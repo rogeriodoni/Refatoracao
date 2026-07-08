@@ -1,0 +1,22 @@
+﻿A Fase 6 j├í est├í **completamente implementada** nas fases anteriores. O arquivo j├í cont├®m tudo que era esperado nesta fase. Aqui est├í o invent├írio completo do que est├í implementado:
+
+**Formsigreegp.prg** (1932 linhas) ÔÇö completo:
+- Todos os 16 campos de filtro do layout.json (empresa, gr. estoque, estoque, grupo produto, linha, gr. venda, data, dt. cota├º├úo, moeda, ordena├º├úo + 6 OptionGroups)
+- 30 BINDEVENTs registrados (linhas 1027ÔÇô1057) para todos os pares c├│digo/descri├º├úo
+- 16 handlers de teclado (TeclaCdEmpresa ÔÇª TeclaDsMoeda)
+- 7 m├®todos Validar* com lookup por ENTER/TAB (ValidarEmpresa, ValidarCdGrEstoque, etc.)
+- 7 m├®todos AbrirBusca* com FormBuscaAuxiliar completo
+- FormParaRelatorio() transferindo todos os 17 filtros para o BO
+- ValidarCampos(), BtnVisualizarClick(), BtnImprimirClick(), BtnExcelClick(), BtnEncerrarClick()
+- AtualizarEstadoDtCotacao() replicando o `When` event do legado
+- Destroy() com limpeza de cursores
+
+**sigreegpBO.prg** (988 linhas) ÔÇö completo:
+- ExecutarProcessamento() replicando fielmente a l├│gica do legado (posi├º├úo atual via SigMvEst + hist├│rico via SigMvHst, agrupamento/ordena├º├úo, cota├º├Áes de moeda, totais por unidade)
+- CarregarCambio() para convers├úo de moedas
+- LimparCursores(), Imprimir(), Visualizar()
+
+**menu.prg** ÔÇö integrado:
+- BAR 103 em popRelatorios, AbrirFormsigreegp() com padr├úo VARTYPE+Show() correto
+
+A fase anterior (Fase 5) entregou os campos restantes al├®m do esperado, cobrindo o escopo da Fase 6. N├úo h├í nada a modificar ÔÇö a migra├º├úo do SIGREEGP est├í **100% implementada e integrada**.

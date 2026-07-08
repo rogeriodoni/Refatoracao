@@ -1,0 +1,7 @@
+﻿Fase 5 conclu├¡da. O arquivo `Formsigrefc2.prg` foi atualizado com:
+
+1. **`ConfigurarPaginaDados()`** adicionado ÔÇö configura a Page2 com controles informativos mostrando a configura├º├úo carregada do `SigCdPam` (opera├º├úo de fechamento + c├│digo de conserto). Esses s├úo campos somente-leitura que espelham os par├ómetros que o `processamento` usa internamente (`crSigcdpam.dopes` e `crSigcdpam.opconsers`), dando ao usu├írio visibilidade da configura├º├úo ativa antes de processar.
+
+2. **`InicializarForm()`** atualizado para chamar `ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`.
+
+3. **`LimparCampos()`** atualizado para popular os campos da Page2 com um `SQLEXEC` em `SigCdPam`, exibindo os valores reais de `Dopes` e `OpcOnsers`.

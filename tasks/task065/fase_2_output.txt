@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `sigrecprBO.prg` agora tem implementa├º├úo completa com:
+
+- **`PrepararDados()`** ÔÇö monta o SQL com os 5 cen├írios de filtro (`lcVerTipo`) traduzidos para subqueries SQL Server diretas (eliminando a depend├¬ncia do cursor local `crSigCdOpt`), data de fim com `23:59:59`, e calcula o `this_cTitulo` baseado nos filtros
+- **`MontarCabecalho()`** ÔÇö cria `CsCabecalho` com nome da empresa, t├¡tulo e per├¡odo
+- **`Imprimir()`** / **`Visualizar()`** ÔÇö chamam PrepararDados + MontarCabecalho + REPORT FORM
+- **`LimparCursores()`** ÔÇö fecha `CsRelatorio` e `CsCabecalho`
+- **`ObterChavePrimaria()`** ÔÇö chave de auditoria com todos os filtros ativos
+- **`RegistrarAuditoria()`** ÔÇö INSERT em `LogAuditoria`
+- **`Inserir()`** / **`Atualizar()`** ÔÇö delegam para Imprimir/Visualizar com auditoria
+- **`Destroy()`** ÔÇö limpa cursores antes de destruir

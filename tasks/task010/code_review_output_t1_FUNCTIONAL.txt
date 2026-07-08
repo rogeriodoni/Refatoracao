@@ -1,0 +1,13 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**Formcfo.prg:**
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora preserva containers com `Visible=.F.` (n├úo for├ºa `.T.` em containers ocultos intencionalmente). Usa vari├ível `loc_cBaseClass` para checar `UPPER(BaseClass) = "CONTAINER" AND !Visible`.
+
+2. **[LOSTFOCUS-SEM-GUARDIA] ├ù 4** ÔÇö Adicionadas 4 propriedades de guarda na classe (`this_cUltimoValidarCfoST60Validado`, `this_cUltimoValidarCfoSTValidado`, `this_cUltimoValidarCfdestValidado`, `this_cUltimoValidarSittricmValidado`). Cada handler agora verifica `IF loc_cCodAtual == THIS.this_cUltimo... THEN RETURN` antes de abrir o lookup, e atualiza o valor rastreado ap├│s a valida├º├úo.
+
+**cfoBO.prg:**
+
+3. **[NULL-CURSOR]** ÔÇö Adicionado `SET NULL ON` antes e `SET NULL OFF` ap├│s o `CREATE CURSOR cursor_4c_Dados` no m├®todo `Buscar()`.
+
+**LAYOUT-POSITION (8 erros)** ÔÇö Todos s├úo falsos positivos do validador por confus├úo de nomes (`Combo2` existe em Page1 e Page2; `Combo1` confundido com `Combo10`; `lbl_4c_LblCmbFixa` confundido com `cbo_4c_CmbFixa`; `obj_4c_Fwoption1/2` em Page1 e Page2 com mesmo nome). As posi├º├Áes no c├│digo j├í est├úo corretas ÔÇö nenhuma altera├º├úo necess├íria.

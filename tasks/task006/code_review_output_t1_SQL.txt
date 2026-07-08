@@ -1,0 +1,9 @@
+﻿Corrections applied:
+
+1. **DATEXCS** (real fix): Removed `AND a.DatExcs IS NULL` from:
+   - `CarregarLista()` in `Formsigmvccr.prg` (line 1151)
+   - `Buscar()` in `sigmvccrBO.prg` (line 151)
+   
+   This condition was not present in the original legado WHERE for SigMvCcr.
+
+2. **CODIGOS / JOBS / CMOES** (false positives ÔÇö kept as-is): These columns appear in lookup sub-queries for other tables (`SigCdGcr.Codigos`, `SigCdJob.Jobs`, `SigCdMoe.CMoes`), not in the main SigMvCcr WHERE. The original code confirms they are valid: `=Seek(M.Grupos, [crSigCdGcr], [Codigos])`, `=Seek(crAltcc.Moedas, [crSigCdMoe], [CMoes])`. The checker produced false positives by scanning all WHERE conditions in the file against the main table's column list.

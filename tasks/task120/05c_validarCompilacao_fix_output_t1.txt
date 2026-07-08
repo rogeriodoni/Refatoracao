@@ -1,0 +1,1 @@
+﻿All 5 errors fixed. The root cause was that VFP9's `INDEX` command has no `IN <alias>` clause ÔÇö unlike `GO`, `REPLACE`, `SEEK`, etc., `INDEX` always operates on the current work area. The fix pattern in every case was to `SELECT <cursor>` first, then run `INDEX ON` without the `IN` suffix.

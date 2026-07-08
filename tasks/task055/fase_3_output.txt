@@ -1,0 +1,22 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormSigReCmp.prg` foi recriado com a estrutura base correta.
+
+**O que foi corrigido em rela├º├úo ├á vers├úo anterior:**
+
+| Problema (vers├úo anterior) | Corre├º├úo (Fase 3) |
+|---|---|
+| `this_oBusinessObject` | `this_oRelatorio` (padr├úo correto para REPORT) |
+| `ISNULL()` check | `VARTYPE() != "O"` |
+| `cmg_4c_Botoes` solto no form | `cmg_4c_Botoes` dentro de `cnt_4c_Cabecalho` |
+| `LostFocus` events | Removidos (vir├úo nas Fases 7-8 com `KeyPress`) |
+| Sem `THIS.Picture` | Adicionado `fundo_cad_1003.jpg` |
+| ├ìcones "relatorio_*" inexistentes | ├ìcones padr├úo framework: `ideo.jpg`, `impressora.jpg`, `excel.jpg`, `otao_encerrar.jpg` |
+
+**Estrutura entregue (Fase 3):**
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria BO, configura cabe├ºalho, `LimparCampos()`
+- `ConfigurarCabecalho()` ÔåÆ container cinza + t├¡tulo + `cmg_4c_Botoes` (4 bot├Áes com BINDEVENTs)
+- `LimparCampos()` ÔåÆ reset de todas as propriedades do BO
+- `FormParaRelatorio()` ÔåÆ mapeamento parcial (campos de controle visuais vir├úo nas Fases 5-6)
+- `ValidarFiltros()` ÔåÆ valida├º├úo de datas com PEMSTATUS (segura antes dos campos existirem)
+- `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnExcelClick()`, `BtnSairClick()` ÔåÆ completos
+- `Destroy()` ÔåÆ `this_oRelatorio = .NULL.` + `DODEFAULT()`

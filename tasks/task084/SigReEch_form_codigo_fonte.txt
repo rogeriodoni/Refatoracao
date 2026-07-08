@@ -1,0 +1,1296 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReEch.SCX
+* Data/Hora: 04/06/2026 11:26:55
+* Total de registros: 32
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREECH
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGREECH
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGREECH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGREECH.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Get_favorecido
+  Parent: SIGREECH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREECH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cheque
+  Parent: SIGREECH
+  Class: container
+  BaseClass: container
+
+Objeto: Get_bco
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_age
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_num
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Valor
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Vencimento
+  Parent: SIGREECH.Cheque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREECH.Cheque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Copia
+  Parent: SIGREECH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREECH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREECH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Verso
+  Parent: SIGREECH
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Opcao_Imprime
+  Parent: SIGREECH
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: oModem
+  Parent: SIGREECH
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: lb_nimp
+  Parent: SIGREECH
+  Class: label
+  BaseClass: label
+
+Objeto: Sair
+  Parent: SIGREECH
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Visualizar
+  Parent: SIGREECH
+  Class: fwbtnm
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: imprimir
+  Parent: SIGREECH
+  Class: fwbtnm
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 315
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Emissão de Cheque"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  peantvalue = .F.
+  Name = "SIGREECH"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Get_favorecido
+------------------------------------------------------------
+  ControlSource = "crSigCqChi.favos"
+  Height = 23
+  Left = 134
+  MaxLength = 40
+  TabIndex = 2
+  Top = 151
+  Visible = .T.
+  Width = 338
+  Name = "Get_favorecido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Favorecido"
+  Left = 134
+  Top = 136
+  Visible = .T.
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque
+------------------------------------------------------------
+  Top = 83
+  Left = 134
+  Width = 487
+  Height = 51
+  BackStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  Name = "Cheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_bco
+------------------------------------------------------------
+  ControlSource = "crpar.bancos"
+  Height = 23
+  Left = 12
+  TabIndex = 10
+  Top = 17
+  Visible = .T.
+  Width = 36
+  Name = "Get_bco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_age
+------------------------------------------------------------
+  ControlSource = "crpar.agencias"
+  Height = 23
+  Left = 58
+  TabIndex = 11
+  Top = 17
+  Visible = .T.
+  Width = 38
+  Name = "Get_age"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_num
+------------------------------------------------------------
+  ControlSource = "crpar.numeros"
+  Height = 23
+  Left = 196
+  TabIndex = 13
+  Top = 17
+  Visible = .T.
+  Width = 52
+  Name = "Get_num"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_conta
+------------------------------------------------------------
+  ControlSource = "crpar.contas"
+  Height = 23
+  Left = 106
+  TabIndex = 12
+  Top = 17
+  Visible = .T.
+  Width = 80
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Bco"
+  Left = 12
+  Top = 3
+  Visible = .T.
+  TabIndex = 19
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Agência"
+  Left = 57
+  Top = 3
+  Visible = .T.
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Número"
+  Left = 196
+  Top = 3
+  Visible = .T.
+  TabIndex = 21
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta"
+  Left = 107
+  Top = 3
+  Visible = .T.
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_Valor
+------------------------------------------------------------
+  ControlSource = "crpar.valos"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 258
+  TabIndex = 12
+  Top = 17
+  Visible = .T.
+  Width = 121
+  Name = "Get_Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor"
+  Left = 259
+  Top = 3
+  Visible = .T.
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Get_Vencimento
+------------------------------------------------------------
+  ControlSource = "crpar.vencs"
+  Height = 23
+  InputMask = ""
+  Left = 389
+  TabIndex = 12
+  Top = 17
+  Visible = .T.
+  Width = 83
+  Name = "Get_Vencimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Cheque.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento"
+  Left = 390
+  Top = 3
+  Visible = .T.
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Get_Copia
+------------------------------------------------------------
+  ControlSource = "crSigCqChi.NCopias"
+  Height = 23
+  Left = 474
+  TabIndex = 3
+  Top = 151
+  Visible = .T.
+  Width = 63
+  Name = "Get_Copia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Nº Cópia"
+  Left = 474
+  Top = 136
+  Visible = .T.
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Verso"
+  Height = 15
+  Left = 134
+  Top = 177
+  Visible = .T.
+  Width = 29
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Get_Verso
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 120
+  Left = 134
+  TabIndex = 4
+  Top = 192
+  Width = 404
+  ControlSource = "crSigCqChi.Versos"
+  NullDisplay = " "
+  Name = "Get_Verso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Opcao_Imprime
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  Value = 1
+  Height = 73
+  Left = 543
+  SpecialEffect = 1
+  Top = 192
+  Width = 79
+  TabIndex = 8
+  BorderColor = 36,84,155
+  Name = "Opcao_Imprime"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Cheque"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 7
+  Option1.Top = 7
+  Option1.Width = 55
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Verso"
+  Option2.Height = 15
+  Option2.Left = 7
+  Option2.Top = 28
+  Option2.Width = 45
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Cópia"
+  Option3.Height = 15
+  Option3.Left = 7
+  Option3.Top = 49
+  Option3.Width = 45
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.oModem
+------------------------------------------------------------
+  Top = 12
+  Left = 504
+  Height = 100
+  Width = 100
+  Name = "oModem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.lb_nimp
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "( Não Impresso )"
+  Height = 15
+  Left = 173
+  Top = 177
+  Width = 82
+  ForeColor = 128,64,64
+  Name = "lb_nimp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Sair
+------------------------------------------------------------
+  Top = 2
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Caption = "Encerrar"
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.Visualizar
+------------------------------------------------------------
+  Top = 2
+  Left = 573
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Caption = "Vídeo"
+  PicturePosition = 13
+  Name = "Visualizar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREECH.imprimir
+------------------------------------------------------------
+  Top = 2
+  Left = 648
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Caption = "Impressora"
+  PicturePosition = 13
+  Name = "imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREECH
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE emitecheque
+------------------------------------------------------------
+PROCEDURE emitecheque
+=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[ImpCheqs])
+
+=fMensagemFixa( "Posicione o cheque na impressora...", 48, "IMPRIME CHEQUE", .F., .F., "a_print4.bmp" )
+
+**** Configura Leitora de Cheques
+If Not fLerSettings('CrSigSyCom',ThisForm.Podatamgr)
+	Return 0
+EndIf
+Select * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite
+Select CrTmpCfCom
+Go Top
+
+IF ! ThisForm.oModem.portopen
+	With ThisForm.oModem
+		.commport = crTmpCfCom.Portas
+		.Settings = Alltrim(crTmpCfCom.Settings)
+		.Inputlen = 1
+	EndWith
+EndIf
+
+ThisForm.oModem.PortOpen = .T.
+
+=Seek( _Empr, 'CrSigCdEmp','Cemps' )
+
+If CrTmpParam.ImpCheqs = 2
+
+	lcValor = Alltrim( Transf( crPar.Valos*100, "@L 99999999999999" ) )
+	lcData = Transform(Day(crPar.Vencs),"@L 99")+Transform(Month(crPar.Vencs),"@L 99")+Right(Str(Year(crPar.Vencs),4),2)
+
+	Set Century Off
+
+	ThisForm.oModem.Output = Chr(27) + "B" + crPar.Bancos
+	ThisForm.oModem.Output = Chr(27) + "F" + crSigCqChi.Favos + "$"
+	ThisForm.oModem.Output = Chr(27) + "D" + lcData
+	ThisForm.oModem.Output = Chr(27) + "C" + Alltrim( crSigCdEmp.Cidas ) + "$"
+	ThisForm.oModem.Output = Chr(27) + "V" + lcValor
+
+Else
+
+	Set Point To ","
+	lcValor = Alltrim( Transf( crPar.Valos, "99999999999.99" ) )
+
+	Set Century Off
+
+	ThisForm.oModem.Output = Chr(27) + Chr(64)  + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(162) + crPar.Bancos + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(160) + crSigCqChi.Favos + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(163) + lcValor + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(164) + Dtoc( crPar.Vencs ) + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(167) + Alltrim( crSigCdEmp.Cidas ) + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(177) + Chr(13)
+	ThisForm.oModem.Output = Chr(27) + Chr(176) + Chr(13)
+	ThisForm.oModem.Output = Chr(12)
+
+	Set Point To "."
+
+EndIf
+
+ThisForm.oModem.PortOpen = .f.
+Set Century On
+
+Replace crSigCqChi.Emitidos with .T.,;
+		crSigCqChi.NEmissoes with crSigCqChi.NEmissoes + 1 in CrSigCqChi
+llEmit = .t.
+
+lcSql = [Update SigCqChi Set Emitidos = ?llEmit, Favos = ']+CrSigCqChi.Favos+[', nEmissoes = ]+Str(CrSigCqChi.nEmissoes)+[ Where CidChaves = ']+CrSigCqChi.CidChaves+[']
+=ThisForm.Podatamgr.Sqlexecute(lcSql,'')
+ThisForm.Podatamgr.commit()
+
+ThisForm.Opcao_Imprime.Option2.Enabled = .t.
+ThisForm.Opcao_Imprime.Option3.Enabled = .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE emitecopia
+------------------------------------------------------------
+PROCEDURE emitecopia
+Local _Fechar, lnNopers
+
+Declare LaCampo3(2,2)
+
+=Seek( _Empr, 'crSigCdEmp','Cemps' )
+
+_Extenso = fValorExtenso( crPar.Valos )
+_Mes     = fMesExtenso( crPar.Vencs )
+_ObsPg   = ' '
+
+=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[GrupoRecs,ContaRecs])
+
+Select CrTmpParam
+Go Top
+
+Create Cursor TmpConta2 (Titulo c(10), Vencimento d(8), Fornecedor c(10), DescriForn c(50), Despesa c(10), ;
+						 DescriDesp c(50), Valor n(12,2), Moeda c(3), Hists c(40), Hist2s c(40), Imprime l(1), ;
+						 Emps c(3), Pagamento c(6), Fim l(1), bGrupos c(10), Numcs n(6), Tipos c(1), Ordem c(1), ;
+						 Opers c(1), Vencs d(8), nbgrupos c(30), CodSegs c(10), OrdCopChs n(3), ChDescrs c(30))
+
+lcPag = []
+lcQuery = [Select Descrs ] + ;
+		    [From SigOpFpp ] + ;
+		   [Where FPags = '] + crPar.FPags + [' And ] + ;
+		   		 [ImpCpChqs = 2]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalFPag]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalFPag)])
+	Return .f.
+EndIf
+Go Top In LocalFPag
+If Not Eof([LocalFPag]) And Not Empty(LocalFPag.Descrs)
+	lcPag = LocalFPag.Descrs
+EndIf
+
+Set Talk On
+Set Talk Window
+Select * From TmpConta Where Flag ;
+Into Cursor TmpTmp
+Set Talk Off
+
+Select TmpTmp
+Scan
+
+	If Type('TmpTmp.Empos') = 'C'
+		lcEmp = TmpTmp.Empos
+	Else
+		lcEmp = TmpTmp.Emps
+	EndIf
+
+	lcWher = [Select Emps, Dopcs, Numcs, Nopers, CidChaves From SigMvCcr Where Emps=']+lcEmp+['And ]+;
+			 [Nopers=]+Str(TmpTmp.Nopers,9)+[ Order by Cidchaves ]
+
+	lnErro = ThisForm.podatamgr.SqlExecute(lcWher,'CrMccr')
+
+	If lnErro < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf
+
+	Select CrMccr
+	GO TOP
+	lcEmp    = crMccr.Emps 
+	lcDop    = crMccr.Dopcs
+	lcNum    = crMccr.Numcs
+	lnNopers = crMccr.Nopers
+	lcEDN    = lcEmp+lcDop+Str(lcNum,6)
+	lcGrupo  = TmpTmp.Grupos
+	Set Talk On
+	Set Talk Window
+	
+	If !Empty(lcDop)
+		lcWher = [Select '1' as Ordem, Opers, Titulos, Vencs, Contems, Grupos, ]+;
+				 [Contas, (Valors) as Valors, Moedas, Hists, Hist2s, Emps, bgrupos, Numcs, Tipos ]+;
+				 [From SigMvCcr Where EmpDopncs = ?lcEDN And Not Tipos = "O" Union all ]+;
+		         [Select '2' as Ordem, Opers, Titulos, Vencs, Contems, Grupos, ]+;
+				 [Contas, ((Valors + Valocurs)*-1) as Valors, Moedas, Hists, Hist2s, Emps, bgrupos, Numcs, Tipos ]+;
+				 [From SigMvCcr Where EmpDopncs = ?lcEDN And Tipos = "O" And Grupos <> ?lcGrupo Order By 1,2,3,4,5,6,7]
+		lnErro = ThisForm.podatamgr.SqlExecute(lcWher,'Tmp')
+	Else
+		lcWher = [Select '1' as Ordem, Opers, Titulos, Vencs, Contems, Grupos, ]+;
+				[Contas, (Valors) as Valors, Moedas, Hists, Hist2s, Emps, bgrupos, Numcs, Tipos ]+;
+				[From SigMvCcr Where Emps=']+lcEmp+['And Nopers=]+Str(lnNopers,9)+[ ]+;
+				[And Opers='C' And Not Tipos = "O" Order By 1,2,3,4,5,6,7 ]
+		lnErro = ThisForm.podatamgr.SqlExecute(lcWher,'Tmp')
+	EndIf
+
+	If lnErro < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf
+
+	Select Tmp
+	Go Top
+
+	lcCnt = 0
+	lcChv = ''
+	Do While !Eof()
+		_Hist  = Strtran(Strtran(Tmp.Hists,Chr(13),' '),Chr(10),' ')
+		_Hist2 = Strtran(Strtran(Tmp.Hist2s,Chr(13),' '),Chr(10),' ')
+		
+		If Tmp.Grupos # crTmpParam.GrupoRecs .and. Tmp.Contas # crTmpParam.ContaRecs
+			ThisForm.Podatamgr.Cursorquery('SigCdUsu','CrTmpUsu','Usuarios',Tmp.bGrupos,[ncomps])
+			ThisForm.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Iclis',Tmp.Contems,[Rclis,CodSegs])
+			lcFornece = crSigCdCli.Rclis
+			ThisForm.Podatamgr.CursorQuery('SigCdCli','CrSigCdCli','Iclis',Tmp.Contas,[Rclis,CodSegs])
+			lcCliente = crSigCdCli.Rclis
+			lcPagto = ''
+			lcEDNI  = crSigCqChi.Emps+crSigCqChi.Dopes+Str(crSigCqChi.Numes,6)
+			If !Eof('crSigCqChi') And ThisForm.podatamgr.CursorQuery('SigCdPgr','CrPgRec','EmpDopNums', lcEDNI,[EmpDopNums,obs] )
+				lcPagto = Str(crSigCqChi.Numes,6)
+				_ObsPg  = Nvl(Alltrim(Strtran(CrPgRec.Obs,Chr(13),'')),'')
+			Endif
+		   	If Tmp.Opers = 'C'
+				lcFornece = crSigCdCli.Rclis
+				lcCodSeg  = CrSigCdCli.CodSegs
+				Insert Into TmpConta2 (Titulo, Vencimento, Fornecedor, DescriForn, ;
+									   Despesa, DescriDesp, Valor, Moeda, Imprime, ;
+									   Emps, Hists, Hist2s, Pagamento, bGrupos, Numcs,;
+									   Tipos, Ordem, Opers, Vencs, nbGrupos, CodSegs, OrdCopChs, ChDescrs) ;
+							   Values (Tmp.Titulos, Nvl(Tmp.Vencs,Ctod('')), Tmp.Contems, lcFornece, ;
+							   		   Tmp.Contas, lcCliente, ;
+							   		   Iif(TmpTmp.Opers='D' And Tmp.Tipos <> 'O' And ;
+							   		   TmpTmp.Acerto <> TmpTmp.Valos,TmpTmp.Acerto,Tmp.Valors),;
+							   		   Tmp.Moedas,(lcChv # Tmp.Titulos+dtoc(Tmp.Vencs)+Tmp.Contems), ;
+							   		   Tmp.Emps, _Hist, _Hist2, lcPagto, Tmp.bGrupos, ;
+							   		   Tmp.Numcs, Tmp.Tipos, Tmp.Ordem, Tmp.Opers, Tmp.Vencs, ;
+							   		   CrTmpUsu.nComps, lcCodSeg, TmpTmp.OrdCopChs, lcPag)
+			Else
+				If lcCnt=0 And Tmp.Tipos <> [O]
+					Select TmpConta2
+					Replace Despesa    With Tmp.Contas, ;
+							DescriDesp With lcCliente,  ;
+							Hists      With _Hist,  ;
+							Hist2s     With _Hist2, ;
+							Valor      With Iif(TmpTmp.Opers='D' And Tmp.Tipos<>[O] And ;
+										    TmpTmp.Acerto<>TmpTmp.Valos,TmpTmp.Acerto,Tmp.Valors), ;
+							ChDescrs   With lcPag
+				Else					
+					Insert Into TmpConta2 (Titulo, Vencimento, Despesa, DescriDesp, Valor, ;
+										   Moeda, Hists, Hist2s, Imprime, Emps, Pagamento, ;
+										   bGrupos, Numcs, Tipos, Ordem, Opers, Vencs, nbGrupos, OrdCopChs, ChDescrs) ;
+								   Values (Tmp.Titulos, Tmp.Vencs, Tmp.Contas, lcCliente, ;
+								   		   Abs(Iif(TmpTmp.Opers='D' And Tmp.Tipos<>[O] And ;
+								   		   TmpTmp.Acerto<>TmpTmp.Valos,TmpTmp.Acerto,Tmp.Valors)),;
+								   		   Tmp.Moedas, _Hist, _Hist2, ;
+								   		   .f., Tmp.Emps, lcPagto, Tmp.bGrupos, Tmp.Numcs,;
+								   		   Tmp.Tipos, Tmp.Ordem, Tmp.Opers, Tmp.Vencs, CrTmpUsu.ncomps, TmpTmp.OrdCopChs, lcPag)
+				EndIf
+				lcCnt = lcCnt + 1
+			EndIf
+			lcChv = Tmp.Titulos + dtoc(Tmp.Vencs) + Tmp.Contems
+		Endif
+		Select Tmp
+		Skip
+	Enddo
+	Select TmpTmp
+EndScan
+_Largo = 2
+Select TmpConta2
+Go Bottom
+Replace Fim With .t.
+Index On Str(OrdCopChs,3) + Titulo + Dtos(Vencs) + Ordem + Opers Tag Impressao
+Go Top
+If ThisForm.EnviaImp
+	Report Form SigOpCq2 To Print Prompt Noconsole
+Else	
+	Report Form SigOpCq2 Preview NoConsole
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE emiteverso
+------------------------------------------------------------
+PROCEDURE emiteverso
+If crSigCqChi.Emitidos
+
+	=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[ImpCheqs])
+
+	=fMensagemFixa( "Posicione o cheque na impressora para impressão do verso...", 48, "IMPRIME CHEQUE", .F., .F., "a_print4.bmp" )
+
+	**** Configura Leitora de Cheques
+	If Not fLerSettings('CrSigSyCom',ThisForm.Podatamgr)
+		Return 0
+	EndIf
+	Select * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite
+	Select CrTmpCfCom
+	Go Top
+
+	IF ! ThisForm.oModem.portopen
+		With ThisForm.oModem
+			.commport = crTmpCfCom.Portas
+			.Settings = Alltrim(crTmpCfCom.Settings)
+			.Inputlen = 1
+		EndWith
+	EndIf
+
+	ThisForm.oModem.PortOpen = .T.
+
+	=Seek( _Empr , 'crSigCdEmp', 'Cemps' )
+	
+	If CrTmpParam.ImpCheqs = 2
+
+		Set Century Off
+
+		Set MemoWidth To 50
+		_Verso = ThisForm.Get_Verso.Value
+		For Lx = 1 To MemLines( _Verso )
+			ThisForm.oModem.Output = Spac( 8 ) + MLine( _Verso, Lx ) + Chr(10) + Chr(13)
+		Next
+		ThisForm.oModem.Output = Chr(12)
+
+	Else
+	
+		Set Century Off
+
+		ThisForm.oModem.Output = Chr(27) + Chr(64) + Chr(13)
+		
+		Set MemoWidth To 50
+		_Verso = ThisForm.Get_Verso.Value
+		For Lx = 1 To MemLines( _Verso )
+			ThisForm.oModem.Output = Spac( 5 ) + MLine( _Verso, Lx ) + Chr(13) + Chr(10)
+		Next
+		ThisForm.oModem.Output = Chr(12)
+		
+	EndIf
+	
+	ThisForm.oModem.PortOpen = .F.
+
+	Set Century On
+
+	Replace crSigCqChi.ImpVersos With 1 in CrSigCqChi
+
+	lcSql = [Update SigCqChi Set ImpVersos = 1 Where CidChaves = ']+CrSigCqChi.CidChaves+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'')
+	ThisForm.Podatamgr.commit()
+
+	ThisForm.lb_nimp.Visible = CrSigCqChi.ImpVersos = 0
+
+Else
+	
+	=MessageBox( "Primeiro deve ser impressa a frente do cheque!", 48,;
+				 "ERRO DE CONFIGURAÇÃO!! " )
+
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters _Emps, _Dopes, _Numes, _pcEscolha, _ncheque
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Emps = _Emps
+ThisForm.Dopes = Padr( _Dopes, 20 )
+ThisForm.Numes = _Numes
+ThisForm.Op_Escolha = _pcEscolha
+lcEDN = _Emps + _Dopes + STR(_Numes,6)
+lcChq = Iif(Type('_nCheque')='C',_nCheque,'')
+
+lcQueryChi = [Select * From SigCqChi Where EmpDopNums = ?lcEDN ]+;
+			 Iif(Not Empty(lcChq),[And ncheques = ']+lcChq+['],[])
+lcQueryEmp = [Select Cemps,Cidas From SigCdEmp ]
+With ThisForm
+	.podatamgr = CreateObject('fSqlConector',This.Name)
+	With .podatamgr
+		.AddCursor('SigCqChi','CidChaves','CrSigCqChi','','',lcQueryChi )
+		.AddCursor('SigCdEmp','cemps','CrSigCdEmp','','',lcQueryEmp)
+	EndWith
+	= DoDefault()
+EndWith
+ThisForm.PoDatamgr.Requery('CrSigCqChi')
+ThisForm.PoDatamgr.Requery('CrSigCdEmp')
+
+Select CrSigCdEmp
+Index On Cemps Tag Cemps
+
+Select CrSigCqChi
+Go Top
+=Thisform.Podatamgr.Cursorquery('SigMvPar','CrPar','EmpDopNums',lcEDN)
+Select CrPar
+Index On Bancos + Agencias + Contas + Numeros Tag Cheque
+=Seek(CrSigCqChi.Bancos + CrSigCqChi.Agencias + CrSigCqChi.ncontas + CrSigCqChi.nCheques)
+
+ThisForm.Opcao_Imprime.Option2.Enabled = crSigCqChi.Emitidos
+ThisForm.Opcao_Imprime.Option3.Enabled = crSigCqChi.Emitidos
+ThisForm.Opcao_Imprime.Value = Iif(crSigCqChi.Emitidos, 3, 1)
+ThisForm.Opcao_Imprime.Option3.SetFocus
+ThisForm.Visualizar.Enabled = crSigCqChi.Emitidos
+ThisForm.lb_nimp.Visible = CrSigCqChi.ImpVersos = 0
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Get_favorecido
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.Op_Escolha, "INSERIR", "ALTERAR" )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_bco
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_age
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_num
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_Valor
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Cheque.Get_Vencimento
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Get_Copia
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Get_Verso
+* Classe: editbox (Base: editbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peantvalue = This.Value
+Return Inlist( ThisForm.Op_Escolha, "INSERIR", "ALTERAR" ) And CrSigCqChi.ImpVersos = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Alltrim(This.Value) == Alltrim(ThisForm.peantvalue)
+	lcSql = [Update SigCqChi Set versos = ']+This.Value+[' Where CidChaves = ']+CrSigCqChi.CidChaves+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'')
+	ThisForm.Podatamgr.commit()
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Opcao_Imprime
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.Visualizar.Enabled = InList(This.Value, 3, 4)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !crSigCqChi.Emitidos
+	llEmit = .f.
+	lcSql = [Update SigCqChi Set Emitidos = ?llEmit, Favos = ']+CrSigCqChi.Favos+[', nEmissoes = ]+Str(CrSigCqChi.nEmissoes)+[ Where CidChaves = ']+CrSigCqChi.CidChaves+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'')
+	ThisForm.Podatamgr.commit()
+	If Messagebox( 'ATENÇÃO!!!' + Chr( 13 ) + 'Este cheque não será emitido...' + Chr( 13 ) + ;
+					'Confirmando a sua saída, este cheque ficará pendente até a sua emissão.'+ Chr( 13 ) + ;
+					'Confirma a Saída ? ', 4+32, '') = 7
+		Return
+	Endif
+Endif
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.Visualizar
+* Classe: fwbtnm (Base: commandbutton)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.EnviaImp = .f.
+
+ThisForm.EmiteCopia
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREECH.imprimir
+* Classe: fwbtnm (Base: commandbutton)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Case
+	Case ThisForm.Opcao_Imprime.Value = 1
+		 ThisForm.EmiteCheque
+	Case ThisForm.Opcao_Imprime.Value = 2
+		 ThisForm.EmiteVerso
+	Case ThisForm.Opcao_Imprime.Value = 3 .or. ;
+		 ThisForm.Opcao_Imprime.Value = 4
+		 ThisForm.EnviaImp = .t.
+		 ThisForm.EmiteCopia
+Endcase
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREECH
+RESERVED3 (ClassInfo): dopes
+emps
+enviaimp
+numes
+op_escolha
+peantvalue
+podatamgr
+*emitecheque 
+*emitecopia 
+*emiteverso 
+
+
+* Objeto: oModem
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿþÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

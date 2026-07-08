@@ -1,0 +1,257 @@
+﻿{
+    "taskId":  "task126",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-06-06T14:26:33",
+    "atualizadoEm":  "2026-06-06T15:25:24",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-06-06T14:26:33",
+                                            "fim":  "2026-06-06T14:26:33",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task126\\SigReInv.sct",
+                                            "baseName":  "SigReInv",
+                                            "scxFile":  "C:\\4c\\tasks\\task126\\SigReInv.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-06-06T14:26:33",
+                                          "fim":  "2026-06-06T14:26:33",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigReInv",
+                                          "txtFile":  "C:\\4c\\tasks\\task126\\SigReInv_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T14:26:33",
+                                              "fim":  "2026-06-06T14:26:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task126\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T14:26:34",
+                                              "fim":  "2026-06-06T14:26:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task126\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task126\\meta_prompt.md",
+                                              "boClass":  "SigReInvBO",
+                                              "formClass":  "FormSigReInv",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task126\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T14:26:34",
+                                              "fim":  "2026-06-06T14:26:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task126\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-06T14:26:35",
+                                               "fim":  "2026-06-06T14:26:35",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task126\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigReInv_esqueleto.prg",
+                                                                "SigReInvBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-06T14:26:35",
+                                       "fim":  "2026-06-06T15:10:04",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReInvBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  82.15,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReInv.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2817
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-06-06T15:10:04",
+                                                  "fim":  "2026-06-06T15:10:13",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReInv.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReInvBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-06-06T15:10:13",
+                                                 "fim":  "2026-06-06T15:10:14",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-06T15:19:57",
+                                       "fim":  "2026-06-06T15:20:10",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-06T15:20:10",
+                                               "fim":  "2026-06-06T15:20:21",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task126\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-06-06T15:20:21",
+                                        "fim":  "2026-06-06T15:25:24",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T15:25:24",
+                                              "fim":  "2026-06-06T15:25:24",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task126_SigReInv.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-06-06T14:26:33",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-06-06T14:26:34",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task126\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-06-06T14:26:34",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-06T14:26:34"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-06-06T15:10:13",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-06-06T15:10:13",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigReInv_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReInv.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task126\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-06-06T15:10:14",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-06-06T15:10:15",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-06-06T15:10:15",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-06-06T15:19:41",
+                                          "passes":  4,
+                                          "problemas":  "[OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  1
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-06-06T15:19:41",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-06-06T15:19:57",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReInvBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReInv.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-06-06T15:20:21",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-06T15:20:21",
+                                             "thresholdPx":  5,
+                                             "unmatched":  10,
+                                             "errors":  10,
+                                             "matched":  21,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task126\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

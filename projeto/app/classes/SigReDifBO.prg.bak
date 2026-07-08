@@ -1,0 +1,302 @@
+*==============================================================================
+* SIGREDIFBO.PRG
+* Business Object para Relatorio de Diferencas (SigReDif)
+*
+* Herda de RelatorioBase
+* Exibe diferencas entre movimentacoes contabeis
+* Recebe DataSessionId do form chamador para acessar cursores movaux/dif2
+*==============================================================================
+
+DEFINE CLASS SigReDifBO AS RelatorioBase
+
+    *-- Sessao de dados do form chamador (DataSessionId)
+    this_nDataSessionId = 0
+
+    *-- Flag para exportacao PDF (lacpdf do legado)
+    this_lAcPdf         = .F.
+
+    *-- Cursor com os dados preparados para o grid
+    this_cCursorDados   = "crGrid"
+
+    *-- Mensagem de erro
+    this_cMensagemErro  = ""
+
+    *-- Propriedades mapeadas da linha atual do crGrid
+    this_nAnoFis        = 0
+    this_cDatas         = ""
+    this_cContas        = ""
+    this_cDebs          = ""
+    this_cCreds         = ""
+    this_cDocto         = ""
+    this_cEmpCont       = ""
+    this_nNumSeq        = 0
+    this_nNums          = 0
+    this_dData          = {}
+    this_cValor         = ""
+    this_cCecus         = ""
+    this_cEmps          = ""
+    this_cTransacaos    = ""
+    this_cHists         = ""
+    this_nDeb1s         = 0
+    this_nCred1s        = 0
+
+    *--------------------------------------------------------------------------
+    * Init - Construtor
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF DODEFAULT()
+                THIS.this_cCursorDados = "crGrid"
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Cria cursor crGrid a partir de movaux/dif2
+    * Muda para sessao this_nDataSessionId onde movaux e dif2 existem,
+    * executa SELECT, formata valores e posiciona no primeiro registro.
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lSucesso, loc_nSessaoOriginal, loc_nContagem
+        loc_lSucesso = .F.
+        loc_nSessaoOriginal = SET("Datasession")
+        TRY
+            *-- Muda para sessao do form chamador onde existem movaux e dif2
+            IF THIS.this_nDataSessionId > 0
+                SET DATASESSION TO (THIS.this_nDataSessionId)
+            ENDIF
+
+            *-- Valida existencia das tabelas de origem
+            IF !USED("movaux") OR !USED("dif2")
+                THIS.this_cMensagemErro = "Cursores 'movaux' e 'dif2' n" + CHR(227) + ;
+                                          "o est" + CHR(227) + "o dispon" + CHR(237) + ;
+                                          "veis na sess" + CHR(227) + "o de dados."
+                MsgErro(THIS.this_cMensagemErro, "Erro")
+                EXIT
+            ENDIF
+
+            *-- Fecha cursor anterior se existir
+            IF USED("crGrid")
+                SELECT crGrid
+                USE
+            ENDIF
+
+            *-- Cursor com os mesmos dados do Cursor Diferenca
+            SELECT *, ;
+                   99999999.99 AS Deb1s, ;
+                   99999999.99 AS Cred1s ;
+            FROM movaux ;
+            WHERE Transacaos IN (SELECT Transacaos FROM dif2) ;
+            INTO CURSOR crGrid READWRITE
+
+            *-- Verifica se ha registros para processar
+            SELECT crGrid
+            loc_nContagem = RECCOUNT("crGrid")
+
+            IF loc_nContagem > 0
+                *-- Formata debito e credito (centavos para formato moeda)
+                REPLACE ALL Debs  WITH TRANSFORM(VAL(Debs)/100,  "@z 9,999,999.99") IN crGrid
+                REPLACE ALL Creds WITH TRANSFORM(VAL(Creds)/100, "@z 9,999,999.99") IN crGrid
+
+                *-- Formata valor total e numero do documento
+                REPLACE ALL Valor WITH TRANSFORM(VAL(Valor), "@z 9,999,999.99") IN crGrid
+                REPLACE ALL Docto WITH TRANSFORM(VAL(Docto), "@z 9999999999")   IN crGrid
+
+                *-- Valores numericos para uso no relatorio FRX (remove separadores de milhar)
+                REPLACE ALL Deb1s  WITH VAL(STRTRAN(Debs,  ",", "")) IN crGrid
+                REPLACE ALL Cred1s WITH VAL(STRTRAN(Creds, ",", "")) IN crGrid
+
+                SELECT crGrid
+                LOCATE
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        *-- Restaura sessao de dados original (fora do TRY/CATCH)
+        IF loc_nSessaoOriginal > 0 AND loc_nSessaoOriginal != SET("Datasession")
+            SET DATASESSION TO (loc_nSessaoOriginal)
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega dados da linha atual do crGrid para propriedades
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_nAnoFis     = TratarNulo(AnoFis,     "N")
+                THIS.this_cDatas      = TratarNulo(Datas,      "C")
+                THIS.this_cContas     = TratarNulo(Contas,     "C")
+                THIS.this_cDebs       = TratarNulo(Debs,       "C")
+                THIS.this_cCreds      = TratarNulo(Creds,      "C")
+                THIS.this_cDocto      = TratarNulo(Docto,      "C")
+                THIS.this_cEmpCont    = TratarNulo(EmpCont,    "C")
+                THIS.this_nNumSeq     = TratarNulo(NumSeq,     "N")
+                THIS.this_nNums       = TratarNulo(Nums,       "N")
+                THIS.this_dData       = TratarNulo(Data,       "D")
+                THIS.this_cValor      = TratarNulo(Valor,      "C")
+                THIS.this_cCecus      = TratarNulo(Cecus,      "C")
+                THIS.this_cEmps       = TratarNulo(Emps,       "C")
+                THIS.this_cTransacaos = TratarNulo(Transacaos, "C")
+                THIS.this_cHists      = TratarNulo(Hists,      "C")
+                THIS.this_nDeb1s      = TratarNulo(Deb1s,      "N")
+                THIS.this_nCred1s     = TratarNulo(Cred1s,     "N")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Nao aplicavel para relatorio
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        RETURN ""
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Exibe relatorio em preview na tela
+    *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30)
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+
+        *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_cCaminhoFrx
+        loc_lSucesso = .F.
+        TRY
+            IF FILE(loc_cCaminhoFrx)
+                THIS.ExecutarReportForm("RelSigReDif", "PREVIEW", THIS.this_cCursorDados)
+            ELSE
+                MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
+                         "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Imprime relatorio com dialogo de impressora
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_cCaminhoFrx
+        loc_lSucesso = .F.
+        TRY
+            IF FILE(loc_cCaminhoFrx)
+                THIS.ExecutarReportForm("RelSigReDif", "PRINTER_PROMPT", THIS.this_cCursorDados)
+            ELSE
+                MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
+                         "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GerarDocumento - Imprime relatorio direto na impressora padrao
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarDocumento()
+        LOCAL loc_lSucesso, loc_cCaminhoFrx
+        loc_lSucesso = .F.
+        TRY
+            IF FILE(loc_cCaminhoFrx)
+                THIS.ExecutarReportForm("RelSigReDif", "PRINTER", THIS.this_cCursorDados)
+            ELSE
+                MsgAviso("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
+                         "o encontrado:" + CHR(13) + loc_cCaminhoFrx, "Aviso")
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna mensagem de erro atual
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+ENDDEFINE

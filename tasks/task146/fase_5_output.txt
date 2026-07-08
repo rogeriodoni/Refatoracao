@@ -1,0 +1,20 @@
+﻿As edi├º├Áes est├úo corretas. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarContainerOperacao`** ÔÇö agora cria 3 TextBoxes read-only com `ControlSource` no cursor `TmpNens` (datasession compartilhada com o form pai):
+   - `txt_4c_Empresa` (Left=2, Width=36) ÔåÆ `tmpnens.emps`
+   - `txt_4c_Operacao` (Left=40, Width=156) ÔåÆ `tmpnens.dopps`
+   - `txt_4c_Codigo` (Left=198, Width=81, InputMask="9999999999") ÔåÆ `tmpnens.numps`
+
+2. **`ConfigurarContainerOrigem`** ÔÇö adicionados 3 TextBoxes ap├│s os labels existentes:
+   - `txt_4c_GrupoO` (Left=9, Top=36) ÔåÆ `tmpnens.grupoos`
+   - `txt_4c_ContaO` (Left=92, Top=36) ÔåÆ `tmpnens.contaos`
+   - `txt_4c_Dconta` (Left=175, Top=36, Width=302) ÔÇö preenchido via SQL em `CarregarGrade`
+
+3. **`ConfigurarContainerDestino`** ÔÇö adicionados 3 TextBoxes equivalentes:
+   - `txt_4c_GrupoD` ÔåÆ `tmpnens.grupods`
+   - `txt_4c_ContaD` ÔåÆ `tmpnens.contads`
+   - `txt_4c_Dconta` ÔÇö preenchido via SQL em `CarregarGrade`
+
+Todos os campos ficam `ReadOnly=.T.` (espelhando o `When = Return .F.` do legado). Os `txt_4c_Dconta` de Origem e Destino j├í s├úo referenciados corretamente em `CarregarGrade` (linhas 764 e 782) que os preenche via `SQLEXEC` na tabela `SigCdCli`.

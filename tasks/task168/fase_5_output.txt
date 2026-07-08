@@ -1,0 +1,7 @@
+﻿Fase 5 conclu├¡da. O m├®todo `ConfigurarPaginaDados()` foi adicionado e conectado ao `InicializarForm()`.
+
+**O que foi feito:**
+- Adicionada chamada `THIS.ConfigurarPaginaDados()` em `InicializarForm()` (linha 131), entre `ConfigurarPaginaLista()` e `TornarControlesVisiveis()`
+- Implementado `ConfigurarPaginaDados()` (linhas 760-769): define `Page2.Picture = new_background.jpg` para consist├¬ncia visual ÔÇö este form OPERACIONAL n├úo tem campos adicionais em Page2 (todo o layout do original est├í em Page1)
+
+**Por que n├úo h├í campos em Page2:** o SIGPRCPR ├® um form plano no legado (sem PageFrame). O PageFrame foi introduzido na migra├º├úo por consist├¬ncia arquitetural. Todos os controles do original (Data, Grade, leitura de c├│digo, bot├Áes) j├í foram migrados para Page1 nas fases 3-4. A pr├│xima fase (6/8) provavelmente finalizar├í a integra├º├úo com `config.prg` e `menu.prg`.

@@ -1,0 +1,22 @@
+﻿Arquivo completo e correto. A Fase 6 est├í implementada. Aqui est├í o resumo do que foi adicionado:
+
+**Fase 6 ÔÇö Campos Restantes e Lookups ÔÇö Conclu├¡da**
+
+Altera├º├Áes em `Formsigrehtc.prg`:
+
+1. **`InicializarForm()`** ÔÇö chama `BuscarContas()` no BO logo ap├│s criar o objeto, pr├®-carregando `cursor_4c_Contas` (contas com `EmiChqs=1` em `SigOpFp`/`SigCdCli`).
+
+2. **`ConfigurarPaginaDados()`** ÔÇö adicionados BINDEVENTs para os campos de Conta (`TeclaCdContas`, `TeclaDsContas`).
+
+3. **`LimparCampos()`** ÔÇö ao limpar os campos, restaura `Enabled = .T.` para `txt_4c_DsGrEstoque` e `txt_4c_DsContas`.
+
+4. **`ValidarCdGrEstoque()` / `ValidarDsGrEstoque()`** ÔÇö passam a gerenciar `DsGrEstoque.Enabled` (`.F.` quando c├│digo v├ílido encontrado, `.T.` quando limpo/n├úo encontrado).
+
+5. **`TeclaCdGrEstoque()` / `TeclaDsGrEstoque()`** ÔÇö atualizados para tamb├®m tratar F4=115 abrindo `AbrirLookupGrEstoque()`.
+
+6. **Novos m├®todos** (6):
+   - `AbrirLookupGrEstoque()` ÔÇö FormBuscaAuxiliar contra `SigCdGrp` (cgrus/dgrus)
+   - `TeclaCdContas()` / `TeclaDsContas()` ÔÇö F4=115 abre lookup, ENTER/TAB valida
+   - `ValidarCdContas()` ÔÇö valida c├│digo no `cursor_4c_Contas` via LOCATE; se n├úo encontrado, abre lookup
+   - `ValidarDsContas()` ÔÇö busca reversa por nome (s├│ quando CdContas vazio, igual ao `When` original)
+   - `AbrirLookupContas()` ÔÇö FormBuscaAuxiliar contra `SigCdCli` (Iclis/Rclis)

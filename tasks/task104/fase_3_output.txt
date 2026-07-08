@@ -1,0 +1,11 @@
+﻿Os coment├írios seguem o mesmo padr├úo da `FormSIGREVIS.prg` existente (linha 3). O arquivo est├í correto. Fase 3/8 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\relatorios\FormSIGREFUN.prg`** criado com:
+
+- `DEFINE CLASS FormSIGREFUN AS FormBase` ÔÇö Width=800, Height=300 (exatos do original), DataSession=1, TitleBar=0, WindowType=1
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria SIGREFUNBO, chama os tr├¬s m├®todos de configura├º├úo, seta Visible=.T.
+- `ConfigurarCabecalho()` ÔÇö container cinza (RGB 100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö CommandGroup `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), geometria exata do framework frmrelatorio, ├¡cones `relatorio_*_26.jpg`, Buttons(4).Cancel=.T.
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com 1 p├ígina ("Filtros"), Top=85, sem abas; campos de filtro ser├úo adicionados nas Fases 4-6
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`

@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo das duas mudan├ºas em `Formsigprdft.prg`:
+
+1. **`VincularEventos` (linha 841 removida)**: O `BINDEVENT(THIS.obj_4c_TipoVenda, "KeyPress", ...)` foi removido ÔÇö `OptionGroup` n├úo exp├Áe o evento `KeyPress` via BINDEVENT no VFP9, causando exce├º├úo que pulava o binding cr├¡tico do `CmdCancelaClick`.
+
+2. **`CarregarLista` (linha 2584)**: Removido `PROTECTED` ÔÇö o teste `CarregarDadosReais` chama `loForm.CarregarLista()` de fora da classe, o que exige visibilidade p├║blica.
+
+O m├®todo `OgTipoVendaKeyPress` continua existindo no form (n├úo foi removido), apenas o BINDEVENT que falhava foi eliminado.

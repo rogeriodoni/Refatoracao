@@ -1,0 +1,21 @@
+﻿Fase 6 conclu├¡da. Resumo das adi├º├Áes ao `FormSIGREEVV.prg`:
+
+**DblClick BINDEVENTs adicionados** (5 campos):
+- `txt_4c_Tabela` ÔåÆ `TabelaDblClick`
+- `txt_4c_DTabela` ÔåÆ `DTabelaDblClick`
+- `txt_4c_Grupo` ÔåÆ `GrupoDblClick`
+- `txt_4c_DGrupo` ÔåÆ `DGrupoDblClick` (novo campo pesquis├ível)
+- `txt_4c_Conta` ÔåÆ `ContaDblClick`
+- `txt_4c_DConta` ÔåÆ `DContaDblClick`
+
+**Novos m├®todos** (8):
+- `TabelaDblClick`, `DTabelaDblClick`, `GrupoDblClick`, `ContaDblClick`, `DContaDblClick` ÔÇö despacham para o AbrirBusca correspondente
+- `AbrirBuscaDGrupo()` ÔÇö lookup reverso em `SigCdGcr` por descri├º├úo (replica `fAcessoContab 'D'`)
+- `TeclaDGrupo()` ÔÇö F4/F5/ENTER/TAB: abre lookup reverso; campo vazio limpa c├│digo
+- `DGrupoDblClick()` ÔÇö despacha para `AbrirBuscaDGrupo`
+
+**Propriedades corrigidas** (PILAR 1):
+- `txt_4c_DGrupo`: ReadOnly removido ÔåÆ agora pesquis├ível por descri├º├úo
+- `MaxLength=10` em `txt_4c_Grupo` e `txt_4c_Conta`
+- `MaxLength=20/40` em `txt_4c_DGrupo`/`txt_4c_DConta` (antecipado da ConfigurarPaginaDados)
+- `ForeColor=RGB(0,0,0)` em todos os campos de texto (conforme original `ForeColor = 0,0,0`)

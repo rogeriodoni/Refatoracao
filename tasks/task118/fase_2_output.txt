@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `SigReIfpBO.prg` agora cont├®m a implementa├º├úo completa com:
+
+- **`CarregarCursoresAuxiliares()`** ÔÇö carrega `TmpGccr` (SigCdGcr) e `TmpCli` (SigCdCli├ùSigCdGcr) com os ├¡ndices necess├írios; chamado no `Init()`
+- **`PrepararDados()`** ÔÇö replica fielmente o `PROCEDURE processamento` do legado (399 linhas originais): cria `TmpRelat` com os 7 n├¡veis de processamento de cursor local, monta `dbCabecalho` com empresa e filtros ativos. Mant├®m os nomes originais `TmpRelat` e `dbCabecalho` para compatibilidade com os FRX legados
+- **`Imprimir()`** / **`Visualizar()`** ÔÇö chamam `PrepararDados()` e disparam `REPORT FORM (frx) TO PRINT PROMPT` ou `PREVIEW NOCONSOLE`
+- **`ObterRelatorioFrx()`** ÔÇö retorna o caminho do FRX correto em `gc_4c_CaminhoReports` conforme `this_nNivImprs` (1ÔåÆA, 2ÔåÆB, 3/4ÔåÆC, 5ÔåÆD, 6ÔåÆE, 7ÔåÆF)
+- **`ObterMensagemErro()`** / **`Destroy()`** ÔÇö limpeza completa de todos os cursores do ciclo de vida
+
+Pr├│xima fase: **Fase 3/8 ÔÇö Form** (`FormSigReIfp.prg`).

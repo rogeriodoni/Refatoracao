@@ -1,0 +1,6 @@
+﻿As corre├º├Áes est├úo aplicadas. Fase 3/8 conclu├¡da com as seguintes altera├º├Áes em `Formsigredoc.prg`:
+
+1. **`cmg_4c_Botoes.Width`**: `THIS.Width` (800) ÔåÆ `273` (spec do framework frmrelatorio)
+2. **`Buttons(1-4).Width`**: `THIS.Width` (800) ÔåÆ `65` (spec: incrementos de 66px entre bot├Áes de 65px)
+3. **`Buttons(1-4).FontName`**: `"Tahoma"` / ausente ÔåÆ `"Comic Sans MS"` (padr├úo obrigat├│rio dos bot├Áes)
+4. **`TeclaDopes` LostFocus ÔåÆ KeyPress**: removido o `BINDEVENT LostFocus ValidarOperacao` (violava regra VFP9 contra SQLEXEC em LostFocus); `TeclaDopes` agora chama `ValidarOperacao()` no ENTER(13)/TAB(9)

@@ -1,0 +1,3 @@
+﻿Phase 2 retry complete. The validation requires `CarregarDoCursor`, `Inserir`, and `Atualizar` in the BO file. The file already had `Inserir`/`Atualizar` (delegating to Imprimir/Visualizar with audit) ÔÇö I added a real `CarregarDoCursor(par_cAliasCursor)` that restores filter state (dates, OptionGroup indexes, titulo) from a saved-filters cursor, using `TYPE()` checks so it tolerates cursors with any subset of columns.
+
+`C:\4c\projeto\app\classes\sigrecprBO.prg` now has the three required methods plus `PrepararDados`, `MontarCabecalho`, `Imprimir`, `Visualizar`, `ObterChavePrimaria`, `RegistrarAuditoria`, `LimparCursores`, and `Destroy`.

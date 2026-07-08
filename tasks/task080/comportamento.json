@@ -1,0 +1,337 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 8,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "from SigMvNfi a with", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Local lcEmp, lcVir\n\nSelect Cemps ;\n  From crSigCdEmp ;\n Where Imps ;\n  Into Cursor LocalEmps\nGo Top In LocalEmps\n\nlcEmp = []\n\nDo Case\n\tCase Reccount([LocalEmps]) = 1\n\t\tlcEmp = [ And a.Emps = '] + LocalEmps.Cemps + [']\n\n\tCase Reccount([LocalEmps]) > 1\n\t\tlcEmp = [ And a.Emps In (]\n\t\tlcVir = []\n\t\tSelect LocalEmps\n\t\tScan\n\t\t\tlcEmp = lcEmp + lcVir + ['] + LocalEmps.Cemps + [']\n\t\t\tlcVir = [, ]\n\t\tEndScan\n\t\tlcEmp = lcEmp + [)]\nEndCase\n\nReturn lcEmp\n* Fim **************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form sigReDir to Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form sigReDir to Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "ThisForm.getAnoBase.Value = Str(Year(Date()),4)\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tENDIF\n\tlfalso = .t.\n\t* Carregando Cursor com as Empresas\n\tIf ThisForm.podatamgr.SQLExecute([select ?lfalso as Imps, cemps, razas from SigCdEmp Order by cEmps],'crSigCdEmp') < 1 Then\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Str,SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "Private pdDataIni, pdDataFin\nLocal ldDataIni, ldDataFin, lcEmpresa, lcTitulo, lcPeriodo, lcMoe1, lcMoe2, lcMoe3, lcIdTab1\n\nldDataIni = Ctod('01/01/'+ThisForm.getAnoBase.Value) \nldDataFin = Ctod('31/12/'+ThisForm.getAnoBase.Value)\n\npdDataIni = fDtoSQL(ldDataIni)\npdDataFin = fDtoSQL(ldDataFin,'23:59:59')\n\nlcemps = thisform.montaemps()\n\nlcquery = [select d.razsocs, d.cgcs, a.emis, a.totnotas, a.vpis as vimposto, b.codpiss as codservs, a.clifors, c.rclis, c.cpfs as cnpj from SigMvNfi a with (nolock)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,from SigMvNfi a with",
+        "metodosFormChamados": "montaemps,SQLExecute",
+        "controlesReferenciados": "get_Fornec",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form sigReDir Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "IF this.Value # 4\n\tIF EMPTY(ThisForm.getAnoBase.Value)\n\t\tMESSAGEBOX('Ano base não informado.',64,'Aviso')\n\t\tRETURN .f.\n\tENDIF\n\n\tSELECT crSigCdEmp\n\tLOCATE\n\tlcemps = thisform.montaemps()\n\tIF EMPTY(lcemps)\n\t\tMESSAGEBOX('Nenhuma empresa foi selecionada.',64,'Aviso')\n\t\tRETURN .f.\n\tENDIF\nENDIF\n\nDODEFAULT()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "montaemps",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDIR.Get_Fornec",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Empty(This.Value)\n\tThisForm.get_DForn.Value = ''\n\tThisForm.get_DForn.Refresh\n\tReturn(.T.)\nEndIf\n\nIf !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.get_DForn)\n\tMessageBox( 'Acesso Negado...', 48, '' )\n\tThis.Value = ' '\n\tThisForm.get_DForn.Value = ''\n\tReturn(.F.)\nEndIf\t\n\nThisForm.get_Fornec.Refresh\nThisForm.get_DForn.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_DForn,get_Fornec",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.Get_Dforn",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Empty(This.Value)\n\tThisForm.get_Fornec.Value = ''\n\tThisForm.get_Fornec.Refresh\n\tReturn(.T.)\nEndIf\n\nIf !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.get_Fornec, This)\n\tMessageBox( 'Acesso Negado...', 48, '' )\n\tThis.Value = ' '\n\tThisForm.get_Fornec.Value = ''\n\tReturn(.F.)\nEndIf\t\n\nThisForm.get_Fornec.Refresh\nThisForm.get_DForn.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Fornec,get_DForn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.Get_Dforn",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_Fornec.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Fornec",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.ck_MarcaEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "if( ThisForm.ck_MarcaEmp.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigCdEmp\nElse\n\tReplace all Imps with 0 in crSigCdEmp\nEndif ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "*!*\tNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\n*!*\tLocal Imps\n\n*!*\tIf InList(nKeyCode, 13, 32)\n*!*\t\tm.Imps = Iif( crSigCdEmp.Imps = 1, 0, 1 )\n\n*!*\t\tSelect crSigCdEmp\n*!*\t\tGather Memvar Fields Imps\n*!*\t\tThisForm.grdEmps.Refresh\n\n*!*\t\tNoDefault\n*!*\tEndIf\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\n*!*\tLocal Imps\n\n*!*\tm.Imps = Iif( crSigCdEmp.Imps = 0, 1, 0 )\n\n*!*\tSelect crSigCdEmp\n*!*\tGather Memvar Fields Imps\n*!*\tThisForm.grdEmps.Refresh\n\n*!*\tNoDefault\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\n*!*\tNoDefault\n*!*\t* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDIR.grdEmps.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDIR.cmdEmps",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update crSigCdEmp Set Imps = (This.Value = 1)\nThisForm.grdEmps.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREDIR.Procedure",
+      "queryOriginal": "Select Cemps ; From crSigCdEmp ; Where Imps ; Into Cursor LocalEmps",
+      "tabelas": "crSigCdEmp",
+      "colunas": "Imps,LocalEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDIR.Init",
+      "queryOriginal": "\tIf ThisForm.podatamgr.SQLExecute([select ?lfalso as Imps, cemps, razas from SigCdEmp Order by cEmps],'crSigCdEmp') < 1 Then",
+      "tabelas": "SigCdEmp",
+      "colunas": "?lfalso,cemps,razas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDIR.Procedure",
+      "queryOriginal": "lcquery = [select d.razsocs, d.cgcs, a.emis, a.totnotas, a.vpis as vimposto, b.codpiss as codservs, a.clifors, c.rclis, c.cpfs as cnpj from SigMvNfi a with (nolock)... [TRUNCADO]",
+      "tabelas": "SigMvNfi",
+      "colunas": "razsocs,cgcs,emis,totnotas,vpis,codpiss,clifors,rclis,cpfs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDIR.cmdEmps.Click",
+      "queryOriginal": "Update crSigCdEmp Set Imps = (This.Value = 1)",
+      "tabelas": "crSigCdEmp",
+      "colunas": "Imps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCdEmp", "SigCdEmp", "SigMvNfi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

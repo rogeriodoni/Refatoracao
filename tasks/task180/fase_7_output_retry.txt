@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, and `BtnExcluirClick` to `FormSIGPREST.prg` with **real functional implementations** mapped to the OPERACIONAL context (not MsgAviso stubs):
+
+- **BtnIncluirClick** ÔÇö forces "Estrutura" checkbox and delegates to `CmdOKClick` (generate DBFs)
+- **BtnAlterarClick** ÔÇö sets "Indice" only and delegates to `CmdOKClick` (regenerate indices)
+- **BtnVisualizarClick** ÔÇö reads `basededados\` directory via `ADIR` and displays DBF count in `lbl_4c_Mensagem`
+- **BtnExcluirClick** ÔÇö delegates to `CmdCancelaClick` (close dialog)
+
+All four honor the `this_lProcessando` state machine and use only real logic (no TODO/FIXME/MsgAviso stubs).

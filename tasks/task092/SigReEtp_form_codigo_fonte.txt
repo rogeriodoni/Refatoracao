@@ -1,0 +1,1067 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReEtp.SCX
+* Data/Hora: 04/06/2026 23:09:04
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREETP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGREETP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGREETP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGREETP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: shpNotas
+  Parent: SIGREETP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGREETP
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdBtnForm
+  Parent: SIGREETP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say1
+  Parent: SIGREETP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: spnVertical
+  Parent: SIGREETP
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: spnHorizontal
+  Parent: SIGREETP
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Say3
+  Parent: SIGREETP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getQtde
+  Parent: SIGREETP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREETP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: spnDensidade
+  Parent: SIGREETP
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: cmbTipos
+  Parent: SIGREETP
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: Say2
+  Parent: SIGREETP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREETP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optImpressora
+  Parent: SIGREETP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label2
+  Parent: SIGREETP
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 340
+  Width = 466
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Impressão de Etiquetas de Operações"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGREETP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.shpNotas
+------------------------------------------------------------
+  Top = 92
+  Left = 26
+  Height = 67
+  Width = 271
+  BackStyle = 0
+  Curvature = 0
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  ZOrderSet = 1
+  Name = "shpNotas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Shape1
+------------------------------------------------------------
+  Top = 174
+  Left = 301
+  Height = 96
+  Width = 138
+  BackStyle = 0
+  Curvature = 0
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.cmdBtnForm
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 311
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 13
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.TabIndex = 1
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnImprimir"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.TabIndex = 3
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Densidade :"
+  Left = 320
+  Top = 186
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.spnVertical
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 999
+  KeyboardLowValue = 0
+  Left = 381
+  SpinnerHighValue = 999.00
+  SpinnerLowValue =   0.00
+  TabIndex = 12
+  Top = 237
+  Width = 56
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Value = 0
+  Name = "spnVertical"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.spnHorizontal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 999
+  KeyboardLowValue = 0
+  Left = 381
+  SpinnerHighValue = 999.00
+  SpinnerLowValue =   0.00
+  TabIndex = 10
+  Top = 209
+  Width = 56
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Value = 0
+  Name = "spnHorizontal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Quantidade :"
+  Left = 44
+  Top = 103
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.getQtde
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 1
+  Height = 25
+  InputMask = "9999"
+  Left = 111
+  TabIndex = 2
+  Top = 99
+  Width = 38
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo :"
+  Left = 41
+  Top = 132
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.spnDensidade
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 20
+  KeyboardLowValue = 10
+  Left = 381
+  SpinnerHighValue =  20.00
+  SpinnerLowValue =   0.00
+  TabIndex = 8
+  Top = 181
+  Width = 56
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Value = 20
+  Name = "spnDensidade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.cmbTipos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 1
+  FirstElement = 1
+  Height = 25
+  Left = 72
+  Style = 2
+  TabIndex = 4
+  Top = 128
+  Width = 220
+  ZOrderSet = 11
+  ForeColor = 0,0,0
+  Name = "cmbTipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Horizontal :"
+  Left = 322
+  Top = 214
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Vertical :"
+  Left = 335
+  Top = 242
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.optImpressora
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 156
+  Left = 27
+  SpecialEffect = 1
+  Top = 174
+  Width = 271
+  TabIndex = 6
+  BorderColor = 90,90,90
+  Name = "optImpressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<1. Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 4
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 262
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETP.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Selecione Impressora"
+  Height = 15
+  Left = 27
+  Top = 161
+  Width = 107
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREETP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impetiq01
+------------------------------------------------------------
+PROCEDURE impetiq01
+* 01 - 4 Colunas Vertical Simples
+Local lcBar, lcLin, lcCol, lnCnt
+
+lnCnt = 0
+For I = 1 To (ThisForm.loObj.Qtd)
+	lnCnt = lnCnt + 1
+	If (lnCnt > 4)
+		lnCnt = 1
+	EndIf
+	
+	* Inicializando a Etiqueta
+	If (lnCnt = 1)
+		Set Printer To Name (ThisForm.loObj.Imp)
+		Set Device To Printer
+
+		??? Chr(02) + 'L' + Chr(13)
+		??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)
+		??? 'D11' + CHR(13)
+	EndIf
+	
+	lcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')
+	lnInc = (107 * (lnCnt - 1))
+	
+	* Superior
+	lcLin = 018 + ThisForm.loObj.Hor
+	lcCol = 030 + ThisForm.loObj.Ver + lnInc
+	??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+	lcLin = 050 + ThisForm.loObj.Hor
+	lcCol = 043 + ThisForm.loObj.Ver + lnInc
+	??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+	* Inferior
+	lcLin = 018 + ThisForm.loObj.Hor
+	lcCol = 080 + ThisForm.loObj.Ver + lnInc
+	??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+	lcLin = 050 + ThisForm.loObj.Hor
+	lcCol = 092 + ThisForm.loObj.Ver + lnInc
+	??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+	* Finalizando a Etiqueta
+	If (I = ThisForm.loObj.Qtd) Or (lnCnt = 4)
+		??? 'Q0001' + Chr(13)
+		??? 'E' + Chr(13)
+
+		Set Printer To Default
+		Set Device To Screen
+	EndIf
+Next
+* Fim *********************************************************************************
+
+*!*		Do Case 
+*!*			Case (lnCnt = 1) && Etiqueta 1 
+*!*				* Superior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 030 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 043 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+*!*				* Inferior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 080 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 092 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+*!*		
+*!*			Case (lnCnt = 2) && Etiqueta 2 
+*!*				* Superior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 137 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 149 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+*!*				* Inferior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 185 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 197 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+*!*		
+*!*			Case (lnCnt = 3) && Etiqueta 3
+*!*				* Superior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 243 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 255 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+*!*				* Inferior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 292 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 304 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+*!*		
+*!*			Case (lnCnt = 4) && Etiqueta 3
+*!*				* Superior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 349 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 361 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+*!*				* Inferior
+*!*				lcLin = 018 + ThisForm.loObj.Hor
+*!*				lcCol = 399 + ThisForm.loObj.Ver
+*!*				??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+*!*				lcLin = 050 + ThisForm.loObj.Hor
+*!*				lcCol = 411 + ThisForm.loObj.Ver
+*!*				??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+*!*		EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impetiq02
+------------------------------------------------------------
+PROCEDURE impetiq02
+* 02 - 4 Colunas Vertical Dupla
+Local lcBar, lcLin, lcCol
+
+For I = 1 To (ThisForm.loObj.Qtd + Mod(ThisForm.loObj.Qtd, 2)) Step 2
+	Set Printer To Name (ThisForm.loObj.Imp)
+	Set Device To Printer
+
+	* Inicializando a Etiqueta
+	??? Chr(02) + 'L' + Chr(13)
+	??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)
+	??? 'D11' + CHR(13)
+
+	lcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')
+
+	* Etiqueta 1 
+
+		* Superior
+		lcLin = 018 + ThisForm.loObj.Hor
+		lcCol = 030 + ThisForm.loObj.Ver
+		??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+		lcLin = 050 + ThisForm.loObj.Hor
+		lcCol = 043 + ThisForm.loObj.Ver
+		??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+		* Inferior
+		lcLin = 018 + ThisForm.loObj.Hor
+		lcCol = 080 + ThisForm.loObj.Ver
+		??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+		lcLin = 050 + ThisForm.loObj.Hor
+		lcCol = 092 + ThisForm.loObj.Ver
+		??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+	* Etiqueta 2
+
+		* Superior
+		lcLin = 018 + ThisForm.loObj.Hor
+		lcCol = 137 + ThisForm.loObj.Ver
+		??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+		lcLin = 050 + ThisForm.loObj.Hor
+		lcCol = 149 + ThisForm.loObj.Ver
+		??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+		* Inferior
+		lcLin = 018 + ThisForm.loObj.Hor
+		lcCol = 185 + ThisForm.loObj.Ver
+		??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+		lcLin = 050 + ThisForm.loObj.Hor
+		lcCol = 197 + ThisForm.loObj.Ver
+		??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+	If (I <> ThisForm.loObj.Qtd) 
+		lcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')
+
+		* Etiqueta 3 
+
+			* Superior
+			lcLin = 018 + ThisForm.loObj.Hor
+			lcCol = 243 + ThisForm.loObj.Ver
+			??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+			lcLin = 050 + ThisForm.loObj.Hor
+			lcCol = 255 + ThisForm.loObj.Ver
+			??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+			* Inferior
+			lcLin = 018 + ThisForm.loObj.Hor
+			lcCol = 292 + ThisForm.loObj.Ver
+			??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+			lcLin = 050 + ThisForm.loObj.Hor
+			lcCol = 304 + ThisForm.loObj.Ver
+			??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+		* Etiqueta 4
+
+			* Superior
+			lcLin = 018 + ThisForm.loObj.Hor
+			lcCol = 349 + ThisForm.loObj.Ver
+			??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+			lcLin = 050 + ThisForm.loObj.Hor
+			lcCol = 361 + ThisForm.loObj.Ver
+			??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+			* Inferior
+			lcLin = 018 + ThisForm.loObj.Hor
+			lcCol = 399 + ThisForm.loObj.Ver
+			??? '4e63031' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+			lcLin = 050 + ThisForm.loObj.Hor
+			lcCol = 411 + ThisForm.loObj.Ver
+			??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+	EndIf
+		
+	* Finalizando a Etiqueta
+	??? 'Q0001' + Chr(13)
+	??? 'E' + Chr(13)
+
+	Set Printer To Default
+	Set Device To Screen
+Next
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impetiq03
+------------------------------------------------------------
+PROCEDURE impetiq03
+* 03 - 2 Colunas Horizontal
+Local lcBar, lcLin, lcCol
+
+For I = 1 To ThisForm.loObj.Qtd
+	Set Printer To Name (ThisForm.loObj.Imp)
+	Set Device To Printer
+
+	lcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')
+
+	* Inicializando a Etiqueta
+	??? Chr(02) + 'L' + Chr(13)
+	??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)
+	??? 'D11' + CHR(13)
+
+	* Etiqueta da Esquerda
+	lcLin = 030 + ThisForm.loObj.Hor
+	lcCol = 037 + ThisForm.loObj.Ver
+	??? '1e63040' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+	lcLin = 012 + ThisForm.loObj.Hor
+	lcCol = 066 + ThisForm.loObj.Ver
+	??? '1911003' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+
+	* Etiqueta da Direita
+	lcLin = 030 + ThisForm.loObj.Hor
+	lcCol = 230 + ThisForm.loObj.Ver
+	??? '1e63040' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'C' + lcBar + Chr(13)
+
+	lcLin = 012 + ThisForm.loObj.Hor
+	lcCol = 260 + ThisForm.loObj.Ver
+	??? '1911003' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + lcBar + Chr(13)
+	
+	* Finalizando a Etiqueta
+	??? 'Q0001' + Chr(13)
+	??? 'E' + Chr(13)
+
+	Set Printer To Default
+	Set Device To Screen
+Next
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE m_imprimir
+------------------------------------------------------------
+PROCEDURE m_imprimir
+Local Array laPrinter1(1)
+Local lnDen, llOks, lcImp, lnTip
+
+With ThisForm
+	.poDataMgr.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', .Dopes, 'NDopes')
+
+	.loObj.Qtd = Int(.getQtde.Value)
+	.loObj.Den = Int(.spnDensidade.Value)
+	.loObj.Hor = Int(.spnHorizontal.Value)
+	.loObj.Ver = Int(.spnVertical.Value)
+	.loObj.Imp = .optImpressora.Buttons(.optImpressora.Value).Tag
+	.loObj.Tip = Padl(.cmbTipos.ListIndex, 2, [0])
+	.loObj.Ini = Padl(LocalOpe.NDopes, 4, [0])
+EndWith
+
+If (ThisForm.loObj.Qtd < 1)
+	=MessageBox('Quantidade Para Impressão Inválida!!!', 0+16, 'Dados Inválidos!!!')
+	ThisForm.getQtde.SetFocus
+	Return 0
+EndIf
+
+Do Case
+	Case (ThisForm.loObj.Tip = [01]) && 01 - 4 Colunas Vertical Simples
+		  ThisForm.ImpEtiq01
+
+	Case (ThisForm.loObj.Tip = [02]) && 02 - 4 Colunas Vertical Dupla
+		  ThisForm.ImpEtiq02
+
+	Case (ThisForm.loObj.Tip = [03]) && 03 - 2 Colunas Horizontal
+		  ThisForm.ImpEtiq03
+EndCase
+
+=MessageBox('A Impressão das Etiquetas Foi Concluída!!!', 0+48, 'Impressao')
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pDop
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.Dopes = Padr(pDop, 20)
+
+		lcCpo = [nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, AjVerts, AjHorzs]
+		.poDataMgr.CursorQuery('SigCdPam', 'LocalParam', .F., .F., lcCpo)
+
+		lnPrinters = APrinters(laPrinters)
+		If (lnPrinters <> 0)
+			For lnI = 1 to lnPrinters
+				laPrinters(lnI, 1) = Upper(laPrinters(lnI, 1))
+			EndFor
+			=ASort(laPrinters)
+			lnTam = Len(laPrinters(1, 1))
+		Else
+			=MessageBox('Não Foi Encontrada Nenhuma Impressora!!!', 48, '')
+			Return 0
+		EndIf
+
+		lcQuery = [Select Impres, ntpImpres From SigCdmp Where nTpImpres = 2]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCimp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCimp)')
+			Return 0
+		EndIf
+
+		lcQuery = [Select b.Impres, b.NtpImpres ] + ;
+					[From SigSyImp a, SigCdmp b ] + ;
+				   [Where a.UsuAcess = '] + Usuar + [' And ] + ;
+				   	     [a.Cimps = b.Impres ] + ;
+				   [Union All ] + ;
+				  [Select c.Impres, c.NtpImpres ] + ;
+				    [From SigCdAcG a, SigSyImp b, SigCdmp c ] + ;
+				   [Where a.Usuarios = '] + Usuar + [' And ] + ;
+				         [a.Grupos = b.GrAcess And ] + ;
+				         [b.Cimps = c.Impres]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpCimp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCimp)')
+			Return .f.
+		EndIf
+
+		If (Reccount('crTmpCimp') > 0)
+			Select Impres, NtpImpres ;
+			  From crTmpCimp ;
+			 Group By Impres, NtpImpres ;
+			  Into Cursor LocalcImp ReadWrite
+		EndIf
+
+		Select LocalCImp
+		Index On Impres Tag skImpres
+
+		lnImpres = 1
+		If (lnPrinters <> 0)
+			Select LocalCImp
+			Set Order To skImpres
+			Scan For LocalCImp.nTpImpres = 2
+				Dimension laImpOk(lnImpres)
+				lnOk = AScan(laPrinters, Alltrim(Upper(LocalCImp.Impres)))
+				If (lnOk <> 0)
+					laImpOk(lnImpres) = laPrinters(lnOk)
+					lnImpres = lnImpres + 1
+				EndIf
+			EndScan
+		EndIf
+		lnImpres = lnImpres - 1
+
+		With .optImpressora
+			lnTop 	 = 10
+			lnHeight = 15
+			If (lnImpres <> 0)
+				.ButtonCount = Min(lnImpres, Max(LocalParam.nMaxImpEti, 7))
+				For lnI = 1 To lnImpres
+					lcI = Alltrim(Str(lnI))
+					With .Option&lcI.
+						.AutoSize = .F.
+						.Caption  = ' \<' + lcI + '. ' + laImpOk(lnI)
+						.FontSize = 8
+						.Tag      = Upper(laImpOk(lnI))
+						.Top      = lnTop
+						.Width    = 180
+					EndWith
+					lnTop 	 = lnTop + 20
+					lnHeight = lnHeight + 20
+				EndFor
+			Else
+				.ButtonCount = 1
+				lnOk = AScan(laPrinters, 'GENÉRICO/SOMENTE TEXTO')
+				With .Option1
+					.AutoSize = .F.
+					.Caption  = ' \<0. Genérico/Somente Texto'
+					.Enabled  = (lnOk <> 0)
+					.FontSize = 8
+					.Tag      = 'GENÉRICO/SOMENTE TEXTO'
+					.Width    = 180
+					lnImpres  = Iif(.Enabled, 1, 0)
+				EndWith
+				lnHeight = lnHeight + 20
+			EndIf
+			.Enabled = (lnImpres > 1)
+			.Height  = lnHeight
+		EndWith
+
+		.spnVertical.Value   = LocalParam.AjVerts
+		.spnHorizontal.Value = LocalParam.AjHorzs
+
+		.loObj = CreateObject('Relation')
+		.loObj.AddProperty('Qtd', Int(.getQtde.Value))
+		.loObj.AddProperty('Den', Int(.spnDensidade.Value))
+		.loObj.AddProperty('Hor', Int(.spnHorizontal.Value))
+		.loObj.AddProperty('Ver', Int(.spnVertical.Value))
+		.loObj.AddProperty('Imp', [])
+		.loObj.AddProperty('Tip', 0)
+		.loObj.AddProperty('Ini', [])
+
+		.cmbTipos.AddItem([4 Colunas Vertical Simples])
+		.cmbTipos.AddItem([4 Colunas Vertical Dupla  ])
+		.cmbTipos.AddItem([2 Colunas Horizontal      ])
+		.cmbTipos.Value = 1
+
+		.optImpressora.InteractiveChange()
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETP.cmdBtnForm
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnImprimir.Click
+------------------------------------------------------------
+PROCEDURE btnImprimir.Click
+ThisForm.m_Imprimir
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETP.optImpressora
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+=fCarregarImps(ThisForm.optImpressora.Buttons(ThisForm.optImpressora.Value).Tag, .f., ;
+			   ThisForm.spnVertical, ThisForm.spnHorizontal, ThisForm.spnDensidade, .f., ThisForm.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREETP
+RESERVED3 (ClassInfo): dopes
+loobj
+podatamgr
+*impetiq01 
+*impetiq02 
+*impetiq03 
+*m_imprimir 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

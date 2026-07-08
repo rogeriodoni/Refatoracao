@@ -1,0 +1,14 @@
+﻿Todas as 3 corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**Problema real: `CIDCHAVES` em 3 locais do BO (`SigPrAprBO.prg`)**
+
+1. **`Atualizar` (linha 359-378)** ÔÇö Valida├º├úo trocada de `EMPTY(this_cCIdChaves)` ÔåÆ `EMPTY(this_cCPros)`. WHERE do UPDATE `SigPrPmi` trocado de `WHERE CIdChaves = ...` ÔåÆ `WHERE CPros = ... AND Promos = ...`, alinhado com o original que identificava registros por `CPros + Promos`.
+
+2. **`ExecutarExclusao` (linha 420-429)** ÔÇö Mesma troca: valida├º├úo por `this_cCPros` e DELETE `WHERE CPros = ... AND Promos = ...` em vez de `WHERE CIdChaves`, correspondendo ao `Delete From SigPrPmi Where CPros = ...` do c├│digo legado.
+
+3. **Backup SigPrCpo SCAN (linha 1196-1202)** ÔÇö O INSERT-SELECT `FROM SigPrCpo WHERE CIdChaves = cursor_value` foi convertido para INSERT VALUES lendo diretamente do cursor `cursor_4c_Compo` (que j├í est├í posicionado no SCAN). Tamb├®m adicionado o `SQLEXEC` que estava ausente (o SQL era constru├¡do mas nunca executado ÔÇö bug secund├írio corrigido).
+
+**Falsos positivos (sem altera├º├úo):**
+- `CMOES` ÔÇö ├® a PK de `SigCdMoe` em `BuscarFatorMoeda`, lookup leg├¡timo por chave prim├íria.
+- `CONTROLCOUNT` ÔÇö propriedade de objeto VFP9 (`.ControlCount`), n├úo ├® cl├íusula SQL.
+- `CODS` ÔÇö ├® a PK de `SigPrFti` na valida├º├úo de lookup, acesso correto.

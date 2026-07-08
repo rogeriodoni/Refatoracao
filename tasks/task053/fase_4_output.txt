@@ -1,0 +1,9 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormSigReCmg.prg`:
+
+1. **BtnAnteriorClick** ÔÇö adicionado `loc_oErro` ao `LOCAL`, corrigida l├│gica de navega├º├úo (agora manipula `pnNumGrf` diretamente com `MAX(1, ...)` e sincroniza o BO), adicionada chamada obrigat├│ria a `ConfigurarOleGrafico()` + `.Refresh` ap├│s `LOCATE` (sem isso o gr├ífico OLE n├úo atualizava na tela).
+
+2. **BtnProximoClick** ÔÇö mesmas corre├º├Áes, com `MIN(3, pnNumGrf + 1)`.
+
+3. **BtnEncerrarClick** ÔÇö adicionada declara├º├úo `LOCAL loc_oErro` que faltava.
+
+**Nota sobre o template da Fase 4**: Este ├® um form OPERACIONAL (subform de gr├ífico, chamado pelo form pai). N├úo possui Page1=Lista/Page2=Dados nem bot├Áes CRUD ÔÇö o template gen├®rico de Fase 4 n├úo se aplica. A navega├º├úo j├í est├í no `CommandGroup` com bot├Áes Anterior/Pr├│ximo/Imprimir/Encerrar (equivalente funcional ao `cnt_4c_Botoes`). O formul├írio n├úo precisa de integra├º├úo no `menu.prg` (├® chamado programaticamente pelo form pai), e o `config.prg` carrega automaticamente via `ADIR()`.

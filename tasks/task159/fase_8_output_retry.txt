@@ -1,0 +1,12 @@
+﻿All 9 Phase 8 required methods are now present. Summary of what I added to `Formsigprccp.prg` before `ENDDEFINE`:
+
+- **FormParaBO** ÔÇö copies all 30+ properties from form controls to BO (fornecedor, filtros de faixa, markup, encargo, moeda, op├º├Áes)
+- **BOParaForm** ÔÇö reverse mapping, reflects BO state on all controls
+- **HabilitarCampos(par_lHabilitar)** ÔÇö toggles Enabled state on every capture control, respecting `txt_4c_DFornecs` as always readonly
+- **LimparCampos** ÔÇö zera todos os campos, restaura defaults do OptionGroups, ZAP no cursor, reseta `this_lProcessado`
+- **BtnBuscarClick / CarregarLista** ÔÇö override vazio (form OPERACIONAL n├úo tem lista CRUD)
+- **BtnSalvarClick** ÔÇö delega para `AtualizarPrecos(.F.)` do BO
+- **BtnCancelarClick** ÔÇö limpa cursor de resultados e desabilita bot├Áes p├│s-processamento
+- **AjustarBotoesPorModo** ÔÇö delega para `AtualizarEstadoCampos()`
+
+Arquivo final: 2619 linhas, terminando corretamente em `ENDDEFINE`.

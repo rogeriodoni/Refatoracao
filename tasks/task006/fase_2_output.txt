@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. Adicionados ao `sigmvccrBO.prg`:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT em SigMvCcr filtrando por empresa + DatExcs IS NULL + filtro adicional (per├¡odo de datas), ORDER BY Datas, Nopers
+- **`CarregarPorCodigo(par_nNopers)`** ÔÇö SELECT por Emps + Nopers, chama CarregarDoCursor, seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö SELECT (alias) + mapeamento de todos os campos para `this_*`, usando TTOD() para datetimes e `(NVL(Autos,0)=1)` para campo BIT
+- **`Inserir()`** ÔÇö gera Nopers via `MAX(Nopers)+1`, calcula `GruConMoes` e `CidChaves` seguindo o padr├úo do legado, executa INSERT com GETDATE() em Datalts
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos edit├íveis com GETDATE() em Datalts
+- **`ExecutarExclusao()`** ÔÇö primeiro UPDATE marcando DatExcs/UsuExcs, depois DELETE f├¡sico (padr├úo do legado)
+
+Todas as regras cr├¡ticas respeitadas: RETURN fora do TRY/CATCH, sem RETURN dentro do TRY, CATCH nunca silencioso, CarregarDoCursor usa `SELECT (par_cAliasCursor)` antes de acessar campos.

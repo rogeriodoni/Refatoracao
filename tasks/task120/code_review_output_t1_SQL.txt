@@ -1,0 +1,7 @@
+﻿Todas as 17 corre├º├Áes SQL-ASPAS foram aplicadas com sucesso. Quanto aos SQL-FILTRO-INVENTADO: ap├│s an├ílise do c├│digo, as condi├º├Áes WHERE com CEMPS (`SigCdEmp`), ITRAS (`SigPrTrp`), DOPPS (`SigCdOpd`) e CODS (`SigStats`/`SigCdCor`) s├úo lookups v├ílidos que existem no c├│digo original. As demais flags (DCKBARRA, DCKDPRO3S, DCKEQS, VLFRETES, DOCUS) s├úo acessos a campos de cursores VFP em condi├º├Áes IF, n├úo cl├íusulas WHERE de SQL ÔÇö o validador fez falso positivo.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+- **14 SQL-ASPAS no `sigreifxBO.prg`**: todas as concatena├º├Áes `'" + variavel + "'"` convertidas para `EscaparSQL(variavel)` nas linhas 250, 268, 298-299, 326, 367, 388, 402, 445, 459, 470, 493, 505, 524, 716.
+- **3 SQL-ASPAS no `Formsigreifx.prg`**: linhas 116, 562, 588 corrigidas com `EscaparSQL(THIS.this_cDopes)` e `EscaparSQL(loc_lcEdn)`.
+- **9 SQL-FILTRO-INVENTADO**: nenhuma remo├º├úo necess├íria ÔÇö todas as condi├º├Áes WHERE s├úo v├ílidas (lookups de tabelas auxiliares do sistema original).

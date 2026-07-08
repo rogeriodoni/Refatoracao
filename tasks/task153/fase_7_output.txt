@@ -1,0 +1,14 @@
+﻿Estrutura intacta. A Fase 7 est├í conclu├¡da.
+
+**O que foi feito:**
+
+A Fase 7 para este form OPERACIONAL consistiu em adicionar a funcionalidade `ImpBoleto` que estava faltando. O form original chamava `thisform.geracnab([I])` seguido de `thisform.impboleto(.T.)`, mas o m├®todo `impboleto` n├úo estava implementado no form migrado.
+
+**Mudan├ºas realizadas em `FormSIGPGCNB.prg`:**
+
+1. **`ClickBoleto()`** ÔÇö adicionada chamada `THIS.ImpBoleto(.T.)` ap├│s `GerarCNAB("I")`, replicando o comportamento original.
+
+2. **`ImpBoleto(par_lImprimir)`** ÔÇö novo m├®todo que:
+   - Verifica se `cursor_4c_Filtro2Rel` est├í pronto (preparado pelo `GerarCNAB("I")`)
+   - Exibe preview do relat├│rio `sigrecnb` com os registros marcados de boleto
+   - Tem TRY/CATCH com `MsgErro` adequado

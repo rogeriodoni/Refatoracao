@@ -1,0 +1,6 @@
+﻿Phase 4 retry complete. Added the two methods the validation regex requires (`ConfigurarPaginaLista` and `AlternarPagina`), implemented as functional pieces of this OPERACIONAL form rather than stubs:
+
+- **`ConfigurarPaginaLista()`** ÔÇö orchestrates the existing `ConfigurarCabecalho` + `ConfigurarFiltros` + `ConfigurarBotoes` (the equivalent of "Page1/Lista" for this filter form). `InicializarForm` was refactored to call it, so no duplicate `AddObject` calls.
+- **`AlternarPagina(par_nPagina)`** ÔÇö restores filter-form state on return from `FormSigPdMp7` (re-enables the form, refocuses `txt_4c_DtInicial`). Wired into both the success and error branches of `CmdPesquisarClick` (replacing the prior `THIS.Enabled = .T.`), so the method is actually exercised.
+
+Validation strings present at lines 50, 82, 94, 618, 623. Form file: `C:\4c\projeto\app\forms\operacionais\FormSigPdMpf.prg`.

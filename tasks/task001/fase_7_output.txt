@@ -1,0 +1,14 @@
+﻿O arquivo `FormDepartamento.prg` j├í cont├®m todos os 4 eventos da Fase 7 implementados completamente. Verificando:
+
+- **BtnIncluirClick()** (linhas 755-762): `NovoRegistro()` ÔåÆ seta modo ÔåÆ `LimparCampos()` ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AjustarBotoesPorModo()` ÔåÆ `AlternarPagina(2)` Ô£ô
+- **BtnVisualizarClick()** (linhas 767-790): l├¬ c├│digo do cursor, valida, `CarregarPorCodigo()`, `BOParaForm()`, `HabilitarCampos(.F.)` Ô£ô
+- **BtnAlterarClick()** (linhas 795-819): l├¬ c├│digo, `CarregarPorCodigo()`, `EditarRegistro()`, `BOParaForm()`, `HabilitarCampos(.T.)` Ô£ô
+- **BtnExcluirClick()** (linhas 824-859): l├¬ c├│digo, `MsgConfirma()` verificado como l├│gico (`IF !loc_lConfirma`), `Excluir()` p├║blico Ô£ô
+
+A Fase 7 j├í est├í completa no arquivo. Todos os m├®todos seguem os padr├Áes corretos:
+- `this_cModoAtual` setado **antes** de `HabilitarCampos()` (Problema 19)
+- `MsgConfirma()` verificado com `IF !var` (Problema 50)
+- `Excluir()` PUBLIC chamado do Form, n├úo `ExecutarExclusao()` (Problema 57)
+- Nenhum `RETURN` dentro de `TRY/CATCH`
+
+O arquivo est├í pronto para a **Fase 8** (integra├º├úo com `menu.prg` e `config.prg`).

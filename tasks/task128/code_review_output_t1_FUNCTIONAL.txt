@@ -1,0 +1,9 @@
+﻿Tudo correto. Resumo das corre├º├Áes aplicadas:
+
+**[NULL-CURSOR]** ÔÇö `SET NULL ON` / `SET NULL OFF` adicionados ao redor do `CREATE CURSOR cursor_4c_Operacoes` em `ConfigurarPaginaLista()`.
+
+**[BINDEVENT-PARAMS]** ÔÇö Linha 685: `BINDEVENT(..., "KeyPress", ..., "TxtNmOperacaoLostFocus")` corrigido para `"LostFocus"`. Procedure `TxtNmOperacaoLostFocus` teve os par├ómetros `(par_nKeyCode, par_nShiftAltCtrl)` removidos, pois LostFocus n├úo passa argumentos.
+
+**[OPTIONGROUP-LEFT]** ÔÇö `.Themes = .F.` adicionado a todos os 25 Buttons de todos os OptionGroups. Buttons 6, 8 e 9 de `obj_4c_OpColunas` tamb├®m receberam `.AutoSize = .T.` (estavam faltando).
+
+**[METODO-INEXISTENTE]** / **[LAYOUT-POSITION]** ÔÇö Falsos positivos do validador: `THIS.Width()` n├úo existe no arquivo (o c├│digo usa `THIS.Width` como propriedade); os diffs de 82px nos layouts s├úo o offset correto do `PageFrame.Top=82` ÔÇö todas as posi├º├Áes est├úo calculadas como `top_original - 82` dentro da Page, resultando em posi├º├úo absoluta id├¬ntica ao legado.

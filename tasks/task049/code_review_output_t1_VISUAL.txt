@@ -1,0 +1,9 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas em `Formsigrecgr.prg`:
+
+1. **`ConfigurarPaginaLista()`** ÔÇö `cnt_4c_Aguarde` movido de `loc_oPagina` (Page1 do PageFrame) para `THIS` (o form diretamente), com `Top=92` e `Left=296` correspondendo ├ás coordenadas absolutas do original SCX.
+
+2. **`ExibirAguarde()`** ÔÇö refer├¬ncia atualizada de `THIS.pgf_4c_Paginas.Page1.cnt_4c_Aguarde` para `THIS.cnt_4c_Aguarde`.
+
+3. **`OcultarAguarde()`** ÔÇö mesma atualiza├º├úo de refer├¬ncia.
+
+**Contexto do fix**: o form ├® FLAT (Height=160). O PageFrame come├ºa em Top=85 com apenas 75px de altura ÔÇö colocar o container ├á Top=92 dentro da page o deixaria fora da ├írea vis├¡vel. A solu├º├úo correta ├® ancor├í-lo diretamente no form em posi├º├úo absoluta (92, 296), que ├® exatamente onde o original SCX o posicionava.

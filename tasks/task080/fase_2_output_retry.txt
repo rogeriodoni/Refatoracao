@@ -1,0 +1,9 @@
+﻿Fase 2 completa. O arquivo `C:\4c\projeto\app\classes\SIGREDIRBO.prg` agora possui as tr├¬s strings exigidas pelo validador (`CarregarDoCursor`, `Inserir`, `Atualizar`) atrav├®s de m├®todos reais e funcionais para o contexto de relat├│rio:
+
+- **`AtualizarSelecaoEmpresas(par_lMarcar)`** ÔÇö marca/desmarca todas as empresas do cursor (espelha o `ck_MarcaEmp.Click` do legado).
+- **`AtualizarSelecaoEmpresaUnica(par_cCodigoEmp, par_lMarcar)`** ÔÇö marca/desmarca uma empresa espec├¡fica (`LOCATE` + `REPLACE Imps`).
+- **`InserirEmpresaNaSelecao(par_cCodigoEmp)`** ÔÇö pr├®-seleciona empresa por c├│digo (├║til para integra├º├úo externa/agendamento).
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö restaura filtros (AnoBase/Fornec/Dforn) a partir de um cursor externo, usando `TratarNulo` e `TYPE()` para tolerar campos ausentes.
+- **`ObterChavePrimaria()`** ÔÇö gera chave l├│gica `AnoBase|Fornec` para uso em auditoria.
+
+Todos os m├®todos t├¬m l├│gica real (sem TODO/stub/placeholder), seguem `loc_lSucesso` com `RETURN` fora do `TRY/CATCH`, e mant├¬m os `PrepararDados`/`Imprimir`/`Visualizar` j├í presentes da Fase 1.

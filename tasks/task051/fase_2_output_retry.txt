@@ -1,0 +1,10 @@
+﻿Phase 2 completed. Added the 5 expected CRUD-equivalent methods to sigrechpBO.prg:
+
+- **ObterChavePrimaria()** ÔÇö composite filter key (TIPO, OPC, ORD, DT, EMP, EMI, DES, FLW) for audit log
+- **CarregarDoCursor()** ÔÇö loads filter presets via SCATTER MEMVAR with TYPE() guards for all 16 filter fields
+- **Inserir()** ÔÇö REPORT semantic: delegates to `Imprimir()` + audits `"IMPRESSAO"`
+- **Atualizar()** ÔÇö REPORT semantic: delegates to `Visualizar()` + audits `"VISUALIZACAO"`
+- **RegistrarAuditoria(par_cOperacao)** ÔÇö `INSERT INTO LogAuditoria` with `SigReChp` as Tabela
+- **Destroy()** ÔÇö closes report cursors via `LimparCursores()` + closes `cursor_4c_Operacoes`
+
+All existing report logic (PrepararDados, BuscarClientes, ProcessarComFollowUp, MontarCabecalho, Imprimir, Visualizar) is preserved unchanged.

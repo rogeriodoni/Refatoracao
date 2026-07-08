@@ -1,0 +1,16 @@
+﻿Fase 6/8 conclu├¡da. O arquivo `FormSigReIfv.prg` foi atualizado com:
+
+**BINDEVENTs adicionados em `ConfigurarPaginaDados()`:**
+- Moeda c├│digo/descri├º├úo ÔåÆ `TeclaCdMoeda` / `TeclaDsMoeda`
+- Grupo Estoque c├│digo/descri├º├úo ÔåÆ `TeclaCdGrEstoque` / `TeclaDsGrEstoque`
+- Conta Estoque c├│digo/descri├º├úo ÔåÆ `TeclaCdEstoque` / `TeclaDsEstoque`
+- N├║mero de Barra ÔåÆ `TeclaIBarra`
+- CommandGroup 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar)
+- Bot├Áes grid de empresas (`CmdSelemp` / `CmdApgEmp`)
+
+**22 m├®todos novos implementados (nenhum stub/TODO):**
+- Lookup Moeda: `TeclaCdMoeda`, `ValidarCdMoeda`, `AbrirBuscaMoeda`, `TeclaDsMoeda`, `ValidarDsMoeda`
+- Lookup Grupo Estoque: `TeclaCdGrEstoque`, `ValidarCdGrEstoque` (SQLEXEC em SigCdGcr), `AbrirBuscaGrEstoque`, `TeclaDsGrEstoque`, `ValidarDsGrEstoque`
+- Lookup Conta Estoque: `TeclaCdEstoque`, `ValidarCdEstoque` (SQLEXEC distinct Contas de SigCdBal filtrado por Grupos), `AbrirBuscaEstoque`, `TeclaDsEstoque`, `ValidarDsEstoque`
+- IBarra: `TeclaIBarra`, `ValidarIBarra` (SQLEXEC em SigOpEtq)
+- A├º├úo: `FormParaRelatorio`, `ValidarFiltros`, `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnEncerrarClick`, `CmdSelempClick`, `CmdApgEmpClick`

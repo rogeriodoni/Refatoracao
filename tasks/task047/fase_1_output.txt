@@ -1,0 +1,12 @@
+﻿Fase 1/8 conclu?da. Criei `C:\4c\projeto\app\classes\SigReCgcBO.prg` com:
+
+- **Heran?a**: `RelatorioBase` (correto para frmrelatorio, n?o `BusinessBase`)
+- **Propriedades de filtro** (extra?das do c?digo fonte original):
+  - `this_dDtIni` / `this_dDtFin` ? mapeiam `getDtIni.Value` / `getDtFin.Value`
+  - `this_nOptDatas` ? mapeia `optDatas.Value` (1=Data, 2=Vencimento)
+  - `this_cGrupo` / `this_cConta` ? par?metros `pGru` / `pCon` do Init original
+- **Metadados do relat?rio**: `this_cArquivoFRX`, `this_cTituloRelatorio` (com CHR(211)/CHR(201) para "RELAT?RIO GEN?RICO DE COMPRAS")
+- **Nomes de cursores** (do legado): TmpRel, CsCabecalho, TmpMoe, CsTotal ? renomeados com prefixo `cursor_4c_`
+- **Init()**: usa `DODEFAULT()` + TRY/CATCH, sem RETURN dentro do TRY (flag `loc_lSucesso`), resolve caminho do FRX via `gc_4c_CaminhoReports`
+
+Pr?xima fase (2/8) implementar? `PrepararDados()` com a query SQL do `dbHistorico` filtrada por per?odo/grupo/conta.

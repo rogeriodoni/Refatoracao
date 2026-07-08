@@ -1,0 +1,9 @@
+﻿Os tr├¬s problemas listados j├í est├úo corrigidos no c├│digo atual:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis()` j├í inclui `"CNT_4C__IMPRESSORA"` no INLIST (linhas 1530-1533). Container n├úo ser├í for├ºado a `Visible=.T.`.
+
+2. **[LAYOUT-POSITION] Top** ÔÇö `cnt_4c_Etiquetas` j├í est├í declarado com `Top = -35` (linha 89), que ├® exatamente o valor original do SCX (`Top=-35`). O valor 136 que gerou o diff era de `shp_4c_Shape2` (shape interno), n├úo do container.
+
+3. **[LAYOUT-POSITION] Left** ÔÇö `cnt_4c_Etiquetas` j├í est├í declarado com `Left = 352` (linha 89), valor id├¬ntico ao original do SCX. O valor 188 era de `shp_4c_Shape2.Left`, que ├® a posi├º├úo do shape DENTRO do container, n├úo do container em si.
+
+Todos os tr├¬s problemas detectados pelo pass j├í est├úo corretamente implementados no arquivo atual. Nenhuma altera├º├úo ├® necess├íria.

@@ -1,0 +1,8 @@
+﻿**1 fix applied.** Summary of all 13 issues:
+
+| Issue | Status | Action |
+|-------|--------|--------|
+| GRID-SQL: CPros, Produzido, Ntrans, Saldo, Valobxs, Produzir, Nparcs, Pesos, PctEnt, Locals (10 issues) | False positive | No change ÔÇö all 10 fields ARE in SELECT SQL with proper aliases (lines 1516ÔÇô1530) |
+| SQL-FILTRO-INVENTADO: MASCNUMS | **Real bug** | Fixed: `WHERE a.MascNums =` ÔåÆ `WHERE a.CPros =` (line 1660), matching original `Where a.cpros = '` |
+| SQL-FILTRO-INVENTADO: DOPES | Valid logic | Kept ÔÇö `Buscar()` filter by operation type is required; removing it would load all movements |
+| SQL-FILTRO-INVENTADO: ICLIS | Valid logic | Kept ÔÇö `CarregarDescricaoConta()` lookup by account code is standard and correct |

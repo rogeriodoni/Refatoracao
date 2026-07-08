@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em 5 pontos:
+
+- **`cmg_4c_Botoes.Width`**: `THIS.Width` (700) ÔåÆ `273` (conforme coment├írio: Left=2,68,134,200 + Width=65 = 273)
+- **`Buttons(1..4).Width`**: `THIS.Width` (700) ÔåÆ `65` cada
+
+O detector flagou `THIS.Width` dentro de blocos `WITH .Buttons(N)` como poss├¡vel chamada de m├®todo inexistente. Na realidade era acesso ├á propriedade do Form (700px), mas o valor estava errado ÔÇö os bot├Áes do `cmg_4c_Botoes` devem ter 65px de largura, n├úo a largura total do formul├írio.

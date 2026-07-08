@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `SigPdM13BO.prg` est├í completo com:
+
+| M├®todo | O que faz |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `this_nNenvs` |
+| `CarregarDoCursor(par_cAliasCursor)` | Carrega EmpDnPs, Cmats, Qtds, TpOps da linha corrente |
+| `CarregarOperacao(par_nNenvs)` | Query `TOP 1` em SigCdNei para pegar numps/emps/dopps ÔåÆ cria `cursor_4c_Operacao` para ControlSource do container |
+| `CarregarDados(par_nNenvs)` | Replica exata do UNION ALL do legado ÔåÆ cria `cursor_4c_Dados` (C33/C14/N9,3/C15) + calcula `this_nTotalQtds` |
+
+Pontos cr├¡ticos respeitados:
+- SQLEXEC sempre em cursor tempor├írio (`cursor_4c_DadosTemp`), depois APPEND FROM DBF ÔåÆ cursor definitivo (nunca direto no cursor do grid)
+- `SET NULL ON` antes do CREATE CURSOR
+- `TABLEREVERT + USE IN` antes de recriar cursor (prote├º├úo uncommitted changes)
+- `SELECT cursor_4c_Dados` antes do APPEND FROM (regra de work area)
+- Tipos exatos do schema: EmpDnPs C(33), Cmats C(14), Qtds N(9,3), TpOps C(15)

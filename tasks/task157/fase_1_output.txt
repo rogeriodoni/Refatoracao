@@ -1,0 +1,16 @@
+﻿`C:\4c\projeto\app\classes\SigPrCarBO.prg` criado com sucesso.
+
+**Fase 1 conclu├¡da.** O arquivo cont├®m:
+
+- **5 propriedades declaradas:**
+  - `this_cCodigos` ÔÇö c├│digo da caracter├¡stica, CHAR(20), FK para SIGCRRAP
+  - `this_cCPros` ÔÇö c├│digo do produto, CHAR(14), FK do produto pai
+  - `this_cPkChaves` ÔÇö chave prim├íria, CHAR(20)
+  - `this_cDescrs` ÔÇö descri├º├úo (auxiliar, vem de JOIN com SIGCRRAP, n├úo existe em sigprcar)
+  - `this_cCGrus` ÔÇö grupo do produto (auxiliar, filtro do lookup SigCrRap)
+
+- **`Init()`** configura `this_cTabela = "sigprcar"` e `this_cCampoChave = "pkchaves"`
+
+- **`ObterChavePrimaria()`** retorna `this_cPkChaves` para o sistema de auditoria
+
+A Fase 2 completar├í o BO com `CarregarDoCursor()`, `Inserir()`, `Atualizar()` e os m├®todos espec├¡ficos para lookup em SIGCRRAP e valida├º├úo de duplicidade.

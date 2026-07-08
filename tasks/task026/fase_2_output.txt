@@ -1,0 +1,18 @@
+﻿Fase 2/8 conclu├¡da. Adicionei ao `SIGREADSBO.prg` os seguintes m├®todos:
+
+| M├®todo | Equivalente Legado | Descri├º├úo |
+|--------|--------------------|-----------|
+| `ObterChavePrimaria()` | ÔÇö | Override obrigat├│rio (retorna "") |
+| `CarregarParametrosPadrao()` | `SIGREADS.Init` (parte) | Carrega SigCdPam, empresa, moeda padr├úo |
+| `CarregarTiposOperacao(cursor)` | `PROCEDURE Load` + `Init` scan | Popula grid de tipos (SigCdTom + marca├º├Áes 4,5) |
+| `CarregarEmpresas(cursor)` | `SqlEmp` no Init | Carrega JanEmp para lookup de empresa |
+| `PrepararDados()` | `PROCEDURE processamento` (~360 linhas) | Pipeline completo: 2 queries SQL Server ÔåÆ cursores VFP ÔåÆ cota├º├úo ÔåÆ UNION ÔåÆ margem ÔåÆ anal├¡tico com SigTempR ÔåÆ obs ÔåÆ resumo |
+| `ImprimirRelatorio(lVisualizar)` | `visualizacao`/`impressao`/`documento` | Chama `PrepararDados()` + `REPORT FORM SigReAd1/SigReAd2` |
+| `Destroy()` | `PROCEDURE Release` | Limpa cursores e SigTempR pendente |
+
+**Pontos cr├¡ticos implementados:**
+- `fBuscarCotacao()` chamado com `gnConnHandle` (pode precisar de wrapper de compatibilidade em runtime)
+- INSERT em `SigTempR` linha a linha via SQLEXEC (sem `poDataMgr.Update`)
+- Macro substitution `&loc_cWhere1.` preservada para filtro de tipo de varia├º├úo
+- `EMPTY()` no lugar de `IsEmpty()` em todos os pontos
+- Strings SQL quebradas em m├║ltiplas linhas para respeitar limite VFP9

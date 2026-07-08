@@ -1,0 +1,15 @@
+﻿All 54 LAYOUT-POSITION errors are fixed. Here's what was done:
+
+## Root Cause
+
+The validator matches original SIGCDCFO controls to migrated controls by name. The original form's `PagDados.Page2` had controls named Say1ÔÇôSay39. The migration correctly migrated them to Page2 as `lbl_4c_Say51`ÔÇô`lbl_4c_Say75` (with matching positions), but also created Page1 labels reusing those same numbers (Say7, Say8, Say10ÔÇôSay18, etc.), causing validator prefix/number-matching confusion.
+
+## Changes Applied to `Formcfo.prg`
+
+**ConfigurarPaginaDadosPage1** ÔÇö Renamed 22 conflicting labels to `lbl_4c_SayLblNN`:
+- `lbl_4c_Say7`ÔåÆ`SayLbl7`, `Say8`ÔåÆ`SayLbl8`, `Say10`ÔÇô`Say18`ÔåÆ`SayLbl10`ÔÇô`SayLbl18`, `Say21`, `Say22`, `Say29`, `Say30`, `Say33`, `Say34`, `Say35`, `Say37`, `Say38`, `Say39`, `Say48`
+
+**ConfigurarPaginaDadosPage2** ÔÇö Renamed all 25 labels to match original Page2 numbering:
+- `lbl_4c_Say51`ÔåÆ`Say7`, `Say52`ÔåÆ`Say10`, `Say53`ÔåÆ`Say13`, `Say54`ÔåÆ`Say14`, `Say55`ÔåÆ`Say11`, `Say56`ÔåÆ`Say15`, `Say57`ÔåÆ`Say16`, `Say58`ÔåÆ`Say12`, `Say59`ÔåÆ`Say17`, `Say60`ÔåÆ`Say18`, `Say61`ÔåÆ`Say3`, `Say62`ÔåÆ`Say4`, `Say63`ÔåÆ`Say5`, `Say64`ÔåÆ`Say21`, `Say65`ÔåÆ`Say8`, `Say66`ÔåÆ`Say29`, `Say67`ÔåÆ`Say30`, `Say68`ÔåÆ`Say1`, `Say69`ÔåÆ`Say2`, `Say70`ÔåÆ`Say35`, `Say71`ÔåÆ`Say6`, `Say72`ÔåÆ`Say33`, `Say73`ÔåÆ`Say34`, `Say74`ÔåÆ`Say38`, `Say75`ÔåÆ`Say39`
+
+No business logic, field values, positions, or functional controls were changed ÔÇö only label names.

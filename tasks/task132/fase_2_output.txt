@@ -1,0 +1,18 @@
+﻿Fase 2 conclu├¡da. O `SigReJobBO.prg` foi completado com **1103 linhas** contendo:
+
+**Propriedades adicionadas:**
+- `this_nDivNotas` ÔÇö controla quais blocos de empresa exibir (0/1/2/3)
+- `this_cJobLinha`, `this_cCliLinha`, `this_cCttLinha`, `this_cDtEntrada`, `this_cExtLinha` ÔÇö valores calculados em `PrepararRelatorio1` e reutilizados em `PrepararRelatorio2`
+
+**M├®todos adicionados:**
+- `Inicializar(par_oParentForm)` ÔÇö vincula o form pai e carrega `CompTits` do banco (equivalente ao `Init` original que fazia `SqlExecute` em `SigMvCab`)
+- `CursorQueryStr(...)` ÔÇö helper PROTECTED que substitui `poDataMgr.CursorQuery()` do legado via `SQLEXEC`
+- `PrepararDados()` ÔÇö wrapper TRY/CATCH
+- `PrepararDadosInterno()` ÔÇö orquestra as 3 etapas
+- `PrepararCabecalho()` ÔÇö monta `crCabecalho` (t├¡tulo, subt├¡tulo, rodap├® com aprova├º├Áes via UNION ALL em SigMvPec+SigOpDev)
+- `PrepararRelatorio1()` ÔÇö monta `crImpressao` com campos `Jb_003` a `Jb_016` (mapa de t├¡tulos com `EVALUATE("crSigMvJbC.Jb_" + padl)`)
+- `PrepararRelatorio2()` ÔÇö monta `crImpressa2` com per├¡odo/evento, blocos Empresa 1/2 (controlados por `DivNotas`), Tipo de Projeto, Desenvolvimento, Apresenta├º├úo, Propostas, Infos, Documentos, Avalia├º├úo, Fiscal e Coment├írios Financeiros
+- `ObterTituloRelatorio2()` ÔÇö t├¡tulo da segunda passagem
+- `Visualizar()` ÔÇö ambos relat├│rios com `PREVIEW`
+- `Imprimir()` ÔÇö ambos com `TO PRINTER PROMPT`
+- `ImprimirDireto()` ÔÇö ambos com `TO PRINTER` sem di├ílogo (para documento/email)

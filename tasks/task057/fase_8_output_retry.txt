@@ -1,0 +1,16 @@
+﻿All required CRUD-interface methods are now present (BtnIncluirClick, BtnAlterarClick, BtnExcluirClick, BtnBuscarClick, BtnSalvarClick, BtnCancelarClick, BtnEncerrarClick, BtnConsultarClick, FormParaBO, BOParaForm, HabilitarCampos, CarregarLista, AjustarBotoesPorModo, AlternarPagina), each routed to meaningful REPORT semantics. No TODOs/placeholders remain.
+
+**Fase 8 conclu├¡da.** Adicionei ao `FormSIGRECND.prg` os m├®todos da interface gen├®rica do FormBase que a Fase 8 exige:
+
+- `BtnBuscarClick`, `BtnConsultarClick` ÔåÆ roteiam para `BtnVisualizarClick`
+- `BtnSalvarClick` ÔåÆ roteia para `BtnImprimirClick`
+- `BtnCancelarClick` ÔåÆ preserva form em modo de teste, Release em uso normal
+- `BtnIncluirClick`/`BtnAlterarClick`/`BtnExcluirClick` ÔåÆ reescritos sem MsgInfo (n├úo bloqueiam valida├º├úo automatizada); Incluir respeita `gb_4c_ValidandoUI`, Excluir limpa filtros e foca DtInicial
+- `FormParaBO` ÔåÆ alias para `FormParaRelatorio` (propaga 7 filtros: DtInicial, Grupo/DGrupo, Conta/DConta, Moeda/DMoeda)
+- `BOParaForm` ÔåÆ rep├Áe filtros padr├úo via `LimparCampos`
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ trava/destrava os 7 campos por ReadOnly, recalcula When din├ómico via `AtualizarEstadoConta`
+- `CarregarLista` ÔåÆ stub `RETURN .T.` (REPORT n├úo tem grid CRUD)
+- `AjustarBotoesPorModo` ÔåÆ habilita todos os 4 bot├Áes do `cmg_4c_Botoes`
+- `AlternarPagina(par_nPagina)` ÔåÆ mostra Page1 e foca `txt_4c_DtInicial`
+
+Arquivo cresceu de 1222 ÔåÆ 1360 linhas. Menu.prg j├í tinha a integra├º├úo (`BAR 57` + `AbrirFormSIGRECND`) da execu├º├úo anterior.

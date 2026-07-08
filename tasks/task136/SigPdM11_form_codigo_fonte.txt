@@ -1,0 +1,1321 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdM11.SCX
+* Data/Hora: 18/06/2026 14:59:59
+* Total de registros: 39
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDM11
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Grade
+  Parent: SIGPDM11
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM11.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM11.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGPDM11
+  Class: shape
+  BaseClass: shape
+
+Objeto: Operação
+  Parent: SIGPDM11
+  Class: container
+  BaseClass: container
+
+Objeto: Say4
+  Parent: SIGPDM11.Operação
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCodigo
+  Parent: SIGPDM11.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmpresa
+  Parent: SIGPDM11.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOperação
+  Parent: SIGPDM11.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_mov
+  Parent: SIGPDM11
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label2
+  Parent: SIGPDM11
+  Class: label
+  BaseClass: label
+
+Objeto: DescCat
+  Parent: SIGPDM11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGPDM11
+  Class: label
+  BaseClass: label
+
+Objeto: Botao1
+  Parent: SIGPDM11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Botao2
+  Parent: SIGPDM11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntSombra
+  Parent: SIGPDM11
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDM11.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDM11.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: ok
+  Parent: SIGPDM11
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Pagamento de Serviços"
+  ControlBox = .F.
+  Closable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGPDM11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade
+------------------------------------------------------------
+  ColumnCount = 9
+  FontBold = .T.
+  HeaderHeight = 15
+  Height = 413
+  Left = 50
+  RecordSource = ""
+  TabIndex = 1
+  Top = 126
+  Width = 899
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontBold = .T.
+  Column1.FontName = "Courier New"
+  Column1.ControlSource = ""
+  Column1.Width = 98
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Format = "L"
+  Column1.InputMask = "9999999999"
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.ColumnOrder = 7
+  Column2.ControlSource = ""
+  Column2.Width = 110
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+  Column3.FontBold = .T.
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 110
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Name = "Column6"
+  Column4.FontBold = .T.
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 110
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column5"
+  Column5.FontBold = .T.
+  Column5.ColumnOrder = 2
+  Column5.ControlSource = ""
+  Column5.Width = 110
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column4"
+  Column6.FontBold = .T.
+  Column6.ColumnOrder = 5
+  Column6.ControlSource = ""
+  Column6.Width = 50
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column7"
+  Column7.FontBold = .T.
+  Column7.ColumnOrder = 6
+  Column7.ControlSource = ""
+  Column7.Width = 52
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Name = "Column2"
+  Column8.FontBold = .T.
+  Column8.Width = 110
+  Column8.Movable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+  Column9.FontBold = .T.
+  Column9.Width = 110
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "O.S."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column1.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  BorderStyle = 0
+  Format = "L"
+  InputMask = "9999999999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column3.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column6.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column5.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column4.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Retrab."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column7.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cat."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Retrab."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column8.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Indicado"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Grade.Column9.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 900
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Operação
+------------------------------------------------------------
+  Top = 81
+  Left = 101
+  Width = 386
+  Height = 44
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 11
+  BorderColor = 136,189,188
+  Name = "Operação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Operação.Say4
+------------------------------------------------------------
+  FontSize = 8
+  Caption = "Movimentação :"
+  Left = 23
+  Top = 14
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Operação.GetCodigo
+------------------------------------------------------------
+  ControlSource = "tmpnens.numps"
+  Format = "L"
+  InputMask = "9999999999"
+  Left = 299
+  ReadOnly = .T.
+  Top = 10
+  Width = 81
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Operação.GetEmpresa
+------------------------------------------------------------
+  ControlSource = "tmpnens.emps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 103
+  ReadOnly = .T.
+  Top = 10
+  Width = 36
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Operação.GetOperação
+------------------------------------------------------------
+  ControlSource = "tmpnens.dopps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 141
+  ReadOnly = .T.
+  Top = 10
+  Width = 156
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetOperação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Opt_mov
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 700
+  Top = 91
+  Width = 199
+  TabIndex = 18
+  BorderColor = 136,189,188
+  Name = "Opt_mov"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Movimentação"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 3
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 87
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Cadastro"
+  Option2.Height = 15
+  Option2.Left = 112
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 62
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Contas de :"
+  Height = 15
+  Left = 634
+  Top = 96
+  Width = 64
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.DescCat
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "xNensiS.Cdescs"
+  Height = 23
+  Left = 128
+  Top = 569
+  Width = 744
+  Name = "DescCat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição do Serviço :"
+  Height = 15
+  Left = 128
+  Top = 548
+  Width = 108
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Botao1
+------------------------------------------------------------
+  Height = 22
+  Left = 490
+  MousePointer = 15
+  SpecialEffect = 1
+  ToolTipText = "Clique para visualizar o Retrabalho"
+  Top = 92
+  Width = 27
+  BackColor = 255,0,0
+  BorderColor = 36,84,155
+  Name = "Botao1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.Botao2
+------------------------------------------------------------
+  Height = 22
+  Left = 517
+  SpecialEffect = 1
+  ToolTipText = "O.S. de Retorno"
+  Top = 92
+  Width = 27
+  BackColor = 0,0,255
+  BorderColor = 36,84,155
+  Name = "Botao2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM11.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 925
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<OK"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 9, 6, 14, 12, 35, 2, 0
+  Courier New, 1, 9, 7, 16, 12, 11, 4, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 1, 9, 6, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDM11
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE gravacat
+------------------------------------------------------------
+PROCEDURE gravacat
+Lparameters llChkCoef
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Local llRet
+
+llRet = .t.
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Select xNensiS
+	x_Recno = Recno()
+	Scan
+		If Not Empty(xNensis.Cats)
+			Select crSigCdSvc
+			Set Order to CaGruCo
+			Do Case
+				Case Seek(xNensiS.Cats + xNensiS.GrupoFs + xNensiS.ContaFs )
+				Case Seek(xNensiS.Cats + xNensiS.GrupoFs + Space(10))
+				Case Seek(xNensiS.Cats + Space(20))
+			Otherwise
+				llRet = .f.
+			Endcase
+			
+			If !Empty(xNensiS.Cats)
+				=Thisform.PodataMgr.CursorQuery('SigCdCat','CrTmpCat','Cods',xNensiS.Cats,[Desc2s])
+				Select xNensis
+				Replace Fators 	  With crSigCdSvc.Coefs, ;
+						Coefs     With CrSigCdSvc.CoefRetrs ,;
+						Moedas    With crSigCdSvc.CMoeds,;
+						GrupoFins With CrSigCdSvc.GruFins,;
+						cDescs    With CrTmpCat.Desc2s
+				IF NOT EMPTY(xNensiS.Cretrabs)
+					=ThisForm.poDataMgr.CursorQuery('SigPrCrt','CrTmpCrt','Cods',xNensiS.cRetrabs)
+					Replace Coefs WITH CrSigCdSvc.coefs * CrTmpCrt.Fators IN xNensiS
+				ENDIF
+			EndIf
+		Endif
+	EndScan
+	Select xNensiS
+	If x_recno # 0
+		Go x_Recno
+	Endif
+EndIf
+
+If llChkCoef
+	Return ( llRet )
+Else
+	Return .t.
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm, DatSes
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+This.LockScreen = .t.
+
+Set Datasession To DatSes
+ThisForm.pcEscolha  = pForm.pcEscolha
+ThisForm.ParentForm = pForm
+ThisForm.poDataMgr  = pForm.poDataMgr
+ThisForm.AntValue   = Space(10)
+
+=Seek(pForm._Dopp, 'crSigCdOpd', 'Dopps')
+
+Select Sum(1) as Qtd, Grupos, Contas ;
+  From CsContas ;
+ Group by Grupos, Contas ;
+  Into Cursor CsTotal
+
+Select CsTotal
+If Reccount() = 1
+	Select CsContas
+	Go Top
+	Select xNensiS
+	Replace all GrupoFs With CsContas.Grupos,;
+				ContaFs With CsContas.Contas
+EndIf
+
+Set Confirm On
+Select xNensis
+Go Top
+=Thisform.Gravacat()
+
+
+With ThisForm.Grade
+	.RecordSource = 'xNensis'
+	.Column1.ControlSource   = 'xnensis.Nenvs' 				&& Envelope
+	.Column2.ControlSource   = 'xnensis.cats'				&& Categoria
+	.Column3.ControlSource   = 'xnensis.Fators'				&& Valor do Servico
+	.Column4.ControlSource   = 'xnensis.qtds'				&& Qtde
+	.Column5.ControlSource   = 'xnensis.Contafs'			&& Conta
+	.Column6.ControlSource   = 'xnensis.Grupofs'			&& Grupo
+	.Column7.ControlSource   = 'xnensis.cRetrabs'			&& retrabalho
+	.Column8.ControlSource   = 'xnensis.Coefs'  			&& Valor do Servico de REtrabalho
+	.Column9.ControlSource   = 'xnensis.Coefinfs'  			&& Valor do Servico Informado
+	.SetAll('DynamicForeColor','Iif(xNensis.Retrabs,RGB(255,0,0),Iif(xnensis.OsRets,RGB(0,0,255),RGB(0,0,0)))','Column')
+	.Refresh
+EndWith
+
+ThisForm.LockScreen = .f.
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.DescCat.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Thisform.Opt_mov.Value = 2
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not Empty(This.Value) And Not Seek(This.Value, 'TmpGccr', 'BalCodigo')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'BalCodigo', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')
+		loBrowse.Show
+	EndIf
+	Replace xNensis.Grupofs With TmpGccr.Codigos
+	=Thisform.Gravacat()
+Endif
+Select xNensiS
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod, lFan, xObj
+
+_Nenv = xNensi.Nenvs
+
+If ThisForm.Opt_mov.Value = 1
+
+	Select * From CsContas Where Nenvs = _Nenv Into Cursor Selecao ReadWrite
+
+	Select Selecao
+	Index On Contas Tag Contas
+
+	If Not Seek(This.Value) 
+		loBrowse = CreateObject('fwBuscaSel', 'Selecao', 'Contas', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('contas', '', 'Conta', .t., 'Contas')
+		loBrowse.AddColuna('Grupos', '', 'Grupo')
+		loBrowse.Show
+		This.Value = Selecao.Contas
+	EndIf
+	Replace xNensis.Grupofs With Selecao.Grupos
+	=Thisform.Gravacat()
+
+Else
+
+	If Not Seek(This.Value, 'TmpCli', 'BalCodigo')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpCli', 'BalCodigo', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('IClis',  '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('RClis',  '', 'Descrição', .t., 'BalNome')
+		loBrowse.AddColuna('Grupos', '', 'Grupo' )		
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(TmpCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		This.Value = TmpCli.Iclis
+	EndIf
+	Replace xNensis.Grupofs With TmpCli.Grupos
+	=Thisform.Gravacat()
+
+Endif
+
+Select xNensis
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( .F. )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	lcSql = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ]
+	If Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigPrCrt)')
+		Return .f.
+	EndIf
+	Select CsSelecao
+	Index On Cods Tag Cods
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CsSelecao', 'Cods', This.Value, 'Retrabalhos')
+		loBrowse.AddColuna('Cods', 	  '', 'Código', .t., 'Cods')
+		loBrowse.AddColuna('Descs',   '', 'Descrição')
+		loBrowse.Show
+		This.Value = Iif(Lastkey() = 27,'',CsSelecao.Cods)
+	EndIf
+	USE In CsSelecao
+Else
+	This.Value = ''
+EndIf
+Keyboard '{DNARROW}'
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value ) 
+	Select crSigCdSvc
+	Set Order to CaGruCo
+	Do Case
+		Case Seek(This.Value + xNensiS.GrupoFs + xNensiS.ContaFs )
+		Case Seek(This.Value + xNensiS.GrupoFs + Space(10))
+		Case Seek(This.Value + Space(20))
+	Otherwise
+		Select * From CrSigCdSvc Where ;
+			( Grupos + Contas = xNensiS.GrupoFs + xnensiS.ContaFs ) Or ;
+			( Grupos + Contas = xNensiS.GrupoFs + Space(10) ) Or ;
+			( Grupos + Contas = Space(20) ) ;
+		Into Cursor Selecao
+
+		Select Selecao
+		Index On CCats Tag cCats
+		loBrowse = CreateObject('fwBuscaSel', 'Selecao', 'cCats', This.Value , 'Cadastro de Categorias')
+		loBrowse.AddColuna('CCats',  'XXXXXX', 'Código', .t., 'cCats')
+		loBrowse.AddColuna('Coefs',  '999,999.9999', 'Valor')
+		loBrowse.AddColuna('CMoeds', 'XXX', 'Moe')
+		loBrowse.Show
+		This.Value = Selecao.CCats
+	Endcase
+	
+	If !Empty(This.Value)
+		=Thisform.PodataMgr.CursorQuery('SigCdCat','CrTmpCat','Cods',This.Value,[Desc2s])
+		Select xNensiS
+		Replace Cats   With This.Value,;
+				cDescs With CrTmpCat.Desc2s
+		=Thisform.Gravacat()
+	EndIf
+EndIf
+Select xNensiS
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Grade.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Operação.GetCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Operação.GetEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Operação.GetOperação
+* Classe: fwget (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Botao1
+* Classe: textbox (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xNensiR
+If Not Eof()
+	Do Form SigPdM12 With ThisForm
+	ThisForm.Enabled = .f.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.Botao2
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM11.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+llOk = ThisForm.Gravacat(.t.)
+If Not llOk
+	MessageBox('Serviço não cadastrado para este Grupo/conta!!!',0+48,'')
+	Return .f.
+Endif
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDM11
+RESERVED3 (ClassInfo): antvalue
+parentform
+pcescolha
+podatamgr
+*gravacat 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

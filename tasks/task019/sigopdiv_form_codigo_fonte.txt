@@ -1,0 +1,2359 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigopdiv.SCX
+* Data/Hora: 23/04/26 13:47:22
+* Total de registros: 45
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGOPDIV
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGOPDIV
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGOPDIV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGOPDIV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grupo_Conf
+  Parent: SIGOPDIV
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grupo_Salva
+  Parent: SIGOPDIV
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade2
+  Parent: SIGOPDIV
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade2.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade2.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGOPDIV
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGOPDIV.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGOPDIV.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGOPDIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_OP
+  Parent: SIGOPDIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGOPDIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Produto
+  Parent: SIGOPDIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwmemo_obs
+  Parent: SIGOPDIV
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Get_obss
+  Parent: SIGOPDIV
+  Class: editbox
+  BaseClass: editbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 177
+  Left = 74
+  Width = 544
+  Height = 394
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 527
+  Width = 830
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\fundo_cad_1003.jpg
+  Caption = "Separa Industrialização"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  LockScreen = .F.
+  Themes = .F.
+  envelopado = .F.
+  envelope = .F.
+  cemps = .F.
+  lautomatico = .F.
+  Name = "SIGOPDIV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.cntSombra
+------------------------------------------------------------
+  Anchor = 0
+  Top = 0
+  Left = 0
+  Width = 828
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 19
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grupo_Conf
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Enabled = .F.
+  Height = 110
+  Left = 674
+  SpecialEffect = 1
+  Top = -1
+  Width = 173
+  TabIndex = 6
+  Visible = .F.
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Grupo_Conf"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Confirmar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Salva"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Conf_Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grupo_Salva
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 673
+  SpecialEffect = 1
+  Top = -1
+  Width = 160
+  TabIndex = 5
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Grupo_Salva"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Cancel = .F.
+  Command1.Caption = "\<Gerar O.P."
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Salva"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Cancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Arial"
+  FontSize = 8
+  DeleteMark = .F.
+  Enabled = .F.
+  GridLineWidth = 1
+  HeaderHeight = 17
+  Height = 293
+  Left = 11
+  ReadOnly = .T.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 7
+  Top = 121
+  Visible = .F.
+  Width = 626
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  GridLineColor = 136,189,188
+  Name = "Grade2"
+  Column1.FontName = "Arial"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Enabled = .F.
+  Column1.Width = 205
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Arial"
+  Column2.FontSize = 8
+  Column2.Alignment = 1
+  Column2.ColumnOrder = 6
+  Column2.ControlSource = ""
+  Column2.Enabled = .F.
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .F.
+  Column2.InputMask = "999,999.999"
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 255,255,255
+  Column2.Name = "Column3"
+  Column3.FontName = "Arial"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 1
+  Column3.ControlSource = ""
+  Column3.Enabled = .F.
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .F.
+  Column3.Format = "K"
+  Column3.InputMask = "9999999999"
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 255,255,255
+  Column3.Name = "Column2"
+  Column4.FontName = "Arial"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Enabled = .F.
+  Column4.Width = 38
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .F.
+  Column4.ForeColor = 0,0,0
+  Column4.BackColor = 255,255,255
+  Column4.Name = "Column4"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Enabled = .F.
+  Column5.Width = 24
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Visible = .F.
+  Column5.ForeColor = 0,0,0
+  Column5.BackColor = 255,255,255
+  Column5.Name = "Column5"
+  Column6.FontName = "Arial"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 3
+  Column6.Enabled = .F.
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Visible = .F.
+  Column6.ForeColor = 0,0,0
+  Column6.BackColor = 255,255,255
+  Column6.Name = "Column6"
+  Column7.FontName = "Arial"
+  Column7.FontSize = 8
+  Column7.Enabled = .F.
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Visible = .F.
+  Column7.ForeColor = 0,0,0
+  Column7.BackColor = 255,255,255
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pedido"
+  ForeColor = 0,0,0
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 0
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column3.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 0,0,0
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column3.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  ControlSource = "Temporario.Qtds"
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  Alignment = 2
+  Caption = "O.P."
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column2.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  ControlSource = "Temporario.nops"
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column5.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column6.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Cliente"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column6.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column7.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Peso"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade2.Column7.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Arial"
+  FontSize = 8
+  DeleteMark = .F.
+  GridLines = 3
+  GridLineWidth = 1
+  HeaderHeight = 17
+  Height = 293
+  Left = 11
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 121
+  Width = 626
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontBold = .F.
+  Column1.FontName = "Arial"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 160
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.DynamicBackColor = ""
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontBold = .F.
+  Column2.FontName = "Arial"
+  Column2.FontSize = 8
+  Column2.Alignment = 1
+  Column2.ColumnOrder = 5
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 102
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.DynamicBackColor = ""
+  Column2.InputMask = "999,999.999"
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 255,255,255
+  Column2.Name = "Column3"
+  Column3.FontBold = .F.
+  Column3.FontName = "Arial"
+  Column3.FontSize = 8
+  Column3.Alignment = 1
+  Column3.ColumnOrder = 7
+  Column3.ControlSource = ""
+  Column3.Width = 85
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.DynamicBackColor = ""
+  Column3.Format = "K"
+  Column3.InputMask = "999,999.999"
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 255,255,255
+  Column3.Name = "Column4"
+  Column4.FontName = "Arial"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 6
+  Column4.ControlSource = ""
+  Column4.Width = 85
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Format = "K"
+  Column4.InputMask = "99999"
+  Column4.ForeColor = 0,0,0
+  Column4.BackColor = 255,255,255
+  Column4.Name = "Column2"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 3
+  Column5.ControlSource = ""
+  Column5.Width = 38
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.ForeColor = 0,0,0
+  Column5.BackColor = 255,255,255
+  Column5.Name = "Column5"
+  Column6.FontName = "Arial"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 4
+  Column6.ControlSource = ""
+  Column6.Width = 38
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.ForeColor = 0,0,0
+  Column6.BackColor = 255,255,255
+  Column6.Name = "Column6"
+  Column7.FontName = "Arial"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 2
+  Column7.Width = 90
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.ForeColor = 0,0,0
+  Column7.BackColor = 255,255,255
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pedido"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 0
+  BorderStyle = 0
+  ControlSource = "Temp_DivOp.Nrped"
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column3.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column3.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  ControlSource = "Temp_DivOp.Qtdade"
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column4.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Divisão"
+  ForeColor = 0,0,0
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column4.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  ControlSource = "Temp_DivOp.QtdDiv"
+  Format = "K"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtd.Op"
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column2.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  ControlSource = "Temp_DivOp.qtdetiqs"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column5.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column6.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = "Temp_DivOp.CodTams"
+  Margin = 0
+  MaxLength = 2
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column7.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cliente"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Grade.Column7.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Say1
+------------------------------------------------------------
+  Caption = "OP :"
+  Height = 15
+  Left = 41
+  Top = 87
+  Width = 23
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Get_OP
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = "999999999999"
+  Left = 67
+  MaxLength = 12
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 83
+  Width = 108
+  BorderColor = 100,100,100
+  Name = "Get_OP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Say2
+------------------------------------------------------------
+  Caption = "Produto :"
+  Height = 15
+  Left = 213
+  Top = 87
+  Width = 47
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Get_Produto
+------------------------------------------------------------
+  Alignment = 3
+  Value =  
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 262
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 83
+  Width = 108
+  BorderColor = 100,100,100
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.fwmemo_obs
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 94
+  Left = 11
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 421
+  Visible = .F.
+  Width = 626
+  DisabledBackColor = 255,255,255
+  BorderColor = 36,84,155
+  ControlSource = "temporario.obss"
+  Name = "fwmemo_obs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGOPDIV.Get_obss
+------------------------------------------------------------
+  Height = 94
+  Left = 11
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 421
+  Width = 626
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  ControlSource = "Temp_DivOp.Obss"
+  Name = "Get_obss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGOPDIV
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Thisform.Podatamgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters lcTipo, laNop, lcCnx
+lnNumop = 0
+lcQryNensI = [Select * From SigCdNei]
+lcQryNens  = [Select * From SigCdNec]
+lcQryOpi   = [Select * From SigOpPic Where Nops = ?lnNumOp Order By Nops, Dopes, Numes, CodCors, CodTams ]
+lcQryMFas  = [Select * From SigPdMvf]
+thisform.cEmps = _Empr
+thisform.lAutomatico = Iif(Type([lcCnx])=[C],.t.,.f.)
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', Iif(Type([lcCnx])=[C],lcCnx, ThisForm.Name))
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdNec', 'cIdChaves', 'crSigCdNec', '', '', lcQryNens)
+			.AddCursor('SigCdNei','cIdChaves', 'crSigCdNei','', '', lcQryNensI)
+			.AddCursor('SigPdMvf', 'cIdChaves', 'crSigPdMvf', '', '', lcQryMFas)
+			.AddCursor('SigOpPic',  'cIdChaves', 'crSigOpPic',  '', '', lcQryOpi)
+		EndWith
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f.,[DoppPads, DoppServs, DivOps])
+		SELECT CrSigCdPam
+		GO Top
+		IF IsEmpty(CrSigCdPam.DivOps)
+			=Messagebox('Operação de Divisão de Op não Configurada nos parametros do sistema...', 0+48, 'Configuração')
+			Thisform.Release
+			Return .f.
+		Endif
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac')
+		ThisForm.SigKey = CrSigCdPac.SigKeys
+
+		ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'crSigCdOpd', .f., .f.,[Dopps, GruOrigs, ConOrigs, GruDests, ConDests, ChkDests,Envelopes,TpPadraos,Autos ])
+		Select crSigCdOpd
+		Index On Dopps Tag Dopps
+
+		Select CrSigCdNei
+		=Afields(aNensi)
+		Create Cursor xNensi From Array aNensi
+		Create Cursor Temp_DivOp ( Qtds n(12,3), QtdEtiqs n(5), QtdDivs n(12,3), Dopes c(20), Numes n(6), ;
+								Dataes D(8), Obss m Null, Nops n(10), SeqDivs n(3), Cpros c(14), CodCors c(4), ;
+								CodTams c(4), Empds c(3), Dpros c(65), Notas c(6), contas c(10), Citens n(10), Pesos n(12,3) )
+		Create Cursor Temporario ( Qtds n(12,3), Dopes c(20), Numes n(6), Dataes D(8), Obss m Null, Nops n(10), ;
+								SeqDivs n(3), Cpros c(14), CodCors c(4), CodTams c(4), Empds c(3), Dpros c(65), ;
+								Notas c(6), contas c(10), pesos n(9,3) )
+		Index On Nops tag Nops For Qtds > 0
+		
+		With ThisForm.Grade
+			.RecordSource="Temp_DivOp"
+			.Column1.ControlSource="Alltrim( Temp_DivOP.Dopes ) + ' ' + Alltrim( Str(Temp_DivOp.Numes ))"
+			.Column3.ControlSource="Temp_DivOp.Qtds"
+			.Column4.ControlSource="Temp_DivOp.QtdDivs"
+			.Column2.ControlSource="Temp_DivOp.qtdetiqs"
+			.Column5.ControlSource="Temp_DivOp.CodCors"
+			.Column6.ControlSource="Temp_DivOp.CodTams"
+			.Column7.ControlSource="Temp_DivOp.Contas"
+		EndWith
+
+		With ThisForm.grade2
+			.RecordSource="Temporario"
+			.Column1.ControlSource="Alltrim(Temporario.dopes)+' '+Alltrim(Str(Temporario.numes,6))"
+			.Column2.ControlSource="Temporario.Nops"
+			.Column3.ControlSource="Temporario.Qtds"
+			.Column4.ControlSource="Temporario.CodCors"
+			.Column5.ControlSource="Temporario.CodTams"
+			.Column6.ControlSource="Temporario.Contas"
+			.Column7.ControlSource="Temporario.Pesos"
+			.Column7.Width = 75
+		EndWith
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ThisForm.Operação = lcTipo
+ThisForm.Divisaoop = ' '
+ThisForm.Envelopado = .f.
+If ThisForm.Operação = 'R'
+	ThisForm.Grupo_Salva.Salva.Caption = '\<Reinicia'
+	thisform.Caption = 'Reinicia Industrialização'
+Endif
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+*** Tiago - 08/10/2013 - Separa automaticamente as OPs que foram passadas com parâmetro
+If Type('laNop',1) = [A]
+	thisform.Visible = .f.
+	thisform.LockScreen = .t.
+	llOk = .f.
+	thisform.cEmps = laNop[1,5]
+	thisform.get_Op.Value = Alltrim(Str(laNop[1,6])) &&lcCrOp..Nops
+	thisform.get_Op.Valid()
+	
+	Select Temp_DivOp	
+	If Reccount() = 0
+		thisform.Release()
+		Return .f.
+	Endif
+
+	For lnCnt = 1 To Alen(laNop,1)
+		Select Temp_DivOp
+		Go top
+		Locate for Dopes = laNop[lnCnt,1] And Numes = laNop[lnCnt,2] And CodCors = laNop[lnCnt,3] And CodTams = laNop[lnCnt,4]
+		If !Eof()
+			Replace QtdDivs With QtdDivs + laNop[lnCnt,8]
+			llOk = .t.
+		Endif
+	Next
+	If llOk
+		thisform.grupo_Salva.salva.Click()
+		For lnCnt = 1 To Alen(laNop,1)
+			Select Temporario
+			Go top
+			Locate for Dopes = laNop[lnCnt,1] And Numes = laNop[lnCnt,2] And CodCors = laNop[lnCnt,3] And CodTams = laNop[lnCnt,4] And Qtds = laNop[lnCnt,8]
+			If !Eof()
+				laNop[lnCnt,7] = Temporario.Nops
+				laNop[lnCnt,9] = Temporario.Qtds
+			Endif
+		Next	
+		thisform.grupo_Conf.salva.Click()
+		thisform.Release()
+		Return .f.		
+	Endif
+	thisform.LockScreen = .f.
+Else
+	Dimension laNop[1] && Linha apenas para não dar erro na geração do exe
+Endif
+***
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grupo_Conf
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Salva.Click
+------------------------------------------------------------
+PROCEDURE Salva.Click
+Select Temporario
+
+Scan
+
+	lnop = Temporario.Nops
+	Seq  = Temporario.SeqDivs
+
+	Select crSigOpPic
+	Scan 
+		If Nops <> lnOp
+			Loop
+		Endif
+		If Dopes+Str(Numes,6)+Str(Qtds,12,2)+Str(SeqDivs,3) # Temporario.Dopes+Str(Temporario.Numes,6)+Str(Temporario.Qtds,12,2)+Str(Seq,3)
+			Loop
+		Endif
+		Replace Obss With Temporario.Obss
+		Exit
+	Endscan
+
+EndScan
+Select CrSigOpPic
+Replace all CodTgOps With TmpOpi.CodTgOps In CrSigOpPic
+
+llTaOK = .t.
+If Not ThisForm.poDataMgr.Update('CrSigCdNec')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdNec)')
+	llTaOK = .f.
+EndIf
+If llTaOK And Not ThisForm.poDataMgr.Update('crSigCdNei')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdNei)')
+	llTaOK = .f.
+EndIf
+If llTaOK And Not ThisForm.poDataMgr.Update('crSigOpPic')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigOpPic)')
+	llTaOK = .f.
+EndIf
+If llTaOK And Not ThisForm.poDataMgr.Update('crSigPdMvf')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPdMvf)')
+	llTaOK = .f.
+EndIf
+
+If llTaOK And (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+	llTaOK = .f.
+EndIf
+
+If Not llTaOK
+	Return 0
+Endif
+
+Select Temporario
+Zap
+If !thisform.lAutomatico
+	ThisForm.Get_Op.SetFocus
+Endif
+ThisForm.Refresh
+ThisForm.Get_Op.Value = ' '
+ThisForm.Get_Produto.Value = ''
+
+With ThisForm.fwmemo_obs
+	.Enabled = .f.
+	.Visible = .f.
+EndWith
+With ThisForm.grade2
+	.Enabled = .f.
+	.Visible = .f.
+EndWith
+With ThisForm.Grade
+	.Enabled = .t.
+	.Visible = .t.
+	.Refresh
+EndWith
+With ThisForm.Grupo_salva
+	.Enabled = .t.
+	.Visible = .t.
+EndWith
+With ThisForm.Grupo_Conf
+	.Enabled = .f.
+	.Visible = .f.
+EndWith
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Conf_Sair.Click
+------------------------------------------------------------
+PROCEDURE Conf_Sair.Click
+ThisForm.RELEASE
+ON KEY LABEL ENTER
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grupo_Salva
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Salva.Click
+------------------------------------------------------------
+PROCEDURE Salva.Click
+If Empty( Thisform.Get_Op.Value ) 
+	Messagebox( 'OP não informada!!', 32, '' )
+	ThisForm.Get_Op.SetFocus
+	Return
+EndIf
+
+lnOp = Val(Thisform.Get_Op.Value)
+pNop = lnOp
+
+on key label enter
+
+Select xNensi
+Sum Pesos to xPeso
+
+Select Temp_DivOp
+Sum Qtds, QtdDivs, QtdEtiqs to lnQtds, lnQtdDivs, lnQtdEtiqs
+
+If ThisForm.Operação = 'D'
+	If lnQtds == lnQtdDivs &&or lnQtds == ( lnQtdDivs + lnQtdEtiqs )
+		Messagebox( 'A OP não pode ficar com quantidade = 0', 32, '' )
+		ThisForm.Grade.Column4.SetFocus
+		Go top
+		Return
+	Endif
+
+	If lnQtdDivs = 0 And lnQtdEtiqs = 0
+		Messagebox( 'Nenhuma OP foi gerada...', 32, '')
+		Return
+	Endif
+EndIf
+
+NumOp = Int( lnOp / 10000 )
+
+lcQuery = [Select Nops From SigOpPic Where Numps = ?Numop Order By Nops Desc ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalOpi') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalOpi)')
+	Return 0
+EndIf
+Select LocalOpi
+Go Top
+lnNovaOp = Nops + 1
+
+LnNumOp = pNop
+=ThisForm.PodataMgr.Requery('CrSigOpPic')
+
+lcQuery = [Select * ] + ;
+			[From SigPdMvf ] + ;
+		   [Where Nops = ?pNop ] + ;
+		   [Order By Nops Desc, cIdChaves Desc]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalMfas') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMfas)')
+	Return 0
+EndIf
+
+If ThisForm.Operação = 'D'
+	Select LocalMfas
+	Go Top
+	If lnQtdDivs > 0
+		lcIds = Dtos(Date()) + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999')+ThisForm.Sigkey 
+		Insert Into CrSigCdNec ( Emps, Dopps, Numps, Datas, Usuars, Datars, Grupoos, Contaos, Grupods, Contads, CidChaves, EmpDnPs );
+			Values ( thisform.cEmps, ThisForm.Divisaoop, lnNovaOp, Datetime(), Usuar, Datetime(), LocalMFas.GrupoDs, LocalMFas.ContaDs,;
+					LocalMFas.Grupods, LocalMFas.Contads, lcIds, thisform.cEmps + Thisform.Divisaoop + Str(lnNovaOp,10) )
+	Endif
+Else
+	Select CrSigCdOpd
+	Set Order to Dopps
+	Seek ThisForm.Divisaoop
+	pTru = .t.
+	lcUpdate = [Update SigCdNec Set ChkSubn = ?pTru Where EmpDnPs = ']+thisform.cEmps + ThisForm.Divisaoop + Str(lnOp,10)+[']
+	If (ThisForm.poDataMgr.SqlExecute(lcUpDate, '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update SigCdNec)')
+		Return 0
+	EndIf
+
+	lcIds = Dtos(Date()) + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999')+ThisForm.Sigkey 
+	
+	Insert Into crSigCdNec ( Emps, Dopps, Numps, Datas, Usuars, Datars, Grupoos, Contaos, Grupods, Contads, CidChaves, EmpDnPs );
+				Values ( thisform.cEmps, ThisForm.Divisaoop , lnNovaOp, Datetime(), Usuar, Datetime(),;
+						crSigCdOpd.GruOrigs, crSigCdOpd.ConOrigs, crSigCdOpd.GruDests, ;
+						crSigCdOpd.ConDests, lcIds, thisform.cEmps + ThisForm.Divisaoop  + Str(lnNovaOp,10))
+	m.Grupoos = crSigCdOpd.GruOrigs
+	m.Contaos = crSigCdOpd.ConOrigs
+	m.Grupods = crSigCdOpd.GruDests
+	m.Contads = crSigCdOpd.ConDests
+Endif
+
+Select LocalMfas
+lnAntigo = CidChaves
+Scatter Memvar
+m.Dopps = Thisform.Divisaoop 
+m.Numps = lnNovaOp
+m.Nops = lnNovaOp
+m.Nenvs = 0
+m.Qtds = 0
+m.Grupoos = m.Grupods
+m.Contaos = m.Contads
+
+If ThisForm.OPeração = 'R'
+	m.Grupoos = crSigCdOpd.GruOrigs
+	m.Contaos = crSigCdOpd.ConOrigs
+	m.Grupods = crSigCdOpd.GruDests
+	m.Contads = crSigCdOpd.ConDests
+	m.Ordems  = 1
+	m.Pesos   = 0
+	If lnQtdDivs > 0
+		m.CidChaves = Dtos(m.Datas) + Transform(fGerUniqueKey(Dtos(m.Datas)), '@L 999999')+Thisform.Sigkey 
+		m.EmpDnPs   = m.Emps + m.Dopps + Str(m.Numps,10)
+		Insert Into crSigPdMvf From Memvar
+		lnNovo = m.Cidchaves
+		Select CrSigPdMvf
+		Replace Ordems With Iif(xPeso=0,1,Ordems) In CrSigPdMvf
+	Endif
+Endif
+
+Select Temp_DivOp
+
+llGeraOp = .F.
+lnTotal = 0
+
+on key label enter
+
+If ThisForm.Operação = 'D'
+	_Citem = 500
+	Scan
+		If !Empty( Temp_DivOp.QtdDivs )
+			=ThisForm.PodataMgr.cursorquery('SigCdPro','TmpPro','Cpros',Temp_DivOp.Cpros)
+			=ThisForm.PodataMgr.cursorquery('SigCdGrp','TmpGru','CGrus',TmpPro.CGrus,[GeraTubs])
+			*** Tiago - 17/08/11 - Vianna
+			If TmpGru.GeraTubs <> 2 && Gera qtd de peças para o tubo, por qtd de componentes
+				lnQtdTb = TmpPro.QtdCpnts
+			Else && Gera qtd de peças para o tubo, por qtd de matrizes
+				lcQuery = [Select Sum(qtds) as total from SigPrMtz where Cpros = ?Temp_DivOp.Cpros]
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPrMtz') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPrMtz)')
+					Return 0
+				EndIf
+				Select crSigPrMtz
+				lnQtdTb = crSigPrMtz.Total
+			Endif
+			lnQtdTb = Nvl(lnQtdTb,0)
+			***
+
+*!*				lnPesoOpNew = Temp_DivOp.Qtds / Iif(Temp_DivOp.Pesos = 0, 1, Temp_DivOp.Pesos)
+			lnPesoOpNew = Iif(Temp_DivOp.Pesos = 0, 0, (Temp_DivOp.Pesos / Temp_DivOp.Qtds) * Temp_DivOp.QtdDivs) && Tiago - 03/07/2015 - Real Gold - Cálculo do peso da OP nova não estava correto
+						
+			Insert Into crSigOpPic ( Emps, Dopps, Numps, Nops, Dopes, Numes, Dataps, Dataes, Qtds, ;
+						Obss, SeqDivs, Cpros, Divs, CodCors, CodTams, Usuars, NopMaes, QtdCpnts,;
+						Empds, cIdChaves, EmpDopNums, EmpDNps, EmpDopNops, Dpros, Notas, Citens, Pesos );
+					Values ( thisform.cEmps, ThisForm.Divisaoop , Int( lnNovaOp / 10000 ), lnNovaOp, ;
+							Temp_DivOp.Dopes, Temp_DivOp.Numes, Date(), Temp_DivOp.Dataes, ;
+							Temp_DivOp.QtdDivs, Temp_DivOp.Obss, _Citem, Temp_DivOp.Cpros, ;
+							.t., Temp_DivOp.CodCors, Temp_DivOp.CodTams, Usuar, Lnop, ;
+							(lnQtdTb * Temp_DivOp.QtdDivs ), Temp_DivOp.Empds ,;
+							fUniqueIds(), Temp_DivOp.Empds + Temp_DivOp.Dopes + Str(Temp_DivOp.Numes, 6), ;
+							thisform.cEmps + ThisForm.Divisaoop + Str(Int(lnNovaOp / 10000), 10),;
+							thisform.cEmps + ThisForm.Divisaoop + Str(LnNovaOp), Temp_DivOp.Dpros, Temp_DivOp.Notas, Temp_DivOp.Citens, lnPesoOpNew )
+							
+			Insert Into Temporario ( Dopes, Numes, Qtds, Obss, nops, SeqDivs, Cpros, CodCors, CodTams, EmpDs, ;
+									Dpros, Notas, Contas ) ;
+				Values ( Temp_DivOp.Dopes, Temp_DivOp.Numes, Temp_DivOp.QtdDivs, Temp_DivOp.Obss, lnNovaOp, ;
+						_Citem, Temp_DivOp.Cpros, Temp_DivOp.CodCors, Temp_DivOp.CodTams, Temp_DivOp.Empds, ;
+						Temp_DivOp.Dpros, Temp_Divop.Notas, Temp_DivOp.Contas )
+			
+			_citem = _citem + 1
+
+			Select LocalMfas
+			Replace Qtds  with Qtds - Temp_DivOp.QtdDivs
+			Replace Pesos With 0
+*** Tiago - 08/05/2013 - comentei pois estava atualizando a quantidade da última movimentação e não é correto alterar nada em movimentações já feitas pois o histórico fica errado
+*!*				lcUpdate = [Update SigPdMvf Set Qtds = ]+Str(LocalMfas.Qtds,12,3)+[, Pesos = 0 Where Cidchaves = ']+LocalMfas.Cidchaves+[']
+*!*				
+*!*				If (ThisForm.poDataMgr.SqlExecute(lcUpDate, '') < 1)
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update SigPdMvf)')
+*!*					Return 0
+*!*				EndIf
+
+			Select LocalMFas
+			Scatter Memvar
+			m.Dopps = ThisForm.Divisaoop 
+			m.Numps = lnNovaOp
+			m.Nops = lnNovaOp
+			m.Nenvs = m.Nops &&Iif(ThisForm.Envelopado,ThisForm.Envelope,m.Nops)
+			m.EmpDnPs   = m.Emps + m.Dopps + Str(m.Numps,10)
+			m.CidChaves = Dtos(m.Datas) + Transform(fGerUniqueKey(Dtos(m.Datas)), '@L 999999')+Thisform.Sigkey 
+			m.Datars = Datetime()
+			m.Qtds = Temp_DivOp.QtdDivs && Tiago - 28/02/2012 - Vianna - Não estava gravando na em SigPdMvf a quantidade correta dividida
+			m.Grupoos = m.Grupods
+			m.Contaos = m.Contads
+
+			Insert Into crSigPdMvf From Memvar
+
+
+			lnTotal = lnTotal + Temp_DivOp.QtdDivs
+			llGeraOp = .T.
+
+			Select CrSigOpPic
+			Scan
+				If Nops <> lnOP
+					Loop
+				EndIf
+				Replace Divs        with .t.
+				Replace Imprs       With .f.
+				Replace Usuars      With Usuar
+				If Dopes+Str(Numes,6)+CodCors+CodTams+Str(Citens,10)+Nvl(Obss,'') # ;
+					Temp_DivOp.Dopes+Str(Temp_DivOp.Numes,6)+Temp_DivOp.CodCors+Temp_DivOp.CodTams+Str(Temp_DivOp.Citens,10)+Nvl(Temp_DivOp.Obss,'')
+					Loop
+				Endif
+				llEntrou = .f.
+				Do While Dopes+Str(Numes,6)+CodCors+CodTams+Str(Citens,10) = Temp_DivOp.Dopes+Str(Temp_DivOp.Numes,6)+Temp_DivOp.CodCors+Temp_Divop.CodTams+Str(Temp_Divop.Citens,10) And !Eof() And Temp_DivOp.QtdDivs # 0 And Nops = lnOp
+				
+					=ThisForm.Podatamgr.Cursorquery('SigCdPro','CrTmpPro','Cpros',CrSigOpPic.Cpros,[QtdCpnts,CGrus])
+					=ThisForm.PodataMgr.cursorquery('SigCdGrp','TmpGru','CGrus',crTmpPro.CGrus,[GeraTubs])
+					*** Tiago - 17/08/11 - Vianna
+					If TmpGru.GeraTubs <> 2 && Gera qtd de peças para o tubo, por qtd de componentes
+						lnQtdTb = crTmpPro.QtdCpnts
+					Else && Gera qtd de peças para o tubo, por qtd de matrizes
+						lcQuery = [Select Sum(qtds) as total from SigPrMtz where Cpros = ?Temp_DivOp.Cpros]
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPrMtz') < 1)
+							=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPrMtz)')
+							Return 0
+						EndIf
+						Select crSigPrMtz
+						lnQtdTb = crSigPrMtz.Total
+					Endif
+					lnQtdTb = Nvl(lnQtdTb,0)
+					***
+
+					If Temp_DivOp.QtdDivs > CrSigOpPic.Qtds
+						Select Temp_DivOp
+						Replace Temp_DivOp.QtdDivs with Temp_DivOp.QtdDivs - CrSigOpPic.Qtds
+						Replace CrSigOpPic.Qtds with 0 In CrSigOpPic
+					Else
+						Select CrSigOpPic
+						Replace Qtds        with Qtds - Temp_DivOp.QtdDivs
+						Replace SeqDivs     with _citem
+						Replace Divs        with .t.
+						Replace Imprs       With .f.
+						Replace Usuars      With Usuar
+						Replace QtdCpnts    With (lnQtdTb * Qtds )
+						Replace Pesos		With (Temp_DivOp.Pesos / Temp_DivOp.Qtds) * crSigOpPic.Qtds && Tiago - 03/07/2015 - Real Gold - Atualiza o peso da OP original
+						
+						Select Temp_DivOp
+						Replace Temp_DivOp.QtdDivs with 0
+						
+						Insert Into Temporario ( Dopes, Numes, Qtds, Obss, nops, SeqDivs, Cpros, CodCors, CodTams, Empds, ;
+												Dpros, Notas, Contas ) ;
+						Values ( CrSigOpPic.Dopes, CrSigOpPic.Numes, CrSigOpPic.Qtds, CrSigOpPic.Obss, CrSigOpPic.Nops, _citem, ;
+							CrSigOpPic.Cpros, CrSigOpPic.CodCors, CrSigOpPic.CodTams, CrSigOpPic.empds, CrSigOpPic.Dpros, ;
+							CrSigOpPic.Notas, Temp_DivOp.Contas  )
+						_citem = _citem + 1
+					EndIf
+					Select CrSigOpPic
+					Skip
+					llEntrou = .t.
+				Enddo
+				If llEntrou 
+					Skip -1
+				Endif
+			Endscan
+		Else
+			If Temp_DivOp.Qtdetiqs = 0 And Temp_DivOp.QtdDivs = 0
+				Insert Into Temporario ( Dopes, Numes, Qtds, Obss, nops, SeqDivs, Cpros, CodCors, CodTams, Empds, ;
+										Dpros, Notas, Contas ) ;
+				Values ( Temp_DivOp.Dopes, Temp_DivOp.Numes, Temp_DivOp.Qtds, ;
+						 Temp_DivOp.Obss, Lnop, Temp_DivOp.SeqDivs, Temp_DivOp.Cpros, ;
+						 Temp_DivOp.CodCors, Temp_DivOp.CodTams, Temp_DivOp.Empds, Temp_DivOp.Dpros, ;
+						 Temp_DivOp.Notas, Temp_DivOp.Contas )
+			Endif
+		Endif
+	EndScan
+	
+	If _Citem > 500
+		lnNovaOp = lnNovaOp + 1
+	Endif
+
+	Select Temp_DivOp
+	Scan
+		If Temp_DivOp.Qtdetiqs > 0
+			Qtd = Int( Temp_DivOp.Qtds / Temp_DivOp.QtdEtiqs )
+			y = Iif(Temp_DivOP.QtdEtiqs=1,1,Temp_DivOp.QtdEtiqs-1)
+			=ThisForm.PodataMgr.Cursorquery('SigCdPro','CrTmpPro','Cpros',Temp_DivOp.Cpros,[QtdCpnts, CGrus])
+			=ThisForm.PodataMgr.cursorquery('SigCdGrp','TmpGru','CGrus',crTmpPro.CGrus,[GeraTubs])
+			*** Tiago - 17/08/11 - Vianna
+			If TmpGru.GeraTubs <> 2 && Gera qtd de peças para o tubo, por qtd de componentes
+				lnQtdTb = crTmpPro.QtdCpnts
+			Else && Gera qtd de peças para o tubo, por qtd de matrizes
+				lcQuery = [Select Sum(qtds) as total from SigPrMtz where Cpros = ?Temp_DivOp.Cpros]
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPrMtz') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPrMtz)')
+					Return 0
+				EndIf
+				Select crSigPrMtz
+				lnQtdTb = crSigPrMtz.Total
+			Endif
+			lnQtdTb = Nvl(lnQtdTb,0)			
+			***
+
+			*** Tiago - 08/05/2013 - comentei pois estava atualizando a quantidade da última movimentação e não é correto alterar nada em movimentações já feitas pois o histórico fica errado
+*!*				*** Tiago - 12/01/2012 - Vianna - Não estava atualizando na fase da tira original a quantidade dividida corretamente
+*!*				lcUpdate = [Update SigPdMvf Set Qtds = ]+Str(Qtd,12,3)+[, Pesos = 0 Where Cidchaves = ']+LocalMfas.Cidchaves+[']				
+*!*				If (ThisForm.poDataMgr.SqlExecute(lcUpDate, '') < 1)
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update SigPdMvf)')
+*!*					Return 0
+*!*				EndIf
+*!*				***
+			
+			For x=1 to y
+				Insert Into crSigOpPic ( Emps, Dopps, Numps, Nops, Dopes, Numes, Dataps, Dataes, Qtds, Obss, ;
+									   SeqDivs, Cpros, Divs, CodCors, CodTams,Usuars, NopMaes, QtdCpnts,;
+									   Empds, CidChaves, EmpDnps, EmpDopNums, EmpDopNops, Dpros, Notas, Citens ) ;
+						Values ( thisform.cEmps, ThisForm.Divisaoop , Int( lnNovaOp / 10000 ), lnNovaOp, ;
+								Temp_DivOp.Dopes, Temp_DivOp.Numes, Date(), Temp_DivOp.Dataes, ;
+								Qtd, Temp_DivOp.Obss, _citem, Temp_DivOp.Cpros, .t., Temp_DivOp.CodCors, ;
+								Temp_DivOp.CodTams, Usuar, LnOp, (lnQtdTb * Qtd ), ;
+								Temp_DivOp.Empds, fUniqueIds(), thisform.cEmps+Thisform.Divisaoop +Str(Int(lnNovaop/10000),10),;
+								Temp_DivOp.Empds + Temp_DivOp.Dopes + Str(Temp_DivOp.numes,6),;
+								thisform.cEmps + Thisform.Divisaoop + Str(LnNovaOp), Temp_DivOp.Dpros, Temp_DivOp.Notas, Temp_DivOp.Citens )
+
+				Insert Into Temporario ( Dopes, Numes, Qtds, Obss, nops, SeqDivs, Cpros, CodCors, CodTams, empds, ;
+										Dpros, Notas, Contas ) ;
+					Values ( Temp_DivOp.Dopes, Temp_DivOp.Numes, Qtd, Temp_DivOp.Obss, lnNovaOp, _citem, ;
+							Temp_DivOp.Cpros, Temp_DivOp.CodCors, Temp_Divop.CodTams, Temp_DivOp.Empds, ;
+							Temp_DivOp.Dpros, Temp_DivOp.Notas, Temp_DivOp.Contas  )
+			
+				Select LocalMfas
+				Go Top
+
+				lcIds = Dtos(Date()) + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999')+ThisForm.Sigkey 
+
+				Insert Into CrSigCdNec ( Emps, Dopps, Numps, Datas, Usuars, Datars, Grupoos, Contaos, Grupods, Contads, CidChaves, EmpDnPs );
+					Values ( thisform.cEmps, ThisForm.Divisaoop , lnNovaOp, Datetime(), Usuar, Datetime(), LocalMfas.GrupoDs, LocalMfas.ContaDs,;
+							LocalMfas.Grupods, LocalMfas.Contads, lcIds, thisform.cEmps + ThisForm.Divisaoop + Str(lnNovaOp,10) )
+
+				Select LocalMFas
+				Scatter Memvar
+				m.Dopps = ThisForm.Divisaoop 
+				m.Numps = lnNovaOp
+				m.Nops = lnNovaOp
+				m.Nenvs = m.Nops &&Iif(ThisForm.Envelopado,ThisForm.Envelope,m.Nops)
+				m.EmpDnPs   = m.Emps + m.Dopps + Str(m.Numps,10)
+				m.CidChaves = Dtos(m.Datas) + Transform(fGerUniqueKey(Dtos(m.Datas)), '@L 999999')+thisform.Sigkey 
+				m.Datars = Datetime()
+ 				m.Grupoos = m.Grupods
+				m.Contaos = m.Contads
+
+				m.Qtds = Qtd && Tiago - 12/01/2012 - Vianna - Não estava atualizando na tabela de fases (SigPdMvf) a quantidade divida corretamente
+				m.Pesos = 0  && Tiago - 12/01/2012 - Vianna - Não estava atualizando na tabela de fases (SigPdMvf) a quantidade divida corretamente
+
+				Insert Into crSigPdMvf From Memvar && Tiago - 12/01/2012 - Vianna - Estava antes dos 2 replace acima; inverti pois não estava gravando a quantidade divida na fase corretamente
+				Replace Ordems With Iif(xPeso=0,1,Ordems) In CrSigPdMvf
+
+				llGeraOp = .T.
+				Select CrSigOpPic
+				Scan
+					If Nops <> lnOP
+						Loop
+					EndIf
+					If Dopes+Str(Numes,6)+CodCors+CodTams+Str(Citens,10)+Nvl(Obss,'') # Temp_DivOp.Dopes+Str(Temp_DivOp.Numes,6)+Temp_DivOp.CodCors+Temp_DivOp.CodTams+Str(Temp_DivOp.Citens,10)+Nvl(Temp_DivOp.Obss,'')
+						Loop
+					Endif
+					Replace Qtds with Qtds - Qtd
+					Replace Divs with .t.
+					Replace Imprs With .f.
+					Replace Usuars With Usuar
+					Replace QtdCpnts With (lnQtdTb * Qtds )
+				Endscan
+				lnNovaOp = lnNovaOp + 1
+			Next
+			
+			Select CrSigOpPic
+			Scan
+				If Nops <> lnOP
+					Loop
+				EndIf
+				Replace Divs    with .t.
+				Replace Imprs   With .f.
+				Replace Usuars  With Usuar
+				If Dopes+Str(Numes,6)+CodCors+CodTams+Str(Citens,10)+Nvl(Obss,'') # Temp_DivOp.Dopes+Str(Temp_DivOp.Numes,6)+Temp_DivOp.CodCors+Temp_DivOp.CodTams+Str(Temp_DivOp.Citens,10)+Nvl(Temp_DivOp.Obss,'')
+					Loop
+				Endif
+				replace SeqDivs with _citem
+				Insert Into Temporario ( Dopes, Numes, Qtds, Obss, nops, SeqDivs, Cpros, CodCors, CodTams, Empds, ;
+										Dpros, Notas, Contas ) ;
+					Values ( crSigOpPic.Dopes, crSigOpPic.Numes, crSigOpPic.Qtds, crSigOpPic.Obss, crSigOpPic.Nops, _citem, ;
+							crSigOpPic.Cpros, crSigOpPic.CodCors, crSigOpPic.CodTams, crSigOpPic.Empds, CrSigOpPic.Dpros, ;
+							CrSigOpPic.Notas, Temp_DivOp.Contas  )
+				_citem = _citem + 1
+			Endscan
+		Endif
+	Endscan
+	
+	PRatear = 00
+	QRatear = 00
+	QOrigin = lnQtds
+
+	Select xNensi
+	Sum Pesos,Qtds to PRatear,QRatear
+	
+	If Pratear # 0
+	
+		Select Nops, Sum(Qtds) as Qtds ;
+		  From Temporario ;
+		 Group By Nops ;
+		  Into Cursor TempDiv
+		
+		Select TempDiv
+
+		Scan
+
+			lnOpDiv = Nops
+			lnQtDiv = Qtds
+			
+			NumDiv  = fGerUniqueKey(alltrim(crSigCdPam.DivOps)+thisform.cEmps)
+			
+			Select LocalMfas
+			Go Top
+			
+			Scatter to memvar
+
+			lcIds = Dtos(Date()) + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999')+thisForm.Sigkey 
+
+			Insert Into CrSigCdNec ( Emps, Dopps, Numps, Datas, Usuars, Datars, Grupoos, Contaos, Grupods, Contads, CidChaves, EmpDnPs );
+				Values ( thisform.cEmps, crSigCdPam.DivOps, NumDiv, Datetime(), Usuar, Datetime(), LocalMFas.GrupoDs, LocalMFas.ContaDs,;
+						LocalMFas.Grupods, LocalMFas.Contads, lcIds , thisform.cEmps + CrSigCdPam.DivOps + Str(NumDiv,10) )
+
+			Select crSigPdMvf
+			Append From Array Memvar
+			Replace Pesos With PRatear / QOrigin * lnQtDiv ,;
+					Qtds  With lnQtDiv,;
+					Emps  With thisform.cEmps,;
+					Dopps With crSigCdPam.DivOps,;
+					Numps With NumDiv,;
+					Nops  with lnOpDiv,;
+					Nenvs With Iif(ThisForm.envelopado,ThisForm.Envelope,Nops),;
+					EmpDnPs WITH thisform.cEmps + crSigCdPam.divops + Str(Numdiv,10),;
+					Datars With Datetime(),;
+					CidChaves with  Dtos(m.Datas) + Transform(fGerUniqueKey(Dtos(m.Datas)), '@L 999999')+ThisForm.Sigkey 
+
+			Select xNensi
+			Scan
+				Scatter to Memvar
+				Select crSigCdNei
+				Append From Array Memvar
+				Replace Dopps With crSigCdPam.DivOps,;
+						Nenvs With Iif(Nops#lnOpDiv,0,Nenvs),;
+						Numps With NumDiv,;
+						Nops  With lnOpDiv,;
+						Pesos With Pesos / QOrigin * lnQtDiv,;
+						Qtds  With Qtds / QOrigin * lnQtDiv,;
+						Peso2s With Peso2s / QOrigin * lnQtDiv,;
+						cidchaves with fUniqueIds(),;
+						EmpDnps with emps + dopps + Str(numps,10)
+			EndScan
+		EndScan
+	EndIf
+
+	Select Dopps From CrSigCdOpd Where ChkDests = 1 And Autos = 1 Into Cursor OppEnvel
+	=Seek(CrSigCdPam.DivOps,'CrSigCdOpd','Dopps')
+	If CrSigCdOpd.Envelopes = 1 And Reccount('OppEnvel') > 0 And Thisform.Envelopado 
+		Go Top In OppEnvel
+		_DopEnvel = OppEnvel.Dopps
+		=Seek(_DopEnvel,'CrSigCdOpd','Dopps')
+		
+		Select * From CrSigPdMvf Where Dopps = CrSigCdPam.DivOps And Nops <> ThisForm.Get_Op.Value Into Cursor Selecao
+		Select Selecao
+		Scan
+			Scatter Memvar Memo
+			m.Numps = ThisForm.Envelope
+			m.Nenvs = m.Nops
+			m.GrupoOs = m.GrupoDs
+			m.ContaOs = m.ContaDs
+			m.Dopps   = _dopEnvel
+			m.EmpDnPs = m.Emps + m.Dopps + Str(m.Numps,10)
+			m.CidChaves = ( Dtos(Date())+Transform(fGerUniqueKey(Dtos(Date())),"@L 999999")+ThisForm.Sigkey )
+			m.Datars = Datetime()
+			Insert Into CrSigPdMvf From Memvar
+		EndScan
+		
+		Select * From CrSigCdNei Where Dopps = CrSigCdPam.DivOps And Nops <> ThisForm.Get_Op.Value Into Cursor Selecao
+		Select Selecao
+		Scan
+			Scatter Memvar Memo
+			m.Numps = ThisForm.Envelope
+			m.Nenvs = m.Nops
+			m.Dopps   = _dopEnvel
+			m.EmpDnPs = m.Emps + m.Dopps + Str(m.Numps,10)
+			m.CidChaves = fUniqueIds()
+			m.TpOps = CrSigCdOpd.TpPadraos
+			Insert Into CrSigCdNei From Memvar
+		EndScan
+	Endif
+Else
+
+	Select CrSigOpPic
+	=AFields(xopi)
+	Create Cursor CrSigOpPic2 From Array xOPi
+
+	Select Temp_DivOp
+
+	Scan
+		Select LocalMFas
+		Replace Qtds with Qtds - Temp_DivOp.Qtds
+
+		lcUpdate = [Update SigPdMvf Set Qtds = ]+Str(LocalMfas.Qtds,12,3)+[ Where Cidchaves = ']+LocalMfas.Cidchaves+[']
+
+		Select CrSigPdMvf
+		Replace Qtds with Qtds + Temp_DivOp.Qtds
+		lnTotal = lnTotal + Temp_DivOp.Qtds
+		llGeraOp = .T.
+		
+		Select CrSigOpPic
+		Scan 
+			If Nops <> lnOp
+				Loop
+			Endif
+			Scatter Memvar Memo
+			m.Nops = lnNovaOp
+			m.NopMaes = LnOp
+			m.CidChaves = fUniqueIds()
+			m.empDopNops = m.Emps + m.Dopps + Str(m.Nops,10)
+			Insert Into CrSigOpPic2 From Memvar
+		EndScan
+	Endscan
+
+	Select CrSigOpPic
+	Append From DBF('CrSigOpPic2')
+
+Endif
+
+ThisForm.Get_obss.Enabled = .f.
+ThisForm.Get_obss.Visible = .f.
+
+Select Temp_DivOp
+Zap
+
+If ThisForm.Operação = 'D'
+	Select Temporario
+	Go top
+	With ThisForm.fwmemo_obs
+		.Enabled = .t.
+		.Visible = .t.
+	EndWith
+	With ThisForm.Grupo_Salva
+		.Enabled = .f.
+		.Visible = .f.
+	EndWith
+	With ThisForm.Grupo_Conf
+		.Enabled = .t.
+		.Visible = .t.
+	EndWith
+	With ThisForm.Grade
+		.Enabled = .f.
+		.Visible = .f.
+	EndWith
+	With ThisForm.grade2
+		.Enabled = .t.
+		.Visible = .t.
+		.Refresh
+		If !thisform.lAutomatico		
+			.Column2.Text1.SetFocus
+		Endif
+	EndWith
+Endif
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Cancelar.Click
+ThisForm.RELEASE
+ON KEY LABEL ENTER
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade2
+* Classe: fwgrade (Base: grid)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.fwmemo_obs.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+ThisForm.Get_obss.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*--Para não passar pela classe
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ON KEY LABEL 'ENTER' KEYBOARD '{DNARROW}' 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Parent.Parent.Column2.Text1.Value > 0 And This.value > 0
+	Messagebox( 'Informe Somente Qtde Divisão ou Qtde de Etiquetas...', 32, '' )
+	This.Value = 0
+	Return 0
+Endif
+If This.Value > Temp_DivOp.Qtds
+	Messagebox( 'Quantidade a dividir não pode ser maior que a quantidade do Pedido...', 32, '' )
+	This.Value = 0
+	Return 0
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Parent.Parent.Column4.Text1.Value > 0 And This.value > 0
+	Messagebox( 'Informe Somente Qtde Divisão ou Qtde de Etiquetas...', 32, 'Aviso' )
+	This.Value = 0
+	Return 0
+Endif
+
+If this.Value = 1 && Não deixa dividir por 1 pois seria a mesma coisa que manter a OP
+	Messagebox( 'Informe somente Qtde maior que 1.', 32, 'Aviso' )
+	This.Value = 0
+	Return 0	
+Endif
+
+If This.Value > Temp_DivOp.Qtds
+	Messagebox( 'Quantidade de Etiquetas não pode ser maior que a quantidade do Pedido...', 32, 'Aviso' )
+	This.Value = 0
+	Return 0
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ON KEY LABEL 'ENTER'
+Return ( Temp_DivOp.Qtds > 1 )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Get_OP
+* Classe: fwget (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Reccount('Temporario')  = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select Temporario
+Delete All
+Select Temp_DivOp
+Delete All
+Select xNensi
+Delete All
+
+If Empty( This.Value ) Or Val(This.Value) = 0
+	Return
+Endif
+
+If Len( Alltrim( This.Value ) ) > 10
+	This.Value = Right( This.Value, 10 )
+EndIf
+
+_citem = 1
+lnOp = Val( This.Value )
+pNop = LnOp
+Set Step On 
+ThisForm.Envelopado = .f.
+ThisForm.Envelope   = 0
+
+lcSql = [Select Dopps From SigCdOpd where ChkDests = 1 ]
+=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpOpp')
+Select TmpOpp
+If Reccount() > 0
+	lcbusca = thisform.cEmps + TmpOpp.Dopps + Str(pNop,10)
+	lcSql = [Select Nops,Numps From SigPdMvf Where EmpDnPs = ']+lcbusca+[']
+	=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpMfas')
+	Select TmpMfas
+	If Reccount() > 0
+		Go top
+		pNop = TmpMfas.Nops
+		This.Value = Str(pNop,10)
+		This.Refresh
+		ThisForm.Envelopado = .t.
+		ThisForm.Envelope = TmpMfas.NumPs
+	Else
+		lcSql = [Select nops,NumPs From SigPdMvf Where Nops = ]+Str(pNop,10)+[ And Dopps = ']+TmpOpp.Dopps+[']
+		=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpMfas')
+		If Reccount('TmpMfas') > 0
+			Thisform.envelopado = .t.
+			ThisForm.Envelope = TmpMfas.NumPs
+		Endif
+	EndIf
+Endif
+
+=ThisForm.PodataMgr.Cursorquery('SigOpPic','TmpOpi','Nops',pNop)
+Select TmpOpi
+If Reccount() = 0
+	Messagebox( 'O.P. não localizada!!', 32, '' )
+	This.Value = ' '
+	Return (.f.)
+Else
+	If TmpOpi.Emps <> thisform.cEmps
+		MessageBox('Op '+Str(pNop)+' é de outra empresa '+tmpOpi.Emps,0+16,'')
+		This.Value = ' '
+		Return (.f.)
+	Endif
+EndIf
+
+lcEdn = TmpOpi.Emps + TmpOpi.Dopps + Str(TmpOpi.Nops,10)
+ThisForm.Divisaoop = TmpOpi.Dopps
+
+=ThisForm.PodataMgr.Cursorquery('SigCdNec','TmpNens','EmpDnPs',lcEdn,[ChkSubn])
+Select TmpNens
+If Reccount() > 0 And Not ChkSubn
+
+	lcQuery = [Select Nops, Emps, Dopps, Numps, cIdChaves, Grupods ] + ;
+				[From SigPdMvf ] + ;
+			   [Where Nops = ?pNop ] + ;
+			   [Order By Nops Desc, cIdChaves Desc]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalMfas') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMfas)')
+		Return 0
+	EndIf
+
+	Select LocalMfas
+	Go Top
+	
+	If Thisform.PodataMgr.CursorQuery('SigCdGcr','TmpGccr','codigos',LocalMfas.Grupods,[BlqDivOps]) And ;
+		TmpGccr.BlqDivOps = 1
+		Messagebox( 'Setor Bloqueado para Divisão de Op!!!',48,'')
+		This.Value = ' '
+		Return 0
+	EndIf
+	
+	lcQuery = [Select * From SigOpPic ]+;
+				[ Where Nops = ?pNop ]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'Localopi') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalOpi)')
+		Return 0
+	EndIf
+	
+	Select LocalOpi
+	If LocalOpi.CodBarras > 0
+		Messagebox( 'Op de Serviço com Barra não pode ser Dividido!!!',48,'')
+		This.Value = ' '
+		Return 0
+	EndIf
+	
+	ThisForm.Get_Produto.Value = LocalOpi.Cpros
+	
+	Select LocalOpi
+	Scan
+		lcUpdate = [Update SigOpPic Set SeqDivs = ]+Str(_Citem)+[ Where CidChaves = ']+Localopi.CidChaves+[']
+		If (ThisForm.poDataMgr.SqlExecute(lcUpdate,'') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigOpPic)')
+			Return 0
+		EndIf
+		lcSql = [Select a.ContaOs, a.contaDs, b.Globalizas, b.Servicos From SigMvCab a, SigCdOpe b ]+;
+				[Where a.EmpDopNums = ']+LocalOpi.EmpdopNums+[' And a.Dopes = b.dopes ]
+		If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalEest') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalEest)')
+			Return 0
+		Endif	
+
+		_Conta = Iif(LocalEest.globalizas=1 or LocalEest.Servicos = 1,LocalEest.ContaOs,LocalEest.ContaDs)
+
+		Select LocalOpi
+		Replace SeqDivs with _citem
+		Insert Into Temp_DivOp ( Dopes, Numes, Qtds, Dataes, Obss, SeqDivs, Cpros, CodCors, CodTams, Empds, Dpros, Notas, Contas, Citens, Pesos ) ;
+				Values ( LocalOpi.Dopes, LocalOpi.Numes, LocalOpi.Qtds, LocalOpi.Dataes, LocalOpi.Obss, _citem,;
+						 LocalOpi.Cpros, LocalOpi.CodCors, LocalOpi.CodTams, LocalOpi.empds, LocalOpi.Dpros, ;
+						 LocalOpi.Notas, _Conta, LocalOpi.Citens, LocalOpi.Pesos )
+		_citem = _citem + 1
+	Endscan
+
+	lcQuery = [Select a.*, b.Datas, c.SepPedras, c.GrComps From SigCdNei a, SigCdNec b, SigCdOpd c ]+;
+			  [Where a.Nops = ?pNop And a.Empdnps = b.EmpDnps And a.Dopps = c.Dopps Order by b.Datas Desc, b.EmpDnPs Desc]
+
+	If ( ThisForm.poDataMgr.SqlExecute(lcQuery,'LocalNensi') < 1 )
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdNei)')
+		Return 0
+	EndIf
+
+	Select LocalNensi
+	Scan
+		If (Not InList(SepPedras,1,3)) And (GrComps = 1)
+			Exit
+		EndIf
+	EndScan
+
+	Select LocalNensi
+	_Chave = EmpDnPs
+	Scan While EmpDnPs = _Chave
+		Scatter to Memvar
+		Select xNensi
+		Append from array Memvar
+	EndScan
+
+	Select Temp_DivOp
+	Go Top
+Else
+	If Reccount('TmpNens') > 0 And ChkSubn
+		Messagebox( 'O.P. já foi encerrada!!', 32, '' )
+	Endif
+	If Reccount('TmpNens') = 0
+		Messagebox( 'O.P. não localizada!!', 32, '' )
+	Endif
+	This.Value = ''
+Endif
+ThisForm.Grade.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If !Empty( This.Value ) And !Eof( 'Temp_divOp' )
+	ThisForm.Grade.Column2.Text1.SetFocus
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Get_Produto
+* Classe: fwget (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.fwmemo_obs
+* Classe: editbox (Base: editbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.grade2.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGOPDIV.Get_obss
+* Classe: editbox (Base: editbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.grade2.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGOPDIV
+RESERVED3 (ClassInfo): codant
+operação
+podatamgr
+divisaoop
+sigkey
+envelopado
+envelope
+cemps
+lautomatico
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 22
+================================================================================

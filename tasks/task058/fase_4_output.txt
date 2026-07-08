@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. Os seguintes m├®todos foram adicionados ao `Formsigrecnt.prg`:
+
+- **`ConfigurarPaginaFiltros()`** ÔÇö adiciona todos os 20 controles de filtro ├á Page1: labels e TextBoxes para Data, C├│digo, Vendedor (c├│digo+descri├º├úo), Base, N├¡vel 2, 3 e 4 (c├│digo+descri├º├úo cada), mais os dois OptionGroups (Local com 4 op├º├Áes: Todos/Contados/N├úo Contados/Divergentes, e Ordem com 4 op├º├Áes: Local/N├¡vel 2/3/4). Campos de descri├º├úo s├úo `ReadOnly=.T.` com fundo cinza claro, como no legado (When=.F.). Posi├º├Áes calculadas a partir do `layout.json` (top original ÔêÆ 85 para compensar o PageFrame).
+
+- **`LimparCampos()`** ÔÇö inicializa todos os filtros: data=`DATE()`, strings=`""`, optiongroups=`1`.
+
+- **`FormParaRelatorio()`** ÔÇö copia os valores do form para as propriedades do BO (`this_dData`, `this_cCods`, `this_cConta`, `this_cDConta`, `this_cBase`, `this_cNvl2/3/4`, `this_nOptLocal/Orion`).
+
+- **`InicializarForm()`** atualizado para chamar ambos ap├│s `ConfigurarPageFrame()`.

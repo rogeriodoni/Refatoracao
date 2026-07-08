@@ -1,0 +1,16 @@
+﻿Fase 4 conclu├¡da. O `FormSIGPRCIC.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** (novo m├®todo) ÔÇö cria todos os controles de Page1 fiel ao legado:
+- `lbl_4c_Programa` + `txt_4c_Programa` (readonly ÔÇö mapeado de Say2 + Text1)
+- `shp_4c_Preview` (Shape1 ÔÇö borda decorativa do preview)
+- `img_4c_Icone` (Icone ÔÇö imagem do ├¡cone selecionado)
+- `grd_4c_Dados` (Grid1 ÔÇö lista de ├¡cones com SetAll id├¬ntico ao Init() legado)
+- BINDEVENT para AfterRowColChange, BeforeRowColChange, Scrolled, DblClick, KeyPress do grid
+
+**`CarregarDados()`** (atualizado) ÔÇö agora tamb├®m popula `txt_4c_Programa.Value` com `crProg2.descricaos`, define RecordSource/ControlSource ap├│s posicionar o cursor, e atualiza o preview inicial.
+
+**Handlers de evento** (novos m├®todos PUBLIC): `GrdDadosAfterRowColChange`, `GrdDadosBeforeRowColChange`, `GrdDadosScrolled`, `GrdDadosText1DblClick`, `GrdDadosText1KeyPress` ÔÇö todos delegam para o PROTECTED `AtualizarPreviewIcone()`.
+
+**`AlternarPagina()`** ÔÇö m├®todo de navega├º├úo entre p├íginas do PageFrame.
+
+**Nota**: Este form OPERACIONAL n├úo recebeu bot├Áes CRUD (Incluir/Alterar/Excluir) pois o original n├úo os possui ÔÇö o mecanismo de sele├º├úo ├® duplo-clique no grid ou ENTER, e fechar sem salvar ├® via ESC.

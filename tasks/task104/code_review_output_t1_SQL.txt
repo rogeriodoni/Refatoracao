@@ -1,0 +1,3 @@
+﻿`loc_cSQL` is still used in the main queries below, so the LOCAL line is correct as-is.
+
+**Fix applied:** Removed the invented `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` sub-query (lines 69ÔÇô81 in the original). The `WHERE Cemps = ...` condition did not exist in the original code ÔÇö only `CODIGOS`, `NOPS`, `NNUMES`, and `CODCORS` appear in the original WHEREs. The company name is now obtained directly from `go_4c_Sistema.cEmpresa`, which is already available on the global system object.

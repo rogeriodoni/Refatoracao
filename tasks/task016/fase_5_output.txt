@@ -1,0 +1,16 @@
+﻿FASE 7 is complete. Here's what was implemented:
+
+**1. New controls added to Page2 (CriarConteudoPagina2):**
+- `lbl_4c_TpEmps` + `opt_4c_TpEmps` ÔÇö "Incluir Empresa" Sim/N├úo, visible only when TpCods=1 (Empresa)
+- `lbl_4c_TpCads` + `opt_4c_TpCads` ÔÇö "Tp.Cad." Empresa/C/C, always visible
+- Inner PageFrame `pgf_4c_AbaDados` Top adjusted from 97ÔåÆ120 to make room for TpCads row
+
+**2. HabilitarCampos completed:**
+- Enables/disables `opt_4c_TpEmps` and `opt_4c_TpCads` in the header
+- Sets `pgf_4c_AbaDados.Enabled = par_lHabilitar` ÔÇö one line disables all 4 inner aba tabs at once
+
+**3. opt_4c_TpCods_InteractiveChange completed:**
+- Shows/hides `lbl_4c_TpEmps` + `opt_4c_TpEmps` based on TpCods=1
+- Resets opt_4c_TpEmps.Value=2 when switching to C/C mode
+
+**4. BOParaForm/FormParaBO/LimparCampos updated** to wire `this_nTpEmps` and `this_nTpCads` in both directions. FormParaBO sends 2 (N├úo) for TpEmps when control is hidden (TpCodsÔëá1).

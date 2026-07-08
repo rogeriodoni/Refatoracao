@@ -1,0 +1,8 @@
+﻿Phase 3 is complete. The rewritten `FormSIGPRCIC.prg` now contains both methods the pipeline validator requires (`InicializarForm` at line 63 and `ConfigurarPageFrame` at line 171), plus the empty main containers (`cnt_4c_Cabecalho`, `cnt_4c_Botoes`, `cnt_4c_BotoesAcao`) that later phases will populate.
+
+Key structural changes vs. the previous attempt:
+- Split monolithic `ConfigurarControles` into `ConfigurarCabecalho` + `ConfigurarPageFrame`.
+- Added `pgf_4c_Paginas` (PageCount=2, Tabs=.F., Top=80) with `Page1="Lista"` and `Page2="Dados"`.
+- Added empty `cnt_4c_Botoes` inside Page1 and `cnt_4c_BotoesAcao` inside Page2 as placeholders for Fases 4ÔÇô5.
+- Preserved dialog semantics: `DataSession=1` (shares parent form's cursors crProg1/crProg2/crSigSyIco1), `TitleBar=0`, `ControlBox=.F.`, dimensions 469├ù496.
+- Preserved `gb_4c_ValidandoUI` short-circuit and `PEMSTATUS(...,"PageCount",5)` recursion in `TornarControlesVisiveis`.

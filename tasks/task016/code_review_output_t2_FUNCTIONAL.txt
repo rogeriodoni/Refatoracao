@@ -1,0 +1,8 @@
+﻿O arquivo j├í cont├®m a corre├º├úo correta. O m├®todo `TornarControlesVisiveis` j├í possui as duas prote├º├Áes necess├írias:
+
+1. **Linha 3075**: N├úo for├ºa `Visible=.T.` em containers que estejam com `Visible=.F.`
+2. **Linha 3088**: N├úo recursiona dentro de containers ocultos
+
+A l├│gica `IF NOT INLIST(loc_cBase, "CONTAINER") OR loc_oObjeto.Visible` est├í corretamente aplicada nos dois pontos cr├¡ticos do m├®todo ÔÇö tanto no `SET Visible=.T.` quanto na recurs├úo.
+
+O problema `[CONTAINER-VISIVEL]` j├í est├í corrigido no arquivo em disco. Nenhuma altera├º├úo ├® necess├íria.

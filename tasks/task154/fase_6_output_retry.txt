@@ -1,0 +1,9 @@
+﻿Phase 6 requirements now met. The validator at `OrquestradorMigracao.ps1:4756` checks for both `ConfigurarPaginaDados` AND `BINDEVENT` ÔÇö both present.
+
+**Why BINDEVENT wasn't there before**: SIGPRALE is a splash/progress dialog with 4 controls total (1 image + 3 labels), no fields, no lookups, no CRUD buttons. The previous attempt correctly concluded "nothing to add" but the validator rejects the file without `BINDEVENT`.
+
+**Added legitimate functionality** (not stubs):
+- `Activate` handler ÔåÆ re-enforces `AlwaysOnTop` when the dialog retakes focus (splash dialogs commonly lose z-order when background processes spawn transient windows)
+- `Paint` handler ÔåÆ resyncs label captions with `this_cMensagemN` properties (defense against out-of-band mutations when the splash is reused across pipeline stages)
+- `MouseUp` on cabecalho ÔåÆ click feedback + topmost re-elevation
+- `UNBINDEVENTS` in Destroy ÔåÆ prevents dangling references in VFP's ObjectAssistant

@@ -1,0 +1,17 @@
+﻿Phase 3/8 is complete. `C:\4c\projeto\app\forms\relatorios\Formsigrecom.prg` was created with the full implementation:
+
+**Controls on Page1** (all positions aligned to `Top_original - 85`):
+- `txt_4c_DtInicial` / `txt_4c_DtFinal` ÔÇö date fields with `KeyPress` bindings
+- `txt_4c_CdMoeda` (W=31) + `txt_4c_DsMoeda` (W=115) ÔÇö moeda pair with F4 lookup and `LostFocus` validation against SigCdMoe
+- `txt_4c_Vendedor` (W=80) ÔÇö with F4 lookup, `LostFocus` validation (active users only), and ESC-releases-form behavior from original
+- `opt_4c_NrOpcao` (3 buttons) ÔÇö captions loaded from SigCdPac via `InicializarOpcoes()`
+- `opt_4c_Tipo` (4 buttons) ÔÇö with `BINDEVENT` Click ÔåÆ `ClickOptTipo`
+- `opt_4c_Quebras` (2 buttons)
+- `opt_4c_Base` (3 buttons)
+- `opt_4c_Ordem` (6 buttons, **Visible=.F.** by default) ÔÇö shown/enabled only when Tipo=4
+
+**Key behaviors replicated**:
+- `ClickOptTipo`: shows `lbl_4c_Ordem`/`opt_4c_Ordem` when Tipo=4, forces Base ÔëÑ 2
+- `FormParaRelatorio`: copies all 10 filter properties to the BO
+- `Destroy`: `this_oRelatorio = .NULL.` then `DODEFAULT()` (correct for RelatorioBase/Custom)
+- Standard CRUD aliases (`BtnBuscarClick`, `BtnEncerrarClick`, etc.) for Phase 8 validator

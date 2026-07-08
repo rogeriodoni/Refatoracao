@@ -1,0 +1,743 @@
+{
+  "resumo": {
+    "totalMetodos": 39,
+    "metodosComSQL": 13,
+    "metodosComValidacao": 22,
+    "totalQueries": 14,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fVerificaPasta", "File", "From csTmpE Where Codigos In", "From csTmpS Where Codigos In", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "If (ThisForm.optImagem.Value = 1) && Com Imagem\n\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ;\n\t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ;\n\t  From crImpressao ;\n\t Where Ordem = '0000000001' ;\n\t  Into Cursor Selecao1\n\n\tSelect CPros, Sum(Estoques) as Estoques ;\n\t  From crImpressao ;\n\t Where Estos = 'Total :   ' ;\n\t Group By Cpros ;\n\t  Into Cursor Selecao2\n\n\tSelect a.*, b.Estoques ;\n\t  From Selecao1 a, Selecao2 b ;\n\t Where a.Cpros = b.Cpros ;\n\t Order By a.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Release Procedure SigReAto\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm\n\t.loObj.DataInicial = .getDtInicial.Value\n\t.loObj.DataFinal   = .getDtFinal.Value\n\t.loObj.Grupo       = .getGrupo.Value\n\t.loObj.Produto \t   = .getCPros.Value\n\t.loObj.Linha \t   = .getLin.Value\n\t.loObj.Fornecedor  = .getFornecedor.Value\n\t.loObj.Imagem      = (.optImagem.Value = 1)\n\t.loObj.Tipos\t   = .optTipos.Value\n\t.loObj.Diferenca   = .optDiferencas.Value\n\n\tllRet = .loNegocios.Processamento(.loObj)\n\n\tIf Not llRet\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim ***********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem,optTipos,optDiferencas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "=fConfigGeral()\n\nSet Procedure To SigReAto.Prg Additive\n\nCreate Cursor csOperacoesE (SelImp l(1), Codigos n(2), Descrs c(30))\nIndex On Codigos Tag Codigos\n\nCreate Cursor csOperacoesS (SelImp l(1), Codigos n(2), Descrs c(30))\nIndex On Codigos Tag Codigos\n\nCreate Cursor csSigCdCeg (lMarca l(1), Grupos c(10), Contas c(10))\nIndex On Grupos + Contas Tag GruContas\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Init",
+      "linhas": 132,
+      "codigoOriginal": "Private llNot\n\nllNot = .f.\n\nWith ThisForm\n\t.loNegocios = CreateObject('cnSigReAto', .Name)\n\n\tIf (.loNegocios.poDataMgr.pnIdconn > 0)\n\t\t.getDtInicial.Value = Date()\n\t\t.getDtFinal.Value   = Date()\n\n\t\t.loObj = CreateObject('Relation')\n\n\t\t.loObj.AddProperty('DataInicial', .getDtInicial.Value)\n\t\t.loObj.AddProperty('DataFinal',   .getDtFinal.Value)\n\t\t.loObj.AddProperty('Grupo',       [])\n\t\t.loObj.AddProperty('Produto',     [])\n\t\t.loObj.AddProperty('Linha',       [])\n\t\t.loObj.AddProperty('Fornecedor', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "If (ThisForm.optImagem.Value = 1) && Com Imagem\n\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ;\n\t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ;\n\t  From crImpressao ;\n\t Where Ordem = '0000000001' ;\n\t  Into Cursor Selecao1\n\n\tSelect CPros, Sum(Estoques) as Estoques ;\n\t  From crImpressao ;\n\t Where Estos = 'Total :   ' ;\n\t Group By Cpros ;\n\t  Into Cursor Selecao2\n\n\tSelect a.*, b.Estoques ;\n\t  From Selecao1 a, Selecao2 b ;\n\t Where a.Cpros = b.Cpros ;\n\t Order By a.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "NoDefault\n\nIf (ThisForm.optTipos.Value = 1) && Analítico\n\tSelect Iif(Ordem = [0000000001], CPros,  Space(14)) as Código, ;\n\t\t   Iif(Ordem = [0000000001], DPros,  Space(40)) as Descrição, ;\n\t\t   Iif(Ordem = [0000000001], Reffs,  Space(15)) as Referência, ;\n\t\t   Iif(Ordem = [0000000001], CGrus,  Space(03)) as Grp, ;\n\t\t   Iif(Ordem = [0000000001], Linhas, Space(10)) as Linha, ;\n\t\t   Iif(Ordem = [0000000001], IFors,  Space(10)) as Fornecedor, ;\n\t\t   Iif(Ordem = [0000000001], Margems, 000.000000) as ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaPasta,File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "If (ThisForm.optImagem.Value = 1) && Com Imagem\n\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ;\n\t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ;\n\t  From crImpressao ;\n\t Where Ordem = '0000000001' ;\n\t  Into Cursor Selecao1\n\n\tSelect CPros, Sum(Estoques) as Estoques ;\n\t  From crImpressao ;\n\t Where Estos = 'Total :   ' ;\n\t Group By Cpros ;\n\t  Into Cursor Selecao2\n\n\tSelect a.*, b.Estoques ;\n\t  From Selecao1 a, Selecao2 b ;\n\t Where a.Cpros = b.Cpros ;\n\t Order By a.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO",
+      "evento": "Click",
+      "linhas": 62,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tSelect Codigos From csOperacoesE Where SelImp Into Cursor csTmpE\n\t\n\tIf (Reccount('csTmpE') < 1)\n\t\t=Messagebox('Nenhum Tipo de Operação de Entrada Foi Selecionado!!!', 0+48, '')\n\t\tThisForm.grdOperacoesE.Column1.SetFocus\n\t\tReturn .f.\n\tEndIf\n\t\n\tSelect Codigos From csOperacoesS Where SelImp Into Cursor csTmpS\n\t\n\tIf (Reccount('csTmpS') < 1)\n\t\t=Messagebox('Nenhum Tipo de Operação de Saida Foi Selecionado!!!', 0+48, '')\n\t\tThisForm.grdOperacoesS.Column1.Se... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From csTmpE Where Codigos In,From csTmpS Where Codigos In",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImagem,optTipos,optDiferencas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = Not csOperacoesE.SelImp\n\nSelect csOperacoesE\nGather Memvar Fields SelImp\nThisForm.GrdOperacoesE.Refresh\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = (Not csOperacoesE.SelImp)\n\tSelect csOperacoesE\n\tGather Memvar Fields SelImp\n\tThisForm.GrdOperacoesE.Refresh\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesE.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = Not csOperacoesS.SelImp\n\nSelect csOperacoesS\nGather Memvar Fields SelImp\nThisForm.GrdOperacoesS.Refresh\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = (Not csOperacoesS.SelImp)\n\tSelect csOperacoesS\n\tGather Memvar Fields SelImp\n\tThisForm.GrdOperacoesS.Refresh\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdOperacoesS.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.cmdBtnGradeS",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update csOperacoesS Set SelImp = (This.Value = 1)\nGo Top In csOperacoesS\nThisForm.GrdOperacoesS.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.cmdBtnGradeE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update csOperacoesE Set SelImp = (This.Value = 1)\nGo Top In csOperacoesE\nThisForm.GrdOperacoesE.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.Commandgroup1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update csSigCdCeg Set lMarca = (This.Value = 1)\nGo Top In csSigCdCeg\nThisForm.grdSigCdCeg.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDPros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCPros.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.GetDLin",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getLin.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.GetDLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value  = ''\n\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getCPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.GetLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', Padr(This.Value, 10), 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getFornecedor",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.getDFornecedor)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.getDFornecedor.Value = '' \n\t\tReturn(.F.)\n\tEndIf\t\t\nElse\n\tThisForm.getFornecedor.Value  = ''\n\tThisForm.getDFornecedor.Value = ''\nEndIf\nThisForm.getFornecedor.Refresh\nThisForm.getDFornecedor.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDFornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getFornecedor.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDFornecedor",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.getFornecedor, This)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.getFornecedor.Value = '' \n\t\tReturn(.F.)\n\tEndIf\t\t\nElse\n\tThisForm.getFornecedor.Value  = ''\n\tThisForm.getDFornecedor.Value = ''\nEndIf\nThisForm.getFornecedor.Refresh\nThisForm.getDFornecedor.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdSigCdCeg.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Replace lMarca With This.Value In csSigCdCeg",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdSigCdCeg.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.grdSigCdCeg.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREATO.getGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREATO.getDGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'DGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ; \t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ; \t  From crImpressao ; \t Where Ordem = '0000000001' ; \t  Into Cursor Selecao1",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,DPros,Reffs,CGrus,Linhas,IFors,Ordem,Estos,Pvens,Moevs,Entradas,Saidas,Grupos,Selecao1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, Sum(Estoques) as Estoques ; \t  From crImpressao ; \t Where Estos = 'Total :   ' ; \t Group By Cpros ; \t  Into Cursor Selecao2",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,Estos,Total,Selecao2",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect a.*, b.Estoques ; \t  From Selecao1 a, Selecao2 b ; \t Where a.Cpros = b.Cpros ; \t Order By a.... [TRUNCADO]",
+      "tabelas": "Selecao1",
+      "colunas": "Cpros",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ; \t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ; \t  From crImpressao ; \t Where Ordem = '0000000001' ; \t  Into Cursor Selecao1",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,DPros,Reffs,CGrus,Linhas,IFors,Ordem,Estos,Pvens,Moevs,Entradas,Saidas,Grupos,Selecao1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, Sum(Estoques) as Estoques ; \t  From crImpressao ; \t Where Estos = 'Total :   ' ; \t Group By Cpros ; \t  Into Cursor Selecao2",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,Estos,Total,Selecao2",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect a.*, b.Estoques ; \t  From Selecao1 a, Selecao2 b ; \t Where a.Cpros = b.Cpros ; \t Order By a.... [TRUNCADO]",
+      "tabelas": "Selecao1",
+      "colunas": "Cpros",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, DPros, Reffs, CGrus, Linhas, IFors, Ordem, Estos,  ; \t       Imagem, Pvens, Moevs, Entradas, Saidas, Grupos, Margems ; \t  From crImpressao ; \t Where Ordem = '0000000001' ; \t  Into Cursor Selecao1",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,DPros,Reffs,CGrus,Linhas,IFors,Ordem,Estos,Pvens,Moevs,Entradas,Saidas,Grupos,Selecao1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect CPros, Sum(Estoques) as Estoques ; \t  From crImpressao ; \t Where Estos = 'Total :   ' ; \t Group By Cpros ; \t  Into Cursor Selecao2",
+      "tabelas": "crImpressao",
+      "colunas": "CPros,Estos,Total,Selecao2",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Procedure",
+      "queryOriginal": "\tSelect a.*, b.Estoques ; \t  From Selecao1 a, Selecao2 b ; \t Where a.Cpros = b.Cpros ; \t Order By a.... [TRUNCADO]",
+      "tabelas": "Selecao1",
+      "colunas": "Cpros",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Click",
+      "queryOriginal": "\tSelect Codigos From csOperacoesE Where SelImp Into Cursor csTmpE",
+      "tabelas": "csOperacoesE",
+      "colunas": "Codigos,SelImp,csTmpE",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Click",
+      "queryOriginal": "\tSelect Codigos From csOperacoesS Where SelImp Into Cursor csTmpS",
+      "tabelas": "csOperacoesS",
+      "colunas": "Codigos,SelImp,csTmpS",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.cmdBtnGradeS.Click",
+      "queryOriginal": "Update csOperacoesS Set SelImp = (This.Value = 1)",
+      "tabelas": "csOperacoesS",
+      "colunas": "SelImp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.cmdBtnGradeE.Click",
+      "queryOriginal": "Update csOperacoesE Set SelImp = (This.Value = 1)",
+      "tabelas": "csOperacoesE",
+      "colunas": "SelImp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREATO.Commandgroup1.Click",
+      "queryOriginal": "Update csSigCdCeg Set lMarca = (This.Value = 1)",
+      "tabelas": "csSigCdCeg",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crImpressao", "Selecao1", "csOperacoesE", "csOperacoesS", "csSigCdCeg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

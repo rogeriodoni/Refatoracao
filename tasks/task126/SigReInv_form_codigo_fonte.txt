@@ -1,0 +1,2817 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReInv.SCX
+* Data/Hora: 06/06/2026 14:26:33
+* Total de registros: 35
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREINV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command1
+  Parent: SIGREINV
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Shape1
+  Parent: SIGREINV
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_MoeFator
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_empresa
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Ds_Empresa
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Cd_Empresa
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_moeda
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_moeda_desc
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Opt_ICMS
+  Parent: SIGREINV
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Lbl_ICMS
+  Parent: SIGREINV
+  Class: label
+  BaseClass: label
+
+Objeto: Say1
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGREINV
+  Class: shape
+  BaseClass: shape
+
+Objeto: ChkInv2
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkInv3
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkInv1
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkValor1
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkValor2
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape4
+  Parent: SIGREINV
+  Class: shape
+  BaseClass: shape
+
+Objeto: ChkValor4
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkValor5
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkValor3
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkSaldo1
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkSaldo2
+  Parent: SIGREINV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDataSaldo
+  Parent: SIGREINV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_ValFator
+  Parent: SIGREINV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREINV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptPosicao
+  Parent: SIGREINV
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 59
+  Left = 55
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Inventário de Estoque"
+  ControlBox = .F.
+  ClipControls = .T.
+  Name = "SIGREINV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = -4
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = -4
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = -4
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = -4
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 524
+  btnReport.Top = 7
+  btnReport.TabIndex = 21
+  btnReport.ZOrderSet = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 522
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Command1
+------------------------------------------------------------
+  Top = 82
+  Left = 648
+  Height = 32
+  Width = 137
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = 
+  Caption = " Gera Inventário TXT       "
+  TabIndex = 20
+  ToolTipText = "Modelo P7"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Shape1
+------------------------------------------------------------
+  Top = 185
+  Left = 219
+  Height = 58
+  Width = 243
+  BackStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  ZOrderSet = 5
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Get_MoeFator
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 219
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 392
+  Width = 37
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "Get_MoeFator"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 164
+  Top = 160
+  Width = 50
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Get_Ds_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 252
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 156
+  Width = 290
+  ZOrderSet = 8
+  Name = "Get_Ds_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Get_Cd_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  InputMask = "XXX"
+  Left = 219
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 156
+  Width = 31
+  ZOrderSet = 9
+  Name = "Get_Cd_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fator :"
+  Height = 15
+  Left = 179
+  Top = 396
+  Width = 35
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.get_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 219
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 15
+  ToolTipText = "Converte os valores para esta moeda. Este parametro tem prioridade sobre o fator."
+  Top = 419
+  Width = 37
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Name = "get_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.get_moeda_desc
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 258
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 16
+  ToolTipText = ""
+  Top = 419
+  Width = 95
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 11
+  Name = "get_moeda_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Opt_ICMS
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 216
+  SpecialEffect = 0
+  Top = 448
+  Width = 133
+  TabIndex = 17
+  ZOrderSet = 12
+  Name = "Opt_ICMS"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 4
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Lbl_ICMS
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Retira ICMS :"
+  Height = 15
+  Left = 148
+  Top = 452
+  Width = 66
+  TabIndex = 28
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Lbl_ICMS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Saldo :"
+  Left = 179
+  Top = 243
+  Width = 35
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor :"
+  Left = 181
+  Top = 285
+  Width = 33
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Inventário :"
+  Left = 155
+  Top = 185
+  Width = 59
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Shape3
+------------------------------------------------------------
+  Top = 295
+  Left = 219
+  Height = 94
+  Width = 243
+  BackStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  ZOrderSet = 17
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkInv2
+------------------------------------------------------------
+  Top = 206
+  Left = 223
+  Height = 15
+  Width = 175
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Produto próprio em poder de 3ºs"
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "ChkInv2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkInv3
+------------------------------------------------------------
+  Top = 223
+  Left = 223
+  Height = 15
+  Width = 169
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Produto de 3ºs em nosso poder"
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "ChkInv3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkInv1
+------------------------------------------------------------
+  Top = 189
+  Left = 223
+  Height = 15
+  Width = 52
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Próprio"
+  Value = 1
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "ChkInv1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkValor1
+------------------------------------------------------------
+  Top = 301
+  Left = 223
+  Height = 15
+  Width = 43
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "UEPS"
+  Value = 0
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "ChkValor1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkValor2
+------------------------------------------------------------
+  Top = 318
+  Left = 223
+  Height = 15
+  Width = 42
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "PEPS"
+  Value = 1
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "ChkValor2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Shape4
+------------------------------------------------------------
+  Top = 248
+  Left = 219
+  Height = 42
+  Width = 243
+  BackStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  ZOrderSet = 23
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkValor4
+------------------------------------------------------------
+  Top = 352
+  Left = 223
+  Height = 15
+  Width = 77
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Custo Médio"
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "ChkValor4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkValor5
+------------------------------------------------------------
+  Top = 369
+  Left = 223
+  Height = 15
+  Width = 48
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Venda"
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 25
+  Name = "ChkValor5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkValor3
+------------------------------------------------------------
+  Top = 335
+  Left = 223
+  Height = 15
+  Width = 46
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Custo"
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "ChkValor3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkSaldo1
+------------------------------------------------------------
+  Top = 252
+  Left = 223
+  Height = 15
+  Width = 55
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Positivo"
+  Value = 1
+  Enabled = .F.
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "ChkSaldo1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.ChkSaldo2
+------------------------------------------------------------
+  Top = 269
+  Left = 223
+  Height = 15
+  Width = 61
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Negativo"
+  Enabled = .F.
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 28
+  Name = "ChkSaldo2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.GetDataSaldo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Height = 23
+  Left = 360
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 474
+  Width = 79
+  ZOrderSet = 29
+  Name = "GetDataSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Get_ValFator
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 1
+  BorderStyle = 1
+  Value = 0
+  Height = 25
+  InputMask = "999999.999"
+  Left = 258
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 392
+  Width = 95
+  ForeColor = 0,0,0
+  DisabledBackColor = 192,192,192
+  DisabledForeColor = 192,192,192
+  ZOrderSet = 11
+  Name = "Get_ValFator"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Posição :"
+  Left = 169
+  Top = 476
+  Width = 45
+  TabIndex = 29
+  ForeColor = 90,90,90
+  ZOrderSet = 31
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda de Conversão :"
+  Height = 15
+  Left = 103
+  Top = 424
+  Width = 111
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINV.OptPosicao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 216
+  SpecialEffect = 0
+  Top = 472
+  Width = 138
+  TabIndex = 18
+  ZOrderSet = 32
+  Name = "OptPosicao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Atual"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 43
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Retroativa :"
+  Option2.Left = 57
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREINV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE procest
+------------------------------------------------------------
+PROCEDURE procest
+LParameters lcFilEmp,lnValCot,lcMoeda
+
+Private lcDatas,ldDtHis
+
+* Declara as variáveis de verificação
+Local lnSldNeg, ldDtAtu, lcConexao, llImpICMS, lnCota
+
+With ThisForm
+	lnPosicao = .OptPosicao.Value
+	lnSldPos  = .ChkSaldo1.Value
+	lnSldNeg  = .ChkSaldo2.Value
+	llImpICMS = (.Opt_ICMS.Value = 1)
+	ldDatas   = .GetDataSaldo.Value
+EndWith
+
+ldDtAtu   = Date()
+lcConexao = ThisForm.poDataMgr.GetDriver()
+llConFox  = (lcConexao = 'foxpro')
+
+If (lnValCot = 0)
+	lnValCot = fCarregarCambio(Alltrim(lcFilEmp),Iif(!Empty(ldDatas),ldDatas,ldDtAtu))
+EndIf
+
+lnCota=0
+If !EMPTY(lcMoeda)
+	lnCota = fCarregarCambio(lcMoeda,Iif(!Empty(ldDatas),ldDatas,ldDtAtu))
+EndIf
+
+Zap In TmpGrupo
+
+Create Cursor csTempo (CGrus c(80), DPros c(55), CUnis c(3), Reffs c(40), CPros c(14), CodCors c(4), CodTams c(4), ;
+					   VlCusto n(12,2), MoeCusto c(3), VlVenda n(12,2), MoeVenda c(3), VlMedio n(14,4), MoeMedio c(3), ;
+					   Emps c(3), Grupos c(10), Estos c(10), SQtds n(12,3), TEQtds n(10,3), TipEsts c(15), ;
+					   TSQtds n(10,3), TotSQtds n(16,3), TotCusto n(20,2), TotVenda n(20,2), TotMedio n(20,2), ;
+					   lCPros l(1), Ps n(1), Ps2 n(1), MoeTotal c(3), ClFiscals c(10), GGrupo c(40), PesoMs n(12,2), ;
+					   Respos c(10), DRespos c(30), Indice n(12,6), ValIcms n(14,4), TipoInvs n(1), Cotacao n(12,6))
+Index On Emps + Grupos + Estos + CPros Tag EmpGrEsCp
+Index On Emps + Grupos + Estos + CPros + CodCors + CodTams Tag chvCorTam
+
+Create Cursor csInventario (CGrus c(80), DPros c(55), CUnis c(3), Reffs c(40), CPros c(14), CodCors c(4), CodTams c(4), ;
+							VlCusto n(12,2), MoeCusto c(3), VlVenda n(12,2), MoeVenda c(3), VlMedio n(14,4), ;
+							MoeMedio c(3), Emps c(3), Grupos c(10), Estos c(10), SQtds n(12,3), TEQtds n(10,3), ;
+							TipEsts c(15), TSQtds n(10,3), TotSQtds n(16,3), TotCusto n(20,2), TotVenda n(20,2), ;
+							TotMedio n(20,2), lCPros l(1), Ps n(1), Ps2 n(1), MoeTotal c(3), ClFiscals c(10), ;
+							GGrupo c(40), PesoMs n(12,2), Respos c(10), DRespos c(30), Indice n(12,6), ValIcms n(14,4), ;
+							TipoInvs n(1), cotacao n(12,6))
+
+Wait Window 'Aguarde! Selecionando Produtos...' NoWait
+
+lcFiltro = []
+Select TmpGccr
+Scan
+	lcFiltro = lcFiltro + Iif(Empty(lcFiltro), ['], [,']) + Padr(TmpGccr.Codigos,10) + [']
+EndScan
+
+lcQuery = [Select a.Emps, a.Grupos, a.Estos, a.CPros, a.CodCors, a.CodTams, a.SQtds, a.TEQtds, ] + ;
+				 [a.TSQtds, a.TipEsts, a.UnitMeds, a.MoedMeds, a.CIdChaves, b.CGrus, b.SGrus, ] + ;
+				 [b.Reffs, b.Linhas, b.Situas, b.DPros, b.CUnis, b.PesoMs, b.ClFiscals, b.CustoFs, ] + ;
+				 [b.PVens, b.FVendas, b.MoePVs, b.MoeCusFs, b.MoeVs ] + ;
+			[From SigMvEst a Inner Join SigCdPro b On b.CPros = a.CPros ] + ;
+		   [Where a.Emps = '] + lcFilEmp + [' And ] + ;
+				 [a.Grupos In(] + lcFiltro + [) ] + ;
+		   [Order By a.CIdChaves]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEst1') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEst1)')
+	Return .f.
+EndIf
+
+Select a.Emps, a.Grupos, a.Estos, a.CPros, a.CodCors, a.CodTams, a.SQtds, a.TEQtds, ;
+	   a.TSQtds, a.TipEsts, a.UnitMeds, a.MoedMeds, a.CIdChaves, a.CGrus, a.SGrus, ;
+	   a.Reffs, a.Linhas, a.Situas, a.DPros, a.CUnis, a.PesoMs, a.ClFiscals, a.CustoFs, ;
+	   a.PVens, a.FVendas, a.MoePVs, a.MoeCusFs, a.MoeVs, b.TipoInvs ;
+  From TmpEst1 a, TmpGccr1 b ;
+ Where a.Grupos = b.Codigos ;
+  Into Cursor TmpEst ReadWrite
+
+Select TmpEst
+Index On Emps + Grupos + Estos + CPros Tag EGEPs
+Index On Emps + Grupos + Estos + CPros + CodCors Tag EGEPCs
+Index On Emps + Grupos + Estos + CPros + CodTams Tag EGEPTs
+Index On Emps + Grupos + Estos + CPros + CodCors + CodTams Tag EGEPCTs
+
+lcDatas = fDtoSQL(Date(),'23:59:59')
+
+If Not (lnPosicao = 1)
+	lcDatas = fDtoSQL(ldDatas,'23:59:59')
+
+	Update TmpEst Set SQtds = 0, TEQtds = 0, TSQtds = 0
+
+	Select TmpEst
+	Go Top
+	If Not Eof()
+		If llConFox
+			lcTblHis = (Addbs(JustPath(ThisForm.poDataMgr.GetDataBase()))+'SigMvHst.dbf')
+			If !Used('SigMvHst')
+				Use (lcTblHis) In 0
+			EndIf
+			Select SigMvHst
+			Set Order To EmpEstPro Descending
+			loBarraHis = CreateObject('fwprogressbar','Calculando Saldos...',Reccount('TmpEst'))
+			loBarraHis.Show
+			Select TmpEst
+			Go Top
+			Scan
+				loBarraHis.Update(.T.,'Grupo: ' + Alltrim(TmpEst.Grupos)+ ' - Estoque: ' + Alltrim(TmpEst.Estos) + ' - Produto: ' + TmpEst.CPros)
+				Select SigMvHst
+				Go Top
+				Set Near On
+				Seek TmpEst.Emps + TmpEst.Grupos + TmpEst.Estos + TmpEst.CPros + DtoS(lcDatas)
+				Set Near Off
+				lnSQtds  = 0
+				lnTEQtds = 0
+				lnTSQtds = 0
+				If SigMvHst.Emps + SigMvHst.Grupos + SigMvHst.Estos + SigMvHst.CPros = ;
+					TmpEst.Emps + TmpEst.Grupos + TmpEst.Estos + TmpEst.CPros
+					lnSQTds  = SigMvHst.SQtds
+					lnTEQtds = SigMvHst.TEQtds
+					lnTSQtds = SigMvHst.TSQtds
+				EndIf
+				Select TmpEst
+				Replace TmpEst.SQtds  With lnSQtds,;
+						TmpEst.TEQtds With lnTEQtds,;
+						TmpEst.TSQtds With lnTSQtds
+			EndScan
+			loBarraHis.Complete(.T.)
+		Else
+			Wait Window 'Aguarde! Selecionando Movimentações...' NoWait
+			
+			Select Distinct Emps + Grupos + Estos as EmpGruEsts ;
+			  From TmpEst ;
+			 Order By 1 ;
+			  Into Cursor CsEst ReadWrite
+
+			lcIdQuery = Sys(2015) + Sys(2015)
+			Select CsEst
+			Scan
+				Insert Into crSigTempR (cIdChaves, cIdQuerys, EmpGruests) ;
+								Values (fUniqueIds(), lcIdQuery, CsEst.EmpGruests)
+			EndScan
+			If Not ThisForm.poDataMgr.Update('crSigTempR')
+				ThisForm.poDataMgr.RollBack()
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigTempR)')
+				Return .f.
+			EndIf
+			If (ThisForm.poDataMgr.Commit() < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+				Return .f.
+			EndIf
+
+			If (lnImpPEPS = 1)
+				lcQuery = [Select a.EmpGruEsts, a.OriDopNums, a.Emps, a.Grupos, a.Estos, a.CPros, a.Datas, a.Qtds, ] + ;
+								 [a.Opers, a.SQtds, a.TEQtds, a.TSQtds, a.Units, a.Pesos, a.cIdChaves, a.Dopes, o.Peps, a.CodCors, a.CodTams ] + ;
+						    [From SigOpCdc o ] + ;
+						   [Inner Join SigMvHst a On o.Dopes = a.Dopes ] + ;
+						   [Inner Join SigTempR b On b.EmpGruEsts = a.EmpGruEsts ] + ;
+						   [Where b.cIdQuerys = '] + lcIdQuery + [' And ] + ;
+						 	     [a.Datas <= ?lcDatas ] + ; 
+						   [Order By a.EmpGruEsts, a.CPros, a.cIdChaves]
+			Else
+				lcQuery = [Select a.EmpGruEsts, a.OriDopNums, a.Emps, a.Grupos, a.Estos, a.CPros, a.Datas, a.Qtds, ] + ;
+								 [a.Opers, a.SQtds, a.TEQtds, a.TSQtds, a.Units, a.Pesos, a.cIdChaves, a.Dopes, 0 as Peps, a.CodCors, a.CodTams ] + ;
+						    [From SigMvHst a ] + ;
+						   [Inner Join SigTempR b On b.EmpGruEsts = a.EmpGruEsts ] + ;
+						   [Where b.cIdQuerys = '] + lcIdQuery + [' And ] + ;
+						 	     [a.Datas <= ?lcDatas ] + ; 
+						   [Order By a.EmpGruEsts, a.CPros, a.cIdChaves]
+			EndIf
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpHis') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpHis - 1)')
+				Return 0
+			EndIf
+			Select TmpHis
+			Index On EmpGruEsts + CPros + cIdChaves Tag EmpPro1
+			Index On EmpGruEsts + CPros + CodCors + CodTams + cIdChaves Descending Tag EmpPro2
+			Index On Emps + Cpros + cIdChaves Descending Tag EmpPro3
+			
+			Wait Clear
+
+			Select TmpHis
+			Go Top
+			If Not Eof()
+				loBarraHis = CreateObject('fwprogressbar','Calculando Saldos...',Reccount('TmpEst'))
+				loBarraHis.Show
+				Select TmpEst
+				Scan
+					loBarraHis.Update(.t., 'Grupo: ' + Alltrim(TmpEst.Grupos)+ ' - Estoque: ' + Alltrim(TmpEst.Estos) + ' - Produto: ' + TmpEst.CPros)
+
+					If Seek(TmpEst.Emps + TmpEst.Grupos + TmpEst.Estos + TmpEst.CPros + TmpEst.CodCors + TmpEst.CodTams, 'TmpHis', 'EmpPro2')
+						Replace SQtds  With TmpHis.SQtds,;
+								TEQtds With TmpHis.TEQtds,;
+								TSQtds With TmpHis.TSQtds In TmpEst
+					EndIf
+				EndScan
+				loBarraHis.Complete(.t.)
+			EndIf
+		EndIf
+		
+		If llConFox And Used('SigMvHst')
+			Use In SigMvHst
+		EndIf
+	EndIf
+EndIf
+
+Wait Window 'Aguarde! Verificando Produtos...' NoWait
+
+Select a.Emps, a.Grupos, a.Estos, a.CPros, Iif(InList(b.TipoEstos,2,4), a.CodCors, Space(Len(a.CodCors))) as CodCors, ;
+	   Iif(InList(b.TipoEstos,3,4), a.CodTams, Space(Len(a.CodTams))) as CodTams, a.TipEsts, a.UnitMeds, a.MoedMeds, ;
+	   a.CGrus, a.SGrus, a.Reffs, a.Linhas, a.Situas, a.DPros, a.CUnis, a.PesoMs, a.ClFiscals, a.CustoFs, a.PVens, ;
+	   a.FVendas, a.MoePVs, a.MoeCusFs, a.MoeVs, a.TipoInvs, Iif(InList(b.TipoEstos,2,3,4), b.TipoEstos, 1) as TipoEstos, ;
+	   b.Mercs, a.CGrus + a.SGrus as GruCods, Space(6) as Codigos, Space(20) as Descricaos, [ ] as TpCustos, [ ] as TpVendas, ;
+	   a.SQtds, a.TEQtds, a.TSQtds, c.Descs ; 
+  From TmpEst a ;
+ Inner Join crSigCdGrp  b On b.CGrus = a.CGrus ;
+ Inner Join crSigCdGpr c On c.Codigos = b.Mercs ;
+ Where b.Invents = 1 And ;
+ 	   Not Empty(b.CGrus) And ;
+ 	   Not Empty(c.Codigos) ;
+  Into Cursor crSigMvEst1 ReadWrite
+
+Select a.Emps, a.Grupos, a.Estos, a.CPros, a.CodCors, a.CodTams, a.TipEsts, a.UnitMeds, a.MoedMeds, a.CGrus, ;
+	   a.SGrus, a.Reffs, a.Linhas, a.Situas, a.DPros, a.CUnis, a.PesoMs, a.ClFiscals, a.CustoFs, a.PVens, ;
+	   a.FVendas, a.MoePVs, a.MoeCusFs, a.MoeVs, a.TipoInvs, a.Mercs, a.TipoEstos, a.Descs, ;
+	   Nvl(b.Codigos, Space(6)) as Codigos, Nvl(b.Descricaos, Space(20)) as Descricaos, ;
+	   Nvl(c.TpCustos, [ ]) as TpCustos, Nvl(c.TpVendas, [ ]) as TpVendas, ;
+   	   Sum(a.SQtds) as SQtds, Sum(a.TEQtds) as TEQtds, Sum(a.TSQtds) as TSQtds ; 
+  From crSigMvEst1 a ;
+  Left Join crSigCdPsg b On b.GruCods = a.GruCods ;
+  Left Join crSigCdLin  c On c.Linhas  = a.Linhas ;
+ Group By 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ;
+ 	   18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 ;
+  Into Cursor crSigMvEst ReadWrite
+
+Select crSigMvEst
+Index On Emps + Grupos + Estos + CPros + CodCors + CodTams Tag EstCorTam
+Go Top
+
+Wait Window 'Aguarde! Totalizando Produtos...' NoWait
+
+Select Distinct Emps, Grupos, Estos, CPros, CodCors, CodTams ;
+  From TmpEst ;
+  Into Cursor TmpTot ReadWrite
+
+lnTotal = Reccount('TmpTot')
+Use In TmpTot
+
+lnFalta = RecCount('crSigMvEst')
+
+loBarraEst = CreateObject('fwprogressbar','Processando Estoque...',lnFalta)
+loBarraEst.Rodape.Caption = '<ESC> para interromper...'
+loBarraEst.Show
+
+llParar = .F.
+Set Escape On
+On Escape llParar = .T.
+
+Select crSigMvEst
+Go Top
+Scan While Not Eof() And Not llParar
+	lnFalta = lnFalta - 1
+
+	loBarraEst.Update(.T., 'Faltam : ' + Alltrim(Str(lnFalta, 10)) + ;
+					    ' - Estoque: ' + Alltrim(crSigMvEst.Grupos) + ' / ' + Alltrim(crSigMvEst.Estos) + ;
+					  	' - Produto: ' + Alltrim(crSigMvEst.CPros)) 
+
+	Select crSigMvEst
+	lcChave = Emps + Grupos + Estos + CPros + CodCors + CodTams
+	llPular = .F.
+
+	m.GGrupo   = crSigMvEst.Descs
+	m.VlMedio  = 0
+	m.MoeMedio = ' '
+
+	If (lnPosicao = 2)   && Estoque na Data Solicitada
+		lcProcura = crSigMvEst.Emps + crSigMvEst.Grupos + crSigMvEst.Estos + crSigMvEst.CPros
+		lcCompara = crSigMvEst.Emps + crSigMvEst.Grupos + crSigMvEst.Estos + crSigMvEst.CPros
+		lcCampos  = 'Emps + Grupos + Estos + CPros'
+		Do Case
+			Case (crSigMvEst.TipoEstos = 2)
+				lcCompara = lcCompara + crSigMvEst.CodCors
+				lcCampos  = lcCampos + ' + CodCors'
+			Case (crSigMvEst.TipoEstos = 3)
+				lcCompara = lcCompara + crSigMvEst.CodTams
+				lcCampos  = lcCampos + ' + CodTams'
+			Case (crSigMvEst.TipoEstos = 4)
+				lcCompara = lcCompara + crSigMvEst.CodCors + crSigMvEst.CodTams
+				lcCampos  = lcCampos + ' + CodCors + CodTams'
+		EndCase
+
+		Select Sum(SQtds) as SQtds, UnitMeds, MoedMeds ;
+		  From TmpEst ;
+		 Where &lcCampos = lcCompara ;
+		 Group By UnitMeds, MoedMeds ;
+		  Into Cursor crResulta
+
+		m.VlMedio  = crResulta.UnitMeds
+		m.MoeMedio = crResulta.MoedMeds
+		m.TipEsts  = ' '
+		If (crResulta.SQtds = 0) Or (lnSldNeg = 1 And crResulta.SQtds > 0) Or (lnSldPos = 1 And crResulta.SQtds < 0)
+			llPular = .T.
+		EndIf
+
+		Select crSigMvEst
+		Scatter MemVar Memo
+		m.SQtds = crResulta.SQtds
+	Else
+		Select crSigMvEst
+		lnRegEst = Recno()
+		Set Order To EstCorTam Descending
+		Go Top
+		=Seek(lcChave)
+		m.VlMedio  = crSigMvEst.UnitMeds
+		m.MoeMedio = crSigMvEst.MoedMeds
+		m.TipEsts  = ' '
+
+		If (crSigMvEst.SQtds = 0) Or (lnSldNeg = 1 And crSigMvEst.SQtds > 0) Or (lnSldPos = 1 And crSigMvEst.SQtds < 0)
+			llPular = .T.
+		EndIf
+
+		Select crSigMvEst
+		Set Order To EstCorTam Ascending
+		Go Top
+		Go lnRegEst
+		Scatter MemVar Memo
+	EndIf
+
+	If Not llPular
+		m.CGrus   = Space(10) + Padr(crSigMvEst.CGrus,80)
+		m.Respos  = Space(10)
+		m.DRespos = Space(30)
+		m.VlVenda = Round(crSigMvEst.PVens * Iif(crSigMvEst.FVendas <> 0 And Not Empty(crSigMvEst.MoePVs), crSigMvEst.FVendas,1), 2)
+		
+		If Not Empty(crSigMvEst.Linhas)
+			If (crSigMvEst.TpCustos = '2')
+				m.VlCusto = crSigMvEst.PesoMs * crSigMvEst.CustoFs
+			EndIf
+			If (crSigMvEst.TpVendas = '2')
+				m.VlVenda = crSigMvEst.PesoMs * m.VlVenda
+			EndIf
+		EndIf
+		m.MoeCusto = m.moeCusFs
+		m.MoeVenda = m.MoeVs
+		m.TotSQtds = m.SQtds
+		m.VlCusto  = m.CustoFs
+		m.TotCusto = Round((m.VlCusto * m.SQtds), 2)
+		m.TotVenda = Round((m.VlVenda * m.SQtds), 2)
+		m.TotMedio = Round((m.VlMedio * m.SQtds), 2)
+		m.lCPros   = .F.
+		m.Ps       = 1
+		m.Indice = lnValCot
+		m.cotacao= IIF(lnCota=0, 0, fCarregarCambio(m.moeCusFs,Iif(!Empty(ldDatas),ldDatas,ldDtAtu))/lnCota)
+		m.Ps2 = 1
+
+		Insert Into csTempo From MemVar
+
+		If (lnImpCusto = 1)
+			Select TmpGrupo
+			Seek '1' + csTempo.CGrus + csTempo.MoeCusto
+			If Eof([TmpGrupo])
+				Insert Into TmpGrupo (Tipo, CGrus, Moedas) Values ('1', csTempo.CGrus, csTempo.MoeCusto)
+			EndIf
+			Replace Valors With TmpGrupo.Valors + m.TotCusto In TmpGrupo
+		EndIf
+		
+		If (lnImpVenda = 1) Or (lnImpPEPS = 1) Or (lnImpUEPS = 1)
+			Select TmpGrupo
+			Seek '2' + csTempo.CGrus + csTempo.MoeVenda
+			If Eof([TmpGrupo])
+				Insert Into TmpGrupo (Tipo, CGrus, Moedas) Values ('2', csTempo.CGrus, csTempo.MoeVenda)
+			EndIf
+			Replace Valors With TmpGrupo.Valors + m.TotVenda In TmpGrupo
+		EndIf
+		
+		If (lnImpMedio = 1)
+			Select TmpGrupo
+			Seek '3' + csTempo.CGrus + csTempo.MoeMedio
+			If Eof([TmpGrupo])
+				Insert Into TmpGrupo (Tipo, CGrus, Moedas) Values ('3', csTempo.CGrus, csTempo.MoeMedio)
+			EndIf
+			Replace Valors With TmpGrupo.Valors + m.TotMedio In TmpGrupo
+		EndIf
+	EndIf
+
+	If (lnPosicao = 2) && Estoque na Data Solicitada
+		Select crSigMvEst
+		Set Order To EstCorTam Descending
+		Seek lcChave
+		Set Order To EstCorTam Ascending
+	EndIf
+EndScan
+
+Set Escape Off
+On Escape
+If llParar
+	MessageBox( 'Processamento Interrompido...', 32 )
+	Return(.F.)
+EndIf
+
+Select csTempo
+Go Top
+
+loBarraInv = CreateObject('fwprogressbar','Recalculando Valores...',RecCount('csTempo'))
+loBarraInv.Show
+
+If ((lnImpPEPS = 1) Or (lnImpUEPS = 1)) And llConFox
+	lcTblHis = (Addbs(JustPath(ThisForm.poDataMgr.GetDataBase()))+'SigMvHst.dbf')
+	If !Used('SigMvHst')
+		Use (lcTblHis) In 0
+		Select SigMvHst
+		Set Order To EmpEstPro Descending
+	EndIf
+EndIf
+
+If ((lnImpPEPS = 1) Or (lnImpUEPS = 1)) And (lnPosicao = 1)
+	Select Distinct Emps ;
+	  From TmpEst ;
+	 Order By Emps ;
+	  Into Cursor csEst ReadWrite
+	
+	loBarraInv.Rodape.Caption = 'Selecionando Movimentações...'
+
+	Select csEst
+	Go Top
+	Do Case
+		Case (Reccount([csEst]) = 1)
+			lcEmg = [ = '] + csEst.Emps + [']
+
+		Case (Reccount([csEst]) = 0)
+			lcEmg = [ = '] + lcFilEmp + [']
+		Otherwise
+			lcEmg = []
+			Select csEst
+			Scan
+				lcEmg = lcEmg + Iif(Empty(lcEmg), ['], [,']) + csEst.Emps + [']
+			EndScan
+			lcEmg = [In (] + lcEmg + [)]
+	EndCase
+
+	If (lnImpPEPS = 1)
+		lStrQuery = [Select a.Datas, a.Emps, a.EmpGruEsts, a.OriDopNums, a.Grupos, ] + ;
+						   [a.Estos, a.CPros, a.Qtds, a.Opers, a.SQtds, a.TEQtds, ] + ;
+						   [a.TSQtds, a.Units, a.Pesos, a.cIdChaves, a.Dopes, o.Peps ] + ;
+					  [From SigOpCdc o Inner Join SigMvHst a On a.Dopes = o.Dopes ] + ;
+					 [Where o.Peps = 1 And ] + ;
+					 	   [a.Datas <= ?lcDatas And ] + ;
+					 	   [a.Emps ] + lcEmg + [ ] + ;
+					 [Order By a.EmpGruEsts, a.CPros, a.cIdChaves]
+	Else
+		lStrQuery = [Select EmpGruEsts, OriDopNums, Emps, Grupos, Estos, CPros, Datas, Qtds, ] + ;
+						   [Opers, SQtds, TEQtds, TSQtds, Units, Pesos, cIdChaves, Dopes, 0 as Peps ] + ;
+					  [From SigMvHst ] + ;
+					 [Where Emps ] + lcEmg + [ And ] + ;
+					 	   [Datas <= ?lcDatas ] + ;
+					 [Order By EmpGruEsts, CPros, cIdChaves]
+	EndIf
+
+	If ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpHis') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexao (TmpHis - 2)')
+		Return(.F.)
+	EndIf
+	Select TmpHis
+	Index On EmpGruEsts + CPros + cIdChaves Tag EmpPro1
+	Index On EmpGruEsts + CPros + cIdChaves Descending Tag EmpPro2
+	Index On Emps + Cpros + cIdChaves Descending Tag EmpPro3
+
+	loBarraInv.Rodape.Caption = ''
+EndIf
+
+Select CsTempo
+Scan
+	loBarraInv.Update(.T.,'Estoque: ' + CsTempo.grupos + ' / ' + CsTempo.estos + ' -  Produto: ' + CsTempo.cpros)
+
+	Do Case
+		Case (lnImpPEPS = 1)
+			Scatter MemVar Memo
+			lcDPros = m.DPros
+			
+			If llConFox
+				Select SigMvHst
+				Set Key To
+				Set Key To m.Emps + m.Grupos + m.Estos + m.CPros
+				Go Top
+				Set Near On
+				Seek m.Emps + m.Grupos + m.Estos + m.CPros + Dtos(lcDatas)
+				Set Near Off
+				lnQtds  = 0
+				lnTQtds = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+				If lnTQtds > 0
+					Do While !Eof() And lnQtds < lnTQtds
+						If SigMvHst.Opers = 'E' And SigMvHst.Units > 0
+							m.SQtds     = SigMvHst.Qtds
+							lnQtds      = lnQtds + m.SQtds
+							If lnQtds > lnTQtds
+								m.SQtds = lnTQtds - (lnQtds - m.SQtds)
+							ENDIF
+							m.VlVenda   = SigMvHst.Units
+							m.TotVenda  = Iif(lnSldNeg = 1,m.SQtds * -1,m.SQtds) * m.VlVenda
+							If SigMvHst.Pesos <> 0
+								m.DPros = AllTrim(lcDPros) + ' c/ ' + AllTrim(Transform(SigMvHst.Pesos,'999999.99')) + ' gr.'
+							Else
+								m.DPros = lcDPros
+							EndIf
+							m.SQtds   = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+							m.ValICMs = 0
+							If llImpICMS
+								lStrQuery = [Select EmpDopNums, CPros, AliqICMS ] + ;
+											  [From SigMvItn ]+;
+											 [Where EmpDopNums = "] + SigMvHst.OriDopNums + [" And ] + ;
+											       [CPros = "] + SigMvHst.CPros + [" ] + ;
+											 [Order By EmpDopNums, CPros, AliqICMS]
+
+								If ThisForm.poDataMgr.SQLExecute(lStrQuery,'crLclMvItn') < 1
+									MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexao (crLclMvItn)')
+									Return(.F.)
+								EndIf
+								Select crLclMvItn
+								Go Top
+								If !Eof()
+									m.ValICMs = ((m.TotVenda * Iif(crLclMvItn.AliqIcms = 0,ThisForm.AliqICMS,crLclMvItn.AliqIcms)) / 100)
+								EndIf
+							EndIf
+							Insert Into CsInventario From MemVar
+						EndIf
+						Select SigMvHst
+						Skip
+					EndDo
+					If lnQtds < lnTQtds
+						m.SQtds    = (lnTQtds - lnQtds) * Iif(lnSldNeg = 1,-1,1)
+						m.VlVenda  = 0
+						m.TotVenda = 0
+						m.DPros    = lcDPros
+						m.ValICMs  = 0
+						Insert Into CsInventario From MemVar
+					EndIf
+				Else
+					m.VlVenda  = 0
+					m.TotVenda = 0
+					m.ValICMs  = 0
+					Insert Into CsInventario From MemVar
+				EndIf
+			Else
+				Select TmpHis
+				Set Order To EmpPro3
+				Go Top
+				Set Key To
+				Set Key To m.Emps + m.CPros
+				Go Top
+				Set Near On
+				Seek m.Emps + m.CPros + Dtos(lcDatas)
+				Set Near Off
+				lnQtds  = 0
+				lnTQtds = m.SQtds * Iif(lnSldNeg = 1, -1, 1)
+				If (lnTQtds > 0)
+					Select TmpHis
+					Do While Not Eof() And (lnTQtds <> 0)
+						If (TmpHis.Opers = 'E') And (TmpHis.Qtds <> 0) And (TmpHis.Units > 0) And (TmpHis.Peps = 1)
+							If (lnTQtds < TmpHis.Qtds)
+								Replace Qtds With TmpHis.Qtds - lnTQtds In TmpHis
+								lnQtds  = lnTqtds
+								lnTQtds = 0
+							Else
+								lnTQtds = lnTQtds - TmpHis.Qtds
+								lnQtds  = TmpHis.Qtds
+								Replace Qtds With 0 In TmpHis
+							EndIf
+							
+							m.VlVenda  = TmpHis.Units
+							m.TotVenda = lnQtds * m.VlVenda
+							m.DPros    = lcDPros
+							m.SQtds    = lnQtds
+							m.ValICMs  = 0
+							
+							If llImpICMS
+								lStrQuery = [Select EmpDopNums, CPros, AliqICMS ] + ;
+											  [From SigMvItn ]+;
+											 [Where EmpDopNums = "] + TmpHis.OriDopNums + [" And ] + ;
+											       [CPros = "] + TmpHis.CPros + [" ] + ;
+											 [Order By EmpDopNums, CPros, AliqICMS]
+
+								If ThisForm.poDataMgr.SQLExecute(lStrQuery,'crLclMvItn') < 1
+									MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexao (crLclMvItn)')
+									Return(.F.)
+								EndIf
+								Go Top In crLclMvItn
+								If Not Eof([crLclMvItn])
+									m.ValICMs = ((m.TotVenda * Iif(crLclMvItn.AliqIcms = 0, ThisForm.AliqICMS, crLclMvItn.AliqIcms)) / 100)
+								EndIf
+							EndIf
+
+							Insert Into csInventario From MemVar
+						EndIf
+
+						Select TmpHis
+						Skip
+					EndDo
+
+					If (lnTQtds <> 0 )
+						m.SQtds    = lnTQtds
+						m.VlVenda  = 0
+						m.TotVenda = 0
+						m.DPros    = lcDPros
+						m.ValICMs  = 0
+
+						Insert Into csInventario From MemVar
+					EndIf
+				Else
+					m.VlVenda  = 0
+					m.TotVenda = 0
+					m.ValICMs  = 0
+
+					Insert Into csInventario From MemVar
+				EndIf
+			EndIf
+
+		Case (lnImpUEPS = 1)
+			Scatter MemVar Memo
+			lcDPros = m.DPros
+			If llConFox
+				Select SigMvHst
+				Set Key To
+				Set Key To m.Emps + m.Grupos + m.Estos + m.CPros
+				Go Top
+				Set Near On
+				Seek m.Emps + m.Grupos + m.Estos + m.CPros + Dtos(lcDatas)
+				Set Near Off
+				Scan While SigMvHst.SQtds <> 0 And !Eof()
+				EndScan
+				Skip -1
+				
+				lnQtds = 0
+				lnTQtds = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+				If lnTQtds > 0
+					Do While !Bof() And lnQtds < lnTQtds
+						If SigMvHst.Opers = 'E' And SigMvHst.Units > 0
+							m.SQtds     = SigMvHst.Qtds
+							lnQtds      = lnQtds + m.SQtds
+							If lnQtds > lnTQtds
+								m.SQtds = lnTQtds - (lnQtds - m.SQtds)
+							EndIf
+							m.VlVenda   = SigMvHst.Units
+							m.TotVenda  = Iif(lnSldNeg = 1,m.SQtds * -1,m.SQtds) * m.VlVenda
+							If SigMvHst.Pesos <> 0
+								m.DPros = AllTrim(lcDPros) + ' c/ ' + AllTrim(Transform(SigMvHst.Pesos,'999999.99')) + ' gr.'
+							Else
+								m.DPros = lcDPros
+							EndIf
+							m.SQtds = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+							m.ValICMs = 0
+							If llImpICMS
+								lStrQuery = [Select EmpDopNums,CPros,AliqICMS ]+;
+											[From SigMvItn ]+;
+											[Where EmpDopNums = "]+SigMvHst.OriDopNums+[" And CPros = "]+SigMvHst.CPros+[" ]+;
+											[Order By EmpDopNums,CPros,AliqICMS ]
+								If ThisForm.poDataMgr.SQLExecute(lStrQuery,'crLclMvItn') < 1
+									MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexao (crLclMvItn)')
+									Return(.F.)
+								EndIf
+								Select crLclMvItn
+								Go Top
+								If !Eof()
+									m.ValICMs = ((m.TotVenda * Iif(crLclMvItn.AliqIcms = 0,ThisForm.AliqICMS,crLclMvItn.AliqIcms)) / 100)
+								EndIf
+							EndIf
+							Insert Into CsInventario From MemVar
+						EndIf
+						Select SigMvHst
+						Skip -1
+					EndDo
+					If lnQtds < lnTQtds
+						m.SQtds    = (lnTQtds - lnQtds) * Iif(lnSldNeg = 1,-1,1)
+						m.VlVenda  = 0
+						m.TotVenda = 0
+						m.DPros    = lcDPros
+						m.ValICMs  = 0
+						Insert Into CsInventario From MemVar
+					EndIf
+				Else
+					m.VlVenda  = 0
+					m.TotVenda = 0
+					m.ValICMs  = 0
+					Insert Into CsInventario From MemVar
+				EndIf
+			Else
+				Select TmpHis
+				Set Order To EmpPro3
+				Go Top
+				Set Key To
+				Set Key To m.Emps + m.CPros
+				Go Top
+				Set Near On
+				Seek m.Emps + m.CPros + Dtos(lcDatas)
+				Set Near Off
+				Scan While TmpHis.SQtds <> 0 And !Eof()
+				EndScan
+				Skip -1
+				
+				lnQtds = 0
+				lnTQtds = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+				If lnTQtds > 0
+					Do While !Bof() And lnQtds < lnTQtds
+						If TmpHis.Opers = 'E' And TmpHis.Units > 0 AND TmpHis.Peps = 1 &&SEEK(TmpHis.Dopes,'CrSigOpCdc') AND CrSigOpCdc.Peps = 1
+							m.SQtds     = TmpHis.Qtds
+							lnQtds      = lnQtds + m.SQtds
+							If lnQtds > lnTQtds
+								m.SQtds = lnTQtds - (lnQtds - m.SQtds)
+							EndIf
+							m.VlVenda   = TmpHis.Units
+							m.TotVenda  = Iif(lnSldNeg = 1,m.SQtds * -1,m.SQtds) * m.VlVenda
+							If TmpHis.Pesos <> 0
+								m.DPros = AllTrim(lcDPros) + ' c/ ' + AllTrim(Transform(TmpHis.Pesos,'999999.99')) + ' gr.'
+							Else
+								m.DPros = lcDPros
+							EndIf
+							m.SQtds = m.SQtds * Iif(lnSldNeg = 1,-1,1)
+							m.ValICMs = 0
+							If llImpICMS
+								lStrQuery = [Select EmpDopNums, CPros, AliqICMS ] + ;
+											  [From SigMvItn ]+;
+											 [Where EmpDopNums = "] + TmpHis.OriDopNums + [" And ] + ;
+											       [CPros = "] + TmpHis.CPros + [" ] + ;
+											 [Order By EmpDopNums, CPros, AliqICMS]
+
+								If ThisForm.poDataMgr.SQLExecute(lStrQuery,'crLclMvItn') < 1
+									MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexao (crLclMvItn)')
+									Return(.F.)
+								EndIf
+								Select crLclMvItn
+								Go Top
+								If !Eof()
+									m.ValICMs = ((m.TotVenda * Iif(crLclMvItn.AliqIcms = 0,ThisForm.AliqICMS,crLclMvItn.AliqIcms)) / 100)
+								EndIf
+							EndIf
+							Insert Into CsInventario From MemVar
+						EndIf
+						Select TmpHis
+						Skip -1
+					EndDo
+					If lnQtds < lnTQtds
+						m.SQtds    = (lnTQtds - lnQtds) * Iif(lnSldNeg = 1,-1,1)
+						m.VlVenda  = 0
+						m.TotVenda = 0
+						m.DPros    = lcDPros
+						m.ValICMs  = 0
+						Insert Into CsInventario From MemVar
+					EndIf
+				Else
+					m.VlVenda  = 0
+					m.TotVenda = 0
+					m.ValICMs  = 0
+					Insert Into CsInventario From MemVar
+				EndIf
+			EndIf
+	EndCase
+	Select csTempo
+EndScan
+loBarraInv.Complete(.t.)
+
+If llConFox And Used('SigMvHst')
+	Use In SigMvHst
+EndIf
+
+If (lnImpPEPS = 1) Or (lnImpUEPS = 1)
+	If Used('csTempo')
+		Zap In csTempo
+	EndIf
+	If Used('csInvent2')
+		Use In csInvent2
+	EndIf
+
+	Select ClFiscals, CPros, lCPros, Emps, Grupos, Estos, CUnis, VlVenda, ;
+		   Max(CGrus) as CGrus,Max(DPros) as DPros, Max(Reffs) as Reffs, ;
+		   Max(CodCors) as CodCors, Max(CodTams) as CodTams, Max(VlCusto) as VlCusto, ;
+		   Max(MoeCusto) as MoeCusto, Max(MoeVenda) as MoeVenda, Max(VlMedio) as VlMedio, ;
+		   Max(MoeMedio) as MoeMedio, Max(TEQtds) as TEQtds, Max(TipEsts) as TipEsts, ;
+		   Max(TSQtds) as TSQtds, Max(TotSQtds) as TotSQtds, Max(Ps) as Ps, Max(Ps2) as Ps2, ;
+		   Max(MoeTotal) as MoeTotal, Max(GGrupo) as GGrupo, Max(PesoMs) as PesoMs, ;
+		   Max(Respos) as Respos, Max(DRespos) as DRespos, Max(Indice) as Indice, Max(TipoInvs) as TipoInvs, ;
+		   Sum(SQtds) as SQtds, Sum(TotCusto) as TotCusto, Sum(TotVenda) as TotVenda, ;
+		   Sum(TotMedio) as TotMedio, Sum(ValICMs) as ValICMs, MAX(cotacao) as cotacao ;
+	  From csInventario ;
+	 Group By ClFiscals, CPros, lCPros, Emps, Grupos, Estos, CUnis, VlVenda ;
+	  Into Cursor csInvent2
+
+	loBarraInv = CreateObject('fwprogressbar','Atualizando os Dados...',RecCount('CsInvent2'))
+	loBarraInv.Show
+	Select csInvent2
+	Scan
+		loBarraInv.Update(.T.)
+
+		Scatter MemVar Memo
+		Insert Into csTempo From MemVar
+		Select csInvent2
+	EndScan
+	loBarraInv.Complete(.t.)
+Else && Tiago - 25/04/2014 - Alterei para agrupar por grupo, conta e produto, pois inventário não precisa sair separado por cor e tamanho
+	Select ClFiscals, CPros, lCPros, Emps, Grupos, Estos, CUnis, VlVenda, ;
+		   Max(CGrus) as CGrus,Max(DPros) as DPros, Max(Reffs) as Reffs, ;
+		   Max(CodCors) as CodCors, Max(CodTams) as CodTams, Max(VlCusto) as VlCusto, ;
+		   Max(MoeCusto) as MoeCusto, Max(MoeVenda) as MoeVenda, Max(VlMedio) as VlMedio, ;
+		   Max(MoeMedio) as MoeMedio, Max(TEQtds) as TEQtds, Max(TipEsts) as TipEsts, ;
+		   Max(TSQtds) as TSQtds, Max(TotSQtds) as TotSQtds, Max(Ps) as Ps, Max(Ps2) as Ps2, ;
+		   Max(MoeTotal) as MoeTotal, Max(GGrupo) as GGrupo, Max(PesoMs) as PesoMs, ;
+		   Max(Respos) as Respos, Max(DRespos) as DRespos, Max(Indice) as Indice, Max(TipoInvs) as TipoInvs, ;
+		   Sum(SQtds) as SQtds, Sum(TotCusto) as TotCusto, Sum(TotVenda) as TotVenda, ;
+		   Sum(TotMedio) as TotMedio, Sum(ValICMs) as ValICMs, MAX(cotacao) as cotacao ;
+	  From csTempo ;
+	 Group By ClFiscals, CPros, lCPros, Emps, Grupos, Estos, CUnis, VlVenda ;
+	  Into Cursor csTempo 	
+EndIf
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+lcEmpInv = ThisForm.Get_Cd_Empresa.Value
+lcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)
+=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')
+=Seek(lcEmpLiv,'CrSlvEmp','CEmps')
+
+Replace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp
+
+Report Form SigReIv1 Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+* Declara as Variáveis de Cabeçalho
+Local lcCbEmpresa,lcCbTitulo,lcCbEstoque,lcCbGrupo,lcCbFornecedor,ldDtAtu,lcMoe
+
+ldDtAtu = Date()
+
+* Inicializa as Variáveis de Campos
+With ThisForm
+	lcCdEmpresa    = Padr(.Get_Cd_Empresa.Value,3)
+	lnImpUEPS      = .ChkValor1.Value
+	lnImpPEPS      = .ChkValor2.Value
+	lnImpCusto     = .ChkValor3.Value
+	lnImpMedio     = .ChkValor4.Value
+	lnImpVenda     = .ChkValor5.Value
+	lnValFat       = .Get_ValFator.Value
+	lcMoe          = .Get_Moeda.Value
+EndWith
+
+Create Cursor CsCabecalho (UniVals c(20),TotVals c(20))
+
+Do Case
+
+	Case lnImpCusto = 1
+		ThisForm.TipoVal = 'C'
+		ThisForm.TipoRel = 'Custo'
+		Insert Into CsCabecalho (UniVals,TotVals) Values ('VlCusto','TotCusto')
+		
+	Case lnImpMedio = 1
+		ThisForm.TipoVal = 'M'
+		ThisForm.TipoRel = 'Custo Médio'
+		Insert Into CsCabecalho (UniVals,TotVals) Values ('VlMedio','TotMedio')
+		
+	Case lnImpVenda = 1 Or lnImpPEPS = 1 Or lnImpUEPS = 1
+		ThisForm.TipoVal = 'V'
+		Do Case
+			Case lnImpVenda = 1
+				ThisForm.TipoRel = 'Venda'
+			Case lnImpPEPS = 1
+				ThisForm.TipoRel = 'PEPS'
+			Case lnImpUEPS = 1
+				ThisForm.TipoRel = 'UEPS'
+		EndCase
+		Insert Into CsCabecalho (UniVals,TotVals) Values ('VlVenda','TotVenda')
+		
+EndCase
+
+Wait Window 'Aguarde! Selecionando Grandes Grupos...' NoWait
+If ThisForm.poDataMgr.SQLExecute([Select Codigos,Descs From SigCdGpr ],'CrSigCdGpr') < 1
+	Return(.F.)
+EndIf
+Select CrSigCdGpr
+Index On Codigos Tag Codigos
+Go Top
+
+Wait Window 'Aguarde! Selecionando Grupos...' NoWait
+If ThisForm.poDataMgr.SQLExecute([Select CGrus,Mercs,TipoEstos,Invents From SigCdGrp ],'CrSigCdGrp') < 1
+	Return(.F.)
+EndIf
+Select CrSigCdGrp
+Index On CGrus Tag CGrus
+Go Top
+
+Wait Window 'Aguarde! Selecionando Sub-Grupos...' NoWait
+If ThisForm.poDataMgr.SQLExecute([Select CGrus,Codigos,Descricaos,CGrus+Codigos as GruCods From SigCdPsg ],'CrSigCdPsg') < 1
+	Return(.F.)
+EndIf
+Select CrSigCdPsg
+Index On GruCods Tag GruCod
+Go Top
+
+Wait Window 'Aguarde! Selecionando Linhas...' NoWait
+If ThisForm.poDataMgr.SQLExecute([Select Linhas,TpCustos,TpVendas From SigCdLin ],'CrSigCdLin') < 1
+	Return(.F.)
+EndIf
+Select CrSigCdLin
+Index On Linhas Tag Linhas
+Go Top
+
+If Empty(lcCdEmpresa)
+	loBarraEmp = CreateObject('fwprogressbar','Verificando as Empresas...',RecCount('CrSigCdEmp'))
+	loBarraEmp.Top = loBarraEmp.Top - loBarraEmp.Height
+	loBarraEmp.Show()
+	llFirst = .T.
+	Select CrSigCdEmp
+	Go Top
+	Scan
+		loBarraEmp.Update(.T.,'Empresa: ' + CrSigCdEmp.CEmps + ' - ' + CrSigCdEmp.Razas)
+		loBarraEmp.Refresh
+		lcCodEmp = CrSigCdEmp.CEmps
+		If CrSigCdEmp.Ativas = 1
+			llProcEst = ThisForm.ProcEst(CrSigCdEmp.CEmps,0,lcMoe)
+			If !(llProcEst)
+				Return(.F.)
+			EndIf
+			If llFirst
+				Select * From CsTempo Into Cursor CsTemporario ReadWrite
+				llFirst = .F.
+			Else
+				Select CsTempo
+				Go Top
+				Scan
+					Scatter Memo MemVar
+					Insert Into CsTemporario From MemVar
+					Select CsTempo
+				EndScan
+			EndIf
+		EndIf
+	EndScan
+	loBarraEmp.Complete(.T.)
+Else
+	llProcEst = ThisForm.ProcEst(lcCdEmpresa,lnValFat,lcMoe)
+	If !(llProcEst)
+		Return(.F.)
+	EndIf
+	Wait Window 'Aguarde! Verificando Produtos...' NoWait
+	Select * From CsTempo Into Cursor CsTemporario ReadWrite
+EndIf
+
+Do Case
+	Case lnImpCusto = 1
+		lcCampo = 'TotCusto'
+	Case lnImpVenda = 1 Or lnImpPEPS = 1 Or lnImpUEPS = 1
+		lcCampo = 'TotVenda'
+	Case lnImpMedio = 1
+		lcCampo = 'TotMedio'
+Other
+	lcCampo = 'Val( "0" )'
+EndCase
+
+Wait Window 'Aguarde! Agrupando Grandes Grupos...' NoWait
+
+*** Mena - 23/08/2013 - incluida conversao para moeda ***
+IF EMPTY(lcMoe)
+	Select GGrupo,Sum(&lcCampo * Indice) As Total ;
+	From CsTemporario ;
+	Group By 1 ;
+	Order By 1 ;
+	Where Ps2 = 1 And Ps = 1 ;
+	Into Cursor TmpGGrupo ReadWrite
+ELSE
+	Select GGrupo,Sum(&lcCampo * cotacao) As Total ;
+	From CsTemporario ;
+	Group By 1 ;
+	Order By 1 ;
+	Where Ps2 = 1 And Ps = 1 ;
+	Into Cursor TmpGGrupo ReadWrite
+ENDIF
+
+
+Select TmpGGrupo
+lnTotalGeral = 0
+Scan
+	If TmpGGrupo.Total <> 0 And !Empty(TmpGGrupo.GGrupo)
+		Insert Into CsTemporario (Ps,Ps2,CPros,TotCusto,GGrupo,DPros) ;
+						  Values (9,9,Chr(255),TmpGGrupo.Total,Chr(255),'TOTAL DE ' + AllTrim(TmpGGrupo.GGrupo) + ' :')
+		lnTotalGeral = lnTotalGeral + TmpGGrupo.Total
+	EndIf
+EndScan
+Insert Into CsTemporario (Ps,Ps2,CPros,TotCusto,GGrupo,DPros) ;
+				  Values (9,9,Chr(255),lnTotalGeral,Chr(255),'TOTAL GERAL :')
+
+Select CsTemporario
+Index On GGrupo + Str(Ps,1) + CPros + Emps + Grupos + Estos + Str(Ps2,1) Tag Imprimir2
+Go Top
+
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor TmpGrupo (Tipo c(1), CGrus c(80), Moedas c(3), Valors n(12,2))
+Index On Tipo + CGrus + Moedas Tag TpGruMoe
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private ldDatas
+
+ldDatas = Date()
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector',.name)
+
+	If .poDataMgr.pnIdConn < 1
+		MessageBox('Impossível Efetuar Conexão com Servidor de Banco de Dados !!!',48,'Create Object 1')
+		Return(.F.)
+	EndIf
+	
+	With .poDataMgr
+		.AddCursor('SigTempR', 'cIdChaves', 'crSigTempR')
+	EndWith
+EndWith
+
+=DoDefault()
+
+ThisForm.lImpICMS   = .F.
+ThisForm.AliqICMS   = 0
+
+lStrQuery = [Select CEmps,Razas,Cidas,RazSocs,Endes,Cidas,IEs,CGCs,Ativas ]+;
+			[From SigCdEmp ]+;
+			[Order By CEmps ]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'CrSigCdEmp') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdEmp)')
+	Return(.F.)
+EndIf
+Select CrSigCdEmp
+Index On CEmps Tag CEmps
+Go Top
+
+lStrQuery = [Select a.CEmps,a.Estas,b.Estados,b.AICMS ]+;
+			[From SigCdEmp a, SigCdUfs b ]+;
+			[Where a.CEmps = ?_Empr And a.Estas = b.Estados ]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'CrAliq') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrAliq)')
+	Return(.F.)
+EndIf
+Select CrAliq
+Go Top
+If !Eof()
+	ThisForm.AliqICMS = CrAliq.AICMS
+EndIf
+
+If ThisForm.poDataMgr.SQLExecute([Select GrPadVens From SigCdPam ],'CrSigCdPam') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdPam)')
+	Return(.F.)
+EndIf
+
+If ThisForm.poDataMgr.SQLExecute([Select * From SigCdMoe ],'CrSigCdMoe') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdMoe)')
+	Return(.F.)
+ENDIF
+
+If ThisForm.poDataMgr.SQLExecute([Select Dopes,Peps From SigOpCdc ],'CrSigOpCdc') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigOpCdc)')
+	Return(.F.)
+EndIf
+
+SELECT CrSigOpCdc
+INDEX ON Dopes TAG Dopes
+
+Select CrSigCdMoe
+Index On CMoes Tag CMoes
+Go Top
+
+If ThisForm.poDataMgr.SQLExecute([Select * From SigCdCot ],'CrSigCdCot') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdCot)')
+	Return(.F.)
+EndIf
+Select CrSigCdCot
+Index On CMoes + DtoS(Datas) Tag CMoeData
+Go Top
+
+If ThisForm.poDataMgr.SQLExecute([Select CMoes,DMoes From SigCdMoe Where Cotas = 1 ],'TmpMoe') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpMoe)')
+	Return(.F.)
+EndIf
+Select TmpMoe
+Index On CMoes Tag CMoes
+Index On DMoes Tag DMoes
+Go Top
+
+lStrQuery = [Select Codigos, TipoInvs From SigCdGcr]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpGccr1') < 1
+	Return(.F.)
+EndIf
+
+lStrQuery = [Select CEmps, RazSocs as Razas, Endes, Cidas, Space(15) as NIRCs, ?ldDatas as DRegs, ] + ;
+				   [Razas as Nomes, Space(14) as CRCs, IEs, CGCs, Space(20) as NIRES, ?ldDatas As Datas, ?ldDatas as DataNIREs ]+;
+			  [From SigCdEmp]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'CrSlvEmp') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (SlvEmp)')
+	Return(.F.)
+EndIf
+
+Select CrSlvEmp
+Index On CEmps Tag CEmps
+Go Top
+
+lcRazas = ''
+Select CrSigCdEmp
+Go Top
+If Seek(_Empr,'CrSigCdEmp','CEmps')
+	lcRazas = CrSigCdEmp.Razas
+EndIf
+Select CrSigCdEmp
+Go Top
+
+* Inicialização das Variáveis do Formulário
+With ThisForm
+	.Get_Cd_Empresa.Value = _Empr
+	.Get_Ds_Empresa.Value = lcRazas
+	.Get_MoeFator.Value   = ''
+	.Get_ValFator.Value   = 0
+	.Opt_ICMS.Value       = 2
+	.OptPosicao.Value     = 1
+	.GetDataSaldo.Value   = Date()
+	.GetDataSaldo.Enabled = .F.
+EndWith
+
+ThisForm.ChkValor4.Visible = fChecaAcesso('SIGREINV','MEDIO')
+ThisForm.ChkValor5.Visible = fChecaAcesso('SIGREINV','VENDA')
+
+ThisForm.Refresh
+ThisForm.Get_Cd_Empresa.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+lcEmpInv = ThisForm.Get_Cd_Empresa.Value
+lcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)
+=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')
+=Seek(lcEmpLiv,'CrSlvEmp','CEmps')
+
+Replace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp
+
+Report Form SigReIv1 To Printer Prompt NoConsole
+
+lcPagina  = AllTrim(Str(lnPaginas + 2))
+lcExtenso = fValorExtenso(lnPaginas + 2)
+lcExt     = ''
+For lnConta = 1 To Words(lcExtenso)
+	If InList(WordNum(lcExtenso,lnConta),'REAL','REAIS')
+		Exit
+	EndIf
+	lcExt = lcExt + WordNum(lcExtenso,lnConta) + ' '
+Next
+lcTIni = 'CONTÉM ESTE LIVRO ' + lcPagina + ' ( ' + lcExt + ;
+		' ) FOLHAS NUMERADAS AUTOMATICAMENTE DE Nº 1 AO Nº ' + lcPagina + ' E '
+lcTFim = ' PARA A ESCRITURAÇÃO POR PROCESSAMENTO DE DADOS DOS' + ;
+		' LANÇAMENTOS DAS OPERAÇÕES PRÓPRIAS DO ESTABELECIMENTO DO CONTRIBUINTE' + ;
+		' ABAIXO IDENTIFICADO : '
+
+Create Cursor TmpTermo (TermoAbre m,TermoFecha m)
+Insert Into TmpTermo (TermoAbre,TermoFecha) ;
+			  Values (lcTIni + 'SERVIRÁ' + lcTFim, lcTIni + 'SERVIU' + lcTFim)
+
+Select TmpTermo
+Report Form SigReIv2 To Printer Prompt NoConsole
+
+Select TmpTermo
+Report Form SigReIv3 To Printer Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+lcEmpInv = ThisForm.Get_Cd_Empresa.Value
+lcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)
+=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')
+=Seek(lcEmpLiv,'CrSlvEmp','CEmps')
+
+Replace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp
+
+Report Form SigReIv1 To Printer NoConsole
+
+lcPagina  = AllTrim(Str(lnPaginas + 2))
+lcExtenso = fValorExtenso(lnPaginas + 2)
+lcExt     = ''
+For lnConta = 1 to Words(lcExtenso)
+	If Inlist(WordNum(lcExtenso,lnConta),'REAL','REAIS')
+		Exit
+	EndIf
+	lcExt = lcExt + WordNum(lcExtenso,lnConta) + ' '
+Next
+lcTIni = 'CONTÉM ESTE LIVRO ' + lcPagina + ' ( ' + lcExt + ;
+		' ) FOLHAS NUMERADAS AUTOMATICAMENTE DE Nº 1 AO Nº ' + lcPagina + ' E '
+lcTFim = ' PARA A ESCRITURAÇÃO POR PROCESSAMENTO DE DADOS DOS' + ;
+		' LANÇAMENTOS DAS OPERAÇÕES PRÓPRIAS DO ESTABELECIMENTO DO CONTRIBUINTE' + ;
+		' ABAIXO IDENTIFICADO : '
+
+Create Cursor TmpTermo (TermoAbre m,TermoFecha m)
+Insert Into TmpTermo (TermoAbre,TermoFecha) ;
+			  Values (lcTIni + 'SERVIRÁ' + lcTFim, lcTIni + 'SERVIU' + lcTFim)
+
+If MessageBox('Deseja Salvar o Termo de Abertura ?',1+32,'') = 1
+	lcNFile = PutFile([Nome do Documento],[],[PDF])
+	If !Empty(lcNFile)
+		ThisForm.oPDF.DefaultFilename = lcNFile
+		Select TmpTermo
+		Report Form SigReIv2 To Printer NoConsole
+	EndIf
+EndIf
+
+If MessageBox('Deseja Salvar o Termo de Encerramento ?',1+32,'') = 1
+	lcNFile = PutFile([Nome do Documento],[],[PDF])
+	If !Empty(lcNFile)
+		ThisForm.oPDF.DefaultFilename = lcNFile
+		Select TmpTermo
+		Report Form SigReIv3 To Printer NoConsole
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+Local llChkInv1, llChkInv2, llChkInv3, llValor1, llValor2, llValor3, llValor4, llValor5
+
+llChkInv1    = (ThisForm.ChkInv1.Value = 1)
+llChkInv2    = (ThisForm.ChkInv2.Value = 1)
+llChkInv3    = (ThisForm.ChkInv3.Value = 1)
+llChkValor1  = (ThisForm.ChkValor1.Value = 1)
+llChkValor2  = (ThisForm.ChkValor2.Value = 1)
+llChkValor3  = (ThisForm.ChkValor3.Value = 1)
+llChkValor4  = (ThisForm.ChkValor4.Value = 1)
+llChkValor5  = (ThisForm.ChkValor5.Value = 1)
+
+If !(This.Value = 4)
+	Do Case
+		Case (Empty(ThisForm.Get_Cd_Empresa.Value) And !fAcessoEmpresa(Usuar,'C',ThisForm.Get_Cd_Empresa.Value))
+			MessageBox('Empresa Inválida !!!',16,'')
+			ThisForm.Get_Cd_Empresa.SetFocus
+			Return 0
+
+		Case (ThisForm.OptPosicao.Value = 2 And Empty(ThisForm.GetDataSaldo.Value))
+			MessageBox('Data de Referência de Estoque Inválida !!!',16,'')
+			ThisForm.GetDataSaldo.SetFocus
+			Return 0
+
+		Case (!(llChkInv1) And !(llChkInv2) And !(llChkInv3))
+			MessageBox('Nenhum Tipo de Inventário Selecionado !!!',16,'Seleção Obrigatória')
+			ThisForm.ChkInv1.SetFocus
+			Return 0
+		
+		Case (!(llChkValor1) And !(llChkValor2) And !(llChkValor3) And !(llChkValor4) And !(llChkValor5))
+			MessageBox('Nenhum Tipo de Valor Selecionado !!!',16,'Seleção Obrigatória')
+			ThisForm.ChkValor1.SetFocus
+			Return 0
+	EndCase
+EndIf
+
+lcWhere  =  [0 = 0 And (]+;
+			Iif(ThisForm.ChkInv1.Value = 1,[a.TipoInvs = 1 Or ],'')+;
+			Iif(ThisForm.ChkInv2.Value = 1,[a.TipoInvs = 2 Or ],'')+;
+			Iif(ThisForm.ChkInv3.Value = 1,[a.TipoInvs = 3 Or ],'')
+lcWhere  =  Stuff(lcWhere,Len(Alltrim(lcWhere)) - 2,3,')')
+lStrQuery = [Select a.Codigos ]+;
+			[From SigCdGcr a, SigCdCli b ]+;
+			[Where ]+lcWhere+[ And a.Codigos = b.Grupos ]+;
+			[Group By a.Codigos ]+;
+			[Order By a.Codigos ]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpGccr') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpGccr)')
+	Return 0
+EndIf
+
+Select TmpGccr
+Index On Codigos Tag Codigos
+Go Top
+If Eof()
+	MessageBox('Nenhum Grupo/Conta Cadastrado com o Tipo de Inventário Selecionado !!!',16,'Seleção Obrigatória')
+	ThisForm.ChkInv1.SetFocus
+	Return 0
+EndIf
+
+frmrelatorio::btnReport.Click
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+If Used('CEstoq1')
+	Use In CEstoq1
+EndIf
+If Used('CsCustoMoe')
+	Use In CsCustoMoe
+EndIf
+If Used('CsVendaMoe')
+	Use In CsVendaMoe
+EndIf
+If Used('CsTmpSoma')
+	Use In CsTmpSoma
+EndIf
+If Used('CsSomatorio')
+	Use In CsSomatorio
+EndIf
+If Used('CsTotGeral')
+	Use In CsTotGeral
+EndIf
+If Used('CsTemporario')
+	Use In CsTemporario
+EndIf
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Command1
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*** mena - 30/01/2015 - gera arquivo de inventário conforme layout fornecido pela Costantine ***
+
+Local llChkInv1, llChkInv2, llChkInv3, llValor1, llValor2, llValor3, llValor4, llValor5
+LOCAL lcStr, lcData
+
+llChkInv1    = (ThisForm.ChkInv1.Value = 1)
+llChkInv2    = (ThisForm.ChkInv2.Value = 1)
+llChkInv3    = (ThisForm.ChkInv3.Value = 1)
+llChkValor1  = (ThisForm.ChkValor1.Value = 1)
+llChkValor2  = (ThisForm.ChkValor2.Value = 1)
+llChkValor3  = (ThisForm.ChkValor3.Value = 1)
+llChkValor4  = (ThisForm.ChkValor4.Value = 1)
+llChkValor5  = (ThisForm.ChkValor5.Value = 1)
+
+Do Case
+	Case (Empty(ThisForm.Get_Cd_Empresa.Value) And !fAcessoEmpresa(Usuar,'C',ThisForm.Get_Cd_Empresa.Value))
+		MessageBox('Empresa Inválida !!!',16,'')
+		ThisForm.Get_Cd_Empresa.SetFocus
+		Return 0
+
+	Case (ThisForm.OptPosicao.Value = 2 And Empty(ThisForm.GetDataSaldo.Value))
+		MessageBox('Data de Referência de Estoque Inválida !!!',16,'')
+		ThisForm.GetDataSaldo.SetFocus
+		Return 0
+
+	Case (!(llChkInv1) And !(llChkInv2) And !(llChkInv3))
+		MessageBox('Nenhum Tipo de Inventário Selecionado !!!',16,'Seleção Obrigatória')
+		ThisForm.ChkInv1.SetFocus
+		Return 0
+	
+	Case (!(llChkValor1) And !(llChkValor2) And !(llChkValor3) And !(llChkValor4) And !(llChkValor5))
+		MessageBox('Nenhum Tipo de Valor Selecionado !!!',16,'Seleção Obrigatória')
+		ThisForm.ChkValor1.SetFocus
+		Return 0
+EndCase
+
+lcWhere  =  [0 = 0 And (]+;
+			Iif(ThisForm.ChkInv1.Value = 1,[a.TipoInvs = 1 Or ],'')+;
+			Iif(ThisForm.ChkInv2.Value = 1,[a.TipoInvs = 2 Or ],'')+;
+			Iif(ThisForm.ChkInv3.Value = 1,[a.TipoInvs = 3 Or ],'')
+lcWhere  =  Stuff(lcWhere,Len(Alltrim(lcWhere)) - 2,3,')')
+lStrQuery = [Select a.Codigos ]+;
+			[From SigCdGcr a, SigCdCli b ]+;
+			[Where ]+lcWhere+[ And a.Codigos = b.Grupos ]+;
+			[Group By a.Codigos ]+;
+			[Order By a.Codigos ]
+If ThisForm.poDataMgr.SQLExecute(lStrQuery,'TmpGccr') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpGccr)')
+	Return 0
+EndIf
+
+Select TmpGccr
+Index On Codigos Tag Codigos
+Go Top
+If Eof()
+	MessageBox('Nenhum Grupo/Conta Cadastrado com o Tipo de Inventário Selecionado !!!',16,'Seleção Obrigatória')
+	ThisForm.ChkInv1.SetFocus
+	Return 0
+EndIf
+
+llProcessa = ThisForm.Processamento()
+
+If llProcessa
+	ldEstoque = ThisForm.GetDataSaldo.Value
+	Select CsTemporario
+	Go Top
+	If Eof()
+		MessageBox('Sem Movimentação !!!',16,'')
+	Else
+		SELECT cpros,TipoInvs,vlcusto, dpros, clfiscals, cunis, SUM(sqtds) as sqtds from CsTemporario where !EMPTY(tipoinvs) group by cpros,TipoInvs,vlcusto, dpros, clfiscals, cunis order by cpros into cursor cur1
+		lcArq = UPPER(ALLTRIM(thisform.get_Cd_Empresa.value))+'_INVENTARIO.TXT'
+		lcStr = ''
+		=StrToFile(lcStr, lcArq, .F.)
+		ldDatas   = DTOS(thisform.getDataSaldo.Value)
+		SELECT cur1
+		GO top
+		scan
+			lcData = SUBSTR(ldDatas,7,2)+SUBSTR(ldDatas,5,2)+SUBSTR(ldDatas,1,4)
+			lcMesI = SUBSTR(ldDatas,5,2)+SUBSTR(ldDatas,3,2)
+			lcMesF = SUBSTR(ldDatas,5,2)+SUBSTR(ldDatas,3,2)
+			 
+			lcStr = lcData + ;										&&Data do Inventário 1 8 Formato: DDMMAAAA
+					lcMesI + ;										&&Mês/Ano inicial de referência 9 4 Formato: MMAA
+					lcMesF + ;										&&Mês/Ano final de referência 13 4 Formato: MMAA
+					Padr(ALLTRIM(cur1.CPros),20) + ;				&&Código do Produto da Empresa 17 20 Alfanumérico	
+					Alltrim(transform(Cur1.TipoInvs, "@L 9")) +;	&&Situação do produto 37 1 1=Da empresa em seu poder 2=Da empresa com Terceiros 3=De Terceiros c/ a Empresa 4=Estoque próprio em Trânsito 5=Estoque próprio inaproveitável
+					'00000000000000' +;								&&CNPJ do Terceiro 38 14 Se campo acima = 1, 4 e 5 move zeros, senão move CNPJ (sem máscara, só
+					'00000000000000000000' +;						&&Inscrição Estadual do Terceiro 52 20 Se CNPJ for preenchido este também deve ser
+					'  ' +;											&&UF do Terceiro 72 2 Se Insc. Est. estiver preenchida este também deve ser
+					'     ' +;										&&Filler 74 5 Brancos
+					Alltrim(transform(Cur1.sqtds, "@L 999999999.999999"))+ ;	&&Quantidade 79 16 #########.######
+					Alltrim(transform(Cur1.vlcusto, "@L 999999999999.9999"))+;	&&Valor Unitário 95 17 ############.####
+					Alltrim(transform(ROUND(Cur1.sqtds*Cur1.vlcusto,2), ;
+					"@L 99999999999999.99")) + ;					&&Valor Total 112 17 ##############.##
+					Alltrim(transform(0.00, "@L 99999999999999.99")) + ;				&&ICMS a Recuperar 129 17 ##############.##
+					SPACE(60) + ;									&&Observação 146 60 Alfanumérico
+					Padr(ALLTRIM(Cur1.DPros),80) + ;				&&Descrição do Produto 206 80 Alfanumérico	
+					'0000' +;										&&Grupo de Produto 286 4 Numérico
+					Padr(ALLTRIM(Cur1.ClFiscals),10)+;				&&Classificação Fiscal (NCM) 290 10 Numérico. Apenas o código NCM sem zeros para preencher posições restantes.	
+					SPACE(30) +;									&&RESERVADO 300 30 Antigo 'Nome Fantasia' - Não Utilizado
+					Padr(ALLTRIM(Cur1.cunis),3)+;					&&Unidade de Medida 330 3 Alfanumérico
+					SPACE(30) +;									&&Descrição Grupo Produto 333 30 AlfaNumérico
+					Padr(ALLTRIM(Cur1.cunis),6)						&& unidade de Medida 363 6 Alfanumérico
+			=StrToFile(lcStr + Chr(13) + Chr(10), lcArq, .t.)
+		endscan
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Get_MoeFator
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	ThisForm.Get_ValFator.Value = 0
+	ThisForm.Get_ValFator.Refresh
+Else
+	If ThisForm.poDataMgr.SQLExecute([Select CMoes,DMoes From SigCdMoe],'TmpMoe2') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpMoe)')
+		Return(.F.)
+	EndIf	
+	lnValFat = 0
+	ldData   = Iif(ThisForm.OptPosicao.Value = 1,Date(),ThisForm.GetDataSaldo.Value)
+	Select TmpMoe2
+	Index On CMoes Tag CMoes
+	Index On DMoes Tag DMoes
+	Set Order To CMoes
+	Go Top
+	If Seek(This.Value,'TmpMoe2','CMoes')
+		This.Value = TmpMoe2.CMoes
+		This.Refresh
+		lnValFat = fCarregarCambio(TmpMoe2.CMoes,ldData)
+		ThisForm.Get_ValFator.Value = lnValFat
+		ThisForm.Get_ValFator.Refresh
+		Return(.T.)
+	EndIf
+	xBrow    = CreateObject('fwBuscaSel','TmpMoe2','CMoes',This.Value,'Moedas')
+	xBrowCol = xBrow.AddColuna('CMoes','XXXXXX','Código',.T.,'CMoes')
+	xBrowCol = xBrow.AddColuna('DMoes','','Descrição',.T.,'DMoes')
+	xBrow.Show
+	If LastKey() = 27
+		This.Value = ''
+		ThisForm.Get_ValFator.Value = 0
+		ThisForm.Get_ValFator.Refresh
+	Else
+		This.Value = TmpMoe2.CMoes
+		lnValFat   = fCarregarCambio(TmpMoe2.CMoes,ldData)
+		ThisForm.Get_ValFator.Value = lnValFat
+		ThisForm.Get_ValFator.Refresh
+	EndIf
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Get_Ds_Empresa
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Cd_Empresa.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Get_Cd_Empresa
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.get_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value 	  = crListaRemota.CMoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value 	  = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.get_moeda_desc
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_moeda.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value 	  = crListaRemota.CMoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value 	  = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Opt_ICMS
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.lImpICMS = (This.Value = 1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkValor1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ChkValor2.Value = 0
+	ThisForm.ChkValor3.Value = 0
+	ThisForm.ChkValor4.Value = 0
+	ThisForm.ChkValor5.Value = 0
+	ThisForm.ChkValor2.Refresh
+	ThisForm.ChkValor3.Refresh
+	ThisForm.ChkValor4.Refresh
+	ThisForm.ChkValor5.Refresh
+	ThisForm.ChkSaldo1.Value   = 1
+	ThisForm.ChkSaldo2.Value   = 0
+	ThisForm.ChkSaldo1.Enabled = .F.
+	ThisForm.ChkSaldo2.Enabled = .F.
+	ThisForm.ChkSaldo1.Refresh
+	ThisForm.ChkSaldo1.Refresh
+Else
+	This.Value = 1
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkValor2
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ChkValor1.Value = 0
+	ThisForm.ChkValor3.Value = 0
+	ThisForm.ChkValor4.Value = 0
+	ThisForm.ChkValor5.Value = 0
+	ThisForm.ChkValor1.Refresh
+	ThisForm.ChkValor3.Refresh
+	ThisForm.ChkValor4.Refresh
+	ThisForm.ChkValor5.Refresh
+	ThisForm.ChkSaldo1.Value   = 1
+	ThisForm.ChkSaldo2.Value   = 0
+	ThisForm.ChkSaldo1.Enabled = .F.
+	ThisForm.ChkSaldo2.Enabled = .F.
+	ThisForm.ChkSaldo1.Refresh
+	ThisForm.ChkSaldo1.Refresh
+Else
+	This.Value = 1
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkValor4
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ChkValor1.Value = 0
+	ThisForm.ChkValor2.Value = 0
+	ThisForm.ChkValor3.Value = 0
+	ThisForm.ChkValor5.Value = 0
+	ThisForm.ChkValor1.Refresh
+	ThisForm.ChkValor2.Refresh
+	ThisForm.ChkValor3.Refresh
+	ThisForm.ChkValor5.Refresh
+	ThisForm.ChkSaldo1.Enabled = .T.
+	ThisForm.ChkSaldo2.Enabled = .T.
+	ThisForm.ChkSaldo1.Refresh
+	ThisForm.ChkSaldo1.Refresh
+Else
+	This.Value = 1
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkValor5
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ChkValor1.Value = 0
+	ThisForm.ChkValor2.Value = 0
+	ThisForm.ChkValor3.Value = 0
+	ThisForm.ChkValor4.Value = 0
+	ThisForm.ChkValor1.Refresh
+	ThisForm.ChkValor2.Refresh
+	ThisForm.ChkValor3.Refresh
+	ThisForm.ChkValor4.Refresh
+	ThisForm.ChkSaldo1.Enabled = .T.
+	ThisForm.ChkSaldo2.Enabled = .T.
+	ThisForm.ChkSaldo1.Refresh
+	ThisForm.ChkSaldo1.Refresh
+Else
+	This.Value = 1
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkValor3
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ChkValor1.Value = 0
+	ThisForm.ChkValor2.Value = 0
+	ThisForm.ChkValor4.Value = 0
+	ThisForm.ChkValor5.Value = 0
+	ThisForm.ChkValor1.Refresh
+	ThisForm.ChkValor2.Refresh
+	ThisForm.ChkValor4.Refresh
+	ThisForm.ChkValor5.Refresh
+	ThisForm.ChkSaldo1.Enabled = .T.
+	ThisForm.ChkSaldo2.Enabled = .T.
+	ThisForm.ChkSaldo1.Refresh
+	ThisForm.ChkSaldo1.Refresh
+Else
+	This.Value = 1
+	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkSaldo1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	This.Parent.ChkSaldo2.Value = 0
+	This.Parent.ChkSaldo2.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.ChkSaldo2
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	This.Parent.ChkSaldo1.Value = 0
+	This.Parent.ChkSaldo1.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.GetDataSaldo
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.OptPosicao.Value = 2)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.Get_ValFator
+* Classe: fwget (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINV.OptPosicao
+* Classe: fwoption (Base: optiongroup)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+With This.Parent
+	If This.Value = 1
+		.GetDataSaldo.Value   = Date()
+		.GetDataSaldo.Enabled = .F.
+	Else
+		If Empty(.GetDataSaldo.Value)
+			.GetDataSaldo.Value = Date()
+		EndIf
+		.GetDataSaldo.Enabled = .T.
+	EndIf
+	.GetDataSaldo.Refresh
+	.GetDataSaldo.SetFocus
+EndWith
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREINV
+RESERVED3 (ClassInfo): aliqicms
+comfiltro
+lfiltroativo
+limpicms
+linventario
+podatamg2
+podatamgr
+tipo
+tiporel
+tipoval
+*procest 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 28
+================================================================================

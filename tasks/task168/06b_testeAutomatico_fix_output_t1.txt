@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo das mudan├ºas:
+
+**Causa raiz**: No teste automatizado sem form pai, `cursor_4c_TmpEnc` n├úo existe. O form chamava `MsgAviso()` ao detectar isso ÔÇö dialog modal que bloqueia VFP indefinidamente. Mesmo que resolvido, a execu├º├úo continuava e chamava `BO.CarregarBaixas()` que tentava `SELECT cursor_4c_TmpEnc` ÔåÆ "Alias not found" ÔåÆ CATCH ÔåÆ `MsgErro()` ÔåÆ segundo bloqueio.
+
+**Corre├º├Áes aplicadas**:
+
+1. **`FormSIGPRCPR.prg` - `CarregarBaixas()`**: Removido `MsgAviso()` bloqueante. Agora usa padr├úo IF/ELSE: se `cursor_4c_TmpEnc` n├úo existe, retorna `.F.` silenciosamente sem chamar o BO. O `gb_4c_ValidandoUI` j├í protegia `InicializarForm()`, mas `CarregarBaixas()` podia ser chamado por outros caminhos (ex: `BtnBuscarClick`).
+
+2. **`SIGPRCPRBO.prg` - `CarregarBaixas()`**: Adicionado `loc_lSucesso = .T.` no in├¡cio do TRY e guard `IF !loc_lSucesso / ELSE / ENDIF` para que cursores faltantes impe├ºam todo o processamento subsequente sem chegar ao `SELECT cursor_4c_TmpEnc` destrutivo.

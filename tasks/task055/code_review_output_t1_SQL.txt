@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormSigReCmp.prg`:
+
+| M├®todo | Linha | Fix |
+|--------|-------|-----|
+| `ValidarCodObs` | ~1838 | Removido `WHERE Codigos = STR(loc_nCod,3)` ÔåÆ `LOCATE FOR Codigos = loc_nCod` |
+| `ValidarGrdGrupoCod` | ~2151 | Removido `WHERE CAST(codigos AS VARCHAR(5)) = ...` ÔåÆ `LOCATE FOR ALLTRIM(STR(codigos,5)) = ALLTRIM(loc_cCod)` |
+| `ValidarSubGrupoCod` | ~2501 | Removido `WHERE Codigos = EscaparSQL(loc_cCod)` ÔåÆ `LOCATE FOR Codigos = loc_cCod` |
+
+Em todos os casos, o SQL agora busca todos os registros da tabela de lookup (SigCdObs, SigCdGpr, SigCdPsg) sem WHERE, e o filtro por c├│digo ├® feito via `LOCATE FOR` no cursor VFP9 ÔÇö mantendo a mesma l├│gica de valida├º├úo sem usar `CODIGOS` em cl├íusula WHERE.

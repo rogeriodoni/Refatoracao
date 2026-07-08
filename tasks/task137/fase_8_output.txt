@@ -1,0 +1,16 @@
+﻿Fase 8/8 conclu├¡da. Os 10 m├®todos auxiliares foram adicionados ao `FormSigPdM12.prg`:
+
+| M├®todo | Comportamento |
+|--------|--------------|
+| `CarregarLista()` | Delega para `CarregarDados()` (refresh do grid xNensiR) |
+| `FormParaBO()` | Chama `CarregarDoCursor("xNensiR")` + `CarregarCabecalhoDoCursor("tmpnens")` |
+| `BOParaForm()` | Refresh() no grid, txt_4c_Rclis e cnt_4c_Operacao |
+| `HabilitarCampos(par_cModo)` | Todos ReadOnly=.T. (popup consulta ÔÇö sem modo de edi├º├úo) |
+| `LimparCampos()` | GO TOP IN xNensiR + Refresh() dos controles |
+| `AjustarBotoesPorModo(par_cModo)` | cmd_4c_Ok.Enabled=.T. (├║nico bot├úo, sempre ativo) |
+| `BtnBuscarClick()` | Chama `CarregarLista()` |
+| `BtnEncerrarClick()` | Chama `AlternarPagina(1)` (re-habilita pai + Release) |
+| `BtnSalvarClick()` | `MsgAviso()` informando que o form ├® somente leitura |
+| `BtnCancelarClick()` | Chama `AlternarPagina(1)` (fecha popup) |
+
+O formul├írio est├í completo e funcional. Como SIGPDM12 ├® um popup read-only que exibe retrabalhos j├í realizados a partir de cursores do form pai (`xNensiR`, `tmpnens`), todos os m├®todos auxiliares t├¬m implementa├º├Áes apropriadas ao seu contexto ÔÇö sem stubs nem TODOs.

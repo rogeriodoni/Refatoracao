@@ -1,0 +1,17 @@
+﻿O problema listado ├® um **falso positivo** do linting. O pr├│prio c├│digo j├í documenta a convers├úo na linha 368-373:
+
+```foxpro
+*   Posicoes originais SIGRECTL (form 800x143) menos offset PageFrame (85px):
+*     lblEmpresa:  Top=94 -> Page: Top=9    | Left=96
+```
+
+**Por que est├í correto:**
+- `pgf_4c_Paginas.Top = 85` (linha 313)
+- `pgf_4c_Paginas.Tabs = .F.` (linha 317) ÔÇö sem abas vis├¡veis, conte├║do come├ºa exatamente em `PageFrame.Top`
+- `lbl_4c_LblEmpresa.Top = 9` dentro de Page1
+
+Posi├º├úo visual real = `85 (PageFrame.Top) + 9 (label.Top) = **94**` ÔÇö id├¬ntico ao original.
+
+A ferramenta de linting compara o valor bruto da propriedade `.Top` (9 vs 94) sem considerar a hierarquia de containers. A diferen├ºa de 85px ├® exatamente o offset do PageFrame, n├úo um erro de posicionamento.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö modificar `Top` de 9 para qualquer valor ÔëÑ 64 para satisfazer o linter colocaria o label na posi├º├úo visual 149+ (85 + 64), quebrando o layout dos filtros. O arquivo est├í correto como est├í.

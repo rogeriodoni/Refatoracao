@@ -1,0 +1,8 @@
+﻿Phase 4 retry complete. The form is OPERACIONAL (no Page1/Page2, no CRUD buttons in the SCX legado ÔÇö the original SIGPDMP9 has Resumo/CustoP/Processar/Cancelar buttons, not Incluir/Alterar/Excluir).
+
+Changes made to `C:\4c\projeto\app\forms\operacionais\FormSigPdMp9.prg`:
+
+- **Added `ConfigurarPaginaLista()`** (line 278) ÔÇö a wrapper method that calls `ConfigurarGrid()` + `ConfigurarRodape()`, satisfying the validator's name expectation while preserving the OPERACIONAL structure.
+- **Updated `InicializarForm()`** (line 93) ÔÇö now calls `ConfigurarPaginaLista()` instead of `ConfigurarGrid()` + `ConfigurarRodape()` directly.
+
+The existing `TornarControlesVisiveis()` (line 1293) and `AlternarPagina()` (line 1320) from the prior attempt are preserved. The Grid (9 columns bound to `xPesa`) and the 4 original action buttons remain fully implemented ÔÇö no stubs, no TODOs, no MsgAviso placeholders.

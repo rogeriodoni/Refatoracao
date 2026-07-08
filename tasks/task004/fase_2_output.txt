@@ -1,0 +1,22 @@
+﻿Fase 2 conclu├¡da. O arquivo `sigmvccrBO.prg` foi completado com os seguintes m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT para o grid (sem filtro de per├¡odo) |
+| `BuscarPorPeriodo(dIni, dFin, cExtra)` | PUBLIC | SELECT filtrado por datas ÔÇö usado pelo filtro de per├¡odo da tela |
+| `CarregarPorCodigo(cCidChaves)` | PUBLIC | Carrega por PK (`Cidchaves`) |
+| `CarregarPorNopers(cEmps, nNopers)` | PUBLIC | Carrega pela chave de neg├│cio |
+| `CarregarDoCursor(cAlias)` | PUBLIC | Mapeia cursor ÔåÆ `this_*` com campos opcionais via `TYPE()` |
+| `GerarNextNoper()` | PROTECTED | `MAX(Nopers)+1` para a empresa corrente |
+| `Inserir()` | PROTECTED | INSERT completo com gera├º├úo de `Cidchaves` e `Gruconmoes` |
+| `Atualizar()` | PROTECTED | UPDATE dos campos edit├íveis identificado por `Emps+Nopers` |
+| `ExecutarExclusao()` | PROTECTED | Exclus├úo **l├│gica** ÔÇö seta `Datexcs`/`Usuexcs` (sem DELETE f├¡sico, compat├¡vel com o legado) |
+
+**Decis├Áes importantes:**
+- PK real ├® `Cidchaves` (clustered) ÔÇö corrigido de `Nopers` no `Init()`
+- `Cidchaves` gerado como `DTOS(data) + PADL(nopers, 6, "0")` (mesmo formato do legado com `fGerUniqueKey`)
+- Exclus├úo l├│gica por `UPDATE SET Datexcs/Usuexcs` (o legado nunca fazia `DELETE` f├¡sico)
+- Campos opcionais em `CarregarDoCursor()` verificados com `TYPE("campo") != "U"` para compatibilidade com cursores parciais (listagem vs. carregamento completo)
+- 15 propriedades novas adicionadas (`this_cShists`, `this_cVlancs`, etc.) alinhadas ao schema real

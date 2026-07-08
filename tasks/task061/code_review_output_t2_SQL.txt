@@ -1,0 +1,13 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma corre├º├úo necess├íria.**
+
+Ap├│s investiga├º├úo completa, `CMOEDATA` **n├úo ├® uma coluna em cl├íusula WHERE**. As 3 ocorr├¬ncias no arquivo `sigrecopBO.prg` s├úo:
+
+| Linha | Uso | Tipo |
+|-------|-----|------|
+| 175 | `INDEX ON PADR(cmoes, 3) + DTOS(datas) TAG CMOEDATA` | Nome de TAG de ├¡ndice |
+| 207 | Coment├írio explicativo do ├¡ndice | Coment├írio |
+| 217 | `SET ORDER TO CMOEDATA` | Ativa├º├úo do ├¡ndice para SEEK |
+
+O detector de code review identificou `CMOEDATA` como suspeita por aparecer no c├│digo migrado sem estar na lista de colunas do WHERE original, mas o contexto ├® diferente: ├® um **nome de TAG de ├¡ndice** criado para otimizar o `SEEK(PADR(moeda,3) + DTOS(data))` que implementa a fun├º├úo `fBuscarCotacao()` do legado.
+
+O c├│digo est├í correto. Nenhum filtro inventado existe ÔÇö o pass SQL est├í limpo para este arquivo.

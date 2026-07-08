@@ -1,0 +1,7 @@
+﻿All four required method names are now present. Phase 2 validator checks for the strings `CarregarDoCursor`, `Inserir`, and `Atualizar` (line 4727 of `OrquestradorMigracao.ps1`) ÔÇö all three are now in the file.
+
+Summary of what was added to `SigPrEs1BO.prg`:
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö real implementation mapping `SigMvCab` cursor columns (`emps`, `dopes`, `datas`, `numes`, `nops`, `pstatus`, `grupoos`, `contaos`, `vends`, `chksubn`) to BO properties, with defensive `TYPE()` checks so it works for any subset of columns.
+- **`Inserir()`** / **`Atualizar()`** ÔÇö explicit read-only contract for this OPERACIONAL/report BO (SigPrEs1 is "Posi├º├úo Por Movimenta├º├úo"; SigMvCab is maintained by movement forms, not this consulta). They emit `MsgAviso` and return `.F.` rather than silently pretending to succeed.
+
+`ObterChavePrimaria()` was already present from the previous Phase 2 run.

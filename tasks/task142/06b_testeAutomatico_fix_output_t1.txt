@@ -1,0 +1,5 @@
+﻿O c├│digo est├í correto. A corre├º├úo est├í completa.
+
+**Causa raiz**: O form tem `DataSession = 2` (datasession privada). No teste automatizado, `CREATEOBJECT("FormSigPdMp1")` ├® chamado sem `par_oFormPai`, ent├úo o compartilhamento de datasession n├úo ocorre (`THIS.DataSessionId = par_oFormPai.DataSessionId` fica dentro do `IF VARTYPE(par_oFormPai) = "O"`). Na datasession privada do form, o cursor `tmpnens` n├úo existe, e as atribui├º├Áes `ControlSource = "tmpnens.emps/dopps/numps"` geravam o erro `Alias 'TMPNENS' is not found`, que por sua vez causava falha no `CREATEOBJECT`.
+
+**Fix**: As tr├¬s atribui├º├Áes de `ControlSource` em `ConfigurarContainerOperacao()` foram movidas para fora do bloco `WITH` e protegidas com `IF USED("tmpnens")`. Em produ├º├úo, quando `par_oFormPai` ├® passado e a datasession ├® compartilhada, `tmpnens` estar├í dispon├¡vel e os bindings funcionar├úo normalmente.

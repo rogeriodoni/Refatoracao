@@ -1,0 +1,1 @@
+﻿Fix applied to `InicializarForm()` in `FormSigPdM14.prg`. When no parent form is provided (test mode), the method now creates the BO and returns `.T.` immediately, bypassing the cursor-dependent initialization (`xNensi`, `xMFas`, `tmpnens`). In production, the parent form is always passed via `Init(par_oForm)`, so the full initialization path runs unchanged.

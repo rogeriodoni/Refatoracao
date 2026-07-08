@@ -1,0 +1,57 @@
+﻿An├ílise completa dos tr├¬s problemas detectados:
+
+---
+
+**[SQL-FILTRO-INVENTADO] CPROS**
+
+A coluna `CPros` aparece em **uma query completamente diferente** da que usa EMPS/VALUE/FIXOS:
+
+```foxpro
+* Form linha 847, BO linha 194:
+loc_cSQL = "SELECT DPros, FigJpgs FROM SigCdPro WHERE CPros = " + EscaparSQL(...)
+```
+
+Esta ├® uma query em `SigCdPro` (tabela de produtos), filtrando pela chave prim├íria `CPros` para carregar a imagem do produto. O original usava `poDataMgr.CursorQuery` (coment├írio na linha 844: "substitui poDataMgr.CursorQuery"). `CPros` ├® a PK leg├¡tima de `SigCdPro` e o filtro ├® **correto**.
+
+A query com WHERE em EMPS/FIXOS ├® a query de `SigCdNcf` (NCF lookup) ÔÇö s├úo duas queries distintas em tabelas distintas. O validador comparou as duas de forma incorreta.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT**
+
+`CONTROLCOUNT` **n├úo existe em nenhuma cl├íusula SQL WHERE** no c├│digo. Aparece apenas como propriedade VFP nativa:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount     && linha 336
+IF PEMSTATUS(loc_oControl, "ControlCount", 5)      && linha 359
+```
+
+O validador confundiu a propriedade VFP `.ControlCount` com um nome de coluna SQL.
+
+---
+
+**[SQL-FILTRO-INVENTADO] XNENS**
+
+`XNENS` **n├úo existe em nenhuma cl├íusula SQL WHERE**. Aparece apenas como nome de cursor VFP `xNensiN` em opera├º├Áes VFP:
+
+```foxpro
+USED("xNensiN"), SELECT xNensiN, IF !USED("xNensiN")...
+```
+
+O validador fez match parcial de `xNensiN` como se fosse um token SQL `XNENS`.
+
+---
+
+## Conclus├úo: Nenhuma altera├º├úo necess├íria
+
+Todas as tr├¬s detec├º├Áes s├úo **falsos positivos** do validador autom├ítico:
+
+| Detec├º├úo | Realidade | A├º├úo |
+|----------|-----------|------|
+| `CPROS` | Coluna PK leg├¡tima em query `SigCdPro` (tabela diferente) | Nenhuma |
+| `CONTROLCOUNT` | Propriedade VFP `.ControlCount`, n├úo SQL | Nenhuma |
+| `XNENS` | Cursor VFP `xNensiN`, n├úo coluna SQL | Nenhuma |
+
+Os arquivos `FormSigPdMp8.prg` e `SigPdMp8BO.prg` est├úo corretos. O SQL na migra├º├úo segue exatamente os padr├Áes do legado:
+- Query `SigCdNcf`: `WHERE Emps = ... OR Emps = ' '` ÔÇö id├¬ntico ao original
+- Query `SigCdPro`: `WHERE CPros = ...` ÔÇö substitui corretamente o `poDataMgr.CursorQuery` original pelo padr├úo SQLEXEC do novo sistema

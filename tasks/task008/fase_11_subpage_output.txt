@@ -1,0 +1,41 @@
+﻿All methods are in place. Here's a summary of everything implemented for **FASE 11 - PgDadosConsP**:
+
+---
+
+## Changes Made to `FormProduto.prg`
+
+### 1. `ConfigurarPaginaDados` (line 2289)
+Added call to configure Page5:
+```foxpro
+THIS.ConfigurarPgPgDadosConsP(loc_oPgfInner.Page5)
+```
+
+### 2. `NavegacaoDadosChange` (line 2127)
+Added data load when user navigates to ConsP page (page 5):
+```foxpro
+IF loc_nPagina = 5
+    THIS.CarregarConsP()
+ENDIF
+```
+
+### 3. `ConfigurarPgPgDadosConsP` (line 7331) ÔÇö NEW
+PROTECTED method that creates all controls for PgDadosConsP (Page5):
+- **Cursors**: `cursor_4c_ConsP` (9 fields: Mats/Qtds/Unisp/Grupos/Descrs/Ordems/Conss/Ccats/DCats) and `cursor_4c_DTemp` (2 fields: Grupos/TempoP)
+- **`lbl_4c_Label7`**: "Qtde Componentes :" label
+- **`txt_4c_Qtcpnt`**: Read-only TextBox for component count
+- **`chk_4c_ChkFund`**: "N├úo Checar Cadastro de Fundi├º├úo" checkbox
+- **`lbl_4c_Label1`**: "Tempo Produ├º├úo por Agrupamento :" label
+- **`grd_4c_GrdCons`**: 9-column grid (top=184, left=6, w=987, h=362) ÔÇö Cols 1/2/3/6/9 read-only, Cols 4/5/7/8 editable
+- **`grd_4c_GrDTEMP`**: 2-column grid (top=548, left=821, w=172, h=107) ÔÇö both columns read-only
+- BINDEVENTs on Column4/5/8 Text1 KeyPress for F4 lookups
+
+### 4. `CarregarConsP` (line 7532) ÔÇö NEW PUBLIC
+Loads data from SQL Server into `cursor_4c_ConsP` and `cursor_4c_DTemp`:
+- JOINs SigPrCpo + SigCdPrf (phase description) + SigCdCat (category description)
+- Updates `txt_4c_Qtcpnt` with record count
+- Updates `grd_4c_GrDTEMP` with aggregated consumo by Grupos
+
+### 5. Lookup Handlers ÔÇö NEW PUBLIC/PROTECTED (6 methods)
+- **`GrdConsCol4KeyPress`** + **`AbrirLookupFaseConsP`**: F4 on Fase column ÔåÆ FormBuscaAuxiliar on SigCdPrf
+- **`GrdConsCol5KeyPress`** + **`AbrirLookupFaseDescConsP`**: F4 on Descri├º├úo column ÔåÆ FormBuscaAuxiliar on SigCdPrf by description
+- **`GrdConsCol8KeyPress`** + **`AbrirLookupCatConsP`**: F4 on Cat. column ÔåÆ FormBuscaAuxiliar on SigCdCat

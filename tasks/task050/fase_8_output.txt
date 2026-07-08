@@ -1,0 +1,19 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi adicionado:
+
+**Formsigreche.prg** ÔÇö 8 m├®todos inseridos antes de `ENDDEFINE`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick()` | Chama `FormParaRelatorio()` + `Visualizar()` |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Chama `FormParaRelatorio()` + `Imprimir()` |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` (alias de compatibilidade com FormBase) |
+| `BOParaForm()` | Popula todos os 20 controles de filtro a partir do BO (inverso de FormParaRelatorio) |
+| `HabilitarCampos(par_lHabilitar)` | Seta `.ReadOnly`/`.Enabled` em todos os controles de filtro |
+| `CarregarLista()` | Recria cursores, chama `CarregarOpcoes()` e refresha os dois grids |
+| `AjustarBotoesPorModo()` | Mant├®m todos os 4 bot├Áes do `cmg_4c_Botoes` habilitados (REPORT n├úo tem modos CRUD) |
+
+**menu.prg** ÔÇö Integra├º├úo completa:
+- `DEFINE BAR 46` (separador) + `DEFINE BAR 47` ("Cheques") adicionados ao `popRelatorios`
+- `ON SELECTION BAR 47 OF popRelatorios DO AbrirFormsigreche`
+- `PROCEDURE AbrirFormsigreche()` adicionada no final do arquivo seguindo o padr├úo can├┤nico (VARTYPE check + MostrarErro no CATCH)

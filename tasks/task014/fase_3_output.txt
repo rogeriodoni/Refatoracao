@@ -1,0 +1,16 @@
+﻿The migration for SIGCDPRO is complete. Here's a summary of what was done:
+
+**Files already present (complete from previous session):**
+- `C:\4c\projeto\app\classes\ProdutoBO.prg` ÔÇö 1086 lines, full BusinessBase implementation
+- `C:\4c\projeto\app\forms\cadastros\FormProduto.prg` ÔÇö 7285 lines, complete CRUD form with 7 internal tabs
+- `C:\4c\projeto\app\menu\menu.prg` ÔÇö already has `AbrirFormProduto` integration
+
+**Bugs fixed in this session:**
+
+1. **`ProdutoBO.Buscar()` SELECT missing `usuaalts`** ÔÇö The grid's Column6 bound to `cursor_4c_Dados.usuaalts` ("Usu├írio") but the SELECT only returned 20 other fields. Fixed the SELECT to return exactly the 7 fields the grid uses: `cpros, dpros, cgrus, sgrus, reffs, usuaalts, situas`.
+
+2. **BIT field loading in `CarregarDoCursor()`** ÔÇö Fields `flagctabs`, `tcomps`, `transps`, `impetiqs`, `chkfunds` are `BIT` in SQL Server (return as `.T.`/`.F.` in VFP9) but were being loaded with `TratarNulo(campo, "N") = 1`. Fixed to use `IF VARTYPE(campo) = "L" ÔåÆ NVL / ELSE ÔåÆ NVL = 1` pattern to handle both logical and numeric return types.
+
+**Known remaining items for CorretorAuto (step 05b):**
+- F4 key code: `par_nKeyCode = 63` throughout ÔÇö CorretorAuto #67 will change to `115`
+- Other standard anti-pattern fixes

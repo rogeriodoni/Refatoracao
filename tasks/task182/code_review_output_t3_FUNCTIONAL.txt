@@ -1,0 +1,7 @@
+﻿As 3 corre├º├Áes foram aplicadas corretamente:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `cnt_4c_Cabecalho.Visible = .T.` adicionado explicitamente na linha 161 (dentro de `ConfigurarCabecalho`), e `"CNT_4C_CABECALHO"` inserido no INLIST do filtro na linha 1089. O header ├® inicializado vis├¡vel e TornarControlesVisiveis n├úo o sobrescreve.
+
+2. **[GRID-WITH]** ÔÇö `.ColumnCount = 3` movido para FORA do `WITH .grd_4c_Dados` em todos os 5 grids de `ConfigurarPaginaDados` (linhas 424, 492, 560, 628, 696). Agora os objetos Column s├úo criados antes de o WITH tentar acess├í-los via `.Column1.Width`, `.Column3.Header1.Caption`, etc.
+
+3. **[LAYOUT-POSITION]** ÔÇö Falsos positivos. O c├│digo atual j├í possui os valores corretos (`cnt_4c_Detalhe.Left=336`, `cnt_4c_Resumo.Top=184/Left=659`, etc.) que coincidem com o SCX original. Nenhuma altera├º├úo necess├íria.

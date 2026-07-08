@@ -1,0 +1,9 @@
+﻿Corrigi o erro. Aqui est├í o resumo:
+
+**Causa:** `OptionGroup` em VFP9 **n├úo possui** a propriedade `BorderStyle`. Os 9 OptionGroups em `ConfigurarPaginaDadosPage2` tinham `.BorderStyle = 0`, causando `Property BORDERSTYLE is not found` durante a instancia├º├úo.
+
+**Corre├º├úo:** Removido `.BorderStyle = 0` de todos os OptionGroups afetados:
+- `opg_4c_Agrupas`, `opg_4c_Zeradas`, `opg_4c_DtIntFis`, `opg_4c_UtilVars` (Integra├º├úo Cont├íbil)
+- `opg_4c_IntVlrCont`, `opg_4c_IntVlrIcms`, `opg_4c_IntVlrIpi`, `opg_4c_IndMov`, `opg_4c_IndPagto` (Integra├º├úo Fiscal)
+
+Os `.fxp` foram deletados para for├ºar recompila├º├úo. Note que os OptionGroups em `ConfigurarPaginaDadosPage1` j├í estavam corretos (sem `BorderStyle`).

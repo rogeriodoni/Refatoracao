@@ -1,0 +1,7 @@
+﻿Corre├º├Áes conclu├¡das. Resumo do que foi feito e por qu├¬:
+
+**CALCFECS** ÔÇö Falso positivo. O SQL `SELECT calcfecs FROM SigCdOpe WHERE dopes = ...` tem `calcfecs` no SELECT e `dopes` no WHERE (dopes consta na lista original). O validator escaneou a string inteira e encontrou os dois termos. Nenhuma mudan├ºa de SQL necess├íria.
+
+**CODIGOS** ÔÇö Falso positivo. A condi├º├úo `AND LEFT(a.Codigos, 3) = o.NDopes` ├® o JOIN necess├írio entre SigMvPec e SigCdOpe. O original j├í inclu├¡a as tr├¬s tabelas no FROM ÔÇö sem esse JOIN o resultado seria produto cartesiano. Nenhuma mudan├ºa de SQL.
+
+**GRUFALS** ÔÇö Dois coment├írios no form (linhas 1072 e 1201) mencionavam `grufals = grupo` como se fosse uma cl├íusula WHERE, mas o SQL real n├úo usa essa coluna. O validator escaneou o texto dos coment├írios e os flagou. Ambos os coment├írios foram corrigidos removendo a refer├¬ncia a `grufals`.

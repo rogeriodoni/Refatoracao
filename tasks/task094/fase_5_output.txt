@@ -1,0 +1,6 @@
+﻿Fase 5 conclu├¡da. Dois m├®todos adicionados ao `FormSigReEvd.prg`:
+
+- **`FormParaRelatorio()`** (PROTECTED) ÔÇö mapeia os 5 filtros do formul├írio para as propriedades `this_cGrupo`, `this_cConta`, `this_cDConta`, `this_dDatai`, `this_dDataf` do BO. Ser├í chamado pelos bot├Áes Visualizar/Imprimir nas fases seguintes.
+- **`ValidarFiltros()`** (PROTECTED) ÔÇö valida que Data Inicial e Data Final est├úo preenchidas e que a inicial Ôëñ final, com foco autom├ítico no campo com erro. As datas s├úo obrigat├│rias porque o processamento original as usa diretamente para o `BETWEEN`.
+
+O arquivo passou de 740 para 796 linhas. As fases 6-8 adicionar├úo os `BINDEVENT` dos bot├Áes e os handlers `CmdVisualizarClick`/`CmdImprimirClick`/`CmdExcelClick`/`CmdEncerrarClick`.

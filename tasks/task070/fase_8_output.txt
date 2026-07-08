@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 8 implementada com sucesso.
+
+**Resumo do que foi adicionado na Fase 8:**
+
+| Adi├º├úo | Descri├º├úo |
+|--------|-----------|
+| F4 (115) em `TeclaEmpresa` | Abre `AbrirBuscaEmpresa()` ao pressionar F4 |
+| F4 (115) em `TeclaGrupo` | Abre `AbrirBuscaGrupo()` ao pressionar F4 |
+| F4 (115) em `TeclaConta` | Abre `AbrirBuscaConta()` ao pressionar F4 |
+| `HabilitarCampos()` em 7 locais | Ap├│s `LimparCampos`, `ValidarCodEmpresa`, `AbrirBuscaEmpresa`, `ValidarCodGrupo`, `AbrirBuscaGrupo`, `ValidarCodConta`, `AbrirBuscaConta` |
+| `BOParaForm()` | Popula form com dados do BO (delega para `LimparCampos`) |
+| `FormParaBO()` | Alias de `FormParaRelatorio()` |
+| `HabilitarCampos()` | Implementa o `When=` do legado: campos de descri├º├úo ficam ReadOnly quando o c├│digo correspondente est├í preenchido |
+| `CarregarLista()` | Limpa `RecordSource` do grid (estado inicial limpo) |
+| `AjustarBotoesPorModo()` | Habilita bot├úo Movimento apenas quando h├í dados no grid |
+| `BtnBuscarClick()` | Alias de `ProcessarClick()` |
+| `BtnEncerrarClick()` | Fecha o formul├írio via `Release()` |
+| `BtnSalvarClick()` | Alias de `ProcessarClick()` (para pesquisa: confirmar = processar) |
+| `BtnCancelarClick()` | Alias de `BtnIncluirClick()` (nova pesquisa = limpar filtros) |

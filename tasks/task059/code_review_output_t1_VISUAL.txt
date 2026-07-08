@@ -1,0 +1,23 @@
+﻿Analisando os dados com cuidado antes de qualquer edi├º├úo.
+
+Os 5 problemas detectados t├¬m diferen├ºa de **exatamente 85px** ÔÇö que ├® o valor de `pgf_4c_Paginas.Top = 85` (linha 279).
+
+| Controle | Original (SCX) | Migrado (page-relativo) | Absoluto efetivo |
+|---|---|---|---|
+| lbl_periodo | 133 | 48 | 85+48=**133** Ô£ô |
+| lbl_periodo_a | 136 | 51 | 85+51=**136** Ô£ô |
+| lbl_empresa | 160 | 75 | 85+75=**160** Ô£ô |
+| lbl_vendedor | 187 | 102 | 85+102=**187** Ô£ô |
+| Label6 | 214 | 129 | 85+129=**214** Ô£ô |
+
+**Todos os 5 itens s├úo falsos positivos.** O validador compara o `Top` p├ígina-relativo do controle migrado contra o `Top` absoluto do SCX original, sem considerar a hierarquia `PageFrame.Top = 85`. As posi├º├Áes absolutas efetivas s├úo **id├¬nticas** ao original.
+
+Se eu alterar os `Top` para os valores originais (133, 136, 160, 187, 214), os controles ficar├úo 85px abaixo dentro da p├ígina ÔÇö completamente desalinhados dos seus TextBoxes pareados que permanecem em Top=44, 71, 98 e 125. Isso criaria **novos problemas visuais reais** onde hoje n├úo existe nenhum.
+
+N├úo existe nenhuma altera├º├úo necess├íria neste arquivo. O layout visual est├í correto.
+
+---
+
+**Diagn├│stico:** O validador da pipeline tem uma limita├º├úo conhecida ÔÇö ao encontrar controles filhos de uma Page dentro de PageFrame, ele compara o `Top` relativo-├á-p├ígina com o `Top` absoluto do SCX, sem somar `PageFrame.Top`. O offset constante de 85px em todos os 5 controles ├® exatamente a prova disso: `pgf_4c_Paginas.Top = 85` (linha 279 do form).
+
+**A├º├úo necess├íria:** Nenhuma altera├º├úo no form. Seria necess├írio corrigir o validador da pipeline para que, ao encontrar controles dentro de Pages de PageFrames, some o `PageFrame.Top` ao calcular a posi├º├úo efetiva antes de comparar.

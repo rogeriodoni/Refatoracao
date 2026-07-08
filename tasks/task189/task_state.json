@@ -1,0 +1,264 @@
+﻿{
+    "taskId":  "task189",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-07-03T12:09:09",
+    "atualizadoEm":  "2026-07-03T18:20:42",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-03T12:09:09",
+                                            "fim":  "2026-07-03T12:09:09",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task189\\SigPrGlp.sct",
+                                            "baseName":  "SigPrGlp",
+                                            "scxFile":  "C:\\4c\\tasks\\task189\\SigPrGlp.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-03T12:09:09",
+                                          "fim":  "2026-07-03T12:09:09",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigPrGlp",
+                                          "txtFile":  "C:\\4c\\tasks\\task189\\SigPrGlp_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-03T12:09:09",
+                                              "fim":  "2026-07-03T12:09:10",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task189\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-03T12:09:11",
+                                              "fim":  "2026-07-03T12:09:11",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task189\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task189\\meta_prompt.md",
+                                              "boClass":  "SigPrGlpBO",
+                                              "formClass":  "FormSigPrGlp",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task189\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-03T12:09:11",
+                                              "fim":  "2026-07-03T12:09:11",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task189\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-03T12:09:11",
+                                               "fim":  "2026-07-03T12:09:12",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task189\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigPrGlp_esqueleto.prg",
+                                                                "SigPrGlpBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-03T12:09:12",
+                                       "fim":  "2026-07-03T13:47:26",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrGlp.prg",
+                                                               "C:\\4c\\projeto\\app\\classes\\SigPrGlpBO.prg"
+                                                           ],
+                                       "comentario":  "FormSigPrGlp.prg (2461 linhas, 43 metodos), SigPrGlpBO.prg (2257 linhas)",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrGlpBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  180.8,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrGlp.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  6136
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-03T13:47:26",
+                                                  "fim":  "2026-07-03T13:47:49",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  9,
+                                                  "erro":  null,
+                                                  "comentario":  "7 auto+2 manual: ELSEIF-\u003eELSE IF, CONTAINER_VISIBLE, LOSTFOCUS-\u003eKeyPress+LPARAMETERS, HEADER-WIDTH, BOTAO-SAIDA, LOCAL declarations, silent CATCHes removidos",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrGlp.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrGlpBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-03T13:47:49",
+                                                 "fim":  "2026-07-03T13:47:50",
+                                                 "tentativas":  3,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "1 erro corrigido: SCAN IN (par_cCursor) -\u003e SCAN IN \u0026par_cCursor (VFP9 nao suporta expr evaluation no IN clause do SCAN). Ambos compilaram OK.",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-03T14:13:22",
+                                       "fim":  "2026-07-03T14:13:47",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-07-03T14:13:47",
+                                               "fim":  "2026-07-03T14:14:08",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task189\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-07-03T14:14:09",
+                                        "fim":  "2026-07-03T14:14:25",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 4 erros (limite 4), 7 diferencas visuais (limite 0), 792 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSigPrGlp_20260703141425.html",
+                                        "diferencas":  7,
+                                        "erros":  4,
+                                        "totalProblemas":  803,
+                                        "avisos":  792,
+                                        "recoveredAt":  "2026-07-03T18:20:42",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-03T12:09:10",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-03T12:09:10",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task189\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-03T12:09:10",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-03T12:09:11"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-03T13:47:49",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-03T13:47:49",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigPrGlp_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrGlp.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task189\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-03T13:47:50",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-03T13:47:51",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-03T13:47:51",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-03T14:13:05",
+                                          "passes":  5,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_ESTOQUES, CNT_4C_LINHAS, CNT_4C_REQUISICOES. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-WITH] Bloco WITH 0 define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: 0.RecordSource).; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ESTOQUE\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CGRUS, CUSTOS, CPROS, CUNIS, 0, DOPES, DOPPS, _NREGISTRO, ORIGEMS, TIPOS, CODCORS, CODTAMS, XBAIXA, EMPDOPNUMS, CIDCHAVES, DISPS, NUMERODAOP, NUMPS, FABRPROPRS, _LNVEZES, CITEM2, CONTADS, EMPS, NUMES, QTDS, IF, X, CHKSUBN, DOPEBS, QTDES, CMATS, LNTOTREQ, PRAZOENTS, ENTPES, AUTOS, NOPS, MATS, NTRANS, TMPH, EMPDNPS, AQTDS, CITENS, QTPRODS, DTALTS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027GEREMPHS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CGRUS, CUSTOS, CPROS, CUNIS, 0, DOPES, DOPPS, _NREGISTRO, ORIGEMS, TIPOS, CODCORS, CODTAMS, XBAIXA, EMPDOPNUMS, CIDCHAVES, DISPS, NUMERODAOP, NUMPS, FABRPROPRS, _LNVEZES, CITEM2, CONTADS, EMPS, NUMES, QTDS, IF, X, CHKSUBN, DOPEBS, QTDES, CMATS, LNTOTREQ, PRAZOENTS, ENTPES, AUTOS, NOPS, MATS, NTRANS, TMPH, EMPDNPS, AQTDS, CITENS, QTPRODS, DTALTS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027BXDESTS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CGRUS, CUSTOS, CPROS, CUNIS, 0, DOPES, DOPPS, _NREGISTRO, ORIGEMS, TIPOS, CODCORS, CODTAMS, XBAIXA, EMPDOPNUMS, CIDCHAVES, DISPS, NUMERODAOP, NUMPS, FABRPROPRS, _LNVEZES, CITEM2, CONTADS, EMPS, NUMES, QTDS, IF, X, CHKSUBN, DOPEBS, QTDES, CMATS, LNTOTREQ, PRAZOENTS, ENTPES, AUTOS, NOPS, MATS, NTRANS, TMPH, EMPDNPS, AQTDS, CITENS, QTPRODS, DTALTS; [METODO-INEXISTENTE] Metodo \u0027THIS.Controls()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  6
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-03T14:13:05",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-03T14:13:22",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrGlpBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrGlp.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-03T14:14:08",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-03T14:14:09",
+                                             "thresholdPx":  5,
+                                             "unmatched":  35,
+                                             "errors":  36,
+                                             "matched":  22,
+                                             "warnings":  26,
+                                             "reportFile":  "C:\\4c\\tasks\\task189\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

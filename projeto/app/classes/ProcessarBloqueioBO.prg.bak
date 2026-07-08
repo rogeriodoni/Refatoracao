@@ -1,0 +1,65 @@
+*==============================================================================
+* ProcessarBloqueioBO.prg
+* Business Object para processamento de bloqueio/desbloqueio de contas
+*==============================================================================
+
+DEFINE CLASS ProcessarBloqueioBO AS BusinessBase
+    *-- Propriedades do processamento
+    this_dDataInicial = {}
+    this_dDataFinal = {}
+    this_cSituacao = ""
+    this_nTipoBloqueio = 1
+    this_nOpcao = 1
+    this_nRegistrosProcessados = 0
+    this_nRegistrosErro = 0
+    
+    PROCEDURE Init()
+        DODEFAULT()
+        THIS.this_cTabela = "SigCdCli"
+        THIS.this_cCampoChave = "IClis"
+        RETURN .T.
+    ENDPROC
+    
+    PROCEDURE ValidarParametros()
+        LOCAL loc_lResultado
+        loc_lResultado = .T.
+        
+        IF EMPTY(THIS.this_cSituacao)
+            MsgAviso("Situa" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o informada!")
+            loc_lResultado = .F.
+        ENDIF
+        
+        IF EMPTY(THIS.this_dDataInicial) OR EMPTY(THIS.this_dDataFinal)
+            MsgAviso("Per" + CHR(237) + "odo n" + CHR(227) + "o informado!")
+            loc_lResultado = .F.
+        ENDIF
+        
+        IF THIS.this_dDataInicial > THIS.this_dDataFinal
+            MsgAviso("Data Inicial n" + CHR(227) + "o deve ser maior que a Data Final.")
+            loc_lResultado = .F.
+        ENDIF
+        
+        RETURN loc_lResultado
+    ENDPROC
+    
+    PROTECTED PROCEDURE Inserir()
+        RETURN .F.
+    ENDPROC
+    
+    PROTECTED PROCEDURE Atualizar()
+        RETURN .F.
+    ENDPROC
+    
+    PROTECTED PROCEDURE ExecutarExclusao()
+        RETURN .F.
+    ENDPROC
+    
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        RETURN .F.
+    ENDPROC
+    
+    PROCEDURE Buscar(par_cFiltro)
+        RETURN .F.
+    ENDPROC
+    
+ENDDEFINE

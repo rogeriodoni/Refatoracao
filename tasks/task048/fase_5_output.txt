@@ -1,0 +1,9 @@
+﻿Fase 5 conclu├¡da. Adicionados ao `Formsigrecgp.prg`:
+
+- **`ConfigurarPaginaDados()`** ÔÇö stub de compatibilidade com o pipeline (form FLAT sem Page2/Dados)
+- **BINDEVENTs em `InicializarForm()`** ÔÇö `Buttons(1)ÔåÆBtnVisualizarClick` e `Buttons(2)ÔåÆBtnImprimirClick`
+- **`FormParaRelatorio()`** ÔÇö transfere `obj_4c_Opc_Rel.Value` e `obj_4c_Opc_Ordem.Value` para o BO; para tipo 5, monta a chave EDN a partir do form pai usando EVALUATE com CHR(231)+CHR(227) para os nomes de propriedade acentuados
+- **`BtnVisualizarClick()`** ÔÇö fluxo completo: FormParaRelatorio ÔåÆ MostrarProgresso ÔåÆ PrepararDados ÔåÆ Visualizar
+- **`BtnImprimirClick()`** ÔÇö mesmo fluxo para impress├úo
+
+Pr├│ximas fases (6 e 7) adicionar├úo BINDEVENTs e handlers para Excel (Buttons 3) e Encerrar (Buttons 4), mais integra├º├úo em menu/config.

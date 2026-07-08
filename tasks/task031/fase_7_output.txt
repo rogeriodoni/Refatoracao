@@ -1,0 +1,15 @@
+﻿Ambos os arquivos est├úo completamente implementados. A Fase 7 j├í estava conclu├¡da nas fases anteriores:
+
+**`Formsigreanr.prg`** ÔÇö todos os eventos de bot├úo j├í presentes:
+- `BtnVisualizarClick()` ÔÇö linha 501, com valida├º├úo de per├¡odo e chamada a `Visualizar()`
+- `BtnImprimirClick()` ÔÇö linha 527, com valida├º├úo e chamada a `Imprimir()`
+- `BtnGerarExcelClick()` ÔÇö linha 553, com valida├º├úo e chamada a `GerarExcel()`
+- `BtnCancelarClick()` ÔÇö linha 579, fecha o form
+
+**`sigreanrBO.prg`** ÔÇö BO tamb├®m completo com:
+- `PrepararDados()` ÔÇö l├│gica completa de 400 linhas replicando o processamento original
+- `Visualizar()`, `Imprimir()`, `GerarExcel()` ÔÇö todos implementados
+- `BuscarCotacao()` ÔÇö substituto de `fDtoSQL` do legado
+- `RegistrarAuditoria()`, `Destroy()` com limpeza dos cursores tempor├írios
+
+A Fase 7/8 est├í conclu├¡da. Resta apenas a **Fase 8 (integra├º├úo)**: adicionar entradas em `config.prg` e criar o item de menu em `menu.prg` no popup `popRelatorios`. Deseja que eu execute isso agora?

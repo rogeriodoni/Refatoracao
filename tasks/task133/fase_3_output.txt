@@ -1,0 +1,27 @@
+﻿Arquivo criado com sucesso. Veja o que foi implementado na Fase 3:
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigReJur.prg`** ÔÇö 214 linhas
+
+---
+
+## O que foi criado
+
+**Propriedades da classe:**
+- `this_oParentForm` ÔÇö refer├¬ncia ao form pai que abre este subformul├írio
+- `this_lAlteraContas` / `this_lAlteraJuros` ÔÇö flags de permiss├úo (equivalentes a `alteracontas`/`alterajuros` do original)
+- Propriedades visuais exatas do SIGREJUR: `Height=450`, `Width=1003`, `TitleBar=0`, `ControlBox=.F.`, `Movable=.F.`, `ClipControls=.F.`
+
+**`Init(par_oParentForm)`** ÔÇö padr├úo FormSigReCmg:
+- Compartilha `DataSessionId` do form pai **antes** do DODEFAULT, para que `InicializarForm()` j├í tenha acesso a `crTmpJuros`/`crSigCdPam`
+- Instancia `SigReJurBO` antes do DODEFAULT
+- Ap├│s DODEFAULT, carrega permiss├Áes via `fChecaAcesso` (TRY/CATCH ÔåÆ default `.T.` se fun├º├úo n├úo dispon├¡vel)
+
+**`InicializarForm()`** ÔÇö cria `Caption`, `Picture` e chama `ConfigurarCabecalho()`
+
+**`ConfigurarCabecalho()`** ÔÇö replica o `cntSombra` original: container cinza `RGB(100,100,100)`, 1100├ù80, com `lbl_4c_Sombra` (preto, sombra) e `lbl_4c_Titulo` (branco, vis├¡vel), FontSize=18 conforme original
+
+**`TornarControlesVisiveis()`** / **`Destroy()`** ÔÇö implementa├º├Áes completas padr├úo
+
+---
+
+**Pr├│xima fase (4/8):** Edit no arquivo para adicionar Grid 7 colunas (`ConfigurarGrid()`), Shapes, campos de conta D├®bito/Cr├®dito e bot├úo Confirma em `InicializarForm()`, mais `CarregarDadosIniciais()` em `Init()`.

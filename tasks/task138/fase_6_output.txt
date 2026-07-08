@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com duas corre├º├Áes aplicadas:
+
+1. **ColumnOrder adicionado** em todos os 4 colunas do grid para replicar a ordem visual do SCX legado:
+   - Movimenta├º├úo (Column1) ÔåÆ posi├º├úo 1
+   - Quantidade (Column4 f├¡sico) ÔåÆ posi├º├úo 2  
+   - Tipo de Material (Column3) ÔåÆ posi├º├úo 3
+   - Componente (Column2 f├¡sico) ÔåÆ posi├º├úo 4
+
+2. **ConfigurarPaginaLista() corrigida** para ser um verdadeiro no-op ÔÇö a vers├úo anterior chamava `AddObject` (via `ConfigurarCabecalho()` etc.) dentro do m├®todo, o que causaria "member already exists" se chamado ap├│s `InicializarForm()`.
+
+O form n├úo tem lookups (todos os campos s├úo read-only no original), e o config.prg j├í carrega automaticamente `FormSigPdM13.prg` da pasta `operacionais\` e `SigPdM13BO.prg` da pasta `classes\` via ADIR din├ómico ÔÇö nenhum registro manual necess├írio.

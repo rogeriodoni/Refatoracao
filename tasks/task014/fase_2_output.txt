@@ -1,0 +1,23 @@
+﻿All loading methods are in place. Here's a summary of what was completed in this session:
+
+**Bug fixed:**
+- `CHR227` ÔåÆ `CHR(227)` in `grd_4c_SubCompo.Column2.Header1.Caption` (line 2850)
+
+**ConfigurarTabFases() implemented** (Tab 7 - PgDadosFaseP):
+- Placeholder cursors: `cursor_4c_Fases` (SigCdPrf: ordems, grupos, minutos, uniprdts, matprdts) and `cursor_4c_Matrizes` (SigPrMtz+locals join)
+- Left panel fields: `txt_4c_Qminfab`, `txt_4c_Codgarras`, `txt_4c_Conquilhas`, `txt_4c_Pesobris`, `txt_4c_Pesometal`, `txt_4c_Pesopdrs`, `txt_4c_CodcorsFas`, `txt_4c_CodtamsFas`, `txt_4c_CodacbsFas`, `txt_4c_DacbsFas` ÔÇö all with exact positions from layout.json
+- Checkboxes: `chk_4c_CravCera` (CravCers) and `chk_4c_PesoVari` (Varias)
+- `grd_4c_Fases`: 5 cols (Ordem/Fase/Utiliza├º├úo/Uni. Produtiva/Material) from SigCdPrf
+- `grd_4c_Matrizes`: 3 cols (Matriz/Local/Qtde) from SigPrMtz
+- `lbl_4c_DescFase`, `txt_4c_DescFase`, `edt_4c_ObsFase` at bottom
+
+**New loading methods:**
+- `CarregarComposicao()`: queries SIGPRCPO + sigsubcp with JOIN to SigCdPro for descriptions
+- `CarregarFases()`: queries SigCdPrf + populates all Tab7 BO property fields; calls CarregarMatrizes()
+- `CarregarMatrizes()`: queries SigPrMtz INNER JOIN SigCdPro for locals
+
+**OpcaoAbasChange updated**: triggers CarregarComposicao() on tab 2 and CarregarFases() on tab 7 when a product is loaded
+
+**BOParaForm + FormParaBO updated**: Tab 4 (Dados Fiscais) fields now round-trip through the BO (clfiscals, origmercs, sittricms, icms, tptribs, codservs, ipis, descfis, metals, teors, descecfs, valors, moedas)
+
+The file is 7285 lines with all PROCEDURE/ENDPROC, TRY/ENDTRY, and WITH/ENDWITH blocks balanced.

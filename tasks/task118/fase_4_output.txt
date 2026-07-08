@@ -1,0 +1,12 @@
+﻿O `FormSigReIfp.prg` j├í est├í **completo**. Esta ├® uma tarefa de **formul├írio REPORT** (`frmrelatorio`), n├úo CRUD. A Fase 4 do template multi-fase pede "Grid e Bot├Áes CRUD", mas esses elementos **n├úo existem em forms de relat├│rio**.
+
+O que o form j├í tem (correto para REPORT):
+- `cmg_4c_Botoes` ÔÇö CommandGroup com 4 bot├Áes (Visualizar, Imprimir, Excel, Encerrar), padr├úo `frmrelatorio`
+- `ConfigurarPaginaFiltros()` ÔÇö todos os campos de filtro (per├¡odo, NivImprs, TpMat, Ifor/Dfor, CdGrupo/DsGrupo)
+- Layout FLAT com 1 PageFrame de 1 p├ígina (sem Page1 Lista + Page2 Dados)
+- Todos os m├®todos: `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`, `FormParaRelatorio`, `ValidarPeriodo`
+- Todos os lookups: `AbrirBuscaTpMat`, `AbrirBuscaCdIfor`, `AbrirBuscaDfor`, `AbrirBuscaCdGrupo`
+- Todas as valida├º├Áes: `ValidarTpMat`, `ValidarCdIfor`, `ValidarDfor`, `ValidarCdGrupo`
+- `AtualizarCamposNivel()` para habilitar campos conforme NivImprs
+
+**N├úo h├í nada a modificar** ÔÇö Grid CRUD e `AlternarPagina()` s├úo exclusivos de forms `frmcadastro`. O form estava completo desde a Fase 3. A Fase 4 ├® N/A para este tipo de form.

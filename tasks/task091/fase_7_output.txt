@@ -1,0 +1,18 @@
+﻿A migra├º├úo da task091 (FormSigReEtl) est├í **integralmente conclu├¡da**. Todas as fases 1-7 j├í foram implementadas nas sess├Áes anteriores:
+
+**Verifica├º├úo do estado atual:**
+
+| Componente | Status |
+|---|---|
+| `SigReEtlBO.prg` | Ô£ô Completo ÔÇö PropararDados (4 tipos), Visualizar, Imprimir, ReverterXML, etc. |
+| `FormSigReEtl.prg` | Ô£ô Completo ÔÇö BtnVisualizarClick, BtnImprimirClick, BtnExcelClick, BtnEncerrarClick implementados; todos os Tecla*, Validar*, AbrirBusca*, cascade Muda* |
+| `menu.prg` | Ô£ô Integrado ÔÇö `AbrirFormSigReEtl` na BAR 111 do `popRelatorios` |
+| `config.prg` | Ô£ô N├úo requer entrada manual ÔÇö auto-load via ADIR() |
+
+A Fase 7 (eventos principais dos bot├Áes) foi implementada em uma fase anterior. O arquivo `FormSigReEtl.prg` j├í cont├®m:
+- `BtnVisualizarClick()` (linha 2309) ÔÇö valida campos, chama `this_oRelatorio.Visualizar()`
+- `BtnImprimirClick()` (linha 2321) ÔÇö valida campos, chama `this_oRelatorio.Imprimir()`
+- `BtnExcelClick()` (linha 2333) ÔÇö exporta `CsImpressao` para XLS via `PUTFILE`
+- `BtnEncerrarClick()` (linha 2361) ÔÇö chama `THIS.Release()`
+
+Nenhuma modifica├º├úo ├® necess├íria. A migra├º├úo task091 est├í pronta para testes.

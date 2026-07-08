@@ -1,0 +1,23 @@
+﻿Arquivo completo e correto. A Fase 2 do SIGREEGGBO.prg foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+| M├®todo | Equivalente Legado | Descri├º├úo |
+|---|---|---|
+| `PrepararDados()` | orchestration | Chama ValidarFiltros ÔåÆ GerarCabecalho ÔåÆ Processar |
+| `ValidarFiltros()` | `btnReport.Click` validations | Verifica SigCdGcr, SigCdCli, SigCdGpr, data obrigat├│ria |
+| `GerarCabecalho()` | bloco inicial de `processamento` | Cria `CsCabecalho` com t├¡tulos, empresa, per├¡odo |
+| `Processar()` | `PROCEDURE processamento` | Loop por empresas, acumula em `cursor_4c_Relatorio` |
+| `ProcessarEmpresa()` | `PROCEDURE processa` | SQL principal (SigMvEst + SigMvHst + SigOpEtq), UNION ALL, agrupamentos |
+| `Visualizar()` | `PROCEDURE visualizacao` | `REPORT FORM SigReEgg PREVIEW` |
+| `Imprimir()` | `PROCEDURE impressao` | `REPORT FORM SigReEgg TO PRINTER PROMPT` |
+| `ObterMensagemErro()` | ÔÇö | Retorna `this_cMensagemErro` |
+| `LimparCursoresIntermedios()` | `PROCEDURE Release` | Fecha TmpEst, TmpEti, TmpHis, TmpRelatorio, CsEst, CsEti, CsRel |
+| `CarregarDoCursor()` / `Inserir()` / `Atualizar()` / `ObterChavePrimaria()` | ÔÇö | Stubs defensivos (relat├│rios n├úo gravam) |
+
+**Decis├Áes t├®cnicas relevantes:**
+- `fBuscarCotacao(moeda, data, gnConnHandle)` chamado diretamente (mesma fun├º├úo framework usada em sigrevtoBO)
+- Filtro `empgruests` constru├¡do com `PADR()` para garantir alinhamento dos 23 chars (emps=3 + grupos=10 + estos=10)
+- C├ílculo hist├│rico de saldo via `SigMvHst` quando data Ôëá hoje (query por produto dentro do SCAN)
+- UNION ALL final com 3 tipos: detalhe (Tps=1), total grupo (Tps=2), total empresa (Tps=3)
+- `ImpLinha` marcado com LOCATE/CONTINUE igual ao legado

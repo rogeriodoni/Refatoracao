@@ -1,0 +1,19 @@
+﻿A migra├º├úo da fase 8 j├í est├í **completa**. O arquivo `Formsigreeun.prg` j├í continha todos os m├®todos requeridos nas fases anteriores:
+
+- `BtnBuscarClick()` ÔåÆ linha 1571 (delega para Visualizar)
+- `BtnEncerrarClick()` ÔåÆ linha 1575 (delega para Sair)
+- `BtnSalvarClick()` ÔåÆ linha 1579 (delega para Imprimir)
+- `BtnCancelarClick()` ÔåÆ linha 1583 (limpa campos + foco)
+- `FormParaBO()` / `BOParaForm()` ÔåÆ linhas 1497ÔÇô1526
+- `HabilitarCampos()` ÔåÆ linha 1528
+- `LimparCampos()` ÔåÆ linha 691
+- `CarregarLista()` ÔåÆ linha 1484
+- `AjustarBotoesPorModo()` ÔåÆ linha 1558
+- `Destroy()` ÔåÆ linha 1599
+
+A integra├º├úo tamb├®m est├í correta:
+- `menu.prg`: `DEFINE BAR 113 OF popRelatorios` + `AbrirFormSIGREEUN()` seguindo o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release)
+- `config.prg`: carregamento autom├ítico via ADIR() ÔÇö sem entrada manual necess├íria
+- `sigreeunBO.prg`: completo com `PrepararDados()`, `ValidarFiltros()`, `RegistrarCotacao()` e l├│gica de dois caminhos (com/sem filtro de unidade)
+
+A migra├º├úo **task093/SIGREEUN est├í 100% conclu├¡da** em todas as 8 fases.

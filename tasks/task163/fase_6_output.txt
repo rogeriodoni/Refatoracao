@@ -1,0 +1,12 @@
+﻿A Fase 6/8 est├í conclu├¡da. Resumo do que foi feito:
+
+**An├ílise da migra├º├úo SIGPRCIC:**
+
+Este form ├® um **dialog modal de sele├º├úo de ├¡cones**, n├úo um CRUD padr├úo. O template de Fase 6 (campos restantes + lookups + Salvar/Cancelar) n├úo se aplica aqui porque:
+- **N├úo h├í lookups** no original (busca fwbuscaext/sigacess ausente)
+- **N├úo h├í campos em Page2** ÔÇö o original ├® flat, todo conte├║do est├í na "lista" (grid + preview + campo Programa)  
+- **N├úo h├í bot├Áes Salvar/Cancelar** ÔÇö a sele├º├úo fecha o dialog via DblClick/ENTER no grid
+
+**├Ünica lacuna real (corrigida):** O `InicializarForm` agora herda `DataSessionId` do form pai, exatamente como o legado faz com `.DataSessionId = .poForm1.DataSessionId`. Isso garante que o dialog acessa os cursors `crProg1`, `crProg2`, `crSigSyIco1` abertas pelo form pai, mesmo que o pai use `DataSession = 2` (sess├úo privada).
+
+A migra├º├úo est├í completa. Fases 1-5 j├í implementaram todos os controles, handlers de eventos e o BO com `SelecionarIcone()` / `BuscarIconeAtual()`. A integra├º├úo (config.prg + classes/) ├® autom├ítica via `ADIR()`.

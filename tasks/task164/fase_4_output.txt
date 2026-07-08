@@ -1,0 +1,10 @@
+﻿Os 3 valores `.Value = 1` restantes s├úo todos corretos:
+- Linha 169: `cgp_4c_Filtro.Value = 1` (CommandGroup, n├úo OptionButton ÔÇö OK)
+- Linha 244: `opt_4c_Processados.Value = 1` (OptionGroup container selecionando Option1 ÔÇö correto)
+- Linha 392: `opt_4c_Periodo.Value = 1` (OptionGroup container selecionando Option1 ÔÇö correto)
+
+**Fase 4 conclu├¡da.** O arquivo `FormSIGPRCNB.prg` j├í estava completo desde a Fase 3 (2489 linhas com todos os m├®todos CNAB implementados). Foram aplicadas 3 corre├º├Áes de bugs:
+
+1. `lbl_4c_LblOper.Caption`: `CHR(60)` sem backslash mostrava `<` literal ÔÇö corrigido para `CHR(92) + CHR(60)` (nota├º├úo `\<` de hotkey VFP9)
+2. `opt_4c_Processados.Option1.Value = 1` removido (Bug #108 ÔÇö OptionButton com `.Value != 0` faz todos os radios aparecerem marcados)
+3. `opt_4c_Periodo.Option1.Value = 1` removido (mesmo bug)

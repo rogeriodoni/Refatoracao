@@ -1,0 +1,531 @@
+{
+  "resumo": {
+    "totalMetodos": 31,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 15,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "Formas de Pagamento"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Procedure",
+      "linhas": 92,
+      "codigoOriginal": "Select * From GravaNens Where 0=1 Into Cursor TmpNens ReadWrite\n\nSelect *, 000000.000 as ps2FaseAnt, Space(3) as cUnips, .f. as OsRets, .f. as Retrabs, Space(10) as MatPrincs,;\n\t000000.000 as PsFaseAnt, Space(60) as Descs, ;\n\t0 as Rateio, .f. as Visivel, 000000.000 as QtFaseAnt, 000000 as Amarracao, 00 as TrfPesa, 0 as ServAuto,;\n\tSPACE(20) as dopcs, 0 as retrab  ;\nFrom GravaNensI Where 1=0 Into Cursor xNensi ReadWrite\n\nSelect xNensi\nIndex On Recno() For Visivel Tag Editar\nIndex On Cats Tag Cats... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Do Form SigOpIbo With Thisform, 2, This.Titulo",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Private pDtI, pDtF\n\nldDtInicial\t= ThisForm.ParentForm.Container1.get_dt_inicial.Value\nldDtFinal\t= ThisForm.ParentForm.Container1.get_dt_final.Value\n\npDtI = fDtoSQL(ldDtInicial)\npDtF = fDtoSQL(ldDtFinal, '23:59:59')\n\nIf (ThisForm.pcEscolha = 'PROCURAR') And Not Empty(ThisForm.Pagina.Dados.cntDados.get_codigo.Value)\n\tSelect csTemporario\n\tSet Near On\n\t=Seek(ThisForm.Pagina.Dados.cntDados.get_codigo.Value, 'csTemporario', 'Numps')\n\tSet Near Off\nEndIf\n\n=DoDefault()\n* Fim *****************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "pcEscolha = 'PROCURAR') And Not Empty",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Init",
+      "linhas": 105,
+      "codigoOriginal": "Lparameters pQuery, pForm\n\nWith ThisForm\n\t.ParentForm = pForm\n\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdNec', 'cIdChaves', 'csTemporario', '', ThisForm.Pagina.Lista.Grade, pQuery)\n\t\t\t.pfSqlTabela(1).pColuna('Numps',    '', '', 'Código',     70, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Datas',    '', '', 'Data',       75, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('TotPesos', '', '', 'Peso',       80, .f.)\n\t\t\t.pfSqlTabela(1).pColu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Criacursor",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Click",
+      "linhas": 301,
+      "codigoOriginal": "LParameter Opcao, Ok\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nOk     = .t.\nAltPat = .t.\nAltTra = .t.\n\nThisForm._Dopp = csTemporario.Dopps\n\nThis.Parent.Parent.Dados.cntDados.Nom_Operacao.Caption = csTemporario.Dopps\n\nlcEdn = csTemporario.Emps + csTemporario.Dopps + Str(csTemporario.Numps, 10)\n\nThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNPs', lcEdn)\nSelect crSigCdNec\n\n=Seek(ThisForm._Dopp, 'crSigCdOpd', 'Dopps')\nThisForm.Titulo = Proper(Alltrim(crSigCdOpd.TNivels)) +... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Formas de Pagamento",
+        "metodosFormChamados": "CursorQuery,Titulo = Proper,Artigo = Lower",
+        "controlesReferenciados": "Chksubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Select TmpNens\nGo Top\n_Posicao = TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10)\n\n=Seek(TmpNens.Dopps, 'crSigCdOpd', 'Dopps')\n\nIf Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'PROCURAR')\n\tThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNPs', _Posicao)\n\tSelect crSigCdNec\n\n\tIf (ThisForm.pcEscolha = 'CONSULTAR') And (crSigCdOpd.Etiqs = 1)\n\t\tDo Form SigPdM10 With ThisForm, .t.\n\tEndIf\n\n\t=DoDefault()\n\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,pcEscolha = 'CONSULTAR') And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "Private Op_Escolha\nLocal lcPosicao, lnCodigo, lcCodDopp\n\nlnCodigo  = TmpNens.Numps\nlcCodDopp = Alltrim(TmpNens.Dopps) + TmpNens.Emps\n\nOp_Escolha = ThisForm.pcEscolha\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNPs', TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10))\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7",
+      "evento": "Activate",
+      "linhas": 20,
+      "codigoOriginal": "=DoDefault()\n\n=Seek(ThisForm._Dopp, 'crSigCdOpd', 'Dopps')\n\nIf ThisForm.AtFoco\n\tThisForm.AtFoco = .f.\n\tWith ThisForm.Pagina.Dados\n\t\tDo Case\n\t\t\tCase (ThisForm.pcEscolha = 'PROCURAR')\n\t\t\t\t.cntDados.get_codigo.SetFocus\n\n\t\t\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\t\t\t.grupo_salva.salva.SetFocus\n\t\tEndCase\n\tEndWith\nEndIf\nSelect TmpNens\nGo Top\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.cntDados.Get_codigo",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'PROCURAR') Or (ThisForm.pcEscolha = 'INSERIR' And ;\n\t   (crSigCdOpd.Numeras = 1) And ThisForm.EditaOrigem)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'PROCURAR') Or",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.cntDados.Dt_data",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') \n\tSelect TmpOperacao\n\tCount to _LnCont For Codigos > 0\n\tIf _lnCont > 0\n\t\tMessageBox('A Data só pode ser alterada antes de Informar Envelopes/Ops',0+16,'')\n\t\tReturn .f.\n\tElse\n\t\tReturn .t.\n\tEndif\nElse\n\tReturn .f.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.cntDados.Dt_data",
+      "evento": "Valid",
+      "linhas": 65,
+      "codigoOriginal": "If (fVerificaBloqueio(This.Value, ThisForm.podatamgr) <> 0)\n\t=Messagebox('Periodo Bloqueado!!!', 0+48, '')\n\tReturn 0\nEndIf\n\nIf (fBloqueioPorPeriodo(This.Value, ThisForm.podatamgr) <> 0)\n\t=Messagebox('Periodo Bloqueado!!!', 0+48, '')\n\tReturn 0\nEndIf\n\n\nIf (crSigCdOpd.Origems = 1)\n\tlcQuery = [Select Codigos, Datas ] + ;\n\t\t\t    [From SigCdFcx ] + ;\n\t\t\t   [Where Emps = '] + ThisForm.pEmps + [' And ] + ;\n\t\t\t   \t\t [Grupos = '] + TmpNens.GrupoOs + [' And ] + ;\n\t\t\t   \t\t [Contas = '] + TmpNens.ContaOs + [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,GetDatetime",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Origem.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Origem.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Destino.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Destino.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Destino.Get_dconta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Responsavel.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Responsavel.Get_conta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Responsavel.Get_dconta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha <> 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Operacao",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If (ThisForm.pcEscolha <> 'PROCURAR')\n\tThisForm.Enabled = .f.\n\tSelect xMfas\n\tSet Order To\n\n\tDo Form SigPdMp5 With ThisForm, ThisForm.DataSessionId\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Componentes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha <> 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Componentes",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If (ThisForm.pcEscolha <> 'PROCURAR')\n\tThisForm.Enabled = .f.\n\n\tSelect xNensi\n\tSet Order To\n\n\tDo Form SigPdMp2 With ThisForm, ThisForm.DataSessionId\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Etiquetas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha <> 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Etiquetas",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If (ThisForm.pcEscolha <> 'PROCURAR')\n\tThisForm.Enabled = .f.\n\tSelect xNensi\n\tSet Order To\n\tThisForm.Enabled = .f.\n\n\tIf (crSigCdPam.AltPesas = 1)\n\t\tSelect xOpi\n\t\tGo Top\n\t\tDo Form SigPdMp3 With ThisForm, ThisForm.DataSessionId\n\tElse\n\t\tSelect xPesa\n\t\tGo Top\n\n\t\tDo Form SigPdMp9 with ThisForm\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Dados",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Do Form SigOpInf With ThisForm, ThisForm.DataSessionId\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Boleto",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=Seek(ThisForm._Dopp, 'crSigCdOpd', 'Dopps')\n\nIf (crSigCdOpd.Boletos = 1)\n\tThisForm.ImpBol()\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ImpBol",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.Documento",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "=Seek(ThisForm._Dopp, 'crSigCdOpd', 'Dopps')\n\n* Impressao Boleto\nIf (crSigCdOpd.Docus = 1)\n\t=Seek(TmpNens.Dopps, 'crSigCdOpd', 'Dopps')\n\tThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNPs', TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10))\n\n\tDo SigPrIdc With TmpNens.Emps, TmpNens.Dopps, TmpNens.Numps, 0, crSigCdOpd.QtdDocs,.f.,.f.,.f.,.f.,.f.,.f.,ThisForm\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP7.Pagina.Dados.GradeOperação.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDMP7.Procedure",
+      "queryOriginal": "Select * From GravaNens Where 0=1 Into Cursor TmpNens ReadWrite",
+      "tabelas": "GravaNens",
+      "colunas": "TmpNens,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDMP7.Procedure",
+      "queryOriginal": "Select *, 000000.000 as ps2FaseAnt, Space(3) as cUnips, .f. as OsRets, .f. as Retrabs, Space(10) as MatPrincs,; \t000000.000 as PsFaseAnt, Space(60) as Descs, ; \t0 as Rateio, .f. as Visivel, 000000.000 as QtFaseAnt, 000000 as Amarracao, 00 as TrfPesa, 0 as ServAuto,; \tSPACE(20) as dopcs, 0 as retrab  ; From GravaNensI Where 1=0 Into Cursor xNensi ReadWrite",
+      "tabelas": "GravaNensI",
+      "colunas": "000,000000,xNensi,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["GravaNens", "GravaNensI"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

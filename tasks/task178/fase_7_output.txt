@@ -1,0 +1,18 @@
+﻿As corre├º├Áes est├úo corretas. A fase 7 est├í completa.
+
+**Resumo do que foi feito:**
+
+O arquivo `FormSigPrEs1.prg` j├í estava completo com `CmgConsultarClick()` (83 linhas de l├│gica SQL + valida├º├Áes) e `CmgEncerrarClick()` ÔÇö os "eventos principais" de um form OPERACIONAL. A fase 7 revelou e corrigiu **9 bugs** introduzidos nas fases anteriores:
+
+**Bugs nos handlers KeyPress (6)** ÔÇö todos os m├®todos `BuscarXxxPorCodigo()` do BO retornam `.T.`/`.F.` e populam cursor, mas o form os tratava como string de descri├º├úo, causando `TYPE MISMATCH` ao atribuir `.T.` a campos TextBox:
+- `TxtCdEmpresaKeyPress` ÔåÆ agora usa `cursor_4c_BuscaEmp.razas`
+- `TxtNmOperacaoKeyPress` ÔåÆ agora usa `!loc_oBO.BuscarOperacaoPorNome()`
+- `TxtGrupoKeyPress` ÔåÆ agora usa `cursor_4c_BuscaGrupo.descrs`
+- `TxtContaKeyPress` ÔåÆ par├ómetros invertidos corrigidos (`grupo, codigo`) + usa `cursor_4c_BuscaConta.rclis`
+- `TxtCpfKeyPress` ÔåÆ agora usa `cursor_4c_BuscaCliente.iclis`/`rclis`
+- `TxtRespsKeyPress` ÔåÆ agora usa `cursor_4c_BuscaResp.rclis`
+
+**Bugs nos m├®todos AbrirLookup (3)** ÔÇö nomes de coluna incorretos:
+- `AbrirLookupMoeda` ÔåÆ `cdmoes`/`dsmoes` ÔåÆ `cmoes`/`dmoes` (nomes reais do schema)
+- `AbrirLookupConta` ÔåÆ `codigos`/`nomes` ÔåÆ `iclis`/`rclis`; tabela filtro `GrupoOs` ÔåÆ `grupos`
+- `AbrirLookupResps` ÔåÆ tabela `SigCdPam` (inexistente para este lookup) ÔåÆ `SigCdCli WHERE grupos`; `codigos`/`nomes` ÔåÆ `iclis`/`rclis`

@@ -1,0 +1,506 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 22,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMP9",
+      "evento": "Init",
+      "linhas": 59,
+      "codigoOriginal": "Lparameters pForm, DatSes\n\nLocal _Padrao\n\nThis.LockScreen = .t.\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession To DatSes\n\nThisForm.ParentForm = pForm\nThisForm._Dopp \t\t= pForm._Dopp\nThisForm.pcEscolha \t= pForm.pcEscolha\nThisForm.poDataMgr  = pForm.poDataMgr\n\nSelect xOpi\nGo Top\nthisform.grade.column5.header1.Tag = Iif(xOpi.Indiv,'X','') && Tiago - 12/06/2015 - Real Gold - Atualiza a TAG para usar para marcar e desma... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Tag = Iif,CursorQuery",
+        "controlesReferenciados": "get_dconta,get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Origem.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Origem.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Destino.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Destino.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Destino.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Lparameters ncolindex\n\nLocal lcArquivo3\nlcArquivo3 = Sys(2023) + '\\Temp3.jpg'\n\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', xopi.cpros, 'DPros, FigJpgs')\n\nThisForm.get_descr.Value = LocalPro.DPros\n\nIf (crSigCdOpd.Imagems = 1)\n\tThisForm.FigJpg.Visible = .f.\n\tThisForm.FigJpg.Picture = ''\n\n\tIf Not Empty(LocalPro.FigJpgs) And Not IsNull(LocalPro.FigJpgs)\n\t\tClear Resources\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(LocalPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Picture =",
+        "controlesReferenciados": "get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nIf (nKeyCode = 9)\n\tThisForm.Ok.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Empty(This.Value) And (Lastkey() = 13)\n\tThisForm.Ok.SetFocus\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "Select xPesa\nDelete All For Amarra = xOpi.Amarra\n\nSelect xOpi\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', xOpi.Cpros, 'MatPrincs,Cgrus, PesoMs')\nThisForm.PodataMgr.CursorQuery('SigCdGrp', 'LocalGru', 'CGrus', LocalPro.Cgrus,[Mercs])\nThisForm.PodataMgr.CursorQuery('SigCdGpr','LocalGgrp','Codigos',LocalGru.Mercs,[MatPrincs,cpqtds])\n\nlcsql = [Select CadProds, Pesos From SigCdOpe Where dopes = ']+xOpi.Dopes+[']\nThisform.podatamgr.sqlexecute(lcsql,'LocalOpe')\n\n_MatP = IIF(!EMPTY(L... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column5.Header1",
+      "evento": "Click",
+      "linhas": 47,
+      "codigoOriginal": "this.Tag = Iif(!Empty(this.Tag),'','X') && Tiago - 12/06/2015 - Real Gold - Atualiza a TAG para usar para marcar e desmarcar todos os registro clicando no cabeçalho da coluna\n\nSelect xOpi\nGo Top\nReplace All Indiv With !Empty(this.Tag)\nGo Top\n\nSelect xOpi\nScan \n\tSelect xPesa\n\tDelete All For Amarra = xOpi.Amarra\n\n\tSelect xOpi\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', xOpi.Cpros, 'MatPrincs,Cgrus,Pesoms')\n\tThisForm.PodataMgr.CursorQuery('SigCdGrp', 'LocalGru', 'CGrus', LocalP... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column5.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 36,
+      "codigoOriginal": "=DoDefault()\n\nSelect xPesa\nDelete All For Amarra = xOpi.Amarra\n\nSelect xOpi\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', xOpi.Cpros, 'MatPrincs,Cgrus,Pesoms')\nThisForm.PodataMgr.CursorQuery('SigCdGrp', 'LocalGru', 'CGrus', LocalPro.Cgrus,[Mercs])\nThisForm.PodataMgr.CursorQuery('SigCdGpr','LocalGgrp','Codigos',LocalGru.Mercs,[MatPrincs,cpqtds])\n\n_MatP = IIF(!EMPTY(LocalPro.MatPrincs),LocalPro.MatPrincs,IIF(!EMPTY(LocalGgrp.Matprincs),LocalGgrp.MatPrincs,CrSigCdPam.Ouros))\n\nIf T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column5.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.ParentForm.pcEscolha = 'INSERIR' And Not xOpi.Obrigs)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column7.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "this.Tag = Iif(!Empty(this.Tag),'','X') && Tiago - 12/06/2015 - Real Gold - Atualiza a TAG para usar para marcar e desmarcar todos os registro clicando no cabeçalho da coluna\n\nSelect xOpi\nGo Top\nReplace All Divs With !Empty(this.Tag)\nGo Top\n\nSelect xOpi\nScan\n\tSelect xPesa\n\tUpdate xPesa Set Divs = (xOpi.Divs) Where Amarra = xOpi.Amarra\nEndscan\n\nThisform.grade.Refresh()\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column7.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\nSelect xPesa\nUpdate xPesa Set Divs = (This.Value) Where Amarra = xOpi.Amarra\n\nThisform.Grade.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Grade.Column7.Check1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.ParentForm.pcEscolha = 'INSERIR' And Not xOpi.Obrigs And Not xopi.indiv)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.ok",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "If (ThisForm.pcEscolha = 'CONSULTAR') And InList(crSigCdOpd.Etiqs, 1, 3) and MessageBox('Deseja imprimir as etiquetas.',4+32+256,'Imrpimir') = 6\n\tSelect TmpNens\n\tGo Top\n\t_Posicao = TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10)\n\t=Seek(TmpNens.Dopps, 'crSigCdOpd', 'Dopps')\n\n\tSelect crSigCdNec\n\tLocate For EmpDNPs = _Posicao\n\n\tDo Form SigPdM10 With ThisForm, .t.\nEndIf\n\nSet Confirm Off\nThisForm.ParentForm.Enabled = .t.\nThisForm.ParentForm.Pagina.Dados.Operacao.SetFocus\nThisForm.Release\n* Fim ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'CONSULTAR') And InList",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP9.Pesagem",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select xPesa\nGo Top\nThisForm.Enabled = .f.\n\nDo Form SigPdMp9 With ThisForm\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDMP9.Grade.Column3.Text1.Valid",
+      "queryOriginal": "lcsql = [Select CadProds, Pesos From SigCdOpe Where dopes = ']+xOpi.Dopes+['] Thisform.podatamgr.sqlexecute(lcsql,'LocalOpe')",
+      "tabelas": "SigCdOpe",
+      "colunas": "CadProds,Pesos,dopes,Dopes+[],sqlexecutelcsql,LocalOpe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDMP9.Grade.Column7.Header1.Click",
+      "queryOriginal": "\tUpdate xPesa Set Divs = (xOpi.Divs) Where Amarra = xOpi.Amarra",
+      "tabelas": "xPesa",
+      "colunas": "Divs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDMP9.Grade.Column7.Check1.InteractiveChange",
+      "queryOriginal": "Update xPesa Set Divs = (This.Value) Where Amarra = xOpi.Amarra",
+      "tabelas": "xPesa",
+      "colunas": "Divs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe", "xPesa"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

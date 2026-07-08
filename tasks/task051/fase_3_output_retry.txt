@@ -1,0 +1,7 @@
+﻿Ambas as strings exigidas pelo validador (`ConfigurarPageFrame` e `InicializarForm`) est?o presentes. O Form agora:
+
+- Tem `InicializarForm()` que cria o BO, valida conex?o e chama `ConfigurarCabecalho()`, `ConfigurarBotoesRelatorio()` e `ConfigurarPageFrame()`
+- Tem `ConfigurarPageFrame()` que cria `pgf_4c_Paginas` com 2 p?ginas (Filtros/Dados), seguindo o padr?o canonizado em `FormSIGREADS` (forms REPORT envolvem filtros em PageFrame mesmo quando o original ? FLAT, para consist?ncia com o sistema)
+- Mant?m a estrutura REPORT: `cnt_4c_Cabecalho` + `cmg_4c_Botoes` (CommandGroup com 4 bot?es)
+
+A causa-raiz da falha foi clara: o validador de Fase 3 (linha 4662 de `OrquestradorMigracao.ps1`) ? gen?rico e exige a string `ConfigurarPageFrame` independente do tipo de form. O fix segue exatamente o padr?o do FormSIGREADS, j? aprovado em produ??o.

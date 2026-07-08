@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. Fase 6 implementada completamente com:
+
+- **`ConfigurarEventos()`** ÔÇö BINDEVENTs para `txt_4c_Empresa` (KeyPress), `txt_4c_DesEmpresa` (KeyPress) e os 4 bot├Áes do `cmg_4c_Botoes`
+- **`EmpresaKeyPress`** ÔÇö F4 abre lookup, Enter/Tab valida o c├│digo
+- **`DesEmpresaKeyPress`** ÔÇö Enter/Tab/F4 abrem lookup por nome (equivalente ao `Valid` do `GetDesEmpresa` do legado)
+- **`ValidarCodEmpresa()`** ÔÇö valida c├│digo contra `SigCdEmp` via `BO.ValidarEmpresa()`, preenche descri├º├úo, gerencia estado `Enabled` do campo de descri├º├úo
+- **`AbrirLookupEmpresa()`** ÔÇö `FormBuscaAuxiliar` sobre `SigCdEmp` com colunas `CEmps`/`Razas`, carrega `this_cTabela` via `ValidarEmpresa()` ap├│s sele├º├úo
+- **`BtnVisualizarClick`/`BtnImprimirClick`/`BtnExcelClick`** ÔÇö validam empresa + tabela de desconto (mesma l├│gica do `btnReport.Click` original) antes de chamar `BO.Visualizar()`/`Imprimir()`/`ImprimirDireto()`
+- **`BtnEncerrarClick`** ÔÇö `THIS.Release()`
+- `LimparCampos()` atualizado para gerenciar `txt_4c_DesEmpresa.Enabled` (habilitado apenas quando empresa est├í vazia, equivalente ao `When` do legado)

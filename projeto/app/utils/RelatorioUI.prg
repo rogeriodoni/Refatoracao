@@ -1,0 +1,284 @@
+*====================================================================
+* RelatorioUI.prg
+*
+* Classe para gerar relatorio HTML de diferencas de UI Fidelity
+*
+* Uso:
+*   loc_oRelatorio = CREATEOBJECT("RelatorioUI")
+*   loc_cArquivo = loc_oRelatorio.Gerar("FormCor", loc_aDiferencas, loc_nTotal)
+*
+* Retorno:
+*   Caminho completo do arquivo HTML gerado
+*====================================================================
+
+DEFINE CLASS RelatorioUI AS Custom
+
+    cCaminhoRelatorios = ""
+
+    *====================================================================
+    * Init
+    * Inicializa caminho de relatorios
+    *====================================================================
+    PROCEDURE Init()
+        LOCAL loc_cCaminhoBase
+
+        loc_cCaminhoBase = JUSTPATH(SYS(16))
+        THIS.cCaminhoRelatorios = ADDBS(loc_cCaminhoBase) + "relatorios\"
+
+        *-- Cria pasta de relatorios se nao existir
+        IF !DIRECTORY(THIS.cCaminhoRelatorios)
+            ON ERROR *-- Ignora erro se pasta ja existir
+            MKDIR (THIS.cCaminhoRelatorios)
+            ON ERROR
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *====================================================================
+    * Gerar
+    * Gera relatorio HTML de diferencas
+    *====================================================================
+    function Gerar(par_cNomeForm, par_aDiferencas, par_nTotal)
+        LOCAL loc_cArquivo, loc_nHandle, loc_cHTML
+        LOCAL loc_cTimestamp
+
+        *-- Gera nome do arquivo com timestamp
+        loc_cTimestamp = TTOC(DATETIME(), 1)  && YYYYMMDDHHMMSS
+        loc_cTimestamp = STRTRAN(loc_cTimestamp, " ", "_")
+        loc_cTimestamp = STRTRAN(loc_cTimestamp, ":", "")
+        loc_cTimestamp = STRTRAN(loc_cTimestamp, "/", "")
+
+        loc_cArquivo = "C:\4c\projeto\app\utils\relatorios\" + "UIFidelity_" + par_cNomeForm + "_" + loc_cTimestamp + ".html"
+
+        *-- Gera HTML (NAO usa @ porque VFP9 perde tipo entre metodos da mesma classe)
+        loc_cHTML = THIS.GerarHTML(par_cNomeForm, @par_aDiferencas, par_nTotal)
+
+        *-- Salva arquivo
+        loc_nHandle = FCREATE(loc_cArquivo)
+
+        IF loc_nHandle < 0
+            RETURN ""
+        ENDIF
+
+        FWRITE(loc_nHandle, loc_cHTML)
+        FCLOSE(loc_nHandle)
+
+        RETURN loc_cArquivo
+    ENDPROC
+
+    *====================================================================
+    * GerarHTML
+    * Gera conteudo HTML do relatorio
+    *====================================================================
+    PROTECTED function GerarHTML(par_cNomeForm, par_aDiferencas, par_nTotal)
+        LOCAL loc_cHTML, loc_nErros, loc_nAvisos, loc_nDiferencas
+        LOCAL i
+
+
+        *-- Conta tipos de diferencas
+        loc_nErros = 0
+        loc_nAvisos = 0
+        loc_nDiferencas = 0
+
+        IF par_nTotal > 0
+            FOR i = 1 TO par_nTotal
+                DO CASE
+                CASE par_aDiferencas[i, 5] = "ERRO"
+                    loc_nErros = loc_nErros + 1
+                CASE par_aDiferencas[i, 5] = "AVISO"
+                    loc_nAvisos = loc_nAvisos + 1
+                CASE par_aDiferencas[i, 5] = "DIFERENCA"
+                    loc_nDiferencas = loc_nDiferencas + 1
+                ENDCASE
+            ENDFOR
+        ENDIF
+
+        *-- Inicia HTML
+        loc_cHTML = THIS.GerarCabecalhoHTML(par_cNomeForm)
+
+        *-- Resumo executivo
+        loc_cHTML = loc_cHTML + THIS.GerarResumoHTML(par_nTotal, loc_nErros, loc_nAvisos, loc_nDiferencas)
+
+        *-- Tabela de diferencas
+        IF par_nTotal > 0
+            loc_cHTML = loc_cHTML + THIS.GerarTabelaHTML(@par_aDiferencas, par_nTotal)
+        ELSE
+            loc_cHTML = loc_cHTML + '<div class="sucesso">' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '  <h2>&#10004; UI Fidelity OK</h2>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '  <p>Nenhuma diferenca visual encontrada entre o formulario original e o migrado.</p>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '</div>' + CHR(13) + CHR(10)
+        ENDIF
+
+        *-- Rodape
+        loc_cHTML = loc_cHTML + THIS.GerarRodapeHTML()
+
+        RETURN loc_cHTML
+    ENDPROC
+
+    *====================================================================
+    * GerarCabecalhoHTML
+    *====================================================================
+    PROTECTED PROCEDURE GerarCabecalhoHTML(par_cNomeForm)
+        LOCAL loc_cHTML
+
+        TEXT TO loc_cHTML NOSHOW TEXTMERGE
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - <<par_cNomeForm>></title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: <<par_cNomeForm>> | Data: <<TTOC(DATETIME())>></p>
+        </div>
+ENDTEXT
+
+        RETURN loc_cHTML
+    ENDPROC
+
+    *====================================================================
+    * GerarResumoHTML
+    *====================================================================
+    PROTECTED PROCEDURE GerarResumoHTML(par_nTotal, par_nErros, par_nAvisos, par_nDiferencas)
+        LOCAL loc_cHTML
+
+        TEXT TO loc_cHTML NOSHOW TEXTMERGE
+        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero"><<ALLTRIM(STR(par_nTotal))>></div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero"><<ALLTRIM(STR(par_nErros))>></div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero"><<ALLTRIM(STR(par_nAvisos))>></div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero"><<ALLTRIM(STR(par_nDiferencas))>></div>
+            </div>
+        </div>
+ENDTEXT
+
+        RETURN loc_cHTML
+    ENDPROC
+
+    *====================================================================
+    * GerarTabelaHTML
+    *====================================================================
+    PROTECTED function GerarTabelaHTML(par_aDiferencas, par_nTotal)
+        LOCAL loc_cHTML, i, loc_cTipo, loc_cBadgeClass
+
+        loc_cHTML = '<div class="conteudo">' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '  <h2>Detalhes das Diferencas</h2>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '  <table>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '    <thead>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '      <tr>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>#</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Tipo</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Objeto</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Propriedade</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Valor Original</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Valor Migrado</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '        <th>Linha</th>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '      </tr>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '    </thead>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '    <tbody>' + CHR(13) + CHR(10)
+
+        FOR i = 1 TO par_nTotal
+            loc_cTipo = LOWER(par_aDiferencas[i, 5])
+
+            loc_cHTML = loc_cHTML + '      <tr>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td>' + ALLTRIM(STR(i)) + '</td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td><span class="badge ' + loc_cTipo + '">' + par_aDiferencas[i, 5] + '</span></td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td><code>' + THIS.EscaparHTML(par_aDiferencas[i, 1]) + '</code></td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td><strong>' + THIS.EscaparHTML(par_aDiferencas[i, 2]) + '</strong></td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td><code>' + THIS.EscaparHTML(par_aDiferencas[i, 3]) + '</code></td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td><code>' + THIS.EscaparHTML(par_aDiferencas[i, 4]) + '</code></td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '        <td>' + ALLTRIM(STR(par_aDiferencas[i, 6])) + '</td>' + CHR(13) + CHR(10)
+            loc_cHTML = loc_cHTML + '      </tr>' + CHR(13) + CHR(10)
+        ENDFOR
+
+        loc_cHTML = loc_cHTML + '    </tbody>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '  </table>' + CHR(13) + CHR(10)
+        loc_cHTML = loc_cHTML + '</div>' + CHR(13) + CHR(10)
+
+        RETURN loc_cHTML
+    ENDPROC
+
+    *====================================================================
+    * GerarRodapeHTML
+    *====================================================================
+    PROTECTED PROCEDURE GerarRodapeHTML()
+        LOCAL loc_cHTML
+
+        TEXT TO loc_cHTML NOSHOW
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>
+ENDTEXT
+
+        RETURN loc_cHTML
+    ENDPROC
+
+    *====================================================================
+    * EscaparHTML
+    * Escapa caracteres especiais para HTML
+    *====================================================================
+    PROTECTED PROCEDURE EscaparHTML(par_cTexto)
+        LOCAL loc_cRetorno
+
+        loc_cRetorno = par_cTexto
+        loc_cRetorno = STRTRAN(loc_cRetorno, "&", "&amp;")
+        loc_cRetorno = STRTRAN(loc_cRetorno, "<", "&lt;")
+        loc_cRetorno = STRTRAN(loc_cRetorno, ">", "&gt;")
+        loc_cRetorno = STRTRAN(loc_cRetorno, '"', "&quot;")
+
+        RETURN loc_cRetorno
+    ENDPROC
+
+ENDDEFINE

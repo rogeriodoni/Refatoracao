@@ -1,0 +1,15 @@
+﻿Tudo correto. Resumo das corre├º├Áes aplicadas:
+
+**sigrecorBO.prg** ÔÇö 5 coment├írios reescritos:
+- Cabe├ºalho do arquivo: `Comissao Pendente` ÔåÆ `Comissao por Vendedor (filtro PenPag)`
+- Propriedade `this_nOptPenPag`: `(pendente de pagamento)` ÔåÆ `(PenPag: pagamento em aberto)`
+- Cabe├ºalho `PrepararDados`: removido "Pendente" do t├¡tulo
+- Se├º├úo interna: `*-- Processamento de pendente de pagamento` ÔåÆ `*-- Processamento de PenPag`
+- Filtro final: `PendentePagamento` ÔåÆ `filtro PenPag`
+
+**Formsigrecor.prg** ÔÇö 4 coment├írios + 1 procedure:
+- Cabe├ºalho do arquivo: `Comiss...o Pendente` ÔåÆ `(filtro PenPag)`
+- Filtro listado: `Pendente de Pagamento (CheckBox)` ÔåÆ `PenPag: pagamento em aberto`
+- Coment├írio do CheckBox: `CheckBox Pendente de Pagamento` ÔåÆ `CheckBox PenPag`
+- Cabe├ºalho do handler: `Click no CheckBox Pendente de Pagamento` ÔåÆ `Click no CheckBox PenPag`
+- `AjustarBotoesPorModo()`: procedure vazia ÔåÆ adicionado `RETURN`

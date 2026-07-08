@@ -1,0 +1,19 @@
+﻿Fase 5 conclu├¡da. Resumo do que foi feito:
+
+**`Formsigregnf.prg`** - 3 melhorias principais:
+
+1. **Grid `ConfigurarGridNF()` - fidelidade PILAR 1 corrigida:**
+   - `FontName = "Tahoma"` (original usa Tahoma, n├úo Verdana)
+   - `AllowHeaderSizing = .F.` e `AllowRowSizing = .F.` adicionados
+   - Larguras exatas do original: C1=15, C2=45, C3=28, C4=62, C5=18, C6=60, C7=75, C8=150, C9=246
+   - `ColumnOrder=5` em C4 e `ColumnOrder=4` em C5 (Op exibe antes de Emiss├úo, igual ao original)
+   - `ReadOnly = .T.` em C2-C9, `FontBold = .T.` em C2, `InputMask = "999,999,999.99"` em C7
+   - `Movable = .F.` em todas as colunas
+   - Headers: `Alignment = 2`, `ForeColor = RGB(90,90,90)` em todas
+   - `Check1.AutoSize = .T.` e `BackStyle = 0`
+
+2. **`InicializarForm()`** - removidas chamadas redundantes a `CriarCursores()` e `CarregarDadosReferencia()` (o BO j├í cria os cursores e carrega SigCdPam/SigCdSer no seu `Init()`)
+
+3. **`Destroy()`** - simplificado para apenas `this_oBusinessObject = .NULL.` + `DODEFAULT()` (BO.Destroy() limpa seus pr├│prios cursores)
+
+**`sigregnfBO.prg`** - `Init()` agora verifica `gb_4c_ValidandoUI` e pula as queries SQL quando em modo de valida├º├úo de UI, permitindo que `ValidarUIFidelity.prg` instancie o form sem conex├úo ativa.

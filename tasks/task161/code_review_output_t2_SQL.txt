@@ -1,0 +1,7 @@
+﻿**Falso positivo confirmado.** O scanner detectou `ControlCount` (propriedade VFP9 de containers para contar controles filhos) e o interpretou incorretamente como uma coluna SQL "CONTROLCOUNT" num WHERE inventado.
+
+Fatos verificados:
+- `FormSigPrCfn.prg`: zero queries SQL (SQLEXEC/SELECT/WHERE). Os dois usos de `ControlCount` nas linhas 354 e 368 s├úo acesso a propriedade VFP9 de objeto container ÔÇö c├│digo correto para itera├º├úo recursiva de controles.
+- `SigPrCfnBO.prg`: zero queries SQL. ├ë um BO de c├ílculo puro, sem acesso a banco de dados.
+
+**Nenhuma altera├º├úo necess├íria.** O alerta `[SQL-FILTRO-INVENTADO]` ├® um falso positivo do validador autom├ítico ÔÇö `ControlCount` ├® uma propriedade nativa do VFP9 (equivalente a `Controls.Count`), n├úo uma coluna SQL. Os arquivos est├úo corretos.

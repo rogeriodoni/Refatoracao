@@ -1,0 +1,24 @@
+﻿A Fase 8/8 j├í est├í **completa**. Todos os m├®todos requeridos j├í foram implementados nas fases anteriores:
+
+**M├®todos da Fase 8 j├í presentes no arquivo (linhas 2239-2438):**
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `BtnVisualizarClick()` | 2309 | Ô£à Completo - valida, mapeia e chama BO.Visualizar() |
+| `BtnImprimirClick()` | 2321 | Ô£à Completo - valida, mapeia e chama BO.Imprimir() |
+| `BtnExcelClick()` | 2333 | Ô£à Completo - prepara dados e exporta COPY TO XL5 |
+| `BtnEncerrarClick()` | 2361 | Ô£à Completo - THIS.Release() |
+| `FormParaRelatorio()` | 2239 | Ô£à Completo - todos os 16 campos mapeados |
+| `ValidarCampos()` | 2281 | Ô£à Completo - valida Empresa + Grupo obrigat├│rios |
+| `LimparCampos()` | 1124 | Ô£à Completo - limpa todos os filtros |
+| `CarregarLista()` | 2383 | Ô£à Stub correto (REPORT n├úo tem lista) |
+| `AjustarBotoesPorModo()` | 2387 | Ô£à Stub correto (REPORT n├úo tem modos CRUD) |
+| `HabilitarCampos()` | 2391 | Ô£à Stub correto (REPORT n├úo tem modos CRUD) |
+| `FormParaBO()` / `BOParaForm()` | 2395/2399 | Ô£à Stubs corretos (REPORT usa FormParaRelatorio()) |
+| `Destroy()` | 2431 | Ô£à Completo - null no BO + DODEFAULT() |
+
+**Integra├º├úo tamb├®m completa:**
+- `menu.prg`: DEFINE BAR 111 + ON SELECTION BAR 111 + `AbrirFormSigReEtl()` (linha 2607)
+- `config.prg`: carrega automaticamente via ADIR (`*BO.prg` e `Form*.prg` em relatorios\)
+
+O arquivo `FormSigReEtl.prg` tem **2439 linhas** e est├í 100% funcional. A migra├º├úo da task091 est├í finalizada.

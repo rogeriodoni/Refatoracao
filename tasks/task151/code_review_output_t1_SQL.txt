@@ -1,0 +1,41 @@
+﻿An├ílise completa dos tr├¬s alertas. Vou verificar cada um contra o c├│digo real.
+
+**Resultado da verifica├º├úo:**
+
+---
+
+### [SQL-FILTRO-INVENTADO] CIDCHAVES
+
+`cidchaves` aparece **apenas** em:
+- `Atualizar()` linha 287: `UPDATE SigCdNec SET ... WHERE cidchaves = ...` ÔÇö obrigat├│rio para identificar o registro
+- `ExecutarExclusao()` linha 321: `DELETE FROM SigCdNec WHERE cidchaves = ...` ÔÇö obrigat├│rio para excluir pelo PK
+
+O SELECT principal (`ConstruirSQL()`, linhas 405-411) **n├úo usa cidchaves no WHERE** ÔÇö usa exatamente: `datas`, `emps`, `dopps`, `grupoos`, `grupods`, `contaos`, `contads`. 100% alinhado com o original.
+
+**Veredito: Falso positivo.** O detector varreu UPDATE/DELETE como se fossem SELECT.
+
+---
+
+### [SQL-FILTRO-INVENTADO] ICL e RCL
+
+`IClis` e `RClis` aparecem **apenas como par├ómetros de FormBuscaAuxiliar**:
+- Linha 1023: `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCli", "cursor_4c_BuscaConta", "IClis", loc_cValor, ...)` ÔÇö lookup F4 por c├│digo
+- Linha 1076: `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCli", "cursor_4c_BuscaConta", "RClis", loc_cValor, ...)` ÔÇö lookup F4 por nome
+
+N├úo existem `IClis`/`RClis` em nenhuma cl├íusula WHERE de SQLEXEC direto. S├úo nomes de colunas de `SigCdCli` passados ao lookup auxiliar ÔÇö padr├úo correto do projeto.
+
+**Veredito: Falso positivo.** O detector interpretou strings passadas ao FormBuscaAuxiliar como condi├º├Áes SQL injetadas no WHERE.
+
+---
+
+### Conclus├úo
+
+Nenhum dos tr├¬s alertas requer altera├º├úo de c├│digo. Os arquivos est├úo corretos:
+
+| Alerta | Contexto real | A├º├úo |
+|--------|---------------|------|
+| CIDCHAVES | WHERE de UPDATE/DELETE (PK obrigat├│rio) | Nenhuma |
+| ICL (IClis) | Par├ómetro de FormBuscaAuxiliar | Nenhuma |
+| RCL (RClis) | Par├ómetro de FormBuscaAuxiliar | Nenhuma |
+
+O SELECT principal em `ConstruirSQL()` usa exatamente as colunas do original: `DATAS`, `EMPS`, `DOPPS`, `GRUPOOS`, `GRUPODS`, `CONTAOS`, `CONTADS`. Nenhuma condi├º├úo inventada.

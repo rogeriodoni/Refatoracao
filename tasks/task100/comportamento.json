@@ -1,0 +1,545 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 13,
+    "totalQueries": 20,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FPags", "Sum", "fDtoSQL", "fConfigGeral", "fAcessoEmpresa", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 76,
+      "codigoOriginal": "Local lcVal, lnTot\n\nInsert Into crImpressao (Detalhe) Values ([======= ANALITICO POR PAGAMENTOS =======])\n\nSelect Distinct FPags ;\n  From crDetalhe ;\n Order By FPags ;\n  Into Cursor TmpFPags\n\nlnTot = 0\n\nSelect TmpFPags\nScan\n\tSelect Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RPags, RChqs, ;\n\t\t   RelFechas, Vends, Notas, Parcs, ValPagos, Contas, Numeros, Vencs ;\n\t  From crDetalhe ;\n\t Where FPags = TmpFPags.FPags ;\n\t Order By FPags, Vends, Notas, Parcs ;\n\t  Into Cursor TmpOpePags\n\n\tlnSub =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "Local lcDEp, ldDtI, ldDtF, lcUsu\n\nlcDEp = Alltrim(ThisForm.getDEmps.Value)\nldDtI = ThisForm.getDtIni.Value \nldDtF = ThisForm.getDtFim.Value\nlcUsu = ThisForm.getUsuars.Value\n\nInsert Into crImpressao (Detalhe) Values ([========================================])\nInsert Into crImpressao (Detalhe) Values (Padc(lcDEp, 40))\nInsert Into crImpressao (Detalhe) Values ([   Caixas de: ] + Dtoc(ldDtI) + [ à ] + Dtoc(ldDtF))\nInsert Into crImpressao (Detalhe) Values ([   Usuario  : ] + Iif(Empty(lcUsu), [GERAL... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 128,
+      "codigoOriginal": "Local lcVal, lnTot, lcVen\n\nlcVen = ThisForm.getVends.Value\n\nIf Empty(lcVen)\n\tIf ThisForm.chkVends.Value \n\t\tSelect Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;\n\t\t  From crDetalhe ;\n\t\t Group By Vends, Dopes ;\n\t\t Order By Dopes, Vends ;\n\t\t  Into Cursor TmpOperacoes\n\tElse\n\t\tSelect Space(10) as Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;\n\t\t  From crDetalhe ;\n\t\t Group By Dopes ;\n\t\t Order By Dopes ;\n\t\t  Into Cursor TmpOperacoes\n\tEndIf\nElse\n\tSelect Vends, Dopes, Sum(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkVends",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 74,
+      "codigoOriginal": "Local lcVal, lnTot\n\nSelect Dopes, Sum(ValPagos) as Valos ;\n  From crDetalhe ;\n Group By Dopes ;\n Order By Dopes ;\n  Into Cursor TmpOperacoes\n  \nInsert Into crImpressao (Detalhe) Values ([==== RESUMO: OPERACOES X PAGAMENTOS ====])\nInsert Into crImpressao (Detalhe) Values ([])\n\nlnGer = 0\nSelect TmpOperacoes\nScan && Operações\n\tInsert Into crImpressao (Detalhe) Values ([= ] + TmpOperacoes.Dopes)\n\n\tSelect DetFecCxs, RelFechas, FPags, Sum(ValPagos) as Valos ;\n\t  From crDetalhe ;\n\t Where Dopes = TmpOpe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FPags, Sum",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "Local lcVal, lnTot\n\nSelect Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RelFechas, Sum(ValPagos) as Valos ;\n  From crDetalhe ;\n Group By 1, 2 ;\n Order By 1 ;\n  Into Cursor TmpFPags\n  \nInsert Into crImpressao (Detalhe) Values ([==== RESUMO POR FORMAS DE PAGAMENTO ====])\nInsert Into crImpressao (Detalhe) Values ([])\n\nlnTot = 0\nSelect TmpFPags\nScan\n\t*** Mena - 03/04/2014 - soma vale nos totais ***\n*!*\t\tlnTot = lnTot + Iif(RelFechas=4, 0, TmpFPags.Valos)\n\tlnTot = lnTot + TmpFPags.Valos\n\t\n\t* =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "Local lcVal, lnTot, lcVen\n\n**Select Vends, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;**\n\nSelect Vends, Sum(ValPagos) as Valos ;\n  From crDetalhe ;\n Group By Vends ;\n Order By Vends ;\n  Into Cursor TmpOperacoes\n\nInsert Into crImpressao (Detalhe) Values ([========= RESUMO POR VENDEDOR ==========])\n\nlnTot = 0\nSelect TmpOperacoes\nScan && Vendedores\n\tlnTot = lnTot + TmpOperacoes.Valos\n\t\n\t* Imprimindo Cabeçalho do Vendedor\n\t* = XXXXXXXXXX            : 999,999,999.99\n\tlcVal = Transform(TmpOperaco... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFec Preview NoConsole\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 232,
+      "codigoOriginal": "Private pDtI, pDtF\n\nLocal lcEmp, lcDEp, ldDtI, ldDtF, lcUsu, lcVen, lcEdn, lcFPg\n\nlcEmp = ThisForm.getEmps.Value\nlcDEp = ThisForm.getDEmps.Value \nldDtI = ThisForm.getDtIni.Value \nldDtF = ThisForm.getDtFim.Value\nlcUsu = ThisForm.getUsuars.Value\nlcVen = ThisForm.getVends.Value\nlcFPg = ThisForm.getFPags.Value\n\npDtI = fDtoSQL(ldDtI)\npDtF = fDtoSQL(ldDtF, [23:59:59])\n\n* Carrega Todas As Operações Que Devem Aparecer No Relatório de Fechamento Do Caixa\nlcQuery = [Select o.RelFechas, o.CalcFecs, e.EmpDo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkSubn,chkPagos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.poDataMgr.CursorQuery([SigCdEmp], [crSigCdEmp], [Cemps], _Empr, [Cemps, Razas])\n\t\tIf Not Used([crSigCdEmp])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdEmp)])\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\t.getEmps.Value  = crSigCdEmp.Cemps\n\t\t.getDEmps.Value = crSigCdEmp.Razas\n\t\t.getDtIni.Value = Date()\n\t\t.getDtFim.Value = Date()\n\t\t.Refresh\n\n\t\t=DoDefault()\n\tElse\n\t\t=Mess... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFEC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFec To Printer Prompt NoConsole\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmps, ThisForm.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getUsuars",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;\n\t\t\t\t\t\t   [crListaRemota], [Usuarios], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Usuarios], [], [Usuário])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Usuarios\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmps, ThisForm.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkDetOpe",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not This.Value \n\tThisForm.chkVends.Value = .f.\n\tThisForm.getVends.Value = []\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkVends",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkOpePag",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getVends.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkResFpg",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getVends.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkVends",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.chkDetOpe.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkDetOpe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkVends",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If Not This.Value \n\tThisForm.getVends.Value = []\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getVends",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.chkDetOpe.Value And ThisForm.chkVends.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkDetOpe,chkVends",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getVends",
+      "evento": "Valid",
+      "linhas": 32,
+      "codigoOriginal": "lcQuery = [Select a.* From SigCdUsu a ]+;\n\t\t  [Where Not a.cAtivos='N' And Not a.Senhas = ']+Space(6)+[']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpUsu') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpUsu)')\n\tReturn 0\nEndIf\n\nSelect TmpUsu\nindex on usuarios tag usuarios\nindex on NComps tag NComps \nif !IsEmpty(this.Value)\n\tselect tmpusu\n\tset order to usuarios\n\tset near on\n\tIf Not seek(this.Value)\n\t\txBrow=CreateObject('fwbuscasel','tmpusu','usuarios',this.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkResFpg,chkOpePag,chkAnaPag",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.chkAnaPag",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getVends.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFEC.getFPags",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigOpFp], ;\n\t\t\t\t\t\t   [crListaRemota], [FPags], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([FPags],  [], [Código])\n\t\tloLista.mAddColuna([Descrs], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.FPags\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([======= ANALITICO POR PAGAMENTOS =======])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Select Distinct FPags ; From crDetalhe ; Order By FPags ; Into Cursor TmpFPags",
+      "tabelas": "crDetalhe",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "\tSelect Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RPags, RChqs, ; \t\t   RelFechas, Vends, Notas, Parcs, ValPagos, Contas, Numeros, Vencs ; \t  From crDetalhe ; \t Where FPags = TmpFPags.FPags ; \t Order By FPags, Vends, Notas, Parcs ; \t  Into Cursor TmpOpePags",
+      "tabelas": "crDetalhe",
+      "colunas": "12),FPags),RPags,RChqs,Vends,Notas,Parcs,ValPagos,Contas,Numeros,TmpOpePags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([========================================])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values (Padc(lcDEp, 40))",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([   Caixas de: ] + Dtoc(ldDtI) + [ à ] + Dtoc(ldDtF))",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([   Usuario  : ] + Iif(Empty(lcUsu), [GERAL... [TRUNCADO]",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "\t\tSelect Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ; \t\t  From crDetalhe ; \t\t Group By Vends, Dopes ; \t\t Order By Dopes, Vends ; \t\t  Into Cursor TmpOperacoes",
+      "tabelas": "crDetalhe",
+      "colunas": "Vends,Dopes,00,ValPagos))",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "\t\tSelect Space(10) as Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ; \t\t  From crDetalhe ; \t\t Group By Dopes ; \t\t Order By Dopes ; \t\t  Into Cursor TmpOperacoes",
+      "tabelas": "crDetalhe",
+      "colunas": "Dopes,00,ValPagos))",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Select Dopes, Sum(ValPagos) as Valos ; From crDetalhe ; Group By Dopes ; Order By Dopes ; Into Cursor TmpOperacoes",
+      "tabelas": "crDetalhe",
+      "colunas": "Dopes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([==== RESUMO: OPERACOES X PAGAMENTOS ====])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "\tInsert Into crImpressao (Detalhe) Values ([= ] + TmpOperacoes.Dopes)",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "\tSelect DetFecCxs, RelFechas, FPags, Sum(ValPagos) as Valos ; \t  From crDetalhe ; \t Where Dopes = TmpOpe... [TRUNCADO]",
+      "tabelas": "crDetalhe",
+      "colunas": "DetFecCxs,RelFechas,FPags,Dopes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Select Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RelFechas, Sum(ValPagos) as Valos ; From crDetalhe ; Group By 1, 2 ; Order By 1 ; Into Cursor TmpFPags",
+      "tabelas": "crDetalhe",
+      "colunas": "12),FPags),RelFechas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([==== RESUMO POR FORMAS DE PAGAMENTO ====])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Select Vends, Sum(ValPagos) as Valos ; From crDetalhe ; Group By Vends ; Order By Vends ; Into Cursor TmpOperacoes",
+      "tabelas": "crDetalhe",
+      "colunas": "Vends",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.Procedure",
+      "queryOriginal": "Insert Into crImpressao (Detalhe) Values ([========= RESUMO POR VENDEDOR ==========])",
+      "tabelas": "crImpressao",
+      "colunas": "Detalhe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFEC.getVends.Valid",
+      "queryOriginal": "lcQuery = [Select a.* From SigCdUsu a ]+; \t\t  [Where Not a.cAtivos='N' And Not a.Senhas = ']+Space(6)+['] ",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crImpressao", "crDetalhe", "SigCdUsu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

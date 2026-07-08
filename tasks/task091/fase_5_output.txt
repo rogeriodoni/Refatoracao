@@ -1,0 +1,17 @@
+﻿O arquivo FormSigReEtl.prg j├í est├í completamente implementado. Vou confirmar o que est├í presente:
+
+**FormSigReEtl.prg (2438 linhas) - j├í completo:**
+
+- `ConfigurarCabecalho()` - container cinza com t├¡tulo (linhas 102-142)
+- `ConfigurarBotoes()` - CommandGroup 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar (linhas 148-246)
+- `ConfigurarPageFrame()` - PageFrame flat com 1 p├ígina (linhas 252-275)
+- `ConfigurarFiltros()` - TODOS os 14 pares campo/descricao + OptionGroups (linhas 282-1118): Empresa, Grupo, Conta, Grupo de Venda, Base, Nvl2, Nvl3, Nvl4, Localiza├º├úo, Grande Grupo, Grupo Produto, Subgrupo, Produto, Fornecedor
+- `LimparCampos()`, handlers `TeclaXxx()`, `MudaXxx()` (cascade clear hierarquia)
+- `ValidarXxx()` + `AbrirBuscaXxx()` para todos os campos com lookup
+- `FormParaRelatorio()`, `ValidarCampos()`, `BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnEncerrarClick()`
+- `ConfigurarPaginaDados()` como stub vazio (linha 2372) ÔÇö **correto** para formul├írio REPORT
+- `Destroy()`
+
+**Explica├º├úo:** A Fase 5 descreve "Page2 - Campos Principais" seguindo o template CRUD, mas este ├® um formul├írio `frmrelatorio` com layout FLAT. O `ConfigurarPaginaDados()` ├® intencionalmente vazio ÔÇö ├® apenas um stub de compatibilidade com `FormBase`. Toda a implementa├º├úo real est├í em `ConfigurarFiltros()` que j├í est├í completa.
+
+O arquivo est├í pronto para a Fase 6/8.

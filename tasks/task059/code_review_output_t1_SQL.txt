@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada:
+
+- **CVENS removido** (linha 214): `AND g.cvens = a.vends` eliminado do JOIN de `SigCmGri`. O original juntava SigCmGri apenas por `cgrus`, que ├® o ├║nico campo listado no WHERE original. A condi├º├úo `cvens` foi inven├º├úo da LLM.
+
+- **CMOES mantido** (linha 496): O `WHERE cmoes = ...` em `BuscarCotacao` ├® equivalente exato ao `SEEK(..., 'crSigCdCot', 'Cmoes')` do original ÔÇö ambos filtram SigCdCot pela moeda buscada. Remover quebraria a cota├º├úo (retornaria taxas de todas as moedas). Falso positivo do validador.

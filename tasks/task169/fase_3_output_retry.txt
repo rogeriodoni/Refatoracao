@@ -1,0 +1,14 @@
+﻿Fase 3 conclu├¡da. Arquivo atualizado em `C:\4c\projeto\app\forms\operacionais\FormSigPrCtc.prg` (9.97 KB) com os elementos necess├írios para passar o validador da Fase 3:
+
+**Estrutura entregue:**
+- **DEFINE CLASS** com 11 propriedades visuais + 8 propriedades de neg├│cio (`this_oBusinessObject`, `this_cModoAtual`, `this_oParentForm`, `this_pcEdn`, `this_pcEmps`, `this_pcDopes`, `this_pnNumes`, `this_pcEscolha`, flags)
+- **Init(par_oParentForm, par_nDataSes, par_cEscolha, par_cEmps, par_cDopes, par_nNumes)** ÔÇö armazena par├ómetros do form pai antes de `DODEFAULT()`
+- **InicializarForm()** (PROTECTED) ÔÇö verifica `gb_4c_ValidandoUI`, cria `SigPrCtcBO`, propaga chave EDN e chama `ConfigurarPageFrame()`
+- **ConfigurarPageFrame()** (PROTECTED) ÔÇö PageFrame com `Top=-29, Tabs=.F.`, Page1 (Lista) e Page2 (Dados), com os 3 containers vazios exigidos:
+  - `cnt_4c_Cabecalho` (Page1, barra escura superior)
+  - `cnt_4c_Botoes` (Page1, lado direito)
+  - `cnt_4c_BotoesAcao` (Page2, Salvar/Cancelar)
+- **TornarControlesVisiveis(par_oContainer)** ÔÇö recursivo em Pages + Containers
+- **Destroy()** ÔÇö reabilita form pai, fecha cursores e chama `DODEFAULT()`
+
+Valida├º├úo por regex do Orquestrador: ambos `ConfigurarPageFrame` e `InicializarForm` presentes (7 matches). Grid e bot├Áes CRUD ficam para a Fase 4.

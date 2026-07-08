@@ -1,0 +1,11 @@
+﻿Fase 2/8 conclu├¡da. O `SIGREAPRBO.prg` agora tem implementa├º├úo completa:
+
+- **`PrepararDados()`** (PROTECTED): monta SQL com subquery comparando `SigCdPro` (atual) vs `bkp_sigcdpro` (hist├│rico), aplica todos os filtros (data, grupo, produto, linha, fornecedor) e filtra pela varia├º├úo m├¡nima de venda/custo via `CASE WHEN`. Sem `RETURN` dentro de TRY/CATCH ÔÇö usa vari├ível flag `loc_lResultado`.
+
+- **`Imprimir()`**: chama `PrepararDados()` e executa `REPORT FORM ... TO PRINT NOCONSOLE`. Libera cursor ao final.
+
+- **`Visualizar()`**: chama `PrepararDados()` e executa `REPORT FORM ... PREVIEW NOCONSOLE`. Libera cursor ao final.
+
+- **`ObterMensagemErro()`**: retorna `this_cMensagemErro` para o form exibir via `MsgErro()`.
+
+- **`Destroy()`**: fecha cursor pendente e chama `DODEFAULT()`.

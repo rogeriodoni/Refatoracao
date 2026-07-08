@@ -1,0 +1,7 @@
+﻿Fase 6 conclu├¡da. As modifica├º├Áes foram:
+
+1. **Cabe├ºalho atualizado** para "FASE 6/8" documentando que o form REPORT simples n├úo tem campos adicionais nem lookups.
+
+2. **Bug corrigido em `ConfigurarPaginaLista()`** ÔÇö o m├®todo antigo chamava `ConfigurarFiltros()` que tentaria re-criar controles j├í existentes (erro "member already exists"). Agora apenas chama `AtualizarEstadoCampos()`, que ├® o comportamento correto para esta fase.
+
+O SIGREIMC ├® um form report muito simples (3 TextBoxes + 3 Labels, sem lookups), ent├úo toda a l├│gica real estava completa desde a Fase 5. A Fase 6 identificou e corrigiu o ├║nico problema latente no c├│digo existente.

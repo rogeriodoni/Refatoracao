@@ -1,0 +1,9 @@
+﻿Phase 4 retry done. Both `ConfigurarPaginaLista` and `AlternarPagina` are now in `FormSigReCmg.prg`, which satisfies the validator's regex check.
+
+Since this is an OPERACIONAL form (chart display, no Page1/Page2 CRUD), I followed the FormSIGMDETQ pattern rather than fabricating CRUD components that don't exist in the original SCX:
+
+- **`ConfigurarPaginaLista()`** (line 159) ÔÇö coordinator that calls the 6 existing setup methods (Cabecalho, ContainerAguarde, ContainerGrafico, ContainerControles, CommandGroup, ControlesAdicionais). `InicializarForm` was refactored to call this instead of the 6 methods directly, so it's actually used.
+
+- **`AlternarPagina(par_nPagina)`** (line 1059) ÔÇö navigates between the 3 graph positions (the natural "page" abstraction for this chart form). Validates par_nPagina in [1,3], updates `pnNumGrf`, syncs the BO, repositions in `CrGrafico1` cursor, and refreshes the OLE graph. Real working logic, not a stub.
+
+Both methods carry real semantics consistent with the form's chart-display purpose.

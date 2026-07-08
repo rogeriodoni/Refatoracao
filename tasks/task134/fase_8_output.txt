@@ -1,0 +1,16 @@
+﻿Arquivo finalizado corretamente com 1167 linhas. Fase 8/8 conclu├¡da.
+
+**Resumo do que foi adicionado:**
+
+| M├®todo | Comportamento para form OPERACIONAL |
+|--------|-------------------------------------|
+| `BtnBuscarClick()` | Dispara processamento se n├úo feito; re-aplica filtro de grupo se j├í processado |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Atualiza `csCab.cbsubtit` com o grupo ativo via `AtualizarCabecalhoRelatorio()` |
+| `BtnCancelarClick()` | Confirma e chama `LimparCampos()` |
+| `CarregarLista()` | Refresh do grid sem SQL ÔÇö aplica filtro ativo ou remove filtro |
+| `AjustarBotoesPorModo()` | Mostra/oculta bot├Áes V├¡deo/Impressora/ShpRp conforme `this_lProcessamento` |
+| `HabilitarCampos()` | Liga/desliga `obj_4c_Arquivos`; mant├®m `cmd_4c_Processar` sempre habilitado |
+| `LimparCampos()` | ZAP csRel/csCab, Clear listbox, reseta flags no form e no BO, chama `AjustarBotoesPorModo()` |
+| `FormParaBO()` | Transfere grupo selecionado (3 chars) e subt├¡tulo para o BO |
+| `BOParaForm()` | Sincroniza sele├º├úo do listbox com `this_cGrupoAtual` do BO e reaplica `FiltrarPorGrupo()` |

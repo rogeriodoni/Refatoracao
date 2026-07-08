@@ -1,0 +1,9 @@
+﻿Three targeted fixes applied to `FormSigPdM12.prg`:
+
+1. **`ConfigurarAreaOperacao()`** ÔÇö Removed `.ControlSource` from inside the `WITH` blocks for the three `tmpnens.*` fields; added a single `IF USED("tmpnens")` block after to assign all three ControlSources only when the alias exists.
+
+2. **`ConfigurarGrid()`** ÔÇö Removed all five `Column*.ControlSource = "xNensiR.*"` from inside the `WITH` block; added an `IF USED("xNensiR")` block after the `ENDWITH` to assign them conditionally.
+
+3. **`ConfigurarPaginaDados()`** ÔÇö Removed `.ControlSource = "xNensir.rclis"` from inside the `WITH` block; added an `IF USED("xNensir")` guard after.
+
+**Root cause**: The automated test calls `CREATEOBJECT("FormSigPdM12")` without a parent form, so `SET DataSession TO` is never called and the cursors `tmpnens`/`xNensiR` don't exist in the private data session. VFP9 errors immediately when a `ControlSource` referencing a non-existent alias is assigned. The fix defers those assignments behind existence checks, so the form instantiates cleanly ÔÇö the ControlSources are still bound correctly at runtime when the parent form provides the shared data session.

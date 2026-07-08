@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "File", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReIdc To Printer Prompt NoConsole ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Init",
+      "linhas": 45,
+      "codigoOriginal": "Local lcEscape\n\n=fConfigGeral()\n\nm.lcEscape = Set('Escape')\n\nSet Escape Off\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdPam','GrPadClis','crSigCdPam','GrPadClis',.f.,[Select GrPadClis, Logos from SigCdPam])\n\t\t.Requery(\"crSigCdPam\")\n\tEndWith\nEndwith\t\n\n\nThisform.podatamgr.SqlExe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "SqlExecute,Value = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Procedure",
+      "linhas": 128,
+      "codigoOriginal": "Private lcCempresas,lcCgrupo,lcDgrupo,lcConta,lcDcotna,lcTitulo1,lcEscape,cEmpresas,cTitulo1s,cGrupos,cContas,cDcontas,;\n      cArqJpgs,lcDirJpg,lnLinha,lnColuna,lnConta1\n\nThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)\n\nm.lcCempresas = AllTrim(crSigCdEmp.Razas)\nm.lcCgrupo = ThisForm.getCdGrupo.Value\nm.lcDgrupo = ThisForm.getDsGrupo.Value\nm.lcCconta = ThisForm.getCdConta.Value\nm.lcDconta = ThisForm.getDsConta.Value\nm.lnLinha = ThisForm.getLinha.Value\nm.lnColuna = ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Opt_logo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReIdc Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC",
+      "evento": "Click",
+      "linhas": 61,
+      "codigoOriginal": "Local llRetorno\n\nThisForm.LockScreen = .t.\n\nm.llRetorno = .t.\n\nIf .Not.This.Value==3\n\n\tDo Case\n\t\tCase (.Not.IsEmpty(ThisForm.getCdGrupo.Value).And.;\n\t\t      .Not.ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', ThisForm.getCdGrupo.Value))\n\t        Messagebox('Grupo Inválido.',16,'')\n\t        ThisForm.getCdGrupo.SetFocus\n\t        m.llRetorno = .f.\n\t\tCase (.Not.IsEmpty(ThisForm.getCdConta.Value).And.;\n\t\t      .Not.ThisForm.podatamgr.ChkRegister('SigCdCli', 'Iclis', ThisForm.getCdConta.Value))... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdGcr',ChkRegister('SigCdCli'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getDsGrupo",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,ThisForm.getCdGrupo,ThisForm.getDsGrupo)\nElse\n\tThisForm.getCdGrupo.value = ''\n\tThisForm.getCdGrupo.refresh\nendif\nreturn(.t.)\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getDsGrupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(IsEmpty(Thisform.getCdGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getCdGrupo",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,This,ThisForm.getDsGrupo)\nElse\n\tThisForm.getDsGrupo.value = ''\n\tThisForm.getDsGrupo.refresh\nendif\nreturn(.t.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getDsConta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "grupo = ThisForm.getCdGrupo.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.getCdConta,ThisForm.getDsConta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.getCdConta.Value = ''\n\t\tThisForm.getCdConta.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.getCdConta.Value = ''\n\tThisForm.getCdConta.Refresh\n\treturn(.t.)\nendif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getDsConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.Not.IsEmpty(ThisForm.getCdGrupo.Value).And.IsEmpty(ThisForm.getCdConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getCdConta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "grupo = ThisForm.getCdGrupo.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,ThisForm.getDsConta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.getDsConta.Value = ''\n\t\tThisForm.getDsConta.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.getDsConta.Value = ''\n\tThisForm.getDsConta.Refresh\n\treturn(.t.)\nendif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDC.getCdConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(.Not.IsEmpty(ThisForm.getCdGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIDC.Init",
+      "queryOriginal": "\t\t.AddCursor('SigCdPam','GrPadClis','crSigCdPam','GrPadClis',.f.,[Select GrPadClis, Logos from SigCdPam])",
+      "tabelas": "SigCdPam",
+      "colunas": "GrPadClis,Logos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

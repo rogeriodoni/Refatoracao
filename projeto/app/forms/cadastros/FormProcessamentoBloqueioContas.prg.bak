@@ -1,0 +1,634 @@
+*==============================================================================
+* FormProcessamentoBloqueioContas.prg
+* Formulario para Processamento de Bloqueio/Desbloqueio de Contas
+*==============================================================================
+* Descricao: Processa bloqueio/desbloqueio de contas baseado em criterios
+* Autor: Sistema 4C
+* Data: 2026-02-05
+*==============================================================================
+
+DEFINE CLASS FormProcessamentoBloqueioContas AS Form
+    *--------------------------------------------------------------------------
+    * Propriedades Visuais (PILAR 1 - UX FIDELITY - copiar do original)
+    *--------------------------------------------------------------------------
+    BorderStyle = 2
+    Height = 230
+    Width = 500
+    ShowTips = .T.
+    AutoCenter = .T.
+    Picture = ""  && Sera configurado no Init com caminho correto
+    Caption = "Processamento para Bloqueio de Contas"
+    ControlBox = .F.
+    Closable = .F.
+    TitleBar = 0
+    WindowState = 0
+    ShowWindow = 1
+    WindowType = 1
+    Themes = .F.
+
+    *--------------------------------------------------------------------------
+    * Propriedades
+    *--------------------------------------------------------------------------
+    this_oBusinessObject = .NULL.
+
+    *--------------------------------------------------------------------------
+    * Init
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            * Configura Picture com caminho correto
+            THIS.Picture = gc_4c_CaminhoIcones + "..\framework\imagens\fundo_cadastro.jpg"
+
+            * Cria Business Object
+            THIS.this_oBusinessObject = CREATEOBJECT("ProcessamentoBloqueioContaBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MostrarErro("Erro ao criar Business Object", "Erro")
+                loc_lSucesso = .F.
+            ELSE
+                * Configura controles
+                THIS.ConfigurarControles()
+                THIS.InicializarValores()
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao inicializar formul" + CHR(225) + "rio:" + CHR(13) + loException.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarControles - Cria todos os controles do formulario
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarControles()
+        *-- Container Sombra (cabecalho)
+        THIS.AddObject("cnt_4c_Sombra", "Container")
+        WITH THIS.cnt_4c_Sombra
+            .Top = 0
+            .Left = 0
+            .Width = 800
+            .Height = 80
+            .BorderWidth = 0
+            .BackColor = RGB(100, 100, 100)
+            .Visible = .T.
+        ENDWITH
+
+        *-- Label Sombra
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_Sombra", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_Sombra
+            .FontBold = .T.
+            .FontName = "Tahoma"
+            .FontSize = 18
+            .WordWrap = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .Caption = THIS.Caption
+            .Height = 40
+            .Left = 10
+            .Top = 0
+            .Width = 769
+            .ForeColor = RGB(0, 0, 0)
+            .Visible = .T.
+        ENDWITH
+
+        *-- Label Titulo
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_Titulo", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_Titulo
+            .FontBold = .T.
+            .FontName = "Tahoma"
+            .FontSize = 18
+            .WordWrap = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .Caption = THIS.Caption
+            .Height = 46
+            .Left = 10
+            .Top = 3
+            .Width = 769
+            .ForeColor = RGB(255, 255, 255)
+            .Visible = .T.
+        ENDWITH
+
+        *-- Label Periodo
+        THIS.AddObject("lbl_4c_Periodo", "Label")
+        WITH THIS.lbl_4c_Periodo
+            .AutoSize = .T.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .BackStyle = 0
+            .Caption = "Per" + CHR(237) + "odo :"
+            .Height = 15
+            .Left = 51
+            .Top = 97
+            .Width = 45
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        *-- TextBox Data Inicial
+        THIS.AddObject("txt_4c_DataInicial", "TextBox")
+        WITH THIS.txt_4c_DataInicial
+            .FontName = "Courier New"
+            .Alignment = 3
+            .Value = {}
+            .Format = "KD"
+            .Height = 25
+            .Left = 98
+            .MaxLength = 10
+            .SpecialEffect = 1
+            .Top = 92
+            .Width = 79
+            .Visible = .T.
+        ENDWITH
+
+        *-- Label "a"
+        THIS.AddObject("lbl_4c_A", "Label")
+        WITH THIS.lbl_4c_A
+            .AutoSize = .T.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .BackStyle = 0
+            .Caption = CHR(224)
+            .Height = 15
+            .Left = 182
+            .Top = 97
+            .Width = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        *-- TextBox Data Final
+        THIS.AddObject("txt_4c_DataFinal", "TextBox")
+        WITH THIS.txt_4c_DataFinal
+            .FontName = "Courier New"
+            .Alignment = 3
+            .Value = {}
+            .Format = "KD"
+            .Height = 25
+            .Left = 193
+            .MaxLength = 10
+            .SpecialEffect = 1
+            .Top = 92
+            .Width = 79
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(THIS.txt_4c_DataInicial, "Valid", THIS, "ValidarDataInicial")
+
+        *-- Label Situacao
+        THIS.AddObject("lbl_4c_Situacao", "Label")
+        WITH THIS.lbl_4c_Situacao
+            .AutoSize = .T.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .BackStyle = 0
+            .Caption = "Situa" + CHR(231) + CHR(227) + "o :"
+            .Height = 15
+            .Left = 46
+            .Top = 125
+            .Width = 50
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        *-- TextBox Situacao
+        THIS.AddObject("txt_4c_Situacao", "TextBox")
+        WITH THIS.txt_4c_Situacao
+            .FontBold = .F.
+            .FontItalic = .F.
+            .FontName = "Courier New"
+            .FontSize = 9
+            .Alignment = 0
+            .BackStyle = 1
+            .BorderStyle = 1
+            .Value = ""
+            .Format = "K"
+            .Height = 25
+            .Left = 98
+            .MaxLength = 3
+            .SpecialEffect = 1
+            .Top = 120
+            .Width = 31
+            .ForeColor = RGB(0, 0, 0)
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(THIS.txt_4c_Situacao, "Valid", THIS, "ValidarSituacao")
+        BINDEVENT(THIS.txt_4c_Situacao, "KeyPress", THIS, "SituacaoKeyPress")
+
+        *-- OptionGroup Bloqueio
+        THIS.AddObject("opt_4c_Bloqueio", "OptionGroup")
+        WITH THIS.opt_4c_Bloqueio
+            .AutoSize = .T.
+            .ButtonCount = 2
+            .BackStyle = 0
+            .BorderStyle = 0
+            .Value = 1
+            .Height = 25
+            .Left = 137
+            .Top = 120
+            .Width = 161
+            .Visible = .T.
+
+            .Option1.FontName = "Tahoma"
+            .Option1.FontSize = 8
+            .Option1.BackStyle = 0
+            .Option1.Caption = "Bloqueio"
+            .Option1.Value = 1
+            .Option1.Height = 15
+            .Option1.Left = 5
+            .Option1.Top = 5
+            .Option1.Width = 58
+            .Option1.AutoSize = .T.
+            .Option1.ForeColor = RGB(90, 90, 90)
+            .Option1.Themes = .F.
+
+            .Option2.FontName = "Tahoma"
+            .Option2.FontSize = 8
+            .Option2.BackStyle = 0
+            .Option2.Caption = "Desbloqueio"
+            .Option2.Height = 15
+            .Option2.Left = 80
+            .Option2.Top = 5
+            .Option2.Width = 76
+            .Option2.AutoSize = .T.
+            .Option2.ForeColor = RGB(90, 90, 90)
+            .Option2.Themes = .F.
+        ENDWITH
+        BINDEVENT(THIS.opt_4c_Bloqueio, "InteractiveChange", THIS, "BloqueioChange")
+
+        *-- Label Opcao
+        THIS.AddObject("lbl_4c_Opcao", "Label")
+        WITH THIS.lbl_4c_Opcao
+            .AutoSize = .T.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .BackStyle = 0
+            .Caption = "Op" + CHR(231) + CHR(227) + "o :"
+            .Height = 15
+            .Left = 56
+            .Top = 153
+            .Width = 40
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        *-- OptionGroup Opcao
+        THIS.AddObject("opt_4c_Opcao", "OptionGroup")
+        WITH THIS.opt_4c_Opcao
+            .AutoSize = .T.
+            .ButtonCount = 3
+            .BackStyle = 0
+            .Value = 1
+            .Height = 63
+            .Left = 98
+            .SpecialEffect = 1
+            .Top = 147
+            .Width = 187
+            .Themes = .F.
+            .Visible = .T.
+
+            .Option1.FontName = "Tahoma"
+            .Option1.FontSize = 8
+            .Option1.BackStyle = 0
+            .Option1.Caption = "Somente com Parcelas em Atraso"
+            .Option1.Value = 1
+            .Option1.Height = 15
+            .Option1.Left = 5
+            .Option1.ToolTipText = "N" + CHR(227) + "o Esta com Parcelas em Atraso e esta Parcelas em Aberto"
+            .Option1.Top = 5
+            .Option1.Width = 177
+            .Option1.AutoSize = .T.
+            .Option1.ForeColor = RGB(90, 90, 90)
+            .Option1.Themes = .F.
+
+            .Option2.FontName = "Tahoma"
+            .Option2.FontSize = 8
+            .Option2.BackStyle = 0
+            .Option2.Caption = "Somente com Vendas em Aberto"
+            .Option2.Value = 0
+            .Option2.Height = 15
+            .Option2.Left = 5
+            .Option2.ToolTipText = "Esta com Parcelas em Atraso e esta com Parcelas em Aberto"
+            .Option2.Top = 24
+            .Option2.Width = 173
+            .Option2.AutoSize = .T.
+            .Option2.ForeColor = RGB(90, 90, 90)
+            .Option2.Themes = .F.
+
+            .Option3.FontName = "Tahoma"
+            .Option3.FontSize = 8
+            .Option3.BackStyle = 0
+            .Option3.Caption = "Ambos"
+            .Option3.Height = 15
+            .Option3.Left = 5
+            .Option3.ToolTipText = "Esta com Parcelas em Atraso ou esta com Parcelas em Aberto"
+            .Option3.Top = 43
+            .Option3.Width = 50
+            .Option3.AutoSize = .T.
+            .Option3.ForeColor = RGB(90, 90, 90)
+            .Option3.Themes = .F.
+        ENDWITH
+
+        *-- Container Aguarde
+        THIS.AddObject("cnt_4c_Aguarde", "Container")
+        WITH THIS.cnt_4c_Aguarde
+            .Top = 120
+            .Left = 146
+            .Width = 207
+            .Height = 49
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .Visible = .F.
+        ENDWITH
+
+        THIS.cnt_4c_Aguarde.AddObject("lbl_4c_Aguarde1", "Label")
+        WITH THIS.cnt_4c_Aguarde.lbl_4c_Aguarde1
+            .FontBold = .T.
+            .FontName = "Tahoma"
+            .FontSize = 10
+            .BackStyle = 0
+            .Caption = "Aguarde..."
+            .Height = 18
+            .Left = 69
+            .Top = 7
+            .Width = 68
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        THIS.cnt_4c_Aguarde.AddObject("lbl_4c_Aguarde2", "Label")
+        WITH THIS.cnt_4c_Aguarde.lbl_4c_Aguarde2
+            .AutoSize = .T.
+            .FontBold = .T.
+            .FontName = "Tahoma"
+            .FontSize = 10
+            .FontCondense = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .Caption = "Processando Dados..."
+            .Height = 18
+            .Left = 24
+            .Top = 24
+            .Width = 141
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+
+        *-- Botao Processar
+        THIS.AddObject("cmd_4c_Processar", "CommandButton")
+        WITH THIS.cmd_4c_Processar
+            .Caption = "\<Processar"
+            .Top = 3
+            .Left = 347
+            .Height = 75
+            .Width = 75
+            .Picture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .PicturePosition = 13
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
+
+        *-- Botao Encerrar
+        THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH THIS.cmd_4c_Encerrar
+            .Caption = "Encerrar"
+            .Cancel = .T.
+            .Top = 3
+            .Left = 423
+            .Height = 75
+            .Width = 75
+            .Picture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .PicturePosition = 13
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarValores - Inicializa valores dos controles
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarValores()
+        THIS.txt_4c_DataInicial.Value = {}
+        THIS.txt_4c_DataFinal.Value = {}
+        THIS.txt_4c_Situacao.Value = ""
+        THIS.opt_4c_Bloqueio.Value = 1
+        THIS.opt_4c_Opcao.Value = 1
+        THIS.cnt_4c_Aguarde.Visible = .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDataInicial - Valida data inicial
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDataInicial()
+        IF !EMPTY(THIS.txt_4c_DataInicial.Value)
+            IF THIS.txt_4c_DataInicial.Value > THIS.txt_4c_DataFinal.Value
+                THIS.txt_4c_DataFinal.Value = THIS.txt_4c_DataInicial.Value
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarSituacao - Valida e busca situacao
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarSituacao()
+        LOCAL loc_oBusca, loc_cSQL, loc_nResultado, loc_lContinuar
+        loc_lContinuar = .T.
+
+        IF !EMPTY(THIS.txt_4c_Situacao.Value)
+            TRY
+                * Busca situacao
+                TEXT TO loc_cSQL NOSHOW
+                    SELECT Codigos, Descrs
+                    FROM SigCdCst
+                    WHERE NOT Autos = 2
+                ENDTEXT
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "crListaRemota")
+
+                IF loc_nResultado < 0
+                    MostrarErro("Erro ao buscar situa" + CHR(231) + CHR(245) + "es:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    loc_lContinuar = .F.
+                ENDIF
+
+                IF loc_lContinuar
+                    SELECT crListaRemota
+                    INDEX ON Codigos TAG Codigos
+                    INDEX ON Descrs + Codigos TAG Descrs
+
+                    SET NEAR ON
+                    IF !SEEK(THIS.txt_4c_Situacao.Value, "crListaRemota", "Codigos")
+                        * Abre busca
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCst", "cursor_4c_Busca", "Codigos", THIS.txt_4c_Situacao.Value, "Situa" + CHR(231) + CHR(245) + "es")
+
+                        * Adicionar colunas ao grid
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+
+                        * Mostrar modal
+                        loc_oBusca.Show(1)
+
+                        * Verificar selecao
+                        IF loc_oBusca.this_lSelecionou
+                            IF USED("cursor_4c_Busca")
+                                THIS.txt_4c_Situacao.Value = ALLTRIM(cursor_4c_Busca.Codigos)
+                            ENDIF
+                        ELSE
+                            THIS.txt_4c_Situacao.Value = ""
+                        ENDIF
+
+                        * Limpar
+                        IF USED("cursor_4c_Busca")
+                            USE IN cursor_4c_Busca
+                        ENDIF
+                        loc_oBusca.Release()
+                    ELSE
+                        THIS.txt_4c_Situacao.Value = ALLTRIM(crListaRemota.Codigos)
+                    ENDIF
+                    SET NEAR OFF
+
+                    IF USED("crListaRemota")
+                        USE IN crListaRemota
+                    ENDIF
+                ENDIF
+
+            CATCH TO loException
+                MostrarErro("Erro ao validar situa" + CHR(231) + CHR(227) + "o:" + CHR(13) + loException.Message, "Erro")
+            ENDTRY
+        ENDIF
+
+        THIS.Refresh()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * SituacaoKeyPress - Trata tecla F4 para lookup
+    *--------------------------------------------------------------------------
+    PROCEDURE SituacaoKeyPress(nKeyCode, nShiftAltCtrl)
+        IF nKeyCode = 286  && F4
+            THIS.ValidarSituacao()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BloqueioChange - Trata mudanca do optiongroup bloqueio
+    *--------------------------------------------------------------------------
+    PROCEDURE BloqueioChange()
+        IF THIS.opt_4c_Bloqueio.Value = 2  && Desbloqueio
+            THIS.opt_4c_Opcao.Value = 3  && Ambos
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnProcessarClick - Processa bloqueio/desbloqueio
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnProcessarClick()
+        LOCAL loc_lSucesso, loc_cTitulo, loc_lContinuar
+        loc_lSucesso = .F.
+        loc_lContinuar = .T.
+
+        TRY
+            * Transfere valores para BO
+            THIS.this_oBusinessObject.this_dDataInicial = THIS.txt_4c_DataInicial.Value
+            THIS.this_oBusinessObject.this_dDataFinal = THIS.txt_4c_DataFinal.Value
+            THIS.this_oBusinessObject.this_cSituacao = ALLTRIM(THIS.txt_4c_Situacao.Value)
+            THIS.this_oBusinessObject.this_nOpcaoBloqueio = THIS.opt_4c_Bloqueio.Value
+            THIS.this_oBusinessObject.this_nOpcaoFiltro = THIS.opt_4c_Opcao.Value
+
+            * Valida parametros
+            IF !THIS.this_oBusinessObject.ValidarParametros()
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                * Mostra mensagem aguarde
+                THIS.cnt_4c_Aguarde.Visible = .T.
+                THIS.Refresh()
+
+                * Cria cursor de cabecalho
+                CREATE CURSOR crCabecalho (Titulo c(200))
+                loc_cTitulo = THIS.this_oBusinessObject.ObterTituloRelatorio()
+                INSERT INTO crCabecalho (Titulo) VALUES (loc_cTitulo)
+
+                * Busca ultimo vencimento
+                IF !THIS.this_oBusinessObject.BuscarUltimoVencimento()
+                    THIS.cnt_4c_Aguarde.Visible = .F.
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lContinuar
+                * Busca contas a processar
+                IF !THIS.this_oBusinessObject.BuscarContasProcessar()
+                    THIS.cnt_4c_Aguarde.Visible = .F.
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lContinuar
+                * Cria cursor final
+                IF !THIS.this_oBusinessObject.CriarCursorFinal()
+                    THIS.cnt_4c_Aguarde.Visible = .F.
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lContinuar
+                * Mostra relatorio de preview
+                REPORT FORM SigBlCta PREVIEW
+
+                * Confirma atualizacao
+                IF MESSAGEBOX("Deseja Atualizar as Situa" + CHR(231) + CHR(245) + "es das Contas?", 4+32, "Aten" + CHR(231) + CHR(227) + "o") = 6
+                    * Atualiza situacoes
+                    loc_lSucesso = THIS.this_oBusinessObject.AtualizarSituacoes()
+
+                    IF loc_lSucesso
+                        * Commit
+                        IF SQLEXEC(gnConnHandle, "COMMIT TRANSACTION") >= 0
+                            MsgSucesso("A Grava" + CHR(231) + CHR(227) + "o Dos Dados Foi Realizada Com Sucesso!")
+                        ELSE
+                            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                            MostrarErro("A Grava" + CHR(231) + CHR(227) + "o Dos Dados N" + CHR(227) + "O Pode Ser Realizada!", "Falha na Grava" + CHR(231) + CHR(227) + "o")
+                        ENDIF
+                    ELSE
+                        * Mostra erros
+                        SELECT crErros
+                        GO TOP
+                        REPLACE Titulo WITH "Erros do Processamento" IN crCabecalho
+                        REPORT FORM SigBlCta PREVIEW
+                    ENDIF
+                ENDIF
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao processar:" + CHR(13) + loException.Message, "Erro")
+        FINALLY
+            THIS.cnt_4c_Aguarde.Visible = .F.
+            THIS.InicializarValores()
+            THIS.Refresh()
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Fecha formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+ENDDEFINE

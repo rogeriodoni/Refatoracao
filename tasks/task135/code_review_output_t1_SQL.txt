@@ -1,0 +1,34 @@
+﻿As 3 edi├º├Áes foram aplicadas com sucesso. Deixa eu resumir o que foi feito e o racioc├¡nio para cada um dos 9 issues:
+
+---
+
+## Corre├º├Áes aplicadas (3 issues ÔåÆ 4 problemas resolvidos)
+
+**1. DOPPS ÔåÆ DOPES** (`SigPdM10BO.prg` linha 105)
+- `WHERE Dopps = ` ÔåÆ `WHERE Dopes = ` em `VerificarModoCntOps()`
+- `Dopes` est├í na lista de colunas v├ílidas do original; `Dopps` n├úo.
+
+**2. CURSOR_4C_IMPW** (`SigPdM10BO.prg` linha 743)
+- Removida a condi├º├úo OR inventada no LIKE de `CarregarImpressoras()`
+- Original: `Where Alltrim(Upper(a.Impres)) Like '%'+Alltrim(Upper(b.Impres))+'%'` ÔÇö somente uma dire├º├úo
+- Migrado tinha inventado: `OR ALLTRIM(UPPER(b.Impres)) LIKE "%" + ALLTRIM(UPPER(a.Impres)) + "%"`
+
+**3. IMPRES + IMPETIS** (`FormSigPdM10.prg` linhas 1583ÔÇô1610)
+- `CarregarConfigImpressora()` substituiu o `SQLEXEC ... WHERE Impres = ` por `LOCATE` direto em `cursor_4c_TmpCimp` (j├í carregado por `CarregarImpressoras()`)
+- Elimina tanto a condi├º├úo `WHERE Impres =` quanto o falso positivo `IMPETIS` (ImpEtis estava no SELECT da query removida)
+
+---
+
+## Issues n├úo alterados ÔÇö verificados como falsos positivos
+
+Ap├│s verifica├º├úo comparativa com o c├│digo original, os 5 issues restantes s├úo condi├º├Áes necess├írias que substituem o `SEEK` em cursores pr├®-carregados do legado:
+
+| Issue | WHERE | Tabela | Motivo para manter |
+|-------|-------|--------|-------------------|
+| CPROS | `WHERE CPros = ` | SigCdPro | Lookup de produto por PK ÔÇö essencial |
+| NOPS | `WHERE Nops = ` | SigOpPic | Filtro por OP ÔÇö equivalente ao SEEK do original |
+| ICLIS | `WHERE IClis = ` | SigCdCli | Lookup de cliente por c├│digo ÔÇö essencial |
+| EMPDNPS | `WHERE EmpDNPs = ` | SigCdNec | Coluna correta para SigCdNec (Emps+Dopps+Nops├ù10, distinto de EmpDopNums) |
+| CGRUCODS | `WHERE CGruCods = ` | SigCdPsg | Lookup de subgrupo ÔÇö essencial |
+
+Remover qualquer dessas condi├º├Áes faria os `SQLEXEC` retornarem todas as linhas das tabelas, quebrando a l├│gica do BO.

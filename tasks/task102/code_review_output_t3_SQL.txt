@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes aplicadas com sucesso em `sigreffnBO.prg`:
+
+**CEMPS** (linha 282-291 ÔåÆ 282-285): Removeu `SQLEXEC` com `WHERE Cemps = '...'`; substitu├¡do por `SEEK` no cursor `cEmp` j├í carregado ÔÇö id├¬ntico ao padr├úo original.
+
+**CMOES + VALOS em BuscarCambio** (linhas 1102-1127): Removeu SQL fallback com `WHERE CMoes = '...' ORDER BY Datas DESC`; agora usa somente cursor `crSigCdCot` (SEEK) com fallback para `crSigCdMoe.Cotas` via ELSE.
+
+**CMOES em BuscarCotacaoAtual** (linhas 1144-1154): Substituiu o `SQLEXEC` por SEEK em `crSigCdCot` + fallback `crSigCdMoe` ÔÇö mesma estrat├®gia do original que usa `fBuscarCotacao` com cursores pr├®-carregados.
+
+Os outros tr├¬s flags (`2`, `DATAS`, `VALOS` como colunas WHERE) s├úo falsos positivos: `ValPres = 2` e `Datas <= ?pDat` existem no original (linhas 1793 e 1737 do legado), e `Valos` estava no SELECT, n├úo no WHERE.

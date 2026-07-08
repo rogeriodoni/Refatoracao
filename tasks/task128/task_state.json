@@ -1,0 +1,258 @@
+﻿{
+    "taskId":  "task128",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-06-06T15:58:41",
+    "atualizadoEm":  "2026-06-06T17:38:31",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-06-06T15:58:41",
+                                            "fim":  "2026-06-06T15:58:41",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task128\\sigreipe.sct",
+                                            "baseName":  "sigreipe",
+                                            "scxFile":  "C:\\4c\\tasks\\task128\\sigreipe.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-06-06T15:58:41",
+                                          "fim":  "2026-06-06T15:58:41",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigreipe",
+                                          "txtFile":  "C:\\4c\\tasks\\task128\\sigreipe_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T15:58:41",
+                                              "fim":  "2026-06-06T15:58:41",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task128\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T15:58:42",
+                                              "fim":  "2026-06-06T15:58:42",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task128\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task128\\meta_prompt.md",
+                                              "boClass":  "sigreipeBO",
+                                              "formClass":  "Formsigreipe",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task128\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T15:58:42",
+                                              "fim":  "2026-06-06T15:58:43",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task128\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-06T15:58:43",
+                                               "fim":  "2026-06-06T15:58:43",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task128\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigreipe_esqueleto.prg",
+                                                                "sigreipeBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-06T15:58:43",
+                                       "fim":  "2026-06-06T17:09:40",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreipeBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  51.37,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreipe.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1979
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-06-06T17:09:40",
+                                                  "fim":  "2026-06-06T17:09:50",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreipe.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreipeBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-06-06T17:09:50",
+                                                 "fim":  "2026-06-06T17:09:52",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-06T17:33:04",
+                                       "fim":  "2026-06-06T17:33:18",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-06T17:33:18",
+                                               "fim":  "2026-06-06T17:33:28",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task128\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-06-06T17:33:29",
+                                        "fim":  "2026-06-06T17:38:31",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-06T17:38:31",
+                                              "fim":  "2026-06-06T17:38:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task128_sigreipe.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-06-06T15:58:41",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-06-06T15:58:42",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task128\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-06-06T15:58:42",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-06T15:58:42"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-06-06T17:09:50",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-06-06T17:09:50",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigreipe_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreipe.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task128\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-06-06T17:09:52",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-06-06T17:09:52",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-06-06T17:09:52",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-06-06T17:28:50",
+                                          "passes":  5,
+                                          "problemas":  "[OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=9 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [METODO-INEXISTENTE] Metodo \u0027THIS.Width()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGREIPE): Top original=363 vs migrado \u0027lbl_4c_Say2\u0027 Top=281 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Option\u0027 (parent: SIGREIPE): Top original=378 vs migrado \u0027obj_4c_Option\u0027 Top=23 (diff=355px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpOrdem\u0027 (parent: SIGREIPE): Top original=451 vs migrado \u0027obj_4c_OpOrdem\u0027 Top=23 (diff=428px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_dopes\u0027 (parent: SIGREIPE): Top original=128 vs migrado \u0027lbl_4c_Lbl_dopes\u0027 Top=46 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpColunas\u0027 (parent: SIGREIPE): Top original=378 vs migrado \u0027obj_4c_OpColunas\u0027 Top=22 (diff=356px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpColunas\u0027 (parent: SIGREIPE): Left original=125 vs migrado \u0027obj_4c_OpColunas\u0027 Left=5 (diff=120px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGREIPE): Top original=424 vs migrado \u0027lbl_4c_Say4\u0027 Top=342 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptPais\u0027 (parent: SIGREIPE): Top original=419 vs migrado \u0027obj_4c_OptPais\u0027 Top=5 (diff=414px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptPais\u0027 (parent: SIGREIPE): Left original=669 vs migrado \u0027obj_4c_OptPais\u0027 Left=5 (diff=664px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGREIPE): Top original=440 vs migrado \u0027lbl_4c_Say6\u0027 Top=358 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optCodigo\u0027 (parent: SIGREIPE): Top original=436 vs migrado \u0027obj_4c_OptCodigo\u0027 Top=5 (diff=431px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optCodigo\u0027 (parent: SIGREIPE): Left original=669 vs migrado \u0027obj_4c_OptCodigo\u0027 Left=5 (diff=664px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGREIPE): Top original=457 vs migrado \u0027lbl_4c_Say7\u0027 Top=375 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optProper\u0027 (parent: SIGREIPE): Top original=452 vs migrado \u0027obj_4c_OptProper\u0027 Top=5 (diff=447px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optProper\u0027 (parent: SIGREIPE): Left original=669 vs migrado \u0027obj_4c_OptProper\u0027 Left=5 (diff=664px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_conta\u0027 (parent: SIGREIPE): Top original=172 vs migrado \u0027obj_4c_Opt_conta\u0027 Top=5 (diff=167px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_conta\u0027 (parent: SIGREIPE): Left original=91 vs migrado \u0027obj_4c_Opt_conta\u0027 Left=5 (diff=86px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo\u0027 (parent: SIGREIPE): Top original=151 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Top=69 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo\u0027 (parent: SIGREIPE): Left original=47 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Left=182 (diff=135px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo_a\u0027 (parent: SIGREIPE): Top original=151 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Top=69 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGREIPE): Top original=476 vs migrado \u0027lbl_4c_Say9\u0027 Top=394 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optContatos\u0027 (parent: SIGREIPE): Top original=471 vs migrado \u0027obj_4c_OptContatos\u0027 Top=5 (diff=466px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optContatos\u0027 (parent: SIGREIPE): Left original=669 vs migrado \u0027obj_4c_OptContatos\u0027 Left=5 (diff=664px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027apaga\u0027 (parent: SIGREIPE): Top original=264 vs migrado \u0027cmd_4c_Apaga\u0027 Top=182 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027SelTudo\u0027 (parent: SIGREIPE): Top original=220 vs migrado \u0027cmd_4c_SelTudo\u0027 Top=138 (diff=82px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Impressora\u0027 (parent: SIGREIPE): Top original=378 vs migrado \u0027obj_4c_Opt_Impressora\u0027 Top=10 (diff=368px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Impressora\u0027 (parent: SIGREIPE): Left original=230 vs migrado \u0027obj_4c_Opt_Impressora\u0027 Left=9 (diff=221px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGREIPE): Top original=364 vs migrado \u0027lbl_4c_Label3\u0027 Top=282 (diff=82px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  37
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-06-06T17:28:50",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-06-06T17:33:04",
+                                                "status":  "FIXED",
+                                                "retries":  2,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreipeBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreipe.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-06-06T17:33:28",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-06T17:33:29",
+                                             "thresholdPx":  5,
+                                             "unmatched":  5,
+                                             "errors":  5,
+                                             "matched":  25,
+                                             "warnings":  24,
+                                             "reportFile":  "C:\\4c\\tasks\\task128\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

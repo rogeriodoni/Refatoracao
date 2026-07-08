@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Empty", "fConfigGeral", "fGerUniqueKey", "fRecalculaP", "fRecalculaC"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCPR",
+      "evento": "Procedure",
+      "linhas": 181,
+      "codigoOriginal": "Private pVal, pDat\nSelect TmpBaixa\nDelete All\n\n_DopeCit = crSigCdPam.DopeCitens\n\nSelect TmpEnc\nDelete All For Empty(Dopps) Or Empty(Numps)\nScan\n\t_Chave = _Empr + TmpEnc.Dopps + Str(TmpEnc.Numps, 6)\n\n\tThisForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'EmpDopNums', _Chave)\n\tSelect crSigOpEtq\n\tScan\n\t\tIf (Grupos + Contas = crSigCdPam.GruConfs + crSigCdPam.ConConfs)\n\t\t\tThisForm.poDataMgr.CursorQuery('SigMvCab', 'LocalEest', 'EmpDopNums', crSigOpEtq.Empos + crSigOpEtq.DopeOs + Str(crSigOpEtq.Nu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "LParameters _Form\n\nThisForm.ParentForm = _Form\n\nThisForm.DataSessionId  = ThisForm.ParentForm.DataSessionId\nThisForm.Get_Data.Value = ThisForm.ParentForm.Get_Data.Value\nThisForm.poDataMgr\t\t= ThisForm.ParentForm.poDataMgr\nThisform.SigKey = CrSigCdPac.SigKeys\n\nThisForm.CarregaBars\n\nwith ThisForm.Grade\n\t.RecordSource = 'TmpBaixa'\n\t.Column1.ControlSource = 'TmpBaixa.CodBarra'\n\t.Column2.ControlSource = 'TmpBaixa.Cpros'\n\t.Column3.ControlSource = 'TmpBaixa.Dopes'\n\t.Column4.ControlSource = 'TmpBaixa.Num... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Get_Data",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Get_Leitura",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm On",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Get_Leitura",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Select TmpBaixa\nSet Order to CodBarra\n\nIf Not Empty(This.Value)\n\tIf Seek(This.Value)\n\t\tIf (TmpBaixa.QtdeLido = 0)\n\t\t\tReplace QtdeLido With TmpBaixa.Qtde In TmpBaixa\n\t\tElse\n\t\t\t=Messagebox('Código de Barras Já Foi Lido!!!', 32, '')\n\t\tEndIf\n\t\tThisForm.Grade.Refresh\n\t\t=Seek(This.Value)\n\t\tThisForm.Grade.Refresh\n\tElse\n\t\t=Messagebox('Código de Barras Não Cadastrado!!!', 32, '')\n\tEndIf\n\tThis.Value = 0\n\tReturn 0\nEndIf\n\nThisForm.Grade.Refresh\n* Fim *********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Get_Leitura",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "Set Confirm Off",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Sair",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\n\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Ok",
+      "evento": "Click",
+      "linhas": 140,
+      "codigoOriginal": "Private pDat, pBar\n\nIf Messagebox('Confirma a Conferência das Etiquetas?', 4+32+256, '') = 7\n\tThisForm.Get_Leitura.SetFocus\n\tReturn 0\nEndIf\n\nZap In crSigMvCab\nZap In crSigMvItn\nZap In crSigMvHst\n\nCreate Cursor xGrava (Grupo c(10), Conta c(10), CPros c(14), Qtds n(12,3))\nIndex On Grupo + Conta Tag GruConta\n\nSelect xGrava\nSelect Distinct Grupods, Contads ;\n  From TmpBaixa ;\n Where QtdeLido <> 0 ;\n  Into Cursor xCabec\n\n_Dope = crSigCdPam.TransfEncs\n\nSelect xCabec\nScan\n\t_Nume = fGerUniqueKey(_Empr +... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey,fRecalculaP,fRecalculaC",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Leitura",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPR.Conferencia",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select TmpBaixa\nSet Order to CodBarra\nReplace all TmpBaixa.QtdeLido with TmpBaixa.Qtde\nThisForm.Grade.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCPR.Ok.Click",
+      "queryOriginal": "Select Distinct Grupods, Contads ; From TmpBaixa ; Where QtdeLido <> 0 ; Into Cursor xCabec",
+      "tabelas": "TmpBaixa",
+      "colunas": "QtdeLido,xCabec",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpBaixa"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

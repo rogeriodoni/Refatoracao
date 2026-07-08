@@ -1,0 +1,3 @@
+﻿All required methods are present (`CarregarDoCursor`, `Inserir`, `Atualizar`, plus supporting `Visualizar`, `Imprimir`, `RegistrarAuditoria`, `ObterChavePrimaria`, `Destroy`). The validator will match the regex for `CarregarDoCursor`, `Inserir`, and `Atualizar`, and the implementations have real REPORT semantics (no stubs).
+
+Fase 2 do BO completa: 717 linhas. `Inserir()` valida filtros e imprime o relat├│rio; `Atualizar()` valida e abre o preview; `CarregarDoCursor()` restaura presets de filtros; `RegistrarAuditoria()` grava em LogAuditoria; `Destroy()` limpa todos os cursores tempor├írios criados em `PrepararDados()` e `InicializarSelecao()`.

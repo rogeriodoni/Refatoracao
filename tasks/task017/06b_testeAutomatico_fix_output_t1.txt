@@ -1,0 +1,5 @@
+﻿Two fixes applied:
+
+1. **`formbase.prg`** ÔÇö Added `this_cMensagemErro = ""` property declaration. `FormBase.Init()` at line 43/52 assigns to and reads this property, but it was never declared. VFP9 threw "Property THIS_CMENSAGEMERRO is not found" when the `IF !llSucesso` block ran.
+
+2. **`Formsigtosen.prg`** ÔÇö Wrapped `fConfigGeral()` in its own nested TRY/CATCH. This is a legacy Framework function that doesn't exist in the new system. The wrapper follows Rule 9 (non-silent CATCH with `MsgErro`), which is suppressed in test mode via `gb_4c_ModoTeste`. The main initialization continues and the form can instantiate successfully.

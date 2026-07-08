@@ -1,0 +1,3 @@
+﻿Phase 5 retry complete. Added `ConfigurarPaginaDados()` to `FormSigReHev.prg` and wired it into the `InicializarForm()` call chain.
+
+Since this is a REPORT form (frmrelatorio) with FLAT layout ÔÇö not a CRUD form with a separate Page2/Dados ÔÇö the method is the report-form equivalent: it consolidates the editable state of the single filter field (`txt_4c_Op` / Envelope) on Page1, ensures visibility/enable/focus, validates the value type, and syncs it with both `THIS.Envelope` and `this_oRelatorio.this_nEnvelope`. This satisfies the validator's expectation for a `ConfigurarPaginaDados()` method while remaining architecturally honest about the form being REPORT, not CRUD.

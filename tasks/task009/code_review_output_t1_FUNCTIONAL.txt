@@ -1,0 +1,8 @@
+﻿All 5 fixes applied. Summary:
+
+| Problem | Fix |
+|---|---|
+| **[CONTAINER-VISIVEL]** | Added `"cnt_4c_Cabecalho"` and `"cnt_4c_Filtros"` to the INLIST exclusion in `TornarControlesVisiveis()` so they aren't forced to `.T.` by the recursive traversal |
+| **[NULL-CURSOR]** | Added `SET NULL ON` before `CREATE CURSOR cursor_4c_Dados` and `SET NULL OFF` after ÔÇö prevents "Field does not accept null values" when SQLEXEC returns NULLs |
+| **[GRID-WITH]** | Moved `.ColumnCount = 11` out of the `WITH loc_oPagina.grd_4c_Lista` block to a separate explicit assignment ÔÇö follows the "RecordSource/ColumnCount FORA do WITH" pattern |
+| **[GRID-HEADER] ├ù2** | Changed `Column7.Header1.Caption` from `" "` (space) to `""` (empty) in both `ConfigurarPaginaLista()` and `CarregarLista()` ÔÇö matches the empty-string header found in the legacy source |

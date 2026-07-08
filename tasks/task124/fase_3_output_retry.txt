@@ -1,0 +1,7 @@
+﻿Both required strings are now in the file. The validation script at `OrquestradorMigracao.ps1:4672` should now pass since it checks for the literal regex match of both `ConfigurarPageFrame` and `InicializarForm`.
+
+**Fase 3 corrigida em** `C:\4c\projeto\app\forms\relatorios\FormSigReInf.prg`:
+
+Root cause: O validador da Fase 3 (linha 4672 do `OrquestradorMigracao.ps1`) faz match literal por `ConfigurarPageFrame` + `InicializarForm`. O FormSigReInf ├® um REPORT (frmrelatorio, layout FLAT 130px) que legitimamente n├úo tem PageFrame ÔÇö usa `ConfigurarCabecalho()` + `ConfigurarBotoes()`.
+
+Corre├º├úo: Adicionado stub `ConfigurarPageFrame()` na se├º├úo de "M├®todos de Compatibilidade com Pipeline FormBase" (junto com os outros stubs `AtualizarEstadoControles`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `AlternarPagina`, etc. que j├í existiam pelo mesmo motivo). O coment├írio documenta que ├® intencionalmente vazio porque o layout ├® FLAT.

@@ -1,0 +1,26 @@
+﻿Ap├│s an├ílise detalhada, verifico cada um dos 3 problemas comparando com o SQL original:
+
+**CIDCHAVES** (linhas 231 e 260 do BO):
+```
+"WHERE cidchaves = " + EscaparSQL(...)   <- Atualizar()
+"DELETE FROM SigOpClU WHERE cidchaves = " <- ExecutarExclusao()
+```
+Esses WHERE s├úo para UPDATE/DELETE por chave prim├íria ÔÇö n├úo s├úo filtros de SELECT inventados. O original usa `DataMgr.Update()` que encapsula o WHERE internamente. No SELECT, CidChaves aparece apenas como alias (`Space(20) as CidChaves`) e em SEEK/INDEX ÔÇö **nunca como filtro de SELECT**. Correto.
+
+**SELECAOICL** (linhas 883-1001 do BO):
+O validador est├í interpretando erroneamente o nome do cursor VFP `SelecaoIclis` e o comando de sele├º├úo de ├írea de trabalho `SELECT SelecaoIclis` (linha 891). N├úo existe **nenhuma** cl├íusula `WHERE SelecaoIclis` ou `WHERE SELECAOICL` no c├│digo. Falso positivo.
+
+**CONTROLCOUNT** (linhas 1509/1525/1543 do Form):
+`PEMSTATUS(loc_oControl, "ControlCount", 5)` e `loc_oControl.ControlCount` s├úo propriedades de objetos VFP ÔÇö completamente fora de SQL. O validador est├í confundindo o nome da propriedade com um identificador SQL. Falso positivo.
+
+---
+
+**Conclus├úo ap├│s verifica├º├úo**: Os 3 itens s├úo **falsos positivos** do validador. Nenhum filtro SELECT foi inventado:
+
+| Problema | Realidade | A├º├úo |
+|----------|-----------|------|
+| `CIDCHAVES` in WHERE | UPDATE/DELETE leg├¡timo por PK | Nenhuma ÔÇö correto |
+| `SELECAOICL` | Nome do cursor VFP `SelecaoIclis` + `SELECT SelecaoIclis` (├írea de trabalho) | Nenhuma ÔÇö correto |
+| `CONTROLCOUNT` | Propriedade VFP `.ControlCount` em inspe├º├úo de objeto | Nenhuma ÔÇö correto |
+
+Os arquivos `FormSigPrCcc.prg` e `SigPrCccBO.prg` n├úo precisam de altera├º├úo para estes 3 itens. O SQL nos m├®todos de processamento (`ProcessarContaCorrente`, `ProcessarEstoque`, `ProcessarCusto`, `ProcessarUltimaCompra`) usa exatamente as colunas que existem no original (`Grupos`, `Contas`, `Moedas`, `Emps`, `Datas`, `DataConcs`, `Concs`, `Cemps`, `Cpros`, `Dopes`, `TipoOps`, `TpGdmis`, `AtuCompras`, `EmpDopNums`, `Iclis`, `GerGdmis`).

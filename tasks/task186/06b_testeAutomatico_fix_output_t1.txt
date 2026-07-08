@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `ConfigurarGrades()` atribu├¡a `RecordSource = "TmpCabec"` incondicionalmente ÔÇö quando o teste instancia o form sem par├ómetros (sem form pai), os cursores `TmpCabec`/`TmpItens` n├úo existem e o VFP9 lan├ºa `Alias 'TMPCABEC' is not found`.
+
+A corre├º├úo envolve os dois blocos de RecordSource/ControlSource em `IF USED("TmpCabec")` e `IF USED("TmpItens")`, de forma que o form instancia corretamente mesmo sem os cursores ÔÇö eles ser├úo vinculados normalmente quando o form pai chamar o form com os cursores j├í populados em sess├úo.

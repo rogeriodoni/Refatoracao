@@ -1,0 +1,11 @@
+﻿Tudo correto. Resumo das mudan├ºas aplicadas:
+
+**`FormSigReDpD.prg`:**
+- `cnt_4c_Ope` movido de `pgf_4c_Paginas.Page1` para o n├¡vel do form (via `THIS.AddObject`)
+- `Top` corrigido de `4` ÔåÆ `89` (igual ao legado `cntOpe.Top=89`)
+- Todas as 18 refer├¬ncias ao container atualizadas de `loc_oPg/loc_oPg2/loc_oPg3.cnt_4c_Ope` e `THIS.pgf_4c_Paginas.Page1.cnt_4c_Ope` ÔåÆ `THIS.cnt_4c_Ope`
+
+**`FormSigReDpD_mapeamento.json`:**
+- `"SIGREDPD.cntOpe"` mapeado de `"cnt_4c_Cabecalho"` ÔåÆ `"cnt_4c_Ope"` (era um erro de mapeamento ÔÇö o validador estava comparando contra o cabe├ºalho, que tem Top=0/Left=0/Width=800/Height=80)
+
+**Causa raiz:** O mapeamento gerado automaticamente apontou `cntOpe` para `cnt_4c_Cabecalho` (errado). Com a corre├º├úo, o validador encontra `THIS.cnt_4c_Ope` diretamente no form com Top=89/Left=492/Width=330/Height=270 ÔÇö valores id├¬nticos ao legado.

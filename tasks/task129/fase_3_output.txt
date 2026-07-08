@@ -1,0 +1,16 @@
+﻿Estrutura correta: 1 DEFINE CLASS com ENDDEFINE no final, 1065 linhas. O arquivo est├í bem formado.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\relatorios\FormSigReIpr.prg` foi criado com implementa├º├úo completa (1065 linhas):
+
+- **Init()** ÔåÆ delega para DODEFAULT()
+- **InicializarForm()** ÔåÆ cria SigReIprBO, ConfigurarCabecalho, ConfigurarBotoes, ConfigurarPageFrame, BINDEVENTs dos bot├Áes, LimparCampos
+- **ConfigurarCabecalho()** ÔåÆ container cinza com t├¡tulo duplo (sombra + branco)
+- **ConfigurarBotoes()** ÔåÆ `cmg_4c_Botoes` com 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar
+- **ConfigurarPageFrame()** ÔåÆ 1 p├ígina "Filtros" (form REPORT = layout flat)
+- **ConfigurarPaginaLista()** ÔåÆ Label Sele├º├úo + txt_4c_Codigo + txt_4c_Desc + Label Incluir Campos + 5 CheckBoxes
+- **ConfigurarPaginaDados()** ÔåÆ Label Ordem + opt_4c_Option (6 bot├Áes) + opt_4c_OpOrdem (2 bot├Áes) + BINDEVENTs dos TextBoxes
+- **Lookups** ÔåÆ AbrirBuscaCodigo/AbrirBuscaDesc via FormBuscaAuxiliar em SigMlItn (campos Codigos/Descs)
+- **Valida├º├Áes** ÔåÆ ValidarCodigo/ValidarDesc com SQLEXEC em SigMlItn
+- **A├º├Áes** ÔåÆ BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnSairClick
+- **Compatibilidade FormBase** ÔåÆ FormParaBO, BOParaForm, HabilitarCampos, AjustarBotoesPorModo, CarregarLista, e aliases Btn*Click
+- **Destroy()** ÔåÆ libera this_oRelatorio = .NULL.

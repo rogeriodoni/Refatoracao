@@ -1,0 +1,16 @@
+﻿Phase 3 complete. `FormSigReIr1.prg` created at `C:\4c\projeto\app\forms\relatorios\FormSigReIr1.prg` (1648 lines).
+
+**What was built:**
+- `Init(par_nNumBalanco)` ÔÇö stores the inventory number, delegates to `DODEFAULT()` which calls `InicializarForm()`
+- `InicializarForm()` ÔÇö creates BO, sets `this_nNumBalanco`, builds all UI, calls `InicializarDados()`, applies GesInd rule, sets initial enabled states
+- Header container + 4-button CommandGroup (Visualizar, Imprimir, Excel, Encerrar)
+- PageFrame with 1 page ("Filtros") containing all 15 filter controls mapped from the legacy layout
+- `TipoRelatorioChange()` ÔÇö mirrors the legacy `TipoRelatorio.InteractiveChange`: enables/disables TipoDiferenca, TipoLeitura, TipoAnalitico, TipoOrdem, all 5 optg controls, produto/local fields, and chkImpImg based on which of the 5 report types is selected
+- `TipoAnaliticoChange()` ÔÇö switches produto vs local fields when mode changes
+- `AtualizarReadOnly()` ÔÇö replicates the `When` events: ds_codigo readonly when cd_codigo filled, Dlocal readonly when Local filled
+- `AplicarRegraGesInd()` ÔÇö hides TipoOrdem, OptgDescricao, OptgBarras, OptgLocalizacao when `CsSigCdPam.GesInd = 1`
+- 4 lookup pairs for SigCdPro (CPros/DPros) and SigPrLcl (codigos/descricaos) via `FormBuscaAuxiliar` with F4/DblClick/Enter/Tab handling
+- `FormParaRelatorio()` ÔÇö maps all 16 controls to BO properties before generating reports
+- `BtnVisualizarClick()` ÔåÆ `FormParaRelatorio()` + `this_oRelatorio.Visualizar()`
+- `BtnImprimirClick()` ÔåÆ `FormParaRelatorio()` + `this_oRelatorio.Imprimir()`
+- All FormBase compatibility stubs (BOParaForm, AlternarPagina, AjustarBotoesPorModo, etc.)

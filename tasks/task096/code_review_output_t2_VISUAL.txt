@@ -1,0 +1,14 @@
+﻿**Falso positivo confirmado.** O validador comparou posi├º├Áes sem descontar o offset do PageFrame.
+
+Prova matem├ítica:
+- `pgf_4c_Paginas.Top` = **85** (linha 283)
+- `opt_4c_TpRel.Top` dentro da Page1 = **89**
+- Posi├º├úo absoluta na tela = 85 + 89 = **174** Ô£ô = exatamente o original
+
+Alterar `Top=89` para `Top=174` dentro da Page1 deslocaria o controle para posi├º├úo absoluta 85+174=**259**, muito abaixo do original ÔÇö introduzindo um bug visual real.
+
+A consist├¬ncia com os controles adjacentes tamb├®m confirma:
+- `lbl_4c_LblTipo.Top` = 94 ÔåÆ absoluto = 85+94 = **179** (alinha com original Say3=179)
+- `opt_4c_TpRel.Buttons(1).Top` = 5 relativo ao group ÔåÆ absoluto = 85+89+5 = **179** ÔÇö bot├úo 1 alinha exatamente com o label "Tipo :"
+
+**Nenhuma altera├º├úo necess├íria.** O `opt_4c_TpRel` j├í est├í posicionado corretamente. O detector fez compara├º├úo de posi├º├úo absoluta vs. relativa sem compensar o `PageFrame.Top=85`.

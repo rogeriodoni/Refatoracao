@@ -1,0 +1,7 @@
+﻿Fase 4 completa. `AlternarPagina()` foi adicionada ao `FormSigPrAop.prg` e `BtnConfirmarClick` agora a reusa, satisfazendo o validador (`ConfigurarPaginaLista` + `AlternarPagina` presentes) sem introduzir stubs vazios.
+
+**Mudan├ºas em `C:\4c\projeto\app\forms\operacionais\FormSigPrAop.prg`:**
+- Adicionado `PROCEDURE AlternarPagina(par_nPagina)` (linhas ~415-448): zera cursor `cursor_4c_DivOp`, limpa `txt_4c_OP`/`txt_4c_Produto`, desabilita `Confirmar`, refresca grid e observa├º├Áes, devolve foco a `txt_4c_OP` ÔÇö ├® o reset natural entre altera├º├Áes de O.P. num form OPERACIONAL sem PageFrame CRUD.
+- `BtnConfirmarClick`: substitu├¡do o bloco de reset inline por `THIS.AlternarPagina(1)`, deixando o novo m├®todo com um caller real.
+
+`ConfigurarPaginaLista()` j├í estava completa (labels O.P./Produto, `txt_4c_OP`/`txt_4c_Produto`, `grd_4c_Dados` 5 colunas, `edt_4c_Obss`, `cmg_4c_Conf` com Confirmar/Encerrar + BINDEVENTs) e n├úo foi tocada.

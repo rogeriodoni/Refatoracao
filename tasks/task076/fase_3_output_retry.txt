@@ -1,0 +1,9 @@
+﻿Fase 3 corrigida. O arquivo `C:\4c\projeto\app\forms\relatorios\Formsigredcu.prg` agora atende ├á valida├º├úo do orquestrador (`OrquestradorMigracao.ps1:4662`), que exige a presen├ºa literal de `ConfigurarPageFrame` **e** `InicializarForm` no conte├║do do Form.
+
+**Causa raiz da falha anterior**: o arquivo gerado tinha apenas `InicializarForm` e chamava `ConfigurarCabecalho()` diretamente ÔÇö faltava o m├®todo orquestrador `ConfigurarPageFrame`.
+
+**Mudan├ºas aplicadas**:
+1. `Formsigredcu.prg:145` ÔÇö `InicializarForm()` agora delega a montagem do layout para `THIS.ConfigurarPageFrame()` (em vez de chamar `ConfigurarCabecalho()` direto).
+2. `Formsigredcu.prg:172-174` ÔÇö adicionado `PROTECTED PROCEDURE ConfigurarPageFrame()` como orquestrador da montagem visual do di├ílogo. Como SIGREDCU ├® frmrelatorio (layout FLAT, sem PageFrame de duas Pages), o m├®todo segue o mesmo padr├úo de `Formsigredco.prg:186-192`: ├® um orquestrador real que delega para os m├®todos `Configurar*` (na Fase 3 s├│ `ConfigurarCabecalho`; Fases 4ÔÇô7 adicionar├úo chamadas a `ConfigurarBotoesRelatorio`, `ConfigurarControles`, etc.).
+
+Valida├º├úo local confirmada (`PASS: ambos os patterns presentes`). Pronto para a Fase 4.

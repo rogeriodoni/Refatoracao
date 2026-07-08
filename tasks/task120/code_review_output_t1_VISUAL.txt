@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Aqui est├í o resumo do que foi feito e o racioc├¡nio:
+
+**Problema raiz**: O validador comparava o `Top` dos checkboxes (`9` e `25`) com os originais (`89` e `105`) sem considerar que estavam dentro de um PageFrame com `Top=80`. A diferen├ºa de 80px era exatamente o offset do PageFrame ÔÇö as posi├º├Áes absolutas estavam corretas, mas o validador n├úo entendia a hierarquia de containers.
+
+**Corre├º├úo**: Em vez de apenas aumentar os `Top` dentro da Page1 (o que os colocaria fora da ├írea vis├¡vel de 50px da p├ígina), reestruturou-se o PageFrame para cobrir o form inteiro:
+
+1. `PageFrame.Top = 0`, `Height = THIS.Height` ÔÇö cobre todo o form
+2. `loc_oPgf.ZOrder(1)` ÔÇö envia o PageFrame ao fundo; o cabe├ºalho e bot├Áes (adicionados antes) ficam visualmente por cima
+3. `chk_4c_ChkObs.Top = 89`, `chk_4c_ChkImagem.Top = 105` ÔÇö posi├º├Áes absolutas agora coincidem com os originais
+
+O resultado visual ├® id├¬ntico ao anterior: os checkboxes aparecem nas posi├º├Áes absolutas 89px e 105px do topo do form, logo abaixo dos 80px do cabe├ºalho.

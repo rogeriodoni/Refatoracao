@@ -1,0 +1,348 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReCgc.SCX
+* Data/Hora: 16/05/26 15:15:04
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECGC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: shpImprimir
+  Parent: SIGRECGC
+  Class: shape
+  BaseClass: shape
+
+Objeto: getDtIni
+  Parent: SIGRECGC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFin
+  Parent: SIGRECGC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECGC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECGC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optDatas
+  Parent: SIGRECGC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC
+------------------------------------------------------------
+  DataSession = 1
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = (Prompt())
+  WindowType = 1
+  Name = "SIGRECGC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 9
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 141
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 207
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.shpImprimir
+------------------------------------------------------------
+  Top = 156
+  Left = 129
+  Height = 50
+  Width = 394
+  BackStyle = 0
+  SpecialEffect = 1
+  ZOrderSet = 0
+  Name = "shpImprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.getDtIni
+------------------------------------------------------------
+  Left = 196
+  TabIndex = 1
+  Top = 171
+  ZOrderSet = 2
+  Name = "getDtIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.getDtFin
+------------------------------------------------------------
+  Left = 292
+  TabIndex = 2
+  Top = 171
+  ZOrderSet = 3
+  Name = "getDtFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.Say1
+------------------------------------------------------------
+  Caption = "Período :"
+  Left = 147
+  Top = 174
+  TabIndex = 6
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.Say4
+------------------------------------------------------------
+  Caption = "à"
+  Left = 280
+  Top = 174
+  TabIndex = 7
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGC.optDatas
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 27
+  Left = 372
+  Top = 168
+  Width = 148
+  TabIndex = 3
+  ZOrderSet = 6
+  Name = "optDatas"
+  Option1.Caption = "\<Data"
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 44
+  Option1.AutoSize = .F.
+  Option1.Name = "Option1"
+  Option2.Caption = "\<Vencimento"
+  Option2.Height = 17
+  Option2.Left = 60
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 83
+  Option2.AutoSize = .F.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECGC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCgc to Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pGru, pCon
+
+=DoDefault()
+
+=fConfigGeral()
+
+ThisForm.Grupo = pGru
+ThisForm.Conta = pCon
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local ldDtIni, ldDtFin, lcDatas, lcCond, lcOrdem, lcCon
+Local lcTitulo, lcSubTit, lcEmpresa, lcPeriodo
+
+ldDtIni = ThisForm.getDtIni.Value
+ldDtFin = ThisForm.getDtFin.Value
+lcDatas = Iif(ThisForm.optDatas.Value = 1,'D','V')
+
+=Seek(_Empr,'CrSigCdEmp','cemps')
+lcEmpresa = _Empr + ' - ' + Alltrim(CrSigCdEmp.razas)
+
+lcTitulo  = 'RELATÓRIO GENÉRICO DE COMPRAS'
+
+Select TmpCli
+lcCon = ' - ' + Alltrim(TmpCli.rclis)
+
+lcSubTit  = 'GRUPO : ' + Alltrim(ThisForm.Grupo) + '/CONTA : ' + ;
+						 Alltrim(ThisForm.Conta) + lcCon
+lcPeriodo = 'PERÍODO DE ' + Dtoc(ldDtIni) + ' À ' + Dtoc(ldDtFin)
+
+Create Cursor CsCabecalho (Titulo c(200), SubTit c(200), Empresa c(80), Periodo c(35), Datar c(1))
+Insert Into CsCabecalho (Titulo, SubTit, Empresa, Periodo, Datar) Values ;
+						(lcTitulo, lcSubTit, lcEmpresa, lcPeriodo, lcDatas)
+
+******   Criação da Select com os Dados do Relatório   *****
+lcCond  = Iif(lcDatas = 'D','Datas','Vencs') + ' Between ldDtIni And ldDtFin'
+lcOrdem = Iif(lcDatas = 'D','Datas','Vencs')
+
+Select *, 'X' As X ;
+From dbHistorico ;
+Where &lcCond. ;
+Into Cursor TmpRel ;
+Order by &lcOrdem.
+
+Select Sum(valors) As valores, moedas ;
+From TmpRel ;
+Group by moedas ;
+Into Cursor TmpMoe
+
+Create Cursor CsTotal (Total m(4))
+Select CsTotal
+Append Blank
+
+Select TmpMoe
+Scan
+	Select CsTotal
+	Replace Total With Total + Transform(TmpMoe.valores,'999,999,999,999.99') + ;
+							   ' ' + TmpMoe.moedas + Chr(13)
+	Select TmpMoe
+EndScan
+
+Select TmpRel
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCgc Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Sair.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Sair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value # 3
+	If Empty(ThisForm.GetDtIni.Value)
+		Messagebox('Data inicial inválida !!!',16,'')
+		ThisForm.getDtIni.SetFocus
+		Return(.F.)
+	EndIf
+
+	If Empty(ThisForm.GetDtFin.Value)
+		Messagebox('Data final inválida !!!',16,'')
+		ThisForm.getDtFin.SetFocus
+		Return(.F.)
+	EndIf
+
+	If ThisForm.GetDtIni.Value > ThisForm.GetDtFin.Value
+		Messagebox('Data inicial não pode ser maior que a final!',16,'')
+		ThisForm.GetDtIni.SetFocus
+		Return(.F.)
+	EndIf
+EndIf
+
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECGC
+RESERVED3 (ClassInfo): conta
+grupo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

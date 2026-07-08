@@ -1,0 +1,52 @@
+﻿Ap├│s verifica├º├úo cuidadosa do c├│digo migrado comparado com as refer├¬ncias do original, aqui est├í a an├ílise de cada problema flagado:
+
+---
+
+## Resultado da Verifica├º├úo: Todos os 3 Itens S├úo FALSOS POSITIVOS
+
+### 1. `EMPDOPNUMS` em `SigMvPar` (linha 179)
+
+```foxpro
+loc_lcQuery = "SELECT MoeFpgs, Valos FROM SigMvPar " + ;
+              "WHERE EmpDopNums = " + EscaparSQL(loc_lcEdn)
+```
+
+**An├ílise**: O original usava DataEnvironment com uma rela├º├úo entre `crSigMvCab` (pai) e `crSigMvPar` (filho). No original, `Select crSigMvPar` acessava automaticamente apenas os registros do movimento atual via essa rela├º├úo. A migra├º├úo para SQLEXEC **obrigatoriamente** requer o `WHERE EmpDopNums = loc_lcEdn` para filtrar as parcelas do movimento espec├¡fico ÔÇö onde `loc_lcEdn = Emps + Dopes + STR(Numes,6)` ├® exatamente a chave composta `EmpDopNums`. Remover esse filtro retornaria **todas as parcelas de todos os movimentos**, quebrando completamente o c├ílculo.
+
+**A├º├úo**: Nenhuma altera├º├úo. Filtro necess├írio e correto.
+
+---
+
+### 2. `ICLIS` em `SigCdCli` (linha 319 do BO)
+
+```foxpro
+loc_lcQuery = "SELECT IClis, RClis FROM SigCdCli " + ;
+              "WHERE IClis = " + EscaparSQL(ALLTRIM(TmpCli.Conta))
+```
+
+**An├ílise**: O original usava `SEEK(Conta, 'SigCdCli', 'IClis')` ÔÇö lookup por chave em cursor pr├®-carregado. A migra├º├úo substitui esse SEEK por um SQLEXEC com `WHERE IClis = ...`. Remover o filtro retornaria todos os clientes, `SELECT TOP 1` n├úo existe aqui (seria o primeiro cliente alfab├®tico, n├úo o correto). Filtro ├® o equivalente direto do SEEK original.
+
+**A├º├úo**: Nenhuma altera├º├úo. Filtro necess├írio e correto.
+
+---
+
+### 3. `CMOES` em `SigCdCot` dentro de `BuscarCotacao()`
+
+```foxpro
+loc_cSQL = "SELECT TOP 1 valos FROM SigCdCot " + ;
+           "WHERE cmoes = " + EscaparSQL(loc_cMoeda) + ;
+           " AND " + loc_cFiltroData + ;
+           " ORDER BY datas DESC, horas DESC"
+```
+
+**An├ílise**: Este m├®todo substitui `fBuscarCotacao()` do legado, que internamente fazia um SEEK por moeda+data em `SigCdCot`. O `WHERE cmoes = ...` ├® o filtro de moeda essencial ÔÇö sem ele, `SELECT TOP 1 ... ORDER BY datas DESC` retornaria a cota├º├úo mais recente de **qualquer moeda**, n├úo da moeda solicitada. Comportamento completamente errado.
+
+**A├º├úo**: Nenhuma altera├º├úo. Filtro necess├írio e correto.
+
+---
+
+## Conclus├úo
+
+Os tr├¬s itens flagados pelo validador autom├ítico s├úo **falsos positivos**. O validador comparou literalmente as colunas nas cl├íusulas WHERE do SQL do legado (que usava DataEnvironment + SEEK, sem WHERE expl├¡cito para SigMvPar/SigCdCli/SigCdCot), mas o c├│digo migrado **precisa** desses filtros porque usa SQLEXEC em vez de cursores com rela├º├Áes autom├íticas.
+
+**Nenhuma altera├º├úo foi necess├íria no c├│digo.** Os arquivos est├úo corretos como est├úo.

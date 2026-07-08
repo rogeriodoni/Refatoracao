@@ -1,0 +1,979 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprenv.SCX
+* Data/Hora: 03/07/2026 00:09:12
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRENV
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRENV
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRENV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRENV.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: btnReport
+  Parent: SIGPRENV
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Etq_Ini
+  Parent: SIGPRENV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Etq_Qtd
+  Parent: SIGPRENV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_Etq
+  Parent: SIGPRENV
+  Class: label
+  BaseClass: label
+
+Objeto: lbl_Qtd
+  Parent: SIGPRENV
+  Class: label
+  BaseClass: label
+
+Objeto: Opt_Tipo
+  Parent: SIGPRENV
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Lbl_TpEti
+  Parent: SIGPRENV
+  Class: label
+  BaseClass: label
+
+Objeto: Cnt_Impressora
+  Parent: SIGPRENV
+  Class: container
+  BaseClass: container
+
+Objeto: Say2
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Spn_AjHorzs
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Spn_AjVerts
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Spn_AjDenss
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: spn_AjVelos
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Say1
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opcao_imp
+  Parent: SIGPRENV.Cnt_Impressora
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Impressora
+  Parent: SIGPRENV
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label2
+  Parent: SIGPRENV
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 120
+  Left = 27
+  Width = 792
+  Height = 445
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Impressão de etiquetas de envelopes"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGPRENV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.btnReport
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 110
+  Left = 636
+  SpecialEffect = 1
+  Top = -2
+  Width = 171
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "btnReport"
+  Command1.Top = 5
+  Command1.Left = 10
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_60.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Imprime"
+  Command2.Top = 5
+  Command2.Left = 86
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] - Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Etq_Ini
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = "99999999"
+  Left = 237
+  TabIndex = 1
+  Top = 125
+  Width = 66
+  DisabledBackColor = 255,255,255
+  Name = "Etq_Ini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Etq_Qtd
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 1
+  Format = "K!"
+  Height = 23
+  InputMask = "99999999"
+  Left = 397
+  MaxLength = 8
+  TabIndex = 2
+  Top = 125
+  Width = 66
+  Name = "Etq_Qtd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.lbl_Etq
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Etiqueta Inicial :"
+  Height = 15
+  Left = 155
+  Top = 129
+  Width = 79
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "lbl_Etq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.lbl_Qtd
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Quantidade :"
+  Height = 15
+  Left = 328
+  Top = 129
+  Width = 65
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "lbl_Qtd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Opt_Tipo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 182
+  Left = 140
+  SpecialEffect = 1
+  Top = 179
+  Width = 240
+  TabIndex = 5
+  Themes = .F.
+  Name = "Opt_Tipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<a. Rabicho"
+  Option1.Value = 1
+  Option1.Height = 22
+  Option1.Left = 10
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 222
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Lbl_TpEti
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de etiqueta "
+  Height = 15
+  Left = 150
+  Top = 166
+  Width = 97
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Lbl_TpEti"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora
+------------------------------------------------------------
+  Top = 289
+  Left = 396
+  Width = 254
+  Height = 67
+  BackStyle = 0
+  TabIndex = 10
+  Name = "Cnt_Impressora"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Vertical"
+  Height = 13
+  Left = 12
+  Top = 25
+  Width = 33
+  TabIndex = 14
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Horizontal"
+  Left = 72
+  Top = 25
+  TabIndex = 17
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Spn_AjHorzs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 26
+  KeyboardHighValue = 999
+  KeyboardLowValue = 0
+  Left = 71
+  SpinnerHighValue = 999.00
+  SpinnerLowValue =   0.00
+  TabIndex = 13
+  Top = 36
+  Width = 56
+  ZOrderSet = 5
+  Name = "Spn_AjHorzs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Spn_AjVerts
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 26
+  KeyboardHighValue = 999
+  KeyboardLowValue = 0
+  Left = 10
+  SpinnerHighValue = 999.00
+  SpinnerLowValue =   0.00
+  TabIndex = 13
+  Top = 36
+  Width = 56
+  ZOrderSet = 5
+  Name = "Spn_AjVerts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Spn_AjDenss
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 26
+  KeyboardHighValue = 20
+  KeyboardLowValue = 10
+  Left = 132
+  SpinnerHighValue =  20.00
+  SpinnerLowValue =  10.00
+  TabIndex = 5
+  Top = 36
+  Width = 56
+  ZOrderSet = 5
+  Value = 10
+  Name = "Spn_AjDenss"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.spn_AjVelos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 26
+  KeyboardHighValue = 3
+  KeyboardLowValue = 1
+  Left = 192
+  SpinnerHighValue =   3.00
+  SpinnerLowValue =   1.00
+  TabIndex = 9
+  Top = 36
+  Width = 54
+  ZOrderSet = 5
+  Value = 3
+  Name = "spn_AjVelos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Densidade"
+  Left = 132
+  Top = 25
+  TabIndex = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Say20
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Velocidade"
+  Left = 192
+  Top = 25
+  TabIndex = 8
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Cnt_Impressora.Opcao_imp
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  Comment = ""
+  Height = 22
+  Left = 3
+  Top = 3
+  Width = 249
+  TabIndex = 2
+  Name = "Opcao_imp"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Allegro"
+  Option1.Left = 3
+  Option1.Top = 4
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Zebra ZPL"
+  Option2.Left = 77
+  Option2.Top = 4
+  Option2.Width = 66
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Zebra EPL"
+  Option3.Height = 15
+  Option3.Left = 170
+  Option3.Top = 4
+  Option3.Width = 66
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Themes = .F.
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Opt_Impressora
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 105
+  Left = 396
+  SpecialEffect = 1
+  Top = 180
+  Width = 254
+  TabIndex = 3
+  Themes = .F.
+  Name = "Opt_Impressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<1. Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 10
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 238
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRENV.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Impressora "
+  Height = 15
+  Left = 409
+  Top = 167
+  Width = 71
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRENV
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private pQtd
+Local lnTipos, lnTipoPadrao, lnI, lnTop, lnHeight, lnImpres, lnBottom1, lnBottom2, lnMaxTipos, lnPrinters
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		pQtd = 1
+*!*			ThisForm.poDataMgr.CursorQuery('SigSySeq', 'crSigSySeq', 'Valor', Padr('ETIQENVELOPE', 25))
+*!*			If Eof('crSigSySeq')
+*!*				lcQuery = [Insert Into SigSySeq (Valor, Conteudo, Digchecks) Values ('ETIQENVELOPE', ?pQtd, 0)]
+*!*				If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigSySeq)')
+*!*					Return 0
+*!*				EndIf
+*!*				If (ThisForm.poDataMgr.Commit() < 1)
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+*!*					Return 0
+*!*				EndIf
+*!*			Else
+*!*				pQtd = crSigSySeq.Conteudo
+*!*			EndIf
+		
+		With ThisForm.Etq_Ini
+			.Value = pQtd
+			.Refresh
+		EndWith
+
+		lnPrinters = APrinters(laPrinters)
+		If (lnPrinters <> 0)
+			For lnI = 1 to lnPrinters
+				laPrinters(lnI, 1) = Upper(laPrinters(lnI, 1))
+			EndFor
+			=ASort(laPrinters)
+		EndIf
+
+		lcCpo = 'nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, AjVerts, AjHorzs, TpCBars'
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., lcCpo)
+		Goto Top In crSigCdPam
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac')
+		Goto Top In crSigCdPac
+
+		ThisForm.poDataMgr.CursorQuery('SigCdMp', 'crSigCdMp')
+		Select crSigCdMp
+		Index On Impres Tag skImpres
+
+		ThisForm.poDataMgr.CursorQuery('SigCdTpe', 'crSigCdTpe')
+		Select crSigCdTpe
+		Index On cOrdems + cEtiquetas Tag skOrdems For nSituas = 1
+
+		Select crSigCdTpe
+		Set Order to skOrdems
+		Count To lnTipos For nTipos = 6
+
+		With ThisForm.Opt_Tipo
+			lnHeight = 40			&& mena - alterado em 21/12/2011 de 15 para 40
+			lnTop 	 = 10
+			lnI 	 = 1
+			If (lnTipos <> 0)
+				lnTipoPadrao = 1
+				.ButtonCount = Min(lnTipos, Max(crSigCdPam.nMaxTpEtis, 5))
+				lnMaxTipos = .ButtonCount + 1
+				Scan For (crSigCdTpe.nTipos = 6) And (lnI < lnMaxTipos)
+					lcI = AllTrim(Str(lnI))
+					With .Option&lcI.
+						.AutoSize = .f.
+						.Width    = 160
+						.Caption  = '\<' + Chr(96 + lnI) + '. ' + AllTrim(crSigCdTpe.cEtiquetas)
+						.FontSize = 8
+						.Tag      = AllTrim(Str(crSigCdTpe.nTipos))
+						.Top      = lnTop
+					EndWith
+				EndScan
+			Else
+				lnTipos 	 = 1
+				lnTipoPadrao = 1
+				.ButtonCount = 1
+				lcI = AllTrim(Str(lnI))
+				With .Option&lcI.
+					.AutoSize = .f.
+					.Width    = 160
+					.Caption  = '\<1. Envelope'
+					.FontSize = 8
+					.Tag      = AllTrim(Str(6))
+					.Top      = lnTop
+				EndWith
+				lnI 	 = lnI + 1
+				lnTop 	 = lnTop + 20
+				lnHeight = lnHeight + 20
+			EndIf
+			.Enabled  = (.ButtonCount > 1)
+			.Height   = lnHeight
+			.Value    = lnTipoPadrao
+			lnBottom1 = .Top + .Height
+		EndWith
+
+		lcSql = [Select b.* From SigSyImp a, SigCdMp b Where a.UsuAcess = ']+Usuar+[' and a.cimps = b.impres ]+;
+				[Union all ]+;
+				[Select c.* From SigCdAcG a, SigSyImp b, SigCdMp c Where a.Usuarios=']+Usuar+[' ]+;
+				[And a.Grupos = b.GrAcess And b.Cimps = c.Impres]
+
+		If ThisForm.podatamgr.sqlexecute(lcSql,'CrTmpCimp') <= 0
+			Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+			Return(.f.)
+		EndIf
+
+		Select CrTmpCimp
+		If Reccount() > 0
+			Select Impres, nTpImpres From CrTmpCimp Into Cursor crSigCdMp ReadWrite
+			Select crSigCdMp
+			Index On Impres Tag skImpres
+		Endif
+
+		lnImpres = 1
+		If (lnPrinters <> 0)
+			Select crSigCdMp
+			Set Order to skImpres
+			Scan For crSigCdMp.nTpImpres = 2
+				Dimension laImpOk(lnImpres)
+				lnOk = AScan(laPrinters, AllTrim(Upper(crSigCdMp.Impres)))
+				If (lnOk <> 0)
+					laImpOk(lnImpres) = laPrinters(lnOk)
+					lnImpres = lnImpres + 1
+				EndIf
+			EndScan
+		EndIf
+		lnImpres = lnImpres - 1
+
+		With Thisform.Opt_Impressora
+			lnTop 	 = 10
+			lnHeight = 15
+			If (lnImpres <> 0)
+				.ButtonCount = Min(lnImpres, Max(crSigCdPam.nMaxImpEti, 5))
+				For lnI = 1 to .ButtonCount
+					lcI = AllTrim(Str(lnI))
+					With .Option&lcI.
+						.AutoSize = .F.
+						.Caption  = ' \<' + lcI + '. ' + laImpOk(lnI)
+						.FontSize = 8
+						.Tag      = Upper(laImpOk(lnI))
+						.Top      = lnTop
+						.Width    = 160
+					EndWith
+					lnTop 	 = lnTop + 20
+					lnHeight = lnHeight + 20
+				EndFor
+			Else
+				.ButtonCount = 1
+				lnOk = AScan(laPrinters, 'GENÉRICO/SOMENTE TEXTO')
+				With .Option1
+					.AutoSize = .f.
+					.Caption  = ' \<0. Genérico/Somente Texto'
+					.Enabled = (lnOk <> 0)
+					.FontSize = 8
+					.Tag      = 'GENÉRICO/SOMENTE TEXTO'
+					.Width    = 160
+					lnImpres  = Iif(.Enabled, 1, 0)
+				EndWith
+				lnHeight = lnHeight + 20
+			EndIf
+			.Enabled = (lnImpres > 1)
+			.Height  = lnHeight
+		EndWith
+
+		With Thisform.Cnt_Impressora
+			With .Opcao_Imp
+				.Value = Iif(crSigCdPam.ImpEtis <> 0, crSigCdPam.ImpEtis, 1)
+				.Enabled = .f.
+			EndWith
+			.Spn_AjVerts.Value = crSigCdPam.AjVerts
+			.Spn_AjHorzs.Value = crSigCdPam.AjHorzs
+			.Spn_AjDenss.Value = Iif(CrSigCdPac.AjDens<10,10,CrSigCdPac.AjDens)
+			.spn_AjVelos.Value = Iif(Empty(crSigCdPac.AjVelos), 01, crSigCdPac.AjVelos)			
+			.Top = Thisform.Opt_Impressora.Top + Thisform.Opt_Impressora.Height - 2
+			lnBottom2 = .Top + .Height
+		EndWith
+
+		With Thisform.btnReport
+			.Imprime.Enabled = (lnTipos <> 0 And lnImpres <> 0)
+			.Value = Iif(.Imprime.Enabled, 1, 2)
+		EndWith
+
+		Thisform.Height = Max(lnBottom1, lnBottom2) + 10
+
+		Create Cursor dbImpressao (Cpros C(10), DPros C(40), Qtds N(10,3), QtdeEtiq N(10,3), Pedido C(30), Obs C(10))
+		Index On Cpros tag Cpros
+		Set Order To 
+
+		.Opt_Impressora.InteractiveChange()
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRENV.btnReport
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Imprime.Click
+------------------------------------------------------------
+PROCEDURE Imprime.Click
+Private pQtd
+Local lcSelecao, lcConfirma, lcNomeImp, lnTpImp, lnAjVerts, lnAjHorzs
+
+* Testa o Campo Quantidade
+If (Val(ThisForm.Etq_Qtd.Value) <= 0)
+	=Messagebox('A Quantidade de Etiquetas Precisa Ser Maior Que 0 (Zero)!!!', 16, '')
+	ThisForm.Etq_Qtd.SetFocus
+	Return .t.
+EndIf
+
+* Confirma o Envio das Etiquetas Para Impressão
+Clear Typeahead()
+If Messagebox('Confirma a Impressão Das Etiquetas ?', 4+32+256, '') <> 6
+	Return .t.
+EndIf
+
+*!*	ThisForm.poDataMgr.CursorQuery('SigSySeq', 'crSigSySeq', 'Valor', Padr('ETIQENVELOPE', 25))
+*!*	If (ThisForm.Etq_Ini.Value <> crSigSySeq.Conteudo)
+*!*		ThisForm.Etq_Ini.Value  = crSigSySeq.Conteudo
+*!*		lnConfirma = Messagebox('O Valor Inicial das Etiquetas Foi Alterado Para ' + ;
+*!*								Alltrim(Str(crSigSySeq.Conteudo)) + Chr(13) + ;
+*!*					 			'Deseja Imprimir a Partir Deste Número ?', 4+32+256, 'Atenção!!!')
+*!*		If (lnConfirma <> 6)
+*!*			Return .t.
+*!*		EndIf
+*!*	EndIf
+
+For I = ThisForm.Etq_Ini.Value To ThisForm.Etq_Ini.Value + (Val(ThisForm.Etq_Qtd.Value) - 1)
+	Insert Into dbImpressao (Cpros, Qtds, Pedido, QtdeEtiq) Values (Padl(Alltrim(Str(I,8)),8,'0'),1,'',1)
+Next
+
+* Inicia a Impressão das Etiquetas
+With Thisform.Cnt_Impressora
+	lnTpImp   = .Opcao_Imp.Value
+	lnAjVerts = .Spn_AjVerts.Value
+	lnAjHorzs = .Spn_AjHorzs.Value
+	lnAjDenss = .spn_AjDenss.Value
+	lnAjVelos = .spn_AjVelos.Value	
+EndWith
+
+With Thisform.Opt_Impressora
+	lnImpres  = .Value
+	lcNomeImp = .Buttons(lnImpres).Tag
+EndWith
+
+=SigOpEtq(ThisForm.poDataMgr, .f., .f. , 6, lnTpImp, lnAjVerts, lnAjHorzs, lnAjDenss, , , ,lcNomeImp, , , lnAjVelos)
+
+pQtd = ThisForm.Etq_Ini.Value + Val(ThisForm.Etq_Qtd.Value)
+
+=Messagebox('Impressão concluída com sucesso!', 64, 'Aviso')
+
+Select dbImpressao
+Zap
+Append Blank
+
+ThisForm.Etq_Ini.Value = ThisForm.Etq_Ini.Value + Val(ThisForm.Etq_Qtd.Value)
+ThisForm.Etq_Qtd.Value = '0'
+ThisForm.Etq_Ini.Refresh
+ThisForm.Etq_Qtd.Refresh
+ThisForm.Etq_Qtd.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Sair.Click
+------------------------------------------------------------
+PROCEDURE Sair.Click
+Thisform.Release()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRENV.Opt_Impressora
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+loImp = ThisForm.cnt_Impressora
+=fCarregarImps(ThisForm.Opt_Impressora.Buttons(ThisForm.Opt_Impressora.Value).Tag, loImp.Opcao_Imp, ;
+			   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.spn_AjVelos, ThisForm.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRENV
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

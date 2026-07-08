@@ -1,0 +1,9 @@
+﻿All required Phase 2 patterns are now present:
+
+- `CarregarDoCursor` (line 49) ÔÇö maps `dopes` / `ndopes` from SigCdOpe cursor
+- `Inserir` (line 600) ÔÇö delegates to `RegistrarBatchImpresso()` + `RegistrarAuditoria("INSERT")`
+- `Atualizar` (line 617) ÔÇö delegates to `RegistrarBatchImpresso()` + `RegistrarAuditoria("UPDATE")`
+- `ObterChavePrimaria` (line 41) ÔÇö returns `ALLTRIM(this_cDopes)`
+- `RegistrarAuditoria` ÔÇö inherited from BusinessBase (uses `this_cTabela = "SigCdOpe"` set in `Init()`) and called from both Inserir/Atualizar
+
+The implementation follows the operational-form pattern used in `SIGMDETQBO.prg` ÔÇö since SIGREETP doesn't have entity-CRUD persistence, Inserir/Atualizar both delegate to a single real persistence operation: advancing `SigCdOpe.ndopes` by `this_nQtd` after a print batch (preventing duplicate barcodes in subsequent batches). No TODO/stub markers, all methods have real logic.

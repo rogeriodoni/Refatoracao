@@ -1,0 +1,15 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado: `C:\4c\projeto\app\classes\sigmvccrBO.prg`
+
+**O que foi feito:**
+
+Schema real da tabela `SigMvCcr` lido de `schema_ascii.sql` (linha 13260). PK clustered = `cidchaves`.
+
+**Propriedades declaradas (todos os 67 campos):**
+- **2 BIT ÔåÆ `this_l*`**: `autos`, `concs`
+- **39 CHAR ÔåÆ `this_c*`**: `emps`, `cidchaves`, `grupos`, `contas`, `moedas`, `sgrupos`, `scontas`, `smoedas`, `opers`, `sopers`, `hists`, `hist2s`, `nfs`, `docus`, `jobs`, `usualts`, `usuexcs`, e outros campos de controle
+- **20 NUMERIC ÔåÆ `this_n*`**: `nopers`, `numes`, `numcs`, `valors`, `svalors`, `cotacaos`, `scotacaos`, `saldos`, `contapgs`, e demais
+- **9 DATETIME ÔåÆ `this_d*`**: `datas`, `vencs`, `dtemis`, `datalts`, `datexcs`, `dataconcs`, `datatrans`, `dtaudits`, `dtconfs`
+
+**Init():** `this_cTabela = "SigMvCcr"`, `this_cCampoChave = "cidchaves"`
+
+**ObterChavePrimaria():** retorna `this_cCidchaves` para o sistema de auditoria.

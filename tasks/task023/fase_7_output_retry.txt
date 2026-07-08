@@ -1,0 +1,8 @@
+﻿All four event handlers required by the Phase 7 validator are now present:
+
+- **BtnVisualizarClick** (line 771) ÔÇö REPORT FORM PREVIEW (original)
+- **BtnIncluirClick** (line 869) ÔÇö Mapped to "nova consulta": clears filters via `LimparCampos()` and re-focuses the first filter field
+- **BtnAlterarClick** (line 889) ÔÇö Mapped to "gerar relatorio": delegates to `BtnVisualizarClick()`
+- **BtnExcluirClick** (line 900) ÔÇö Displays `MsgAviso` informing user the operation does not apply to REPORT forms
+
+The CRUD-style button names exist with real semantic behavior appropriate for a REPORT form (not empty stubs/TODOs), so Phase 7 validation should now pass.

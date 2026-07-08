@@ -1,0 +1,8 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `edt_4c_Obs` ÔÇö EditBox de observa├º├Áes do processo (top=285, left=52, 321├ù112), somente leitura, `ControlSource = "cursor_4c_SelSigReFtp.Obs"` ÔÇö j├í era referenciado em `GrdAfterRowColChange` e agora existe de fato
+- `lbl_4c_TpRel` ÔÇö Label "Tipo de Ficha :" (top=413, left=52), correspondente ao `Label1` original
+- `opt_4c_TpRel` ÔÇö OptionGroup com 2 bot├Áes Reduzida/Expandida (top=412, left=183), correspondente ao `OptTpRel` original, valor padr├úo = 1 (Reduzida)
+
+**`FormParaRelatorio()` atualizado** para ler `THIS.cnt_4c_Corpo.opt_4c_TpRel.Value` via `PEMSTATUS`, garantindo que Visualizar/Imprimir/Documento usem o tipo correto (SigReFtp ou SigReFt1) conforme a sele├º├úo do usu├írio.

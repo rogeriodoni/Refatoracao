@@ -1,0 +1,11 @@
+﻿A Fase 2/8 est├í conclu├¡da. O arquivo `sigrecntBO.prg` agora tem implementa├º├úo completa com 7 m├®todos adicionados:
+
+- **`CarregarParametros()`** ÔÇö carrega `GrPadVens` de `SigCdPam` e os 4 cursores de n├¡vel (SigLcNv1-4) via SQLEXEC para uso nos lookups do formul├írio
+- **`ValidarFiltros()`** ÔÇö valida que a data obrigat├│ria foi informada
+- **`PrepararDados()`** ÔÇö implementa├º├úo completa do `processamento` original: montagem do cabe├ºalho, query de contagens (`sigcdcnl + sigcdcni`), query de estoque (`SigOpEtq UNION ALL SigMvesl`), filtragem por localiza├º├úo, DO CASE para os 4 modos de OptLocal (Todas/Somente Lidos/N├úo Lidos/Diferen├ºas), cursor `crRel` final com decomposi├º├úo de n├¡veis, enriquecimento de descri├º├úo via `SigLcNv3` e ordena├º├úo configur├ível
+- **`Visualizar()`** ÔÇö prepara dados e exibe preview NOCONSOLE
+- **`Imprimir()`** ÔÇö prepara dados e imprime com di├ílogo de impressora (PROMPT)
+- **`GerarExcel()`** ÔÇö prepara dados e exporta `crRel` para XLS via PUTFILE + COPY TO
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro`
+
+Todos os m├®todos usam o padr├úo `DO WHILE .T. / EXIT` para evitar `RETURN` dentro de TRY/CATCH, e `CHR()` para caracteres acentuados.

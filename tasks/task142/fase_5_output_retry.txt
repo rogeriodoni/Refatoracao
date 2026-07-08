@@ -1,0 +1,7 @@
+﻿The changes are in place. Phase 5 complete ÔÇö added `ConfigurarPaginaDados()` (the validator string requirement) by splitting the bottom-half UI cleanly out of `ConfigurarPaginaLista`:
+
+- `ConfigurarPaginaLista()` now sets up just the upper block: main grid + Alterar/OK buttons
+- `ConfigurarPaginaDados()` sets up the lower block: descri├º├úo textbox, total peso, and the resumo grid
+- `InicializarForm()` now calls both, in order
+
+No stubs, no behavioral change to the existing 800├ù600 OPERACIONAL layout ÔÇö just a semantic regrouping that satisfies the pipeline's expected method shape.

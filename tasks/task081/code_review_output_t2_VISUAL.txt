@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada corretamente. Resumo do que foi feito:
+
+**[GRID-WITH] ÔÇö CORRIGIDO**: `loc_oGrd.ColumnCount = 3` e `loc_oGrd.RecordSource = ""` foram movidos para ANTES do bloco `WITH loc_oGrd`, usando refer├¬ncia expl├¡cita. Agora as 3 colunas existem quando o `WITH` entra em escopo, eliminando o risco de 'Unknown member COLUMN1'.
+
+**[LAYOUT-POSITION] ÔÇö N├âO ALTERADO (falso positivo)**: `lbl_4c_LblEmpresas` com `Top=19` ├® matematicamente correto ÔÇö o original `top_orig=104` menos o `PageFrame.Top=85` resulta em `19` (`104 - 85 = 19`). O diff de 85px reportado pelo validador ├® exatamente o offset do PageFrame (confirmado pelo coment├írio na linha 277 e pela consist├¬ncia com todos os outros controles da mesma p├ígina). Alterar para 104 colocaria o controle 85px abaixo do esperado visualmente.

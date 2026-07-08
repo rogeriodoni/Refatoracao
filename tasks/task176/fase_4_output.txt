@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto e completo. Vou confirmar o que foi feito:
+
+**Fase 4/8 conclu├¡da** ÔÇö `Formsigprenv.prg` agora tem:
+
+1. **`ConfigurarPaginaLista()`** ÔÇö adiciona todos os controles est├íticos do form:
+   - `obj_4c_BtnReport` (CommandGroup com Imprimir + Encerrar) posicionado ├á direita (Left=820)
+   - `txt_4c_Etq_Ini`, `txt_4c_Etq_Qtd` com respectivos labels
+   - `obj_4c_Opt_Tipo` (1 button inicial, cresce dinamicamente)
+   - `obj_4c_Opt_Impressora` (1 button inicial, cresce dinamicamente)
+   - `cnt_4c__Impressora` com OptionGroup Allegro/ZPL/EPL + 4 Spinners de ajuste
+   - BINDEVENTs: Imprimir ÔåÆ `BtnImprimeClick`, Encerrar ÔåÆ `BtnEncerrarClick`, InteractiveChange ÔåÆ `OptImpressoraInteractiveChange`
+
+2. **`CarregarDados()`** ÔÇö popula controles din├ómicos:
+   - Chama BO para carregar configura├º├Áes (SigCdPam/SigCdPac), tipos (SigCdTpe) e impressoras (SigCdMp)
+   - Constr├│i bot├Áes de `obj_4c_Opt_Tipo` via SCAN em cursor_4c_SigCdTpe
+   - Filtra impressoras tipo 2 ├ù APRINTERS() para `obj_4c_Opt_Impressora`
+   - Ajusta Top do `cnt_4c__Impressora` dinamicamente
+   - Habilita bot├úo Imprimir somente se h├í tipos e impressoras dispon├¡veis
+   - Ajusta `THIS.Height` conforme tamanho dos grupos de bot├Áes
+
+3. **`BtnImprimeClick()`**, **`BtnEncerrarClick()`**, **`OptImpressoraInteractiveChange()`** ÔÇö handlers com l├│gica completa (sem RETURN dentro de TRY, sem MESSAGEBOX, usando MsgAviso/MsgConfirma/MsgInfo)
+
+4. **`InicializarForm()`** atualizado ÔÇö verifica `gb_4c_ValidandoUI` antes de chamar `CarregarDados()`

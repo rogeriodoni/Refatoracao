@@ -1,0 +1,8 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `Formsigrecop.prg` j├í existia completo (fases anteriores o criaram integralmente). Corrigi os seguintes bugs:
+
+1. **`cmg_4c_Botoes.Width`**: `THIS.Width` (800) ÔåÆ `273` ÔÇö grupo estava estendendo 529px al├®m do form
+2. **`BorderStyle = 0`**: adicionado ao CommandGroup (ausente no original)
+3. **`Buttons(1-4).Width`**: `THIS.Width` (800) ÔåÆ `65` ÔÇö bot├Áes se sobrepunham
+4. **`FontName`**: `"Tahoma"` ÔåÆ `"Comic Sans MS"` em todos os bot├Áes (padr├úo do framework)
+5. **`Buttons(1).FontName/FontSize`**: ausentes ÔåÆ adicionados (`"Comic Sans MS"`, `8`)
+6. **BINDEVENT duplicados** removidos: `txt_4c_CdEmpresa`, `txt_4c_CdMoeda`, `txt_4c_DsMoeda` ÔÇö cada campo tinha dois handlers para o mesmo `KeyPress`, causando valida├º├úo SQL em toda digita├º├úo

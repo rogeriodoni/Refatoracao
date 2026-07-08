@@ -1,0 +1,23 @@
+﻿The file ends correctly at line 1484 with `ENDDEFINE`. Phase 4 is complete. The `FormSigPrGlo.prg` grew from 442 to 1484 lines with all the new methods added:
+
+**What was implemented:**
+- `InicializarForm` updated to call 8 new container-population methods + `PopularCamposIniciais` + `ConfigurarEventos`
+- `ConfigurarCamposForm` ÔÇö 13 labels/textboxes directly on the form (period dates, labels for each section)
+- `ConfigurarContainerTipoOp` ÔÇö `txt_4c_TpGOp` (Courier New, MaxLength=10)
+- `ConfigurarContainerOperacao` ÔÇö 5 controls: code + labels "de"/"at├®" + numeric range fields
+- `ConfigurarContainerConta` ÔÇö grupo + conta + dconta for Movimenta├º├úo
+- `ConfigurarContainerResponsavel` ÔÇö grupo + conta + dconta for Vendedor (same layout)
+- `ConfigurarContainerEmpresa` ÔÇö cd/ds empresa + checkbox "N├úo Empenhar Pedras" (initially hidden)
+- `ConfigurarContainerPrevisao` ÔÇö dates previs├úo and gera├º├úo
+- `ConfigurarContainerOp` ÔÇö label + numeric field for n├║mero OP manual
+- `PopularCamposIniciais` ÔÇö populates empresa from BO, sets dates (DATE()+PrevProds, DATE()), checkbox visibility, TpGOp auto-select
+- `ConfigurarEventos` ÔÇö 14 BINDEVENTs (2 Click + 12 KeyPress)
+- `CmdProcessarClick` ÔÇö 3 validations, copies all fields to BO, calls `ProcessarOrdens()`
+- `CmdCancelarClick` ÔÇö `THIS.Release()`
+- 12 KeyPress handlers ÔÇö all with `LPARAMETERS` + Enter/Tab/F4 guard:
+  - TpGOp: SEEK CrTmpTpGop ÔåÆ pre-populated FormBuscaAuxiliar without params
+  - Opera├º├úo: SEEK TmpOper (filtered by TpGOp if GerPorTp) ÔåÆ FormBuscaAuxiliar without params
+  - Operacaoi: auto-populates faixa final
+  - Grupo/Conta/Dconta (├ù2 for Conta and Responsavel): FormBuscaAuxiliar with SQL params (SigCdGcr/SigCdCli)
+  - Empresa Cd/Ds: FormBuscaAuxiliar with SigCdEmp (only when `this_lAlterEmp`)
+  - Nop: delegates to `BO.ValidarNumeroOP()`

@@ -1,0 +1,19 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormSigAcCcr.prg` foi criado com implementa├º├úo completa contendo:
+
+**Estrutura base criada:**
+- `DEFINE CLASS FormSigAcCcr AS FormBase` com propriedades visuais (Height=600, Width=1000, Caption="Acesso a Conta Corrente")
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria SigAcCcrBO, configura PageFrame, carrega lista
+- `ConfigurarPageFrame()` ÔåÆ 2 pages com Top=-29
+- `ConfigurarPaginaLista()` ÔåÆ Page1 com cabe├ºalho, 5 bot├Áes CRUD, grid 4 colunas, bot├úo Encerrar
+- `ConfigurarPaginaDados()` ÔåÆ Page2 com bot├Áes Confirmar/Cancelar, campos Usu├írio (Grupo+Nome) e Conta Corrente (GrConta+DGrConta+CdConta+DCONTA)
+
+**M├®todos funcionais completos:**
+- `CarregarLista()`, `AlternarPagina()`, `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`
+- Bot├Áes: `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`, `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- Lookups via `FormBuscaAuxiliar`: `ValidarGrupoUsuario()` (SigCdGrA), `ValidarUsuario()` (SigCdUsu), `ValidarGrConta()` e `ValidarDGrConta()` (SigCdGcr), `ValidarCdConta()` e `ValidarDConta()` (SigCdCli)
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()`
+
+**Integra├º├úo no sistema:**
+- `menu.prg`: BAR 21 em popCadastros + `AbrirFormSigAcCcr()` adicionados
+- `config.prg`: n├úo precisa de altera├º├úo (ADIR() carrega automaticamente)

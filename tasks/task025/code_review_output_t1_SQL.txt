@@ -1,0 +1,13 @@
+﻿O schema confirma que as tr├¬s colunas flagadas **existem e s├úo corretas**:
+
+- `usuarios` ├® chave prim├íria de `SigCdUsu` Ô£ô
+- `ncomps` existe em `SigCdUsu` e `SigCdGrA` Ô£ô
+- `grupos` ├® chave prim├íria de `SigCdGrA` Ô£ô
+
+**Conclus├úo ap├│s verifica├º├úo: os 3 flags s├úo falsos positivos.**
+
+O analisador est├ítico comparou *todas* as cl├íusulas WHERE do arquivo migrado contra as colunas do WHERE original (CEMPS, TRANSACAOS, PROGS, CIDCHAVES ÔÇö todas em SigOpLog). Mas as condi├º├Áes flagadas est├úo em queries de **tabelas diferentes** (SigCdUsu e SigCdGrA), nos m├®todos de lookup/valida├º├úo de input (`ValidarCUsuario`, `ValidarDUsuario`, `ValidarCGrupo`, `ValidarDGrupo`).
+
+O c├│digo original n├úo tinha essas queries expl├¡citas porque usava controles customizados legacy (`GetCGrupo`, `GetCUsuario`) que faziam o lookup internamente. A arquitetura 4C migrada usa text boxes simples com m├®todos de valida├º├úo ÔÇö padr├úo correto para o novo sistema.
+
+**Nenhuma altera├º├úo necess├íria.** As condi├º├Áes WHERE s├úo leg├¡timas, as colunas existem no banco, e remov├¬-las quebraria a valida├º├úo de input dos filtros.

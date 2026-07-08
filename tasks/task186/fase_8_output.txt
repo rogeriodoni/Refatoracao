@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPrGl2.prg` agora tem 1.367 linhas e est├í completo com todos os m├®todos exigidos:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Reaplica ordena├º├úo + GO TOP + Refresh nos grids + chama HabilitarCampos |
+| `FormParaBO()` | Transfere `this_lReservaAuto`, `this_lAutomatico`, `this_nEmphPdr`, `this_nNumeroOp`, `this_cPorDestino` para o BO |
+| `BOParaForm()` | Refresha grids, txt_4c_Cliente, editboxes via ControlSource existente |
+| `HabilitarCampos()` | SCAN FOR Flag em TmpCabec ÔåÆ habilita/desabilita `cmd_4c_Processar` (que tem Caption, n├úo icone-only) |
+| `LimparCampos()` | REPLACE ALL Flag WITH .F. + Refresh dos controles de observa├º├úo |
+| `AjustarBotoesPorModo()` | Delega para `HabilitarCampos()` (sem modos CRUD neste form) |
+| `BtnBuscarClick()` | ÔåÆ `CarregarLista()` |
+| `BtnEncerrarClick()` | ÔåÆ `AoCancelar()` |
+| `BtnSalvarClick()` | ÔåÆ `AoProcessar()` (salvar = processar OPs) |
+| `BtnCancelarClick()` | ÔåÆ `AoCancelar()` |

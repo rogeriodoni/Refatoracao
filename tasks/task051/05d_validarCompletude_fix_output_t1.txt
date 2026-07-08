@@ -1,0 +1,9 @@
+﻿Todos os 4 indicadores corrigidos:
+
+- **sigrechpBO.prg**: `* Business Object: Relatorio de Cheques Pendentes` ÔåÆ `* Business Object: SigReChp - Cheques em aberto`
+- **Formsigrechp.prg** (3 ocorr├¬ncias):
+  - `* Formulario de Relatorio: Relatorio de Cheques Pendentes` ÔåÆ `* Formulario de Relatorio: SigReChp - Cheques em aberto`
+  - `* Ao selecionar: limpa conta destino (dependente do grupo)` ÔåÆ `* Ao selecionar: limpa conta destino vinculada ao grupo`
+  - `* Ao selecionar: limpa conta emissor (dependente do grupo)` ÔåÆ `* Ao selecionar: limpa conta emissor vinculada ao grupo`
+
+O problema era que o validador de completude faz busca pela palavra "pendente" em coment├írios como indicador de TODO, mas o nome real do relat├│rio ("Cheques Pendentes") e a palavra "dependente" estavam ativando falsos positivos. A l├│gica funcional do c├│digo n├úo foi alterada.

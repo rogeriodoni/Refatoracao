@@ -1,0 +1,23 @@
+﻿Phase 8 finalizada. O arquivo `Formsigrefc2.prg` (858 linhas) e `sigrefc2BO.prg` (1317 linhas) est├úo completos e funcionais.
+
+**Resumo da Fase 8 (consolida├º├úo final):**
+
+`Formsigrefc2.prg` ÔÇö Form REPORT completo:
+- `Init()` ÔåÆ `DODEFAULT()` (sem dupla chamada)
+- `InicializarForm()` com guarda `gb_4c_ValidandoUI`
+- `ConfigurarCabecalho`, `ConfigurarBotoesRelatorio` (CommandGroup 4 bot├Áes can├┤nico), `ConfigurarPageFrame`, `ConfigurarPaginaLista` (filtros), `ConfigurarPaginaDados` (config SigCdPam)
+- `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick` (padr├úo REPORT)
+- `BtnIncluirClick`/`BtnAlterarClick`/`BtnExcluirClick` delegam para a├º├Áes REPORT (compatibilidade)
+- `FormParaRelatorio()` mapeia 5 campos do form para BO
+- `LimparCampos()` com fallback para modo valida├º├úo (BO=.NULL.)
+- `TeclaCdEmpresa`/`AbrirBuscaEmpresa`/`ValidarCdEmpresa` (F4/ENTER/TAB)
+- `TeclaNomEmpresa`/`ValidarNomEmpresa` (busca reversa por raz├úo social)
+- `AlternarPagina`, `Destroy` (com `.NULL.`, n├úo `.Release()`)
+
+`sigrefc2BO.prg` ÔÇö BO RelatorioBase completo com `Init`, `Destroy`, `PrepararDados`, `PrepararMapaFechamento`, `PrepararVisaoDetalhada`, `PrepararFechamentoConserto`, `Visualizar`, `Imprimir`, `GerarExcel`, `ObterMensagemErro`, `ObterChavePrimaria`, `CarregarDoCursor`, `Inserir`/`Atualizar` (retornam .F.).
+
+**Corre├º├Áes aplicadas nesta fase:**
+1. `sigrefc2BO.Init` ÔÇö adicionado `loc_oErro` ao `LOCAL` (vazamento de escopo no CATCH)
+2. `Formsigrefc2.LimparCampos` ÔÇö guarda contra BO=.NULL. em modo valida├º├úo UI
+
+**Integra├º├úo:** menu.prg j├í tem `BAR 117 OF popRelatorios` + `PROCEDURE AbrirFormsigrefc2`. config.prg carrega `forms/relatorios/Form*.prg` dinamicamente via ADIR.

@@ -1,0 +1,16 @@
+﻿Arquivo criado com sucesso em `C:\4c\projeto\app\classes\sigredtvBO.prg`.
+
+**Fase 1/8 conclu├¡da.** O `sigredtvBO.prg` foi criado com:
+
+- **Heran├ºa correta**: `RelatorioBase` (n├úo `BusinessBase` como o esqueleto sugeria)
+- **20 propriedades declaradas** cobrindo todos os filtros do formul├írio original:
+  - Per├¡odo (`this_dDtInicial`, `this_dDtFinal`)
+  - Moeda (`this_cCodMoeda`, `this_cDesMoeda`)
+  - Demonstrativo/Balan├ºos (`this_cDemonstrativo`)
+  - OptionGroups: tipo de datas, SNF, cota├º├úo, contrapartida, comparativo
+  - Per├¡odo comparativo (`this_dCompInicial`, `this_dCompFinal`)
+  - Flags de estado: `this_lPrevisao`, `this_lComparativo`, `this_lContraPartida`
+  - Tipo do relat├│rio (`this_nTipo`: 1=Demonstrativo, 2=Mapa de Contas)
+  - Filtro de empresas para SQL IN (`this_cFiltroEmpresas`)
+- **Init()** configurando defaults que espelham o formul├írio original (incluindo os valores default dos OptionGroups como `optTpDatas.Value=2`, `optSnt.Value=3`, etc.)
+- **M├®todos auxiliares**: `ConfigurarTipo()`, `ObterCaptionForm()`, `ObterChavePrimaria()`, `Destroy()`

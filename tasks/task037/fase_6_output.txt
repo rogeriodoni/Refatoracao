@@ -1,0 +1,16 @@
+﻿As 4 corre├º├Áes foram aplicadas com sucesso. Resumo do que foi feito na Fase 6:
+
+**An├ílise da implementa├º├úo existente** (fases 1-5 j├í tinham completado):
+- Todos os 22 controles do layout.json j├í presentes Ô£ô
+- Todos os campos: `dt_final`, `cd_moeda`/`ds_moeda`, `cd_empresa`/`ds_empresa` Ô£ô
+- Todos os OptionGroups: `optGcontaz`, `optGtprel`, `OptCotacao`, `Opt_Cli`, `OpAnCst`, `optconcilias` Ô£ô
+- Todos os lookups com BINDEVENT (KeyPress F4=115, ENTER=13/TAB=9 + DblClick) Ô£ô
+- `FormParaRelatorio()` mapeando todos os 10 filtros para o BO Ô£ô
+
+**Bug corrigido nesta fase**: Os handlers de lookup para campos de **descri├º├úo** (`txt_4c__ds_moeda` e `txt_4c__ds_empresa`) n├úo verificavam o estado `ReadOnly`. Quando o c├│digo est├í preenchido, esses campos ficam ReadOnly ÔÇö mas DblClick e F4 ainda disparariam a busca. Adicionados guards em 4 m├®todos:
+- `TeclaLookupMoedaDesc` (linha 781)
+- `AbrirBuscaMoedaDesc` (linha 793)
+- `TeclaLookupEmpresaDesc` (linha 928)
+- `AbrirBuscaEmpresaDesc` (linha 940)
+
+O arquivo `Formsigrebal.prg` est├í completo e funcional para a Fase 6.

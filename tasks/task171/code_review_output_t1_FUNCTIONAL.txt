@@ -1,0 +1,16 @@
+﻿Feito. Uma corre├º├úo real foi aplicada; os 7 problemas listados s├úo falsos positivos.
+
+**Resumo:**
+
+| Problema Listado | Diagn├│stico |
+|---|---|
+| `THIS.Width()` inexistente | Falso positivo ÔÇö ├® acesso a propriedade `.Width`, sem `()` no c├│digo real |
+| `THIS.Controls()` inexistente | Falso positivo ÔÇö cole├º├úo built-in VFP9, sintaxe `Controls(N)` ├® v├ílida |
+| `THIS.ObterResultado()` inexistente | Falso positivo ÔÇö definido como `FUNCTION` na linha 514 |
+| `THIS.ExtrairCampoBuf()` inexistente | Falso positivo ÔÇö definido como `PROTECTED FUNCTION` na linha 1054 |
+| `THIS.ExecutarLoopSiTef()` inexistente | Falso positivo ÔÇö definido como `FUNCTION` na linha 884 |
+| `lbl_4c_Label11` Top=268 (orig=14) | Falso positivo ÔÇö validador confundiu `Label1` (ÔåÆ`lbl_4c_Instrucao`, Top=14 Ô£ô) com `Label11` (ÔåÆ`lbl_4c_Label11`, label da data de vencimento) |
+| `lbl_4c_Label11` Left=98 (orig=18) | Idem acima |
+
+**Bug real corrigido (n├úo estava na lista):**
+- Linha 834: `BINDEVENT(txt_4c_Text1, "KeyPress", TxtText1LostFocus)` ÔåÆ `"LostFocus"`. O handler sem guard bloqueava o `txt_4c_Text1` no primeiro keystroke, tornando imposs├¡vel digitar o n├║mero de parcelas. Assinatura do handler atualizada para `PROCEDURE TxtText1LostFocus()` (LostFocus n├úo passa par├ómetros).

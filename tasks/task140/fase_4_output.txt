@@ -1,0 +1,31 @@
+﻿Analisando o arquivo atual e o c├│digo fonte original, identifiquei um problema importante com a Fase 4.
+
+**FormSigPdMen N├âO ├® um formul├írio CRUD** ÔÇö ├® um dialog modal simples de exibi├º├úo de mensagens. O original `SIGPDMEN.SCX` tem apenas:
+- Um cabe├ºalho
+- Um container de texto/memo
+- Um bot├úo OK
+
+O formul├írio **j├í est├í completo** desde a Fase 3. Adicionar `ConfigurarPaginaLista()`, grid e bot├Áes CRUD violaria o **PILAR 1 (UX)** ÔÇö o original n├úo tem nada disso, e incluir seria fundamentalmente incorreto.
+
+**Evid├¬ncias no c├│digo fonte:**
+- `layout.json`: `"temGrid": false`, form ├® `800x270` (pequeno dialog)
+- `comportamento.json`: apenas 4 m├®todos simples (Release, Load, Init, Click do OK)
+- `analise.json`: `"formType": "OPERACIONAL"`, sem campos, sem lookups
+
+**O que o Phase 4 pede vs. o que o form ├®:**
+
+| Fase 4 pede | FormSigPdMen real |
+|-------------|-------------------|
+| Page1 com grid de registros | Sem pages, sem grid |
+| 6 bot├Áes CRUD | 1 bot├úo OK |
+| AlternarPagina() | Sem navega├º├úo entre p├íginas |
+
+**O formul├írio atual (`FormSigPdMen.prg`) j├í implementa 100% da funcionalidade do legado:**
+- Recebe par├ómetros `(pCidChave, pDescr1, pDescr2)` Ô£ô
+- Carrega de `SigCdMsg` via BO Ô£ô
+- Exibe texto via Label ou EditBox (modo memo) Ô£ô
+- Comportamento do bot├úo OK id├¬ntico ao legado Ô£ô
+
+**A Fase 4 deve ser marcada como N/A para este form.** A pipeline multi-fase foi projetada para forms CRUD ÔÇö para este dialog operacional simples, as fases 1-3 j├í encerraram a migra├º├úo completa.
+
+Deseja que eu avance diretamente para a integra├º├úo (menu.prg + config.prg, que seria a Fase 5 ou equivalente), ou prefere revisar a an├ílise?

@@ -1,0 +1,25 @@
+﻿88 `PROCEDURE` declarations and 88 `ENDPROC` ÔÇö perfectly balanced. Phase 6 is complete.
+
+Here's what was implemented in FASE 6/8:
+
+**`ConfigurarPaginaDadosPrincipal` - remaining ~50% of controls added:**
+- Linha 8b: `txt_4c_Cor` (getCor/codcors) + `txt_4c_Tam` (getTam/codtams) ÔÇö same row as Refs
+- Right side top: `txt_4c_DtSituas` (dtsituas)
+- Linha 9: `txt_4c_CodFinP` + `txt_4c_DesFinP` (Ficha/codfinp) + `txt_4c_PesoB` (pesobs)
+- Linha 10: `txt_4c_CodAcb` + `txt_4c_DacbDisplay` (Acabamento/codacbs) + `txt_4c_Pmedio` (pcuss)
+- Linha 11: `txt_4c_Class` + `txt_4c_DClassDisplay` (cclass) + `txt_4c_Local` (locals)
+- Linha 11b: `txt_4c_Ctotal` + `txt_4c_Mctotal` (moecs)
+- Linha 12: `txt_4c_Cuni` + `txt_4c_DuniDisplay` + `txt_4c_Cunip` + `txt_4c_DunipDisplay`
+- Linha 12b: `txt_4c_Pvenda` + `txt_4c_Mpvenda` + `txt_4c_DtIncs` + `txt_4c_DataAlts`
+- Linha 13: `txt_4c_CodIdent` + `txt_4c_Fvenda` + `txt_4c_Mfvenda` + `txt_4c_UsuIncs` + `txt_4c_UsuaAlts`
+- Linha 14: `edt_4c_DscCompras` + `chk_4c_FabrProprs` + `chk_4c_Consig` + `chk_4c_Encoms`
+- Linha 15: `edt_4c_DPro3s`
+- Linha 16: `edt_4c_ObsCompras`
+- **DblClick BINDEVENTs** on all Phase 5 lookup fields + all new Phase 6 lookup fields
+
+**Bug fixes applied:**
+- `CarregarDadosSigCdPro`: corrected `clins` ÔåÆ `linhas`, `ccols` ÔåÆ `colecoes` (correct SQL Server column names)
+- `CarregarDescLin`: corrected `WHERE clins =` ÔåÆ `WHERE linhas =` and `dlins` ÔåÆ `descs`
+- `CarregarDescCol`: removed non-existent SigCdCol reference; `colecoes` is free text in SigCdPro
+
+**New methods (28 total):** 9 `CarregarDesc*`, 11 KeyPress handlers, 8 Validate methods, 11 `AbrirLookup*`

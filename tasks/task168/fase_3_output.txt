@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormSIGPRCPR.prg` (340 linhas) foi criado em `C:\4c\projeto\app\forms\operacionais\` com:
+
+**O que foi entregue (Fase 3/8 ÔÇö Estrutura Base):**
+- `DEFINE CLASS FormSIGPRCPR AS FormBase` com todas as propriedades visuais (1000├ù600, TitleBar=0, ControlBox=.F., Closable=.F., DataSession=2)
+- `this_*` declarados: oBusinessObject, oFormPai, dData, cSigKey e os 8 par├ómetros vindos de `crSigCdPam` (DopeCit, DopTransf, GruConfs, ConConfs, GruReservs, ConReservs, GrupoEsts, ContaEsts)
+- `Init(par_oFormPai)` ÔÇö captura form pai ANTES de DODEFAULT (inclui data, SigKey e todos os par├ómetros de configura├º├úo)
+- `InicializarForm()` ÔÇö herda DataSessionId do pai, cria BO, propaga par├ómetros, cria cursor, monta cabe├ºalho, chama `CarregarBaixas()` (protegido por `gb_4c_ValidandoUI`)
+- `PropagararParametrosBO()` ÔÇö transfere todos os `this_*` para o BO
+- `CriarCursorTmpBaixa()` ÔÇö cria `cursor_4c_TmpBaixa` com estrutura exata e ├¡ndices `CodBarra` + `GruConta`
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` (cinza 100,100,100) com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco), caption acentuado via CHR()
+- `TornarControlesVisiveis()` ÔÇö skip em `grd_4c_Dados`, `txt_4c_Leitura`, `lbl_4c_Txt_Leitura` (ficam `Visible=.F.` inicialmente, como no legado)
+- `CarregarBaixas()` ÔÇö wrapper que chama `this_oBusinessObject.CarregarBaixas()`
+- `Destroy()` ÔÇö fecha cursor, zera BO, habilita form pai + DODEFAULT
+
+**Pr├│xima fase (4/8):** Grid `grd_4c_Dados` + bot├Áes (Sair, Ok, Conf. Auto) e campo Data com label.

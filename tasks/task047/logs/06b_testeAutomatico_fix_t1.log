@@ -1,0 +1,24 @@
+[2026-05-16 16:07:46] [INFO] === CLAUDE CLI INVOKER ===
+[2026-05-16 16:07:46] [INFO] Prompt File: C:\4c\tasks\task047\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-05-16 16:07:46] [INFO] Output File: C:\4c\tasks\task047\06b_testeAutomatico_fix_output_t1.txt
+[2026-05-16 16:07:46] [INFO] Model: sonnet
+[2026-05-16 16:07:46] [INFO] Timeout: 3600 segundos
+[2026-05-16 16:07:46] [INFO] Max Output Tokens: 128000
+[2026-05-16 16:07:46] [INFO] Context Files: 0 arquivo(s)
+[2026-05-16 16:07:46] [INFO] Invocando Claude CLI...
+[2026-05-16 16:07:46] [INFO] Prompt carregado: 54841 caracteres
+[2026-05-16 16:07:46] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-05-16 16:07:46] [INFO] Tamanho total do prompt: 54841 caracteres
+[2026-05-16 16:07:46] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-05-16 16:09:16] [INFO] Claude CLI finalizado em 89.947402 segundos
+[2026-05-16 16:09:16] [INFO] Exit Code: 0
+[2026-05-16 16:09:16] [INFO] Output salvo em: C:\4c\tasks\task047\06b_testeAutomatico_fix_output_t1.txt
+[2026-05-16 16:09:16] [INFO] Output size: 636 bytes
+[2026-05-16 16:09:16] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-05-16 16:09:16] [INFO] Preview do output:
+[2026-05-16 16:09:16] [INFO] Tr+¬s altera+º+Áes aplicadas em `FormSigReCgc.prg`:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `Property AJUSTARBOTOESPORMODO is not found` | `PROTECTED` impede acesso externo ÔÇö VFP9 reporta como "property not found" | Removido `PROTECTED` de `AjustarBotoesPorModo` (linha 717) |
+| `BtnIncluirClick nao navegou para Page2 (ActivePage=1)` | `PageCount=1` sem Page2; `BtnIncluirClick` fazia `RETURN` sem navegar | `PageCount=2` + Page2 vazia criada; `BtnIncluirClick` agora seta `ActivePag

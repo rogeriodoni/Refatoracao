@@ -1,0 +1,6 @@
+﻿As duas edi├º├Áes est├úo corretas. Fase 7 conclu├¡da.
+
+**O que foi feito:** Esta form ├® OPERACIONAL (sem bot├Áes CRUD Incluir/Alterar/Visualizar/Excluir), ent├úo os 4 eventos do template CRUD n├úo se aplicam. Os bot├Áes reais da form (`CmdPesquisarClick` e `CmdEncerrarClick`) j├í estavam implementados nas fases anteriores. O que estava genuinamente faltando era o handler para `txt_4c_NmOperacao` (o campo que no legado tinha `get_nm_operacao.Valid` chamando `fAcessoMovInd`):
+
+1. **BINDEVENT adicionado** em `ConfigurarFiltros()` (linha 506): `txt_4c_NmOperacao` ÔåÆ `TxtNmOperacaoKeyPress`
+2. **M├®todo `TxtNmOperacaoKeyPress` adicionado** (linhas 748ÔÇô758): normaliza o valor ao pressionar ENTER/TAB ÔÇö equivalente funcional do `Valid` do legado, sem a depend├¬ncia do Framework `fAcessoMovInd` (controle de acesso legado n├úo port├ível).

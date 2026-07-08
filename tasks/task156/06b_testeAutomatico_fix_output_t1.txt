@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes foram aplicadas corretamente. O problema e a solu├º├úo:
+
+**Causa raiz**: `TesteAutomatico.prg` define `gnConnHandle = 0` intencionalmente (sem conex├úo ao banco) e espera que os forms chequem `gb_4c_ModoTeste = .T.` para pular queries SQL. `SigPrAprBO.CarregarParametros()` n├úo tinha essa prote├º├úo ÔÇö chamava `SQLEXEC(0, ...)` ÔåÆ lan├ºava "Connection handle is invalid" ÔåÆ CATCH retornava `.F.` ÔåÆ `InicializarForm()` retornava `.F.` ÔåÆ `CREATEOBJECT` falhava.
+
+**Corre├º├Áes aplicadas em 2 arquivos**:
+
+1. **`SigPrAprBO.prg` ÔÇö `CarregarParametros()`**: adicionado `RETURN .T.` imediato quando `gb_4c_ModoTeste = .T.`, pulando todas as queries SQL de inicializa├º├úo.
+
+2. **`FormSigPrApr.prg` ÔÇö `InicializarForm()`**: o segundo `SQLEXEC` (que cria `cursor_4c_TmpPro` vazio) tamb├®m foi guardado com a mesma checagem, evitando que o form quebre mesmo ap├│s CarregarParametros ter passado.

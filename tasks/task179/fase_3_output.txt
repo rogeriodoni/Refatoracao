@@ -1,0 +1,21 @@
+﻿Arquivo criado com 253 linhas. Fase 3 entregue com:
+
+**O que foi criado em `Formsigpres2.prg`:**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à | Cria BO, chama Configurar*, respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Ô£à | 2 p├íginas, Top=-29, Tabs=.F., BackColor/Picture configurados |
+| `ConfigurarPaginaLista()` | Ô£à | cnt_4c_Cabecalho (sombra+t├¡tulo), cnt_4c_Botoes (90px ÔÇö apenas Consultar), cnt_4c_Saida (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | Ô£à | cnt_4c_BotoesAcao (Confirmar/Cancelar) |
+| `CarregarLista()` | Ô£à | Propaga `this_cDopes` ao BO e chama `Buscar("")` |
+| `Destroy()` | Ô£à | Libera BO e chama `DODEFAULT()` |
+| `TornarControlesVisiveis()` | Ô£à | Recursivo, itera Pages de PageFrames |
+
+**Decis├Áes de design:**
+- `cnt_4c_Botoes` com `Width=90` (espelha o original: `Grupo_Op.Width = 10+80`, apenas Consultar vis├¡vel ÔÇö os demais eram hidden/disabled no legado)
+- `this_cDopes` como propriedade p├║blica ÔÇö o form pai seta antes de `Show()` em vez do legado `LPARAMETERS _Chave`
+- Sem RETURN dentro de TRY/CATCH em nenhum m├®todo
+
+**Pr├│xima fase (4):** Grid `grd_4c_Lista` na Page1 com 11 colunas + bot├úo `cmd_4c_Consultar` em `cnt_4c_Botoes` + `cmd_4c_Encerrar` em `cnt_4c_Saida`.

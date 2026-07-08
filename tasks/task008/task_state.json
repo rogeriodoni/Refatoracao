@@ -1,0 +1,271 @@
+﻿{
+    "taskId":  "task008",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-04-10T21:23:19",
+    "atualizadoEm":  "2026-04-11T03:34:49",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-04-10T21:23:19",
+                                            "fim":  "2026-04-10T21:23:19",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task008\\sigcdpro.sct",
+                                            "baseName":  "sigcdpro",
+                                            "scxFile":  "C:\\4c\\tasks\\task008\\sigcdpro.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-04-10T21:23:19",
+                                          "fim":  "2026-04-10T21:23:21",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdpro",
+                                          "txtFile":  "C:\\4c\\tasks\\task008\\sigcdpro_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T21:23:23",
+                                              "fim":  "2026-04-10T21:23:25",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task008\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T21:23:30",
+                                              "fim":  "2026-04-10T21:23:30",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task008\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task008\\meta_prompt.md",
+                                              "boClass":  "ProdutoBO",
+                                              "formClass":  "FormProduto",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task008\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T21:23:30",
+                                              "fim":  "2026-04-10T21:23:32",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task008\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-10T21:23:32",
+                                               "fim":  "2026-04-10T21:23:34",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task008\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formpro_esqueleto.prg",
+                                                                "proBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-10T21:23:34",
+                                       "fim":  "2026-04-11T01:03:58",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  998.67,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  33480
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-04-11T01:03:58",
+                                                  "fim":  "2026-04-11T01:08:04",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-04-11T01:08:06",
+                                                 "fim":  "2026-04-11T01:25:30",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  2,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-11T03:21:53",
+                                       "fim":  "2026-04-11T03:21:56",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-11T03:21:56",
+                                               "fim":  "2026-04-11T03:29:18",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task008\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-04-11T03:29:45",
+                                        "fim":  "2026-04-11T03:34:48",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-11T03:34:49",
+                                              "fim":  "2026-04-11T03:34:49",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task008_sigcdpro.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-04-10T21:23:21",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-04-10T21:23:23",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task008\\sigcdpro_form_codigo_fonte.txt",
+                                              "reducaoPercent":  65.9,
+                                              "tamanhoOriginalKB":  998.67,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task008\\sigcdpro_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  340.81
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-04-10T21:23:25",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-04-10T21:23:27",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task008\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-04-10T21:23:27",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-10T21:23:30"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-04-11T01:08:04",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-04-11T01:08:06",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormProduto_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task008\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-04-11T01:25:30",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-04-11T01:33:12",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-04-11T01:33:12",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-04-11T02:53:19",
+                                          "passes":  6,
+                                          "problemas":  "[CARGA-DADOS] OptionGroup \u0027opt_4c_Situacao\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_SituacaoCopia\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_SituacaoPro\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_ProdWeb\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [CARGA-DADOS] OptionGroup \u0027opt_4c_OpcVar\u0027 NAO tem BINDEVENT para InteractiveChange. Se este OptionGroup afeta filtro de dados (ex: Global/Positivos/Negativos), DEVE ter InteractiveChange que recarrega a grade.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_SubCp\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_GrupoCompo\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_GrupoCompo2\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_DTemp\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [NULL-CURSOR] CREATE CURSOR \u0027cursor_4c_Mtz\u0027 sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com \u0027Field XXX does not accept null values\u0027. Adicionar SET NULL ON antes e SET NULL OFF depois.; [SQL-AVISO] 60 alertas SQL-COLUNA para tabela desconhecida suprimidos (provavel falso positivo por reuso de alias em queries complexas); [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: MOEMRKAPS, TPCALCPS, TPCALCP, ACRESCS, VALORS, TPFTIOS, ARREDCS, VENDPESO, TPCALCCUS, TIPOS, ESTIMADO, CPROS, CGRUS, PGRU, CODS, I, SGRUS, ALTCOEF, QTDS, PRODUTOS, CUSTOS, MATS, IFORS, REFFS, COLECOES, UNICOMPOS, CUNIPS, MTPRIMAS, 0, ETIQS, CIDCHAVES, _XNRG, CUNIS, PCOMPOS, LCCPO, GRUPOS, VLTPS, FXINIS, FXFINS, 1, SINALS, FKCHAVES, CCATS, PRCON, DATAALTS, HORAALTS, USUAALTS, STATUS, DATAS, CODIGOS, CESTOS, CONJUNTS, USARPAS, APAGAR, VERSAOWEB, LIBERAS, ARQUIVOS, COND3S, IDIOMA, TIPOCADS, VALUE, ICLIS, CONSESTOQ, CODTAMS, CODCORS, EAN13, CATS, OBGFATOR, ENCOMS, MKPOBRIGS, MERCS, CARACTERIS, NCHKSUBGRS, NFAIXAFINS, CONTAS, PCESCOLHA, ETIQCDPRO, ETIQREF, DWVENDAS, LINHAS, LNMARCKUPA, TPCONGLOP, CNJTSQTDS, QTEQUALPS, TAG, ORDEMS, DESCRS, CODCADS, USUARS, OPERS, SITUAS, COND4S, EMPGRUESTS, CMOES; [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDPRO.Pagina.Lista.cntMensagem): Top original=32 vs migrado \u0027lbl_4c_Label1\u0027 Top=245 (diff=213px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblGrupo\u0027 (parent: SIGCDPRO.Pagina.Lista.cntFiltros): Top original=18 vs migrado \u0027lbl_4c_LblGrupoCus\u0027 Top=444 (diff=426px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblGrupo\u0027 (parent: SIGCDPRO.Pagina.Lista.cntFiltros): Left original=21 vs migrado \u0027lbl_4c_LblGrupoCus\u0027 Left=479 (diff=458px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label8\u0027 (parent: SIGCDPRO.Pagina.Dados.CntQtMin): Top original=5 vs migrado \u0027lbl_4c_Label8\u0027 Top=320 (diff=315px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label8\u0027 (parent: SIGCDPRO.Pagina.Dados.CntQtMin): Left original=8 vs migrado \u0027lbl_4c_Label8\u0027 Left=250 (diff=242px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=134 vs migrado \u0027lbl_4c_Label2\u0027 Top=270 (diff=136px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=451 vs migrado \u0027lbl_4c_Label10\u0027 Top=512 (diff=61px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=967 vs migrado \u0027lbl_4c_Label10\u0027 Left=147 (diff=820px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=451 vs migrado \u0027lbl_4c_Label9\u0027 Top=349 (diff=102px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=884 vs migrado \u0027lbl_4c_Label9\u0027 Left=756 (diff=128px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblAcabamento\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=350 vs migrado \u0027lbl_4c_LblAcabamento\u0027 Top=385 (diff=35px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=172 vs migrado \u0027chk_4c_Fwoption1\u0027 Top=360 (diff=188px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=879 vs migrado \u0027chk_4c_Fwoption1\u0027 Left=180 (diff=699px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblVenda\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=581 vs migrado \u0027lbl_4c_LblVendaSep\u0027 Top=503 (diff=78px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblVenda\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=416 vs migrado \u0027lbl_4c_LblVendaSep\u0027 Left=361 (diff=55px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  27
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-04-11T02:53:19",
+                                                "status":  "FAILED",
+                                                "tentativas":  1,
+                                                "erro":  "SQL schema validation failed: 13 unresolved problem(s). See C:\\4c\\tasks\\task008\\sql_schema_problems.txt",
+                                                "fim":  "2026-04-11T03:21:53"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-04-11T03:29:18",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-11T03:29:45",
+                                             "thresholdPx":  5,
+                                             "unmatched":  251,
+                                             "errors":  257,
+                                             "matched":  151,
+                                             "warnings":  319,
+                                             "reportFile":  "C:\\4c\\tasks\\task008\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

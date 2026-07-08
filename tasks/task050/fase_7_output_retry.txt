@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Os 4 handlers principais agora existem em `C:\4c\projeto\app\forms\relatorios\Formsigreche.prg`:
+
+- `BtnVisualizarClick()` (linha 394) ÔÇö j├í existia, gera preview do relat├│rio
+- `BtnIncluirClick()` (linha 465) ÔÇö "gerar novo": chama `this_oRelatorio.Visualizar()` com filtros atuais
+- `BtnAlterarClick()` (linha 485) ÔÇö "alterar par├ómetros": `LimparCampos()` + foco no primeiro filtro
+- `BtnExcluirClick()` (linha 501) ÔÇö "encerrar": pede confirma├º├úo via `MsgConfirma()` e fecha o form
+
+Cada handler tem l├│gica funcional real (sem stubs/TODOs), respeita o padr├úo TRY/CATCH com `MsgErro`, e usa CHR() para acentos. Como `Formsigreche` ├® um `frmrelatorio` (n├úo CRUD), os nomes Incluir/Alterar/Excluir foram mapeados para as a├º├Áes semanticamente equivalentes de um relat├│rio.

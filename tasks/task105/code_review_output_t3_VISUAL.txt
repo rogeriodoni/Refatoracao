@@ -1,0 +1,38 @@
+﻿Encontrei a informa├º├úo decisiva. A linha 358 do arquivo cont├®m um coment├írio expl├¡cito:
+
+```
+* Posicoes relativas a Page1 = posicao_original - 85 (offset do PageFrame)
+```
+
+Tamb├®m confirmei que nenhuma das 6 propriedades ├® redefinida em outro lugar no arquivo.
+
+## An├ílise: Todos os 6 problemas s├úo falsos positivos do validador
+
+O validador est├í cometendo dois erros distintos de compara├º├úo:
+
+### Problemas 1 & 2 ÔÇö OptRfEstoque (Top=0, Left=0)
+
+O validador leu as propriedades de **Buttons(1)** (linhas 394-395: `.Top=0, .Left=0`) dentro do `WITH .Buttons(1)`, e as atribuiu incorretamente ao `obj_4c_OptRfEstoque`.
+
+O OptionGroup **em si** est├í em `.Top=41, .Left=162` (linha 382-383). Com o pgf em `Top=85, Left=-1`, a posi├º├úo absoluta ├® **126, 161** ÔÇö correspond├¬ncia exata com o original.
+
+### Problemas 3 & 4 ÔÇö lbl_moeda (Top=104) e lbl_grupo (Top=185)
+
+O validador comparou a posi├º├úo **relativa ├á Page** contra a posi├º├úo **absoluta no form original**, sem considerar o offset do PageFrame. As contas s├úo:
+
+| Controle | Pos. na Page | + pgf.Top (85) | Absoluto | Original SCX |
+|---|---|---|---|---|
+| lbl_4c_Lbl_moeda | 104 | 85 | **189** | 189 Ô£ô |
+| lbl_4c_Lbl_grupo | 185 | 85 | **270** | 270 Ô£ô |
+
+### Problemas 5 & 6 ÔÇö cnt_4c_Aguarde (Top=13, Left=12)
+
+O validador leu as propriedades de **lbl_4c_Label1** (linhas 686-687: `.Top=13, .Left=12`) dentro do container, e as atribuiu ao `cnt_4c_Aguarde`.
+
+O container **em si** est├í em `.Top=105, .Left=261` (linhas 675-676). Com pgf em `Top=85, Left=-1`, a posi├º├úo absoluta ├® **190, 260** ÔÇö correspond├¬ncia com o original (190, 261).
+
+---
+
+**Conclus├úo:** O c├│digo est├í **completamente correto**. O offset de ÔêÆ85 est├í inclusive documentado no pr├│prio arquivo (linha 358: `"Posicoes relativas a Page1 = posicao_original - 85 (offset do PageFrame)"`). Alterar qualquer uma dessas posi├º├Áes quebraria o layout ÔÇö por exemplo, mover `lbl_4c_Lbl_moeda` de Top=104 para Top=189 a colocaria **abaixo** do textbox `txt_4c__cd_moeda` (que est├í em Top=101).
+
+Nenhuma altera├º├úo ├® necess├íria neste pass. Os 6 alertas devem ser reportados como falsos positivos do validador para que a ferramenta possa ajustar sua l├│gica de compara├º├úo para considerar o offset do PageFrame e o escopo de blocos `WITH` aninhados.

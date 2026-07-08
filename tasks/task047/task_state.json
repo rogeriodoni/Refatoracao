@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task047",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-05-16T15:15:03",
+    "atualizadoEm":  "2026-05-16T16:11:54",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-05-16T15:15:03",
+                                            "fim":  "2026-05-16T15:15:03",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task047\\SigReCgc.sct",
+                                            "baseName":  "SigReCgc",
+                                            "scxFile":  "C:\\4c\\tasks\\task047\\SigReCgc.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-05-16T15:15:03",
+                                          "fim":  "2026-05-16T15:15:04",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigReCgc",
+                                          "txtFile":  "C:\\4c\\tasks\\task047\\SigReCgc_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T15:15:04",
+                                              "fim":  "2026-05-16T15:15:04",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task047\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T15:15:05",
+                                              "fim":  "2026-05-16T15:15:05",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task047\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task047\\meta_prompt.md",
+                                              "boClass":  "SigReCgcBO",
+                                              "formClass":  "FormSigReCgc",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task047\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T15:15:05",
+                                              "fim":  "2026-05-16T15:15:06",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task047\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T15:15:06",
+                                               "fim":  "2026-05-16T15:15:06",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task047\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigReCgc_esqueleto.prg",
+                                                                "SigReCgcBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T15:15:06",
+                                       "fim":  "2026-05-16T15:54:38",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReCgcBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  9.27,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReCgc.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  348
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-05-16T15:54:38",
+                                                  "fim":  "2026-05-16T15:54:40",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReCgc.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReCgcBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-05-16T15:54:40",
+                                                 "fim":  "2026-05-16T15:54:41",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T16:06:59",
+                                       "fim":  "2026-05-16T16:07:44",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T16:07:44",
+                                               "fim":  "2026-05-16T16:11:53",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task047\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-05-16T16:11:53",
+                                        "fim":  "2026-05-16T16:11:54",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSigReCgc_20260516161154.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  44,
+                                        "avisos":  40
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T16:11:54",
+                                              "fim":  "2026-05-16T16:11:54",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task047_SigReCgc.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-05-16T15:15:04",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-05-16T15:15:05",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task047\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-05-16T15:15:05",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T15:15:05"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-05-16T15:54:40",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-05-16T15:54:40",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigReCgc_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReCgc.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task047\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-05-16T15:54:41",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-05-16T15:57:19",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  2,
+                                                 "mensagem":  "Corrigido automaticamente apos 2 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-05-16T15:57:19",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-05-16T16:02:11",
+                                          "passes":  3,
+                                          "problemas":  "[LAYOUT-POSITION] Controle \u0027optDatas\u0027 (parent: SIGRECGC): Top original=168 vs migrado \u0027obj_4c_OptDatas\u0027 Top=5 (diff=163px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optDatas\u0027 (parent: SIGRECGC): Left original=372 vs migrado \u0027obj_4c_OptDatas\u0027 Left=5 (diff=367px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  2
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-05-16T16:02:11",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-05-16T16:06:59",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReCgcBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReCgc.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-05-16T16:11:53",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T16:11:53",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  6,
+                                             "warnings":  6,
+                                             "reportFile":  "C:\\4c\\tasks\\task047\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

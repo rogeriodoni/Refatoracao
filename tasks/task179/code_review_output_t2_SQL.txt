@@ -1,0 +1,5 @@
+﻿Two changes made:
+
+1. **DOPES fix** (real issue): Removed the hard-coded `WHERE a.Dopes = EscaparSQL(THIS.this_cDopes)` from `sigpres2BO.Buscar()`. The BO now only applies a WHERE if `par_cFiltro` is provided. The form's `CarregarLista()` now passes the Dopes filter explicitly as `Buscar("a.Dopes = " + EscaparSQL(THIS.this_cDopes))`, preserving the filtering behavior.
+
+2. **ICLIS** (false positive): `CarregarDescricaoConta()` unchanged. `IClis` is the confirmed PK of SIGCDCLI (schema constraint `sigcdcli_iclis`, FK reference `[iclis]`), and the `WHERE iclis = EscaparSQL(...)` pattern is used identically in other migrated forms (FormSIGREVIS). The WHERE is structurally necessary and not invented.

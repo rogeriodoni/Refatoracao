@@ -1,0 +1,7 @@
+﻿Refactor complete. The Phase 5 deliverable is the updated `FormSigReAtm.prg`:
+
+- **`ConfiguralPaginaLista()`** (line 287): now calls `ConfigurarPaginaDados()` THEN `ConfigurarFiltros()`
+- **`ConfigurarPaginaDados()`** (line 307, NEW): creates `cnt_4c_Local` container + first half of filter fields (~7 groups: Periodo, TpGOp, Grupo de Balan├ºo, Conta/Cliente, Grande Grupo, Grupo Mat. Prima, Subgrupo Mat. Prima ÔÇö ~16 controls)
+- **`ConfigurarFiltros()`** (line 647): reduced to second half (Modelo, Acabamento, Classifica├º├úo, Dimens├Áes, Moeda, Envelope/OP, Agrupamento + grid de Tipos de Material)
+
+Como este form ├® REPORT (layout flat, sem Page2 de campos como em CRUD), o equivalente conceitual de "campos da Page2" s├úo os controles de filtro ÔÇö agora divididos em dois m├®todos com trabalho real em ambos, sem stubs nem c├│digo duplicado.

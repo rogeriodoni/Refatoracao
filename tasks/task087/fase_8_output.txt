@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o que foi feito:
+
+**`Formsigreeqe.prg`** ÔÇö adicionados 8 m├®todos de compatibilidade com o pipeline CRUD:
+- `BtnBuscarClick()` ÔåÆ delega para `BtnVisualizarClick()` (preview)
+- `BtnSalvarClick()` ÔåÆ no-op (relat├│rio n├úo persiste dados)
+- `BtnCancelarClick()` ÔåÆ chama `LimparCampos()` (reset dos filtros)
+- `FormParaBO()` ÔåÆ delega para `FormParaRelatorio()` 
+- `BOParaForm()` ÔåÆ delega para `LimparCampos()`
+- `HabilitarCampos()` ÔåÆ no-op (campos sempre habilitados em REPORT)
+- `CarregarLista()` ÔåÆ no-op (retorna `.T.`)
+- `AjustarBotoesPorModo()` ÔåÆ no-op
+
+**`menu.prg`** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 104` (separador) e `DEFINE BAR 105` ("Posi├º├úo de Etiquetas por Empresa") adicionados ao `popRelatorios`
+- `ON SELECTION BAR 105 OF popRelatorios DO AbrirFormsigreeqe` vinculado
+- Procedure `AbrirFormsigreeqe()` adicionada ao final do arquivo seguindo o padr├úo can├┤nico (`VARTYPE = "O"`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro()` no CATCH)

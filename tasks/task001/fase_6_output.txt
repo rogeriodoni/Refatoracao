@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. Adicionei os 3 OptionGroups e seus labels ao `ConfigurarPaginaDados()`:
+
+**Campos adicionados:**
+- `lbl_4c_Label4` + `opt_4c_ObrigaSubclasse` ÔÇö "Obriga Subclas. Encerramento" (top=257/260, Sim/N├úo, value=1)
+- `lbl_4c_Label5` + `opt_4c_Tipo` ÔÇö "Tipo" (top=275/278, Sim/N├úo, value=1)
+- `lbl_4c_Label6` + `opt_4c_Autos` ÔÇö "Autom├ítico" (top=293/296, Sim/N├úo, value=2 = padr├úo "N├úo")
+
+**Aplicado:**
+- Compensa├º├úo +29px em todos os `Top` (PageFrame.Top=-29)
+- Propriedades visuais exatas do original (FontName, FontSize, ForeColor, BackStyle, BorderStyle)
+- `AutoSize=.T.` em cada `Button` (Problema 30 ÔÇö evita sobreposi├º├úo)
+- CHR() para "N├úo" e "Autom├ítico" (Regra 4 ÔÇö sem acentos literais)
+- Os m├®todos `HabilitarCampos`, `LimparCampos`, `BOParaForm` e `FormParaBO` j├í referenciavam esses controles desde fases anteriores ÔÇö est├úo compat├¡veis

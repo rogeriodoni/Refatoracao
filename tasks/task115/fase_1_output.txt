@@ -1,0 +1,15 @@
+﻿`C:\4c\projeto\app\classes\sigrehtcBO.prg` criado com sucesso. 
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+- Heran├ºa de `RelatorioBase` (n├úo BusinessBase)
+- **11 propriedades** mapeadas do processamento legado:
+  - `this_dDtInicial`, `this_dDtFinal` ÔÇö filtros de per├¡odo
+  - `this_nTpDat` ÔÇö tipo de data (Movimenta├º├úo/Vencimento)
+  - `this_cGrupo`, `this_cDsGrupo` ÔÇö grupo de estoque/cont├íbil (`getCdGrEstoque`/`getDsGrEstoque`)
+  - `this_cIclis`, `this_cDsContas` ÔÇö conta corrente (`getCdContas`/`getDsContas`)
+  - `this_nOpEmitido`, `this_nOpCancela`, `this_nOpOrdem`, `this_nOpBaixas` ÔÇö OptionGroups
+  - `this_cCursorDados` ÔÇö nome do cursor de resultado
+- `Init()` configurando `this_cTabela = "SigCqChi"` e chamando `DODEFAULT()`
+
+Pr├│xima fase: implementar `PrepararDados()` com o SQL complexo da procedure `processamento` legada.

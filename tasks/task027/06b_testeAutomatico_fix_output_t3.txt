@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada. O `BtnCancelarClick` agora navega para Page1 em vez de `THIS.Release()`.
+
+**An├ílise das 3 falhas (mesma causa raiz):**
+
+1. **BtnIncluirNavegacao**: teste chama `BtnIncluirClick()` (ÔåÆ Page2) e depois `BtnCancelarClick()`. Com `THIS.Release()`, o form era destru├¡do. Na linha 992, `THIS.oForm.pgf_4c_Paginas.ActivePage` falha com "Unknown member OFORM" porque o objeto j├í n├úo existe.
+
+2. **BtnEncerrarExiste**: `PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 5)` na linha 1044 falha porque `THIS.oForm` ├® uma refer├¬ncia inv├ílida (form foi destru├¡do no teste anterior).
+
+3. **LookupMetodosExistem**: `AMEMBERS(loc_aMembers, THIS.oForm, 1)` na linha 1187 falha pelo mesmo motivo.
+
+Com `BtnCancelarClick` navegando para Page1, o form permanece vivo durante toda a bateria de testes e os 3 falham passam.

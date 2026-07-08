@@ -1,0 +1,12 @@
+﻿A fun├º├úo foi adicionada corretamente. A **Fase 6 est├í completa**.
+
+**Resumo do que foi encontrado e feito:**
+
+O arquivo `FormSIGREEGG.prg` j├í estava **completamente implementado** com:
+- Todos os 7 grupos de campos de filtro (Empresa, Grupo Estoque, Conta Estoque, Grande Grupo, Data Posi├º├úo, Custo, Moeda)
+- Todos os BINDEVENTs (F4/DblClick para cada campo de lookup)
+- Todos os handlers de teclado (`TeclaXxx`) implementados
+- Todos os m├®todos de lookup (`ValidarXxx` + `AbrirBuscaXxx`) completamente funcionais com `FormBuscaAuxiliar`
+- `FormParaRelatorio()`, `ValidarCampos()`, todos os bot├Áes e `Destroy()`
+
+**Corre├º├úo adicionada:** A fun├º├úo `fBuscarCotacao` foi adicionada ao `functions.prg` (`linha 1590`). Essa fun├º├úo estava sendo chamada em `SIGREEGGBO.prg` (linhas 381 e 586) e em diversos outros BOs do projeto, mas n├úo havia defini├º├úo no c├│digo novo ÔÇö era uma fun├º├úo legada do Framework.vcx. A implementa├º├úo consulta `SigCdCot` (tabela de cota├º├Áes) e retorna 1.0 como fallback seguro.

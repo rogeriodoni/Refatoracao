@@ -1,0 +1,21 @@
+﻿Os valores `Top=8` e `Left=68` detectados pela ferramenta s├úo, na verdade, as coordenadas do `lbl_4c_Label1` **dentro** do container ÔÇö n├úo do container em si. Veja a an├ílise:
+
+**No ADD OBJECT (linhas 37-40):**
+```foxpro
+ADD OBJECT cnt_4c_Aguarde AS Container WITH ;
+    Top = 115, Left = 296, ...
+```
+
+**Em ConfigurarAguarde (linhas 258-259):**
+```foxpro
+.Top  = 115
+.Left = 296
+```
+
+**O que a ferramenta confundiu:**
+- `lbl_4c_Label1.Left = 68`, `lbl_4c_Label1.Top = 8` ÔåÆ coordenadas do label *interno* ao container
+- A ferramenta leu essas coordenadas e as atribuiu ao container pai
+
+O `cnt_4c_Aguarde` j├í est├í corretamente posicionado em **Top=115, Left=296** ÔÇö exatamente o valor original. As coordenadas (8, 68) s├úo relativas ao container e corretas (o texto "Aguarde..." fica centralizado dentro do container de 207px de largura).
+
+**Resultado:** ambos os problemas listados s├úo **falsos positivos** ÔÇö a ferramenta de review confundiu as coordenadas relativas do label interno com as coordenadas absolutas do container. O c├│digo est├í correto e n├úo requer nenhuma altera├º├úo.

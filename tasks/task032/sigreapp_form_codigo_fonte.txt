@@ -1,0 +1,2951 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreapp.SCX
+* Data/Hora: 16/05/26 05:17:04
+* Total de registros: 61
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAPP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGREAPP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGREAPP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_fator
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: LblPeriodo
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: optSaldos
+  Parent: SIGREAPP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Opt_AnaSi
+  Parent: SIGREAPP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: grdCla
+  Parent: SIGREAPP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREAPP.grdCla.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREAPP.grdCla.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREAPP.grdCla.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREAPP.grdCla.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREAPP.grdCla.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREAPP.grdCla.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdEmps
+  Parent: SIGREAPP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREAPP.grdEmps.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREAPP.grdEmps.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREAPP.grdEmps.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREAPP.grdEmps.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREAPP.grdEmps.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREAPP.grdEmps.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: ck_MarcaEmp
+  Parent: SIGREAPP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say8
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdTipo
+  Parent: SIGREAPP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREAPP.GrdTipo.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREAPP.GrdTipo.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREAPP.GrdTipo.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREAPP.GrdTipo.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DConta
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Conta
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say9
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DGrupo
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Numes
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Grupo
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_Juros
+  Parent: SIGREAPP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Juros
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say7
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ck_MarcaOpe
+  Parent: SIGREAPP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: ck_Pagamentos
+  Parent: SIGREAPP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: ck_Recebimentos
+  Parent: SIGREAPP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say2
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Jobs
+  Parent: SIGREAPP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ck_MarcaCla
+  Parent: SIGREAPP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say10
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getSaldo
+  Parent: SIGREAPP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: optAutorizados
+  Parent: SIGREAPP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optDatas
+  Parent: SIGREAPP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say11
+  Parent: SIGREAPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dJobs
+  Parent: SIGREAPP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 66
+  Left = 102
+  Width = 485
+  Height = 293
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 700
+  Width = 1300
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 1
+  Caption = "Relatório de Análise a Pagar / Receber"
+  lnvlcotacao = .F.
+  saldos1 = .F.
+  saldos2 = .F.
+  Name = "SIGREAPP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Width = 1308
+  cntSombra.Height = 80
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 1026
+  btnReport.Top = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 16
+  REGISTRY1.Left = 528
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Height = 24
+  Left = 98
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 125
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 1
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.getDtFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Height = 24
+  Left = 208
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 125
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.lbl_fator
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda :"
+  Height = 15
+  Left = 608
+  Top = 183
+  Width = 41
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_fator"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.LblPeriodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento :"
+  Height = 15
+  Left = 29
+  Top = 129
+  Width = 64
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "LblPeriodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.get_ds_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K"
+  Height = 24
+  Left = 685
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 28
+  Top = 179
+  Width = 115
+  ZOrderSet = 5
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "até"
+  Left = 183
+  Top = 130
+  Width = 18
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.get_cd_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 24
+  InputMask = ""
+  Left = 652
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 27
+  ToolTipText = ""
+  Top = 179
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.optSaldos
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 29
+  Left = 798
+  Top = 125
+  Width = 265
+  TabIndex = 21
+  Visible = .T.
+  ZOrderSet = 8
+  Name = "optSaldos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Informado"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 68
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Data Inicial"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 87
+  Option2.Top = 6
+  Option2.Width = 71
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Data Atual"
+  Option3.Height = 15
+  Option3.Left = 176
+  Option3.Top = 6
+  Option3.Width = 69
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Opt_AnaSi
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 29
+  Left = 92
+  Top = 98
+  Width = 265
+  TabIndex = 2
+  ZOrderSet = 8
+  Name = "Opt_AnaSi"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Analítico"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 58
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Sintético"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 76
+  Option2.Top = 6
+  Option2.Width = 59
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Fluxo de Caixa"
+  Option3.Height = 15
+  Option3.Left = 151
+  Option3.Top = 6
+  Option3.Width = 89
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 394
+  Left = 706
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 42
+  Top = 282
+  Width = 574
+  GridLineColor = 238,238,238
+  ZOrderSet = 9
+  Name = "grdCla"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 19
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 80
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 452
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdCla.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 394
+  Left = 24
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 40
+  Top = 282
+  Width = 331
+  GridLineColor = 238,238,238
+  ZOrderSet = 10
+  Name = "grdEmps"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 17
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 27
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 263
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.grdEmps.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.ck_MarcaEmp
+------------------------------------------------------------
+  Top = 283
+  Left = 25
+  Height = 16
+  Width = 13
+  Alignment = 0
+  Centered = .F.
+  Caption = ""
+  Value = 1
+  TabIndex = 34
+  ZOrderSet = 11
+  Name = "ck_MarcaEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Classificações"
+  Left = 706
+  Top = 265
+  Width = 80
+  TabIndex = 37
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresas"
+  Left = 24
+  Top = 266
+  Width = 57
+  TabIndex = 33
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.GrdTipo
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 394
+  Left = 369
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 41
+  TabStop = .F.
+  Top = 282
+  Width = 323
+  GridLineColor = 238,238,238
+  ZOrderSet = 14
+  Name = "GrdTipo"
+  Column1.FontName = "Tahoma"
+  Column1.Alignment = 0
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 17
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 283
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.GrdTipo.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.GrdTipo.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.GrdTipo.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.GrdTipo.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operações de Título"
+  Left = 369
+  Top = 266
+  Width = 114
+  TabIndex = 35
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 55
+  Top = 184
+  Width = 38
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Get_DConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 24
+  Left = 181
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 179
+  Width = 301
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "Get_DConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Get_Conta
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K"
+  Height = 24
+  InputMask = ""
+  Left = 98
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 179
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 607
+  Top = 210
+  Width = 42
+  TabIndex = 29
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 55
+  Top = 157
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Get_DGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 24
+  Left = 181
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 152
+  Width = 301
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Name = "Get_DGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.get_Numes
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 24
+  Left = 653
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 30
+  Top = 206
+  Width = 80
+  ZOrderSet = 22
+  Name = "get_Numes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Get_Grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 24
+  Left = 98
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 152
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Juros :"
+  Left = 614
+  Top = 156
+  Width = 35
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.opt_Juros
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 23
+  Left = 646
+  SpecialEffect = 0
+  Top = 153
+  Width = 91
+  TabIndex = 23
+  ZOrderSet = 25
+  Name = "opt_Juros"
+  Option1.FontName = "Tahoma"
+  Option1.FontShadow = .F.
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 57
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 48
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 57
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.get_Juros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 1
+  BorderStyle = 1
+  Value = 0
+  Format = "K"
+  Height = 24
+  InputMask = "99.99"
+  Left = 749
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 24
+  Top = 152
+  Width = 51
+  ZOrderSet = 26
+  Name = "get_Juros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "% mês"
+  Left = 802
+  Top = 157
+  Width = 35
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.ck_MarcaOpe
+------------------------------------------------------------
+  Top = 283
+  Left = 371
+  Height = 16
+  Width = 13
+  Alignment = 0
+  Centered = .F.
+  Caption = ""
+  Value = 1
+  TabIndex = 36
+  ZOrderSet = 28
+  Name = "ck_MarcaOpe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.ck_Pagamentos
+------------------------------------------------------------
+  Top = 159
+  Left = 889
+  Height = 15
+  Width = 77
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Pagamentos"
+  TabIndex = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "ck_Pagamentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.ck_Recebimentos
+------------------------------------------------------------
+  Top = 182
+  Left = 889
+  Height = 15
+  Width = 85
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Recebimentos"
+  TabIndex = 32
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  Name = "ck_Recebimentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 64
+  Top = 105
+  Width = 29
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.get_Jobs
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontName = "Tahoma"
+  Height = 23
+  Left = 98
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 205
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 32
+  Name = "get_Jobs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.ck_MarcaCla
+------------------------------------------------------------
+  Top = 283
+  Left = 708
+  Height = 16
+  Width = 13
+  Alignment = 0
+  Centered = .F.
+  Caption = ""
+  Value = 1
+  TabIndex = 38
+  ZOrderSet = 31
+  Name = "ck_MarcaCla"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Saldo Inicial :"
+  Left = 584
+  Top = 129
+  Width = 65
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.getSaldo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 1
+  BorderStyle = 1
+  Value = 0
+  Format = "K"
+  Height = 24
+  InputMask = "999999999999.99"
+  Left = 652
+  SpecialEffect = 1
+  TabIndex = 20
+  Top = 125
+  Width = 148
+  ZOrderSet = 26
+  Name = "getSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.optAutorizados
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 92
+  Top = 230
+  Width = 310
+  TabIndex = 18
+  ZOrderSet = 16
+  Name = "optAutorizados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Todos"
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 56
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Autorizados"
+  Option2.Height = 15
+  Option2.Left = 63
+  Option2.Style = 0
+  Option2.Top = 6
+  Option2.Width = 75
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Não Autorizados"
+  Option3.Height = 15
+  Option3.Left = 154
+  Option3.Style = 0
+  Option3.Top = 6
+  Option3.Width = 97
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say12
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Autorização :"
+  Left = 27
+  Top = 235
+  Width = 66
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.optDatas
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 29
+  Left = 287
+  Top = 124
+  Width = 265
+  TabIndex = 7
+  Visible = .T.
+  ZOrderSet = 8
+  Name = "optDatas"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Vencimento"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 73
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Emissão"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 91
+  Option2.Top = 6
+  Option2.Width = 56
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Lançamento"
+  Option3.Height = 15
+  Option3.Left = 159
+  Option3.Top = 6
+  Option3.Width = 76
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Say11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Job :"
+  Left = 67
+  Top = 210
+  Width = 26
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPP.Get_dJobs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  Left = 181
+  Margin = 0
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 205
+  Width = 301
+  ForeColor = 0,0,0
+  ZOrderSet = 43
+  Name = "Get_dJobs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAPP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE buscasaldos
+------------------------------------------------------------
+PROCEDURE buscasaldos
+Private pDat
+
+pDat = fDtoSQL(Iif(ThisForm.optSaldos.Value = 2, ThisForm.getDtInicial.Value, Date()), [23:59:59]) && 1-Informado; 2-Data Inicial; 3-Data Atual
+
+lcQuery = [Select c.Grupos, c.Contas, d.RClis, c.Datas, c.Saldos ] + ;
+			[From SigMvCcr c, SigCdCli d ] + ;
+		   [Where c.cIdChaves In (] + ;
+		  [Select Max(b.cIdChaves) as cIdChaves ] + ;
+		    [From SigCdGcr a, SigMvCcr b ] + ;
+		   [Where a.Coletors = 11 And ] + ;
+		   		 [a.Codigos = b.Grupos And ] + ;
+		   		 [b.Datas <= ?pDat ] + ;
+		   [Group By b.Grupos, b.Contas) And ] + ;
+		   [c.Contas = d.IClis And ] + ;
+		   [Not c.Saldos = 0]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSaldos]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalSaldos)])
+	Return 0
+EndIf
+
+lnRet = 0
+ThisForm.Saldos1 = [Saldo Inicial :] + Chr(13)
+ThisForm.Saldos2 = [ ] + Chr(13)
+
+Select LocalSaldos
+Go Top In LocalSaldos
+If Eof([LocalSaldos])
+	ThisForm.Saldos1 = [Saldo Inicial :]
+	ThisForm.Saldos2 = [0,00 (Nenhuma Conta Com Saldo Configurada Nos Grupos de Contas)]
+Else
+	Scan
+		ThisForm.Saldos1 = ThisForm.Saldos1 + ;
+						   Transform(LocalSaldos.Saldos, [9,999,999,999.99]) + [ = ] + Chr(13)
+
+		ThisForm.Saldos2 = ThisForm.Saldos2 + ;
+						   Alltrim(LocalSaldos.Contas) + [ / ] + Alltrim(LocalSaldos.RClis) + Chr(13)
+
+		lnRet = lnRet + LocalSaldos.Saldos
+	EndScan
+EndIf
+Use In LocalSaldos
+
+Return lnRet
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE habobjs
+------------------------------------------------------------
+PROCEDURE habobjs
+Lparameters llPagRec
+
+lcLabel = Iif(ThisForm.ck_Pagamentos.Value == 1,[Pagamento:],[Recebimento:]) 
+
+ThisForm.get_Numes.Enabled = llPagRec
+ThisForm.Opt_AnaSi.Enabled = not(llPagRec)
+ThisForm.lblPeriodo.Caption = Iif(llPagRec,lcLabel,[Vencimento:])
+ThisForm.Opt_Juros.Enabled = not(llPagRec)
+Thisform.get_Juros.Enabled = not(llPagRec)
+
+Return
+  
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ncalcjuros
+------------------------------------------------------------
+PROCEDURE ncalcjuros
+Lparameters ldDataVenc, nVlrBase
+
+Local lnVlrJuros, lnDias, lnJurosDia
+
+lnVlrJuros = 0
+lnJurosDia = Round((((1+ThisForm.Get_Juros.Value/100) ^ (1/30)) - 1) * 100, 9)
+
+If( ldDataVenc < Date() ) and (ThisForm.Opt_Juros.Value == 1) 
+	lnDias = Date() - ldDataVenc	
+	lnVlrJuros = Round(nVlrBase * (((1+lnJurosDia / 100) ^ (lnDias))-1), 2)	
+Endif
+Return(lnVlrJuros)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processapagrec
+------------------------------------------------------------
+PROCEDURE processapagrec
+Private pDataIni, pDataFin
+Local lcDopes, ldDataIni, ldDataFin, lcGrupo, lcConta
+
+lcDopes = Padr(Iif(ThisForm.ck_Pagamentos.Value = 1,[PAGAMENTO],[RECEBIMENTO]),20 )
+
+ldDataIni = ThisForm.getDtInicial.Value
+ldDataFin = ThisForm.getDtFinal.Value
+lcGrupo   = ThisForm.get_Grupo.Value
+lcConta   = ThisForm.get_Conta.Value
+lnCodOper = ThisForm.get_Numes.Value 
+
+pDataIni = fDtoSQL(ldDataIni)  
+pDataFin = fDtoSQL(ldDataFin,[23:59:59])
+
+Create Cursor crDados(Vencs d(8), Emps c(3), Numes n(6), Datas d(8), Titulos c(10), Debito n(12,2), Credito n(12,2), Acerto n(12,2), Moeda c(3),;
+					  Hists c(100), Hist2s c(40), CondPag m(4), VlrPago m(4), nTotPago n(12,2))
+Index on Emps+Str(Numes,6) Tag OrdRel					  
+
+If lnCodOper <= 0
+	lcQuery = [Select a.Emps, a.Numes, a.EmpDopNums, a.DataRcs, a.Dopes from SigCdPgr a ] + ;
+				[ Inner Join SigCdPgc b on b.EmpDopNums = a.EmpDopNums ] + ;
+				[ where a.Dopes = ']+lcDopes+[' and a.DataRcs between ?pDataIni and ?pDataFin ] + ;
+				[ And b.Grupos = ']+lcGrupo+[' ] + ;
+				Iif(not Empty(lcConta), [ And b.Contas = ']+lcConta+[' ],[]) + ;
+				[ Order by a.EmpDopNums ]
+Else
+	lcQuery = [Select Emps, Numes, EmpDopNums, DataRcs, Dopes from SigCdPgr where Dopes = ']+lcDopes+[' and Numes = ]+Str(lnCodOper,6)
+Endif				
+			
+If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crDados1]) < 1 )
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDados1)')
+	Return(.F.) 	
+EndIf
+
+Create Cursor crCabecalho(Empresa c(80), Titulo c(80), Periodo c(80))
+
+=Seek(_Empr,[crSigCdEmp],[cEmps])
+lcEmpresa = _Empr + [-] + crSigCdEmp.Razas
+lcTitulo  = [Relatório de Análise à Pagar/Receber - ] + Iif(lcDopes = Padr([PAGAMENTO],20),[Pagamentos],[Recebimentos])
+If lnCodOper <= 0
+	lcPeriodo = Iif(lcDopes = Padr([PAGAMENTO],20),[Pagamentos],[Recebimentos])+[ de : ] + Dtoc(ldDataIni) + [ à ] + Dtoc(ldDataFin)
+	lcPeriodo = lcPeriodo + [ - Grupo: ] + Alltrim(lcGrupo) + Iif(not Empty(lcConta), [ - Conta: ] + lcConta,[])
+Else
+	lcPeriodo = Iif(lcDopes = Padr([PAGAMENTO],20),[Pagamento],[Recebimento])+[: Nº ] + Str(lnCodOper,6)
+Endif	
+
+Insert into crCabecalho(Empresa,Titulo,Periodo) Values (lcEmpresa,lcTitulo,lcPeriodo)
+
+Select crDados1
+Go Top in crDados1
+Scan
+	lcQuery = [Select a.Acertos, a.Contas, a.Datas, a.Hists, a.Moedas, a.Nopers, a.Opers, a.Tipos, a.Valos, a.Vencs, a.Empos, b.RClis from SigCdPit a ] + ;
+				[Inner Join SigCdCli b on b.Iclis = a.Contas ] + ;
+				[Where EmpDopNums = ']+crDados1.EmpDopNums+[']
+	If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crTmpPrIt]) < 1 )
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpPrIt)')
+		Return(.F.)	
+	Endif		
+				
+	lnValos  = 0
+	lnAcerto = 0
+	lcMoeda  = []
+	lcHists  = []
+	lcHist2s = []
+	lcCondPag= []
+	lnVlrPago= 0
+	ldVencs  = Ctod([])
+	lcTitulo = []			
+	
+	** Parcelas do pagamento
+	lcEDN = crDados1.Emps + crDados1.Dopes + Str(crDados1.Numes,6)
+	lcQuery = [Select Valos, VPags, Emps, Dopes, Numes, FPags, MoeFpgs, Vencs from SigMvPar where EmpDopNums = ']+lcEDN+[']
+	If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crParcPag]) < 1 )
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crParcPag)')
+		Return(.F.)
+	EndIf
+	Select crParcPag	
+	
+	Select crTmpPrIt
+	Scan
+		If lnCodOper <= 0 and not Empty(lcConta) and lcConta <> crTmpPrIt.Contas
+			Loop
+		Endif		
+		** SigMvCcr
+		lcQuery = [Select Valors, ValPags, Moedas, Hists, Hist2s, Vencs, Titulos from SigMvCcr where Emps = ']+crTmpPrIt.EmpOs+[' and Nopers = ]+Str(crTmpPrIt.Nopers,9)		
+		If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crTmpMccr]) < 1 )
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpMccr)')
+			Return(.F.)	
+		EndIf
+		** SigMvPar
+		lcQuery = [Select Valos, VPags, Emps, Dopes, Numes, FPags, MoeFpgs, Vencs from SigMvPar where Emps = ']+crTmpPrIt.EmpOs+[' and Nopers = ]+Str(crTmpPrIt.Nopers,9)
+		If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crTmpPar]) < 1 )
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpPar)')
+			Return(.F.)
+		EndIf
+		Select crTmpPar	
+		** SigMvPar
+		lcQuery = [Select Valos, FPags from SigCdPbx where Nopers = ]+Str(crTmpPrIt.Nopers,9) + [ And EmpDopNums = ']+crDados1.EmpDopNums+[']				
+		If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crTmpPrBx]) < 1 )
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpPrBx)')
+			Return(.F.)	
+		EndIf
+		Select crTmpPrBx
+		
+		lcCondPag = Iif( not Eof([crTmpPrBx]), crTmpPrBx.FPags, crTmpPar.FPags )
+		lnVlrPago = crTmpPrBx.Valos
+		lcTitulo  = crTmpMccr.Titulos
+		lcHist2s  = crTmpMccr.Hist2s
+		
+		Do Case
+			Case crTmpPrIt.Tipos = [C]				
+				Select crTmpMccr
+				lnValos = crTmpMccr.Valors - crTmpMccr.ValPags + crTmpPrIt.Acertos
+				lnAcerto= crTmpPrIt.Acertos
+				lcMoeda = crTmpMccr.Moedas
+				lcHists = crTmpMccr.Hists
+				lcHist2s= crTmpMccr.Hist2s
+				ldVencs = crTmpMccr.Vencs
+			Case crTmpPrIt.Tipos = [P]
+				If Eof([crTmpPar])					
+					lnValos = crTmpMccr.Valors - crTmpMccr.ValPags + crTmpPrIt.Acertos
+					lnAcerto= crTmpPrIt.Acertos
+					lcMoeda = crTmpMccr.Moedas
+					lcHists = crTmpMccr.Hists
+					lcHist2s= crTmpMccr.Hist2s
+					ldVencs = crTmpMccr.Vencs
+				Else
+					lnValos = crTmpPar.Valos - crTmpPar.VPags + crTmpPrIt.Acertos
+					lnAcerto= crTmpPrIt.Acertos								
+					lcMoeda = crTmpPar.MoeFpgs
+					ldVencs = crTmpPar.Vencs
+					lcHists = Alltrim( crTmpPar.FPags ) + " " + crTmpPar.Emps + ;
+							  Alltrim( crTmpPar.Dopes ) + " " + Alltrim( fGerMascara( crTmpPar.Numes ) ) 
+					If not Eof([crTmpMccr])
+						lcHists = crTmpMccr.Hists
+						lcHist2s= crTmpMccr.Hist2s
+					EndIf					
+				Endif				
+			Case crTmpPrIt.Tipos = [M]
+				lnValos = crTmpPrIt.Valos
+				lnAcerto= crTmpPrIt.Acertos				
+				lcMoeda = crTmpPrIt.Moedas
+				ldVencs = crTmpPrIt.Vencs
+				lcHists = crTmpPrIt.Hists				
+		EndCase				
+		lnDebito = Iif(crTmpPrIt.Opers = [D], 0, lnValos)
+		lnCredito= Iif(crTmpPrIt.Opers = [C], 0, lnValos)
+	
+		lcHists = lcHists + Iif( not Empty(lcHist2s), Chr(13) + lcHist2s, [] )		
+	
+		lcCondPag = []
+		lnVlrPago = []
+		lnTotPago  = 0
+		Select crTmpPrBx
+		Scan
+			lcCondPag = lcCondPag + Iif( not Empty(lcCondPag), Chr(13), []) + crTmpPrBx.FPags
+			lnVlrPago = lnVlrPago + Iif( not Empty(lnVlrPago), Chr(13), []) + Transform(crTmpPrBx.Valos,'9,999,999.99')
+			lnTotPago = lnTotPago + crTmpPrBx.Valos
+		EndScan
+				
+		Insert into crDados(Emps, Numes, Datas, Titulos, Vencs, Debito, Credito, Acerto, Moeda, Hists, Hist2s, CondPag, VlrPago, nTotPago) Values(;
+							crDados1.Emps, crDados1.Numes, crTmpPrIt.Datas, lcTitulo, ldVencs, lnDebito, lnCredito, lnAcerto, lcMoeda,;
+							lcHists, lcHist2s, lcCondPag, lnVlrPago, lnTotPago)
+		EndScan	
+EndScan
+Select crDados
+Go Top in crDados
+
+Return(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Local llPagRec
+llPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)
+
+If (ThisForm.Opt_AnaSi.Value = 3)
+	Report Form SigReAp4 Preview NoConsole
+Else
+	If not llPagRec
+		If( ThisForm.opt_AnaSi.Value == 1 )
+			Report Form SigReAp1 Preview NoConsole
+		Else
+			Report Form SigReAp2 Preview NoConsole
+		Endif	
+	Else
+		Report Form SigReAp3 Preview NoConsole
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pdDataIni, pdDataFin
+Local lnJuros, lcGrupo, lcConta, ldDataIni, ldDataFin, lcTitulo, lcSubTit, lcPeriodo, lcEmpresa, lnQtdEmp, llPagRec, lcJob, lcDesJob
+
+ldDataIni = ThisForm.getDtInicial.Value
+ldDataFin = ThisForm.getDtFinal.Value
+lnDatas   = ThisForm.optDatas.Value 
+lcCpoDt   = Iif(lnDatas = 1, [Vencs], Iif(lnDatas = 2, [DtEmis], [Datas]))
+lnJuros   = ThisForm.get_Juros.Value
+lcGrupo   = ThisForm.get_Grupo.Value
+lcConta   = ThisForm.get_Conta.Value
+llPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)
+lnSaldo   = ThisForm.getSaldo.Value
+lnOpS	  = ThisForm.optSaldos.Value 
+lcJob     = Padr(Alltrim(Thisform.Get_jobs.Value), 10)
+lcDesJob  = Iif(Not Empty(lcJob), Chr(13) + Chr(10) + 'Job : ' + Alltrim(lcJob) + ' - ' + ThisForm.get_djobs.Value ,'')
+lnAut     = ThisForm.optAutorizados.Value 
+
+ThisForm.grdTipo.Refresh 
+Go Bottom In crSigOpOpe
+ThisForm.grdTipo.Refresh 
+Go Top In crSigOpOpe
+
+If llPagRec
+	Return(ThisForm.ProcessaPagRec())	
+Endif
+
+pdDataIni = fDtoSQL(ldDataIni)
+pdDataFin = fDtoSQL(ldDataFin,'23:59:59')
+
+Create Cursor crCabecalho (Empresa c(80), Titulo c(180), SubTitulo c(180), Periodo c(180), nQtdEmp n(2), cEmp1 c(3), cEmp2 c(3), ;
+						   cEmp3 c(3), cEmp4 c(3), cEmp5 c(3), cEmp6 c(3), cEmp7 c(3), cEmp8 c(3), cEmp9 c(3), ;
+						   SaldoFinal n(15,2), SaldoIni n(15,2), SaldosCab1 m, SaldosCab2 m)
+
+ThisForm.Saldos1 = []
+ThisForm.Saldos2 = []
+lcSaldo = []
+
+If (ThisForm.opt_AnaSi.Value = 1)
+	lcSaldo = Iif(ThisForm.opt_AnaSi.Value = 1, Iif(Empty(lnSaldo), [], [ - Saldo Inicial : ] + Alltrim(Transform(lnSaldo, [999,999,999.99]))), [])
+Else
+	If InList(lnOpS, 2, 3) && 1-Informado; 2-Data Inicial; 3-Data Atual
+		lnSaldo = ThisForm.BuscaSaldos()
+	Else
+		ThisForm.Saldos1 = [Saldo Inicial : ]
+		ThisForm.Saldos2 = Alltrim(Transform(lnSaldo, [999,999,999.99]))
+	EndIf
+EndIf
+
+=Seek(_Empr,[crSigCdEmp],[cEmps])
+lcEmpresa = _Empr + [-] + crSigCdEmp.Razas
+lcTitulo  = [Relatório de Análise a Pagar / Receber]
+lcMoeda   = Iif(Empty(ThisForm.get_cd_moeda.Value), [], [ - Moeda : ] + Alltrim(ThisForm.get_cd_moeda.Value) + ;
+													[ - ] + Alltrim(ThisForm.get_ds_moeda.Value))
+lcDatas   = Iif(lnDatas = 1, [Vencimentos], Iif(lnDatas = 2, [Emissões], [Lançamentos]))
+
+IF thisform.opt_AnaSi.Value <> 5
+   lcDesJob1=''
+   lcPeriodo = lcDatas + [ de : ] + Dtoc(ldDataIni) + [ à ] + Dtoc(ldDataFin) + lcMoeda + lcSaldo + lcDesJob
+ELSE
+   lcDesJob1 = Iif(Not Empty(lcJob), 'Job : ' + Alltrim(lcJob) + ' - ' + ThisForm.get_djobs.Value ,'')
+   lcPeriodo = lcDatas + [ de : ] + Dtoc(ldDataIni) + [ à ] + Dtoc(ldDataFin)
+EndIf
+ 	
+Insert Into crCabecalho (Empresa, Titulo, SubTitulo, Periodo, SaldoIni, SaldosCab1, SaldosCab2) ;
+				 Values (lcEmpresa, lcTitulo, lcDesJob1, lcPeriodo, lnSaldo, ThisForm.Saldos1, ThisForm.Saldos2)
+
+lcQuery = [Select a.Emps, a.DopCs, a.Nopers, a.EmpDopNums, a.Contas, a.Titulos, a.Vencs, a.Opers, a.Hists, a.EspecieNFs, ] + ;
+				 [a.Valors as VlOrig, a.ValPags, (a.Valors-a.ValPags) as Valors, b.RClis, b.Codigos, a.Moedas ] + ;
+			[From SigMvCcr a Inner Join SigCdCli b on b.iClis = a.Contas ] + ;
+		   [Where a.] + lcCpoDt + [ BetWeen ?pdDataIni and ?pdDataFin And ] + ;
+				  Iif(Empty(lcGrupo), [], [a.Grupos = '] + lcGrupo + [' And ]) + ;
+				  Iif(Empty(lcConta), [], [a.Contas = '] + lcConta + [' And ]) + ;
+				 [(a.Valors-a.ValPags) > 0 And ] + ;
+				 [a.Pagos = 1 And ] + ;
+				 [a.ContaPgs <> 2 And ] + ;
+				 [a.Tipos <> 'C' ] + ;
+				 Iif(ThisForm.opt_AnaSi.Value = 3, [And a.Tipos <> 'X'], []) + ;
+		   		 Iif(lnAut = 1, [], [And ] + Iif(lnAut = 2, [Not ], []) + [a.UsuConfs = Space(10) ]) + ;
+				 Iif(Empty(lcJob),[],[And a.Jobs = '] + lcJob + [' ]) +;
+		   [Order By a.Emps, a.DopCs, a.Contas, a.] + lcCpoDt
+
+If( ThisForm.poDataMgr.SQLExecute(lcQuery,[crDados1]) < 1 )
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDados1)')
+	Return 0	
+EndIf
+
+Select * ;
+  From crSigOpOpe ;
+ Where RealPrevs = 2 And Imps = 1 ;
+  Into Cursor crPrevs
+  
+Select crPrevs
+Go Top In crPrevs
+If Not Eof([crPrevs])
+	* Se Selecionou Movimentação de Previsão
+
+	lcQuery = [Select a.Emps, a.DopCs, a.Nopers, a.EmpDopNums, a.Contas, a.Titulos, a.Vencs, a.Opers, a.Hists, a.EspecieNFs, ] + ;
+					 [a.Valors as VlOrig, a.ValPags, (a.Valors-a.ValPags) as Valors, b.RClis, b.Codigos, a.Moedas ] + ;
+				[From SigMvCpv a Inner Join SigCdCli b on b.iClis = a.Contas ] + ;
+			   [Where a.] + lcCpoDt + [ Between ?pdDataIni and ?pdDataFin And ] + ;
+					  Iif(Empty(lcGrupo), [], [a.Grupos = '] + lcGrupo + [' And ]) + ;
+					  Iif(Empty(lcConta), [], [a.Contas = '] + lcConta + [' And ]) + ;
+					 [(a.Valors-a.ValPags) > 0 And ] + ;
+					 [a.Pagos = 1 And ] + ;
+					 [a.ContaPgs <> 2 And ] + ;
+					 [a.Tipos <> 'C' ] + ;
+					 Iif(ThisForm.opt_AnaSi.Value = 3, [And a.Tipos <> 'X'], []) + ;
+		   		     Iif(lnAut = 1, [], [And ] + Iif(lnAut = 2, [Not ], []) + [a.UsuConfs = Space(10) ]) + ;
+					 Iif(Empty(lcJob),[],[And a.Jobs = '] + lcJob + [' ]) +;
+			   [Order By a.Emps, a.DopCs, a.Contas, a.] + lcCpoDt
+
+	If( ThisForm.poDataMgr.SQLExecute(lcQuery,[LocalPrev]) < 1 )
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalPrev)')
+		Return 0	
+	EndIf
+	*** Tiago - 02/12/2011 - Vianna - Coloquei a clausula 'and a.Opers = Left(c.Opers,1)' para pegar apenas as penas no SIGMVCCR que correspondem ao OPERS da operação de títulos
+	Select a.* ;
+	  From crDados1 a ;
+	 Inner join crSigCdEmp b on b.cEmps = a.Emps ;
+	 Inner join crSigOpOpe c on c.Dopes = a.DopCs ;
+	 Inner Join crSigCdClc d on d.Codigos = a.Codigos ;
+	 Where (b.Imps = 1) and (c.Imps = 1) and (d.Imps = 1) and a.Opers = Left(c.Opers,1) ;
+	 Union All ;
+	Select e.* ;
+	  From LocalPrev e ;
+	 Inner join crSigCdEmp f on f.cEmps = e.Emps ;
+	 Inner join crSigOpOpe g on g.Dopes = e.DopCs ;
+	 Inner Join crSigCdClc h on h.Codigos = e.Codigos ;
+	 Where (f.Imps = 1) and (g.Imps = 1) and (h.Imps = 1) and e.Opers = Left(g.Opers,1) Into cursor crDados2
+Else
+	*** Tiago - 02/12/2011 - Vianna - Coloquei a clausula 'and a.Opers = Left(c.Opers,1)' para pegar apenas as penas no SIGMVCCR que correspondem ao OPERS da operação de títulos
+	Select a.* ;
+	  From crDados1 a ;
+	 Inner join crSigCdEmp b on b.cEmps = a.Emps ;
+	 Inner join crSigOpOpe c on c.Dopes = a.DopCs ;
+	 Inner Join crSigCdClc d on d.Codigos = a.Codigos ;
+	 Where (b.Imps = 1) and (c.Imps = 1) and (d.Imps = 1) and a.Opers = Left(c.Opers,1) Into cursor crDados2
+EndIf
+
+Select * from crDados2 where 0=1 into cursor crDados readwrite
+	
+Select crDados2 
+Go Top in crDados2
+Scan
+	If not Empty(crDados2.EmpDopNums) and crDados2.ValPags <= 0
+		ldVenc = crDados2.Vencs
+		lcQry = [Select vPags from SigMvPar where empdopnums = ']+crDados2.EmpDopNums+[' and Vencs = ?ldVenc]
+		ThisForm.poDataMgr.SQLExecute(lcQry,[crTmpPar])
+		If( (crDados2.VlOrig - crTmpPar.VPags) > 0 ) or Eof([crTmpPar])
+			Select crDados2
+			Scatter MemVar Memo
+			If not Eof([crTmpPar])
+				m.Valors = (m.VlOrig - Iif(crTmpPar.vPags > m.VlOrig,m.VlOrig,crTmpPar.vPags))
+			Endif
+			Insert into crDados from MemVar
+		EndIf
+	Else
+		Select crDados2
+		Scatter MemVar Memo
+		Insert into crDados from MemVar
+	Endif
+EndScan 	
+
+Do Case
+	Case (ThisForm.opt_AnaSi.Value = 1) && Analítico
+		Create Cursor crRel(Emps c(3), DopCs c(20), Titulos c(10), Conta c(10), NomeConta c(50), Vencs d(8), Debito n(14,2), ;
+							Credito n(14,2), VlJuros n(14,2), VlTotal n(14,2), EmpDopNums c(29), OpDopCs c(2), OpLanc c(1))
+		
+		Select crDados
+		Go Top in crDados
+		Scan
+			= Seek(crDados.DopCs,[crSigOpOpe],[Dopes])
+			
+			nVlJuros = 0
+			If( crSigOpOpe.Opers == [CR] and crDados.Opers = [C] ) or ;
+			  ( crSigOpOpe.Opers == [DB] and crDados.Opers = [D] ) 
+				nVlJuros = ThisForm.nCalcJuros(Ttod(crDados.Vencs),crDados.Valors)
+			Endif
+
+			*Conversão para moeda selecionada		
+			lnValor = crDados.Valors
+			lnCtReferencia = 0
+			lnCtReferencia =fBuscarCambio({}, Date(), Space(03), crDados.Moedas)
+			lnValor = lnValor * lnCtReferencia / ThisForm.lnVlCotacao
+			
+			Append Blank in crRel
+			Replace Emps 		with crDados.Emps,;
+					DopCs		with crDados.DopCs,;
+					Titulos 	with crDados.Titulos,;
+					Conta		with crDados.Contas,;
+					EmpDopNums	with Iif(Empty(Substr(crDados.EmpDopNums, 4, 1)), [], crDados.EmpDopNums),;
+					NomeConta	with crDados.RClis,;
+					Vencs		with Ttod(crDados.Vencs),;
+					Debito		with Iif(crDados.Opers = [D], lnValor, 0 ),;
+					Credito		with Iif(crDados.Opers = [C], lnValor, 0 ),;
+					VlJuros		with nVlJuros,;
+					VlTotal		with lnValor + nVlJuros,;
+					OpDopCs		with crSigOpOpe.Opers,;
+					OpLanc		with crDados.Opers in crRel
+		EndScan	
+		Select crRel
+		Index on Dtos(Vencs) Tag OrdRel
+		
+	Case (ThisForm.opt_AnaSi.Value = 2) && Sintético
+		Create Cursor crRel(Conta c(10), NomeConta c(50), nVlrEmp1 n(14,2), nVlrEmp2 n(14,2), nVlrEmp3 n(14,2), nVlrEmp4 n(14,2), nVlrEmp5 n(14,2),;
+							nVlrEmp6 n(14,2), nVlrEmp7 n(14,2), nVlrEmp8 n(14,2), nVlrEmp9 n(14,2), VlTotal n(14,2))
+		Index on Conta Tag Conta	
+
+		Create Cursor crEmps(Coluna n(2), Emps c(3))
+		Index on Emps Tag Emps
+		
+		lnColuna = 1
+		
+		Select crDados
+		Go Top in crDados
+		Scan
+			= Seek(crDados.DopCs,[crSigOpOpe],[Dopes])
+			
+			If not Seek(crDados.Contas,[crRel],[Conta])
+				Append Blank in crRel
+				Replace Conta 	  with crDados.Contas,;
+						NomeConta with crDados.RClis in crRel
+			EndIf
+
+			*Conversão para moeda selecionada		
+			lnValor = crDados.Valors
+			lnCtReferencia = 0
+			lnCtReferencia =fBuscarCambio({}, Date(), Space(03), crDados.Moedas)
+			lnValor = lnValor * lnCtReferencia / ThisForm.lnVlCotacao
+			
+			lnVlJuros = 0
+			If( crSigOpOpe.Opers == [CR] and crDados.Opers = [C] ) or ;
+			  ( crSigOpOpe.Opers == [DB] and crDados.Opers = [D] ) 		
+				lnVlJuros = ThisForm.nCalcJuros(Ttod(crDados.Vencs),lnValor)
+			Endif			
+					
+			lnVlrAtu = lnValor + lnVlJuros
+			
+			** Achar a coluna
+			If not Seek(crDados.Emps,[crEmps],[Emps])
+				Insert into crEmps(Coluna,Emps) Values (lnColuna,crDados.Emps)
+				
+				lcCampo = [cEmp]+Alltrim(Str(lnColuna))
+				Replace &lcCampo with crDados.Emps in crCabecalho
+				
+				lnColuna = lnColuna + 1
+			Endif
+			
+			cCampo   = [nVlrEmp]+Alltrim(Str(crEmps.Coluna))
+* Richard em 02/01/2013 - O comportamento do Analitico é lançar nas colunas de débito e crédito conforme o OPERS do
+* 						  SIGMVCCR apenas e aqui está considerando o OPERS do SIGOPOPE também causando divergências
+*!*				If( crSigOpOpe.Opers == [CR] )
+				nVlCampo = Iif( crDados.Opers = [D], lnVlrAtu, lnVlrAtu * -1 )
+*!*				Else
+*!*					nVlCampo = Iif( crDados.Opers = [D], lnVlrAtu, lnVlrAtu * -1 )
+*!*				Endif		
+			
+			Replace &cCampo with &cCampo + nVlCampo,;
+					VlTotal with VlTotal + nVlCampo in crRel
+		EndScan
+		
+		Replace nQtdEmp with lnColuna-1 in crCabecalho
+		
+		Select crRel
+		Index on NomeConta Tag OrdRel
+
+	Otherwise && Fluxo de Caixa
+	
+		Select [] as GrpSaldos, Ttod(Vencs) as Vencs, Titulos, Hists, EspecieNFs, Moedas, Valors, Opers, ;
+			   9999999999.99 as SaldoDia, 9999999999.99 as SaldoTot, ;
+			   9999999999.99 as Debitos,  9999999999.99 as Creditos ; 
+		  From crDados ;
+		 Order By Vencs, Titulos, Hists, EspecieNFs, Moedas, Valors ;
+		  Into Cursor crProcessar Readwrite
+		
+		Update crProcessar Set SaldoDia = 0, SaldoTot = 0, Debitos = 0, Creditos = 0
+
+		ldVct = Ctod([01/01/1900])
+		lnSdD = 0
+		lnSdT = lnSaldo
+		Select crProcessar
+		Scan
+			If (ldVct <> crProcessar.Vencs)
+				lnSdD = 0
+			EndIf
+			ldVct = crProcessar.Vencs
+			
+			lnVal = Abs(crProcessar.Valors)
+			lnCtR = 0
+			lnCtR = fBuscarCambio({}, Date(), Space(03), crProcessar.Moedas)
+			lnVal = lnVal * lnCtR / ThisForm.lnVlCotacao
+			
+			lnSdD = lnSdD + (lnVal * Iif(crProcessar.Opers = [D], 1, -1))
+			lnSdT = lnSdT + (lnVal * Iif(crProcessar.Opers = [D], 1, -1))
+			
+			Replace Debitos	 With Iif(crProcessar.Opers = [D], lnVal, 0), ;
+					Creditos With Iif(crProcessar.Opers = [C], lnVal, 0), ;
+					SaldoDia With lnSdD, ;
+					SaldoTot With lnSdT In crProcessar
+		EndScan
+
+		Select crProcessar
+		Go Top In crProcessar
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.getDtInicial.Value = Date()
+ThisForm.getDtFinal.Value = Date()
+ThisForm.get_Numes.Value = 0 
+
+ThisForm.lnVlCotacao = 1
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',Thisform.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .f., .f., 'CMoes, Cotas')
+	Select crSigCdMoe
+	Index On CMoes Tag CMoes
+	
+	ThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')
+	Select crSigCdCot
+	Index On CMoes + Dtos(Datas) Tag CMoeData
+
+	* Carregando Moeda Padrão
+	If Not fAbrirTabs(ThisForm.poDataMgr, [SigCdPam], [LocalPam])
+		Return .f.
+	EndIf
+	If Not Eof([LocalPam])
+		ThisForm.get_cd_moeda.Value = LocalPam.Moedaps
+	EndIf
+	Use In LocalPam
+	ThisForm.get_ds_moeda.Value = []
+	If Not Empty(ThisForm.get_cd_moeda.Value)
+		If Not fAbrirTabs(ThisForm.poDataMgr, [SigCdMoe], [LocalMoe], [CMoes = '] + ThisForm.get_cd_moeda.Value + ['])
+			Return .f.
+		EndIf
+		If Not Eof([LocalMoe])
+			ThisForm.get_ds_moeda.Value = LocalMoe.DMoes
+		EndIf
+		Use In LocalMoe
+	EndIf
+	
+	* Carregando Cursor com as Empresas
+	If ThisForm.podatamgr.SQLExecute([select 1 as Imps, cemps, razas from SigCdEmp Order by cEmps],'crSigCdEmp') < 1 Then
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdEmp)')
+		Return(.F.)	
+	Endif	
+	Select crSigCdEmp
+	Index on cEmps Tag cEmps
+
+	With .grdEmps
+		.ColumnCount       = 3
+		.RecordSource      = 'crSigCdEmp'
+		.DeleteMark        = .f.
+		.RecordMark        = .f.
+		.ReadOnly          = .f.
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource   = 'crSigCdEmp.Imps'
+		.Column1.FontName        = 'Courier New'
+		.Column1.Movable         = .f.
+		.Column1.Resizable       = .f.
+		.Column1.ReadOnly        = .f.
+		.Column1.Sparse          = .f.
+		.Column1.Check1.AutoSize = .t.
+	
+		.Column2.ControlSource   = 'crSigCdEmp.cEmps'
+		.Column3.ControlSource   = 'crSigCdEmp.Razas'
+	
+		For I=2 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..FontName  = 'Courier New'
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+		Next
+	EndWith
+
+	* Carregando Cursor com as Operações de Títulos
+	If ThisForm.podatamgr.SQLExecute([select 1 as Imps, Dopes, Opers, RealPrevs From SigOpOpe Order by Dopes],'crSigOpOpe') < 1 Then
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpOpe)')
+		Return(.F.)	
+	Endif	
+
+	Insert into crSigOpOpe(Imps,Dopes,Opers) Values(0,Space(20),[C])
+	Go Top in crSigOpOpe
+	Index on Dopes Tag Dopes
+
+	With .grdTipo
+		.ColumnCount       = 2
+		.RecordSource      = 'crSigOpOpe'
+		.DeleteMark        = .f.
+		.RecordMark        = .f.
+		.ReadOnly          = .f.
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource   = 'crSigOpOpe.Imps'
+		.Column1.FontName        = 'Courier New'
+		.Column1.Movable         = .f.
+		.Column1.Resizable       = .f.
+		.Column1.ReadOnly        = .f.
+		.Column1.Sparse          = .f.
+		.Column1.Check1.AutoSize = .t.
+	
+		.Column2.ControlSource   = 'crSigOpOpe.Dopes'
+	
+		For I=2 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..FontName  = 'Courier New'
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+		Next
+	EndWith
+
+	* Carregando Cursor com as Operações de Títulos
+	If ThisForm.podatamgr.SQLExecute([select 1 as Imps, Codigos, Descs from SigCdClc Order by Codigos],'crSigCdClc') < 1 Then
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdClc)')
+		Return(.F.)	
+	Endif	
+	Insert into crSigCdClc(Imps, Codigos, Descs) Values(1,[          ],[EM BRANCO])
+	Go Top in crSigCdClc
+
+	With .grdCla
+		.ColumnCount       = 3
+		.RecordSource      = 'crSigCdClc'
+		.DeleteMark        = .f.
+		.RecordMark        = .f.
+		.ReadOnly          = .f.
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource   = 'crSigCdClc.Imps'
+		.Column1.FontName        = 'Courier New'
+		.Column1.Movable         = .f.
+		.Column1.Resizable       = .f.
+		.Column1.ReadOnly        = .f.
+		.Column1.Sparse          = .f.
+		.Column1.Check1.AutoSize = .t.
+	
+		.Column2.ControlSource   = 'crSigCdClc.Codigos'
+		.Column3.ControlSource   = 'crSigCdClc.Descs'
+	
+		For I=2 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..FontName  = 'Courier New'
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+		Next
+	EndWith
+Endwith	
+
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local llPagRec
+llPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)
+
+If (ThisForm.Opt_AnaSi.Value = 3)
+	Report Form SigReAp4 to PRINTER Prompt NoConsole
+Else
+	If not llPagRec
+		If( ThisForm.opt_AnaSi.Value == 1 )
+			Report Form SigReAp1 to Print Prompt NoConsole
+		Else
+			Report Form SigReAp2 to Print Prompt NoConsole
+		Endif	
+	Else
+		Report Form SigReAp3 to PRINTER Prompt NoConsole
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documentoexcel
+------------------------------------------------------------
+PROCEDURE documentoexcel
+
+If ThisForm.Opt_AnaSi.Value = 3
+	Select crDados
+	Go Top in crDados
+	
+	Select grpsaldos,vencs,titulos,hists,especienfs,valors,opers,debitos,creditos,saldodia,saldotot,moedas From crProcessar ;
+	Where 0=0 Into Cursor crDados3 ReadWrite 
+
+	Select crDados3
+	Go Top in crDados3
+EndIf 
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Local llPagRec
+llPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)
+
+If (ThisForm.Opt_AnaSi.Value = 3)
+	Report Form SigReAp4 to PRINTER NoConsole
+Else
+	If not llPagRec
+		If( ThisForm.opt_AnaSi.Value == 1 ) 
+			Report Form SigReAp1 to Print NoConsole
+		Else
+			Report Form SigReAp2 to Print NoConsole
+		Endif	
+	Else
+		Report Form SigReAp3 to PRINTER NoConsole
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.get_ds_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_moeda.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes
+	This.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	This.Parent.get_Cd_Moeda.Value = ''
+	This.Parent.get_Ds_Moeda.Value = ''
+EndIf
+This.Parent.get_Cd_Moeda.Refresh
+This.Parent.get_Ds_Moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+lnVlCotacao = 0
+lnVlCotacao = fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)
+ThisForm.lnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.get_cd_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes
+	This.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	This.Parent.get_Cd_Moeda.Value = ''
+	This.Parent.get_Ds_Moeda.Value = ''
+EndIf
+This.Parent.get_Cd_Moeda.Refresh
+This.Parent.get_Ds_Moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+lnVlCotacao = 0
+lnVlCotacao = fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)
+ThisForm.lnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.grdCla.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Imps
+
+m.Imps = Iif( crSigCdClc.Imps = 0, 1, 0 )
+
+Select crSigCdClc
+Gather Memvar Fields Imps
+ThisForm.grdCla.Refresh() 
+
+NoDefault
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Imps
+
+If InList(nKeyCode, 13, 32)
+	m.Imps = Iif( crSigCdClc.Imps = 1, 0, 1 )
+
+	Select crSigCdClc
+	Gather Memvar Fields Imps
+	ThisForm.GrdCla.Refresh()  
+
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.grdCla.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.grdEmps.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Imps
+
+m.Imps = Iif( crSigCdEmp.Imps = 0, 1, 0 )
+
+Select crSigCdEmp
+Gather Memvar Fields Imps
+ThisForm.grdEmps.Refresh
+
+NoDefault
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Imps
+
+If InList(nKeyCode, 13, 32)
+	m.Imps = Iif( crSigCdEmp.Imps = 1, 0, 1 )
+
+	Select crSigCdEmp
+	Gather Memvar Fields Imps
+	ThisForm.grdEmps.Refresh
+
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.grdEmps.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.grdEmps.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.ck_MarcaEmp
+* Classe: checkbox (Base: checkbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if( ThisForm.ck_MarcaEmp.Value = 1 ) Then
+	Replace all Imps with 1 in crSigCdEmp
+Else
+	Replace all Imps with 0 in crSigCdEmp
+Endif 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.Get_DConta
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Conta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.Get_Grupo.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,grupo,'D',This.Value,This.Parent.Get_Conta,This)
+		MessageBox('Acesso Negado !!',48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Get_Conta.Value = ''
+		ThisForm.Get_Conta.Refresh() 
+		Return 0
+	EndIf
+Else
+	ThisForm.Get_Conta.Value = ''	
+	ThisForm.Get_Conta.Refresh() 
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.Get_Conta
+* Classe: textbox (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.Get_Grupo.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,This,This.Parent.Get_Dconta)
+		MessageBox('Acesso Negado !!',48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Get_DConta.Value = ''
+		ThisForm.Get_DConta.Refresh() 
+		Return 0
+	EndIf
+Else
+	ThisForm.Get_DConta.Value = ''
+	ThisForm.Get_DConta.Refresh() 
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.Get_DGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'D',This.Value,This.Parent.Get_Grupo,This)
+Else
+	ThisForm.Get_Grupo.Value = ''
+	ThisForm.Get_Grupo.Refresh() 
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.Get_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,This,This.Parent.Get_DGrupo)
+Else
+	ThisForm.Get_DGrupo.Value = [] 
+	ThisForm.Get_DGrupo.Refresh() 
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.opt_Juros
+* Classe: fwoption (Base: optiongroup)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If( This.Value == 2 )
+	ThisForm.get_Juros.Value = 0
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.get_Juros
+* Classe: textbox (Base: textbox)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Opt_Juros.Value == 1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.ck_MarcaOpe
+* Classe: checkbox (Base: checkbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if( ThisForm.ck_MarcaOpe.Value = 1 ) Then
+	Replace all Imps with 1 in crSigOpOpe
+Else
+	Replace all Imps with 0 in crSigOpOpe
+Endif 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.ck_Pagamentos
+* Classe: checkbox (Base: checkbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.ck_Recebimentos.Value = Iif(This.Value = 1, 0, ThisForm.ck_Recebimentos.Value )
+ThisForm.HabObjs((ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.ck_Recebimentos
+* Classe: checkbox (Base: checkbox)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.ck_Pagamentos.Value = Iif(This.Value = 1, 0, ThisForm.ck_Pagamentos.Value )
+ThisForm.HabObjs((ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.get_Jobs
+* Classe: fwget (Base: textbox)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value ) And this.peantvalue <> this.Value
+	If !fAcessoContas( Usuar, '', 'C', This.Value,this,ThisForm.Get_dJobs, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)
+		MessageBox( 'Acesso Negado...', 48, '' )
+		Thisform.get_Jobs.Value =""
+		ThisForm.Get_dJobs.Value = ''
+		Return .f.
+	EndIf
+Else
+	Thisform.Get_dJobs.Value = ''
+Endif
+
+
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.ck_MarcaCla
+* Classe: checkbox (Base: checkbox)
+* Registro: 53
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if( ThisForm.ck_MarcaCla.Value = 1 ) Then
+	Replace all Imps with 1 in crSigCdClc
+Else
+	Replace all Imps with 0 in crSigCdClc
+Endif 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPP.Get_dJobs
+* Classe: fwget (Base: textbox)
+* Registro: 60
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( Empty(thisform.get_dJobs.Value) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value ) And this.peantvalue <> this.Value
+	If !fAcessoContas( Usuar, '', 'D', This.Value, Thisform.Get_Jobs, This, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)	
+		MessageBox( 'Acesso Negado...', 48, '' )
+	    Thisform.get_Jobs.Value = ''
+		This.Value = ''
+		Return .f.
+	Endif
+Else
+    Thisform.get_Jobs.Value = ''
+Endif
+
+
+
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAPP
+RESERVED3 (ClassInfo): lnvlcotacao
+mydopes
+podatamgr
+saldos1
+saldos2
+*buscasaldos 
+*habobjs 
+*ncalcjuros 
+*processapagrec 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 42
+================================================================================

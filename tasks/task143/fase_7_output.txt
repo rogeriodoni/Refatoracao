@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Resumo das altera├º├Áes da Fase 7/8:
+
+**4 m├®todos aprimorados em `Formsigpdmp2.prg`:**
+
+1. **`BtnInserirClick`** ÔÇö Substitu├¡do APPEND BLANK gen├®rico por `INSERT INTO xNensi` com campos iniciais de `TmpNens` (Emps/Dopps/Numps) e `crSigCdOpd` (TpPadraos). Inclui verifica├º├úo de linha vazia via `SET ORDER TO NopMatCat` + `SEEK`, e l├│gica de CompAgru=1 para permitir inser├º├úo adicional.
+
+2. **`BtnAlterarClick`** ÔÇö Adicionada valida├º├úo de `xNensi.TpOps` antes de abrir SigPdM14 (replica `Alterar.Click` original). Tamb├®m verifica `pcEscolha` para bloquear em modo consulta.
+
+3. **`BtnExcluirClick`** ÔÇö Implementada l├│gica completa de exclus├úo agrupada: `SepPedras=4` (exclui por mesmo Cmats), `ChkQtdPs=4+FlagIncs` (exclui por Amarracao), e padr├úo (exclui por FlagIncs+Cmats+Nenvs/Nops ou Amarracao).
+
+4. **`BtnSairClick`** ÔÇö Adicionada valida├º├úo completa do `ok.Click` original: fecha sem validar em modo consulta, verifica `TpOps/Cats` por linha, consulta `DupTpOps` em `SigOpOpt`, e detecta `CodnConfs` para flag de libera├º├úo.

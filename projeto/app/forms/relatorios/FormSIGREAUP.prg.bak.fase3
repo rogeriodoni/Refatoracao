@@ -1,0 +1,305 @@
+*==============================================================================
+* FormSIGREAUP.PRG
+* Formulario de Relatorio de Tipos de Autorizacoes de Producao
+* Herda de FormBase
+*
+* Tipo: REPORT (frmrelatorio) - Layout FLAT, sem PageFrame CRUD
+* BO: SIGREAUPBO
+* Reports: SigReAu1.frx (listagem), SigReAu2.frx (percentual)
+*
+* Migrado de: SIGREAUP.SCX (frmrelatorio)
+* Campos de filtro: Periodo, Grupo, Conta, Envelope, Codigo NCF, Ordem, Percentual
+*==============================================================================
+
+DEFINE CLASS FormSIGREAUP AS FormBase
+
+    *-- Propriedades visuais EXATAS do original SIGREAUP.SCX
+    Height       = 300
+    Width        = 800
+    AutoCenter   = .T.
+    BorderStyle  = 2
+    Caption      = "Relat" + CHR(243) + "rio de Tipos de Autoriza" + CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o"
+    ControlBox   = .F.
+    ClipControls = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    TitleBar     = 0
+    Themes       = .F.
+    WindowType   = 1
+    BackColor    = RGB(192, 192, 192)
+    ShowWindow   = 1
+
+    *-- Business Object do relatorio
+    this_oRelatorio = .NULL.
+
+    *--------------------------------------------------------------------------
+    * Init - Inicializacao completa do formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            *-- Verificar conexao (exceto em modo validacao UI)
+            IF NOT (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                IF TYPE("gnConnHandle") != "N" OR gnConnHandle < 0
+                    MostrarErro("Erro de conex" + CHR(227) + "o com banco de dados.", "Erro")
+                    RETURN .F.
+                ENDIF
+            ENDIF
+
+            *-- Criar Business Object
+            THIS.this_oRelatorio = CREATEOBJECT("SIGREAUPBO")
+            IF VARTYPE(THIS.this_oRelatorio) != "O"
+                MostrarErro("Erro ao criar BO do relat" + CHR(243) + "rio de Autoriza" + ;
+                            CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
+                            "VARTYPE retornou: " + VARTYPE(THIS.this_oRelatorio), "Erro")
+                RETURN .F.
+            ENDIF
+
+            *-- Configurar estrutura visual
+            THIS.ConfigurarCabecalho()
+            THIS.ConfigurarBotoesRelatorio()
+
+            *-- Inicializar BO com valores padrao (campos filtro configurados nas Fases 4-6)
+            THIS.LimparCampos()
+
+            THIS.Visible = .T.
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Cria container de cabecalho com titulo
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
+            .Top        = 0
+            .Left       = 0
+            .Width      = THIS.Width
+            .Height     = 80
+            .BackStyle  = 1
+            .BackColor  = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible    = .T.
+        ENDWITH
+
+        THIS.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH THIS.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Top       = 25
+            .Left      = 20
+            .AutoSize  = .T.
+            .Caption   = "Relat" + CHR(243) + "rio de Tipos de Autoriza" + ;
+                         CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o"
+            .FontName  = "Tahoma"
+            .FontSize  = 14
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoesRelatorio - Cria CommandGroup com 4 botoes de relatorio
+    * Geometria do original: btnReport.Left=527, Top=2
+    * Buttons: Visualizar(5) | Imprimir(71) | Documento(137) | Encerrar(204)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoesRelatorio()
+        THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+        WITH THIS.cmg_4c_Botoes
+            .Top           = 2
+            .Left          = 527
+            .Width         = 273
+            .Height        = 78
+            .ButtonCount   = 4
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 1
+            .Themes        = .F.
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Botao 1: Visualizar (preview na tela)
+        WITH THIS.cmg_4c_Botoes.Buttons(1)
+            .Top             = 5
+            .Left            = 5
+            .Width           = 65
+            .Height          = 70
+            .Caption         = "Visualizar"
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .Picture         = gc_4c_CaminhoIcones + "ideo.jpg"
+            .PicturePosition = 13
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .F.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+        ENDWITH
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+
+        *-- Botao 2: Imprimir (com dialogo de selecao de impressora)
+        WITH THIS.cmg_4c_Botoes.Buttons(2)
+            .Top             = 5
+            .Left            = 71
+            .Width           = 65
+            .Height          = 70
+            .Caption         = "Imprimir"
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .Picture         = gc_4c_CaminhoIcones + "impressora.jpg"
+            .PicturePosition = 13
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .F.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+        ENDWITH
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(2), "Click", THIS, "BtnImprimirClick")
+
+        *-- Botao 3: Documento (impressao direta sem dialogo - original: btnReport.DocExcel)
+        *-- Original usava geral_envelope_32.jpg (enviar para impressora diretamente)
+        WITH THIS.cmg_4c_Botoes.Buttons(3)
+            .Top             = 5
+            .Left            = 137
+            .Width           = 65
+            .Height          = 70
+            .Caption         = "Documento"
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
+            .PicturePosition = 13
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .F.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+        ENDWITH
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(3), "Click", THIS, "BtnDocumentoClick")
+
+        *-- Botao 4: Encerrar (ESC fecha o formulario via .Cancel = .T.)
+        WITH THIS.cmg_4c_Botoes.Buttons(4)
+            .Top             = 5
+            .Left            = 204
+            .Width           = 65
+            .Height          = 70
+            .Caption         = "Encerrar"
+            .FontName        = "Comic Sans MS"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .Picture         = gc_4c_CaminhoIcones + "otao_encerrar.jpg"
+            .PicturePosition = 13
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .F.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .Cancel          = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(4), "Click", THIS, "BtnSairClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Valida filtros e exibe relatorio em preview na tela
+    * Original: PROCEDURE visualizacao / frmrelatorio::btnReport.Click com Value=1
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        IF VARTYPE(THIS.this_oRelatorio) != "O"
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.ValidarFiltros()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.Visualizar()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImprimirClick - Valida filtros e imprime com dialogo de impressora
+    * Original: PROCEDURE impressao / frmrelatorio::btnReport.Click com Value=2
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImprimirClick()
+        IF VARTYPE(THIS.this_oRelatorio) != "O"
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.ValidarFiltros()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.Imprimir()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnDocumentoClick - Valida filtros e envia direto para impressora (sem dialogo)
+    * Original: PROCEDURE documento / frmrelatorio::btnReport.Click com Value=3
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnDocumentoClick()
+        IF VARTYPE(THIS.this_oRelatorio) != "O"
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.ValidarFiltros()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            RETURN
+        ENDIF
+        IF !THIS.this_oRelatorio.Documento()
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSairClick - Fecha o formulario
+    * Original: frmrelatorio::btnReport.Click com Value=4 (Sair)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSairClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Inicializa filtros do BO com valores padrao
+    * Chamado em Init() e apos execucao do relatorio
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCampos()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            THIS.this_oRelatorio.this_dDtInicial = DATE()
+            THIS.this_oRelatorio.this_dDtFinal   = DATE()
+            THIS.this_oRelatorio.this_cGrupo     = ""
+            THIS.this_oRelatorio.this_cDGrupo    = ""
+            THIS.this_oRelatorio.this_cConta     = ""
+            THIS.this_oRelatorio.this_cDConta    = ""
+            THIS.this_oRelatorio.this_nEnvelope  = 0
+            THIS.this_oRelatorio.this_cCodigo    = ""
+            THIS.this_oRelatorio.this_nOrdem     = 1
+            THIS.this_oRelatorio.this_nPercent   = 0
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera recursos ao fechar o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            THIS.this_oRelatorio = .NULL.
+        ENDIF
+    ENDPROC
+
+ENDDEFINE

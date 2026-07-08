@@ -1,0 +1,5 @@
+﻿**Falso positivo confirmado.** O checker reportou `THIS.Width()` mas o que existe no arquivo ├® `THIS.Width` (linha 168) ÔÇö acesso correto a uma **propriedade** nativa do Form em VFP9, sem par├¬nteses.
+
+`Width` ├® uma propriedade built-in herdada de todos os objetos Form no VFP9. A sintaxe `loc_nLarguraForm = THIS.Width` ├® exatamente a forma correta de ler essa propriedade. N├úo existe nem existiu chamada `THIS.Width()` como m├®todo no arquivo.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O form `FormSigReDif.prg` est├í correto neste ponto ÔÇö o pass FUNCTIONAL n├úo encontrou nenhum problema real a corrigir.

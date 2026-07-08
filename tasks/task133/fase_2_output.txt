@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**SigReJurBO.prg** foi completado com os seguintes m├®todos adicionados ├á Fase 1:
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `""` ÔÇö form operacional sem PK pr├│pria |
+| `CarregarDoCursor(par_cAliasCursor)` | Carrega `this_cGrupo`/`this_cConta` de `crTmpJuros` (lado d├®bito) |
+| `CarregarDadosPam(par_cAliasCursor)` | Carrega `this_cSGrupo`/`this_cSConta` de `crSigCdPam` (lado cr├®dito) |
+| `BuscarDescricaoGrupo(par_cCodigo)` | Query `SigCdGcr.Descrs` por `Codigos` ÔÇö substitui `fAcessoContab` |
+| `BuscarDescricaoConta(par_cGrupo, par_cConta)` | Query `SigCdCli.RClis` por `Grupos`+`IClis` ÔÇö substitui lookup de conta |
+| `VerificarContaAtiva(par_cConta)` | Checa `SigCdCli.Inativas = 0` ÔÇö substitui `fChecarInativas` |
+| `VerificarAcessoGrupo(par_cCodigo)` | Valida exist├¬ncia do grupo em `SigCdGcr` |
+| `VerificarAcessoConta(par_cGrupo, par_cConta)` | Valida exist├¬ncia da conta em `SigCdCli` |
+
+N├úo h├í `Inserir`/`Atualizar`/`ExecutarExclusao` porque este form OPERACIONAL edita diretamente o cursor `crTmpJuros` do form pai via `DataSession` compartilhado ÔÇö sem SQL INSERT/UPDATE pr├│prio.

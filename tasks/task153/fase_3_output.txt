@@ -1,0 +1,16 @@
+﻿All 4 bugs from the prior session are confirmed fixed:
+- Lines 96/100: `Page1.Name = "pgfiltro"` and `Page2.Name = "pgdados"` ÔÇö page naming bug fixed
+- Lines 557-560 and 647-650: `AddObject("Check1", "CheckBox")` + `CurrentControl = "Check1"` ÔÇö CheckBox grid bug fixed for both grids
+- Lines 1300 and 1355: `ColumnCount = 8` ÔÇö OrdenarGrade bug fixed
+
+Phase 3 is now fully complete. Summary of all work done:
+
+**FormSIGPGCNB.prg** ÔÇö 4 structural bugs fixed:
+1. Pages not named (`Page1.Name = "pgfiltro"`, `Page2.Name = "pgdados"`)
+2. `grd_4c_Grupos` Column1 missing CheckBox control
+3. `grd_4c_Dados` Column1 missing CheckBox control  
+4. `OrdenarGrade()` resetting ColumnCount to 3 instead of 8
+
+**functions.prg** ÔÇö 2 missing utility functions added:
+- `fLimpaTexto()` ÔÇö strips Portuguese accents for ASCII-clean CNAB output
+- `fGerUniqueKey()` ÔÇö session-level sequential counter per key prefix; seeds BRNOSSONUM from `MAX(nopers)` in `SigMvCcr` for cross-session continuity

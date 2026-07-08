@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi aplicada com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarCampos()`** ÔÇö cria os 4 shapes visuais (caixas de agrupamento), 7 labels, e os 5 textboxes (`txt_4c_Barras`, `txt_4c_CorAnt`, `txt_4c_TamAnt`, `txt_4c_CorNew`, `txt_4c_TamNew`) com posi├º├Áes exatas do `layout.json`. Os campos Antigo t├¬m `ReadOnly = .T.`.
+
+2. **`ConfigurarBINDEVENTs()`** atualizado ÔÇö adicionados 4 novos bindings para os campos de entrada.
+
+3. **`ValidarBarras()`** ÔÇö chama `BO.BuscarPorBarras()`, preenche `txt_4c_CorAnt`/`txt_4c_TamAnt` e move o foco para `txt_4c_CorNew`.
+
+4. **`TxtBarrasKeyPress()`** ÔÇö dispara `ValidarBarras()` em ENTER (13) e TAB (9).
+
+5. **`TxtBarrasInteractiveChange()`** ÔÇö limpa todos os campos derivados quando o usu├írio digita novo c├│digo de barras.
+
+6. **`AbrirBuscaCor()`** e **`TxtCorNewKeyPress()`** ÔÇö lookup de Cores (SigCdCor) via `FormBuscaAuxiliar`, disparado em F4/ENTER/TAB.
+
+7. **`AbrirBuscaTam()`** e **`TxtTamNewKeyPress()`** ÔÇö lookup de Tamanhos (SigCdTam), mesmo padr├úo.
+
+8. **`BtnProcessarClick()`** atualizado ÔÇö adicionada valida├º├úo autom├ítica do barras via `ValidarBarras()` caso `this_nCodBarras` ainda n├úo corresponda ao campo, garantindo que o BO esteja populado antes de processar.

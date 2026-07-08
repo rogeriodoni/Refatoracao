@@ -1,0 +1,11 @@
+﻿All fixes applied correctly:
+
+**Fix 1 ÔÇö `TornarControlesVisiveis` (line 3448):** Changed `LEFT(loc_cNome, 4) = "cnt_"` ÔåÆ `INLIST(LEFT(loc_cNome, 4), "cnt_", "pgf_")`. PageFrames with `Visible=.F.` are now also skipped (not force-shown).
+
+**Fix 2 ÔÇö `chk_4c_Fwoption1` relocation:**
+- **Removed** from `ConfigurarPgPgDadosFaseP` (was at Page4, Top=331, Left=180)
+- **Added** to `ConfigurarPgDadosP2` at the correct page (`Page1` of `pgf_4c_Dados`) with Top=172, Left=879 ÔÇö matching the original legado position in `SIGCDPRO.Pagina.Dados.pgframeDados.pgDados`
+- **`PreencherCamposFaseP`:** Added `loc_oPg1 = Page1` local variable; references `loc_oPg1.chk_4c_Fwoption1`
+- **`LerCamposFaseP`:** Same ÔÇö added `loc_oPg1` and reads `chk_4c_Fwoption1` from Page1
+
+Problems 3ÔÇô6 (`cnt_4c_Botoes` Top/Left and `obj_4c_Opc_situacao` Top/Left) were validator false positives: the validator compared against different legacy controls on different form pages, and applying those positions would place controls off-screen or in the wrong section. No changes to those.

@@ -1,0 +1,17 @@
+﻿Analisando os 3 problemas detectados contra o c├│digo original:
+
+**CODIGOS** ÔÇö aparece em `WHERE Codigos = ?` nas queries de lookup do `SigCdGcr` (linhas 1747-1749, 2514-2517, 2590-2593). O original usa `=Seek(M.Grupos, [crSigCdGcr], [Codigos])` ÔÇö tradu├º├úo correta de SEEK para SQL WHERE.
+
+**JOBS** ÔÇö aparece em `WHERE Jobs = ?` nas queries de lookup do `SigCdJob` (linhas 1943-1946, 2480-2482). O original usa SEEK em SigCdJob ÔÇö tradu├º├úo correta.
+
+**CMOES** ÔÇö aparece em `WHERE CMoes = ?` na query de lookup do `SigCdMoe` (linhas 2079-2081). O original usa `=Seek(crAltcc.Moedas, [crSigCdMoe], [CMoes])` ÔÇö tradu├º├úo correta de SEEK.
+
+**Estes s├úo falsos positivos.** O checker compara o WHERE do c├│digo migrado contra as colunas do WHERE principal da tabela `SigMvCcr`, mas as condi├º├Áes flaggeadas est├úo em **queries auxiliares de lookup** contra tabelas diferentes (`SigCdGcr`, `SigCdJob`, `SigCdMoe`). Nenhuma dessas condi├º├Áes foi inventada ÔÇö s├úo tradu├º├Áes exatas do padr├úo SEEK do legado:
+
+| Original VFP9 (SEEK) | SQL migrado (equivalente) |
+|---|---|
+| `Seek(Grupos, [crSigCdGcr], [Codigos])` | `WHERE Codigos = ?` em SigCdGcr |
+| `Seek(Jobs, [crSigCdJob], [Jobs])` | `WHERE Jobs = ?` em SigCdJob |
+| `Seek(Moedas, [crSigCdMoe], [CMoes])` | `WHERE CMoes = ?` em SigCdMoe |
+
+**Nenhuma altera├º├úo necess├íria.** Remover essas condi├º├Áes quebraria os lookups ÔÇö o form buscaria toda a tabela sem filtro ao inv├®s de um registro espec├¡fico. O arquivo `Formsigmvccr.prg` est├í correto como est├í.

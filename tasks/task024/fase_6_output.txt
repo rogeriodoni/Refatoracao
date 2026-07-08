@@ -1,0 +1,16 @@
+﻿**Fase 6/8 conclu├¡da.**
+
+## O que foi feito
+
+O form `Formsigrevto.prg` estava **completamente implementado** das fases anteriores (fase 5 retry incluiu todos os campos e lookups). A Fase 6 identificou e corrigiu dois problemas:
+
+### Corre├º├úo 1 ÔÇö Bug no `lbl_4c_A.Caption`
+O separador entre as datas de per├¡odo estava com `"a"` (sem acento) em vez do correto `CHR(224)` = `"├á"` (preposi├º├úo portuguesa, conforme o original: `Caption = "├á"`).
+
+### Corre├º├úo 2 ÔÇö `mapeamento.json` com nomes errados
+O pipeline havia gerado nomes com underscore duplo (`txt_4c__dopes`, `txt_4c__moeda`, etc.) e labels gen├®ricos (`lbl_4c_Label1`, `lbl_4c_Label2`). Corrigido para os nomes reais implementados (`txt_4c_Dopes`, `lbl_4c_LblMoeda`, etc.).
+
+### Verificado e OK
+- `menu.prg`: `AbrirFormsigrevto()` j├í integrado
+- `config.prg`: carregamento din├ómico via ADIR() cobre `forms\relatorios\*.prg` automaticamente
+- `sigrevtoBO.prg`: completo com l├│gica dual-branch (`SigMvPar`/`SigMvCab`)

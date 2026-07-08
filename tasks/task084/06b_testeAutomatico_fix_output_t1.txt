@@ -1,0 +1,3 @@
+﻿Fixed. The root cause: when `CREATEOBJECT("FormSigReEch")` is called without parameters (as the automated test does), VFP9 assigns `.F.` (logical) to all unpassed parameters. `NVL(.F., "")` returns `.F.` because `.F.` is not NULL, so `PADR(.F., 20)` fails with "Function argument value, type, or count is invalid".
+
+Changed lines 52ÔÇô55 from `NVL(par_X, default)` to `IIF(VARTYPE(par_X) = "C/N", par_X, default)`, matching the pattern already used on line 56 for `par_cNcheque`.

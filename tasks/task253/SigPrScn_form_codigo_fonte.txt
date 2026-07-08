@@ -1,0 +1,334 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrScn.SCX
+* Data/Hora: 07/07/2026 11:00:10
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRSCN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: USUARIO
+  Parent: SIGPRSCN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SENHA
+  Parent: SIGPRSCN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRSCN
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRSCN
+  Class: label
+  BaseClass: label
+
+Objeto: cntSombra
+  Parent: SIGPRSCN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRSCN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRSCN.cntSombra
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 266
+  Left = 178
+  Width = 389
+  Height = 325
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 160
+  Width = 436
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Liberação de Acesso ao Sistema"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGPRSCN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.USUARIO
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 14
+  BackStyle = 1
+  Format = "K"
+  Height = 30
+  InputMask = "!!!!!!!!!!"
+  Left = 160
+  SelectOnEntry = .F.
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 86
+  Width = 136
+  BackColor = 255,255,255
+  Name = "USUARIO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.SENHA
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 14
+  BackStyle = 1
+  Format = "K"
+  Height = 30
+  InputMask = "!!!!!!!!!!"
+  Left = 160
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 121
+  Width = 136
+  PasswordChar = "*"
+  BackColor = 255,255,255
+  Name = "SENHA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Usuário :"
+  Height = 21
+  Left = 78
+  Top = 91
+  Width = 75
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Senha :"
+  Height = 21
+  Left = 90
+  Top = 126
+  Width = 63
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSCN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Arial, 1, 14, 9, 23, 18, 50, 4, 1
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRSCN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.Tbvisivel = goSistema.BarraAtalho.Visible
+goSistema.BarraAtalho.Visible = .f.
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector')
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSCN.SENHA
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+
+Local lcUser, lcPass, lcQuery
+
+lcUser = PADR(ThisForm.USUARIO.Value,10)
+lcPass = PADR(Thisform.SENHA.Value,10)
+lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]
+ThisForm.poDataMgr.SQLExecute(lcQuery, 'crSigCdUsu')
+
+If Used('crSigCdUsu')
+	Select CrSigCdUsu
+	If Eof() Or Empty(lcUser) OR lcPass <> fCriptografar(CrSigCdUsu.SENHAS)
+		=MessageBox('Usuário ou Senha incorretos',0+48,'')
+		ThisForm.Senha.Value    = ''
+		Thisform.Usuario.Value  = ''
+
+	Else
+		If Not File(Sys(5)+Sys(2003)+'\SetFiscal.Ini')
+			= ThisForm.Podatamgr.cursorquery('SigCdPam','CrTmpParam',.f.,.f.,[nTmpChks,nTmpApps])
+
+			Select CrTmpParam
+			Goto Top
+			fTempoApp(CrTmpParam.nTmpChks, CrtmpParam.nTmpApps)
+
+		EndIf 
+
+		= fGravarLog('L',Thisform.Name,lcUser,Thisform.Caption)
+
+		If ThisForm.Tbvisivel
+			goSistema.BarraAtalho.Visible = .t.
+		Endif
+
+		Thisform.Release
+	EndIf
+EndIf
+
+Return
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRSCN
+RESERVED3 (ClassInfo): podatamgr
+retorno
+tbvisivel
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

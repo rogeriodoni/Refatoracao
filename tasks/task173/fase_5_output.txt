@@ -1,0 +1,16 @@
+﻿Fase 5 implementada com sucesso. Aqui est├í o que foi adicionado ao `FormSigPrDsc.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö Estado inicial dos filtros: todos os tr├¬s campos habilitados ao abrir o form, replicando o comportamento do legado quando nenhum filtro est├í preenchido.
+
+**`AtualizarEstadoFiltros()`** ÔÇö Implementa a exclusividade m├║tua (equivalente aos eventos `When` do legado):
+- Se `CGrus` tem valor ÔåÆ desabilita `CProsI` e `CProsF`  
+- Se `CProsI` ou `CProsF` tem valor ÔåÆ desabilita `CGrus`
+- Se todos vazios ÔåÆ habilita todos
+
+**Integra├º├úo nos m├®todos existentes:**
+- `InicializarForm()` agora chama `ConfigurarPaginaDados()` entre `ConfigurarPaginaLista()` e `VincularEventos()`
+- `AbrirBuscaProduto()` chama `AtualizarEstadoFiltros()` ap├│s selecionar produto
+- `AbrirBuscaGrupo()` chama `AtualizarEstadoFiltros()` ap├│s selecionar grupo  
+- `BtnSelecionarClick()` chama `AtualizarEstadoFiltros()` ap├│s o auto-fill dos campos
+
+**`SelectOnEntry = .T.`** adicionado nos tr├¬s filtros (`txt_4c_CProsI`, `txt_4c_CProsF`, `txt_4c_CGrus`) ÔÇö equivalente ao `Format = "K"` do legado.

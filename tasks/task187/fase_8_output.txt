@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Foram adicionados ao `FormSigPrGlo.prg` (1747ÔåÆ1991 linhas) os 10 m├®todos exigidos:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `FormParaBO()` | Copia todos os 21 campos do form para o BO (inclui `this_cDcontaResp` e `this_cDsEmpresa` que faltavam no bloco inline do `CmdProcessarClick`) |
+| `BOParaForm()` | Popula todos os campos do form a partir das propriedades do BO |
+| `HabilitarCampos(par_lEditar)` | Habilita/desabilita campos respeitando as regras de modo (GerPorTp, AlterEmp, Reserva) |
+| `LimparCampos()` | Limpa todos os filtros do form (datas, opera├º├úo, conta, respons├ível, empresa, previs├úo, OP) |
+| `CarregarLista()` | Compatibilidade com FormBase ÔÇö chama `PopularCamposIniciais()` |
+| `AjustarBotoesPorModo()` | Delega para `AlternarPagina("ENTRADA")` |
+| `BtnBuscarClick()` | Limpa + recarrega valores iniciais |
+| `BtnEncerrarClick()` | Fecha o form via `CmdCancelarClick()` |
+| `BtnSalvarClick()` | Processa via `CmdProcessarClick()` |
+| `BtnCancelarClick()` | Restaura modo ENTRADA + limpa + recarrega |
+
+No `menu.prg`: adicionados `DEFINE BAR 46/47` em `popMovimentos` e o procedimento `AbrirFormSigPrGlo()` no padr├úo can├┤nico do sistema.

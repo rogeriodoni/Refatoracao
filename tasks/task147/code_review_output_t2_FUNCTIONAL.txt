@@ -1,0 +1,15 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**Problema 1 [CONTAINER-VISIVEL]** ÔÇö J├í estava corrigido (INLIST na linha 1797). Nenhuma altera├º├úo necess├íria.
+
+**Problemas 2-9 [GRID-HEADER]** ÔÇö Corrigidos em `FormatarGridLista()` e `CarregarLista()`:
+| Coluna | Antes | Depois |
+|--------|-------|--------|
+| Column1 (numps) | "N├║m." | "C├│digo" |
+| Column3 | `dopps` / "Opera├º├úo" | `totpesos` / "Total de Peso" |
+| Column5 (grupoos) | "Gr. Orig." | "Gr. Origem" |
+| Column6 (contaos) | "Ct. Orig." | "Ct. Origem" |
+| Column7 (grupods) | "Gr. Dest." | "Gr. Destino" |
+| Column8 (contads) | "Ct. Dest." | "Ct. Destino" |
+
+**Problemas 10-11 [LAYOUT-POSITION]** ÔÇö Falso positivo do validador. O validador comparou `cnt_4c_BotoesAcao` (Page2/Dados) contra o legado `Botoes` (Page1/Lista). O verdadeiro equivalente do legado `Botoes` ├® `cnt_4c_Legenda`, que j├í est├í em Top=153 (=124+29), Left=669 ÔÇö posi├º├úo correta.

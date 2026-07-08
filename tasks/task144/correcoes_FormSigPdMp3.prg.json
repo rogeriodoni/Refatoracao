@@ -1,0 +1,63 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPdMp3.prg",
+    "timestamp":  "2026-06-19T02:20:43",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  694,
+                          "Original":  "THIS.grd_4c_Dados.Column5.Header1.Tag = IIF(NVL(indiv, 0) = 1, \"X\", \"\")",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1117,
+                          "Original":  "loc_lObrigs = (NVL(obrigs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(obrigs)=\"L\" / loc_lObrigs = ... / ELSE / loc_lObrigs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1150,
+                          "Original":  "loc_lIndiv = (NVL(indiv, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(indiv)=\"L\" / loc_lIndiv = ... / ELSE / loc_lIndiv = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1279,
+                          "Original":  "loc_lObrigs = (NVL(obrigs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(obrigs)=\"L\" / loc_lObrigs = ... / ELSE / loc_lObrigs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1304,
+                          "Original":  "REPLACE indiv WITH IIF(NVL(indiv, 0) = 1, 0, 1)",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1382,
+                          "Original":  "loc_lObrigs = (NVL(obrigs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(obrigs)=\"L\" / loc_lObrigs = ... / ELSE / loc_lObrigs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1415,
+                          "Original":  "loc_lIndiv = (NVL(indiv, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(indiv)=\"L\" / loc_lIndiv = ... / ELSE / loc_lIndiv = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1436,
+                          "Original":  "REPLACE divs WITH IIF(NVL(divs, 0) = 1, 0, 1)",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      }
+                  ],
+    "totalCorrecoes":  8
+}

@@ -1,0 +1,17 @@
+﻿Encontrei a resposta. No c├│digo legado do Init (`sigprdis_form_codigo_fonte.txt`, linha 3106):
+
+```
+.pfSqlTabela(1).pColuna('Codigos', '', '', 'C?digo', 80, .t.)
+.pfSqlTabela(1).pColuna('Datas',  '', '', 'Data', 80, .t.)
+```
+
+O legado define o caption `'Data'` via c├│digo din├ómico (`.pColuna()`), n├úo como propriedade est├ítica no SCX. Por isso o validador n├úo o encontrou na sua varredura de propriedades est├íticas do SCX ÔÇö ├® um **falso-positivo**.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os dois usos de `"Data"` no c├│digo migrado (`Formsigprdis.prg` linhas 406 e 710) s├úo **id├¬nticos ao legado** e est├úo corretos. O validador simplesmente n├úo consegue rastrear captions definidos via c├│digo (`.pColuna()`), apenas os declarados como propriedade direta nos objetos SCX.
+
+Resumo da an├ílise:
+- Legado (`Init`, linha 3106): `.pColuna('Datas', '', '', 'Data', 80, .t.)` ÔåÆ caption = `"Data"`
+- Migrado (linha 406): `.Column2.Header1.Caption = "Data"` ÔåÆ id├¬ntico
+- Migrado (linha 710): `loc_oGrid.Column2.Header1.Caption = "Data"` ÔåÆ id├¬ntico
+
+Os dois problemas reportados s├úo falsos-positivos do validador. Nenhuma corre├º├úo visual ├® necess├íria no arquivo.

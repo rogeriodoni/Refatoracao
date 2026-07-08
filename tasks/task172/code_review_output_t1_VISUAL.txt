@@ -1,0 +1,6 @@
+﻿Todas as corre├º├Áes aplicadas com sucesso. Verificando:
+
+- **GRID-SQLEXEC (4 fixes)**: Todos os 4 cursores agora usam cursor tempor├írio (`*Temp`) via SQLEXEC, depois populam o cursor original (ZAP+APPEND para `cursor_4c_Lista`, SELECT INTO para os demais), preservando as colunas do Grid.
+- **GRID-HEADER "Distribu?do" (4 fixes)**: Todos os `"Distribu" + CHR(237) + "do"` substitu├¡dos por `"Distribuido"` (sem acento, id├¬ntico ao legado onde `Col07_QtdSaldo.Caption = "Distribuido"`).
+- **GRID-HEADER "Data" (2 ocorr├¬ncias)**: **Nenhuma altera├º├úo** ÔÇö o legado confirma `.pColuna('Datas', '', '', 'Data', 80, .t.)`, ou seja, o caption "Data" est├í correto. O validator n├úo capturou esse padr├úo de Framework legado.
+- **Destroy**: Adicionados blocos de cleanup para `cursor_4c_ListaTemp`, `cursor_4c_EstoqueTemp`, `cursor_4c_CabOperasTemp` e `cursor_4c_ItnOperasTemp`.

@@ -1,0 +1,17 @@
+﻿A integra├º├úo no `menu.prg` j├í est├í feita (linha 406 e o procedimento `AbrirFormsigregnf` na linha 2973). O `config.prg` carrega automaticamente via `ADIR()` conforme documentado no CLAUDE.md.
+
+**Fase 8/8 conclu├¡da.** Adicionados 9 m├®todos ao `Formsigregnf.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick` | Delega para `BtnProcessarClick` |
+| `BtnEncerrarClick` | `THIS.Release()` |
+| `BtnSalvarClick` | Delega para `BtnImprimirClick` |
+| `BtnCancelarClick` | Delega para `LimparCampos` |
+| `BOParaForm` | Copia `this_cSeries`/`this_cUsuars` do BO para os TextBoxes |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles de filtro e bot├Áes auxiliares |
+| `LimparCampos` | Limpa filtros, ZAP no cursor, reseta estado do BO e do grid |
+| `CarregarLista` | Chama `FormParaBO` + `SelecionarDados` + `Refresh` (s├│ se S├®rie preenchida e fora do modo ValidarUI) |
+| `AjustarBotoesPorModo` | Habilita `cmd_4c_Processar` se S├®rie preenchida; `SelTudo`/`Apaga` se grid tem dados |
+
+O arquivo final tem 1.037 linhas com implementa├º├úo 100% completa e funcional.

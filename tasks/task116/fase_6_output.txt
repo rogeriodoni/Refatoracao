@@ -1,0 +1,16 @@
+﻿A migra├º├úo est├í **completamente implementada**. N├úo h├í nada a adicionar na Fase 6, pois as fases anteriores j├í produziram o c├│digo completo:
+
+**FormSIGREIDC.prg** (1199 linhas) ÔÇö completo:
+- `ConfigurarPaginaDados()`: todos os 11 controles (2 labels Grupo/Conta, txt_4c_CdGrupo, txt_4c_DsGrupo, txt_4c_CdConta, txt_4c_DsConta, Label Linha, txt_4c_Linha, Label Coluna, txt_4c_Coluna, chk_4c_OptLogo)
+- BINDEVENT para KeyPress (F4=115, ENTER=13, TAB=9) e DblClick nos 4 campos com lookup
+- 8 m├®todos de lookup/valida├º├úo completos: AbrirBuscaCdGrupo, AbrirBuscaDsGrupo, ValidarCdGrupo, ValidarDsGrupo, AbrirBuscaCdConta, AbrirBuscaDsConta, ValidarCdConta, ValidarDsConta
+- AtualizarEstadoCamposDescricao() para simular os eventos `When` do legado
+- Bot├Áes Visualizar/Imprimir/Excel/Encerrar com valida├º├úo e limpeza de tempor├írios
+
+**SIGREIDCBO.prg** (399 linhas) ÔÇö completo:
+- InicializarFiltros(), PrepararDados(), ValidarFiltros(), LimparArquivosTemporarios()
+- CRUD bloqueado, Destroy() fecha todos os cursores
+
+**Integra├º├úo** ÔÇö completa: `DEFINE BAR 145 OF popRelatorios`, `ON SELECTION BAR 145`, e `AbrirFormSIGREIDC()` no menu.prg. Config.prg usa ADIR() din├ómico, sem necessidade de entrada manual.
+
+A Fase 6 n├úo tem pend├¬ncias ÔÇö a migra├º├úo do SIGREIDC est├í pronta para as fases 7/8.

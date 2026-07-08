@@ -1,0 +1,11 @@
+﻿All changes are in place. Here's a summary of what Phase 5 added to `Formsigtosen.prg`:
+
+**3 changes made:**
+
+1. **`InicializarForm()`** (line 112): Added `THIS.ConfigurarPaginaDados()` call right after `ConfigurarPaginaLista()` ÔÇö so empresa fields are explicitly initialized to hidden/disabled state on form open.
+
+2. **`Confirmar()`** (line 966): Added `THIS.ConstruirBarraAtalhos(ALLTRIM(gcUsuar))` before `THIS.Release()` ÔÇö the missing toolbar building step that was in the original `confirma` procedure but wasn't migrated.
+
+3. **Two new methods** added before `BtnSaidaClick` (lines 1109ÔÇô1241):
+   - **`ConfigurarPaginaDados()`** ÔÇö Formally configures the empresa selection fields (ocultos/desabilitados at├® autentica├º├úo). For this flat login form, "Page2" = the empresa selection state.
+   - **`ConstruirBarraAtalhos(par_cUsuario)`** ÔÇö Full migration of the original toolbar-building logic from `confirma`: creates `goSistema.BarraAtalho` via `fwBarraBtns`, queries `SigCdAcB` for user shortcuts, loads icons from `SigSyIco`, and dynamically adds buttons to the toolbar. This was the key functional gap in the previous phases.

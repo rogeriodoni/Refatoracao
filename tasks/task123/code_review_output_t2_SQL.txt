@@ -1,0 +1,33 @@
+﻿Encontrei o c├│digo-fonte original do SIGREIMP.SCX. A an├ílise est├í completa.
+
+## Resultado da Investiga├º├úo
+
+**Todos os 3 flags s├úo FALSOS POSITIVOS.** Nenhuma altera├º├úo ├® necess├íria.
+
+### HEADERHEIGHT
+O `.HeaderHeight = 0` (linhas 731 e 811) ├® uma propriedade do Grid VFP9, **n├úo existe** nenhum `WHERE HEADERHEIGHT` no c├│digo. O validador confundiu atribui├º├úo de propriedade com condi├º├úo SQL.
+
+### CEMPS
+O c├│digo original (`sigreimp_form_codigo_fonte.txt`) confirma que havia lookups de empresa. Os `WHERE Cemps = ...` do form s├úo lookups de valida├º├úo corretos contra `SigCdEmp`. O filtro opcional no BO usa `n.Emps`, que ├® a migra├º├úo exata do original:
+```foxpro
+* ORIGINAL:
+Iif(Empty(lcEmp), [], [n.Emps = '] + lcEmp + [' And ])
+* MIGRADO (correto):
+loc_cEmpresaFiltro = "n.Emps = " + EscaparSQL(THIS.this_cEmpresa) + " AND "
+```
+
+### ICLIS
+O c├│digo original confirma que o WHERE da query principal tinha:
+```foxpro
+[Left(n.CliFors, 10) = c.IClis And ] + ;
+Iif(Empty(lcCta), [], [c.IClis = '] + lcCta + [' And ]) + ;
+```
+A migra├º├úo est├í correta. O `I` e `I2` no WHERE original listado pelo validador eram **contadores de loop** (`For I = 1 to 2`, `For I2 = 1 To 3`) do procedimento Init, n├úo colunas SQL.
+
+### Por que o validador errou
+O validador extraiu nomes de colunas do c├│digo original de forma imprecisa:
+- "I" e "I2" s├úo vari├íveis de loop (`FOR I = 1 TO 2`), n├úo colunas WHERE
+- Isso levou o validador a concluir erroneamente que CEMPS/ICLIS eram inventados
+- HEADERHEIGHT nunca apareceu em SQL ÔÇö foi falso positivo de pattern matching
+
+**Nenhum arquivo precisa ser alterado.** O SQL migrado est├í 100% fiel ao original.

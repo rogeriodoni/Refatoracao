@@ -1,0 +1,7 @@
+﻿As tr├¬s edi├º├Áes est├úo corretas. O resultado ├®:
+
+- **`AlternarPagina(par_nPagina)`** adicionado na linha 1290 ÔÇö centraliza a navega├º├úo entre a p├ígina de filtro (1) e a p├ígina de dados (2), limpando o `RecordSource` do grid ao voltar para filtro.
+- **`ClickEncerrarDados()`** refatorado para chamar `THIS.AlternarPagina(1)`.
+- **`Processamento()`** refatorado para chamar `THIS.AlternarPagina(2)` antes de ajustar o estado do bot├úo Boleto.
+
+Fase 4 conclu├¡da. O arquivo j├í tinha `ENDDEFINE` na linha 3249 e toda a estrutura OPERACIONAL (ConfigurarPaginaFiltro + ConfigurarPaginaDados) estava completa desde a Fase 3 ÔÇö o que esta fase adicionou foi a abstra├º├úo de navega├º├úo `AlternarPagina()` que ├® o equivalente OPERACIONAL do padr├úo `AlternarPagina` dos forms CRUD.

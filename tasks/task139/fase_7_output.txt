@@ -1,0 +1,19 @@
+﻿O arquivo j├í est├í completo. Vou verificar o que a Fase 7 deveria adicionar versus o que j├í existe.
+
+O arquivo `FormSigPdM14.prg` j├í cont├®m todos os eventos necess├írios para este form OPERACIONAL:
+
+**Eventos j├í implementados (n├úo faltam Btn*Click de CRUD):**
+- `BtnConfirmarClick()` ÔÇö linha 890 (mapeia `ok.Click` do original, l├│gica completa)
+- `BtnCancelarClick()` ÔÇö linha 916 (mapeia `Cancelar.Click` do original)
+- `GradeAfterRowColChange()` ÔÇö linha 932
+- `GradeCol2WhenHandler()` / `GradeCol2ValidHandler()` ÔÇö linhas 944/971
+- `GradeCol4WhenHandler()` / `GradeCol4ValidHandler()` / `GradeCol4LostFocusHandler()` ÔÇö linhas 1025/1046/1113
+- `GradeCol6WhenHandler()` / `GradeCol6ValidHandler()` ÔÇö linhas 1132/1144
+
+**Por que BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick n├úo se aplicam:**
+
+Este ├® um form **OPERACIONAL modal** (`SIGPDM14`), n├úo um form CRUD. O original tem apenas 2 bot├Áes (`ok=Confirmar` e `Cancelar`), confirmado pelo `comportamento.json` e `layout.json`. O template de Fase 7 lista eventos CRUD que s├úo para forms `frmcadastro` com Page1=Lista/Page2=Dados.
+
+Adicionar esses 4 m├®todos seria criar c├│digo sem correspond├¬ncia no original ÔÇö viola├º├úo direta da regra de paridade funcional 100%.
+
+**Conclus├úo:** A Fase 7 est├í conclu├¡da. O arquivo est├í funcionalmente completo e fiel ao original. Todos os 26 m├®todos do `comportamento.json` est├úo implementados.

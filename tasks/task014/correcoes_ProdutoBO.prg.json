@@ -1,0 +1,56 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg",
+    "timestamp":  "2026-04-12T14:58:56",
+    "correcoes":  [
+                      {
+                          "Tipo":  "SQL_COLUNA_LEGADA",
+                          "Linha":  864,
+                          "Original":  "UsuaAlts (na linha: usuincs, usuaalts, tinsts, diasinas, tents, casas,)",
+                          "Corrigido":  "(WARNING) Usar \u0027usuaalts\u0027 em vez de \u0027UsuaAlts\u0027",
+                          "Descricao":  "Coluna \u0027UsuaAlts\u0027 eh nome legado CamelCase - schema real usa \u0027usuaalts\u0027"
+                      },
+                      {
+                          "Tipo":  "SQL_COLUNA_LEGADA",
+                          "Linha":  1209,
+                          "Original":  "UsuaAlts (na linha: usuaalts       = \u003c\u003cEscaparSQL(THIS.this_cUsuaalts)\u003e\u003e,)",
+                          "Corrigido":  "(WARNING) Usar \u0027usuaalts\u0027 em vez de \u0027UsuaAlts\u0027",
+                          "Descricao":  "Coluna \u0027UsuaAlts\u0027 eh nome legado CamelCase - schema real usa \u0027usuaalts\u0027"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  508,
+                          "Original":  "THIS.this_lFlagctabs = (NVL(flagctabs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(flagctabs)=\"L\" / THIS.this_lFlagctabs = ... / ELSE / THIS.this_lFlagctabs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  557,
+                          "Original":  "THIS.this_lTcomps = (NVL(tcomps, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(tcomps)=\"L\" / THIS.this_lTcomps = ... / ELSE / THIS.this_lTcomps = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  606,
+                          "Original":  "THIS.this_lTransps = (NVL(transps, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(transps)=\"L\" / THIS.this_lTransps = ... / ELSE / THIS.this_lTransps = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  655,
+                          "Original":  "THIS.this_lImpetiqs = (NVL(impetiqs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(impetiqs)=\"L\" / THIS.this_lImpetiqs = ... / ELSE / THIS.this_lImpetiqs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  704,
+                          "Original":  "THIS.this_lChkfunds = (NVL(chkfunds, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(chkfunds)=\"L\" / THIS.this_lChkfunds = ... / ELSE / THIS.this_lChkfunds = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  7
+}

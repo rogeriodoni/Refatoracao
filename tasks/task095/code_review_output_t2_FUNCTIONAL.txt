@@ -1,0 +1,17 @@
+﻿Ap├│s an├ílise completa do arquivo, encontrei que todos os 4 problemas reportados s├úo **falsos positivos** do validador:
+
+**[METODO-INEXISTENTE] `THIS.Value()`** ÔÇö Fiz busca exaustiva por `THIS.Value()`, `.Value()`, `Value\(\)` no arquivo inteiro: **zero ocorr├¬ncias**. O c├│digo correto em `BotoesClick` (linha 1025) ├® `THIS.cmg_4c_Botoes.Value` ÔÇö acesso ├á propriedade `.Value` do CommandGroup, que ├® sintaxe VFP9 v├ílida. O validador confundiu acesso de propriedade com chamada de m├®todo.
+
+**[LAYOUT-POSITION] ÔÇö 3 controles (diff=85px)** ÔÇö Analisando o padr├úo de migra├º├úo:
+
+| Controle | Original | Migrado | F├│rmula | Visual |
+|---|---|---|---|---|
+| `lbl_4c_Lbl_estoque` | 165 | 80 | 165ÔêÆ85=80 | form+85+80=**165** Ô£ô |
+| `chk_4c_ChkFranquias` | 213 | 128 | 213ÔêÆ85=128 | form+85+128=**213** Ô£ô |
+| `chk_4c_ChkZerados` | 213 | 128 | 213ÔêÆ85=128 | form+85+128=**213** Ô£ô |
+
+O offset de ÔêÆ85 ├® o `PageFrame.Top=85` intencional e documentado no pr├│prio c├│digo (linha 339: `"Posicoes relativas a Page1 = posicao original no form - PageFrame.Top (85)"`). Todos os demais ~12 controles na Page1 usam o mesmo offset e **n├úo foram flagrados** ÔÇö inconsist├¬ncia do validador, n├úo do c├│digo.
+
+O arquivo est├í correto. Alterar os `Top` para 165/213/213 dentro da Page1 deslocaria os controles 85px para baixo visualmente, empurrando os checkboxes para fora da ├írea vis├¡vel da p├ígina (PageFrame.Height=215, Top=213+HeightÔëê233 > 215).
+
+**Nenhuma corre├º├úo necess├íria** ÔÇö o FormSIGREEVV.prg e o SIGREEVVBO.prg est├úo funcionalmente corretos e com posicionamento visual pixel-perfect em rela├º├úo ao legado.

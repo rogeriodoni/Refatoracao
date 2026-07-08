@@ -1,0 +1,594 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrRsa.SCX
+* Data/Hora: 03/07/2026 18:10:00
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRRSA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRRSA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRRSA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRRSA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRRSA
+  Class: shape
+  BaseClass: shape
+
+Objeto: SAIR
+  Parent: SIGPRRSA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: OK
+  Parent: SIGPRRSA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGPRRSA
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRRSA
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Prioridade
+  Parent: SIGPRRSA
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 200
+  Width = 580
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Recálculo de Saldos de Produto"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  prioridade = 
+  _memberdata = <VFPData><memberdata name="prioridade" type="property" display="Prioridade"/></VFPData>
+  Name = "SIGPRRSA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 480
+  Height = 29
+  Width = 48
+  Anchor = 0
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.SAIR
+------------------------------------------------------------
+  Top = 3
+  Left = 505
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 3
+  ToolTipText = "[ESC] Sair"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SAIR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.OK
+------------------------------------------------------------
+  Top = 3
+  Left = 430
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Cancel = .F.
+  Caption = "Processar"
+  TabIndex = 2
+  ToolTipText = "Processar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "OK"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Label1"
+  Height = 20
+  Left = 136
+  Top = 99
+  Width = 309
+  TabIndex = 4
+  ForeColor = 90,90,90
+  BackColor = 255,255,234
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Prioridade (0/1) : "
+  Height = 15
+  Left = 134
+  Top = 154
+  Width = 102
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRSA.Get_Prioridade
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "9"
+  Left = 238
+  MaxLength = 1
+  TabIndex = 1
+  Top = 150
+  Width = 17
+  Name = "Get_Prioridade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRRSA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.PodataMgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pParam,pPrior
+
+ThisForm.Parametrizado = (Type('pParam')='C')
+ThisForm.Prioridade    = Iif(Type('pPrior')=[N],pPrior,0)
+ThisForm.Get_Prioridade.Value = ThisForm.Prioridade
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','recspro',.t.)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .podatamgr
+			.AddCursor('SigPrSlP','CidChaves','CrSigPrSlP','')
+		EndWith
+		=DoDefault()
+	Else
+		If Not ThisForm.Parametrizado
+			=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Endif
+		Return .f.
+	EndIf
+EndWith
+
+=ThisForm.Podatamgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.,[GrupoRecs,GrupoPags,ContaRecs,ContaPags])
+
+If ThisForm.Parametrizado && Grava o "Log" de Processamento
+	lcArquivo = 'Fortyus.Log'
+	=StrToFile('', lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Iniciando o Processamento : Fortyus.Exe (SigOpClS) - Recalculo de Saldos'
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Data : ' + Dtoc(Date()) + ' - Hora : ' + Time()
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If ThisForm.Parametrizado
+	ThisForm.OK.Click()
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRRSA.SAIR
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRRSA.OK
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+Local llOk, lcCidChave, lnErro1
+
+This.Enabled = .F.
+
+Set Cursor Off
+
+lnMov = 1
+llErrCnx = .f.
+
+Keyboard '{LEFTARROW}'
+
+Do While .T.
+
+	ThisForm.Sair.Enabled = .f.
+
+	ThisForm.Label1.Caption = 'Aguardando Produtos Para Processar' + Replicate('.', lnMov)
+	lnMov = Iif(lnMov < 5, lnMov + 1, 1)
+	
+	lcSql = [Select 0 as Flag,* From SigOpClP Where Priors = ]+Str(ThisForm.Prioridade,1)+[ Order by Emps,Grupos,Estos ]
+	llOk  = ( ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigOpClP') > 0 )
+
+	If Not llOk
+		llErrCnx = .t.
+	Else
+
+		Select CrSigOpClp
+		_nRegAl = Reccount('CrSigOpClp')
+		_nRegLi = 0
+
+		Scan
+			_nRegLi = _nRegLi + 1
+
+			ThisForm.Label1.Caption = 'Aguarde. Processando Produtos ('+Alltrim(Str(_nRegLi))+'/'+Alltrim(Str(_nRegAl))+')'
+
+			lcUpdate = [ Update SigOpClP Set Usuars = Usuars Where CidChaves = ']+CrSigOpClP.CidChaves+[']
+			lnErro1 = ThisForm.poDataMgr.SqlExecute(lcUpdate , '', 1  )
+			llOk = ( lnErro1 > 0 )
+
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				
+				If lnErro1==-3 && queda de conexao com BD...
+					Exit 
+				EndIf 
+
+				Loop
+			EndIf 
+
+			If Used( 'crRecalculaP' )
+				USE in crRecalculaP
+			Endif
+			llOk = fRecalculaP( CrSigOpClp.Emps, CrSigOpClp.grupos, CrSigOpClp.estos, CrSigOpClp.cpros, CrSigOpClp.Datas, CrSigOpClp.CodCors, CrSigOpClp.CodTams , ThisForm.Podatamgr )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			Endif
+	
+			llOk = fRecalculaP( .t., ThisForm.Podatamgr, .t.,.f.,.f.,.f.,.f.,.f.,.t. )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			EndIf
+			
+			llOk = ( ThisForm.PodataMgr.Commit() > 0 )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			EndIf
+			
+			lcSql = [Select CidChaves From SigMvEst where EmpGruEsts = ']+CrSigOpClP.Emps+CrSigOpClP.Grupos+CrSigOpClp.Estos+[' And ]+;
+					[Cpros = ']+CrSigOpClP.Cpros+[']
+			If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpEst') < 1 Or Reccount('TmpEst') = 0
+				lcSql = [Select EmpGruEsts, Sum(1) as TT From SigMvHst where EmpGruests = ']+CrSigOpClP.Emps+CrSigOpClP.Grupos+CrSigOpClp.Estos+[' And ]+;
+					[Cpros = ']+CrSigOpClP.Cpros+[' Group by EmpGruEsts ]
+				If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpHis') < 1 Or TmpHis.TT > 0
+					Loop
+				Endif
+			EndIf
+			
+			Select CrSigOpClP
+			Scatter Memvar
+			
+			Select CrSigPrSlP
+			Zap
+			Append Blank
+			Gather Memvar
+
+			lcDelete = [ Delete From SigOpClP Where CidChaves = ']+CrSigOpClP.CidChaves+[']
+			llOk = ( ThisForm.poDataMgr.SqlExecute(lcDelete, '', 1 ) > 0 )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			EndIf
+			
+*			llOk = Thisform.Podatamgr.Update('CrSigPrSlP')
+
+			llOk = llOk And ( ThisForm.PodataMgr.Commit() > 0 )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			Endif
+
+		EndScan
+	EndIf
+	
+	ThisForm.Podatamgr.Rollback()
+
+	ThisForm.Sair.Enabled = .t.
+	
+	lnError = 0
+	lcErro  = On('Error')
+	On Error lnError = 1
+
+	lnKey=Inkey(.5, 'M')
+
+	If lnError <> 0
+		lnKey = 0
+	Endif
+	On Error &lcErro.
+
+	If Not ThisForm.Parametrizado Or lnKey = 27 Or llErrCnx
+		Exit
+	Endif
+
+	lcForm = ThisForm.Name
+	If ThisForm.MouseSobreBotaoSair(mCol(lcForm, 3), mRow(lcForm, 3), ThisForm.Sair) .and. (lnKey=151)
+		ThisForm.Sair.Click()
+		Exit
+	Endif
+Enddo
+Set Cursor On
+
+ThisForm.Label1.Caption = ''
+This.Enabled = .T.
+
+If ThisForm.Parametrizado
+	* Grava o "Log" de Processamento
+	lcArquivo = 'Fortyus.Log'
+	=StrToFile('', lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Concluindo o Processamento : Fortyus.Exe (SigOpClS) - Recalculo de Saldos'
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Data : ' + Dtoc(Date()) + ' - Hora : ' + Time()
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	Thisform.Release
+	Quit
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRRSA.Get_Prioridade
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Not ThisForm.Parametrizado)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not InList(This.Value,0,1)
+	MessageBox('Prioridade Invalida!!!',0+64,'')
+	Return .f.
+EndIf
+ThisForm.Prioridade = This.Value
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRRSA
+RESERVED3 (ClassInfo): parametrizado
+podatamgr
+prioridade
+_memberdata XML Metadata for customizable properties
+*mousesobrebotaosair 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

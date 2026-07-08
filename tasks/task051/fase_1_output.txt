@@ -1,0 +1,14 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigrechpBO.prg` criado com:
+
+- **Heran├ºa**: `RelatorioBase` (correto para forms REPORT, n├úo BusinessBase)
+- **18 propriedades `this_*`** cobrindo todos os filtros do formul├írio original:
+  - Tipo de data (`this_nNrTipo`)
+  - Per├¡odo (`this_dDtInicial`, `this_dDtFinal`)
+  - Empresa (`this_cCdEmpresa`, `this_cDsEmpresa`)
+  - Op├º├úo nota (`this_nNrOpcao`)
+  - Emissor grupo/conta (`this_cCdEmiGrupo`, `this_cDsEmiGrupo`, `this_cCdEmiConta`, `this_cDsEmiConta`)
+  - Destino grupo/conta (`this_cCdDesGrupo`, `this_cDsDesGrupo`, `this_cCdDesConta`, `this_cDsDesConta`)
+  - Ordem, follow-up, captions din├ómicos do opt_nr_opcao
+- **Cursores de trabalho**: dados, cabe├ºalho, opera├º├Áes, temp
+- **Vari├íveis de cabe├ºalho** do relat├│rio (NomeEmpresa, Titulo, Periodo, Emissor, Destino)
+- **`Init()`** com TRY/CATCH, RETURN fora do bloco: seta `this_cTabela`, `this_cCampoChave`, `this_cArquivoRelatorio` (aponta para `SigReChp.frx`), inicializa datas com `DATE()` e defaults de op├º├Áes.

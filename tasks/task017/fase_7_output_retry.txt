@@ -1,0 +1,9 @@
+﻿File is structurally sound. Phase 7 complete with three genuine behavioral improvements:
+
+1. **`TxtUsuarioGotFocus`** - Resets `this_lUsuarioOk = .F.` when the user field gets focus, matching the original `USUARIO.When` behavior that always reset the OK flag before re-validation.
+
+2. **`TxtSenhaGotFocus`** - Redirects focus away from senha if not in GetUsuario mode, matching the original `SENHA.When` that returned `.F.` to prevent access.
+
+3. **`TxtEmpGotFocus`** - Reloads the empresa list from the database each time the EMP field gets focus, matching the original `Get_EMP.When` which re-queried empresas filtered by user access level (supervisor vs normal) and auto-filled when only 1 empresa existed.
+
+All three handlers are bound via BINDEVENT in `VincularEventos()`. This is a login form (OPERACIONAL), so CRUD button events (BtnIncluir/Alterar/Visualizar/Excluir) do not apply.

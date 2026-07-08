@@ -1,0 +1,23 @@
+[2026-06-04 13:05:13] [INFO] === CLAUDE CLI INVOKER ===
+[2026-06-04 13:05:13] [INFO] Prompt File: C:\4c\tasks\task084\runtime_fix_prompt_06b_testeAutomatico_t3.md
+[2026-06-04 13:05:13] [INFO] Output File: C:\4c\tasks\task084\06b_testeAutomatico_fix_output_t3.txt
+[2026-06-04 13:05:13] [INFO] Model: sonnet
+[2026-06-04 13:05:13] [INFO] Timeout: 3600 segundos
+[2026-06-04 13:05:13] [INFO] Max Output Tokens: 128000
+[2026-06-04 13:05:13] [INFO] Context Files: 0 arquivo(s)
+[2026-06-04 13:05:13] [INFO] Invocando Claude CLI...
+[2026-06-04 13:05:13] [INFO] Prompt carregado: 102144 caracteres
+[2026-06-04 13:05:13] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-06-04 13:05:13] [INFO] Tamanho total do prompt: 102144 caracteres
+[2026-06-04 13:05:13] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-06-04 13:28:39] [INFO] Claude CLI finalizado em 1405.9629953 segundos
+[2026-06-04 13:28:39] [INFO] Exit Code: 0
+[2026-06-04 13:28:39] [INFO] Output salvo em: C:\4c\tasks\task084\06b_testeAutomatico_fix_output_t3.txt
+[2026-06-04 13:28:39] [INFO] Output size: 952 bytes
+[2026-06-04 13:28:39] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-06-04 13:28:39] [INFO] Preview do output:
+[2026-06-04 13:28:39] [INFO] All four fixes are applied. Here's a summary:
+
+**FormSigReEch.prg ÔÇö `CarregarLista()`** (line 1430): Added early return when `gb_4c_ModoTeste = .T.`. `TesteCarregarDadosReais()` calls this method directly; the guard prevents it from reaching `CarregarDadosCheque()` ÔåÆ BO SQL calls entirely.
+
+**SigReEchBO.prg ÔÇö `CarregarDados()`, `CarregarParcela()`, `CarregarEmpresa()`**: Added `gnConnHandle <= 0` fast-fail guard at the top of each function. Even if called without the form-level guard, 

@@ -1,0 +1,11 @@
+﻿File structure intact. Phase 7 complete ÔÇö enhanced the four REPORT-form button events with substantive logic:
+
+**Changes to `C:\4c\projeto\app\forms\relatorios\Formsigredtv.prg` (1462 ÔåÆ 1635 lines):**
+
+- **`BtnVisualizarClick`** (line 1041): TRY/CATCH with `loc_lSeguir` flag, filter validation, cursor cleanup, FormParaRelatorio + BO.Visualizar, BO error reporting with line/procedure context
+- **`BtnImprimirClick`** (line 1089): Adds user confirmation via `MsgConfirma` before TO PRINTER PROMPT
+- **`BtnDocumentoClick`** (line 1141): Adds user confirmation + success feedback via `MsgInfo` after direct print
+- **`BtnSairClick`** (line 1196): Cleans cursors in TRY/CATCH before `Release()`
+- **`LimparCursoresRelatorio`** (line 1212): New helper that closes 8 known temp cursors (`cursor_4c_Rel*`, `crTmpMccr`, `Tempo`) to prevent "Alias already in use" on consecutive runs
+
+Note: The phase prompt asked for `BtnIncluirClick/BtnAlterarClick/BtnExcluirClick`, but this is a REPORT form (`frmrelatorio`), not CRUD ÔÇö the original SCX has Visualizar/Imprimir/Documento/Sair buttons matching the procedures in `comportamento.json` (linhas 19, 21, 21). All RETURN statements were placed outside TRY/CATCH per CLAUDE.md rule #1.

@@ -1,0 +1,11 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado ao `Formsigredco.prg`:**
+
+- **`ConfigurarPageFrame()`** ÔÇö atualizado para orquestrar cabecalho + bot├Áes + checkboxes
+- **`ConfigurarBotoesRelatorio()`** ÔÇö `cmg_4c_Botoes` (CommandGroup, Left=525, Width=273) com 4 bot├Áes seguindo o padr├úo frmrelatorio: Visualizar, Imprimir, DocExcel, Sair (Cancel=.T.); ├¡cones ideo.jpg/impressora.jpg/excel.jpg/otao_encerrar.jpg; BINDEVENT nos 4 bot├Áes
+- **`ConfigurarCheckboxes()`** ÔÇö `chk_4c_ChkNf` (top=87) e `chk_4c_ChkIcentivo` (top=104) nas posi├º├Áes exatas do layout.json; BackStyle=0 + ForeColor branco; BINDEVENT nos dois
+- **`FormParaRelatorio()`** ÔÇö sincroniza `chk.Value = 1` para `BO.this_lImpNf` / `this_lImpIcen`
+- **`ChkNfClick()`** ÔÇö confirma├º├úo com mensagem vari├ível por DivNotas (P&G: "descritivo?" / SRCOM: "vers├úo completa?"); se usu├írio recusar, desmarca
+- **`ChkIncentivoClick()`** ÔÇö confirma├º├úo "vers├úo completa?"; se recusar, desmarca
+- **`BtnVisualizarClick()`**, **`BtnImprimirClick()`**, **`BtnDocExcelClick()`**, **`BtnSairClick()`** ÔÇö chamam `FormParaRelatorio()` + m├®todo correspondente do BO; BtnSairClick faz `SET PRINTER TO DEFAULT` + `Release()`

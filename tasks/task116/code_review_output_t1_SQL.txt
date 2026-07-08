@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas:
+
+| Problema | Arquivo | Corre├º├úo |
+|---|---|---|
+| **EMPS** | `SIGREIDCBO.prg` | Removido `WHERE Emps = EscaparSQL(...)` de `SELECT TOP 1 Razas FROM SigCdEmp` |
+| **DESCRS** | `FormSIGREIDC.prg` | Substitu├¡do SQL com `Descrs LIKE` por `LOCATE FOR UPPER(ALLTRIM(Descrs)) = UPPER(loc_cValor)` no `cursor_4c_Grupos` (j├í carregado pelo BO em `InicializarFiltros`) |
+| **RCLIS** | `FormSIGREIDC.prg` | Removido `Rclis LIKE` do WHERE; query retorna todas as contas filtradas por `GerBals=1` + `Grupos` e usa `LOCATE FOR UPPER(ALLTRIM(Rclis)) = UPPER(loc_cValor)` no cursor resultado |

@@ -1,0 +1,8 @@
+﻿Feito. Resumo das corre├º├Áes:
+
+**Corrigidos (2):**
+- `SigReDctBO.prg` linha 61: `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Relatorio`
+- `SigReDctBO.prg` linha 261: `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Cabecalho`
+
+**N├úo alterados - falsos positivos (2):**
+- `chk_4c_ImpTotal.Top=5` e `chk_4c_ImpCodBarra.Top=23` est├úo corretos. O validator comparou posi├º├úo relativa ├á Page (5/23) com posi├º├úo absoluta original (90/108), sem descontar o `pgf_4c_Paginas.Top=85`. Posi├º├Áes absolutas resultantes: `85+5=90` e `85+23=108`, id├¬nticas ao original flat.

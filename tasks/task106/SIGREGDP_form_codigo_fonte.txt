@@ -1,0 +1,1030 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREGDP.SCX
+* Data/Hora: 05/06/2026 16:18:13
+* Total de registros: 31
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREGDP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NFFim
+  Parent: SIGREGDP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGREGDP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREGDP.Grade.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGDP.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGDP.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREGDP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Série
+  Parent: SIGREGDP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processar
+  Parent: SIGREGDP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: apaga
+  Parent: SIGREGDP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGREGDP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: optSelecao
+  Parent: SIGREGDP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREGDP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NFIni
+  Parent: SIGREGDP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREGDP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 120
+  Left = 80
+  Width = 267
+  Height = 75
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP
+------------------------------------------------------------
+  Height = 700
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Emissão Global de Duplicatas/Boletos"
+  lacemail = .F.
+  lacexcel = .F.
+  lacpdf = .F.
+  Name = "SIGREGDP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = -2
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 6
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Visible = .F.
+  btnReport.Visualiza.ZOrderSet = 0
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 6
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.ZOrderSet = 2
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 6
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.SAIR.Top = 6
+  btnReport.SAIR.Left = 204
+  btnReport.SAIR.ZOrderSet = 1
+  btnReport.SAIR.Name = "SAIR"
+  btnReport.Left = 523
+  btnReport.Top = -1
+  btnReport.TabIndex = 12
+  btnReport.ZOrderSet = 4
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 526
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Get_NFFim
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Height = 23
+  InputMask = "999999"
+  Left = 283
+  MaxLength = 6
+  TabIndex = 6
+  Top = 160
+  Width = 55
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 14
+  Name = "Get_NFFim"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 329
+  Left = 72
+  Panel = 1
+  RecordSource = "TmpNFis"
+  ScrollBars = 2
+  TabIndex = 9
+  Top = 192
+  Width = 671
+  GridLineColor = 238,238,238
+  ZOrderSet = 5
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "TmpNFis.Flag"
+  Column1.Width = 20
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "TmpNFis.NFis"
+  Column2.Width = 45
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 5
+  Column3.ControlSource = "TmpNFis.Datas"
+  Column3.Width = 70
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column4"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 3
+  Column4.ControlSource = "TmpNFis.Digito"
+  Column4.Width = 16
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column5"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 7
+  Column5.ControlSource = "TmpNFis.Vecto"
+  Column5.Width = 70
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column6"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ControlSource = "TmpNFis.Valor"
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.InputMask = "999,999,999.99"
+  Column6.Name = "Column7"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 4
+  Column7.ControlSource = "TmpNFis.Conta"
+  Column7.Width = 160
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column9"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ControlSource = "TmpNFis.Emps + TmpNFis.Dopes + Str(TmpNFis.Numes, 6)"
+  Column8.Width = 170
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column1.Check1
+------------------------------------------------------------
+  Top = 66
+  Left = 10
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vecto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emitente / Detinatário"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Série : "
+  Left = 100
+  Top = 138
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Get_Série
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Height = 23
+  InputMask = ""
+  Left = 145
+  MaxLength = 3
+  TabIndex = 2
+  Top = 135
+  Width = 34
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 7
+  Name = "Get_Série"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Processar
+------------------------------------------------------------
+  Top = 92
+  Left = 668
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Cancel = .F.
+  Caption = "P\<rocessar"
+  TabIndex = 8
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 8
+  Themes = .F.
+  Name = "Processar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.apaga
+------------------------------------------------------------
+  Top = 529
+  Left = 117
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\cancelab.bmp
+  Caption = ""
+  TabIndex = 11
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 9
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.SelTudo
+------------------------------------------------------------
+  Top = 529
+  Left = 71
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\a_save1.bmp
+  Caption = ""
+  TabIndex = 10
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.optSelecao
+------------------------------------------------------------
+  AutoSize = .F.
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 48
+  Left = 346
+  Top = 135
+  Width = 141
+  TabIndex = 7
+  ZOrderSet = 15
+  Name = "optSelecao"
+  Option1.FontBold = .T.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Duplicatas"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 77
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Boletos Bancários"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Style = 0
+  Option2.Top = 25
+  Option2.Width = 118
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "NF Inicial : "
+  Left = 217
+  Top = 138
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Get_NFIni
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Height = 23
+  InputMask = "999999"
+  Left = 283
+  MaxLength = 6
+  TabIndex = 4
+  Top = 135
+  Width = 55
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "Get_NFIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGDP.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "NF Final : "
+  Left = 225
+  Top = 163
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREGDP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lnSelecao
+
+lnSelecao = ThisForm.optSelecao.Value
+
+If (lnSelecao = 1) && Duplicata
+	=SigIpDup('', ThisForm.Get_Série.Value, .T., ThisForm.poDataMgr)
+Else
+	Select Emps, Dopes, Numes, Parcs ;
+	  From TmpNFis ;
+	 Where Flag ;
+	 Group By Emps, Dopes, Numes, Parcs ;
+	  Into Cursor TprMvCab
+
+	lcSql = [Select count(*) as qt from SigCnFBl Where fpags <> ' ']
+	If Thisform.Podatamgr.Sqlexecute(lcsql,'LocalCfg') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCfg)')
+		Return 0
+	EndIf
+	
+	If LocalCfg.Qt = 0
+
+		Do Form SigPrIbl With '', ThisForm
+		
+	Else
+
+		Select TprMvCab
+		Scan
+			ThisForm.LockScreen = .t.
+			ThisForm.Enabled = .f.
+
+			Do Form SigPrIbb With TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes, 6), ThisForm
+
+			ThisForm.Enabled = .t.
+		 	ThisForm.LockScreen = .f.
+		EndScan
+
+	Endif
+
+EndIf
+
+Select TmpNFis
+Go Bottom
+
+Thisform.Grade.Refresh
+Thisform.Grade.Column1.Check1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'MascNums')
+
+		ThisForm.poDataMgr.CursorQuery('SigOpFp', 'crSigOpFp', .f., .f., 'FPags, ImpDups, ImpBols, ImpNotas')
+		Select crSigOpFp
+		Index On FPags Tag FPags
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor TmpNFis (Flag l, Datas d Null, NFis c(6), Valor n(12,2), Conta c(40), Digito n(1), Vecto c(12), ;
+					   TotNotas n(12,2), Emps c(3), Dopes c(20), Numes n(6), Obs m(4) Null, Parcs n(2))
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Select TmpNFis
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Imprime.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Imprime.Click
+This.Parent.Value = 2
+This.Parent.Click()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.SAIR.Click
+------------------------------------------------------------
+PROCEDURE btnReport.SAIR.Click
+This.Parent.Value = 4
+This.Parent.Click()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGDP.Get_Série
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFNf', ;
+						   'crListaRemota', 'Series', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Series', '', 'Códigos')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Series
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGDP.Processar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcSerieNf, lcNotaIni, lcNotaFim, lnSelecao, lcChave
+
+lcSerieNf = ThisForm.Get_Série.Value
+lcNotaIni = ThisForm.Get_NFIni.Value
+lcNotaFim = ThisForm.Get_NFFim.Value
+lnSelecao = ThisForm.optSelecao.Value
+
+Zap In TmpNFis
+
+Wait Window 'Aguarde!!! Selecionando Notas Fiscais...' NoWait
+
+lcQuery = [Select a.NFis, a.CliFors, a.TotNotas, a.Emps, a.Dopes, a.Numes, ] + ;
+				 [b.FPags, b.Parcs, b.Valos, b.Datas, b.Vencs, b.Obs ] + ;
+		    [From SigMvNfi a, SigMvPar b ] + ;
+		   [Where a.NFis BetWeen '] + lcNotaIni + [' And '] + lcNotaFim + [' And ] + ;
+		   		 [a.Series = '] + lcSerieNf + [' And ] + ;
+		   		 [a.EmpDopNums = b.EmpDopNums ] + ;
+		   [Order By a.Emps, a.Dopes, a.Numes, b.FPags, b.Parcs]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvNfi') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvNfi)')
+	Return 0
+EndIf
+
+Select crSigMvNfi
+oProg = CreateObject('fwprogressbar', 'Processando Dados do Cursor...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	lnConta = 0
+	=Seek(crSigMvNfi.FPags, 'crSigOpFp', 'FPags')
+	If ((lnSelecao = 1) And (crSigOpFp.ImpDups <> 1)) Or ;
+	   ((lnSelecao = 2) And (crSigOpFp.ImpBols <> 1)) 
+		Loop
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigMvNfi.CliFors, 'RClis')
+	If (lnSelecao = 1) And .f.
+		lnConta = lnConta + 1
+	Else
+		lnConta = crSigMvNfi.Parcs
+	EndIf
+
+	Insert Into TmpNFis (Flag, NFis, Valor, Datas, Conta, Digito, Parcs, Vecto, TotNotas, Obs, Emps, Dopes, Numes) ;
+				 Values (.t., crSigMvNfi.NFis, crSigMvNfi.Valos, Ttod(Nvl(crSigMvNfi.Datas, Ctot(''))), ;
+				 		 crSigMvNfi.CliFors + ' ' + crSigCdCli.RClis, lnConta, crSigMvNfi.Parcs, ;
+				 		 Iif(crSigOpFp.ImpNotas = 1, Dtoc(Ttod(Nvl(crSigMvNfi.Vencs, Ctot('')))), crSigMvNfi.FPags), ;
+				 		 crSigMvNfi.TotNotas, Nvl(crSigMvNfi.Obs, ''), crSigMvNfi.Emps, crSigMvNfi.Dopes, crSigMvNfi.Numes) 
+EndScan
+oProg.Complete
+Wait Clear
+
+Select TmpNFis
+Go Top
+If Eof()
+	If (lnSelecao = 1)
+		=Messagebox('Nenhuma Duplicata Selecionada...', 32)
+	Else
+		=Messagebox('Nenhum Boleto Bancário Selecionado...', 32)
+	EndIf
+EndIf
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGDP.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update TmpNFis Set Flag = .f.
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGDP.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update TmpNFis Set Flag = .t.
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREGDP
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. O arquivo `SigPdM14BO.prg` foi completado com 8 m├®todos adicionados:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor(par_cAlias)` | L├¬ todas as 13 colunas de xNensi para propriedades do BO |
+| `InicializarCursores(par_nNenv)` | Cria TmpDistrib com estrutura id├¬ntica ao legado e preenche via SCAN de xMFas |
+| `CalcularDistribuicao()` | Distribui Pesos2/Qtds2 proporcionalmente (l├│gica exata do Init legado) |
+| `BuscarUnidadeSQL(cCUnis, cAlias, cCampos)` | Equivalente ao `CursorQuery('SigCdUni', ...)` via SQLEXEC |
+| `VerificarEstoquePeso(par_nQuant)` | Equivalente ao `fVerEstP` do framework legado |
+| `ObterCasasDecimais()` | L├¬ `CrSigCdOpd.CasQtds` para m├íscara de quantidade |
+| `ConfirmarRateio(par_nCtrlAgrega)` | L├│gica completa do `ok.Click` ÔÇö INSERT/REPLACE em xNensi, acumula totais |
+| `CancelarRateio()` | Restaura `SET ORDER TO Editar` em xNensi (l├│gica do `Cancelar.Click`) |
+| `RegistrarAuditoria(par_cOperacao)` | Override sem opera├º├úo (form operacional sem tabela SQL pr├│pria) |

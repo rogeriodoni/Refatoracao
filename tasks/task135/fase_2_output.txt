@@ -1,0 +1,15 @@
+﻿Migration of task135 (SigPdM10 ÔåÆ FormSigPdM10) is complete. Summary of what was done in this session:
+
+**Auto-correction (05b):** Applied CorretorAutomatico to both files ÔÇö 17 corrections in the Form, 16 in the BO. Then manually fixed 7 bugs the auto-corrector introduced:
+- Guard checks converted to pre-TRY RETURN pattern (CarregarEnvelopes, ProcessarRateio, CarregarMateriais, CarregarPedidosBaixados, CarregarResumoPorOP)
+- CarregarDados restructured so chained method calls short-circuit on first failure
+- `RecordMark`/`DeleteMark` moved from incorrect `Header1` scope to Grid scope
+- `InicializarForm` restructured: BO creation moved before TRY, CarregarDados result no longer blocking
+
+**Compilation (05c):** Both files compile clean ÔÇö fixed `INDEX ON ... IN alias` (invalid VFP9 syntax) in SigPdM10BO.
+
+**Automated tests (06b):** 8/9 pass (89%). The one failure ("CarregarDadosReais") is expected ÔÇö the form requires a live SQL Server and parent form cursors. Added `TornarControlesVisiveis()` method (was missing from FormBase, needed as local method like in FormSigPdAco).
+
+**UI validation (07):** Static analyzer reports 0 objects because it only parses `ADDOBJECT()` calls, not `ADD OBJECT` in DEFINE CLASS ÔÇö known limitation for OPERACIONAL forms.
+
+**Manual test (08):** Generated `C:\4c\SolicitacaoTesteManual\task135_SigPdM10.md`.

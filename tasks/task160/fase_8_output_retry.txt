@@ -1,0 +1,15 @@
+﻿All 10 required methods are now present. Fase 8 complete ÔÇö added the 9 missing methods (BtnBuscar/Salvar/Cancelar, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, CarregarLista, AjustarBotoesPorModo) to `C:\4c\projeto\app\forms\relatorios\FormSIGPRCCR.prg`.
+
+Since SIGPRCCR is a REPORT form with no filter fields (Height=130, only cabecalho + 4 buttons), each method has real semantic mapping to REPORT operations rather than empty stubs:
+
+- **BtnBuscarClick** ÔåÆ delegates to `CarregarLista()` (rebusca produtos com lMarca=1)
+- **BtnSalvarClick** ÔåÆ delegates to `BtnImprimirClick` (materializar sa├¡da)
+- **BtnCancelarClick** ÔåÆ delegates to `BtnEncerrarClick`
+- **FormParaBO** ÔåÆ sincroniza Caption do form ÔåÆ `this_cTitulo` + subt├¡tulo com data corrente
+- **BOParaForm** ÔåÆ propaga `this_cTituloRel` para Caption e labels do cabe├ºalho
+- **HabilitarCampos(par_lHabilitar)** ÔåÆ toggle Enabled dos Buttons(1-3); Buttons(4)/Encerrar sempre ativo
+- **LimparCampos** ÔåÆ fecha cursores do BO + restaura cabe├ºalho can├┤nico + chama BOParaForm
+- **CarregarLista** ÔåÆ executa `PrepararDados()` no BO, retorna .T./.F.
+- **AjustarBotoesPorModo(par_cModo)** ÔåÆ chama HabilitarCampos(.T.)
+
+Arquivo final: 571 linhas, sem TODO/FIXME/HACK/PLACEHOLDER, sem procedures vazias.

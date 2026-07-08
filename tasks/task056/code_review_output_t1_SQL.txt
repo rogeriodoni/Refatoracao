@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**Issue 5 (DMOES) ÔÇö CORRIGIDO**: `ValidarDsMoeda` tinha `WHERE DMoes LIKE valor%` inventado pela LLM. O original usava `fwBuscaExt` (formul├írio de busca), n├úo uma pr├®-filtragem LIKE. Agora o m├®todo simplesmente limpa os campos e abre `AbrirBuscaCdMoeda()`, replicando o comportamento original.
+
+**Issues 1-3 (CODIGOS, ICLIS, CMOES) ÔÇö VERIFICADOS, SEM ALTERA├ç├âO**: S├úo lookups por chave prim├íria (`SELECT TOP 1 ... WHERE chave = valor`) em `ValidarGrupoMov`, `ValidarCdEstoque` e `ValidarCdMoeda`. As colunas existem nas respectivas tabelas e a l├│gica ├® id├¬ntica ao que `fAcessoContab`/`fwBuscaExt` faziam internamente. Remover essas condi├º├Áes quebraria a valida├º├úo de campo.
+
+**Issue 4 (CARREGARDADOSINICIA) ÔÇö FALSO POSITIVO**: Nenhum `WHERE CARREGARDADOSINICIA` existe no c├│digo ÔÇö o validador confundiu o nome do m├®todo `CarregarDadosIniciais` (presente em coment├írios adjacentes a blocos SQL) com um nome de coluna.

@@ -1,0 +1,19 @@
+SET DATE global ANTES config.prg: BRITISH
+SET DATE global APOS config.prg: DMY (esperado: DMY ou BRITISH)
+SET CENTURY global APOS config.prg: ON (esperado: ON)
+
+=== TESTE: Formsigrevto (DataSession=2) ===
+OK - Objeto form criado
+
+DataSessionId do form: 2
+SET DATE na datasession privada: BRITISH
+SET CENTURY na datasession privada: ON
+SET MARK na datasession privada: /
+
+[OK] SET DATE correto: BRITISH
+[OK] SET CENTURY ON
+
+DTOC(DATE()) na datasession do form: '26/05/2026'
+[OK] Formato DD/MM/YYYY (10 chars com '/')
+
+=== RESULTADO: SUCESSO ===

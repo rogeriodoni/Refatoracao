@@ -1,0 +1,15 @@
+﻿Analisei os dois arquivos completos. Ambas as detec├º├Áes s├úo **falsos positivos** do validador:
+
+**1. PKCHAVES** ÔÇö Aparece em `WHERE PkChaves = ...` nos m├®todos `Atualizar()` e `ExecutarExclusao()` do BO. O c├│digo original usava o mecanismo de buffer do VFP (`poDatamgr.Update([crSigAlert])`), que internamente identifica o registro pela chave prim├íria. A migra├º├úo traduziu corretamente para SQL expl├¡cito com `WHERE PkChaves`. Remover esse WHERE tornaria o UPDATE/DELETE sem condi├º├úo, atualizando/excluindo **todos os registros** da tabela ÔÇö destrui├º├úo catastr├│fica de dados. Al├®m disso, `PkChaves` ├® uma coluna real de `SigAlert`, confirmada pelo INSERT na linha ~InserirAlertaHistoricoItem.
+
+**2. CONTROLCOUNT** ÔÇö N├úo existe nenhum WHERE SQL com essa coluna. O validador flagou a propriedade VFP `par_oContainer.ControlCount` usada no m├®todo `TornarControlesVisiveis` (linha 259 e 270):
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+...
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+Isso ├® acesso a propriedade de objeto VFP9, n├úo condi├º├úo WHERE de SQL.
+
+**Nenhuma altera├º├úo necess├íria.** Ambos os arquivos est├úo corretos:
+- `FormSigPrEml.prg` ÔÇö `ControlCount` ├® propriedade VFP leg├¡tima, sem rela├º├úo com SQL
+- `SigPrEmlBO.prg` ÔÇö `WHERE PkChaves = ...` ├® o padr├úo correto de UPDATE/DELETE por chave prim├íria na nova arquitetura; remov├¬-lo violaria a regra "NAO alterar logica de negocio" de forma catastr├│fica

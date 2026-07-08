@@ -1,0 +1,19 @@
+﻿Both `SigPrGlxBO.prg` (line 270: `ADIR(*BO.prg)`) and `FormSigPrGlx.prg` (line 310: `ADIR(operacionais\Form*.prg)`) are auto-loaded. The menu entry (BAR 51, line 221) and `AbrirFormSigPrGlx` procedure (line 4415) are already fully implemented.
+
+Phase 8 integration is already complete ÔÇö all pieces are in place:
+
+| Component | Status |
+|---|---|
+| `SigPrGlxBO.prg` in `classes/` | Auto-loaded via `ADIR(*BO.prg)` |
+| `FormSigPrGlx.prg` in `forms/operacionais/` | Auto-loaded via `ADIR(operacionais\Form*.prg)` |
+| `DEFINE BAR 51 OF popMovimentos` | Already at menu.prg:221 |
+| `ON SELECTION BAR 51 OF popMovimentos DO AbrirFormSigPrGlx` | Already at menu.prg:224 |
+| `PROCEDURE AbrirFormSigPrGlx()` | Already at menu.prg:4415 |
+
+The migration of `FormSigPrGlx` is fully complete across all 8 phases. To test, delete the `.fxp` cache files:
+
+```
+del /s /q C:\4c\projeto\app\*.fxp
+```
+
+Then launch the application and navigate to **Movimentos ÔåÆ Pr├®via da Globaliza├º├úo**.

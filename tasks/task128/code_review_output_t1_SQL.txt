@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas em `sigreipeBO.prg`:
+
+1. **[SQL-FILTRO-INVENTADO] EMPS removido** ÔÇö o bloco `loc_cEmps = go_4c_Sistema.cCodEmpresa / IF !EMPTY(loc_cEmps) ... AND a.Emps = ...` foi eliminado por completo, incluindo a vari├ível `loc_cEmps` da declara├º├úo LOCAL. O original n├úo filtra por empresa nesse WHERE.
+
+2. **[SQL-FILTRO-INVENTADO] DATANFS ÔåÆ DATAS** ÔÇö `a.DataNFs` substitu├¡do por `a.Datas` nos filtros de data, alinhando com o WHERE do original (`a.Datas BETWEEN ...`) e com o c├│digo do Form (`ValidarDtFinal`, linha 1212).

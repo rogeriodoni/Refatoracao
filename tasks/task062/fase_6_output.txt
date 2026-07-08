@@ -1,0 +1,19 @@
+﻿Fase 6 conclu├¡da. As seguintes adi├º├Áes foram feitas ao `Formsigrecor.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö 5 novos BINDEVENTs:
+- `txt_4c__cd_moeda` ÔåÆ `TeclaCdMoeda`
+- `txt_4c__ds_moeda` ÔåÆ `TeclaDsMoeda`
+- `obj_4c_OptTipo` ÔåÆ `OptTipoClick`
+- `obj_4c_OptQuebras` ÔåÆ `OptQuebrasClick`
+- `chk_4c_OptPenPag` ÔåÆ `OptPenPagClick`
+
+**`LimparCampos()`** ÔÇö moeda inicializada com `'R'` (padr├úo do legado) + busca SQL autom├ítica para preencher a descri├º├úo.
+
+**9 novos m├®todos**:
+- `TeclaCdMoeda` / `TeclaDsMoeda` ÔÇö handlers F4/Enter/Tab
+- `ValidarCdMoeda` ÔÇö valida c├│digo contra SigCdMoe, preenche descri├º├úo
+- `ValidarDsMoeda` ÔÇö lookup reverso por descri├º├úo
+- `AbrirBuscaCdMoeda` / `AbrirBuscaDsMoeda` ÔÇö FormBuscaAuxiliar em SigCdMoe (cmoes/dmoes)
+- `OptTipoClick` ÔÇö desmarca PenPag quando tipo Ôëá Anal├¡tico
+- `OptQuebrasClick` ÔÇö desmarca PenPag quando quebra Ôëá Datas
+- `OptPenPagClick` ÔÇö for├ºa tipo=Anal├¡tico e quebra=Datas ao marcar PenPag

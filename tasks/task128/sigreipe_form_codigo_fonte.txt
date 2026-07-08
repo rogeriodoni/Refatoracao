@@ -1,0 +1,1979 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreipe.SCX
+* Data/Hora: 06/06/2026 15:58:41
+* Total de registros: 46
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIPE
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdOper
+  Parent: SIGREIPE
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREIPE.grdOper.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIPE.grdOper.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIPE.grdOper.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIPE.grdOper.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIPE.grdOper.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIPE.grdOper.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIPE.grdOper.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_codigo
+  Parent: SIGREIPE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_desc
+  Parent: SIGREIPE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Option
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OpOrdem
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: spn_qtdetiq
+  Parent: SIGREIPE
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: lbl_dopes
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_nm_operacao
+  Parent: SIGREIPE
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: OpColunas
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say4
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptPais
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say6
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optCodigo
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say7
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optProper
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say5
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_conta
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: lbl_periodo
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREIPE
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREIPE
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optContatos
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say8
+  Parent: SIGREIPE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGREIPE
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGREIPE
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Opt_Impressora
+  Parent: SIGREIPE
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label3
+  Parent: SIGREIPE
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 558
+  Width = 819
+  DoCreate = .T.
+  Caption = "Impressão de Etiquetas"
+  TitleBar = 0
+  Name = "SIGREIPE"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Width = 852
+  cntSombra.Height = 80
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 512
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 36
+  REGISTRY1.Left = 300
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper
+------------------------------------------------------------
+  ColumnCount = 6
+  Height = 148
+  Left = 17
+  Panel = 1
+  TabIndex = 14
+  Top = 207
+  Width = 727
+  ZOrderSet = 0
+  Name = "grdOper"
+  Column1.Width = 18
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.Width = 31
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.Width = 190
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.Width = 52
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.Width = 200
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.Name = "Column5"
+  Column6.Width = 200
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column1.Header1
+------------------------------------------------------------
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column1.Check1
+------------------------------------------------------------
+  Top = 27
+  Left = 50
+  Height = 17
+  Width = 60
+  Alignment = 2
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column2.Header1
+------------------------------------------------------------
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column3.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column4.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column5.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column6.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.grdOper.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Get_codigo
+------------------------------------------------------------
+  Left = 97
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 100
+  Width = 66
+  ZOrderSet = 2
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Get_desc
+------------------------------------------------------------
+  Left = 165
+  MaxLength = 30
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 100
+  Width = 220
+  ZOrderSet = 3
+  Name = "Get_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Seleção :"
+  Left = 46
+  Top = 104
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Caption = "Ordenar por :"
+  Height = 15
+  Left = 18
+  Top = 363
+  Width = 76
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Option
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  Value = 2
+  Height = 64
+  Left = 18
+  SpecialEffect = 1
+  Top = 378
+  Width = 102
+  TabIndex = 16
+  BorderColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Option"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Alfabética"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 23
+  Option1.Width = 66
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "CEP"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 6
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Data Nasc."
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Top = 42
+  Option3.Width = 71
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.OpOrdem
+------------------------------------------------------------
+  ButtonCount = 2
+  OLEDropEffects = 2
+  BackStyle = 0
+  Value = 2
+  Height = 83
+  Left = 18
+  SpecialEffect = 1
+  Top = 451
+  Width = 102
+  TabIndex = 17
+  BorderColor = 90,90,90
+  ZOrderSet = 7
+  Name = "OpOrdem"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Ascendente"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 23
+  Option1.Width = 75
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "OpcDesc"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Descendente"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 6
+  Option2.Width = 81
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "OpcAsc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.spn_qtdetiq
+------------------------------------------------------------
+  Height = 21
+  KeyboardHighValue = 10
+  KeyboardLowValue = 1
+  Left = 360
+  SpecialEffect = 1
+  SpinnerHighValue =  10.00
+  SpinnerLowValue =   1.00
+  TabIndex = 10
+  Top = 148
+  Width = 53
+  ZOrderSet = 5
+  Value = 1
+  Name = "spn_qtdetiq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.lbl_dopes
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação :"
+  Left = 36
+  Top = 128
+  Width = 56
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.get_nm_operacao
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 97
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 125
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_nm_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.OpColunas
+------------------------------------------------------------
+  ButtonCount = 9
+  OLEDropEffects = 2
+  BackStyle = 0
+  Value = 2
+  Height = 156
+  Left = 125
+  SpecialEffect = 1
+  Top = 378
+  Width = 100
+  TabIndex = 18
+  BorderColor = 90,90,90
+  ZOrderSet = 11
+  Name = "OpColunas"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "3 Colunas"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 22
+  Option1.Width = 65
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "OpcCol3"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "2 Colunas"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 6
+  Option2.Width = 65
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "OpcCol2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "9 Linhas"
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Top = 38
+  Option3.Width = 57
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option1"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "9 x 3 "
+  Option4.Height = 15
+  Option4.Left = 5
+  Option4.Top = 54
+  Option4.Width = 45
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option3"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "A4355"
+  Option5.Height = 15
+  Option5.Left = 5
+  Option5.ToolTipText = "Etiqueta Pimaco A4355"
+  Option5.Top = 70
+  Option5.Width = 49
+  Option5.AutoSize = .T.
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option4"
+  Option6.FontName = "Tahoma"
+  Option6.FontSize = 8
+  Option6.BackStyle = 0
+  Option6.Caption = "2 Cols-Marg "
+  Option6.Height = 17
+  Option6.Left = 5
+  Option6.Top = 86
+  Option6.Width = 89
+  Option6.ForeColor = 90,90,90
+  Option6.Name = "Option5"
+  Option7.FontName = "Tahoma"
+  Option7.FontSize = 8
+  Option7.BackStyle = 0
+  Option7.Caption = "Térmica"
+  Option7.Height = 15
+  Option7.Left = 5
+  Option7.Top = 103
+  Option7.Width = 55
+  Option7.AutoSize = .T.
+  Option7.ForeColor = 90,90,90
+  Option7.Name = "Option6"
+  Option8.FontName = "Tahoma"
+  Option8.FontSize = 8
+  Option8.BackStyle = 0
+  Option8.Caption = "Pimaco 6181"
+  Option8.Height = 17
+  Option8.Left = 5
+  Option8.Top = 120
+  Option8.Width = 90
+  Option8.ForeColor = 90,90,90
+  Option8.Name = "Option7"
+  Option9.FontName = "Tahoma"
+  Option9.FontSize = 8
+  Option9.BackStyle = 0
+  Option9.Caption = "Térmica Z"
+  Option9.Height = 17
+  Option9.Left = 5
+  Option9.Top = 137
+  Option9.Width = 85
+  Option9.ForeColor = 90,90,90
+  Option9.Name = "Option8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say4
+------------------------------------------------------------
+  Caption = "Imprimir País :"
+  Height = 15
+  Left = 595
+  Top = 424
+  Width = 69
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.OptPais
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 26
+  Left = 669
+  Top = 419
+  Width = 104
+  TabIndex = 20
+  ZOrderSet = 13
+  Name = "OptPais"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say6
+------------------------------------------------------------
+  Caption = "Imprimir Código :"
+  Height = 15
+  Left = 581
+  Top = 440
+  Width = 83
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.optCodigo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 26
+  Left = 669
+  Top = 436
+  Width = 104
+  TabIndex = 24
+  ZOrderSet = 15
+  Name = "optCodigo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say7
+------------------------------------------------------------
+  Caption = "Imprime Iniciais em Maiúsculo :"
+  Height = 15
+  Left = 516
+  Top = 457
+  Width = 148
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.optProper
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 26
+  Left = 669
+  Top = 452
+  Width = 104
+  TabIndex = 26
+  ZOrderSet = 17
+  Name = "optProper"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Conta :"
+  Height = 15
+  Left = 54
+  Top = 176
+  Width = 38
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.opt_conta
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 91
+  Top = 172
+  Width = 135
+  TabIndex = 12
+  ZOrderSet = 19
+  Name = "opt_conta"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Origem"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 52
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Destino"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 68
+  Option2.Top = 5
+  Option2.Width = 54
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Perío\<do :"
+  Left = 47
+  Top = 151
+  Width = 45
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.get_dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Height = 21
+  Left = 97
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 148
+  Width = 80
+  ZOrderSet = 21
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 182
+  Top = 151
+  Width = 8
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.get_dt_final
+------------------------------------------------------------
+  Format = "K"
+  Height = 21
+  Left = 194
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 148
+  Width = 80
+  ZOrderSet = 23
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say9
+------------------------------------------------------------
+  Caption = "Usar Nome de Contato se Preenchido :"
+  Height = 15
+  Left = 476
+  Top = 476
+  Width = 188
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.optContatos
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 26
+  Left = 669
+  Top = 471
+  Width = 104
+  TabIndex = 28
+  ZOrderSet = 17
+  Name = "optContatos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Say8
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Qtd. cópias :"
+  Left = 281
+  Top = 151
+  Width = 75
+  TabIndex = 11
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.apaga
+------------------------------------------------------------
+  Top = 264
+  Left = 756
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 32
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.SelTudo
+------------------------------------------------------------
+  Top = 220
+  Left = 756
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 31
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Opt_Impressora
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 156
+  Left = 230
+  SpecialEffect = 1
+  Top = 378
+  Width = 215
+  TabIndex = 23
+  BorderColor = 90,90,90
+  Themes = .F.
+  Name = "Opt_Impressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 16
+  Option1.Left = 9
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 210
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPE.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Impressora "
+  Height = 15
+  Left = 228
+  Top = 364
+  Width = 74
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIPE
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE imptermica
+------------------------------------------------------------
+PROCEDURE imptermica
+thisform.processamento()
+
+Select *, '1' as cpros, 1 as qtds, 0 as cbars from Relacao into cursor DbImpressao Readwrite
+Go top
+replace all Obs with Iclis
+
+lnTpImp = Iif(crSigCdPam.ImpEtis <> 0, crSigCdPam.ImpEtis, 1)
+lnAjVerts = crSigCdPam.AjVerts
+lnAjHorzs = crSigCdPam.AjHorzs
+lnAjDenss = Iif(crSigCdPac.AjDens<10,10,CrSigCdPac.AjDens)
+lnAjVelos = Iif(crSigCdPac.AjVelos<1, 1, crSigCdPac.AjVelos)
+
+With Thisform.Opt_Impressora
+	lnImpres = .Value
+	lcNomeImp = .Buttons( lnImpres ).Tag
+EndWith
+
+=SigOpEtq(ThisForm.poDataMgr, .f., .f., 45, lnTpImp, lnAjVerts, lnAjHorzs, ;
+			lnAjDenss, .F., .F., .F., lcNomeImp, , , lnAjVelos, .f., .f.)
+
+
+=MessageBox('Impressão Concluída!!!', 0+64, '')
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE imptermicaz
+------------------------------------------------------------
+PROCEDURE imptermicaz
+thisform.processamento()
+
+Select *, '1' as cpros, 1 as qtds, 0 as cbars, SPACE(10) as Obs from Relacao into cursor DbImpressao Readwrite
+Go top
+replace all Obs with Iclis
+
+lnTpImp = Iif(crSigCdPam.ImpEtis <> 0, crSigCdPam.ImpEtis, 1)
+lnAjVerts = crSigCdPam.AjVerts
+lnAjHorzs = crSigCdPam.AjHorzs
+lnAjDenss = Iif(crSigCdPac.AjDens<10,10,CrSigCdPac.AjDens)
+lnAjVelos = Iif(crSigCdPac.AjVelos<1, 1, crSigCdPac.AjVelos)
+
+With Thisform.Opt_Impressora
+	lnImpres = .Value
+	lcNomeImp = .Buttons( lnImpres ).Tag
+EndWith
+
+=SigOpEtq(ThisForm.poDataMgr, .f., .f., 96, lnTpImp, lnAjVerts, lnAjHorzs, ;
+			lnAjDenss, .F., .F., .F., lcNomeImp, , , lnAjVelos, .f., .f.)
+
+
+=MessageBox('Impressão Concluída!!!', 0+64, '')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+DO Case 
+	Case ThisForm.opColunas.Value = 1
+		Label Form SigMldDn  To Printer NoConsole
+	Case ThisForm.opColunas.Value = 2
+		Label Form SigMld2 To Printer NoConsole
+	Case ThisForm.opColunas.Value = 3
+		Label Form SigMld3 To Printer NoConsole
+	Case ThisForm.opColunas.Value = 4
+		Label Form SigMld4 To Printer NoConsole	
+	Case ThisForm.opColunas.Value = 5
+		Label Form SigMld5 To Printer NoConsole	
+	Case ThisForm.opColunas.Value = 6
+		Label Form SigMld2C  To Printer NoConsole	
+	Case ThisForm.opColunas.Value = 8
+		Label Form SigMld2K To Printer NoConsole	
+EndCase 
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+DO Case 
+	Case ThisForm.opColunas.Value = 1
+		Label Form SigMldDn  To Printer Prompt NoConsole
+	Case ThisForm.opColunas.Value = 2
+		Label Form SigMld2 To Printer Prompt NoConsole
+	Case ThisForm.opColunas.Value = 3
+		Label Form SigMld3 To Printer Prompt NoConsole
+	Case ThisForm.opColunas.Value = 4
+		Label Form SigMld4 To Printer Prompt NoConsole		
+	Case ThisForm.opColunas.Value = 5
+		Label Form SigMld5 To Printer Prompt NoConsole
+	Case ThisForm.opColunas.Value = 6
+		Label Form SigMld2C  To Printer Prompt NoConsole
+	Case ThisForm.opColunas.Value = 8
+		Label Form SigMld2K To Printer Prompt NoConsole
+EndCase 
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCodigos
+
+Private pCod
+
+=fConfigGeral()
+
+=DoDefault()
+
+pCod = Iif(Type('pCodigos')='C', pCodigos, Space(10))
+
+lcQryMala = [Select a.IClis, a.RClis, a.Endes, a.Nums, a.Compls, a.Bairs, a.Cidas, a.Ceps, a.Estas, ] + ;
+				   [a.Tel1s, a.Tel2s, a.Faxs, a.Nascs, a.cIdChaves, a.Codigos, b.paises, b.Contato ] + ;
+			  [From SigMlCab a, SigCdCli b ] + ;
+			 [Where a.Codigos = ?pCod And ] + ;
+			 	   [a.Iclis = b.Iclis ] + ;
+		  	 [Order By a.IClis, a.RClis, a.Endes, a.Nums, a.Compls, a.Bairs, a.Cidas, a.Ceps, a.Estas, ] + ;
+		  	 	   [a.Tel1s, a.Tel2s, a.Faxs, a.Nascs, a.cIdChaves, a.Codigos, b.Contato]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDataMgr
+		.AddCursor('SigMlCab', 'cIdChaves', 'Relacao', '', '', lcQryMala)
+	EndWith
+EndWith
+
+* Checando se Existe Algum Usuário Cadastrado Para Liberar o Acesso Ao Formulário
+lcQuery = [Select pkChaves ] + ;
+			[From SigCdAcU ] + ;
+		   [Where Programas  = '] + Padr('SIGREIPE',  15) + [' And ] + ;
+		   		 [Parametros = '] + Padr('LIBERAIMP',10) + [' ] + ;
+		   [Order By pkChaves]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdAcU') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdAcU)')
+	Return .f.
+EndIf
+Go Top In crSigCdAcU
+If Not Eof([crSigCdAcU])
+	Do Form SigSnSen With [], [SIGREIPE], [LIBERAIMP], [USUARIO] To loObj
+
+	If (Type([loObj])=[O])
+		If loObj.Acesso And Not Empty(loObj.Usuario)
+			=fGravarLog([T], [MALADIRETA], Usuar, [Foi Liberada a Impressão ] + ;
+						  [de Etiquetas Pelo Usuário ] + loObj.Usuario)
+		Else
+			=fGravarLog([T], [MALADIRETA], Usuar, [Houve Uma Tentativa de Liberação ] + ;
+						  [de Impressão Etiquetas Pelo Usuário ] + loObj.Usuario)
+			Return .f.
+		EndIf
+		Release loObj
+	EndIf
+EndIf
+* Fim da Checagem de Usuário Cadastrado Para Liberar o Acesso Ao Formulário
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute('Select * From SigCdPam', 'crSigCdPam')
+If (lnQueryOk < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão')
+	Return 0
+EndIf
+
+If ! ThisForm.podatamgr.Cursorquery('SigCdPac','CrSigCdPac')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão')
+	Return 0
+Endif
+
+If Not Empty(pCod)
+	ThisForm.Get_codigo.Value = pCod
+	If ThisForm.Podatamgr.CursorQuery('SigMlItn', 'crTmp', 'Codigos', pCod)
+		ThisForm.Get_desc.Value = Evaluate('crTmp.Descs')
+		Use In crTmp
+	EndIf
+EndIf
+
+ThisForm.opColunas.Value = 2
+
+
+*** Tiago - 22/08/2012 - Muredu - Alteração para imprimir etiqueta térmica de endereço
+Dimension laPrinters(10,2)
+
+lnPrinters = APrinters(laPrinters)
+If (lnPrinters <> 0)
+	For lnI = 1 To lnPrinters
+		laPrinters(lnI, 1) = Upper(laPrinters(lnI, 1))
+	EndFor
+	=ASort(laPrinters)
+EndIf
+
+lcSql = [Select b.Impres ] + ;
+		  [From SigSyImp a, SigCdmp b ] + ;
+		 [Where a.UsuAcess = '] + Usuar + [' And ] + ;
+		 	   [a.CImps = b.Impres And ] + ;
+		 	   [b.nTpImpres = 2 ] + ;
+		 [Union All ] + ;
+		[Select c.Impres ] + ;
+		  [From SigCdAcG a, SigSyImp b, SigCdmp c ] + ;
+		 [Where a.Usuarios = '] + Usuar + [' And ] + ;
+		       [a.Grupos = b.GrAcess And ] + ;
+		       [b.CImps = c.Impres And ] + ;
+		       [c.nTpImpres = 2]
+
+If ThisForm.podatamgr.sqlexecute(lcSql,'crTmpCimp') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+	Return(.f.)
+EndIf
+
+Select crTmpCImp
+If (Reccount([crTmpCImp]) > 0)
+	Select Distinct Impres ;
+	  From crTmpCImp ;
+	 Order By Impres ;
+	  Into Cursor crSigCdmp ReadWrite
+Else
+	lcQuery = [Select Distinct Impres ] + ;
+			    [From SigCdmp ] + ;
+			   [Where nTpImpres = 2 ] + ;
+			   [Order By Impres]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdmp]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdmp)])
+		Return .f.
+	EndIf
+EndIf
+Select crSigCdmp
+Go Top In crSigCdmp		
+
+lnCnt = 0
+lnImp = 1
+If (lnPrinters <> 0)
+	Select crSigCdmp
+	Scan
+		Dimension laImpOk(lnImp)
+		lnOk = AScan(laPrinters, Alltrim(Upper(crSigCdmp.Impres)))
+		If (lnOk <> 0)
+			lnCnt = lnCnt + 1
+			laImpOk(lnCnt) = laPrinters(lnOk)
+			lnImp = lnImp + 1
+		EndIf
+	EndScan
+EndIf
+lnImp = lnImp - 1
+
+With ThisForm.opt_Impressora
+	lnTop = 10
+	lnHeight = 15
+	If (lnImp <> 0)
+		.ButtonCount = Min(lnImp, Max(crSigCdPam.nMaxImpEti, 5))
+		For lnI = 1 to .ButtonCount
+			lcI = AllTrim(Str(lnI))
+			With .Option&lcI.
+				.AutoSize  = .f.
+				.Caption   = ' \<' + lcI + '. ' + laImpOk(lnI)
+				.FontSize  = 8
+				.Forecolor = Rgb(36,84,155)
+				.Tag       = Upper(laImpOk(lnI))
+				.Top       = lnTop
+				.Width     = 210
+				.BackStyle = 0
+			EndWith
+			lnTop = lnTop + 20
+			lnHeight = lnHeight + 20
+		EndFor
+	Else
+		.ButtonCount = 1
+		lnOk = AScan(laPrinters, 'GENÉRICO/SOMENTE TEXTO')
+		With .Option1
+			.AutoSize = .f.
+			.Caption  = ' \<0. Genérico/Somente Texto'
+			.Enabled  = (lnOk <> 0)
+			.FontSize = 8
+			.Forecolor = Rgb(36,84,155)
+			.Tag      = 'GENÉRICO/SOMENTE TEXTO'
+			.Width    = 210
+			lnImp     = Iif(.Enabled, 1, 0)
+		EndWith
+		lnHeight = lnHeight + 20
+	EndIf
+	.Enabled = (lnImp > 1)
+	.Height  = lnHeight
+EndWith
+
+
+ThisForm.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pCod
+
+pCod = Thisform.Get_Codigo.Value
+
+Create Cursor CsCabecalho (llImpPais l, llImpCodigos l)
+Append Blank
+Replace llImpPais    With ( ThisForm.optpais.Value = 1 )
+Replace llImpCodigos With ( ThisForm.optCodigo.Value = 1 ) 
+
+If Empty(thisform.get_nm_operacao.Value)
+	ThisForm.poDataMgr.Requery('Relacao')
+Else
+	Select TmpOper
+	Scan
+		If TmpOper.Marcas = 1 and !Empty(TmpOper.ContaEs) and TmpOper.LocalEnts <> 0
+			*** Tiago - 03/06/2011 - Busca endereço de entrega se estiver preenchido
+			Dimension laArray(2)
+			laArray(1) = TmpOper.ContaEs
+			laArray(2) = TmpOper.LocalEnts
+						
+			If fEndEntrega(@laArray, thisform.podatamgr)
+				Select TmpOper			
+				Scatter memo memvar			
+				m.Ceps = laArray(04)
+				m.Paises = laArray(05)
+				m.Endes = laArray(06)
+				m.Nums = laArray(07)
+				m.Compls = laArray(08)
+				m.Bairs = laArray(09)
+				m.Cidas = laArray(10)
+				m.Estas = laArray(11)				
+				m.Contato = laArray(15)				
+				Select TmpOper				
+				Gather memo memvar				
+			EndIf
+		EndIf
+	EndScan
+
+	lcQuery = []
+	For x = 1 to thisform.spn_qtdetiq.Value
+		lcQuery = lcQuery  + Iif(!Empty(lcQuery),[;] + Chr(13)+Chr(10)+[Union All ;]+Chr(13)+Chr(10),[]) +;
+				[Select * from TmpOper n] + Alltrim(Str(x,2,0)) + [ where marcas = 1 ] +;
+				Iif(x = thisform.spn_qtdetiq.Value,[into cursor Relacao readwrite],[])
+	Next
+	
+	=ExecScript(lcQuery)
+	 
+	Select Relacao
+	Go top
+EndIf
+
+If (ThisForm.optContatos.Value = 1) && Usar Nome de Contato se Preenchido
+	Replace All RClis With Iif(Empty(Contato), RClis, Contato) In Relacao
+Endif 
+
+If (ThisForm.optProper.Value = 1)
+	Replace All RClis With Proper(RClis) In Relacao
+Endif 
+
+Select Relacao
+Do Case 
+	Case (ThisForm.Option.Value=1) && Alfabética
+		Index On RClis + IClis Tag RClis
+		If ThisForm.Opordem.value = 2
+			Index On RClis + IClis DESCENDING Tag RClis
+		Endif
+
+	Case (ThisForm.Option.Value=2) && Cep
+		Index On Ceps + IClis Tag Ceps
+		If ThisForm.Opordem.value = 2
+			Index On Ceps + IClis DESCENDING Tag Ceps
+		Endif
+
+	Case (ThisForm.Option.Value=3) && Data de Nascimento
+		Index On Substr(Dtos(Nascs),5) + IClis Tag Nascs
+		If ThisForm.Opordem.value = 2
+			Index On Substr(Dtos(Nascs),5) + IClis DESCENDING Tag Nascs
+		Endif
+EndCase
+Go Top In Relacao
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+DO Case 
+	Case ThisForm.opColunas.Value = 1
+		Label Form SigMldDn  Preview NoConsole
+	Case ThisForm.opColunas.Value = 2
+		Label Form SigMld2  Preview NoConsole
+	Case ThisForm.opColunas.Value = 3
+		Label Form SigMld3 Preview NoConsole
+	Case ThisForm.opColunas.Value = 4
+		Label Form SigMld4 Preview NoConsole		
+	Case ThisForm.opColunas.Value = 5
+		Label Form SigMld5 Preview NoConsole		
+	Case ThisForm.opColunas.Value = 6
+		Label Form SigMld2C  Preview NoConsole		
+	Case ThisForm.opColunas.Value = 8
+		Label Form SigMld2K Preview NoConsole		
+EndCase 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.grdOper.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Select TmpOper
+replace marcas with this.Value
+&&Locate for .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.Get_desc
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_codigo.Value) and Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.spn_qtdetiq
+* Classe: spinner (Base: spinner)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return !Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.get_nm_operacao
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Empty(this.Value)
+	thisform.get_dt_inicial.Value = {}
+	thisform.get_dt_final.Value = {}
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoMovmto(Usuar, This.Value, This)
+EndIf
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.get_codigo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.OptPais
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AddObject
+------------------------------------------------------------
+PROCEDURE AddObject
+LPARAMETERS cName, cClass
+'
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.opt_conta
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+If !Empty(thisform.get_dt_inicial.Value) and !Empty(thisform.get_dt_final.Value)
+	thisform.get_dt_final.Valid()
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return !Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.get_dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return !Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.get_dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lcDopes = thisform.get_nm_operacao.Value
+	ldDataIni = thisform.get_dt_inicial.Value
+	ldDataFin = thisform.get_dt_final.value
+	lnConta = thisform.opt_conta.Value
+	If Not Empty(This.Value)
+		thisform.grdOper.RecordSource = []
+		
+		lcQuery = [Select 0 as Marcas, a.Emps, a.Dopes, a.Numes, b.rclis as DescOrigs, c.Rclis as DescDests, a.ContaEs, a.LocalEnts, ] +;
+					Iif(lnConta=1,[b.* ],[c.* ]) +;
+					[from SigMvCab a inner join SigCdCli b on a.ContaOs = b.Iclis ] +;
+					[inner join SigCdCli c on a.ContaDs = c.Iclis ] +;
+					[where Dopes = '] + lcDopes + [' and Datas between ?ldDataIni and ?ldDataFin order By Numes]
+		ThisForm.poDataMgr.SqlExecute(lcQuery,[TmpOper])
+		
+		Select TmpOper
+		If !Eof()
+			Go top
+			thisform.grdOper.RecordSource = [TmpOper]
+		Else
+			MessageBox([Nenhum movimento encontrado nesse período.],64,[Aviso])
+		EndIf
+		thisform.grdOper.Refresh()
+	EndIf
+EndIf
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return !Empty(thisform.get_nm_operacao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpOper
+Replace All TmpOper.marcas with 0
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Used('TmpOper')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPE.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select tmpOper
+Replace All tmpOper.marcas with 1
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Used('TmpOper')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIPE
+RESERVED3 (ClassInfo): podatamgr
+*imptermica impressão em impressora térmica (allegro)
+*imptermicaz 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 27
+================================================================================

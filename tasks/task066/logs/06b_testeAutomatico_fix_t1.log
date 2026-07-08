@@ -1,0 +1,23 @@
+[2026-05-18 14:04:29] [INFO] === CLAUDE CLI INVOKER ===
+[2026-05-18 14:04:29] [INFO] Prompt File: C:\4c\tasks\task066\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-05-18 14:04:29] [INFO] Output File: C:\4c\tasks\task066\06b_testeAutomatico_fix_output_t1.txt
+[2026-05-18 14:04:29] [INFO] Model: sonnet
+[2026-05-18 14:04:29] [INFO] Timeout: 3600 segundos
+[2026-05-18 14:04:29] [INFO] Max Output Tokens: 128000
+[2026-05-18 14:04:29] [INFO] Context Files: 0 arquivo(s)
+[2026-05-18 14:04:29] [INFO] Invocando Claude CLI...
+[2026-05-18 14:04:29] [INFO] Prompt carregado: 110634 caracteres
+[2026-05-18 14:04:29] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-05-18 14:04:29] [INFO] Tamanho total do prompt: 110634 caracteres
+[2026-05-18 14:04:29] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-05-18 14:05:31] [INFO] Claude CLI finalizado em 62.7409405 segundos
+[2026-05-18 14:05:31] [INFO] Exit Code: 0
+[2026-05-18 14:05:31] [INFO] Output salvo em: C:\4c\tasks\task066\06b_testeAutomatico_fix_output_t1.txt
+[2026-05-18 14:05:31] [INFO] Output size: 510 bytes
+[2026-05-18 14:05:31] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-05-18 14:05:31] [INFO] Preview do output:
+[2026-05-18 14:05:31] [INFO] Corrigi o `sigrecrfBO.Init()` com duas mudan+ºas:
+
+1. **Guard `gb_4c_ValidandoUI`**: quando em modo de teste UI (sem conex+úo SQL), pula o `SQLEXEC` e seta `loc_lSucesso = .T.` diretamente ÔÇö mesmo padr+úo que o form j+í usa para pular a valida+º+úo de GrPadVens.
+
+2. **Bug secund+írio corrigido**: `loc_lSucesso = .T.` estava fora do `ELSE` e sobrescrevia incondicionalmente o resultado do check de GrPadVens. Agora s+¦ seta `.T.` quando GrPadVens n+úo est+í vazio.

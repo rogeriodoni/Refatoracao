@@ -1,0 +1,9 @@
+﻿**Corre├º├úo aplicada.** 
+
+**Diagn├│stico:** O teste travava em ETAPA 1B (SQLSTRINGCONNECT) por instabilidade de rede ÔÇö o SQL Server 192.168.15.101 ficou inacess├¡vel durante as tentativas. Isso ├® transit├│rio (task020 teve o mesmo padr├úo e resolveu na 3┬¬ tentativa). O bug real no c├│digo era independente disso.
+
+**Bug corrigido:** Os 6 validators de lookup (`ValidarGrupoUsuario`, `ValidarUsuario`, `ValidarGrConta`, `ValidarDGrConta`, `ValidarCdConta`, `ValidarDConta`) estavam vinculados ao evento `"KeyPress"` em vez de `"LostFocus"`. Com `"KeyPress"`, o validator disparava em **cada tecla digitada**, tentando abrir `FormBuscaAuxiliar` (form modal) a cada keystroke ÔÇö bloqueio garantido em modo interativo e potencial travamento em teste.
+
+Os 6 handlers F4 (`txt_4c_*_KeyPress`) permaneceram corretamente em `"KeyPress"`.
+
+O .fxp desatualizado foi removido para for├ºar recompila├º├úo limpa na pr├│xima execu├º├úo.

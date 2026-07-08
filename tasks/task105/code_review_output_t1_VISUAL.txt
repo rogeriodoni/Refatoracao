@@ -1,0 +1,17 @@
+﻿All changes look correct. Let me summarize what was done and why.
+
+**Changes made to `FormSIGREFXV.prg`:**
+
+1. **`lbl_4c_Label1` (Complemento Caracteristica, Left=82) ÔåÆ `lbl_4c_LblComplementoCarac`** ÔÇö freed the `lbl_4c_Label1` name for the correct original mapping
+
+2. **`lbl_4c_Label2` (Grande Grupo, Top=158) ÔåÆ `lbl_4c_LblGrandeGrupo`** ÔÇö freed the `lbl_4c_Label2` name for the correct original mapping
+
+3. **`lbl_4c_Estoques` (Estoques header, Left=414) ÔåÆ `lbl_4c_Label1`** ÔÇö fixes problem 4: the original "Label1" at Left=414 was the Estoques header, now correctly named
+
+4. **`lbl_4c_AguardeMsg1` (inside cnt_4c_Aguarde, Top=13, Left=12) ÔåÆ `lbl_4c_Label1`** ÔÇö fixes problems 6,8,9: original Label1 inside Aguarde is now findable at Top=13, Left=12
+
+5. **`lbl_4c_AguardeMsg2` (inside cnt_4c_Aguarde, Top=47, Left=9) ÔåÆ `lbl_4c_Label2`** ÔÇö fixes problems 7,10,11: original Label2 inside Aguarde is now findable at Top=47, Left=9
+
+**Root cause:** The validator maps original control names (Label1, Label2) to migrated names (lbl_4c_Label1, lbl_4c_Label2) and compares positions. The migration had incorrectly assigned these names to different controls (Complemento and Grande Grupo labels), causing the validator to find the wrong controls and report position mismatches.
+
+**Problems 1,2,3,5 (OptRfEstoque, lbl_moeda, lbl_grupo):** The code already has correct page-relative coordinates (original position minus PageFrame.Top=85). These are validator artifacts from comparing form-absolute coordinates to page-relative ones ÔÇö no code change is possible without breaking the layout.

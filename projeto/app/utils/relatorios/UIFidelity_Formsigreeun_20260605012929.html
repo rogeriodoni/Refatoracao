@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - Formsigreeun</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: Formsigreeun | Data: 05/06/2026 01:29:29</p>
+        </div>        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero">200</div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero">4</div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero">196</div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero">0</div>
+            </div>
+        </div><div class="conteudo">
+  <h2>Detalhes das Diferencas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Objeto</th>
+        <th>Propriedade</th>
+        <th>Valor Original</th>
+        <th>Valor Migrado</th>
+        <th>Linha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>57</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>142</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>4</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>143</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>632</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>144</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>326</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>145</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Visualiza.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>165</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Visualiza.Left</strong></td>
+        <td><code>2</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>166</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Imprime.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>168</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Imprime.Left</strong></td>
+        <td><code>68</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>169</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.DocExcel.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>171</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.DocExcel.Left</strong></td>
+        <td><code>134</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>172</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Sair.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>174</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Sair.Left</strong></td>
+        <td><code>200</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>175</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Left</strong></td>
+        <td><code>531</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>177</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN</code></td>
+        <td><strong>btnReport.Top</strong></td>
+        <td><code>0</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>178</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>187</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>188</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Grupo :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>189</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>228</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>190</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>99</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>191</td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>192</td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_estoque</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>194</td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_estoque</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>202</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_estoque</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>205</td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_estoque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>352</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>206</td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_estoque</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>120</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>209</td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_estoque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>290</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>210</td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>218</td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>219</td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>220</td>
+      </tr>
+      <tr>
+        <td>30</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>221</td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>223</td>
+      </tr>
+      <tr>
+        <td>32</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>225</td>
+      </tr>
+      <tr>
+        <td>33</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>229</td>
+      </tr>
+      <tr>
+        <td>34</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>230</td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>231</td>
+      </tr>
+      <tr>
+        <td>36</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>233</td>
+      </tr>
+      <tr>
+        <td>37</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>120</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>236</td>
+      </tr>
+      <tr>
+        <td>38</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>237</td>
+      </tr>
+      <tr>
+        <td>39</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>238</td>
+      </tr>
+      <tr>
+        <td>40</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_estoque</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>239</td>
+      </tr>
+      <tr>
+        <td>41</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>247</td>
+      </tr>
+      <tr>
+        <td>42</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>248</td>
+      </tr>
+      <tr>
+        <td>43</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Unidade :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>249</td>
+      </tr>
+      <tr>
+        <td>44</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>218</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>250</td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>150</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>251</td>
+      </tr>
+      <tr>
+        <td>46</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>48</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>252</td>
+      </tr>
+      <tr>
+        <td>47</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_grupo</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>254</td>
+      </tr>
+      <tr>
+        <td>48</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo_desc</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>262</td>
+      </tr>
+      <tr>
+        <td>49</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo_desc</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>265</td>
+      </tr>
+      <tr>
+        <td>50</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo_desc</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>303</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>266</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo_desc</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>145</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>269</td>
+      </tr>
+      <tr>
+        <td>52</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo_desc</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>203</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>270</td>
+      </tr>
+      <tr>
+        <td>53</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>278</td>
+      </tr>
+      <tr>
+        <td>54</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>279</td>
+      </tr>
+      <tr>
+        <td>55</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>280</td>
+      </tr>
+      <tr>
+        <td>56</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>281</td>
+      </tr>
+      <tr>
+        <td>57</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>283</td>
+      </tr>
+      <tr>
+        <td>58</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>285</td>
+      </tr>
+      <tr>
+        <td>59</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>289</td>
+      </tr>
+      <tr>
+        <td>60</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>290</td>
+      </tr>
+      <tr>
+        <td>61</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>291</td>
+      </tr>
+      <tr>
+        <td>62</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>293</td>
+      </tr>
+      <tr>
+        <td>63</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>145</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>296</td>
+      </tr>
+      <tr>
+        <td>64</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>31</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>297</td>
+      </tr>
+      <tr>
+        <td>65</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>298</td>
+      </tr>
+      <tr>
+        <td>66</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_grupo</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>299</td>
+      </tr>
+      <tr>
+        <td>67</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>307</td>
+      </tr>
+      <tr>
+        <td>68</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>308</td>
+      </tr>
+      <tr>
+        <td>69</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Imprime Cotação :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>309</td>
+      </tr>
+      <tr>
+        <td>70</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>176</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>310</td>
+      </tr>
+      <tr>
+        <td>71</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>248</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>311</td>
+      </tr>
+      <tr>
+        <td>72</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>312</td>
+      </tr>
+      <tr>
+        <td>73</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dados_cotacao</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>314</td>
+      </tr>
+      <tr>
+        <td>74</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>324</td>
+      </tr>
+      <tr>
+        <td>75</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>326</td>
+      </tr>
+      <tr>
+        <td>76</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>264</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>327</td>
+      </tr>
+      <tr>
+        <td>77</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>328</td>
+      </tr>
+      <tr>
+        <td>78</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>243</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>329</td>
+      </tr>
+      <tr>
+        <td>79</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>97</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>330</td>
+      </tr>
+      <tr>
+        <td>80</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>333</td>
+      </tr>
+      <tr>
+        <td>81</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>334</td>
+      </tr>
+      <tr>
+        <td>82</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.Caption</strong></td>
+        <td><code>Sim</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>336</td>
+      </tr>
+      <tr>
+        <td>83</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>337</td>
+      </tr>
+      <tr>
+        <td>84</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>338</td>
+      </tr>
+      <tr>
+        <td>85</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>339</td>
+      </tr>
+      <tr>
+        <td>86</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.Width</strong></td>
+        <td><code>34</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>340</td>
+      </tr>
+      <tr>
+        <td>87</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>342</td>
+      </tr>
+      <tr>
+        <td>88</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>344</td>
+      </tr>
+      <tr>
+        <td>89</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>345</td>
+      </tr>
+      <tr>
+        <td>90</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.Caption</strong></td>
+        <td><code>Não</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>347</td>
+      </tr>
+      <tr>
+        <td>91</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.Left</strong></td>
+        <td><code>51</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>348</td>
+      </tr>
+      <tr>
+        <td>92</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>349</td>
+      </tr>
+      <tr>
+        <td>93</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.opt_dados_cotacao</code></td>
+        <td><strong>Option2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>351</td>
+      </tr>
+      <tr>
+        <td>94</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>359</td>
+      </tr>
+      <tr>
+        <td>95</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>360</td>
+      </tr>
+      <tr>
+        <td>96</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>361</td>
+      </tr>
+      <tr>
+        <td>97</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>362</td>
+      </tr>
+      <tr>
+        <td>98</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>364</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>366</td>
+      </tr>
+      <tr>
+        <td>100</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>370</td>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>371</td>
+      </tr>
+      <tr>
+        <td>102</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>372</td>
+      </tr>
+      <tr>
+        <td>103</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>374</td>
+      </tr>
+      <tr>
+        <td>104</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>195</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>377</td>
+      </tr>
+      <tr>
+        <td>105</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>31</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>378</td>
+      </tr>
+      <tr>
+        <td>106</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>379</td>
+      </tr>
+      <tr>
+        <td>107</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>380</td>
+      </tr>
+      <tr>
+        <td>108</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>388</td>
+      </tr>
+      <tr>
+        <td>109</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>389</td>
+      </tr>
+      <tr>
+        <td>110</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>390</td>
+      </tr>
+      <tr>
+        <td>111</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>391</td>
+      </tr>
+      <tr>
+        <td>112</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>393</td>
+      </tr>
+      <tr>
+        <td>113</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>395</td>
+      </tr>
+      <tr>
+        <td>114</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>399</td>
+      </tr>
+      <tr>
+        <td>115</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>400</td>
+      </tr>
+      <tr>
+        <td>116</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>303</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>401</td>
+      </tr>
+      <tr>
+        <td>117</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>403</td>
+      </tr>
+      <tr>
+        <td>118</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>195</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>406</td>
+      </tr>
+      <tr>
+        <td>119</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>115</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>407</td>
+      </tr>
+      <tr>
+        <td>120</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>408</td>
+      </tr>
+      <tr>
+        <td>121</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_moeda_desc</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>409</td>
+      </tr>
+      <tr>
+        <td>122</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_data</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>416</td>
+      </tr>
+      <tr>
+        <td>123</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_data</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>417</td>
+      </tr>
+      <tr>
+        <td>124</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_data</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>170</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>419</td>
+      </tr>
+      <tr>
+        <td>125</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_data</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>420</td>
+      </tr>
+      <tr>
+        <td>126</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_dt_cotacao</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>428</td>
+      </tr>
+      <tr>
+        <td>127</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_dt_cotacao</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>429</td>
+      </tr>
+      <tr>
+        <td>128</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_dt_cotacao</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>220</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>431</td>
+      </tr>
+      <tr>
+        <td>129</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_dt_cotacao</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>432</td>
+      </tr>
+      <tr>
+        <td>130</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>440</td>
+      </tr>
+      <tr>
+        <td>131</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>441</td>
+      </tr>
+      <tr>
+        <td>132</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Data :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>442</td>
+      </tr>
+      <tr>
+        <td>133</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>234</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>443</td>
+      </tr>
+      <tr>
+        <td>134</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>175</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>444</td>
+      </tr>
+      <tr>
+        <td>135</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_data</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>446</td>
+      </tr>
+      <tr>
+        <td>136</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>454</td>
+      </tr>
+      <tr>
+        <td>137</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>455</td>
+      </tr>
+      <tr>
+        <td>138</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Moeda :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>456</td>
+      </tr>
+      <tr>
+        <td>139</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>225</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>457</td>
+      </tr>
+      <tr>
+        <td>140</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>200</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>458</td>
+      </tr>
+      <tr>
+        <td>141</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_moeda</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>460</td>
+      </tr>
+      <tr>
+        <td>142</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>468</td>
+      </tr>
+      <tr>
+        <td>143</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>469</td>
+      </tr>
+      <tr>
+        <td>144</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Dt. Cotação :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>470</td>
+      </tr>
+      <tr>
+        <td>145</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>199</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>471</td>
+      </tr>
+      <tr>
+        <td>146</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>225</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>472</td>
+      </tr>
+      <tr>
+        <td>147</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.lbl_dt_cotacao</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>474</td>
+      </tr>
+      <tr>
+        <td>148</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>483</td>
+      </tr>
+      <tr>
+        <td>149</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>484</td>
+      </tr>
+      <tr>
+        <td>150</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Fator de Venda :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>485</td>
+      </tr>
+      <tr>
+        <td>151</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>183</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>486</td>
+      </tr>
+      <tr>
+        <td>152</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>273</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>487</td>
+      </tr>
+      <tr>
+        <td>153</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>83</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>488</td>
+      </tr>
+      <tr>
+        <td>154</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>490</td>
+      </tr>
+      <tr>
+        <td>155</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>500</td>
+      </tr>
+      <tr>
+        <td>156</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>501</td>
+      </tr>
+      <tr>
+        <td>157</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>264</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>502</td>
+      </tr>
+      <tr>
+        <td>158</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>503</td>
+      </tr>
+      <tr>
+        <td>159</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>268</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>504</td>
+      </tr>
+      <tr>
+        <td>160</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>97</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>505</td>
+      </tr>
+      <tr>
+        <td>161</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>508</td>
+      </tr>
+      <tr>
+        <td>162</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>509</td>
+      </tr>
+      <tr>
+        <td>163</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.Caption</strong></td>
+        <td><code>Sim</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>511</td>
+      </tr>
+      <tr>
+        <td>164</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>512</td>
+      </tr>
+      <tr>
+        <td>165</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>513</td>
+      </tr>
+      <tr>
+        <td>166</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>514</td>
+      </tr>
+      <tr>
+        <td>167</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.Width</strong></td>
+        <td><code>34</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>515</td>
+      </tr>
+      <tr>
+        <td>168</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>517</td>
+      </tr>
+      <tr>
+        <td>169</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>519</td>
+      </tr>
+      <tr>
+        <td>170</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>520</td>
+      </tr>
+      <tr>
+        <td>171</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.Caption</strong></td>
+        <td><code>Não</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>522</td>
+      </tr>
+      <tr>
+        <td>172</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.Left</strong></td>
+        <td><code>51</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>523</td>
+      </tr>
+      <tr>
+        <td>173</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>524</td>
+      </tr>
+      <tr>
+        <td>174</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Opc_fator</code></td>
+        <td><strong>Option2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>526</td>
+      </tr>
+      <tr>
+        <td>175</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>534</td>
+      </tr>
+      <tr>
+        <td>176</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>535</td>
+      </tr>
+      <tr>
+        <td>177</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Conta :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>536</td>
+      </tr>
+      <tr>
+        <td>178</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>228</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>537</td>
+      </tr>
+      <tr>
+        <td>179</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>124</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>538</td>
+      </tr>
+      <tr>
+        <td>180</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>539</td>
+      </tr>
+      <tr>
+        <td>181</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.Say2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>541</td>
+      </tr>
+      <tr>
+        <td>182</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_grestoque</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>549</td>
+      </tr>
+      <tr>
+        <td>183</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_grestoque</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>552</td>
+      </tr>
+      <tr>
+        <td>184</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_grestoque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>352</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>553</td>
+      </tr>
+      <tr>
+        <td>185</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_grestoque</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>95</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>556</td>
+      </tr>
+      <tr>
+        <td>186</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_ds_grestoque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>290</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>557</td>
+      </tr>
+      <tr>
+        <td>187</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>565</td>
+      </tr>
+      <tr>
+        <td>188</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>566</td>
+      </tr>
+      <tr>
+        <td>189</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Courier New</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>567</td>
+      </tr>
+      <tr>
+        <td>190</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>568</td>
+      </tr>
+      <tr>
+        <td>191</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>570</td>
+      </tr>
+      <tr>
+        <td>192</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>572</td>
+      </tr>
+      <tr>
+        <td>193</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>576</td>
+      </tr>
+      <tr>
+        <td>194</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>577</td>
+      </tr>
+      <tr>
+        <td>195</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>270</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>578</td>
+      </tr>
+      <tr>
+        <td>196</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>580</td>
+      </tr>
+      <tr>
+        <td>197</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>95</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>583</td>
+      </tr>
+      <tr>
+        <td>198</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>584</td>
+      </tr>
+      <tr>
+        <td>199</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>585</td>
+      </tr>
+      <tr>
+        <td>200</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREEUN.get_cd_grestoque</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>586</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. Fase 4 implementada com sucesso.
+
+**O que foi adicionado ao `FormSigPdMp1.prg`:**
+
+- **InicializarForm()**: 4 chamadas novas ap├│s `ConfigurarContainerOperacao()`
+
+- **ConfigurarGradeDistrib()** (PROTECTED): Grid principal `grd_4c_Dados` com 11 colunas ligadas a `cursor_4c_Distrib`. Colunas 3 (Pesos), 5 (Qtds) e 8 (Peso2s) iniciam `ReadOnly=.T.` e ficam edit├íveis ap├│s Alterar. BINDEVENT no `AfterRowColChange` e nos `GotFocus`/`LostFocus` das 3 colunas edit├íveis.
+
+- **ConfigurarGradeResumo()** (PROTECTED): Grid `grd_4c_Resumo` com 6 colunas ReadOnly ligadas a `cursor_4c_Resumo` (totais agrupados).
+
+- **ConfigurarCamposExtras()** (PROTECTED): Label "Descri├º├úo :", `txt_4c_Descr` (ControlSource=`cursor_4c_Distrib.CDescs`) e `txt_4c_TotPeso` (valor do total calculado pelo BO).
+
+- **ConfigurarBotoes()** (PROTECTED): Bot├Áes `cmd_4c_Alterar` (Left=650) e `cmd_4c_Ok` (Left=725) com ├¡cones padr├úo do framework.
+
+- **BtnAlterarClick()** (PUBLIC): Libera ReadOnly nas colunas 3/5/8, aplica BackColor RGB(255,255,193) (pale-yellow do legado = 12713983) e chama `HabilitarAlteracao()` no BO.
+
+- **BtnOkClick()** (PUBLIC): Chama `SalvarAlteracoes()`, restaura posi├º├úo em `xNensi`, reabilita form pai e fecha o form.
+
+- **GrdDistribAfterRowColChange**, **GrdCol3/5/8 GotFocus/LostFocus** (todos PUBLIC para BINDEVENT): Salvam valor antes da edi├º├úo e marcam registro como 'M' se houve altera├º├úo.

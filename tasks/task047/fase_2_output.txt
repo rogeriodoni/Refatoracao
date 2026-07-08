@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O `SigReCgcBO.prg` agora tem os seguintes m├®todos completos:
+
+- **`ObterMensagemErro()`** ÔÇö retorna a mensagem do ├║ltimo erro
+- **`PrepararDados()`** (PROTECTED) ÔÇö traduz o `PROCEDURE processamento` do original:
+  1. Determina campo de data (`Datas` ou `Vencs`) baseado em `this_nOptDatas`
+  2. Busca raz├úo social da empresa via `SQLEXEC` em `SigCdEmp`
+  3. Busca descri├º├úo da conta (`rclis`) em `SigCdCli` pelo `iclis`
+  4. Monta cursor `cursor_4c_CsCabecalho` com t├¡tulo/subt├¡tulo/empresa/per├¡odo
+  5. `SQLEXEC` em `dbHistorico` filtrado por `BETWEEN` datas
+  6. VFP SELECT com `GROUP BY moedas` ÔåÆ `cursor_4c_TmpMoe`
+  7. Loop formatando total acumulado no memo `cursor_4c_CsTotal`
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT NOCONSOLE`
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`Destroy()`** ÔÇö fecha todos os 4 cursores ao liberar o BO

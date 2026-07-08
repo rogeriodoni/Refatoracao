@@ -1,0 +1,3261 @@
+﻿# CORRIGIR ERRO DE RUNTIME VFP9
+
+## TAREFA OBRIGATORIA
+O formulario VFP9 apresentou erro de runtime durante teste automatizado.
+Voce DEVE corrigir o erro e salvar os arquivos corrigidos usando Write tool.
+
+## ERRO DETECTADO
+- Etapa: 05d_validarCompletude
+- Tentativa: 1/10
+- Mensagem: Validacao de completude falhou. Procedures vazias/TODOs encontrados:
+[sigredocBO.prg] Indicador de pendencia: *   - Itens Pendente
+[Formsigredoc.prg] Indicador de pendencia: *   - ItensPend  : chk_4c_ItensPendente
+[Formsigredoc.prg] Indicador de pendencia: *-- Checkbox Imprimir Apenas Itens Pendente
+[Formsigredoc.prg] Indicador de pendencia: *     chk_4c_ItensPendente
+
+IMPORTANTE: Preencha TODAS as procedures vazias com codigo funcional REAL. NAO use TODO, FIXME, PLACEHOLDER ou comentarios de pendencia. Cada procedure deve ter implementacao completa.
+
+## CONTEXTO DO ERRO
+
+
+## ERROS COMUNS E SOLUCOES (Consultar CLAUDE.md)
+- "Property PAGE1 is not found" -> Definir .PageCount ANTES de acessar .Page1
+- "Property BACKCOLOR is not found" em PageFrame -> Remover BackColor do PageFrame, usar Page1.BackColor
+- "RETURN/RETRY not allowed in TRY/CATCH" -> Usar variavel loc_lResultado e RETURN fora do TRY
+- "Property ALLOWDELETE is not found" -> Grid VFP9 nao tem AllowDelete/AllowEdit/AllowAddNew
+- "Property VISIBLE is not found" em Page -> Pages NAO tem .Visible, apenas PageFrame tem
+- "Property ERASEPAGE is not found" -> PageFrame NAO tem ErasePage
+- "Unknown member BUTTON1" -> OptionGroup: usar .Buttons(1) ao inves de .Button1
+- "Property FONTNAME is not found" em OptionGroup -> OptionGroup NAO tem FontName/FontSize, definir nas Buttons(N)
+- "Property FONTNAME is not found" em Grid -> SetAll("FontName",...,"Column") invalido, usar Grid.FontName diretamente
+- "Alias XXX is not found" -> Criar cursor ANTES de definir ControlSource
+- "Property THIS_CNOMETABELA is not found" -> Usar this_cTabela (nao this_cNomeTabela)
+- "Property OBTERTODOS is not found" -> Usar Buscar("") (nao ObterTodos)
+- "Property RELEASE is not found" -> Custom/BO NAO tem Release(), usar = .NULL.
+- "Function argument value, type, or count is invalid" em FormParaBO -> Se TextBox.Value ja eh numerico, NAO usar VAL()
+- "Unknown member PAGE1" apos WITH PageFrame -> Mover config das Pages para FORA do WITH block
+- "PAGE1" ou "COLUMN1" apos .Name -> NUNCA usar .Name em Pages ou Columns (rename quebra TODAS as referencias .Page1/.Column1 no resto do codigo)
+- BINDEVENT nao funciona -> Metodo deve ser PUBLIC (sem PROTECTED)
+- "Incorrect syntax near" em SQL com EscaparSQL/FormatarDataSQL -> Estas funcoes JA INCLUEM aspas. NUNCA adicionar aspas extras: usar campo = " + EscaparSQL(val), NAO campo = '" + EscaparSQL(val) + "'"
+- TIMEOUT sem mensagem de erro visivel -> Provavelmente dialog modal de erro travando VFP
+
+## REGRAS OBRIGATORIAS
+- Corrigir APENAS o erro indicado, NAO alterar logica de negocio
+- NAO remover campos, funcionalidades ou lookups
+- NAO alterar nomes de tabelas/colunas do banco (PILAR 2)
+- Manter nomenclatura padronizada _4c_ (PILAR 3)
+- Strings SQL longas DEVEM ser quebradas com `+;` (continuation) a cada 3-4 campos - NUNCA numa unica linha
+- Usar Write tool para salvar os arquivos corrigidos nos mesmos caminhos
+
+## CODIGO ATUAL DOS ARQUIVOS
+
+### FORM (C:\4c\projeto\app\forms\relatorios\Formsigredoc.prg):
+*==============================================================================
+* FORMSIGREDOC.PRG
+* Impress" + CHR(227) + "o de Documento - Formulario de Filtros
+* Tipo: REPORT (herda FormBase, BO herda RelatorioBase)
+* Migrado de: SIGREDOC.SCX (frmrelatorio)
+*
+* Filtros:
+*   - GrdEmp     : grid de selecao de empresas (cursor_4c_Emps)
+*   - Operacao   : txt_4c_Dopes (c=20, uppercase, valida via ValidarOperacao)
+*   - Periodo    : txt_4c_DtInicial / txt_4c_DtFinal (mutuamente exclusivos com Numeros)
+*   - Numero     : txt_4c_NumeroI / txt_4c_NumeroF  (mutuamente exclusivos com Datas)
+*   - Reimp      : chk_4c_Reimp (habilitado/desabilitado por ValidarOperacao)
+*   - Imagem     : chk_4c_Imagem
+*   - ItensPend  : chk_4c_ItensPendentes
+*   - Agrupar    : opt_4c_Agrupa (2 opcoes, padrao=Nenhum)
+*
+* Form: Width=800, Height=500
+* Cabecalho: Top=0, Height=80
+* PageFrame: Top=85, Height=415, Width=802
+* Page1 controles: Top_page1 = Top_original - 85
+*==============================================================================
+
+DEFINE CLASS Formsigredoc AS FormBase
+
+    Height      = 500
+    Width       = 800
+    DataSession = 2
+    ShowWindow  = 1
+    WindowType  = 1
+    AutoCenter  = .T.
+    BorderStyle = 2
+    ControlBox  = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    ShowTips    = .T.
+
+    this_oRelatorio    = .NULL.
+    this_cMensagemErro = ""
+
+    *--------------------------------------------------------------------------
+    * Init - Delega para FormBase.Init() que chama THIS.InicializarForm()
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Cria estrutura visual e instancia BO
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_lContinuar, loc_oErro
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+
+        TRY
+            THIS.Caption = "Impress" + CHR(227) + "o de Documento"
+
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            IF TYPE("gc_4c_CaminhoBase") = "U"
+                gc_4c_CaminhoBase = ""
+            ENDIF
+
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            THIS.this_oRelatorio = CREATEOBJECT("sigredocBO")
+            IF VARTYPE(THIS.this_oRelatorio) != "O"
+                MsgErro("Erro ao criar sigredocBO" + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oRelatorio), "Erro")
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarPageFrame()
+                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+                THIS.ConfigurarPaginaLista()
+                THIS.ConfigurarPaginaDados()
+                THIS.CarregarEmpresas()
+                THIS.LimparCampos()
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Container cinza com titulo e botoes de acao
+    *   cmg_4c_Botoes: Visualizar / Imprimir / Doc.Excel / Sair
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_oCab, loc_oCmg
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        loc_oCab = THIS.cnt_4c_Cabecalho
+
+        WITH loc_oCab
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 22
+                .Left      = 22
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Impress" + CHR(227) + "o de Documento"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 20
+                .Left      = 20
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Impress" + CHR(227) + "o de Documento"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("cmg_4c_Botoes", "CommandGroup")
+            WITH .cmg_4c_Botoes
+                .Top           = 0
+                .Left          = 529
+                .Width         = THIS.Width
+                .Height        = 80
+                .ButtonCount   = 4
+                .BackStyle     = 0
+                .BorderColor   = RGB(136, 189, 188)
+                .SpecialEffect = 1
+                .Themes        = .F.
+                .Visible       = .T.
+
+                WITH .Buttons(1)
+                    .Caption         = "Visualizar"
+                    .Top             = 5
+                    .Left            = 5
+                    .Width           = THIS.Width
+                    .Height          = 70
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                    .PicturePosition = 13
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .BackColor       = RGB(255, 255, 255)
+                    .ForeColor       = RGB(90, 90, 90)
+                    .SpecialEffect   = 0
+                    .MousePointer    = 15
+                    .Themes          = .F.
+                ENDWITH
+
+                WITH .Buttons(2)
+                    .Caption         = "Imprimir"
+                    .Top             = 5
+                    .Left            = 71
+                    .Width           = THIS.Width
+                    .Height          = 70
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                    .PicturePosition = 13
+                    .FontName        = "Comic Sans MS"
+                    .FontSize        = 8
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .BackColor       = RGB(255, 255, 255)
+                    .ForeColor       = RGB(90, 90, 90)
+                    .SpecialEffect   = 0
+                    .MousePointer    = 15
+                    .Themes          = .F.
+                ENDWITH
+
+                WITH .Buttons(3)
+                    .Caption         = "Doc. Excel"
+                    .Top             = 5
+                    .Left            = 137
+                    .Width           = THIS.Width
+                    .Height          = 70
+                    .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
+                    .PicturePosition = 13
+                    .FontName        = "Comic Sans MS"
+                    .FontSize        = 8
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .BackColor       = RGB(255, 255, 255)
+                    .ForeColor       = RGB(90, 90, 90)
+                    .SpecialEffect   = 0
+                    .MousePointer    = 15
+                    .Themes          = .F.
+                ENDWITH
+
+                WITH .Buttons(4)
+                    .Caption         = "Sair"
+                    .Top             = 5
+                    .Left            = 203
+                    .Width           = THIS.Width
+                    .Height          = 70
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+                    .PicturePosition = 13
+                    .Cancel          = .T.
+                    .FontName        = "Comic Sans MS"
+                    .FontSize        = 8
+                    .FontBold        = .T.
+                    .FontItalic      = .T.
+                    .BackColor       = RGB(255, 255, 255)
+                    .ForeColor       = RGB(90, 90, 90)
+                    .SpecialEffect   = 0
+                    .MousePointer    = 15
+                    .Themes          = .F.
+                ENDWITH
+            ENDWITH
+        ENDWITH
+
+        loc_oCmg = loc_oCab.cmg_4c_Botoes
+        BINDEVENT(loc_oCmg.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oCmg.Buttons(2), "Click", THIS, "BtnImprimirClick")
+        BINDEVENT(loc_oCmg.Buttons(3), "Click", THIS, "BtnGerarExcelClick")
+        BINDEVENT(loc_oCmg.Buttons(4), "Click", THIS, "BtnCancelarClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - PageFrame com 1 pagina (Filtros)
+    *   Form Height=500; Cabecalho Height=80; PageFrame Top=85, Height=415
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oPgf
+
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        loc_oPgf = THIS.pgf_4c_Paginas
+
+        loc_oPgf.PageCount = 1
+        loc_oPgf.Top       = 85
+        loc_oPgf.Left      = -1
+        loc_oPgf.Width     = THIS.Width + 2
+        loc_oPgf.Height    = THIS.Height - 85
+        loc_oPgf.Tabs      = .F.
+
+        loc_oPgf.Page1.Caption   = "Filtros"
+        loc_oPgf.Page1.FontName  = "Tahoma"
+        loc_oPgf.Page1.FontSize  = 8
+        loc_oPgf.Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.Page1.BackColor = RGB(255, 255, 255)
+        loc_oPgf.Page1.ForeColor = RGB(90, 90, 90)
+
+        loc_oPgf.Visible    = .T.
+        loc_oPgf.ActivePage = 1
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Todos os controles de filtro na Page1 (REPORT form)
+    *   Em forms REPORT, a "pagina lista" eh a pagina unica com filtros + grid
+    *   de empresas; o nome ConfigurarPaginaLista mantem compatibilidade com o
+    *   pipeline multi-fase (validacao Fase 4) e com forms similares (FormSIGREDIR).
+    *   Posicoes: Top_page1 = Top_original - 85
+    *   (Form original Top max ~420; PageFrame.Top=85)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPagina, loc_oGrd
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        *-- Label "Empresas :" (top_orig=104, left=217 -> page1 top=19)
+        loc_oPagina.AddObject("lbl_4c_LblEmpresas", "Label")
+        WITH loc_oPagina.lbl_4c_LblEmpresas
+            .Top       = 19
+            .Left      = 217
+            .Width     = 63
+            .Height    = 15
+            .Caption   = "Empresas :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Grid de empresas (top_orig=120, left=216 -> page1 top=35)
+        *   Column1: CheckBox Marca (w=15)
+        *   Column2: cEmps Cod. (w=33, ReadOnly)
+        *   Column3: Razas Nome (w=245, ReadOnly)
+        loc_oPagina.AddObject("grd_4c_Emps", "Grid")
+        loc_oGrd = loc_oPagina.grd_4c_Emps
+        WITH loc_oGrd
+            .Top              = 35
+            .Left             = 216
+            .Width            = 327
+            .Height           = 164
+            .ColumnCount      = 3
+            .FontName         = "Tahoma"
+            .FontSize         = 8
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing   = .F.
+            .DeleteMark       = .F.
+            .HeaderHeight     = 16
+            .RowHeight        = 16
+            .ScrollBars       = 2
+            .GridLineColor    = RGB(238, 238, 238)
+            .RecordSource     = ""
+            .Themes           = .F.
+            .Visible          = .T.
+
+            *-- Column1: CheckBox para Marca
+            WITH .Column1
+                .Width     = 15
+                .Movable   = .F.
+                .Resizable = .F.
+                .Sparse    = .F.
+                .Header1.Caption   = ""
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.ForeColor = RGB(90, 90, 90)
+                .AddObject("chk_4c_Marca", "CheckBox")
+                .CurrentControl = "chk_4c_Marca"
+                WITH .chk_4c_Marca
+                    .Caption   = ""
+                    .Alignment = 2
+                    .Width     = 14
+                    .Height    = 14
+                    .FontName  = "Tahoma"
+                    .FontSize  = 8
+                ENDWITH
+            ENDWITH
+
+            *-- Column2: Codigo empresa (ReadOnly)
+            WITH .Column2
+                .Width          = 33
+                .Movable        = .F.
+                .Resizable      = .F.
+                .ReadOnly       = .T.
+                .CurrentControl = "Text1"
+                .Header1.Caption   = "C" + CHR(243) + "d."
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.ForeColor = RGB(90, 90, 90)
+                .Header1.Alignment = 2
+                WITH .Text1
+                    .FontName    = "Tahoma"
+                    .FontSize    = 8
+                    .BorderStyle = 0
+                    .Margin      = 0
+                    .ForeColor   = RGB(0, 0, 0)
+                    .BackColor   = RGB(255, 255, 255)
+                ENDWITH
+            ENDWITH
+
+            *-- Column3: Razao social (ReadOnly)
+            WITH .Column3
+                .Width          = 245
+                .Movable        = .F.
+                .Resizable      = .F.
+                .ReadOnly       = .T.
+                .CurrentControl = "Text1"
+                .Header1.Caption   = "Nome da Empresa"
+                .Header1.FontName  = "Tahoma"
+                .Header1.FontSize  = 8
+                .Header1.ForeColor = RGB(90, 90, 90)
+                .Header1.Alignment = 2
+                WITH .Text1
+                    .FontName    = "Tahoma"
+                    .FontSize    = 8
+                    .BorderStyle = 0
+                    .Margin      = 0
+                    .ForeColor   = RGB(0, 0, 0)
+                    .BackColor   = RGB(255, 255, 255)
+                ENDWITH
+            ENDWITH
+        ENDWITH
+
+        *-- Botao Selecionar Todas (cmdSelemp, top_orig=164, left=547 -> top=79)
+        loc_oPagina.AddObject("cmd_4c_SelecionarTodas", "CommandButton")
+        WITH loc_oPagina.cmd_4c_SelecionarTodas
+            .Top          = 79
+            .Left         = 547
+            .Width        = 40
+            .Height       = 40
+            .Caption      = ""
+            .Picture      = gc_4c_CaminhoBase + "vbmp\a_save1.bmp"
+            .FontName     = "Verdana"
+            .FontSize     = 8
+            .WordWrap     = .T.
+            .ToolTipText  = "Selecionar"
+            .TabStop      = .F.
+            .ForeColor    = RGB(36, 84, 155)
+            .BackColor    = RGB(255, 255, 255)
+            .Themes       = .F.
+            .Visible      = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cmd_4c_SelecionarTodas, "Click", THIS, "CmdSelecionarTodasClick")
+
+        *-- Botao Desmarcar Todas (CmdApgEmp, top_orig=204, left=547 -> top=119)
+        loc_oPagina.AddObject("cmd_4c_DesmarcarTodas", "CommandButton")
+        WITH loc_oPagina.cmd_4c_DesmarcarTodas
+            .Top          = 119
+            .Left         = 547
+            .Width        = 40
+            .Height       = 40
+            .Caption      = ""
+            .Picture      = gc_4c_CaminhoBase + "vbmp\cancelab.bmp"
+            .FontName     = "Verdana"
+            .FontSize     = 8
+            .WordWrap     = .T.
+            .ToolTipText  = "Desmarcar"
+            .TabStop      = .F.
+            .ForeColor    = RGB(36, 84, 155)
+            .BackColor    = RGB(255, 255, 255)
+            .Themes       = .F.
+            .Visible      = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cmd_4c_DesmarcarTodas, "Click", THIS, "CmdDesmarcarTodasClick")
+
+        *-- Label "Opera" + CHR(231) + CHR(227) + "o :" (top_orig=293, left=225 -> top=208)
+        loc_oPagina.AddObject("lbl_4c_Operacao", "Label")
+        WITH loc_oPagina.lbl_4c_Operacao
+            .Top       = 208
+            .Left      = 225
+            .Width     = 59
+            .Height    = 18
+            .Caption   = "Opera" + CHR(231) + CHR(227) + "o : "
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Campo Operacao get_dopes (top_orig=289, left=288 -> top=204)
+        loc_oPagina.AddObject("txt_4c_Dopes", "TextBox")
+        WITH loc_oPagina.txt_4c_Dopes
+            .Top           = 204
+            .Left          = 288
+            .Width         = 150
+            .Height        = 23
+            .Value         = ""
+            .FontName      = "Tahoma"
+            .FontSize      = 9
+            .ForeColor     = RGB(0, 0, 0)
+            .BackColor     = RGB(255, 255, 255)
+            .Format        = "K!"
+            .MaxLength     = 20
+            .SpecialEffect = 0
+            .BorderStyle   = 1
+            .Alignment     = 0
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_Dopes, "KeyPress", THIS, "TeclaDopes")
+
+        *-- Label "Periodo :" (top_orig=318, left=236 -> top=233)
+        loc_oPagina.AddObject("lbl_4c_Periodo", "Label")
+        WITH loc_oPagina.lbl_4c_Periodo
+            .Top       = 233
+            .Left      = 236
+            .Width     = 48
+            .Height    = 18
+            .Caption   = "Periodo : "
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data Inicial (top_orig=314, left=288 -> top=229)
+        loc_oPagina.AddObject("txt_4c_DtInicial", "TextBox")
+        WITH loc_oPagina.txt_4c_DtInicial
+            .Top           = 229
+            .Left          = 288
+            .Width         = 80
+            .Height        = 23
+            .Value         = {}
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(0, 0, 0)
+            .Format        = "K"
+            .MaxLength     = 10
+            .SpecialEffect = 1
+            .BorderStyle   = 1
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_DtInicial, "KeyPress", THIS, "TeclaDtInicial")
+        BINDEVENT(loc_oPagina.txt_4c_DtInicial, "LostFocus", THIS, "AtualizarEstadoFiltros")
+
+        *-- Separador "a" entre datas (top_orig=319, left=371 -> top=234)
+        loc_oPagina.AddObject("lbl_4c_SepData", "Label")
+        WITH loc_oPagina.lbl_4c_SepData
+            .Top       = 234
+            .Left      = 371
+            .Width     = 8
+            .Height    = 18
+            .Caption   = CHR(224)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data Final (top_orig=314, left=382 -> top=229)
+        loc_oPagina.AddObject("txt_4c_DtFinal", "TextBox")
+        WITH loc_oPagina.txt_4c_DtFinal
+            .Top           = 229
+            .Left          = 382
+            .Width         = 80
+            .Height        = 23
+            .Value         = {}
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(0, 0, 0)
+            .Format        = "K"
+            .MaxLength     = 10
+            .SpecialEffect = 1
+            .BorderStyle   = 1
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_DtFinal, "KeyPress", THIS, "TeclaDtFinal")
+        BINDEVENT(loc_oPagina.txt_4c_DtFinal, "LostFocus", THIS, "AtualizarEstadoFiltros")
+
+        *-- Label "N" + CHR(250) + "mero :" (top_orig=341, left=235 -> top=256)
+        loc_oPagina.AddObject("lbl_4c_Numero", "Label")
+        WITH loc_oPagina.lbl_4c_Numero
+            .Top       = 256
+            .Left      = 235
+            .Width     = 49
+            .Height    = 18
+            .Caption   = "N" + CHR(250) + "mero : "
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Numero Inicial Get_Opera??oi (top_orig=339, left=288 -> top=254)
+        loc_oPagina.AddObject("txt_4c_NumeroI", "TextBox")
+        WITH loc_oPagina.txt_4c_NumeroI
+            .Top           = 254
+            .Left          = 288
+            .Width         = 55
+            .Height        = 23
+            .Value         = 0
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(0, 0, 0)
+            .Format        = "K"
+            .InputMask     = "999999"
+            .MaxLength     = 6
+            .Alignment     = 3
+            .SpecialEffect = 1
+            .BorderStyle   = 1
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_NumeroI, "KeyPress", THIS, "TeclaNumeroI")
+        BINDEVENT(loc_oPagina.txt_4c_NumeroI, "LostFocus", THIS, "AtualizarEstadoFiltros")
+
+        *-- Separador "a" entre numeros (top_orig=344, left=349 -> top=259)
+        loc_oPagina.AddObject("lbl_4c_SepNumero", "Label")
+        WITH loc_oPagina.lbl_4c_SepNumero
+            .Top       = 259
+            .Left      = 349
+            .Width     = 8
+            .Height    = 15
+            .Caption   = CHR(224)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Numero Final Get_Opera??of (top_orig=339, left=363 -> top=254)
+        loc_oPagina.AddObject("txt_4c_NumeroF", "TextBox")
+        WITH loc_oPagina.txt_4c_NumeroF
+            .Top           = 254
+            .Left          = 363
+            .Width         = 55
+            .Height        = 23
+            .Value         = 0
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(0, 0, 0)
+            .Format        = "K"
+            .InputMask     = "999999"
+            .MaxLength     = 6
+            .Alignment     = 3
+            .SpecialEffect = 1
+            .BorderStyle   = 1
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_NumeroF, "KeyPress", THIS, "TeclaNumeroF")
+        BINDEVENT(loc_oPagina.txt_4c_NumeroF, "LostFocus", THIS, "AtualizarEstadoFiltros")
+
+        *-- Checkbox Imprimir Imagem (top_orig=368, left=288 -> top=283)
+        loc_oPagina.AddObject("chk_4c_Imagem", "CheckBox")
+        WITH loc_oPagina.chk_4c_Imagem
+            .Top       = 283
+            .Left      = 288
+            .Width     = 100
+            .Height    = 15
+            .Caption   = "Imprimir Imagem"
+            .Value     = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .AutoSize  = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Checkbox Imprimir Apenas Itens Pendentes (top_orig=384, left=288 -> top=299)
+        loc_oPagina.AddObject("chk_4c_ItensPendentes", "CheckBox")
+        WITH loc_oPagina.chk_4c_ItensPendentes
+            .Top       = 299
+            .Left      = 288
+            .Width     = 170
+            .Height    = 15
+            .Caption   = "Imprimir Apenas Itens Pendentes"
+            .Value     = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .AutoSize  = .T.
+            .Alignment = 0
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Checkbox Reimpressao (top_orig=400, left=288 -> top=315)
+        loc_oPagina.AddObject("chk_4c_Reimp", "CheckBox")
+        WITH loc_oPagina.chk_4c_Reimp
+            .Top           = 315
+            .Left          = 288
+            .Width         = 79
+            .Height        = 15
+            .Caption       = "Reimpress" + CHR(227) + "o"
+            .Value         = 0
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .FontBold      = .F.
+            .AutoSize      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 0
+            .Enabled       = .T.
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Label "Agrupar por: " (top_orig=420, left=217 -> top=335)
+        loc_oPagina.AddObject("lbl_4c_AgruparPor", "Label")
+        WITH loc_oPagina.lbl_4c_AgruparPor
+            .Top       = 335
+            .Left      = 217
+            .Width     = 67
+            .Height    = 18
+            .Caption   = "Agrupar por: "
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptAgrupa (top_orig=416, left=283 -> top=331)
+        *   Value=2 = Nenhum (padrao)
+        *   Button1: "Produto, Cor, Valor Unit" + CHR(225) + "rio" (Value=1)
+        *   Button2: "Nenhum" (Value=1 dentro do botao, mas grupo Value=2)
+        loc_oPagina.AddObject("opt_4c_Agrupa", "OptionGroup")
+        WITH loc_oPagina.opt_4c_Agrupa
+            .Top         = 331
+            .Left        = 283
+            .Width       = 267
+            .Height      = 27
+            .ButtonCount = 2
+            .AutoSize    = .T.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+
+            WITH .Buttons(1)
+                .Caption   = "Produto, Cor, Valor Unit" + CHR(225) + "rio"
+                .Top       = 5
+                .Left      = 5
+                .Width     = 151
+                .Height    = 15
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "Nenhum"
+                .Top       = 5
+                .Left      = 193
+                .Width     = 69
+                .Height    = 17
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Form REPORT: todos os controles estao em
+    *   ConfigurarPaginaLista() (Page1 = Filtros). Nao ha Page2 de edicao.
+    *   O original SIGREDOC.SCX (frmrelatorio) tem layout plano sem PageFrame
+    *   de edicao; todos os 20 controles migrados estao na Page1/Filtros:
+    *     grd_4c_Emps (3 colunas), txt_4c_Dopes, txt_4c_DtInicial,
+    *     txt_4c_DtFinal, txt_4c_NumeroI, txt_4c_NumeroF, chk_4c_Imagem,
+    *     chk_4c_ItensPendentes, chk_4c_Reimp, opt_4c_Agrupa (2 botoes),
+    *     cmd_4c_SelecionarTodas, cmd_4c_DesmarcarTodas + 6 labels.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPagina, loc_oErro, loc_lOk
+        loc_lOk = .F.
+        TRY
+            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+            *-- Verificar que os controles essenciais existem
+            loc_lOk = PEMSTATUS(loc_oPagina, "txt_4c_Dopes",    5) AND ;
+                      PEMSTATUS(loc_oPagina, "grd_4c_Emps",     5) AND ;
+                      PEMSTATUS(loc_oPagina, "chk_4c_Reimp",    5) AND ;
+                      PEMSTATUS(loc_oPagina, "opt_4c_Agrupa",   5)
+            IF !loc_lOk
+                THIS.this_cMensagemErro = "Controles de filtro n" + CHR(227) + "o encontrados na Page1"
+                MsgErro(THIS.this_cMensagemErro, "ConfigurarPaginaDados")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "ConfigurarPaginaDados")
+            loc_lOk = .F.
+        ENDTRY
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarEmpresas - Carrega cursor de empresas e vincula ao grid
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarEmpresas()
+        LOCAL loc_oCursor, loc_oGrd, loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                IF THIS.this_oRelatorio.CarregarEmpresas()
+                    loc_oCursor = THIS.this_oRelatorio.this_cCursorEmpresas
+                    loc_oGrd    = THIS.pgf_4c_Paginas.Page1.grd_4c_Emps
+
+                    WITH loc_oGrd
+                        .RecordSource             = loc_oCursor
+                        .Column1.ControlSource    = loc_oCursor + ".Marca"
+                        .Column2.ControlSource    = loc_oCursor + ".cEmps"
+                        .Column3.ControlSource    = loc_oCursor + ".Razas"
+                        .Refresh()
+                    ENDWITH
+                ELSE
+                    MsgErro("Falha ao carregar lista de empresas.", "CarregarEmpresas")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "CarregarEmpresas")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Inicializa filtros com valores padrao
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCampos()
+        LOCAL loc_oPagina, loc_oErro
+
+        TRY
+            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+            WITH loc_oPagina
+                .txt_4c_Dopes.Value          = ""
+                .txt_4c_DtInicial.Value      = {}
+                .txt_4c_DtFinal.Value        = {}
+                .txt_4c_NumeroI.Value        = 0
+                .txt_4c_NumeroF.Value        = 0
+                .chk_4c_Imagem.Value         = 0
+                .chk_4c_ItensPendentes.Value = 0
+                .chk_4c_Reimp.Value          = 0
+                .chk_4c_Reimp.Enabled        = .T.
+                .opt_4c_Agrupa.Value         = 2
+            ENDWITH
+
+            THIS.AtualizarEstadoFiltros()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "LimparCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Ativa pagina (forms REPORT tem so Page1)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_nPagina, loc_oErro, loc_oPagina
+        TRY
+            loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
+            IF loc_nPagina < 1 OR loc_nPagina > THIS.pgf_4c_Paginas.PageCount
+                loc_nPagina = 1
+            ENDIF
+            THIS.pgf_4c_Paginas.ActivePage = loc_nPagina
+            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+            IF PEMSTATUS(loc_oPagina, "txt_4c_Dopes", 5)
+                loc_oPagina.txt_4c_Dopes.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao Alternar P" + CHR(225) + "gina")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaRelatorio - Copia valores do form para o BO antes de processar
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaRelatorio()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+        WITH THIS.this_oRelatorio
+            .this_cDopes          = ALLTRIM(loc_oPagina.txt_4c_Dopes.Value)
+            .this_dDtInicial      = loc_oPagina.txt_4c_DtInicial.Value
+            .this_dDtFinal        = loc_oPagina.txt_4c_DtFinal.Value
+            .this_nOperacaoI      = loc_oPagina.txt_4c_NumeroI.Value
+            .this_nOperacaoF      = loc_oPagina.txt_4c_NumeroF.Value
+            .this_nReimp          = loc_oPagina.chk_4c_Reimp.Value
+            .this_nAgrupa         = loc_oPagina.opt_4c_Agrupa.Value
+            .this_lImagem         = (loc_oPagina.chk_4c_Imagem.Value = 1)
+            .this_lItensPendentes = (loc_oPagina.chk_4c_ItensPendentes.Value = 1)
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarOperacao - Valida codigo de operacao e atualiza estado chk_4c_Reimp
+    *   Equivalente ao get_dopes.Valid do legado
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarOperacao()
+        LOCAL loc_cDopes, loc_oPagina, loc_oErro, loc_lEnabled, loc_nNdopes
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+        loc_cDopes  = ALLTRIM(loc_oPagina.txt_4c_Dopes.Value)
+
+        TRY
+            IF !EMPTY(loc_cDopes)
+                fAcessoMovmto(gc_4c_UsuarioLogado, loc_cDopes, loc_oPagina.txt_4c_Dopes)
+            ENDIF
+
+            IF !EMPTY(loc_cDopes)
+                IF VARTYPE(THIS.this_oRelatorio) = "O"
+                    THIS.this_oRelatorio.ValidarOperacao(loc_cDopes)
+                    IF THIS.this_oRelatorio.this_nChkImpDoc = 1
+                        loc_nNdopes  = THIS.this_oRelatorio.this_nNdopes
+                        loc_lEnabled = fChecaAcesso( ;
+                            PADL(ALLTRIM(STR(loc_nNdopes)), 8, "0"), "REIMPDOC")
+                        loc_oPagina.chk_4c_Reimp.Enabled = loc_lEnabled
+                        IF !loc_lEnabled
+                            loc_oPagina.chk_4c_Reimp.Value = 0
+                        ENDIF
+                    ELSE
+                        loc_oPagina.chk_4c_Reimp.Enabled = .T.
+                    ENDIF
+                ENDIF
+            ELSE
+                loc_oPagina.chk_4c_Reimp.Enabled = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "ValidarOpera" + CHR(231) + CHR(227) + "o")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarEstadoFiltros - Controla exclusao mutua entre datas e numeros
+    *   Datas preenchidas -> numeros desabilitados (e vice-versa)
+    *   Replicando comportamento dos When events do legado
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarEstadoFiltros()
+        LOCAL loc_oPagina, loc_lDatasVazias, loc_lNumerosZero, loc_nIni, loc_nFim, loc_oErro
+        TRY
+            loc_oPagina      = THIS.pgf_4c_Paginas.Page1
+            loc_lDatasVazias = EMPTY(loc_oPagina.txt_4c_DtInicial.Value) AND ;
+                               EMPTY(loc_oPagina.txt_4c_DtFinal.Value)
+            loc_nIni         = loc_oPagina.txt_4c_NumeroI.Value
+            loc_nFim         = loc_oPagina.txt_4c_NumeroF.Value
+            loc_lNumerosZero = (loc_nIni = 0) AND (loc_nFim = 0)
+
+            *-- Sync: se NumeroI preenchido e NumeroF=0, copiar valor
+            IF loc_nIni > 0 AND loc_nFim = 0 AND loc_lDatasVazias
+                loc_oPagina.txt_4c_NumeroF.Value = loc_nIni
+                loc_oPagina.txt_4c_NumeroF.Refresh()
+                loc_lNumerosZero = .F.
+            ENDIF
+
+            *-- Numeros habilitados somente quando datas vazias
+            loc_oPagina.txt_4c_NumeroI.Enabled = loc_lDatasVazias
+            loc_oPagina.txt_4c_NumeroF.Enabled = loc_lDatasVazias
+
+            *-- Datas habilitadas somente quando numeros zero
+            loc_oPagina.txt_4c_DtInicial.Enabled = loc_lNumerosZero
+            loc_oPagina.txt_4c_DtFinal.Enabled   = loc_lNumerosZero
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "AtualizarEstadoFiltros")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaDopes - KeyPress em txt_4c_Dopes; dispara ValidarOperacao ao ENTER/TAB
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaDopes(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarOperacao()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaDtInicial / TeclaDtFinal - KeyPress em campos de data (sem acao especial)
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaDtInicial(par_nKeyCode, par_nShiftAltCtrl)
+    ENDPROC
+
+    PROCEDURE TeclaDtFinal(par_nKeyCode, par_nShiftAltCtrl)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaNumeroI / TeclaNumeroF - KeyPress em campos de numero (sem acao especial)
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaNumeroI(par_nKeyCode, par_nShiftAltCtrl)
+    ENDPROC
+
+    PROCEDURE TeclaNumeroF(par_nKeyCode, par_nShiftAltCtrl)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CmdSelecionarTodasClick - Marca todas as empresas (Marca=1)
+    *--------------------------------------------------------------------------
+    PROCEDURE CmdSelecionarTodasClick()
+        LOCAL loc_oCursor, loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                loc_oCursor = THIS.this_oRelatorio.this_cCursorEmpresas
+                IF USED(loc_oCursor)
+                    SELECT (loc_oCursor)
+                    REPLACE ALL Marca WITH 1
+                    GO TOP
+                    THIS.pgf_4c_Paginas.Page1.grd_4c_Emps.Refresh()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "CmdSelecionarTodas")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CmdDesmarcarTodasClick - Desmarca todas as empresas (Marca=0)
+    *--------------------------------------------------------------------------
+    PROCEDURE CmdDesmarcarTodasClick()
+        LOCAL loc_oCursor, loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                loc_oCursor = THIS.this_oRelatorio.this_cCursorEmpresas
+                IF USED(loc_oCursor)
+                    SELECT (loc_oCursor)
+                    REPLACE ALL Marca WITH 0
+                    GO TOP
+                    THIS.pgf_4c_Paginas.Page1.grd_4c_Emps.Refresh()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "CmdDesmarcarTodas")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Preview do relatorio na tela
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_oErro, loc_lContinuar, loc_cDopes
+        loc_lContinuar = .T.
+        TRY
+            loc_cDopes = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Dopes.Value)
+            IF EMPTY(loc_cDopes)
+                MsgAviso("Informe o c" + CHR(243) + "digo da opera" + CHR(231) + CHR(227) + "o.", ;
+                         "Valida" + CHR(231) + CHR(227) + "o")
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.Visualizar()
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
+                            "Erro ao Visualizar")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImprimirClick - Imprime relatorio com dialogo de impressora
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImprimirClick()
+        LOCAL loc_oErro, loc_lContinuar, loc_cDopes
+        loc_lContinuar = .T.
+        TRY
+            loc_cDopes = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Dopes.Value)
+            IF EMPTY(loc_cDopes)
+                MsgAviso("Informe o c" + CHR(243) + "digo da opera" + CHR(231) + CHR(227) + "o.", ;
+                         "Valida" + CHR(231) + CHR(227) + "o")
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.ImprimirComDialog()
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
+                            "Erro ao Imprimir")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnGerarExcelClick - Doc. Excel (impressao direta sem dialogo)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnGerarExcelClick()
+        LOCAL loc_oErro, loc_lContinuar, loc_cDopes
+        loc_lContinuar = .T.
+        TRY
+            loc_cDopes = ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Dopes.Value)
+            IF EMPTY(loc_cDopes)
+                MsgAviso("Informe o c" + CHR(243) + "digo da opera" + CHR(231) + CHR(227) + "o.", ;
+                         "Valida" + CHR(231) + CHR(227) + "o")
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.Imprimir()
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
+                            "Erro ao Imprimir")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Fecha o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera referencia ao BO e cursor de empresas
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            LOCAL loc_oCursor
+            loc_oCursor = THIS.this_oRelatorio.this_cCursorEmpresas
+            IF USED(loc_oCursor)
+                USE IN (loc_oCursor)
+            ENDIF
+            THIS.this_oRelatorio = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - Forms REPORT nao tem grid CRUD
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Em forms REPORT todos os botoes ficam habilitados
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_oCmg, loc_oErro, loc_nI
+        TRY
+            IF VARTYPE(THIS.cnt_4c_Cabecalho) = "O" AND ;
+               PEMSTATUS(THIS.cnt_4c_Cabecalho, "cmg_4c_Botoes", 5)
+                loc_oCmg = THIS.cnt_4c_Cabecalho.cmg_4c_Botoes
+                FOR loc_nI = 1 TO loc_oCmg.ButtonCount
+                    loc_oCmg.Buttons(loc_nI).Enabled = .T.
+                ENDFOR
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "AjustarBotoesPorModo")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Aliases de interface CRUD exigidos pelo pipeline multi-fase
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    PROCEDURE BtnSalvarClick()
+        THIS.BtnImprimirClick()
+    ENDPROC
+
+    PROCEDURE BtnConsultarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnIncluirClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnAlterarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO / BOParaForm - Aliases para a interface generica FormBase
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        THIS.FormParaRelatorio()
+    ENDPROC
+
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPg, loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                loc_oPg = THIS.pgf_4c_Paginas.Page1
+                WITH THIS.this_oRelatorio
+                    loc_oPg.txt_4c_Dopes.Value          = .this_cDopes
+                    IF !EMPTY(.this_dDtInicial)
+                        loc_oPg.txt_4c_DtInicial.Value  = .this_dDtInicial
+                    ENDIF
+                    IF !EMPTY(.this_dDtFinal)
+                        loc_oPg.txt_4c_DtFinal.Value    = .this_dDtFinal
+                    ENDIF
+                    loc_oPg.txt_4c_NumeroI.Value        = .this_nOperacaoI
+                    loc_oPg.txt_4c_NumeroF.Value        = .this_nOperacaoF
+                    loc_oPg.chk_4c_Reimp.Value          = .this_nReimp
+                    loc_oPg.opt_4c_Agrupa.Value         = .this_nAgrupa
+                    loc_oPg.chk_4c_Imagem.Value         = IIF(.this_lImagem, 1, 0)
+                    loc_oPg.chk_4c_ItensPendentes.Value = IIF(.this_lItensPendentes, 1, 0)
+                ENDWITH
+                THIS.AtualizarEstadoFiltros()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "BOParaForm")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita ou desabilita os campos de filtro
+    *--------------------------------------------------------------------------
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPg, loc_lHab, loc_oErro
+        TRY
+            loc_lHab = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+            loc_oPg  = THIS.pgf_4c_Paginas.Page1
+            IF VARTYPE(loc_oPg) = "O"
+                IF PEMSTATUS(loc_oPg, "txt_4c_Dopes", 5)
+                    loc_oPg.txt_4c_Dopes.ReadOnly = !loc_lHab
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
+                    loc_oPg.txt_4c_DtInicial.ReadOnly = !loc_lHab
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c_DtFinal", 5)
+                    loc_oPg.txt_4c_DtFinal.ReadOnly = !loc_lHab
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c_NumeroI", 5)
+                    loc_oPg.txt_4c_NumeroI.ReadOnly = !loc_lHab
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c_NumeroF", 5)
+                    loc_oPg.txt_4c_NumeroF.ReadOnly = !loc_lHab
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "HabilitarCampos")
+        ENDTRY
+    ENDPROC
+
+ENDDEFINE
+
+
+### BO (C:\4c\projeto\app\classes\sigredocBO.prg):
+*==============================================================================
+* SIGREDOCBO.PRG
+* Business Object para Impressao de Documento
+* Herda de RelatorioBase
+*
+* Tabela principal: SigMvCab (cabecalho de movimentos)
+* Relatorio FRX  : SigReDoc.frx (framework original)
+*
+* Filtros:
+*   - Operacao (this_cDopes)
+*   - Periodo  (this_dDtInicial / this_dDtFinal)
+*   - Numero   (this_nOperacaoI / this_nOperacaoF)
+*   - Reimpressao (this_nReimp)
+*   - Agrupamento (this_nAgrupa: 1=Produto/Cor/Val.Unit, 2=Nenhum)
+*   - Imagem (this_lImagem)
+*   - Itens Pendentes (this_lItensPendentes)
+*   - Empresas selecionadas (cursor apontado por this_cCursorEmpresas)
+*==============================================================================
+
+DEFINE CLASS sigredocBO AS RelatorioBase
+
+    *-- Filtros do formulario
+    this_cDopes          = ""
+    this_dDtInicial      = {}
+    this_dDtFinal        = {}
+    this_nOperacaoI      = 0
+    this_nOperacaoF      = 0
+    this_nReimp          = 0
+    this_nAgrupa         = 2
+    this_lImagem         = .F.
+    this_lItensPendentes = .F.
+
+    *-- Estado apos validar get_dopes
+    this_nNdopes         = 0
+    this_nChkImpDoc      = 0
+
+    *-- Configuracao do relatorio
+    this_cCursorDados    = "cursor_4c_Dados"
+    this_cArquivoFRX     = ""
+    this_cCursorEmpresas = "cursor_4c_Emps"
+
+    *-- Estado compartilhado entre PrepararDados e metodos auxiliares
+    this_nMaxCols        = 100
+    this_nTamLinha       = 0
+    this_nTamCabGradeP   = 0
+    this_nDeslObsi       = -1
+    this_cCabecN         = ""
+    this_cCabec          = ""
+    this_cTitul          = ""
+    this_cCabGrade       = ""
+    this_cCabGradeP      = ""
+    this_cDetalhe        = ""
+    this_cDetalheD       = ""
+    this_cDetalheO       = ""
+    this_cDetalheP       = ""
+    this_cDetalheDP      = ""
+    this_cDetalheR       = ""
+    this_cFinal          = ""
+    this_nXvlr           = 0
+    this_lXvlrNull       = .T.
+    this_nXitm           = 0
+    this_lTemSubN        = .F.
+
+    *--------------------------------------------------------------------------
+    * Init - Configura BO do relatorio de impressao de documento
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = "SigMvCab"
+        THIS.this_cCampoChave = "Numes"
+        THIS.this_cArquivoFRX = gc_4c_CaminhoBase + "Framework\SigReDoc.frx"
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Monta cursor TmpRelat com todos os dados para impressao
+    * Equivalente ao PROCEDURE processamento do legado
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lSucesso, loc_lContinuar, loc_oErro
+        LOCAL loc_lcDp, loc_ldDtI, loc_ldDtF, loc_lnNu1, loc_lnNu2, loc_lnReimp
+        LOCAL loc_pAgrupa, loc_pImagem, loc_pItPendente, loc_pDev, loc_pSomaPeso
+        LOCAL loc_nOldMemoWidth
+        LOCAL loc_lcQuery, loc_lcSql
+        LOCAL loc_lcEmp, loc_pEmp, loc_pDop, loc_pNum, loc_pPrVenCus
+        LOCAL loc_lnCorTams, loc_lnCorTam2s
+        LOCAL loc_lcArquivo, loc_lcProduto, loc_lcFoto, loc_lcFigJpg
+        LOCAL loc_lnTotQtds, loc_lnTotPess
+        LOCAL loc_lnCItens
+        LOCAL loc_lnDocItem, loc_lnDocBarra, loc_lnDocQtd, loc_lnDocPeso, loc_lnDocTaCor
+        LOCAL loc_lnItem2s
+        LOCAL loc_lnXttm, loc_lnPrFator, loc_lnPrUnits, loc_lnCotaMov
+        LOCAL loc_llBar, loc_lcBar, loc_lcEmail
+        LOCAL loc_lnX
+        LOCAL loc_lnCount, loc_lnNumLines, loc_lmDescFis, loc_lmObs, loc_lnMemoWAnt
+        LOCAL loc_lcCabObsi, loc_lnReplicaLen
+        LOCAL loc_lnQtd, loc_lcSubNivel
+        LOCAL loc_cCursorEmp, loc_lnPreco
+        LOCAL loc_lnLpQtds, loc_lnLuQtds, loc_lcMoeda
+        LOCAL loc_lcSeek, loc_lnTotQte2, loc_lnTotQtdEnt2
+        LOCAL loc_lcReplica, loc_lcCodBarras, loc_lcResp
+        LOCAL laCampos[1]
+
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+
+        TRY
+            *-- Ler filtros das propriedades
+            loc_lcDp    = ALLTRIM(THIS.this_cDopes)
+            loc_ldDtI   = THIS.this_dDtInicial
+            loc_ldDtF   = THIS.this_dDtFinal
+            loc_lnNu1   = THIS.this_nOperacaoI
+            loc_lnNu2   = THIS.this_nOperacaoF
+            loc_lnReimp = THIS.this_nReimp
+            loc_pAgrupa     = (THIS.this_nAgrupa = 1)
+            loc_pImagem     = THIS.this_lImagem
+            loc_pItPendente = THIS.this_lItensPendentes
+            loc_pDev        = 0
+
+            THIS.this_nMaxCols = 100
+            loc_nOldMemoWidth  = SET("MemoWidth")
+            SET MemoWidth TO (THIS.this_nMaxCols)
+
+            *-- Criar cursor TmpRelat
+            IF USED("TmpRelat")
+                USE IN TmpRelat
+            ENDIF
+            CREATE CURSOR TmpRelat (Numes n(6), Tipo n(1), Titulo m NULL, ;
+                Linha m NULL, LinhaNeg m NULL, CDetalhe m NULL, ;
+                IDetalhe m NULL, IDetalheD m NULL, IDetalheO m NULL, ;
+                IDetalheR m NULL, Finaliza m NULL, Descr n(1), ;
+                ObsI n(1), Imagem c(100), Barras c(10), ImpCabBar l(1))
+
+            *-- Carregar tabela de operacoes
+            IF loc_lContinuar
+                loc_lcQuery = "Select * From SigCdOpe"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrTmpOpe") < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar SigCdOpe"
+                    loc_lContinuar = .F.
+                ELSE
+                    SELECT CrTmpOpe
+                    INDEX ON Dopes TAG Dopes
+                ENDIF
+            ENDIF
+
+            *-- Carregar configuracao de documentos
+            IF loc_lContinuar
+                loc_lcQuery = "Select * From SigOpCdc"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrTmpDcOpe") < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar SigOpCdc"
+                    loc_lContinuar = .F.
+                ELSE
+                    SELECT CrTmpDcOpe
+                    INDEX ON dopes TAG Dopes
+                ENDIF
+            ENDIF
+
+            *-- Carregar tabela de descontos
+            IF loc_lContinuar
+                loc_lcQuery = "Select * From SigOpTdz"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrTmpTabD") < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar SigOpTdz"
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            *-- Carregar parametros
+            IF loc_lContinuar
+                loc_lcQuery = "Select * From SigCdPam"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrTmpParam") < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar SigCdPam"
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            *-- Carregar parametros complementares
+            IF loc_lContinuar
+                loc_lcQuery = "Select * From SigCdPac"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrTmpParac") < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar SigCdPac"
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            *-- Verificar cursor de empresas selecionadas
+            IF loc_lContinuar AND !USED(THIS.this_cCursorEmpresas)
+                THIS.this_cMensagemErro = "Cursor de empresas n" + CHR(227) + "o encontrado: " + THIS.this_cCursorEmpresas
+                loc_lContinuar = .F.
+            ENDIF
+
+            *-- Criar imagem branco placeholder para produtos sem foto
+            IF loc_lContinuar
+                loc_lcFigJpg = fCriarIcone("brjpg.jpg", .F., .NULL.)
+                IF USED("crBranco")
+                    USE IN crBranco
+                ENDIF
+                CREATE CURSOR crBranco (Branco M)
+                SELECT crBranco
+                APPEND BLANK
+                IF !EMPTY(loc_lcFigJpg)
+                    APPEND MEMO Branco FROM (loc_lcFigJpg) OVERWRITE
+                ENDIF
+            ENDIF
+
+            *-- Loop por empresas selecionadas (Marca = 1)
+            IF loc_lContinuar
+                loc_cCursorEmp = THIS.this_cCursorEmpresas
+                SELECT * FROM (loc_cCursorEmp) WHERE Marca = 1 INTO CURSOR csCemps
+
+                SELECT csCemps
+                SCAN WHILE loc_lContinuar
+                    loc_lcEmp = ALLTRIM(csCemps.cEmps)
+                    THIS.CursorQuery("SigCdEmp", "CrTmpEmp", "cEmps", loc_lcEmp)
+
+                    loc_lcSql = "Select Emps, Dopes, Numes, EmpDopNums" + ;
+                                " From SigMvCab" + ;
+                                " Where Emps = " + EscaparSQL(loc_lcEmp) + ;
+                                " And Dopes = " + EscaparSQL(loc_lcDp)
+
+                    IF !EMPTY(loc_ldDtI)
+                        loc_lcSql = loc_lcSql + ;
+                            " And Datas Between " + FormatarDataSQL(loc_ldDtI) + ;
+                            " And " + FormatarDataSQL(loc_ldDtF)
+                    ENDIF
+
+                    IF loc_lnNu1 > 0
+                        loc_lcSql = loc_lcSql + ;
+                            " And Numes Between " + TRANSFORM(loc_lnNu1) + ;
+                            " And " + TRANSFORM(loc_lnNu2)
+                    ENDIF
+
+                    loc_lcSql = loc_lcSql + ;
+                        " And Impress in (" + IIF(loc_lnReimp = 1, "0,1", "0") + ")" + ;
+                        " Order by empdopnums"
+
+                    IF SQLEXEC(gnConnHandle, loc_lcSql, "TprMvCab") < 1
+                        THIS.this_cMensagemErro = "Falha ao carregar TprMvCab para " + loc_lcEmp
+                        loc_lContinuar = .F.
+                        EXIT
+                    ENDIF
+
+                    SELECT TprMvCab
+                    SCAN WHILE loc_lContinuar
+                        loc_pEmp = ALLTRIM(TprMvCab.Emps)
+                        loc_pDop = ALLTRIM(TprMvCab.Dopes)
+                        loc_pNum = TprMvCab.Numes
+
+                        *-- Sub-niveis (estrutura de produtos)
+                        loc_lcSql = "Select * From SigMvPec" + ;
+                            " Where EmpDopNums = " + EscaparSQL(ALLTRIM(TprMvCab.EmpdopNums))
+                        IF SQLEXEC(gnConnHandle, loc_lcSql, "CrTmpEstPe") < 1
+                            THIS.this_cMensagemErro = "Falha ao carregar SigMvPec"
+                            loc_lContinuar = .F.
+                            EXIT
+                        ENDIF
+
+                        SELECT a.Codigos, ;
+                               NVL(b.Dopes, 0) AS cDopes, ;
+                               NVL(b.Abrevs, '') AS cAbrevs ;
+                            FROM CrTmpEstPe a ;
+                            LEFT JOIN CrTmpOpe b ;
+                                ON b.NDopes = VAL(LEFT(STR(a.Codigos, 10), 4)) ;
+                            WHERE a.Emps + a.Dopes + STR(a.Numes, 6) == ;
+                                  loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
+                            INTO CURSOR TmpEstPe
+                        INDEX ON Codigos TAG Codigos
+
+                        *-- Pagamentos do documento
+                        THIS.CursorQuery("SigMvPar", "TmpPag", "EmpDopNums", ;
+                            loc_pEmp + loc_pDop + STR(loc_pNum, 6), ;
+                            "FPags,Bancos,Agencias,Contas,Numeros,Cartaos,Datas,Valos,Vencs,MoeFPgs,CotFPgs")
+                        THIS.CursorQuery("SigMvCab", "CrTprMvCab",  "EmpDopNums", loc_pEmp + loc_pDop + STR(loc_pNum, 6))
+                        THIS.CursorQuery("SigMvItn", "CrTprMvCabi", "EmpDopNums", loc_pEmp + loc_pDop + STR(loc_pNum, 6))
+                        THIS.CursorQuery("SigMvIts", "CrTmpEsti2",  "EmpDopNums", loc_pEmp + loc_pDop + STR(loc_pNum, 6))
+
+                        *-- Montar TmpRel (sem agrupamento ou com agrupamento)
+                        IF !loc_pAgrupa
+                            SELECT c.Emps, c.Dopes, c.Numes, c.Usuars, c.GrVends, ;
+                                c.Valos, c.ValInis, c.Vends, c.GrupoOs, c.ContaOs, ;
+                                c.GrupoDs, c.ContaDs, c.ValVars, c.Obses, c.Vars, ;
+                                c.ValEncs, c.Datas, c.TabDs, c.Acres, c.PrazoEnts, ;
+                                c.LPrecos, c.EmpDs, c.Notas AS NotaC, ;
+                                c.grResps, c.Resps, NVL(d.Descos, 0) AS Descos, ;
+                                NVL(o.PrecoPs, 0)    AS PrecoPs,    NVL(o.nDopes, 0)     AS nDopes, ;
+                                NVL(o.Caixas, 0)     AS Caixas,     NVL(o.Parcs, 0)      AS Parcs, ;
+                                NVL(o.QtdPesos, 0)   AS QtdPesos,   NVL(o.QtdPrecos, 0)  AS QtdPrecos, ;
+                                NVL(o.PesoVts, 0)    AS PesoVts,    NVL(o.EPrecos, 0)    AS EPrecos, ;
+                                NVL(i.Fators, 0)     AS Fators,     NVL(i.Opers, ' ')    AS Opers, ;
+                                NVL(i.nCodigos, 0)   AS nCodigos,   NVL(i.MoeFats, '')   AS moefats, ;
+                                NVL(i.fatvals, 0)    AS FatVals,    NVL(i.Moedas, '')    AS moedas, ;
+                                NVL(i.moevals, 0)    AS MoeVals,    NVL(i.CItens, 0)     AS citens, ;
+                                NVL(i.pesos, 0)      AS Pesos, ;
+                                NVL(i.Qtds - IIF(loc_pItPendente, i.QtBaixas, 0), 0) AS qtds, ;
+                                NVL(i.units, 0)      AS Units,      NVL(i.UniVals, 0)    AS univals, ;
+                                NVL(i.cpros, '')     AS CPros,      NVL(i.UniVals, 0)    AS Bases, ;
+                                NVL(i.codbarras, 0)  AS CodBarras,  NVL(i.DPros, '')     AS dpros, ;
+                                NVL(i.totas, 0)      AS Totas,      NVL(i.Obs, '')       AS obs, ;
+                                NVL(i.Notas, '')     AS Notas,      NVL(i.Reffs, '')     AS Reffs ;
+                                FROM CrTprMvCab c ;
+                                LEFT JOIN CrTmpOpe    o ON c.Dopes == o.Dopes ;
+                                LEFT JOIN CrTmpTabd   d ON c.Tabds == d.Codigos ;
+                                LEFT JOIN CrTmpdcOpe  p ON c.Dopes == p.Dopes ;
+                                LEFT JOIN CrTprMvCabi i ;
+                                    ON c.Emps+c.Dopes+STR(c.Numes,6) == i.Emps+i.Dopes+STR(i.Numes,6) ;
+                                WHERE c.Emps + c.Dopes + STR(c.Numes, 6) == ;
+                                      loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
+                                AND IIF(p.dckOpes=1, i.Opers="E", IIF(p.DckOpes=2, i.Opers="S", .T.)) ;
+                                INTO CURSOR TmpRel
+
+                            SELECT i.cItens, ;
+                                i.Qtds - IIF(loc_pItPendente, i.QtBaixas, 0) AS Qtds, ;
+                                i.CodEmbs, i.CodTams, i.CodCors, ;
+                                i.QtdEmbs, i.QtdEnts, i.CodEmbEnts, i.CodBarras ;
+                                FROM crTmpEsti2 i ;
+                                WHERE i.emps + i.dopes + STR(i.numes, 6) == ;
+                                      loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
+                                INTO CURSOR TmpRel2
+                            INDEX ON STR(cItens,4)+CodCors+CodTams+CodEmbs TAG cItens
+
+                        ELSE
+                            *-- Com agrupamento por produto/cor/valor unit.
+                            IF USED("TmpRel")
+                                USE IN TmpRel
+                            ENDIF
+                            IF USED("TmpRel2")
+                                USE IN TmpRel2
+                            ENDIF
+
+                            SELECT c.Acres,   c.ContaDs, c.ContaOs, c.Datas,   c.Dopes, c.Emps, c.EmpDs, ;
+                                c.GrupoOs, c.GrupoDs, c.GrVends, c.LPrecos, c.Numes, c.Obses, c.PrazoEnts, ;
+                                c.TabDs,   c.Usuars,  c.ValEncs, c.ValInis, c.Valos, c.ValVars, c.Vars, ;
+                                c.Vends, c.Notas AS NotaC, c.grResps, c.Resps, ;
+                                NVL(d.Descos, 0)     AS Descos, ;
+                                NVL(o.PrecoPs, 0)    AS PrecoPs,    NVL(o.nDopes, 0)      AS nDopes, ;
+                                NVL(o.Caixas, 0)     AS Caixas,     NVL(o.Parcs, 0)       AS Parcs, ;
+                                NVL(o.QtdPesos, 0)   AS QtdPesos,   NVL(o.QtdPrecos, 0)   AS QtdPrecos, ;
+                                NVL(o.PesoVts, 0)    AS PesoVts,    NVL(o.EPrecos, 0)     AS EPrecos, ;
+                                NVL(i.Fators, 0)     AS Fators,     NVL(i.Opers, ' ')     AS Opers, ;
+                                NVL(i.nCodigos, 0)   AS nCodigos,   NVL(i.MoeFats, '')    AS moefats, ;
+                                NVL(i.fatvals, 0)    AS FatVals,    NVL(i.Moedas, '')     AS moedas, ;
+                                NVL(i.moevals, 0)    AS MoeVals,    NVL(i.CItens, 0)      AS citens, ;
+                                NVL(i.Pesos, 0)      AS Pesos,      NVL(i.Obs, '')        AS obs, ;
+                                NVL(i.units, 0)      AS Units,      NVL(i.UniVals, 0)     AS univals, ;
+                                NVL(i.cpros, '')     AS CPros,      NVL(i.UniVals, 0)     AS Bases, ;
+                                NVL(i.codbarras, 0)  AS CodBarras,  NVL(i.DPros, '')      AS dpros, ;
+                                NVL(i.totas, 0)      AS Totas,      1                     AS nTotal, ;
+                                NVL(j.CItens, 0)     AS CItens2, ;
+                                NVL(j.Qtds - IIF(loc_pItPendente, j.QtBaixas, 0), 0) AS Qtds2, ;
+                                NVL(j.CodEmbs, '')   AS CodEmbs,    NVL(j.CodCors, '')    AS CodCors, ;
+                                NVL(j.QtdEmbs, 1)    AS QtdEmbs,    NVL(j.QtdEnts, 1)     AS QtdEnts, ;
+                                NVL(j.CodBarras, 0)  AS CodBarras2, NVL(j.CodEmbEnts, '') AS CodEmbEnts, ;
+                                NVL(j.Pesos, 0)      AS Pesos2, ;
+                                NVL(i.Qtds - IIF(loc_pItPendente, i.QtBaixas, 0), 0) AS Qtds, ;
+                                NVL(i.Notas, '')     AS Notas,      SPACE(4)              AS CodTams, ;
+                                NVL(i.Reffs, '')     AS Reffs ;
+                                FROM CrTprMvCab c ;
+                                LEFT JOIN CrTmpOpe   o ON c.Dopes == o.Dopes ;
+                                LEFT JOIN CrTmpTabd  d ON c.TabDs == d.Codigos ;
+                                LEFT JOIN CrTmpDcope p ON c.Dopes == p.Dopes ;
+                                LEFT JOIN CrTprMvCabi i ;
+                                    ON c.Emps+c.Dopes+STR(c.Numes,6) == i.Emps+i.Dopes+STR(i.Numes,6) ;
+                                LEFT JOIN CrTmpEsti2 j ;
+                                    ON i.Emps+i.Dopes+STR(i.Numes,6)+STR(i.CItens,4) == ;
+                                       j.Emps+j.Dopes+STR(j.Numes,6)+STR(j.CItens,4) ;
+                                WHERE c.Emps + c.Dopes + STR(c.Numes, 6) == ;
+                                      loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
+                                AND IIF(p.DckOpes=1, i.Opers="E", IIF(p.DckOpes=2, i.Opers="S", .T.)) ;
+                                INTO CURSOR TmpRelPi
+
+                            SELECT * FROM TmpRelPi WHERE 1 = 0 INTO CURSOR TmpRelP READWRITE
+                            SELECT TmpRelP
+                            INDEX ON Emps+Dopes+STR(Numes,6)+Opers+Cpros+STR(Units,15,6)+Moedas+CodCors TAG IdxTmpRelP
+
+                            SELECT TmpRelPi
+                            SCAN
+                                SCATTER MEMO MEMVAR
+                                loc_lcSeek = M.Emps+M.Dopes+STR(M.Numes,6)+M.Opers+M.Cpros+STR(M.Units,15,6)+M.Moedas+M.CodCors
+                                IF !SEEK(loc_lcSeek, "TmpRelP", "IdxTmpRelP")
+                                    INSERT INTO TmpRelP FROM MEMVAR
+                                ELSE
+                                    REPLACE TmpRelP.Pesos   WITH TmpRelP.Pesos + M.Pesos, ;
+                                            TmpRelP.totas   WITH TmpRelP.totas + M.totas, ;
+                                            TmpRelP.nTotal  WITH TmpRelP.nTotal + 1, ;
+                                            TmpRelP.Qtds2   WITH TmpRelP.Qtds2 + M.Qtds2, ;
+                                            TmpRelP.Pesos2  WITH TmpRelP.Pesos2 + M.Pesos2
+                                ENDIF
+                            ENDSCAN
+
+                            SELECT TmpRelP
+                            =AFIELDS(laCampos)
+                            CREATE CURSOR TmpRel FROM ARRAY laCampos
+                            CREATE CURSOR TmpRel2 (CItens N(4), Qtds N(12,2), CodEmbs C(3), CodCors C(4), ;
+                                QtdEmbs N(12,2), QtdEnts N(12,2), CodBarras N(8), ;
+                                CodEmbEnts C(3), CodTams C(4))
+                            INDEX ON STR(CItens,4)+CodCors+CodTams+CodEmbs TAG CItens
+
+                            SELECT TmpRelP
+                            loc_lnCItens = 1
+                            SCAN
+                                SCATTER MEMVAR MEMO
+                                M.CItens    = loc_lnCItens
+                                M.CodBarras = 0
+                                M.Pesos     = M.Pesos2
+                                M.Qtds      = IIF(M.Qtds2 # 0, M.Qtds2, M.Qtds)
+                                M.Totas     = M.Qtds * M.Units
+                                INSERT INTO TmpRel FROM MEMVAR
+                                IF !EMPTY(M.CodCors)
+                                    INSERT INTO TmpRel2 FROM MEMVAR
+                                ENDIF
+                                loc_lnCItens = loc_lnCItens + 1
+                            ENDSCAN
+                        ENDIF
+
+                        *-- Cursores auxiliares por documento
+                        IF USED("TmpResIte")
+                            USE IN TmpResIte
+                        ENDIF
+                        CREATE CURSOR TmpResIte (Numes n(6), Cpros c(14), Cmats c(14), ;
+                            Qtds n(9,3), Cunis c(3), QtScons n(6), cItens n(4))
+                        INDEX ON STR(Numes,6) + Cpros + Cmats + STR(cItens,4) TAG Cmats
+
+                        IF USED("xTotIte")
+                            USE IN xTotIte
+                        ENDIF
+                        CREATE CURSOR xTotIte (Numes n(6), xMoeda C(3), xTotal N(12,2))
+                        INDEX ON STR(Numes,6) + xMoeda TAG xMoeda
+
+                        *-- Verificar itens com cor/tamanho
+                        loc_lnCorTams = 0
+                        SELECT TmpRel2
+                        GO TOP
+                        IF !EOF()
+                            SELECT TmpRel
+                            SCAN
+                                IF !EMPTY(TmpRel.CPros)
+                                    SELECT TmpRel2
+                                    SET ORDER TO cItens
+                                    SET KEY TO STR(TmpRel.CItens, 4)
+                                    COUNT TO loc_lnCorTam2s
+                                    loc_lnCorTams = BITOR(loc_lnCorTams, ;
+                                        IIF(loc_lnCorTam2s = 0, 0, IIF(loc_lnCorTam2s = 1, 1, 2)))
+                                ENDIF
+                            ENDSCAN
+                        ENDIF
+
+                        *-- Verificar sub-niveis
+                        SELECT TmpEstPe
+                        GO TOP
+                        THIS.this_lTemSubN = !EOF("TmpEstPe")
+
+                        *-- Posicionar cursores de configuracao no documento atual
+                        SELECT TmpRel
+                        GO TOP
+                        =SEEK(TmpRel.Dopes, "CrTmpOpe", "Dopes")
+                        IF CrTmpOpe.itemalfas = 1
+                            INDEX ON Cpros TAG CPros
+                        ELSE
+                            IF CrTmpOpe.itemalfas = 3
+                                INDEX ON Moedas + Reffs TAG Moedas
+                            ELSE
+                                INDEX ON CItens TAG CItens
+                            ENDIF
+                        ENDIF
+                        GO TOP
+                        =SEEK(TmpRel.Dopes, "CrTmpDcOpe", "Dopes")
+
+                        *-- Resumo de itens compostos (DckRite/DckRiteI)
+                        IF CrTmpDcOpe.DckRite = 1 OR CrTmpDcOpe.DckRiteI = 1
+                            SELECT Cpros, cItens, SUM(Qtds) AS Qtds ;
+                                FROM TmpRel GROUP BY Cpros, cItens INTO CURSOR wEesti
+                            SELECT wEesti
+                            SCAN
+                                THIS.CursorQuery("SigPrCpo", "CrCompo", "Cpros", ;
+                                    wEesti.Cpros, "Mats,UniCompos,Qtds,QtScons")
+                                SELECT CrCompo
+                                SCAN
+                                    THIS.CursorQuery("SigCdPro", "CrPro", "Cpros", CrCompo.Mats, "Cgrus")
+                                    THIS.CursorQuery("SigCdGrp", "CrGru", "Cgrus", CrPro.Cgrus, "mtprimas")
+                                    IF CrGru.Mtprimas # 1
+                                        LOOP
+                                    ENDIF
+                                    SELECT TmpResIte
+                                    IF !SEEK(wEesti.Cpros + CrCompo.Mats + STR(wEesti.cItens, 4))
+                                        APPEND BLANK
+                                        REPLACE Cmats  WITH CrCompo.Mats, ;
+                                                Cpros  WITH wEesti.Cpros, ;
+                                                Cunis  WITH CrCompo.UniCompos, ;
+                                                cItens WITH wEesti.cItens
+                                    ENDIF
+                                    REPLACE Qtds    WITH Qtds + (CrCompo.Qtds * wEesti.Qtds), ;
+                                            QtScons WITH QtScons + (CrCompo.QtScons * wEesti.Qtds)
+                                ENDSCAN
+                            ENDSCAN
+                        ENDIF
+
+                        *-- Inicializar acumuladores para este documento
+                        loc_pPrVenCus = TmpRel.Precops
+                        loc_pSomaPeso = TmpRel.Pesovts
+                        THIS.this_nXvlr     = 0
+                        THIS.this_lXvlrNull = .T.
+                        THIS.this_nXitm     = 0
+                        THIS.this_cTitul    = ""
+                        THIS.this_nTamLinha    = 0
+                        THIS.this_nTamCabGradeP = 0
+                        THIS.this_nDeslObsi = -1
+                        THIS.this_cFinal    = CHR(13) + CHR(10)
+                        THIS.this_nMaxCols  = 100
+                        loc_lnTotQtds       = 0
+                        loc_lnTotPess       = 0
+
+                        *-- Montar cabecalho do documento
+                        THIS.Cabecalho(THIS.this_nMaxCols)
+
+                        *-- Definir colunas do cabecalho do grid de itens
+                        IF CrTmpDcOpe.DckSubn = 1 AND THIS.this_lTemSubN AND CrTmpOpe.SubNs = 4
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocSubN, 13)
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckItem = 1
+                            loc_lnDocItem = MAX(LEN(ALLTRIM(CrTmpDcOpe.DocItem)) + 1, 5)
+                            THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocItem), loc_lnDocItem)
+                        ELSE
+                            loc_lnDocItem = 0
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckCbar = 1
+                            loc_lnDocBarra = MAX(LEN(ALLTRIM(CrTmpDcOpe.DocBarra)) + 1, 9)
+                            THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocBarra), loc_lnDocBarra)
+                        ELSE
+                            loc_lnDocBarra = 0
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckQtd = 1
+                            loc_lnDocQtd = MAX(LEN(ALLTRIM(CrTmpDcOpe.DocQtd)) + 1, 10)
+                            THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocQtd), loc_lnDocQtd)
+                        ELSE
+                            loc_lnDocQtd = 0
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckPeso = 1
+                            loc_lnDocPeso = MAX(LEN(ALLTRIM(CrTmpDcOpe.DocPeso)) + 1, 10)
+                            THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocPeso), loc_lnDocPeso)
+                        ELSE
+                            loc_lnDocPeso = 0
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckCod    = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocCod,     13)
+                        ENDIF
+                        IF CrTmpDcOpe.DckUni    = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocUni,     13)
+                        ENDIF
+                        IF CrTmpDcOpe.DckVen    = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocVen,     13)
+                        ENDIF
+                        IF CrTmpDcOpe.DckReffs  = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocReffs,   21)
+                        ENDIF
+                        IF CrTmpDcOpe.DckFeitios= 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocFeitios, 12)
+                        ENDIF
+
+                        IF !EMPTY(CrTmpOpe.Cmoes)
+                            IF loc_pPrVenCus # 2 AND CrTmpDcOpe.DckCoef = 1
+                                THIS.MontaCabGrade(CrTmpDcOpe.DocCoef, 13)
+                            ENDIF
+                        ENDIF
+
+                        IF CrTmpDcOpe.Dckunit   = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocUnit,    13)
+                        ENDIF
+                        IF CrTmpDcOpe.DckBase   = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocBase,    13)
+                        ENDIF
+                        IF CrTmpDcOpe.DckToti   = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocToti,    13)
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckTaCor = 1
+                            loc_lnDocTaCor = MAX(LEN(ALLTRIM(CrTmpDcOpe.DocTaCor)) + 1, 8)
+                        ELSE
+                            loc_lnDocTaCor = 0
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckGrv    = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocGrv,     10)
+                        ENDIF
+                        IF CrTmpDcOpe.DckNota   = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocNota,     6)
+                        ENDIF
+                        IF CrTmpDcOpe.Dckftecs  = 1
+                            THIS.MontaCabGrade(CrTmpDcOpe.Docftecs,   13)
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckDescr = 1
+                            IF CrTmpDcOpe.DckFiscal = 1
+                                IF CrTmpDcOpe.DckTaCor = 1 AND BITAND(loc_lnCorTams, 1) # 0
+                                    THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocTaCor), loc_lnDocTaCor)
+                                ENDIF
+                                IF !EMPTY(THIS.this_cCabGradeP)
+                                    IF THIS.this_nTamCabGradeP = 0
+                                        THIS.this_nTamCabGradeP = LEN(THIS.this_cCabGradeP)
+                                    ENDIF
+                                    THIS.this_cCabGrade = THIS.this_cCabGrade + ;
+                                        PADC(THIS.this_cCabGradeP, THIS.this_nMaxCols) + CHR(13) + CHR(10)
+                                    IF THIS.this_nDeslObsi = -1
+                                        THIS.this_nDeslObsi = INT((THIS.this_nMaxCols - LEN(THIS.this_cCabGradeP)) / 2)
+                                    ENDIF
+                                    THIS.this_cCabGradeP = ""
+                                ENDIF
+                            ENDIF
+                            THIS.MontaCabGrade(CrTmpDcOpe.DocDescr, 40)
+                        ENDIF
+
+                        IF CrTmpDcOpe.DckTaCor = 1 AND ;
+                           (CrTmpDcOpe.DckDescr # 1 OR ;
+                            (CrTmpDcOpe.DckDescr = 1 AND CrTmpDcOpe.DckFiscal # 1)) AND ;
+                           BITAND(loc_lnCorTams, 1) # 0
+                            THIS.MontaCabGrade(ALLTRIM(CrTmpDcOpe.DocTaCor), loc_lnDocTaCor)
+                        ENDIF
+
+                        IF THIS.this_nTamCabGradeP = 0
+                            THIS.this_nTamCabGradeP = LEN(THIS.this_cCabGradeP)
+                        ENDIF
+                        THIS.this_cCabGrade = THIS.this_cCabGrade + ;
+                            IIF(!EMPTY(THIS.this_cCabGradeP), ;
+                                PADC(THIS.this_cCabGradeP, THIS.this_nMaxCols), "")
+                        IF THIS.this_nDeslObsi = -1
+                            THIS.this_nDeslObsi = INT((THIS.this_nMaxCols - LEN(THIS.this_cCabGradeP)) / 2)
+                        ENDIF
+                        THIS.this_cCabGradeP = ""
+
+                        *-- Processar itens do documento
+                        SELECT TmpRel
+                        IF CrTmpDcOpe.DckItens = 1
+                            THIS.this_nXvlr     = 0
+                            THIS.this_lXvlrNull = .T.
+                            SCAN
+                                loc_llBar = (CrTmpDcOpe.DckBarra = 1)
+                                loc_lcBar = fAltBar2de5(PADL(TmpRel.NDopes, 4, "0") + PADL(TmpRel.Numes, 6, "0"))
+
+                                SELECT TmpRel2
+                                SET ORDER TO cItens
+                                SET KEY TO STR(TmpRel.CItens, 4)
+                                COUNT TO loc_lnItem2s
+                                GO TOP
+                                SELECT TmpRel
+
+                                THIS.this_cDetalhe   = ""
+                                THIS.this_cDetalheD  = ""
+                                THIS.this_cDetalheO  = ""
+                                THIS.this_cDetalheP  = ""
+                                THIS.this_cDetalheDP = ""
+                                THIS.this_nTamLinha  = 0
+
+                                IF !EMPTY(TmpRel.CPros)
+                                    THIS.this_nXitm = THIS.this_nXitm + 1
+                                ENDIF
+
+                                loc_lnLpQtds = 1
+                                loc_lnLuQtds = 1
+                                IF CrTmpOpe.QtdPesos = 1
+                                    loc_lnLpQtds = TmpRel.Qtds
+                                ENDIF
+                                IF CrTmpOpe.QtdPrecos = 1
+                                    loc_lnLuQtds = TmpRel.Qtds
+                                ENDIF
+                                M.Totas = TmpRel.Qtds * TmpRel.Units
+
+                                THIS.CursorQuery("SigCdPro", "CrTmpPro", "Cpros", TmpRel.Cpros)
+                                THIS.CursorQuery("SigCdGrp", "CrTmpGru", "CGrus", CrTmpPro.Cgrus)
+
+                                *-- Imagem do produto
+                                loc_lcArquivo = ""
+                                IF loc_pImagem AND USED("CrTmpPro") AND !EOF("CrTmpPro")
+                                    loc_lcProduto = STRTRAN(STRTRAN(CrTmpPro.Cpros, "/", ""), " ", "")
+                                    loc_lcArquivo = SYS(2023) + "\" + ALLTRIM(loc_lcProduto) + ".JPG"
+                                    CLEAR RESOURCES
+                                    IF !EMPTY(CrTmpPro.FigJpgs) AND !ISNULL(CrTmpPro.FigJpgs)
+                                        loc_lcFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(CrTmpPro.FigJpgs, ;
+                                            "data:image/png;base64,", ""), ;
+                                            "data:image/jpeg;base64,", ""), ;
+                                            "data:image/jpg;base64,", ""), 14)
+                                        =STRTOFILE(loc_lcFoto, loc_lcArquivo)
+                                    ELSE
+                                        SELECT crBranco
+                                        =STRTOFILE(crBranco.Branco, loc_lcArquivo)
+                                        SELECT TmpRel
+                                    ENDIF
+                                ENDIF
+
+                                *-- Sub-nivel
+                                IF CrTmpDcOpe.DckSubN = 1 AND THIS.this_lTemSubN AND CrTmpOpe.SubNs = 4
+                                    loc_lcSubNivel = ""
+                                    IF !EMPTY(TmpRel.nCodigos) AND SEEK(TmpRel.nCodigos, "TmpEstPe", "Codigos")
+                                        loc_lcSubNivel = PADL(ALLTRIM(TmpEstPe.cAbrevs), 2) + "." + ;
+                                            ALLTRIM(fGerMascara(VAL(RIGHT(STR(TmpRel.nCodigos, 10), 6))))
+                                    ENDIF
+                                    THIS.MontaDetalhe(loc_lcSubNivel, 13)
+                                ENDIF
+
+                                IF CrTmpDcOpe.DckItem = 1
+                                    THIS.MontaDetalhe(STR(THIS.this_nXitm, 3), loc_lnDocItem)
+                                ENDIF
+
+                                *-- Codigo de barras
+                                loc_lcCodBarras = ""
+                                IF CrTmpDcOpe.DckBarPro = 1
+                                    loc_lcCodBarras = TRANSFORM(CrTmpPro.Cbars, "99999999999999")
+                                ELSE
+                                    IF !EMPTY(TmpRel.CodBarras)
+                                        loc_lcCodBarras = TRANSFORM(TmpRel.CodBarras, "99999999999999")
+                                    ELSE
+                                        IF loc_lnItem2s = 1 AND !EMPTY(TmpRel2.CodBarras)
+                                            loc_lcCodBarras = TRANSFORM(TmpRel2.CodBarras, "99999999999999")
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
+                                IF CrTmpDcOpe.DckCbar = 1
+                                    THIS.MontaDetalhe(loc_lcCodBarras, loc_lnDocBarra)
+                                ENDIF
+
+                                IF CrTmpDcOpe.DckQtd = 1
+                                    THIS.MontaDetalhe(TRANSFORM(TmpRel.Qtds, "999999.99") + ;
+                                        IIF(CrTmpDcOpe.DckOpers = 1, " " + TmpRel.Opers, ""), loc_lnDocQtd)
+                                ENDIF
+                                IF CrTmpDcOpe.DckPeso = 1
+                                    THIS.MontaDetalhe(TRANSFORM(TmpRel.Pesos, "999999.99"), loc_lnDocPeso)
+                                ENDIF
+                                IF CrTmpDcOpe.DckCod = 1
+                                    THIS.MontaDetalhe(TmpRel.CPros, 13)
+                                ENDIF
+                                IF CrTmpDcOpe.DckUni = 1
+                                    THIS.MontaDetalhe(CrTmpPro.Cunis, 13)
+                                ENDIF
+                                IF CrTmpDcOpe.DckVen = 1
+                                    loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                        fStringChr(STR(CrTmpPro.Pvens,9,2), CrTmpParac.fTabelas), ;
+                                        TRANSFORM(CrTmpPro.Pvens, "99999.99"))
+                                    THIS.MontaDetalhe(loc_lnQtd, 13)
+                                ENDIF
+                                IF CrTmpDcOpe.DckReffs   = 1
+                                    THIS.MontaDetalhe(CrTmpPro.Reffs,   21)
+                                ENDIF
+                                IF CrTmpDcOpe.DckFeitios = 1
+                                    THIS.MontaDetalhe(CrTmpPro.Cftios,  12)
+                                ENDIF
+
+                                *-- Preco/coeficiente
+                                IF EMPTY(CrTmpOpe.Cmoes)
+                                    IF CrTmpDcOpe.Dckunit = 1
+                                        loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                            fStringChr(STR(TmpRel.Units,9,2), CrTmpParac.fTabelas), ;
+                                            TRANSFORM(TmpRel.Units, "99999.99"))
+                                        THIS.MontaDetalhe(loc_lnQtd + " " + ALLTRIM(TmpRel.Moedas), 13)
+                                    ENDIF
+                                    IF CrTmpDcOpe.DckBase = 1
+                                        THIS.MontaDetalhe(TRANSFORM(TmpRel.Bases, "99999.99") + " " + ALLTRIM(TmpRel.Moedas), 13)
+                                    ENDIF
+                                    IF CrTmpDcOpe.DckToti = 1
+                                        loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                            fStringChr(STR(M.Totas,12,2), CrTmpParac.fTabelas), ;
+                                            TRANSFORM(M.Totas, "9999999.99"))
+                                        THIS.MontaDetalhe(loc_lnQtd, 13)
+                                    ENDIF
+                                    IF CrTmpDcOpe.Dckunit = 1 AND CrTmpDcOpe.DckLinAd = 1
+                                        loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                            fStringChr(STR(TmpRel.Units,9,2), CrTmpParac.fTabelas), ;
+                                            TRANSFORM(TmpRel.Units, "99999.99"))
+                                        THIS.this_cDetalhe = THIS.this_cDetalhe + CHR(13) + CHR(10) + ;
+                                            SPACE(22) + ALLTRIM(loc_lnQtd) + " " + ;
+                                            ALLTRIM(TmpRel.Moedas) + " " + CHR(43) + " " + ;
+                                            ALLTRIM(TRANSFORM(TmpRel.Pesos, "999.99")) + " * " + ;
+                                            ALLTRIM(TRANSFORM(TmpRel.Fators, "99.99")) + " " + ;
+                                            ALLTRIM(TmpRel.MoeFats) + CHR(13) + CHR(10)
+                                        THIS.this_nTamLinha = 0
+                                    ENDIF
+                                    loc_lnPrFator = ROUND(TmpRel.Fators * TmpRel.Pesos * loc_lnLpQtds, 2)
+                                    loc_lnPrUnits = ROUND(TmpRel.Units * loc_lnLuQtds, 2)
+                                    SELECT xTotIte
+                                    IF loc_lnPrUnits # 0
+                                        IF !SEEK(TmpRel.Moedas)
+                                            INSERT INTO xTotIte (xMoeda) VALUES (TmpRel.Moedas)
+                                        ENDIF
+                                        REPLACE xTotal WITH xTotal + loc_lnPrUnits
+                                    ENDIF
+                                    IF loc_lnPrFator # 0 AND loc_pSomaPeso = 1
+                                        IF !SEEK(TmpRel.MoeFats)
+                                            INSERT INTO xTotIte (xMoeda) VALUES (TmpRel.MoeFats)
+                                        ENDIF
+                                        REPLACE xTotal WITH xTotal + loc_lnPrFator
+                                    ENDIF
+                                    SELECT TmpRel
+                                ELSE
+                                    loc_lnCotaMov = fBuscarCotacao(CrTmpOpe.Cmoes, DATE(), .NULL.)
+                                    SELECT TmpRel
+                                    IF TmpRel.Fators # 0
+                                        loc_lnPrFator = TmpRel.FatVals * TmpRel.MoeVals / loc_lnCotaMov
+                                    ELSE
+                                        loc_lnPrFator = TmpRel.MoeVals / loc_lnCotaMov
+                                    ENDIF
+                                    loc_lnXttm = TmpRel.Qtds * TmpRel.Units
+
+                                    IF loc_pPrVenCus = 3
+                                        IF CrTmpDcOpe.DckCoef = 1
+                                            THIS.MontaDetalhe(TRANSFORM(TmpRel.fators*TmpRel.pesos*loc_lnLpQtds*TmpRel.FatVals/loc_lnCotaMov, "99999.99"), 13)
+                                        ENDIF
+                                        IF CrTmpDcOpe.DckUnit = 1
+                                            loc_lnPreco = TmpRel.Units * TmpRel.Moevals / loc_lnCotaMov
+                                            loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                                fStringChr(STR(loc_lnPreco,9,2), CrTmpParac.fTabelas), ;
+                                                TRANSFORM(loc_lnPreco, "99999.99"))
+                                            THIS.MontaDetalhe(loc_lnQtd, 13)
+                                        ENDIF
+                                        IF CrTmpDcOpe.DckBase = 1
+                                            loc_lnPreco = TmpRel.Bases * TmpRel.Moevals / loc_lnCotaMov
+                                            loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                                fStringChr(STR(loc_lnPreco,9,2), CrTmpParac.fTabelas), ;
+                                                TRANSFORM(loc_lnPreco, "99999.99"))
+                                            THIS.MontaDetalhe(loc_lnQtd, 13)
+                                        ENDIF
+                                    ELSE
+                                        IF CrTmpDcOpe.DckCoef = 1
+                                            THIS.MontaDetalhe(TRANSFORM(TmpRel.UniVals, "99999.99"), 13)
+                                        ENDIF
+                                        IF CrTmpDcOpe.DckUnit = 1
+                                            loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                                fStringChr(STR(TmpRel.Units,9,2), CrTmpParac.fTabelas), ;
+                                                TRANSFORM(TmpRel.Units, "99999.99"))
+                                            THIS.MontaDetalhe(loc_lnQtd, 13)
+                                        ENDIF
+                                        IF CrTmpDcOpe.DckBase = 1
+                                            loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                                fStringChr(STR(TmpRel.Bases,9,2), CrTmpParac.fTabelas), ;
+                                                TRANSFORM(TmpRel.Bases, "99999.99"))
+                                            THIS.MontaDetalhe(loc_lnQtd, 13)
+                                        ENDIF
+                                    ENDIF
+                                    IF CrTmpDcOpe.DckToti = 1
+                                        loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv = 1, ;
+                                            fStringChr(STR(loc_lnXttm,9,2), CrTmpParac.fTabelas), ;
+                                            TRANSFORM(loc_lnXttm, "9999999.99"))
+                                        THIS.MontaDetalhe(loc_lnQtd, 11)
+                                    ENDIF
+                                    IF THIS.this_lXvlrNull
+                                        THIS.this_nXvlr     = loc_lnXttm
+                                        THIS.this_lXvlrNull = .F.
+                                    ELSE
+                                        THIS.this_nXvlr = THIS.this_nXvlr + loc_lnXttm
+                                    ENDIF
+                                    SELECT TmpRel
+                                ENDIF
+
+                                IF CrTmpDcOpe.DckGrv  = 1
+                                    THIS.MontaDetalhe(CrTmpPro.Colecoes, 11)
+                                ENDIF
+                                IF CrTmpDcOpe.DckNota = 1
+                                    THIS.MontaDetalhe(TmpRel.Notas,       7)
+                                ENDIF
+
+                                *-- Ficha tecnica
+                                IF CrTmpDcOpe.Dckftecs = 1
+                                    loc_lcSql = "Select Resps From SigCdPft" + ;
+                                        " Where Cpros = " + EscaparSQL(TmpRel.Cpros) + ;
+                                        " And ctits = " + EscaparSQL(CrTmpDcOpe.ctits)
+                                    SQLEXEC(gnConnHandle, loc_lcSql, "TmpProft")
+                                    SELECT TmpProft
+                                    GO TOP
+                                    loc_lcResp = STRTRAN(TmpProft.Resps, CHR(13), "")
+                                    loc_lcResp = STRTRAN(loc_lcResp, CHR(10), "")
+                                    loc_lcResp = LEFT(loc_lcResp, 20)
+                                    loc_lcResp = PADR(IIF(EMPTY(loc_lcResp), " ", loc_lcResp), 20)
+                                    THIS.MontaDetalhe(loc_lcResp, 21)
+                                    SELECT TmpRel
+                                ENDIF
+
+                                *-- Descricao fiscal
+                                IF CrTmpDcOpe.DckDescr = 1
+                                    IF CrTmpDcOpe.DckFiscal = 1
+                                        IF CrTmpDcOpe.DckTaCor = 1 AND loc_lnItem2s = 1
+                                            SELECT TmpRel2
+                                            SET ORDER TO
+                                            SET ORDER TO cItens
+                                            SET KEY TO STR(TmpRel.CItens, 4)
+                                            GO TOP
+                                            THIS.MontaDetalhe(TmpRel2.CodTams + " " + TmpRel2.CodCors, loc_lnDocTaCor, "N")
+                                            loc_lnItem2s = 0
+                                            SELECT TmpRel
+                                        ENDIF
+                                        IF !EMPTY(ALLTRIM(CrTmpPro.DescFis))
+                                            loc_lmDescFis  = CrTmpPro.DescFis
+                                            loc_lnMemoWAnt = SET("MEMOWIDTH", 1)
+                                            SET MemoWidth TO (THIS.this_nMaxCols - 2)
+                                            loc_lnNumLines = MEMLINES(loc_lmDescFis)
+                                            FOR loc_lnCount = 1 TO loc_lnNumLines
+                                                IF !EMPTY(MLINE(loc_lmDescFis, loc_lnCount))
+                                                    THIS.this_cDetalheD = THIS.this_cDetalheD + ;
+                                                        PADC(ALLTRIM(MLINE(loc_lmDescFis, loc_lnCount)), THIS.this_nMaxCols - 2) + ;
+                                                        CHR(13) + CHR(10)
+                                                ENDIF
+                                            NEXT
+                                            SET MemoWidth TO loc_lnMemoWAnt
+                                        ELSE
+                                            THIS.this_cDetalheD = THIS.this_cDetalheD + ;
+                                                PADC(ALLTRIM(TmpRel.Dpros), THIS.this_nMaxCols) + CHR(13) + CHR(10)
+                                        ENDIF
+                                    ELSE
+                                        THIS.MontaDetalhe(TmpRel.Dpros, 40, "R")
+                                    ENDIF
+                                ENDIF
+
+                                IF CrTmpDcOpe.DckTaCor = 1 AND loc_lnItem2s = 1
+                                    SELECT TmpRel2
+                                    SET ORDER TO
+                                    SET ORDER TO cItens
+                                    SET KEY TO STR(TmpRel.CItens, 4)
+                                    GO TOP
+                                    THIS.MontaDetalhe(TmpRel2.CodTams + " " + TmpRel2.CodCors, loc_lnDocTaCor, "N")
+                                    loc_lnItem2s = 0
+                                    SELECT TmpRel
+                                ENDIF
+
+                                *-- Grade cor/tamanho
+                                THIS.this_cDetalheDP = ""
+                                THIS.this_cDetalheR  = ""
+                                IF CrTmpDcOpe.DckTaCor = 1 AND loc_lnItem2s # 0
+                                    IF INLIST(CrTmpGru.TipoEstos, 2, 3, 4) OR ;
+                                       CrTmpGru.Cores = 1 OR CrTmpGru.Tams = 1
+                                        SELECT TmpRel2
+                                        IF SEEK(STR(TmpRel.CItens, 4))
+                                            THIS.this_cDetalheDP = THIS.this_cDetalheDP + SPACE(3)
+                                            loc_lcReplica    = SPACE(3)
+                                            loc_lnReplicaLen = 3
+
+                                            IF CrTmpDcOpe.DckCbar = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + "C.Barra  "
+                                                loc_lcReplica    = loc_lcReplica + SPACE(9)
+                                                loc_lnReplicaLen = loc_lnReplicaLen + 9
+                                            ENDIF
+                                            IF CrTmpGru.Tams = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + "Tam "
+                                                loc_lcReplica    = loc_lcReplica + "--- "
+                                                loc_lnReplicaLen = loc_lnReplicaLen + 4
+                                            ENDIF
+                                            IF CrTmpGru.Cores = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + SPACE(8) + "Cor " + SPACE(8) + " "
+                                                loc_lcReplica    = loc_lcReplica + REPLICATE("-", 20) + " "
+                                                loc_lnReplicaLen = loc_lnReplicaLen + 21
+                                            ENDIF
+                                            THIS.this_cDetalheDP = THIS.this_cDetalheDP + "  Qtds   "
+                                            loc_lcReplica = loc_lcReplica + REPLICATE("-", 8) + " "
+                                            IF CrTmpGru.Embs = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + "Emb "
+                                                loc_lcReplica = loc_lcReplica + "--- "
+                                            ENDIF
+                                            IF CrTmpGru.Entregas = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + "  Qtds   Emb"
+                                                loc_lcReplica = loc_lcReplica + REPLICATE("-", 8) + " ---"
+                                            ENDIF
+                                            THIS.this_cDetalheD = THIS.this_cDetalheD + ;
+                                                PADC(THIS.this_cDetalheDP, THIS.this_nMaxCols) + CHR(13) + CHR(10) + ;
+                                                PADC(loc_lcReplica, THIS.this_nMaxCols) + CHR(13) + CHR(10)
+                                            THIS.this_cDetalheDP = ""
+                                        ENDIF
+
+                                        loc_lnTotQte2    = 0
+                                        loc_lnTotQtdEnt2 = 0
+                                        SCAN WHILE TmpRel2.CItens = TmpRel.CItens
+                                            THIS.this_cDetalheDP = THIS.this_cDetalheDP + SPACE(3)
+                                            IF CrTmpDcOpe.DckCbar = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + ;
+                                                    TRANSFORM(IIF(TmpRel2.CodBarras=0, 0, TmpRel2.CodBarras), "99999999") + " "
+                                            ENDIF
+                                            IF CrTmpGru.Tams  = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + TmpRel2.CodTams + "  "
+                                            ENDIF
+                                            IF CrTmpGru.Cores = 1
+                                                THIS.CursorQuery("SigCdCor", "CrTmpCor", "Cods", TmpRel2.CodCors)
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + ;
+                                                    TmpRel2.CodCors + "-" + PADR(CrTmpCor.Descs, 15) + " "
+                                            ENDIF
+                                            THIS.this_cDetalheDP = THIS.this_cDetalheDP + TRANSFORM(TmpRel2.Qtds, "99999.99") + " "
+                                            IF CrTmpGru.Embs = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + TmpRel2.CodEmbs + " "
+                                            ENDIF
+                                            IF CrTmpGru.Entregas = 1
+                                                THIS.this_cDetalheDP = THIS.this_cDetalheDP + ;
+                                                    TRANSFORM(TmpRel2.QtdEnts, "99999.99") + " " + TmpRel2.CodEmbEnts
+                                            ENDIF
+                                            THIS.this_cDetalheD  = THIS.this_cDetalheD + ;
+                                                PADC(THIS.this_cDetalheDP, THIS.this_nMaxCols) + CHR(13) + CHR(10)
+                                            THIS.this_cDetalheDP = ""
+                                            loc_lnTotQte2    = loc_lnTotQte2    + TmpRel2.Qtds
+                                            loc_lnTotQtdEnt2 = loc_lnTotQtdEnt2 + TmpRel2.QtdEnts
+                                        ENDSCAN
+
+                                        IF loc_lnTotQte2 # 0 OR loc_lnTotQtdEnt2 # 0
+                                            THIS.this_cDetalheD = THIS.this_cDetalheD + ;
+                                                PADC(SPACE(loc_lnReplicaLen-1) + "----------" + " " + ;
+                                                    IIF(loc_lnTotQtdEnt2 # 0, "  ----------" + SPACE(5), " "), ;
+                                                    THIS.this_nMaxCols) + CHR(13) + CHR(10) + ;
+                                                PADC(SPACE(loc_lnReplicaLen-1) + ;
+                                                    TRANSFORM(loc_lnTotQte2, "9999999.99") + " " + ;
+                                                    IIF(loc_lnTotQtdEnt2 # 0, ;
+                                                        "  " + TRANSFORM(loc_lnTotQtdEnt2, "9999999.99") + SPACE(5), " "), ;
+                                                    THIS.this_nMaxCols) + CHR(13) + CHR(10)
+                                        ENDIF
+                                        SELECT TmpRel
+                                    ENDIF
+                                ENDIF
+
+                                *-- Observacoes do item
+                                IF CrTmpDcOpe.DckObsi = 1 AND !EMPTY(TmpRel.Obs)
+                                    loc_lmObs      = TmpRel.Obs
+                                    loc_lnMemoWAnt = SET("MEMOWIDTH", 1)
+                                    SET MemoWidth TO (THIS.this_nMaxCols - 2 * THIS.this_nDeslObsi)
+                                    loc_lnNumLines = MEMLINES(loc_lmObs)
+                                    loc_lcCabObsi  = PADL(ALLTRIM(CrTmpDcOpe.DocObsi) + " : ", 13)
+                                    FOR loc_lnCount = 1 TO loc_lnNumLines
+                                        IF !EMPTY(MLINE(loc_lmObs, loc_lnCount))
+                                            THIS.this_cDetalheO = THIS.this_cDetalheO + ;
+                                                IIF(THIS.this_nDeslObsi > 0, SPACE(THIS.this_nDeslObsi), "") + ;
+                                                loc_lcCabObsi + MLINE(loc_lmObs, loc_lnCount) + CHR(13) + CHR(10)
+                                            loc_lcCabObsi = SPACE(13)
+                                        ENDIF
+                                    NEXT
+                                    SET MemoWidth TO loc_lnMemoWAnt
+                                ENDIF
+
+                                *-- Descricao de compras
+                                IF CrTmpDcOpe.Dckdsccps = 1 AND !EMPTY(CrTmpPro.DscCompras)
+                                    loc_lmObs      = CrTmpPro.DscCompras
+                                    loc_lnMemoWAnt = SET("MEMOWIDTH", 1)
+                                    SET MemoWidth TO (THIS.this_nMaxCols - 2 * THIS.this_nDeslObsi)
+                                    loc_lnNumLines = MEMLINES(loc_lmObs)
+                                    loc_lcCabObsi  = PADL(ALLTRIM(CrTmpDcOpe.DocDscCps) + " : ", 13)
+                                    FOR loc_lnCount = 1 TO loc_lnNumLines
+                                        IF !EMPTY(MLINE(loc_lmObs, loc_lnCount))
+                                            THIS.this_cDetalheO = THIS.this_cDetalheO + ;
+                                                IIF(THIS.this_nDeslObsi > 0, SPACE(THIS.this_nDeslObsi), "") + ;
+                                                loc_lcCabObsi + MLINE(loc_lmObs, loc_lnCount) + CHR(13) + CHR(10)
+                                            loc_lcCabObsi = SPACE(13)
+                                        ENDIF
+                                    NEXT
+                                    SET MemoWidth TO loc_lnMemoWAnt
+                                ENDIF
+
+                                *-- Resumo de composicao do item
+                                IF CrTmpDcOpe.DckrIteI = 1
+                                    SELECT TmpResIte
+                                    SET ORDER TO Cmats
+                                    =SEEK(TmpRel.Cpros)
+                                    SCAN WHILE Cpros = TmpRel.cpros
+                                        IF cItens = TmpRel.cItens
+                                            THIS.this_cDetalheR = THIS.this_cDetalheR + ;
+                                                "Componente:" + TmpResIte.Cmats + ;
+                                                "   Qtde: " + STR(Qtds, 9, 3) + " " + cUnis + ;
+                                                "   Consumo:" + STR(QtScons, 6) + CHR(13) + CHR(10)
+                                        ENDIF
+                                    ENDSCAN
+                                    SELECT TmpRel
+                                ENDIF
+
+                                THIS.this_cDetalhe = THIS.this_cDetalhe + ;
+                                    IIF(!EMPTY(THIS.this_cDetalheP), ;
+                                        PADC(THIS.this_cDetalheP, THIS.this_nMaxCols), "")
+
+                                INSERT INTO TmpRelat ;
+                                    (Numes, Tipo, TITULO, LINHA, LINHANEG, CDETALHE, ;
+                                     IDETALHE, IDETALHED, IDETALHEO, FINALIZA, ;
+                                     DESCR, OBSI, IDETALHER, Imagem, Barras, ImpCabBar) ;
+                                VALUES (loc_pNum, 1, THIS.this_cTitul, THIS.this_cCabec, ;
+                                    THIS.this_cCabecN, THIS.this_cCabGrade, ;
+                                    THIS.this_cDetalhe, THIS.this_cDetalheD, ;
+                                    THIS.this_cDetalheO, THIS.this_cFinal, ;
+                                    CrTmpDcOpe.DckDESCR, ;
+                                    IIF(CrTmpDcOpe.DckOBSI=1 OR CrTmpDcOpe.Dckdsccps=1, 1, 0), ;
+                                    THIS.this_cDetalheR, loc_lcArquivo, loc_lcBar, loc_llBar)
+                            ENDSCAN
+
+                            *-- Totalizar quantidades e pesos
+                            loc_lnTotQtds = 0
+                            loc_lnTotPess = 0
+                            SELECT TmpRel
+                            SCAN
+                                loc_lnTotQtds = loc_lnTotQtds + IIF(TmpRel.Opers = "E", -1, 1) * TmpRel.Qtds
+                                IF loc_pAgrupa AND TYPE("TmpRel.nTotal") = "N" AND TmpRel.nTotal > 1
+                                    loc_lnTotPess = loc_lnTotPess + ROUND(IIF(TmpRel.Opers="E",-1,1) * TmpRel.Pesos, 2)
+                                ELSE
+                                    loc_lnTotPess = loc_lnTotPess + ROUND(IIF(TmpRel.Opers="E",-1,1) * TmpRel.Pesos * ;
+                                        IIF(CrTmpOpe.QtdPesos=1 AND EMPTY(TmpRel.CodBarras), TmpRel.Qtds, 1), 2)
+                                ENDIF
+                            ENDSCAN
+                            loc_lnTotQtds = ABS(loc_lnTotQtds)
+                            loc_lnTotPess = ABS(loc_lnTotPess)
+
+                            *-- Inserir linha de totais se necessario
+                            SELECT TmpRel
+                            GO TOP
+                            IF !EOF() AND (CrTmpDcOpe.DckQtd = 1 OR CrTmpDcOpe.DckPeso = 1)
+                                loc_lnX = IIF(CrTmpDcOpe.DckItem=1, loc_lnDocItem, 0)
+                                loc_lnX = loc_lnX + IIF(CrTmpDcOpe.DckCbar=1, loc_lnDocBarra, 0)
+                                loc_lnX = loc_lnX + IIF(CrTmpDcOpe.DckSubN=1 AND THIS.this_lTemSubN, 13, 0)
+                                loc_lnX = loc_lnX + IIF(THIS.this_nTamCabGradeP < THIS.this_nMaxCols, ;
+                                    INT((THIS.this_nMaxCols - THIS.this_nTamCabGradeP) / 2), 0)
+
+                                THIS.this_cDetalhe = PADL(IIF(loc_lnX > 9, "Totais -> ", "T: "), loc_lnX) + ;
+                                    IIF(CrTmpDcOpe.DckQtd=1, ;
+                                        PADC(ALLTRIM(TRANSFORM(loc_lnTotQtds,"99,999.99")), loc_lnDocQtd-1) + " ", "") + ;
+                                    IIF(CrTmpDcOpe.DckPeso=1, ;
+                                        PADC(ALLTRIM(TRANSFORM(loc_lnTotPess,"99,999.99")), loc_lnDocPeso-1), "")
+
+                                loc_llBar = (CrTmpDcOpe.DckBarra = 1)
+                                loc_lcBar = fAltBar2de5(PADL(TmpRel.NDopes, 4, "0") + PADL(TmpRel.Numes, 6, "0"))
+
+                                INSERT INTO TmpRelat ;
+                                    (Numes, TIPO, TITULO, LINHA, LINHANEG, CDETALHE, ;
+                                     IDETALHE, IDETALHED, IDETALHEO, FINALIZA, ;
+                                     DESCR, OBSI, Barras, ImpCabBar) ;
+                                VALUES (loc_pNum, 1, THIS.this_cTitul, THIS.this_cCabec, ;
+                                    THIS.this_cCabecN, THIS.this_cCabGrade, ;
+                                    THIS.this_cDetalhe, "", "", THIS.this_cFinal, ;
+                                    CrTmpDcOpe.DckDESCR, 9, loc_lcBar, loc_llBar)
+
+                                THIS.this_cDetalhe  = ""
+                                THIS.this_cDetalheD = ""
+                                THIS.this_cDetalheO = ""
+                            ENDIF
+                        ENDIF
+
+                        *-- Rodape do documento
+                        THIS.this_cDetalhe  = ""
+                        THIS.this_cDetalheD = ""
+                        THIS.this_cDetalheO = ""
+                        THIS.this_cDetalheR = ""
+
+                        SELECT TmpRel
+                        GO TOP
+                        loc_llBar = (CrTmpDcOpe.DckBarra = 1)
+                        loc_lcBar = fAltBar2de5(PADL(TmpRel.NDopes, 4, "0") + PADL(TmpRel.Numes, 6, "0"))
+
+                        IF CrTmpDcOpe.DckResu = 1
+                            IF EMPTY(CrTmpOpe.CMoes) AND RECCOUNT("xtotite") > 0
+                                SELECT xtotite
+                                SCAN
+                                    IF CrTmpDcOpe.DckTota = 1
+                                        loc_lnQtd = IIF(CrTmpDcOpe.DckTabCv=1, ;
+                                            fStringChr(STR(xtotite.xtotal,12,2), CrTmpParac.fTabelas), ;
+                                            TRANSFORM(xtotite.xtotal, "999,999.99"))
+                                        THIS.this_cFinal = THIS.this_cFinal + ;
+                                            PADL(ALLTRIM(CrTmpDcOpe.DocTota), 13) + " " + ;
+                                            PADL(ALLTRIM(xtotite.xmoeda), 3, " ") + " : " + ;
+                                            loc_lnQtd + CHR(13) + CHR(10)
+                                    ENDIF
+                                ENDSCAN
+                                SELECT TmpRel
+                                IF CrTmpDcOpe.DckAcres = 1 AND TmpRel.valvars > 0
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        PADL(ALLTRIM(CrTmpDcOpe.DocAcres), 13) + " " + ;
+                                        PADL(ALLTRIM(CrTmpParam.Moedaps), 3, " ") + " : " + ;
+                                        TRANSFORM(IIF(ISNULL(TmpRel.vars), 0, TmpRel.vars), "99999.99") + "%" + ;
+                                        CHR(13) + CHR(10)
+                                ENDIF
+                                IF CrTmpDcOpe.DckDesco = 1 AND TmpRel.valvars < 0
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        PADL(ALLTRIM(CrTmpDcOpe.DocDesco), 13) + " " + ;
+                                        PADL(ALLTRIM(CrTmpParam.MoedaPs), 3, " ") + " : " + ;
+                                        TRANSFORM(IIF(ISNULL(TmpRel.vars), 0, TmpRel.vars), "99999.99") + "%" + ;
+                                        CHR(13) + CHR(10)
+                                ENDIF
+                                IF CrTmpDcOpe.DckEnca = 1 AND TmpRel.ValEncs # 0
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        PADL(ALLTRIM(CrTmpDcOpe.DocEnca), 13) + "    " + " : " + ;
+                                        TRANSFORM((TmpRel.ValEncs / TmpRel.Valinis * 100), "9999.99") + "%" + ;
+                                        CHR(13) + CHR(10)
+                                ENDIF
+                                IF CrTmpDcOpe.DckNite = 1 AND THIS.this_nXitm > 0
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        PADL(ALLTRIM(CrTmpDcOpe.DocNite), 17) + " : " + ;
+                                        STR(THIS.this_nXitm, 6) + CHR(13) + CHR(10)
+                                ENDIF
+                                IF CrTmpDcOpe.Dckprze = 1
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        PADL(ALLTRIM(CrTmpDcOpe.DocPrze), 17) + " : " + ;
+                                        NVL(DTOC(TmpRel.prazoents), "") + CHR(13) + CHR(10)
+                                ENDIF
+                                SELECT TmpRel
+                            ELSE
+                                THIS.Finaliza(loc_pDev, THIS.this_nMaxCols, loc_lnTotQtds)
+                            ENDIF
+                        ENDIF
+
+                        *-- Pagamentos
+                        IF CrTmpDcOpe.DckPaga = 1
+                            SELECT TmpPag
+                            GO TOP
+                            IF !EOF()
+                                IF CrTmpDcOpe.DckPag = 1
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        "=============" + CHR(13) + CHR(10) + ;
+                                        PADC(ALLTRIM(CrTmpDcOpe.DocPag), 13) + CHR(13) + CHR(10) + ;
+                                        "=============" + CHR(13) + CHR(10)
+                                ENDIF
+                                SCAN
+                                    THIS.this_cFinal = THIS.this_cFinal + TmpPag.fpags + " " + ;
+                                        IIF(EMPTY(TmpPag.numeros), TmpPag.cartaos + " ", ;
+                                            TmpPag.bancos + "." + TmpPag.contas + "." + TmpPag.numeros) + " " + ;
+                                        NVL(DTOC(TmpPag.vencs), "") + " " + ;
+                                        TRANSFORM(TmpPag.valos, "999,999.99") + CHR(13) + CHR(10)
+                                ENDSCAN
+                            ENDIF
+                            SELECT TmpRel
+                        ENDIF
+
+                        *-- Observacoes gerais
+                        IF CrTmpDcOpe.DckObsg = 1
+                            THIS.this_cFinal = THIS.this_cFinal + CHR(13) + CHR(10)
+                            IF !EMPTY(CrTmpDcOpe.DocObsg)
+                                THIS.this_cFinal = THIS.this_cFinal + ALLTRIM(CrTmpDcOpe.DocObsg) + " : "
+                            ENDIF
+                            IF CrTmpDcOpe.DckObsC = 1
+                                THIS.this_cFinal = THIS.this_cFinal + ;
+                                    CHR(13) + CHR(10) + ALLTRIM(NVL(TmpRel.Obses, "")) + CHR(13) + CHR(10)
+                            ELSE
+                                THIS.this_cFinal = THIS.this_cFinal + NVL(CrTmpDcOpe.ObsResu, "") + CHR(13) + CHR(10)
+                            ENDIF
+                        ENDIF
+
+                        *-- Resumo de itens compostos
+                        IF CrTmpDcOpe.DckRite = 1
+                            THIS.this_cFinal = THIS.this_cFinal + CHR(13) + CHR(10)
+                            SELECT Cmats, Cunis, SUM(Qtds) AS Qtds, SUM(QtScons) AS QtScons ;
+                                FROM TmpResIte GROUP BY 1, 2 INTO CURSOR TmpResumo
+                            SELECT TmpResumo
+                            GO TOP
+                            IF !EOF()
+                                THIS.this_cFinal = THIS.this_cFinal + ;
+                                    "======[ Resumo de Itens ] =======" + CHR(13) + CHR(10) + ;
+                                    "Componente Quantidade Uni Consumo" + CHR(13) + CHR(10) + ;
+                                    "========== ========== === =======" + CHR(13) + CHR(10)
+                                SCAN
+                                    THIS.this_cFinal = THIS.this_cFinal + ;
+                                        TmpResumo.cmats + " " + ;
+                                        TRANSFORM(TmpResumo.Qtds, "99,999.999") + " " + ;
+                                        TmpResumo.Cunis + TRANSFORM(TmpResumo.QtsCons, "999999") + ;
+                                        CHR(13) + CHR(10)
+                                ENDSCAN
+                            ENDIF
+                        ENDIF
+
+                        *-- Email para os contatos do documento
+                        loc_lcEmail = ""
+                        SELECT CrTprMvCab
+                        IF !EMPTY(CrTprMvCab.ContaOs)
+                            THIS.CursorQuery("SigCdCli", "CrTmpCli", "Iclis", CrTprMvCab.ContaOs, "Emails")
+                            SELECT CrTmpCli
+                            IF !EMPTY(CrTmpCli.Emails)
+                                loc_lcEmail = ALLTRIM(CrTmpCli.Emails) + ";"
+                            ENDIF
+                        ENDIF
+                        IF !EMPTY(CrTprMvCab.ContaDs)
+                            THIS.CursorQuery("SigCdCli", "CrTmpCli", "Iclis", CrTprMvCab.ContaDs, "Emails")
+                            SELECT CrTmpCli
+                            IF !EMPTY(CrTmpCli.Emails)
+                                loc_lcEmail = loc_lcEmail + ALLTRIM(CrTmpCli.Emails)
+                            ENDIF
+                        ENDIF
+
+                        *-- Inserir registro final do documento no TmpRelat
+                        INSERT INTO TmpRelat ;
+                            (Numes, TIPO, TITULO, LINHA, LINHANEG, CDETALHE, ;
+                             IDETALHE, IDETALHED, IDETALHEO, FINALIZA, ;
+                             DESCR, OBSI, Barras, ImpCabBar) ;
+                        VALUES (loc_pNum, 1, THIS.this_cTitul, THIS.this_cCabec, ;
+                            THIS.this_cCabecN, THIS.this_cCabGrade, ;
+                            THIS.this_cDetalhe, THIS.this_cDetalheD, THIS.this_cDetalheO, ;
+                            THIS.this_cFinal, CrTmpDcOpe.DckDESCR, CrTmpDcOpe.DckOBSI, ;
+                            loc_lcBar, loc_llBar)
+
+                        SET MemoWidth TO (THIS.this_nMaxCols)
+                    ENDSCAN
+                ENDSCAN
+            ENDIF
+
+            IF loc_lContinuar
+                SET MemoWidth TO loc_nOldMemoWidth
+                SELECT TmpRelat
+                GO TOP
+                loc_lSucesso = .T.
+            ELSE
+                SET MemoWidth TO loc_nOldMemoWidth
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em PrepararDados")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Cabecalho - Monta texto do cabecalho de cada documento
+    * par_nMaxCols: largura maxima da linha (normalmente 100)
+    *--------------------------------------------------------------------------
+    PROCEDURE Cabecalho(par_nMaxCols)
+        LOCAL loc_lcCpf, loc_lnLinha, loc_lcSubNivel
+
+        SELECT TmpRel
+        GO TOP
+        THIS.this_cCabecN = ""
+        THIS.this_cCabec  = ""
+
+        IF CrTmpDcOpe.DckTit = 1
+            THIS.this_cTitul = ALLTRIM(CrTmpDcOpe.DocTit) + " : " + ;
+                TRANSFORM(TmpRel.Numes, "@L 999999") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckDig = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocDig), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + ALLTRIM(TmpRel.Usuars) + CHR(13) + CHR(10)
+        ENDIF
+
+        IF !EMPTY(TmpRel.GrVends + TmpRel.Vends) AND ;
+           CrTmpOpe.Vendes # 3 AND CrTmpDcOpe.DckVend = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocVend), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + ;
+                IIF(CrTmpDcOpe.DckGVend=1, ALLTRIM(TmpRel.GrVends) + " / ", "") + ;
+                ALLTRIM(TmpRel.Vends)
+            IF CrTmpDcOpe.Dcknvend = 1
+                THIS.CursorQuery("SigCdCli", "CrTmpCli", "Iclis", TmpRel.Vends)
+                THIS.this_cCabec = THIS.this_cCabec + " - " + PROPER(ALLTRIM(CrTmpCli.RClis))
+            ENDIF
+            THIS.this_cCabec = THIS.this_cCabec + CHR(13) + CHR(10)
+        ENDIF
+
+        IF !EMPTY(TmpRel.GrResps + TmpRel.Resps) AND ;
+           CrTmpOpe.ComisDivS # 2 AND CrTmpDcOpe.DckVend2 = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocVend2), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + ;
+                IIF(CrTmpDcOpe.DckGVen2=1, ALLTRIM(TmpRel.GrResps) + " / ", "") + ;
+                ALLTRIM(TmpRel.Resps)
+            IF CrTmpDcOpe.Dcknven2 = 1
+                THIS.CursorQuery("SigCdCli", "CrTmpCli", "Iclis", TmpRel.Resps)
+                THIS.this_cCabec = THIS.this_cCabec + " - " + PROPER(ALLTRIM(CrTmpCli.RClis))
+            ENDIF
+            THIS.this_cCabec = THIS.this_cCabec + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpOpe.Origems = 1 AND CrTmpDcOpe.DckOri = 1
+            THIS.CursorQuery("SigCdCli", "CrTmpCli",  "Iclis",   TmpRel.Contaos)
+            THIS.CursorQuery("SigCdGcr", "CrTmpGccr", "Codigos", TmpRel.Grupoos)
+            loc_lcCpf = ""
+            IF CrTmpGccr.TpCads = 1
+                loc_lcCpf = "       Cpf : " + ALLTRIM(CrTmpCli.Cpfs) + "  "
+            ENDIF
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocOrig), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + ;
+                IIF(CrTmpDcOpe.dckGOri=1, ALLTRIM(TmpRel.Grupoos) + " / ", "") + ALLTRIM(TmpRel.Contaos)
+            IF CrTmpDcOpe.DckNOri = 1
+                THIS.this_cCabec = THIS.this_cCabec + " - " + PROPER(ALLTRIM(CrTmpCli.RClis))
+            ENDIF
+            IF CrTmpDcOpe.DckFOri = 1
+                loc_lnLinha = RAT(CHR(10), THIS.this_cCabec)
+                loc_lnLinha = IIF(loc_lnLinha = 0, LEN(THIS.this_cCabec), LEN(THIS.this_cCabec) - loc_lnLinha)
+                IF loc_lnLinha + LEN(loc_lcCpf) > par_nMaxCols
+                    THIS.this_cCabecN = THIS.this_cCabecN + CHR(13) + CHR(10)
+                    THIS.this_cCabec  = THIS.this_cCabec + CHR(13) + CHR(10) + ALLTRIM(loc_lcCpf)
+                ELSE
+                    THIS.this_cCabec = THIS.this_cCabec + loc_lcCpf
+                ENDIF
+            ENDIF
+            THIS.this_cCabec = THIS.this_cCabec + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpOpe.Destinos = 1 AND CrTmpDcOpe.DckDest = 1
+            THIS.CursorQuery("SigCdCli", "CrTmpCli",  "Iclis",   TmpRel.Contads)
+            THIS.CursorQuery("SigCdGcr", "CrTmpGccr", "Codigos", TmpRel.Grupods)
+            loc_lcCpf = ""
+            IF CrTmpGccr.TpCads = 1
+                loc_lcCpf = "       Cpf : " + ALLTRIM(CrTmpCli.Cpfs) + "  "
+            ENDIF
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocDest), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + ;
+                IIF(CrTmpDcOpe.dckgDest=1, ALLTRIM(TmpRel.Grupods) + " / ", "") + ALLTRIM(TmpRel.Contads)
+            IF CrTmpDcOpe.DckNDest = 1
+                THIS.this_cCabec = THIS.this_cCabec + " - " + PROPER(ALLTRIM(CrTmpCli.RClis))
+            ENDIF
+            IF CrTmpDcOpe.DckFDest = 1
+                loc_lnLinha = RAT(CHR(10), THIS.this_cCabec)
+                loc_lnLinha = IIF(loc_lnLinha = 0, LEN(THIS.this_cCabec), LEN(THIS.this_cCabec) - loc_lnLinha)
+                IF loc_lnLinha + LEN(loc_lcCpf) > par_nMaxCols
+                    THIS.this_cCabecN = THIS.this_cCabecN + CHR(13) + CHR(10)
+                    THIS.this_cCabec  = THIS.this_cCabec + CHR(13) + CHR(10) + ALLTRIM(loc_lcCpf)
+                ELSE
+                    THIS.this_cCabec = THIS.this_cCabec + loc_lcCpf
+                ENDIF
+            ENDIF
+            THIS.this_cCabec = THIS.this_cCabec + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckData = 1
+            LOCAL loc_lcOpcDef
+            loc_lcOpcDef = SET("date")
+            IF CrTmpDcOpe.OpcData = 2
+                SET DATE TO AMERICAN
+            ELSE
+                SET DATE TO BRITISH
+            ENDIF
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocData), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + NVL(DTOC(TmpRel.Datas), "") + CHR(13) + CHR(10)
+            SET DATE TO &loc_lcOpcDef
+        ENDIF
+
+        IF CrTmpDcOpe.DckHora = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocHora), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + LEFT(TIME(), 5) + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckTDesc = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocTDesc), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + TmpRel.tabds + ;
+                IIF(CrTmpDcOpe.DckpDesc=1, "(" + TRANSFORM(TmpRel.Descos, "@Z 9999.99%") + ")", "") + ;
+                CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckLpre = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocLpre), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + TmpRel.lprecos + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckNf = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocNf), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + TmpRel.Notac + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckObs = 1
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocObs), 13) + " : " + CHR(13) + CHR(10)
+            IF !EMPTY(ALLTRIM(CrTmpDcOpe.ObsCab))
+                THIS.this_cCabec = THIS.this_cCabec + ALLTRIM(CrTmpDcOpe.ObsCab) + CHR(13) + CHR(10)
+            ENDIF
+            IF !EMPTY(ALLTRIM(TmpRel.Obses))
+                THIS.this_cCabec = THIS.this_cCabec + ALLTRIM(TmpRel.Obses)
+            ENDIF
+            THIS.this_cCabec = THIS.this_cCabec + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckEmpDs = 1 AND CrTmpOpe.Transs = 1 AND !EMPTY(TmpRel.EmpDs)
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocEmpDs), 13) + " : " + CHR(13) + CHR(10)
+            THIS.this_cCabec = THIS.this_cCabec + TmpRel.EmpDs + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckSubn = 1 AND THIS.this_lTemSubN
+            THIS.this_cCabecN = THIS.this_cCabecN + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocSubn), 13) + " : " + CHR(13) + CHR(10)
+            SELECT TmpEstPe
+            GO TOP
+            loc_lcSubNivel = TmpEstPe.cDopes
+            THIS.this_cCabec = THIS.this_cCabec + ;
+                IIF(CrTmpOpe.SubNs=4 AND !EMPTY(TmpEstPe.cAbrevs), ALLTRIM(TmpEstPe.cAbrevs) + "-", "") + ;
+                ALLTRIM(loc_lcSubNivel) + " ( "
+            SCAN
+                IF TmpEstPe.cDopes # loc_lcSubNivel
+                    loc_lcSubNivel = TmpEstPe.cDopes
+                    THIS.this_cCabec = THIS.this_cCabec + " ) " + ;
+                        IIF(CrTmpOpe.SubNs=4 AND !EMPTY(TmpEstPe.cAbrevs), ;
+                            ALLTRIM(TmpEstPe.cAbrevs) + "-", "") + ;
+                        ALLTRIM(loc_lcSubNivel) + " ( "
+                ENDIF
+                LOCAL loc_lcCod2
+                loc_lcCod2 = fGerMascara(VAL(RIGHT(STR(TmpEstPe.Codigos, 10), 6)))
+                THIS.this_cCabec = THIS.this_cCabec + ALLTRIM(loc_lcCod2) + " "
+            ENDSCAN
+            THIS.this_cCabec = THIS.this_cCabec + " )" + CHR(13) + CHR(10)
+            SELECT TmpRel
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Finaliza - Monta texto do rodape/totais do documento
+    * par_nDev      : valor de devolucao
+    * par_nMaxCols  : largura da linha
+    * par_nTotQtds  : total de quantidades
+    *--------------------------------------------------------------------------
+    PROCEDURE Finaliza(par_nDev, par_nMaxCols, par_nTotQtds)
+        LOCAL loc_lnNlTotIte, loc_lnNlTotPar, loc_lnCotaIte, loc_lnCotaOpe
+        LOCAL loc_lnValIte, loc_lnValPar
+
+        IF !BOF()
+            SKIP -1
+        ENDIF
+
+        IF CrTmpDcOpe.DckSubt = 1
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocSubt), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(IIF(THIS.this_lXvlrNull, TmpRel.ValInis, THIS.this_nXvlr), "999,999.99") + ;
+                CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckDevo = 1 AND par_nDev # 0
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocDevo), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(IIF(ISNULL(par_nDev), 0, par_nDev), "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckEnca = 1 AND TmpRel.ValEncs # 0
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocEnca), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(TmpRel.ValEncs, "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckAcres = 1 AND TmpRel.valvars > 0
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocAcres), 13) + " :  " + ;
+                TRANSFORM(IIF(ISNULL(TmpRel.vars), 0, TmpRel.vars), "9999.99") + "%  " + ;
+                TRANSFORM(IIF(ISNULL(TmpRel.valvars), 0, TmpRel.valvars), "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckDesco = 1 AND TmpRel.valvars < 0
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocDesco), 13) + " :  " + ;
+                TRANSFORM(IIF(ISNULL(TmpRel.vars), 0, TmpRel.vars), "9999.99") + "%  " + ;
+                TRANSFORM(IIF(ISNULL(TmpRel.valvars), 0, TmpRel.valvars), "999,999.99") + CHR(13)
+        ENDIF
+
+        IF CrTmpDcOpe.DckSubt=1 OR CrTmpDcOpe.DckDevo=1 OR ;
+           CrTmpDcOpe.DckEnca=1 OR CrTmpDcOpe.DckAcres=1 OR CrTmpDcOpe.DckDesco=1
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                SPACE(15) + REPLICATE(CHR(45), 22) + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckTota = 1
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocTota), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(IIF(THIS.this_lXvlrNull OR THIS.this_nXvlr=0, TmpRel.Valos, THIS.this_nXvlr) - ;
+                    par_nDev + TmpRel.valvars + TmpRel.ValEncs, "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckImpIte = 1
+            loc_lnNlTotIte = 0
+            SELECT TmpRel
+            GO TOP
+            IF SEEK(TmpRel.Dopes, "CrTmpOpe", "DOPES")
+                IF !EMPTY(CrTmpOpe.cmoes)
+                    SUM IIF(TmpRel.Opers="E",-1,1) * (TmpRel.Qtds * TmpRel.Units) TO loc_lnNlTotIte
+                    loc_lnNlTotIte = ABS(loc_lnNlTotIte)
+                ELSE
+                    SELECT TmpRel
+                    SCAN
+                        loc_lnCotaIte = fBuscarCotacao(TmpRel.Moedas, TmpRel.Datas, .NULL.)
+                        loc_lnValIte  = ROUND(TmpPag.Valos * loc_lnCotaIte, 2)
+                        loc_lnNlTotIte = loc_lnNlTotIte + loc_lnValIte
+                    ENDSCAN
+                ENDIF
+            ENDIF
+            SELECT TmpRel
+            GO TOP
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocImpIte), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(loc_lnNlTotIte, "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckImpPar = 1
+            SELECT TmpRel
+            GO TOP
+            loc_lnNlTotPar = 0
+            IF SEEK(TmpRel.Dopes, "CrTmpOpe", "DOPES")
+                loc_lnCotaOpe = IIF(EMPTY(CrTmpOpe.cmoes), 1, fBuscarCotacao(CrTmpOpe.cmoes, TmpRel.Datas, .NULL.))
+                SELECT TmpPag
+                SCAN
+                    loc_lnValPar = ROUND(TmpPag.Valos * TmpPag.cotfPgs / loc_lnCotaOpe, 2)
+                    loc_lnNlTotPar = loc_lnNlTotPar + loc_lnValPar
+                ENDSCAN
+            ENDIF
+            SELECT TmpRel
+            GO TOP
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocImpPar), 13) + " : " + SPACE(11) + ;
+                TRANSFORM(loc_lnNlTotPar, "999,999.99") + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.DckNite = 1 AND THIS.this_nXitm > 0
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocNite), 13) + " : " + ;
+                ALLTRIM(STR(THIS.this_nXitm, 6)) + CHR(13) + CHR(10)
+        ENDIF
+
+        IF CrTmpDcOpe.Dckprze = 1
+            THIS.this_cFinal = THIS.this_cFinal + ;
+                PADL(ALLTRIM(CrTmpDcOpe.DocPrze), 13) + " : " + ;
+                NVL(DTOC(TmpRel.prazoents), "") + CHR(13) + CHR(10)
+        ENDIF
+
+        THIS.this_cFinal = THIS.this_cFinal + CHR(10) + CHR(13) + CHR(10)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MontaCabGrade - Acumula texto no cabecalho do grid de itens
+    * par_cTexto: texto da coluna
+    * par_nTam  : largura da coluna
+    *--------------------------------------------------------------------------
+    PROCEDURE MontaCabGrade(par_cTexto, par_nTam)
+        IF THIS.this_nTamLinha + par_nTam > THIS.this_nMaxCols
+            THIS.this_nTamLinha = 0
+            THIS.this_cCabGrade = THIS.this_cCabGrade + ;
+                PADC(THIS.this_cCabGradeP, THIS.this_nMaxCols) + CHR(13) + CHR(10)
+            IF THIS.this_nDeslObsi = -1
+                THIS.this_nDeslObsi = INT((THIS.this_nMaxCols - LEN(THIS.this_cCabGradeP)) / 2)
+            ENDIF
+            IF THIS.this_nTamCabGradeP = 0
+                THIS.this_nTamCabGradeP = LEN(THIS.this_cCabGradeP)
+            ENDIF
+            THIS.this_cCabGradeP = ""
+        ENDIF
+        THIS.this_nTamLinha = THIS.this_nTamLinha + par_nTam
+        THIS.this_cCabGradeP = THIS.this_cCabGradeP + PADC(ALLTRIM(par_cTexto), par_nTam - 1) + " "
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MontaDetalhe - Acumula texto na linha de detalhe do item
+    * par_cTexto  : texto a incluir
+    * par_nTam    : largura do campo
+    * par_cTpAlign: alinhamento "R"=direita, "L"=esquerda, "N"=numerico, outro=centro
+    *--------------------------------------------------------------------------
+    PROCEDURE MontaDetalhe(par_cTexto, par_nTam, par_cTpAlign)
+        IF THIS.this_nTamLinha + par_nTam > THIS.this_nMaxCols
+            THIS.this_nTamLinha = 0
+            THIS.this_cDetalhe = THIS.this_cDetalhe + ;
+                PADC(THIS.this_cDetalheP, THIS.this_nMaxCols) + CHR(13) + CHR(10)
+            THIS.this_cDetalheP = ""
+        ENDIF
+        THIS.this_nTamLinha = THIS.this_nTamLinha + par_nTam
+        DO CASE
+            CASE VARTYPE(par_cTpAlign) = "C" AND par_cTpAlign = "R"
+                THIS.this_cDetalheP = THIS.this_cDetalheP + PADL(ALLTRIM(par_cTexto), par_nTam-1) + " "
+            CASE VARTYPE(par_cTpAlign) = "C" AND par_cTpAlign = "L"
+                THIS.this_cDetalheP = THIS.this_cDetalheP + PADR(ALLTRIM(par_cTexto), par_nTam-1) + " "
+            CASE VARTYPE(par_cTpAlign) = "C" AND par_cTpAlign = "N"
+                THIS.this_cDetalheP = THIS.this_cDetalheP + PADR(par_cTexto, par_nTam)
+            OTHERWISE
+                THIS.this_cDetalheP = THIS.this_cDetalheP + PADC(ALLTRIM(par_cTexto), par_nTam-1) + " "
+        ENDCASE
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarEmpresas - Carrega cursor de empresas para selecao no grid
+    * Retorna .T. se sucesso
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarEmpresas()
+        LOCAL loc_lSucesso, loc_lcQuery, loc_nResult, loc_oErro, loc_cCursor
+
+        loc_lSucesso = .F.
+        loc_cCursor  = THIS.this_cCursorEmpresas
+
+        TRY
+            IF USED("cursor_4c_EmpsT")
+                USE IN cursor_4c_EmpsT
+            ENDIF
+            IF USED(loc_cCursor)
+                USE IN (loc_cCursor)
+            ENDIF
+
+            loc_lcQuery = "Select 0 as Marca, cEmps, Razas From SigCdEmp"
+            loc_nResult = SQLEXEC(gnConnHandle, loc_lcQuery, "cursor_4c_EmpsT")
+
+            IF loc_nResult < 1
+                THIS.this_cMensagemErro = "Falha ao carregar SigCdEmp"
+            ELSE
+                SELECT * FROM cursor_4c_EmpsT WHERE 1 = 0 ;
+                    INTO CURSOR (loc_cCursor) READWRITE
+
+                SELECT cursor_4c_EmpsT
+                SCAN
+                    SCATTER MEMO MEMVAR
+                    INSERT INTO (loc_cCursor) FROM MEMVAR
+                ENDSCAN
+
+                SELECT (loc_cCursor)
+                INDEX ON cEmps TAG Emps
+                INDEX ON Razas TAG Razas
+                GO TOP
+
+                USE IN cursor_4c_EmpsT
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao carregar empresas")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarOperacao - Valida codigo de operacao e carrega Ndopes/ChkImpDoc
+    * par_cDopes: codigo da operacao a validar
+    * Retorna .T. se operacao valida
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarOperacao(par_cDopes)
+        LOCAL loc_lSucesso, loc_lcQuery, loc_oErro
+
+        loc_lSucesso = .F.
+        THIS.this_nNdopes    = 0
+        THIS.this_nChkImpDoc = 0
+
+        TRY
+            IF !EMPTY(par_cDopes)
+                loc_lcQuery = "Select a.Ndopes, b.chkImpDoc" + ;
+                    " From SigCdOpe a, SigOpCdc b" + ;
+                    " Where a.Dopes = " + EscaparSQL(ALLTRIM(par_cDopes)) + ;
+                    " And b.Dopes = a.Dopes"
+
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdOpeD") > 0
+                    SELECT crSigCdOpeD
+                    GO TOP
+                    THIS.this_nNdopes    = crSigCdOpeD.Ndopes
+                    THIS.this_nChkImpDoc = crSigCdOpeD.chkImpDoc
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada: " + par_cDopes
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao validar opera" + CHR(231) + CHR(227) + "o")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Prepara dados e envia para impressora sem dialogo
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                SELECT TmpRelat
+                GO TOP
+                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao imprimir documento")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirComDialog - Prepara dados e exibe dialogo de impressao
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirComDialog()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                SELECT TmpRelat
+                GO TOP
+                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao imprimir documento")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Prepara dados e exibe preview em tela
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                SELECT TmpRelat
+                GO TOP
+                REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ao visualizar documento")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna ultima mensagem de erro
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CursorQuery - Helper: SELECT de registros de uma tabela por campo=valor
+    * par_cTabela : tabela SQL Server
+    * par_cCursor : nome do cursor de destino
+    * par_cCampo  : campo de filtro (WHERE campo = valor)
+    * par_cValor  : valor do filtro (character)
+    * par_cCampos : campos a selecionar (opcional, default = *)
+    *--------------------------------------------------------------------------
+    FUNCTION CursorQuery(par_cTabela, par_cCursor, par_cCampo, par_cValor, par_cCampos)
+        LOCAL loc_cSQL, loc_nResult, loc_cCamposSQL
+
+        loc_cCamposSQL = IIF(VARTYPE(par_cCampos) = "C" AND !EMPTY(par_cCampos), par_cCampos, "*")
+        loc_cSQL = "SELECT " + loc_cCamposSQL + " FROM " + par_cTabela + ;
+                   " WHERE " + par_cCampo + " = " + EscaparSQL(ALLTRIM(par_cValor))
+
+        IF USED(par_cCursor)
+            USE IN (par_cCursor)
+        ENDIF
+
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, par_cCursor)
+        IF loc_nResult > 0
+            SELECT (par_cCursor)
+            GO TOP
+        ENDIF
+        RETURN loc_nResult > 0
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Retorna chave logica da execucao do relatorio
+    * Composto por: operacao + periodo + numero inicial/final
+    * Usado por RegistrarAuditoria para identificar a execucao no log
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        LOCAL loc_cChave, loc_cDtIni, loc_cDtFim
+        loc_cDtIni = IIF(EMPTY(THIS.this_dDtInicial), SPACE(8), DTOS(THIS.this_dDtInicial))
+        loc_cDtFim = IIF(EMPTY(THIS.this_dDtFinal), SPACE(8), DTOS(THIS.this_dDtFinal))
+        loc_cChave = ALLTRIM(THIS.this_cDopes) + "|" + loc_cDtIni + "|" + loc_cDtFim + "|" + ;
+                     ALLTRIM(STR(THIS.this_nOperacaoI, 6)) + "|" + ALLTRIM(STR(THIS.this_nOperacaoF, 6))
+        RETURN loc_cChave
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * RegistrarAuditoria - Registra execucao do relatorio em LogAuditoria
+    * par_cOperacao: "IMPRIMIR" / "VISUALIZAR" / "EXCEL"
+    *--------------------------------------------------------------------------
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+        LOCAL loc_lSucesso, loc_oErro, loc_cSQL, loc_cChave, loc_cUsuario, loc_cEmpresa
+        loc_lSucesso = .F.
+        TRY
+            loc_cChave    = THIS.ObterChavePrimaria()
+            loc_cUsuario  = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "")
+            loc_cEmpresa  = ""
+            IF TYPE("go_4c_Sistema") = "O" AND !ISNULL(go_4c_Sistema)
+                loc_cEmpresa = go_4c_Sistema.cCodEmpresa
+            ENDIF
+
+            loc_cSQL = "INSERT INTO LogAuditoria (DataHora, Usuario, Empresa, Tabela, ChavePrimaria, Operacao)" + ;
+                       " VALUES (" + FormatarDataSQL(DATETIME()) + ", " + ;
+                       EscaparSQL(loc_cUsuario) + ", " + EscaparSQL(loc_cEmpresa) + ", " + ;
+                       EscaparSQL(THIS.this_cTabela) + ", " + EscaparSQL(loc_cChave) + ", " + ;
+                       EscaparSQL(par_cOperacao) + ")"
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Falha em auditoria nao deve abortar a execucao do relatorio
+            loc_lSucesso = .F.
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Restaura filtros do relatorio a partir de um cursor
+    * par_cAliasCursor: alias do cursor contendo filtros salvos previamente
+    * Util para reexecutar o relatorio com os ultimos filtros usados
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF VARTYPE(par_cAliasCursor) != "C" OR EMPTY(par_cAliasCursor) OR !USED(par_cAliasCursor)
+                THIS.this_cMensagemErro = "Cursor de filtros n" + CHR(227) + "o disponivel"
+                loc_lSucesso = .F.
+            ENDIF
+
+            SELECT (par_cAliasCursor)
+
+            IF TYPE(par_cAliasCursor + ".Dopes") != "U"
+                THIS.this_cDopes = TratarNulo(Dopes, "C")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".DtInicial") != "U"
+                THIS.this_dDtInicial = TratarNulo(DtInicial, "D")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".DtFinal") != "U"
+                THIS.this_dDtFinal = TratarNulo(DtFinal, "D")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".OperacaoI") != "U"
+                THIS.this_nOperacaoI = TratarNulo(OperacaoI, "N")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".OperacaoF") != "U"
+                THIS.this_nOperacaoF = TratarNulo(OperacaoF, "N")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".Reimp") != "U"
+                THIS.this_nReimp = TratarNulo(Reimp, "N")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".Agrupa") != "U"
+                THIS.this_nAgrupa = TratarNulo(Agrupa, "N")
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".Imagem") != "U"
+                IF VARTYPE(Imagem) = "N"
+                    IF VARTYPE(Imagem) = "L"
+                        THIS.this_lImagem = Imagem
+                    ELSE
+                        IF VARTYPE(Imagem) = "L"
+                            THIS.this_lImagem = Imagem
+                        ELSE
+                            THIS.this_lImagem = (NVL(Imagem, 0) = 1)
+                        ENDIF
+                    ENDIF
+                ELSE
+                    THIS.this_lImagem = NVL(Imagem, .F.)
+                ENDIF
+            ENDIF
+            IF TYPE(par_cAliasCursor + ".ItensPendentes") != "U"
+                IF VARTYPE(ItensPendentes) = "N"
+                    IF VARTYPE(ItensPendentes) = "L"
+                        THIS.this_lItensPendentes = ItensPendentes
+                    ELSE
+                        IF VARTYPE(ItensPendentes) = "L"
+                            THIS.this_lItensPendentes = ItensPendentes
+                        ELSE
+                            THIS.this_lItensPendentes = (NVL(ItensPendentes, 0) = 1)
+                        ENDIF
+                    ENDIF
+                ELSE
+                    THIS.this_lItensPendentes = NVL(ItensPendentes, .F.)
+                ENDIF
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = "Erro ao carregar filtros: " + loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - Nao aplicavel a relatorios
+    * Sobrescrita defensiva para impedir uso indevido por callers genericos
+    * Relatorios nao gravam registros - usar Imprimir() / Visualizar()
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o de inclus" + CHR(227) + ;
+            "o n" + CHR(227) + "o se aplica a relat" + CHR(243) + "rios. " + ;
+            "Utilize Imprimir() ou Visualizar() para executar o relat" + CHR(243) + "rio."
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Nao aplicavel a relatorios
+    * Sobrescrita defensiva para impedir uso indevido por callers genericos
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o de atualiza" + CHR(231) + CHR(227) + ;
+            "o n" + CHR(227) + "o se aplica a relat" + CHR(243) + "rios. " + ;
+            "Utilize Imprimir() ou Visualizar() para executar o relat" + CHR(243) + "rio."
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera recursos
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        THIS.this_oDataAccess = .NULL.
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE
+

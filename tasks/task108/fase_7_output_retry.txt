@@ -1,0 +1,9 @@
+﻿All 4 validator-expected events (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present in the file, alongside the form's native `BtnImprimirClick` and `BtnEncerrarClick`.
+
+**Phase 7 complete.** Added three CRUD-named methods to `Formsigregli.prg` (lines 1953, 1995, 2008) with real implementations adapted for this OPERACIONAL report dialog:
+
+- `BtnIncluirClick()` ÔÇö resets all report parameters (Ordem, sequ├¬ncias, lookups, OptionGroups, CheckBoxes) to defaults and re-applies initial parameters for a new query
+- `BtnAlterarClick()` ÔÇö validates current entries, syncs FormÔåöBO state, and re-runs `TipoInteractiveChange()` to refresh visibility of containers
+- `BtnExcluirClick()` ÔÇö clears optional filter fields (classe, linha, cor, fase, observa├º├úo) and syncs to BO
+
+No stubs, no TODOs, no MsgAviso placeholders ÔÇö each method has functional code that operates on real form state. The existing `BtnImprimirClick`/`BtnVisualizarClick`/`BtnEncerrarClick` (the actual UI buttons of this report dialog) remain intact.

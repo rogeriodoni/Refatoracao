@@ -1,0 +1,209 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 3,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "From CrSigCdLpi Where Empty", "fUniqueIds", "fArredondamento"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRSLP",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "LParameters pcLPrecos\n\nWith ThisForm.GradeItens\n\n\t.RecordSource = ''\n\t\n\tlStrQuery = [Select 0 As lMarcas,a.* From SigCdLpi a ]+;\n\t\t\t\t[Where a.lprecos = ']+pcLPrecos+[' ]+;\n\t\t\t\t[Order By a.cpros ]\n\tIf ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CsSigCdLpi') < 1\n\t\tReturn(.F.)\n\tEndIf\n\n\tSelect CsSigCdLpi\n\tGo Top\n\t\n\t.RecordSource = 'CsSigCdLpi'\n\t.Column1.ControlSource = 'CsSigCdLpi.lMarcas'\n\t.Column2.ControlSource = 'CsSigCdLpi.cpros'\n\t.Column3.ControlSource = 'CsSigCdLpi.dpros'\n\t.Column4.Con... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "LParameters poForm, pcLPreco\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.ParentForm = poForm\n\nThisForm.GradeLista.RecordSource = ''\n\nlStrQuery = [Select * From SigCdLpc Where lprecos <> ']+pcLPreco+[' Order By lprecos ]\nIf ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CsSigCdLpc') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tThisForm.Release()\nEndIf\n\nWith ThisForm.GradeLista\n\t.RecordS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "SqlExecute,Release,MontaGrade2",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Wait Clear\n\nIf Used('CsSigCdLpc')\n\tUse In CsSigCdLpc\nEndIf\n\nIf Used('CsSigCdLpi')\n\tUse In CsSigCdLpi\nEndIf\n\nSelect CrSigCdLpi\nWith ThisForm.ParentForm\n\tWith .Pagina.Dados\n\t\t.Refresh\n\t\t.SetFocus\n\t\t.Grade.Column1.SetFocus\n\tEndWith\n\t.Enabled = .T.\nEndwith\n\n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.Command1",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Delete From CrSigCdLpi Where Empty(cpros)\n\nSelect CsSigCdLpi\nGo Top\nScan\n\tIf CsSigCdLpi.lMarcas = 1 And !Seek(CsSigCdLpi.cpros,'CrSigCdLpi','CPros')\n\t\tScatter MemVar\n\t\tm.lprecos   = CrSigCdLpc.lprecos\n\t\tm.cidchaves = fUniqueIds()\n\t\tm.vencis    = Nvl(m.vencis,{})\n\t\tm.vencfs    = Nvl(m.vencfs,{})\n\n\t\tIf (ThisForm.ParentForm.CompVenda <> [C])\n\t\t\tm.pvens = fArredondamento(m.pvens, ThisForm.ParentForm.poDataMgr)\n\t\tEndIf\n\t\tInsert Into CrSigCdLpi From MemVar\n\tEndIf\n\tSelect CsSigCdLpi\nEndScan\n\nThisForm.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From CrSigCdLpi Where Empty,fUniqueIds,fArredondamento",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.GradeLista",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nColIndex\n\nlcLPrec = CsSigCdLpc.lprecos\n\nIf !(ThisForm.MontaGrade2(lcLPrec))\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tThisForm.Release()\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "MontaGrade2,Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.GradeItens.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(CsSigCdLpi.lMarcas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.Sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.cmdSelTudo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdLpi\nReplace All lMarcas With 1\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSLP.CmdApgTudo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdLpi\nReplace All lMarcas With 0\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRSLP.Procedure",
+      "queryOriginal": "\tlStrQuery = [Select 0 As lMarcas,a.* From SigCdLpi a ]+; \t\t\t\t[Where a.lprecos = ']+pcLPrecos+[' ]+; \t\t\t\t[Order By a.cpros ]",
+      "tabelas": "SigCdLpi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSLP.Init",
+      "queryOriginal": "lStrQuery = [Select * From SigCdLpc Where lprecos <> ']+pcLPreco+[' Order By lprecos ] If ThisForm.ParentForm.poDataMgr.SqlExecute(lStrQuery,'CsSigCdLpc') < 1",
+      "tabelas": "SigCdLpc",
+      "colunas": "lprecos,SqlExecutelStrQuery,CsSigCdLpc",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSLP.Command1.Click",
+      "queryOriginal": "Delete From CrSigCdLpi Where Empty(cpros)",
+      "tabelas": "CrSigCdLpi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRSLP.Command1.Click",
+      "queryOriginal": "\t\tInsert Into CrSigCdLpi From MemVar",
+      "tabelas": "CrSigCdLpi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdLpi", "SigCdLpc", "CrSigCdLpi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

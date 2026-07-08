@@ -1,0 +1,19 @@
+﻿Arquivo criado com sucesso. Fase 3 entregue: `C:\4c\projeto\app\forms\relatorios\FormSIGREAUP.prg` (138 linhas).
+
+**O que foi implementado (completo e funcional):**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | Verifica conex├úo, cria SIGREAUPBO, configura UI, mostra form |
+| `ConfigurarCabecalho()` | Ô£à | cnt_4c_Cabecalho RGB(100,100,100) + lbl_4c_Titulo branco |
+| `ConfigurarBotoesRelatorio()` | Ô£à | cmg_4c_Botoes Left=527 (exato do original) com 4 buttons + BINDEVENTs |
+| `BtnVisualizarClick()` | Ô£à | Valida via BO.ValidarFiltros() + chama BO.Visualizar() |
+| `BtnImprimirClick()` | Ô£à | Valida + chama BO.Imprimir() |
+| `BtnDocumentoClick()` | Ô£à | Valida + chama BO.Documento() (impress├úo direta sem di├ílogo) |
+| `BtnSairClick()` | Ô£à | THIS.Release() |
+| `LimparCampos()` | Ô£à | Inicializa todas as propriedades do BO com defaults |
+| `Destroy()` | Ô£à | this_oRelatorio = .NULL. (libera cursores do BO via Destroy chain) |
+
+**Fases seguintes adicionar├úo via Edit:**
+- Fase 4-6: `ConfigurarCamposFiltro()` com todos os controles (datas, grupo, conta, envelope, c├│digo, ordem, checkbox) + `FormParaRelatorio()`
+- Fase 7-8: Handlers de KeyPress para lookups (Get_Grupo, Get_DGrupo, Get_conta, Get_dconta, Get_Codigo)

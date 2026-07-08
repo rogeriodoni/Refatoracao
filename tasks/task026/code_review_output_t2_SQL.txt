@@ -1,0 +1,40 @@
+﻿Verifica├º├úo completa. An├ílise dos dois problemas flagrados:
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] ICLIS ÔÇö FormSIGREADS.prg:1226
+
+```foxpro
+loc_cSQL = "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE Iclis = " + ;
+           EscaparSQL(loc_cCodigo)
+```
+
+**Contexto:** Procedure `ValidarVendedor` ÔÇö valida que o c├│digo digitado no campo `txt_4c_Vended` existe em `SigCdCli`.
+
+**Veredicto: FALSO POSITIVO.** `Iclis` ├® a chave prim├íria de `SigCdCli`. O join do relat├│rio original confirma: `a.Vends = c.Iclis`. A query de valida├º├úo de UI usa `WHERE Iclis = ...` para checar exist├¬ncia de um c├│digo digitado ÔÇö mesma l├│gica que o SCX original fazia com `SEEK(lcVend, "SigCdCli", "Iclis")`. **Remover destruiria a valida├º├úo.**
+
+---
+
+### [SQL-FILTRO-INVENTADO] CMOES ÔÇö FormSIGREADS.prg:1383 + SIGREADSBO.prg:106
+
+```foxpro
+loc_cSQL = "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
+           EscaparSQL(loc_cCodigo)
+```
+
+**Contexto:** Procedure `ValidarMoeda` (Form) e `CarregarParametrosPadrao` (BO) ÔÇö valida├º├úo da moeda digitada e busca da descri├º├úo da moeda padr├úo.
+
+**Veredicto: FALSO POSITIVO.** `CMoes` ├® a chave prim├íria de `SigCdMoe`. A query `SELECT TOP 1 ... WHERE CMoes = ...` ├® o equivalente SQL do `SEEK` do c├│digo legado. **Remover destruiria a valida├º├úo do campo moeda.**
+
+---
+
+## Conclus├úo
+
+Ambos os problemas s├úo **falsos positivos do scanner de code review**. O scanner comparou todos os WHEREs do c├│digo migrado contra as colunas do SQL principal do relat├│rio (`DOPES, NUMES, VALPRES, VALINIS, EMPDOPNUMS, CIDQUERYS, VENDS, OPERS, CEMPS, DATAS`) e flagrou as queries auxiliares de valida├º├úo de UI como "inventadas".
+
+Essas queries:
+- S├úo **lookups de valida├º├úo de input** (`ValidarVendedor`, `ValidarMoeda`), n├úo filtros do SQL do relat├│rio
+- O original usava `SEEK` em tabelas abertas localmente; o c├│digo migrado usa SQL ÔÇö implementa├º├úo diferente, mesma l├│gica
+- Remover os WHEREs retornaria registros aleat├│rios em vez do c├│digo digitado, quebrando a valida├º├úo
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos.

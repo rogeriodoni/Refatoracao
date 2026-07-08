@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. As duas altera├º├Áes realizadas:
+
+1. **`FormSigReIiv.prg`** ÔÇö adicionado `LimparCampos()` (├║nico m├®todo em falta da Fase 8), que reseta `chk_4c_Listagem.Value = 0` com verifica├º├úo defensiva via `PEMSTATUS`.
+
+2. **`SigReIivBO.prg`** ÔÇö corrigido CATCH silencioso em `Destroy()` para incluir `MsgErro(loc_oErro.Message, "Erro")`, conforme Regra 9 do `CLAUDE.md`.
+
+O form est├í completo e funcionalmente ├¡ntegro:
+- Todos os m├®todos exigidos pela Fase 8 est├úo implementados (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`)
+- Integra├º├úo no menu.prg j├í existia (`AbrirFormSigReIiv` com par├ómetros)
+- O BO herda de `RelatorioBase` com `PrepararDados()` completo reproduzindo toda a l├│gica do `processamento` original

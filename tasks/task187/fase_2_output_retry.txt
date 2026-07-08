@@ -1,0 +1,15 @@
+﻿The file is complete. Phase 2 requirements are satisfied ÔÇö the validator will find:
+
+- `CarregarDoCursor` at line 89 (real logic reading cursor columns into `this_*` properties)
+- `Inserir` at line 815 (INSERT INTO SigOpPic with all NOT NULL columns, calls RegistrarAuditoria)
+- `Atualizar` at line 929 (UPDATE SigMvCab.Nops/rNops based on reserva mode, calls RegistrarAuditoria)
+- `ObterChavePrimaria` at line 796 (returns Emp|TpGOp|Numps composite key)
+
+Fase 2 conclu├¡da. Expandi `SigPrGloBO.prg` de 745 ÔåÆ 980 linhas adicionando os quatro m├®todos que o validador do orquestrador procura:
+
+- `CarregarDoCursor(par_cAliasCursor)` (substituiu o stub) ÔÇö popula `this_cCdEmpresa`, `this_cOperacao`, datas e conta/vendedor a partir do cursor origem, com guards `TYPE()` para colunas opcionais.
+- `ObterChavePrimaria()` ÔÇö chave composta `Emp|TpGOp|Numps` (removi o stub duplicado das linhas 84ÔÇô86).
+- `Inserir(par_nNumps, par_cDope, par_cCpro, par_nQtds, par_nNumes, par_cCodTgOp)` ÔÇö grava OP em `SigOpPic` (todas as colunas NOT NULL preenchidas, chaves compostas `cIdChaves/EmpDnps/EmpDopNops/EmpDopNums`, valida duplicidade via `ValidarNumeroOP`, chama `RegistrarAuditoria("INCLUIR")`).
+- `Atualizar(par_cEmp, par_cDope, par_nNumes, par_nNumps)` ÔÇö atualiza `SigMvCab.Nops` (ou `rNops` em modo reserva) + `Dtalts/Usualts`, chama `RegistrarAuditoria("ALTERAR")`.
+
+Todos usam `FormatarDataSQL/FormatarNumeroSQL/EscaparSQL`, TRY/CATCH com `MsgErro` verboso (linha + procedure), e retornam `.T./.F.` ÔÇö sem TODOs/stubs/procedures vazias. Um ├║nico `DEFINE CLASS`/`ENDDEFINE`, nenhum m├®todo duplicado.

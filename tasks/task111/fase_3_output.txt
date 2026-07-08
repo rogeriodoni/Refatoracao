@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Fase 3 conclu├¡da com o form **completo e funcional** ÔÇö sem TODOs ou stubs.
+
+---
+
+**O que foi criado:**
+
+**`FormSIGREHCP.prg`** (C:\4c\projeto\app\forms\relatorios\) ÔÇö 790+ linhas, form REPORT completo com:
+- Dimens├Áes EXATAS do original: `Width=800, Height=300`, `ControlBox=.F.`, `TitleBar=0`
+- `ConfigurarCabecalho()` ÔÇö container escuro RGB(100,100,100) com t├¡tulo em branco
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` (CommandGroup 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` ÔÇö 1 p├ígina "Filtros" abaixo do cabe├ºalho (Top=85)
+- `ConfigurarPaginaLista()` ÔÇö todos os filtros: Empresa (oculto se CalcCustos=1), Per├¡odo, Produto
+- `ConfigurarPaginaDados()` ÔÇö `opt_4c_OptTipImps` + todos os BINDEVENTs (KeyPress + DblClick)
+- Lookups completos: Produto (`SigCdPro.cpros/dpros`) e Empresa (`SigCdEmp.emps/nemp`)
+- `ValidarFiltros()` ÔÇö valida datas (DataInicial, DataFinal, Per├¡odo)
+- `OcultarCamposEmpresa()` ÔÇö oculta campos empresa quando `CalcCustos=1`
+- `AtualizarEstadoCamposDescricao()` ÔÇö simula evento `When` do legado
+- Todos os m├®todos CRUD-to-REPORT: `CarregarLista`, `FormParaBO`, `BOParaForm`, etc.
+
+**`SIGREHCPBO.prg`** ÔÇö removido `PROTECTED` de `PrepararDados()` (necess├írio para `BtnExcelClick` funcionar).

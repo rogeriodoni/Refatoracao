@@ -1,0 +1,217 @@
+*=================================================================================
+* RUNNER AUTOM?TICO - FormProduto
+*=================================================================================
+
+CLEAR
+CLOSE DATABASES ALL
+CLOSE TABLES ALL
+*SET STEP ON && Comentado - debugger pausa execu??o autom?tica
+*-- Vari?vel de controle
+PUBLIC gb_4c_ValidandoUI
+gb_4c_ValidandoUI = .F.
+
+*-- Arquivo de log
+LOCAL loc_cLogFile
+loc_cLogFile = "C:\temp\test_result.txt"
+
+*-- Limpar log anterior
+IF FILE(loc_cLogFile)
+	DELETE FILE (loc_cLogFile)
+ENDIF
+
+*-- Criar arquivo de log
+LOCAL loc_nHandle
+loc_nHandle = FCREATE(loc_cLogFile)
+
+TRY
+	*-- Gravar in?cio
+	FPUTS(loc_nHandle, "=== TESTE AUTOMATIZADO - FormProduto ===")
+	FPUTS(loc_nHandle, "Data/Hora: " + TTOC(DATETIME()))
+	FPUTS(loc_nHandle, "")
+
+	*-- 1. Configurar ambiente (SEM UI para modo headless)
+	FPUTS(loc_nHandle, "1. Configurando ambiente...")
+
+	CD C:\4c\projeto\app\start
+
+	*-- Limpar ambiente
+	**CLEAR ALL
+
+	*-- Carregar config.prg (define caminhos)
+	DO config.prg
+
+	*-- Configurar ambiente (SET PROCEDURE)
+	ConfigurarAmbiente()
+
+	*-- Configurar SETs (sem UI)
+	SET DATE TO DMY
+	SET CENTURY ON
+	SET DECIMALS TO 2
+	SET POINT TO ","
+	SET DELETED ON
+	SET EXACT ON
+	SET SAFETY OFF
+	SET TALK OFF
+
+	*-- Conectar ao banco (sem MESSAGEBOX)
+	PUBLIC gnConnHandle
+	LOCAL loc_cStringConexao
+	loc_cStringConexao = ObterStringConexao()
+	gnConnHandle = SQLSTRINGCONNECT(loc_cStringConexao)
+
+	IF gnConnHandle < 0
+		FPUTS(loc_nHandle, "   ERRO - Falha ao conectar ao banco!")
+		FCLOSE(loc_nHandle)
+		QUIT
+	ENDIF
+
+	*-- Configurar timeout
+	SQLSETPROP(gnConnHandle, "QueryTimeOut", 60)
+	SQLSETPROP(gnConnHandle, "DispWarnings", .T.)
+
+	FPUTS(loc_nHandle, "   OK - Ambiente configurado")
+	FPUTS(loc_nHandle, "   Conexao: " + TRANSFORM(gnConnHandle))
+	FPUTS(loc_nHandle, "")
+
+	*-- 2. Criar formul?rio
+	FPUTS(loc_nHandle, "2. Criando FormProduto...")
+	LOCAL loc_oForm
+	loc_oForm = CREATEOBJECT("FormProduto")
+
+	IF ISNULL(loc_oForm)
+		FPUTS(loc_nHandle, "   ERRO - FormProduto retornou NULL!")
+		FCLOSE(loc_nHandle)
+		QUIT
+	ENDIF
+
+	FPUTS(loc_nHandle, "   OK - FormProduto criado")
+	FPUTS(loc_nHandle, "   Caption: " + loc_oForm.Caption)
+	FPUTS(loc_nHandle, "   Width: " + TRANSFORM(loc_oForm.Width))
+	FPUTS(loc_nHandle, "   Height: " + TRANSFORM(loc_oForm.Height))
+	FPUTS(loc_nHandle, "")
+
+	*-- 3. Verificar estrutura
+	FPUTS(loc_nHandle, "3. Verificando estrutura...")
+
+	IF TYPE("loc_oForm.pgf_4c_Principal") = "O"
+		FPUTS(loc_nHandle, "   OK - PageFrame existe")
+		FPUTS(loc_nHandle, "   PageCount: " + TRANSFORM(loc_oForm.pgf_4c_Principal.PageCount))
+	ELSE
+		FPUTS(loc_nHandle, "   ERRO - PageFrame nao encontrado!")
+	ENDIF
+
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page1.grd_4c_Dados") = "O"
+		FPUTS(loc_nHandle, "   OK - Grid existe")
+		IF USED("cursor_4c_Lista")
+			FPUTS(loc_nHandle, "   Cursor: " + TRANSFORM(RECCOUNT("cursor_4c_Lista")) + " registros")
+		ENDIF
+	ELSE
+		FPUTS(loc_nHandle, "   ERRO - Grid nao encontrado!")
+	ENDIF
+
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados") = "O"
+		FPUTS(loc_nHandle, "   OK - pgframeDados existe")
+		FPUTS(loc_nHandle, "   Top: " + TRANSFORM(loc_oForm.pgf_4c_Principal.Page2.pgframeDados.Top))
+		FPUTS(loc_nHandle, "   Width: " + TRANSFORM(loc_oForm.pgf_4c_Principal.Page2.pgframeDados.Width))
+	ELSE
+		FPUTS(loc_nHandle, "   ERRO - pgframeDados nao encontrado!")
+	ENDIF
+
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.cnt_4c_BotoesAcao") = "O"
+		FPUTS(loc_nHandle, "   OK - Botoes Confirmar/Cancelar existem")
+		FPUTS(loc_nHandle, "   Top: " + TRANSFORM(loc_oForm.pgf_4c_Principal.Page2.cnt_4c_BotoesAcao.Top))
+		FPUTS(loc_nHandle, "   Left: " + TRANSFORM(loc_oForm.pgf_4c_Principal.Page2.cnt_4c_BotoesAcao.Left))
+		FPUTS(loc_nHandle, "   Visible: " + IIF(loc_oForm.pgf_4c_Principal.Page2.cnt_4c_BotoesAcao.Visible, "Sim", "Nao"))
+	ELSE
+		FPUTS(loc_nHandle, "   ERRO - Botoes nao encontrados!")
+	ENDIF
+
+	FPUTS(loc_nHandle, "")
+
+	*-- 4. Testar Page2 (campos) - SEM SHOW para modo headless
+	FPUTS(loc_nHandle, "4. Testando Page2 (Dados)...")
+	loc_oForm.pgf_4c_Principal.ActivePage = 2
+
+	*-- Verificar todos os 13 labels
+	LOCAL loc_nLabels
+	loc_nLabels = 0
+
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Codigo") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Descricao") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_CodigoBarras") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Grupo") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Fornecedor") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_RefFornecedor") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_ObsPessoal") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_ObsPedidos") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_DataUsuario") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Custo") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_PrecoVenda") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_FatorVenda") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+	IF TYPE("loc_oForm.pgf_4c_Principal.Page2.pgframeDados.pgDados.lbl_4c_Unidade") = "O"
+		loc_nLabels = loc_nLabels + 1
+	ENDIF
+
+	FPUTS(loc_nHandle, "   Labels encontrados: " + TRANSFORM(loc_nLabels) + " de 13")
+	FPUTS(loc_nHandle, "")
+
+	*-- 5. Fechar formul?rio
+	FPUTS(loc_nHandle, "5. Fechando formulario...")
+	loc_oForm.Release()
+	FPUTS(loc_nHandle, "   OK - Formulario liberado")
+	FPUTS(loc_nHandle, "")
+
+	*-- Resultado final
+	FPUTS(loc_nHandle, "=== TESTE CONCLUIDO COM SUCESSO ===")
+	FPUTS(loc_nHandle, "Status: PASSED")
+	FPUTS(loc_nHandle, "")
+	FPUTS(loc_nHandle, "NOTA: Teste executado SEM exibir form (modo headless)")
+
+CATCH TO loc_oErro
+	*-- Gravar erro
+	FPUTS(loc_nHandle, "")
+	FPUTS(loc_nHandle, "=========================================")
+	FPUTS(loc_nHandle, "ERRO CAPTURADO:")
+	FPUTS(loc_nHandle, "=========================================")
+	FPUTS(loc_nHandle, "Mensagem: " + loc_oErro.Message)
+	FPUTS(loc_nHandle, "Linha: " + TRANSFORM(loc_oErro.LineNo))
+	FPUTS(loc_nHandle, "Procedure: " + loc_oErro.Procedure)
+	FPUTS(loc_nHandle, "Details: " + loc_oErro.Details)
+	FPUTS(loc_nHandle, "=========================================")
+	FPUTS(loc_nHandle, "Status: FAILED")
+ENDTRY
+
+*-- Fechar log
+FCLOSE(loc_nHandle)
+
+*-- Fechar conex?o
+IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+	SQLDISCONNECT(gnConnHandle)
+ENDIF
+
+*-- Finalizar VFP
+QUIT

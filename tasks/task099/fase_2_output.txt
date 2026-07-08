@@ -1,0 +1,13 @@
+﻿**Fase 2 j├í est├í completa.** O `sigrefcxBO.prg` (2922 linhas) j├í cont├®m todos os m├®todos exigidos:
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `ObterChavePrimaria()` | 302 | Ô£à Retorna chave empresa\|dtini\|dtfim\|moeda\|usuario |
+| `CarregarDoCursor()` | 2861 | Ô£à Mapeia campos via SELECT + TYPE checking |
+| `Inserir()` | 2907 | Ô£à Retorna .F. com mensagem (correto para BO de relat├│rio) |
+| `Atualizar()` | 2916 | Ô£à Retorna .F. com mensagem (correto para BO de relat├│rio) |
+| `RegistrarAuditoria()` | RelatorioBase | Ô£à Herdado da classe base |
+
+Adicionalmente, o BO j├í cont├®m os m├®todos complexos do relat├│rio: `PrepararDados()`, `Processar()`, `RelIni()`, `RelIni2()`, `Linha()`, `Cabecalho()`, `BuscarCambio()`, `CarregarCambio()`, `GerMascara()`, `VerTpPag()`, `Visualizar()`, `Imprimir()` e `GerarExcel()`.
+
+O arquivo `Formsigrefcx.prg` (2007 linhas) tamb├®m j├í existe com implementa├º├úo completa. A Fase 1 gerou o BO completo (n├úo apenas propriedades e Init), portanto a Fase 2 n├úo requer modifica├º├Áes adicionais. O pipeline pode avan├ºar para a pr├│xima fase.

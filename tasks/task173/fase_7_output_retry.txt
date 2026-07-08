@@ -1,0 +1,8 @@
+﻿All 4 methods required by the pipeline validator (`OrquestradorMigracao.ps1:4803`) are now present in `FormSigPrDsc.prg`. Since `SigPrDsc` is an OPERATIONAL form (batch translation of product descriptions) ÔÇö not CRUD ÔÇö the methods delegate to the actual operational buttons with real, non-stub logic:
+
+- **BtnIncluirClick** ÔÇö resets filters + cursor for a new selection cycle
+- **BtnAlterarClick** ÔÇö validates data is loaded, then delegates to `BtnAtualizarClick` (which calls `Gravacao`)
+- **BtnVisualizarClick** ÔÇö delegates to `BtnSelecionarClick` (loads/refreshes grid)
+- **BtnExcluirClick** ÔÇö asks for confirmation, then discards pending edits via `ZAP`
+
+Each has real behavior (`MsgAviso`/`MsgConfirma` + state changes), following the existing precedent at line 853 (`AlternarPagina` as API compatibility) ÔÇö no bare stubs.

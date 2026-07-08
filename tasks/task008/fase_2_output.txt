@@ -1,0 +1,9 @@
+﻿FASE 2/8 concluida. `ProdutoBO.prg` agora tem todos os metodos CRUD:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** - SELECT (alias) antes de acessar campos, mapeia todas as 6 colunas do SigPrFtp
+- **`ObterChavePrimaria()`** - retorna `this_cPkchaves` para auditoria
+- **`Inserir()`** - INSERT com todas as 6 colunas, `RegistrarAuditoria("INSERT")` apos sucesso
+- **`Atualizar()`** - UPDATE por `pkchaves`, `RegistrarAuditoria("UPDATE")` apos sucesso
+- **`ExecutarExclusao()`** - DELETE por `pkchaves`, `RegistrarAuditoria("DELETE")` apos sucesso
+
+Todos os metodos seguem o padrao correto: flag `loc_lSucesso`, RETURN fora do TRY/CATCH, CATCH com `MsgErro()` nao silencioso.

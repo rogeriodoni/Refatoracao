@@ -1,0 +1,3 @@
+﻿**Bug**: `.Page1.*` and `.Page2.*` were accessed **inside** the `WITH THIS.pgf_4c_Paginas` block. VFP9 cannot resolve `Page1`/`Page2` as members within a WITH block for a PageFrame ÔÇö it throws "Unknown member PAGE1". The CATCH called `MostrarErro()`, which showed a modal dialog that blocked VFP indefinitely in unattended mode (SYS(2335,0) mode), causing the 300s timeout.
+
+**Fix**: Closed the WITH block before setting Page1/Page2 properties, then accessed them via the full path `THIS.pgf_4c_Paginas.Page1.*` and `THIS.pgf_4c_Paginas.Page2.*`.

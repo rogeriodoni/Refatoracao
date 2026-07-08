@@ -1,0 +1,18 @@
+﻿A an├ílise est├í completa. Todos os 6 casos ficam mapeados:
+
+| Migrado (Formsigprema.prg) | Original (sigprema_form_codigo_fonte.txt) |
+|---|---|
+| Linha 840: `SigCdOpe WHERE Dopes = loc_cDopes` | Linha 634: `cursorquery('SigCdOpe','crSigCdOpe','dopes',TprMvCab.Dopes)` |
+| Linha 855: `SigOpCdc WHERE Dopes = loc_cDopes` | Linha 635: `cursorquery('SigOpCdc','crSigOpCdc','Dopes',TprMvCab.Dopes)` |
+| Linha 864: `SigOpCdi WHERE Dopes = loc_cDopes` | Linha 636: `cursorquery('SigOpCdi','crSigOpCdi','Dopes',TprMvCab.Dopes)` |
+| Linha 873: `SigOpCdd WHERE Dopes = loc_cDopes` | Linha 637: `cursorquery('SigOpCdd','crSigOpCdd','Dopes',TprMvCab.Dopes)` |
+| Linha 934: `SigCdOpe WHERE Dopes = loc_cDopEst` | Linha 668: `cursorquery('SigCdOpe','TmpOpe','dopes',pcDop)` |
+| Linha 943: `SigOpCdc WHERE Dopes = loc_cDopEst` | Linha 670: `cursorquery('SigOpCdc','crSigOpCdc','Dopes',pcDop)` |
+
+**Resultado da verifica├º├úo: falso positivo.**
+
+O flag `[SQL-FILTRO-INVENTADO]` foi disparado porque a ferramenta automatizada analisa apenas strings SQL expl├¡citas (`lcSql = [SELECT ... WHERE ...]`) e n├úo detecta chamadas a `cursorquery('tabela', 'alias', 'campo', valor)` ÔÇö que internamente executam exatamente um `SELECT * FROM tabela WHERE campo = valor`.
+
+As 6 condi├º├Áes `WHERE Dopes = ...` no m├®todo `ImprimirDocumento` do form s├úo **tradu├º├Áes corretas e necess├írias** das chamadas `cursorquery` originais. Nenhuma ├® inventada.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formsigprema.prg` e `sigpremaBO.prg` est├úo corretos neste ponto. O pass SQL passa.

@@ -1,0 +1,14 @@
+[SQL-SCHEMA] Linha ~4232: Tabela 'SigCdCcp' NAO EXISTE no banco. Verificar nome correto no schema.sql ou codigo original.
+
+ANALISE CONCLUIDA:
+- Nome da tabela SigCdCcp esta CORRETO - identico ao legado (sigprccp_form_codigo_fonte.txt linha 3239)
+- Tabela existe em producao mas ausente do schema.sql (schema incompleto)
+- Colunas usadas: cfornecs, merci, mercf, cgrui, cgruf, sgrui, sgruf, cunii, cunif, lini, linf,
+  coli, colf, moedai, moedaf, opcmoedatp, mrki, mrkf, enci, encf, variacao, feitio, opcsit,
+  opcrecalc, reajuste, encargo, nmrk, opcpven, newmkp, Inativas
+- FALSO POSITIVO do ValidadorSQLSchema: lacuna no schema.sql, nao erro de codigo
+
+CORRECAO APLICADA (sigprccpBO.prg - ProcessaAutomatico):
+- Bug de fluxo corrigido: quando SQLEXEC falhava (loc_nResult < 1) o codigo continuava
+  para SELECT crSigCdCcp causando erro em cascata. Fix: bloco SCAN..ENDSCAN movido
+  para dentro de ELSE, executando apenas quando SQLEXEC bem-sucedido.

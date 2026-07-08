@@ -1,0 +1,1056 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReJob.SCX
+* Data/Hora: 06/06/2026 20:10:23
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREJOB
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJOB
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 130
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Impressão de Documento"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  chkimpdoc = .F.
+  chkimpdocacess = .F.
+  comptits = .F.
+  parentform = .F.
+  passagem = .F.
+  Name = "SIGREJOB"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 533
+  btnReport.Top = 0
+  btnReport.TabIndex = 7
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREJOB
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE selecionadados
+------------------------------------------------------------
+PROCEDURE selecionadados
+Local lcRe1, lcSb1, lcRdp, lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcB01, lcTit, lcCnt, lcVal, lnEmp
+
+* Montando o Cabeçalho e Rodape do Relatório1
+Create Cursor crCabecalho (Titulo m(4), Subtitulo m(4), Rodape m(4), Aprovados c(100))
+
+* Título do Primeiro Relatório
+lcRe1 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 001, 50))), ;
+		[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 001, 50))) + ;
+		ThisForm.CompTits
+
+lcSb1 = Proper(Alltrim(TprMvCab.Dopes)) + [ - ] + ;
+		Alltrim(Str(TprMvCab.Numes, 10)) + [ - ] + ;
+		Dtoc(Ttod(TprMvCab.Datas))
+
+ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdEmp], [LocalEmps], [Cemps], TprMvCab.Emps, [DivNotas])
+If Not Used([LocalEmps])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - LocalEmps)])
+	Return .f.
+EndIf
+Select LocalEmps
+Go Top In LocalEmps
+lnEmp = Iif(Eof([LocalEmps]), 1, LocalEmps.DivNotas)
+Use In LocalEmps
+
+* Campo Responsável no Rodapé
+lcRdp = [Data : ] + Dtoc(Ttod(TprMvCab.Datas)) + Space(5) + Alltrim(ThisForm.ParentForm.CfgTitResponsavel) + [ : ] 
+If Not Empty(Alltrim(TprMvCab.Resps))
+	ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], TprMvCab.Resps, [RClis])
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 1)])
+		Return .f.
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus])
+		lcRdp = lcRdp + Alltrim(LocalBus.RClis)
+	EndIf
+	Use In LocalBus
+EndIf
+lcRdp = lcRdp + Chr(13)
+
+* Campo Aprovado Por no Rodapé
+lnCod = ((crSigCdOpe.NDopes * 1000000) + TprMvCab.Numes)
+	
+lcQuery = [Select a.Emps, a.Dopes, a.Numes, b.Datas, b.Resps, d.RClis, b.Datars, c.TitOpes ] + ;
+		    [From SigMvPec a, SigMvCab b, SigCdOpe c, SigCdCli d ] + ;
+		   [Where a.Codigos = ] + Str(lnCod, 10) + [ And ] + ;
+		  	   [a.EmpDopNums = b.EmpDopNums And ] + ;
+			   [a.EmpSubns = '] + TprMvCab.Emps + [' And ] + ;
+			   [b.Dopes = c.Dopes And ] + ;
+			   [b.Resps = d.IClis ] + ;
+		 [Union All ] + ;
+		[Select a.Emps, a.Dopes, a.Numes, b.Datas, b.Resps, d.RClis, b.Datars, c.TitOpes ] + ;
+		  [From SigOpDev a, SigMvCab b, SigCdOpe c, SigCdCli d ] + ;
+		 [Where a.Codigos = ] + Str(lnCod, 10) + [ And ] + ;
+		 	   [a.EmpDopNums = b.EmpDopNums And ] + ;
+			   [b.Dopes = c.Dopes And ] + ;
+			   [b.Resps = d.IClis ] + ;
+		 [Order By b.Datars]
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 2)])
+	Return .f.
+EndIf
+Go Top In LocalBus
+If Eof([LocalBus])
+	lcRdp = lcRdp + [Data :     /   /        ] + Space(5) + [Aprovado por : ] 
+	lcEdn = []
+Else
+	lcRdp = lcRdp + [Data : ] + Dtoc(Ttod(LocalBus.Datas)) + Space(5) + ;
+			Proper(Alltrim(LocalBus.TitOpes)) + [ : ] + Alltrim(LocalBus.RClis)
+	lcEdn = LocalBus.Emps + LocalBus.Dopes + Str(LocalBus.Numes, 6)
+EndIf
+Use In LocalBus
+
+lcRdp = lcRdp + Chr(13)
+
+lcApr = [Aprovação Cliente]
+
+If Empty(Alltrim(lcEdn)) && Se Não Teve Aprovação Anterior
+	lcRdp = lcRdp + [Data :     /   /        ] + Space(5) + lcApr + [ : ]
+Else
+	ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdOpe], [LocalOpe], [Dopes], Substr(lcEdn, 4, 20), [NDopes])
+	If Not Used([LocalOpe])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 3)])
+		Return .f.
+	EndIf
+	Go Top In LocalOpe
+	If Not Eof([LocalOpe])
+		lnCod = ((LocalOpe.NDopes * 1000000) + Int(Val(Right(lcEdn, 6))))
+
+		lcQuery = [Select a.Emps, a.Dopes, a.Numes, b.Datas, b.Resps, d.RClis, b.Datars, c.TitOpes ] + ;
+				    [From SigMvPec a, SigMvCab b, SigCdOpe c, SigCdCli d ] + ;
+				   [Where a.Codigos = ] + Str(lnCod, 10) + [ And ] + ;
+				  	   [a.EmpDopNums = b.EmpDopNums And ] + ;
+					   [a.EmpSubns = '] + TprMvCab.Emps + [' And ] + ;
+					   [b.Dopes = c.Dopes And ] + ;
+					   [b.Resps = d.IClis ] + ;
+				 [Union All ] + ;
+				[Select a.Emps, a.Dopes, a.Numes, b.Datas, b.Resps, d.RClis, b.Datars, c.TitOpes ] + ;
+				  [From SigOpDev a, SigMvCab b, SigCdOpe c, SigCdCli d ] + ;
+				 [Where a.Codigos = ] + Str(lnCod, 10) + [ And ] + ;
+				 	   [a.EmpDopNums = b.EmpDopNums And ] + ;
+					   [b.Dopes = c.Dopes And ] + ;
+					   [b.Resps = d.IClis ] + ;
+				 [Order By b.Datars]
+
+		If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 4)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Eof([LocalBus])
+			lcRdp = lcRdp + [Data : ] + Dtoc(Ctod([])) + Space(5) + [Aprovação Cliente : ]
+		Else
+			lcRdp = lcRdp + [Data : ] + Dtoc(Ttod(LocalBus.Datas)) + Space(5) + ;
+					Proper(Alltrim(LocalBus.TitOpes)) + [ : ] + Alltrim(LocalBus.RClis)
+			
+			lcApr = Proper(Alltrim(LocalBus.TitOpes))		
+		EndIf
+	EndIf
+	Use In LocalOpe
+EndIf
+
+Insert Into crCabecalho (Titulo, Subtitulo, Rodape, Aprovados) Values (lcRe1, lcSb1, lcRdp, lcApr)
+
+* Montando as Linhas do Relatório 1
+Create Cursor crImpressao (Jobs c(250), Clientes c(250), Contatos c(250), DtEntradas c(100), DtApresentas c(100), ;
+						   DtEntregas c(100), Extras c(100), Bloco001 m(4), TitCampo m(4), ValCampo m(4))
+
+* Campo do Job
+lcJob = Alltrim(TprMvCab.Jobs)
+If Not Empty(Alltrim(TprMvCab.Jobs))
+	ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], TprMvCab.Jobs, [RClis, DataIncs, Usuars])
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 5)])
+		Return .f.
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus])
+		lcJob = lcJob + [ - ] + Alltrim(LocalBus.RClis)
+	EndIf
+	Use In LocalBus
+EndIf
+
+* Campo do Cliente e Contatos
+lcCli = Alltrim(TprMvCab.ContaOs)
+lcCtt = []
+If Not Empty(Alltrim(TprMvCab.ContaOs))
+	ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], TprMvCab.ContaOs, [RClis, Ddds, Tel1s, Tel2s, Faxs, Contato, eMails])
+	If Not Used([LocalBus])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 6)])
+		Return .f.
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus])
+		lcCli = lcCli + [ - ] + Alltrim(LocalBus.RClis)
+		lcCtt = Alltrim(Nvl(crSigMvJbC.Jb_Contatos, []))
+*!*			lcCtt = lcCtt + [Tel.: (] + ; 
+*!*					Iif(Empty(LocalBus.Ddds), Space(2), Alltrim(LocalBus.Ddds)) + [) ] + ;
+*!*					Iif(Empty(LocalBus.Tel1s),   [], Alltrim(LocalBus.Tel1s) + [ ]) + ;
+*!*					Iif(Empty(LocalBus.Tel2s),   [], Alltrim(LocalBus.Tel2s) + [ ]) + ;
+*!*					Iif(Empty(LocalBus.Faxs),    [], Alltrim(LocalBus.Faxs)  + [ ]) + ;
+*!*					Iif(Empty(LocalBus.Contato), [], [ - Contato : ] + Alltrim(LocalBus.Contato) + [ ]) + ;
+*!*					Iif(Empty(LocalBus.eMails),  [], [ - eMail : ] + Alltrim(LocalBus.eMails) + [ ])
+	EndIf
+	Use In LocalBus
+EndIf
+
+* Campo de Data de Entrada
+lcDtE = [Data de Entrada : ]
+
+lcQuery = [Select Jobs, Min(Datas) as Datas ] + ;
+		    [From SigMvCab ] + ;
+		   [Where Dopes = '] + TprMvCab.Dopes + [' And ] + ;
+		   		 [Jobs = ']  + TprMvCab.Jobs  + [' ] + ;
+		   [Group By Jobs]
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 7)])
+	Return .f.
+EndIf
+Go Top In LocalBus
+If Not Eof([LocalBus])
+	lcDtE = lcDtE + Dtoc(Ttod(LocalBus.Datas))
+EndIf
+
+* Campo de Data de Apresentação
+lcDtA = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0001, 50))), ;
+		[Apresentação : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0001, 50)) + [ : ]) + ;
+		Dtoc(Ttod(Nvl(crSigMvJbC.Jb_001, Ctot([]))))
+
+* Campo de Data de Entrega
+lcDtT = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0051, 50))), ;
+		[Entrega : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0051, 50)) + [ : ]) + ;
+		Dtoc(Ttod(Nvl(crSigMvJbC.Jb_002, Ctot([]))))
+
+* Título do Primeiro Bloco
+lcB01 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 101, 50))), ;
+		[Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 101, 50)))
+Replace Bloco001 With lcB01 In crImpressao
+
+* Briefing Extra
+lcExt = [Briefing Extra : ]
+If Not Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3351, 50)))
+	lcExt = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3351, 50)) + [ : ]
+EndIf
+lcExt = lcExt + Iif(crSigMvJbC.Jb_072 = 1, [Sim], [Não])
+Replace Extras With lcExt In crImpressao
+
+Dimension laImp(16, 2)
+laImp(03, 1) = [Sobre o Que Estamos Falando?]
+laImp(03, 2) = 0351
+laImp(04, 1) = [Histórico]
+laImp(04, 2) = 0401
+laImp(05, 1) = [Contexto Mercadológico]
+laImp(05, 2) = 0451
+laImp(06, 1) = [Cenário]
+laImp(06, 2) = 0501
+laImp(07, 1) = [Target]
+laImp(07, 2) = 0551
+laImp(08, 1) = [O problema]
+laImp(08, 2) = 0601
+laImp(09, 1) = [Desafio]
+laImp(09, 2) = 0651
+laImp(10, 1) = [Objetivos]
+laImp(10, 2) = 0701
+laImp(11, 1) = [Tom de voz]
+laImp(11, 2) = 0751
+laImp(12, 1) = [Inspirações]
+laImp(12, 2) = 0801
+laImp(13, 1) = [Cliente]
+laImp(13, 2) = 0851
+laImp(14, 1) = [Sugestões]
+laImp(14, 2) = 0901
+laImp(15, 1) = [Comunicação]
+laImp(15, 2) = 0951
+laImp(16, 1) = [Informações do local do evento]
+laImp(16, 2) = 1001
+
+For lnCnt = 3 To 16
+	lcTit = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), laImp(lnCnt, 2), 50))
+	lcTit = Iif(Empty(lcTit), Alltrim(laImp(lnCnt, 1)), lcTit)
+	lcCnt = Padl(lnCnt, 3, [0])
+	lcVal = Alltrim(Nvl(crSigMvJbC.Jb_&lcCnt., []))
+
+	Insert Into crImpressao (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+					 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB01, lcTit, lcVal)
+Next
+
+Select crImpressao
+Go Top In crImpressao
+
+* Montando as Linhas do Relatório 2
+Create Cursor crImpressa2 (Jobs c(250), Clientes c(250), Contatos c(250), DtEntradas c(100), DtApresentas c(100), ;
+						   DtEntregas c(100), Extras c(100), Bloco001 m(4), TitCampo m(4), ValCampo m(4))
+
+* Data / Período + Período de Montagem + Local + Estimativa de Público + Budget
+If Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0151, 50)))
+	lcMnt = [Início de Montagem : ] + Dtoc(Ttod(Nvl(crSigMvJbC.Jb_019, Ctot([])))) + Chr(13) + ;
+			[Início de Desmontagem : ] + Dtoc(Ttod(Nvl(crSigMvJbC.Jb_020, Ctot([])))) + Chr(13)
+Else
+	lcMnt = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0151, 50)) + [ : ] + ;
+			Dtoc(Ttod(Nvl(crSigMvJbC.Jb_019, Ctot([])))) + [ até ] + Dtoc(Ttod(Nvl(crSigMvJbC.Jb_020, Ctot([])))) + Chr(13) 
+EndIf
+
+lcVal = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0101, 50))), ;
+		[Período do Evento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0101, 50)) + [ : ]) + ;
+		Dtoc(Ttod(Nvl(crSigMvJbC.Jb_017, Ctot([])))) + [ até ] + Dtoc(Ttod(Nvl(crSigMvJbC.Jb_018, Ctot([])))) + ;
+		Chr(13) + ;
+		[] + ;
+		lcMnt + ;
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0301, 50))), ;
+		[Local do Evento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0301, 50)) + [ : ]) + ;
+		Nvl(crSigMvJbC.Jb_021, []) + ;
+		Chr(13) + ;		
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0201, 50))), ;
+		[Público Estimado : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0201, 50)) + [ : ]) + ;
+		Nvl(crSigMvJbC.Jb_022, []) + ;
+		Chr(13) + ;		
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0251, 50))), ;
+		[Budget Estimado : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 0251, 50)) + [ : ]) + ;
+		Nvl(crSigMvJbC.Jb_023, [])		
+		
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, [], [], lcVal)
+
+* Bloco Empresa 1 - Líder de Projeto + Atendimento + Gerência de Projeto + Comercial + Orçamento + Arquiteto + Montagem
+If InList(lnEmp, 0, 1, 2)
+	lcVal = []
+
+	lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 151, 50))), ;
+			[Empresa 1], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 151, 50)))
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_024, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 8)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1051, 50))), ;
+					[Atendimento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1051, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+	 
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_025, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 9)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1101, 50))), ;
+					[Comercial : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1101, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_026, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 11)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1201, 50))), ;
+					[Gerência de Projeto : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1201, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_027, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 13)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1301, 50))), ;
+					[Criação : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1301, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+					
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_028, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 10)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1151, 50))), ;
+					[Arquiteto : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1151, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_029, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 12)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1251, 50))), ;
+					[Orçamento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1251, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_030, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 14)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1351, 50))), ;
+					[Montagem : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1351, 50)) + [ : ]) + ;
+					lcNom
+			
+	Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+					 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+EndIf
+
+* Bloco Empresa 2 - Líder de Projeto + Atendimento + Planejamento + Comercial + Produção + Criação + Produção Financeira
+If InList(lnEmp, 0, 1, 3)
+	lcVal = []
+
+	lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 201, 50))), ;
+			[Empresa 2], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 201, 50)))
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_031, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 15)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1401, 50))), ;
+					[Líder de Projeto : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1401, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_032, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 16)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1451, 50))), ;
+					[Atendimento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1451, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_033, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 18)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1551, 50))), ;
+					[Comercial : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 551, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_034, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 20)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1651, 50))), ;
+					[Criação : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1651, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+					
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_035, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 17)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1501, 50))), ;
+					[Planejamento : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1501, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_036, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 19)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1601, 50))), ;
+					[Produção : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1601, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+
+	lcNom = Padr(Nvl(crSigMvJbC.Jb_037, []), 10)
+	If Not Empty(Alltrim(lcNom))
+		ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], lcNom, [RClis])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 21)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			lcNom = Alltrim(LocalBus.RClis) + [ (] + Alltrim(lcNom) + [)]
+		EndIf
+	EndIf
+
+	lcVal = lcVal + Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1701, 50))), ;
+					[Produção Financeira : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1701, 50)) + [ : ]) + ;
+					lcNom + Chr(13)
+			
+	Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+					 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+EndIf
+
+* Bloco Tipo de Projeto - Pedido do Cliente + Concorrência + Licitação + Proprietário
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 251, 50))), ;
+		[Tipo de Projeto], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 251, 50)))
+
+lcVal = Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_038, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1751, 50))), ;
+		[Pedido do Cliente], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1751, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_039, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1801, 50))), ;
+		[Concorrência], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1801, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_040, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1851, 50))), ;
+		[Licitação], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1851, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_041, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1901, 50))), ;
+		[Proprietário], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1901, 50))), 38)
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Tipo de Desenvolvimento - Desenvolvimento Total + Produção + Criação
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 301, 50))), ;
+		[Tipo de Desenvolvimento], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 301, 50)))
+
+lcVal = Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_042, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1951, 50))), ;
+		[Desenvolvimento Total], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 1951, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_043, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2001, 50))), ;
+		[Produção], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2001, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_044, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2051, 50))), ;
+		[Criação], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2051, 50))), 38)
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Apresentação - Presencial + Eletrônica
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 401, 50))), ;
+		[Apresentação], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 401, 50)))
+
+lcVal = Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_049, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2101, 50))), ;
+		[Presencial], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2101, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_050, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2151, 50))), ;
+		[Eletrônica], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2151, 50))), 38)
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Proposta Comercial - Impressão + CD + Outros
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 451, 50))), ;
+		[Proposta Comercial], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 451, 50)))
+
+lcVal = Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_051, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2201, 50))), ;
+		[Impressão], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2201, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_052, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2251, 50))), ;
+		[CD], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2251, 50))), 38) + ;
+		[] + ;
+		[( ] + Iif(Nvl(crSigMvJbC.Jb_053, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2301, 50))), ;
+		[Outros], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2301, 50))) + ;
+		[ : ] + Alltrim(Nvl(crSigMvJbC.Jb_073, []))
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+				 
+* Bloco Proposta Técnica - Impressão + CD + Outros
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 451, 50))), ;
+		[Proposta Técnica], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 451, 50)))
+
+lcVal = Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_054, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2351, 50))), ;
+		[Impressão], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2351, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_055, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2401, 50))), ;
+		[CD], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2401, 50))), 38) + ;
+		[] + ;
+		[( ] + Iif(Nvl(crSigMvJbC.Jb_056, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2451, 50))), ;
+		[Outros], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2451, 50))) + ;
+		[ : ] + Alltrim(Nvl(crSigMvJbC.Jb_074, []))
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Infos Clientes - Logomarca + Manual de Marca + Imagens + Referências + Atas, emails e correspondências de alterações
+lcB02 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 351, 50))), ;
+		[Infos Clientes], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 351, 50)))
+
+lcVal = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2501, 50))), ;
+		[Logomarca : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2501, 50)) + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_045, [])) + ;
+		Chr(13) + ;
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2551, 50))), ;
+		[Manual de Marca : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2551, 50)) + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_046, [])) + ;
+		Chr(13) + ;		
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2601, 50))), ;
+		[Imagens : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2601, 50)) + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_047, [])) + ;
+		Chr(13) + ;		
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2651, 50))), ;
+		[Referências : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2651, 50)) + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_048, [])) + ;
+		Chr(13) + ;		
+		[] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2701, 50))), ;
+		[Atas, emails e correspondências de alterações e aprovação do cliente : ], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2701, 50)) + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_061, []))
+				
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Documentos Necessários
+lcTit = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2751, 50))
+lcTit = Iif(Empty(lcTit), [Documentos Necessários], lcTit)
+lcVal = Alltrim(Nvl(crSigMvJbC.Jb_057, []))
+				
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, [], lcTit, lcVal)
+
+* Bloco Avaliação do Job
+lcTit = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2801, 50))
+lcTit = Iif(Empty(lcTit), [Avaliação do Job], lcTit)
+lcVal = Alltrim(Nvl(crSigMvJbC.Jb_058, []))
+				
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, [], lcTit, lcVal)
+
+*!*	* Bloco Briefing Inicial
+*!*	lcTit = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 551, 50))
+*!*	lcTit = Iif(Empty(lcTit), [Briefing Inicial], lcTit)
+
+*!*	lcQuery = [Select a.Jobs, Count(1) as Soma, Min(a.Datas) as Datas ] + ;
+*!*			    [From SigMvCab a ] + ;
+*!*			   [Where a.Jobs = '] + TprMvCab.Jobs + [' And ] + ;
+*!*			   		 [a.Emps = '] + TprMvCab.Emps + [' And ] + ;
+*!*			   		 [a.Dopes = '] + TprMvCab.Dopes + [' And ] + ;
+*!*			   		 [a.Numes <= ] + Alltrim(Str(TprMvCab.Numes, 6)) + [ ] + ;
+*!*			   [Group By a.Jobs]
+
+*!*	If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+*!*		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (SigReJob - SelecionaDados 22)])
+*!*		Return .f.
+*!*	EndIf
+*!*	Go Top In LocalBus
+*!*	If Eof([LocalBus])
+*!*		lcVal = [Data : ] + Dtoc(Ttod(TprMvCab.Datas)) + [ / Refação : Nenhuma]
+*!*	Else
+*!*		lcVal = [Data : ] + Dtoc(Ttod(LocalBus.Datas)) + [ / Refação : ] + Alltrim(Str(LocalBus.Soma, 10))
+*!*	EndIf
+*!*	Use In LocalBus
+				
+*!*	Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+*!*					 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, [], lcTit, lcVal)
+
+* Bloco Modelo Fiscal / Considerações Financeiras
+lcB02 = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 601, 50))
+lcB02 = Iif(Empty(lcB02), [Modelo Fiscal / Considerações Financeiras], lcB02 )
+
+lcVal = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3251, 50))
+lcVal = Iif(Empty(lcVal), [Código de Atividade : ], lcVal + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_062, [])) + ;
+		Chr(13) + ;
+		Chr(13) + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_063, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2851, 50))), ;
+		[NF de Serviço], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2851, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_064, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2901, 50))), ;
+		[Nota de Débito], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2901, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_065, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2951, 50))), ;
+		[NF de Locação], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 2951, 50))), 38) + ;
+		Chr(13) + ;
+		Chr(13) + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_066, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3001, 50))), ;
+		[Incentivo ICMS], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3001, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_067, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3051, 50))), ;
+		[Incentivo Rouanet], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3051, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_068, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3101, 50))), ;
+		[Incentivo ISS], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3101, 50))), 38) + ;
+		[] + ;
+		Padr([( ] + Iif(Nvl(crSigMvJbC.Jb_069, 0) = 1, [X], [ ]) + [ )] + ;
+		Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3151, 50))), ;
+		[Patrocínio], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3151, 50))), 38)
+
+lcOut = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3401, 50))
+lcVal = lcVal + Chr(13) + Chr(13) + ;
+		Iif(Empty(lcOut), [Outras Receitas : ], lcOut + [ : ]) + ;
+		Alltrim(Nvl(crSigMvJbC.Jb_070, []))
+
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, lcB02, [], lcVal)
+
+* Bloco Comentários Financeiros
+lcTit = Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_CPO, []), 3301, 50))
+lcTit = Iif(Empty(lcTit), [Comentários Financeiros], lcTit)
+
+lcVal = Alltrim(Nvl(crSigMvJbC.Jb_071, []))
+				
+Insert Into crImpressa2 (Jobs, Clientes, Contatos, DtEntradas, DtApresentas, DtEntregas, Extras, Bloco001, TitCampo, ValCampo) ;
+				 Values (lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcExt, [], lcTit, lcVal)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReJb1 Preview NoConsole
+
+* Segundo Relatório
+lcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;
+		[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;
+		ThisForm.CompTits
+
+Replace Titulo With lcRe2 In crCabecalho 
+
+Select crImpressa2
+Go Top In crImpressa2
+
+Report Form SigReJb1 Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+If ThisForm.SelecionaDados()
+	Select crCabecalho
+	Go Top In crCabecalho
+
+	If (ThisForm.Passagem = 1)
+		Select crImpressao
+		Go Top In crImpressao
+	Else
+		* Segundo Relatório
+		lcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;
+				[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;
+				ThisForm.CompTits
+				
+		Replace Titulo With lcRe2 In crCabecalho 
+
+		Select crImpressa2
+		Go Top In crImpressa2
+	EndIf
+
+	=DoDefault()
+Else
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pFrm
+
+With ThisForm
+	.ParentForm = pFrm
+
+	Set Datasession To .ParentForm.DataSessionId
+	
+	.Caption 	= [Impressão de ] + Alltrim(ThisForm.ParentForm.CfgTitJob)
+	.ContaEmail = []
+	.CompTits 	= []
+	.Passagem 	= 1
+
+	lcQuery = [Select ObsCabMovs ] + ;
+			    [From SigMvCab ] + ;
+			   [Where EmpDopNums = '] + TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes, 6) + [']
+
+	If (.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCab]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCab)])
+		Return .f.
+	EndIf
+	Go Top In LocalCab
+	If Not Eof([LocalCab]) 
+		.CompTits = Chr(13) + Alltrim(LocalCab.ObsCabMovs)
+	EndIf
+	Use In LocalCab
+EndWith
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReJb1 To Printer Prompt NoConsole
+
+* Segundo Relatório
+lcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;
+		[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;
+		ThisForm.CompTits
+		
+Replace Titulo With lcRe2 In crCabecalho 
+
+Select crImpressa2
+Go Top In crImpressa2
+
+Report Form SigReJb1 To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReJb1 To Printer NoConsole
+
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value = 3) && Arquivos/e-mail
+	ThisForm.Passagem = 1
+	For I = 1 to 2
+		ThisForm.Passagem = I
+		=DoDefault()
+	Next
+Else
+	=DoDefault()
+EndIf
+ThisForm.Passagem = 1
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREJOB
+RESERVED3 (ClassInfo): chkimpdoc
+chkimpdocacess
+comptits
+parentform
+passagem
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

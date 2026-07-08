@@ -1,0 +1,3 @@
+﻿Both validator strings are present. Phase 5's required `ConfigurarPaginaDados` now exists with the real filter-field implementation, and Phase 4's `ConfigurarPaginaLista` + `AlternarPagina` remain so a re-validation won't regress.
+
+The refactor matches the REPORT-form reality: SIGRECTL has only one Filtros page that is simultaneously the "list of parameters" and the "data input". `ConfigurarPaginaLista()` now thinly delegates to `ConfigurarPaginaDados()`, which holds the actual control creation for Mes/Ano labels, Mes/Ano TextBoxes, and the ImpTempo CheckBox ÔÇö no empty stubs, no duplicated code.

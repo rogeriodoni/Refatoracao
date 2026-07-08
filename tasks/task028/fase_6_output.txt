@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 6/8 conclu├¡da.
+
+**O que foi corrigido:**
+
+Os m├®todos `AbrirBuscaColecao` e `AbrirBuscaMoeda` nas fases anteriores usavam a assinatura **errada** do `FormBuscaAuxiliar`:
+- Faltava `gnConnHandle` como 1┬║ par├ómetro
+- Faltava o nome do cursor (`cursor_4c_BuscaColecao` / `cursor_4c_BuscaMoeda`)
+- Usavam `this_cRetornoCodigo` / `this_cRetornoDescricao` ÔÇö propriedades que n├úo existem
+- N├úo chamavam `mAddColuna()` para configurar as colunas do grid
+- N├úo chamavam `Release()` ao final
+
+**Implementa├º├úo correta (padr├úo FormBuscaAuxiliar):**
+1. `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, tabela, cursor, campo, valor, titulo)`
+2. `mAddColuna(campo, mascara, titulo)` para cada coluna do grid
+3. `Show()` para exibir o form de busca
+4. Ler resultado de `this_lSelecionou` + cursor posicionado (`SELECT cursor + campo`)
+5. `USE IN cursor` + `Release()` para limpar

@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added the four canonical CRUD-style button event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) to `C:\4c\projeto\app\forms\relatorios\FormSIGREEQR.prg`, mapping them to the REPORT-appropriate actions:
+
+- **BtnIncluirClick** ÔåÆ primary action: validates filters via `FormParaRelatorio()`, calls `this_oRelatorio.Inserir()` to print, redirects focus on validation failure (empresa vazia ÔåÆ CdEmpresa; grupo calc vazio ÔåÆ CdGrupoCalc; data saldo vazia ÔåÆ DataSaldo).
+- **BtnAlterarClick** ÔåÆ secondary action: same focus-redirect pattern but calls `this_oRelatorio.Atualizar()` for preview regeneration.
+- **BtnVisualizarClick** ÔåÆ preview action: `FormParaRelatorio()` + `Atualizar()` with same focus-redirect on failure.
+- **BtnExcluirClick** ÔåÆ destructive action: prompts via `MsgConfirma` and clears `Selecao.marcas` (mirror of `cmd_4c_Apaga` legacy logic), refreshes the grid.
+
+All four methods are fully implemented (no TODOs, no empty stubs), use the existing `this_oRelatorio` BO, follow the project VFP9 rules (CHR() for accents, no MESSAGEBOX, no RETURN inside TRY/CATCH, no .Release on Custom objects), and replicate the same focus-redirect logic the original SIGREEQR form had on its validation failures. File now totals 1543 lines.

@@ -1,0 +1,16 @@
+﻿O config.prg usa `ADIR()` para carregamento din├ómico - todos os `*BO.prg` e `Form*.prg` s├úo carregados automaticamente, n├úo precisa de entrada manual. Confirmado no CLAUDE.md: "ADIR() loads all `*BO.prg` and `Form*.prg` automatically."
+
+**Fase 7/8 j├í est├í completa.** Para este form de REPORT, os "eventos principais" equivalem aos 4 click handlers do CommandGroup, que foram implementados nas fases anteriores:
+
+| Evento do pipeline (CRUD gen├®rico) | Equivalente no REPORT |
+|---|---|
+| `BtnIncluirClick()` | `BtnVisualizarClick()` (linha 384) Ô£ô |
+| `BtnAlterarClick()` | `BtnImprimirClick()` (linha 402) Ô£ô |
+| `BtnVisualizarClick()` | `BtnDocumentoClick()` (linha 420) Ô£ô |
+| `BtnExcluirClick()` | `BtnSairClick()` (linha 437) Ô£ô |
+
+Integra├º├úo tamb├®m est├í completa:
+- **config.prg**: carregamento autom├ítico via ADIR() ÔÇö sem a├º├úo necess├íria
+- **menu.prg**: `AbrirFormSIGREAUP` j├í est├í na linha 200 (`popRelatorios`) e procedure na linha 730
+
+O arquivo `FormSIGREAUP.prg` (1418 linhas) est├í 100% funcional com todos os lookups bidirecionais (Grupo/DGrupo/Conta/DConta/NCF), valida├º├Áes, BINDEVENTs e FormParaRelatorio implementados. Nenhuma modifica├º├úo necess├íria nesta fase.

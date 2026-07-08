@@ -1,0 +1,25 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+---
+
+**Fase 8/8 ÔÇö Consolida├º├úo Final**
+
+**`Formsigrecor.prg`** ÔÇö 8 m├®todos adicionados antes do `ENDDEFINE`:
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` (reseta filtros) |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Restaura todos os 12 filtros do BO para os controles do form |
+| `HabilitarCampos()` | Habilita todos os campos de filtro (sem modos CRUD em REPORT) |
+| `CarregarLista()` | Retorna `.T.` (sem grid de lista em REPORT) |
+| `AjustarBotoesPorModo()` | Vazio (sem modos CRUD em REPORT) |
+
+**`menu.prg`** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 66` (separador) e `DEFINE BAR 67` ("Comiss├úo Pendente por Vendedor") no `popRelatorios`
+- `ON SELECTION BAR 67 OF popRelatorios DO AbrirFormsigrecor`
+- Procedimento `AbrirFormsigrecor()` com padr├úo can├┤nico do projeto
+
+**`config.prg`** ÔÇö Sem altera├º├úo necess├íria: ADIR() j├í carrega automaticamente `sigrecorBO.prg` (classes/) e `Formsigrecor.prg` (forms/relatorios/).

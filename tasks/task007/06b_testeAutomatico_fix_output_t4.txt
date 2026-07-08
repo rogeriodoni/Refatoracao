@@ -1,0 +1,9 @@
+﻿**Causa:** A classe `Container` do VFP9, quando criada via `AddObject`, n├úo possui a propriedade `BorderStyle` ÔÇö ela existe apenas em `Form`, `Shape` e alguns outros controles espec├¡ficos.
+
+**Fix:** Removidas as 4 linhas `.BorderStyle = 0` dos containers:
+- `cnt_4c_Cabecalho`
+- `cnt_4c_Botoes`
+- `cnt_4c_Saida`
+- `cnt_4c_BotoesAcao`
+
+As linhas `BorderStyle` nos objetos `Shape` (`shp_4c_*`) foram preservadas ÔÇö l├í a propriedade ├® v├ílida.

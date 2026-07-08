@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\relatorios\Formsigreimp.prg` foi criado com:
+
+**Estrutura criada:**
+- `DEFINE CLASS Formsigreimp AS FormBase` ÔÇö herda de FormBase, com `DataSession = 2` (original) e `this_oRelatorio = .NULL.`
+- `Init()` ÔÇö retorna `DODEFAULT()` (FormBase.Init() chama InicializarForm automaticamente)
+- `InicializarForm()` ÔÇö cria `sigreimpBO`, configura Width=1000/Height=600/Caption, chama ConfigurarCabecalho e ConfigurarBotoesRelatorio
+- `ConfigurarCabecalho()` ÔÇö container `cnt_4c_Cabecalho` com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco) sobre fundo `RGB(100,100,100)`
+- `ConfigurarBotoesRelatorio()` ÔÇö `cmg_4c_Botoes` com 4 bot├Áes: Visualizar/Imprimir/DocExcel/Sair (padr├úo frmrelatorio, Left=727 proporcional ao original 526/800)
+- `Destroy()` ÔÇö zera `this_oRelatorio = .NULL.` e chama `DODEFAULT()`
+
+**Pr├│ximas fases** adicionar├úo via Read+Edit: grids de sele├º├úo (Fase 4), campos de filtro (Fases 5-6), eventos e BINDEVENTs (Fases 7-8).

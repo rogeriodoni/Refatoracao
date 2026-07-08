@@ -1,0 +1,13 @@
+﻿`FormSigReAiv.prg` criado em `C:\4c\projeto\app\forms\relatorios\`. O arquivo ├® uma implementa├º├úo **completa** (n├úo parcial) seguindo o padr├úo can├┤nico de `FormSigReAac.prg`, pois a REGRA OBRIGAT├ôRIA pro├¡be stubs/TODOs.
+
+**O que foi implementado:**
+
+- **Estrutura base**: `Height=190, Width=800` (exatos do original), `TitleBar=0`, `ControlBox=.F.`, `WindowType=1`
+- **`ConfigurarCabecalho()`** ÔÇö container cinza com lbl_4c_Sombra + lbl_4c_Titulo
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar) com geometria exata do framework frmrelatorio (Left=5/71/137/203)
+- **`ConfigurarPageFrame()`** ÔÇö 1 p├ígina, `Top=85`, `Height=105` (190-85)
+- **`ConfigurarPaginaLista()`** ÔÇö Empresa + 1┬║ Invent├írio com posi├º├Áes relativas ao PageFrame (Top = Top_original - 85)
+- **`ConfigurarPaginaDados()`** ÔÇö 2┬║ Invent├írio + OptTipo (Anal├¡tico/Sint├®tico)
+- **Lookups**: `AbrirBuscaEmpresa/Inv1/Inv2` via FormBuscaAuxiliar; valida├º├úo por ENTER/TAB via `ValidarEmpresa/Inv1/Inv2` com SQL direto
+- **`fAcessoEmpresa`** substitu├¡do por SQL contra `SigCdEmP`; **`fwBuscaExt(SigCdBal)`** substitu├¡do por FormBuscaAuxiliar com WHERE Emps filtrado
+- Todos os aliases CRUDÔåÆREPORT (`BtnAlterarClick`, `FormParaBO`, `BOParaForm`, etc.)

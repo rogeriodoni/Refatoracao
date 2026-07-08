@@ -1,0 +1,12 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\Formsigprenv.prg` foi criado com:
+
+- **`DEFINE CLASS Formsigprenv AS FormBase`** com `DataSession = 2`
+- **`Init()`** ÔåÆ `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- **`InicializarForm()`** ÔÇö define propriedades visuais do form (Width=1000, TitleBar=0, ControlBox=.F., Caption com CHR(227)), cria o BO, chama `ConfigurarPageFrame()` e `TornarControlesVisiveis()`
+- **`ConfigurarPageFrame()`** ÔÇö orquestra layout flat (OPERACIONAL n├úo usa PageFrame CRUD), por ora chama apenas `ConfigurarCabecalho()`
+- **`AlternarPagina()`** ÔÇö stub de compatibilidade com FormBase
+- **`ConfigurarCabecalho()`** ÔÇö cria `cnt_4c_Cabecalho` (100,100,100) com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco), AutoSize=.F. conforme regra de mem├│ria
+- **`TornarControlesVisiveis()`** ÔÇö recursiva padr├úo
+- **`Destroy()`** ÔÇö libera BO e todos os cursores (SigCdTpe, ImpAcessiveis, ImpTemp, ConfigImp, SigCdPam, SigCdPac, dbImpressao)
+
+Nenhum `RETURN` dentro de TRY/CATCH ÔÇö usa flag `loc_lSucesso` com IF/ELSE. Pronto para as Fases 4-8 que adicionar├úo via EDIT: CommandGroup de impress├úo, TextBoxes, OptionGroups e spinners.

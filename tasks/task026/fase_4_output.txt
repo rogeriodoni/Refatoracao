@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. Resumo das mudan├ºas da Fase 4:
+
+**Adicionado em `InicializarForm()`:**
+- Chamada a `THIS.ConfigurarGridTipos()` ap├│s `ConfigurarPageFrame()`
+
+**Novos m├®todos adicionados:**
+
+1. **`ConfigurarGridTipos()`** ÔÇö Cria na Page1 ("Filtros"):
+   - `lbl_4c_TipoOpe`: label "Tipo de Opera├º├úo :" (top=109, equivalente ao Label1 original top=194 - offset 85)
+   - `grd_4c_TipoOps`: grid com 2 colunas ÔÇö CheckBox (Marca) + descri├º├úo (Descri), RecordSource = `cursor_4c_TipoOps`; segue a regra cr├¡tica: `AddObject("Check1")` ÔåÆ `CurrentControl` ÔåÆ `ControlSource` nessa ordem; headers reconfigurados ap├│s `RecordSource`
+   - `cmd_4c_SelTudo` (top=128): seleciona todos via BINDEVENT ÔåÆ `BtnSelTudoClick`
+   - `cmd_4c_Apaga` (top=168): desmarca todos via BINDEVENT ÔåÆ `BtnApagaClick`
+   - Guard contra cursor ausente em modo valida├º├úo UI
+
+2. **`BtnSelTudoClick()`** ÔÇö `REPLACE ALL Marca WITH 1` + Refresh do grid
+
+3. **`BtnApagaClick()`** ÔÇö `REPLACE ALL Marca WITH 0` + Refresh do grid
+
+4. **`AlternarPagina(par_nPagina)`** ÔÇö stub sem corpo (form de relat├│rio tem p├ígina ├║nica)

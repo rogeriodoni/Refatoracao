@@ -1,0 +1,38 @@
+﻿Conclu├¡ a verifica├º├úo completa. Ambas as detec├º├Áes s├úo **falsos positivos**. Aqui est├í a an├ílise:
+
+---
+
+## Verifica├º├úo: [SQL-FILTRO-INVENTADO] CODIGOS
+
+**Detec├º├úo**: `WHERE codigos = ...` em `SigCdGcr` n├úo aparece no WHERE original.
+
+**Resultado**: Ô£à **Correto ÔÇö sem altera├º├úo necess├íria.**
+
+O campo original usa `fAcessoContab()`, que internamente consulta `SigCdGcr.Codigos/Descrs` (confirmado em `functions.prg:418` e `lookup_implementation.md:237`). O c├│digo migrado replica corretamente essa l├│gica:
+
+```foxpro
+"SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cCodigo)
+```
+
+A coluna `codigos` n├úo aparece no WHERE do formul├írio legado porque estava encapsulada dentro da fun├º├úo `fAcessoContab`. N├úo ├® uma condi├º├úo inventada.
+
+---
+
+## Verifica├º├úo: [SQL-FILTRO-INVENTADO] ICLIS
+
+**Detec├º├úo**: `WHERE iclis = ...` em `SigCdCli` n├úo aparece no WHERE original.
+
+**Resultado**: Ô£à **Correto ÔÇö sem altera├º├úo necess├íria.**
+
+O campo original usa `fAcessoContas()`, que internamente consulta `SigCdCli.IClis/RClis` com filtro por `grupos` (confirmado em `functions.prg:719` e no c├│digo framework linha 13729). O c├│digo migrado replica corretamente:
+
+```foxpro
+"SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCodigo) + loc_cFiltro
+* onde loc_cFiltro = " AND grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))
+```
+
+O filtro `grupos` vem do par├ómetro `pGrp` passado em `fAcessoContas(Usuar, lcGrupo, ...)` no original.
+
+---
+
+**Conclus├úo**: Ambas as detec├º├Áes s├úo falsos positivos gerados porque a ferramenta de an├ílise compara os WHERE do formul├írio migrado com os WHERE do formul├írio legado sem considerar que o legado delegava essas valida├º├Áes ├ás fun├º├Áes `fAcessoContab`/`fAcessoContas` do framework. O c├│digo atual est├í correto e nenhuma modifica├º├úo ├® necess├íria.

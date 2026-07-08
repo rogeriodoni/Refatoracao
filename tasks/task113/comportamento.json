@@ -1,0 +1,92 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREHPE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReHpe To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPE",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "=fConfigGeral()\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n\n=DoDefault()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPE",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Local lcEmp, lcTit\n\nThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _empr)\n\nlcEmp = Alltrim(crSigCdEmp.Cemps + ' - ' + crSigCdEmp.Razas)\nlcTit = Alltrim('Resumo de Cheques Pendentes')\n\nCreate Cursor csCabecalho (Empresa c(80), Titulo c(80))\nInsert Into csCabecalho (Empresa, Titulo) Values (lcEmp, lcTit)\n\n*******************************************************************************************\nSet Talk Window\nSet Talk On\n\nlsSql=[Select a.Umovs, Sum(a.Valors) as Valor ]+;\n      ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReHpe Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREHPE.Procedure",
+      "queryOriginal": "Insert Into csCabecalho (Empresa, Titulo) Values (lcEmp, lcTit)",
+      "tabelas": "csCabecalho",
+      "colunas": "Empresa,Titulo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csCabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

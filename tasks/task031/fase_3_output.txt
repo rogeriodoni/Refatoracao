@@ -1,0 +1,10 @@
+﻿Fase 3 entregue. `C:\4c\projeto\app\forms\relatorios\Formsigreanr.prg` criado com:
+
+- **`DEFINE CLASS Formsigreanr AS FormBase`** ÔÇö dimens├Áes exatas do original (Width=800, Height=300), todas as propriedades de janela (TitleBar=0, ControlBox=.F., etc.)
+- **`Init()`** ÔÇö delega para `DODEFAULT()` (padr├úo do pipeline)
+- **`InicializarForm()`** ÔÇö cria `sigreanrBO`, configura caption/picture, chama `ConfigurarCabecalho()` + `ConfigurarPageFrame()` com tratamento completo de erro no CATCH
+- **`ConfigurarCabecalho()`** ÔÇö container RGB(100,100,100) com lbl_4c_Sombra (preto) e lbl_4c_Titulo (branco), Width=800 cobrindo a faixa completa
+- **`ConfigurarPageFrame()`** ÔÇö PageFrame.Top=85, Height=215, 1 p├ígina (Filtros), Tabs=.F., fundo `fundo_cad_1003.jpg`
+- **`Destroy()`** ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()` (n├úo usa `.Release()` pois BO herda de Custom)
+
+**Pr├│ximas fases:** Fase 4 adiciona `ConfigurarBotoes()` (cmg_4c_Botoes com 4 bot├Áes) e BINDEVENT dos bot├Áes; Fases 5-6 adicionam `ConfigurarPaginaLista()` com os campos de filtro (per├¡odo, cota├º├úo, empresa); Fases 7-8 adicionam valida├º├úo, lookups de empresa e handlers de a├º├úo.

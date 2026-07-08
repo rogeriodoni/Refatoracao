@@ -1,0 +1,12 @@
+﻿Both checks pass. The file is now clean of all VFP9 violations. Here's a summary of what was fixed in this session:
+
+**All 7 RETURN-inside-TRY violations resolved:**
+- `InicializarForm`: Changed guard to `IF VARTYPE() = "O"` + added `ELSE / MsgErro / ENDIF` before CATCH
+- `ConfigurarBalanca`: Converted 2 early-exit RETURNs to nested `IF USED(...) / IF FILE(...) ... ENDIF / ENDIF` guards
+- `InicializarPesoFixs`: Converted 2 early-exit RETURNs to nested `IF USED(...) / IF loc_lPesMatPs ... ENDIF / ENDIF` guards
+- `GradeCol4TextValid`: Wrapped lookup body in `IF !EMPTY(loc_cValor) ... ENDIF`
+- `GradeCol7TextValid`: Same pattern for Cors lookup
+
+**All empty CATCH blocks also resolved** (done in prior session).
+
+The file is ready for step `05b_corrigirAutomatico` (CorretorAutomatico pass).

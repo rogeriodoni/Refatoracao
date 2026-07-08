@@ -1,0 +1,14 @@
+﻿O arquivo foi atualizado corretamente. A Fase 5 est├í completa.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö m├®todo orquestrador chamado em `InicializarForm()` ap├│s `ConfigurarContainerOperacao()`, que delega para os dois helpers abaixo.
+
+2. **`ConfigurarCamposOperacao()`** ÔÇö preenche o container `cnt_4c_Operacao` (que estava vazio desde a Fase 3) com os 4 controles do original:
+   - `lbl_4c_Movimentacao` (Label "Movimenta├º├úo :") ÔÇö posi├º├úo exata do `Say1` original
+   - `txt_4c_Empresa` ÔåÆ `ControlSource = "tmpnens.emps"` (ReadOnly, Width=36)
+   - `txt_4c_Operacao` ÔåÆ `ControlSource = "tmpnens.dopps"` (ReadOnly, Width=156)
+   - `txt_4c_Codigo` ÔåÆ `ControlSource = "tmpnens.numps"` (ReadOnly, formato num├®rico)
+   - Todos com `USED("tmpnens")` guard para n├úo quebrar em modo de valida├º├úo de UI
+
+3. **`ConfigurarShapeDecorativo()`** ÔÇö adiciona `shp_4c_Decorativo` (equivalente ao `Shape1` original: Top=10, Left=897, Width=90, Height=110, transparente, BorderColor=136,189,188).

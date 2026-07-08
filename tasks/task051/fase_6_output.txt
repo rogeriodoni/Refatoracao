@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **10 handlers `TeclaXxx` atualizados** ÔÇö F4(115) agora chama `AbrirLookupXxx()`, ENTER(13)/TAB(9) continuam chamando `ValidarXxx()` (comportamento diferenciado por tecla).
+
+2. **4 m├®todos `ValidarXxx` de grupo expandidos** ÔÇö `ValidarCdEmiGrupo`, `ValidarDsEmiGrupo`, `ValidarCdDesGrupo` e `ValidarDsDesGrupo` agora fazem query SQL real contra `SigCdGcr` (antes apenas limpavam campos quando vazio).
+
+3. **5 m├®todos `AbrirLookupXxx` adicionados** com `FormBuscaAuxiliar` completo:
+   - `AbrirLookupEmpresa()` ÔåÆ `SigCdEmp` (cEmps, Razas)
+   - `AbrirLookupDesGrupo()` ÔåÆ `SigCdGcr` (Codigos, Descrs) + limpa conta vinculada
+   - `AbrirLookupDesConta()` ÔåÆ `SigCdCli` (Iclis, rClis) filtrado por grupo destino
+   - `AbrirLookupEmiGrupo()` ÔåÆ `SigCdGcr` (Codigos, Descrs) + limpa conta vinculada
+   - `AbrirLookupEmiConta()` ÔåÆ `SigCdCli` (Iclis, rClis) filtrado por grupo emissor
+
+Arquivo final: **1994 linhas**. Pr├│xima fase (7/8) deve tratar integra├º├úo (config.prg e menu.prg).

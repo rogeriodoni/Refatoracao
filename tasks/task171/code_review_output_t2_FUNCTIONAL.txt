@@ -1,0 +1,29 @@
+﻿Conclu├¡ a an├ílise completa. Todos os 7 problemas s├úo **falsos positivos** do checker. Aqui est├í o diagn├│stico detalhado:
+
+---
+
+## Resultado da An├ílise
+
+### [METODO-INEXISTENTE] ÔÇö 5 problemas ÔåÆ todos falsos positivos
+
+| Problema reportado | Situa├º├úo real |
+|---|---|
+| `THIS.Width()` | `Width` ├® **propriedade built-in do VFP9** (`THIS.Width` sem par├¬nteses, linha 243). O checker confundiu acesso a propriedade com chamada de m├®todo. |
+| `THIS.Controls()` | `Controls(n)` ├® **cole├º├úo indexed built-in do VFP9** (linha 465). Acesso por ├¡ndice ├® sintaxe v├ílida, n├úo ├® chamada de m├®todo. |
+| `THIS.ObterResultado()` | **Definido** em `FUNCTION ObterResultado()` na linha 516. O checker n├úo detectou a defini├º├úo. |
+| `THIS.ExtrairCampoBuf()` | **Definido** em `PROTECTED FUNCTION ExtrairCampoBuf(...)` na linha 1056. O checker n├úo detectou a defini├º├úo. |
+| `THIS.ExecutarLoopSiTef()` | **Definido** em `FUNCTION ExecutarLoopSiTef(...)` na linha 886. O checker n├úo detectou a defini├º├úo. |
+
+### [LAYOUT-POSITION] ÔÇö 2 problemas ÔåÆ falsos positivos
+
+O checker comparou a posi├º├úo **relativa ao container** do original (`Top=14, Left=18` dentro de `Container1`) com a posi├º├úo **absoluta no form** do migrado (`Top=268, Left=98`). S├úo unidades incompar├íveis:
+
+- `Container1` original estava em `Top=298, Left=54`
+- `Label1` dentro do container: `Top=14, Left=18` (relativo)
+- Posi├º├úo **absoluta** equivalente seria `Top=312, Left=72`
+
+O `lbl_4c_Label11` migrado est├í em `Top=268, Left=98` **ao n├¡vel do form**, visualmente alinhado com `txt_4c_Datas` (`Top=266`). Alterar para `Top=14, Left=18` moveria o label para o topo do form ÔÇö quebraria o layout visual.
+
+---
+
+**Conclus├úo:** O arquivo `Formsigprdft.prg` est├í correto. Nenhuma altera├º├úo ├® necess├íria para este pass. Os 7 problemas s├úo artefatos do checker de revis├úo, n├úo bugs reais no c├│digo.

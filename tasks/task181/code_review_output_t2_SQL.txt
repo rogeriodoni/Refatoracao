@@ -1,0 +1,23 @@
+﻿Analisei todos os 8 itens flagados. Veja o diagn├│stico antes de qualquer mudan├ºa:
+
+**CONTROLCOUNT** (linhas 195, 212) ÔÇö aparece em `PEMSTATUS(loc_oControl, "ControlCount", 5)`, que ├® uma checagem de propriedade VFP9, **n├úo** uma cl├íusula SQL WHERE. Falso positivo.
+
+**DISPLAY** (linha 368) ÔÇö aparece apenas em um coment├írio `*-- Column4: Ref.Fornecedor display=DPro2s...`. **N├úo** ├® SQL. Falso positivo.
+
+Para os 6 restantes, todos s├úo SQL WHERE leg├¡timos:
+
+| Coluna | Contexto | Remover? |
+|--------|----------|----------|
+| `EMPDOPNUMS` | `WHERE EmpDopNums = ` em SigMvItn ÔÇö filtra itens do documento | N├úo ÔÇö sem este filtro retorna TODOS os itens de todos os documentos |
+| `EAN13` | `WHERE Ean13 = ` em SigCdPro ÔÇö busca por c├│digo EAN | N├úo ÔÇö quebra leitura de c├│digo de barras |
+| `CBARS` | `WHERE CBars = ` em SigCdPro ÔÇö busca por c├│digo de barras | N├úo ÔÇö quebra leitura de c├│digo de barras |
+| `DPROS` | `WHERE DPros = ` em `BuscarProdutoPorDescricao` | N├úo ÔÇö ├® o predicado da busca por descri├º├úo |
+| `DPRO2S` | `WHERE Dpro2s = ` em `BuscarProdutoPorReferencia` | N├úo ÔÇö ├® o predicado da busca por refer├¬ncia do fornecedor |
+| `DOPES` | `WHERE Dopes = ` em `ObterNDopesParaBOP` ÔÇö busca NDopes em SigCdOpe | N├úo ÔÇö ├® a chave de lookup do c├│digo BOP |
+
+**Todos os 8 itens s├úo falsos positivos neste pass:**
+
+- 2 deles (`CONTROLCOUNT`, `DISPLAY`) aparecem em contextos que n├úo s├úo SQL ÔÇö o validador detectou o texto da string mas n├úo h├í WHERE SQL para corrigir.
+- 6 deles s├úo WHERE conditions SQL reais em colunas reais do schema, geradas como equivalente SQL das opera├º├Áes cursor-level (`SEEK`/`LOCATE`/`SCAN`) do c├│digo original. Remov├¬-los violaria a regra "NAO alterar logica de negocio" e quebraria o form em runtime.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os arquivos est├úo corretos.

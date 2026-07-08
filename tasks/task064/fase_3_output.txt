@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\forms\relatorios\FormSIGRECPM.prg` criado com 246 linhas.
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+- `DEFINE CLASS FormSIGRECPM AS FormBase` ÔÇö dimens├Áes exatas do original (Width=800, Height=350), TitleBar=0, sem barra de t├¡tulo
+- `Init()` ÔÇö retorna `DODEFAULT()` (padr├úo correto)
+- `InicializarForm()` ÔÇö cria SIGRECPMBO, valida com `VARTYPE`, chama os 3 m├®todos de configura├º├úo, seta `Visible=.T.`; CATCH n├úo silencioso
+- `ConfigurarCabecalho()` ÔÇö container escuro RGB(100,100,100), Width=THIS.Width, lbl_4c_Sombra + lbl_4c_Titulo com efeito 3D
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar) nas posi├º├Áes exatas do framework; `Buttons(4).Cancel=.T.` para ESC fechar; BINDEVENTs ficam para Fase 7
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 1 p├ígina "Filtros", top=85, height=Height-85=265; controles de filtro ficam para Fases 5-6
+- `Destroy()` ÔÇö anula `this_oRelatorio` sem chamar `.Release()` (Custom n├úo tem Release)

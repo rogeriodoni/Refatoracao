@@ -1,0 +1,263 @@
+﻿{
+    "taskId":  "task037",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-05-16T13:03:11",
+    "atualizadoEm":  "2026-05-16T14:47:40",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-05-16T13:03:11",
+                                            "fim":  "2026-05-16T13:03:11",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task037\\sigrebal.sct",
+                                            "baseName":  "sigrebal",
+                                            "scxFile":  "C:\\4c\\tasks\\task037\\sigrebal.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-05-16T13:03:11",
+                                          "fim":  "2026-05-16T13:03:12",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigrebal",
+                                          "txtFile":  "C:\\4c\\tasks\\task037\\sigrebal_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T13:03:12",
+                                              "fim":  "2026-05-16T13:03:12",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task037\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T13:03:13",
+                                              "fim":  "2026-05-16T13:03:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task037\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task037\\meta_prompt.md",
+                                              "boClass":  "sigrebalBO",
+                                              "formClass":  "Formsigrebal",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task037\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T13:03:13",
+                                              "fim":  "2026-05-16T13:03:14",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task037\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T13:03:14",
+                                               "fim":  "2026-05-16T13:03:14",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task037\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigrebal_esqueleto.prg",
+                                                                "sigrebalBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T13:03:14",
+                                       "fim":  "2026-05-16T14:33:38",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrebalBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  34.35,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrebal.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1226
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-05-16T14:33:38",
+                                                  "fim":  "2026-05-16T14:33:43",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  1,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrebal.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrebalBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-05-16T14:33:43",
+                                                 "fim":  "2026-05-16T14:33:44",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T14:43:22",
+                                       "fim":  "2026-05-16T14:44:08",
+                                       "tentativas":  2,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T14:44:08",
+                                               "fim":  "2026-05-16T14:46:45",
+                                               "tentativas":  2,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task037\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-05-16T14:46:45",
+                                        "fim":  "2026-05-16T14:47:40",
+                                        "tentativas":  2,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigrebal_20260516144740.html",
+                                        "diferencas":  4,
+                                        "erros":  4,
+                                        "totalProblemas":  114,
+                                        "avisos":  106
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T14:47:40",
+                                              "fim":  "2026-05-16T14:47:40",
+                                              "tentativas":  2,
+                                              "arquivoGerado":  "C:\\4c\\SolicitacaoTesteManual\\task037_sigrebal_teste_manual.md",
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task037_sigrebal.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-05-16T13:03:12",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-05-16T13:03:13",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task037\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-05-16T13:03:13",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T13:03:13"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-05-16T14:33:43",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-05-16T14:33:43",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigrebal_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrebal.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task037\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-05-16T14:33:44",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-05-16T14:33:45",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-05-16T14:33:45",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-05-16T14:42:16",
+                                          "passes":  4,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027OPBALANCOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DATAS, CONCILIAS, LNCONTA1, LNCONTAZ; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DATAS, CONCILIAS, LNCONTA1, LNCONTAZ; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DATAS, CONCILIAS, LNCONTA1, LNCONTAZ; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CEMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DATAS, CONCILIAS, LNCONTA1, LNCONTAZ; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027RAZAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DATAS, CONCILIAS, LNCONTA1, LNCONTAZ",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  5
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-05-16T14:42:16",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-05-16T14:43:22",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrebalBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrebal.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-05-16T14:46:45",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T14:46:45",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  20,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task037\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

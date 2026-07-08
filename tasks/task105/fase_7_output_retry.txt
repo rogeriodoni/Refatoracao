@@ -1,0 +1,7 @@
+﻿All 4 main events required by Phase 7 are now present (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick), plus the report-specific buttons (Imprimir/Excel/Encerrar) that already existed.
+
+Phase 7 implementation:
+- **BtnIncluirClick** (REPORT semantic: "gerar sa├¡da") ÔåÆ delega para `BtnVisualizarClick`
+- **BtnAlterarClick** (REPORT semantic: "limpar filtros") ÔåÆ chama `LimparCampos()` + foco no c├│digo da moeda
+- **BtnVisualizarClick** (j├í existia) ÔåÆ valida, chama `Visualizar()` no BO
+- **BtnExcluirClick** (REPORT semantic: "encerrar") ÔåÆ `THIS.Release()`

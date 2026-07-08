@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerPDFCreator", "File", "fConfigGeral", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 56,
+      "codigoOriginal": "Local lcTxt, lcDir, lcSch, loCfg, loMsg, lcArq\n\nlcTxt = []\nlcDir = Addbs(Sys(5) + Sys(2003))\n\nThisform.pcArqEmail = lcDir + [SigReClt.pdf]\n\nThisForm.Processamento()\n\nIf (Used([crDados]) And Not Eof([crDados]))\n\tlcTxt = Alltrim(crCabecalho.Subtitulos) + Chr(13) + Alltrim(crCabecalho.Empresa)\n\t\n\tlPrintPDFCreator = fGerPDFCreator(ThisForm)\t\n\n\tIf lPrintPDFCreator And File(ThisForm.pcArqEmail)\n\t\tlcSch = [http://schemas.microsoft.com/cdo/configuration/]\n\t\tloCfg = CreateObject([CDO.Configuration])\n\n\t\tW... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerPDFCreator,File",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report Form SigReCtl To Printer NoConsole\n\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCtl To Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "Lparameters pAut, pExc\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.getMes.Value = Month(Date())\n\t\t.getAno.Value = Year(Date())\n\n\t\t.chkImpTempo.Value = Iif(pAut, 1, 0)\n\n\t\t=DoDefault()\n\t\t\n\t\tIf pAut\n\t\t\tThisForm.EnviarEmail(pExc)\n\t\t\tReturn .f.\n\t\tEndIf\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim *******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "EnviarEmail",
+        "controlesReferenciados": "chkImpTempo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 116,
+      "codigoOriginal": "Local lcMes, lcAno, ldIni, ldFim, ltIni, ltFim, lcLic, lcSub\n\nlcMes = Alltrim(Str(ThisForm.getMes.Value, 2))\nlcAno = Alltrim(Str(ThisForm.getAno.Value, 4))\nldIni = Ctod([01/] + lcMes + [/] + lcAno)\nldFim = Gomonth(ldIni, 1) - 1\nltIni = fDtoSQL(Ctod([01/] + lcMes + [/] + lcAno), [00:00:00])\nltFim = fDtoSQL(Gomonth(ldIni, 1) - 1, [23:59:59])\nllTpo = (ThisForm.chkImpTempo.Value = 1)\n\nlcSub = [Mês : ] + lcMes + [ / Ano : ] + lcAno\n\nCreate Cursor crCabecalho (Subtitulos c(250), Empresa c(250))\nInsert... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkImpTempo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCtl Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTL",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tDo Case\n\t\tCase Not Between(ThisForm.getMes.Value, 1, 12)\n\t\t\t=Messagebox([Mês Inválido!!!], 0+48, [Atenção!!!])\n\t\t\tThisForm.getMes.SetFocus\n\t\t\tReturn .f.\n\n\t\tCase Not Between(ThisForm.getAno.Value, 2000, 2099)\n\t\t\t=Messagebox([Ano Inválido!!!], 0+48, [Atenção!!!])\n\t\t\tThisForm.getAno.SetFocus\n\t\t\tReturn .f.\n\tEndCase\nEndIf\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECTL.getMes",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Between(This.Value, 1, 12)\n\t=MessageBox([O Mês Precisa Estar No Intervalo de 01 a 12!!!], 0+16, [Mês Inválido!!!])\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECTL.getAno",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Between(This.Value, 2000, 2099)\n\t=MessageBox([O Ano Precisa Estar No Intervalo de 2000 a 2099!!!], 0+16, [Ano Inválido!!!])\n\tReturn .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

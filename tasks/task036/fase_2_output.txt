@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `SIGREAUPBO.prg` agora tem implementa├º├úo completa com:
+
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro`
+- **`ValidarFiltros()`** ÔÇö valida datas obrigat├│rias e consist├¬ncia (final >= inicial)
+- **`PrepararDados()`** ÔÇö replica toda a l├│gica do `processamento` legado:
+  - Busca nome da empresa em `SigCdEmp`
+  - Cria `cursor_4c_Cabecalho` com t├¡tulo/subt├¡tulo
+  - Monta WHERE din├ómico com filtros opcionais (grupo, conta, envelope, c├│digo NCF)
+  - Executa query principal (`SigOpInc` + `SigCdNcf` + `SigCdCli`)
+  - Modo percentual: agrega em `cursor_4c_TmpInc` com percentuais por tipo
+  - Modo listagem: cria `cursor_4c_Selecao` indexado por Quebra1+Quebra2+Data+Envelope
+- **`Visualizar()`** ÔÇö `PrepararDados()` + `REPORT FORM ... PREVIEW`
+- **`Imprimir()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT`
+- **`Documento()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TO PRINT`
+- **`Destroy()`** ÔÇö fecha todos os cursores auxiliares

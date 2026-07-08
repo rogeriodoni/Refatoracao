@@ -1,0 +1,8 @@
+﻿Phase 3/8 complete. `C:\4c\projeto\app\forms\relatorios\FormSigReIiv.prg` created with:
+
+- **Init(pEmp, pDop, nNum, nTpImp)** ÔÇö stores params as form properties, calls `DODEFAULT()` for FormBase init, auto-prints-and-releases when `nTpImp` is 3 or 4
+- **InicializarForm()** ÔÇö creates `SigReIivBO`, builds header/buttons/pageframe/controls, binds button events; caption includes the dynamic `"Impress├úo de Invoice (DOP/NUM)"` from parameters
+- **ConfigurarPageFrame()** ÔÇö single-page, `Top=85`, `Height=40` (form height 125 minus 85)
+- **ConfigurarPaginaLista()** ÔÇö `chk_4c_Listagem` at Page1-relative `Top=9, Left=72` (mirrors original absolute Top=94)
+- **FormParaRelatorio()** ÔÇö transfers pEmp/pDop/pNum/pTpImp plus `chk_4c_Listagem.Value` to the BO
+- All standard pipeline stubs: `BtnAlterarClick`, `BtnExcluirClick`, `BOParaForm`, `HabilitarCampos`, `CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`

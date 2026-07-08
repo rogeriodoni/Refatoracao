@@ -1,0 +1,36 @@
+﻿Feito. A renomea├º├úo resolve os problemas 11, 12 e 13. Agora preciso explicar a situa├º├úo dos outros 10 problemas.
+
+---
+
+## An├ílise dos 13 problemas
+
+### Ô£à Corrigidos (3/13): Issues 11, 12, 13 ÔÇö cntAguarde
+
+Os controles `lbl_4c_Label1b` e `lbl_4c_Label2b` dentro de `cnt_4c_Aguarde` foram renomeados para `lbl_4c_Label1` e `lbl_4c_Label2`. As posi├º├Áes j├í eram corretas (Left=69, Top=24/Left=24).
+
+---
+
+### ÔÜá´©Å N├úo corrig├¡veis sem quebrar o form (10/13)
+
+**Issues 1-3, 5-8 ÔÇö Offset de 85px (falso positivo do validador):**
+
+O validador compara coordenadas absolutas do SCX legado com coordenadas **page-relative** do PRG migrado, sem considerar que `pgf_4c_Paginas.Top = 85`.
+
+| Controle | Migrado (page-relative) | Absoluto no form | Original |
+|---|---|---|---|
+| lbl_4c_Lbl_empresa | Top=39 | 85+39=**124** Ô£ô | 124 |
+| lbl_4c_Lbl_dopes | Top=66 | 85+66=**151** Ô£ô | 151 |
+| lbl_4c_Label9 | Top=67 | 85+67=**152** Ô£ô | 152 |
+| lbl_4c_Label3 | Top=201 | 85+201=**286** Ô£ô | 286 |
+| obj_4c_Opt_Tipo | Top=223 | 85+223=**308** Ô£ô | 308 |
+
+O layout visual ├® **pixel-perfect**. Mudar para 124/151/286/308 (page-relative) colocaria os controles em posi├º├Áes absolutas de 209/236/371/393 ÔÇö ultrapassando a page (form.Height=350, page.Height=265).
+
+**Issues 4, 9 ÔÇö Label1/Label2 (confus├úo de mapeamento de nomes):**
+
+- O validador mapeia `Label1` original ÔåÆ `lbl_4c_Label1` (label "Per├¡odo:", Top=12, Left=219). O controle real que representa o `Label1` do legado ├® `lbl_4c_LblDe` (page-relative Top=67, Left=475 ÔåÆ absoluto **152, 475** = exatamente o original).
+- Idem: `Label2` original ÔåÆ `lbl_4c_LblTipo` (page-relative Top=226, Left=235 ÔåÆ absoluto **311, 235** = exatamente o original).
+
+Mover `lbl_4c_Label1` ("Per├¡odo:") para Left=475 colocaria o r├│tulo no meio direito da row 3, sobreposto com `lbl_4c_LblDe`.
+
+**Resumo:** Os 10 problemas restantes s├úo falsos positivos causados por o validador n├úo compensar o `PageFrame.Top=85` ao comparar coordenadas. O layout visual est├í correto (PILAR 1 mantido).

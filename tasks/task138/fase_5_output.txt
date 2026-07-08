@@ -1,0 +1,9 @@
+﻿Fase 5 conclu├¡da. As altera├º├Áes em `FormSigPdM13.prg`:
+
+1. **`ConfigurarShape1()`** ÔÇö adicionado: Shape decorativo (`shp_4c_Shape1`) que ficava atr├ís do bot├úo OK no SCX original (Top=7, Left=874, Width=113, Height=110, BackStyle=0, BorderStyle=0, BorderColor=teal). Escalonado de 800ÔåÆ1000px proporcionalmente.
+
+2. **`ConfigurarShape1()` chamado em `InicializarForm()`** ÔÇö inserido antes de `ConfigurarBotaoOK()` para garantir z-order correto (shape atr├ís do bot├úo).
+
+3. **`ConfigurarPaginaDados()`** ÔÇö adicionado como no-op documentado: form OPERACIONAL de consulta n├úo tem p├ígina de edi├º├úo, m├®todo existe apenas para compatibilidade com o pipeline multi-fase.
+
+4. **`ConfigurarPaginaLista()` atualizado** ÔÇö orquestrador agora inclui chamada ao Shape1 na sequ├¬ncia correta.

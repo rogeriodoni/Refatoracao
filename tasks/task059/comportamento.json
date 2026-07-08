@@ -1,0 +1,282 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 9,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fAcessoEmpresa", "fAcessoContas", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "report form SigReCog to printer noconsole\nuse in cabecalho\nuse in sumitens\nuse in tempo\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Init",
+      "linhas": 70,
+      "codigoOriginal": "lcQrySigCdOpe   = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ;\n\t\t\t   \t\t[ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]\nlcQrySigCdEmp   = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']\nlcQrySigCdPam = [Select * From SigCdPam ]\nlcQrySigMvPar   = [Select * From SigMvPar Where 1=0 ]\nlcQrySigCdMoe   = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,sub... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value = date",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_empresa,get_empresa_desc,get_vendedor,get_vendedor_desc",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Procedure",
+      "linhas": 83,
+      "codigoOriginal": "Private dDataIni1,dDataIni2,dDataFim1,dDataFim2\nlocal dInicial, dFinal, cEmpresa, cVendedor\nlocal cNomeEmpresa, cRelTitulo, cPeriodo,lcCmoeda,lcDmoeda\n\n* inicializa variáveis de memória\ndInicial  = thisform.get_dt_inicial.value\ndFinal    = thisform.get_dt_final.value\n\ndDataIni1 = fDtoSQL(dInicial)\ndDataIni2 = fDtoSQL(dInicial,'23:59:59')\ndDataFim1 = fDtoSQL(dFinal)\ndDataFim2 = fDtoSQL(dFinal,'23:59:59')\n\ncEmpresa  = thisform.get_empresa.value\ncVendedor = thisform.get_vendedor.value\nm.lcCmoeda = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_empresa,get_vendedor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "report form SigReCog preview NoConsole\nuse in cabecalho\nuse in sumitens\nuse in tempo\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_empresa_desc",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar,'D',This.Value,thisform.get_empresa,thisform.get_empresa_desc,Thisform.podatamgr.pnIdConn)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa,get_empresa_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_empresa_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_empresa.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar,'C',This.Value,thisform.get_empresa,thisform.get_empresa_desc,Thisform.podatamgr.pnIdConn)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa,get_empresa_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_vendedor_desc",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = 'VENDEDOR  '\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,thisform.get_vendedor,this)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthisform.get_vendedor.Value = ''\n\t\tthisform.get_vendedor.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tthisform.get_vendedor.Value = ''\n\tthisform.get_vendedor.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_vendedor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_vendedor_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_vendedor.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_vendedor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.get_vendedor",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = 'VENDEDOR  '\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,thisform.get_vendedor_desc)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthisform.get_vendedor_desc.Value = ''\n\t\tthisform.get_vendedor_desc.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tthisform.get_vendedor_desc.Value = ''\n\tthisform.get_vendedor_desc.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_vendedor_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.getDmoeda",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loBrowse\n\nIf .Not.IsEmpty(This.Value)\n\n    Set Near On\n    \n    If .Not.Seek(This.Value,'crSigCdMoe','Dmoes')\n\t\txBrow=CreateObject('fwbuscasel','crSigCdMoe','DMOES',this.value,'Seleção')\n\t\txBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')\n\t\txBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')\n\t\txBrow.Show\t    \n\tEndIf\n\n\tSet Near Off\n\t\n   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')\n   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')\n   This.Pare... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.getDmoeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getCmoeda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOG.getCmoeda",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loBrowse\n\nIf .Not.IsEmpty(This.Value)\n\n    Set Near On\n    \n    If .Not.Seek(This.Value,'crSigCdMoe','Cmoes')\n\t\txBrow=CreateObject('fwbuscasel','crSigCdMoe','CMOES',this.value,'Seleção')\n\t\txBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')\n\t\txBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')\n\t\txBrow.Show\t      \n\tEndIf\n\n\tSet Near Off\n\t\n   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')\n   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')\n   This.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECOG.Init",
+      "queryOriginal": "lcQrySigCdOpe   = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ; \t\t\t   \t\t[ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]",
+      "tabelas": "SigCdOpe",
+      "colunas": "ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECOG.Init",
+      "queryOriginal": "lcQrySigCdEmp   = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+['] lcQrySigCdPam = [Select * From SigCdPam ]",
+      "tabelas": "SigCdEmp,SigCdPam",
+      "colunas": "cemps,razas,lcQrySigCdPam,From",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECOG.Init",
+      "queryOriginal": "lcQrySigMvPar   = [Select * From SigMvPar Where 1=0 ]",
+      "tabelas": "SigMvPar",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe", "SigCdEmp", "SigCdPam", "SigMvPar"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

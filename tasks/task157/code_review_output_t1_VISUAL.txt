@@ -1,0 +1,5 @@
+﻿Dois problemas GRID-WITH corrigidos em `FormSigPrCar.prg`:
+
+1. **Linha ~287** (ConfigurarGrade inicial): `.ColumnCount = 2` e `.RecordSource = "cursor_4c_Dados"` movidos para fora do `WITH`, usando refer├¬ncia expl├¡cita `THIS.grd_4c_Dados.*` ÔÇö colunas ficam criadas antes do `WITH` acess├í-las.
+
+2. **Linha ~579** (rebind em CmdExcluirClick): mesmo padr├úo ÔÇö `.ColumnCount` e `.RecordSource` extra├¡dos para antes do `WITH`, restante das propriedades de coluna permanece dentro do bloco.

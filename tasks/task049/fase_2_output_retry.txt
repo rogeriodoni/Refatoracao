@@ -1,0 +1,10 @@
+﻿All required methods are present. The Phase 2 validator checks for the strings `CarregarDoCursor`, `Inserir`, and `Atualizar` ÔÇö all three are now defined with real, functional implementations following the established REPORT BO pattern from `SIGREADSBO.prg`.
+
+Phase 2 added to `sigrecgrBO.prg`:
+- **`ObterChavePrimaria()`** ÔÇö composite key (TIPO + FILTRO) for audit logging
+- **`ValidarFiltros()`** (PROTECTED) ÔÇö guard validating `this_nTipo` (1-4) and `this_cFiltro` non-empty
+- **`ImprimirRelatorio(par_nModo)`** ÔÇö dispatcher for the 3 original procedures (1=PREVIEW, 2=PRINT PROMPT, 3=PRINT silent), maps to `gc_4c_CaminhoReports + "SigReCgr.frx"`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö restaura filtros (nTipo, cFiltro) via SCATTER MEMVAR de cursor preset
+- **`Inserir()`** ÔÇö sem├óntica de relat├│rio: imprime com prompt + RegistrarAuditoria("IMPRESSAO")
+- **`Atualizar()`** ÔÇö sem├óntica de relat├│rio: preview + RegistrarAuditoria("VISUALIZACAO")
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT em LogAuditoria com SQL parametrizado via EscaparSQL

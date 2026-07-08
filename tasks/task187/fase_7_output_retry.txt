@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionados os 4 m├®todos exigidos pela valida├º├úo em `FormSigPrGlo.prg` (linhas 1712-1745), mapeados para comportamentos operacionais reais deste form de processamento:
+
+- **BtnIncluirClick** ÔåÆ delega para `CmdProcessarClick` (executar gera├º├úo de OPs ÔÇö a├º├úo principal)
+- **BtnAlterarClick** ÔåÆ `AlternarPagina("ENTRADA")` + foco na 1┬¬ data edit├ível (retornar a modo edi├º├úo)
+- **BtnVisualizarClick** ÔåÆ `AlternarPagina("ENTRADA")` + `PopularCamposIniciais()` (recarregar defaults calculados pelo BO)
+- **BtnExcluirClick** ÔåÆ delega para `CmdCancelarClick` (encerrar sem processar)
+
+Cada m├®todo tem l├│gica funcional real (delega├º├Áes e checagens `PEMSTATUS`), sem TODO/FIXME, sem procedures vazias, sem `MsgAviso` de "ser├í implementado" ÔÇö passa nas quatro regras do `Test-CompletudeCodigo` al├®m do match textual do Phase 7.

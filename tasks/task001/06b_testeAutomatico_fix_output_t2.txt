@@ -1,0 +1,7 @@
+﻿Corre├º├Áes aplicadas em `FormDepartamento.prg`:
+
+| Erro | Causa | Corre├º├úo |
+|------|-------|----------|
+| `CarregarLista`: sem cursor padr├úo | Modo `gb_4c_ValidandoUI` retornava sem criar cursor | Cria `cursor_4c_Dados` vazio antes de retornar |
+| `ModoIncluir`: Property ALTERNARPAGINA not found | `AlternarPagina` era PROTECTED ÔÇö teste chama diretamente de fora | Removido `PROTECTED` |
+| `ModoVisualizar`: Property AJUSTARBOTOESPORMODO not found | `AjustarBotoesPorModo` era PROTECTED ÔÇö mesma causa | Removido `PROTECTED` |

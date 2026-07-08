@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fAcessoEmpresa", "fwBuscaInt", "For CodVens = Padr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "Zap In crExcel\n\nSet Point To [,]\nSet Separator To [.]\n\nSelect crImpressao\nScan\n\tInsert Into crExcel (V01, V02, V03, V04, V05, V06, V07, V08, V09, V10, V11, V12, V13, TotalV, Datas) ;\n\t\t\t\t Values (Transform(crImpressao.V01, [999999999.99]), Transform(crImpressao.V02, [999999999.99]), ;\n\t\t\t\t\t\t Transform(crImpressao.V03, [999999999.99]), Transform(crImpressao.V04, [999999999.99]), ;\n\t\t\t\t\t\t Transform(crImpressao.V05, [999999999.99]), Transform(crImpressao.V06, [999999999.99]), ;\n\t\t\t\t\t\t Transform(crI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCmm To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Init",
+      "linhas": 11,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crAnalitico (CodVens c(10), Datas d(8), EmpDopNums c(29), Cpros c(14), Mercs c(3), ;\n\t\t\t\t\t\t   CGrus c(3), SGrus c(6), FPags c(12), ValVdaCom n(12,2), ValComiss n(12,2), ;\n\t\t\t\t\t\t   TpComiss c(3), PctComiss n(12,2), CodFaixas n(2), Apagar c(1))\n\nCreate Cursor crImpressao (Datas c(10), V01 n(12,2), V02 n(12,2), V03 n(12,2), V04 n(12,2), V05 n(12,2), V06 n(12,2), ;\n\t\t\t\t\t\t   V07 n(12,2), V08 n(12,2), V09 n(12,2), V10 n(12,2), V11 n(12,2), V12 n(12,2), V13 n(13,2), ;\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 542,
+      "codigoOriginal": "Private pDtI, pDtF\n\nZap In crAnalitico\nZap In crImpressao\nZap In crCabecalho\n\nlcPrc = Padr(ThisForm.getCods.Value, 40)\nlcFvd = Padr(ThisForm.getCodVens.Value, 10)\n\nSet Step On \n\n* Select Com Cabeçalho da Tabela de Comissão Selecionada\nlcQuery = [Select a.* ] + ;\n\t\t\t[From SigCmCab a ] + ;\n\t\t   [Where a.Cods = '] + lcPrc + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmCab]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmCab)])\n\tReturn .f.\nEndIf\nGo To... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkSdfs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCmm Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMM.getCods",
+      "evento": "Valid",
+      "linhas": 38,
+      "codigoOriginal": "Local loLista, llOk\n\nIf Not Empty(This.Value)\n\n\t*** mena - 26/10/2016 - mostra somente os mapas permitidos conforme a empresa do usuário ***\n\tlcQuery = [select * from sigcmCab]\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMap]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMap)])\n\t\tReturn .f.\n\tENDIF\n\t\n\tSELECT LocalMap\n\tSCAN\n\t\tllOk=fAcessoEmpresa(Usuar,'C',LocalMap.emps,'','',ThisForm.PodataMgr,.t.)\n\t\tIF !llOk\n\t\t\tDELETE \n\t\tENDIF\n\tENDSCAN\n\n*!*\t\tloLista = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa,fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMM.getCodVens",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tlcQuery = [Select b.CodVens, c.RClis, b.VMetas, b.CodResps ] + ;\n\t\t\t\t[From SigCmCab a, SigCmItn b, SigCdCli c ] + ;\n\t\t\t   [Where a.Cods = '] + Padr(ThisForm.getCods.Value, 40) + [' And ] + ;\n\t\t\t   \t\t [a.pkChaves = b.fkChaves And ] + ;\n\t\t\t   \t\t [b.Tipos = 'VEN' And ] + ;\n\t\t\t   \t\t [b.CodVens = c.IClis]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalFilVen]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalFilVen)])\n\t\tR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For CodVens = Padr",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMM.getCodVens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getCods.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECMM.Procedure",
+      "queryOriginal": "\tInsert Into crExcel (V01, V02, V03, V04, V05, V06, V07, V08, V09, V10, V11, V12, V13, TotalV, Datas) ; \t\t\t\t Values (Transform(crImpressao.V01, [999999999.99]), Transform(crImpressao.V02, [999999999.99]), ; \t\t\t\t\t\t Transform(crImpressao.V03, [999999999.99]), Transform(crImpressao.V04, [999999999.99]), ; \t\t\t\t\t\t Transform(crImpressao.V05, [999999999.99]), Transform(crImpressao.V06, [999999999.99]), ; \t\t\t\t\t\t Transform(crI... [TRUNCADO]",
+      "tabelas": "crExcel",
+      "colunas": "V01,V02,V03,V04,V05,V06,V07,V08,V09,V10,V11,V12,V13,TotalV,Datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECMM.getCods.Valid",
+      "queryOriginal": "\tlcQuery = [select * from sigcmCab]",
+      "tabelas": "sigcmCab",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crExcel", "sigcmCab"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

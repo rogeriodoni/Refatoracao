@@ -1,0 +1,16 @@
+﻿Ambos os arquivos est├úo completamente implementados. A Fase 4 j├í foi entregue integralmente na Fase 3.
+
+**An├ílise do estado atual:**
+
+- `FormSIGRECTL.prg` (710 linhas): Completo ÔÇö `ConfigurarPaginaLista()` j├í implementada (linhas 339-448) com os 3 controles de filtro (M├¬s, Ano, chkImpTempo), BINDEVENTs, valida├º├Áes, todos os handlers dos bot├Áes e `EnviarEmail()` para modo batch.
+
+- `SIGRECTLBO.prg` (457 linhas): Completo ÔÇö `PrepararDados()` com as 4 queries SQL, 7 cursores auxiliares, l├│gica de clamp de datas, agrega├º├úo por usu├írio e c├ílculo de tempo.
+
+**Por que n├úo h├í Grid nem bot├Áes CRUD a adicionar:**
+
+Este ├® um formul├írio do tipo `frmrelatorio` com layout FLAT. A descri├º├úo gen├®rica da Fase 4 ("Grid e Bot├Áes CRUD") ├® o template para forms CRUD ÔÇö n├úo se aplica aqui. O equivalente para relat├│rio j├í est├í no lugar:
+- `cmg_4c_Botoes` (CommandGroup com 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar) ÔåÆ criado em `ConfigurarBotoes()`
+- `ConfigurarPaginaLista()` ÔåÆ adiciona os filtros (M├¬s/Ano/ImpTempo) na Page1, n├úo um grid
+- `AlternarPagina()` ÔåÆ n├úo aplic├ível (form tem 1 p├ígina, sem navega├º├úo CRUD)
+
+A migra├º├úo da task072 est├í completa nas fases 1ÔÇô3. Fase 4 n├úo requer modifica├º├Áes.

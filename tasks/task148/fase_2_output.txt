@@ -1,0 +1,12 @@
+﻿A Fase 2 est├í conclu├¡da. O arquivo `sigpdmp7BO.prg` foi completado com todos os m├®todos CRUD necess├írios:
+
+**M├®todos adicionados:**
+- `MontarChaveComposta()` ÔÇö calcula `empdnps` = `emps + dopps + STR(numps, 10)`
+- `CarregarDoCursor()` ÔÇö mapeia todos os 42 campos do schema `SigCdNec` para as propriedades `this_*`
+- `CarregarPorCodigo(par_cChave)` ÔÇö SELECT por `cidchaves` ou `empdnps`
+- `Buscar(par_cFiltro)` ÔÇö SELECT com filtro opcional para o grid (retorna colunas da listagem: numps, datas, totpesos, usuars, grupoos, contaos, grupods, contads)
+- `Inserir()` ÔÇö INSERT completo com todos os 42 campos, gera `cidchaves` via `SYS(2015)` se vazio, chama `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE completo de todos os campos por `cidchaves`, chama `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` ÔÇö DELETE por `cidchaves`, chama `RegistrarAuditoria("DELETE")`
+
+Todos os campos BIT s├úo convertidos corretamente entre `.T.`/`.F.` e `"1"`/`"0"`, datas DATETIME s├úo convertidas com `TTOD()`, e nenhum `RETURN` est├í dentro de `TRY/CATCH`.

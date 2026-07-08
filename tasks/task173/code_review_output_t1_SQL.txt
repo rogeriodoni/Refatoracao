@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes aplicadas corretamente. Resumo das 5 corre├º├Áes em `SigPrDscBO.prg`:
+
+| Problema | Linha original | Corre├º├úo |
+|---|---|---|
+| [SQL-ASPAS] | 289: `"WHERE CPros = '" + loc_cPro + "'"` | `EscaparSQL(loc_cPro)` |
+| [SQL-ASPAS] | 298: `"WHERE CPros = '" + loc_cPro + "'"` no DELETE | `EscaparSQL(loc_cPro)` |
+| [TRANSACAO-AVULSA] | 305-313: bloco `IF loc_lOks COMMIT` + `IF !loc_lOks ROLLBACK` | removido |
+| [TRANSACAO-AVULSA] | 312: `SQLEXEC(gnConnHandle, "ROLLBACK", "")` | removido |
+| [TRANSACAO-AVULSA] | 325: `SQLEXEC(gnConnHandle, "ROLLBACK", "")` no CATCH | removido |
+
+**[SQL-FILTRO-INVENTADO] ├® falso positivo**: `ControlCount` em `TornarControlesVisiveis` (linha 292 do form) ├® propriedade VFP usada para iterar controles de um container ÔÇö n├úo ├® coluna SQL em cl├íusula WHERE. Nenhuma altera├º├úo necess├íria.

@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SigReEchBO.prg`:**
+
+| M├®todo | Prop├│sito | Origens no legado |
+|--------|-----------|-------------------|
+| `CarregarDoCursor()` | Mapeia todas as 22 colunas de SIGCQCHI ÔåÆ propriedades BO, com tratamento de BITÔåÆLOGICAL para `emitidos`/`cancelas` | Padr├úo BO |
+| `CarregarDados()` | Carrega cheque por `emps+dopes+numes` via SQLEXEC | `Init` do legado: `lcQueryChi` |
+| `CarregarParcela()` | Carrega SigMvPar (banco/ag├¬ncia/conta/n├║mero/valor/vencimento) | `Init`: `CursorQuery('SigMvPar',...)` |
+| `CarregarEmpresa()` | Carrega `cidas` de SigCdEmp para uso na impress├úo | `Init`: `lcQueryEmp` |
+| `Inserir()` | INSERT completo em SigCqChi, gera `cidchaves` ├║nico, chama `RegistrarAuditoria` | Padr├úo BO |
+| `Atualizar()` | UPDATE completo em SigCqChi por `cidchaves`, chama `RegistrarAuditoria` | Padr├úo BO |
+| `MarcarEmitido()` | `emitidos=1 + favos + nemissoes` | `EmiteCheque`: UPDATE ap├│s imprimir |
+| `MarcarVersoImpresso()` | `impversos=1` | `EmiteVerso`: UPDATE ap├│s imprimir verso |
+| `AtualizarVerso()` | `versos=<texto>` | `Get_Verso.Valid`: UPDATE ao sair do campo |
+| `SalvarStatusSaida()` | `emitidos=0 + favos + nemissoes` | `Sair.Click`: salva antes de fechar sem emitir |

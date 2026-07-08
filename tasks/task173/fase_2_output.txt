@@ -1,0 +1,5 @@
+﻿Fase 2 conclu├¡da. O arquivo `SigPrDscBO.prg` foi atualizado com os tr├¬s m├®todos adicionados:
+
+- **`ObterChavePrimaria()`** (PROTECTED FUNCTION) ÔÇö retorna `ALLTRIM(this_cCPros)`, necess├írio para o sistema de auditoria do BusinessBase.
+- **`Inserir()`** (PROTECTED) ÔÇö retorna `.F.` com mensagem de erro descritiva, pois este form OPERACIONAL n├úo cria produtos novos (apenas atualiza descri├º├Áes existentes em lote).
+- **`Atualizar()`** (PROTECTED) ÔÇö faz UPDATE em `SigCdPro` (campos `DscCompras`, `ObsCompras`, `DPros`) para um produto individual identificado por `this_cCPros`, e chama `RegistrarAuditoria("A")` ap├│s o sucesso. Usa `EscaparSQL()` nos campos memo e `PADR(..., 40)` em `DPros`, replicando exatamente a l├│gica do `gravacao` original.

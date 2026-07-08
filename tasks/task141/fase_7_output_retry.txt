@@ -1,0 +1,10 @@
+﻿All 4 required Phase 7 event handlers (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) were added to `FormSigPdMfa.prg` before `BtnProcessaClick`.
+
+Since this is an **OPERACIONAL** form (SIGPDMFA has no CRUD buttons ÔÇö just Processar/Cancela), the handlers were mapped to functional equivalents that exercise the real form state:
+
+- **BtnIncluirClick**: clears all fields + BO state, focuses `txt_4c_Linha` for new entry
+- **BtnAlterarClick**: refreshes controls and focuses the first field for review/edit
+- **BtnVisualizarClick**: refreshes controls and focuses `cmd_4c_Processa`
+- **BtnExcluirClick**: asks confirmation via `MsgConfirma`, then discards the in-progress entry
+
+Each method runs real VFP9 code (no `MsgAviso("ser├í implementado")` stubs), uses `CHR()` for accents, calls `AtualizarEstadoCampos()` to keep DLinha/Dconta `Enabled` correct, and is documented explaining the operational-form mapping.

@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `sigprenvBO.prg`:**
+
+M├®todos "CRUD" (adaptados para OPERACIONAL sem tabela principal):
+- `ObterChavePrimaria()` ÔÇö retorna `""` (sem PK)
+- `CarregarDoCursor()` ÔÇö mapeia `nmaxtpetis`, `nmaximpeti`, `impetis`, `ajverts`, `ajhorzs` de cursor SigCdPam
+- `Inserir()` / `Atualizar()` ÔÇö retornam `.T.` (n├úo aplic├íveis)
+
+M├®todos de neg├│cio (equivalentes ├ás fun├º├Áes legadas e queries do `Init` original):
+- `CarregarConfiguracoes()` ÔÇö substitui `CursorQuery('SigCdPam')` + `CursorQuery('SigCdPac')`, popula todas as `this_n*Pad` de configura├º├úo
+- `CarregarTiposEtiqueta()` ÔÇö substitui `CursorQuery('SigCdTpe')` + filtro `ntipos=6 AND nsituas=1`
+- `CarregarImpressoras()` ÔÇö substitui a query UNION de `SigSyImp`/`sigcdacg`/`SIGCDMP` com acesso por usu├írio
+- `CarregarConfigImpressora()` ÔÇö substitui `fCarregarImps()` do Framework, popula `this_nTpImp/AjVerts/AjHorzs/AjDenss/AjVelos`
+- `PrepararCursorImpressao()` ÔÇö cria `dbImpressao` e insere registros para `SigOpEtq` consumir
+- `LimparCursorImpressao()` ÔÇö zera `dbImpressao` ap├│s impress├úo

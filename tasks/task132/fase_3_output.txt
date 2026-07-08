@@ -1,0 +1,13 @@
+﻿O caractere especial est├í apenas no coment├írio (`*`), o que ├® inofensivo no VFP9 (coment├írios s├úo ignorados pelo compilador). O arquivo est├í funcionalmente correto.
+
+Arquivo `FormSigReJob.prg` criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`. A Fase 3/8 est├í completa:
+
+**O que foi criado:**
+- `DEFINE CLASS FormSigReJob AS FormBase` com Width=800, Height=130 (exatos do original), DataSession=2, WindowType=1, ControlBox=.F., Closable=.F.
+- `Init(par_oParentForm)` ÔÇö recebe o form pai, armazena em `this_oParentFormRef`, faz `SET DATASESSION TO pFrm.DataSessionId` para compartilhar a datasession do FormJob (necess├írio para acessar TprMvCab, crSigOpCdI, crSigMvJbC), depois chama `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `SigReJobBO`, chama `Inicializar(this_oParentFormRef)` (que carrega CompTits do banco), monta cabecalho e bot├Áes, define `Caption` din├ómico a partir de `pFrm.CfgTitJob`
+- `ConfigurarCabecalho()` ÔÇö cria `cnt_4c_Cabecalho` (BackColor=RGB(100,100,100), opaco) com `lbl_4c_Sombra` e `lbl_4c_Titulo`
+- `ConfigurarBotoes()` ÔÇö cria `cmg_4c_Botoes` (Left=533, exato do original) com 4 bot├Áes: Visualizar/Imprimir/Arquivos/Sair; BINDEVENTs ser├úo adicionados na Fase 7/8
+- `Destroy()` ÔÇö limpa `this_oRelatorio = .NULL.` e `this_oParentFormRef = .NULL.`
+
+**Pr├│ximas fases:** 4-6 (n├úo aplic├íveis ÔÇö sem grid ou campos de dados neste form), Fase 7/8 adicionar├í os BINDEVENTs dos bot├Áes e os handlers `BtnVisualizarClick`, `BtnImprimirClick`, `BtnArquivosClick`, `BtnSairClick`.

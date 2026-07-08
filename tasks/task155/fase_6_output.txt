@@ -1,0 +1,11 @@
+﻿As tr├¬s mudan├ºas foram aplicadas corretamente. Resumo da Fase 6:
+
+**Mudan├ºas implementadas em `FormSigPrAop.prg`:**
+
+1. **Column1 ControlSource** (linha 194): Alterado de `"cursor_4c_DivOp.Dopes"` para `"ALLTRIM(cursor_4c_DivOp.Dopes) + ' ' + TRANSFORM(cursor_4c_DivOp.Numes)"` ÔÇö reproduz o comportamento original `Dopes + ' ' + fGerMascara(Numes)` sem depender da fun├º├úo legada.
+
+2. **Foco no Column5 ap├│s carregar OP** (linhas 439-441): Adicionado `THIS.grd_4c_Dados.ActiveColumn = 5` antes do `SetFocus`, equivalente ao `Grade.Column2.Text1.SetFocus` do legado que movia o cursor para a coluna "Quantidade" (edit├ível).
+
+3. **Height do edt_4c_Obss** (linha 280): Alterado de `70` para `96` ÔÇö escalonamento proporcional do form original (436px ÔåÆ 600px: `70 ├ù 1.376 Ôëê 96`), alinhando a parte inferior do EditBox com a ├írea ├║til do form.
+
+O form est├í completo ÔÇö a Fase 6 finalizou os ajustes de fidelidade visual/comportamental restantes para este formul├írio OPERACIONAL.

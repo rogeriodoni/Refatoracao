@@ -1,0 +1,25 @@
+﻿Phase 8 is complete. Here's a summary of what was added/changed:
+
+**Methods already implemented in previous phases (confirmed present):**
+- `CarregarLista()`, `BtnBuscarClick()`, `BtnEncerrarClick()` Ô£ô
+- `BtnSalvarClick()`, `BtnCancelarClick()` Ô£ô
+- `FormParaBO()`, `BOParaForm()` Ô£ô
+- `HabilitarCampos()`, `LimparCampos()` Ô£ô
+
+**Phase 8 additions:**
+
+1. **`AjustarBotoesPorModo()`** (new, line 4009) ÔÇö adjusts Salvar/Cancelar buttons: VISUALIZAR disables Salvar and sets CancelarÔåÆ"Voltar"; INCLUIR/ALTERAR enables both with "Cancelar" caption.
+
+2. **`BtnIncluirClick`** updated ÔÇö now calls `AjustarBotoesPorModo()` + resets inner page to Page1 before switching.
+
+3. **`BtnVisualizarClick`** updated ÔÇö same treatment after loading data.
+
+4. **`BtnAlterarClick`** updated ÔÇö same treatment after loading + entering edit mode.
+
+5. **`BOParaForm()`** extended ÔÇö now populates read-only display fields: `txt_4c_DtSituas`, `txt_4c_Estoques`, `txt_4c_QtdEsts`, `txt_4c_Ctotal`, `txt_4c_Mctotal`.
+
+6. **`LimparCampos()`** extended ÔÇö now clears all display-only fields: `txt_4c_DtSituas`, `txt_4c__Dtucp`, `txt_4c_Vucp`, `txt_4c_Mucp`, `txt_4c_Qtdultcomp`, `txt_4c_Estoques`, `txt_4c_QtdEsts`, `txt_4c_Ctotal`, `txt_4c_Mctotal`.
+
+**Integration** (already in place from prior phases):
+- `menu.prg` line 76: `AbrirFormProduto` already defined and wired to popCadastros
+- `config.prg`: uses ADIR() dynamic loading ÔÇö no manual SET PROCEDURE needed

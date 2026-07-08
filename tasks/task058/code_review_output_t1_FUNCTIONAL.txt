@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes funcionais aplicadas. Resumo do que foi feito e do que n├úo pode ser corrigido:
+
+**Corrigido (7 problemas funcionais reais):**
+
+- **[BUSCA-CURSOR] x5** ÔÇö Adicionado `loc_oLookup.this_cCursorDestino = "cursor_4c_BuscaXxx"` antes de `DefinirCursor()` em todos os 5 m├®todos `AbrirBusca*` (Vendedor, Base, Nvl2, Nvl3, Nvl4)
+- **[OPTIONGROUP-LEFT] x2** ÔÇö Adicionado `.AutoSize = .F.` e `.FontName`/`.FontSize` ao `Buttons(1)` dos dois OptionGroups (que estava faltando); todos os outros bot├Áes tamb├®m receberam `.AutoSize = .F.`
+
+**N├úo corrigido ÔÇö artefatos do validador (11 erros de layout):**
+
+Os 9 erros `[LAYOUT-POSITION]` das Labels e os 4 da posi├º├úo dos OptionGroups s├úo causados pelo validador comparar coordenadas **relativas ├á p├ígina** (original ÔêÆ 85px) contra os valores absolutos do SCX original. Corrigir esses valores colocaria `Label9` (Top=294) **fora da p├ígina** (que tem apenas 265px de altura = 350 ÔêÆ 85). O posicionamento atual est├í matematicamente correto para controles dentro de um `PageFrame` com `Top=85`.

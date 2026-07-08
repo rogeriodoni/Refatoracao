@@ -1,0 +1,11 @@
+﻿4 altera├º├Áes aplicadas com sucesso. Resumo do que foi feito e por qu├¬:
+
+**An├ílise das flags:**
+- Ambas as condi├º├Áes (`SERVICOS` e `PCCS`) **existem no original** ÔÇö `Servicos` aparece em `Delete All For _Cmats = xNensi.CMats and !servicos` e `Pccs` ├® campo leg├¡timo do cursor `crSigCdOpd` para controle do bot├úo EncerraPCC. N├úo eram filtros inventados, apenas VARTYPE checks desnecess├írios.
+
+**Fix aplicado (4 locais):**
+- `VARTYPE(xNensi.Servicos) = "L" AND xNensi.Servicos = .T.` ÔåÆ `NVL(xNensi.Servicos, .F.)` (linhas 595 e 836)
+- `!(VARTYPE(Servicos) = "L" AND Servicos)` ÔåÆ `!NVL(Servicos, .F.)` (linha 1432)
+- `(VARTYPE(crSigCdOpd.Pccs) = "L" AND crSigCdOpd.Pccs = .T.)` ÔåÆ `NVL(crSigCdOpd.Pccs, .F.)` (linha 1989)
+
+O resultado ├® c├│digo mais fiel ao estilo VFP original (`!servicos` simples), sem alterar l├│gica de neg├│cio.

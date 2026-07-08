@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "Local lcImg, lcEmp, lcCompos, cMaoObraPro, cMaoObraGarra\n\nThisForm.Container1.Visible = .T.\nThisForm.Label1.Visible = .T.\nThisForm.Label2.Visible = .T.\n\nCreate Cursor Cabecalho(Empresa c(50), Titulos c(50), lImpTit l)\nCreate Cursor crProCompos(cPros c(14), dPros c(40), PesoMs n(12,2), PVens n(12,2), Compos m,;\n\t\t\t\t\t      DtIncs d, DataAlts d, CodGarras c(10), cProdPai c(14),;\n\t\t\t\t\t      MoeVs c(3), PrecoGarra n(12,2), PesoGarra n(12,2),;\n\t\t\t\t\t      MoeGarra c(3), cMObraPro c(50), cMObraGarra c(5... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "If ThisForm.Opc_Rel.Value = 1\n\tReport Form SigReCgp To Print Prompt NoConsole\nENDIF\nIf INLIST(ThisForm.Opc_Rel.Value,2)\t\t&& mena - 05/03/3017 - incluida opcao 5 JAL\n\tReport Form SigReCg1 To Print Prompt NoConsole\nendif\nIf INLIST(ThisForm.Opc_Rel.Value,5)\t\t&& mena - 13/04/3017 - novo report para opcao 5 JAL\n\tReport Form SigReCg2 To Print Prompt NoConsole\nENDIF\nIf ThisForm.Opc_Rel.Value = 3\n\tReport Form SigPrCpr To Print Prompt NoConsole\nEndif\t\t\n*** mena - 01/09/2016 - inclusao de novo formato - i... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "Lparameters loForm\n\nThisForm.parentform = loForm\nDoDefault()\nThisform.poDataMgr = CreateObject('fSqlConector')\n\nThisForm.Container1.Visible = .F.\nThisForm.Label1.Visible = .F.\nThisForm.Label2.Visible = .F.\n\n*** Só habilita tipo de relatorio 5 se houver filtro por movimentação ***\nWITH thisform.parentform.fld_principal.pag_Consulta.filtro.principal\n\tthisform.opc_Rel.option5.Enabled=.get_operaçãoi.value<>0\nENDWITH\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject",
+        "controlesReferenciados": "get_operaçãoi,option5",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Procedure",
+      "linhas": 342,
+      "codigoOriginal": "Local lcEmpresa, lcTitulo, lcSubtit, lcGrupo, llImpImag\nLocal lcApagar, lcBrancos, lcEDN\npublic pcTotais\n\nllImpImag = .T.\n\nlnOrdem = ThisForm.Opc_Ordem.Value\nlnTpRel = ThisForm.Opc_Rel.Value\n\nThisForm.lnval = Iif(INLIST(lnTpRel,2),1,0)\n\nIf( INLIST(lnTpRel,3,4) )\t&& mena 01/09/2016 - incluido relatorio tipo 4\n\tThisForm.ProcCompEsp1()\n\tReturn\nEndif\n\n******   Criação do Cabeçalho do Relatório   *****\nCreate Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), ImpImagem l(1))\nSelect CrSigCdEmp\nGo T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "lnval = Iif,ProcCompEsp1,GetDatabase,SqlExecute",
+        "controlesReferenciados": "get_operação,get_operaçãoi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "If Used('crRelProm') Then\n\tSelect crRelProm\n\tGo Top\n\tScan\n\t\txImg = AllTrim(fLimpaString(crRelProm.cPros))\n\t\tlcArquivo = Sys(2023) + '\\T' + xImg + '.jpg'\n\t\tIf File(lcArquivo)\n\t\t\tDelete File (lcArquivo)\n\t\tEndif\n\tEndScan\nEndIf\n\nThisForm.parentform.Enabled = .t.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGP",
+      "evento": "Procedure",
+      "linhas": 39,
+      "codigoOriginal": "If ThisForm.Opc_Rel.Value = 1\n\tReport Form SigReCgp Preview NoConsole\nENDIF\n\nIf INLIST(ThisForm.Opc_Rel.Value,2)\t\t&& mena - 05/03/3017 - incluida opcao 5 JAL\n\tReport Form SigReCg1 Preview NoConsole\nENDIF\n\nIf INLIST(ThisForm.Opc_Rel.Value,5)\t\t&& mena - 13/04/3017 - novo report para opcao 5 JAL\n\tReport Form SigReCg2 Preview NoConsole\nENDIF\n\nIf ThisForm.Opc_Rel.Value = 3\n\tReport Form SigPrCpr Preview NoConsole\nEndif\t\t\n\n*** mena - 01/09/2016 - formato para atender solicitação da DRW\nIf ThisForm.Opc_... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,17 @@
+﻿Confirmado: as 3 ocorr├¬ncias de `ControlCount` nas linhas 214, 224 e 244 est├úo todas dentro do m├®todo `TornarControlesVisiveis`, iterando controles VFP9 via `par_oContainer.ControlCount` ÔÇö n├úo s├úo colunas SQL em nenhum `WHERE`.
+
+Verificando todos os `WHERE` das queries SQL no BO:
+
+| Query | WHERE columns |
+|-------|--------------|
+| SigCdPcz | `codigos` |
+| SigCdPcP | `Codigos`, `Datas`, `Fases` + filtro opcional `UniPrdts` |
+| SigCdPcg | `datas`, `Fases`, `Codigos` + filtro opcional `UniPrdts` |
+| SigCdPco | `Codigos`, `Fases`, `UniPrdts`, `Contas` |
+| VFP SELECT local | `Fases`, `UniPrdts`, `Nenvs`, `Seqs` |
+
+Todos batem exatamente com os WHEREs do original: `PNCOD/CODIGOS`, `DATAS`, `FASES`, `UNIPRDTS`, `CONTAS`, `CPROS`, `UNIDADE`. Nenhum filtro `CONTROLCOUNT` existe em SQL.
+
+**O alerta [SQL-FILTRO-INVENTADO] ├® um falso positivo.** O checker detectou o texto `ControlCount` como string suspeita, mas ele ├® exclusivamente a **propriedade VFP9** `ControlCount` usada para iterar controles de formul├írio ÔÇö nunca aparece dentro de string SQL ou cl├íusula `WHERE`.
+
+Nenhuma altera├º├úo ├® necess├íria nos arquivos `Formsigprcpd.prg` e `sigprcpdBO.prg`.

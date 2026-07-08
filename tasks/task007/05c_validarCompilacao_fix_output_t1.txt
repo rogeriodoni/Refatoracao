@@ -1,0 +1,3 @@
+﻿The fix is correct. The colon-separated property assignments within `WITH` blocks have been expanded to individual lines. 582 lines were fixed across the `ConfigurarPaginaDadosPage1` and `ConfigurarPaginaDadosPage2` methods.
+
+**Root cause**: VFP9 does not allow the `:` command separator inside `WITH...ENDWITH` blocks ÔÇö each property assignment must be on its own line. The code was generating "Syntax error" on every line that used ` : ` to pack multiple property assignments together.

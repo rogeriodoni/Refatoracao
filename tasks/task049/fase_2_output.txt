@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O arquivo `sigrecgrBO.prg` foi atualizado com:
+
+1. **`ConsultarTabela()`** (PROTECTED) ÔÇö substituto fiel do `poDataMgr.CursorQuery` do legado. Detecta o tipo do valor (N/C) automaticamente para formatar a SQL corretamente via `SQLEXEC`.
+
+2. **`PrepararDados()`** ÔÇö tradu├º├úo completa do m├®todo `processamento` (~490 linhas) com:
+   - Cria├º├úo dos cursores `TmpRastro`, `TmpBarra`, `TmpNop` com ├¡ndices
+   - Query inicial para `TmpLote` (cross-reference OP/Lote) via `SQLEXEC` + SELECT local VFP para calcular `nNumes = VAL(STR(Ndopes,4) + TRANSFORM(Numes,"@L 999999"))`
+   - Processamento dos 4 tipos de rastreabilidade (`DO CASE`)
+   - Loop hier├írquico OP ÔåÆ OP m├úe com `DELETE IN TmpNop` + `GO TOP`
+   - Todos os tipos 1-6 de registros em `TmpRastro` incluindo Scatter/Gather para tipo 6
+   - `_Empr` ÔåÆ `go_4c_Sistema.cCodEmpresa`, `SQLEXEC` em vez de `poDataMgr.SqlExecute`
+   - Erros via `THROW` dentro do `TRY`, capturados em `CATCH` com `MsgErro()`

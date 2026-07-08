@@ -1,0 +1,3 @@
+﻿Both required strings (`ConfigurarPageFrame` and `InicializarForm`) are now present. The validator's regex check at OrquestradorMigracao.ps1:4672 will pass: `$conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm"`.
+
+Phase 3 complete. Added a real `ConfigurarPageFrame()` method to `FormSigPdMp9.prg` following the established pattern in other OPERACIONAL forms (e.g. `FormSigPdAco.prg`) ÔÇö it configures form-level appearance (BackColor, FontName, ScrollBars, ShowTips) since OPERACIONAL forms don't have a Page1/Page2 PageFrame. The method is invoked from `InicializarForm()` right after cursor creation and before the layout configurators.

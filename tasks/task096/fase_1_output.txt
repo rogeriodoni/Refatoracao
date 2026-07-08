@@ -1,0 +1,10 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\sigrefc1BO.prg` foi criado com:
+
+- **Heran├ºa**: `RelatorioBase` (n├úo BusinessBase)
+- **Propriedades de filtro**: `this_dDtInicial`, `this_dDtFinal`, `this_cCodEmpresa`, `this_cDesEmpresa`, `this_nTpRel`
+- **Par├ómetros do sistema**: `this_cOperacao` e `this_cConserto` (extra├¡dos de `SigCdPam.dopes` / `SigCdPam.opconsers`)
+- **Configura├º├úo**: `this_cArquivoFRX = "SigReFc3"`, `this_cCursorDados = "csRelatorio"`
+- **Init()**: carrega `SigCdPam` (par├ómetros) e `SigOpFp` (formas de pagamento indexadas por `fpags`), replica exatamente o comportamento do `Init` e `Load` originais ÔÇö sem RETURN dentro do TRY/CATCH
+- **Destroy()**: fecha os 3 cursores de refer├¬ncia antes do DODEFAULT()
+
+Pronto para a Fase 2 (PrepararDados + demais m├®todos do BO).

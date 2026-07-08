@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 5,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCAR",
+      "evento": "Init",
+      "linhas": 37,
+      "codigoOriginal": "LParameters poForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession to poForm.DataSessionId\n\n=DoDefault()\n\nWith ThisForm\n\t.ParentForm = poForm\n\t.pcEscolha = Iif(Type([ThisForm.ParentForm.pcEscolha])=[C], .ParentForm.pcEscolha, [CONSULTAR])\n\t.HouveIncl = .f.\n\t.HouveExcl = .f.\n\n\tllVis = InList(.pcEscolha,'INSERIR','ALTERAR')\n\t.cmdInserir.Visible = llVis\n\t.cmdInserir.Enabled = llVis\n\t.cmdExcluir.Visible = llVis\n\t.cmdEx... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 48,
+      "codigoOriginal": "Local loLista\nIf (This.Tag <> This.Value)\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCrRap', ;\n\t\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., [CGrus In ('] + crSigCdPro.CGrus + [', Space(3))])\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tIf (Lastkey() <> 27)\n\t\t\tlnReg = Recno('crSigPrCar')\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.Tag = This.Value\n\nReturn InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 46,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nLocal loLista\n\nIf (This.Tag <> This.Value)\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCrRap', ;\n\t\t\t\t\t\t\t   'CrListaRemota', 'Descrs', This.Value, 'Seleção', .t., .f., [CGrus In ('] + crSigCdPro.CGrus + [', Space(3))])\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Descrs', '', 'Descrição')\n\t\t\tloLista.mAddColuna('Codigos',   '', 'Código')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tIf (Lastkey() <> 27)\n\t\t\tSelect a... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.Tag = This.Value\n\nReturn InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.cmdExcluir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crSigPrCar\n\nIf Not Eof() And (crSigPrCar.CPros = crSigCdPro.CPros)\n\tDelete\n\tSkip\n\tSkip - 1\nEndIf\n\nThisForm.HouveExcl = .T.\nThisForm.Grade.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.cmdSair",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) \n\t\tSelect crSigPrCar\n\t\tScan\n\t\t\tIf IsEmpty(crSigPrCar.Codigos)\n\t\t\t\tDelete In crSigPrCar\n\t\t\tEndIf\n\t\tEndScan\t\n\tEndIf\nEndIf\n\nThisForm.ParentForm.Enabled = .T.\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCAR.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.houveincl = .T.\n\nSelect crSigPrCar\nLocate For CPros = crSigCdPro.CPros And Empty(Codigos)\nIf Eof()\n\tInsert Into crSigPrCar (CPros, pkChaves) Values (crSigCdPro.CPros, fUniqueIds())\nEndIf\n\nSelect crSigPrCar\nThisform.Grade.Column1.SetFocus()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCAR.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into crSigPrCar (CPros, pkChaves) Values (crSigCdPro.CPros, fUniqueIds())",
+      "tabelas": "crSigPrCar",
+      "colunas": "CPros,pkChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigPrCar"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

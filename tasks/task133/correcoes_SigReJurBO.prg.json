@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigReJurBO.prg",
+    "timestamp":  "2026-06-06T22:27:08",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  208,
+                          "Original":  "loc_lAtiva = (NVL(Inativas, 0) = 0)",
+                          "Corrigido":  "IF VARTYPE(Inativas)=\"L\" / loc_lAtiva = ... / ELSE / loc_lAtiva = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

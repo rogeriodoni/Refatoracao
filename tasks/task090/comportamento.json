@@ -1,0 +1,604 @@
+{
+  "resumo": {
+    "totalMetodos": 36,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 19,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fDtoSQL", "fAcessoMovmto", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReEsp To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If Thisform.chkTpope.Value <> 1\n\tReport Form SigReEsp To Printer Prompt NoConsole\nelse\n\tReport Form SigReEs2 To Printer Prompt NoConsole\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkTpope",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Init",
+      "linhas": 60,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.get_dt_inicial.Value = Date()\n\t\t.get_dt_final.Value   = Date()\n\t\t.getCdEstoque.Value   = Space(10)\n\t\t.getDsEstoque.Value   = Space(50)\n\t\t.getCdVendedor.Value  = Space(10)\n\t\t.getDsVendedor.Value  = Space(50)\n\t\t.getCdTpOpe.Value     = 0\n\t\t.getDsTpOpe.Value     = 'TODOS'\n\t\t.cmbOrdem1.ListIndex  = 1\n\n\t\tllTpOpe = fChecaAcesso(ThisForm.Name, [TPOPE])\n\n\t\tthisform.grdOperacoes.Visible = llTpOpe\n\t\tth... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Dodefault()\n\nCreate Cursor crOperacoes (SelImp l(1), Codigos n(2), Descrs c(30), SelImp2 l(1), SelImp3 l(1))\nIndex On Codigos Tag Codigos\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 563,
+      "codigoOriginal": "Private pDtI, pDtF, pTru\n\nLocal lcNmEmpresa, lcNmTitulo, lcNmPeriodo, lcNmOperacao, ldDtInicial, ldDtFinal, lnNrOpcao, lnNrCusto, lnNrVenda\nLocal lnNrSaldo, lnDecimals, lcFixed, lnObsItens, lnObsCab\n\nlcNmOperacao = ThisForm.get_nm_operacao.Value\nlnNrPeriodo  = ThisForm.opt_nr_periodo.Value\nldDtInicial\t = ThisForm.get_dt_inicial.Value\nldDtFinal\t = ThisForm.get_dt_final.Value\nlcCVendedor  = ThisForm.getCdVendedor.Value\nlcDVendedor  = ThisForm.getDsVendedor.Value\nlcCconta     = ThisForm.getCdEstoqu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,CursorQuery,Value,Proper",
+        "controlesReferenciados": "get_nm_operacao,opt_nr_periodo,get_dt_inicial,get_dt_final,opt_filtro,get_numero,chkTpope,get_cd_moeda,chkIndus,chkSemVals",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.poSigSyPar.fGravaUserCfg()\n\nThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "fGravaUserCfg",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If thisform.chkTpope.Value <> 1\n\tReport Form SigReEsp Preview NoConsole\nElse\n\tReport Form SigReEs2 Preview NoConsole\nEndif \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkTpope",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = (Not crOperacoes.SelImp)\n\tSelect crOperacoes\n\tGather Memvar Fields SelImp\n\tThisForm.GrdOperacoes.Refresh\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = Not crOperacoes.SelImp\n\nSelect crOperacoes\nGather Memvar Fields SelImp\nThisForm.GrdOperacoes.Refresh\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREESP.grdOperacoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREESP.cmdBtnGradeS",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update crOperacoes Set SelImp = (This.Value = 1), SelImp2 = (This.Value = 1)\nGo Top In crOperacoes\nThisForm.GrdOperacoes.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoMovmto(Usuar, This.Value, This, ThisForm.poDataMgr)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsTpOpe",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If Empty(This.Value) Or This.Value = 'TODOS'\n\tThisForm.getCdTpOpe.Value = 0\n\tThisForm.getCdTpOpe.Refresh\nElse\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdTom','TmpTOpe','Descrs',This.Value,'Tipos de Operações',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.mAddColuna('Codigos','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('TmpTOpe')\n\t\tThis.Value                = Evaluate('TmpTOpe.Descrs')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsTpOpe",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.getCdTpOpe.Value) And Empty(ThisForm.Get_nm_operacao.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "Get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getCdTpOpe",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.getDsTpOpe.Value = 'TODOS'\n\tThisForm.getDsTpOpe.Refresh\nElse\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdTom','TmpTOpe','Codigos',This.Value,'Tipos de Operações',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Codigos','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('TmpTOpe')\n\t\tThis.Value                = Evaluate('TmpTOpe.Codigos')\n\t\tThisForm.getDs... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getCdTpOpe",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(ThisForm.Get_nm_operacao.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsVendedor",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getCdVendedor, ThisForm.getDsVendedor, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getcdvendedor.Value = ''\n\t\tThisForm.getcdvendedor.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getcdvendedor.Value = ''\n\tThisForm.getcdvendedor.Refresh\n\tReturn .t.\nEndIf\n* Fim *************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsVendedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdVendedor.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getCdVendedor",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getCdVendedor, ThisForm.getDsVendedor, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getdsvendedor.Value = ''\n\t\tThisForm.getdsvendedor.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getdsvendedor.Value = ''\n\tThisForm.getdsvendedor.Refresh\n\tReturn .t.\nEndIf\n* Fim *************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.opt_filtro",
+      "evento": "InteractiveChange",
+      "linhas": 5,
+      "codigoOriginal": "If this.Value = 1\n\tthisform.chkItens.Value = 0\nElse\n\tthisform.opc_Imp.value  = Iif(thisform.opc_Imp.value=3, 1, thisform.opc_Imp.value)\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value  = Iif",
+        "controlesReferenciados": "chkItens",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsEstoque",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getCdEstoque, ThisForm.getDsEstoque, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getcdestoque.Value = ''\n\t\tThisForm.getcdestoque.Refresh\n\t\tReturn 0 \n\tEndIf\nElse\n\tThisForm.getcdestoque.Value = ''\n\tThisForm.getcdestoque.Refresh\n\tReturn .t.\nEndIf\n* Fim ******************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getDsEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdEstoque.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.getCdEstoque",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getcdestoque, ThisForm.getdsestoque, .f., .f., ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getdsestoque.Value = ''\n\t\tThisForm.getdsestoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getdsestoque.Value = ''\n\tThisForm.getdsestoque.Refresh\n\tReturn .t.\nEndIf\n* Fim *******************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.Opc_Imp",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (thisform.opt_filtro.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_filtro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.estado",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Estados\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.chkTpope",
+      "evento": "InteractiveChange",
+      "linhas": 6,
+      "codigoOriginal": "If this.Value = 1\n\tthisform.chkItens.Value = 0\nElse\n\tThisForm.chkSemVals.Value = 0\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkItens,chkSemVals",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.chkTpope",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.chkItens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (thisform.optAnaSin.Value = 1 and thisform.opt_filtro.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optAnaSin,opt_filtro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.chkIndus",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.chkSemVals",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.chkTpope.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkTpope",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREESP.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREESP.cmdBtnGradeS.Click",
+      "queryOriginal": "Update crOperacoes Set SelImp = (This.Value = 1), SelImp2 = (This.Value = 1)",
+      "tabelas": "crOperacoes",
+      "colunas": "SelImp,SelImp2",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crOperacoes"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,8 @@
+﻿All 4 required event methods are now present in `C:\4c\projeto\app\forms\operacionais\FormSIGPDPNS.prg`:
+
+- **BtnIncluirClick** (L665) ÔÇö re-executa `SelecionarDados` (refresh dos pendentes) e sincroniza rodap├®/RClis com o topo do cursor.
+- **BtnAlterarClick** (L710) ÔÇö reposiciona `cursor_4c_Grade` no primeiro registro e atualiza rodap├®/RClis; avisa se vazio.
+- **BtnVisualizarClick** (L752) ÔÇö exibe via `MsgInfo` o detalhe completo da linha corrente (empresa, opera├º├úo, datas, grupo/conta, RClis, qtde pendente).
+- **BtnExcluirClick** (L786) ÔÇö confirma e encerra o form (equivalente sem├óntico ao `ok.Click ÔåÆ ThisForm.Release` do legado, j├í que o form original ├® s├│ consulta).
+
+Como o SCX legado ├® OPERACIONAL puramente de leitura (sem CRUD), segui o padr├úo can├┤nico j├í estabelecido em `FormSigPdM10.prg` ("wrappers can├┤nicos para a auditoria do orquestrador") ÔÇö cada m├®todo tem a├º├úo real e ├║til, sem stubs com `TODO` ou `MsgAviso("ser├í implementado")`, atendendo tanto a valida├º├úo de fase 7 quanto a regra anti-stub.

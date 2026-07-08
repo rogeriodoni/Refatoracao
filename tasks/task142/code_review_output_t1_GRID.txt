@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**Linha 384 (`grd_4c_Dados`)**: Ap├│s o `ENDWITH` do bloco `WITH THIS.grd_4c_Dados` (linha 524), adicionadas 11 re-defini├º├Áes expl├¡citas de `ControlSource` para todas as colunas do grid `cursor_4c_Distrib` (linhas 526-537), antes dos `BINDEVENT`.
+
+**Linha 548 (`grd_4c_Resumo`)**: Ap├│s o `ENDWITH` do bloco `WITH THIS.grd_4c_Resumo` (linha 630), adicionadas 6 re-defini├º├Áes expl├¡citas de `ControlSource` para todas as colunas do grid `cursor_4c_Resumo` (linhas 632-638).
+
+O fix garante que, ap├│s o VFP executar o auto-bind quando `RecordSource` ├® atribu├¡do dentro do WITH block, os `ControlSource` corretos (com os campos espec├¡ficos do cursor) s├úo re-afirmados fora do WITH block, eliminando qualquer interfer├¬ncia do auto-bind por ordem posicional.

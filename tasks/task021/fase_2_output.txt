@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado ao `SigAcCcrBO.prg`:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `CarregarDoCursor` | PROTECTED | Mapeia cursor ÔåÆ propriedades (usa `SELECT (alias)` + campos diretos) |
+| `ObterChavePrimaria` | PROTECTED | Retorna `this_cIdChave` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional, ordena por gracess/usuacess/grcontas |
+| `CarregarPorCodigo` | PUBLIC | SELECT por `cIdChaves`, seta `this_lNovoRegistro = .F.` |
+| `ValidarDados` | PROTECTED | Valida que usuario/grupo n├úo est├úo ambos vazios + grupo/conta corrente |
+| `ValidarDuplicata` | PUBLIC | Verifica duplicata por gracess+usuacess+grcontas+cdcontas (excluindo o pr├│prio registro no UPDATE) |
+| `Inserir` | PROTECTED | INSERT com `SYS(2015)` para gerar `cIdChaves` (equivalente ao `fUniqueIds()` do legado) |
+| `Atualizar` | PROTECTED | UPDATE por `cIdChaves` |
+| `ExecutarExclusao` | PROTECTED | DELETE por `cIdChaves` |
+| `CarregarDescricoesConta` | PUBLIC | Carrega `this_cDGrConta` (SigCdGcr.Descrs) e `this_cDConta` (SigCdCli.RClis) para display |

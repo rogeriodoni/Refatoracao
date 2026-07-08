@@ -1,0 +1,24 @@
+﻿Apenas no coment├írio, sem viola├º├Áes. A Fase 3 est├í completa.
+
+**Arquivo criado:** `C:/4c/projeto/app/forms/operacionais/Formsigprdft.prg` (491 linhas)
+
+**O que foi implementado na Fase 3:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Recebe 9 par├ómetros TEF, instancia BO, repassa params, chama DODEFAULT() |
+| `InicializarForm()` | Carrega SigOpFp/caixa do banco, declara DLLs, constr├│i layout, ajusta estado |
+| `InicializarDLLs()` | DECLARE das 4 fun├º├Áes da `CliSiTef32I.DLL` (equivale ao `PROCEDURE Load` do legado) |
+| `ConfigurarLayout()` | Orquestra cria├º├úo de cabecalho, sa├¡da, shape e container1 |
+| `ConfigurarCabecalho()` | Container cinza 100,100,100 com lbl_4c_Sombra/lbl_4c_Titulo |
+| `ConfigurarSaida()` | CommandGroup com bot├úo Cancelar (Top=-2, Left=420, Width=85) |
+| `ConfigurarShape()` | Shape2 decorativo ao redor dos campos (Top=93, Height=202) |
+| `ConfigurarContainer1()` | Container de instru├º├úo ao usu├írio ("Insira ou Passe o Cart├úo") |
+| `AjustarComportamento()` | Inicializa flags de estado (lKeyEsc, lAbandona, lTvenda) |
+| `TornarControlesVisiveis()` | Torna vis├¡veis todos os controles ap├│s AddObject |
+| `KeyPress()` | ESC cancela a transa├º├úo via Buttons(1).Click() |
+| `ObterResultado()` | Retorna string de resultado via BO.ObterResultadoFinal() |
+| `Unload()` | Retorna resultado ao fechar (equivale ao `PROCEDURE Unload` do legado) |
+| `Destroy()` | Libera BO e chama DODEFAULT() |
+
+**Pr├│xima fase (4/8):** Adicionar os campos de entrada (GetValor, GetCartao, GetDigitos, Optiongroup1, Text1, GetDatas) com suas propriedades visuais originais.

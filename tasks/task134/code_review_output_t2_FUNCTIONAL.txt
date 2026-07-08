@@ -1,0 +1,16 @@
+﻿O `CNT_4C_CABECALHO` j├í est├í na INLIST na linha 218 do arquivo atual. O problema descrito no code review **j├í est├í corrigido** no c├│digo atual ÔÇö nenhuma altera├º├úo ├® necess├íria.
+
+O m├®todo `TornarControlesVisiveis` (linhas 208ÔÇô235) j├í filtra corretamente todos os containers que devem permanecer inalterados:
+
+```foxpro
+IF INLIST(UPPER(loc_oControl.Name), ;
+          "CNT_4C_AGUARDE",    ;
+          "CNT_4C_CABECALHO",  ;   ÔåÉ j├í presente
+          "SHP_4C_SHPRP",      ;
+          "CMD_4C_CMDRPVIEW",  ;
+          "CMD_4C_CMDRPPRINT")
+    LOOP
+ENDIF
+```
+
+O ├║nico problema listado no pass Functional (`[CONTAINER-VISIVEL] CNT_4C_CABECALHO`) est├í resolvido no c├│digo fornecido. Arquivo `FormSigPdAco.prg` n├úo precisa de modifica├º├úo.

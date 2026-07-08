@@ -1,0 +1,231 @@
+*==============================================================================
+* MAIN.PRG
+* Programa principal de inicialização do sistema
+* Responsabilidade: inicializar ambiente, conectar ao banco, abrir menu
+*==============================================================================
+
+*------------------------------------------------------------------------------
+* Programa Principal
+*------------------------------------------------------------------------------
+PROCEDURE Main()
+    * Limpa ambiente
+    CLEAR ALL
+    CLEAR
+
+    * Exibe mensagem de inicialização
+    WAIT WINDOW "Inicializando sistema..." NOWAIT
+
+    * Carrega configurações
+    DO config.prg
+
+    * Configura ambiente
+    ConfigurarAmbiente()
+
+    * Configura SET's globais
+    ConfigurarSETs()
+
+    * Conecta ao banco de dados
+    IF !ConectarBancoDados()
+        WAIT CLEAR
+        MESSAGEBOX("Não foi possível conectar ao banco de dados." + CHR(13) + ;
+                   "O sistema será encerrado.", ;
+                   16, ;
+                   "Erro de Conexão")
+        RETURN
+    ENDIF
+
+    WAIT CLEAR
+
+    * Exibe tela de apresentação (splash screen) - opcional
+    * DO splash.prg
+
+    * Abre menu principal
+    * Opção 1: Menu programático
+    DO ..\menu\menu.prg
+    * Opção 2: Menu criado com Menu Designer (descomente após criar o .mpr)
+    * DO MENU ..\menu\menu.mpr
+
+    * Ao sair do menu, desconecta do banco
+    DesconectarBancoDados()
+
+    * Limpa variáveis públicas
+    LimparVariaveisPublicas()
+
+    * Mensagem de encerramento
+    MESSAGEBOX("Sistema encerrado com sucesso.", 64, "Até logo!")
+
+    CLEAR ALL
+    QUIT
+ENDPROC
+
+*------------------------------------------------------------------------------
+* ConectarBancoDados - Estabelece conexão com SQL Server
+* Retorno: .T. se conectou com sucesso, .F. se erro
+*------------------------------------------------------------------------------
+PROCEDURE ConectarBancoDados()
+    LOCAL lcStringConexao, lnHandle, llConectado
+    PUBLIC gnConnHandle
+
+    llConectado = .F.
+
+    TRY
+        * Obtém string de conexão
+        lcStringConexao = ObterStringConexao()
+
+        * Tenta conectar
+        lnHandle = SQLSTRINGCONNECT(lcStringConexao)
+
+        IF lnHandle < 0
+            * Erro na conexão
+            LOCAL ARRAY laErro[1]
+            AERROR(laErro)
+
+            MESSAGEBOX("Erro ao conectar ao banco de dados:" + CHR(13) + ;
+                       laErro[2], ;
+                       16, ;
+                       "Erro SQL")
+
+            llConectado = .F.
+        ELSE
+            * Armazena handle da conexão
+            gnConnHandle = lnHandle
+
+            * Configura timeout de queries
+            SQLSETPROP(gnConnHandle, "QueryTimeOut", DB_QUERY_TIMEOUT)
+
+            * Configura para retornar sempre array de erros
+            SQLSETPROP(gnConnHandle, "DispWarnings", .T.)
+
+            llConectado = .T.
+        ENDIF
+
+    CATCH TO loException
+        MESSAGEBOX("Exceção ao conectar ao banco:" + CHR(13) + ;
+                   loException.Message, ;
+                   16, ;
+                   "Erro")
+
+        llConectado = .F.
+    ENDTRY
+
+    RETURN llConectado
+ENDPROC
+
+*------------------------------------------------------------------------------
+* DesconectarBancoDados - Fecha conexão com SQL Server
+*------------------------------------------------------------------------------
+PROCEDURE DesconectarBancoDados()
+    IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+        SQLDISCONNECT(gnConnHandle)
+        gnConnHandle = 0
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* ConfigurarSETs - Define configurações globais do VFP
+*------------------------------------------------------------------------------
+PROCEDURE ConfigurarSETs()
+    * Formato de data
+    SET DATE TO DMY
+    SET CENTURY ON
+    SET MARK TO "/"
+
+    * Formato numérico
+    SET DECIMALS TO 2
+    SET POINT TO ","
+    SET SEPARATOR TO "."
+
+    * Formato de moeda
+    SET CURRENCY TO "R$ "
+    SET CURRENCY LEFT
+
+    * Comportamento
+    SET BELL OFF
+    SET CONFIRM ON
+    SET DELETED ON
+    SET EXACT ON
+    SET NEAR OFF
+    SET SAFETY OFF
+    SET TALK OFF
+    SET NOTIFY OFF
+    SET ESCAPE OFF
+
+    * Performance
+    SET OPTIMIZE ON
+    SET REPROCESS TO AUTOMATIC
+
+    * Interface
+    SET STATUS BAR ON
+    SET SYSMENU TO DEFAULT
+    SET CLOCK STATUS
+
+    * Codepage
+    SET COLLATE TO "GENERAL"
+
+    * Compatibilidade
+    SET STRICTDATE TO 0
+ENDPROC
+
+*------------------------------------------------------------------------------
+* LimparVariaveisPublicas - Remove variáveis públicas
+*------------------------------------------------------------------------------
+PROCEDURE LimparVariaveisPublicas()
+    IF TYPE("gnConnHandle") = "N"
+        RELEASE gnConnHandle
+    ENDIF
+
+    IF TYPE("gcCaminhoBase") = "C"
+        RELEASE gcCaminhoBase
+    ENDIF
+
+    IF TYPE("gcCaminhoClasses") = "C"
+        RELEASE gcCaminhoClasses
+    ENDIF
+
+    IF TYPE("gcCaminhoUtils") = "C"
+        RELEASE gcCaminhoUtils
+    ENDIF
+
+    IF TYPE("gcCaminhoForms") = "C"
+        RELEASE gcCaminhoForms
+    ENDIF
+
+    IF TYPE("gcCaminhoIcones") = "C"
+        RELEASE gcCaminhoIcones
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* TestarConexao - Testa conexão com banco de dados
+* Função auxiliar para debug/manutenção
+*------------------------------------------------------------------------------
+FUNCTION TestarConexao()
+    LOCAL lcSQL, lnResultado, llConexaoOK
+
+    llConexaoOK = .F.
+
+    IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+        RETURN llConexaoOK
+    ENDIF
+
+    TRY
+        * Executa query simples para testar
+        lcSQL = "SELECT 1 AS Teste"
+        lnResultado = SQLEXEC(gnConnHandle, lcSQL, "curTeste")
+
+        IF lnResultado > 0
+            USE IN curTeste
+            llConexaoOK = .T.
+        ENDIF
+
+    CATCH TO loException
+        llConexaoOK = .F.
+    ENDTRY
+
+    RETURN llConexaoOK
+ENDFUNC
+
+*------------------------------------------------------------------------------
+* Inicia execução
+*------------------------------------------------------------------------------
+DO Main

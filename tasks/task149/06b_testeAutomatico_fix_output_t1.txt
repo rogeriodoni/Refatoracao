@@ -1,0 +1,8 @@
+﻿As corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**Causa raiz**: O form tem `DataSession = 2` (datasession privada). Durante o teste automatizado, `CREATEOBJECT("FormSigPdMp8")` ├® chamado sem `par_oFormPai`, ent├úo `THIS.DataSessionId` n├úo ├® alterado ÔÇö os cursores `xNensiN` e `tmpnens` n├úo existem na datasession isolada. As atribui├º├Áes diretas de `ControlSource = "xNensiN.descs"` e `ControlSource = "tmpnens.xxx"` dentro dos m├®todos `ConfigurarPaginaDados()` e `AdicionarTxtDescricao()` causavam o crash.
+
+**Corre├º├Áes**:
+1. `ConfigurarPaginaDados()` ÔÇö as 3 atribui├º├Áes de `ControlSource` para `tmpnens.*` agora s├úo guardadas por `IF USED("tmpnens")`.
+2. `AdicionarTxtDescricao()` ÔÇö `ControlSource = "xNensiN.descs"` guardado por `IF USED("xNensiN")`.
+3. `CarregarGradeRetrab()` ÔÇö adicionada vincula├º├úo tardia dos ControlSources dos campos de texto, executada apenas quando os cursores existem (em execu├º├úo real com form pai).

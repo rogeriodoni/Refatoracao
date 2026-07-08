@@ -1,0 +1,16 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\relatorios\Formsigrecpe.prg` foi criado com **17 m├®todos completos**:
+
+**O que foi implementado:**
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` ÔåÆ cria BO, cabecalho, bot├Áes, PageFrame, vincula BINDEVENTs dos 4 bot├Áes
+- `ConfigurarCabecalho()` ÔåÆ `cnt_4c_Cabecalho` com sombra+t├¡tulo branco sobre cinza `RGB(100,100,100)`
+- `ConfigurarBotoes()` ÔåÆ `cmg_4c_Botoes` CommandGroup (Left=529, ButtonCount=4) com Visualizar/Imprimir/Excel/Encerrar no padr├úo can├┤nico
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com 1 page ("Filtros"), sem tabs, Top=85
+- `FormParaRelatorio()` ÔåÆ transfer de todos os controles para o BO (funciona quando Phase 5 adicionar os campos; TRY/CATCH para Phase 3)
+- `ValidarCamposObrigatorios()` ÔåÆ valida Estoque B obrigat├│rio, Estoque A obrigat├│rio s├│ no Tipo 1, usando `PEMSTATUS` para checar exist├¬ncia dos controles
+- `LimparCampos()` ÔåÆ reset com PEMSTATUS defensivo (funciona agora, preenche quando Phase 5 adicionar campos)
+- Handlers dos bot├Áes: `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`
+- Mapeamento CRUDÔåÆREPORT: `AtualizarEstadoControles`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnIncluirClick`
+- `Destroy()` ÔåÆ `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+Pr├│xima fase (4/8): n├úo se aplica a REPORT (sem grid/CRUD). Fase 5/8 adicionar├í os controles de filtro (TextBoxes, Labels, OptionGroups) na Page1 do PageFrame.

@@ -1,0 +1,10 @@
+﻿O valor `12713983` aparece **apenas em um coment├írio** na linha 747, n├úo em nenhuma cl├íusula WHERE. Trata-se de um falso positivo do validador.
+
+**An├ílise:** `12713983` ├® o valor num├®rico de `RGB(255, 255, 193)` (amarelo claro). O validador varreu o arquivo, encontrou esse n├║mero e o classificou erroneamente como "coluna em WHERE".
+
+As condi├º├Áes WHERE/LOCATE reais no c├│digo s├úo:
+- `InicializarResumo()`: `WHERE xNensi.Visivel` ÔÇö correto (equivale ao legado)  
+- `InicializarDistrib()`: `IF xNensi.Visivel` ÔÇö correto  
+- `SalvarAlteracoes()`: `LOCATE FOR nTrans = cursor_4c_Distrib.nTrans` ÔÇö correto, usa exatamente `NTRANS` como indicado no report
+
+**Resultado:** Nenhuma corre├º├úo necess├íria. O issue **[SQL-FILTRO-INVENTADO]** ├® um falso positivo ÔÇö o `12713983` est├í apenas no coment├írio `* BackColor 12713983 = RGB(255,255,193) pale-yellow do legado` e n├úo integra nenhuma condi├º├úo SQL. O c├│digo SQL do arquivo est├í correto.

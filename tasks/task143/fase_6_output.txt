@@ -1,0 +1,13 @@
+﻿The file is complete and correct. Phase 6/8 is done. Here's what was implemented:
+
+**Edit 3** ÔÇö `ConfigurarPaginaDados()` now calls `THIS.ConfigurarCntServico()` at the end (before the CATCH), completing the "Part 2/2" that was commented as Fase 6.
+
+**Edit 4** ÔÇö Added 4 new methods before `ENDDEFINE`:
+
+| Method | Purpose |
+|--------|---------|
+| `ConfigurarCntServico()` | Populates `cnt_4c_Servico` with 5 labels + 7 TextBoxes, then wires 6 BINDEVENTs |
+| `CntServicoEditavelWhen()` | `FUNCTION` returning `THIS.AlteraServico` ÔÇö shared When handler for get_valor/get_moeda/get_retrab (replaces legacy `RETURN ThisForm.AlteraServico`) |
+| `CntServicoGetValorLostFocus()` | Recalculates `get_total = ROUND(get_valor ├ù xNensi.Qtds, 2)` |
+| `CntServicoGetRetrabLostFocus()` | Recalculates `get_total = ROUND(get_retrab ├ù xNensi.Qtds, 2)` |
+| `AbrirLookupMoeda()` | KeyPress F4/ENTER/TAB ÔåÆ `FormBuscaAuxiliar` on `SigCdMoe` (CMOES/DMOES), replaces legacy `get_moeda.Valid` with `fwBuscaExt` |

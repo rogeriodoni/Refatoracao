@@ -1,0 +1,18 @@
+﻿A Fase 5 j├í est├í conclu├¡da. Ambos os arquivos est├úo completos desde as fases anteriores.
+
+**Situa├º├úo:**
+
+`Formsigreani.prg` (661 linhas) j├í tem:
+- `ConfigurarCabecalho()` - container cinza escuro com t├¡tulo
+- `ConfigurarBotoes()` - CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` - PageFrame com 1 p├ígina (form REPORT plano)
+- `ConfigurarPaginaLista()` - todos os 4 controles do filtro de per├¡odo (`lbl_4c_Periodo`, `txt_4c_DtInicial`, `lbl_4c_LblA`, `txt_4c_DtFinal`)
+- `ConfigurarPaginaDados()` - intencionalmente vazio (stub correto)
+- Todos os handlers de bot├úo, `FormParaRelatorio()`, `ValidarFiltros()`, `LimparCampos()`, `BOParaForm()`, `HabilitarCampos()`, `Destroy()`
+
+`sigreaniBO.prg` (424 linhas) j├í tem:
+- `PrepararDados()` completo com l├│gica MMDD, SCAN em SigCdCli + SigCdCe, socios e conjuges
+- `Imprimir()`, `Visualizar()`, `LimparCursores()`, `ObterMensagemErro()`
+- Todos os stubs de compatibilidade com pipeline
+
+**`ConfigurarPaginaDados()` est├í correto vazio** ÔÇö este form REPORT tem apenas 2 campos de data, ambos implementados em `ConfigurarPaginaLista()`. N├úo existe "Page2 - Dados" neste formul├írio. A Fase 5 n├úo requer nenhuma altera├º├úo.

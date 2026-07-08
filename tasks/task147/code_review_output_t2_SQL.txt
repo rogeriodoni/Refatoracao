@@ -1,0 +1,9 @@
+﻿Ap├│s pesquisa completa em todos os arquivos `.prg` do projeto, `LNBOT`/`lnBot` aparece **exclusivamente em um coment├írio VFP** (linha 2837 do Form), nunca em um SQL WHERE real:
+
+```foxpro
+*   and lnBot=0 and xNensi vazio -> Do Form SigOpMpn With ThisForm, DataSessionId
+```
+
+Esse `lnBot` ├® uma **vari├ível local VFP do c├│digo legado** (prefixo `ln` = local numeric), n├úo uma coluna de banco de dados. O coment├írio apenas documenta a condi├º├úo original do legado. O c├│digo novo equivalente (`BtnPendentesClick`) trata isso corretamente verificando `THIS.this_cModoAtual = "INCLUIR"`.
+
+**Resultado**: O problema [SQL-FILTRO-INVENTADO] ├® um **falso positivo** ÔÇö o scanner do code review n├úo distinguiu c├│digo VFP execut├ível de linhas de coment├írio (`*`). N├úo h├í nenhum SQL WHERE com `LNBOT` ou `lnBot` em nenhum arquivo do projeto. Nenhuma corre├º├úo ├® necess├íria.

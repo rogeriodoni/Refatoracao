@@ -1,0 +1,11 @@
+﻿Phase 3/8 complete. `FormSIGREAEG.prg` created at `C:\4c\projeto\app\forms\relatorios\FormSIGREAEG.prg` (~600 lines).
+
+The form implements:
+- **Header**: `cnt_4c_Cabecalho` (RGB(100,100,100)) with shadow/title labels
+- **ButtonGroup**: `cmg_4c_Botoes` (4 buttons ├ù 75px, Left=487 matching original btnReport geometry) bound to Visualizar/Imprimir/Excel/Encerrar
+- **PageFrame**: 2 pages, Tabs=.F., top=85
+- **All 5 filter rows** in Page1 with Top adjusted (original_top - 85): Empresa (35), GGrupo (60), GrEstoque (87), Estoque (114), Periodo (141)
+- **Lookups**: F4/DblClick opens `FormBuscaAuxiliar` for GGrupo (SigCdGpr), GrEstoque (SigCdGcr), Estoque (SigCdCli), Empresa (SigCdEmp); ENTER/TAB triggers validation via SQLEXEC
+- **ValidarCampos()**: replicates the original `btnReport.Click` validation sequence (SigCdGcr ÔåÆ SigCdCli ÔåÆ SigCdGpr ÔåÆ date checks)
+- **FormParaRelatorio()**: transfers all 10 filter fields to the BO properties
+- **BtnVisualizarClick/BtnImprimirClick**: validate ÔåÆ transfer ÔåÆ call `this_oRelatorio.Visualizar()`/`Imprimir()`

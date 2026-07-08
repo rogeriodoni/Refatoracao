@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 1 conclu├¡da: `C:\4c\projeto\app\classes\sigredcuBO.prg` criado com:
+
+**Propriedades declaradas (28 total):**
+- Par├ómetros do documento: `this_cEmps`, `this_cDopes`, `this_nNumes`, `this_nQbols`, `this_cEmail`, `this_nTpImpressao`
+- Checkboxes de op├º├Áes: `this_nChkImagem`, `this_nChkItensP`, `this_nChkDescIng`, `this_nChkCompo`, `this_nChkImpPag`
+- Agrupamento: `this_nOptAgrupa` (default 2=Nenhum, conforme legado)
+- Controle de impress├úo: `this_lChkImpDoc`, `this_lChkImpDocAcess`, `this_lImpTodasPaginas`, `this_lAcImprimir`, `this_lAcExcel`, `this_lChkCompoVisivel`
+- Dados de crSigCdOpeD: `this_nNDopes`, `this_nChkImpDocOpe`, `this_nCarCompos`, `this_nDckTermos`, `this_cCMoes`, `this_nTipoNfs`, `this_nOpers`, `this_cLblTxIdCs`, `this_nChkIFoto`
+- Cursores/referencias: `this_cCursorDados`, `this_cCursorRel`, `this_oFormPai`, `this_cArqEmail`
+
+**M├®todos:**
+- `Init()` ÔÇö chama `DODEFAULT()`
+- `PrepararDados()` ÔÇö carrega crSigCdOpeD via SQLEXEC, sem RETURN dentro de TRY
+- `VerificarReimpressao()` ÔÇö consulta SigMvCab.Impress
+- `RegistrarImpressao()` ÔÇö UPDATE SigMvCab SET Impress=1
+- `ObterMensagemErro()` ÔÇö retorna this_cMensagemErro
+- `Destroy()` ÔÇö limpa refer├¬ncia ao form pai

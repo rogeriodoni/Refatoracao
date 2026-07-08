@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da com sucesso. O `FormSigPdMpf.prg` agora tem 1327 linhas e todos os m├®todos foram implementados:
+
+**M├®todos adicionados na Fase 8:**
+- `BOParaForm()` ÔÇö sincroniza BO ÔåÆ UI para todos os 8 campos de filtro, incluindo re-aplica├º├úo das regras `When` do legado (DGrupo/DConta habilita├º├úo condicional)
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita todos os controles preservando as regras condicionais do legado
+- `LimparCampos()` ÔÇö zera todos os filtros, datas voltam para hoje, sincroniza BO
+- `CarregarLista()` ÔÇö para form OPERACIONAL plano (sem grid), chama `BOParaForm()` e respeita flag `gb_4c_ValidandoUI`
+- `AjustarBotoesPorModo()` ÔÇö form OPERACIONAL sem modos CRUD: garante `Enabled=.T.` em Pesquisar + Encerrar + todos os campos
+- `BtnBuscarClick()` ÔåÆ delega para `CmdPesquisarClick()`
+- `BtnEncerrarClick()` ÔåÆ chama `Release()`
+- `BtnSalvarClick()` ÔåÆ delega para `CmdPesquisarClick()` (contexto operacional: executar = "salvar" a consulta)
+- `BtnCancelarClick()` ÔåÆ chama `LimparCampos()` e devolve foco para data inicial

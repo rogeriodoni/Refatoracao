@@ -1,0 +1,19 @@
+﻿Phase 4 is complete. The file now has 1,394 lines. Here's a summary of what was accomplished in this session:
+
+**BO fixes (sigprcomBO.prg)** ÔÇö done in prior session:
+- Removed non-existent `b.sgrus` column from `Buscar()` SELECT and GROUP BY
+- Added missing `a.deptos` to all 3 UNION ALL queries in `CarregarCursorCopia()`
+
+**Formsigprcom.prg ÔÇö Edit 1** (prior session): 5 CRUD buttons in `cnt_4c_Botoes` with BINDEVENTs
+
+**Edit 2** (this session): Completed `ConfigurarPaginaLista()` with:
+- BINDEVENT for Encerrar ÔåÆ BtnEncerrarClick
+- `cmd_4c_BtnCopiar` (Top=33, Left=474, geral_copiar_60.jpg)
+- `grd_4c_Lista` (Top=131, Width=971, Height=553, ColumnCount=7 outside WITH)
+- `cnt_4c_Copia` panel (BackStyle=1 opaque to prevent ghost trails, Visible=.F.) with all children: 3 action buttons, 2 textboxes, 3 labels, 6 legend labels, `grd_4c_Dados` (ColumnCount=6 outside WITH) with CheckBox in Column1
+
+**Edit 3**: Updated `CarregarLista()` to call `VincularGridLista()` after `Buscar()`
+
+**Edit 4**: Added 18 methods: `VincularGridLista` (Problems 34/36/48/32 pattern), `AlternarPagina`, `BtnEncerrarClick`, `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnCopiarClick`, `CmdSairCopiaClick`, `EmpOrigLostFocus`, `EmpDestLostFocus`, `ProdutoCopiaLostFocus`, `CmdProcessaClick`, `CmdCopiarClick`, `CmdMarcarClick`, `CmdDesmarcarClick`, `GridListaAfterRowColChange`
+
+Next: Phase 5/8 ÔÇö Page2 header controls (product info fields: txt_4c__produto, txt_4c_Dpro, txt_4c_Cgru, txt_4c_Dgru, txt_4c_Ifor, txt_4c_Dfor, txt_4c_Refs, situacao option group).

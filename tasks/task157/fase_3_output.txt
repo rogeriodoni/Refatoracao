@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrCar.prg` foi criado com:
+
+- **DEFINE CLASS FormSigPrCar AS FormBase** ÔÇö propriedades visuais exatas do original (480├ù540, TitleBar=0, WindowType=1, Themes=.F., ControlBox=.F.) + propriedades operacionais (`this_oFormPai`, `this_cPcEscolha`, `this_lHouveIncl`, `this_lHouveExcl`, `this_cCPros`, `this_cCGrus`)
+
+- **Init(par_oFormPai, par_cCPros, par_cCGrus, par_cPcEscolha)** ÔÇö armazena todos os par├ómetros *antes* de `DODEFAULT()`, incluindo `this_cTituloForm` com `CHR(237)` (n├úo pode estar no DEFINE CLASS)
+
+- **InicializarForm()** ÔÇö cria BO, define Picture, chama `ConfigurarPageFrame()`, `TornarControlesVisiveis()`, e dispara `Buscar()` apenas fora dos modos de teste/valida├º├úo UI
+
+- **ConfigurarPageFrame()** ÔÇö cria `cnt_4c_Sombra` (100,100,100) com `lbl_4c_LblSombra` (preto/sombra) e `lbl_4c_LblTitulo` (branco/t├¡tulo), FontSize=18, AutoSize=.F.
+
+- **TornarControlesVisiveis(par_oContainer)** ÔÇö recursivo, trata PageFrames via `Pages()`
+
+- **Destroy()** ÔÇö fecha cursores `cursor_4c_Dados`, `cursor_4c_DadosTemp`, `cursor_4c_DupCheck`, nulifica BO, chama `DODEFAULT()`
+
+A Fase 4 adicionar├í `ConfigurarPaginaLista()` com o grid e os bot├Áes (Inserir/Excluir/Encerrar).

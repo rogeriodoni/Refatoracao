@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O `sigredcuBO.prg` agora tem **10 m├®todos novos** adicionados:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna chave `EmpDopNums` concatenada (3+20+6 chars) |
+| `RegistrarAuditoria(op)` | Delega para `RegistrarImpressao()` quando op="IMPRIMIR" |
+| `PrepararImpressao()` (protected) | Seta `ImpTodasPaginas` e posiciona `TmpRelat` no topo |
+| `Processamento()` | Popula `TmpRelat` via `DO SigPrIdc WITH` 15 par├ómetros |
+| `AtualizarOpcoes()` | Wrapper que chama `Processamento()` quando checkboxes/OptAgrupa mudam |
+| `Visualizacao()` | Loop `this_nQbols` ├ù `REPORT FORM SigReDc2 PREVIEW` + `impGarantia()` |
+| `Impressao()` | Loop `this_nQbols` ├ù `REPORT FORM SigReDc2 TO PRINTER` (PROMPT se TpImpressao Ôëá 2,4) + `impGarantia()` |
+| `DocumentoExcel()` | Gera `SigReDc2 TO FILE ... ASCII`; popula `this_cArqEmail` com o path |
+| `impGarantia()` | Carrega `TxtTermos` de `SigOpCdc` e imprime `SigReDc3` se `dckTermos=1` |
+| `EnviarEmail(cAnexo)` | Busca email em `SigMvFornE` se `this_cEmail` vazio; chama `ForeMails()` |

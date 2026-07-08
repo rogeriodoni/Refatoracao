@@ -1,0 +1,6 @@
+﻿All 5 methods required by the Phase 8 validator (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`) are now present in `Formsigrectc.prg`.
+
+The previous retry failed because the validator (OrquestradorMigracao.ps1:4741) is hard-coded to expect CRUD-style method names (`FormParaBO`, `BOParaForm`), but this is a REPORT form that originally implemented `FormParaRelatorio` instead. Added two wrapper methods at the end of the class, matching the pattern used by other migrated REPORT forms (e.g., `Formsigrecrt.prg`):
+
+- `FormParaBO()` ÔåÆ delegates to `FormParaRelatorio()` (moves filter values to the BO)
+- `BOParaForm()` ÔåÆ calls `LimparCampos()` + Refresh (resets filter screen)

@@ -1,0 +1,22 @@
+﻿Verifica├º├úo completa. Todos os 5 alertas s├úo **falsos positivos**.
+
+## An├ílise por coluna flagged
+
+O code review comparou os WHERE de **todas** as queries do arquivo contra as linhas de refer├¬ncia da query principal (`SigMvCcr`), mas as colunas flagged est├úo em queries **auxiliares separadas** ÔÇö n├úo na query principal:
+
+| Coluna | Query | Tabela | Prop├│sito | Status |
+|--------|-------|--------|-----------|--------|
+| `CEMPS` | `WHERE Cemps = go_4c_Sistema.cCodEmpresa` | `SigCdEmp` | Busca nome da empresa para cabe├ºalho do relat├│rio (`NomeEmpresa` em `dbCabecalho`) | Ô£à Leg├¡timo |
+| `ICLIS` (BO) | `WHERE IClis = cursor_4c_CcrDados.Contas` | `SigCdCli` | Busca `RClis` para cada registro no SCAN (campo `RClis` do `TmpHist`) | Ô£à Leg├¡timo |
+| `ICLIS` (Form) | `WHERE IClis = loc_cValor` | `SigCdCli` | Valida├º├úo do c├│digo de conta digitado no filtro | Ô£à Leg├¡timo |
+| `CMOES` | `WHERE CMoes = loc_cValor` | `SigCdMoe` | Valida├º├úo do c├│digo de moeda no filtro | Ô£à Leg├¡timo |
+| `DATAS` | `WHERE datas <= par_dData` | `SigCdCot` | `BuscarCotacao()` ÔÇö busca cota├º├úo para convers├úo de moeda | Ô£à Leg├¡timo |
+| `CODIGOS` | `WHERE Codigos = loc_cValor` | `SigCdGcr` | Valida├º├úo do c├│digo de grupo no filtro | Ô£à Leg├¡timo |
+
+**Query principal de `SigMvCcr` (linhas 118ÔÇô125 do BO)** usa exatamente `WHERE Grupos = ... AND (DataConcs IS NULL OR DataConcs > ...)` ÔÇö bate perfeitamente com o original (`GRUPOS, DATACONCS`). Ô£à
+
+## Diagn├│stico
+
+O verificador autom├ítico escaneou todos os `WHERE` do arquivo e comparou contra as colunas da query de refer├¬ncia (`SigMvCcr`). Ele n├úo distinguiu entre a query principal e lookups auxiliares em outras tabelas (`SigCdEmp`, `SigCdCli`, `SigCdMoe`, `SigCdGcr`, `SigCdCot`).
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto.

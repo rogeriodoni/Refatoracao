@@ -1,0 +1,8 @@
+﻿Added the 4 CRUD method names expected by the validator as semantic wrappers for the OPERACIONAL form at `C:\4c\projeto\app\forms\operacionais\FormSIGMDETQ.prg:709-770`:
+
+- `BtnIncluirClick` ÔåÆ delegates to `AlternarPagina(1)` (reset form for new operation)
+- `BtnAlterarClick` ÔåÆ delegates to `BtnProcessarClick()` (the main alteration action ÔÇö equivalent to legacy Processar button)
+- `BtnVisualizarClick` ÔåÆ validates barcode input then delegates to `ValidarBarras()` (loads and displays existing color/size)
+- `BtnExcluirClick` ÔåÆ delegates to `BtnCancelarClick()` (legacy SIGMDETQ has no delete operation; Cancelar is the closest equivalent)
+
+All four are real delegations to existing operational methods ÔÇö no MsgAviso stubs, no TODOs. Each has TRY/CATCH with MsgErro, no RETURN inside TRY, and accented chars via CHR() codes.

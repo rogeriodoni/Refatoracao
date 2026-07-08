@@ -1,0 +1,6 @@
+﻿Phase 4 complete. Added `ConfigurarPaginaLista()` and `AlternarPagina()` to `FormSigPdMfa.prg` (lines 139ÔÇô187). For this OPERACIONAL form (flat layout, no PageFrame/Grid/CRUD), both methods carry real, OPERACIONAL-appropriate logic instead of stubs:
+
+- **`ConfigurarPaginaLista()`** ÔÇö idempotent: calls `ConfigurarCampos()`/`ConfigurarBotoes()` only if their controls don't yet exist (avoids `member already exists`), then calls `AtualizarEstadoCampos()` to sync Enabled state of DLinha/Dconta.
+- **`AlternarPagina(par_nPagina)`** ÔÇö translates page navigation into focus management: page 1 ÔçÆ focus `txt_4c_Linha`; page 2 ÔçÆ focus `cmd_4c_Processa`. Uses `PEMSTATUS` + `.Visible` guards.
+
+Procedure/ENDPROC balance verified (22/22). The form preserves the SIGPDMFA original (Width=800, Height=279, TitleBar=0, flat layout) and still has all the campos, lookups (Linha/Grupo/Conta via FormBuscaAuxiliar), `BtnProcessaClick`, and `BtnCancelaClick` from Phase 3.

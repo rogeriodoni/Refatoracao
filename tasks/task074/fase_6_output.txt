@@ -1,0 +1,21 @@
+﻿A implementa├º├úo est├í completa. Aqui est├í o resumo do que foi verificado e confirmado na Fase 6:
+
+**`Formsigredco.prg` ÔÇö Status: COMPLETO**
+
+O form `SIGREDCO` ├® um di├ílogo modal de impress├úo (798├ù128px) chamado programaticamente pelo form chamador. N├úo h├í campos adicionais nem lookups porque o original simplesmente n├úo os tem:
+
+| Componente original | Implementa├º├úo migrada | Status |
+|---|---|---|
+| `chkNf` (checkbox) | `chk_4c_ChkNf` com `ChkNfClick()` | Ô£à |
+| `chkIcentivo` (checkbox) | `chk_4c_ChkIcentivo` com `ChkIncentivoClick()` | Ô£à |
+| `btnReport` (CommandGroup 4 bot├Áes) | `cmg_4c_Botoes` com 4 buttons + BINDEVENTs | Ô£à |
+| `PROCEDURE visualizacao` | `Visualizar()` no BO | Ô£à |
+| `PROCEDURE impressao` | `Imprimir()` no BO | Ô£à |
+| `PROCEDURE documento` | `ImprimirDocumento()` no BO | Ô£à |
+| `PROCEDURE processamento` | `PrepararDados()` no BO | Ô£à |
+| Init com 9 par├ómetros | `Init()` com `LPARAMETERS` completo | Ô£à |
+| DigItens 6/7: ocultar checkboxes | `ConfigurarPaginaDados()` | Ô£à |
+| DivNotas=2 (P&G): renomear captions + Finaliza | `ConfigurarPaginaDados()` | Ô£à |
+| TpImpressao=3/4: imprimir direto sem exibir form | `Init()` ap├│s `DODEFAULT()` | Ô£à |
+
+**Integra├º├úo**: Auto-carregado pelo `ADIR()` do `config.prg` (padr├úo `*BO.prg` + `Form*.prg`). N├úo precisa de entrada no menu pois ├® chamado programaticamente.

@@ -1,0 +1,893 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReIiv.SCX
+* Data/Hora: 06/06/2026 10:01:11
+* Total de registros: 5
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIIV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkListagem
+  Parent: SIGREIIV
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIIV
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 125
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Impressão de Invoice"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  Name = "SIGREIIV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 533
+  btnReport.Top = 1
+  btnReport.TabIndex = 1
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIIV.chkListagem
+------------------------------------------------------------
+  Top = 94
+  Left = 72
+  Height = 15
+  Width = 101
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir \<Listagem"
+  Value = 0
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "chkListagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIIV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE selecionadados
+------------------------------------------------------------
+PROCEDURE selecionadados
+Local lcEdn, loCnx
+
+lcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)
+loCnx = ThisForm.poDataMgr
+
+* Campos Usados Do SigCdPam
+loCnx.CursorQuery([SigCdPam], [LocalParam], .f., .f., [CGruEstPs])
+Go Top In LocalParam
+If Eof([LocalParam])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigCdEmp
+* RazSocs	= Razão Social
+* Razas	    = Nome
+* Endes		= Endereço
+* Numeros   = Número
+* Bairs     = Bairro
+* Cidas     = Cidade
+* Estas     = Estado
+* Ceps      = CEP
+loCnx.CursorQuery([SigCdEmp], [LocalEmp], [Cemps], Padr(ThisForm.pcEmps, 3), ;
+				  [RazSocs, Razas, Endes, Numeros, Bairs, Cidas, Estas, Ceps, Paises])
+Go Top In LocalEmp
+If Eof([LocalEmp])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvCab
+* Numes		= Nº do Pedido
+* Datas 	= Data
+* ContaOs	= Fornecedor
+* ContaDs	= Entrega
+loCnx.CursorQuery([SigMvCab], [LocalMvCab], [EmpDopNums], lcEdn, ;
+				  [Numes, Datas, ContaOs, ContaDs, Notas, Valos, ObsEs, DtEmis])
+Go Top In LocalMvCab
+If Eof([LocalMvCab])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvItn
+lcQuery = [Select a.CItens, a.CodBarras, a.CPros, a.DPros, a.Units, a.Pesos, a.Qtds, a.Totas ] + ;
+		    [From SigMvItn a ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' ] + ;
+		   [Order By a.CItens, a.CPros]
+
+If (loCnx.SqlExecute(lcQuery, [LocalMvItn]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMvItn)])
+	Return .f.
+EndIf
+Go Top In LocalMvItn
+If Eof([LocalMvItn])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvIts
+lcQuery = [Select a.CItens, a.CPros, a.CodBarras, a.Qtds, a.CodCors, a.CodTams ] + ;
+		    [From SigMvIts a ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' ] + ;
+		   [Order By a.CItens, a.CPros]
+
+If (loCnx.SqlExecute(lcQuery, [LocalMvIts]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMvIts)])
+	Return .f.
+EndIf
+Go Top In LocalMvIts
+*!*	If Eof([LocalMvIts])
+*!*		Return .f.
+*!*	EndIf
+
+* Campos Usados Do SigSubMv
+lcQuery = [Select a.CItens, a.CPros, a.Mats, a.Pesos, a.Qtds, p.Varias, b.NTipoJoals ] + ;
+		    [From SigSubMv a, SigCdPro p, SigCdGrp b ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+		   		 [a.Mats = p.CPros And ] + ;
+		   		 [p.CGrus = b.CGrus ] + ;
+		   [Order By a.CItens, a.CPros, a.Mats]
+
+If (loCnx.SqlExecute(lcQuery, [LocalSubMv]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalSubMv)])
+	Return .f.
+EndIf
+Go Top In LocalSubMv
+
+* Campos Usados Do SigMvNfi
+* Emis	    = Data de Emissão
+* Qtdes     = Número de Volumes
+* PLiqs     = Peso Líquido
+* PBrus     = Peso Bruto
+* CodTrans  = Transportadora
+loCnx.CursorQuery([SigMvNfi], [LocalNFis], [EmpDopNums], lcEdn, ;
+				  [Emis, Qtdes, PLiqs, PBrus, CodTrans, Numeros, Espes, VlFretes, VlSeguros, DespAces])
+If Not Used([LocalNFis])
+	Return .f.
+Else
+	Go Top In LocalNFis
+EndIf
+
+* Campos Usados Do SigMvPar
+* FPags		= Forma de Pagamento
+* MoeFpgs	= Moeda da Forma de Pagamento
+* Valos		= Valor
+lcSql = [Select a.Fpags, a.MoeFpgs, a.Valos, b.Descrs, b.Trocos ] + ;
+		  [From SigMvPar a, SigOpFp b ] + ;
+		 [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+		 	   [a.Fpags = b.Fpags]
+
+loCnx.SqlExecute(lcSql, [LocalPar1])
+
+If Not Used([LocalPar1])
+	Return .f.
+Else
+	Go Top In LocalPar1
+
+	Select Sum(1) as Total, FPags, MoeFpgs, Valos, Descrs, Trocos ;
+	  From LocalPar1 ;
+	 Group By FPags, MoeFpgs, Valos, Descrs, Trocos ;
+	  Into Cursor LocalPar ReadWrite
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lcPmt
+
+lcPmt = Iif(InList(ThisForm.pcTpImp, 2, 4), [], [Prompt])
+
+Report Form SigReIiv To Printer &lcPmt. NoConsole
+
+If (ThisForm.chkListagem.Value = 1) && Imprimir Listagem
+	Select crInvoices
+	Go Top
+
+	Report Form SigReIpk To Printer &lcPmt. NoConsole
+EndIf
+
+lcArq = Sys(2023) + [\SigReIiv_*.jpg]
+Delete File &lcArq.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEmp, pDop, pNum, pImp 
+
+With ThisForm
+	.pcEmps     = pEmp
+	.pcDopes    = pDop
+	.pcNumes    = pNum
+	.Caption    = [Impressão de Invoice (] + Alltrim(pDop) + [/] + Alltrim(Str(pNum)) + [)]
+	.pcTpImp    = Iif(Type([pImp])=[N], pImp, 0)
+	.ContaEmail = Space(10)
+
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		Set Point To [,]
+		Set Separator To [.]
+
+		lcQuery = [Select Expressao, Traducao ] + ;
+					[From SigCdDic ] + ;
+				   [Where Idioma = 'INGLES    ' ] + ;
+				   [Order By Len(Expressao) Desc, Expressao]
+
+		If (.poDataMgr.SqlExecute(lcQuery, [crSigCdDic]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdDic)])
+			Return .f.
+		EndIf
+
+		=DoDefault()
+
+		If (.btnReport.Imprime.Visible And InList(.pcTpImp, 3, 4))
+			.btnReport.Value = 1
+			.btnReport.Click()
+			.Release
+			Return .f.
+		EndIf
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local loCnx
+
+loCnx = ThisForm.poDataMgr
+
+lcQuery = [Select CasQtds ] + ;
+		    [From SigOpCdd ] + ;
+		   [Where Dopes = '] + Padr(ThisForm.pcDopes, 20) + [' ] + ;
+		   [Order By Dopes]
+
+If (loCnx.SqlExecute(lcQuery, [LocalOpe]) < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalOpe)')
+	Return .f.
+EndIf
+Select LocalOpe
+Go Top
+
+lcQuery = [Select * ] + ;
+		    [From SigOpCdi ] + ;
+		   [Where Dopes = '] + Padr(ThisForm.pcDopes, 20) + [' ] + ;
+		   [Order By Dopes]
+
+If (loCnx.SqlExecute(lcQuery, [LocalIvOpe]) < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalIvOpe)')
+	Return .f.
+EndIf
+
+Select LocalIvOpe
+Go Top
+If Eof([LocalIvOpe])
+	=MessageBox([Esta Operação Não Possui Invoices Configuradas Para Impressão!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+If (LocalIvOpe.chkInvs <> 1)
+	=MessageBox([Esta Operação Não Foi Configurada Para Imprimir Invoices!!!], 0+16, [Atenção!!!])
+	Return .f.
+EndIf
+
+lcQtd = Iif(LocalOpe.CasQtds < 1, [n(12)], [n(12,] + Alltrim(Str(LocalOpe.CasQtds, 10))+ [)])
+
+Create Cursor crInvoices (Dopes c(20), chkTits n(1), lblTits c(30), chkLists n(1), lblLists c(30), chkOrigs n(1), ;
+						  lblOrigs c(30), chkEndOs n(1), lblEndOs c(30), chkDests n(1), lblDests c(30), ;
+						  chkEndDs n(1), lblEndDs c(30), chkEmps n(1), lblEmps c(30), chkEndEs n(1), lblEndEs c(30), ;
+						  chkTrans n(1), lblTrans c(30), chkEmis n(1), lblEmis c(30), optEmis n(1), chkPais n(1), ;
+						  lblPais c(30), chkVols n(1), lblVols c(30), lblVolCs c(30), chkEsps n(1), lblEsps c(30), ;
+						  lblEspCs c(30), chkQtds n(1), lblQtds c(30), lblQtdCs c(30), chkPesoBs n(1), lblPesoBs c(30), ;
+						  chkPesoLs n(1), lblPesoLs c(30), chkTots n(1), lblTots c(30), chkItens n(1), ;
+						  SubGBris c(6), chkPags n(1), lblPags c(30), chkRods n(1), lblRods c(30), ObsRods M(4), ;
+						  DSubGBris c(10), CItens n(10), CPros c(14), CodTams c(4), FigJpgs m(4), DCors c(20), ;
+						  DGrus c(20), CClass c(3), DPros m(4), Metals n(11,3), PTots n(11,3), QtdBs n(11,3), ;
+						  PesoBs n(11,3), Mat1s c(14), Qtd1s n(11,3), Peso1s n(11,3), Qtds &lcQtd., Units n(12,2), ;
+						  Totas n(12,2), Pagina n(4), TotPag n(4), DadTits c(100), DadLists c(100), DadOrigs c(100), ;
+						  DadEndOs c(200), DadDests c(100), DadEndDs c(200), DadEmps c(100), DadEndEs c(200), ;
+						  DadTrans c(100), DadEmis c(100), DadPais c(100), DadVols c(100), DadEsps c(100), ;
+						  DadQtds c(100), DadPesoBs c(100), DadPesoLs c(100), DadTots c(100), DadPags M(4), ;
+						  ImpRodape l, ChkTxIds n(1), lblTxIds c(30), lblTxIdCs m(4), lblTxIdOs m(4), chkDescLng n(1), ObsCab M, ;
+						  DadHands n(12,2), lblFrete c(30), chkFrete n(1), lblSeguro c(30), chkSeguro n(1), DadFrete c(100), DadSeguro c(100))
+If ThisForm.SelecionaDados()
+	lnMax = Iif(LocalIvOpe.MaxItens > 0, LocalIvOpe.MaxItens, 9999) && Número Máximo de Produtos Por Página de Invoice
+
+	* Título do Relatório
+	lcTit = []
+	If (LocalIvOpe.chkCabs = 1)
+		lcTit = Alltrim(LocalIvOpe.lblTits) + [ nº ] + Alltrim(LocalMvCab.Notas)
+	EndIf
+	
+	lcOCb = Nvl(LocalMvCab.ObsEs,'')
+
+	* Título da Listagem
+	lcLis = []
+	If (LocalIvOpe.chkLists = 1)
+		lcLis = Alltrim(LocalIvOpe.lblLists) + [ ] + ;
+				Alltrim(LocalMvCab.Notas) + [/] + ;
+				Substr(Dtos(LocalMvCab.Datas), 3, 2)
+	EndIf
+
+	lcEmail = []
+	If Not Empty(LocalMvCab.ContaOs)
+		loCnx.Cursorquery([SigCdCli], [crTmpCli], [IClis], LocalMvCab.ContaOs, [Emails])
+		Select crTmpCli
+		If Not IsEmpty(crTmpCli.Emails)
+			lcEmail = Alltrim(crTmpCli.Emails) + [;]
+		EndIf
+	EndIf
+	
+	If Not Empty(LocalMvCab.ContaDs)
+		loCnx.Cursorquery([SigCdCli], [crTmpCli], [IClis], LocalMvCab.ContaDs, [Emails])
+		Select crTmpCli
+		If Not IsEmpty(crTmpCli.Emails)
+			lcEmail = lcEmail + Alltrim(crTmpCli.Emails)
+		EndIf
+	EndIf
+	
+	ThisForm.ContaEmail = lcEmail
+
+	* Descrição e Endereço da Conta de Origem
+	lcCtO = []
+	lcEdO = []
+	lcTxO = []
+	
+	If (LocalIvOpe.chkCabs = 1) And Not Empty(LocalMvCab.ContaOs) And ((LocalIvOpe.chkOrigs = 1) Or (LocalIvOpe.chkEndOs = 1))
+		loCnx.CursorQuery([SigCdCli], [LocalCli], [IClis], LocalMvCab.ContaOs, ;
+						  [Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Paises, Obs])
+
+		If (LocalIvOpe.ChkTxIds = 1) And Used([LocalCli])
+			lcTxO = LocalCli.Obs
+		EndIf
+
+		lcCtO = Alltrim(Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos))
+
+		lcEdO = Alltrim(LocalCli.Endes) + ;
+				Iif(Empty(Alltrim(LocalCli.Nums)),   [], [, ]  + Alltrim(LocalCli.Nums))   + ;
+				Iif(Empty(Alltrim(LocalCli.Compls)), [], [ - ] + Alltrim(LocalCli.Compls)) + ;
+				Iif(Empty(Alltrim(LocalCli.Bairs)),  [], [ - ] + Alltrim(LocalCli.Bairs))  + ;
+				Iif(Empty(Alltrim(LocalCli.Cidas)),  [], [ - ] + Alltrim(LocalCli.Cidas))  + ;
+				Iif(Empty(Alltrim(LocalCli.Estas)),  [], [ - ] + Alltrim(LocalCli.Estas))  + ;
+				Iif(Empty(Alltrim(LocalCli.Paises)), [], [ - ] + Alltrim(LocalCli.Paises)) + ;
+				Iif(Empty(Alltrim(LocalCli.Ceps)),   [], [ - CEP: ] + Alltrim(LocalCli.Ceps))
+	EndIf
+
+	* Descrição e Endereço da Conta de Destino
+	lcCtD = []
+	lcEdD = []
+
+	loCnx.CursorQuery([SigCdCli], [LocalCli], [IClis], LocalMvCab.ContaDs, ;
+					  [Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Paises, Obs])
+
+	lcTxI = Nvl(LocalIvOpe.lblTxIds, [])
+	If (LocalIvOpe.ChkTxIds = 1) And Used([LocalCli])
+		lcTxI = Nvl(LocalCli.Obs, [])
+	EndIf
+
+	If (LocalIvOpe.chkCabs = 1) And Not Empty(LocalMvCab.ContaDs) And ((LocalIvOpe.chkDests = 1) Or (LocalIvOpe.chkEndDs = 1))
+		lcCtD = Alltrim(Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos))
+
+		lcEdD = Alltrim(LocalCli.Endes) + ;
+				Iif(Empty(Alltrim(LocalCli.Nums)),   [], [, ]  + Alltrim(LocalCli.Nums))   + ;
+				Iif(Empty(Alltrim(LocalCli.Compls)), [], [ - ] + Alltrim(LocalCli.Compls)) + ;
+				Iif(Empty(Alltrim(LocalCli.Bairs)),  [], [ - ] + Alltrim(LocalCli.Bairs))  + ;
+				Iif(Empty(Alltrim(LocalCli.Cidas)),  [], [ - ] + Alltrim(LocalCli.Cidas))  + ;
+				Iif(Empty(Alltrim(LocalCli.Estas)),  [], [ - ] + Alltrim(LocalCli.Estas))  + ;
+				Iif(Empty(Alltrim(LocalCli.Paises)), [], [ - ] + Alltrim(LocalCli.Paises)) + ;
+				Iif(Empty(Alltrim(LocalCli.Ceps)),   [], [ - CEP: ] + Alltrim(LocalCli.Ceps))
+	EndIf
+
+	* Descrição e Endereço da Empresa
+	lcCtE = []
+	lcEdE = []
+	If (LocalIvOpe.chkCabs = 1)
+		lcCtE = Iif(Empty(LocalEmp.RazSocs), LocalEmp.Razas, LocalEmp.RazSocs)
+		lcEdE = Alltrim(LocalEmp.Endes) + ;
+				Iif(Empty(Alltrim(LocalEmp.Numeros)),[], [, ]  + Alltrim(LocalEmp.Numeros)) + ;
+				Iif(Empty(Alltrim(LocalEmp.Bairs)),  [], [ - ] + Alltrim(LocalEmp.Bairs)) + ;
+				Iif(Empty(Alltrim(LocalEmp.Cidas)),  [], [ - ] + Alltrim(LocalEmp.Cidas)) + ;
+				Iif(Empty(Alltrim(LocalEmp.Estas)),  [], [ - ] + Alltrim(LocalEmp.Estas)) + ;
+				Iif(Empty(Alltrim(LocalEmp.Paises)), [], [ - ] + Alltrim(LocalEmp.Paises)) + ;
+				Iif(Empty(Alltrim(LocalEmp.Ceps)),   [], [ - CEP : ] + Alltrim(LocalEmp.Ceps))
+	EndIf
+
+	* Descrição da Transportadora
+	lcTrp = []
+	If (LocalIvOpe.chkCabs = 1) And Not Empty(LocalNFis.CodTrans) And (LocalIvOpe.chkTrans = 1)
+		loCnx.CursorQuery('SigPrTrp', 'LocalTra', 'Itras', LocalNFis.CodTrans, 'Razaos')
+
+		lcTrp = Alltrim(LocalTra.Razaos)
+	EndIf
+	
+	* Data de Embarque
+	lcDtE = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkEmis = 1)
+		lcCdE = Iif(Empty(Alltrim(LocalEmp.Cidas)),  [], Alltrim(LocalEmp.Cidas) + [, ])
+		ldDat = Iif(IsEmpty(LocalMvCab.DtEmis), Iif(IsEmpty(LocalMvCab.Datas), Datetime(), LocalMvCab.Datas), LocalMvCab.DtEmis)
+
+		Do Case
+			Case (LocalIvOpe.optEmis = 2) && aaaa/mm/dd
+				lcDtE = Dtoc(Ttod(Nvl(ldDat, Datetime())))
+				lcDtE = lcCdE + Substr(lcDtE, 7, 4) + [/] + Substr(lcDtE, 4, 2) + [/] + Substr(lcDtE, 1, 2)
+
+			Case (LocalIvOpe.optEmis = 3) && mês dd, aaaa
+				ldDtE = Ttod(Nvl(ldDat, Datetime()))
+				If Not Empty(ldDtE)
+					lcDtE = lcCdE + CMonth(ldDtE) + [ ] + Alltrim(Str(Day(ldDtE),20,0)) + [, ] + Alltrim(Str(Year(ldDtE),20,0))
+				EndIf
+
+			Case (LocalIvOpe.optEmis = 4) && dd de mês de aaaa
+				lcDtE = lcCdE + fMontaDtChq(Ttod(Nvl(ldDat, Datetime())))
+
+			Otherwise 					  && dd/mm/aaaa
+				lcDtE = lcCdE + Dtoc(Ttod(Nvl(ldDat, Datetime())))
+		EndCase
+	EndIf
+
+	* País
+	lcPai = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkPais = 1)
+		lcPai = [Brazil]
+	EndIf
+
+	* Número de Volumes
+	lcVol = []
+	If (LocalIvOpe.chkCabs = 1)
+		If (LocalIvOpe.chkVols = 1)
+			lcVol = Alltrim(Str(Iif(Empty(LocalNFis.Qtdes), 1, LocalNFis.Qtdes), 6)) + [ ]
+		EndIf
+		If Not Empty(LocalNfis.Numeros)
+			lcVol = lcVol + Alltrim(LocalNfis.Numeros)
+		Else
+			lcVol = lcVol + Alltrim(LocalIvOpe.lblVolCs)
+		Endif
+	EndIf
+	
+	* Especificações
+	lcEsp = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkEsps = 1)
+		lcEsp = Alltrim(LocalNfis.Espes)
+	EndIf
+
+	* Quantidade Total
+	lcQtt = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkQtds = 1)
+		Select [ ] as Agrupar,Sum(Qtds) as Qtds ;
+		  From LocalMvItn ;
+		  Into Cursor crQtds group by 1
+
+		Go Top In crQtds
+		If Not Eof('crQtds')
+			If Int(Qtds) - Qtds <> 0
+				lcQtt = Transform(crQtds.Qtds, "@R 99,999.99") + [ ]
+			Else
+				lcQtt = Alltrim(Str(crQtds.Qtds, 10)) + [ ]
+			Endif
+		Else
+			lcQtt = [1 ]
+		EndIf
+		lcQtt = lcQtt + Alltrim(LocalIvOpe.lblQtdCs)
+	EndIf
+
+	* Peso Bruto
+	lcPeB = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkPesoBs = 1) And LocalNfis.pbrus > 0
+		lcPeB = Transform(Transform(LocalNFis.PBrus*100,"@l 9999999"),"@R 99,999.99") + 'Kg'
+	EndIf
+
+	* Peso Líquido
+	lcPeL = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkPesoLs = 1) And LocalNfis.pliqs > 0
+		lcPel = Transform(Transform(LocalNFis.pLiqs*100,"@l 9999999"),"@R 99,999.99") + 'Kg'
+	EndIf
+
+	* Frete
+	lcFrete = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkFrete = 1) And LocalNfis.VlFretes > 0
+		lcFrete = Alltrim(Transform(LocalNFis.VlFretes,"@999,999,999.99"))
+	EndIf
+	
+	* Seguro
+	lcSeguro = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkSeguro = 1) And LocalNfis.VlSeguros > 0
+		lcSeguro = Alltrim(Transform(LocalNFis.VlSeguros,"@999,999,999.99"))
+	EndIf
+	
+	* Descritivo do Grupo de Brilhantes
+	lcDgb = []
+	If Not Empty(LocalIvOpe.lblEspCs)
+		lcDgb = Alltrim(LocalIvOpe.lblEspCs)
+	EndIf
+
+	Select [ ] as Agrupar, Sum(Totas) as Totas ;
+	  From LocalMvItn ;
+	  Into Cursor LocalTPar2 ;
+	 Group By 1
+
+	Select LocalTPar2
+	Go Top
+	lnCtt2 = LocalTPar2.Totas
+
+	* Condições de Pagamento
+	Select [ ] as Agrupar, Sum(Valos * Iif(Trocos=1, -1, 1)) as Valos ;
+	  From LocalPar ;
+	  Into Cursor LocalTPar ;
+	 Group By 1
+	
+	Select LocalTPar
+	Go Top
+	lnCtt = LocalTPar.Valos
+
+	lcPag = []
+	Select LocalPar
+	Scan
+		lcPct = Padl(Alltrim(Str((LocalPar.Valos / lnCtt2) * 100, 8, 2)), 8)
+		lcPag = lcPag + Padr(Alltrim(LocalPar.Descrs), 25) + [ (] + lcPct + [%) ] + ;
+				Padl(Alltrim(Str(LocalPar.Valos, 16, 2)), 18) + Chr(13)
+	EndScan
+	If Not Empty(lcPag)
+		lcPag = lcPag + Space(42) + Replicate([_], 14) + Chr(13) && Linha Sobre o Valor Total
+		lcPag = lcPag + Padr([Total], 15) + Space(11) + Padl(Alltrim(Str(lnCtt, 16, 2)), 30)
+	EndIf
+
+	lcBrc = Addbs(JustPath(ThisForm.poDataMgr.getDatabase())) + [BrJpg.JPG]
+	Create Cursor crBranco (Branco m)
+	Select crBranco
+	Append Blank In crBranco
+	Append Memo Branco From (lcBrc) Overwrite
+
+	* Inserindo Produtos
+	lnPgn = 1
+	lnItn = 1
+	lnVal = 0
+	
+	Select LocalMvItn
+	Scan
+		lnItn = LocalMvItn.CItens
+		
+		ThisForm.poDataMgr.CursorQuery([SigCdPro], [LocalPro], [CPros], LocalMvItn.CPros, ;
+									   [DPros, DescFis, DscCompras, CGrus, CClass, FigJpgs, CodCors, CodTams])
+
+		lcCor = LocalPro.CodCors
+		lcTam = LocalPro.CodTams
+						
+		Select Qtds, CodCors, CodTams ;
+		  From LocalMvIts ;
+		 Where CItens = lnItn ;
+		  Into Cursor crItens
+
+		Select crItens
+		Go Top In crItens
+		If Eof([crItens])
+			Select Qtds, Space(4) as CodCors, Space(4) as CodTams ;
+			  From LocalMvItn ;
+			 Where CItens = lnItn ;
+			  Into Cursor crItens
+		EndIf
+		
+		Select crItens
+		Scan
+			lcCor = Iif(Empty(crItens.CodCors), lcCor, crItens.CodCors)
+			lcTam = Iif(Empty(crItens.CodTams), lcTam, crItens.CodTams)
+			lcCla = LocalPro.CClass
+			lcDps = Alltrim(Nvl(LocalPro.DscCompras, Nvl(LocalPro.DescFis, [])))
+			lcDps = Alltrim(Iif(Empty(lcDps), LocalPro.DPros, lcDps))
+			lcDgs = []
+			If (LocalIvOpe.chkDescLng = 1) && Apanhando a Descrição Em Inglês
+				If Not Empty(LocalPro.CGrus)	
+					ThisForm.poDataMgr.CursorQuery([SigCdGrp], [LocalGru], [CGrus], LocalPro.CGrus, [DGrus])
+					lcDgs = Alltrim(LocalGru.DGrus)
+				EndIf
+				
+				If Not Empty(lcDgs)	
+					Select crSigCdDic
+					Scan
+						lcDgs = Strtran(lcDgs, Alltrim(crSigCdDic.Expressao), Alltrim(crSigCdDic.Traducao))
+						lcDps = Strtran(lcDps, Alltrim(crSigCdDic.Expressao), Alltrim(crSigCdDic.Traducao))
+					EndScan
+				EndIf
+			EndIf
+
+			ThisForm.poDataMgr.CursorQuery([SigCdCor], [LocalCor], [Cods], lcCor, [Descs])
+
+			lcDcr = Alltrim(LocalCor.Descs)
+			If (LocalIvOpe.chkDescLng = 1) && Apanhando a Descrição Em Inglês
+				If Not Empty(lcDcr)	
+					Select crSigCdDic
+					Scan
+						lcDcr = Strtran(lcDcr, Alltrim(crSigCdDic.Expressao), Alltrim(crSigCdDic.Traducao))
+					EndScan
+				EndIf
+			EndIf
+			
+			* Inserindo os Dados no Cursor de Impressão
+			Insert Into crInvoices (Dopes, chkTits, lblTits, chkLists, lblLists, ;
+									chkOrigs, lblOrigs, chkEndOs, lblEndOs, chkDests, ;
+									lblDests, chkEndDs, lblEndDs, chkEmps, lblEmps, ;
+									chkEndEs, lblEndEs, chkTrans, lblTrans, chkEmis, ;
+									lblEmis, optEmis, chkPais, lblPais, chkVols, ;
+									lblVols, lblVolCs, chkEsps, lblEsps, lblEspCs, ;
+									chkQtds, lblQtds, lblQtdCs, chkPesoBs, lblPesoBs, ;
+									chkPesoLs, lblPesoLs, chkTots, lblTots, chkItens, ;
+									SubGBris, chkPags, lblPags, chkRods, lblRods, ;
+									ObsRods, chkDescLng, chkTxIds, lblTxids, lblTxIdCs, ;
+									lblTxIdOs, CPros, PTots, Qtds, Units, ;
+									Totas, DadTits, DadLists, DadOrigs, DadEndOs, ;
+									DadDests, DadEndDs, DadEmps, DadEndEs, DadTrans, ;
+									DadEmis, DadPais, DadVols, DadEsps, DadQtds, ;
+									DadPesoBs, DadPesoLs, DadPags, Pagina, ObsCab, ;
+									CItens, DSubGBris, DPros, DGrus, CClass, ;
+									CodTams, DCors, FigJpgs, lblFrete, chkFrete, lblSeguro, chkSeguro, DadFrete, DadSeguro) ;
+							Values (LocalIvOpe.Dopes, LocalIvOpe.chkTits, LocalIvOpe.lblTits, LocalIvOpe.chkLists, LocalIvOpe.lblLists, ;
+									LocalIvOpe.chkOrigs, LocalIvOpe.lblOrigs, LocalIvOpe.chkEndOs, LocalIvOpe.lblEndOs, LocalIvOpe.chkDests, ;
+									LocalIvOpe.lblDests, LocalIvOpe.chkEndDs, LocalIvOpe.lblEndDs, LocalIvOpe.chkEmps, LocalIvOpe.lblEmps, ;
+									LocalIvOpe.chkEndEs, LocalIvOpe.lblEndEs, LocalIvOpe.chkTrans, LocalIvOpe.lblTrans, LocalIvOpe.chkEmis, ;
+									LocalIvOpe.lblEmis, LocalIvOpe.optEmis, LocalIvOpe.chkPais, LocalIvOpe.lblPais, LocalIvOpe.chkVols, ;
+									LocalIvOpe.lblVols, LocalIvOpe.lblVolCs, LocalIvOpe.chkEsps, LocalIvOpe.lblEsps, LocalIvOpe.lblEspCs, ;
+									LocalIvOpe.chkQtds, LocalIvOpe.lblQtds, LocalIvOpe.lblQtdCs, LocalIvOpe.chkPesoBs, LocalIvOpe.lblPesoBs, ;
+									LocalIvOpe.chkPesoLs, LocalIvOpe.lblPesoLs, LocalIvOpe.chkTots, LocalIvOpe.lblTots, LocalIvOpe.chkItens, ;
+									LocalIvOpe.SubGBris, LocalIvOpe.chkPags, LocalIvOpe.lblPags, LocalIvOpe.chkRods, LocalIvOpe.lblRods, ;
+									Nvl(LocalIvOpe.ObsRods, []), LocalIvOpe.chkDescLng, LocalIvOpe.ChkTxIds, LocalIvOpe.lblTxIds, lcTxI, ;
+									lcTxO, LocalMvItn.CPros, LocalMvItn.Pesos, crItens.Qtds, LocalMvItn.Units, ;
+									LocalMvItn.Units * crItens.Qtds, lcTit, lcLis, lcCtO, lcEdO, ;
+									lcCtD, lcEdD, lcCtE, lcEdE, lcTrp, ;
+									lcDtE, lcPai, lcVol, lcEsp, lcQtt, ;
+									lcPeB, lcPeL, lcPag, lnPgn, lcOCb, ;
+									LocalMvItn.CItens, lcDgb, lcDps, lcDgs, lcCla, ;
+									lcTam, lcDcr, Nvl(LocalPro.FigJpgs, []), ;
+									LocalIvOpe.lblFrete, LocalIvOpe.chkFrete, LocalIvOpe.lblSeguro, LocalIvOpe.chkSeguro, lcFrete, lcSeguro)
+			
+			Select LocalSubMv
+			Go Top In LocalSubMv
+			Locate For CItens = LocalMvItn.CItens
+			If Not Eof([LocalSubMv])
+				Select Mats, Qtds, Pesos as PCompos, Varias, NTipoJoals ;
+				  From LocalSubMv ;
+				 Where CItens = LocalMvItn.CItens ;
+				 Order By Mats ; 
+				  Into Cursor LocalCompo
+					
+			Else
+				lcQuery = [Select a.Mats, a.Qtds, a.Pesos as PCompos, p.Varias, b.NTipoJoals, u.Fators ] + ;
+						    [From SigPrCpo a, SigCdPro p, SigCdGrp b, SigCdUni u ] + ;
+						   [Where a.CPros = '] + Padr(LocalMvItn.CPros, 14) + [' And ] + ;
+						   		 [a.Mats = p.CPros And ] + ;
+						   		 [p.CGrus = b.CGrus And ] + ;
+						   		 [a.UniCompos = u.CUnis ] + ;
+						   [Order By a.Mats]
+
+				If (loCnx.SqlExecute(lcQuery, [LocalCompo]) < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCompo)')
+					Return .f.
+				EndIf
+
+				Update LocalCompo ;
+				   Set Qtds = Qtds * crItens.Qtds, ;
+				   	   PCompos = PCompos * crItens.Qtds
+			EndIf
+
+			lnQtB = 0
+			lnPsB = 0
+			lnPtt = 0
+			Select LocalCompo
+			Scan
+				Do Case
+					Case (LocalCompo.Varias = 1) && Peso Variavel = Sim -> Metal
+						Replace Metals With Metals + LocalCompo.Qtds In crInvoices
+						lnPtt = lnPtt + LocalCompo.Qtds
+
+					Case InList(LocalCompo.NTipoJoals, 0, 1) && Pedras Variadas
+						Replace Peso1s With Peso1s + LocalCompo.Qtds, ;
+								Qtd1s  With Qtd1s  + LocalCompo.PCompos In crInvoices
+						lnPtt = lnPtt + (LocalCompo.PCompos * Fators)
+
+					Case (LocalCompo.NTipoJoals = 2) && Brilhantes
+						Replace QtdBs  With QtdBs  + LocalCompo.Qtds, ;
+								PesoBs With PesoBs + LocalCompo.PCompos In crInvoices
+						lnPtt = lnPtt + (LocalCompo.PCompos * Fators)
+				EndCase
+
+				lcArq = Sys(2023) + [\SigReIiv_] + Alltrim(LocalMvItn.CPros) + [.jpg]
+				Clear Resources
+				If Not IsEmpty(crInvoices.FigJpgs) And Not IsNull(crInvoices.FigJpgs) And (Len(Alltrim(crInvoices.FigJpgs)) > 10)
+					lcFoto=Strconv(Strtran(Strtran(Strtran(crInvoices.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+					StrToFile(lcFoto, lcArq)
+				Else
+					Copy Memo crBranco.Branco To (lcArq)
+				EndIf
+			EndScan
+			
+			Replace PTots With lnPtt In crInvoices
+			
+			lnVal = lnVal + (LocalMvItn.Units * crItens.Qtds)
+			lnItn = lnItn + 1
+			
+			If (lnItn > lnMax)
+				lnItn = 1
+				lnPgn = lnPgn + 1
+			EndIf
+		EndScan
+	EndScan
+
+	lnHnd = LocalNFis.VlFretes + LocalNFis.VlSeguros + LocalNFis.DespAces
+
+	* Valor Total
+	lcVlT = []
+	If (LocalIvOpe.chkCabs = 1) And (LocalIvOpe.chkTots = 1)
+		lcVlT = Alltrim(Transform(lnVal + lnHnd, [@Z 999,999,999.99]))
+	EndIf
+	
+	Update crInvoices ;
+	   Set TotPag = lnPgn, ;
+	   	   DadTots = lcVlT, ;
+	   	   DadHands = lnHnd
+EndIf
+
+Select crInvoices
+Go Bottom
+Replace ImpRodape With .t.
+Go Top
+Report Form SigReIiv NoConsole
+Update crInvoices Set TotPag = _PageNo
+
+Select crInvoices
+Go Top
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Local lcArq
+
+ThisForm.poDataMgr.Release
+
+Set Point To [.]
+Set Separator To [,]
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReIiv Preview NoConsole
+
+If (ThisForm.chkListagem.Value = 1) && Imprimir Listagem
+	Select crInvoices
+	Go Top
+
+	Report Form SigReIpk Preview NoConsole
+EndIf
+
+lcArq = Sys(2023) + [\SigReIiv_*.jpg]
+Delete File &lcArq.
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIIV
+RESERVED3 (ClassInfo): pcdopes
+pcemps
+pcnumes
+pctpimp
+podatamgr
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

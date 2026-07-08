@@ -1,0 +1,18 @@
+﻿**FASE 3/8 conclu├¡da.** Arquivo criado: `C:\4c\projeto\app\forms\relatorios\Formsigrecmc.prg` (1925 linhas).
+
+**O que foi implementado:**
+
+- **Layout**: 800├ù500, cabe├ºalho escuro (cnt_4c_Cabecalho), 4 bot├Áes (Visualizar/Imprimir/Doc Excel/Encerrar), PageFrame com 1 p├ígina
+- **Controles de filtro** (todos mapeados pixel-fiel ao original):
+  - Empresa + descri├º├úo, Movimenta├º├úo, Per├¡odo Inicial/Final
+  - Moeda + descri├º├úo (habilitado apenas em modo Valor)
+  - Quantidade / M├¡nimo, Conta, Vendedor, Produto
+- **OptionGroups**: Ordem (Mais/Menos/N├úo Compram), Sele├º├úo (Valor/Quantidade), Comparativo (Cliente/Classifica├º├úo), Vendedor (Movimenta├º├úo/Cadastro)
+- **CheckBoxes**: Cidades, Comparativo, Dados do Cliente, Com Valor ÔÇö com l├│gica de exclus├úo m├║tua id├¬ntica ao original
+- **Grid** `grd_4c_Dados` vinculado a `CrSigCdTom` (coluna CheckBox nMarca + texto Descri), bot├Áes Selecionar/Desmarcar
+- **Lookups F4** para todos os campos c├│digo/descri├º├úo (SigCdEmp, SigCdOpe, SigCdMoe, SigCdCli, SigCdPro)
+- **BINDEVENTs** completos para todos os controles interativos
+- `FormParaRelatorio()` transfere todos os 20 campos/op├º├Áes para o BO
+- `Destroy()` fecha cursores auxiliares (CrSigCdTom, CrSigCdPam, CrSigCdEmp)
+
+**Pendente para fases seguintes**: os arquivos FRX (`SigReCm1.frx`, `SigReCm2.frx`, `SigReCm3.frx`) precisam ser copiados/criados em `projeto\app\reports\`.

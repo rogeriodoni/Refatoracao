@@ -1,0 +1,12 @@
+﻿Fase 5 conclu├¡da. Adicionei ao arquivo `Formsigrecrp.prg`:
+
+- **`ConfigurarPaginaDados()`** ÔÇö BINDEVENTs `KeyPress` e `DblClick` para `txt_4c_Grupo`, `txt_4c__Ds_Grupo`, `txt_4c_Conta` e `txt_4c_DCONTA`
+- **`TeclaGrupoCod` / `TeclaGrupoDesc`** ÔÇö handlers de teclado: F4(115) abre lookup direto; ENTER(13)/TAB(9) valida c├│digo digitado
+- **`ValidarGrupoCodigo`** ÔÇö busca exata em `SigCdGcr`, preenche `txt_4c__Ds_Grupo`, ou abre busca se n├úo encontrado
+- **`AbrirBuscaGrupoCont`** ÔÇö `FormBuscaAuxiliar` em `SigCdGcr` (campos `Codigos`/`Descrs`)
+- **`TeclaContaCod` / `TeclaContaDesc`** ÔÇö mesma l├│gica para a conta
+- **`ValidarContaCodigo`** ÔÇö busca em `SigCdCli` por `iclis`, preenche `rclis` em `txt_4c_DCONTA`
+- **`AbrirBuscaContaCont`** ÔÇö `FormBuscaAuxiliar` em `SigCdCli` (campos `iclis`/`rclis`)
+- Chamada a `ConfigurarPaginaDados()` inserida em `InicializarForm()` ap├│s `ConfigurarPaginaLista()`
+
+Fase 6 expandir├í `ConfigurarPaginaDados()` com BINDEVENTs para Sgrupo, Sconta, datas, empresa e moeda.

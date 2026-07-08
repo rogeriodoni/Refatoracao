@@ -1,0 +1,13 @@
+﻿Arquivo completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**SigPrGloBO.prg** foi expandido de 88 para 745 linhas com os seguintes m├®todos adicionados:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor()` | Stub para form operacional (sem edi├º├úo de registro ├║nico) |
+| `FormatarDataHoraSQL()` | Helper privado: converte data em `'YYYY-MM-DD HH:MM:SS'` para cl├íusulas BETWEEN com hora fim |
+| `CarregarParametros(lGerPorTp)` | Carrega `crSigCdPam`, `crSigCdPac`, `TmpOper` (SigCdOpe+SigOpCdd+SigOpCdc) e `CrTmpTpGop` (SigInTgo+fChecaAcesso filtro) |
+| `CarregarEmpresa(cCodEmp)` | Carrega raz├úo social de SigCdEmp, popula `this_cCdEmpresa`/`this_cDsEmpresa` |
+| `ValidarNumeroOP(nNop)` | Consulta SigOpPic ÔÇö retorna `.T.` se NOP dispon├¡vel, `.F.` se j├í existe |
+| `PrepararCursoresProcessamento()` | Cria `DBParam`, `TmpCabec`, `SelPedra`, `Produtos`, `TmpItens` com ├¡ndices corretos |
+| `ProcessarOrdens()` | L├│gica completa do `Processar.Click` original: itera TmpOper ÔåÆ SigMvCab ÔåÆ SigMvItn ÔåÆ SigMvIts ÔåÆ SigCdPro ÔåÆ SigCdGrp ÔåÆ SigPrMtz, constr├│i `TmpCabec` e `TmpItens`, retorna `.T.` se h├í registros para o form SigPrGl2 processar |

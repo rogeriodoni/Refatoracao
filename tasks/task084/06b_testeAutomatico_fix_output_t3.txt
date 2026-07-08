@@ -1,0 +1,9 @@
+﻿All four fixes are applied. Here's a summary:
+
+**FormSigReEch.prg ÔÇö `CarregarLista()`** (line 1430): Added early return when `gb_4c_ModoTeste = .T.`. `TesteCarregarDadosReais()` calls this method directly; the guard prevents it from reaching `CarregarDadosCheque()` ÔåÆ BO SQL calls entirely.
+
+**SigReEchBO.prg ÔÇö `CarregarDados()`, `CarregarParcela()`, `CarregarEmpresa()`**: Added `gnConnHandle <= 0` fast-fail guard at the top of each function. Even if called without the form-level guard, the BO now returns immediately without touching `SQLEXEC()`.
+
+The dual-layer protection ensures the 300-second OS TCP timeout cannot be triggered: the form-level guard stops the call chain first; the BO-level guard is a fallback for any other caller path (e.g., `BtnCancelarClick()` which calls `CarregarDadosCheque()` directly).
+
+Quer que eu propague as li├º├Áes aprendidas para o pipeline (CorretorAutomatico, prompts, skill)?

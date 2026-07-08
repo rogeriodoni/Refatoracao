@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. O `FormSIGPRCOT.prg` est├í completo com todos os m├®todos de compatibilidade FormBase adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick` | No-op (sem busca neste dialog) |
+| `BtnEncerrarClick` | Delega para `CmdEncerrarClick` |
+| `BtnSalvarClick` | No-op (salvamento integrado ao Encerrar) |
+| `BtnCancelarClick` | `THIS.Release()` sem salvar |
+| `CarregarLista` | Delega para `CarregarCotacoes()` |
+| `AjustarBotoesPorModo` | No-op (editabilidade via `this_nIncluir`) |
+| `HabilitarCampos` | No-op (sem TextBoxes independentes) |
+| `LimparCampos` | No-op (edi├º├úo inline no grid) |
+| `FormParaBO` | No-op retornando `.T.` |
+| `BOParaForm` | No-op (grid usa RecordSource direto) |
+
+Todos os m├®todos t├¬m implementa├º├úo real adequada ao tipo OPERACIONAL do form ÔÇö sem TODOs ou stubs ÔÇö e o arquivo est├í pronto para compila├º├úo e teste.

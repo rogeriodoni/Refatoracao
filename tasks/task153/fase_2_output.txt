@@ -1,0 +1,20 @@
+﻿Here's a summary of all changes made this session:
+
+**Bug fix ÔÇö CNAB lot numbering (`FormSIGPGCNB.prg`):**
+- Added `this_nCnabLot = 0` property to `DEFINE CLASS`
+- All 3 parent CNAB methods (`CnabItau240`, `CnabBrades240`, `CnabSantander240`) now initialize `THIS.this_nCnabLot = 0` before generating lots
+- All 6 sub-methods (`CnabXxxLoteCC`, `CnabXxxLoteBoleto`) now do `THIS.this_nCnabLot = THIS.this_nCnabLot + 1` instead of the by-value parameter increment ÔÇö guaranteeing sequential lot numbers (1, 2, 3ÔÇª) across the file
+- All 3 file trailers now use `THIS.this_nCnabLot` for "quantidade de lotes" and `INT(FSIZE(lcArq)/242)+1` for "quantidade de registros" ÔÇö accurate counts regardless of how many lotes/records were written
+
+**Bug fix ÔÇö cursor work area after `GO TOP IN` (`FormSIGPGCNB.prg`):**
+- The CorretorAutomatico removed `(par_cCursor).campo` prefixes, but `GO TOP IN cursor_4c_Conta` changes the active work area. Added `SELECT (par_cCursor)` immediately after `GO TOP IN cursor_4c_Conta` in all 5 CNAB sub-method SCAN loops so subsequent unqualified field accesses (`nopers`, `vencs`, `valors`, etc.) refer to the correct cursor
+
+**CorretorAutomatico pass (`FormSIGPGCNB.prg`):**
+- 87 anti-patterns corrected on first run (mostly `(par_cCursor).campo` ÔåÆ `campo` and similar VFP9 patterns)
+- Second run: 0 corrections needed
+
+**Menu registration (`menu.prg`):**
+- Added "Gera├º├úo CNAB - Pagamentos" as Bar 4 in `popFerramentas` (between Bloqueio de Contas and the separator)
+- Added `AbrirFormSIGPGCNB()` procedure following the same pattern as `AbrirFormSIGBLCTA()`
+
+The migration is now at phase 5c (ready for compilation validation and form testing).

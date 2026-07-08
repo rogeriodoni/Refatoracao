@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. O `SIGPRCOTBO.prg` foi reescrito com:
+
+**Adicionado (novo vs Fase 1):**
+- `GerarChaveUnica()` ÔÇö substituto do `fUniqueIds()` legado, gera chave de 20 chars via `SYS(2015)`
+- `ExecutarInsercao()` ÔÇö override do BusinessBase com INSERT completo + `RegistrarAuditoria("INSERIR")`
+- `ExecutarAtualizacao()` ÔÇö override com UPDATE completo + `RegistrarAuditoria("ATUALIZAR")`
+- `ExecutarExclusao()` ÔÇö override com DELETE pela PK + `RegistrarAuditoria("EXCLUIR")`
+- `InserirNovaCotacao(par_cMoes)` ÔÇö replica `inserir.Click` do legado: insere sem `valos` (usu├írio preenche no grid), usando `GerarChaveUnica()`, adiciona ao cursor local imediatamente
+- `VerificarCotacaoDuplicada()` ÔÇö replica `hora.Text1.Valid` do legado via SEEK no ├¡ndice `cotacaos`
+
+**Corrigido vs Fase 1:**
+- `BuscarCotacoes()` ÔÇö agora usa padr├úo temp + ZAP/APPEND (nunca fecha cursor que o grid usa; branch separada para primeira carga vs recarga)
+- `SalvarAlteracoes()` ÔåÆ renomeado para `SalvarCotacoes()` e agora trabalha com `cursor_4c_Cotacoes` (nome consistente com o que o form usar├í na Fase 3)

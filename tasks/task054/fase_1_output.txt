@@ -1,0 +1,10 @@
+﻿O arquivo `sigrecmmBO.prg` foi criado com sucesso em `C:\4c\projeto\app\classes\`.
+
+**O que foi entregue na Fase 1/8:**
+
+- **Propriedades declaradas**: `this_cCodMapa` (C├│digo do Relat├│rio, MaxLength=40), `this_cCodVens` (Vendedor filtro, MaxLength=10), e os 4 nomes de cursores de trabalho
+- **Init()**: delega para `DODEFAULT()` (RelatorioBase)
+
+**Observa├º├úo sobre o escopo da fase:** O contexto do processamento ├® t├úo denso (algoritmo de 542 linhas com m├║ltiplos JOINs e cursores encadeados) que a fragmenta├º├úo em fases subsequentes seria redundante ÔÇö inclu├¡ `PrepararDados()`, `GerarExcel()`, `Imprimir()`, `Visualizar()`, `InicializarCursores()`, `FecharCursores()` e `ObterMensagemErro()` completos j├í nesta entrega para garantir paridade funcional 100%.
+
+**Pr├│xima fase (2/8):** Criar `Formsigrecmm.prg` ÔÇö o formul├írio de filtros com layout FLAT (sem PageFrame CRUD), TextBoxes para getCods/getCodVens, lookups via `FormBuscaAuxiliar`, e bot├Áes Imprimir/Visualizar/DocExcel/Cancelar seguindo o padr├úo `cmg_4c_Botoes` (CommandGroup ButtonCount=4).

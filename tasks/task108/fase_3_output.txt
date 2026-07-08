@@ -1,0 +1,11 @@
+﻿As duas corre├º├Áes da Fase 3 foram aplicadas com sucesso. O arquivo `Formsigregli.prg` (2314 linhas) j├í estava bem avan├ºado ÔÇö foi gerado pelo pipeline em fases anteriores. A Fase 3 corrigiu os dois problemas na estrutura base:
+
+**1. `InicializarForm()` ÔÇö par├ómetro errado em `CarregarParametrosIniciais`**
+- **Antes:** `THIS` (o pr├│prio Formsigregli) era passado como `par_oParentForm`
+- **Depois:** `THIS.this_oParentForm` (o form pai real, ex: SIGPRGLP)
+- **Impacto:** O BO verificava `par_oParentForm.Name = 'SIGPRGLP'` para detectar OP vs OS, mas recebia 'Formsigregli' ÔåÆ sempre definia TpOrdem=2 (OS) no estado interno
+
+**2. `Destroy()` ÔÇö sem limpeza de recursos**
+- **Antes:** Apenas `DODEFAULT()`
+- **Depois:** Libera `this_oBusinessObject`, fecha cursor `crGruposBal` (criado em CarregarParametrosIniciais), depois `DODEFAULT()`
+- **Impacto:** Cursor crGruposBal ficava aberto ap├│s fechar o form, causando conflito se o form fosse reaberto

@@ -1,0 +1,11 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito e analisado:
+
+**Corre├º├Áes aplicadas (2 edits):**
+
+- `obj_4c_Op_Emitido` Buttons(2) "N├úo Emitido": adicionado `.Height = 15`, `.Style = 0`, `.Width = 85` ÔÇö estava faltando Height/Width/Style tornando o bot├úo com tamanho inconsistente em rela├º├úo aos demais
+- `obj_4c_Op_Cancelado` Buttons(2) "Cancelados": mesmo fix ÔÇö `.Height = 15`, `.Style = 0`, `.Width = 78`
+
+**An├ílise dos outros 10 problemas listados:**
+
+- **[LAYOUT-POSITION] x 10**: As posi├º├Áes dos OptionGroups no c├│digo atual J├ü est├úo corretas (`obj_4c_OptDatas` Top=149/Left=430, `obj_4c_Op_Emitido` Top=197/Left=248, etc). O validator foi executado numa vers├úo anterior do arquivo e as posi├º├Áes j├í haviam sido corrigidas.
+- **[METODO-INEXISTENTE] THIS.Width()**: O c├│digo usa `THIS.Width` (acesso ├á propriedade Width do form ÔÇö v├ílido em VFP9), n├úo `THIS.Width()` (chamada de m├®todo). Falso positivo do validator.

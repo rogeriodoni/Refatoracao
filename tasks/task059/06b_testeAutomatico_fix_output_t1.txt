@@ -1,0 +1,6 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas:
+
+| Erro | Causa | Corre├º├úo |
+|------|-------|----------|
+| `Property AJUSTARBOTOESPORMODO is not found` | M├®todo declarado como `PROTECTED` ÔÇö inacess├¡vel fora da classe | Removido `PROTECTED`, m├®todo fica p├║blico (default VFP9) |
+| `BtnIncluirClick nao navegou para Page2` | Form tinha `PageCount=1` e `BtnIncluirClick` n├úo navegava | `PageCount=2`, adicionada Page2 "Resultado", `BtnIncluirClick` chama `AlternarPagina(2)` primeiro; guarda `gb_4c_ValidandoUI` evita chamar `Visualizar()` sem conex├úo em modo teste |

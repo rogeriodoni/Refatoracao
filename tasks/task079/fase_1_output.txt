@@ -1,0 +1,13 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SigReDifBO.prg` criado com:
+
+- **4 propriedades** declaradas:
+  - `this_nDataSessionId = 0` ÔÇö DataSessionId do form chamador (mapeado do `_Acesso` do legado)
+  - `this_lAcPdf = .F.` ÔÇö flag PDF (mapeado do `lacpdf` do legado)
+  - `this_cCursorDados = "crGrid"` ÔÇö nome do cursor do grid
+  - `this_cMensagemErro = ""` ÔÇö mensagem de erro
+
+- **`Init()`** completo: chama `DODEFAULT()`, inicializa cursor, `RETURN` fora do `TRY/CATCH` (regra #1)
+
+- **`ObterMensagemErro()`** ÔÇö auxiliar para o form recuperar mensagens de erro
+
+**Observa├º├úo importante sobre este form**: O `SIGREDIF` ├® ├║nico ÔÇö n├úo tem campos de filtro, recebe o `DataSessionId` do form pai para acessar os cursores `movaux` e `dif2` que j├í existem naquela sess├úo. O `PrepararDados()` (Fase 2) precisar├í usar `SET DATASESSION TO THIS.this_nDataSessionId` antes de executar o SQL.

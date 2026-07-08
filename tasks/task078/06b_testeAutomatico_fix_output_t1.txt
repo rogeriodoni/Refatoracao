@@ -1,0 +1,5 @@
+﻿**Fix aplicado em `FormSIGREDES.prg` (linha ~838).**
+
+**Causa raiz:** `InicializarFiltros()` do BO faz SQLEXEC para criar `cursor_4c_OpFp`. No ambiente de teste (sem conex├úo SQL Server real), o SQLEXEC retorna `-1` e o cursor nunca ├® criado. A form n├úo checava o retorno de `InicializarFiltros()` e chamava `ConfigurarFiltros()` mesmo assim, que tentava setar `RecordSource = "cursor_4c_OpFp"` em um alias inexistente ÔåÆ crash.
+
+**Solu├º├úo:** Antes de criar o grid, verificar `IF !USED("cursor_4c_OpFp")` e criar um cursor vazio com a mesma estrutura (`nMarca I, fpags C(30)`) como fallback. Em produ├º├úo (com conex├úo), o cursor real criado pelo BO j├í estar├í ativo e o `IF !USED()` n├úo executa. No teste, o cursor vazio permite a instancia├º├úo sem erro.

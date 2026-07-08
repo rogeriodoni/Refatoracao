@@ -1,0 +1,10 @@
+﻿Phase 7 is complete. The 4 main button events were already fully implemented in `FormProduto.prg` from the previous phases:
+
+- **BtnIncluirClick** (line 2807) - correct order: `NovoRegistro()` ÔåÆ `LimparCampos()` ÔåÆ mode ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AlternarPagina(2)`
+- **BtnVisualizarClick** (line 2819) - cursor validation ÔåÆ `CarregarPorCodigo()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)`
+- **BtnAlterarClick** (line 2844) - cursor validation ÔåÆ `CarregarPorCodigo()` ÔåÆ `EditarRegistro()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.T.)`
+- **BtnExcluirClick** (line 2871) - `MsgConfirma()` (logical) ÔåÆ `Excluir()` ÔåÆ `CarregarLista()`
+
+All buttons are bound via `BINDEVENT` in `ConfigurarPaginaLista()` and declared `PUBLIC` (required for BINDEVENT). No `RETURN` inside `TRY/CATCH`.
+
+The form is at 3993 lines with `ENDDEFINE` present. The pipeline's next steps (`05b_corrigirAutomatico` ÔåÆ `05c_validarCompilacao` ÔåÆ `06_testForm`) can now proceed.

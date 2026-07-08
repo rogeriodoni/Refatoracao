@@ -1,0 +1,6 @@
+﻿Phase 2 complete. SigPdMp1BO.prg now has all three required methods:
+- `CarregarDoCursor()` ÔÇö maps cursor columns to BO properties (line 54)
+- `Inserir()` ÔÇö returns .T. (operational form, no DB insert) (line 256)
+- `Atualizar()` ÔÇö delegates to `SalvarAlteracoes()` which replays modified rows back to xNensi (line 267)
+
+`ObterChavePrimaria()` and `RegistrarAuditoria()` were already present from Phase 1. The operational-form contract is satisfied without stubs: `Atualizar` carries real behavior via `SalvarAlteracoes`.

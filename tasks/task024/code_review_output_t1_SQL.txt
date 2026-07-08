@@ -1,0 +1,26 @@
+﻿Analisando o c├│digo completo, todas as 5 ocorr├¬ncias s├úo **falsos positivos** do checker automatizado. Aqui est├í a an├ílise:
+
+## An├ílise dos 5 Issues
+
+O checker comparou **todos** os WHERE clauses do arquivo inteiro contra o WHERE do SQL principal, mas os 5 casos flagrados est├úo em **queries de lookup/valida├º├úo** completamente separadas, n├úo na query de dados principal:
+
+| Issue | Localiza├º├úo | Tabela | Prop├│sito |
+|-------|-------------|--------|-----------|
+| `DOPES` | `ValidarOperacao()` linha 906 | `SigCdOpe` | Valida c├│digo de opera├º├úo digitado no filtro |
+| `CMoes` | `ValidarMoeda()` linha 968 | `SigCdMoe` | Valida c├│digo de moeda digitado no filtro |
+| `DMoes` | `ValidarMoedaDesc()` linha 1034 | `SigCdMoe` | Busca moeda pelo nome digitado |
+| `Cemps` | `ValidarEmpresa()` linha 1099 | `SigCdEmp` | Valida c├│digo de empresa digitado no filtro |
+| `Razas` | `ValidarDesEmpresa()` linha 1165 | `SigCdEmp` | Busca empresa pelo nome digitado |
+
+**Nenhuma dessas colunas est├í no WHERE das queries principais** (`SigMvPar`/`SigMvCab` em `PrepararDados()`). O checker confundiu queries de valida├º├úo de input de formul├írio com queries de dados do relat├│rio.
+
+Adicionalmente, a refer├¬ncia do SQL original foi exibida incompleta ÔÇö o `[From SigMvPar ] + ;` tem continua├º├úo (`+;`), o que significa que o WHERE original tamb├®m tinha `Dopes =` e per├¡odo, mas n├úo foi capturado pelo extrator de refer├¬ncias.
+
+## Resultado
+
+**Nenhuma altera├º├úo ├® necess├íria.** As 5 condi├º├Áes s├úo corretas e protegidas pela regra "NAO remover campos, funcionalidades ou lookups":
+
+- As queries de valida├º├úo de lookup (`ValidarMoeda`, `ValidarEmpresa`, `ValidarOperacao`) s├úo o padr├úo can├┤nico do sistema novo para validar campos de filtro
+- O filtro por `Dopes` no `PrepararDados()` do BO ├® obrigat├│rio ÔÇö este ├® um relat├│rio "Total Por Opera├º├úo", remover esse filtro retornaria todas as opera├º├Áes, quebrando o relat├│rio completamente
+
+Os arquivos **n├úo ser├úo alterados** pois qualquer modifica├º├úo introduziria regress├Áes funcionais graves.

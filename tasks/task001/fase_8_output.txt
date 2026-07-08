@@ -1,0 +1,20 @@
+﻿Both files exist and the integration is already complete:
+
+**FormDepartamento.prg** ÔÇö already has ALL Phase 8 methods fully implemented:
+- `BtnBuscarClick()` ÔÇö opens FormBuscaAuxiliar for SigCdDpt, uses `this_lSelecionou` + cursor (line 864)
+- `BtnEncerrarClick()` ÔÇö calls `THIS.Release()` (line 905)
+- `BtnSalvarClick()` ÔÇö validates fields OUTSIDE TRY, calls `Salvar()` without params (line 1064)
+- `BtnCancelarClick()` ÔÇö sets mode + calls `AlternarPagina(1)` which calls `CarregarLista()` (line 1111)
+- `FormParaBO()` ÔÇö maps all 6 fields: codigos, descricaos, diretores, nChkSubs, nChkTipos, nAutos (line 1031)
+- `BOParaForm()` ÔÇö maps all 6 fields back (line 997)
+- `HabilitarCampos()` ÔÇö controls all 6 editable controls, codigo only enabled in INCLUIR mode (line 912)
+- `LimparCampos()` ÔÇö resets all fields + resets `this_cUltimoDiretorValidado` guard (line 945)
+- `CarregarLista()` ÔÇö loads cursor, sets RecordSource, redefines headers AFTER RecordSource (line 654)
+- `AjustarBotoesPorModo()` ÔÇö Salvar disabled in VISUALIZAR, Cancelar always enabled (line 979)
+
+**Integration** ÔÇö already complete:
+- `config.prg` dynamically loads `*BO.prg` from classes/ and `Form*.prg` from forms/cadastros/ via ADIR
+- `menu.prg` line 73: `ON SELECTION BAR 3 OF popCadastros DO AbrirFormDepartamento`
+- `menu.prg` line 263: `PROCEDURE AbrirFormDepartamento()` with correct VARTYPE + Show() without params + no Release()
+
+**Phase 8 is complete.** The FormDepartamento.prg was already fully implemented through phases 1-7, and all integration was already in place.

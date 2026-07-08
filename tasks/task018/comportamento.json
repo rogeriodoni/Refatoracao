@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.GetEstado.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdUfs','estados',ThisForm.Pagina.Dados.GetEstado.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdUfs', 'Estados', 'crSigCdUfs', '', ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna('Estados','','','UF',40,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('descrs','','','Nome',250,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('aicms','','','Alíq. ICMS',80,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('bicms','','','B.ICMS Redu',80,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('areduzidas','','','Alíq. Red... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nif inlist(thisform.pcEscolha,'INSERIR','PROCURAR')\n\tthisform.Pagina.Dados.getEstado.setfocus\nelse\n\tif inlist(thisform.pcEscolha,'ALTERAR')\n\t\tthisform.Pagina.Dados.get_Descr.setfocus\n\tElse\n\t\tthisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\tEndif\t\nendif   \n\nIf (crSigCdUfs.Ger50 = 0)\n\tThisForm.Pagina.Dados.chkGer54.Value = 0\n\tThisForm.Pagina.Dados.chkGer54.Enabled = .f.\nElse\n\tThisForm.Pagina.Dados.chkGer54.Enabled = .... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Descr,chkGer54,chkGer60I,chkGer60D,chkGer60R,chkGer60P",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "Select CrSigCdUfs\n\nIf Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')\n\n\tIf IsEmpty( Thisform.Pagina.Dados.getEstado.value )\n\t\t=messagebox('U.F. Inválido.',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.getEstado.setfocus\n\t\tReturn\n\tElse\n\t\n\t\tIf ThisForm.poDataMgr.ChkRegister('SigCdUfs','estados',Thisform.Pagina.Dados.getEstado.value) and Inlist( Thisform.pcEscolha,'INSERIR')\n\t\t\tMessagebox( 'U.F. Já Cadastrado.',0+64,'Atenção!' )\n\t\t\tThisform.Pagina.Dados.getEstado.SetFocus\n\t\t\tReturn\n\t\tEndif\n\t\n\tEndif\n\n   ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdUfs',ChkRegister('SigCdCli',ChkRegister('SigCdCee',ChkRegister('SigCdCll'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Activate",
+      "linhas": 35,
+      "codigoOriginal": "=dodefault()\n\nif (thisform.pcEscolha=='INSERIR' or !eof('CrSigCdUfs'))\n   \n\tif inlist(thisform.pcEscolha,'INSERIR','ALTERAR','PROCURAR')\n\n\t\tthisform.Pagina.Dados.getEstado.setfocus\n\n\telse\n\n\t   thisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\t   \n\tendif   \n\n\twith thisform.Pagina.Dados\n\n\t\t*!* inicializa combo ipi...\n\n\t\t.cmbIpi.clear\n\t\t.cmbIpi.additem('\\<'+padr('Tributado',9))\n\t\t.cmbIpi.additem('\\<'+padr('Isento',9))\n\t\t.cmbIpi.additem('\\<'+padr('Outros',9))\n\t\t.cmbIpi.value = padr(iif(upper(CrSigCd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha=='INSERIR' or !eof",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getUFIBGES",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getEstado",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.cmbIpi",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.chkGer60",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If (This.Value = 0)\n\tThisForm.Pagina.Dados.chkGer60I.Value = 0\n\tThisForm.Pagina.Dados.chkGer60D.Value = 0\n\tThisForm.Pagina.Dados.chkGer60R.Value = 0\n\tThisForm.Pagina.Dados.chkGer60P.Value = 0\n\n\tThisForm.Pagina.Dados.chkGer60I.Enabled = .f.\n\tThisForm.Pagina.Dados.chkGer60D.Enabled = .f.\n\tThisForm.Pagina.Dados.chkGer60R.Enabled = .f.\n\tThisForm.Pagina.Dados.chkGer60P.Enabled = .f.\nElse\n\tThisForm.Pagina.Dados.chkGer60I.Enabled = .t.\n\tThisForm.Pagina.Dados.chkGer60D.Enabled = .t.\n\tThisForm.Pagina.Dad... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkGer60I,chkGer60D,chkGer60R,chkGer60P",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.chkGer50",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If (This.Value = 0)\n\tThisForm.Pagina.Dados.chkGer54.Value = 0\n\n\tThisForm.Pagina.Dados.chkGer54.Enabled = .f.\nElse\n\tThisForm.Pagina.Dados.chkGer54.Enabled = .t.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkGer54",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.fwcheckbox3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.getEstado.Value = [PB])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.fwcheckbox8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.getEstado.Value = [MS])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,13 @@
+﻿Fase 8/8 conclu├¡da. O arquivo `Formsigmvccr.prg` est├í completo com 2995 linhas e 53 m├®todos.
+
+**O que foi adicionado nesta fase:**
+
+- **`LimparCampos()`** (linha 2146): Zera todos os 26 campos de Page2 com valores padr├úo (datas={}, strings=SPACE, n├║meros=0, OptionGroup=2/N├úo)
+- **`AjustarBotoesPorModo()`** (linha 2189): Habilita/desabilita bot├úo Confirmar (somente em INCLUIR/ALTERAR), mant├®m Cancelar sempre habilitado, ajusta bot├Áes de cota├º├úo
+- **Integra├º├úo no `BtnIncluirClick()`**: substitui chamada a `BOParaForm()` por `LimparCampos()` + `AjustarBotoesPorModo()` (mais correto)
+- **Integra├º├úo no `BOParaForm()`**: chama `AjustarBotoesPorModo()` ap├│s `HabilitarCamposDados()`
+- **Header atualizado**: fase 7/8 ÔåÆ fase 8/8 COMPLETO
+
+**Integra├º├úo j├í estava completa (fases anteriores):**
+- `config.prg`: usa ADIR din├ómico ÔÇö carrega `sigmvccrBO.prg` e `Formsigmvccr.prg` automaticamente
+- `menu.prg`: `AbrirFormsigmvccr()` + `ON SELECTION BAR 7 OF popMovimentos` j├í presentes

@@ -1,0 +1,14 @@
+﻿Lendo o arquivo completo, verifico que todos os m├®todos da Fase 7 j├í est├úo implementados. O arquivo `Formsigrefcx.prg` j├í cont├®m:
+
+- `BtnVisualizarClick()` ÔÇö linha 1426 (preview do relat├│rio via `Visualizar()`)
+- `BtnImprimirClick()` ÔÇö linha 1446 (impress├úo via `Imprimir()`)
+- `BtnExcelClick()` ÔÇö linha 1466 (exporta├º├úo via `GerarExcel()`)
+- `BtnSairClick()` / `BtnEncerrarClick()` ÔÇö linhas 1486/1490
+- **Mapeamento CRUDÔåÆREPORT** ÔÇö linhas 1947-1961:
+  - `BtnIncluirClick()` ÔÇö delega para `BtnVisualizarClick()`
+  - `BtnAlterarClick()` ÔÇö delega para `BtnVisualizarClick()`
+  - `BtnExcluirClick()` ÔÇö exibe aviso de opera├º├úo n├úo dispon├¡vel em relat├│rios
+
+A Fase 7/8 j├í est├í completa. O arquivo cont├®m implementa├º├úo total de todos os eventos principais solicitados, incluindo valida├º├úo de per├¡odo (`ValidarPeriodo()`), transfer├¬ncia de filtros (`FormParaRelatorio()`), lookups completos para empresa/moeda/usu├írio/operador, e os mapeamentos de compatibilidade com FormBase (`FormParaBO`, `BOParaForm`, `CarregarLista`, `AjustarBotoesPorModo`).
+
+Nenhuma modifica├º├úo necess├íria ÔÇö o arquivo est├í pronto.

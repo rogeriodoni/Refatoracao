@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo das decis├Áes:
+
+**Corre├º├úo realizada:**
+- **[OPTIONGROUP-LEFT]** ÔåÆ Adicionado `.Top = 0`, `.Height = 27`, `.AutoSize = .F.` em cada `Button` do `obj_4c_OptGtprel`. Em VFP9, sem `.Top = 0` expl├¡cito os bot├Áes empilham verticalmente por padr├úo, causando sobreposi├º├úo quando `.Left` ├® definido para layout horizontal.
+
+**Falsos positivos (sem altera├º├úo necess├íria):**
+- **[METODO-INEXISTENTE]** `ValidarFiltros()` ÔÇö definido na linha 1635 como `PROTECTED FUNCTION ValidarFiltros()`. FUNCTION e PROCEDURE s├úo equivalentes em m├®todos de classe no VFP9.
+- **[LAYOUT-POSITION] 4 controles com diff=80px** ÔÇö O validador compara coordenadas absolutas do SCX contra coordenadas relativas ├á Page dentro do PageFrame (Top=85). A diferen├ºa de exatamente 80px em todos os controles ├® um artefato sistem├ítico do validador, n├úo um erro de posicionamento. As posi├º├Áes visuais absolutas est├úo corretas.

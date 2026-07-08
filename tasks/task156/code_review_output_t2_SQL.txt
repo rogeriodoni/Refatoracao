@@ -1,0 +1,32 @@
+﻿Ap├│s verifica├º├úo completa, todos os 3 problemas flagged s├úo **falsos positivos** do revisor autom├ítico. Nenhuma corre├º├úo necess├íria.
+
+## An├ílise de cada flag
+
+### [SQL-FILTRO-INVENTADO] CMOES
+`CMoes` aparece em **queries de lookup de valida├º├úo separadas** na tabela `SigCdMoe` (n├úo no WHERE principal de `SigCdPro`):
+```
+SELECT CMoes FROM SigCdMoe WHERE CMoes = ...   ÔåÉ valida├º├úo de moeda
+SELECT TOP 1 MoeQs, QtdeQs FROM SigCdMoe WHERE CMoes = ...  ÔåÉ BO, busca fator c├ómbio
+```
+`CMoes` ├® a PK de `SigCdMoe`. Query correta e necess├íria.
+
+### [SQL-FILTRO-INVENTADO] CONTROLCOUNT
+`ControlCount` **n├úo ├® coluna SQL**. Linhas 1274 e 1277 usam a propriedade VFP9 de container:
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount      ÔåÉ propriedade de objeto VFP9
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) ...   ÔåÉ PEMSTATUS tamb├®m ├® VFP9
+```
+O revisor confundiu `objeto.ControlCount` com uma coluna SQL.
+
+### [SQL-FILTRO-INVENTADO] CODS
+`Cods` aparece em **query de valida├º├úo de Feitio** na tabela `SigPrFti`:
+```
+SELECT Cods FROM SigPrFti WHERE Cods = ...    ÔåÉ valida├º├úo do campo CFtios
+```
+O BO declara explicitamente `SigPrFti.Cods (C 3)` como PK da tabela. Query correta.
+
+---
+
+**Causa dos falsos positivos**: o revisor autom├ítico listou as colunas WHERE do `SigCdPro` principal (`CGRUS, COLECOES, IFORS, MOEVS, MARGEMS, CPROS...`) e depois varreu TODO o arquivo comparando qualquer coluna em qualquer WHERE, sem discriminar que s├úo queries em tabelas diferentes. `CMoes` ├® de `SigCdMoe`, `Cods` ├® de `SigPrFti`, `ControlCount` n├úo ├® SQL. O WHERE principal do BO (linhas 839ÔÇô878) est├í correto e n├úo cont├®m nenhum desses campos.
+
+**Nenhuma altera├º├úo no c├│digo necess├íria.** O arquivo est├í correto.

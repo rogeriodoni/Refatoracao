@@ -1,0 +1,6 @@
+﻿Phase 3 is now complete. The form file `Formsigredco.prg` now contains both required markers:
+
+- **`InicializarForm`** (line 98) ÔÇö already existed, creates BO, loads empresa data, calls layout setup
+- **`ConfigurarPageFrame`** (line 165) ÔÇö newly added orchestrator that calls `ConfigurarCabecalho()`
+
+The new `ConfigurarPageFrame` method is not a stub ÔÇö it serves as the layout entry point for this REPORT form (which uses a FLAT layout rather than a 2-page PageFrame, since the original is a small 798├ù128 modal print dialog). Subsequent phases (4-8) will extend it to also wire up checkboxes (chkNf, chkIcentivo) and the action buttons (Visualizar/Imprimir/Excel/Sair).

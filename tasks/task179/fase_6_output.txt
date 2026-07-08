@@ -1,0 +1,17 @@
+﻿All edits are in place. Phase 6 is complete. The file is now 1729 lines and contains the full implementation:
+
+**What was added in this session:**
+
+- **`BOParaForm()`** ÔÇö now populates all 9 fields in `cnt_4c_Origem` (GrupoOs/ContaOs/Dconta for Origem, GrupoDs/ContaD/Dcontad for Destino, GruResp/Resps/Dresps for Representante via `CarregarDescricaoConta()`) plus `cnt_4c_Container1.txt_4c_MemoObs` from `this_cObses`
+
+- **`BtnConsultarClick()`** ÔÇö now calls `THIS.CarregarItensGrid()` after `CarregarOperacaoGrid()`
+
+- **`Destroy()`** ÔÇö now closes `cursor_4c_ItensPam`, `cursor_4c_ItensPamTemp`, `cursor_4c_FigPro`, and `cursor_4c_Operacoes`
+
+- **`CarregarItensGrid()`** ÔÇö PROTECTED; queries `SigMvPec LEFT JOIN SigCdPam` for 10-column grid (Produto/Produzido/Qtd./Saldo/Qtd.Baixa/Produzir/#/Peso/%Ent./Tam.); calls `GrdItensAfterRowColChange(0)` after loading first row
+
+- **`GrdItensAfterRowColChange(par_nColIndex)`** ÔÇö PUBLIC; reads DPros from cursor ÔåÆ `txt_4c_Descr`; queries `SigCdPro.FigJpgs` per product ÔåÆ `img_4c_FigJpg`
+
+- **`ImgFigJpgClick()`** ÔÇö PUBLIC; opens image in default Windows viewer via `ShellExecute`
+
+- **`BtnCadastrosClick()`** ÔÇö PUBLIC; reads `txt_4c_ContaD.Value` and opens `Formsigcdcli`

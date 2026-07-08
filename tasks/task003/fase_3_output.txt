@@ -1,0 +1,17 @@
+﻿FormProduto.prg criado com sucesso. Estrutura da Fase 3:
+
+**Arquivo**: `C:\4c\projeto\app\forms\cadastros\FormProduto.prg`
+
+**O que foi criado:**
+- `DEFINE CLASS FormProduto AS FormBase` ÔÇö dimens├Áes 1000├ù600, sem borda/titlebar
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (FormBase chama InicializarForm)
+- `InicializarForm()` ÔÇö instancia ProdutoBO, configura pageframe+p├íginas, verifica `gb_4c_ValidandoUI` antes do CarregarLista
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com Top=-29, Tabs=.F., 2 p├íginas
+- `ConfigurarPaginaLista()` ÔÇö Page1 com containers vazios: `cnt_4c_Cabecalho` (fundo escuro RGB(53,53,53) + lbl_4c_Titulo branco), `cnt_4c_Botoes` (stub Fase 4), `cnt_4c_Saida` (stub Fase 4)
+- `ConfigurarPaginaDados()` ÔÇö Page2 com container vazio: `cnt_4c_BotoesAcao` (stub Fase 4)
+- `CarregarLista()` ÔÇö stub retornando `.T.` (Fase 4 implementar├í SQL + grid)
+- `TornarControlesVisiveis()` ÔÇö filtra por prefixo (`cnt_`, `grd_`, `lbl_`, `txt_`, `cmd_`, `pgf_`) para n├úo tornar containers flutuantes vis├¡veis
+- `FormatarGridLista()` ÔÇö stub (Fase 4)
+- `Destroy()` ÔÇö libera BO + `DODEFAULT()`
+
+**Pr├│xima fase**: Fase 4/8 ÔÇö Grid da lista (7 colunas: Produto, Descri├º├úo, Grupo, Subgrupo, Ref.Fornecedor, Usu├írio, I) + bot├Áes CRUD + btn Encerrar + btn Salvar/Cancelar/Voltar.

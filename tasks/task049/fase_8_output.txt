@@ -1,0 +1,22 @@
+﻿Fase 8 conclu├¡da. O arquivo `Formsigrecgr.prg` est├í completo com 762 linhas.
+
+**M├®todos adicionados:**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `FormParaRelatorio()` | PROTECTED - documenta que params j├í est├úo no BO via Init() |
+| `FormParaBO()` | Delega para FormParaRelatorio() |
+| `BOParaForm()` | Stub (sem campos de UI para popular) |
+| `CarregarLista()` | Delega para Processar() (reprocessa dados) |
+| `HabilitarCampos()` | Stub (sem campos edit├íveis) |
+| `LimparCampos()` | Stub (filtros chegam via Init, n├úo h├í campos para limpar) |
+| `AjustarBotoesPorModo()` | Stub (sem altern├óncia de modo LISTA/DADOS) |
+| `BtnBuscarClick()` | Chama Processar() - reprocessa o relat├│rio |
+| `BtnEncerrarClick()` | Chama Release() |
+| `BtnSalvarClick()` | Chama GerarRelatorio(2) - impress├úo com prompt |
+| `BtnCancelarClick()` | Chama Release() |
+
+**Observa├º├Áes importantes:**
+- config.prg carrega `sigrecgrBO.prg` e `Formsigrecgr.prg` automaticamente via ADIR ÔÇö nenhuma altera├º├úo necess├íria
+- Este form ├® invocado programaticamente por um form pai com par├ómetros `(nTipo, cFiltro, oParentForm)`, n├úo pelo menu ÔÇö nenhuma entrada de menu adicionada
+- N├úo h├í campos de filtro na UI (an├ílise.json confirma `campos=[]`); todos os filtros v├¬m via Init()

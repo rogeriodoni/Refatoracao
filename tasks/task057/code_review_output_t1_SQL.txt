@@ -1,0 +1,31 @@
+﻿Verifica├º├úo conclu├¡da. O agente encontrou o c├│digo fonte legado original em `C:\4c\tasks\task057\SIGRECND_form_codigo_fonte.txt`.
+
+**Resultado: Todos os 6 flags s├úo FALSOS POSITIVOS ÔÇö nenhuma corre├º├úo necess├íria.**
+
+Comparando o WHERE original com o migrado:
+
+**Original (legado):**
+```foxpro
+[Where Grupos = '] + lcGru + [' And ] + ;
+       Iif(Empty(lcCon), [], [Contas = '] + lcCon + [' And ]) + ;
+       [Datas <= ?pDtR And ] + ;
+       [(DataConcs Is Null Or DataConcs > ?pDtR) ]
+```
+
+**Migrado (SIGRECNDBO.prg):**
+```foxpro
+" WHERE Grupos = " + EscaparSQL(loc_cGru) + ;
+loc_cWhereConta + ;
+" AND Datas <= " + FormatarDataSQL(THIS.this_dDtInicial) + ;
+" AND (DataConcs IS NULL OR DataConcs > " + FormatarDataSQL(THIS.this_dDtInicial) + ")"
+```
+
+As condi├º├Áes s├úo **id├¬nticas**:
+- `CONTAS` ÔÇö presente no original (filtro opcional `IIF(Empty(lcCon), ...)`)
+- `DATAS` ÔÇö presente no original (`Datas <= ?pDtR`)
+- `CEMPS` ÔÇö em query separada para `SigCdEmp` (PK da tabela, lookup leg├¡timo)
+- `ICLIS` ÔÇö em query separada para `SigCdCli` (PK da tabela, lookup leg├¡timo)
+- `CMOES` ÔÇö em query separada para `SigCdMoe` (PK da tabela, lookup leg├¡timo)
+- `CODIGOS` ÔÇö em query separada para `SigCdGcr` (PK da tabela, lookup leg├¡timo)
+
+O validador gerou falsos positivos porque varreu todos os WHEREs do arquivo (incluindo lookups de tabelas auxiliares) e comparou contra as colunas vis├¡veis do snippet truncado do original. O c├│digo migrado est├í correto ÔÇö **nenhuma altera├º├úo necess├íria**.

@@ -1,0 +1,7 @@
+﻿Fix applied. Summary of all 3 problems:
+
+1. **[METODO-INEXISTENTE]** ÔÇö Fixed: changed `PROTECTED FUNCTION ValidarDatas()` ÔåÆ `PROTECTED PROCEDURE ValidarDatas()` at line 517. The method was correctly implemented; the validator was looking for `PROCEDURE` keyword and missed the `FUNCTION` declaration.
+
+2. **[LAYOUT-POSITION] Top** ÔÇö False positive: `obj_4c_OptDatas.Top` is already **83** in the current code (correct: 168 original ÔêÆ 85 PageFrame offset = 83). The validator picked up `Buttons(1).Top=5`, which is the button's position *inside* the OptionGroup container, not the group's own `Top`.
+
+3. **[LAYOUT-POSITION] Left** ÔÇö False positive: `obj_4c_OptDatas.Left` is already **372** in the current code, matching the original. Same root cause as problem 2.

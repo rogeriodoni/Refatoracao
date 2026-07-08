@@ -1,0 +1,8 @@
+﻿Correto. Resumo das corre├º├Áes aplicadas:
+
+**TRANSACAO-AVULSA (2 issues ÔÇö corrigidos)**
+- `SigPrEtqBO.prg`: Removidos `SQLEXEC("COMMIT")` e `SQLEXEC("ROLLBACK")` do m├®todo `ImprimirEtiquetas()`. Substitu├¡do pelo simples `loc_lSucesso = .T.`. A conex├úo ODBC usa autocommit e `SigOpEtq` n├úo abre `BEGIN TRANSACTION`, tornando os statements in├║teis.
+
+**SQL-FILTRO-INVENTADO (8 issues ÔÇö sem altera├º├úo necess├íria)**
+- `CONTROLCOUNT` / `DISPLAY`: S├úo propriedades VFP (`par_oContainer.ControlCount`) em `TornarControlesVisiveis()`, **n├úo colunas em WHERE SQL**. Falsos positivos do scanner.
+- `EAN13`, `CBARS`, `DPROS`, `DPRO2S`, `DOPES`, `EMPDOPNUMS`: Ap├│s verifica├º├úo, s├úo colunas **corretas** em queries separadas (SigCdPro, SigCdOpe, SigMvItn) que correspondem ├á l├│gica original. O "WHERE original usa" listado no issue refere-se exclusivamente ├ás colunas de uma query espec├¡fica (SigOpEtq), n├úo ao universo de todas as queries do form.

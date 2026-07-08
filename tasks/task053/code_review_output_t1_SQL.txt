@@ -1,0 +1,20 @@
+﻿After reading the complete form (1541 lines) and the BO file, I can now analyze the three flagged items.
+
+**Finding: All three are false positives from the static validator.**
+
+Searching the actual code:
+
+- `POFORM1` ÔåÆ `THIS.poForm1` is a **form property** (line 28, used in `IF VARTYPE(THIS.poForm1) = "O"` guards). It never appears in a SQL WHERE or LOCATE FOR condition.
+- `CONTROLCOUNT` ÔåÆ `par_oContainer.ControlCount` is a **VFP9 object property** used in `FOR loc_nI = 1 TO par_oContainer.ControlCount` (line 1065). Not a SQL condition.
+- `PNNUMGRF` ÔåÆ `THIS.pnNumGrf` is a **form property** used in assignments and button enable checks. Not a SQL condition.
+
+The actual LOCATE FOR conditions in this file are:
+- `LOCATE FOR CrGrafico1.cChave1s = PADR(loc_cChave2, 100)` ÔÇö uses `cChave1s` (valid field, maps to `CCHAVE1S` in the allowed list)
+- In the BO: `LOCATE FOR TmpResult.ordem = loc_nOrdem` ÔÇö uses `ordem` (valid field, maps to `ORDEM` in the allowed list)
+
+The validator generated false positives because it matched these VFP9 identifiers (object properties appearing near conditional constructs like `IF`, `FOR`) against the SQL column name allowlist. None of these three identifiers appear in any SQL `WHERE` or `LOCATE FOR` clause.
+
+**No changes are required to `FormSigReCmg.prg` or `SigReCmgBO.prg`.** The SQL code in both files is correct:
+- SQL SELECTs use valid fields (`Ordem`, `Crclis`) from `TmpResult`
+- LOCATE FOR conditions use valid fields (`cChave1s`, `ordem`) that ARE in the original's allowed column list
+- INSERT uses valid columns of `CrGrafico1` (`cChave1s`, `cTitulo1s`, etc.)

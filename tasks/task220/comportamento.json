@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "Fortyus.Exe", "fRecalculaP"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRRSA",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA",
+      "evento": "Init",
+      "linhas": 43,
+      "codigoOriginal": "LParameters pParam,pPrior\n\nThisForm.Parametrizado = (Type('pParam')='C')\nThisForm.Prioridade    = Iif(Type('pPrior')=[N],pPrior,0)\nThisForm.Get_Prioridade.Value = ThisForm.Prioridade\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','recspro',.t.)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .podatamgr\n\t\t\t.AddCursor('SigPrSlP','CidChaves','CrSigPrSlP','')\n\t\tEndWith\n\t\t=DoDefault()\n\tElse... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fortyus.Exe",
+        "metodosFormChamados": "Parametrizado =,Prioridade    = Iif,Cursorquery",
+        "controlesReferenciados": "Get_Prioridade",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRRSA",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "If ThisForm.Parametrizado\n\tThisForm.OK.Click()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA.SAIR",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA.OK",
+      "evento": "Click",
+      "linhas": 156,
+      "codigoOriginal": "Local llOk, lcCidChave, lnErro1\n\nThis.Enabled = .F.\n\nSet Cursor Off\n\nlnMov = 1\nllErrCnx = .f.\n\nKeyboard '{LEFTARROW}'\n\nDo While .T.\n\n\tThisForm.Sair.Enabled = .f.\n\n\tThisForm.Label1.Caption = 'Aguardando Produtos Para Processar' + Replicate('.', lnMov)\n\tlnMov = Iif(lnMov < 5, lnMov + 1, 1)\n\t\n\tlcSql = [Select 0 as Flag,* From SigOpClP Where Priors = ]+Str(ThisForm.Prioridade,1)+[ Order by Emps,Grupos,Estos ]\n\tllOk  = ( ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigOpClP') > 0 )\n\n\tIf Not llOk\n\t\tllErrCnx... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fRecalculaP,Fortyus.Exe",
+        "metodosFormChamados": "Sqlexecute,Rollback,Commit,MouseSobreBotaoSair,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA.Get_Prioridade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not ThisForm.Parametrizado)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRSA.Get_Prioridade",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not InList(This.Value,0,1)\n\tMessageBox('Prioridade Invalida!!!',0+64,'')\n\tReturn .f.\nEndIf\nThisForm.Prioridade = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRRSA.OK.Click",
+      "queryOriginal": "\tlcSql = [Select 0 as Flag,* From SigOpClP Where Priors = ]+Str(ThisForm.Prioridade,1)+[ Order by Emps,Grupos,Estos ] \tllOk  = ( ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigOpClP') > 0 )",
+      "tabelas": "SigOpClP",
+      "colunas": "Priors,Prioridade,1+[,Emps,Grupos,Estos,Sqlexecutelcsql,CrSigOpClP",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpClP"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

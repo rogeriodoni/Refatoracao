@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 775,
+      "codigoOriginal": "Local lcRe1, lcSb1, lcRdp, lcJob, lcCli, lcCtt, lcDtE, lcDtA, lcDtT, lcB01, lcTit, lcCnt, lcVal, lnEmp\n\n* Montando o Cabeçalho e Rodape do Relatório1\nCreate Cursor crCabecalho (Titulo m(4), Subtitulo m(4), Rodape m(4), Aprovados c(100))\n\n* Título do Primeiro Relatório\nlcRe1 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 001, 50))), ;\n\t\t[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 001, 50))) + ;\n\t\tThisForm.CompTits\n\nlcSb1 = Proper(Alltrim(TprMvCab.Dopes)) + ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Report Form SigReJb1 Preview NoConsole\n\n* Segundo Relatório\nlcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;\n\t\t[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;\n\t\tThisForm.CompTits\n\nReplace Titulo With lcRe2 In crCabecalho \n\nSelect crImpressa2\nGo Top In crImpressa2\n\nReport Form SigReJb1 Preview NoConsole",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "If ThisForm.SelecionaDados()\n\tSelect crCabecalho\n\tGo Top In crCabecalho\n\n\tIf (ThisForm.Passagem = 1)\n\t\tSelect crImpressao\n\t\tGo Top In crImpressao\n\tElse\n\t\t* Segundo Relatório\n\t\tlcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;\n\t\t\t\t[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;\n\t\t\t\tThisForm.CompTits\n\t\t\t\t\n\t\tReplace Titulo With lcRe2 In crCabecalho \n\n\t\tSelect crImpressa2\n\t\tGo Top In crImpressa2\n\tEndIf\n\n\t=DoDefault()\nElse\n\tReturn .f... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SelecionaDados",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "LParameters pFrm\n\nWith ThisForm\n\t.ParentForm = pFrm\n\n\tSet Datasession To .ParentForm.DataSessionId\n\t\n\t.Caption \t= [Impressão de ] + Alltrim(ThisForm.ParentForm.CfgTitJob)\n\t.ContaEmail = []\n\t.CompTits \t= []\n\t.Passagem \t= 1\n\n\tlcQuery = [Select ObsCabMovs ] + ;\n\t\t\t    [From SigMvCab ] + ;\n\t\t\t   [Where EmpDopNums = '] + TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes, 6) + [']\n\n\tIf (.ParentForm.poDataMgr.SqlExecute(lcQuery, [LocalCab]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Report Form SigReJb1 To Printer Prompt NoConsole\n\n* Segundo Relatório\nlcRe2 = Iif(Empty(Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))), ;\n\t\t[Relatório de Briefing], Alltrim(Substr(Nvl(crSigOpCdI.JOB_MV_TIT, []), 051, 50))) + ;\n\t\tThisForm.CompTits\n\t\t\nReplace Titulo With lcRe2 In crCabecalho \n\nSelect crImpressa2\nGo Top In crImpressa2\n\nReport Form SigReJb1 To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report Form SigReJb1 To Printer NoConsole\n\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJOB",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value = 3) && Arquivos/e-mail\n\tThisForm.Passagem = 1\n\tFor I = 1 to 2\n\t\tThisForm.Passagem = I\n\t\t=DoDefault()\n\tNext\nElse\n\t=DoDefault()\nEndIf\nThisForm.Passagem = 1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

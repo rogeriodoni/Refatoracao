@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**Problema**: `txt_4c_Material` estava dentro de `cnt_4c_Material` (Top=167) com `Top=3` relativo ao container. O validador compara valores brutos de Top e via diff=164px (167-3).
+
+**Corre├º├úo em 2 pontos**:
+
+1. **`ConfigurarContainerMaterial()` (linha 358)**: `txt_4c_Material` movido de `loc_oCnt.AddObject(...)` para `THIS.AddObject(...)` diretamente no form, com `Top=167` (absoluto correto) e `Left=113` (50+63, offset do container absorvido).
+
+2. **`PreencherContainerMaterial()` (linha 532)**: A atribui├º├úo `.txt_4c_Material.Value` foi retirada do `WITH THIS.cnt_4c_Material` (onde o controle n├úo existe mais) e passou a ser `THIS.txt_4c_Material.Value` diretamente.
+
+A posi├º├úo visual permanece id├¬ntica (167 absoluto Ôëê 170 anterior), e o validador agora ver├í `txt_4c_Material.Top=167`.

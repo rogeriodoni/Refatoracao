@@ -1,0 +1,792 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGRECND.SCX
+* Data/Hora: 17/05/26 12:45:08
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECND
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntMensagem
+  Parent: SIGRECND
+  Class: container
+  BaseClass: container
+
+Objeto: lblMensagem
+  Parent: SIGRECND.cntMensagem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntLocal
+  Parent: SIGRECND
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGRECND.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGRECND.cntLocal
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDGrupo
+  Parent: SIGRECND.cntLocal
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_estoque
+  Parent: SIGRECND.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getConta
+  Parent: SIGRECND.cntLocal
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getGrupo
+  Parent: SIGRECND.cntLocal
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getMoeda
+  Parent: SIGRECND.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGRECND.cntLocal
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECND.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECND.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDMoeda
+  Parent: SIGRECND.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Posição de Lançamentos Não Conciliados"
+  Name = "SIGRECND"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntMensagem
+------------------------------------------------------------
+  Top = 527
+  Left = 134
+  Width = 473
+  Height = 56
+  SpecialEffect = 0
+  TabIndex = 2
+  ZOrderSet = 3
+  Name = "cntMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntMensagem.lblMensagem
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontSize = 12
+  Alignment = 2
+  Caption = "Aguarde!!!"
+  Height = 22
+  Left = 20
+  Top = 18
+  Width = 445
+  ForeColor = 0,0,128
+  Name = "lblMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal
+------------------------------------------------------------
+  Top = 112
+  Left = 167
+  Width = 491
+  Height = 112
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 1
+  ZOrderSet = 4
+  Name = "cntLocal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 67
+  Top = 34
+  Width = 38
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getDConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 191
+  MaxLength = 40
+  TabIndex = 8
+  Top = 57
+  Width = 298
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 191
+  MaxLength = 20
+  TabIndex = 5
+  Top = 30
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 67
+  Top = 62
+  Width = 38
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getConta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 109
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 57
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 20
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 109
+  MaxLength = 10
+  TabIndex = 4
+  Top = 30
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 22
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getMoeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K!"
+  Left = 109
+  MaxLength = 3
+  TabIndex = 10
+  Top = 84
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getMoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 109
+  TabIndex = 2
+  Top = 5
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda :"
+  Left = 64
+  Top = 87
+  Width = 41
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Referência :"
+  Left = 18
+  Top = 8
+  Width = 87
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECND.cntLocal.getDMoeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 142
+  MaxLength = 15
+  TabIndex = 11
+  Top = 84
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getDMoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECND
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCnd To Printer
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCnd To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtR
+
+ldDat = ThisForm.cntLocal.getDtInicial.Value
+lcGru = Padr(ThisForm.cntLocal.getGrupo.Value, 10)
+lcCon = Padr(ThisForm.cntLocal.getConta.Value, 10)
+lcMoe = Padr(ThisForm.cntLocal.getMoeda.Value, 03)
+
+lcTit = ThisForm.Caption
+lcSub = 'Data Referência : ' + Dtoc(ldDat) + ' - ' + ;
+		'Grupo : ' + Alltrim(lcGru) + ' - ' + ;
+		'Conta : ' + Iif(Empty(lcCon), 'Todas', Alltrim(lcCon))
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcCep = Alltrim(_Empr) + Iif(Eof('crSigCdEmp'), '', ' - ' + Alltrim(crSigCdEmp.Razas))
+
+Create Cursor dbCabecalho (NomeEmpresa c(80), Titulo c(80), SubTitulo c(80), Moeda1 c(80))
+Insert Into dbCabecalho (NomeEmpresa, Titulo, SubTitulo, Moeda1) Values (lcCep, lcTit, lcSub, lcMoe)
+
+Create Cursor TmpHist (Audits l(1), Datas d(8), Grupos c(10), Contas c(10), RClis c(40), ;
+					   Saldo1 n(12, 2), Opers c(1), Hists c(40), Hist2s c(40), Emps c(3), ;
+					   Debitos n(12, 2), Creditos n(12, 2), Docus c(10), cIdChaves c(20))
+Index On Grupos + Contas + cIdChaves Tag ContData
+
+pDtR = fDtoSQL(ldDat, '23:59:59')
+
+lcQuery = [Select Grupos, Contas, cIdChaves, Datas, Opers, Valors, Moedas, Docus, Emps, DtAudits, Hists, Hist2s ] + ;
+			[From SigMvCcr ] + ;
+		   [Where Grupos = '] + lcGru + [' And ] + ;
+		   		  Iif(Empty(lcCon), [], [Contas = '] + lcCon + [' And ]) + ;
+		   		  [Datas <= ?pDtR And ] + ;
+		   		  [(DataConcs Is Null Or DataConcs > ?pDtR) ] + ;
+		   	[Order By Grupos, Contas, cIdChaves, Datas, Opers, Valors, Docus, Emps, DtAudits]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crDados') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDados)')
+	Return 0
+EndIf
+
+lcCab = ''
+lnSal = 0
+Select crDados
+oProg = CreateObject('fwprogressbar', 'Processando Operações...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+	If (lcCab <> crDados.Grupos + crDados.Contas)
+		lcCab = crDados.Grupos + crDados.Contas
+		lnSal = 0
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crDados.Contas, 'RClis')
+	lcDes = crSigCdCli.RClis
+
+	lnVal = crDados.Valors
+	If (crDados.Moedas <> lcMoe)
+		lnCt1 = fBuscarCotacao(crDados.Moedas, crDados.Datas, ThisForm.poDataMgr)
+		lnCt2 = fBuscarCotacao(lcMoe, crDados.Datas, ThisForm.poDataMgr)
+		lnVal = (crDados.Valors * lnCt1) / lnCt2
+	EndIf
+
+	lnSal = lnSal + (lnVal * Iif(crDados.Opers = 'C', 1, -1))
+
+	Insert Into TmpHist (Audits, Datas, Grupos, Contas, RClis, Saldo1, Opers, ;
+						 Hists, Hist2s, Emps, Debitos, Creditos, Docus, cIdChaves) ;
+				 Values (Not IsEmpty(crDados.DtAudits), crDados.Datas, crDados.Grupos, ;
+				 		 crDados.Contas, lcDes, lnSal, crDados.Opers, crDados.Hists, ;
+				 		 crDados.Hist2s, crDados.Emps, Iif(crDados.Opers = 'D', lnVal, 0), ;
+				 		 Iif(crDados.Opers = 'C', lnVal, 0), crDados.Docus, crDados.cIdChaves)
+EndScan
+oProg.Complete
+
+Select TmpHist
+Set Order To ContData
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCnd Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	If Empty(ThisForm.cntLocal.getDtInicial.Value)
+		=Messagebox('Data de Referência Inválida!!!', 0+48, '')
+		ThisForm.cntLocal.getDtInicial.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.cntLocal.getGrupo.Value)
+		=Messagebox('Grupo Inválido!!!', 0+48, '')
+		ThisForm.cntLocal.getGrupo.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.cntLocal.getMoeda.Value)
+		=Messagebox('Moeda Inválida!!!', 0+48, '')
+		ThisForm.cntLocal.getMoeda.SetFocus
+		Return 0
+	EndIf
+EndIf 
+
+frmrelatorio::btnReport.Click
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getDConta
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.cntLocal.GetGrupo.Value
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.cntLocal.GetConta, This, ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.cntLocal.GetConta.Value = ''
+		ThisForm.cntLocal.GetConta.Refresh
+	EndIf
+Else
+	ThisForm.cntLocal.GetConta.Value = ''
+	ThisForm.cntLocal.GetConta.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.cntLocal.GetGrupo.Value) And Empty(ThisForm.cntLocal.GetConta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getDGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRet
+
+llRet = .t.
+If Not Empty(This.Value)
+	llRet = fAcessoContab(Usuar, 'D', This.Value, ThisForm.cntLocal.GetGrupo, This, ThisForm.poDataMgr)
+Else
+	ThisForm.cntLocal.GetGrupo.Value = ''
+	ThisForm.cntLocal.GetGrupo.Refresh
+EndIf
+Return llRet
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.cntLocal.GetGrupo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getConta
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = This.Parent.GetGrupo.Value
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This, ThisForm.cntLocal.GetDConta, ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.cntLocal.GetDConta.Value = ''
+		ThisForm.cntLocal.GetDConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.cntLocal.GetDConta.Value = ''
+	ThisForm.cntLocal.GetDConta.Refresh
+	Return .t.
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRet
+
+llRet = .t.
+If Not Empty(This.Value)
+	llRet = fAcessoContab(Usuar, 'C', This.Value, This, ThisForm.cntLocal.GetDGrupo, ThisForm.poDataMgr)
+Else
+	ThisForm.cntLocal.GetDGrupo.Value = ''
+	ThisForm.cntLocal.GetDGrupo.Refresh
+EndIf
+
+Return llRet
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getMoeda
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes
+	ThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getMoeda.Value  = ''
+	ThisForm.cntLocal.getDMoeda.Value = ''
+EndIf
+ThisForm.cntLocal.getMoeda.Refresh
+ThisForm.cntLocal.getDMoeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECND.cntLocal.getDMoeda
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes
+	ThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getMoeda.Value  = ''
+	ThisForm.cntLocal.getDMoeda.Value = ''
+EndIf
+ThisForm.cntLocal.getMoeda.Refresh
+ThisForm.cntLocal.getDMoeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.cntLocal.getMoeda.Value)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECND
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

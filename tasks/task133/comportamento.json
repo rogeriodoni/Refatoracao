@@ -1,0 +1,438 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 19,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fAcessoContab", "fAcessoContas", "fChecarInativas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREJUR",
+      "evento": "Init",
+      "linhas": 87,
+      "codigoOriginal": "LParameters pForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n=DoDefault()\n\nThisForm.ParentForm = pForm\n\nSet DataSession to ThisForm.ParentForm.DataSessionId\n\nSelect crTmpJuros\n\nThisForm.AlteraContas = fChecaAcesso(ThisForm.ParentForm.Name, [ALTCONJUR])\nThisForm.AlteraJuros  = fChecaAcesso(ThisForm.ParentForm.Name, [ALTJUROS])\n\nWith ThisForm.Grid1\n\t.AllowHeaderSizing = .f.\n\t.AllowRowSizing = .f.\n\t.ColumnCount = 7\n\t.DeleteMark ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "AlteraContas = fChecaAcesso,AlteraJuros  = fChecaAcesso,CursorQuery",
+        "controlesReferenciados": "get_Oper,get_Grupo,get_DGrupo,get_Conta,get_DConta,get_SOper,get_SGrupo,get_SDGrupo,get_SConta,get_SDConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraJuros",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Grid1.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraJuros",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Confirma",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SOPER",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SGRUPO",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SGRUPO",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, [C], This.Value, This, ThisForm.get_SDGrupo, ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)\nElse\n\tThisForm.get_SDGrupo.Value = []\n\tThisForm.get_SDGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_SDGrupo,get_SConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SCONTA",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SCONTA",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local Grupo\nGrupo = ThisForm.Get_SGrupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [C], This.Value, This, ThisForm.get_SDConta)\n\t\t=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.get_Sconta.Value  = []\n\t\tThisForm.get_Sdconta.Value = []\n\t\tThisForm.get_Sconta.Refresh \n\t\tThisForm.get_Sdconta.Refresh \n\t\tReturn .f.\n\tEndIf\n\n\tIf Not fChecarInativas(This.Value, ThisForm.ParentForm.poDataMgr)\n\t\t=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SGrupo,get_SDConta,get_Sconta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SDCONTA",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas And Empty(ThisForm.Get_SConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AlteraContas And Empty",
+        "controlesReferenciados": "Get_SConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_SDCONTA",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local Grupo\nGrupo = ThisForm.Get_SGrupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.get_SConta, This)\n\t\t=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.get_SDconta.Value  = []\n\t\tThisForm.get_Sconta.Value = []\n\t\tThisForm.get_SDconta.Refresh \n\t\tThisForm.get_Sconta.Refresh \n\t\tReturn .f.\n\tEndIf\n\n\tIf Not fChecarInativas(ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)\n\t\t=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!]... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SGrupo,get_SConta,get_SDconta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_OPER",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_sdgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas And Empty(ThisForm.Get_SGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AlteraContas And Empty",
+        "controlesReferenciados": "Get_SGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_sdgrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, [D], This.Value, ThisForm.get_SGrupo, This, ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)\nElse\n\tThisForm.get_SGrupo.Value = []\n\tThisForm.get_SGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_SGrupo,get_SConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_grupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, [C], This.Value, This, ThisForm.get_DGrupo, ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)\nElse\n\tThisForm.get_DGrupo.Value = []\n\tThisForm.get_DGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_DGrupo,get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas And Empty(ThisForm.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AlteraContas And Empty",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_dgrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, [D], This.Value, ThisForm.get_Grupo, This, ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)\nElse\n\tThisForm.get_Grupo.Value = []\n\tThisForm.get_Grupo.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlteraContas",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_conta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local Grupo\nGrupo = ThisForm.Get_Grupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [C], This.Value, This, ThisForm.get_DConta)\n\t\t=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.get_conta.Value  = []\n\t\tThisForm.get_dconta.Value = []\n\t\tThisForm.get_conta.Refresh \n\t\tThisForm.get_dconta.Refresh \n\t\tReturn .f.\n\tEndIf\n\n\tIf Not fChecarInativas(This.Value, ThisForm.ParentForm.poDataMgr)\n\t\t=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.get_co... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,get_DConta,get_conta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And IsEmpty( This.Parent.Get_Conta.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREJUR.Get_dconta",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local Grupo\nGrupo = ThisForm.Get_SGrupo.Value\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.get_Conta, This)\n\t\t=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])\n\n\t\tThisForm.get_Dconta.Value  = []\n\t\tThisForm.get_conta.Value = []\n\t\tThisForm.get_Dconta.Refresh \n\t\tThisForm.get_conta.Refresh \n\t\tReturn .f.\n\tEndIf\n\n\tIf Not fChecarInativas(ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)\n\t\t=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])\n\n\t\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SGrupo,get_Conta,get_Dconta",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

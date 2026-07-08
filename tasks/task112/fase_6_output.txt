@@ -1,0 +1,10 @@
+﻿Tudo correto. Resumo da Fase 6/8:
+
+**FormSigReHev.prg**: Header atualizado de "FASE 5/8" para "FASE 6/8" com nota explicando que o form j├í estava completo (SIGREHEV original tem apenas 1 campo, sem lookups).
+
+**menu.prg**: Integra├º├úo adicionada:
+- `DEFINE BAR 136` (separador) e `DEFINE BAR 137` ("Hist├│rico de Envelopes") em `popRelatorios`
+- `ON SELECTION BAR 137 OF popRelatorios DO AbrirFormSigReHev`
+- `PROCEDURE AbrirFormSigReHev()` no final do arquivo seguindo o padr├úo can├┤nico dos outros forms
+
+O `config.prg` j├í carrega automaticamente todos os `*BO.prg` de `classes\` e todos os `Form*.prg` de `relatorios\` via `ADIR()`, portanto n├úo precisa de altera├º├úo manual.

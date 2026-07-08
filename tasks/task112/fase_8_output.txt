@@ -1,0 +1,13 @@
+﻿Tudo correto. A Fase 8/8 est├í conclu├¡da. O `FormSigReHev.prg` agora tem todos os m├®todos exigidos:
+
+**M├®todos adicionados na Fase 8:**
+- `CarregarLista()` ÔÇö retorna `.T.` (form de relat├│rio n├úo tem lista CRUD)
+- `AjustarBotoesPorModo()` ÔÇö mant├®m todos os bot├Áes do `cmg_4c_Botoes` habilitados
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita o `txt_4c_Op` (├║nico campo de entrada)
+- `FormParaBO()` ÔÇö alias de `FormParaRelatorio()` para compatibilidade com chamadas gen├®ricas
+- `BOParaForm()` ÔÇö sincroniza `this_nEnvelope` do BO de volta para o campo no form
+- `BtnBuscarClick()` ÔÇö delega para `BtnVisualizarClick()` (buscar = gerar relat├│rio em tela)
+- `BtnSalvarClick()` ÔÇö delega para `BtnImprimirClick()` (salvar = imprimir)
+- `BtnCancelarClick()` ÔÇö limpa filtros e reposiciona foco no campo Envelope
+
+A integra├º├úo no `menu.prg` (DEFINE BAR 137 + procedure `AbrirFormSigReHev`) j├í estava presente das fases anteriores e segue o padr├úo can├┤nico correto.

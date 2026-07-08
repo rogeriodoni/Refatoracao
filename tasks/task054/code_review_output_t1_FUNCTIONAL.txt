@@ -1,0 +1,5 @@
+﻿Both fixes applied:
+
+1. **[METODO-INEXISTENTE]** ÔÇö `cmg_4c_Botoes.Width` corrected from `THIS.Width` (700) to `273`, and each of the 4 buttons corrected from `THIS.Width` to `65`. Using the form's Width property inside the nested WITH blocks produced 700px-wide buttons (same as form width), completely breaking the toolbar layout. Values derive from the existing comment on line 146: `Left=2,68,134,200` + `Width=65` ÔåÆ total 273.
+
+2. **[NULL-CURSOR] ├ù4** ÔÇö Added `SET NULL ON` before the first `CREATE CURSOR` and `SET NULL OFF` after the last one in `sigrecmmBO.InicializarCursores()`. All four cursors (`cursor_4c_Analitico`, `cursor_4c_Impressao`, `cursor_4c_Cabecalho`, `cursor_4c_Excel`) now accept NULL values when populated from SQL Server results.

@@ -1,0 +1,12 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi executada com sucesso.
+
+**O que foi adicionado:**
+
+- **`cmg_4c_Botoes`** no `cnt_4c_Cabecalho`: CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Doc.Excel/Sair), geometria exata do framework frmrelatorio (`Left=527, Width=273, ButtonCount=4`), ├¡cones e propriedades corretas, com `Buttons(4).Cancel=.T.` para ESC
+- **`ConfigurarCamposFiltro()`**: todos os 9 controles da Page1 com posi├º├Áes exatas do original (per├¡odo, data cota├º├úo, empresa+descri├º├úo), BINDEVENTs conectados
+- **`LimparCampos()`**: inicializa datas com `DATE()` e empresa em branco (padr├úo do `Init` original)
+- **`FormParaRelatorio()`**: copia filtros do form para o BO
+- **`BtnVisualizarClick/BtnImprimirClick/BtnGerarExcelClick/BtnCancelarClick`**: handlers com valida├º├úo de per├¡odo e `loc_lContinuar` (sem `RETURN` dentro de `TRY`)
+- **`TeclaEmpresa/ValidarEmpresa/AbrirBuscaEmpresa`**: lookup F4+ENTER/TAB com busca em `SigCdEmp`, controle de `ReadOnly` da descri├º├úo
+- **`TeclaEmpresaDesc/ValidarEmpresaDesc`**: busca reversa por nome de empresa
+- Handlers vazios para datas (sem lookup, como o original)

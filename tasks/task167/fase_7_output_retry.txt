@@ -1,0 +1,10 @@
+﻿Added the 4 CRUD event handlers before `ENDDEFINE` in `C:/4c/projeto/app/forms/operacionais/Formsigprcpd.prg`.
+
+Since SIGPRCPD is a read-only OPERACIONAL consultation form (`When ÔåÆ Return .F.` on all fields, only "Sair" in the original), each method was mapped to a real available operation, not a MsgAviso stub:
+
+- `BtnIncluirClick` ÔÇö refresh: re-executes `CarregarDados()` + `AtualizarGrid()` with current parameters
+- `BtnAlterarClick` ÔÇö validates a selected row and navigates to Page2 (detail view)
+- `BtnVisualizarClick` ÔÇö same detail-view navigation (equivalent to `GrdDadosDblClick`)
+- `BtnExcluirClick` ÔÇö `MsgConfirma` ÔåÆ `THIS.Release()` (close consultation)
+
+All wrapped in TRY/CATCH with `MsgErro`/`MsgAviso` per the rules (no MESSAGEBOX, no return-inside-try, `CHR(231)+CHR(227)` for `├º├ú`).

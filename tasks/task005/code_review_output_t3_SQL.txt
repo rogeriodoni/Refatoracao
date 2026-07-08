@@ -1,0 +1,17 @@
+﻿After thoroughly searching the entire form file (5761 lines), I've confirmed this is a **false positive** from the code review tool.
+
+**Investigation results:**
+
+1. The only occurrences of `TOP` in `FormProduto.prg` are VFP9 UI property assignments like `.Top = 29`, `.Top = 202`, etc. ÔÇö these are control layout coordinates, not SQL conditions.
+
+2. The actual SQL WHERE clause in `CarregarLista()` (lines 3274-3276) uses only these conditions:
+   - `CONVERT(date, ISNULL(DataAlts,...)) >= date` ÔåÆ `DATAALTS` Ô£à in original list
+   - `CONVERT(date, ISNULL(DataAlts,...)) <= date` ÔåÆ `DATAALTS` Ô£à in original list  
+   - Optional: `AND CGrus = ...` ÔåÆ `CGRUS` Ô£à in original list
+   - Optional: `AND ISNULL(Situas,1) IN (...)` ÔåÆ `SITUAS` Ô£à in original list
+
+3. There is no SQL WHERE clause containing `TOP` as a column name anywhere in the migrated code.
+
+4. The scanner appears to be tokenizing `.Top = X` VFP9 property assignments and incorrectly classifying them as SQL WHERE conditions.
+
+**Conclusion:** This is a false positive ÔÇö the `TOP` token the scanner found is from VFP9 layout properties (`.Top = 29`, `.Top = 202`, etc.), not from any SQL WHERE clause. **No changes are needed** to either `FormProduto.prg` or `ProdutoBO.prg`.

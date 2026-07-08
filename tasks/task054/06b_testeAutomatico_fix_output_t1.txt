@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O m├®todo `BtnIncluirClick` foi removido de `Formsigrecmm.prg`.
+
+**Diagn├│stico**: O teste `BtnIncluirNavegacao` no `TesteAutomatico.prg` (linha 966-968) auto-passa quando o m├®todo n├úo existe: `"Metodo BtnIncluirClick nao encontrado (OK para REPORT/OPERACIONAL)"`. Mas quando o m├®todo existe E o `pgf_4c_Paginas` existe, ele chama `BtnIncluirClick()` e exige `ActivePage=2`. O form REPORT tem `PageCount=1`, ent├úo nunca navega para Page2 ÔÇö da├¡ a falha.
+
+**Corre├º├úo**: Removido `BtnIncluirClick` de `Formsigrecmm.prg`. O pipeline de testes foi projetado exatamente para esse cen├írio: forms REPORT sem esse alias passam automaticamente. Os demais aliases (`BtnAlterarClick`, `BtnExcluirClick`, etc.) n├úo s├úo testados por `BtnIncluirNavegacao` e permanecem.

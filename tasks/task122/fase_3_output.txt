@@ -1,0 +1,19 @@
+﻿O arquivo `Formsigreimc.prg` foi criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`. 
+
+**Resumo da Fase 3/8:**
+
+**Estrutura criada:**
+- `DEFINE CLASS Formsigreimc AS FormBase` com dimens├Áes exatas do original (800├ù160px)
+- Propriedades visuais: `DataSession=2`, `TitleBar=0`, `WindowType=1`, `BorderStyle=2`
+- 7 propriedades de par├ómetros opcionais (`this_cEmp`, `this_cSerie`, `this_dEmisDe`, `this_dEmisAte`, `this_cEDNs`, `this_cNotaIni`, `this_cNotaFim`)
+
+**M├®todos implementados:**
+- `Init(7 params)` ÔÇö recebe par├ómetros opcionais com `PCOUNT()`, armazena antes do `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria BO, chama `InicializarFiltros()` (pula em modo UI), monta cabecalho/botoes/PageFrame, BINDEVENTs para bot├Áes 1/2/4
+- `ConfigurarCabecalho()` ÔÇö container cinza 800├ù80 com lbl_4c_Sombra + lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö CommandGroup can├┤nico (Left=529, Width=273, Height=80, 4 bot├Áes 65├ù70); Buttons(3) Excel desabilitado (cartas f├¡sicas n├úo t├¬m exporta├º├úo)
+- `ConfigurarPageFrame()` ÔÇö PageFrame com Page1 "Filtros", Top=80, Height=80
+- `LimparCampos()` ÔÇö propaga par├ómetros do Init para o BO
+- `FormParaRelatorio()` ÔÇö transfere estado do form para o BO antes de imprimir
+- `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnSairClick()` ÔÇö handlers completos
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`

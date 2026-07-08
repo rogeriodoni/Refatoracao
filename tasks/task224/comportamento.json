@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerPswDiarioMC", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRSEN",
+      "evento": "Procedure",
+      "linhas": 47,
+      "codigoOriginal": "parameters pcSenhaDia\nlcCab = [Senha do Dia : ] + pcSenhaDia\nlcCrp = []\nlcDir = Addbs(Sys(5) + Sys(2003))\n\nlcSch = [http://schemas.microsoft.com/cdo/configuration/]\nloObs = Createobject([CDO.Configuration])\n\nTry\n\tWith loObs.Fields\n\t\t.Item(lcSch + [smtpserver]) = [mail.4control.com.br]\n\t\t.Item(lcSch + [smtpserverport]) = 25\n\t\t.Item(lcSch + [sendusing]) = 2\n\t\t.Item(lcSch + [smtpauthenticate]) = 0\n\t\t.Item(lcSch + [smtpusessl]) = .F.\n\t\t.Item(lcSch + [smtpauthenticate]) = 1\n\t\t.Item(lcSch + [smtpusess... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSEN",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "LOCAL cCorpo, cFrom, cCC, cTo, cAssunto, cAnexo, cEmail\n\nIf Not ThisForm.Automatico\n\tIf Messagebox([Deseja realmente gerar a senha?],4+32+256,[Gerar Senha]) = 7\n\t\tReturn .f.\n\tEndif\nEndIf \n\nlcSenha = fGerPswDiarioMC(Val(Sys(1)), Date(), 0)\nIf Not ThisForm.Automatico\n\t=Messagebox('Favor Anotar a Senha : ' + Chr(13) + Chr(13) + lcSenha + Chr(13) + Chr(13), 32, 'Senha - 4Control',5000)\nEndIf \nSet Step On \nThisForm.MandaEmail(lcSenha)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerPswDiarioMC",
+        "metodosFormChamados": "MandaEmail",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSEN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSEN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSEN",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "parameters pAuto\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nThisForm.Automatico = pAuto\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\tIf Not ThisForm.Automatico\n\t\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tEndIf \n\t\tReturn .f.\n\tEndIf\nEndWith\n\nIf ThisForm.Automatico\n\tThisForm.btnGerSen.Click()... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSEN.btnGerSen",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.Processamento()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSEN.Saida",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

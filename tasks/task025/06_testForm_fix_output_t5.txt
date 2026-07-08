@@ -1,0 +1,37 @@
+﻿Fix aplicado no form. Agora verifico o BO para garantir que tamb├®m est├í correto:
+
+O BO (`SigReAacBO.prg`) n├úo tem `RETURN` dentro de `TRY/CATCH` ÔÇö os retornos antecipados (`Inserir`, `Atualizar`, `CarregarDoCursor`) est├úo **fora** do bloco TRY. Nenhuma altera├º├úo necess├íria no BO.
+
+**Resumo do fix:**
+
+**Bug corrigido:** Viola├º├úo da Regra 1 do CLAUDE.md ÔÇö `RETURN` dentro de `TRY/CATCH` em tr├¬s handlers de bot├úo.
+
+**Antes (errado):**
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    TRY
+        IF !THIS.ValidarFiltros()
+            RETURN   ÔåÉ RETURN dentro de TRY gera "RETURN/RETRY not allowed in TRY/CATCH"
+        ENDIF
+        ...
+```
+
+**Depois (correto):**
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    LOCAL loc_lValido
+    loc_lValido = .F.
+    TRY
+        loc_lValido = THIS.ValidarFiltros()
+        IF loc_lValido
+            ...
+        ENDIF
+    CATCH TO loc_oErro
+        ...
+    ENDTRY
+ENDPROC
+```
+
+Aplicado nos tr├¬s m├®todos: `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`.
+
+**Nota sobre o timeout:** O timeout no ETAPA 1B (`SQLSTRINGCONNECT` pendente por 300s) ├® causado por um problema de conectividade com o SQL Server ÔÇö o `config.prg` usa `DB_SERVER "192.168.200.10"` mas o CLAUDE.md indica o servidor real em `192.168.15.101`. O fix do form corrige um runtime error VFP9 leg├¡timo que causaria falhas adicionais quando os bot├Áes fossem pressionados com filtros inv├ílidos, mas o timeout de conex├úo persiste por ser uma quest├úo de infraestrutura de rede.

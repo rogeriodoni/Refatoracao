@@ -1,0 +1,8 @@
+﻿Fase 2 completa. Adicionei ao `SIGREAUPBO.prg`:
+
+- **`ObterChavePrimaria()`** ÔÇö gera chave ├║nica de auditoria com empresa + tipo (PERCENT/LISTAGEM) + ordem + per├¡odo + filtros aplicados
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö insere registro real em `LogAuditoria` com tabela/opera├º├úo/chave/usu├írio/datahora
+- **`Inserir()`, `Atualizar()`, `CarregarDoCursor()`** ÔÇö implementa├º├Áes expl├¡citas que retornam .F. com mensagem em `this_cMensagemErro` (opera├º├Áes inaplic├íveis a BO de relat├│rio, mant├®m contrato uniforme com validador)
+- **Integra├º├úo de auditoria** em `Visualizar()` ÔåÆ "VISUALIZAR", `Imprimir()` ÔåÆ "IMPRIMIR", `Documento()` ÔåÆ "DOCUMENTO"
+
+Padr├úo segue exatamente `sigreappBO.prg` (REPORT BO de refer├¬ncia).

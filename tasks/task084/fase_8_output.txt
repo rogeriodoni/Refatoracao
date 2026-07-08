@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. A Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado ao FormSigReEch.prg:**
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `FormParaBO()` | Sincroniza form ÔåÆ BO (favorecido e verso antes de opera├º├Áes) |
+| `HabilitarCampos(par_cModo)` | Controla ReadOnly dos campos por modo (INSERIR/ALTERAR vs somente leitura) |
+| `LimparCampos()` | Reseta campos edit├íveis e o estado `peantvalue` do verso |
+| `CarregarLista()` | Recarrega dados do cheque do banco + atualiza UI completa |
+| `AjustarBotoesPorModo()` | Centraliza ajuste de estado dos bot├Áes/controles baseado em `lEmitidos`, `nImpVersos` e `op_escolha` |
+
+**Integra├º├Áes confirmadas como j├í completas:**
+- `menu.prg` linha 132: `ON SELECTION BAR 14 OF popMovimentos DO AbrirFormSigReEch` Ô£ô
+- `menu.prg` linha 2438: procedure `AbrirFormSigReEch()` com mensagem informando que o form ├® invocado do m├│dulo Contas a Pagar Ô£ô
+- `config.prg`: carregamento din├ómico cobre `*BO.prg` em `classes/` e `Form*.prg` em `forms/operacionais/` Ô£ô

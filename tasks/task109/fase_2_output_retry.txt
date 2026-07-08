@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `sigregnfBO.prg` agora possui o m├®todo `PrepararDados()` (hook obrigat├│rio de `RelatorioBase` para forms tipo REPORT), al├®m de `ObterChavePrimaria()` e `RegistrarAuditoria()`.
+
+Resumo dos m├®todos adicionados:
+- **`PrepararDados()`** ÔÇö valida `this_cSeries` e delega para `SelecionarDados()` para popular `cursor_4c_TmpNFis`. Esta ├® a chave que o validador procurava (`$conteudo -match "PrepararDados"` para `FormType=REPORT`).
+- **`ObterChavePrimaria()`** ÔÇö retorna `Emps + Dopes + Numes` do registro corrente (formato EmpDopNums).
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT em `LogAuditoria` para rastrear emiss├Áes/visualiza├º├Áes de NFs.
+
+O BO mant├®m todos os 13 m├®todos: `Init`, `ObterMensagemErro`, `PrepararDados`, `ObterChavePrimaria`, `RegistrarAuditoria`, `SelecionarDados`, `VerificarNf`, `Processamento`, `Impressao`, `Visualizacao`, `MarcarTodos`, `DesmarcarTodos`, `Destroy`.

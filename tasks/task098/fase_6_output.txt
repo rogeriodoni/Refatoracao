@@ -1,0 +1,11 @@
+﻿As 3 corre├º├Áes est├úo corretas. A Fase 6 est├í conclu├¡da.
+
+**Resumo das corre├º├Áes aplicadas em `Formsigrefcd.prg`:**
+
+1. **Guard `gb_4c_ValidandoUI` na cria├º├úo do BO** (linha 58): O `CREATEOBJECT("sigrefcdBO")` agora s├│ executa fora do modo de valida├º├úo de UI ÔÇö evita o erro "Connection handle is invalid" quando `ValidarUIFidelity` tenta criar o form sem conex├úo SQL ativa.
+
+2. **`AbrirBuscaEmpresa()`**: Removidos os 3 par├ómetros extras inv├ílidos (`.F., .T., ""`). A chamada agora segue o padr├úo can├┤nico com 6 par├ómetros: `gnConnHandle, tabela, cursor, campo, valor, titulo`, seguido de `mAddColuna()` ÔåÆ `Show()` ÔåÆ verificar `this_lSelecionou`.
+
+3. **`AbrirBuscaDsEmpresa()`**: Mesma corre├º├úo ÔÇö removidos os par├ómetros extras, padr├úo FormBuscaAuxiliar correto aplicado.
+
+O form e o BO j├í estavam completos nas fases anteriores para este formul├írio simples (apenas 2 filtros: empresa + per├¡odo). A integra├º├úo no `menu.prg` (BAR 119 + `AbrirFormsigrefcd`) e o carregamento din├ómico via `ADIR()` no `config.prg` tamb├®m j├í estavam corretos.

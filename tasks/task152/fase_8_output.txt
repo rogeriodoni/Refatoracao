@@ -1,0 +1,20 @@
+﻿Tudo correto. A Fase 8 est├í completa. Aqui est├í um resumo do que foi implementado:
+
+**FormSIGPDPNS.prg** ÔÇö 9 m├®todos adicionados:
+
+| M├®todo | Comportamento |
+|--------|--------------|
+| `BtnBuscarClick()` | Delega para `CarregarLista()` |
+| `BtnSalvarClick()` | Encerra o form (somente leitura) |
+| `BtnCancelarClick()` | Encerra o form |
+| `FormParaBO()` | Popula BO com linha corrente do `cursor_4c_Grade` via `CarregarDoCursor` |
+| `BOParaForm()` | No-op (dados exibidos diretamente via cursor) |
+| `HabilitarCampos()` | No-op (todos os controles s├úo ReadOnly) |
+| `LimparCampos()` | Limpa `grd_4c_Rodape.Column1/2.Text1.Value` e `txt_4c_RClis.Value` |
+| `CarregarLista()` | Chama `BO.SelecionarDados()` com WAIT WINDOW, atualiza rodap├® e d├í refresh nos grids |
+| `AjustarBotoesPorModo()` | No-op (form sem modos CRUD) |
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 17/18 OF popMovimentos` (separador + "Pendentes")
+- `ON SELECTION BAR 18 OF popMovimentos DO AbrirFormSIGPDPNS`
+- Procedimento `AbrirFormSIGPDPNS()` no padr├úo can├┤nico (VARTYPE + Show() sem par├ómetro + MostrarErro no CATCH)

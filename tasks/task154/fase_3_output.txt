@@ -1,0 +1,13 @@
+﻿`C:\4c\projeto\app\forms\operacionais\FormSIGPRALE.prg` criado com sucesso.
+
+**O que foi feito (Fase 3/8 - Estrutura Base):**
+
+- `DEFINE CLASS FormSIGPRALE AS FormBase` com propriedades `this_cBitmap`, `this_cMensagem1/2/3`
+- Propriedades visuais copiadas do SCX original: `Width=419`, `Height=115`, `TitleBar=0`, `ControlBox=.F.`, `Closable=.F.`, `MaxButton=.F.`, `MinButton=.F.`, `AlwaysOnTop=.T.`, `DataSession=2`
+- `Init(par_cBitmap, par_cMensagem1, par_cMensagem2, par_cMensagem3)` ÔÇö captura os par├ómetros na propriedades `this_` **antes** de `DODEFAULT()`, mantendo a interface legada
+- `InicializarForm()` ÔÇö tenta carregar `new_background.jpg` se dispon├¡vel, depois chama `ConfigurarControles()`
+- `ConfigurarControles()` ÔÇö cria `img_4c_Imagem` (vis├¡vel apenas se bitmap passado) + `lbl_4c_Mensagem/2/3` com todas as propriedades do original (FontBold, Tahoma 14pt, ForeColor vermelho, AutoSize, BackStyle=0)
+- `AtualizarMensagens()` ÔÇö m├®todo p├║blico para atualizar textos em runtime e chamar `Refresh()`
+- `Destroy()` chama `DODEFAULT()`
+
+**Nota de adapta├º├úo:** Este form ├® um dialog de progresso puro (419├ù115), sem PageFrame nem estrutura CRUD. A Fase 3 entrega estrutura completa pois todos os controles cabem num ├║nico m├®todo `ConfigurarControles()`.

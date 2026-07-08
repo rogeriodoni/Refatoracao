@@ -1,0 +1,5 @@
+﻿As ocorr├¬ncias de `ControlCount` encontradas nas linhas 1771 e 1791 s├úo **propriedades VFP9** (`par_oContainer.ControlCount`, `loc_oControl.ControlCount`), n├úo colunas em cl├íusulas SQL WHERE.
+
+Este ├® um **falso positivo** do detector: a ferramenta encontrou a string `ControlCount` no arquivo, mas ela est├í sendo usada como propriedade de objeto VFP9 (n├║mero de controles em um container), n├úo como coluna SQL. N├úo existe nenhum `WHERE ... CONTROLCOUNT` no arquivo.
+
+Nenhuma corre├º├úo ├® necess├íria ÔÇö o c├│digo est├í correto e n├úo h├í filtro SQL inventado para remover.

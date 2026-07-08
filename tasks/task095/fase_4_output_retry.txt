@@ -1,0 +1,13 @@
+﻿All references resolve. Phase 4 work is complete: the `cmg_4c_Botoes` CommandGroup is now wired to a central `BotoesClick` dispatcher (mirroring the legacy single-Click pattern from `comportamento.json`), with validation that mirrors the legacy filter checks (`Tabela` obrigat├│ria, `ValorIni >= 0`, `ValorIni <= ValorFin`).
+
+**Summary of Phase 4 changes to `C:\4c\projeto\app\forms\relatorios\FormSIGREEVV.prg`:**
+
+- `InicializarForm()` ÔÇö now invokes `THIS.VincularEventosBotoes()` after the UI is built
+- `VincularEventosBotoes()` ÔÇö BINDEVENT wires `cmg_4c_Botoes` Click ÔåÆ `BotoesClick`
+- `BotoesClick()` ÔÇö central dispatcher; replicates the legacy Click logic by reading `cmg_4c_Botoes.Value` (1=Visualizar, 2=Imprimir, 3=Excel, 4=Encerrar)
+- `ValidarFiltrosForm()` ÔÇö three validations identical to the legado, with mensagem + SetFocus no campo problem├ítico
+- `BotaoVisualizarClick()` / `BotaoImprimirClick()` ÔÇö chamam `Visualizar()` / `Imprimir()` no BO (j├í existentes)
+- `BotaoExcelClick()` ÔÇö `PrepararDados()` + `PUTFILE` + `COPY TO ... TYPE XL5`
+- `BotaoEncerrarClick()` ÔÇö `THIS.Release()`
+
+Note: this is a **REPORT** form (frmrelatorio), not CRUD, so the literal Phase 4 wording "Grid e Bot├Áes CRUD" doesn't apply ÔÇö the equivalent meaningful work is wiring the report buttons, which is what was missing after Phase 3.

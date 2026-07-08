@@ -1,0 +1,12 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigReGla.prg`. A Fase 3 entrega:
+
+- `DEFINE CLASS FormSigReGla AS FormBase` com propriedades visuais do original (Width=375, Height=250, TitleBar=0)
+- `Init()` que retorna `DODEFAULT()` (padr├úo correto ÔÇö FormBase chama `InicializarForm` automaticamente)
+- `InicializarForm()` ÔÇö instancia `SigReGlaBO`, chama `ConfigurarPageFrame()`, seta `Visible=.T.` e `ActivePage=1`, verifica `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Height=THIS.Height+29`, `Tabs=.F.`, 2 pages
+- `ConfigurarContaineresPage1()` ÔÇö `cnt_4c_Cabecalho` (fundo RGB 100,100,100) + `lbl_4c_Titulo` + `cnt_4c_Botoes` vazios
+- `ConfigurarContaineresPage2()` ÔÇö `cnt_4c_BotoesAcao` vazio
+- `TornarControlesVisiveis()` ÔÇö itera├º├úo recursiva com `LOCAL loc_p` declarado no topo (fora do loop)
+- `Destroy()` ÔÇö libera BO e chama `DODEFAULT()`
+
+Pr├│xima fase (4/8): adicionar grid e bot├Áes CRUD em Page1.

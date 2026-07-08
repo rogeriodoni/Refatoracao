@@ -1,0 +1,2723 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReAtm.SCX
+* Data/Hora: 16/05/26 08:26:41
+* Total de registros: 61
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREATM
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Datai
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_Conta
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dataf
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_CGru
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Ggrp
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DGru
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dGGrp
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkDestino
+  Parent: SIGREATM
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: cntOpe
+  Parent: SIGREATM
+  Class: container
+  BaseClass: container
+
+Objeto: GrdTipo
+  Parent: SIGREATM.cntOpe
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREATM.cntOpe.GrdTipo.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREATM.cntOpe.GrdTipo.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREATM.cntOpe.GrdTipo.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREATM.cntOpe.GrdTipo.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: apaga
+  Parent: SIGREATM.cntOpe
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGREATM.cntOpe
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGREATM.cntOpe
+  Class: label
+  BaseClass: label
+
+Objeto: get_envelope
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Nop
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkProdutos
+  Parent: SIGREATM
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: get_dgrupo
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label5
+  Parent: SIGREATM
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TpGOp
+  Parent: SIGREATM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Class
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblClassificacao
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodFinP
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblModelo
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesFinP
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Dacb
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_Agru
+  Parent: SIGREATM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_codacb
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblAcabamento
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DClass
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCSGru
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDsGru
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say27
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_tamps
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblProfundidade
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblAltura
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblComprimento
+  Parent: SIGREATM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_tamcs
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_tamas
+  Parent: SIGREATM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 53
+  Left = 39
+  Width = 317
+  Height = 80
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 550
+  Width = 800
+  DoCreate = .T.
+  Caption = (prompt())
+  Name = "SIGREATM"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 527
+  btnReport.Top = 4
+  btnReport.TabIndex = 29
+  btnReport.ZOrderSet = 51
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_Datai
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Height = 23
+  Left = 132
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 120
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Themes = .F.
+  Name = "Get_Datai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say_Conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 83
+  Top = 124
+  Width = 45
+  TabIndex = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_Dataf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Height = 23
+  Left = 240
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 120
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "Get_Dataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = " até "
+  Left = 216
+  Top = 124
+  Width = 24
+  TabIndex = 32
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_CGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 132
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 240
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Themes = .F.
+  Name = "Get_CGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_Ggrp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 132
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 216
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "Get_Ggrp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_DGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = ""
+  Left = 164
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 240
+  Width = 158
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Themes = .F.
+  Name = "Get_DGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo Mat. Prima :"
+  Height = 15
+  Left = 36
+  Top = 244
+  Width = 92
+  TabIndex = 38
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_ds_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 23
+  Left = 164
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 24
+  Top = 384
+  Width = 202
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_dGGrp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = ""
+  Left = 164
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 216
+  Width = 158
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Themes = .F.
+  Name = "Get_dGGrp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grande Grupo :"
+  Height = 15
+  Left = 52
+  Top = 220
+  Width = 76
+  TabIndex = 37
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_cd_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K!"
+  Left = 132
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 23
+  Top = 384
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 132
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 168
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Themes = .F.
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 132
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 192
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Themes = .F.
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 213
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 192
+  Width = 280
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Themes = .F.
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 90
+  Top = 172
+  Width = 38
+  TabIndex = 34
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 90
+  Top = 196
+  Width = 38
+  TabIndex = 35
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.ChkDestino
+------------------------------------------------------------
+  Top = 462
+  Left = 136
+  Height = 15
+  Width = 118
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Analisar pelo Destino"
+  Value = .F.
+  TabIndex = 43
+  Visible = .F.
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "ChkDestino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe
+------------------------------------------------------------
+  Top = 235
+  Left = 440
+  Width = 350
+  Height = 265
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 28
+  ZOrderSet = 20
+  Name = "cntOpe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.GrdTipo
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  HeaderHeight = 0
+  Height = 240
+  Left = 5
+  Panel = 1
+  RecordMark = .F.
+  RecordSource = "cs_SigCdTom"
+  RowHeight = 18
+  ScrollBars = 2
+  TabIndex = 6
+  TabStop = .F.
+  Top = 17
+  Width = 300
+  GridLineColor = 238,238,238
+  ZOrderSet = 27
+  Name = "GrdTipo"
+  Column1.FontName = "Tahoma"
+  Column1.Alignment = 0
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 15
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 220
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.GrdTipo.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.GrdTipo.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.GrdTipo.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Descrs"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.GrdTipo.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.apaga
+------------------------------------------------------------
+  Top = 127
+  Left = 306
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 10
+  TabStop = .F.
+  ToolTipText = "Desmaca todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.SelTudo
+------------------------------------------------------------
+  Top = 87
+  Left = 306
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 9
+  TabStop = .F.
+  ToolTipText = "Marca todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.cntOpe.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Tipo de material"
+  Height = 16
+  Left = 7
+  Top = 1
+  Width = 100
+  TabIndex = 30
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_envelope
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 23
+  InputMask = "9999999999"
+  Left = 132
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 25
+  Top = 408
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Themes = .F.
+  Name = "get_envelope"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Envelope :"
+  Left = 75
+  Top = 412
+  Width = 53
+  TabIndex = 39
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_Nop
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 23
+  InputMask = "999999"
+  Left = 255
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 26
+  Top = 408
+  Width = 58
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Themes = .F.
+  Name = "get_Nop"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "O.P. :"
+  Left = 220
+  Top = 412
+  Width = 31
+  TabIndex = 41
+  ZOrderSet = 24
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.chkProdutos
+------------------------------------------------------------
+  Top = 481
+  Left = 153
+  Height = 15
+  Width = 123
+  FontName = "Verdana"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Produtos"
+  Value = .F.
+  Enabled = .F.
+  TabIndex = 44
+  Visible = .F.
+  ForeColor = 36,84,155
+  ZOrderSet = 25
+  Name = "chkProdutos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_dgrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 213
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 168
+  Width = 280
+  ForeColor = 0,0,0
+  ZOrderSet = 26
+  Themes = .F.
+  Name = "get_dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Tipo de O.P.:"
+  Height = 15
+  Left = 62
+  Top = 148
+  Width = 66
+  TabIndex = 36
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_TpGOp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 132
+  Margin = 2
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 144
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 28
+  Name = "Get_TpGOp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_Class
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 132
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 18
+  ToolTipText = "Classificação"
+  Top = 336
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 29
+  Name = "Get_Class"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblClassificacao
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  Caption = "Classificação :"
+  Height = 15
+  Left = 24
+  Top = 340
+  Width = 104
+  TabIndex = 46
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  ToolTipText = "Classificação"
+  Name = "lblClassificacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.getCodFinP
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 132
+  SpecialEffect = 1
+  TabIndex = 14
+  ToolTipText = "Modelo"
+  Top = 288
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 31
+  Name = "getCodFinP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblModelo
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  Caption = "Modelo :"
+  Height = 15
+  Left = 24
+  Top = 292
+  Width = 104
+  TabIndex = 42
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  ToolTipText = "Modelo"
+  Name = "lblModelo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.getDesFinP
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 164
+  SpecialEffect = 1
+  TabIndex = 15
+  ToolTipText = "Modelo"
+  Top = 288
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 33
+  Name = "getDesFinP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_Dacb
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 164
+  SpecialEffect = 1
+  TabIndex = 17
+  ToolTipText = "Acabamento"
+  Top = 312
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 34
+  Name = "get_Dacb"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.opt_Agru
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 4
+  Left = 126
+  SpecialEffect = 0
+  Top = 433
+  Width = 300
+  TabIndex = 27
+  ZOrderSet = 35
+  Name = "opt_Agru"
+  Option1.FontName = "Tahoma"
+  Option1.Caption = "Analítico"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 58
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.Caption = "Modelo"
+  Option2.Value = 0
+  Option2.Left = 78
+  Option2.Top = 6
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Classificação"
+  Option3.Height = 15
+  Option3.Left = 143
+  Option3.Top = 6
+  Option3.Width = 79
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Conta"
+  Option4.Value = 1
+  Option4.Height = 15
+  Option4.Left = 242
+  Option4.Top = 6
+  Option4.Width = 47
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_codacb
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 132
+  SpecialEffect = 1
+  TabIndex = 16
+  ToolTipText = "Acabamento"
+  Top = 312
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 36
+  Name = "get_codacb"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblAcabamento
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  Caption = "Acabamento :"
+  Left = 24
+  Top = 316
+  Width = 104
+  TabIndex = 45
+  ForeColor = 90,90,90
+  ZOrderSet = 37
+  ToolTipText = "Acabamento"
+  Name = "lblAcabamento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Get_DClass
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 164
+  SpecialEffect = 1
+  TabIndex = 19
+  ToolTipText = "Classificação"
+  Top = 336
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 38
+  Name = "Get_DClass"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda :"
+  Left = 87
+  Top = 388
+  Width = 41
+  TabIndex = 33
+  ForeColor = 90,90,90
+  ZOrderSet = 39
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 99
+  Top = 439
+  Width = 29
+  TabIndex = 40
+  ForeColor = 90,90,90
+  ZOrderSet = 40
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.GetCSGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 23
+  InputMask = ""
+  Left = 132
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 264
+  Width = 52
+  ForeColor = 0,0,0
+  ZOrderSet = 41
+  Name = "GetCSGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.GetDsGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 23
+  InputMask = ""
+  Left = 185
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 264
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 42
+  Name = "GetDsGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Subgrupo Mat. Prima:"
+  Height = 15
+  Left = 22
+  Top = 268
+  Width = 106
+  TabIndex = 30
+  ForeColor = 90,90,90
+  ZOrderSet = 43
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.Say27
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Dimensão :"
+  Height = 15
+  Left = 73
+  Top = 364
+  Width = 55
+  TabIndex = 47
+  ForeColor = 90,90,90
+  ZOrderSet = 44
+  Name = "Say27"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_tamps
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Height = 23
+  InputMask = "999.99"
+  Left = 132
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 20
+  Top = 360
+  Width = 58
+  ForeColor = 0,0,0
+  ZOrderSet = 45
+  Name = "get_tamps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblProfundidade
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "p"
+  Height = 15
+  Left = 192
+  Top = 364
+  Width = 8
+  TabIndex = 48
+  ForeColor = 90,90,90
+  ZOrderSet = 46
+  Name = "lblProfundidade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblAltura
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "a"
+  Height = 15
+  Left = 280
+  Top = 364
+  Width = 8
+  TabIndex = 49
+  ForeColor = 90,90,90
+  ZOrderSet = 47
+  Name = "lblAltura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.lblComprimento
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "c"
+  Height = 15
+  Left = 367
+  Top = 364
+  Width = 7
+  TabIndex = 50
+  ForeColor = 90,90,90
+  ZOrderSet = 48
+  Name = "lblComprimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_tamcs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Height = 23
+  InputMask = "999.99"
+  Left = 307
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 22
+  Top = 360
+  Width = 58
+  ForeColor = 0,0,0
+  ZOrderSet = 49
+  Name = "get_tamcs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREATM.get_tamas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Height = 23
+  InputMask = "999.99"
+  Left = 219
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 21
+  Top = 360
+  Width = 58
+  ForeColor = 0,0,0
+  ZOrderSet = 50
+  Name = "get_tamas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREATM
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Do Case
+	Case thisform.opt_Agru.Value = 1
+		Report Form SigReAt2 Preview NoConsole
+	OtherWise
+		Report Form SigReAt3 Preview NoConsole
+
+Endcase
+	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+If Used('CrSigCdCli')
+	Use In CrSigCdCli
+EndIf
+If Used('CrSigCdPro')
+	Use In CrSigCdPro
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+Local lcGrupo, lcConta, lcDConta, ldDatai, ldDataf, lcGruMat, lnTotal, lcCab, lcSub, lcEmp
+
+lcGrupo   = ThisForm.Get_Grupo.Value
+lcConta   = ThisForm.Get_Conta.Value
+lcDConta  = ThisForm.Get_DConta.Value
+lcGruMat  = ThisForm.Get_CGru.Value
+lcGgrp    = ThisForm.Get_Ggrp.Value
+lcSgru    = thisform.getCSGru.Value
+ldDatai   = ThisForm.Get_Datai.Value
+ldDataf   = ThisForm.Get_Dataf.Value
+llDestino = ThisForm.ChkDestino.Value
+lnEnvelope= ThisForm.Get_Envelope.Value
+lnOp      = ThisForm.Get_Nop.Value
+lnOpI     = ( ThisForm.Get_Nop.Value * 10000 ) + 1
+lnOpF     = ( ThisForm.Get_Nop.Value * 10000 ) + 9999
+lcTGOp	  = thisform.get_tpGOp.Value
+lcCodFin = thisform.getCodFinP.Value
+lcClas = thisform.get_Class.Value 
+lcTamA = Val(thisform.get_tamas.Value)
+lcTamP = Val(thisform.get_tamps.Value)
+lcTamC = Val(thisform.get_tamcs.Value)
+lnAgru = thisform.opt_Agru.Value
+lcMoeda = thisform.get_cd_moeda.Value
+
+Create Cursor TmpRelat (Fase c(10),IClis c(10),RClis c(50),CMats c(14),DPros c(40) ,CPros c(14),DDPros c(40),Qtde n(12,3),TpOps c(15),;
+						CUnis c(3), Operacaos c(31), Nenvs n(10), Datas D, Pesos n(12,3), Valor n(12,2), Fators n(12,3), Moecs c(3),;
+						Cgrus c(3), Sgrus c(3), Cclass c(3), CodFinP c(3), Dimens c(30), DFinP c(20), DClass c(40), QtdTrabs n(12,3))
+Index On Dtos(datas) + Operacaos + Str(nenvs,10) + cmats Tag Operacao
+Index on TpOps + CodFinP + Str(Qtde,12,3) Tag TpCodFin
+Index on Dtos(Datas) + Fase + IClis + TpOps + CUnis + CMats + Operacaos + Str(nenvs,10) + Str(Qtde,12,3) Tag FFuncMat
+
+
+pDtI = fDtoSQL(ldDataI) 
+pDtF = fDtoSQL(ldDataF, '23:59:59')
+
+*** Filtra os tipos de materiais selecionados
+lcTpOp = []
+Select CrSigOpOpt
+Go top
+Count for Marca = 1 to lnTotOp
+Scan
+	If (CrSigOpOpt.Marca = 1 Or lnTotOp = 0)
+		lcTpOp = lcTpOp + Iif(Empty(lcTpOp),[']+CrSigOpOpt.Cods+['],[,']+CrSigOpOpt.Cods+['])
+	Endif
+Endscan
+lcTpOp = [(] + Iif(Empty(lcTpOp ),[''],lcTpOp) + [)]
+
+
+lStrQuery = [Select a.Datas,a.CIdChaves,a.Emps,a.DopPs,a.NumPs,a.GrupoOs,a.ContaOs,b.CMats,b.Qtds,b.TpOps,b.Nenvs,]+;
+				   [a.GrupoDs,a.ContaDs, b.Nops, b.Pesos, b.Fators, b.Servicos, b.Cats, b.Empdnps ]+;
+			  [From SigCdNec a, SigCdNei b ] + ;
+			[Where a.Datas BetWeen ?pDtI And ?pDtF And a.EmpDNPs = b.EmpDNPs ]+;
+				Iif(Empty(lcTpOp),[],[And b.TpOps in ] + lcTpOp + [ ])+;
+				Iif(Empty(lcGrupo),[],Iif(llDestino,[And a.GrupoDs = '],[And a.GrupoOs = '])+lcGrupo+[' ])+;
+				Iif(Empty(lcConta),[],Iif(llDestino,[And a.ContaDs = '],[And a.ContaOs = '])+lcConta+[' ])+;
+				Iif(lnEnvelope > 0,[And Nenvs = ?lnEnvelope ],[]) +;
+			[Order By a.cIdChaves ]
+
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpNens') < 1
+	MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpNens)')
+	Return 0
+EndIf
+
+*** Quantidade total do componente trabalhados por período
+lStrQuery = [Select a.Datas,a.CIdChaves,a.Emps,a.DopPs,a.NumPs,a.ContaOs,b.CMats,b.Qtds,b.TpOps,b.Nenvs,]+;
+				   [a.GrupoDs,a.ContaDs, b.Nops, b.Pesos, b.Fators, b.Servicos, b.Cats, b.Empdnps, d.CodFinP, d.Cclass, d.Cunis, d.Pcuss, ]+;
+					[case when e.agrupas = '' then a.GrupoOs else e.agrupas end as GrupoOs ] +;
+			  [From SigCdNec a, SigCdNei b, SigOpOpt c, SigCdPro d, SigCdGcr e ] + ;
+			[Where a.Datas BetWeen ?pDtI And ?pDtF And a.EmpDNPs = b.EmpDNPs And c.Cods = b.TpOps ] +;
+			[And b.Cmats = d.Cpros And b.servicos = 0 And a.Retrabs = 0 And a.GrupoOs = e.Codigos ] +;
+				Iif(Empty(lcGrupo),[],Iif(llDestino,[And a.GrupoDs = '],[And a.GrupoOs = '])+lcGrupo+[' ])+;
+				Iif(Empty(lcConta),[],Iif(llDestino,[And a.ContaDs = '],[And a.ContaOs = '])+lcConta+[' ])+;
+				Iif(lnEnvelope > 0,[And Nenvs = ?lnEnvelope ],[]) +;
+				Iif(Empty(lcGruMat),[],[And d.CGrus = ']+lcGruMat+[' ]) +;
+				Iif(Empty(lcGgrp),[],[And d.Mercs = ']+lcGgrp+[' ]) +;
+				Iif(Empty(lcCodFin),[],[And d.CodFinP = ']+lcCodFin+[' ]) +;
+				Iif(Empty(lcClas),[],[And d.Cclass = ']+lcClas+[' ]) +;
+			[Order By a.cIdChaves ]
+*!*	And b.flagincs = 1
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpProd') < 1
+	MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpProd)')
+	Return 0
+EndIf
+
+Select CsSigCdOpd
+Go Top
+
+*** Filtra o Tipo de operação
+Select * From CrSigOpOpt Where Marca > 0 Into Cursor csLocalMc
+Go Top In csLocalMc
+If !Eof([csLocalMc])
+	Select a.* From TmpNens a, CsSigCdOpd b ;
+	Where a.DopPs = b.DopPs And Iif(!Empty(lcTGOp),b.CodTgOps = lcTGOp, .t. ) ;
+	Into Cursor CrSigCdNec ReadWrite
+Else
+	Select a.* From TmpNens a, CsSigCdOpd b ;
+	Where a.DopPs = b.DopPs And Iif(!Empty(lcTGOp),b.CodTgOps = lcTGOp, .t. ) ;
+	Into Cursor CrSigCdNec ReadWrite
+EndIf
+
+If (lnEnvelope > 0)
+	Select Distinct Empdnps From CrSigCdNec Where Nenvs = lnEnvelope Into Cursor crEnvelope
+EndIf
+
+Select CrSigCdNec
+Index On Dtos(Datas) + CIdChaves Tag Datas
+Set Order To Datas
+Go Top In CrSigCdNec		
+
+lnTotal = Reccount('CrSigCdNec')
+If (lnTotal <> 0)
+	loBarra = CreateObject('fwprogressbar','Processando Movimentações',lnTotal)
+	loBarra.Titulo.FontBold = .T.
+	loBarra.Show
+	Scan
+		loBarra.Update(.T.)
+
+*		If (lnEnvelope > 0) And (CrSigCdNec.Nenvs <> lnEnvelope And lcEdn <> CrSigCdNec.Empdnps)
+		If (lnEnvelope > 0)
+			Select crEnvelope
+			Go Top In crEnvelope
+			Locate For Empdnps = CrSigCdNec.Empdnps
+			If Eof([crEnvelope])
+				Loop
+			EndIf
+		EndIf
+		If lnOP > 0 And Not Between(CrSigCdNec.Nops,lnOpI,lnOpF)
+			Loop
+		EndIf
+	
+		lcQuery = [Select a.CPros,a.DPros,a.CGrus,a.Sgrus,a.CUnis,b.Mercs,a.Pcuss,a.Moecs,a.Cclass,a.CodFinp,a.TamPs,a.TamHs,a.TamLs From SigCdPro a, SigCdGrp b ] +;
+				[Where a.CPros = ']+CrSigCdNec.CMats+[' And a.Cgrus = b.Cgrus ]
+		If Thisform.PodataMgr.SqlExecute(lcQuery,'CrSigCdPro') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!',16,'Falha na Conexão (CrSigCdPro)')
+			Return 0
+		EndIf
+		Select CrSigCdPro
+		If !Empty(lcGruMat) And (CrSigCdPro.CGrus <> lcGruMat)
+			Loop
+		EndIf
+		If !Empty(lcGgrp) And (CrSigCdPro.Mercs <> lcGgrp )
+			Loop
+		Endif
+		If !Empty(lcSgru) And (CrSigCdPro.Sgrus <> lcSgru )
+			Loop
+		Endif
+		If !Empty(lcCodFin) And (CrSigCdPro.CodFinp <> lcCodFin )
+			Loop
+		Endif
+		If !Empty(lcClas) And (CrSigCdPro.Cclass <> lcClas )
+			Loop
+		Endif
+		If !Empty(lcTamP) And (CrSigCdPro.TamPs <> lcTamP )
+			Loop
+		Endif
+		If !Empty(lcTamA) And (CrSigCdPro.TamHs <> lcTamA )
+			Loop
+		Endif		
+		If !Empty(lcTamC) And (CrSigCdPro.TamLs <> lcTamC )
+			Loop
+		Endif				
+		
+		lcTpOps = CrSigCdNec.TpOps
+		
+		lcGrp = Iif(llDestino,CrSigCdNec.GrupoDs,CrSigCdNec.GrupoOs)
+		ThisForm.poDataMgr.CursorQuery('SigCdGcr', 'TmpCdGcr', 'Codigos', lcGrp, 'Agrupas')
+		lcGrp = Iif(Empty(TmpCdGcr.Agrupas),lcGrp,Padr(TmpCdGcr.Agrupas,10))		
+		lcCta = Iif(llDestino,CrSigCdNec.Contads,CrSigCdNec.ContaOs)
+		lcPed = Padr(Iif(lnAgru = 1,CrSigCdNec.Dopps+'-'+Str(CrSigCdNec.Numps,10),' '),31)
+		lnEnv = Iif(lnAgru = 1,CrSigCdNec.Nenvs,0)
+		ldData = Iif(lnAgru = 1,CrSigCdNec.Datas,Ctod('31/12/9999'))
+		
+		If lcGrp = CrSigCdPam.GrTrans
+			Loop
+		EndIf
+
+		lcPro = []
+		lcDpr = []
+		If Not IsEmpty(CrSigCdNec.Nops) And ThisForm.chkProdutos.Value
+			lcQuery = [Select top 1 a.Cpros, b.DPros ] + ;
+					    [From SigOpPic a Inner join SigCdPro b on a.Cpros = b.Cpros Where Nops = ?crSigCdNec.Nops]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)])
+				Return 0
+			EndIf
+			Go Top In LocalPro
+			If Not Eof([LocalPro])
+				lcDpr = LocalPro.DPros
+				lcPro = LocalPro.Cpros
+			EndIf
+		EndIf
+
+		*** Monta dimensões do produto
+		lcDimen = ''
+		ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'crSigCdGrp', 'CGrus', crSigCdPro.CGrus, 'TitulosPro')
+		If !Empty(Substr(crSigCdGrp.TitulosPro, 061, 060))
+			lcDimen = Str(crSigCdPro.tamps,2) + Iif(Empty(Substr(crSigCdGrp.TitulosPro, 061, 020)),'p',Alltrim(Substr(crSigCdGrp.TitulosPro, 061, 020)))
+			lcDimen = lcDimen + [ x ] + Str(crSigCdPro.tamhs,2) + Iif(Empty(Substr(crSigCdGrp.TitulosPro, 081, 020)),[a],Alltrim(Substr(crSigCdGrp.TitulosPro, 081, 020)))
+			lcDimen = lcDimen + [ x ] + Str(crSigCdPro.tamls,2) + Iif(Empty(Substr(crSigCdGrp.TitulosPro, 101, 020)),[c],Alltrim(Substr(crSigCdGrp.TitulosPro, 101, 020)))
+		Endif
+
+		ThisForm.poDataMgr.CursorQuery('SigCdFip', 'crSigCdFip', 'Cods', crSigCdPro.CodFinP, 'Descs')
+		ThisForm.poDataMgr.CursorQuery('SigCdCls', 'crSigCdCls', 'Cods', crSigCdPro.Cclass, 'Descs')
+		
+
+		Select TmpRelat
+		If Not Seek(Dtos(ldData) + lcGrp + lcCta + lcTpOps + CrSigCdPro.Cunis + CrSigCdNec.CMats + lcPed + Str(lnEnv,10) )			
+			ThisForm.poDataMgr.CursorQuery('SigCdCli', 'CrTmpCli', 'IClis', lcCta, 'RClis')
+			Insert Into TmpRelat (Fase, Iclis, RClis, CMats, Dpros, CPros, DDPros, TpOps, Cunis, Operacaos, Nenvs, ;
+								Datas, Fators, Moecs, Cclass, CodFinP, Dimens, Cgrus, Sgrus, ;
+								DFinP, DClass ) ;
+						  Values (lcGrp, lcCta, CrTmpCli.RClis, CrSigCdNec.CMats, CrSigCdPro.Dpros, lcPro, lcDpr, lcTpOps, CrSigCdPro.Cunis, lcPed, lnEnv, ;
+						  		ldData, crSigCdNec.Fators, crSigCdPro.Moecs, crSigCdPro.Cclass, crSigCdPro.CodFinP, lcDimen, crSigCdPro.Cgrus, crSigCdPro.Sgrus, ;
+						  		crSigCdFip.Descs, crSigCdCls.Descs )
+		EndIf
+		Replace Qtde With Qtde + CrSigCdNec.Qtds
+		Replace Valor With Valor + Iif(crSigCdPro.Moecs <> lcMoeda, fCarregarCambio(crSigCdPro.Moecs, Date()) / fCarregarCambio(lcMoeda, Date()),;
+		 				(CrSigCdPro.Pcuss * CrSigCdNec.Qtds))
+		Replace Moecs With Iif(crSigCdPro.Moecs <> lcMoeda,lcMoeda,crSigCdPro.Moecs)
+
+		If lnAgru = 1
+			If Not Seek(Dtos(Ctod('31/12/9999')) + Replicate(Chr(255), 20) + lcTpOps + CrSigCdPro.Cunis + CrSigCdNec.CMats)
+				Insert Into TmpRelat (Fase, Iclis, RClis, CMats, TpOps, Cunis, ;
+							  Moecs, Datas, CodFinP, Cclass ) ;
+							  Values (Replicate(Chr(255), 10), Replicate(Chr(255), 10), 'Total Geral : ', CrSigCdNec.CMats, lcTpOps, CrSigCdPro.Cunis, ;
+							  crSigCdPro.Moecs, Ctod('31/12/9999'), '','')
+			EndIf
+			Replace Qtde with Qtde + CrSigCdNec.Qtds
+			Replace Valor With Valor + Iif(crSigCdPro.Moecs <> lcMoeda, fCarregarCambio(crSigCdPro.Moecs, Date()) / fCarregarCambio(lcMoeda, Date()),;
+		 				(CrSigCdPro.Pcuss * CrSigCdNec.Qtds))
+			Replace Moecs With Iif(crSigCdPro.Moecs <> lcMoeda,lcMoeda,crSigCdPro.Moecs)		 				
+		Endif
+	EndScan
+	loBarra.Complete(.T.)
+EndIf
+
+Select TmpRelat
+Go top
+Do Case
+	Case lnAgru = 1
+*!*			Set Order To tag FFuncMat
+		lcCabTipo = [ - Tipo : Analítico]
+		
+		Select * from TmpRelat order by Datas, Fase, IClis, TpOps, CUnis, Moecs, CMats, Qtde Desc into cursor TmpRelat ReadWrite
+
+	Case lnAgru = 2
+		lcCabTipo = [ - Tipo : Modelo]
+		Select CodFinp, Cunis, Sum(Qtds) as QtdTrabs, Sum(Qtds * Pcuss) as CustoTrabs from TmpProd ;
+			Group By CodFinp, Cunis Order By CodFinp, QtdTrabs Desc into cursor TmpProd  ReadWrite
+
+		Select a.TpOps, a.CodFinp as Agrupa, a.DFinP as Dagrupa, a.Cunis, a.Moecs, b.QtdTrabs, Sum(a.Qtde) as Qtde, Sum(a.Valor) as Valor, ;
+			CustoTrabs, ((Sum(a.Qtde) / b.QtdTrabs) * 100) as PercMat ;
+			from TmpRelat a Left Join TmpProd b On a.CodFinP = b.CodFinP And a.Cunis = b.Cunis ;
+			Group By a.TpOps, a.CodFinp, a.DFinP, a.Cunis, a.Moecs, b.QtdTrabs, b.CustoTrabs Order By a.TpOps, a.CodFinp, a.Cunis into cursor TmpRelat ReadWrite
+					
+	Case lnAgru = 3
+		lcCabTipo = [ - Tipo : Classificação]
+		Select Cclass, Cunis, Sum(Qtds) as QtdTrabs, Sum(Qtds * Pcuss) as CustoTrabs from TmpProd ;
+			Group By Cclass, Cunis Order By Cclass, QtdTrabs Desc into cursor TmpProd  ReadWrite
+			
+		Select a.TpOps, a.Cclass as Agrupa, a.DClass as Dagrupa, a.Cunis, a.Moecs, b.QtdTrabs, Sum(a.Qtde) as Qtde, Sum(a.Valor) as Valor, ;
+			CustoTrabs, ((Sum(a.Qtde) / b.QtdTrabs) * 100) as PercMat ;
+			from TmpRelat a Left Join TmpProd b On a.Cclass = b.Cclass And a.Cunis = b.Cunis ;
+			Group By a.TpOps, a.Cclass, a.DClass, a.Cunis, a.Moecs, b.QtdTrabs, b.CustoTrabs Order By a.TpOps, a.Cclass, a.Cunis into cursor TmpRelat ReadWrite
+
+	Case lnAgru = 4
+		lcCabTipo = [ - Tipo : Conta]
+		Select GrupoOs, ContaOs, Cunis, Sum(Qtds) as QtdTrabs, Sum(Qtds * Pcuss) as CustoTrabs from TmpProd ;
+			Group By GrupoOs, ContaOs, Cunis Order By GrupoOs, ContaOs, QtdTrabs Desc into cursor TmpProd  ReadWrite
+			
+		Select a.TpOps, a.Fase as Agrupa, a.Iclis + ' - ' + a.Rclis as Dagrupa, a.Cunis, a.Moecs, b.QtdTrabs, Sum(a.Qtde) as Qtde, Sum(a.Valor) as Valor, ;
+			CustoTrabs, ((Sum(a.Qtde) / b.QtdTrabs) * 100) as PercMat ;
+			from TmpRelat a Left Join TmpProd b On a.Fase = Padr(b.GrupoOs,10) And a.Iclis = b.ContaOs And a.Cunis = b.Cunis ;
+			Group By a.TpOps, a.Fase, Dagrupa, a.Cunis, a.Moecs, b.QtdTrabs, b.CustoTrabs Order By a.TpOps, a.Fase, Dagrupa, a.Cunis into cursor TmpRelat ReadWrite
+
+Endcase
+
+lcCab = [Análise por Tipo de Material ] + Chr(13) + [Moeda : ] + lcMoeda + lcCabTipo
+lcSub = Iif(llDestino,[Por Destino],[Por Origem]) +  [ - Período : ] + Alltrim(Dtoc(ldDatai)) + [ até ] + Alltrim(Dtoc(ldDataf))
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'CrSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmp = _Empr + ' - ' + Iif(Eof('CrSigCdEmp'), '', CrSigCdEmp.Razas)
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100))
+Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)
+
+
+Select TmpRelat
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select Codigos, Descrs ] + ;
+				    [From SigCdGcr ] + ;
+				   [Where GerBals = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'CrSigCdGcr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrSigCdGcr)')
+			Return 0
+		EndIf
+		Select CrSigCdGcr
+		Index On Codigos Tag BalCodigo
+		Index On Descrs  Tag BalDescrs
+
+		lcQuery = [Select 0 As Marca, Cods, Descs ] + ;
+				    [From SigOpOpt ] + ;
+				   [Where Situas < 2 And (Emps = ' ' Or Emps = ']+_Empr+[') ]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'CrSigOpOpt') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrSigOpOpt)')
+			Return 0
+		EndIf
+		Select CrSigOpOpt
+		Index On Cods  Tag Cods
+		Index On Descs Tag Descs
+
+		Go top
+		With ThisForm.CntOpe
+			.GrdTipo.RecordSource = 'CrSigOpOpt'
+			.GrdTipo.Column1.ControlSource = 'CrSigOpOpt.Marca'
+			.GrdTipo.Column3.ControlSource = 'CrSigOpOpt.Descs'
+			.GrdTipo.Refresh
+			.Visible = .T.
+			.Refresh
+		EndWith
+
+		lcQuery = [Select IClis, RClis, Inativas ] + ;
+				    [From SigCdCli ] + ;
+				   [Where GerBals = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'CrSigCdCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrSigCdCli)')
+			Return 0
+		EndIf
+		Select CrSigCdCli
+		Index On IClis Tag BalCodigo
+		Index On RClis Tag BalNome
+		
+		=Thisform.Podatamgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.,[GrTrans])
+
+		*** Tiago - 17/04/2012 - Vianna - Checa os acessos que o usuário possui de tipo de produção
+		lcSql = [Select 0 as Acesso, * From SigInTgo ]
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'TmpTpGop') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpTpGop)')
+			Return 0
+		EndIf
+		Select TmpTpGop
+		Scan
+			If fChecaAcesso('SIGPRGLOT',Alltrim(TmpTpGop.Codigos))
+				Replace Acesso With 1 In TmpTpGop
+			EndIf
+		EndScan
+		
+		Select * From TmpTpGop Where Acesso = 1 Into Cursor CrTmpTpGop ReadWrite
+		Select CrTmpTpGop
+		Index on Codigos Tag Codigos
+		Go Top
+		
+		If Reccount('CrTmpTpGop') = 1
+			ThisForm.Get_TpGOp.Value = CrTmpTpGop.Codigos
+		Endif
+		***
+
+		ThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')
+		Select crSigCdCot
+		Index On CMoes + Dtos(Datas) Tag CMoeData
+		Set Order To CMoeData Descending
+
+		ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .f., .f., 'CMoes, Cotas')
+		Select crSigCdMoe
+		Index On CMoes Tag CMoes
+
+		=DoDefault()
+	Else
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...',48,'Create Object')
+		Return(.F.)
+	EndIf
+EndWith
+
+
+If ThisForm.poDataMgr.SqlExecute([Select 0 As Marca, DopPs, ndopps, CodTgOps From SigCdOpd ],'CsSigCdOpd') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CsSigCdOpd')
+	Return(.F.)
+Endif
+*** Tiago - 17/04/2012 - Vianna - Checa operações de produção que o usuário tem acesso
+*!*	Select CsSigCdOpd
+*!*	Index on Dopps tag Dopps
+*!*	Scan
+*!*		If ! fChecaAcesso('P'+padl(csSigCdOpd.ndopps,8,'0'))
+*!*			Delete
+*!*		Endif
+*!*	Endscan
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Do Case
+	Case thisform.opt_Agru.Value = 1
+		Report Form SigReAt2 To Print Prompt NoConsole
+	Case thisform.opt_Agru.Value = 2
+		Report Form SigReAt3 To Print Prompt NoConsole
+Endcase
+	
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Encerrar
+	If Empty(thisform.get_cd_moeda.Value)
+		Messagebox('Moeda de conversão é obrigatória.',64,'Aviso')
+		thisform.get_cd_moeda.SetFocus()
+		Return .f.
+	Endif
+Endif
+
+Dodefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_CGru
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'crListaRemota', 'CGrus', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CGrus', '', 'Código')
+		loLista.mAddColuna('DGrus', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Get_CGru.Value = crListaRemota.CGrus
+	ThisForm.Get_DGru.Value = crListaRemota.DGrus
+	Use In crListaRemota
+Else
+	ThisForm.Get_CGru.Value = ''
+	ThisForm.Get_DGru.Value = ''
+EndIf
+ThisForm.Get_CGru.Refresh
+ThisForm.Get_DGru.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_Ggrp
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	This.Value = crListaRemota.codigos
+	ThisForm.Get_dGgrp.Value = CrListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.Get_Ggrp.Value = ''
+	ThisForm.Get_DgGrp.Value = ''
+EndIf
+ThisForm.Get_Ggrp.Refresh
+ThisForm.Get_DgGrp.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_DGru
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Cgru.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'crListaRemota', 'DGrus', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DGrus', '', 'Descrição')
+		loLista.mAddColuna('CGrus', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Get_CGru.Value = crListaRemota.CGrus
+	ThisForm.Get_DGru.Value = crListaRemota.DGrus
+	Use In crListaRemota
+Else
+	ThisForm.Get_CGru.Value = ''
+	ThisForm.Get_DGru.Value = ''
+EndIf
+ThisForm.Get_CGru.Refresh
+ThisForm.Get_DGru.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Thisform.get_cd_moeda.value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value )
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','crMoedas1','dmoes',This.Value,'Seleção',.T.)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('dmoes','','Descrição')
+		m.loLista.mAddColuna('cmoes','XXXXXX','Código')
+		m.loLista.Show()
+	EndIf
+	Thisform.Get_cd_moeda.Value = crMoedas1.CMoes
+	Thisform.Get_ds_moeda.Value = crMoedas1.DMoes
+Else
+	Thisform.Get_cd_moeda.Value = ''
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_dGGrp
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value )
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','crMoedas1','cmoes',This.Value,'Seleção',.T.)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('cmoes','XXXXXX','Código')
+		m.loLista.mAddColuna('dmoes','','Descrição')
+		m.loLista.Show()
+	EndIf
+	Thisform.Get_cd_moeda.Value = crMoedas1.CMoes
+	Thisform.Get_ds_moeda.Value = crMoedas1.DMoes
+Else
+	Thisform.Get_ds_moeda.Value = ''
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select CrSigCdGcr
+	Set Order to BalCodigo
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CrSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .T., 'BalCodigo' )
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .T., 'BalDescrs' )
+		loBrowse.Show
+	EndIf
+	If Lastkey() <> 27
+		This.Value = CrSigCdGcr.Codigos
+		thisform.get_dgrupo.Value = crSigCdGcr.Descrs
+	Else
+		This.Value = ''
+		thisform.get_dgrupo.Value = ''
+	EndIf
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select CrSigCdCli
+	Set Order to BalCodigo
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CrSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('IClis', '', 'Código',    .T., 'BalCodigo')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .T., 'BalNome')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		If Lastkey() = 27
+			ThisForm.Get_Conta.Value  = ''
+			ThisForm.Get_DConta.Value = ''
+		EndIf
+	EndIf
+	ThisForm.Get_Conta.Value  = CrSigCdCli.IClis
+	ThisForm.Get_DConta.Value = CrSigCdCli.RClis
+Else
+	ThisForm.Get_DConta.Value = ''
+EndIf
+ThisForm.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.Get_Grupo.Value) And Empty(ThisForm.Get_Conta.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty( This.Value )
+	Select CrSigCdCli
+	Set Order to BalNome
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CrSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .T., 'BalNome')
+		loBrowse.AddColuna('IClis', '', 'Código',    .T., 'BalCodigo')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		If Lastkey() = 27
+			ThisForm.Get_Conta.Value  = ''
+			ThisForm.Get_DConta.Value = ''
+		EndIf
+	EndIf
+	ThisForm.Get_Conta.Value  = CrSigCdCli.IClis
+	ThisForm.Get_DConta.Value = CrSigCdCli.RClis
+Else
+	ThisForm.Get_Conta.Value = ''
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.cntOpe.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpOpt
+Replace All Marca With 0
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.cntOpe.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpOpt
+Replace All Marca With 1
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.get_dgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select CrSigCdGcr
+	Set Order to BalDescrs
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CrSigCdGcr', 'BalDescrs', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .T., 'BalCodigo' )
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .T., 'BalDescrs' )
+		loBrowse.Show
+	EndIf
+	If Lastkey() <> 27
+		Thisform.get_grupo.Value = CrSigCdGcr.Codigos 
+		this.Value = crSigCdGcr.Descrs
+	Else
+		Thisform.get_grupo.Value = ''
+		this.Value = ''
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_TpGOp
+* Classe: textbox (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Reccount('CrTmpTpGop') > 1)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Seek(This.Value, 'crTmpTpGop', 'Codigos')
+	loBrowse = CreateObject('fwBuscaSel', 'CrTmpTpGop', 'Codigos', This.Value, 'Tipos de geração de O.P.')
+	loBrowse.AddColuna('Codigos', 'XXXXXXXXXX', 'Codigo', .t., 'Codigos')
+	loBrowse.AddColuna('Descs', ' ', 'Descricao')
+	loBrowse.Show
+	This.Value = CrTmpTpGop.Codigos
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_Class
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'crSigCdCls', ;
+						   'CrListaRemota', 'Cods', This.Value, 'Classificação', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descrs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		This.Value = CrListaRemota.Cods
+		Thisform.get_DClass.Value = CrListaRemota.Descrs
+	Else
+		This.Value = ''
+		Thisform.get_DClass.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	This.Value = ''
+	Thisform.get_DClass.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.getCodFinP
+* Classe: fwget (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdFip], ;
+						   [crListaRemota], [Cods], This.Value, [Modelo], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Cods],  [], [Código])
+		loLista.mAddColuna([Descs], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		ThisForm.getCodFinP.Value = crListaRemota.Cods
+		ThisForm.getDesFinP.Value = crListaRemota.Descs
+	Else
+		ThisForm.getCodFinP.Value = []
+		ThisForm.getDesFinP.Value = []
+	EndIf
+	Use In crListaRemota
+Else
+	ThisForm.getDesFinP.Value = []
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.getDesFinP
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.getCodFinP.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdFip], ;
+						   [crListaRemota], [Descs], This.Value, [Modelo], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Descs], [], [Descrição])
+		loLista.mAddColuna([Cods],  [], [Código])
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		ThisForm.getCodFinP.Value = crListaRemota.Cods
+		ThisForm.getDesFinP.Value = crListaRemota.Descs
+	Else
+		ThisForm.getCodFinP.Value = []
+		ThisForm.getDesFinP.Value = []
+	EndIf
+	
+	Use In crListaRemota
+Else
+	ThisForm.getCodFinP.Value = []
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.get_Dacb
+* Classe: fwget (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.get_codacb.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdAca', ;
+						   'CrListaRemota', 'Descrs', This.Value, 'Acabamento', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descrs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		Thisform.get_codacb.Value = CrListaRemota.Cods
+		Thisform.get_Dacb.Value = CrListaRemota.Descrs
+	Else
+		Thisform.get_codacb.Value = ''
+		Thisform.Get_dacb.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	Thisform.get_codacb.Value = ''
+	Thisform.Get_dacb.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.get_codacb
+* Classe: fwget (Base: textbox)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdAca', ;
+						   'CrListaRemota', 'Cods', This.Value, 'Acabamento', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descrs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		This.Value = CrListaRemota.Cods
+		Thisform.get_Dacb.Value = CrListaRemota.Descrs
+	Else
+		This.Value = ''
+		Thisform.Get_dacb.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	This.Value = ''
+	Thisform.Get_dacb.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.Get_DClass
+* Classe: fwget (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.get_Class.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'crSigCdCls', ;
+						   'CrListaRemota', 'Decs', This.Value, 'Classificação', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descrs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		Thisform.get_class.Value = CrListaRemota.Cods
+		Thisform.get_DClass.Value = CrListaRemota.Descrs
+	Else
+		Thisform.get_class.Value = ''
+		Thisform.get_DClass.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	Thisform.get_class.Value = ''
+	Thisform.get_DClass.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.GetCSGru
+* Classe: fwget (Base: textbox)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'CGrus'
+	laFiltro(1,2) = Padr(ThisForm.getCgru.Value, 3)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		Thisform.getCSgru.Value = CrListaRemota.Codigos
+		Thisform.getDSgru.Value = CrListaRemota.Descricaos
+	Else
+		Thisform.getCSgru.Value = ''
+		Thisform.getDSgru.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	Thisform.getCSgru.Value = ''
+	Thisform.getDSgru.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREATM.GetDsGru
+* Classe: fwget (Base: textbox)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.getCSGru.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'CGrus'
+	laFiltro(1,2) = Padr(ThisForm.getCgru.Value, 3)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t., .f., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descricaos', '', 'Descricao')
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	If (Lastkey() <> 27)
+		Thisform.getCSgru.Value = CrListaRemota.Codigos
+		Thisform.getDSgru.Value = CrListaRemota.Descricaos
+	Else
+		Thisform.getCSgru.Value = ''
+		Thisform.getDSgru.Value = ''
+	EndIf
+	Use In CrListaRemota
+Else
+	Thisform.getCSgru.Value = ''
+	Thisform.getDSgru.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREATM
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 38
+================================================================================

@@ -1,0 +1,12 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**SIGREAUPBO.prg** ÔÇö problema CEMPS:
+- Substitu├¡da a query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` por `go_4c_Sistema.cEmpresa` diretamente (eliminando o WHERE com coluna inexistente no original)
+- Removido `loc_cSQLEmp` das declara├º├Áes LOCAL
+- Removido cleanup de `cursor_4c_SigCdEmp` no Destroy
+
+**FormSIGREAUP.prg** ÔÇö problemas CODIGOS, DESCRS, ICLIS, RCLIS:
+- Adicionado m├®todo `CarregarCursoresLookup()` que carrega SigCdGcr e SigCdCli completos com ├¡ndices TAG para SEEK (replicando o padr├úo do legado com `crSigCdGcr`/`crSigCdCli`)
+- `InicializarForm()` agora chama `CarregarCursoresLookup()` ap├│s configurar os campos
+- `ValidarGrupo`, `ValidarDGrupo`, `ValidarConta`, `ValidarDConta` reescritos para usar `SEEK(val, cursor, tag)` nos cursores pr├®-carregados, eliminando todos os `SQLEXEC` com WHERE nas colunas flagadas
+- `Destroy()` fecha `cursor_4c_SigCdGcr` e `cursor_4c_SigCdCli`

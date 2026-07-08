@@ -1,0 +1,9 @@
+﻿Phase 2/8 conclu├¡da. `ProdutoBO.prg` agora tem todos os m├®todos CRUD:
+
+- `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos
+- `Inserir()` ÔÇö INSERT com `EscaparSQL()` e `FormatarNumeroSQL()`, chama `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE WHERE pkchaves, chama `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` (PROTECTED) ÔÇö DELETE WHERE pkchaves, chama `RegistrarAuditoria("DELETE")`
+- `ObterChavePrimaria()` ÔÇö retorna `THIS.this_cPkchaves`
+
+Nenhum `RETURN` dentro de TRY/CATCH ÔÇö todos usam `loc_lResultado`.

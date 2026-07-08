@@ -1,0 +1,2267 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecop.SCX
+* Data/Hora: 17/05/26 17:19:26
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECOP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ds_GrEstoque
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Cd_GrEstoque
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_estoque
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_estoque
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTipo
+  Parent: SIGRECOP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECOP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECOP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGRECOP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optQuebras
+  Parent: SIGRECOP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGRECOP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optunifica
+  Parent: SIGRECOP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGRECOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_empresa
+  Parent: SIGRECOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optMovs
+  Parent: SIGRECOP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptSaldo
+  Parent: SIGRECOP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkPComis
+  Parent: SIGRECOP
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 30
+  Left = -4
+  Width = 1016
+  Height = 544
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  Caption = "Comissões por Recebimento"
+  ControlBox = .F.
+  Name = "SIGRECOP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 210
+  Top = 191
+  Width = 38
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 210
+  Top = 164
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Periodo :"
+  Left = 203
+  Top = 111
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_Ds_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "!"
+  Height = 25
+  Left = 333
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 160
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_Ds_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_Cd_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "!"
+  Height = 25
+  Left = 252
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 160
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_Cd_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 336
+  Top = 112
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_ds_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 333
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 187
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_ds_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_cd_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 252
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 187
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_cd_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 219
+  Top = 243
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.optTipo
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 27
+  Left = 247
+  Top = 239
+  Width = 368
+  TabIndex = 19
+  ZOrderSet = 9
+  Name = "optTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Analítico"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 58
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Sintético"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 5
+  Option2.Width = 59
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Resumido"
+  Option3.Height = 17
+  Option3.Left = 157
+  Option3.Top = 5
+  Option3.Width = 76
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Analítico por parcelas"
+  Option4.Height = 15
+  Option4.Left = 243
+  Option4.Top = 7
+  Option4.Width = 120
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 252
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 108
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 348
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 108
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_cd_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K!"
+  Left = 252
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 213
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda :"
+  Left = 207
+  Top = 216
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Saldo :"
+  Height = 15
+  Left = 213
+  Top = 333
+  Width = 35
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Movimento :"
+  Left = 187
+  Top = 287
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Seleção :"
+  Left = 202
+  Top = 265
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.optQuebras
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 247
+  Top = 261
+  Width = 231
+  TabIndex = 21
+  ZOrderSet = 9
+  Name = "optQuebras"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Todos"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 47
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Pagos"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 5
+  Option2.Width = 47
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Não Pagos"
+  Option3.Height = 15
+  Option3.Left = 157
+  Option3.Top = 5
+  Option3.Width = 69
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_ds_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 285
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 213
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.optunifica
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 401
+  Top = 214
+  Width = 134
+  TabIndex = 17
+  ZOrderSet = 9
+  Name = "optunifica"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Unificar"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 54
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Filtrar"
+  Option2.Height = 15
+  Option2.Left = 78
+  Option2.Top = 5
+  Option2.Width = 46
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 285
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 133
+  Width = 360
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 25
+  InputMask = "XXX"
+  Left = 252
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 133
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 20
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 198
+  Top = 137
+  Width = 50
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.optMovs
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 247
+  Top = 283
+  Width = 211
+  TabIndex = 23
+  ZOrderSet = 9
+  Name = "optMovs"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Ambas"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 50
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Entradas"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 5
+  Option2.Width = 61
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Saídas"
+  Option3.Height = 15
+  Option3.Left = 157
+  Option3.Top = 5
+  Option3.Width = 49
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.OptSaldo
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 247
+  Top = 329
+  Width = 117
+  TabIndex = 27
+  Name = "OptSaldo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOP.chkPComis
+------------------------------------------------------------
+  Top = 312
+  Left = 397
+  Height = 15
+  Width = 77
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "% Comissão"
+  Value = 1
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 34
+  Name = "chkPComis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECOP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+lcSep = Set([Separator])
+lcPto = Set([Point])
+Set Point To [,]
+Set Separator To [.]
+
+Do Case
+	Case Inlist(thisform.optTipo.Value,1,2)
+		Report form SigReCr8 To Print NoConsole
+	Case thisform.optTipo.Value = 3
+		Report form SigReCr7 To Print NoConsole
+	Case thisform.optTipo.Value = 4
+		Report form SigReCr9 To Print NoConsole
+Endcase
+
+Set Point To lcPto
+Set Separator To lcSep
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+lcSep = Set([Separator])
+lcPto = Set([Point])
+Set Point To [,]
+Set Separator To [.]
+
+Do Case
+	Case Inlist(thisform.optTipo.Value,1,2)
+		Report form SigReCr8 To Print Prompt NoConsole
+	Case thisform.optTipo.Value = 3
+		Report form SigReCr7 To Print Prompt NoConsole
+	Case thisform.optTipo.Value = 4
+		Report form SigReCr9 To Print Prompt NoConsole
+Endcase
+
+Set Point To lcPto
+Set Separator To lcSep
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+lcQrySigCdEmp = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdEmp', 'cemps', 'crSigCdEmp', '', , lcQrySigCdEmp)
+			
+			lcRetSigCdEmp = .ReQuery('crSigCdEmp')
+		EndWith
+		
+		If 	(lcRetSigCdEmp < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão ( Requery(s) )')
+			Return 0
+		EndIf
+
+		lcQuery = [Select CMoes, Cotas, FMults, Moeqs, Qtdeqs, NordRels From SigCdMoe]
+		If (.poDataMgr.SqlExecute(lcQuery, [crSigCdMoe]) < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdMoe)')
+			Return 0
+		EndIf
+		Select crSigCdMoe
+		Index On CMoes Tag CMoes
+		Set Order To CMoes
+
+		lcQuery = [Select MoedaPs From SigCdPam]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdPam]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdPam)])
+			Return 0
+		EndIf
+		Go Top In crSigCdPam
+
+		lcQuery = [Select Colecoes, Agrupas From SigCdCol]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdCol]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdCol)])
+			Return 0
+		EndIf
+
+		=DoDefault()
+			
+		ThisForm.get_dt_inicial.Value = date()
+		ThisForm.get_dt_final.Value = date()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+	
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+ldDtI     = ThisForm.get_dt_inicial.Value
+ldDtF     = ThisForm.get_dt_final.Value 
+lcCdMoeda = ThisForm.get_cd_moeda.Value
+lcDsMoeda = ThisForm.get_ds_moeda.Value
+lcGrupo   = PadR(thisform.get_cd_grestoque.Value,10)
+lDGrupo   = PadR(thisform.get_Ds_grestoque.Value,20)
+lcConta   = PadR(thisform.get_cd_estoque.Value,10)
+lnPagos	  = thisform.optQuebras.Value
+lnTipo	  = thisform.optTipo.Value
+llMoeUni  = (thisform.optUnifica.Value = 1)
+lcEmp 	  = thisform.get_cd_empresa.Value
+lnMov 	  = ThisForm.optMovs.Value 
+
+pDtI = fDtoSQL(ThisForm.get_dt_inicial.Value)
+pDtF = fDtoSQL(ThisForm.get_dt_final.Value,'23:59:59')
+
+Go Top In crSigCdEmp 
+If Not Eof('crSigCdEmp')
+	lcNmEmpresa = crSigCdEmp.razas
+Endif
+
+lcNmTitulo  = [Comissão ] + Iif(!Empty(lcCdMoeda),[ - Moeda ] + Iif(llMoeUni,[Unificada : ],[Filtrada : ]) + Proper(Alltrim(lcDsMoeda)),[]) + [ - ] + ;
+			  Dtoc(ldDtI) + [ à ] + Dtoc(ldDtF) + Iif(Empty(lcEmp) Or (lnTipo = 4),[],[ - Empresa : ] + lcEmp) + Iif(lnTipo = 4, Chr(13), [ - ]) + ;
+			  [Tipo : ] + Iif(lnTipo=1,[Analítico],Iif(lnTipo=2,[Sintético],Iif(lnTipo=3,[Resumido], [Analítico por parcelas]))) + ;
+			  Iif(lnMov = 2, [ - Entradas], Iif(lnMov = 3, [ - Saídas], []))
+
+create cursor dbcabecalho (NomeEmpresa c(80),Titulo m(4), PerComis l)
+insert into dbcabecalho (NomeEmpresa, Titulo, PerComis) Values (lcNmEmpresa, lcNmTitulo, (thisform.chkPComis.Value = 1))
+
+Create Cursor crAnalitico (Vends c(10), NVends c(50), VlComis n(9,4), Valos n(12,4), Datas D, EmpDopNums c(29), ;
+						   ContaDs c(10), RClis c(40), Notas c(6), Dopes c(20), VlBaixas n(12,4), moedas c(3), ;
+						   DataRec D, Linhas c(10), Tabds c(10), DopReceb c(26), MoedaRec c(3), ValPags n(12,4), ;
+						   lDivs L, PRecs n(5,2), OrdCopChs n(3), Acertos n(12,4), MoeAcertos c(3), ;
+						   ValTots n(12,4), MoeTots c(3), ValInis n(12,4), Titulos c(10), PComis n(5,2))
+
+Index On Vends + Dtos(Datas) + DopReceb + EmpDopNums + Str(OrdCopChs,3) + Linhas  tag VendDatas
+
+*!*	lcQuery = [Select a.cidchaves, b.opers, b.Acertos, b.Moedas as MoeAcertos, a.empdopnums as EmpDopReceb, a.datas as DataRec, a.grupos, d.contas, ] + ;
+*!*					 [a.pagos, a.valors, a.valpags, a.moedas as MoedaRec, d.EmpDopNums, d.bases, d.comissaos, d.percs, d.baixas, ] + ;
+*!*					 [d.moedas, d.linhas, e.tabds, c.Contas as ContaCli, e.Datas, e.Notas, b.OrdCopChs, 0000000000.0000 as Valor2s, ] + ;
+*!*					 [e.Valos, o.CMoes as MoeTots, e.ValInis, c.Titulos ] +;
+*!*				[from sigmvccr a inner join sigcdpit b on a.empdopnums = b.empdopnums and a.Sopers = b.opers ] +;
+*!*					[inner join sigmvccr c on b.nopers = c.nopers and c.opers = b.opers ] +;
+*!*					[inner join sigcdcmm d on c.empdopnums = d.empdopnums and a.contas = d.contas And a.intconts = d.intconts ] +;
+*!*					[inner join sigmvcab e on e.empdopnums = c.empdopnums ] +;
+*!*					 [left join sigcdope o on o.Dopes = e.Dopes ] +;
+*!*				[where a.datas Between ?pDtI And ?pDtF and a.tipos = 'X' and a.dopes = 'RECEBIMENTO' ] + ;
+*!*				Iif(lnPagos = 1,[],Iif(lnPagos = 2,[And a.Pagos = 0],[And a.Pagos = 1])) + ;
+*!*				Iif(Empty(lcEmp),[],[And d.Emps = ?lcEmp ]) +;
+*!*				Iif(Empty(lcGrupo),[],[and d.grupos = ?lcGrupo ]) + ;
+*!*				Iif(!Empty(lcCdMoeda) And !llMoeUni,[and d.moedas = ?lcCdMoeda ],[]) + ;
+*!*				Iif(lnMov = 2, [And o.COpers = 1 ], Iif(lnMov = 3, [And o.COpers = 2 ], []))
+
+*!* Tava filtrando pelo campo a.Datalts, mas tem ocasião que ele não gravava a data do recebimento corretamente
+
+lcQuery = [Select a.cidchaves, b.opers, b.Acertos, b.Moedas as MoeAcertos, a.empdopnums as EmpDopReceb, a.datas as DataRec, a.grupos, a.contas, ] + ;
+				 [a.pagos, a.valors, a.valpags, a.moedas as MoedaRec, c.EmpDopNums, e.tabds, c.Contas as ContaCli, e.Datas, e.Notas, b.OrdCopChs, ] + ;
+				 [e.Valos, o.CMoes as MoeTots, e.ValInis, c.Titulos, f.CotFpgs, a.IntConts ] +;
+			[from sigmvccr a inner join sigcdpit b on a.empdopnums = b.empdopnums and a.Sopers = b.opers ] +;
+				[inner join sigmvccr c on b.nopers = c.nopers and c.opers = b.opers And c.Emps = b.EmpOs ] +;
+				[inner join sigmvcab e on e.empdopnums = c.empdopnums And (e.vends = a.contas Or e.resps = a.contas) ] +;
+				[Inner Join SigMvPar f on b.Nopers = f.Nopers And c.Emps = f.Emps ] +;
+				 [left join sigcdope o on o.Dopes = e.Dopes ] +;
+			[where a.datas Between ?pDtI And ?pDtF and a.tipos = 'X' and a.dopes = 'RECEBIMENTO' ] + ;
+			Iif(lnPagos = 1,[],Iif(lnPagos = 2,[And a.Pagos = 0 ],[And a.Pagos = 1 ])) + ;
+			Iif(Empty(lcEmp),[],[And c.Emps = ?lcEmp ]) +;
+			Iif(Empty(lcGrupo),[],[and a.grupos = ?lcGrupo ]) + ;
+			Iif(lnMov = 2, [And o.COpers = 1 ], Iif(lnMov = 3, [And o.COpers = 2 ], []))
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCmm') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCmm)')
+	Return .f.
+EndIf
+
+If !Eof('crSigCdCmm')
+	Select EmpDopNums, Contas from crSigCdCmm Into Cursor TmpVende
+Endif
+
+If !Empty(lcConta)
+	Select * From crSigCdCmm where Contas = lcConta Into Cursor crSigCdCmm readwrite
+Endif
+
+lcQuery = [Select a.* From SigCdCmm a Inner Join ] +;
+			  [(Select Distinct c.EmpDopNums ] +;
+				[From SigMvCcr a Inner Join SigCdPit b on a.EmpDopNums = b.EmpDopNums and a.Sopers = b.opers ] +;
+					[Inner Join SigMvCcr c on b.Nopers = c.Nopers and c.Opers = b.Opers ] +;
+				[where a.datas Between ?pDtI And ?pDtF and a.tipos = 'X' and a.dopes = 'RECEBIMENTO' ] + ;
+				Iif(lnPagos = 1,[],Iif(lnPagos = 2,[And a.Pagos = 0 ],[And a.Pagos = 1 ])) + ;
+				Iif(Empty(lcGrupo),[],[and a.grupos = ?lcGrupo ]) + ;					
+				[) b On a.EmpDopNums = b.EmpDopNums ] + ;
+			[Where 0 = 0 ] +;
+				Iif(Empty(lcEmp),[],[And a.Emps = ?lcEmp ]) +;
+				Iif(!Empty(lcCdMoeda) And !llMoeUni,[and a.Moedas = ?lcCdMoeda ],[])
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crCmm') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crCmm)')
+	Return 0
+Endif
+
+*** Limpa a select buscando na comissão a movimentação correta que gerou ela
+Select a.* From crSigCdCmm a Inner Join crCmm b On a.EmpDopNums = b.EmpDopNums And a.IntConts = b.IntConts ;
+	Into Cursor crSigCdCmm ReadWrite
+
+If Inlist(lnTipo,1,2,3) && Analítico, Sintético e Resumo
+	Select EmpDopReceb, DataRec, MoedaRec, EmpDopNums, Opers, Sum(Acertos) as Acertos, MoeAcertos, Grupos, Contas, Max(Valors) as Comissaos, ;
+		Max(Valpags) as ValPags, Tabds, ContaCli, Datas, Notas, Valos, MoeTots, ValInis, CotFpgs, Space(10) as Linhas, ;
+		Space(3) as Moedas, Space(10) as Titulos ;
+		From crSigCdCmm a ;
+		Group By 1, 2, 3, 4, 5, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19 ;
+		Order By 1, 2, 3, 4, 5 ;
+		Into Cursor crSigCdCmm ReadWrite
+Else && Analítico por títulos recebidos
+*!*		Select EmpDopReceb, DataRec, MoedaRec, EmpDopNums, Opers, Acertos, MoeAcertos, Grupos, Contas, Valors as Comissaos, ;
+*!*			ValPags, Tabds, ContaCli, Datas, Notas, Valos, MoeTots, ValInis, Titulos, CotFpgs, Space(10) as Linhas ;
+*!*			From crSigCdCmm a ;
+*!*			Order By 1, 2, 3, 4, 5 ;
+*!*			Into Cursor crSigCdCmm ReadWrite
+	Select EmpDopReceb, DataRec, MoedaRec, EmpDopNums, Opers, Acertos, MoeAcertos, Grupos, Contas, Sum(Valors) as Comissaos, ;
+		ValPags, Tabds, ContaCli, Datas, Notas, Valos, MoeTots, ValInis, Titulos, CotFpgs, Space(10) as Linhas ;
+		From crSigCdCmm a ;
+		Group By EmpDopReceb, DataRec, MoedaRec, EmpDopNums, Opers, Acertos, MoeAcertos, Grupos, Contas, ;
+		ValPags, Tabds, ContaCli, Datas, Notas, Valos, MoeTots, ValInis, Titulos, CotFpgs ;
+		Order By 1, 2, 3, 4, 5 ;
+		Into Cursor crSigCdCmm ReadWrite
+Endif
+
+Select crSigCdCmm
+Go top
+
+oProg = CreateObject('fwprogressbar', 'Processando Dados...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	*** Checa se tem comissões na movimentação caso tenha filtrado por moedas
+	Select crCmm
+	Go Top
+	Locate For EmpDopNums = crSigCdCmm.EmpDopNums
+	If Eof()
+		Loop
+	Endif
+	
+	Select crAnalitico
+	Append Blank
+
+	lcQuery = [Select Moeds, Moevals From SigMvMov Where EmpDopNums = '] + crSigCdCmm.EmpDopNums + [' and Moevals <> 0]
+	If ThisForm.poDataMgr.SqlExecute(lcQuery,'crCotMov') < 1
+		MessageBox('Favor Reinicializar o Processo!!!',16,'Falha na Conexão (crCotMov)')
+		Return 0
+	Endif
+	
+	lcQuery = [Select RClis From SigCdCli Where IClis = '] + crSigCdCmm.ContaCli + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 1)')
+		Return 0
+	EndIf								
+	lcCta = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+	
+	lcQuery = [Select RClis From SigCdCli Where IClis = '] + crSigCdCmm.Contas + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 2)')
+		Return 0
+	EndIf								
+	select Localcli
+	Go Top
+	lcNvends = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+
+	Replace Vends   with crSigCdCmm.Contas,;
+	        Nvends  with lcNvends in crAnalitico
+
+    Select TmpVende
+    Go top
+    Locate for EmpDopNums = crSigCdCmm.EmpDopNums And Contas # crSigCdCmm.Contas
+    If !Eof()
+    	Replace lDivs with .t. in crAnalitico
+    Endif
+
+	lnParc = AT([/],crSigCdCmm.Titulos)
+	Replace Datas With crSigCdCmm.Datas, ;
+	        EmpDopNums With crSigCdCmm.EmpDopNums, ;
+	        Notas With crSigCdCmm.Notas, ;
+	        ContaDs With crSigCdCmm.ContaCli, ;
+	        RClis With lcCta, ;
+	        DataRec With crSigCdCmm.DataRec, ;
+	        OrdCopChs With 1, ;
+			Titulos With IIF(lnParc>0,SUBSTR(crSigCdCmm.Titulos,lnParc+1) ,[1]), ;
+	        Tabds With crSigCdCmm.Tabds, ;
+	        DopReceb With Substr(crSigCdCmm.EmpDopReceb,4,26) In crAnalitico		
+
+	Replace ValTots With Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Valos, ;
+			ValInis With Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.ValInis, ; && Tiago - 16/03/2016 - Ícaro - Incluído para sair o valor líquido (valor base = total itens)
+			Acertos With Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Acertos, ;
+			VlBaixas With Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Comissaos, ;
+			ValPags With Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.ValPags, ;				
+	        MoeAcertos With crSigCdCmm.MoeAcertos, ;
+			MoedaRec With crSigCdCmm.MoedaRec In crAnalitico
+
+	=Seek(lcCdMoeda, [crSigCdMoe], [Cmoes])
+	If Not Empty(crSigCdMoe.Moeqs)
+		lcMoeU = crSigCdMoe.Moeqs
+		lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+	Else
+		lcMoeU = lcCdMoeda
+		lnEqv = 1
+	EndIf
+	lnMdU = fBuscarCotacao(lcMoeU, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv	
+
+	lnVal = crSigCdCmm.Valos
+	lnValIni = crSigCdCmm.ValInis && Tiago - 16/03/2016 - Ícaro - Incluído para sair o valor líquido (valor base = total itens)
+	lcMoeMov = Iif(Empty(crSigCdCmm.MoeTots), crSigCdPam.MoedaPs, crSigCdCmm.MoeTots)
+	If lcMoeMov <> Padr(lcMoeU,3)
+*!*			Replace MoeTots With lcMoeU In crAnalitico
+
+		=Seek(lcMoeMov, [crSigCdMoe], [Cmoes])
+		If Not Empty(crSigCdMoe.Moeqs)
+			lcMoeMov = crSigCdMoe.Moeqs
+			lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+		Else
+			lnEqv = 1
+		EndIf
+*!*			lnMdc = fBuscarCotacao(lcMoeMov, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+*!*			lnVal = (lnVal * lnMdc) / lnMdU
+*!*			lnValIni = (lnValIni * lnMdc) / lnMdU
+		
+		Select crCotMov
+		Go Top
+		Locate For Moeds = Padr(lcMoeMov,3)
+		lnMdc = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcMoeMov, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)
+
+		Select crCotMov
+		Go Top
+		Locate For Moeds = Padr(lcCdMoeda,3)
+		lnMdU2 = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcCdMoeda, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)
+		
+		lnVal = (lnVal * lnMdc) / lnMdU2
+		lnValIni = (lnValIni * lnMdc) / lnMdU2
+	EndIf
+			
+	lnValBai = crSigCdCmm.Comissaos
+	lnValPag = crSigCdCmm.Valpags			
+	If crSigCdCmm.MoedaRec <> Padr(lcMoeU,3)
+		=Seek(crSigCdCmm.MoedaRec, [crSigCdMoe], [Cmoes])
+		If Not Empty(crSigCdMoe.Moeqs)
+			lcMoe = crSigCdMoe.Moeqs
+			lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+		Else
+			lcMoe = crSigCdCmm.MoedaRec
+			lnEqv = 1
+		EndIf
+		lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+		lnValBai = (lnValBai * lnMdc) / lnMdU
+		lnValPag = (lnValPag * lnMdc) / lnMdU			
+	Endif
+
+	lcMac = crSigCdCmm.MoeAcertos
+	lnValAcerto = crSigCdCmm.Acertos
+	lnValParOri = crSigCdCmm.Acertos
+	If (crSigCdCmm.MoeAcertos <> Padr(lcMoeU,3))
+		=Seek(crSigCdCmm.MoeAcertos, [crSigCdMoe], [Cmoes])
+		lcMoe = Iif(Empty(crSigCdMoe.Moeqs), crSigCdCmm.MoeAcertos, crSigCdMoe.Moeqs)
+		lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+		lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv		
+		
+		lnValAcerto = (lnValAcerto * lnMdc) / lnMdU	
+*!*			lnValAcerto = (lnValAcerto * crSigCdCmm.CotFpgs) / lnMdU
+
+		Select crCotMov
+		Go Top
+		Locate For Moeds = Padr(lcMoeU,3)
+		lnMdU2 = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcMoeU, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)		
+		lnValParOri = (lnValParOri * crSigCdCmm.CotFpgs) / lnMdU2
+	EndIf
+
+	lnPComi = lnValParOri / lnVal && lnValAcerto / lnVal &&lnValAcerto / lnValIni  && Percentual do recebimento sobre o valor total dos itens (base da comissão)da movimentação
+	lnPPag = lnValPag / lnValBai && Percentual do valor pago sobre o valor de comissão liberada
+	lnPBai = Round((lnValBai / lnValini) * 100,2) && Percentual comissão liberada sobre o valor da movimentação
+	Replace PRecs With lnPBai In crAnalitico
+
+	If Not Empty(lcCdMoeda) And llMoeUni		
+		Replace ValTots With Iif(crSigCdCmm.Opers = [C],-1,1) * lnVal, ;
+				ValInis With Iif(crSigCdCmm.Opers = [C],-1,1) * lnValIni, ;
+				Acertos With Iif(crSigCdCmm.Opers = [C],-1,1) * lnValAcerto, ; 
+				VlBaixas With Iif(crSigCdCmm.Opers = [C],-1,1) * lnValBai, ;
+				ValPags With Iif(crSigCdCmm.Opers = [C],-1,1) * lnValPag, ;
+		        MoeAcertos With lcMoeU, ;
+		        Moedas With lcMoeU, ;
+				MoedaRec With lcMoeU In crAnalitico
+	Endif
+
+	Select crAnalitico
+	Scatter Memo Memvar
+	lnReg = Recno()
+
+	lnTotComMov = 0 && Total de comissão por movimentação - usado na opção sintético e analítico por parcelas
+	lnTotComMovOri = 0 && Total de comissão por movimnetação original, com a cotação da movimentação
+	Select crCmm
+	Scan For EmpDopNums = crSigCdCmm.EmpDopNums And Contas = crSigCdCmm.Contas 
+		lnVlComiOri = crCmm.Comissaos
+		lnVlComi = crCmm.Comissaos
+		lnVlBase = crCmm.Bases
+		lnVlBaixa = Round(crCmm.Comissaos * lnPComi,4) && Tiago - 26/04/2016
+		If (crCmm.Moedas <> Padr(lcMoeU,3))
+			=Seek(crCmm.Moedas, [crSigCdMoe], [Cmoes])
+			If Not Empty(crSigCdMoe.Moeqs)
+				lcMoe = crSigCdMoe.Moeqs
+				lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+			Else
+				lcMoe = crCmm.Moedas
+				lnEqv = 1
+			EndIf
+			lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.DataRec, ThisForm.poDataMgr) * lnEqv && Datas
+			lnVlComi = (lnVlComi * lnMdc) / lnMdU
+			lnVlBase = (lnVlBase * lnMdc) / lnMdU
+			lnVlBaixa = (lnVlBaixa * lnMdc) / lnMdU
+
+			Select crCotMov
+			Go Top
+			Locate For Moeds = Padr(lcMoe,3)
+			lnMdc = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)
+
+			Select crCotMov
+			Go Top
+			Locate For Moeds = Padr(lcCdMoeda,3)
+			lnMdU2 = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcCdMoeda, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)	
+			lnVlComiOri = (crCmm.Comissaos * lnMdc) / lnMdU2
+		Endif 		
+		lnTotComMov = lnTotComMov + lnVlComi
+		lnTotComMovOri = lnTotComMovOri + lnVlComiOri
+		
+		If Inlist(lnTipo,1) && Analítico - Visualiza cada linha de comissão gerada na movimentação
+			Select crAnalitico				
+			Go Top 
+			Locate For DopReceb = Substr(crSigCdCmm.EmpDopReceb,4,26) And EmpDopNums = crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas And (Linhas = crCmm.Linhas Or Linhas = Space(10))
+			If Eof()
+				Insert Into crAnalitico From Memvar
+			Endif
+
+			lnPBai = Round(((lnVlComi / lnVlBase) * lnPComi) * 100,2) && Percentual comissão liberada sobre o valor base da comissão
+			lnVlComi = Iif(Not Empty(lcCdMoeda) And llMoeUni,lnVlComi,crCmm.Comissaos)
+			lnVlComiOri = Iif(Not Empty(lcCdMoeda) And llMoeUni,lnVlComiOri,crCmm.Comissaos)
+			lnVlBaixa = Iif(Not Empty(lcCdMoeda) And llMoeUni,lnVlBaixa, Round(crCmm.Comissaos * lnPComi,4)) && Tiago - 26/04/2016
+			
+			Replace Linhas With crCmm.Linhas, ;
+					MoeAcertos With crCmm.Moedas, ;
+					Moedas With crCmm.Moedas, ;
+					MoedaRec With crCmm.Moedas, ;
+					VlComis With Iif(crSigCdCmm.Opers = [C],-1,1) * lnVlComiOri, ;
+					PComis With crCmm.Percs, ;						
+					VlBaixas With Iif(crSigCdCmm.Opers = [C],-1,1) * Round(lnVlBaixa,2), ; && Tiago - 26/04/2016 - Round(lnVlComi * lnPComi,2)
+					PRecs With lnPBai, ;
+					ValPags With Iif(crSigCdCmm.Opers = [C],-1,1) * Round(lnVlBaixa * lnPPag,2) && Tiago - 26/04/2016 - Round(lnVlComi * lnPComi * lnPPag,2)
+			
+			If Not Empty(lcCdMoeda) And llMoeUni
+				Replace Moedas With lcMoeU, ;
+				        MoeAcertos With lcMoeU, ;
+						MoedaRec With lcMoeU In crAnalitico
+			Endif
+		Endif				
+
+		If Inlist(lnTipo,1) && Analítico - Totalizador por linha de produção / grupo de venda	
+			Select crAnalitico
+			Scatter Memo Memvar				
+
+			Select crAnalitico
+			Go top
+			Count for EmpDopNums = crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas to lnTotaliza
+			Go top
+			Count for EmpDopNums = crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas And Linhas = crCmm.Linhas to lnTotaLinha
+
+			Go top
+			Locate for EmpDopNums = Replicate('Z',29) And Vends = m.Vends And Linhas = m.Linhas And Moedas = m.Moedas And MoedaRec = m.MoedaRec
+			If Eof()
+				Insert Into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec) Values ;
+					(m.Vends, Ctod('31/12/9999'), m.Linhas, Replicate('Z',29), m.moedas, m.MoedaRec)
+			Endif
+
+			If lnTotaliza = 1
+				Replace VlComis with VlComis + m.VlComis in crAnalitico
+			Endif			
+			Replace VlBaixas with VlBaixas + m.VlBaixas, ;
+					ValPags with ValPags + m.ValPags In crAnalitico
+
+			*** Totalizador por moedas
+			Select crAnalitico
+			Go top
+			Locate for EmpDopNums = Replicate('Z',29) And Vends = m.Vends And Linhas = Replicate('Z',10) And Moedas = m.moedas And MoedaRec = m.MoedaRec
+			If Eof()
+				Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec, MoeAcertos) ;
+				                values (m.Vends, Ctod('31/12/9999'), Replicate('Z',10), Replicate('Z',29), m.moedas, m.MoedaRec, m.MoeAcertos)
+			Endif
+			
+			If lnTotaliza = 1
+				Replace ValInis With ValInis + m.ValInis in crAnalitico
+			Endif
+			If lnTotaLinha = 1
+				Replace VlComis with VlComis + m.VlComis in crAnalitico
+			Endif
+
+			Replace VlBaixas with VlBaixas + m.VlBaixas, ;
+					ValPags  with ValPags  + m.ValPags, ;
+					Acertos  with Acertos  + m.Acertos In crAnalitico
+		Endif
+	Endscan
+
+	If Inlist(lnTipo,2) && Sintético - Visualiza uma linha totalizando a comissão
+		Select crAnalitico
+		Go lnReg
+		Replace VlComis With Iif(crSigCdCmm.Opers = [C],-1,1) * lnTotComMovOri, ;
+				PComis	With (lnTotComMovOri / lnValini) * 100, ;
+				ValPags With Iif(crSigCdCmm.Opers = [C],-1,1) * lnTotComMov * lnPComi * lnPPag
+
+		Scatter Memo Memvar
+		
+		*** Totalizador por moedas
+		Select crAnalitico
+		Go top
+		Count for EmpDopNums = crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas to lnTotaliza 
+				
+		Select crAnalitico
+		Go top
+		Locate for EmpDopNums = Replicate('Z',29) And Vends = m.Vends And Linhas = Replicate('Z',10) And Moedas = m.moedas And MoedaRec = m.MoedaRec
+		If Eof()
+			Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec, MoeAcertos) ;
+			                values (m.Vends, Ctod('31/12/9999'), Replicate('Z',10), Replicate('Z',29), m.moedas, m.MoedaRec, m.MoeAcertos)
+		Endif
+
+		If lnTotaliza = 1
+			Replace ValInis With ValInis + m.ValInis, ;
+					VlComis with VlComis + m.VlComis in crAnalitico
+		Endif
+		Replace	VlBaixas with VlBaixas + m.VlBaixas, ;
+				ValPags  with ValPags  + m.ValPags, ;
+				Acertos  with Acertos  + m.Acertos In crAnalitico				
+	Endif		
+
+	If Inlist(lnTipo,4) && Analítico por parcelas
+*!*			lnTotAcerto = 0 && Totaliza as parcelas recebidas da movimentação
+*!*			lcEDNRec = crSigCdCmm.EmpDopReceb
+*!*			Select Acertos, MoeAcertos From crSigCdCmm Where EmpDopReceb = lcEDNRec And EmpDopNums = crAnalitico.EmpDopNums Into Cursor crParc
+*!*			Select crParc
+*!*			Scan
+*!*				lnValAcerto2 = crParc.Acertos	
+*!*				If (crParc.MoeAcertos <> Padr(lcMoeU,3))
+*!*					=Seek(crParc.MoeAcertos, [crSigCdMoe], [Cmoes])
+*!*					If Not Empty(crSigCdMoe.Moeqs)
+*!*						lcMoe = crSigCdMoe.Moeqs
+*!*						lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*					Else
+*!*						lcMoe = crParc.MoeAcertos
+*!*						lnEqv = 1
+*!*					EndIf
+*!*	*!*					lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+*!*	*!*					lnValAcerto = (lnValAcerto * lnMdc) / lnMdU		
+
+*!*					Select crCotMov
+*!*					Go Top
+*!*					Locate For Moeds = Padr(lcMoe,3)
+*!*					lnMdc = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)
+
+*!*					Select crCotMov
+*!*					Go Top
+*!*					Locate For Moeds = Padr(lcCdMoeda,3)
+*!*					lnMdU2 = Iif(!Empty(crCotMov.Moevals), crCotMov.Moevals, fBuscarCotacao(lcCdMoeda, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv)
+*!*							
+*!*					lnValAcerto2 = (lnValAcerto2 * crSigCdCmm.CotFpgs) / lnMdU2
+*!*				Endif 		
+*!*				lnTotAcerto = lnTotAcerto + lnValAcerto2			
+*!*			Endscan
+		
+*!*			lnPComi = lnValAcerto / lnVal && crAnalitico.Acertos / lnTotAcerto && Percentual da parcela sobre o valor total das parcelas recebidas
+		Select crAnalitico
+		Go lnReg 
+		Replace VlComis With Iif(crSigCdCmm.Opers = [C],-1,1) * lnTotComMovOri, ;
+				PComis	With Round((lnTotComMovOri / lnVal) * 100,2), ;		
+				VlBaixas With Iif(crSigCdCmm.Opers = [C],-1,1) * Round(lnTotComMov * lnPComi,2), ; &&VlBaixas 
+				ValPags With Iif(crSigCdCmm.Opers = [C],-1,1) * Round(lnTotComMov * lnPPag,2)
+
+		Scatter Memo Memvar
+
+		*** Totalizador por moedas
+		Select crAnalitico
+		Go top
+		Locate for EmpDopNums = Replicate('Z',29) And Vends = m.Vends And Linhas = Replicate('Z',10) And Moedas = m.moedas And MoedaRec = m.MoedaRec
+		If Eof()
+			Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec, MoeAcertos, ValInis, VlComis) ;
+			                values (m.Vends, Ctod('31/12/9999'), Replicate('Z',10), Replicate('Z',29), m.moedas, m.MoedaRec, m.MoeAcertos, m.ValInis, m.VlComis)
+		Endif
+
+		Replace VlBaixas with VlBaixas + m.VlBaixas, ;
+				ValPags  with ValPags  + m.ValPags, ;
+				Acertos  with Acertos  + m.Acertos In crAnalitico				
+	Endif	
+Endscan	
+
+Select crAnalitico
+
+If thisform.optSaldo.Value = 1 And Reccount([crAnalitico]) > 0
+	If thisform.podatamgr.SqlExecute([Select Cmoes from SigCdMoe],[TmpMoe]) < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpMoe)')
+		Return 0
+	Endif
+	If !Empty(lcCdMoeda)
+		Delete From TmpMoe where Cmoes <> lcCdMoeda
+	endif
+	
+	Select Distinct Contas from TmpVende into cursor TmpVende
+	Select TmpVende
+	Scan
+		If !Empty(lcConta) And TmpVende.contas <> lcConta
+			Loop
+		Endif
+	
+		pDat = fDtoSQL(ldDtI - 1, '23:59:59')
+		
+		If thisform.podatamgr.SqlExecute([Select Grupos from SigCdCli where Iclis = '] + TmpVende.Contas + ['],[TmpCli]) < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+			Return 0
+		EndIf
+
+		Select TmpMoe
+		Scan
+			pGcm = TmpCli.Grupos + TmpVende.Contas + TmpMoe.Cmoes
+			lcQuery = [Select Top 1 Nfs, SaldoCs, Saldos, cIdChaves ] + ;
+						[From SigMvCcr ] + ;
+					   [Where GruConMoes = ?pGcm And ] + ;
+					   		 [Datas <= ?pDat ] + ;
+					   [Order By GruConMoes Asc, cIdChaves Desc]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCcr') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCcr)')
+				Return 0
+			EndIf
+
+			Select crSigMvCcr
+			Go Top
+			If Not Eof('crSigMvCcr')
+				Insert into crAnalitico(Vends, DataRec, VlBaixas, EmpDopNums,Moedas) Values (TmpVende.Contas,pDat,crSigMvCcr.Saldos,[   Saldo Anterior],TmpMoe.Cmoes)
+			Endif
+		Endscan
+	Endscan
+Endif
+
+Select crAnalitico
+Set Order To VendDatas
+Go Top In crAnalitico
+
+*!*	SELECT crsigcdcmm
+*!*	GO top
+*!*	If !Eof('crSigCdCmm')
+*!*		Select cidchaves, opers, Acertos, MoeAcertos, EmpDopReceb, DataRec, Grupos, Contas, Pagos, Valors, Valpags, MoedaRec, EmpDopNums, Bases, Comissaos, ;
+*!*				Percs, Baixas,  Moedas, Tabds, ContaCli, Datas, Notas, OrdCopChs, Valor2s, Valos, MoeTots, ValInis, Titulos, ;
+*!*				Iif(!isEmpty(b.Agrupas), b.Agrupas, a.Linhas) as Linhas ;
+*!*				From crSigCdCmm a Left Join crSigCdCol b On a.Linhas = b.Colecoes Into Cursor crSigCdCmm ReadWrite
+*!*	Endif
+
+*!*	SELECT crsigcdcmm
+*!*	GO top
+
+*!*	oProg = CreateObject('fwprogressbar', 'Processando Dados...', Reccount())
+*!*	oProg.Show
+*!*	Scan
+*!*		oProg.Update(.t.)
+*!*		
+*!*		Select crAnalitico
+*!*		Append Blank
+
+*!*		lcQuery = [Select RClis ] + ;
+*!*		    		[From SigCdCli ] + ; 
+*!*		    	   [Where IClis = '] + crSigCdCmm.ContaCli + [']
+*!*		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+*!*			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 1)')
+*!*			Return 0
+*!*		EndIf								
+*!*		lcCta = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+*!*		
+*!*		lcQuery = [Select RClis ] + ;
+*!*		    		[From SigCdCli ] + ; 
+*!*		    	   [Where IClis = '] + crSigCdCmm.Contas + [']
+*!*		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+*!*			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 1)')
+*!*			Return 0
+*!*		EndIf								
+*!*		select Localcli
+*!*		Go Top
+*!*		lcNvends = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+
+*!*		Replace Vends   with crSigCdCmm.Contas,;
+*!*		        Nvends  with lcNvends, ;
+*!*		        ValTots with crSigCdCmm.Valos, ;
+*!*		        ValInis with crSigCdCmm.ValInis in crAnalitico && Tiago - 16/03/2016 - Ícaro - Incluído para sair o valor líquido (valor base = total itens)
+
+*!*	    Select TmpVende
+*!*	    Go top
+*!*	    Locate for EmpDopNums = crSigCdCmm.EmpDopNums And Contas # crSigCdCmm.Contas
+*!*	    If !Eof()
+*!*	    	Replace lDivs with .t. in crAnalitico
+*!*	    Endif
+
+*!*		Replace Datas With crSigCdCmm.Datas, ;
+*!*		        EmpDopNums With crSigCdCmm.EmpDopNums, ;
+*!*		        Notas With crSigCdCmm.Notas, ;
+*!*		        ContaDs With crSigCdCmm.ContaCli, ;
+*!*		        RClis With lcCta, ;
+*!*		        DataRec With crSigCdCmm.DataRec, ;
+*!*		        OrdCopChs With crSigCdCmm.OrdCopChs In crAnalitico
+
+*!*		*** Soma as comissões da movimentação para achar o percentual de comissão baixada
+*!*		lcEDNR = crSigCdCmm.EmpDopReceb
+*!*		lcCid =  crSigCdCmm.cidchaves
+*!*		Select crSigCdCmm
+*!*		lnReg = Recno()
+*!*		Go top
+*!*		*** Mena - 29/01/2015 - acrescentado o filtro cidchaves para fazer a soma somente da operação atual - Costantine ***
+*!*		Sum Comissaos for EmpDopReceb = lcEDNR And EmpDopNums = crAnalitico.EmpDopNums and cidchaves = lcCid to lnTotComis
+*!*		&&Sum valors for EmpDopReceb = lcEDNR And EmpDopNums = crAnalitico.EmpDopNums to lnTotValors		&& mena - 13/06/2014 - incluido para calcular valors2
+*!*		Go lnReg
+*!*	*!*		replace Valors With Round(crSigCdCmm.Comissaos * (crSigCdCmm.Valors / lnTotComis),2) in crSigCdCmm
+*!*	*!*	mena - 13/06/2014 - substituido pela linha abaixo	replace Valor2s With crSigCdCmm.Comissaos * (crSigCdCmm.Valors / lnTotComis) in crSigCdCmm
+*!*	*!*	replace Valor2s With crSigCdCmm.Comissaos * (lnTotValors / lnTotComis) in crSigCdCmm
+*!*		*** mena - 22/09/2014 volta calculo anterior ***	
+*!*		replace Valor2s With crSigCdCmm.Comissaos * (crSigCdCmm.Valors / lnTotComis) in crSigCdCmm
+*!*		***
+
+*!*		VlComi = crSigCdCmm.comissaos
+*!*		lnValPag = crSigCdCmm.valpags			
+*!*		If Not Empty(lcCdMoeda) and llMoeUni
+*!*			=Seek(lcCdMoeda, [crSigCdMoe], [Cmoes])
+*!*			If Not Empty(crSigCdMoe.Moeqs)
+*!*				lcMoeC = crSigCdMoe.Moeqs
+*!*				lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*			Else
+*!*				lcMoeC = lcCdMoeda
+*!*				lnEqv = 1
+*!*			EndIf
+*!*			lnMdU = fBuscarCotacao(lcMoeC, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv	
+*!*			
+*!*			lnVal = crSigCdCmm.bases		
+*!*			If (crSigCdCmm.Moedas <> lcCdMoeda)
+*!*				=Seek(crSigCdCmm.Moedas, [crSigCdMoe], [Cmoes])
+*!*				If Not Empty(crSigCdMoe.Moeqs)
+*!*					lcMoe = crSigCdMoe.Moeqs
+*!*					lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*				Else
+*!*					lcMoe = crSigCdCmm.Moedas
+*!*					lnEqv = 1
+*!*				EndIf
+*!*				lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+*!*				lnVal = (crSigCdCmm.bases * lnMdc) / lnMdU
+*!*				VlComi = (crSigCdCmm.comissaos * lnMdc) / lnMdU
+*!*	*!*				lnValBai = (crSigCdCmm.Baixas * lnMdc) / lnMdU && Tiago - 08/02/14 - Comentei pois estava trazendo o valor total da comissão e não o valor creditado no conta corrente
+*!*			Endif 
+
+*!*			lnValBai = crSigCdCmm.Valor2s
+*!*			lnValPag = crSigCdCmm.valpags			
+*!*			If crSigCdCmm.MoedaRec <> lcCdMoeda
+*!*				=Seek(crSigCdCmm.MoedaRec, [crSigCdMoe], [Cmoes])
+*!*				If Not Empty(crSigCdMoe.Moeqs)
+*!*					lcMoe = crSigCdMoe.Moeqs
+*!*					lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*				Else
+*!*					lcMoe = crSigCdCmm.MoedaRec
+*!*					lnEqv = 1
+*!*				EndIf
+*!*				lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+*!*				lnValBai = (crSigCdCmm.Valor2s * lnMdc) / lnMdU
+*!*				lnValPag = (crSigCdCmm.valpags * lnMdc) / lnMdU			
+*!*			Endif
+
+*!*			Replace Moedas With lcCdMoeda, ;
+*!*					MoedaRec With lcCdMoeda, ;
+*!*					bases With lnVal, ;
+*!*					Valor2s With lnValBai , ;
+*!*					valpags With lnValPag In crSigCdCmm
+*!*					
+*!*			*** Tiago - 17/10/2014 - Ícaro - Incluido dentro da opção unificar pois não estava convertando os valores recebido na mesma moeda, ficando errado o totalizador
+*!*			lnMac = crSigCdCmm.Acertos
+*!*			If (lcCdMoeda <> crSigCdCmm.MoeAcertos)
+*!*				=Seek(crSigCdCmm.MoeAcertos, [crSigCdMoe], [Cmoes])
+*!*				lcMoe = Iif(Empty(crSigCdMoe.Moeqs), crSigCdCmm.MoeAcertos, crSigCdMoe.Moeqs)
+*!*				lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+*!*				lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv		
+*!*				
+*!*				lnMac = (lnMac * lnMdc) / lnMdU	
+*!*			EndIf
+
+*!*			Replace Acertos    With lnMac, ; 
+*!*			        MoeAcertos With lcCdMoeda In crSigCdCmm
+*!*			***
+*!*		Endif
+
+*!*		lnPRec = Round((crSigCdCmm.Valor2s / crSigCdCmm.bases) * 100,2)
+*!*		If crSigCdCmm.Moedas <> crSigCdCmm.MoedaRec
+*!*			=Seek(crSigCdCmm.Moedas, [crSigCdMoe], [Cmoes])
+*!*			If Not Empty(crSigCdMoe.Moeqs)
+*!*				lcMoe = crSigCdMoe.Moeqs
+*!*				lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*			Else
+*!*				lcMoe = crSigCdCmm.Moedas
+*!*				lnEqv = 1
+*!*			EndIf
+*!*			lnMdU = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+
+*!*			=Seek(crSigCdCmm.MoedaRec, [crSigCdMoe], [Cmoes])
+*!*			If Not Empty(crSigCdMoe.Moeqs)
+*!*				lcMoe = crSigCdMoe.Moeqs
+*!*				lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*			Else
+*!*				lcMoe = crSigCdCmm.MoedaRec
+*!*				lnEqv = 1
+*!*			EndIf
+*!*			lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv		
+*!*			lnVal = (crSigCdCmm.Valor2s * lnMdc) / lnMdU	
+*!*			lnPRec = (lnVal / crSigCdCmm.bases) * 100	
+*!*		Endif	
+
+*!*		replace valos with valos + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.bases) In crAnalitico
+*!*		replace VlComis with VlComis + (Iif(crSigCdCmm.Opers = [C],-1,1) * VlComi) In crAnalitico
+*!*	*!*		replace vlbaixas with vlbaixas + crSigCdCmm.Baixas In crAnalitico && Tiago - 08/02/14 - Comentei pois estava trazendo o valor total da comissão e não o valor creditado no conta corrente
+*!*		replace vlbaixas with vlbaixas + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Valor2s) In crAnalitico
+*!*		replace valpags with valpags + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.valpags) In crAnalitico 
+*!*		replace moedas with crSigCdCmm.moedas, MoedaRec With crSigCdCmm.MoedaRec In crAnalitico
+*!*		replace Linhas with crSigCdCmm.Linhas, Tabds With crSigCdCmm.Tabds, DopReceb With Substr(crSigCdCmm.EmpDopReceb,4,26) In crAnalitico
+*!*		Replace PRecs With lnPRec in crAnalitico
+*!*		lnParc = AT([/],crSigCdCmm.Titulos)
+*!*		Replace Titulos With IIF(lnParc>0,SUBSTR(crSigCdCmm.Titulos,lnParc+1) ,[1]) in crAnalitico
+
+*!*		* Richard em 02/04/2014 - Incluir Valor de Recebimento
+*!*		lcMac = crAnalitico.Moedas
+*!*		lnMac = crSigCdCmm.Acertos
+*!*		If (lcMac <> crSigCdCmm.MoeAcertos)
+*!*			=Seek(lcMac, [crSigCdMoe], [Cmoes])
+*!*			lcMoe = Iif(Empty(crSigCdMoe.Moeqs), crSigCdCmm.Moedas, crSigCdMoe.Moeqs)
+*!*			lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+*!*			lnMdU = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+
+*!*			=Seek(crSigCdCmm.MoeAcertos, [crSigCdMoe], [Cmoes])
+*!*			lcMoe = Iif(Empty(crSigCdMoe.Moeqs), crSigCdCmm.MoeAcertos, crSigCdMoe.Moeqs)
+*!*			lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+*!*			lnMdc = fBuscarCotacao(lcMoe, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv		
+*!*			
+*!*			lnMac = (lnMac * lnMdc) / lnMdU	
+*!*		EndIf
+
+*!*		Replace Acertos    With lnMac, ; 
+*!*		        MoeAcertos With lcMac In crAnalitico
+
+*!*		lnVal = crSigCdCmm.Valos
+*!*		lnValIni = crSigCdCmm.ValInis && Tiago - 16/03/2016 - Ícaro - Incluído para sair o valor líquido (valor base = total itens)
+*!*		lcMpd = Iif(Empty(crSigCdCmm.MoeTots), crSigCdPam.MoedaPs, crSigCdCmm.MoeTots)
+*!*		Replace MoeTots With lcMpd In crAnalitico
+*!*		If (lcMpd <> crSigCdCmm.Moedas)
+*!*			Replace MoeTots With crSigCdCmm.Moedas In crAnalitico
+
+*!*			lnMdU = fBuscarCotacao(crSigCdCmm.Moedas, crSigCdCmm.Datas, ThisForm.poDataMgr)
+
+*!*			=Seek(lcMpd, [crSigCdMoe], [Cmoes])
+*!*			If Not Empty(crSigCdMoe.Moeqs)
+*!*				lcMpd = crSigCdMoe.Moeqs
+*!*				lnEqv = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+*!*			Else
+*!*				lnEqv = 1
+*!*			EndIf
+*!*			lnMdc = fBuscarCotacao(lcMpd, crSigCdCmm.Datas, ThisForm.poDataMgr) * lnEqv
+*!*			lnVal = (crSigCdCmm.Valos * lnMdc) / lnMdU
+*!*			lnValIni = (crSigCdCmm.ValInis * lnMdc) / lnMdU
+*!*		EndIf
+*!*		Replace ValTots With lnVal, ValInis With lnValIni In crAnalitico
+
+*!*		* Fim de: Richard em 02/04/2014 - Incluir Valor de Recebimento
+*!*				        
+*!*		*** Totalizador por linha de produção / grupo de venda
+*!*		If Inlist(lnTipo,1,2) && Tiago - 07/02/14 - Alterei para só totalizar as movimentações de crédito para não somar junto as devoluções	
+*!*			Select crAnalitico
+*!*			lnReg = Recno()		
+*!*			Go top
+*!*			Count for EmpDopNums =	crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas And Linhas = crSigCdCmm.Linhas to lnTotaliza 
+*!*			
+*!*			Select crAnalitico
+*!*			Go top
+*!*			Locate for EmpDopNums = Replicate('Z',29) And Vends = crSigCdCmm.Contas And Linhas = crSigCdCmm.Linhas And Moedas = crSigCdCmm.moedas And MoedaRec = crSigCdCmm.MoedaRec
+*!*			If Eof()
+*!*				Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec) values (crSigCdCmm.Contas, Ctod('31/12/9999'), crSigCdCmm.Linhas, ;
+*!*					Replicate('Z',29), crSigCdCmm.moedas, crSigCdCmm.MoedaRec)
+*!*			Endif
+
+*!*			If lnTotaliza = 1 && Tiago - 07/02/14 - Comentado pois estava somando mais de uma vez o valor total da movimentação
+*!*				replace valos with valos + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.bases) In crAnalitico 
+*!*				replace VlComis with VlComis + (Iif(crSigCdCmm.Opers = [C],-1,1) * VlComi) In crAnalitico
+*!*			Endif 
+
+*!*			replace vlbaixas with vlbaixas + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Valor2s  ) In crAnalitico
+*!*			replace valpags with valpags + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.valpags ) In crAnalitico
+*!*	*!*		replace moedas with crSigCdCmm.moedas, MoedaRec With crSigCdCmm.MoedaRec In crAnalitico
+
+*!*			Select crAnalitico
+*!*			Go lnReg
+*!*		Endif
+*!*		
+*!*		*** Totalizador por moedas - Só totaliza as movimentações de crédito para não somar junto as devoluções
+*!*	*!*		If crSigCdCmm.Opers = [C] && Tiago - 07/02/14 - Alterei para só totalizar as movimentações de crédito para não somar junto as devoluções
+*!*			Select crAnalitico
+*!*			lnReg = Recno()		
+*!*			Go top
+*!*			Count for EmpDopNums =	crSigCdCmm.EmpDopNums And Vends = crSigCdCmm.Contas And Linhas = crSigCdCmm.Linhas And Moedas = crSigCdCmm.moedas to lnTotaliza 
+*!*		
+*!*			Select crAnalitico
+*!*			Go top
+*!*			Locate for EmpDopNums = Replicate('Z',29) And Vends = crSigCdCmm.Contas And Linhas = Replicate('Z',10) And Moedas = crSigCdCmm.moedas And MoedaRec = crSigCdCmm.MoedaRec
+*!*			If Eof()
+*!*				Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec, MoeAcertos) ;
+*!*				                values (crSigCdCmm.Contas, Ctod('31/12/9999'), Replicate('Z',10), ;
+*!*										Replicate('Z',29), crSigCdCmm.moedas, crSigCdCmm.MoedaRec, crSigCdCmm.Moedas)
+*!*			Endif
+
+*!*			If lnTotaliza = 1 && Tiago - 07/02/14 - Comentado pois estava somando mais de uma vez o valor total da movimentação
+*!*				replace valos with valos + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.bases) In crAnalitico 
+*!*				replace VlComis with VlComis + (Iif(crSigCdCmm.Opers = [C],-1,1) * VlComi) In crAnalitico
+*!*			Endif 
+
+*!*			replace vlbaixas with vlbaixas + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Valor2s) In crAnalitico 
+*!*			replace valpags  with valpags  + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.valpags) In crAnalitico
+*!*			Replace Acertos  with Acertos  + (Iif(crSigCdCmm.Opers = [C],-1,1) * lnMac) In crAnalitico
+*!*		*!*		replace moedas with crSigCdCmm.moedas, MoedaRec With crSigCdCmm.MoedaRec In crAnalitico
+
+*!*			Select crAnalitico
+*!*			Go lnReg
+*!*	*!*		Endif 
+
+*!*		*** Totalizador por dia
+*!*		If thisform.chkTotdia.Value = 1 &&And crSigCdCmm.Opers = [C] && Tiago - 07/02/14 - Alterei para só totalizar as movimentações de crédito para não somar junto as devoluções			
+*!*			llTotaliza = .t.
+*!*			Select crAnalitico
+*!*			lnReg = Recno()		
+*!*			Go top
+*!*			Count for EmpDopNums =	crSigCdCmm.EmpDopNums to lnTotaliza 
+
+*!*			Select crAnalitico
+*!*			Go top
+*!*			Locate for EmpDopNums = Replicate('Z',29) And Vends = crSigCdCmm.Contas And Linhas = Replicate('Z',10) And DataRec = Ttod(crSigCdCmm.DataRec) And ;
+*!*						Moedas = crSigCdCmm.moedas And MoedaRec = crSigCdCmm.MoedaRec
+*!*			If Eof()
+*!*				Insert into crAnalitico(Vends, Datas, Linhas, EmpDopNums, Moedas, MoedaRec, MoeAcertos, DataRec) ;
+*!*								values (crSigCdCmm.Contas, Ctod('31/12/9999'), Replicate('Z',10), ;
+*!*										Replicate('Z',29), crSigCdCmm.moedas, crSigCdCmm.MoedaRec, ;
+*!*										crSigCdCmm.Moedas, Ttod(crSigCdCmm.DataRec))
+*!*			Endif
+
+*!*	*!*			If lnTotaliza = 1 && Tiago - 07/02/14 - Comentado pois estava somando mais de uma vez o valor total da movimentação
+*!*				replace valos with valos + crSigCdCmm.bases In crAnalitico 
+*!*				replace VlComis with VlComis + (Iif(crSigCdCmm.Opers = [C],-1,1) * VlComi) In crAnalitico
+*!*	*!*			Endif 
+
+*!*			replace vlbaixas with vlbaixas + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.Valor2s) In crAnalitico 
+*!*			replace valpags  with valpags  + (Iif(crSigCdCmm.Opers = [C],-1,1) * crSigCdCmm.valpags) In crAnalitico
+*!*			Replace Acertos  with Acertos  + (Iif(crSigCdCmm.Opers = [C],-1,1) * lnMac) In crAnalitico
+*!*			
+*!*			Select crAnalitico		
+*!*			Go lnReg	
+*!*		Endif 	
+*!*		
+*!*		Select crSigCdCmm
+*!*	Endscan
+*!*	oProg.Complete()
+
+*!*	* Richard em 10/06/2014
+*!*	If (lnTipo = 4) && Sintético Sem Totais
+
+*!*		Select crAnalitico
+*!*		Scan
+*!*			Replace VlComis With 0 In crAnalitico
+
+*!*			lcQuery = [Select Moedas, Datas, Sum(Comissaos) as Comissaos ] + ;
+*!*						[From SigCdCmm ] + ;
+*!*					   [Where EmpDopNums = '] + crAnalitico.EmpDopNums + [' And ] + ;
+*!*						[Contas = '] + crAnalitico.Vends + [' ] + ;
+*!*						[Group By Moedas, Datas]
+
+*!*			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmm]) < 1)
+*!*				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmm)])
+*!*				Return .f.
+*!*			EndIf
+*!*			Go Top In LocalCmm
+*!*			If Not Eof([LocalCmm]) And Not Empty(LocalCmm.Comissaos)
+*!*				Select LocalCmm
+*!*				Scan
+*!*					lcMac = crAnalitico.Moedas
+*!*					lnMac = LocalCmm.Comissaos
+*!*					If (lcMac <> LocalCmm.Moedas)
+*!*						=Seek(lcMac, [crSigCdMoe], [Cmoes])
+*!*						lcMoe = Iif(Empty(crSigCdMoe.Moeqs), lcMac, crSigCdMoe.Moeqs)
+*!*						lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+*!*						lnMdU = fBuscarCotacao(lcMoe, LocalCmm.Datas, ThisForm.poDataMgr) * lnEqv
+
+*!*						=Seek(LocalCmm.Moedas, [crSigCdMoe], [Cmoes])
+*!*						lcMoe = Iif(Empty(crSigCdMoe.Moeqs), LocalCmm.Moedas, crSigCdMoe.Moeqs)
+*!*						lnEqv = Iif(Empty(crSigCdMoe.Moeqs), 1, Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs))
+*!*						lnMdc = fBuscarCotacao(lcMoe, LocalCmm.Datas, ThisForm.poDataMgr) * lnEqv		
+*!*							
+*!*						lnMac = (lnMac * lnMdc) / lnMdU	
+*!*					EndIf
+
+*!*					Replace VlComis With VlComis + lnMac In crAnalitico
+*!*				EndScan
+*!*			EndIf
+*!*		EndScan
+*!*		
+*!*		*** mena - 21/10/2014 - Cria cursor agrupado pelo empdopnums para não somar vr comissao repetido ***
+*!*		Select MAX(Vends) as vends, MAX(Moedas) as moedas, max(VlComis) as VlComis ;
+*!*		  From crAnalitico ;
+*!*		 Group By empdopnums ;
+*!*		 Into Cursor CrAux1
+*!*		***
+*!*		
+*!*		Select Vends, Moedas, Sum(VlComis) as VlComis ;
+*!*		  From crAux1 ;
+*!*		 Group By Vends, Moedas ;
+*!*		 Into Cursor LocalTot
+*!*		 
+*!*		Select LocalTot
+*!*		Scan
+*!*			Update crAnalitico ;
+*!*			   Set VlComis = LocalTot.VlComis ;
+*!*			 Where EmpDopNums = Replicate('Z',29) And ;
+*!*			 	   Moedas = LocalTot.Moedas And Vends = LocalTot.Vends
+*!*		EndScan 
+*!*	EndIf
+
+*!*	Do Case
+*!*		Case InList(lnTipo, 2, 4) && Sintético
+*!*			If InList(lnTipo, 2)
+*!*				*** Tiago - 13/01/2015 - Mena comentou essa select e fez a debaixo, mas não pode pois o valor base e valor total da comisão não pode somar pois já estão totalizados
+*!*				Select Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas, TabDs, ;
+*!*					   .f. as lDivs, Max(Valos) as Valos, Max(VlComis) as VlComis, Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags, ;
+*!*					   Sum(PRecs) as PRecs, Sum(Acertos) as Acertos, Max(ValTots) as ValTots, MoeAcertos, MoeTots, Max(Notas) as Notas, ;
+*!*					   Max(ValInis) as ValInis ;
+*!*				  From crAnalitico ;
+*!*				 Group By Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas, TabDs, MoeAcertos, MoeTots ;
+*!*				  Into Cursor crAnalitico ReadWrite	
+*!*			Else && Tiago - 18/03/2016 - Ícaro - Alterado para sair o valor líquido (ValInis) e parcela (Titulos)
+*!*				Select Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Titulos, ;
+*!*					   .f. as lDivs, Max(Valos) as Valos, Max(VlComis) as VlComis, Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags, ;
+*!*					   Sum(PRecs) as PRecs, Sum(Acertos) as Acertos, Max(ValTots) as ValTots, MoeAcertos, MoeTots, Max(Notas) as Notas, ;
+*!*					   Max(ValInis) as ValInis ;
+*!*				  From crAnalitico ;
+*!*				 Group By Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Titulos, MoeAcertos, MoeTots ;
+*!*				  Into Cursor crAnalitico ReadWrite			
+*!*			Endif
+*!*			
+*!*	*!*			Select Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas, TabDs, ;
+*!*	*!*				   .f. as lDivs, Sum(Valos) as Valos, Sum(VlComis) as VlComis, Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags, ;
+*!*	*!*				   Sum(PRecs) as PRecs, Sum(Acertos) as Acertos, Max(ValTots) as ValTots, MoeAcertos, MoeTots ;
+*!*	*!*			  From crAnalitico ;
+*!*	*!*			 Group By Vends, NVends, Datas, DopReceb, DataRec, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas, TabDs, MoeAcertos, MoeTots ;
+*!*	*!*			  Into Cursor crAnalitico ReadWrite			
+*!*				
+*!*			Index On Vends + EmpDopNums tag VendDatas	
+
+*!*		Case lnTipo = 3 && Resumido
+*!*			Select Vends, NVends, Datas, DopReceb, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas, Max(Valos) as Valos, Max(VlComis) as VlComis, ;
+*!*				Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags, Sum(PRecs) as PRecs ;
+*!*				From crAnalitico Group By Vends, NVends, Datas, DopReceb, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Linhas Into Cursor crAnalitico ReadWrite			
+*!*		
+*!*			Select Vends, NVends, Datas, DopReceb, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Space(10) as Linhas, Sum(Valos) as Valos, Sum(VlComis) as VlComis, Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags ;
+*!*				From crAnalitico Group By Vends, NVends, Datas, DopReceb, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis Into Cursor crAnalitico ReadWrite
+*!*							
+*!*			Select Vends, NVends, Datas, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis, Space(10) as Linhas, Max(Valos) as Valos, Max(VlComis) as VlComis, Sum(VlBaixas) as VlBaixas, Sum(ValPags) as ValPags ;
+*!*				From crAnalitico Group By Vends, NVends, Datas, EmpDopNums, Moedas, MoedaRec, ContaDs, Rclis Into Cursor crAnalitico ReadWrite
+
+*!*			Index On Vends + EmpDopNums tag VendDatas
+*!*	Endcase
+
+*!*	If thisform.optSaldo.Value = 1 And Reccount([crAnalitico]) > 0
+*!*		If thisform.podatamgr.SqlExecute([Select Cmoes from SigCdMoe],[TmpMoe]) < 1
+*!*			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpMoe)')
+*!*			Return 0
+*!*		Endif
+*!*		If !Empty(lcCdMoeda)
+*!*			Delete From TmpMoe where Cmoes <> lcCdMoeda
+*!*		endif
+*!*		
+*!*		Select Distinct Contas from TmpVende into cursor TmpVende
+*!*		Select TmpVende
+*!*		Scan
+*!*			If !Empty(lcConta) And TmpVende.contas <> lcConta
+*!*				Loop
+*!*			Endif
+*!*		
+*!*			pDat = fDtoSQL(ldDtI - 1, '23:59:59')
+*!*			
+*!*			If thisform.podatamgr.SqlExecute([Select Grupos from SigCdCli where Iclis = '] + TmpVende.Contas + ['],[TmpCli]) < 1
+*!*				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+*!*				Return 0
+*!*			EndIf
+
+*!*			Select TmpMoe
+*!*			Scan
+*!*				pGcm = TmpCli.Grupos + TmpVende.Contas + TmpMoe.Cmoes
+*!*				lcQuery = [Select Top 1 Nfs, SaldoCs, Saldos, cIdChaves ] + ;
+*!*							[From SigMvCcr ] + ;
+*!*						   [Where GruConMoes = ?pGcm And ] + ;
+*!*						   		 [Datas <= ?pDat ] + ;
+*!*						   [Order By GruConMoes Asc, cIdChaves Desc]
+
+*!*				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCcr') < 1)
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCcr)')
+*!*					Return 0
+*!*				EndIf
+
+*!*				Select crSigMvCcr
+*!*				Go Top
+*!*				If Not Eof('crSigMvCcr')
+*!*					Insert into crAnalitico(Vends, DataRec, VlBaixas, EmpDopNums,Moedas) Values (TmpVende.Contas,pDat,crSigMvCcr.Saldos,[   Saldo Anterior],TmpMoe.Cmoes)
+*!*				Endif
+*!*			Endscan
+*!*		Endscan
+*!*	Endif
+
+*!*	Select crAnalitico
+*!*	Set Order To VendDatas
+*!*	Go Top In crAnalitico
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+lcSep = Set([Separator])
+lcPto = Set([Point])
+Set Point To [,]
+Set Separator To [.]
+
+Do Case
+	Case Inlist(thisform.optTipo.Value,1,2)
+		Report form SigReCr8 preview NoConsole
+	Case thisform.optTipo.Value = 3
+		Report form SigReCr7 preview NoConsole
+	Case thisform.optTipo.Value = 4
+		Report form SigReCr9 preview NoConsole
+Endcase
+
+Set Point To lcPto
+Set Separator To lcSep
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_Ds_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,This.Parent.get_Cd_Grestoque,This)
+Else
+	This.Parent.get_Cd_Grestoque.value = ''
+	This.Parent.get_Cd_Grestoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_cd_grestoque.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_Cd_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,This,This.Parent.get_Ds_Grestoque)
+Else
+	This.Parent.get_Ds_Grestoque.value = ''
+	This.Parent.get_Ds_Grestoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_ds_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,This.Parent.get_Cd_estoque,This)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		This.Parent.get_Cd_estoque.Value = ''
+		This.Parent.get_Cd_estoque.Refresh
+		return 0 
+	Endif
+Else
+	This.Parent.get_Cd_estoque.Value = ''
+	This.Parent.get_Cd_estoque.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value).And.IsEmpty(ThisForm.get_cd_estoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_cd_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,This.Parent.get_Ds_estoque)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		This.Parent.get_Ds_estoque.Value = ''
+		This.Parent.get_Ds_estoque.Refresh
+		return 0 
+	Endif
+Else
+	This.Parent.get_Ds_estoque.Value = ''
+	This.Parent.get_Ds_estoque.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_ds_moeda.Value = ''
+	ThisForm.get_ds_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','CMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_cd_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','DMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_empresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOP.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECOP
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 19
+================================================================================

@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e bem estruturado. Fase 8/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os filtros + bot├Áes CommandGroup durante gera├º├úo do relat├│rio |
+| `BOParaForm()` | Carrega propriedades do BO de volta nos controles (inverso de `FormParaRelatorio`) |
+| `FormParaBO()` | Alias sem├óntico para `FormParaRelatorio()` (compatibilidade com contratos CRUD) |
+| `CarregarLista()` | Para forms REPORT: delega para `LimparCampos()` (reinicializa filtros) |
+| `AjustarBotoesPorModo()` | Para forms REPORT: chama `HabilitarCampos(.T.)` ÔÇö sem modos CRUD |
+| `BtnEncerrarClick()` | Alias can├┤nico de `BtnSairClick()` |
+| `BtnSalvarClick()` | Para relat├│rio: mapeia "salvar" ÔåÆ `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Limpa os filtros com `LimparCampos()` e foca no campo Empresa |

@@ -1,0 +1,11 @@
+﻿Arquivo correto e completo. Fase 4 conclu├¡da.
+
+**O que foi adicionado a `FormSigReIpc.prg`:**
+
+- **`ConfigurarBotoes()`** ÔÇö cria o `cmg_4c_Botoes` (CommandGroup) com 4 bot├Áes seguindo as posi├º├Áes exatas do `btnReport` original (Left=495, Width=310, bot├Áes Width=75 com Left=5/80/155/230). Imagens: `relatorio_video_26.jpg`, `relatorio_impressora_26.jpg`, `relatorio_excel_26.jpg`, `relatorio_sair_60.jpg`.
+- **`ConfigurarPageFrame()`** ÔÇö atualizado para chamar tamb├®m `THIS.ConfigurarBotoes()`.
+- **`InicializarForm()`** ÔÇö adicionados 4 `BINDEVENT` para vincular os clicks ap├│s montar o layout.
+- **`BtnVisualizarClick()`** ÔÇö chama `PrepararDados()` ÔåÆ `Visualizar()` no BO.
+- **`BtnImprimirClick()`** ÔÇö chama `PrepararDados()` ÔåÆ `Imprimir()` no BO.
+- **`BtnExcelClick()`** ÔÇö exibe aviso (cursores s├úo gerenciados pelo form chamador, exporta├º├úo n├úo ├® suportada).
+- **`BtnSairClick()`** ÔÇö `THIS.Release()`.

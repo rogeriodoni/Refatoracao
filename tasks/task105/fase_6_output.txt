@@ -1,0 +1,11 @@
+﻿As 3 adi├º├Áes est├úo corretas. A Fase 6 est├í completa.
+
+**Resumo do que foi feito:**
+
+O Form (`FormSIGREFXV.prg`) e o BO (`SIGREFXVBO.prg`) j├í estavam completos das fases anteriores (todos os campos, lookups, valida├º├Áes, e l├│gica de processamento). A Fase 6 consistiu na **integra├º├úo ao menu**:
+
+1. `DEFINE BAR 126` (separador) e `DEFINE BAR 127` ("Posi├º├úo de Estoque por Grupo/Faixa de Valor") no popup `popRelatorios`
+2. `ON SELECTION BAR 127 OF popRelatorios DO AbrirFormSIGREFXV` na se├º├úo de handlers
+3. Procedure `AbrirFormSIGREFXV()` no final de `menu.prg` ÔÇö padr├úo can├┤nico com `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`, e catch com detalhes de erro
+
+O BO e Form s├úo auto-carregados pelo `config.prg` (`*BO.prg` e `forms/relatorios/Form*.prg`), sem necessidade de altera├º├Áes no config.

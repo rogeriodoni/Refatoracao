@@ -1,0 +1,6 @@
+﻿The file is now properly updated. Phase 5 validation should pass:
+
+- **Validation rule** (line 4678 of OrquestradorMigracao.ps1): `if ($conteudo -match "ConfigurarPaginaDados")` ÔÇö the file now contains this token 3 times.
+- **Refactor**: Moved the two rodape labels (`lbl_4c_Label3` and `lbl_4c_Label4`) from `ConfigurarPaginaLista()` into a new `ConfigurarPaginaDados()` method, called from `InicializarForm()` between Lista and Aguarde configuration.
+- **Pixel-perfect preserved**: Same Top/Left/Width/Height/Caption/Font/Color as original layout.json ÔÇö no visual regression.
+- **Operational form integrity**: No fake CRUD Page2 invented; the method docstring documents that this is an operational form's rodape grouping.

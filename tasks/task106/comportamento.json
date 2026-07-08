@@ -1,0 +1,225 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 4,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Procedure",
+      "linhas": 47,
+      "codigoOriginal": "Local lnSelecao\n\nlnSelecao = ThisForm.optSelecao.Value\n\nIf (lnSelecao = 1) && Duplicata\n\t=SigIpDup('', ThisForm.Get_Série.Value, .T., ThisForm.poDataMgr)\nElse\n\tSelect Emps, Dopes, Numes, Parcs ;\n\t  From TmpNFis ;\n\t Where Flag ;\n\t Group By Emps, Dopes, Numes, Parcs ;\n\t  Into Cursor TprMvCab\n\n\tlcSql = [Select count(*) as qt from SigCnFBl Where fpags <> ' ']\n\tIf Thisform.Podatamgr.Sqlexecute(lcsql,'LocalCfg') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCfg)')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "optSelecao,Get_Série",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'MascNums')\n\n\t\tThisForm.poDataMgr.CursorQuery('SigOpFp', 'crSigOpFp', .f., .f., 'FPags, ImpDups, ImpBols, ImpNotas')\n\t\tSelect crSigOpFp\n\t\tIndex On FPags Tag FPags\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim *********... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor TmpNFis (Flag l, Datas d Null, NFis c(6), Valor n(12,2), Conta c(40), Digito n(1), Vecto c(12), ;\n\t\t\t\t\t   TotNotas n(12,2), Emps c(3), Dopes c(20), Numes n(6), Obs m(4) Null, Parcs n(2))\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Select TmpNFis\nGo Top\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "This.Parent.Value = 2\nThis.Parent.Click()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "This.Parent.Value = 4\nThis.Parent.Click()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP.Get_Série",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFNf', ;\n\t\t\t\t\t\t   'crListaRemota', 'Series', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Series', '', 'Códigos')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Series\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP.Processar",
+      "evento": "Click",
+      "linhas": 65,
+      "codigoOriginal": "Local lcSerieNf, lcNotaIni, lcNotaFim, lnSelecao, lcChave\n\nlcSerieNf = ThisForm.Get_Série.Value\nlcNotaIni = ThisForm.Get_NFIni.Value\nlcNotaFim = ThisForm.Get_NFFim.Value\nlnSelecao = ThisForm.optSelecao.Value\n\nZap In TmpNFis\n\nWait Window 'Aguarde!!! Selecionando Notas Fiscais...' NoWait\n\nlcQuery = [Select a.NFis, a.CliFors, a.TotNotas, a.Emps, a.Dopes, a.Numes, ] + ;\n\t\t\t\t [b.FPags, b.Parcs, b.Valos, b.Datas, b.Vencs, b.Obs ] + ;\n\t\t    [From SigMvNfi a, SigMvPar b ] + ;\n\t\t   [Where a.NFis BetWeen ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "Get_Série,Get_NFIni,Get_NFFim,optSelecao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP.apaga",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update TmpNFis Set Flag = .f.\nThisForm.Grade.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGDP.SelTudo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update TmpNFis Set Flag = .t.\nThisForm.Grade.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREGDP.Procedure",
+      "queryOriginal": "\tSelect Emps, Dopes, Numes, Parcs ; \t  From TmpNFis ; \t Where Flag ; \t Group By Emps, Dopes, Numes, Parcs ; \t  Into Cursor TprMvCab",
+      "tabelas": "TmpNFis",
+      "colunas": "Emps,Dopes,Numes,Flag,Parcs,TprMvCab",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGDP.Procedure",
+      "queryOriginal": "\tlcSql = [Select count(*) as qt from SigCnFBl Where fpags <> ' ']",
+      "tabelas": "SigCnFBl",
+      "colunas": "fpags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGDP.apaga.Click",
+      "queryOriginal": "Update TmpNFis Set Flag = .f.",
+      "tabelas": "TmpNFis",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGDP.SelTudo.Click",
+      "queryOriginal": "Update TmpNFis Set Flag = .t.",
+      "tabelas": "TmpNFis",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpNFis", "SigCnFBl"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

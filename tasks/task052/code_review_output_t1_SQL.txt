@@ -1,0 +1,14 @@
+﻿Todas as ocorr├¬ncias de `MaxLength` no arquivo s├úo propriedades de TextBox (`.MaxLength = N` dentro de blocos `WITH`), **n├úo condi├º├Áes SQL WHERE**. Nenhuma aparece em contexto de query SQL.
+
+A detec├º├úo foi um **falso positivo**: o scanner encontrou a string "MAXLENGTH" no arquivo, mas ela est├í em blocos de configura├º├úo de UI como:
+
+```foxpro
+WITH loc_oPg.txt_4c_Empresa
+    .MaxLength = 10   ÔåÉ propriedade de TextBox, n├úo SQL
+    ...
+ENDWITH
+```
+
+`.MaxLength` ├® uma propriedade nativa do VFP9 que limita quantos caracteres o usu├írio pode digitar no campo. N├úo existe nenhum WHERE com MAXLENGTH no c├│digo migrado.
+
+**Nenhuma corre├º├úo necess├íria** ÔÇö o arquivo est├í correto.

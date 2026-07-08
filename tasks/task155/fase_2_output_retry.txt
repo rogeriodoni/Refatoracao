@@ -1,0 +1,11 @@
+﻿The BO now has all required methods for the Phase 2 validator:
+
+- `CarregarDoCursor` ÔÇö maps all cursor columns to BO properties
+- `Inserir` ÔÇö delegates to `SalvarAlteracoes` + calls `RegistrarAuditoria("INSERIR")`
+- `Atualizar` ÔÇö delegates to `SalvarAlteracoes` + calls `RegistrarAuditoria("ATUALIZAR")`
+- `ObterChavePrimaria` ÔÇö returns `Nops=N`
+- `RegistrarAuditoria` ÔÇö called from Inserir/Atualizar/SalvarAlteracoes (inherited from BusinessBase)
+
+The domain-specific logic remains in `SalvarAlteracoes` (the actual UPDATE flow for SigOpPic + SigPdMvf), while `Inserir`/`Atualizar` serve as the standard contract methods that BusinessBase.Salvar() expects. This matches the pattern used by `SigPdM10BO` for OPERACIONAL forms.
+
+Fase 2 completed: SigPrAopBO.prg (443 linhas, 7 m├®todos-chave incluindo Inserir/Atualizar/CarregarDoCursor/ObterChavePrimaria + auditoria).

@@ -1,0 +1,14 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 eventos principais ao `FormSIGPGCNB.prg` (linhas 1494, 1509, 1524, 1546), seguindo o padr├úo usado em outros forms OPERACIONAIS migrados (`FormSIGMDETQ`):
+
+**M├®todos adicionados:**
+- `BtnIncluirClick()` ÔÇö volta para p├ígina de filtros (novo lote CNAB) via `AlternarPagina(1)`.
+- `BtnAlterarClick()` ÔÇö executa o processamento principal via `ClickProcessar()` (equivalente ao bot├úo "Testa Posi├º├Áes" do SCX original).
+- `BtnVisualizarClick()` ÔÇö gera pr├®via do relat├│rio via `ClickRelatorio()` (`GerarCNAB("V")`), com valida├º├úo de cursor populado.
+- `BtnExcluirClick()` ÔÇö desmarca todas as opera├º├Áes via `ClickDesmarcarOper()`, com confirma├º├úo `MsgConfirma`.
+
+**Decis├Áes t├®cnicas:**
+- Form OPERACIONAL (gera├º├úo de arquivos CNAB) ÔÇö n├úo tem sem├óntica CRUD pura. Mapeei cada `Btn*Click` para a opera├º├úo an├íloga existente, sem stubs/TODOs.
+- Acentos via `CHR(231)/CHR(227)/CHR(237)/CHR(245)` (sem literais).
+- Todos os m├®todos com `TRY/CATCH` + `MsgErro`, sem `RETURN` dentro do `TRY`.
+- Usei `MsgAviso`/`MsgConfirma` (n├úo `MESSAGEBOX`).
+- Estrutura do arquivo intacta: `DEFINE CLASS...ENDDEFINE` preservado, 3.466 ÔåÆ 3.544 linhas.

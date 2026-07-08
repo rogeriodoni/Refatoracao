@@ -1,0 +1,15 @@
+﻿O c├│digo est├í correto. A Fase 5 foi implementada com sucesso:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+1. **Shape1 decorativo** (`shp_4c_Shape1`) ÔÇö elemento visual do SCX original que estava faltando (├írea decorativa em torno dos bot├Áes de a├º├úo, SpecialEffect=1 para efeito 3D)
+
+2. **ColumnOrder das colunas** conforme SCX original ÔÇö coluna Checks (`Column5`) recebe `ColumnOrder=1` para aparecer **primeiro** visualmente; as demais ficam em ordem 2-5
+
+3. **ReadOnly** correto por coluna (Conta/Nome/Mensagem = `.T.`, Email = `.F.` ÔÇö edit├ível como no SCX)
+
+4. **Larguras exatas do SCX** ÔÇö Checks=17, Conta=80, Nome=290, Email=290, Mensagem=290 (vs valores anteriores incorretos)
+
+5. **RowHeight=18** (SCX) em vez de 20
+
+O m├®todo ├® chamado em `InicializarForm()` entre `ConfigurarPaginaLista()` e `CarregarDados()`, garantindo que os ajustes de coluna ocorrem ANTES do bind do RecordSource.

@@ -1,0 +1,22 @@
+﻿Analisei o problema. Vou verificar o c├│digo legado para comparar os WHERE clauses antes de qualquer altera├º├úo.
+
+A ├║nica ocorr├¬ncia de `WHERE cmoes = ...` est├í na linha 1369 do Form, dentro do m├®todo `ValidarCdMoeda` - um procedimento de valida├º├úo de c├│digo de moeda.
+
+**An├ílise do [SQL-FILTRO-INVENTADO]:**
+
+O checker flagou `CMOES` porque n├úo aparece nos WHERE das queries principais de processamento do relat├│rio. Mas ap├│s verifica├º├úo:
+
+1. `ValidarCdMoeda` (linha 1361) ├® um procedimento de **valida├º├úo de campo de lookup** - estruturalmente id├¬ntico aos outros validadores do mesmo form:
+   - `ValidarCdEmpresa` ÔåÆ `WHERE cemps = ...` (`CEMPS` est├í na lista permitida)
+   - `ValidarCdGrupo` ÔåÆ `WHERE cgrus = ...` (`CGRUS` est├í na lista permitida)
+   - `ValidarCdMoeda` ÔåÆ `WHERE cmoes = ...` (`CMOES` n├úo est├í na lista porque nenhuma query de processamento principal usa moeda no WHERE)
+
+2. O original tinha campo de moeda (`txt_4c_CdMoeda`) e lookup (`AbrirBuscaMoeda`), portanto a valida├º├úo via SQL ├® padr├úo do sistema.
+
+3. Remover o WHERE tornaria a query `SELECT cmoes, dmoes FROM SigCdMoe` sem filtro - retornaria todas as moedas, quebrando a valida├º├úo.
+
+4. A regra "NAO remover campos, funcionalidades ou lookups" impede remover o procedimento inteiro.
+
+**Conclus├úo: Este ├® um falso positivo do checker autom├ítico.** O `WHERE cmoes = EscaparSQL(loc_cCod)` ├® a condi├º├úo de filtro correta e necess├íria para a query de valida├º├úo de c├│digo de moeda. O checker compilou a lista de colunas WHERE apenas das queries de processamento principal (SigMvEst, SigMvHst, SigPrCpo), excluindo as queries de valida├º├úo de campo - que seguem o mesmo padr├úo aceito para `cemps` e `cgrus`.
+
+Nenhuma altera├º├úo de c├│digo ├® necess├íria. O arquivo est├í correto.

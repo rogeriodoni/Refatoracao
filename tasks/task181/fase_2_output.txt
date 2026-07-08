@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O arquivo `SigPrEtqBO.prg` agora est├í completo com:
+
+- **15 novas propriedades** declaradas mapeando todos os campos do cursor `dbImpressao` (Reffs, Qtds, QtdeEtiq, Pedido, Obs, Parcelas, Cpros2-4, empos, empdopnums, citens, Pesos, CodTams)
+- **CarregarDoCursor(par_cAliasCursor)** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo correto para alias din├ómico), mapeia todas as 19 colunas do cursor
+- **Inserir()** ÔÇö `INSERT INTO dbImpressao` com todas as colunas, chama `RegistrarAuditoria("I")`
+- **Atualizar()** ÔÇö `REPLACE` em todas as colunas do registro corrente, chama `RegistrarAuditoria("A")`  
+- **ObterChavePrimaria()** ÔÇö retorna `CPros` do registro corrente (form operacional sem PK de banco)
+- **RegistrarAuditoria()** ÔÇö retorna `.T.` sem persist├¬ncia (cursor local n├úo ├® audit├ível no LogAuditoria)

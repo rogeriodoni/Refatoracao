@@ -1,0 +1,12 @@
+﻿Phase 8 complete. The file now has 25 procedures, none empty. The previous validation failure was caused by 3 empty stub methods (`HabilitarCampos`, `AjustarBotoesPorModo`, `AlternarPagina`) and 6 missing methods the validator expected. All now have real implementations adapted to the REPORT form pattern:
+
+- `BtnBuscarClick` ÔåÆ calls `CarregarLista` (refresh grid)
+- `BtnSalvarClick` ÔåÆ delegates to `BtnImprimirClick` (emit = save for reports)
+- `BtnCancelarClick` ÔåÆ delegates to `BtnEncerrarClick`
+- `FormParaBO` ÔåÆ propagates DataSessionId + loads current cursor row into BO
+- `BOParaForm` ÔåÆ reflects BO `this_cHists` into the historic textbox
+- `CarregarLista` ÔåÆ delegates to `CarregarGrade` + syncs history textbox
+- `HabilitarCampos` ÔåÆ enforces read-only on textbox and grid
+- `LimparCampos` ÔåÆ clears textbox and repositions cursor
+- `AjustarBotoesPorModo` ÔåÆ ensures all 4 CommandGroup buttons are enabled
+- `AlternarPagina` ÔåÆ reloads grid if cursor missing, repositions to first record

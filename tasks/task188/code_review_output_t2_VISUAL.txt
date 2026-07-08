@@ -1,0 +1,35 @@
+﻿Depois de ler o arquivo completo, posso ver o que realmente est├í implementado nos m├®todos em quest├úo (linhas 680ÔÇô717, que n├úo apareceram nos trechos enviados ao revisor):
+
+**BtnVisualizarClick** (linhas 691ÔÇô701):
+```foxpro
+THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Lista")
+THIS.BOParaForm()
+THIS.HabilitarCampos(.F.)
+THIS.pgf_4c_Paginas.ActivePage = 2
+```
+ÔåÆ **J├ü l├¬ do cursor antes de navegar para Page2.**
+
+**BtnAlterarClick** (linhas 706ÔÇô717):
+```foxpro
+THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Lista")
+THIS.this_oBusinessObject.EditarRegistro()
+THIS.BOParaForm()
+THIS.HabilitarCampos(.T.)
+THIS.pgf_4c_Paginas.ActivePage = 2
+```
+ÔåÆ **J├ü l├¬ do cursor antes de navegar para Page2.**
+
+**BtnIncluirClick** (linhas 680ÔÇô686):
+```foxpro
+THIS.this_oBusinessObject.NovoRegistro()
+THIS.LimparCampos()
+THIS.HabilitarCampos(.T.)
+THIS.pgf_4c_Paginas.ActivePage = 2
+```
+ÔåÆ Para modo INCLUIR, o comportamento correto ├® **n├úo** ler do cursor ÔÇö ├® um registro novo, os campos devem estar limpos.
+
+---
+
+Os tr├¬s problemas s├úo **falsos positivos**: o revisor autom├ítico recebeu apenas trechos at├® a linha 679 (cabe├ºalho do m├®todo) e n├úo viu as implementa├º├Áes que come├ºam na linha 680. O c├│digo atual j├í est├í correto.
+
+**Nenhuma altera├º├úo necess├íria neste pass.** O arquivo `FormSigPrGloT.prg` est├í em conformidade com o padr├úo OPERACIONAL.

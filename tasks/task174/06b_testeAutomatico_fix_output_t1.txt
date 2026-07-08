@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes est├úo corretas. O arquivo foi salvo. Resumo da corre├º├úo:
+
+**Causa raiz:** Em VFP9, ao criar um `Grid` via `AddObject` e definir `ColumnCount = 5`, cada coluna recebe automaticamente um controle `Text1` (TextBox padr├úo). As Colunas 2, 3 e 4 tentavam fazer `.AddObject("Text1", "TextBox")` novamente ÔÇö gerando "A member object with this name already exists" na linha 233 (primeira ocorr├¬ncia, Column2).
+
+**Corre├º├úo aplicada em `Formsigprema.prg`:**
+- Column2, Column3, Column4: removido `.AddObject("Text1", "TextBox")` ÔÇö o bloco `WITH .Text1` agora configura o `Text1` j├í criado automaticamente pelo VFP9, sem tentar cri├í-lo novamente.
+- Column1 (`Check1`) e Column5 (`Edit1`) n├úo precisavam de corre├º├úo pois usam nomes diferentes do `Text1` padr├úo.

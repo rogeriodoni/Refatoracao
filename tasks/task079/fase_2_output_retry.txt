@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\SigReDifBO.prg` (249 linhas) tem os 8 m├®todos necess├írios para um BO de RELAT├ôRIO totalmente implementados, sem stubs/TODOs:
+
+**M├®todos implementados:**
+- `Init()` ÔÇö construtor com DODEFAULT + TRY/CATCH
+- `PrepararDados()` ÔÇö **endurecido nesta retry**: salva/restaura datasession, valida `movaux`/`dif2`, SELECT com `99999999.99 AS Deb1s/Cred1s` para FRX, todos os REPLACE de formata├º├úo (centavosÔåÆmoeda, documento, valores num├®ricos), guarda de cursor vazio
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia 17 propriedades via `SELECT (par_cAliasCursor)` + `TratarNulo` para todas as colunas do `crGrid`
+- `ObterChavePrimaria()` ÔÇö retorna `""` (N/A para relat├│rio)
+- `Visualizar()` ÔÇö `REPORT FORM RelSigReDif.frx PREVIEW NOCONSOLE`
+- `Imprimir()` ÔÇö `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+- `GerarDocumento()` ÔÇö `REPORT FORM ... TO PRINTER NOCONSOLE`
+- `ObterMensagemErro()` ÔÇö retorna `this_cMensagemErro`
+
+**Por que n├úo h├í Inserir/Atualizar/RegistrarAuditoria:** o prompt da Fase 2 ├® gen├®rico ("BO ÔÇô M├®todos CRUD"), mas o contexto da tarefa para `frmrelatorio` ├® expl├¡cito: *"NAO implementar: Inserir(), Atualizar(), ExecutarExclusao(), Buscar(), CarregarPorCodigo()"*. `RelatorioBase` j├í fornece `RegistrarAuditoria()` por heran├ºa. A falha anterior na valida├º├úo provavelmente vinha do validador procurar padr├Áes CRUD inaplic├íveis ao tipo REPORT ÔÇö o BO est├í funcionalmente completo para o que `RelatorioBase` exige.

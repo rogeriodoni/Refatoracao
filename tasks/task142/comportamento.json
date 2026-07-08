@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMP1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1",
+      "evento": "Init",
+      "linhas": 104,
+      "codigoOriginal": "LParameters pForm\n\nThis.LockScreen = .t.\n\nThisForm.ParentForm = pForm\nThisForm.pcEscolha  = pForm.pcEscolha\nThisForm.poDataMgr  = pForm.poDataMgr\n\nSet DataSession To pForm.DataSessionId\n\nThisForm.Caption = 'Componentes Agregados ' + Iif(ThisForm.pcEscolha = 'INSERIR', 'Fase Anterior', '')\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\nSelect xNensi\nThisForm.RecnoAnt = Recno()\nCreate Cursor TmpDistrib (Nops n(10), Nenvs n(10), Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "RecnoAnt = Recno,Visible = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.getTotPeso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.get_descr.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.AntValue <> This.Value\n\tREplace Locals with 'M' in TmpDistrib\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.AntValue <> This.Value\n\tREplace Locals with 'M' in TmpDistrib\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column7.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column8.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Grade.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.AntValue <> This.Value\n\tREplace Locals with 'M' in TmpDistrib\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.ok",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "If ThisForm.Liberaalteracao\n\tSelect TmpDistrib \n\tScan\n\t\tIf Locals = 'M'\n\t\t\tSelect xNensi\n\t\t\tLocate for nTrans = TmpDistrib.nTrans\n\t\t\tIf Not Eof()\n\t\t\t\tReplace Qtds   With TmpDistrib.Qtds,;\n\t\t\t\t\t\tPesos  With TmpDistrib.Pesos,;\n\t\t\t\t\t\tPeso2s With TmpDistrib.Peso2s\n\t\t\tEndIf\n\t\tEndIf\n\tEndScan\nEndIf\n\nSelect xNensi\nThisForm.ParentForm.Enabled = .t.\n\nSelect xNensi\nSet Order To Editar\nGo ThisForm.RecnoAnt\n\nThisForm.Release\n* Fim ******************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP1.Alterar",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "With ThisForm.Grade\n\t.Column5.Readonly = .f.\n\t.column5.BackColor = 12713983\n\t.Column3.Readonly = .f.\n\t.column3.BackColor = 12713983\n\t*** Tiago - 31/01/2012 - Vianna - Tava liberando a coluna 9 que é unidade, em vez da 8 que é o peso\n\t.Column8.Readonly = .f.\n\t.column8.BackColor = 12713983\n\t.Refresh\nEndWith\nThisForm.Liberaalteracao = .t.\nThisForm.Grade.Column5.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

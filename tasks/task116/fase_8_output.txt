@@ -1,0 +1,22 @@
+﻿A migra├º├úo da Fase 8 j├í est├í **completa**. Analisando o arquivo `FormSIGREIDC.prg`:
+
+**Todos os m├®todos solicitados j├í est├úo implementados:**
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `BtnBuscarClick()` | 1168 | Ô£à Delega para `BtnVisualizarClick()` |
+| `BtnEncerrarClick()` | 1172 | Ô£à Delega para `BtnSairClick()` |
+| `BtnSalvarClick()` | 1176 | Ô£à Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | 1180 | Ô£à Limpa campos + SetFocus |
+| `FormParaBO()` | 1093 | Ô£à Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | 1097 | Ô£à Mapeia todos os 7 campos |
+| `HabilitarCampos()` | 1119 | Ô£à Controla todos os controles + estado |
+| `LimparCampos()` | 547 | Ô£à Reseta todos os filtros |
+| `CarregarLista()` | 1080 | Ô£à Posiciona foco em CdGrupo |
+| `AjustarBotoesPorModo()` | 1140 | Ô£à Habilita todos os 4 bot├Áes |
+
+**Integra├º├úo tamb├®m completa:**
+- `config.prg`: carrega `*BO.prg` e `Form*.prg` dinamicamente via ADIR() ÔÇö SIGREIDCBO e FormSIGREIDC j├í cobertos
+- `menu.prg`: BAR 145 em `popRelatorios`, `ON SELECTION BAR 145`, e procedure `AbrirFormSIGREIDC()` com padr├úo correto (VARTYPE + Show() sem par├ómetro)
+
+A migra├º├úo do FormSIGREIDC est├í **100% conclu├¡da** ÔÇö todos os 8 fases foram entregues.

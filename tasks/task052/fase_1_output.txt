@@ -1,0 +1,19 @@
+﻿Arquivo `sigrecmcBO.prg` criado em `C:\4c\projeto\app\classes\`. A Fase 1/8 est├í completa.
+
+**O que foi criado:**
+- Heran├ºa de `RelatorioBase` (correto para form tipo REPORT)
+- 30 propriedades `this_*` cobrindo todos os filtros do formul├írio:
+  - Empresa (c├│digo + raz├úo social)
+  - Opera├º├úo/movimenta├º├úo
+  - Per├¡odo (data inicial/final)
+  - Moeda (c├│digo + descri├º├úo)
+  - Quantidades (Qtde m├íxima e m├¡nima)
+  - Conta/estoque (c├│digo + descri├º├úo)
+  - Vendedor (c├│digo + descri├º├úo)
+  - Produto (c├│digo + descri├º├úo)
+  - 4 option groups (`this_nOrdem`, `this_nOptSelRel`, `this_nOptCompara`, `this_nOptMovCad`)
+  - 4 checkboxes (`this_nComparativo`, `this_nChkCidade`, `this_nChkDadosCli`, `this_nChkValor`)
+  - Dados auxiliares do `SigCdPam` (moeda padr├úo, grupo padr├úo)
+  - Propriedades de cabe├ºalho do relat├│rio (`this_cNmEmpresa`, `this_cNmTitulo`, `this_cNmPeriodo`, `this_cTipoRel`)
+- `Init()` completo: chama `DODEFAULT()`
+- `ObterMensagemErro()` para o form chamar ap├│s falha na impress├úo/visualiza├º├úo

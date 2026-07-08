@@ -1,0 +1,718 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecgr.SCX
+* Data/Hora: 16/05/26 17:08:37
+* Total de registros: 7
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECGR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Aguarde
+  Parent: SIGRECGR
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGRECGR.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGRECGR.Aguarde
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGR
+------------------------------------------------------------
+  DataSession = 1
+  Height = 160
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Rastreabilidade"
+  WindowType = 1
+  Name = "SIGRECGR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 5
+  btnReport.sair.Left = 230
+  btnReport.sair.Height = 75
+  btnReport.sair.Width = 75
+  btnReport.sair.Name = "sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 24
+  REGISTRY1.Left = 372
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGR.Aguarde
+------------------------------------------------------------
+  Top = 92
+  Left = 296
+  Width = 207
+  Height = 57
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 21
+  BackColor = 255,255,255
+  ZOrderSet = 11
+  Name = "Aguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGR.Aguarde.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 18
+  Left = 69
+  Top = 8
+  Width = 70
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGR.Aguarde.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Processando"
+  Height = 18
+  Left = 62
+  Top = 28
+  Width = 74
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECGR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCgr Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lnCodBars, lnOp, lnEnv, lcEDN, lnTipo
+
+lnTipo = ThisForm.Tipo
+
+ThisForm.Aguarde.Visible = .t.
+ThisForm.Refresh
+
+Create Cursor TmpRastro (Cbars n(8), Cpros c(14), Dpros c(40), Tipos c(1), ImpCab l,;
+						Nops n(10), cFunds n(6), Tubos n(2), Dtfunds d, CodMaqfs c(10),;
+						nNumes c(10), Numes n(10), DtLotes d, Ifors c(10), Dfors c(30), ;
+						Codigos n(6), DtRgans d, Codtpans n(2), Descs c(20), Resps c(30), ;
+						Pesoams n(9,2), Dtamos d, nLotes n(10), nfunds n(6), RgNops n(10), ;
+						nLaudos n(6), Fases c(10), Retrabs c(37), Dtcrts d, Setors c(31), ;
+						Docs c(33), Datas d, Dopps c(20), Numps n(10), Grupods c(10),;
+						Contads c(10), Pesos n(9,2), Qtds n(12,3), Rclis c(30), Citens n(4), Obs m )
+Index On Tipos + Str(Numes,10)+Cpros+Str(Citens,4) tag lote
+Index On Tipos + Str(Codigos,6) Tag Analise
+Index on Tipos + Str(Nops,10) + Str(Tubos,2) + nNumes + Str(Codigos,6) + Dtos(Dtcrts) Tag Tipos
+
+Create Cursor TmpBarra (Cbars n(8), Nops n(10))
+Index on Cbars Tag Cbars
+
+Create Cursor TmpNop  (Nops n(10))
+Index on Nops Tag Nops
+
+lcQuery = [Select a.Emps, a.Dopes, a.Numes, a.Datas, b.Ndopes, b.OriLotes, a.Contads, a.Vends, a.Contaos, b.Abrevs ] + ;
+			[From SigMvCab a, SigCdOpe b ] + ;
+		   [Where a.Dopes = b.Dopes And ] + ;
+		   		 [b.CtrlLotes = 1]
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'TmpLote1') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpLote1)')
+	Return 0
+EndIf
+
+Select Emps, Dopes, Numes, Datas, Val(Str(Ndopes, 4) + Transform(Numes, '@L 999999')) as nNumes, ;
+	   Iif(OriLotes=2, Contads, Iif(Orilotes=3, Vends, Contaos)) as Contaos, Abrevs ;
+  From TmpLote1 ;
+  Into Cursor TmpLote ReadWrite
+Select TmpLote
+Index On nNumes Tag Numes
+
+*********   Criação da Imagem em Branco Para o Relatório   ***********************************
+lcBrancos = Addbs(JustPath(ThisForm.parentform.poDataMgr.GetDatabase())) + 'BrJpg.JPG'
+Create Cursor crBranco (Branco M)
+Select crBranco
+Append Blank
+Append Memo Branco From (lcBrancos) Overwrite
+
+******   Criação do Cabeçalho do Relatório   *****
+Create Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), Figura c(10), Campo1 c(10), Campo2 c(10), Campo3 c(10), Descr1 c(40), Descr2 c(40), Descr3 c(40))
+ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmpresa = _Empr + ' - ' + Alltrim(crSigCdEmp.Razas)
+lcTitulo  = 'Relatório de Rastreabilidade'
+lcfigura  = 'imagem'
+Insert Into csCabecalho (NomeEmpresa, Titulo, Figura) Values (lcEmpresa, lcTitulo, lcfigura)
+
+Copy Memo crBranco.Branco to Sys(2023)+'\'+alltrim(lcFigura)+".jpg"
+		
+If (lnTipo = 1)
+	lnCodBars = ThisForm.Filtro
+
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'CBars', lnCodBars, 'CPros, Nops, Emps, Dopes, Numes')
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crSigOpEtq.CPros, 'DPros, FigJpgs')
+	Clear Resources
+	If Not Empty(crSigCdPro.FigJpgs) And Not IsNull(crSigCdPro.FigJpgs)
+		lcFoto=Strconv(Strtran(Strtran(Strtran(crSigCdPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+		StrToFile(lcFoto, sys(2023)+"\"+alltrim(lcFigura)+".jpg")
+		*Copy Memo crSigCdPro.FigJpgs to sys(2023)+"\"+alltrim(lcFigura)+".jpg"
+	Else
+		Copy Memo crBranco.Branco to Sys(2023)+'\'+alltrim(lcFigura)+".jpg"
+	EndIf
+
+	Replace Campo1 with 'Barra',;
+			Campo2 With 'Produto',;
+			Campo3 With 'Descrição',;
+			Descr1 With Alltrim(Str(lnCodBars)),;
+			Descr2 With crSigOpEtq.Cpros,;
+			Descr3 With crSigCdPro.Dpros In csCabecalho
+
+	If Empty(crSigOpEtq.Nops)
+		_Chave = crSigOpEtq.Emps + crSigOpEtq.Dopes + Str(crSigOpEtq.Numes, 6)
+
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvItn', 'crSigMvItn', 'EmpDopNums', _Chave, 'Opers, CodBarras')
+		Select crSigMvItn
+		Scan
+			If (crSigMvItn.Opers = 'E')
+				Loop
+			EndIf
+			Insert Into TmpBarra (Cbars) Values (crSigMvItn.CodBarras)
+		EndScan
+		
+		Select TmpBarra
+		Go Top
+		Do While Not Eof()
+			If Not Empty(TmpBarra.Nops)
+				Skip
+				Loop
+			EndIf
+
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'CBars', TmpBarra.Cbars, ;
+													  'CPros, Nops, Emps, Dopes, Numes')
+			If Empty(crSigOpEtq.Nops)
+				Delete In TmpBarra
+				_Chave = crSigOpEtq.Emps + crSigOpEtq.Dopes + Str(crSigOpEtq.Numes, 6)
+
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvItn', 'crSigMvItn', 'EmpDopNums', _Chave, ;
+														  'Opers, CodBarras')
+				Select crSigMvItn
+				Scan
+					If (crSigMvItn.Opers = 'E')
+						Loop
+					EndIf
+					Insert Into TmpBarra (Cbars) Values (crSigMvItn.CodBarras)
+				EndScan
+				Select TmpBarra
+				Go Top
+			Else
+				Select TmpBarra
+				Replace Nops With crSigOpEtq.Nops In TmpBarra
+				Go Top
+			EndIf
+		EndDo
+	Else
+		Insert Into TmpBarra (Cbars, Nops) Values (lnCodBars, crSigOpEtq.Nops)
+	EndIf
+
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'CBars', lnCodBars, 'CPros')
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crSigOpEtq.CPros, 'DPros')
+
+	Insert Into TmpRastro (Cbars, Cpros, Dpros) Values (lnCodBars, crSigOpEtq.Cpros, crSigCdPro.Dpros)
+
+	Select TmpBarra
+	Scan
+		If Not Seek(TmpBarra.Nops, 'TmpNop', 'Nops')
+			Insert Into TmpNop (Nops) Values (TmpBarra.Nops)
+		EndIf
+	EndScan
+Else
+	If (lnTipo = 2)
+		lnOp = ThisForm.filtro &&Tipo
+
+		Replace Campo1 With 'O.P.', ;
+				Descr1 With Alltrim(Str(lnOp)) In csCabecalho
+
+		If Not Seek(lnOp, 'TmpNop', 'Nops')
+			Insert Into TmpNop (Nops) Values (lnOp)
+		EndIf
+	Else
+		If (lnTipo = 3)
+			lnEnv = ThisForm.filtro &&Tipo
+			Replace Campo1 With 'Envelope', ;
+					Descr1 With Alltrim(Str(lnEnv)) In csCabecalho
+
+			lcQuery = [Select Top 1 EmpDNps ] + ;
+					    [From SigPdMvf ] + ;
+					   [Where Nenvs = ] + Str(lnEnv, 10) + [ ] + ;
+					   [Order By Nenvs Desc, EmpDNps Desc]
+
+			If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'crTopMfas') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTopMfas)')
+				Return 0
+			EndIf
+			Select crTopMfas
+			Go Top
+			If Not Eof()
+				_Chave = crTopMfas.EmpDNps
+
+				lcQuery = [Select Nops ] + ;
+						    [From SigPdMvf ] + ;
+						   [Where EmpDNps = '] + _Chave + [' ] + ;
+						   [Order By Nops]
+
+				If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf 2)')
+					Return 0
+				EndIf
+				Select crSigPdMvf
+				Scan
+					If Not Seek(crSigPdMvf.Nops, 'TmpNop', 'Nops')
+						Insert Into TmpNop (Nops) Values (crSigPdMvf.Nops)
+					EndIf
+				EndScan
+			EndIf
+		Else
+			lcEDN = _Empr + ThisForm.filtro &&Tipo
+			
+			Replace Campo1 With 'Operação', ;
+					Descr1 With Alltrim(lcEDN) In csCabecalho
+
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'EmpDopNums', lcEDN, 'Nops')
+			Select crSigOpPic
+			Scan
+				If Not Seek(crSigOpPic.Nops, 'TmpNop', 'Nops')
+					Insert Into TmpNop (Nops) Values (crSigOpPic.Nops)
+				EndIf
+			EndScan
+		EndIf
+	EndIf
+EndIf
+
+Select TmpNop
+Go Top
+Do While !Eof()
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', TmpNop.Nops, 'Nops')
+
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdFud', 'crSigCdFud', 'Nops', TmpNop.Nops)
+	Select crSigCdFud
+	Scan
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdFun', 'crSigCdFun', 'Codigos', crSigCdFud.Codigos)
+
+		lcEmp = crSigCdFun.Emps
+
+		Select TmpRastro
+		Append Blank
+		Replace Nops     With crSigCdFud.Nops, ;
+				cFunds   With crSigCdFud.Codigos, ;
+				Tubos    With crSigCdFud.Tubos, ;
+				Dtfunds  With crSigCdFun.Datas, ;
+				CodMaqfs With crSigCdFun.codmaqfs, ;
+				Tipos    With '1', ;
+				ImpCab   With .t.
+
+		RegCreate = .f.
+
+		lcQuery = [Select * ] + ;
+				    [From SigCdFud ] + ;
+				   [Where Codigos = ] + Str(crSigCdFun.Codigos, 6) + [ And ] + ;
+				   		 [Tubos = ] + Str(TmpRastro.Tubos, 2)
+
+		If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'TmpTubos') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpTubos)')
+			Return 0
+		EndIf
+
+		Select TmpTubos
+		Scan
+			If Not Empty(nNumes)
+				Set Decimals To 0
+				ndope = Val(Left(Str(TmpTubos.nNumes, 10), 4))
+
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdOpe', 'TmpOpe', 'NDopes', NDope, 'Dopes, Abrevs')
+
+				Dope = TmpOpe.Dopes
+				Nume = Val(Right(Str(TmpTubos.nNumes, 10), 6))
+				Set Decimals To 2
+				nNume = TmpOpe.Abrevs + '-' + Transform(Nume, '@L 999999')
+
+				If RegCreate
+					Select TmpRastro
+					Append Blank
+					Replace Nops     With TmpTubos.Nops, ;
+							cFunds   With TmpTubos.Codigos, ;
+							Tubos    With TmpTubos.Tubos, ;
+							Dtfunds  With crSigCdFun.Datas, ;
+							CodMaqfs With crSigCdFun.codmaqfs, ;
+							Tipos    With '1'
+				EndIf
+
+				Select TmpRastro
+				Replace nNumes With nNume
+				RegCreate = .t.
+				
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvCab', 'crSigMvCab',  'EmpDopNums', lcEmp + Dope + Str(Nume, 6))
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvItn', 'crSigMvItn', 'EmpDopNums', lcEmp + Dope + Str(Nume, 6))
+				
+				Select crSigMvItn
+				Scan
+					If (nLotes = 0)
+						Loop
+					EndIf
+
+					=Seek(nLotes, 'TmpLote', 'Numes')
+					ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', TmpLote.ContaOs, 'RClis')
+
+					nNume = TmpLote.Abrevs + '-' + Transform(TmpLote.Numes, '@L 999999')
+
+					Select TmpRastro
+					Set Order to Lote
+					If Not Seek('2' + Str(crSigMvItn.nLotes) + crSigMvItn.Cpros + Str(crSigMvItn.Citens, 4))
+						Append Blank
+						Replace Tipos   With '2', ;
+								Numes   With crSigMvItn.nLotes, ;
+								DtLotes With TmpLote.Datas, ;
+								Ifors   With TmpLote.Contaos, ;
+								Dfors   With crSigCdCli.Rclis, ;
+								nNumes  With nNume, ;
+								Cpros   With crSigMvItn.Cpros, ;
+								Obs     with crSigMvItn.Obs, ;
+								Citens  with crSigMvItn.Citens, ;
+								Pesos   with crSigMvItn.Qtds
+					EndIf
+					
+					ThisForm.ParentForm.poDataMgr.CursorQuery('SigInAna', 'crSigInAna', 'NLotes', crSigMvItn.nLotes)
+					Select crSigInAna
+					If Not Eof('crSigInAna')
+						ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrTpa', 'crSigPrTpa', 'Codigos', crSigInAna.codTpans)
+						ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigInAna.Resps, 'RClis')
+
+						Select TmpRastro
+						Set Order to Analise
+						If Not Seek('4' + Str(crSigInAna.Codigos, 6))
+							Append Blank
+							Replace Tipos    With '4', ;
+									Codigos  With crSigInAna.Codigos, ;
+									DtRgans  With crSigInAna.datas, ;
+									Codtpans With crSigInAna.Codtpans, ;
+									Descs    With crSigPrTpa.Descs, ;
+									Resps    With crSigCdCli.Rclis, ;
+									Pesoams  With crSigInAna.pesamosts, ;
+									dtamos   With crSigInAna.dtAmosts, ;
+									nLotes   With crSigMvItn.Nlotes, ;
+									nLaudos  With crSigInAna.nlaudos, ;
+									nNumes   With nNume
+						EndIf
+					EndIf
+				EndScan
+			EndIf
+		EndScan
+
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigInAna', 'crSigInAna', 'NFunds', crSigCdFun.Codigos)
+		Select crSigInAna
+		If Not Eof('crSigInAna')
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrTpa', 'crSigPrTpa', 'Codigos', crSigInAna.codTpans)
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigInAna.Resps, 'RClis')
+
+			Select TmpRastro
+			Set Order to Analise
+			If Not Seek('4' + Str(crSigInAna.Codigos, 6))
+				Append Blank
+				Replace Tipos    With '4', ;
+						Codigos  With crSigInAna.Codigos, ;
+						DtRgans  With crSigInAna.datas, ;
+						Codtpans With crSigInAna.Codtpans, ;
+						Descs    With crSigPrTpa.Descs, ;
+						Resps    With crSigCdCli.Rclis, ;
+						Pesoams  With crSigInAna.pesamosts, ;
+						dtamos   With crSigInAna.dtAmosts, ;
+						nFunds   With crSigCdFun.codigos, ;
+						nLaudos  With crSigInAna.nlaudos
+			EndIf 
+		EndIf 
+
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigInAna', 'crSigInAna', 'Nops', TmpNop.Nops)
+		Select crSigInAna
+		If Not Eof('crSigInAna')
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrTpa', 'crSigPrTpa', 'Codigos', crSigInAna.codTpans)
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigInAna.Resps, 'RClis')
+
+			Select TmpRastro
+			Set Order to Analise
+			If Not Seek('4' + Str(crSigInAna.Codigos, 6))
+				Append Blank
+				Replace Tipos    With '4', ;
+						Codigos  With crSigInAna.Codigos, ; 
+						DtRgans  With crSigInAna.datas, ;
+						Codtpans With crSigInAna.Codtpans, ;
+						Descs    With crSigPrTpa.Descs, ;
+						Resps    With crSigCdCli.Rclis, ;
+						Pesoams  With crSigInAna.pesamosts, ;
+						dtamos   With crSigInAna.dtAmosts, ;
+						RgnOps   With TmpNop.Nops, ;
+						Fases    With crSigInAna.fases, ;
+						nLaudos  With crSigInAna.nlaudos
+			EndIf 
+		EndIf 
+	EndScan
+	
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigPdMvf', 'crSigPdMvf', 'Nops', TmpNop.Nops)
+	Select crSigPdMvf
+	Scan
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdOpd', 'crSigCdOpd', 'Dopps', Dopps)
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNPs', Emps + Dopps + Str(Numps, 10))
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigCdNec.Contaos, 'RClis')
+
+		If Not Empty(cRetrabs)
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrCrt', 'crSigPrCrt', 'Cods', cRetrabs)
+
+			Select TmpRastro
+			Append Blank
+			Replace Tipos   With '5', ;
+					Retrabs With crSigPdMvf.cRetrabs + '-' + crSigPrCrt.Descs, ;
+					Dtcrts  With crSigCdNec.Datas, ;
+					Setors  With crSigCdNec.Grupoos + '-' + crSigCdCli.Rclis, ;
+					Docs    With crSigCdNec.Dopps + '-' + Str(crSigCdNec.Numps, 10)
+		EndIf
+		
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdNei', 'crSigCdNei', 'EmpDNPs', crSigPdMvf.Emps + crSigPdMvf.Dopps + Str(crSigPdMvf.Numps,10))
+		Select crSigCdNei
+		Scan
+			If (nLotes = 0)
+				Loop
+			EndIf
+
+			_AcumPeso = .t.
+			=Seek(nLotes, 'TmpLote', 'Numes')
+			lcEmp = TmpLote.Emps 
+
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', TmpLote.Contaos, 'RClis')
+
+			nNume = TmpLote.Abrevs + '-' + Transform(TmpLote.Numes, '@L 999999')
+			Set Decimals To 0
+
+			nDope = Val(Left(Str(crSigCdNei.Nlotes, 10), 4))
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdOpe', 'TmpOpe', 'NDopes', NDope, 'Dopes, Abrevs')
+
+			Dope = crSigCdOpe.Dopes
+			Nume = Val(Right(Str(crSigCdNei.Nlotes, 10), 6))
+			Set Decimals To 2
+
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigMvItn', 'crSigMvItn', 'EmpDopNums', lcEmp + Dope + Str(Nume,6))
+			Select crSigMvItn
+			Scan
+				Select TmpRastro
+				Set Order to Lote
+				If Not Seek('3' + Str(crSigCdNei.nLotes) + crSigMvItn.Cpros + Str(crSigMvItn.Citens, 4))
+					Append Blank
+					Replace Tipos   With '3', ;
+							Numes   With crSigCdNei.nLotes, ;
+							DtLotes With TmpLote.Datas, ;
+							Ifors   With Tmplote.Contaos, ;
+							Dfors   With crSigCdCli.Rclis, ;
+							nNumes  With nNume, ;
+							Cpros   With crSigMvItn.Cpros, ;
+							Obs     with crSigMvItn.Obs, ;
+							Citens  With crSigMvItn.Citens
+				EndIf
+
+				If _AcumPeso
+					=Seek('3' + Str(crSigCdNei.nLotes))
+					Replace Pesos With Pesos + crSigCdNei.Pesos
+					_AcumPeso = .f.
+				EndIf
+			EndScan
+
+			ThisForm.ParentForm.poDataMgr.CursorQuery('SigInAna', 'crSigInAna', 'NLotes', crSigCdNei.nLotes)
+			Select crSigInAna
+			If Not Eof('crSigInAna')
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrTpa', 'crSigPrTpa', 'Codigos', crSigInAna.codTpans)
+				ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', crSigInAna.Resps, 'RClis')
+
+				Select TmpRastro
+				Set Order to Analise
+				If Not Seek('4' + Str(crSigInAna.Codigos, 6))
+					Append Blank
+					Replace Tipos    With '4', ;
+							Codigos  With crSigInAna.Codigos, ;
+							DtRgans  With crSigInAna.Datas, ;
+							Codtpans With crSigInAna.Codtpans, ;
+							Descs    With crSigPrTpa.Descs, ;
+							Resps    With crSigCdCli.Rclis, ;
+							Pesoams  With crSigInAna.Pesamosts, ;
+							dtamos   With crSigInAna.DtAmosts, ;
+							nLotes   With crSigMvItn.Nlotes, ;
+							nLaudos  With crSigInAna.Nlaudos, ;
+							nNumes   With nNume
+				EndIf
+			EndIf
+		EndScan
+		
+		Select crSigPdMvf
+		Scatter Memvar
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', m.ContaDs, 'RClis')
+
+		m.Rclis = crSigCdCli.Rclis
+		m.tipos = '6'
+
+		Select TmpRastro
+		Append Blank
+		Gather Memvar
+	EndScan
+
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', TmpNop.Nops, 'NopMaes')
+	Delete In TmpNop
+
+	If Not Empty(crSigOpPic.NopMaes)
+		Insert Into TmpNop (Nops) Values (crSigOpPic.NopMaes)
+	EndIf
+	Select TmpNop
+	Go Top
+EndDo
+
+ThisForm.Aguarde.Visible = .f.
+ThisForm.Refresh
+
+Select TmpRastro
+Set Order To Tipos
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Tipo, _Filtro, _Form
+
+ThisForm.Filtro 	= _Filtro
+ThisForm.Tipo   	= _Tipo
+ThisForm.ParentForm = _Form
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCgr to Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCgr to Print NoConsole
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECGR
+RESERVED3 (ClassInfo): filtro
+parentform
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

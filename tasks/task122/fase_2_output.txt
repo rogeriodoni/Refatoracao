@@ -1,0 +1,21 @@
+﻿O `sigreimcBO.prg` j├í foi implementado completamente na Fase 1. Verificando contra o c├│digo fonte original:
+
+**Cobertura atual vs. original:**
+
+| Procedure original | M├®todo no BO | Status |
+|---|---|---|
+| `visualizacao` (Preview) | `Visualizar()` | Ô£ô completo |
+| `impressao` (Printer) | `Imprimir()` | Ô£ô completo |
+| `processamento` (cursor XCorNf + loop de vias) | `PrepararDados()` | Ô£ô completo |
+| `Init` (par├ómetros + CrSigCdPam.viacarta) | `Init()` + `InicializarFiltros()` | Ô£ô completo |
+
+**Verifica├º├úo de fidelidade do `PrepararDados()`:**
+- JOIN `SigNfCor f / SigMvNfi n / SigCdCli c / SigCcOco o` ÔÇö correto Ô£ô
+- Filtro EDNs condicional (`this_lEmpEdns`) ÔÇö correto Ô£ô  
+- Range `cnfis BETWEEN NotaIni AND NotaFim` com `PADR(..., CHR(254))` como default ÔÇö correto Ô£ô
+- Loop de vias (replica cada NF `this_nCopias` vezes) com `numvias` sequencial ÔÇö correto Ô£ô
+- INDEX `cemps+cseries+cnfis+STR(numvias,8)` ÔÇö correto Ô£ô
+
+Para um BO de relat├│rio (`RelatorioBase`), os m├®todos de "Fase 2" equivalentes s├úo `PrepararDados()`, `Imprimir()` e `Visualizar()` ÔÇö todos j├í implementados sem TODOs ou stubs.
+
+**`sigreimcBO.prg` est├í completo. Nenhuma modifica├º├úo necess├íria para a Fase 2.**

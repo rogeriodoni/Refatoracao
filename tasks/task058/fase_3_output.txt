@@ -1,0 +1,13 @@
+﻿O arquivo foi criado corretamente. A estrutura est├í completa e consistente com o padr├úo dos outros forms de relat├│rio.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\relatorios\Formsigrecnt.prg` criado com:
+
+- `DEFINE CLASS Formsigrecnt AS FormBase` ÔÇö Width=800, Height=350 (exato do original), TitleBar=0, ControlBox=.F., sem barra de t├¡tulo
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `sigrecntBO`, chama `CarregarParametros()` (pula em modo UI), monta cabe├ºalho/bot├Áes/PageFrame
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_Sombra` + `lbl_4c_Titulo`, BackColor=RGB(100,100,100)
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), geometria exata do framework
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com PageCount=1, Tabs=.F., Page1 com fundo `fundo_cad_1003.jpg`
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+As fases 4-6 usar├úo `Edit` para adicionar `ConfigurarPaginaLista()` com os controles de filtro (Data, Conta, Base/N├¡veis, C├│digo, OptionGroups).

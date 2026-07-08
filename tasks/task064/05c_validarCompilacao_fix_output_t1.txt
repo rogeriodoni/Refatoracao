@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. Todas as ocorr├¬ncias de `& .` dentro do m├®todo `ConfigurarPaginaDados` foram substitu├¡das por linhas separadas. O erro era que `&` ├® o operador de macro substitution do VFP9 (n├úo um separador de statements), fazendo o compilador tentar executar `.Left = 219 & .Width = 50 & .Height = 18` como uma macro ÔÇö causando syntax error em todas as linhas afetadas (298 a 581).
+
+Corre├º├úo feita: cada propriedade agora ocupa sua pr├│pria linha dentro dos blocos `WITH`.

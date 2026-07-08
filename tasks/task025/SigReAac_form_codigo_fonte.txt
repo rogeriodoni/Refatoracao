@@ -1,0 +1,512 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReAac.SCX
+* Data/Hora: 15/05/26 17:44:41
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAAC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGREAAC
+  Class: label
+  BaseClass: label
+
+Objeto: GetCUsuario
+  Parent: SIGREAAC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDUsuario
+  Parent: SIGREAAC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGREAAC
+  Class: label
+  BaseClass: label
+
+Objeto: GetCGrupo
+  Parent: SIGREAAC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDGrupo
+  Parent: SIGREAAC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 149
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório do Log de Acessos"
+  Name = "SIGREAAC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = -1
+  cntSombra.Left = 0
+  cntSombra.ZOrderSet = 1
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 5
+  btnReport.sair.Left = 230
+  btnReport.sair.Height = 75
+  btnReport.sair.Width = 75
+  btnReport.sair.Name = "sair"
+  btnReport.Height = 85
+  btnReport.Left = 494
+  btnReport.Top = -3
+  btnReport.Width = 310
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 516
+  REGISTRY1.Height = 12
+  REGISTRY1.Width = 12
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Usuário :"
+  Height = 15
+  Left = 57
+  Top = 90
+  Width = 45
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.GetCUsuario
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 25
+  Left = 105
+  MaxLength = 10
+  TabIndex = 1
+  Top = 86
+  Width = 80
+  ZOrderSet = 4
+  Name = "GetCUsuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.GetDUsuario
+------------------------------------------------------------
+  Height = 25
+  Left = 187
+  MaxLength = 30
+  TabIndex = 2
+  Top = 86
+  Width = 301
+  ZOrderSet = 5
+  Name = "GetDUsuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 64
+  Top = 117
+  Width = 38
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.GetCGrupo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 25
+  Left = 105
+  MaxLength = 10
+  TabIndex = 3
+  Top = 113
+  Width = 80
+  ZOrderSet = 7
+  Name = "GetCGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAAC.GetDGrupo
+------------------------------------------------------------
+  Height = 25
+  Left = 187
+  MaxLength = 30
+  TabIndex = 4
+  Top = 113
+  Width = 301
+  ZOrderSet = 8
+  Name = "GetDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAAC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReAac NoConsole To PRINTER
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReAac NoConsole To PRINTER Prompt
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Acesso
+
+ThisForm.lacpdf = .t.
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+Endwith	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+If Empty(ThisForm.GetCGrupo.Value) And Empty(ThisForm.GetCUsuario.Value)
+	MessageBox('Seleção não Realizada !!!', 16,'')
+	Return
+EndIf
+
+ThisForm.poDatamgr.SqlExecute([Select Razas From SigCdEmp Where cEmps = ']+_empr+['],'crSigCdEmp')
+
+Create Cursor crCabecalho (cTitulos c(80), cSubTitulos c(80), Empresa c(80))
+Select crCabecalho 
+Append Blank
+
+Replace Empresa With _Empr + ' - ' + crSigCdEmp.Razas
+
+If ! Empty(ThisForm.GetCGrupo.Value)
+	Replace cTitulos 	With 'RELATORIO DO LOG DE ALTERAÇÃO GRUPOS DE ACESSOS'
+	Replace cSubTitulos	With 'Grupo : '+ThisForm.GetCGrupo.Value+' - '+ThisForm.GetDGrupo.Value
+	lcQuery = [Select * From SigOpLog Where Transacaos Like '%]+ThisForm.GetCGrupo.Value+[%' And ]+;
+	          [(Progs = 'CADGRU' or Progs = 'CADUSU') Order by Datars ]
+	ThisForm.poDatamgr.SqlExecute(lcQuery,'crDBImp')
+EndIf
+
+If ! Empty(ThisForm.GetCUsuario.Value)
+	Replace cTitulos 	With 'RELATORIO DO LOG DE ALTERAÇÃO DE ACESSOS DE USUARIOS'
+	Replace cSubTitulos	With 'Usuário : '+ThisForm.GetCUsuario.Value+' - '+ThisForm.GetDUsuario.Value
+	lcQuery = [Select * From SigOpLog Where Transacaos Like '%]+ThisForm.GetCUsuario.Value+[%' And ]+;
+	          [(Progs = 'CADUSU' Or Progs = 'CADGRU') Order by Datars ]
+	ThisForm.poDatamgr.SqlExecute(lcQuery,'crDBImp')
+	lnRegs = Reccount()
+	DO While lnRegs >= Recno()
+		If At('GRUPO : ',Upper(Transacaos)) > 0
+			lcGrupo = Substr(Transacaos,9,10)
+			lcQuery = [Select * From SigOpLog Where Transacaos Like '%]+lcGrupo+[%' And ]+;
+			          [Transacaos Like '%PROG :%' And Progs = 'CADGRU' Order by Datars ]
+			ThisForm.poDatamgr.SqlExecute(lcQuery,'crDBGru')
+			Select * from crDBGru Where cIdChaves Not In (Select cIdChaves From crDBImp) into cursor crDBIns
+			Select crDBImp
+			lnReg = Recno()
+			Append From Dbf('crDBIns')
+			Go lnReg
+		EndIf
+		Skip
+	EndDo
+			
+EndIf
+
+Select crDBIMP
+Go Top
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReAac NoConsole Preview
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAAC.GetCUsuario
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	This.Parent.GetDUsuario.Value = ''
+Else
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','Usuarios',This.Value,'Usuários',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrUsuarios')
+		This.Parent.GetCUsuario.Value = Evaluate('CrUsuarios.Usuarios')
+		This.Parent.GetDUsuario.Value = Evaluate('CrUsuarios.NComps')
+	Else
+		This.Parent.GetCUsuario.Value = ''
+		This.Parent.GetDUsuario.Value = ''
+	EndIf
+EndIf
+This.Parent.GetCUsuario.Refresh
+This.Parent.GetDUsuario.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetCGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAAC.GetDUsuario
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','NComps',This.Value,'Usuários',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrUsuarios')
+		This.Parent.GetCUsuario.Value = Evaluate('CrUsuarios.Usuarios')
+		This.Parent.GetDUsuario.Value = Evaluate('CrUsuarios.NComps')
+	Else
+		This.Parent.GetCUsuario.Value = ''
+		This.Parent.GetDUsuario.Value = ''
+	EndIf
+EndIf
+This.Parent.GetCUsuario.Refresh
+This.Parent.GetDUsuario.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetCUsuario.Value) And Empty(ThisForm.GetCGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAAC.GetCGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	This.Parent.GetDGrupo.Value = ''
+Else
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrA','crSigCdGrA','Grupos',This.Value,'Grupos',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('Grupos','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('crSigCdGrA')
+		This.Parent.GetCGrupo.Value = Evaluate('crSigCdGrA.Grupos')
+		This.Parent.GetDGrupo.Value = Evaluate('crSigCdGrA.NComps')
+	Else
+		This.Parent.GetCGrupo.Value = ''
+		This.Parent.GetDGrupo.Value = ''
+	EndIf
+EndIf
+This.Parent.GetCGrupo.Refresh
+This.Parent.GetDGrupo.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetCUsuario.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAAC.GetDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrA','crSigCdGrA','NComps',This.Value,'Grupos',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.mAddColuna('Grupos','XXXXXXXXXX','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('crSigCdGrA')
+		This.Parent.GetCGrupo.Value = Evaluate('crSigCdGrA.Grupos')
+		This.Parent.GetDGrupo.Value = Evaluate('crSigCdGrA.NComps')
+	Else
+		This.Parent.GetCGrupo.Value = ''
+		This.Parent.GetDGrupo.Value = ''
+	EndIf
+EndIf
+This.Parent.GetCGrupo.Refresh
+This.Parent.GetDGrupo.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetCUsuario.Value) And Empty(ThisForm.GetCGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAAC
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

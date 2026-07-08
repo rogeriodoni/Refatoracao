@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso. O `FormSigPrCar.prg` agora tem 779 linhas com todos os novos m├®todos adicionados.
+
+**Resumo do que foi adicionado na Fase 4:**
+
+- **`ConfigurarGrid()`** ÔÇö cria cursor_4c_Dados placeholder, o grid com 2 colunas (codigos/descrs), headers corretos, e os 2 BINDEVENTs de KeyPress
+- **`ConfigurarBotoes()`** ÔÇö cria shp_4c_Shape1 + 3 bot├Áes (cmd_4c_Inserir, cmd_4c_Excluir, cmd_4c_Sair) com ├¡cones, fontes e BINDEVENTs de Click
+- **`AjustarVisibilidadeBotoes()`** ÔÇö mostra/oculta Inserir+Excluir por modo; redimensiona Shape1 em CONSULTAR
+- **`CarregarDados()`** ÔÇö re-vincula grid ap├│s BO.Buscar() recriar o cursor, reconfigurar headers
+- **`CmdInserirClick()`** ÔÇö append blank row + cpros + SetFocus na coluna 1
+- **`CmdExcluirClick()`** ÔÇö SQL DELETE via BO.Excluir() + rebuild f├¡sico do cursor sem o registro (sem DELETE mark vis├¡vel)
+- **`CmdSairClick()`** ÔÇö SCAN salva novas rows (INSERT) e existentes (UPDATE) via BO.Salvar(); reabilita form pai
+- **`TxtCodigosKeyPress()`** ÔÇö ENTER/TAB/F4 ÔåÆ FormBuscaAuxiliar em SigCrRap por c├│digo, com filtro CGrus e checagem de duplicidade
+- **`TxtDescrsKeyPress()`** ÔÇö idem por descri├º├úo, condicionado a Column1 estar vazio
+- **`InicializarForm()`** e **`Destroy()`** atualizados para chamar os novos m├®todos

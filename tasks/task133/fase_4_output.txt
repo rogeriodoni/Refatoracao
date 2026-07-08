@@ -1,0 +1,6 @@
+﻿All RETURN statements are outside TRY/CATCH blocks. The files are clean. Both migrated files are now complete and correct:
+
+- **SigReJurBO.prg** (403 lines): All 8 `loException` ÔåÆ `loc_oErro` naming corrections applied. Zero anti-patterns remain.
+- **FormSigReJur.prg** (1072 lines): Unchanged ÔÇö was already clean from Phase 4.
+
+**Phase 5/8 complete.** Integration requires no changes to config.prg (dynamic loading via ADIR covers both `*BO.prg` and `Form*.prg` in operacionais/) and no menu.prg entry (FormSigReJur is a modal dialog opened programmatically from parent forms, not a standalone menu item). The automated pipeline phases (05b_corrigirAutomatico, 05c_validarCompilacao) will now process the files.

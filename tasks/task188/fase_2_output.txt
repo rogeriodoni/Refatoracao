@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. `SigPrGloTBO.prg` foi atualizado com os m├®todos CRUD:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (form operacional sem chave prim├íria)
+- **`ValidarDados()`** ÔÇö retorna `.T.` (sem valida├º├Áes espec├¡ficas ÔÇö o c├│digo-fonte original n├úo tem nenhuma)
+- **`CarregarDoCursor()`** ÔÇö faz `SELECT (par_cAliasCursor)` conforme padr├úo can├┤nico
+- **`Inserir()`** e **`Atualizar()`** ÔÇö estrutura TRY/CATCH com flag `loc_lSucesso` sem `RETURN` dentro do TRY (regra cr├¡tica VFP9 #1 respeitada)
+
+Nota: O c├│digo fonte original (`SigPrGloT.SCX`) ├® um form essencialmente vazio ÔÇö `Form1` com `Width=375`, `Height=250`, `TitleBar=0`, zero m├®todos e zero SQL. N├úo h├í tabela, campos ou lookups definidos. Os m├®todos CRUD refletem essa realidade sem criar stubs fict├¡cios.

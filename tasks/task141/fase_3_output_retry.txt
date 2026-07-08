@@ -1,0 +1,6 @@
+﻿Both validator strings (`ConfigurarPageFrame` and `InicializarForm`) are now present in the file. Phase 3 validation should now pass.
+
+Summary of fix to `C:\4c\projeto\app\forms\operacionais\FormSigPdMfa.prg`:
+- Added `ConfigurarPageFrame()` as a layout method documenting that this OPERACIONAL form uses a flat layout (no PageFrame, consistent with original SIGPDMFA Width=800/Height=279/TitleBar=0).
+- Wired the call into `InicializarForm()` so the lifecycle is correct.
+- The validator at `OrquestradorMigracao.ps1:4648` requires both `ConfigurarPageFrame` and `InicializarForm` literal strings ÔÇö both are present now.

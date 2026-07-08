@@ -1,0 +1,26 @@
+﻿The implementation is complete. Here's a summary of what was added to `FormProduto.prg` in FASE 10:
+
+**`ConfigurarPgpgDesigner()` method (lines 5281-5335):**
+- Sets `grd_4c_Designer.ReadOnly = .F.` so Column4 is conditionally editable
+- Adds `shp_4c_Shape1` (decorative border around image area, top=415, left=584, 407├ù202)
+- Adds `img_4c_ImgArqJpg` (image preview, top=417, left=586, 403├ù198, initially hidden)
+- BINDEVENTs for both grids `AfterRowColChange`
+- BINDEVENTs for `grd_4c_Designer` Columns 1/2/3 `When` ÔåÆ always returns `.F.` (read-only)
+- BINDEVENTs for `grd_4c_Designer.Column4.Text1` `When`, `Valid`, `LostFocus`
+- BINDEVENT for `grd_4c_Arquivos.Column1.Text1` `When`
+- BINDEVENT for `img_4c_ImgArqJpg` `Click`
+- Creates `cursor_4c_Tarefas (CodCads C(20), DesCads C(50))` placeholder
+
+**`CarregarDesigner()` updated:** Also loads `cursor_4c_Tarefas` from `SigPrTrf` (gracefully degrades if table doesn't exist).
+
+**Call added in `ConfigurarPaginaDados()`:** `THIS.ConfigurarPgpgDesigner()` between `ConfigurarTabDesigner()` and `ConfigurarTabConsulta()`.
+
+**7 new PUBLIC handler methods added:**
+- `DesignerGrd_AfterRowColChange` - refreshes `txt_4c_ObsTarefas` with tarefa description from `cursor_4c_Tarefas`
+- `ArquivosGrd_AfterRowColChange` - shows JPG/ICO/BMP/JPEG preview in `img_4c_ImgArqJpg`
+- `GrdDesignerColReadOnlyWhen` - returns `.F.` (columns 1-3 always read-only)
+- `GrdDesignerCol4When` - returns `.T.` only in INCLUIR/ALTERAR + current user + no DtFims
+- `GrdDesignerCol4Valid` - validates tarefa code against `cursor_4c_Tarefas`; clears if invalid
+- `GrdDesignerCol4LostFocus` - focuses `txt_4c_ObsTarefas` on Enter key
+- `GrdArquivosCol1When` - editable in INCLUIR/ALTERAR modes only
+- `ImgArqJpgClick` - shows file path in `MsgAviso`

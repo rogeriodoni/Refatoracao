@@ -1,0 +1,23 @@
+﻿Select TmpDisp
+Sum Utilizar to QtdUti
+
+If QtdUti > 0
+
+	Select TmpDisp
+	Scan
+		If Utilizar = 0
+			Loop
+		Endif
+		lnQtUtil = Utilizar
+
+		=Seek( TmpDisp.CPros + TmpDisp.CodCors + TmpDisp.CodTams, 'TmpSaldo' )
+
+		Select TmpFinalg
+		Replace Produzir With Produzir - lnQtUtil ,;
+				Estoque  With Estoque + lnQtUtil ,;
+				UsuLibs  With ' ' in TmpFinalg
+
+		Replace Produzir2 With Iif(QtdMins>0 And Produzir < QtdMins And Produzir > 0, QtdMins - Produzir,0 ) in TmpFinalG
+
+		Select TmpSaldo
+		Replace TmpSal... [TRUNCADO]

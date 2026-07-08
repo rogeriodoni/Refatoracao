@@ -1,0 +1,268 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoContas", "fDtoSQL", "fwBuscaExt", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRPPC",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "Private pIds\n\npIds = Replicate(Chr(254), 20)\n\nlcQryGTmpD = [Select * From SigTempC Where cIdQuerys = '] + pIds + [']\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t.poDataTmp = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0) Or (.poDataTmp.pnIdconn > 0)\n\t\tWith .poDataTmp\n\t\t\t.AddCursor('SigTempC', 'cIdQuerys', 'crSigTempC', '', , lcQryGTmpD)\n\t\tEndWith\n\n\t\t.get_cliente.Value      = Space(10)\n\t\t.get_cliente_desc.Value = Space(40)\n\t\t.get_operacao.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cliente,get_cliente_desc,get_operacao,get_dt_inicial,get_dt_final,get_empresa,get_empresa_desc",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPPC",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor dbOperacao (Emps c(3), Dopes c(20), Numes n(6), Datas T Null, Valos n(12,2))\nIndex On Emps + Dopes + Padl(Numes, 6) Tag EmpDopNum\n\nCreate Cursor dbItens (Emps c(3), Dopes c(20), Numes n(6), Cpros c(14), Dpros c(40), Qtds n(10,3))\nIndex On Emps + Dopes + Padl(Numes,6) Tag EmpDopNum\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nThisForm.poDataTmp.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_cliente",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, Thisform.get_grupo.Value, 'C', This.Value, This, ThisForm.get_cliente_desc)\n\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\tThis.Value = ''\n\tThis.Refresh\n\tThisform.get_cliente_desc.Value = ''\n\tThisform.get_cliente_desc.Refresh\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_cliente_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_cliente_desc",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, Thisform.get_grupo.Value, 'D', This.Value, ThisForm.get_cliente, ThisForm.get_cliente_desc)\n\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\tThis.Value = ''\n\tThis.Refresh\n\tThisform.get_cliente.Value = ''\n\tThisform.get_cliente.Refresh\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_cliente,get_cliente_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_cliente_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cliente.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cliente",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.grp_operacao",
+      "evento": "Click",
+      "linhas": 77,
+      "codigoOriginal": "Private pcConta, pcContaDesc, pcOperacao, pdInicial, pdFinal, pcEmpresa, pcEmpresaDesc\n\npcGrupo\t\t  = ThisForm.get_grupo.Value\npcConta       = ThisForm.get_cliente.Value\npcContaDesc   = ThisForm.get_cliente_desc.Value\npcOperacao    = ThisForm.get_operacao.Value\npdInicial     = ThisForm.get_dt_inicial.Value\npdFinal       = ThisForm.get_dt_final.Value\npcEmpresa     = ThisForm.get_empresa.Value\npcEmpresaDesc = ThisForm.get_empresa_desc.Value\n\nThisForm.poDataMgr.CursorQuery('SigCdGcr', 'crSigCdGcr', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_grupo,get_cliente,get_cliente_desc,get_operacao,get_dt_inicial,get_dt_final,get_empresa,get_empresa_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.grp_operacao",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_operacao",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Dopes',  '', 'Operação')\n\t\tloLista.mAddColuna('NDopes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Dopes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim **************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_empresa",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cemps', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cemps', '', 'Código')\n\t\tloLista.mAddColuna('Razas', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_empresa.Value      = crListaRemota.Cemps\n\tThisForm.get_empresa_desc.Value = crListaRemota.Razas\n\tUse In crListaRemota\nElse\n\tThisForm.get_empresa.Value  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa,get_empresa_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_empresa_desc",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Razas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Razas', '', 'Descrição')\n\t\tloLista.mAddColuna('Cemps', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_empresa.Value      = crListaRemota.Cemps\n\tThisForm.get_empresa_desc.Value = crListaRemota.Razas\n\tUse In crListaRemota\nElse\n\tThisForm.get_empresa.Value  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa,get_empresa_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.get_empresa_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_empresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.Get_grupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, ThisForm.get_Grupo, ThisForm.get_DGrupo)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.Get_DGrupo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'D', This.Value, ThisForm.get_Grupo, ThisForm.get_DGrupo)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPC.Get_DGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(Thisform.Get_grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grupo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRPPC.Init",
+      "queryOriginal": "lcQryGTmpD = [Select * From SigTempC Where cIdQuerys = '] + pIds + [']",
+      "tabelas": "SigTempC",
+      "colunas": "cIdQuerys,pIds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigTempC"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

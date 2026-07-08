@@ -1,0 +1,37 @@
+﻿The file is complete and properly terminated. Here's a summary of all changes made to `FormProduto.prg`:
+
+**Changes made:**
+
+1. **`NavegacaoDadosChange()`** (line 2199-2201): Added `IF loc_nPagina = 7: THIS.CarregarDesigner()` to trigger data loading when the user navigates to Page7 (Designer tab).
+
+2. **`ConfigurarPaginaDados()`** (line 2370-2371): Added `THIS.ConfigurarPgpgDesigner(loc_oPgfInner.Page7)` call after FaseP configuration.
+
+3. **`ConfigurarPgpgDesigner(par_oPage)`** (new PROTECTED method, lines 10844-11082):
+   - Creates `crSigPrTar` cursor (CPros, pkChaves, DtInis T, DtFims T, Usuars, Tarefas, ObsTars M) with `SET NULL ON`
+   - Creates `crSigPrArq` cursor (CPros, pkChaves, Arquivos)
+   - All 11 controls from pgDesigner with exact positions (+29 offset): label, grd_4c_Designer (4 cols), obj_4c_GetObsTarefas, cmd_4c_BtnIniTarefa, cmd_4c_BtnFimTarefa, shp_4c_Shape1, grd_4c_Arquivos (1 col), cmd_4c_BtnInsArqs, cmd_4c_BtnExcArqs, cmd_4c_BtnOpnArqs, img_4c_ImgArqJpg
+   - BINDEVENTs for all interactive elements
+
+4. **`CarregarDesigner()`** (new PUBLIC method): Loads SigPrTar and SigPrArq from SQL Server via SQLEXEC+ZAP+APPEND pattern; lazily loads crTarefas via `CarregarTarefas()`.
+
+5. **`CarregarTarefas()`** (new PUBLIC method): Loads task list from `SigCdCad WHERE TipoCads = 'TAREFAS'` into cursor `crTarefas`.
+
+6. **`DesignerAfterRowColChange(par_nColIndex)`** (new PUBLIC method): Refreshes the ObsTarefas editbox on row change and dynamically controls Column4 editability based on user/mode/DtFims.
+
+7. **`DesignerCol4KeyPress(par_nKeyCode, par_nShiftAltCtrl)`** (new PUBLIC method): F4 (115) opens the tarefa lookup.
+
+8. **`AbrirLookupDesignerTarefa()`** (new PROTECTED method): FormBuscaAuxiliar on crTarefas cursor.
+
+9. **`BtnIniTarefaClick()`** (new PUBLIC method): Validates no unfinished/uninformed task for current user, then inserts new row in crSigPrTar with current datetime and user.
+
+10. **`BtnFimTarefaClick()`** (new PUBLIC method): Validates task ownership and unfinished status, then replaces DtFims with current datetime.
+
+11. **`ArquivosAfterRowColChange(par_nColIndex)`** (new PUBLIC method): Shows image preview in img_4c_ImgArqJpg for JPG/BMP/ICO files.
+
+12. **`BtnInsArqsClick()`** (new PUBLIC method): GETFILE() dialog + INSERT INTO crSigPrArq.
+
+13. **`BtnOpnArqsClick()`** (new PUBLIC method): Shell.Application.Open() for selected file.
+
+14. **`BtnExcArqsClick()`** (new PUBLIC method): DELETE IN crSigPrArq + Skip.
+
+15. **`ImgArqJpgClick()`** (new PUBLIC method): DO FORM SigOpZom for image zoom.

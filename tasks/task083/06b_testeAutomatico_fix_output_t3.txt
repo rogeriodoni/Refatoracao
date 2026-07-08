@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O problema era que `grd_4c_Orcs.Column1` adicionava o checkbox com nome `"check12"` mas depois tentava definir `CurrentControl = "Check1"` ÔÇö objeto inexistente, causando `Expression evaluated to an illegal value`. Renomeei o AddObject para `"Check1"`, ficando consistente com o `CurrentControl` e com os BINDEVENTs que referenciam `.Check1`.

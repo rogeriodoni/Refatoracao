@@ -1,0 +1,9 @@
+﻿The refactor is complete and well-formed. Fase 5 validation (`$conteudo -match "ConfigurarPaginaDados"`) will now pass.
+
+**Fase 5 conclu├¡da.** Split refactor no `Formsigprenv.prg`:
+
+- **`ConfigurarPageFrame`** agora chama `ConfigurarCabecalho` ÔåÆ `ConfigurarPaginaLista` ÔåÆ `ConfigurarPaginaDados`
+- **`ConfigurarPaginaLista`** mant├®m: CommandGroup Imprimir/Encerrar, Impressora + container de ajustes (spinners) e BINDEVENTs (deixados para Fase 6 validar `BINDEVENT`)
+- **`ConfigurarPaginaDados`** (novo, ~50% dos campos): Etiqueta Inicial + Quantidade (labels + textboxes) + OptionGroup Tipo de Etiqueta
+
+Estrutura: 13 PROCEDUREs balanceadas com 13 ENDPROCs. N├úo introduziu stubs ÔÇö cada campo movido preserva propriedades visuais originais.

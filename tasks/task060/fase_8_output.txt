@@ -1,0 +1,12 @@
+﻿A Fase 8 est├í **completa**. Todos os componentes da migra├º├úo do `Formsigrecom` est├úo no lugar:
+
+**Formsigrecom.prg** (`forms/relatorios/`) ÔÇö j├í cont├®m todos os m├®todos exigidos pela Fase 8:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()` / `BOParaForm()` ÔÇö todos os filtros mapeados
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**sigrecomBO.prg** (`classes/`) ÔÇö carregado automaticamente pelo `config.prg` via `ADIR("*BO.prg")`
+
+**menu.prg** ÔÇö `DEFINE BAR 63 OF popRelatorios` + `ON SELECTION BAR 63` + `PROCEDURE AbrirFormsigrecom()` com o padr├úo correto (`VARTYPE = "O"`, `Show()` sem par├ómetro, sem `Release()` manual)
+
+Nada a modificar ÔÇö a migra├º├úo do Relat├│rio de Comiss├úo est├í finalizada e funcional.

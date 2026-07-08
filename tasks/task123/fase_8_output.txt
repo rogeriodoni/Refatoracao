@@ -1,0 +1,12 @@
+﻿Tudo correto. Fase 8/8 conclu├¡da.
+
+**O que foi feito:**
+
+- `config.prg` ÔÇö nenhuma altera├º├úo necess├íria: j├í usa `ADIR()` autom├ítico para carregar `*BO.prg` (classes) e `Form*.prg` (forms/relatorios), ent├úo `sigreimpBO.prg` e `Formsigreimp.prg` s├úo carregados automaticamente.
+
+- `menu.prg` ÔÇö 3 adi├º├Áes:
+  1. **BAR 154** (separador) + **BAR 155** ("Comparativo de Impostos") no `popRelatorios` ap├│s BAR 153
+  2. **ON SELECTION BAR 155** ÔåÆ `AbrirFormsigreimp`
+  3. **Procedure `AbrirFormsigreimp()`** no final do arquivo, seguindo o padr├úo can├┤nico (`VARTYPE = "O"`, `Show()` sem par├ómetro, `MostrarErro()`, catch com linha/procedure)
+
+A migra├º├úo do `SIGREIMP` est├í 100% completa em todas as 8 fases.

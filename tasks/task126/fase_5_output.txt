@@ -1,0 +1,17 @@
+﻿O `FormSigReInv.prg` j├í est├í **completamente implementado** desde as fases anteriores. Veja a situa├º├úo:
+
+**Por que a Fase 5 n├úo tem trabalho a fazer:**
+
+Este ├® um form do tipo **REPORT** (layout flat), n├úo CRUD. Isso significa:
+- **N├úo existe Page1/Page2** ÔÇö n├úo h├í PageFrame
+- Todos os controles (campos de filtro, checkboxes, option groups) j├í foram criados em `ConfigurarFiltros()` (linhas 270-829)
+- `ConfigurarPaginaDados()` nas linhas 1378-1380 j├í tem o stub correto (`RETURN`) ÔÇö para forms REPORT, FormBase pode chamar esse m├®todo mas ele n├úo deve fazer nada
+- O form j├í cont├®m 1445 linhas com implementa├º├úo completa:
+  - Todos os 14 controles de filtro (empresa, invent├írio, saldo, valor, moeda, ICMS, posi├º├úo, data)
+  - Todos os handlers: `ValidCdEmpresa`, `ValidMoeFator`, `ValidMoeda`, `ValidMoedaDesc`, `ValidSaldo1/2`, `ValidValor1-5`, `PosicaoInteractiveChange`, `IcmsInteractiveChange`
+  - Bot├Áes: Visualizar, Imprimir, Gera TXT, Encerrar
+  - `FormParaRelatorio()`, `ValidacaoEntrada()`, `LimparCampos()`
+
+**O stub `ConfigurarPaginaDados()` retornando vazio ├® a implementa├º├úo CORRETA** para um form REPORT ÔÇö n├úo h├í campos de edi├º├úo em Page2 porque n├úo existe Page2.
+
+A Fase 5 est├í conclu├¡da sem altera├º├Áes. O arquivo j├í estava completo desde a Fase 3/4.

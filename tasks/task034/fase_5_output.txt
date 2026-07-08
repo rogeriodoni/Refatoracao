@@ -1,0 +1,20 @@
+﻿Ambos os arquivos j├í est├úo completamente implementados. O `FormSigReAtm.prg` tem 2291 linhas e o `SigReAtmBO.prg` tem 957 linhas.
+
+Ao analisar o conte├║do do form, constato que **a Fase 5 e todas as subsequentes j├í foram executadas** em sess├Áes anteriores. O arquivo cont├®m:
+
+- `ConfigurarCabecalho()` ÔÇö container cinza com t├¡tulo Ô£ô
+- `ConfigurarBotoes()` ÔÇö CommandGroup cmg_4c_Botoes com 4 bot├Áes Ô£ô
+- `ConfigurarPageFrame()` ÔÇö PageFrame flat (1 p├ígina) Ô£ô
+- `ConfigurarPaginaLista()` ÔåÆ `ConfigurarFiltros()` ÔÇö **todos** os 60 controles do layout.json Ô£ô
+- `ConfigurarMensagem()` ÔÇö container "Aguarde" Ô£ô
+- `ConfigurarBINDEVENTs()` ÔÇö todos os eventos vinculados Ô£ô
+- `LimparCampos()`, `AjustarCamposDescricao()` Ô£ô
+- `FormParaRelatorio()`, `BOParaForm()` ÔÇö mapeamento completo Ô£ô
+- Todos os 22 handlers `TxtXxxKeyPress` Ô£ô
+- Todos os 8 m├®todos `AbrirBuscaXxx` (TpGOp, Grupo, Conta, Ggrp, CGru, CSGru, CodFinP, Acab, Class, Moeda) Ô£ô
+- `CntOpeApagaClick()`, `CntOpeSelTudoClick()` Ô£ô
+- `Destroy()` Ô£ô
+
+**Importante**: Para este form do tipo REPORT (layout flat), n├úo existe `ConfigurarPaginaDados()` ÔÇö o equivalente ├® `ConfigurarFiltros()`, que j├í est├í 100% implementado. O template de Fase 5/8 usa nomenclatura de forms CRUD que n├úo se aplica aqui.
+
+A migra├º├úo do `FormSigReAtm` est├í completa. As Fases 6, 7 e 8 (se existirem) tamb├®m j├í foram absorvidas na implementa├º├úo atual.

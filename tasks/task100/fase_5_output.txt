@@ -1,0 +1,25 @@
+﻿Analisei o arquivo completo. O `Formsigrefec.prg` j├í est├í totalmente implementado ÔÇö n├úo h├í nada a adicionar na Fase 5.
+
+**Situa├º├úo atual do arquivo (1116 linhas):**
+
+Todos os objetos do `mapeamento.json` j├í est├úo presentes em `ConfigurarCamposFiltro()` (linhas 312-596):
+- `txt_4c_Emps` + `txt_4c_DEmps` + `lbl_4c_Lbl_empresa` Ô£ô
+- `txt_4c_DtIni` + `txt_4c_DtFim` + labels de per├¡odo Ô£ô
+- `txt_4c_Usuars` + `lbl_4c_Label9` Ô£ô
+- `txt_4c_FPags` + `lbl_4c_Label2` Ô£ô
+- `chk_4c_ChkDetOpe`, `chk_4c_ChkVends`, `txt_4c_Vends` Ô£ô
+- `chk_4c_ChkVendRes`, `chk_4c_ChkResFpg`, `chk_4c_ChkOpePag`, `chk_4c_ChkAnaPag` Ô£ô
+- `lin_4c_Line1` + `lbl_4c_Label1` Ô£ô
+
+O `cnt_4c_Cabecalho` est├í em `ConfigurarCabecalho()` (linhas 93-135) Ô£ô
+
+**Por que a Fase 5 n├úo tem trabalho:** O pipeline multi-fase foi desenhado para forms CRUD (com Page1 Lista + Page2 Dados). Este ├® um form **REPORT de layout flat** ÔÇö todos os campos de filtro ficam em uma ├║nica p├ígina e foram implementados como `ConfigurarCamposFiltro()` em uma fase anterior.
+
+O form est├í completo com:
+- Todos os 20 controles mapeados Ô£ô
+- `FormParaRelatorio()` mapeando todos os filtros para o BO Ô£ô
+- `LimparCampos()` com valores padr├úo Ô£ô
+- Todos os handlers de valida├º├úo e lookup Ô£ô
+- Todos os bot├Áes (Visualizar/Imprimir/Excel/Encerrar) Ô£ô
+
+**A Fase 5 est├í completa** ÔÇö o arquivo j├í tem paridade 100% com o original. Pode prosseguir para a Fase 6/8.

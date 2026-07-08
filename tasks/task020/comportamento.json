@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGerUniqueKey", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGMDETQ",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMDETQ",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMDETQ",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.Addcursor('SigMvHst', 'CidChaves', 'CqSigMvHst', '', '')\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '')\n\t\tEndWith \n\t\t=DoDefault()\n\t\t\n\t\tThisForm.getBarras.Value = []\n\t\tThisForm.getCorAnt.Value = []\n\t\tThisForm.getTamAnt.Value = []\n\t\tThisForm.getCorNew.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.cntBotoes",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.cntBotoes",
+      "evento": "Click",
+      "linhas": 157,
+      "codigoOriginal": "Local lnCodBars, lcTamNew, lcTamOld, lcCorNew, lcCorOld, llOk\n\nlnCodBar = Thisform.getBarras.Value\nlcTamNew = Thisform.getTamNew.Value\nlcTamOld = Thisform.getTamAnt.Value\nlcCorNew = Thisform.getCorNew.Value\nlcCorOld = Thisform.getCorAnt.Value\nllOk = .T.\n_pData \t= Datetime()\n\nlnCodBar = Iif(Type([lnCodBar])=[C],Val(lnCodBar),lnCodBar)\n\nIf Empty(lnCodBar)\n\tMessagebox([Favor Informar o Código de Barras.],0+64,[Atenção])\n\tReturn .F.\nEndif\n\nIf Messagebox([Confirma a alteração dos Dados do Barra?],4+3... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getBarras",
+      "evento": "Valid",
+      "linhas": 63,
+      "codigoOriginal": "Local lnCodBars\nlnCodBars = This.Value\n\nIf !Empty(lnCodBars)\n\n\tlnCodBars = Iif(Type([lnCodBars])=[C],Val(lnCodBars),lnCodBars)\n\n\tlStrQuery = [Select a.CPros,a.CBars, b.cbars_old ] + ;\n\t\t[From SigOpEtq a ] + ;\n\t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ;\n\t\t[Where (a.CBars = ]+Alltrim(Str(lnCodBars,14))+[ or b.cbars_old = ]+Alltrim(Str(lnCodBars,14))+[) ]\n\tIf Thisform.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1\n\t\tMessagebox('Favor reinicializar o processo !!!',16,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getBarras",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "Thisform.getCorAnt.Value = []\nThisform.getTamAnt.Value = []\nThisform.getCorNew.Value = []\nThisform.getTamNew.Value = []\nThisform.getCorAnt.Refresh\nThisform.getTamAnt.Refresh\nThisform.getCorNew.Refresh\nThisform.getTamNew.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getCorAnt",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getTamAnt",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getCorNew",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCor', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = CrListaRemota.Cods\n\tElse\n\t\tThis.Value = []\n\tEndIf\n\tUse In CrListaRemota\nEndIf\nThis.Refresh\n* Fim *********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGMDETQ.getTamNew",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdTam', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = CrListaRemota.Cods\n\tElse\n\t\tThis.Value = []\n\tEndIf\n\t\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGMDETQ.getBarras.Valid",
+      "queryOriginal": "\tlStrQuery = [Select a.CPros,a.CBars, b.cbars_old ] + ; \t\t[From SigOpEtq a ] + ; \t\t[left join sigopeta b on a.cpros = b.cpros and a.cbars = b.cbars_new ] + ; \t\t[Where (a.CBars = ]+Alltrim(Str(lnCodBars,14))+[ or b.cbars_old = ]+Alltrim(Str(lnCodBars,14))+[) ] \tIf Thisform.poDataMgr.SqlExecute(lStrQuery,'CrEtiqs') < 1",
+      "tabelas": "sigopeta",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["sigopeta"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

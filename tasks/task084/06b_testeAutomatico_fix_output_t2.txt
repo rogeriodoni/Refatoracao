@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O timeout era causado pelo CATCH do OLE MSComm (`MSCommLib.MSComm`) em `ConfigurarPaginaDados()`: quando o controle n├úo est├í registrado na m├íquina, o CATCH disparava `MsgErro()` que exibe um di├ílogo modal bloqueando o VFP indefinidamente durante o teste automatizado.
+
+A corre├º├úo adiciona o guard `gb_4c_ValidandoUI` antes do `MsgErro` ÔÇö padr├úo j├í usado no resto do form. Em produ├º├úo o usu├írio continua vendo o aviso normalmente; durante o teste automatizado o erro ├® silenciado e o form segue sem o controle MSComm.

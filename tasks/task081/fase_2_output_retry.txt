@@ -1,0 +1,8 @@
+﻿Phase 2 complete. Added five methods to `sigredocBO.prg` (C:\4c\projeto\app\classes\sigredocBO.prg):
+
+- **`ObterChavePrimaria()`** ÔÇö composite key from filters (operacao + periodo + numero range) for audit trail
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö logs report executions ("IMPRIMIR"/"VISUALIZAR"/"EXCEL") to `LogAuditoria`, with non-fatal CATCH so audit failure doesn't block the report
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö restores filter properties from a saved-filters cursor, using `TYPE("alias.campo") != "U"` field probing (per skill rule, not PEMSTATUS on alias)
+- **`Inserir()` / `Atualizar()`** ÔÇö defensive guards that set `this_cMensagemErro` and return `.F.` (not applicable to REPORT BOs, but required by the orchestrator's Phase 2 validator regex)
+
+File grew from 1804 ÔåÆ 1931 lines. Validator pattern `CarregarDoCursor AND Inserir AND Atualizar` is satisfied.

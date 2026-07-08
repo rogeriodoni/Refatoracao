@@ -1,0 +1,9 @@
+﻿**Fase 6 conclu├¡da.** O `FormSigReAac.prg` j├í estava completamente implementado das fases anteriores ÔÇö todos os 4 campos (`CUsuario`, `DUsuario`, `CGrupo`, `DGrupo`) e todos os 4 lookups estavam presentes. O ├║nico gap real era a aus├¬ncia de guards de `ReadOnly` nas 4 fun├º├Áes `AbrirBuscaXxx()`.
+
+**O que foi adicionado nesta fase:**
+- Guard `IF ReadOnly ÔåÆ RETURN` em `AbrirBuscaCUsuario`, `AbrirBuscaDUsuario`, `AbrirBuscaCGrupo` e `AbrirBuscaDGrupo` ÔÇö sem isso, BINDEVENT DblClick/KeyPress ainda dispara lookup em campos desabilitados pela regra de exclus├úo m├║tua (ex: CGrupo preenchido deixa CUsuario ReadOnly, mas DblClick nele ainda abriria o FormBuscaAuxiliar).
+
+**Estado atual (task025):**
+- `SigReAacBO.prg` ÔÇö completo (PrepararDados com SQL complexo do legado, Imprimir/Visualizar/ExportarExcel/RegistrarAuditoria)
+- `FormSigReAac.prg` ÔÇö completo (todos os filtros, lookups com auto-select fiel ao fwBuscaExt, exclus├úo m├║tua, bot├Áes do relat├│rio)
+- `menu.prg` ÔÇö j├í integrado com `AbrirFormSigReAac`

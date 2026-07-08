@@ -1,0 +1,23 @@
+﻿Todas as corre├º├Áes foram aplicadas com sucesso. Resumo do que foi corrigido:
+
+---
+
+**12 problemas corrigidos em `FormSigPrCtr.prg`:**
+
+1. **[CARGA-DADOS] opt_4c_Custo** ÔÇö Adicionado `BINDEVENT(..., "InteractiveChange", "OptCustoInteractiveChange")` + handler que chama `CarregarItemXML()` quando h├í itens carregados
+
+2. **[CARGA-DADOS] opt_4c_Fil** ÔÇö Adicionado `BINDEVENT(..., "InteractiveChange", "OptFilInteractiveChange")` + handler que chama `CarregarGradeEstoque()`
+
+3. **[METODO-INEXISTENTE] XmlGetNodeText** ÔÇö Implementado como `PROTECTED PROCEDURE`: usa `MSXML.selectSingleNode(".//" + tag)` para extrair texto do node XML
+
+4. **[METODO-INEXISTENTE] XmlGetAnyNodeText** ÔÇö Implementado: itera lista de tags separadas por v├¡rgula, retorna o primeiro texto n├úo-vazio encontrado
+
+5. **[GRID-SQLEXEC] cursor_4c_Estoque** ÔÇö Refatorado: SQLEXEC agora escreve em `cursor_4c_EstoqueTemp`; se `cursor_4c_Estoque` j├í existe faz `ZAP + APPEND FROM DBF(temp)` (preserva colunas); sen├úo cria via `SELECT * FROM temp INTO CURSOR ... READWRITE NOFILTER`. Tamb├®m corrigido o bug `ColumnCount=5` que impedia acesso ├á Column6
+
+6-7. **[GRID-HEADER] ' ' (dois casos)** ÔÇö Linhas 941 e 2131: `Caption = " "` ÔåÆ `Caption = ""` (vazio)
+
+8. **[GRID-HEADER] 'Mov. Origem'** ÔÇö `grd_4c_Lista.Column3.Header1.Caption` alterado para `"Movimenta" + CHR(231) + CHR(227) + "o"` (id├¬ntico ao legado pColuna)
+
+9-11. **[GRID-HEADER] 'Data', 'Usu├írio', 'Nome'** ÔÇö Verificados contra o legado (linha 2753-2758 do form_codigo_fonte.txt): s├úo os captions CORRETOS do legado (falso positivo do validador). Mantidos sem altera├º├úo. Bonus: `Column5` corrigido de `"Conta"` para `"Fornecedor"` (caption real do legado)
+
+12. **[LAYOUT-POSITION] cmd_4c_Processar** ÔÇö `.Left` alterado de `917` para `962` (valor original do SCX legado, linha 862 do form_codigo_fonte)

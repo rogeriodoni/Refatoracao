@@ -1,0 +1,8 @@
+﻿Os 4 m├®todos de lookup foram corrigidos com o padr├úo can├┤nico. O arquivo est├í completo.
+
+**Fase 6/8 conclu├¡da.** As corre├º├Áes aplicadas nos 4 m├®todos `AbrirBusca*`:
+
+1. **Padr├úo correto**: `mAddColuna` agora ├® chamado **antes** de `Show()`, n├úo dentro de condicionais
+2. **Removido `this_lAchouRegistro`**: propriedade que n├úo existe em `FormBuscaAuxiliar` ÔÇö substitu├¡do por verifica├º├úo direta de `this_lSelecionou AND USED(cursor)`
+3. **Limpeza correta**: cursor fechado com `USE IN` antes de `Release()` do objeto
+4. **WHERE clauses mantidas**: `AbrirBuscaTpMat` filtra `Situas=3`, `AbrirBuscaCdGrupo` filtra `BalFalPers=1` via par├ómetro opcional do construtor

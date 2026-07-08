@@ -1,0 +1,19 @@
+﻿Encontrei os tr├¬s locais. Agora vou analisar cada um antes de qualquer altera├º├úo.
+
+**CEMPS** ÔÇö SigReEchBO.prg linha 198: `WHERE cemps = EscaparSQL(par_cEmps)` dentro de `CarregarEmpresa`. O c├│digo original fazia `Select Cemps,Cidas From SigCdEmp` sem WHERE, depois `=Seek( _Empr, 'CrSigCdEmp','Cemps' )`. A condi├º├úo WHERE ├® a tradu├º├úo SQL correta do SEEK ÔÇö sem ela a fun├º├úo retornaria a primeira empresa do banco em vez da empresa atual. **N├úo ├® condi├º├úo inventada.**
+
+**CONTROLCOUNT** ÔÇö FormSigReEch.prg linhas 496 e 509: `par_oContainer.ControlCount` e `loc_oControl.ControlCount` s├úo **propriedades de objeto VFP**, n├úo colunas SQL. Ocorrem dentro de `FOR ... TO` e `IF PEMSTATUS(...)` ÔÇö nenhum SQL envolvido. **Falso positivo do validador.**
+
+**ICLIS** ÔÇö FormSigReEch.prg linhas 1145 e 1158: `WHERE Iclis = EscaparSQL(cursor_4c_Mvs.Contems/Contas)` s├úo lookups em `SigCdCli` pela chave prim├íria `Iclis` para obter o nome (`Rclis`) do fornecedor e do cliente. No c├│digo legado essas buscas eram feitas via `SEEK` em cursor VFP local de SigCdCli. A condi├º├úo `WHERE Iclis =` ├® a tradu├º├úo SQL Server correta desses SEEKs ÔÇö remov├¬-la impossibilitaria identificar o cliente/fornecedor correto. **N├úo ├® condi├º├úo inventada.**
+
+---
+
+**Resultado da verifica├º├úo:** os 3 itens s├úo falsos positivos:
+
+| Item | Tipo | Conclus├úo |
+|------|------|-----------|
+| `CEMPS` | Tradu├º├úo correta de `SEEK` por `cemps` | Manter ÔÇö funcional e necess├írio |
+| `CONTROLCOUNT` | Propriedade VFP (`ControlCount`), n├úo coluna SQL | Falso positivo ÔÇö nenhuma a├º├úo |
+| `ICLIS` | Tradu├º├úo correta de `SEEK` em SigCdCli por `iclis` | Manter ÔÇö funcional e necess├írio |
+
+Nenhuma altera├º├úo de c├│digo ├® necess├íria. Remover qualquer uma dessas condi├º├Áes quebraria a funcionalidade: `CarregarEmpresa` retornaria dados da empresa errada, e os lookups de fornecedor/cliente em `SigCdCli` deixariam de funcionar.

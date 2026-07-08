@@ -1,0 +1,24 @@
+﻿O arquivo est├í correto. Resumo do que foi implementado na Fase 2:
+
+**M├®todos adicionados ao `sigrehbrBO.prg`:**
+
+| M├®todo | Acesso | Equivalente original |
+|--------|--------|----------------------|
+| `PrepararDados()` | PUBLIC | `processamento` |
+| `BuscarNomeEmpresa()` | PROTECTED | `crSigCdEmp` do Init |
+| `ProcessarHistoricosDuracao(par_llIImg)` | PROTECTED | SCAN Check3=1 |
+| `ProcessarImagensSimples()` | PROTECTED | SCAN Check3=0+imagem |
+| `PrepararCursorBranco()` | PROTECTED | crBranco + BrJpg.JPG |
+| `CopiarImagemBranca(par_cArquivo)` | PROTECTED | Copy Memo... |
+| `LimparArquivosImagem()` | PROTECTED | `Delete File &lcArq.` |
+| `Visualizar()` | PUBLIC | `visualizacao` |
+| `Imprimir()` | PUBLIC | `impressao` |
+
+**Pontos cr├¡ticos respeitados:**
+- Nenhum `RETURN` dentro de TRY/CATCH (usa `loc_lSucesso` como flag)
+- `EMPTY()` correto (n├úo `IsEmpty()`)
+- CHR() para todos os acentos no SQL header
+- `REPLACE ... IN TmpEti` dentro do SCAN para corrigir registros sem sair do contexto de itera├º├úo
+- Filtros PADR() para `Grupos` (10 chars) e `SGrus` (6 chars), igual ao legado
+- Imagens: decodifica├º├úo base64 via `STRCONV(..., 14)` + extra├º├úo das prefixos data-URI
+- `ProcessarHistoricosDuracao` retorna LOGICAL para propagar erros de SQLEXEC

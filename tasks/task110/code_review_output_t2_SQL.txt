@@ -1,0 +1,20 @@
+﻿O schema confirma as colunas reais de ambas as tabelas:
+- **SigCdGcr**: coluna `[codigos]` ├® a **PRIMARY KEY** (char 10) e `[descrs]` ├® a descri├º├úo
+- **sigcdemp**: coluna `[cemps]` ├® a **PRIMARY KEY** (char 3) e `[razas]` ├® o nome da empresa
+
+Ambas as condi├º├Áes WHERE flagadas s├úo **falsos positivos** do validador autom├ítico.
+
+**An├ílise:**
+
+| Issue | C├│digo | Tabela | Coluna | Status |
+|-------|--------|--------|--------|--------|
+| SQL-FILTRO-INVENTADO CODIGOS | Form linha 1905 | SigCdGcr | `codigos` = PK real | Ô£à Correto |
+| SQL-FILTRO-INVENTADO CEMPS | Form linha 2235 | sigcdemp | `cemps` = PK real | Ô£à Correto |
+
+**Por qu├¬ s├úo falsos positivos:**
+
+O validador compara todas as colunas WHERE do arquivo migrado contra a lista de colunas do WHERE da query **principal do relat├│rio** (`DATAS, EMPOS, CONTAS, ...`). Mas essas duas ocorr├¬ncias s├úo **queries separadas de valida├º├úo de UI** (m├®todos `ValidarCdGrEstoque` e `ValidarCdEmpresa`), que consultam tabelas de lookup (SigCdGcr e sigcdemp) com suas pr├│prias chaves prim├írias ÔÇö n├úo a query de TmpEti.
+
+O BO (`sigrehbrBO.prg`) n├úo cont├®m nem `CODIGOS` nem `CEMPS` no WHERE principal ÔÇö ambos aparecem apenas nos m├®todos de valida├º├úo do Form, com os nomes de coluna corretos confirmados pelo schema.
+
+**Nenhuma altera├º├úo necess├íria.** Remover essas condi├º├Áes quebraria a valida├º├úo dos campos de filtro (Grupo de Estoque e Empresa), violando a regra "NAO remover campos, funcionalidades ou lookups".

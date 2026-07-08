@@ -1,0 +1,10 @@
+﻿Tudo correto. As 3 inser├º├Áes est├úo no lugar certo.
+
+**Resumo da Fase 4:**
+
+O arquivo `FormSigReIpr.prg` j├í estava completo das fases anteriores ÔÇö tanto `ConfigurarPaginaLista()` (linha 278, com todos os filtros: campos de sele├º├úo, 5 CheckBoxes, OptionGroups de ordem e dire├º├úo) quanto `AlternarPagina()` (linha 660) estavam implementados com l├│gica real.
+
+O que a Fase 4 efetivamente adicionou foi a **integra├º├úo no menu.prg**:
+- `DEFINE BAR 164` (separador) e `DEFINE BAR 165` ("Rela├º├úo de Mailing") em `popRelatorios`
+- `ON SELECTION BAR 165 OF popRelatorios DO AbrirFormSigReIpr`
+- `PROCEDURE AbrirFormSigReIpr()` com o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, `MostrarErro`, sem `Release`)

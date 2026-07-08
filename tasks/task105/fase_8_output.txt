@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Os 8 m├®todos foram adicionados ao `FormSIGREFXV.prg` antes do `ENDDEFINE`:
+
+| M├®todo | Comportamento no contexto REPORT |
+|--------|----------------------------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnSalvarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` + `SetFocus` no campo Moeda |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | No-op (fluxo unidirecional formÔåÆBO em REPORT) |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os campos de filtro; `DataSaldo` s├│ ativa quando per├¡odo=Retroativa |
+| `CarregarLista()` | Retorna `.T.` (sem grid CRUD) |
+| `AjustarBotoesPorModo()` | No-op (sem modos CRUD) |
+
+O arquivo est├í completo e funcional com todas as 8 fases implementadas.

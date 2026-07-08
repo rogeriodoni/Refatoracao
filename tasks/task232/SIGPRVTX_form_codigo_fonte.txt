@@ -1,0 +1,849 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRVTX.SCX
+* Data/Hora: 03/07/2026 18:17:58
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRVTX
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRVTX
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRVTX.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRVTX.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRVTX
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grupo_Botao
+  Parent: SIGPRVTX
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: GetPlanilha
+  Parent: SIGPRVTX
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdgetp
+  Parent: SIGPRVTX
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say4
+  Parent: SIGPRVTX
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGPRVTX
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRVTX.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRVTX.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRVTX.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRVTX.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRVTX.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRVTX.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRVTX.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRVTX.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdProcessar
+  Parent: SIGPRVTX
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdLimpar
+  Parent: SIGPRVTX
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 577
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (Prompt())
+  ControlBox = .F.
+  MaxButton = .F.
+  TitleBar = 0
+  BindControls = .T.
+  planilha = .F.
+  podatamgr = .F.
+  sigkey = .F.
+  Name = "SIGPRVTX"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Shape1
+------------------------------------------------------------
+  Top = 21
+  Left = 30
+  Height = 110
+  Width = 586
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grupo_Botao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = ""
+  Height = 85
+  Left = 643
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 7
+  BorderColor = 136,189,188
+  Name = "Grupo_Botao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.GetPlanilha
+------------------------------------------------------------
+  ControlSource = ""
+  Enabled = .F.
+  Height = 23
+  Left = 133
+  MaxLength = 40
+  ReadOnly = .T.
+  TabIndex = 2
+  Top = 101
+  Width = 336
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "GetPlanilha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cmdgetp
+------------------------------------------------------------
+  Top = 86
+  Left = 471
+  Height = 44
+  Width = 65
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_pasta_26.jpg
+  Caption = ""
+  TabIndex = 3
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdgetp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Planilha:"
+  Height = 15
+  Left = 133
+  Top = 84
+  Width = 49
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 435
+  Left = 30
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 133
+  Width = 725
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 400
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 70
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 150
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "SKU ID"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome SKU"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "SKU Ativo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Referencia SKU"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cmdProcessar
+------------------------------------------------------------
+  Top = 3
+  Left = 573
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  TabIndex = 6
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRVTX.cmdLimpar
+------------------------------------------------------------
+  Top = 3
+  Left = 498
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Caption = "\<Limpar"
+  TabIndex = 5
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdLimpar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRVTX
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE limpagrade
+------------------------------------------------------------
+PROCEDURE limpagrade
+lnOldSele = Select()
+
+ThisForm.Grade.RecordSource = []
+
+Select csGrade
+Zap in csGrade
+
+ThisForm.Grade.Refresh 
+
+ThisForm.GetPlanilha.Value = []
+ThisForm.GetPlanilha.Refresh
+
+Select(lnOldSele)
+Return .T.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+lnOldSele = Select()
+
+ThisForm.Grade.RecordSource = []
+
+Select csGrade
+Go top
+ThisForm.Grade.RecordSource = [csGrade]
+ThisForm.Grade.Column1.ControlSource = [csGrade.skuid]
+ThisForm.Grade.Column2.ControlSource = [csGrade.nomesku]
+ThisForm.Grade.Column3.ControlSource = [csGrade.skuativo]
+ThisForm.Grade.Column4.ControlSource = [csGrade.refsku]
+ThisForm.Grade.Refresh 
+
+Select(lnOldSele)
+Return .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcArquivo, lnErro1, llImp, llRecno
+
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lcArquivo = ThisForm.GetPlanilha.Value 
+
+If Empty(lcArquivo)
+	MessageBox([Planilha não Informada.],0+64,[Atenção])
+	Return .F.
+EndIf 
+
+If Used([Planilha])
+	use in Planilha
+EndIf 
+
+Select csGrade
+Zap in csGrade
+
+llRecno = .T.
+If Not ImpExcelDriver(lcArquivo)
+	llRecno = .F.
+EndIf 
+
+If Not llRecno 
+	MessageBox([Não Foi Possível Criar o Cursor Temporário.]+Chr(13)+[Verifique Se a Planilha Não Esta Em Uso Por Outro Processo.],16,'')
+	Return .f.
+EndIf 
+
+Select xlResults
+Select * from xlResults Into Cursor Planilha ReadWrite 
+
+Select Planilha
+Go Top
+Scan
+	
+	Scatter memvar 
+	
+	lcskuid    = Str(Iif(InList(Type([Planilha.skuid]),'C','M'),Val(Nvl(Planilha.skuid,[])),Iif(Type([Planilha.skuid])=[N],Nvl(Planilha.skuid,0),0)),10)
+	lcnomesku  = Iif(InList(Type([Planilha.nomesku]),'C','M'),Nvl(Planilha.nomesku,[]),[])
+	lcskuativo = Iif(InList(Type([Planilha.skuativo]),'C','M'),Nvl(Planilha.skuativo,[]),[])
+	lcrefsku   = Iif(InList(Type([Planilha.refsku]),'C','M'),Nvl(Planilha.refsku,[]),[])
+	
+	If Seek(lcskuid,[csGrade],[skuid])
+		Select Planilha
+		loop
+	EndIf 
+		
+	Select csGrade
+	Append Blank 
+	
+	Replace skuid 	 With lcskuid ,;
+			nomesku  With lcnomesku ,;
+			refsku   With lcrefsku ,;
+			skuativo With lcskuativo in csGrade
+
+	Select Planilha
+EndScan 
+
+ThisForm.Montagrade()
+
+ThisForm.GetPlanilha.Value = ''
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	If (.poDataMgr.pnIdconn > 0)
+		.poDataMgr.AddCursor('SigPrVtx','cIdChaves','crSigPrVtx')
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf	
+EndWith 
+
+ThisForm.poDataMgr.SqlExecute([Select * From SigCdPac],[crSigCdPac])
+ThisForm.SigKey = CrSigCdPac.SigKeys
+
+ThisForm.MontaGrade()
+
+
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 27
+	thisform.grupo_Botao.cmdsair.Click
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor csGrade (nomesku c(100),refsku c(40),skuativo c(3),skuid c(10))
+
+Select csGrade
+index on skuid tag skuid
+Go Top 
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Thisform.podatamgr.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRVTX.Grupo_Botao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdok.Click
+------------------------------------------------------------
+PROCEDURE cmdok.Click
+Local lnOldSel
+lnOldSel = Select()
+
+Select csGrade
+Go Top
+
+If Reccount([csGrade])=0
+	Messagebox([Nenhum Registro para Atualização.],0+64,[Atenção])
+	Return .F.
+Endif
+
+lnResp=Messagebox([Deseja Atualizar as informações.],4+32,[Atenção])
+If lnResp<>6
+	Return .F.
+Endif
+
+Select crSigPrVtx
+Zap in crSigPrVtx
+
+lcDelete = [Delete From SigPrVtx]
+If Thisform.poDataMgr.SqlExecute(lcDelete) < 1
+	MessageBox([Favor reiniciar o Processo.],0+16,[Falha na conexão (Delete - 1)])
+	Return .F.
+EndIf 
+
+ThisForm.poDataMgr.Commit()
+
+Select csGrade
+Go Top
+Scan
+	Scatter memvar 
+	m.cidchaves = fUniqueIds()
+	
+	Select crSigPrVtx
+	Append Blank 
+	
+	Gather Memvar
+Endscan
+
+llOk = .t.
+
+If Not Thisform.poDataMgr.Update('crSigPrVtx')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPrVtx)')
+	llOks = .F.
+Endif
+
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+
+ThisForm.LimpaGrade()
+
+Select(lnOldSel)
+Return .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdsair.Click
+------------------------------------------------------------
+PROCEDURE cmdsair.Click
+thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRVTX.GetPlanilha
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRVTX.cmdgetp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.GetPlanilha.Value = GetFile('xls','Planilha','Importar')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRVTX.cmdProcessar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=ThisForm.Processamento()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRVTX.cmdLimpar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=ThisForm.LimpaGrade()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRVTX
+RESERVED3 (ClassInfo): planilha
+podatamgr
+sigkey
+*limpagrade 
+*montagrade 
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

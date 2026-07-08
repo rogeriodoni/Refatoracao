@@ -1,0 +1,15 @@
+﻿An├ílise completa. Ambas as detec├º├Áes s├úo **falsos positivos**:
+
+**CEMPS** (linha 1261 do BO):
+- A query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` existe desde o `.bak` (vers├úo mais antiga)
+- `cemps` ├® a PK v├ílida de `SigCdEmp` ÔÇö confirmado no schema (linha 3021: `[cemps] [char](3) NOT NULL`)
+- ├ë uma consulta de lookup para obter o nome da empresa para o cabe├ºalho do relat├│rio, n├úo um filtro inventado nos dados principais
+
+**CONTROLCOUNT** (linhas 1083/1089/1097 do Form):
+- Aparece apenas como propriedade VFP9 de container: `par_oContainer.ControlCount` e `PEMSTATUS(loc_oControl, "ControlCount", 5)`
+- **N├úo ├® coluna SQL** ÔÇö ├® a propriedade nativa `.ControlCount` de containers VFP9
+- O scanner de review interpretou erroneamente a string `"ControlCount"` dentro de `PEMSTATUS()` como refer├¬ncia a coluna SQL
+
+**Nenhuma altera├º├úo necess├íria.** Os dois arquivos est├úo corretos:
+- `FormSigPrFem.prg`: `ControlCount` ├® c├│digo VFP9 leg├¡timo para itera├º├úo de controles
+- `SigPrFemBO.prg`: `WHERE Cemps = ...` ├® lookup v├ílido por PK em tabela existente no schema

@@ -1,0 +1,18 @@
+﻿Arquivo finalizado corretamente com 950 linhas. Fase 8/8 conclu├¡da.
+
+Os m├®todos adicionados ao `FormSigReFtp.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnBuscarClick()` | stub (form recebe par├ómetros ÔÇö sem busca livre) |
+| `BtnSalvarClick()` | stub (form REPORT ÔÇö sem persist├¬ncia) |
+| `BtnCancelarClick()` | `THIS.Release()` |
+| `FormParaBO()` | delega para `FormParaRelatorio()` |
+| `BOParaForm()` | atualiza `txt_4c_Cpro`/`txt_4c_Dpro` com valores do BO |
+| `HabilitarCampos()` | stub (controles s├úo somente-leitura ÔÇö N/A) |
+| `LimparCampos()` | reseta `opt_4c_TpRel = 1` + desmarca todos os processos |
+| `CarregarLista()` | `GO TOP` no cursor + `Refresh()` no grid |
+| `AjustarBotoesPorModo()` | stub (sem modos CRUD ÔÇö N/A) |
+
+**Nota:** O `FormSigReFtp` ├® aberto via `CREATEOBJECT("FormSigReFtp", pcProd, pdProd)` pelo form chamador (com par├ómetros de produto), n├úo pelo menu principal ÔÇö portanto n├úo foi adicionado ao `popRelatorios`. O `config.prg` carrega o arquivo automaticamente via ADIR() da pasta `relatorios\`.

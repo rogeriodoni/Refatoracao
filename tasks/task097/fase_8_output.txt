@@ -1,0 +1,10 @@
+﻿Tudo correto. Resumo do que foi feito na Fase 8/8:
+
+**`Formsigrefc2.prg`** ÔÇö j├í estava completo nas fases anteriores com todos os m├®todos necess├írios para um formul├írio RELATORIO (`FormParaRelatorio`, `LimparCampos`, `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`, `Destroy`, lookups de empresa). Adicionei apenas a guarda `gb_4c_ValidandoUI` antes de criar o BO, evitando o erro "Connection handle is invalid" durante `ValidarUIFidelity`.
+
+**`menu.prg`** ÔÇö Adicionadas 3 partes:
+1. `DEFINE BAR 116/117 OF popRelatorios` ÔÇö separator + item "Fechamento de Caixa"
+2. `ON SELECTION BAR 117 OF popRelatorios DO AbrirFormsigrefc2`
+3. Procedure `AbrirFormsigrefc2()` no final do arquivo
+
+O relat├│rio est├í integrado e pronto para uso. Config.prg carrega `Formsigrefc2.prg` e `sigrefc2BO.prg` automaticamente via ADIR().

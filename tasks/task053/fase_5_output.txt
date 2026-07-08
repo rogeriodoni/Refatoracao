@@ -1,0 +1,18 @@
+﻿O FormSigReCmg.prg j├í est├í **completamente implementado** das fases anteriores. Esta ├® a situa├º├úo:
+
+**Por que a Fase 5 n├úo se aplica a este form:**
+
+1. **Form OPERACIONAL** ÔÇö n├úo tem estrutura Page1/Page2 (CRUD). Os containers ficam diretamente no form.
+2. **`analise.json` ÔåÆ `"campos": []`** ÔÇö lista de campos vazia, confirmando que n├úo h├í TextBoxes/Labels de dados a adicionar.
+3. **Todos os controles j├í implementados** no FormSigReCmg.prg (1141 linhas):
+   - `cnt_4c_Sombra` (cabe├ºalho) Ô£ô
+   - `cnt_4c_Grf1` + OLE Ô£ô
+   - `cnt_4c_Grf2` + combo + label Ô£ô
+   - `cnt_4c_Aguarde` Ô£ô
+   - `obj_4c_CmdGgrafico` (4 bot├Áes) Ô£ô
+   - `chk_4c_ChkGraficos`, `txt_4c_NumGraficos`, label Ô£ô
+4. **Todos os m├®todos implementados**: `GerarGrafico`, `ConfigurarOleGrafico`, `BtnAnteriorClick`, `BtnProximoClick`, `BtnImprimirClick`, `BtnEncerrarClick`, `Destroy`, `TornarControlesVisiveis` Ô£ô
+
+O pipeline multi-fase foi desenhado para forms CRUD com Page2/Dados. Neste form operacional de gr├ífico OLE, as fases 3 e 4 j├í cobriram 100% do form ÔÇö a Fase 5 (ConfigurarPaginaDados) simplesmente n├úo tem conte├║do a adicionar.
+
+**Pr├│ximo passo sugerido:** Avan├ºar para a Fase 6/8 (integra├º├úo: config.prg + menu.prg). Confirma?

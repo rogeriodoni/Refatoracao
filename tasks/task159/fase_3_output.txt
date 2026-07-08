@@ -1,0 +1,14 @@
+﻿Phase 3 is complete. Two bugs were fixed in `Formsigprccp.prg` (now 2230 lines):
+
+**Fix 1 ÔÇö `RETURN .F.` inside TRY block (line 52):** Violated rule #1. Restructured to use `ELSE` branch so no early return occurs inside the TRY.
+
+**Fix 2 ÔÇö Missing `TornarControlesVisiveis()` method:** Called on line 65 but never defined. Added the method (lines 1527ÔÇô1538) that iterates all top-level form controls and sets `Visible = .T.`, explicitly skipping `img_4c_FigJpg` which is intentionally hidden until a product with a photo is selected.
+
+Other items reviewed and confirmed clean:
+- `fChecaAcesso` and `fAcessoContas` both exist in `utils/functions.prg`
+- `MsgAviso` is a valid function
+- `DO FORM SigPrCcr` and `DO FORM SigOpZom` ÔÇö acceptable legacy-form call pattern used throughout the codebase
+- `LostFocus` on `ValidarFornecedor` ÔÇö safe because it doesn't open `FormBuscaAuxiliar`
+- Icon-only buttons (`cmd_4c_SelTudo`, `cmd_4c_Desmarcar`) ÔÇö `Themes=.T.`, have Picture, not disabled at init
+- Canonical `cnt_4c_Saida` dimensions: Left=917, Width=90, `cmd_4c_Encerrar` 75├ù75 Ô£ô
+- No literal accented characters, no `ISEMPTY()`, no `PUBLIC PROCEDURE` inside class Ô£ô

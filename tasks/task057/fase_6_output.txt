@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 6/8 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `FormSIGRECND.prg`:**
+
+1. **BINDEVENTs em `ConfigurarPaginaLista()`** ÔÇö 6 campos (Grupo, DGrupo, Conta, DConta, Moeda, DMoeda) vinculados ao KeyPress para F4/ENTER/TAB.
+
+2. **BINDEVENTs em `ConfigurarBotoes()`** ÔÇö 4 bot├Áes (Visualizar, Imprimir, Excel, Encerrar) vinculados ao Click.
+
+3. **`LimparCampos()`** ÔÇö chama `AtualizarEstadoConta()` para definir estado inicial correto (DConta come├ºa desabilitado pois Grupo est├í vazio).
+
+4. **Handlers de bot├úo** ÔÇö `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnEncerrarClick` com valida├º├úo dos 3 filtros obrigat├│rios (data, grupo, moeda) e chamada ao BO.
+
+5. **6 KeyPress handlers** (PUBLIC) ÔÇö `GrupoKeyPress`, `DGrupoKeyPress`, `ContaKeyPress`, `DContaKeyPress`, `MoedaKeyPress`, `DMoedaKeyPress`.
+
+6. **6 Validadores** ÔÇö verificam valor digitado contra a tabela (SigCdGcr/SigCdCli/SigCdMoe), preenchem o par c├│digo/descri├º├úo ou abrem lookup se n├úo encontrado. Todos sem RETURN dentro de TRY/CATCH.
+
+7. **3 AbrirLookup methods** ÔÇö `AbrirLookupGrupo` (SigCdGcr), `AbrirLookupConta` (SigCdCli), `AbrirLookupMoeda` (SigCdMoe) com FormBuscaAuxiliar completo.
+
+8. **`AtualizarEstadoConta()`** ÔÇö replica as condi├º├Áes `When` do legado: DGrupo habilitado somente quando Grupo vazio; DConta habilitado somente quando Grupo preenchido e Conta vazia.

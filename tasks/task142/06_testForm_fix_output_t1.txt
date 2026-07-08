@@ -1,0 +1,9 @@
+﻿The fix looks correct. The changes are limited to `SigPdMp1BO.prg` only ÔÇö the form file didn't need changes.
+
+**Root cause**: `InicializarDistrib()` called `SELECT xNensi` (line 81 in old code) **before** creating `cursor_4c_Distrib`. When the test runs `CREATEOBJECT("FormSigPdMp1")` without a parent form, the private datasession (DataSession=2) has no `xNensi`. This threw "Alias 'XNENSI' is not found", which the CATCH caught and passed to `MsgErro()`, which showed a blocking `MESSAGEBOX()` dialog ÔÇö causing the 300s timeout.
+
+**Fix applied** (BO only, no logic changes):
+
+1. **`InicializarDistrib()`**: `CREATE CURSOR cursor_4c_Distrib` now runs unconditionally first. The entire xNensi-dependent block (RECNO save, SCAN/INSERT loop, totalizador) is wrapped in `IF USED("xNensi") ... ENDIF`. Without xNensi the cursor is created empty and the method returns `.T.` ÔÇö no error, no dialog.
+
+2. **`InicializarResumo()`**: The `SELECT FROM xNensi` is guarded by `IF USED("xNensi")`. The ELSE branch creates an empty `cursor_4c_Resumo` with matching structure so the grid's RecordSource binding works in both cases.

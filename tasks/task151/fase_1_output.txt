@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\classes\SigPdMpfBO.prg` criado com sucesso.
+
+**Fase 1/8 conclu├¡da.** O arquivo cont├®m:
+
+- **8 propriedades** mapeadas do formul├írio original:
+  - `this_dDtInicial` / `this_dDtFinal` ÔÇö per├¡odo de consulta (datas)
+  - `this_cNmOperacao` ÔÇö c├│digo da opera├º├úo (dopps, char 20)
+  - `this_cGrupo` / `this_cDGrupo` ÔÇö grupo e descri├º├úo (SigCdGcr.codigos/descrs, char 10/40)
+  - `this_cConta` / `this_cDConta` ÔÇö conta e descri├º├úo (SigCdCli.IClis/RClis, char 10)
+  - `this_nOptConta` ÔÇö filtro Origem/Destino/Todos (default=3 conforme `OptConta.Value=3` no legado)
+
+- **Init()** configura `this_cTabela = "SigCdNec"` e `this_cCampoChave = "cidchaves"` (PK confirmada no schema), depois chama `DODEFAULT()`.
+
+- Nenhum m├®todo de dados (CarregarDoCursor, Inserir, Atualizar) ÔÇö reservados para Fase 2.

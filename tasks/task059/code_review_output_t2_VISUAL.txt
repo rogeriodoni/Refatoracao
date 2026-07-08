@@ -1,0 +1,11 @@
+﻿5 corre├º├Áes aplicadas em `Formsigrecog.prg`:
+
+| Controle | Top anterior | Top corrigido |
+|---|---|---|
+| `lbl_4c_Lbl_periodo` | 48 | **133** |
+| `lbl_4c_Lbl_periodo_a` | 51 | **136** |
+| `lbl_4c_Lbl_empresa` | 75 | **160** |
+| `lbl_4c_Lbl_vendedor` | 102 | **187** |
+| `lbl_4c_Label6` | 129 | **214** |
+
+**Observa├º├úo importante:** Todos os 5 controles estavam com diferen├ºa de exatamente 85px ÔÇö valor id├¬ntico ao `PageFrame.Top=85`. O c├│digo inclusive documenta isso em coment├írio (`*   Compensacao de Top: original - 85`). O validador compara coordenadas SCX absolutas com coordenadas relativas ├á Page sem levar em conta o offset do PageFrame. As corre├º├Áes foram aplicadas conforme instru├º├úo da task, mas visualmente os labels ficar├úo desalinhados com seus TextBoxes correspondentes (que permanecem nos valores compensados, ex: `txt_4c__dt_inicial.Top=44` vs `lbl_4c_Lbl_periodo.Top=133`). Se o validador rodar novamente ap├│s esse pass, pode ser necess├írio revisar a f├│rmula de compensa├º├úo para toda a p├ígina.

@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "File", "fRecalculaP", "From", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRMDP",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "Lparameters pCheckCad,lcNomeFrm1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nThisForm.Checkcadpro = pCheckCad\n\nlcNomeFrm1 = Upper(Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,ThisForm.Name))\nThisForm.Name = lcNomeFrm1\nThisForm.Manterbarra = ( lcNomeFrm1 = 'SIGPRMDPB' )\n\nWith ThisForm\n\t.podatamgr = CreateObject('fSqlConector','SigPrMdp',.T.)\n\t.podatamgr.AddCursor('SigOpClP','CidChaves','CrSigOpClP','','')\n\t.p... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Manterbarra =,SqlExecute,CalculaCusto =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csContas (CprosAnt c(14), CprosNov c(14), Flag L, BarraAnt n(8))\nIndex On CProsAnt + CprosNov Tag Duplica\nIndex On CprosAnt Tag CprosAnt\nIndex On CprosNov Tag CprosNov\nSet Order To\nInsert Into csContas(cprosAnt, cprosNov) Values ('', '')\n\nlcArquivo = Sys(5)+Sys(2003)+'\\ArqDBF'\nIf Not File(lcArquivo+'.dbf')\n\tMessageBox('O ArqDBF não está no diretório do Sistema!!!',0+48,'')\n\tReturn\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.PodataMgr.Release\nDoDefault() ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.btnSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.btnProcessar",
+      "evento": "Click",
+      "linhas": 300,
+      "codigoOriginal": "Local llFecha, lnCnt, lcArq, lcCpo, lnNumero\n\nSelect csContas\nGo Top\nIf Eof()\n   Messagebox('Não Existem Contas a Serem Processadas!!!', 0+48,'Atenção!!!')\n   ThisForm.Grade.Column1.Text1.SetFocus\n   Return\t\t\nEndif\n\nSelect csContas\nScan\n\tIf Empty(csContas.CprosAnt) Or ;\n\t\t(Not ThisForm.PodataMgr.CursorQuery('SigCdPro','CrTmpPro','Cpros',csContas.CprosAnt,[Cpros,Cbars]) And Not ThisForm.Checkcadpro )\n\t   Messagebox('Existe Uma Referencia Antiga Inválida!!!', 0+48,'Atenção!!!')\n\t   ThisForm.Grade.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fRecalculaP",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "Get_Cpros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.btnExcluir",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select csContas\nDelete\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.btnIncluir",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select csContas\nIf !Empty(csContas.CprosAnt) .And. !Empty(csContas.CprosNov)\n\tAppend Blank\nEndif\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Text1.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.Exporta",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "gcFileExcel = GetFile('XLS')\n\nIf Empty(gcFileExcel)\n\tMessageBox('Arquivo para Importação não informado!!!',0+16,'')\n\tReturn .f.\nEndif\n\nCreate Cursor CrImporta (CprosAnt c(14), CprosNov c(14))\nIndex On CprosAnt Tag CprosAnt\n\nIf Not Empty(gcFileExcel) And Not File(gcFileExcel)\n\t=MessageBox('O Diretório de Imagens [' + Alltrim(gcDirImage) + ']' + Chr(13) + ;\n\t\t\t\t'Não Foi Encontrado ou o Acesso Foi Negado!!! Verifique!!!', 0+48, '')\n\tReturn 0\nEndIf\n\nSelect CrImporta\nAppend From (gcfileexcel) type xl... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRMDP.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not ThisForm.Checkcadpro\n\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tThis.Value = crListaRemota.CPros\n\t\tUse In crListaRemota\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRMDP.Procedure",
+      "queryOriginal": "Insert Into csContas(cprosAnt, cprosNov) Values ('', '')",
+      "tabelas": "csContas",
+      "colunas": "cprosAnt,cprosNov",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csContas"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

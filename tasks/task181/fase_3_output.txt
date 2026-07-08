@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Resumo do que foi criado:
+
+**`C:/4c/projeto/app/forms/operacionais/FormSigPrEtq.prg`** ÔÇö Fase 3/8 conclu├¡da.
+
+Estrutura implementada:
+- **DEFINE CLASS FormSigPrEtq AS FormBase** com propriedades do original (Width=833, Height=700, TitleBar=0, ControlBox=.F., DataSession=2)
+- **Init()** ÔÇö cria `SigPrEtqBO` antes de `DODEFAULT()` (que dispara `InicializarForm` via FormBase)
+- **InicializarForm()** ÔÇö cria o cursor local `dbImpressao` com a estrutura exata do legado (19 campos, ├¡ndices Cpros/Registros, APPEND BLANK inicial), configura o cabe├ºalho e torna controles vis├¡veis
+- **ConfigurarCabecalho()** ÔÇö container `cnt_4c_Cabecalho` (840├ù80, cinza) com `lbl_4c_Sombra` (preto, sombra) e `lbl_4c_Titulo` (branco), mapeando o `cntSombra` original
+- **TornarControlesVisiveis()** ÔÇö recursivo, trata PageFrame.Pages
+- **Destroy()** ÔÇö zera BO e fecha cursor `dbImpressao` antes de `DODEFAULT()`
+
+As Fases 4ÔÇô8 adicionar├úo (via Read+Edit) o grid `grd_4c_Dados`, os TextBoxes de par├ómetros, OptionGroups, container de impressora, CommandGroup BTNREPORT e todos os handlers de evento.

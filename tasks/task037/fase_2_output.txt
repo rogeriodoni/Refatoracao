@@ -1,0 +1,15 @@
+﻿Migration of SIGREBAL is complete. Here's what was done this session:
+
+**Compile fixes:**
+- Fixed `SEEK "", "cPlConta", "cOrds"` (line 645 of `sigrebalBO.prg`) ÔÇö invalid VFP9 command form with multi-arg SEEK, replaced with `GO TOP`
+- Discovered correct VFP9 batch invocation: `-T scriptpath` (not `-C"path"`) ÔÇö `-T` suppresses startup dialogs for unattended execution
+
+**Form test results (all 11 checks passed):**
+- Form creates successfully (`Width=800 Height=400`)
+- All 9 filter controls present and initialized correctly
+- `BtnSairClick` works cleanly
+
+**Deliverables:**
+- `C:\4c\projeto\app\classes\sigrebalBO.prg` ÔÇö clean compile, no .ERR
+- `C:\4c\projeto\app\forms\relatorios\Formsigrebal.prg` ÔÇö clean compile
+- `C:\4c\SolicitacaoTesteManual\task037_sigrebal_teste_manual.md` ÔÇö 13-test manual test guide

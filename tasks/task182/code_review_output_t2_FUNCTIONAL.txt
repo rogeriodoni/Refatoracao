@@ -1,0 +1,26 @@
+﻿Todas as 5 corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**[GRID-WITH] ÔÇö 5 blocos corrigidos em `AtualizarGrades` (linhas 1149ÔÇô1228):**
+
+Para cada um dos 5 containers de detalhe, o padr├úo problem├ítico era:
+```foxpro
+WITH loc_oRes.cnt_4c_DetalheN
+    .grd_4c_Dados.ColumnCount  = 3       ÔåÉ dentro do WITH pai
+    .grd_4c_Dados.RecordSource = "Cursor" ÔåÉ dentro do WITH pai
+    WITH .grd_4c_Dados
+        .Column1.ControlSource = ...      ÔåÉ VFP9 "Unknown member COLUMN1"
+    ENDWITH
+ENDWITH
+```
+
+Corrigido para:
+```foxpro
+loc_oRes.cnt_4c_DetalheN.Visible = .T.
+loc_oRes.cnt_4c_DetalheN.grd_4c_Dados.ColumnCount  = 3    ÔåÉ fora de qualquer WITH
+loc_oRes.cnt_4c_DetalheN.grd_4c_Dados.RecordSource = "Cursor"
+WITH loc_oRes.cnt_4c_DetalheN.grd_4c_Dados
+    .Column1.ControlSource = ...          ÔåÉ colunas j├í existem
+ENDWITH
+```
+
+**[CONTAINER-VISIVEL]** e **[LAYOUT-POSITION]**: j├í estavam corretamente implementados no c├│digo atual ÔÇö `TornarControlesVisiveis` (linhas 1088-1094) j├í filtra os containers com INLIST + recurs├úo antes do LOOP, e as posi├º├Áes Left/Top j├í batem com os originais.

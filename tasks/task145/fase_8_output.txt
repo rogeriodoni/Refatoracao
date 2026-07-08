@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPdMp4.prg` agora tem 1480 linhas com todos os m├®todos da consolida├º├úo final implementados:
+
+- **`CarregarLista()`** ÔÇö delega para `CarregarGrade()` j├í existente
+- **`BtnBuscarClick()`** ÔÇö reinicializa `TmpDistrib` a partir de `xNensi` e recarrega o grid
+- **`BtnEncerrarClick()`** ÔÇö restaura ordem em `xNensi`, reabilita form pai e fecha o dialog
+- **`BtnSalvarClick()`** ÔÇö alias de `BtnOkClick()` (aplica desagrega├º├úo)
+- **`BtnCancelarClick()`** ÔÇö chama `LimparCampos()` + `BtnEncerrarClick()` (fecha sem salvar)
+- **`FormParaBO()`** ÔÇö passa `this_cAliasFonte = "xNensi"` e `this_cEscolha` para o BO
+- **`BOParaForm()`** ÔÇö atualiza grid e campos do rodap├® (Cor, Tam, Descr) a partir de `TmpDistrib`
+- **`HabilitarCampos()`** ÔÇö stub documentado: controle de editabilidade j├í ├® feito por `GradeAfterRowColChange` por registro
+- **`LimparCampos()`** ÔÇö zera `Marca`, `Qtd2s`, `Peso2s`, `Pesof2s` em todos os registros e limpa rodap├®
+- **`AjustarBotoesPorModo()`** ÔÇö stub documentado: form OPERACIONAL sem sistema de modos CRUD

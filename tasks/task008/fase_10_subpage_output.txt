@@ -1,0 +1,22 @@
+﻿The file structure is complete. Here's a summary of everything added:
+
+**Edit 1** ÔÇö `ConfigurarPaginaDados` (line 2283): added `THIS.ConfigurarPgpgCusto(loc_oPgfInner.Page6)`
+
+**Edit 2** ÔÇö `ConfigurarEventos` (lines 1373ÔÇô1379): 4 BINDEVENTs for pgCusto's `grd_4c_GrdCustoCompo`, `cbo_4c_CmbTipos`, and both `cmdg_4c_CustoCompo` buttons
+
+**Edit 3** ÔÇö `ConfigurarPgpgCusto` (lines 6327ÔÇô6325): full `PROTECTED PROCEDURE` with:
+- Two cursor placeholders (`cursor_4c_CustoCompo` 14 fields, `cursor_4c_GrupoCompo2` 3 fields) created before grids
+- `lbl_4c_LblTipo` + `cbo_4c_CmbTipos` (top=183, RowSourceType=1)
+- `grd_4c_GrdCustoCompo` ÔÇö 12 columns (Item/Mats, Descri├º├úo/DPros, Un/Unisp, Valor/Vals, Qtde./Qtds, Total/Totals, Moe/Moedas, Obs/Obss, E/Es, Consumo/Conss, Qtde./Qtdss, Un/Unis) with Col3/Col6/Col12 ReadOnly
+- `cmdg_4c_CustoCompo` ÔÇö 2 buttons (+/-)
+- `lbl_4c_LblDescCus` + `txt_4c_DescCus` (ReadOnly)
+- `lbl_4c_LblGrupoCus` + `txt_4c_DGruCompos` (ReadOnly)
+- `lbl_4c_LblResumoGrp` + `shp_4c_ShapeCusto`
+- `grd_4c_GrupoCompo2` ÔÇö 3 columns (Grp/CGrus, Total/Totals, Moe/Moedas), ReadOnly
+
+**Edit 4** ÔÇö Handler methods (lines 7126ÔÇô7318):
+- `CarregarCusto()` ÔÇö loads `cursor_4c_CustoCompo` from SigPrCpo (filtered by cmbTipos type if selected) and `cursor_4c_GrupoCompo2` from grouped aggregate
+- `GrdCustoCompoAfterRowColChange` ÔÇö updates `txt_4c_DescCus` + queries SigCdGrp for `txt_4c_DGruCompos`
+- `CboTiposCustoInteractiveChange` ÔÇö calls `CarregarCusto()`
+- `CustoCompoIncluirClick` ÔÇö INSERTs into SigPrCpo with current Tipos value
+- `CustoCompoExcluirClick` ÔÇö DELETEs from SigPrCpo after MsgConfirma

@@ -1,0 +1,7 @@
+﻿Phase 8 is complete. Here's a summary of the fixes applied:
+
+1. **Property name mismatch fixed**: `this_cDescEmp` -> `this_cDescEmpresa` in `FormParaBO()` and `BOParaForm()` (lines 1439, 1458). The BO declares `this_cDescEmpresa`, so using `this_cDescEmp` would cause "Property not found" at runtime.
+
+2. **Empty CATCH blocks fixed**: Two empty CATCH blocks in `CarregarLogoEmpresa()` (line 847) and `AlertaPafReducaoZ()` (line 1088) now properly log errors via `MsgErro()`, per CLAUDE.md rule #9.
+
+The `Formsigtosen.prg` file (1557 lines) is complete with all required methods: `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`, `BtnSaidaClick()`, and all event handlers. All BO property and method references are verified correct.

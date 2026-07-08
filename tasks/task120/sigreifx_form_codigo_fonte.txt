@@ -1,0 +1,2611 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreifx.SCX
+* Data/Hora: 06/06/2026 08:14:11
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIFX
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkObs
+  Parent: SIGREIFX
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkImagem
+  Parent: SIGREIFX
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFX
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 130
+  Width = 845
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Documento"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  chkimpdoc = .F.
+  chkimpdocacess = .F.
+  pchkimpdoc = .F.
+  podatamgr2 = .F.
+  Name = "SIGREIFX"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = -1
+  cntSombra.Left = 0
+  cntSombra.Width = 848
+  cntSombra.Height = 80
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 578
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFX.chkObs
+------------------------------------------------------------
+  Top = 89
+  Left = 36
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Imprimir Observação de Moedas/Cotações"
+  Value = .T.
+  SpecialEffect = 1
+  Name = "chkObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFX.chkImagem
+------------------------------------------------------------
+  Top = 105
+  Left = 36
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Imprimir Imagem"
+  Value = .T.
+  SpecialEffect = 1
+  Visible = .F.
+  Name = "chkImagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIFX
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregasgrus
+------------------------------------------------------------
+PROCEDURE carregasgrus
+Lparameters pPro
+
+lcQuery = [Select b.Descricaos ] + ;
+			[From SigCdPro a, SigCdPsg b ] + ;
+		   [Where a.Cpros = '] + pPro + [' And ] + ;
+		   		 [a.CGrus = b.CGrus And ] + ;
+		   		 [a.SGrus = b.Codigos]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSgru]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalSgru)])
+	Return .f.
+EndIf
+Go Top In LocalSgru
+If Not Eof([LocalSgru])
+	Replace DescSgrus With LocalSgru.Descricaos In crDados
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail2
+------------------------------------------------------------
+PROCEDURE memail2
+Lparameters pArq
+
+Declare Integer Sleep In Win32API Integer nMilliseconds
+
+lPrintPDFCreator = .t.
+lcDefaultPrinter = SET( "PRINTER", 2 )
+
+If thisform.Registry1.IsKey([PDFCreator.clsPDFCreator])
+	thisform.oPdf = CreateObject("PDFCreator.clsPDFCreator", "PDFCreator_")
+
+	If thisform.oPdf.cErrorDetail("Number") <> 0
+		lPrintPDFCreator = .F.
+		MessageBox( "Problemas para gerar o obj PDFCretor" +Chr(13) +;
+					"ErrorNr: " + Str( thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+					"Descr: " 	+ thisform.oPdf.cErrorDetail("Description"), 48, "Atenção" )
+	Else
+		Wait Window Chr(13) + [Aguarde... Gerando o Arquivo PDF] + Chr(13) Nowait NoClear				
+		
+		With thisform.oPdf
+			.cClearCache()
+			.cErrorClear()
+
+			llPDFStart = .cStart("/NoProcessingAtStartup")
+			If llPDFStart = .F.
+				lPrintPDFCreator = .F.
+
+				MessageBox( "Problemas no START do PDFCreator" +Chr(13) +;
+							"ErrorNr: " + Str( thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+							"Descr: " 	+ thisform.oPdf.cErrorDetail("Description"), 48, "Atenção" )
+			Else
+				.cOption("UpdateInterval")		 = 0
+				.cOption("DisableUpdateCheck")   = 1														
+				.cOption("UseAutosaveDirectory") = 1
+				.cOption("UseAutosave") 		 = 1
+				.cOption("UseStandardAuthor") 	 = 1
+				.cOption("StandardAuthor") 		 = "Fortyus"
+				.cOption("StandardTitle") 		 = ""
+				.cOption("AutosaveFormat") 	  	 = 0	&& 0=PDF, 1=PNG, 2=JPG, 3=BMP, 4=PCX, 5=TIFF, 6=PS, 7= EPS, 8=ASCII
+				.cOption("AutosaveDirectory") 	 = AddBS(JustPath(thisform.pcArqEmail))
+				.cOption("AutosaveFilename")  	 = JustFname(thisform.pcArqEmail)
+				.cDefaultPrinter = "PDFCreator"
+				.cPrinterStop 	 = .F.
+			EndIf
+		EndWith
+
+		If llPDFStart = .T.	
+			For lnPDFCount = 1 To 200
+				If thisform.oPdf.cDefaultPrinter = "PDFCreator"
+					Exit
+				EndIf
+				Sleep(500)	&& Sleep IN WIN32API
+			Next lnPDFCount
+
+			If thisform.oPdf.cDefaultPrinter # "PDFCreator"
+				lPrintPDFCreator = .F.
+				MessageBox( "Problemas para criar a Default-Printer" +Chr(13) +;
+							"ErrorNr: " + Str( thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+							"Descr: " 	+ thisform.oPdf.cErrorDetail("Description"), 48, "Atenção" )
+			EndIf
+		EndIf
+	EndIf
+
+	If lPrintPDFCreator = .T. And llPDFStart = .T.
+		Report form &pArq. To Printer NoConsole		
+
+		Sleep(500)		&& Milliseconds
+
+		lnMaxSleep  = 0
+		nReadyState = 0		&& Esta var é usada dentro do -> PDF_Event()	&& C:\FrameWork\ReportPreview\PDF_Event.prg 
+		Do While nReadyState = 0 AND lnMaxSleep <= 10					 
+			Sleep( 1000 )		&& Milliseconds
+			lnMaxSleep = lnMaxSleep +1
+		EndDo
+	EndIf
+
+	thisform.oPdf.cDefaultPrinter = lcDefaultPrinter 
+	Set Printer to Name (lcDefaultPrinter)
+
+	CLEAR DLLS "Sleep"
+
+	lnErrorNr = thisform.oPdf.cErrorDetail("Number")
+	lnErrorNr = Iif( Type( "lnErrorNr" )=="N", lnErrorNr, Val( TransForm( lnErrorNr ) ) )
+	If lnErrorNr # 0
+			lPrintPDFCreator = .F.
+			MessageBox( "Problemas para gerar o ARQ " + Chr(13) + thisform.pcArqEmail + Chr(13) +;
+						"ErrorNr: " + Str( lnErrorNr, 3 ) +Chr(13) +;
+						"Descr: " 	+ thisform.oPdf.cErrorDetail("Description"), 48, "Atenção" )
+	EndIf
+
+	thisform.oPdf.cClearCache()
+	thisform.oPdf.cClose()
+	thisform.oPdf = Null
+	Wait Clear
+Else
+	If thisform.Registry1.IsKey([PDFCreatorBeta.JobQueue])
+		oPrint = CreateObject('PDFCreatorBeta.PdfCreatorobj')
+		If oprint.IsInstanceRunning
+			lPrintPDFCreator = .F.
+			MessageBox( [PDFCreator já está sendo executado.] +Chr(13) +;
+						[Feche e tente novamente.], 48, "Atenção" )								
+		Else
+			oPrint = oPrint.GetPDFCreatorPrinters()
+			lcPDFPrinter = oPrint.GetPrinterByIndex(0) && Pega o nome da impressora PDFCreator
+			
+			Set Printer to name (lcPDFPrinter)
+			
+			Release oPrint								
+
+			thisform.oPdf = CreateObject('PDFCreatorBeta.JobQueue')
+			
+			Wait Window Chr(13) + [Aguarde... Gerando o Arquivo PDF] + Chr(13) Nowait NoClear				
+
+			thisform.oPdf.Initialize
+
+			Report form &pArq. To Printer NoConsole		
+
+			if !thisform.oPdf.WaitForJob(5)
+			Else
+				job = thisform.oPdf.NextJob()
+				job.SetProfileSetting('OpenViewer','false') && é o responsável para escolher se o documento será aberto ou não após gravação automática.
+				job.SetProfileSetting('AuthorTemplate','Fortyus') && Autor que gerou o PDF
+				job.SetProfileSetting('TitleTemplate','') && Título do PDF
+				job.ConvertTo(thisform.pcArqEmail)
+
+				For lnPDFCount = 1 To 200
+					If job.IsFinished
+						Exit
+					EndIf
+					Sleep(500)	&& Sleep IN WIN32API
+				Next lnPDFCount
+
+				If !job.IsFinished Or !job.IsSuccessful	
+					lPrintPDFCreator = .F.
+			    Endif
+			Endif
+
+			thisform.oPdf.ReleaseCom()
+			Set Printer to Name (lcDefaultPrinter)
+			CLEAR DLLS "Sleep"
+			thisform.oPdf = Null
+			Wait Clear																			
+		Endif
+	Endif
+EndIf
+
+If Type([Thisform.oEMAIL]) = [O]
+	If !File(Thisform.pcArqEmail)
+*!*									MessageBox([Problemas na geração do arquivo ] + Thisform.pcArqEmail + [!], 48, [Atenção])
+		Return .f.
+	EndIf						
+	** Anexar o Arquivo no Email. Enviar o Email
+	Wait Window Chr(13)+ [Aguarde... gerando EMAIL com o Arquivo] + Chr(13) + Thisform.oEMAIL.cAnexo + Chr(13) Nowait NoClear
+
+						** As Propriedades do objeto oEMAIL, foram acrescentadas no form SigPrPdf
+	If Thisform.mEmail( 	Thisform.oEMAIL.cFrom, ;
+							Thisform.oEMAIL.cTo, ;
+							Thisform.oEMAIL.cCC, ;
+							Thisform.oEMAIL.cAssunto, ;
+							Thisform.oEMAIL.cCorpo, ;
+							Thisform.oEMAIL.cAnexo, ;
+							Thisform.oEMAIL.cSmtpServer, ;
+							Thisform.oEMAIL.nSmtpServerPort, ;
+							Thisform.oEMAIL.cSendUserName, ;
+							Thisform.oEMAIL.cSendPassWord 	)
+		Wait Clear
+		MessageBox([Email enviado com sucesso.], 64, [Envio de Email])
+		Thisform.oEMAIL = Null
+	EndIf 						
+Else 
+	If File(Thisform.pcArqEmail)
+		MessageBox([Arquivo ] + Thisform.pcArqEmail + [ gerado com sucesso!],64,[Aviso])
+	Else
+*!*									MessageBox([Problemas na geração do arquivo ] + Thisform.pcArqEmail + [!], 48, [Atenção])
+		MessageBox([Relatório não está preparado para gerar o arquivo ] + Thisform.pcArqEmail + [!], 48, [Atenção])
+	EndIf
+EndIf
+
+*!*	Local lcArq1,lcArq2,lcStrArqMail
+
+*!*	#define FileNameOption_JPegLevelLow 3                  && Low JPeg compression 
+*!*	#define FileNameOption_JPegLevelMedium 7               && Medium JPeg compression 
+*!*	#define FileNameOption_JPegLevelHigh 9                 && High JPeg compression 
+*!*	#define FileNameOption_NoPrompte 1                     && 0x01
+*!*	#define FileNameOption_UseFileName 2                   && 0x02
+*!*	#define FileNameOption_Embed_Fonts 16                  && 0x10
+*!*	#define FileNameOption_Multilingual_Support 128        && 0x80
+*!*	#define FileNameOption_Full_Embed 512                  && 0x200
+*!*	#define FileNameOption_Embed_Standard_Fonts 2097152    && 0x200000
+*!*	#define FileNameOption_Embed_Simulated_Fonts  16777216 && 0x1000000 
+*!*	#define FileNameOption_AutoCompression -2147483648     && activate automatic image compression 
+
+*!*	Select CrDados
+*!*	Go Top
+*!*	If Type('ThisForm.oPDF')='O'
+*!*		m.lcArq1 = (Addbs(Sys(2023))+'RepSis.Pdf')
+*!*		m.lcArq2 = ''
+
+*!*		With ThisForm.oPDF
+*!*			.PDFDriverInit("PDF Compatible Printer Driver")
+
+*!*			If Not Empty(ThisForm.pcPdfLic) And Not Empty(ThisForm.pcPdfCode)
+*!*				.EnablePrinter(ThisForm.pcPdfLic,ThisForm.pcPdfCode)
+*!*			EndIf 
+
+*!*			.DefaultFilename = m.lcArq1
+*!*			.FileNameOptions = FileNameOption_NoPrompte + ;
+*!*								FileNameOption_UseFileName + ;
+*!*								FileNameOption_Embed_Fonts  + ;
+*!*								FileNameOption_Multilingual_Support
+*!*			.PageContentCompression = .t.
+*!*			.JPEGCompression = .t.
+*!*			.JPegLevel = FileNameOption_JPegLevelMedium
+*!*			.Resolution = 300
+*!*			.PaperSize = 9
+*!*			.SetDefaultConfig()
+*!*		EndWith 
+*!*		Set Printer To Name "PDF Compatible Printer Driver"
+
+*!*		Do Case
+*!*			Case (LocalOpe.Docus = 3) && Fixo Horizontal
+*!*			If Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4
+*!*				Report Form SigReIf2 To Printer NoConsole
+*!*			ELSE
+*!*				Report Form SigReIfx To Printer NoConsole
+*!*			ENDIF
+
+*!*			Case (LocalOpe.Docus = 6) && Fixo Vertical
+*!*				If (LocalDcOpe.dckpeso = 1)
+*!*					* Com Peso
+*!*					Report Form SigRevf2 To Printer NoConsole
+*!*				Else
+*!*					Report Form SigRevfx To Printer NoConsole
+*!*				EndIf
+
+*!*			Case (LocalOpe.Docus = 7) && Nota de Débito
+*!*				Report Form SigRevf3 To Printer NoConsole
+
+*!*			Case (LocalOpe.Docus = 8) && Locação
+*!*				lcSep = Set([Separator])
+*!*				lcPnt = Set([Point])
+*!*				Set Separator To [,]
+*!*				Set Point To [.]
+*!*			
+*!*				Report Form SigRevf4 To Printer NoConsole
+
+*!*				Set Separator To (lcSep)
+*!*				Set Point To (lcPnt)
+
+*!*			Otherwise 				  && Fixo c/ Imagem
+*!*				Report Form SigReIfi To Printer NoConsole
+*!*		EndCase
+
+*!*		If (LocalDCOpe.dckTermos = 1) And Not (LocalOpe.Docus = 7)
+*!*			m.lcArq2 =(Addbs(Sys(2023))+'RepSis1.Pdf')
+*!*			ThisForm.oPDF.DefaultFilename = m.lcArq2
+
+*!*			Select crCabecalho
+*!*			Go Top
+*!*			Report Form SigReIft To Printer NoConsole
+*!*		EndIf
+*!*		
+*!*		Set Printer To Default
+*!*		m.lcStrArqMail = (m.lcArq1+Chr(13)+m.lcArq2)
+*!*	EndIf
+*!*	* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selecionadados
+------------------------------------------------------------
+PROCEDURE selecionadados
+Local lcEdn, loCnx
+
+lcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)
+loCnx = ThisForm.poDataMgr
+
+* Campos Usados Do SigOpCdd
+* DckLogos	 = Logotipo
+* DckAcess	 = Imprime Despesas Acessórias = 1-Sim; 2-Não
+* DocAcess	 = Descritivo do Label de Despesas Acessórias
+* ChkImpDp   = Imprime a Descricao Das Parcelas
+* ChkImpRot  = Ordem de Impressão (1-Itens; 2-Referência; 3-Fator)
+* ChkImpMon  = Imprimir Dados da Empresa no Cabeçalho
+* DckDPro3s  = Imprimir Descrição Completa
+* EditAgends = Casas Decimais % Desc/Acres
+* nCarDims   = Imprimir Linhas (Fixo Vertical)
+* DckImpCd   = Imprimir Contatos Destino
+* DckEqs	 = Imprime Produto Equivalente
+* DckSaldo	 = Imprime Saldo da Conta Corrente
+* DocSaldo	 = Descritivo do Campo Saldo
+* DckTotBrt	 = Imprime o Total Bruto
+* DckObsMov	 = Imprime a Observação da Movimentação
+
+loCnx.CursorQuery([SigCdOpe], [LocalOpe], [Dopes],  Padr(ThisForm.pcDopes, 20), [Opers, NDopes, Docus, Casas, CMoes, TipoNfs, Dcpns, NCPesos, cupfis, Habservs])
+loCnx.CursorQuery([SigOpCdd], [LocalOpe2], [Dopes], Padr(ThisForm.pcDopes, 20), [DckLogos, DckAcess, DocAcess, ] + ;
+				  [ChkImpDp, ChkImpRot, ChkImpMon, DckDPro3s, CasQtds, DckImpIss, ImpFxSers, PafEcfs, EditAgends, ] + ;
+				  [nCarDims, DckImpCd, DckEqs, ConfigGers, DckSaldo, DocSaldo, DckTotBrt, DckObsMov, DckViaResu])
+Go Top In LocalOpe2
+If Eof([LocalOpe2])
+	Insert Into LocalOpe2 (DckLogos, DckAcess, DocAcess, ChkImpDp, ChkImpRot, ChkImpMon) Values (0, 0, [], 0, 0, 0)
+	Go Top In LocalOpe2
+EndIf
+
+* Campos Usados Do SigOpCdc
+* DocTit	 = Título a Ser Impresso no Documento
+* DckDig	 = Nome do usuário. Se = 1 sai o nome do usuário no lugar do nome do cliente
+* DckOri	 = Imprime Dados da Conta Origem
+* DckDest	 = Imprime Dados da Conta Destino
+* DocOrig	 = Descritivo do Label de Fornecedor Quando For Uma Operação de Entrada
+* DocDest	 = Descritivo do Label de Fornecedor Quando For Uma Operação de Saída
+* DckReffs   = Referência do Fornecedor = 1-Sim; 2-Não
+* DckCBar	 = Código de Barras = 1=Sim
+* DocReffs   = Descritivo do Label de Referência do Fornecedor
+* DckPrzE    = Prazo de Entrega = 1-Sim; 2-Não
+* DocPrzE    = Descritivo do Label de Prazo de Entrega
+* TxtPrzEnts = Texto de Prazo de Entrega Após Linha de Ítens
+* ChkPrzEnts = Imprime ou Não o Texto de Prazo de Entrega
+* DckVend	 = Responsável = 1-Sim; 2-Não
+* DocVend	 = Descritivo do Label do Responsável
+* DocPag	 = Descritivo do Label das Condições
+* DckTVend	 = Imprime Dados de Contato do Responsável = 1-Sim; 2-Não
+* DckBarra   = Imprime Código de Barra = 1-Sim; 2-Não
+* DckFretes  = Imprime Frete = 1-Sim; 2-Não
+* DocFretes  = Descritivo do Label de Frete
+* DckIcmIpi  = ICMS/IPI = 1-Nenhum; 2-ICMS; 3-IPI; 4-Ambos
+* DocDesco   = Descritivo do Label de Desconto
+* DocAcres   = Descritivo do Label de Acréscimo
+* DckEntregs = Imprime Dados de Entrega = 1-Sim; 2-Não
+* DocEntregs = Descritivo do Label de Entrega
+* DckObsI    = Imprime Observação dos Ítens = 1-Sim; 2-Não
+* ImgTecs    = Imagem Técnica do Documento
+* DckTermos  = Imprime Termos
+* TitTermos  = Título do Termo
+* TxtTermos  = Conteúdo do Termo
+* ViaTermos  = Número de Vias do Termo
+* TitTermGs  = Título do Termo de Garantia
+* TxtTermGs  = Conteúdo do Termo de Garantia
+* TxtTermBs  = Conteúdo do Termo Complementar de Garantia
+* DocFxSemVl = Imprimir o Documento Sem Valores
+* DocFxVencs = Imprimir o Vencimento Nas Formas de Pagamento
+* DckTpFats  = Imprimir o Tipo de Faturamento
+* DckFiscal  = Imprimir a Descrição Fiscal dos Produtos
+* DckImpIte  = Imprimir Totais de Itens
+* DckSubN	 = Imprimir Cabeçalho de Subníveis
+* DckObsg	 = Imprimir Observação no Resumo
+* ObsResu	 = Observação do Resumo
+* DckObs	 = Imprimir Observação no Cabeçalho (Substitui Campo Com Dados de Vendedor)
+* ObsCab     = Observação do Cabeçalho
+* DckOpes	 = Itens de Entrada / Saída / Ambos
+* nChkVsts   = Incluir Transporte no Total
+* DckPaga    = Layout Pagamento
+* DocObs	 = Título da Observação (No Fixo Vertical Sai no Valor "Líquido")
+* Coletas    = Número de Linhas Para o Fixo Vertical
+* Docunit    = Valor Unitário
+* DocTotI	 = Valor Total
+* DckTaCor	 = Cor e Tamanho
+* DckNIte	 = Número de Itens
+* DocNIte	 = Descritico do Número de Itens
+* DocItem	 = Descritivo dos Itens
+* DocDescr	 = Descritivo da Descrição de Itens
+* DocObsI	 = Descritivo da Observação dos Itens
+* DocObsg	 = Descritivo da observação Geral
+* DckEmpDs	 = Empresa Destino
+
+loCnx.CursorQuery([SigOpCdc], [LocalDcOpe], [Dopes], Padr(ThisForm.pcDopes, 20), [DocTit, DckDig, DocOrig, DocDest, ] + ;
+				  [DckOri, DckDest, DckReffs, DckCBar, DocReffs, DckPrzE, DocPrzE, TxtPrzEnts, ChkPrzEnts, DckVend, ] + ;
+				  [DocVend, DocPag, DckTVend, DckBarra, DckFretes, DocFretes, DckIcmIpi, DocDesco, DocAcres, DckEntregs, ] + ; 
+				  [DocEntregs, DckObsI, ImgTecs, DckTermos, TitTermos, TxtTermos, ViaTermos, TitTermgs, TxtTermgs, ] + ;
+				  [TitTermGs, TxtTermBs, DocFxSemVl, DocFxVencs, DckTpFats, DckFiscal, DckImpIte, DckSubN, DckObsg, ] + ;
+				  [ObsResu, DckObs, ObsCab, DckOpes, nChkVsts, DocPeso, DckPeso, DckPaga, DocObs, Coletas, Docunit, ] + ;
+				  [DocTotI, DckTaCor, DckNIte, DocNIte, DocItem, DocDescr, DocObsI, DocObsg, carcompos, ImpDups, QtdDocs, dckEmpDs])
+
+Go Top In LocalDCOpe
+If Eof([LocalDcOpe])
+	Return .f.
+Endif
+
+* lbltxidCs = Inibir composição desmembrada
+loCnx.CursorQuery([SigOpCdi], [LocalOpCdi], [Dopes], Padr(ThisForm.pcDopes, 20),[lbltxidCs])
+Go Top In LocalOpCdi
+If Eof([LocalOpCdi])
+	Return .f.
+Endif
+
+* Campos Usados Do SigCdPam
+* Logos		= Logotipo da Empresa
+* Moedaps   = Moeda Padrão do Sistema
+loCnx.CursorQuery([SigCdPam], [LocalParam], .f., .f., [Logos, TpInstalas, MoedaPs, DoppServs])
+Go Top In LocalParam
+If Eof([LocalParam])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigCdEmp
+* RazSocs	= Razão Social
+* Cgcs		= CNPJ
+* Ies		= Inscrição Estadual
+* Tel1s		= Telefone 1
+* Tel2s		= Telefone 2
+* Logos		= Logotipo da Empresa
+* Ceps		= Cep
+* Endes		= Endereço
+* Numeros	= Número
+* Compls	= Complemento
+* Bairs 	= Bairro
+* Cidas		= Cidade
+* Estas		= UF
+* IMS		= Inscrição Municipal
+* Razas		= Nome Fantasia
+* NEmps		= Numero Empresa
+
+loCnx.CursorQuery([SigCdEmp], [LocalEmp], [Cemps], Padr(ThisForm.pcEmps, 3), ;
+				  [RazSocs, Cgcs, Ies, Tel1s, Tel2s, Logos, LogoRels, Ceps, Endes, Numeros, Compls, Bairs, Cidas, Estas, IMS, Razas, NEmps])
+Go Top In LocalEmp
+If Eof([LocalEmp])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvCab
+* Emps		= Empresa
+* Numes		= Nº do Pedido
+* Datas 	= Data
+* GrVends 	= Grupo do Comprador
+* Vends 	= Comprador
+* GrResps 	= Grupo do Parceiro
+* Resps 	= Parceiro
+* ContaOs	= Fornecedor
+* ContaEs	= Entrega
+* PrazoEnts	= Data de Entrega
+* Obses		= Observação do Rodapé
+* ValVars	= Em Valor - Se Negativo Considera Como Desconto
+* Vars		= Em Percentual - Se Negativo Considera Como Desconto
+* LocalEnts = Local de Entrega
+* TpFats 	= Tipo de Faturamento
+* Localizas = Localização
+* CodTrans  = Transportadora
+* ValTrans  = Valor do Transporte
+* NEmps		= ?
+* Notas     = Número da Nota/Pedido
+* TabDs     = Tabela de Desconto
+* Usuars 	= Usuário
+* Nops		= Op
+* PStatus	= Status
+* EmpDs		= Empresa Destino
+
+loCnx.CursorQuery([SigMvCab], [LocalEest], [EmpDopNums], lcEdn, [Emps, Dopes, Numes, Datas, GrVends, Vends, ] + ;
+				  [GrResps, Resps, ContaOs, ContaDs, ContaEs, PrazoEnts, Obses, ValVars, Vars, LocalEnts, ] + ;
+				  [TpFats, Localizas, CodTrans, ValTrans, NEmps, Notas, TabDs, usuars, Nops, PStatus, EmpDs])
+Go Top In LocalEest
+If Eof([LocalEest])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvItn
+* CItens 	= Nº do Ítem
+* CPros		= Código do Produto
+* Reffs		= Referência do Fornecedor (SigCdPro)
+* DPros		= Descrição do Produto
+* DPro2s	= Descritivo do Produto
+* CUnis		= Unidade
+* Qtds		= Quantidade
+* Units		= Valor Unitário
+* Totas		= Valor Total
+* Moedas    = Moeda
+* MoeVals   = Vlor da Moeda
+* Aliqs		= Alíquota do IPI
+* ValIpis	= Valor do IPI
+* Obs		= Observação do Item
+* Valors	= Valor Estimado
+* Pesos     = Peso
+* TPesos    = Total de Peso
+*** mena 09/11/2015 foram incluidos os campos valdescs, valrats e icmss para documento da EnPrimeur ***
+lcQuery = [Select a.CItens, a.CPros, b.Reffs, a.DPros, b.DPro2s, a.CUnis, a.Qtds, a.Units, a.Unitorigs, a.Moedas, a.MoeVals, ] + ;
+				 [a.Totas, a.Aliqs, a.ValIpis, a.Obs, a.valdescs, a.pdescs, a.valrats, a.icmss, a.bcicmss, b.IFors, b.Valors, a.Pesos, a.TPesos, b.CodFinP, b.pesobs, b.clfiscals, ] + ;
+				 [b.CGrus, b.Linhas, b.Colecoes, b.Cunis, b.Cftios, b.Sgrus, a.CodBarras, Space(10) as Fator, a.Citem2, a.fators, a.locals, a.localos, Space(3) as tamde, Space(3) as tampara ] + ;
+		    [From SigMvItn a, SigCdPro b ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+		   		 [a.CPros = b.CPros ] + ;
+		   		 Iif(LocalDCOpe.DckOpes = 1, [And a.Opers = 'E' ], Iif(LocalDCOpe.DckOpes = 2, [And a.Opers = 'S' ], [])) + ;
+		   [Order By ] + Iif(LocalOpe2.ChkImpRot = 2, [a.CPros, a.CItens], [a.CItens])
+
+If (loCnx.SqlExecute(lcQuery, [LocalEestI]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEestI)])
+	Return .f.
+EndIf
+
+IF LocalOpe.Docus = 10 and LocalOpe.Habservs=1
+	lcQuery = [Select a.CItens, a.CPros, b.Reffs, c.DPros, a.dpros as DPro2s, c.CUnis, c.Qtds, c.Units, c.Unitorigs, c.Moedas, c.MoeVals, ] + ;
+					 [c.Totas, c.Aliqs, c.ValIpis, a.Obs, a.valdescs, a.pdescs, a.valrats, a.icmss, a.bcicmss, b.IFors, b.Valors, c.Pesos, c.TPesos, b.CodFinP, b.pesobs, b.clfiscals, ] + ;
+					 [b.CGrus, b.Linhas, b.Colecoes, b.Cunis, b.Cftios, b.Sgrus, a.CodBarras, Space(10) as Fator, a.Citem2, a.fators, a.locals, a.localos, c.tamde, c.tampara ] + ;
+			    [From SigMvItn a, SigCdPro b, sigmvitp c ] + ;
+			   [Where a.EmpDopNums = '] + lcEdn + [' And c.empdopnums = ']+lcEdn + [' and ] + ;
+			   		 [c.CPros = b.CPros ] + ;
+			   		 Iif(LocalDCOpe.DckOpes = 1, [And a.Opers = 'E' ], Iif(LocalDCOpe.DckOpes = 2, [And a.Opers = 'S' ], [])) + ;
+			   [Order By ] + Iif(LocalOpe2.ChkImpRot = 2, [a.CPros, a.CItens], [a.CItens])
+
+	If (loCnx.SqlExecute(lcQuery, [LocalEestI]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEestI)])
+		Return .f.
+	EndIf
+ENDIF
+
+*** Homologação paf - 09/2012 - seleciona itens cancelados na operação de orçamento DAV ***
+lcQuery = [Select a.CPros, a.DPros, a.empdopnums, a.Qtds, a.Units, a.Totas From sigexmvi a ] + ;
+		  [Where a.empdopnums = '] + lcEdn + [']
+
+If (loCnx.SqlExecute(lcQuery, [LocalEestIE]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEestI)])
+	Return .f.
+EndIf
+********************************************************************************************
+
+Go Top In LocalEestI
+
+Select LocalEestI
+Scan
+	lcFat = []
+	If (LocalOpe.Dcpns = 1)
+		lcTab = LocalEest.TabDs
+		lcRet = []
+		
+		lcSel = [Select * From SigOpTdt Where Codigos = '] + lcTab + [']
+		lnErr = loCnx.SqlExecute(lcSel, [LocalTabDescs])
+		If (lnErr < 1)
+			=MessageBox([Favor Reinicializar o Processo], 16, [Falha na Conexão (SeekTabDes - LocalTabDescs)])
+			Return .f.
+		EndIf
+		
+		Select LocalTabDescs
+		Index On Codigos + Str(Tipos,1) + CodTips Tag CodTips
+		If (Seek(lcTab + '4' + LocalEestI.CPros) Or ;
+			Seek(lcTab + '9' + LocalEestI.CodFinP) Or ;
+			Seek(lcTab + '1' + LocalEestI.CGrus) Or ;
+			Seek(lcTab + '2' + LocalEestI.Linhas) Or ;
+			Seek(lcTab + '3' + LocalEestI.Colecoes) Or ;
+			Seek(lcTab + '6' + LocalEestI.Cunis) Or ;
+			Seek(lcTab + '7' + LocalEestI.Cftios) Or ;
+			Seek(lcTab + '8' + LocalEestI.Sgrus))
+			Replace Fator With LocalTabDescs.DescFats In LocalEestI
+		EndIf
+	EndIf
+EndScan
+Select LocalEestI
+
+IF LocalOpe2.ChkImpRot = 3		&&Mena - 20/03/2013 - verifica se ordena itens por fator - estava ordenando sem verificar
+	Index On Fator + CPros + Str(Citens, 10) Tag Ordem
+ENDIF
+
+If (LocalOpe2.ImpFxSers = 1)
+	lnItn = LocalEestI.CItens
+	
+	*** Mena - 14/03/2014 esta linha foi corrigida  [Where a.EmpDopNums = '] + lcEdn + [' ] + ; ***
+	lcQuery = [Select a.*, b.Valors, b.DPro2s ] + ;
+			    [From SigMvItt a, SigCdPro b ] + ;
+			   [Where a.EmpDopNums = '] + lcEdn + [' and ] + ;
+		   		 [a.CPros = b.CPros ] + ;			   
+			   [Order By ] + Iif(LocalOpe2.ChkImpRot = 2, [a.CPros, a.CItens], [a.CItens])
+
+	If (loCnx.SqlExecute(lcQuery, [LocalEestis]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEestis)])
+		Return .f.
+	EndIf
+	Go Top In LocalEestis
+
+	Select LocalEestis
+	Scan
+		lnItn = lnItn + 1
+
+		Insert Into LocalEestI (CItens, CPros, DPros, DPro2s, CUnis, Qtds, Units, Totas, Moedas, MoeVals, Valors) ;
+						Values (lnItn, LocalEestis.CPros, LocalEestis.DPros, LocalEestis.DPro2s, LocalEestis.CUnis, ;
+								LocalEestis.Qtds, LocalEestis.Units, LocalEestis.Totas, LocalEestis.Moedas, ;
+								LocalEestI.MoeVals, LocalEestis.Valors)
+	EndScan
+EndIf
+
+* Campos Usados Do SigMvIts
+* CItens 	= Nº do Ítem
+* CPros		= Código do Produto
+* Reffs		= Referência do Fornecedor (SigCdPro)
+* DPros		= Descrição do Produto
+* DPro2s	= Descritivo do Produto
+* CUnis		= Unidade
+* Qtds		= Quantidade
+* Units		= Valor Unitário
+* Totas		= Valor Total
+* Moedas    = Moeda
+* MoeVals   = Valor da Moeda
+* Aliqs		= Alíquota do IPI
+* ValIpis	= Valor do IPI
+* Obs		= Observação do Item
+* Valors	= Valor Estimado
+*** mena 17/09/2015 - incluido campo fators no select ***
+*** mena 09/11/2015 foram incluidos os campos valdescs, valrats e icmss para documento da EnPrimeur ***
+
+lcQuery = [Select a.CItens, a.CPros, c.Reffs, a.DPros, c.DPro2s, b.CodEmbs as CUnis, b.Qtds, a.Units, a.Unitorigs, a.Moedas, a.MoeVals, ] + ;
+				 [b.QtdEmbs, a.Aliqs, a.ValIpis, a.Qtds as QtdsA, a.Obs, a.valdescs, a.pdescs, a.valrats, a.icmss, a.bcicmss, c.iFors, b.CodBarras, ] +;
+				 [b.codtams, b.pesos, a.TPesos, b.codcors, b.empdopnums, c.valors, a.fators, c.colecoes, c.codfinp, c.pesobs, ] +;
+				 [c.linhas, a.locals, a.localos ] + ;
+		    [From SigMvItn a, SigMvIts b, SigCdPro c ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+		   		 [a.EmpDopNums = b.EmpDopNums And ] + ;
+		   		 [a.CItens = b.CItens And ] + ;
+		   		 [b.CPros = c.CPros ] + ;
+		   		  Iif(LocalDCOpe.DckOpes = 1, [And a.Opers = 'E' ], Iif(LocalDCOpe.DckOpes = 2, [And a.Opers = 'S' ], [])) + ;
+		   [Order By ] + Iif(LocalOpe2.ChkImpRot = 2, [a.CPros, a.CItens], [a.CItens])
+
+If (loCnx.SqlExecute(lcQuery, [TmpEstI2]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpEstI2)])
+	Return .f.
+EndIf
+
+*** mena 09/11/2015 foram incluidos os campos valdescs, valrats e icmss para documento da EnPrimeur ***
+Select CItens, CPros, Reffs, DPros, DPro2s, CUnis, Qtds, Units * Iif(QtdEmbs > 0, QtdEmbs, 1) as Units, Unitorigs, ;
+	   Moedas, MoeVals, (Qtds * Units) * Iif(QtdEmbs > 0, QtdEmbs, 1) as Totas, Aliqs, IFors, Obs, valdescs, pdescs, valrats, icmss, bcicmss, ;
+	   CodBarras, (ValIpis / Iif(QtdsA=0,1,QtdsA)) * (Qtds * Iif(QtdEmbs > 0, QtdEmbs, 1)) as ValIpis, ;
+	   CodTams, Pesos, TPesos, CodCors, EmpDopNums, Valors, Fators, colecoes, codfinp, pesobs, linhas, locals, localos ;
+  From TmpEstI2 ;
+ Order By CItens ;
+  Into Cursor LocalEstI2 ReadWrite
+
+Go Top In LocalEstI2
+Select LocalEstI2
+If (LocalOpe2.ChkImpRot = 2)
+	Index On CPros + Str(CItens, 6) Tag CItens
+Else
+	Index On Str(CItens, 6) Tag CItens
+EndIf
+
+* Campos Usados Do SigMvNfi
+* ValIcms	= Valor do Icms da Nota
+* Fretes	= Responsável Pelo Frete
+* VlFretes  = Valor do Frete
+* DespAces  = Valor das Despesas Acessórias
+* vTotIss	= Valor de ISS
+* IcmsS		= Valor de ICMS Subst. Tributária
+*** mena - 09/11/2015 - pega todas os dados da nota fiscal ***
+*!* loCnx.CursorQuery([SigMvNfi], [LocalNFis], [EmpDopNums], lcEdn, [ValIcms, Fretes, VlFretes, DespAces, vTotIss, IcmsS, vlseguros])
+loCnx.CursorQuery([SigMvNfi], [LocalNFis], [EmpDopNums], lcEdn, [ * ])
+Go Top In LocalNFis
+If Not Used([LocalNFis])
+	Return .f.
+EndIf
+
+*** mena - 09/11/2015 - pega dados da transportadora ***
+lcTra = IIF(EOF('LocalNFis'), '', LocalNFis.codtrans)
+loCnx.CursorQuery([SigPrTrp], [LocalTra], [itras], lcTra, [ * ])
+Go Top In LocalTra
+If Not Used([Localtra])
+	Return .f.
+EndIf
+
+* Campos Usados Do SigMvPar
+* FPags		= Forma de Pagamento
+* MoeFpgs	= Moeda da Forma de Pagamento
+* Valos		= Valor
+* Vencs 	= Vencimento
+* Descrs 	= Descrição da Forma de Pagamento
+lcQuery = [Select a.FPags, a.MoeFpgs, a.CotFpgs, a.Valos, a.Vencs, b.Descrs ] + ;
+			[From SigMvPar a, SigOpFp b ] + ;
+		   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+		   		 [b.FPags = a.FPags]
+
+If (loCnx.SqlExecute(lcQuery, [LocalPar1]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPar1)])
+	Return .f.
+EndIf
+
+Go Top In LocalPar1
+If Not Used([LocalPar1])
+	Return .f.
+Else
+	Update LocalPar1 Set Vencs = Nvl(Iif(LocalDcOpe.DocFxVencs = 1, Vencs, Ctot([])), Ctot([]))
+	Go Top In LocalPar1
+	
+	Select Sum(1) as Total, Ttod(Vencs) as Vencs, FPags, MoeFpgs, CotFpgs, Valos, Descrs ;
+	  From LocalPar1 ;
+	 Group By 2, 3, 4, 5, 6, 7 ;
+	  Into Cursor LocalPar ReadWrite
+EndIf
+
+If (LocalDcOpe.DckSubN = 1)
+	* Campos Usados Do SigMvPec
+	* Codigos   = Chave de Busca
+	* Emps		= Empresa
+	* Dopes     = Operação
+	* Numes		= Nº do Pedido
+	lcQuery = [Select a.Codigos ] + ;
+				[From SigMvPec a ] + ;
+			   [Where a.EmpDopNums = '] + lcEdn + [' ] + ;
+			   [Order By a.Codigos]
+
+	If (loCnx.SqlExecute(lcQuery, [LocalEstPe]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEstPe)])
+		Return .f.
+	EndIf
+EndIf
+
+*** Tiago - 04/08/2015 - Hold Gold - Se tiver configurado grade de embalagens, cria o cursor para imprimir o resumo por grupo de venda
+If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+	lcQuery = [Select a.*, b.Descs From SigMvIte a Inner Join SigCdEmb b On a.CodEmbs = b.Cods Where a.EmpDopNums = '] + lcEdn + [']
+	If loCnx.SqlExecute(lcQuery, [LocalMvIte]) < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMvIte)')
+		Return .f.
+	EndIf	
+Endif
+
+*** mena - 08/11/2016 - cria cursor de finalidade e observação ***
+IF LocalOpe.Docus = 10 
+
+	If loCnx.SqlExecute([Select * From SigCdobs],'TmpObs') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpVend)')
+		Return(.F.)
+	EndIf
+
+	lStrQuery = [Select * from SigOpFnl Where EmpDopNums = ']+lcEdn+[' ]
+	If loCnx.SqlExecute(lStrQuery,'crTmpFnl') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpRel)')
+		Return(.F.)
+	ENDIF
+ENDIF
+***********************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Do Case
+	Case InList(LocalOpe.Docus,3,11) && Fixo Horizontal
+		If Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4
+			Report Form SigReIf2 Preview NoConsole
+		Else 
+			IF LocalDcOpe.DckIcmIpi<>6
+				Report Form SigReIfx Preview NoConsole
+			ELSE
+				DELETE FOR EMPTY(cpros)
+				Report Form SigReHfi Preview NoConsole		&& para en primeur
+			ENDIF
+			
+		EndIf 
+
+	Case (LocalOpe.Docus = 6) && Fixo Vertical
+		If ThisForm.chkImagem.Value
+			If (LocalDcOpe.dckpeso = 1)
+				* Com Peso
+				Report Form SigRevf5 Preview NoConsole
+			Else
+				Report Form SigRevf6 Preview NoConsole
+			EndIf
+		Else
+			If (LocalDcOpe.dckpeso = 1)
+				* Com Peso
+				Report Form SigRevf2 Preview NoConsole
+			Else
+				Report Form SigRevfx Preview NoConsole
+			EndIf
+
+		EndIf 	
+
+	Case (LocalOpe.Docus = 7) && Nota de Débito
+		Report Form SigRevf3 Preview NoConsole
+
+	Case InList(LocalOpe.Docus,8,12) && Locação
+		lcSep = Set([Separator])
+		lcPnt = Set([Point])
+		Set Separator To [.]
+		Set Point To [,]
+		
+		If LocalOpe.Docus = 8
+			Report Form SigRevf4 Preview NoConsole
+		Else
+			Report Form SigRevf0 Preview NoConsole
+		EndIf 
+
+		Set Separator To (lcSep)
+		Set Point To (lcPnt)
+	Case (LocalOpe.Docus = 9) && Fixo colunas
+		If LocalOpe2.DckViaResu <> 1		
+			Report Form SigRevfc Preview NoConsole
+		EndIf 	
+
+		If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+			Select crCabecalho
+			Go Top		
+			Select crDados2
+			Go Top
+			Report Form SigRevfc Preview NoConsole
+		Endif
+
+	Case (LocalOpe.Docus = 10) && tres vias por pagina
+		If ThisForm.chkImagem.Value
+			Report Form SigRevfs Preview NoConsole
+		Else
+			Report Form SigRevfs Preview NoConsole
+		EndIf 	
+
+	Otherwise 				  && Fixo c/ Imagem
+		Report Form SigReIfi Preview NoConsole
+EndCase
+
+If (LocalDCOpe.dckTermos = 1) And Not (LocalOpe.Docus = 7)
+	lnVia = Iif(LocalDCOpe.ViaTermos > 0, LocalDCOpe.ViaTermos, 1)
+	
+	For I = 1 To lnVia
+		Select crCabecalho
+		Go Top
+		Report Form SigReIft Preview NoConsole
+	Next
+Endif
+
+*** Tiago - 26/06/2015 - Elisangela Camargo - Impressão duplicata impressora laser
+If LocalDcOpe.ImpDups == 3
+	llImpDup = .f.
+	Select LocalPar
+	Scan
+		=ThisForm.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',LocalPar.Fpags)
+		If crSigOpFp.ImpDups # 1
+			Delete
+		Else
+			llImpDup = .t.
+		EndIf
+	Endscan
+	If llImpDup And crSigOpFp.ImpDups == 1 And MessageBox('Confirma impressão da Duplicata ?(S/N)',4+32+256,'') = 6
+		Select crCabecalho
+		Go Top
+
+		Select LocalPar
+		Go top
+		Report Form SigReDpc Preview NoConsole
+	Endif
+Endif
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Local lcArq
+
+ThisForm.poDataMgr.Release
+ThisForm.poDataMgr2.Release
+
+Set Point To '.'
+Set Separator To ','
+
+lcArq = Sys(2023) + [\] + ThisForm.ImgBranco
+If File(lcArq)
+	Delete File &lcArq.
+EndIf
+
+lcArq = Sys(2023) + [\] + ThisForm.ImgLogotipo
+If File(lcArq)
+	Delete File &lcArq.
+EndIf
+
+lcArq = Sys(2023) + [\] + ThisForm.ImgTecnicas
+If File(lcArq)
+	Delete File &lcArq.
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lnMax, loCnx, lcFig, lcArq, lcFor, lcRef, lcEnt, lcVen, llBar, lcBar, lcReffs, lcQtd, lcUnits, lnStr, ;
+	  lnTQt, lnNum, lcSep, lcPnt, llQP
+
+loCnx = ThisForm.poDataMgr
+*** mena 06/05/2015 - criado campo opers no cab para ser testado no horizontal com imazem ***
+*--Rafael - 01/08/2016 - Criado campo para visualizar o saldo da conta (dcksaldo, docsaldo, SaldoCta)
+Create Cursor crCabecalho (Dopes c(20), Numes n(6), Datas d(8), Razas c(40), RazSocs c(50), Cgcs c(20), RespFretes c(16), ;
+						   Obses m(4), ObsMoes m(4), Ies c(15), GrVends c(10), Vends c(10), DVends c(50), DddVends c(4), ;
+						   Tel1sVends c(20), Tel2sVends c(20), Tel3sVends c(20), eMailVends c(50), GrResps c(10), Resps c(10), ;
+						   DResps c(40), ForIClis c(10), ForRClis c(50), ForEndes c(60), ForNums c(10), ;
+						   ForCompls c(15), ForCeps c(9), ForCidas c(30), ForBairs c(40), ForEstas c(2), ;
+						   ForContato c(20), ForDdds c(4), ForTel1s c(20), ForTel2s c(20), ForFaxs c(20), ;
+						   ForeMails c(50), ForCgcs c(20), ForIes c(15), ForIMuns c(20), ForTpClis n(1), ;
+						   EntIClis c(10), EntRClis c(50), EntEndes c(80), EntNums c(10), EntCompls c(15), ;
+						   EntCeps c(9), EntCidas c(30), EntBairs c(40), EntEstas c(2), EntContato c(20), ;
+						   EntDdds c(4), EntTel1s c(20), EntTel2s c(20), EntFaxs c(20), EnteMails c(50), ;
+						   EntCgcs c(20), EntIes c(15), EntTpClis n(1), PrazoEnts d(8), Icms n(16,2), ;
+						   TipoVars c(20), Variacao n(16,2), VariacaoP n(16,4), EditAgends n(1), CondPagto m(4), ;
+						   TotPag n(4), Fretes c(12), TitFornec c(15), DckPrzE n(1), DocPrzE c(15), DckReffs n(1), ;
+						   DocReffs c(20), DckCBar n(1), DckVend n(1), TitVend c(15), DckTVend n(1), Barras c(10), ;
+						   ImpCabBar l(1), Imagem c(64), ImgTec c(64), DckFretes n(1), DocFretes c(12), DckAcess n(1), ;
+						   DocAcess c(12), DckIcmIpi n(1), DocPag c(12), DckEntregs n(1), DocEntregs c(12), ;
+						   DckObsI n(1), Telefone c(41), VlFretes n(16,2), VlAcess n(16,2), BarVends c(10), ;
+						   TitTermos m(4), TxtTermos m(4), TitTermgs m(4), TxtTermgs m(4), TxtTermBs m(4), ;
+						   Pagina n(4), ObsEntrega c(254), DocFxSemVl n(1), DckTpFats n(1), TpFats c(3), ;
+						   DckLogos n(1), Rotas c(10), Localizas c(6), CodTrans c(10), QtdImpIte n(12,3), ;
+						   Subniveis m(4), DckImpIss n(1), VlrIss n(12,2), IcmsS n(12,2), VlSeguros n(12,2), ;
+						   ObsResu m(4), ObsCab m(4), TotQtds n(12,2), ChkImpMon n(1), TitPaf01 c(100), ;
+						   TitPaf02 c(100), TitPaf03 c(100), TitPaf04 c(100), nCupoms c(6), nCaixas c(3), ;
+						   CMoes c(3), DckPaga n(1), ImprimeLinhas n(1), ImpFator l(1), DckImpCd l(1), DocPeso c(20), ;
+						   DocObs c(12), Negrito l (1), DocValUni c(25), DocValTot c(25), DckEqs n(1), ;
+						   TotItens c(20), DesItens c(12), DocItem c(12), DocDescr c(12), DocObsI c(12), ;
+						   DocObsg c(12), CepCobs c(9), EndCobs c(80), BaiCobs c(20), CidCobs c(20), EstCobs c(2), ;
+						   EmpCeps c(9), EmpEndes c(60), EmpNumeros c(10), EmpCompls c(30), EmpBairs c(40), ;
+						   EmpCidas c(30), EmpEstas c(2), EmpIMS c(15), opers n(1,0), nops c(10), ;
+						   dcksaldo n(1,0), docsaldo c(12), SaldoCta n(14,2), MoeSaldo c(3), DckTotBrt n(1,0), ;
+						   DckObsMov n(1,0), Saldos c(30), ImpCodBar c(20), Status c(20), dckEmpDs n(1), ;
+						   EmpDs c(3), ObsDet m(4)) 
+						   
+*** mena 09/11/2015 foram incluidos os campos valdescs, valrats e icmss para documento da EnPrimeur ***
+Create Cursor crDados (Pagina n(4), CItens n(4), CPros c(14), Reffs c(40), DPros m(4), DPro2s m(4), CUnis c(3), Qtds c(9),  ;
+					   Units c(15), Unitorigs n(11,2), Totas n(11,2), Moedas c(3), MoeVals n(12,2), Aliqs n(4,2), ;
+					   ValIpis n(11,2), Obs m(4), valdescs n(11,2), pdescs n(11,2), valrats n(11,2), icmss n(11,2), bcicmss n(11,2), ;
+					   Valors n(11,2), Pesos c(9), TPesos c(9), Fator c(10), CodBarras n(14), CProEqs c(14), DescSgrus c(20), ClFiscals c(10), ;
+					   Imagem c(100), fators c(9), Embalagens c(40), Colecoes c(10), codfinp c(3), pesobs c(9), linhas c(10), local c(10), ;
+					   TamDe c(4), TamPara c(4), Mercs c(3))
+
+Create Cursor crMoedas (CMoes c(3), Valos n(12,2), CotFpgs n(12,2))
+Index On CMoes Tag CMoes
+
+Create Cursor crFatores (Fator c(10), Totas n(12,2))
+Index On Fator Tag Fator
+
+*** mena 04/09/2016 - criacao de 5 pesos para 5 embalagens digerentes ***
+Create Cursor xTotEmb ( Colecoes C(10), Fators c(9), QtdEtqs n(6), PesoEtqs n(10,3), Pesos n(12,3), Units n(15,4), Embalagens c(40), pEmb1 n(7,3), pEmb2 n(7,3), pEmb3 n(7,3), pEmb4 n(7,3), pEmb5 n(7,3) )
+Index On Colecoes + Fators Tag Colecoes
+
+llQP=.f.
+
+If ThisForm.SelecionaDados()
+	If (LocalOpe.Docus = 8) && 8 - Locação
+		lcSep = Set([Separator])
+		lcPnt = Set([Point])
+		Set Separator To [.]
+		Set Point To [,]
+	EndIf
+
+	lnTQt = 0
+	
+	* Número Máximo de Produtos Por Pedido
+	Do Case
+		Case Inlist(LocalOpe.Docus,3,11) && 3 - Fixo Horizontal
+			lnMax = Iif(Int(Val(LocalDCOpe.Coletas)) < 1, 14, Int(Val(LocalDCOpe.Coletas)))
+			lnMax = Iif(LocalDcOpe.DckObsI = 1, Int(lnMax / 2), lnMax) - Iif(LocalOpe2.PafEcfs = 1,Iif(LocalDcOpe.DckObsI=1,1,3),0)
+
+		Case (LocalOpe.Docus = 6) && 6 - Fixo Vertical
+			lnMax = Iif(Int(Val(LocalDCOpe.Coletas)) < 1, 36, Int(Val(LocalDCOpe.Coletas)))
+			lnMax = Iif(LocalDcOpe.DckObsI = 1, Int(lnMax / 2), lnMax) - Iif(LocalOpe2.PafEcfs = 1,Iif(LocalDcOpe.DckObsI=1,1,3),0)
+
+		Case (LocalOpe.Docus = 8) && 8 - Locação
+			lnMax = 1
+
+		Case (LocalOpe.Docus = 9) && 9 - Fixo colunas
+			lnMax = 44
+			
+		Otherwise 				  && 4 - Fixo c/ Imagem
+*!*				lnMax = 3
+
+			lnMax = Iif(Int(Val(LocalDCOpe.Coletas)) < 1, 14, Int(Val(LocalDCOpe.Coletas)))
+			lnMax = Iif(LocalDcOpe.DckObsI = 1, Int(lnMax / 2), lnMax) - Iif(LocalOpe2.PafEcfs = 1,Iif(LocalDcOpe.DckObsI=1,1,3),0)
+			
+	EndCase
+
+	ThisForm.ContaEmail = []
+	
+	If Not IsEmpty(LocalEest.ContaOs)
+		lcQuery = [Select Emails From SigCdCli Where Iclis = '] + LocalEest.ContaOs + [']
+		loCnx.Sqlexecute(lcQuery, [crTmpCli])
+		If Not IsEmpty(crTmpCli.Emails)
+			ThisForm.ContaEmail = Alltrim(crTmpCli.Emails) + ';'
+		EndIf
+	EndIf
+	
+	If Not IsEmpty(LocalEest.ContaDs)
+		lcQuery = [Select Emails From SigCdCli Where Iclis = '] + LocalEest.ContaDs + [']
+		loCnx.Sqlexecute(lcQuery, [crTmpCli])
+		If Not IsEmpty(crTmpCli.Emails)
+			ThisForm.ContaEmail = ThisForm.ContaEmail + Alltrim(crTmpCli.Emails)
+		EndIf
+	EndIf
+
+	lcObsDet = []
+	*-- Rafael - 12/12/2016 - Carrega os Detalhes da movimentação
+	lcQuery = [Select rtrim(ltrim(b.Descrs)) + ' - ' + case when ctits = '' then rtrim(ltrim(a.Resps)) else rtrim(ltrim(c.descrs)) End as ObsDet ] + ;
+			[From SigMvFtc a ] + ;
+			[Join SigCrRaP b on a.ccars = b.codigos ] + ;
+			[Join SigPrCpP c on a.ctits = c.codigos ] + ;
+			[where b.ntipos = 2 and c.ntipos = 2 ] + ;
+			[And a.empdopnums = ']+LocalEest.Emps + LocalEest.Dopes + Str(LocalEest.Numes,6)+[' ]
+	loCnx.SqlExecute(lcQuery,'LocalDet')
+	
+	Select LocalDet
+	Go Top
+	Scan
+		lcObsDet = lcObsDet + Alltrim(LocalDet.ObsDet) + [; ]
+	EndScan 
+	
+	*--Rafael - 01/08/2016 - Visualizar o saldo da conta
+	Private pDtI
+	Store 0  To lnSaldoCta, lnSaldoCt2, lnValor
+	Store [] To lcMoeSaldo, lcMoeSald2, lcMoe, lcSaldos, lcSaldo1s, lcSaldo2s
+	
+	If Not IsEmpty(LocalEest.ContaDs) And Not IsEmpty(LocalEest.Emps) 
+		
+		loCnx.CursorQuery('SigCdOpe', 'localOpMoe', 'Dopes', LocalEest.Dopes, 'CMoes')
+		lcMoe = Iif(Empty(localOpMoe.CMoes),LocalParam.MoedaPs,localOpMoe.CMoes)
+		
+		loCnx.CursorQuery('SigMvCab', 'LocalEDN', 'EmpDopNums', LocalEest.Emps + LocalEest.Dopes + Str(LocalEest.Numes,6), 'Grupods, ContaDs, Datas, Valos')
+		pDtI = fDtoSQL(LocalEDN.Datas)
+	
+		lcGruI  = LocalEDN.GrupoDs + LocalEDN.ContaDs + Space(3)
+		lcGruf  = LocalEDN.GrupoDs + LocalEDN.ContaDs + Replicate(Chr(254),3)
+		
+		lcQuery = [Select Top 1 Saldos, Moedas, IsNull(DtEmis,Datas) as Datas From SigMvCcr ] + ;
+				[Where Datas <= ?pDtI And Grupos = ']+LocalEDN.GrupoDs+[' And Contas = ']+LocalEDN.ContaDs+[' And Moedas = ']+lcMoe+[' ] + ;
+				[Order by cidchaves desc ]
+
+		loCnx.Sqlexecute(lcQuery, [crSldCta])
+		If Not IsEmpty(crSldCta.Saldos)
+			lnSaldoCta = crSldCta.Saldos - Iif((LocalEDN.Datas = crSldCta.Datas),LocalEDN.Valos, 0)
+			lcMoeSaldo = crSldCta.Moedas
+		EndIf
+	
+		lcQuery = [Select Top 1 Saldos, Moedas, IsNull(DtEmis,Datas) as Datas ] + ;
+				[From SigMvCcr ] + ;
+				[Where Datas <= ?pDtI And Grupos = ']+LocalEDN.GrupoDs+[' And Contas = ']+LocalEDN.ContaDs+[' And Moedas <> ']+lcMoeSaldo+[' ] + ;
+				[Order by cidchaves desc ]
+				
+		loCnx.Sqlexecute(lcQuery, [crSldCta2])
+		
+		If Not IsEmpty(crSldCta2.Saldos)
+			lnSaldoCt2 = crSldCta2.Saldos 
+			lcMoeSald2 = crSldCta2.Moedas	
+			lnCotaOpera = fBuscarCotacao(lcMoeSald2, LocalEDN.Datas, ThisForm.poDataMgr)
+
+			If (lcMoe <> crSldCta2.Moedas And Not Empty(lcMoeSald2) )
+				lnCota  = fBuscarCotacao(lcMoe, LocalEDN.Datas, ThisForm.poDataMgr)
+				lnValor = LocalEDN.Valos * lnCota / lnCotaOpera
+			EndIf
+			
+			lnSaldoCt2 = crSldCta2.Saldos  - Iif((LocalEDN.Datas = crSldCta.Datas),lnValor, 0)
+		EndIf 
+		
+		lcSaldo1s = Iif(Not Empty(lnSaldoCta),Alltrim(Transform(lnSaldoCta, '999,999,999.99'))+[ ]+lcMoeSaldo,[])
+		lcSaldo2s = Iif(Not Empty(lnSaldoCt2),Alltrim(Transform(lnSaldoCt2, '999,999,999.99'))+[ ]+lcMoeSald2,[])
+		lcSaldos  = lcSaldo1s + Iif(Not Empty(lcSaldo1s) And Not Empty(lcSaldo2s),[ / ],[]) + lcSaldo2s
+	EndIf 
+	
+	* Título do Label do Fornecedor: "Dados do ..."
+	lcFor = [Fornecedor]
+	If InList(LocalOpe.Opers, 1, 3) And Not Empty(LocalDcOpe.DocOrig)
+		lcFor = Alltrim(LocalDcOpe.DocOrig)
+	EndIf
+	If InList(LocalOpe.Opers, 2, 3) And Not Empty(LocalDcOpe.DocDest)
+		lcFor = Alltrim(LocalDcOpe.DocDest)
+	EndIf
+
+	* Título do Label da Data de Entrega
+	lcEnt = [Data de Entrega]
+	If Not Empty(LocalDcOpe.DocPrzE)
+		lcEnt = Alltrim(LocalDcOpe.DocPrzE)
+	EndIf
+
+	* Título da Coluna de Referência do Fornecedor
+	lcRef = [Ref. Fornecedor]
+	If Not Empty(LocalDcOpe.DocReffs)
+		lcRef = Alltrim(LocalDcOpe.DocReffs)
+	EndIf
+
+	* Título do Label do Comprador
+	lcVen = [Comprador]
+	If Not Empty(LocalDcOpe.DocVend)
+		lcVen = Alltrim(LocalDcOpe.DocVend)
+	EndIf
+
+	* Título do Label das Condições Comerciais
+	lcPag = [Comerciais]
+	If Not Empty(LocalDcOpe.DocPag)
+		lcPag = Alltrim(LocalDcOpe.DocPag)
+	EndIf
+
+	* Título do Label da Dados de Entrega
+	lcDad = [de Entrega]
+	If Not Empty(LocalDcOpe.DocEntregs)
+		lcDad = Alltrim(LocalDcOpe.DocEntregs)
+	EndIf
+
+	llBar = (LocalDcOpe.DckBarra = 1)
+	lcBar = fAltBar2de5(Padl(LocalOpe.NDopes, 4, '0') + Padl(ThisForm.pcNumes, 6, '0')) && Barra do Cabeçalho
+	lcTel = Alltrim(LocalEmp.Tel1s) + Iif(Empty(Alltrim(LocalEmp.Tel2s)), '', '/' + Alltrim(LocalEmp.Tel2s))
+
+	lnNum = Iif(LocalOpe.TipoNfs = 5, Int(Val(LocalEest.Notas)), ThisForm.pcNumes)
+
+	*--Rafael - 05/12/2016 - Numero da OS 
+	_DoppServ = LocalParam.DoppServs
+	=Thisform.Podatamgr.Cursorquery('SigCdOpd','CrSigCdOpd','Dopps',_DoppServ,[nSeqs])
+	
+	lcNEmps = Alltrim(Str(LocalEmp.NEmps))
+	lcNSeqs = Alltrim(Str(CrSigCdOpd.nSeqs))
+	lcSeqs  = Alltrim(Str(ThisForm.pcNumes))
+	lcNumes = Padl(lcSeqs,6,'0')
+	lcNumps = lcNEmps + lcNSeqs + lcNumes
+	
+	_ImpCodBar = fAltBar2de5(PADL(ALLTRIM(lcNumps),10,'0'))
+	
+	=Thisform.Podatamgr.Cursorquery('SigStats','CrSigStats','Cods',LocalEest.PStatus,[Descs])
+	
+	*--Rafael - 01/08/2016 - Visualizar o saldo da conta (dcksaldo, docsaldo, SaldoCta, MoeSaldo)
+
+	Insert Into crCabecalho (Dopes, Numes, Datas, Razas, RazSocs, Cgcs, Ies, Obses, TitFornec, DckPrzE, DocPrzE, DckReffs, DocReffs, ;
+							 DckVend, TitVend, DckTVend, Barras, ImpCabBar, DckFretes, DocFretes, DckAcess, DocAcess, ;
+							 DckIcmIpi, DocPag, DckEntregs, DocEntregs, DckObsI, Telefone, TitTermos, TxtTermos, TitTermgs, ;
+							 TxtTermgs, TxtTermBs, DocFxSemVl, DckTpFats, TpFats, DckLogos, Localizas, CodTrans, DckImpIss, ;
+							 ChkImpMon, nCaixas, nCupoms, CMoes, DckPaga, EditAgends, ImprimeLinhas, ImpFator, DckImpCd, ;
+							 DocPeso, DocObs, Negrito, DocValUni, DocValTot, DckCBar, DckEqs, DocItem, DocDescr, DocObsI, DocObsg, ;
+							 EmpCeps, EmpEndes, EmpNumeros, EmpCompls, EmpBairs, EmpCidas, EmpEstas, EmpIMS, opers, ;
+							 dcksaldo, docsaldo, SaldoCta, MoeSaldo, DckTotBrt, DckObsMov, Saldos, Nops, ImpCodBar, Status, dckEmpDs, EmpDs, ObsDet) ;
+					 Values (LocalDcOpe.DocTit, lnNum, Nvl(LocalEest.Datas, Ctod('')), LocalEmp.Razas, LocalEmp.RazSocs, ;
+					 		 LocalEmp.Cgcs, LocalEmp.Ies, Nvl(LocalEest.Obses, ''), lcFor, LocalDcOpe.DckPrzE, lcEnt, ;
+					 		 LocalDcOpe.DckReffs, lcRef, LocalDcOpe.DckVend, lcVen, LocalDcOpe.DckTVend, lcBar, llBar, ;
+					 		 LocalDcOpe.DckFretes, LocalDcOpe.DocFretes, LocalOpe2.DckAcess, LocalOpe2.DocAcess, ;
+					 		 LocalDcOpe.DckIcmIpi, lcPag, LocalDcOpe.DckEntregs, lcDad, LocalDcOpe.DckObsI, lcTel, ;
+					 		 Nvl(LocalDcOpe.TitTermos, []), Nvl(LocalDcOpe.TxtTermos, []), Nvl(LocalDcOpe.TitTermgs, []), ;
+					 		 Nvl(LocalDcOpe.TxtTermgs, []), Nvl(LocalDcOpe.TxtTermBs, []), LocalDcOpe.DocFxSemVl, ;
+					 		 LocalDcOpe.DckTpFats, LocalEest.TpFats, LocalOpe2.DckLogos, LocalEest.Localizas, ;
+					 		 LocalEest.CodTrans, LocalOpe2.DckImpIss, LocalOpe2.ChkImpMon, Left(LocalEest.nEmps,3), ;
+					 		 Substr(LocalEest.nEmps,5,6), LocalOpe.CMoes, LocalDcOpe.DckPaga, LocalOpe2.EditAgends, ;
+					 		 LocalOpe2.nCarDims, (LocalOpe.Dcpns = 1), (LocalOpe2.DckImpCd = 1), LocalDCOpe.DocPeso, ;
+					 		 LocalDCOpe.DocObs, (LocalOpe2.nCarDims = 2), LocalDCOpe.Docunit, LocalDCOpe.DocTotI, ;
+					 		 LocalDCOpe.DckCBar, LocalOpe2.DckEqs, LocalDCOpe.DocItem, LocalDCOpe.DocDescr, ;
+					 		 LocalDCOpe.DocObsI, LocalDcOpe.DocObsg, LocalEmp.Ceps, LocalEmp.Endes, LocalEmp.Numeros, ;
+					 		 LocalEmp.Compls, LocalEmp.Bairs, LocalEmp.Cidas, LocalEmp.Estas, LocalEmp.IMS, LocalOpe.Opers, ;
+					 		 LocalOpe2.dcksaldo, LocalOpe2.docsaldo, lnSaldoCta, lcMoeSaldo, LocalOpe2.DckTotBrt, LocalOpe2.DckObsMov, ;
+					 		 lcSaldos, lcNumps, _ImpCodBar, CrSigStats.Descs, LocalDCOpe.dckEmpDs, LocalEest.EmpDs, lcObsDet)
+
+	If LocalOpe2.PafEcfs = 1
+		Replace titpaf01 With 'DOCUMENTO AUXILIAR DE VENDA - '+Alltrim(ThisForm.pcDopes),;
+				Titpaf02 With 'NÃO É DOCUMENTO FISCAL - NÃO É VÁLIDO COMO RECIBO E COMO GARANTIA DE MERCADORIA - ',;
+				Titpaf03 With 'NÃO COMPROVA PAGAMENTO',;
+				Titpaf04 With 'É VEDADA A AUTENTICAÇÃO DESTE DOCUMENTO' in CrCabecalho
+	Endif
+
+	If (LocalDcOpe.DckObsg = 1) And Not IsNull(LocalDcOpe.ObsResu)
+		Replace ObsResu With LocalDcOpe.ObsResu In crCabecalho		
+	EndIf
+
+	If (crCabecalho.DckVend <> 1) And (LocalDcOpe.DckBarra <> 1) And ;
+	   (LocalDcOpe.DckObs = 1) And Not IsNull(LocalDcOpe.ObsCab)
+		Replace ObsCab With LocalDcOpe.ObsCab In crCabecalho		
+	EndIf
+
+	* Inserindo Dados dos Subníveis
+	If (LocalDcOpe.DckSubN = 1)
+		lcSub = []
+		Select LocalEstPe
+		Scan
+			If Empty(lcSub)
+				lcSub = [Subníveis : ]
+			EndIf
+			lcSub = lcSub + PadL(LocalEstPe.Codigos, 10, [0]) + [; ]
+		EndScan
+		Replace Subniveis With lcSub In crCabecalho
+	EndIf
+
+	* Inserindo Dados do Vendedor 1
+	loCnx.CursorQuery('SigCdCli', 'LocalCli', 'IClis', LocalEest.Vends, 'Razaos, RClis, Ddds, Tel1s, Tel2s, Tel3s, eMails')
+
+	lcBVd = Alltrim(Strtran(LocalEest.Vends, '/', '')) + '0'
+	lcBVd = fAltBar2de5(lcBVd) && Barra do Cabeçalho
+
+	Replace GrVends	   With Proper(LocalEest.GrVends), ;
+			Vends      With LocalEest.Vends, ;
+			DVends 	   With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+			DddVends   With LocalCli.Ddds, ;
+			Tel1sVends With LocalCli.Tel1s, ;
+			Tel2sVends With LocalCli.Tel2s, ;
+			Tel3sVends With LocalCli.Tel3s, ;
+			eMailVends With LocalCli.eMails, ;
+			BarVends   With lcBvd In crCabecalho
+
+	* Inserindo Dados do Vendedor 2
+	loCnx.CursorQuery('SigCdCli', 'LocalCli', 'IClis', LocalEest.Resps, 'Razaos, RClis')
+
+	Replace GrResps	   With Proper(LocalEest.GrResps), ;
+			Resps      With LocalEest.Resps, ;
+			DResps 	   With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos) In crCabecalho
+
+	* Inserindo Dados do Fornecedor	
+	llIfr = .f.
+	If InList(LocalOpe.Opers, 1, 3) And Not Empty(LocalDcOpe.DocOrig)
+		lcFor = LocalEest.ContaOs
+		llIfr = (LocalDCOpe.DckOri=1) 
+	EndIf
+	If InList(LocalOpe.Opers, 2, 3) And Not Empty(LocalDcOpe.DocDest)
+		lcFor = LocalEest.ContaDs
+		llIfr = (LocalDCOpe.DckDest=1) 
+	EndIf
+	
+	loCnx.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcFor, ;
+					  'Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Contato, ' + ;
+					  'Ddds, Tel1s, Tel2s, Faxs, eMails, Cpfs, Rgs, InscMuns, TpClis, CepCobs, ' + ;
+					  'EndCobs, pracas, BaiCobs, CidCobs, EstCobs')
+
+	Replace ForIClis   With lcFor, ;
+			ForRClis   With IIF(LocalDcOpe.dckdig=1, localEest.usuars, Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos)) In crCabecalho
+
+	If llIfr
+		Replace ForEndes   With LocalCli.Endes, ;
+				ForNums    With LocalCli.Nums, ;
+				ForCompls  With LocalCli.Compls, ;
+				ForCeps    With LocalCli.Ceps, ;
+				ForCidas   With LocalCli.Cidas, ;
+				ForBairs   With LocalCli.Bairs, ;
+				ForEstas   With LocalCli.Estas, ;
+				ForContato With LocalCli.Contato, ;
+				ForDdds    With LocalCli.Ddds, ;
+				ForTel1s   With LocalCli.Tel1s, ;
+				ForTel2s   With LocalCli.Tel2s, ;
+				ForFaxs    With LocalCli.Faxs, ;
+				ForeMails  With LocalCli.eMails, ; 
+				ForCgcs    With LocalCli.Cpfs, ;
+				ForIes     With LocalCli.Rgs, ;
+				ForIMuns   With LocalCli.InscMuns, ;
+				ForTpClis  With LocalCli.TpClis, ;
+				CepCobs    With LocalCli.CepCobs, ;
+				EndCobs    With ALLTRIM(LocalCli.EndCobs) + ',' +ALLTRIM(LocalCli.pracas), ;
+				BaiCobs    With LocalCli.BaiCobs, ;
+				CidCobs    With LocalCli.CidCobs, ;
+				EstCobs    With LocalCli.EstCobs In crCabecalho
+	EndIf
+
+	* Inserindo Dados de Entrega
+	loCnx.CursorQuery('SigCdCli', 'LocalCli', 'IClis', LocalEest.ContaEs, 'Razaos, RClis, eMails, Faxs, Cpfs, Rgs, TpClis')
+	If Not Eof('LocalCli')
+		Replace EntIClis    With LocalEest.ContaEs, ;
+				EntRClis    With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+				EntFaxs     With LocalCli.Faxs, ;
+				EnteMails   With LocalCli.eMails, ;
+				EntCgcs     With LocalCli.Cpfs, ;
+				EntIes      With LocalCli.Rgs, ;
+				EntTpClis	With LocalCli.TpClis In crCabecalho
+		
+		Dimension laArray(2)
+		laArray(1) = LocalEest.ContaEs
+		laArray(2) = LocalEest.LocalEnts
+
+		If fEndEntrega(@laArray, loCnx)
+			lcEnd = Alltrim(laArray(06)) + ;
+					Iif(Empty(laArray(07)), '', ', ' + Alltrim(laArray(07))) + ;
+					Iif(Empty(laArray(08)), '', ' - ' + Alltrim(laArray(08)))
+			
+			Replace EntEndes    With lcEnd, ;
+					EntCeps     With laArray(04), ;
+					EntBairs    With laArray(09), ;
+					EntCidas    With laArray(10), ;
+					EntEstas    With laArray(11), ;
+					EntDdds     With laArray(12), ;
+					EntTel1s    With laArray(13), ;
+					EntTel2s    With laArray(14), ;
+					EntContato  With laArray(15) In crCabecalho
+		EndIf
+	Else
+		loCnx.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcFor, ;
+						  'Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Contato, ' + ;
+						  'Ddds, Tel1s, Tel2s, Faxs, eMails, Cpfs, Rgs, InscMuns, TpClis')
+
+		lcEnd = Alltrim(LocalCli.Endes) + ;
+				Iif(Empty(LocalCli.Nums), '', ', ' + Alltrim(LocalCli.Nums)) + ;
+				Iif(Empty(LocalCli.Compls), '', ' - ' + Alltrim(LocalCli.Compls))
+
+		Replace EntIClis    With lcFor, ;
+				EntRClis    With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+				EntFaxs     With LocalCli.Faxs, ;
+				EnteMails   With LocalCli.eMails, ;
+				EntCgcs     With LocalCli.Cpfs, ;
+				EntIes      With LocalCli.Rgs, ;
+				EntTpClis	With LocalCli.TpClis, ;
+				EntEndes    With lcEnd, ;
+				EntCeps     With LocalCli.Ceps, ;
+				EntBairs    With LocalCli.Bairs, ;
+				EntCidas    With LocalCli.Cidas, ;
+				EntEstas    With LocalCli.Estas, ;
+				EntDdds     With LocalCli.Ddds, ;
+				EntTel1s    With LocalCli.Tel1s, ;
+				EntTel2s    With LocalCli.Tel2s, ;
+				EntContato  With LocalCli.Contato In crCabecalho
+	EndIf
+
+	* Inserindo Condições Comerciais
+	lcPag = []
+	If (LocalOpe.Docus = 7) && Nota de Débito
+		Select LocalPar
+		Go Top In LocalPar
+		lcPag = Dtoc(LocalPar.Vencs) + Alltrim(Transform(LocalPar.Valos, [99,999,999.99]))
+	Else
+		If LocalOpe2.chkImpDp <> 1
+			lcQbr = Iif(Reccount([LocalPar]) > 5, [], Chr(13))
+			Select LocalPar
+			Scan
+				lcDat = Iif(LocalDcOpe.DocFxVencs = 0 Or Empty(LocalPar.Vencs), [], [ - ] + Dtoc(LocalPar.Vencs))
+				lcCot = Iif(LocalOpe.Dcpns = 1, [], Iif(LocalPar.CotFpgs <> 1, [ (Ct: ] + Alltrim(Transform(LocalPar.CotFpgs, [99,999,999.99])) + [)], []))
+				
+				If (LocalPar.Total > 1)
+					lcPag = lcPag + Iif(Empty(lcPag), [], [; ] + lcQbr) + Alltrim(Str(LocalPar.Total, 10)) + 'x ' + ;
+							Alltrim(LocalPar.FPags) + ' - ' + Iif(LocalOpe.Docus = 6, [], Alltrim(LocalPar.MoeFpgs) + '$ ') + ;
+							Alltrim(Transform(LocalPar.Valos, [99,999,999.99])) + lcCot
+				Else 
+					lcPag = lcPag + Iif(Empty(lcPag), [], [; ] + lcQbr) + Alltrim(LocalPar.FPags) + ' - ' + ;
+							Iif(LocalOpe.Docus = 6, [], Alltrim(LocalPar.MoeFpgs) + '$ ') + Alltrim(Transform(LocalPar.Valos, [99,999,999.99])) + lcCot
+				EndIf 
+				lcPag = lcPag + lcDat
+			EndScan
+		Else
+			Create Cursor crLcPag (Total n, Descrs c(30), MoeFpgs c(3), Valos n(13,2), CotFpgs n(13,2))
+			Index on Alltrim(Descrs)+Alltrim(MoeFpgs) tag IdxLcPag
+
+			Select LocalPar1
+			Scan 
+				If Seek(Alltrim(LocalPar1.Descrs)+Alltrim(LocalPar1.MoeFpgs),'crLcPag','IdxLcPag')
+					Replace Total with Total + 1 ,;
+							Valos with Valos + LocalPar1.Valos in crLcPag 
+				Else
+					Insert Into crLcPag (Total,Descrs,MoeFpgs,Valos,CotFpgs) Values (1,LocalPar1.Descrs,LocalPar1.MoeFpgs,LocalPar1.Valos,LocalPar1.CotFpgs) 
+				EndIf 	
+			EndScan 
+			
+			lcQbr = Iif(Reccount([crLcPag]) > 5, [], Chr(13))
+			Select crLcPag
+			Scan 
+				lcCot = Iif(LocalOpe.Dcpns = 1, [], Iif(crLcPag.CotFpgs <> 1, [ (Ct: ] + Alltrim(Str(crLcPag.CotFpgs, 16, 2)) + [)], []))
+				
+				lcPag = lcPag + Iif(Empty(lcPag), [], [; ] + lcQbr) + Alltrim(Str(crLcPag.Valos, 16, 2)) + ' - ' +;
+						Alltrim(Str(crLcPag.Total, 10)) + 'x ' + Alltrim(crLcPag.Descrs) + lcCot
+			EndScan 		
+		EndIf 
+	EndIf 
+
+	* Título do Label de Variação
+	If (LocalEest.ValVars > 0)
+		lcVar = [Encargos Financeiros]
+		If Not Empty(LocalDcOpe.DocAcres)
+			lcVar = Alltrim(LocalDcOpe.DocAcres)
+		EndIf
+	Else
+		lcVar = [Desconto Concedido]
+		If Not Empty(LocalDcOpe.DocDesco)
+			lcVar = Alltrim(LocalDcOpe.DocDesco)
+		EndIf
+	EndIf
+	
+	lcFrt = []
+	lnIcm = 0
+	lnIss = 0
+	If Used([LocalNFis])
+		lnIcm = LocalNFis.ValIcms
+		lnIss = LocalNFis.vTotIss
+		If Empty(LocalNFis.VlFretes)
+			lcFrt = Iif(LocalNFis.Fretes <> 1, [Destinatário/FOB], [Emitente/CIF])
+		Else
+			lcFrt = Transform(LocalNFis.VlFretes, '9,999,999,999.99')
+			Replace VlFretes With LocalNFis.VlFretes In crCabecalho
+		EndIf
+		Replace VlAcess With LocalNFis.DespAces, ;
+				IcmsS	With LocalNFis.IcmsS, ;
+				vlseguros WITH LocalNFis.vlseguros In crCabecalho
+	EndIf
+
+	* Inserindo o Valor de Transporte 
+	If Not Empty(LocalEest.ValTrans)
+		Replace VlFretes With VlFretes + LocalEest.ValTrans In crCabecalho
+	EndIf
+	
+	* Apanhando o Prazo de Entrega
+	ldOnt = Ttod(Nvl(LocalEest.PrazoEnts, Ctot([])))
+
+	* Montando a Observação do Prazo de Entrega
+	lcOnt = [] 
+	If (LocalDcOpe.ChkPrzEnts = 1) And Not IsEmpty(LocalDcOpe.TxtPrzEnts)
+		lcOnt = Strtran(Alltrim(LocalDcOpe.TxtPrzEnts), [#], Dtoc(ldOnt))
+	EndIf
+
+	Replace PrazoEnts  With ldOnt, ;
+			Variacao   With Abs(LocalEest.ValVars), ;
+			VariacaoP  With Round(Abs(LocalEest.Vars), LocalOpe2.EditAgends), ;
+			TipoVars   With lcVar, ;
+			Icms	   With lnIcm, ;
+			RespFretes With lcFrt, ;
+			CondPagto  With lcPag, ;
+			VlrIss     With lnIss,;
+			ObsEntrega With lcOnt In crCabecalho
+
+	* Inserindo Produtos
+	lnPgn = 1
+	lnItn = 0
+	lnQtI = 0
+	lnSeq = 0
+	llMud = .f.
+	Select LocalEestI
+	Scan
+		llMud = .f.
+
+		lcFis = []
+		lcEqv = []
+		If (LocalDcOpe.DckFiscal = 1) Or (LocalOpe2.DckDPro3s = 1) Or (LocalOpe2.DckEqs = 1) && Se Apanha a Descrição Fiscal ou Completa do Produto
+			lcQuery = [Select DescFis, DPro3s, CProEqs ] + ;
+						[From SigCdPro ] + ;
+					   [Where Cpros = '] + LocalEestI.CPros + [']
+
+			If (loCnx.SqlExecute(lcQuery, [LocalPro]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalPro)])
+				Return .f.
+			EndIf
+			Go Top In LocalPro
+			If Not Eof([LocalPro]) And ((LocalDcOpe.DckFiscal = 1) Or (LocalOpe2.DckDPro3s = 1) )
+				lcFis = Nvl(Iif(LocalDcOpe.DckFiscal = 1, LocalPro.DescFis, LocalPro.DPro3s), [])
+				lcFis = Strtran(Strtran(Strtran(Alltrim(lcFis), Chr(13), [ ]), Chr(10), [ ]), [  ], [ ])
+			EndIf
+			If Not Eof([LocalPro]) And (LocalOpe2.DckEqs = 1) 
+				lcEqv = LocalPro.CProEqs
+			EndIf
+		Endif
+
+		If Inlist(LocalDcOpe.CarCompos,1,5) And Int(Val(Substr(LocalOpCdi.lbltxidCs, 21, 1))) = 1 And !Empty(LocalEestI.Citem2) And LocalEestI.Citens <> LocalEestI.Citem2 && Tiago - 15/10/2013 - Barão Telhas - Não sair a composição desmembrada no documento
+			Loop
+		Endif
+
+		*** Tiago - 04/08/2015 - Hold Gold - Incluído imagem no cursor para sair no layout 9 - Fixo colunas
+		lcArquivo = ''
+		lcEmbalagem = ''
+		lcColecoes = ''		
+		lcfinp     = ''		
+		lcLinhas   = ''		
+		lcPesoBs   = ''
+		lcMercs    = ''		
+
+		*** mena - 09/11/2015 pega 
+		If inlist(LocalOpe.Docus,3,11)
+			lcQuery = [Select FigJpgs, Colecoes, codfinp, pesobs, linhas, Mercs From SigCdPro Where Cpros = '] + LocalEestI.CPros + [']
+			If (loCnx.SqlExecute(lcQuery, [LocalPro]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalPro)])
+				Return .f.
+			Endif
+			lcColecoes = LocalPro.Colecoes	&& safra
+			lcfinp     = LocalPro.codfinp	&& volume
+			lclinhas   = LocalPro.linhas	&& pais
+			lcMercs    = LocalPro.Mercs
+			lcPesoBs   = Alltrim(Transform(LocalPro.Pesobs,'99999'))
+
+		ENDIF
+
+		If inlist(LocalOpe.Docus,6,9,10)
+			llQP	= IIF(LocalOpe2.DckTotBrt=1, .t.,.f.)	&& mena - 03/09/2016 se mostra Qtd x Preco
+			lcQuery = [Select FigJpgs, Colecoes, codfinp, pesobs, linhas, Mercs From SigCdPro Where Cpros = '] + LocalEestI.CPros + [']
+			If (loCnx.SqlExecute(lcQuery, [LocalPro]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalPro)])
+				Return .f.
+			Endif
+			lcColecoes = LocalPro.Colecoes
+			lcfinp     = LocalPro.codfinp
+			lclinhas   = LocalPro.linhas
+			lcMercs    = LocalPro.Mercs
+			lcPesoBs   = Alltrim(Transform(LocalPro.Pesobs,'99999'))
+			lcProduto = Strtran(Strtran(LocalEestI.Cpros,'/',''),' ','')
+			Clear Resources
+			If Not Empty(LocalPro.FigJpgs) And Not IsNull(LocalPro.FigJpgs)
+				lcFoto=Strconv(Strtran(Strtran(Strtran(LocalPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+				lcArquivo = Sys(2023) + '\' + Alltrim(lcProduto) + '.JPG'
+				=Strtofile(lcFoto, lcArquivo)
+			Else
+				lcArquivo = ''
+			EndIf
+			
+			If Not ThisForm.chkImagem.Value
+				lcArquivo = ''
+			EndIf 
+			
+			If (LocalOpe.Docus=9)
+				If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+					lcFator = Alltrim(Transform(LocalEestI.Fators,'99.999'))									
+					Select xtotEmb
+					If !Seek( LocalPro.Colecoes + lcFator )
+						Insert Into xtotEmb(Colecoes, Fators) values (LocalPro.Colecoes, lcFator)
+					Endif
+					Replace Units With Units + LocalEestI.Units, Pesos With Pesos + LocalEestI.Pesos in xTotEmb				
+				
+					Select CodEmbs, Descs, Qtds, Pesos From LocalMvIte Where Citens = LocalEestI.Citens into cursor LocalEmb
+					Select LocalEmb
+					SCAN
+						lcEmbalagem = lcEmBalagem + Transform(LocalEmb.Pesos,'999.999') + [ ]					
+						Replace QtdEtqs with QtdEtqs + LocalEmb.Qtds, PesoEtqs With PesoEtqs + LocalEmb.Pesos, Pesos With Pesos + LocalEmb.Pesos in xTotEmb
+						Replace Embalagens With lcEmbalagem in xTotEmb
+						lcPos=IIF(RECNO()<6,Alltrim(Str(Recno())),'5')		
+						replace pEmb&lcPos. with xTotEmb.pEmb&lcPos.+localemb.pesos	in xTotEmb	&& mena - 03/09/2016 acumula pesos das embalagens por colecao
+					Endscan
+					Use In LocalEmb
+				Endif	
+			EndIf 		
+		Endif
+		
+		Select LocalEstI2
+		If Seek(Str(LocalEestI.CItens, 6), 'LocalEstI2', 'CItens')
+			Select LocalEstI2
+			Scan While (CItens = LocalEestI.CItens)
+				lnItn = lnItn + 1
+				lnSeq = lnSeq + 1
+				
+				lcReffs = ''
+				* Pegar referência do Fornecedor
+				If( LocalEstI2.iFors = lcFor ) Then
+					lcReffs = LocalEstI2.Reffs
+				Else
+					lcQuery = [Select Reffs from SigPrFnc where cPros = ']+LocalEstI2.cPros+[' and iFors = ']+lcFor+[']
+					If(loCnx.SQLExecute(lcQuery,[LocalfPro]) < 1 )
+						=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalfPro)])
+						Return .f.
+					Endif			
+					Go Top in LocalfPro
+					If Not Eof('LocalfPro')
+						lcReffs = LocalfPro.Reffs
+					Else
+						lcReffs = LocalEstI2.Reffs
+					Endif				   
+				Endif					
+
+				* Qtd de Casas de acordo com operação ( Quantidade )
+				lnCas  = Iif(LocalOpe2.CasQtds = 0 , 3, LocalOpe2.CasQtds )
+				lcMask = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+				lnSetAnt = Set("Decimals") 
+				Set Decimals To Max(lnCas,0)
+				lcQtd  = Transform(LocalEstI2.Qtds,Right(lcMask,9))
+				lnTQt = lnTQt + LocalEstI2.Qtds
+				Set Decimals To lnSetAnt
+				
+				* Qtd de Casas de acordo com operação ( valor unitário )
+				lnCas   = Iif(LocalOpe.Casas = 0 , 2, LocalOpe.Casas )
+				lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+				lnSetAnt = Set("Decimals") 
+				Set Decimals To Max(lnCas,0)
+				lcUnits = Transform(LocalEstI2.Units,Right(lcMask,15))
+				If (LocalOpe.Docus = 8) && 8 - Locação
+					lcUnits = Transform(LocalEstI2.Units,[999,999,999.99])
+				EndIf
+				
+				Set Decimals To lnSetAnt			
+
+				* Qtd de Casas de acordo com operação ( peso )
+				lnCas   = Iif(LocalOpe.NCPesos = 0 , 2, LocalOpe.NCPesos )
+				lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+				lnSetAnt = Set("Decimals") 
+				Set Decimals To Max(lnCas,0)
+				lcPeso = Alltrim(Transform(LocalEstI2.Pesos,Right(lcMask,15)))
+				lcTPes = Alltrim(Transform(LocalEstI2.TPesos,Right(lcMask,15)))
+				lcFator = Alltrim(Transform(LocalEstI2.Fators,'99.999'))
+				Set Decimals To lnSetAnt			
+								
+				lnBrr = Iif(Empty(LocalEstI2.CodBarras), LocalEestI.CodBarras, LocalEstI2.CodBarras)
+
+				*** mena 09/11/2015 foram incluidos os campos valdescs e icmss para documento da EnPrimeur ***
+				Insert Into crDados (Pagina, CItens, CPros, Reffs, DPros, DPro2s, CUnis, Qtds, Units, Unitorigs, Totas, Moedas, MoeVals, ;
+									 Aliqs, ValIpis, Obs, valdescs, pdescs, valrats, icmss, bcicmss, Valors, Pesos, TPesos, Fator, CodBarras, CProEqs, ClFiscals, Imagem, ;
+									 Fators, Embalagens, Colecoes, codfinp, pesobs, linhas, local, TamDe, TamPara, Mercs) ;
+							 Values (lnPgn, lnSeq, LocalEstI2.CPros, lcReffs, Iif(Empty(lcFis), LocalEstI2.DPros, lcFis), ;
+							 		 LocalEstI2.DPros, LocalEstI2.CUnis, lcQtd, lcUnits, LocalEstI2.Unitorigs, LocalEstI2.Totas, LocalEstI2.Moedas, ;
+							 		 LocalEstI2.MoeVals, LocalEstI2.Aliqs, LocalEstI2.ValIpis, Nvl(LocalEstI2.Obs, []), LocalEstI2.valdescs, ;
+							 		 LocalEstI2.pdescs, LocalEstI2.valrats, LocalEstI2.icmss, LocalEstI2.bcicmss, ;
+							 		 LocalEstI2.Valors, lcPeso, lcTPes, LocalEestI.Fator, lnBrr, lcEqv, LocalEestI.ClFiscals, lcArquivo, ;
+							 		 lcFator, lcEmbalagem, lcColecoes, lcFinp, lcPesoBs, lcLinhas, IIF(LocalOpe.opers=1,LocalEestI.locals,LocalEestI.localos),;
+							 		 LocalEestI.TamDe, LocalEestI.TamPara, lcMercs)
+
+				If (LocalOpe.Docus = 7) && Nota de Débito
+					ThisForm.CarregaSGrus(LocalEstI2.CPros)
+				EndIf
+
+				lnQtI = lnQtI + LocalEstI2.Qtds
+				
+				If Not Seek(LocalEestI.Fator, [crFatores], [Fator])
+					Insert Into crFatores (Fator) Values (LocalEestI.Fator)
+				EndIf
+				Replace Totas With Totas + LocalEstI2.TPesos In crFatores
+
+				If Not Seek(LocalEstI2.Moedas, [crMoedas], [CMoes])
+					Insert Into crMoedas (CMoes, CotFpgs) Values (LocalEstI2.Moedas, LocalEstI2.MoeVals)
+				EndIf
+				Replace Valos With Valos + LocalEstI2.Totas In crMoedas
+
+				***** Tiago - 09/09/08
+				If (LocalDcOpe.DckTaCor = 1) && Cor/Tamanho
+					lcquery = [Select i.CItens, i.Qtds , i.CodEmbs, i.CodTams, i.CodCors, ] + ;
+									 [i.QtdEmbs, i.QtdEnts, i.CodEmbEnts, i.CodBarras, i.Pesos ] +;
+					  			[From SigMvIts i ] +;
+					 		   [Where i.EmpDopNums = ?LocalEstI2.EmpDopNums And ] + ;
+					 		   		 [i.CItens = ?LocalEstI2.CItens]
+
+					loCnx.SQLExecute(lcquery,'TmpRel2')
+					
+					DetalheDP = ''
+					Select TmpRel2
+					Index On Str(cItens,4)+CodCors+CodTams+CodEmbs Tag cItens
+					Scan While TmpRel2.CItens = LocalEestI.CItens
+						DetalheDP = DetalheDP + 'CB.: '+ Transf(Iif(TmpRel2.CodBarras=0,0,TmpRel2.CodBarras),"99999999")
+						DetalheDP = DetalheDP + ' - Tam.: ' + TmpRel2.CodTams
+						
+						If !EMPTY(TmpRel2.CodCors) &&CrTmpGru.Cores = 1
+							loCnx.Cursorquery('SigCdCor','CrTmpCor','Cods',TmpRel2.CodCors)
+							DetalheDP = DetalheDP + ' - Cor: ' + TmpRel2.CodCors + '-' + Padr( CrTmpCor.Descs,15)
+						EndIf
+						lnCas  = Iif(LocalOpe2.CasQtds = 0 , 3, LocalOpe2.CasQtds )
+						lcMask = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+						
+						DetalheDP = DetalheDP + ' - Qtds: ' + Transf( TmpRel2.Qtds, Right(lcMask,9) )
+						
+						* Qtd de Casas de acordo com operação ( peso )
+						lnCas   = Iif(LocalOpe.NCPesos = 0 , 2, LocalOpe.NCPesos )
+						lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+						lnSetAnt = Set("Decimals") 
+						Set Decimals To Max(lnCas,0)
+						DetalheDP = DetalheDP + ' - Peso: ' + Alltrim(Transform(TmpRel2.Pesos,Right(lcMask,15)))
+						Set Decimals To lnSetAnt			
+
+						Insert Into crDados (Pagina, CItens, CPros, Reffs, DPros, DPro2s, CUnis, Qtds, Units, ;
+											 Totas, Moedas, Aliqs, ValIpis, Obs, Valors) ;
+									 Values (lnPgn, lnSeq, [], [], Detalhedp, [], [], [], [], 0, [], 0, 0, [], 0)
+
+						DetalheDP = []
+						
+						If (lnItn >= lnMax)
+							lnItn = 0
+							lnPgn = lnPgn + 1
+							llMud = .t.
+						EndIf
+						Select TmpRel2
+					EndScan
+				EndIf
+				****** Tiago 
+				
+				Select LocalEstI2
+				If (lnItn >= lnMax)
+					lnItn = 0
+					lnPgn = lnPgn + 1
+					llMud = .t.
+				EndIf
+			EndScan
+			Select LocalEestI
+		Else
+			lnItn = lnItn + 1
+			lnSeq = lnSeq + 1
+
+			lcReffs = ''
+			* Pegar referência do Fornecedor
+			If( LocalEestI.iFors = lcFor ) Then
+				lcReffs = LocalEestI.Reffs
+			Else
+				lcQuery = [Select Reffs from SigPrFnc where cPros = ']+LocalEestI.cPros+[' and iFors = ']+lcFor+[']
+				If(loCnx.SQLExecute(lcQuery,[LocalfPro]) < 1 )
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalfPro)])
+					Return .f.
+				Endif			
+				Go Top in LocalfPro
+				If Not Eof('LocalfPro')
+					lcReffs = LocalfPro.Reffs
+				Else
+					lcReffs = LocalEestI.Reffs
+				Endif				   
+			Endif		
+
+			* Qtd de Casas de acordo com operação ( quantidade )
+			lnCas  = Iif(LocalOpe2.CasQtds = 0 , 3, LocalOpe2.CasQtds )
+			lcMask = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+			lnSetAnt = Set("Decimals") 
+			Set Decimals To Max(lnCas,0)
+			lcQtd  = Transform(LocalEestI.Qtds,Right(lcMask,9))
+			lnTQt = lnTQt + LocalEestI.Qtds
+			Set Decimals To lnSetAnt
+
+			* Qtd de Casas de acordo com operação ( valor unitário )
+			lnCas   = Iif(LocalOpe.Casas = 0 , 2, LocalOpe.Casas )
+			lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+			lnSetAnt = Set("Decimals")
+			Set Decimals To Max(lnCas,0)
+			lcUnits = Transform(LocalEestI.Units,Right(lcMask,15))
+			If (LocalOpe.Docus = 8) && 8 - Locação
+				lcUnits = Transform(LocalEestI.Units,[999,999,999.99])
+			EndIf
+			Set Decimals To lnSetAnt
+
+			* Qtd de Casas de acordo com operação ( peso )
+			lnCas   = Iif(LocalOpe.NCPesos = 0 , 2, LocalOpe.NCPesos )
+			lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+			lnSetAnt = Set("Decimals") 
+			Set Decimals To Max(lnCas,0)
+			lcPeso = Alltrim(Transform(LocalEestI.Pesos,Right(lcMask,15)))
+			lcTPes = Alltrim(Transform(LocalEestI.TPesos,Right(lcMask,15)))
+			lcFator = Alltrim(Transform(LocalEestI.Fators,'99.999'))
+			lnTotas = LocalEestI.Totas
+
+			*** mena - 04/09/2016 - se formulario 9, soma as embalagens ao peso ***
+			IF LocalOpe.Docus = 9 and !llQP
+				Select SUM(Pesos) as pesos From LocalMvIte Where Citens = LocalEestI.Citens into cursor LocalEmb
+				lcPeso  = LocalEestI.Pesos+NVL(LocalEmb.pesos,0)
+				lcPeso  = Alltrim(Transform(lcPeso,Right(lcMask,15)))
+				lcUnits = LocalEestI.Pesos
+				lcUnits = Alltrim(Transform(lcUnits,Right(lcMask,15)))
+			ENDIF
+			
+			*** mena - 03/09/2016 - ajusta valores qdo for QxP - HDG ***
+			lcUnits = IIF(!llQP, lcUnits, Transform(LocalEestI.Qtds*LocalEestI.pesos,Right(lcMask,15)))	&& mena - 03/09/2016 - se QxP)
+			lcPeso  = IIF(!llQP, lcPeso, ALLTRIM(Transform(LocalEestI.pesos,[999999999.99])))
+			lnTotas = IIF(!llQP, lntotas, LocalEestI.Qtds*LocalEestI.pesos*LocalEestI.fators)
+
+			Set Decimals To lnSetAnt			
+
+			Select LocalEestI
+			Insert Into crDados (Pagina, CItens, CPros, Reffs, DPros, DPro2s, CUnis, Qtds, Units, unitOrigs, Totas, Moedas, ;
+								 MoeVals, Aliqs, ValIpis, Obs, valdescs, pdescs, valrats, icmss, bcicmss, Valors, Pesos, TPesos, Fator, CodBarras, CProEqs, ClFiscals, Imagem, ;
+								 Fators, Embalagens, Colecoes, codfinp, pesobs, linhas, local, TamDe, TamPara, Mercs) ;
+						 Values (lnPgn, lnSeq, LocalEestI.CPros, lcReffs, Iif(Empty(lcFis), LocalEestI.DPros, lcFis), ;
+						 		 LocalEestI.DPro2s, LocalEestI.CUnis, lcQtd, lcUnits, LocalEestI.unitOrigs, lnTotas, LocalEestI.Moedas, ;
+						 		 LocalEestI.MoeVals, LocalEestI.Aliqs, LocalEestI.ValIpis, Nvl(LocalEestI.Obs, []), LocalEestI.valdescs, ;
+						 		 LocalEestI.pdescs, LocalEestI.valrats, LocalEestI.icmss, LocalEestI.bcicmss, ;
+						 		 LocalEestI.Valors, lcPeso, lcTPes, LocalEestI.Fator, LocalEestI.CodBarras, lcEqv, LocalEestI.ClFiscals, lcArquivo, ;
+						 		 lcFator, lcEmbalagem, lcColecoes, lcFinp, lcPesobs, lcLinhas, IIF(localOpe.opers=1,LocalEestI.locals, LocalEestI.localos),;
+						 		 LocalEestI.TamDe, LocalEestI.TamPara, lcMercs)
+
+
+			If (LocalOpe.Docus = 7) && Nota de Débito
+				ThisForm.CarregaSGrus(LocalEestI.CPros)
+			EndIf
+
+			lnQtI = lnQtI + LocalEestI.Qtds
+
+			If Not Seek(LocalEestI.Fator, [crFatores], [Fator])
+				Insert Into crFatores (Fator) Values (LocalEestI.Fator)
+			EndIf
+			Replace Totas With Totas + LocalEestI.TPesos In crFatores
+
+			If Not Seek(LocalEestI.Moedas, [crMoedas], [CMoes])
+				Insert Into crMoedas (CMoes, CotFpgs) Values (LocalEestI.Moedas, LocalEestI.MoeVals)
+			EndIf
+			Replace Valos With Valos + LocalEestI.Totas In crMoedas
+
+			If (lnItn >= lnMax)
+				lnItn = 0
+				lnPgn = lnPgn + 1
+				llMud = .t.
+			EndIf
+		EndIf
+	EndScan
+
+**** Homologação paf 09/2012 - inclui itens cancelados da impressão do DAV ****
+	If Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4	&&Mena -11/10/2013-Só inclui itens cancelados no documento se for DAV
+		SELECT LocalEestIE
+		GO top
+		SCAN
+			lnItn = lnItn + 1
+			lnSeq = lnSeq + 1
+			Insert Into crDados (Pagina, CItens, CPros, Reffs, DPros, CUnis, Qtds, Units, Totas, Moedas, ;
+								 MoeVals, Aliqs, ValIpis, Obs, Valors, Pesos, TPesos, Fator, CodBarras, CProEqs) ;
+						 Values (lnPgn, lnSeq, LocalEestIE.cpros, '', ALLTRIM(LocalEestIE.DPros) + ' CANCELADO', ;
+						 		 '', '', '', 0, '', 0, ;
+						 		 0, 0, '', 0, '', ;
+						 		 '', '', 0, '')
+		ENDSCAN
+	endif
+********************************************************************************
+	
+	If (LocalDCOpe.DckNIte = 1) && Quantidade de Itens
+		lnCas  = Iif(LocalOpe2.CasQtds = 0, 3, LocalOpe2.CasQtds)
+		lcMask = [999999999] + Iif(lnCas > 0, [.] + Replicate([9], lnCas), [])
+		lnSetAnt = Set([Decimals]) 
+		Set Decimals To Max(lnCas,0)
+		lcQtI = Transform(lnQtI, Right(lcMask, 9))
+		Set Decimals To lnSetAnt
+		lcDIt = Iif(Empty(Alltrim(LocalDCOpe.DocNIte)), [Qtde Itens], Alltrim(LocalDCOpe.DocNIte))
+		Replace TotItens With lcQtI, ;
+				DesItens With lcDIt In crCabecalho
+	EndIf
+	*** Tiago - 05/08/2015- Hold Gold - Lança os agrupamentos por grupo de venda + fator e no cabeçalho o total de etiqueta pra sair na observação
+	If (LocalOpe.Docus = 9) And (Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1 or llQP)
+		Select xtotEmb
+		Scan
+			lnItn = lnItn + 1
+			lnSeq = lnSeq + 1
+			* Qtd de Casas de acordo com operação ( peso )
+			lnCas   = Iif(LocalOpe.NCPesos = 0 , 2, LocalOpe.NCPesos )
+			lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+			lnSetAnt = Set("Decimals") 
+			Set Decimals To Max(lnCas,0)
+			lcPeso = Alltrim(Transform(xTotEmb.Pesos,Right(lcMask,15)))
+			lcPesoL = Alltrim(Transform(xTotEmb.Pesos - xTotEmb.PesoEtqs,Right(lcMask,15)))
+			lnCas   = Iif(LocalOpe.Casas = 0 , 2, LocalOpe.Casas )
+			lcMask  = '999999999'+Iif(lnCas>0,'.' + Repl( '9', lnCas ),'')
+			Set Decimals To Max(lnCas,0)
+			lcUnits = Transform(xTotEmb.Units,Right(lcMask,15))						
+			lnUnits = xTotEmb.Units
+			Set Decimals To lnSetAnt	
+
+			*** mena 03/09/2016 - soma embalagens para sair no caneçalho ***
+*!*				lcCol = xTotEmb.colecoes
+*!*				Select SUM(pemb1) as peso1, SUM(pemb2) as peso2, SUM(pemb3) as peso3, SUM(pemb4) as peso4, SUM(pemb5) as peso5  From xTotEmb group by colecoes, fators  where colecoes = lcCol into cursor LocalEmb
+*!*				Select LocalEmb
+			lcEmbalagem = []
+			FOR i=1 to 5
+				lcPos=Alltrim(Str(i))
+				lcEmbalagem = lcEmbalagem + IIF(xTotEmb.pEmb&lcPos.<>0,Transform(xTotEmb.pEmb&lcPos.,'999.999')+[ ],[])
+			endfor
+			Replace Embalagens With lcEmbalagem in xTotEmb
+			**********************************************************************************
+
+
+			*** mena - 03/09/2016 - se apresenta qtd total e preco total (HDG - PCI)						
+			IF llQP
+				lcCol = xtotemb.colecoes
+				lnFat = VAL(xtotemb.fators)
+				SELECT SUM(Qtds*pesos*fators) as nVt, SUM(Qtds*pesos) as nVL, SUM(Qtds) as nTQ  from LocalEestI where colecoes = lcCol and fators = lnFat into cursor crAux
+				lcPeso = Alltrim(Transform(crAux.nTQ,Right(lcMask,15)))
+				lcPesoL= ALLTRIM(Transform(crAux.nVL,Right(lcMask,15)))
+				lnUnits = crAux.nVt
+			ENDIF
+
+			Insert Into crDados (Pagina, CItens, CPros, Reffs, DPros, CUnis, Qtds, Units, Totas, Moedas, ;
+								 MoeVals, Aliqs, ValIpis, Obs, Valors, Pesos, TPesos, Fator, CodBarras, CProEqs, Colecoes, Fators, Embalagens) ;
+						 Values (lnPgn, 0, xTotEmb.Colecoes, '', '', '', lcPeso, '', lnUnits, '', ;
+						 		 0, 0, 0, '', 0, lcPesoL, '', '', 0, '',xtotEmb.Colecoes, xtotEmb.Fators, xTotEmb.Embalagens)
+
+			If (lnItn >= lnMax)
+				lnItn = 0
+				lnPgn = lnPgn + 1
+				llMud = .f.
+			EndIf	
+			SELECT xtotemb					 		 
+		ENDSCAN
+		
+		*** Ordena novamente os itens e agrupamentos
+		Select * From crDados Into Cursor crDados Order By Colecoes, Fators, Citens ReadWrite
+		lnItn = 0
+		lnPgn = 1
+		Select crDados
+		Scan
+			lnItn = lnItn + 1
+			Replace Citens With Iif(Empty(Citens),0,lnItn ), Pagina With lnPgn
+
+			If (lnItn >= lnMax)
+				lnItn = 0
+				lnPgn = lnPgn + 1
+				llMud = .f.
+			EndIf						 		 
+		Endscan
+		Select * From crDados Into Cursor crDados Order By Colecoes, Fators, Pagina, Citens ReadWrite
+	Endif
+	
+	* Completando o Cursor Com Registros em Branco Até Preencher a Folha
+	If llMud
+		lnPgn = lnPgn - 1
+	EndIf
+
+	If (lnItn < lnMax) And Not llMud And Not Inlist(LocalOpe.Docus,7,9) && Nota de Débito
+		For I = lnItn To (lnMax - 1)
+			Insert Into crDados (Pagina) Values (lnPgn)
+		Next
+	EndIf
+
+	* Criando o Arquivo do Logotipo Para o Report
+	ThisForm.ImgLogotipo = Sys(2023) + [\] + Sys(2015) + [.jpg]
+	ThisForm.ImgTecnicas = Sys(2023) + [\] + Sys(2015) + [.jpg]
+	ThisForm.ImgBranco   = fCriarIcone([brjpg.jpg], Sys(2023), loCnx)
+
+	If Empty(ThisForm.ImgBranco) Or Not File(ThisForm.ImgBranco)
+		=MessageBox('Não Foi Encontrado Um .JPG em Branco!!!' + Chr(13) + ;
+					'Procurar Por: ' + Alltrim(ThisForm.ImgBranco), 0+48, '')
+		Return .f.
+	EndIf
+
+	Create Cursor csBranco (Branco m(4))
+	Select csBranco
+	Append Blank
+	Append Memo Branco From (ThisForm.ImgBranco) OverWrite
+
+
+	If Not IsEmpty(LocalEmp.LogoRels) or Not IsNull(LocalEmp.LogoRels)
+		Clear Resources
+		Copy Memo LocalEmp.LogoRels To (ThisForm.ImgLogotipo)
+	Else
+		If Not IsEmpty(LocalEmp.Logos) or Not IsNull(LocalEmp.Logos)
+			Clear Resources
+			Copy Memo LocalEmp.Logos To (ThisForm.ImgLogotipo)
+		Else
+			If Not IsEmpty(LocalParam.Logos)
+				Clear Resources
+				Copy Memo LocalParam.Logos To (ThisForm.ImgLogotipo)
+			Else
+				Clear Resources
+				Copy Memo csBranco.Branco To (ThisForm.ImgLogotipo)
+			EndIf
+		EndIf 
+	EndIf 
+
+	If Not IsEmpty(LocalDcOpe.ImgTecs)
+		Clear Resources
+		Copy Memo LocalDcOpe.ImgTecs To (ThisForm.ImgTecnicas)
+	Else
+		Clear Resources
+		Copy Memo csBranco.Branco To (ThisForm.ImgTecnicas)
+	EndIf
+
+	lnQtt = 0
+	If (LocalDcOpe.DckImpIte = 1)
+		Select [] as Agrupar, Sum(Val(Qtds)) as Qtds ;
+		  From crDados ;
+		 Group By 1 ;
+		  Into Cursor crSoma 
+		Go Top In crSoma
+		lnQtt = crSoma.Qtds	  
+	EndIf
+	
+	* Total de Páginas do Relatório
+	Replace QtdImpIte With lnQtt, ;
+			TotPag 	  With lnPgn, ;
+			Imagem    With ThisForm.ImgLogotipo, ;
+			ImgTec    With ThisForm.ImgTecnicas, ;
+			TotQtds   With lnTQt In crCabecalho
+
+	* Totalizadores de Moedas
+	lcObM = []
+	If ThisForm.chkObs.Value
+		If InList(LocalOpe.Docus, 3, 6, 11) && Fixo Horizontal e Vertical
+			Select crMoedas
+			Scan
+				lnFtM = crCabecalho.VlFretes
+				If (crCabecalho.Variacao <> 0)
+					lnFtM = lnFtM + (crCabecalho.Variacao * Iif(Subs(crCabecalho.TipoVars,1,1)=[D], -1, 1))
+				EndIf
+
+				lcObM = lcObM + [CT ] + Alltrim(crMoedas.CMoes) + [ : ] + ;
+						Iif(crMoedas.CotFpgs <> 1, Alltrim(Transform(crMoedas.CotFpgs, [999,999.99])) + [ X ], [ ]) +  ;
+						Alltrim(Transform(crMoedas.Valos + lnFtM, [999,999.99])) + ;
+						Iif(crMoedas.CotFpgs <> 1, [ = (R$ ] + Alltrim(Transform((crMoedas.Valos + lnFtM) * crMoedas.CotFpgs, [999,999.99])) + [)], []) + Chr(13)
+			EndScan
+		Else
+			Select crMoedas
+			Scan
+				lnFtM = 0
+				If (crMoedas.CotFpgs <> 1) And (crCabecalho.VlFretes <> 0)
+					lnFtM = crCabecalho.VlFretes / crMoedas.CotFpgs
+				EndIf
+
+				If (crCabecalho.Variacao <> 0)
+					lnFtM = lnFtM + ((crCabecalho.Variacao * Iif(Subs(crCabecalho.TipoVars,1,1)=[D], -1, 1)) / Iif(crMoedas.CotFpgs = 0, 1, crMoedas.CotFpgs))
+				EndIf
+
+				lcObM = lcObM + Alltrim(crMoedas.CMoes) + [ : ] + ;
+						Alltrim(Transform(crMoedas.Valos + lnFtM, [999,999.99])) + ;
+						Iif(crMoedas.CotFpgs <> 1, [ - (R$ ] + Alltrim(Transform(crMoedas.CotFpgs, [9,999.99])) + [)], []) + Chr(13)
+			EndScan
+		EndIf
+	EndIf
+	Replace ObsMoes With lcObM In crCabecalho
+EndIf
+
+* Totalizador de Fatores
+If crCabecalho.ImpFator
+	lcObM = []
+	Select crFatores
+	Scan
+		lcObM = lcObM + [Fator ] + Alltrim(crFatores.Fator) + [ : ] + Alltrim(Transform(crFatores.Totas, [999,999.99])) + Chr(13)
+	EndScan
+	Replace ObsMoes With lcObm In crCabecalho
+EndIf
+
+If (LocalOpe.Docus = 8) && 8 - Locação
+	Set Separator To (lcSep)
+	Set Point To (lcPnt)
+EndIf
+
+*** mena - 08/11/2016 - imprime tres vias - MonteCarlo
+If (LocalOpe.Docus = 10) && 10 - Imprime tres vias
+	lcObs = ''
+	SELECT crTmpFnl
+	GO top
+	SCAN
+		SELECT tmpObs
+		LOCATE for codigos = crTmpFnl.codigos
+		IF !EOF()
+			lcObs = lcObs + ALLTRIM(tmpObs.descrs) + '//'
+		ENDIF
+		Select crTmpFnl
+	EndScan
+	replace obses with STRTRAN(STRTRAN(crCabecalho.obses,CHR(10),'/'),CHR(13),'/') in crCabecalho
+
+	SELECT * from crdados where !EMPTY(pagina) and !EMPTY(citens) into cursor crAux
+	SELECT crDados
+	ZAP 
+	FOR i=1 to LocalDcOpe.qtddocs
+		SELECT crAux
+		GO top
+		SCAN
+			SCATTER memvar memo
+			m.linhas = ALLTRIM(STR(i))
+			m.obs = m.obs+lcObs
+			SELECT crDados
+			APPEND BLANK
+			GATHER memvar memo
+			SELECT crAux
+		ENDSCAN
+	NEXT
+EndIf
+
+*** Tiago - 06/08/2015 - Hold Gold - Gera o cursor para visualizar o documento resumido
+If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+	Select * From crDados Where Padr(Cpros,10) = Colecoes Into Cursor crDados2 Order By Colecoes, Fators, Pagina, Citens ReadWrite
+	*** Atualizo todos os Citens para o report calcular certo os totais da movimentação
+	Select crDados2
+	Go Top
+	Replace all Citens With 1
+	&&IF !llQP
+		replace all units with pesos
+		replace all pesos with qtds
+	&&ENDIF
+Endif
+
+Select LocalEmp
+Go Top
+
+Select crCabecalho
+Go Top
+
+Select crDados
+Go Top
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEmp, pDop, pNum, pImp, pChkImpDoc 
+
+ThisForm.pcEmps  = pEmp
+ThisForm.pcDopes = pDop
+ThisForm.pcNumes = pNum
+ThisForm.pChkImpDoc = pChkImpDoc 
+ThisForm.Caption = 'Impressão de Documento (' + Alltrim(pDop) + '/' + Alltrim(Str(pNum)) + ')'
+ThisForm.TpImpressao = Iif(Type('pImp')='N', pImp, 0)
+ThisForm.Contaemail = ' '
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)
+	
+	If (.poDataMgr.pnIdconn > 0)
+		Set Point To ','
+		Set Separator To '.'
+
+		.ImgLogotipo = []
+		.ImgTecnicas = []
+		.ImgBranco   = []
+		=DoDefault()
+
+		If .BtnReport.Imprime.Visible And InList(.Tpimpressao, 3, 4)
+			.BtnReport.Value = 1
+			.BtnReport.Click()
+			.Release
+			Return .f.
+		EndIf
+
+		If (.Tpimpressao = 5) && Somente Visualização
+			.BtnReport.Value = 2
+			.BtnReport.Click()
+			.Release
+			Return .f.
+		EndIf
+		
+		If ThisForm.pChkImpDoc
+			lcQuery = [ Select a.Ndopes, b.chkImpDoc ] + ;
+					    [ From SigCdOpe a, SigOpCdc b ]+ ;
+					    [ Where a.Dopes = ']+ThisForm.pcDopes +[' and b.Dopes = a.Dopes ]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpeD)])
+				Return 0
+			EndIf
+
+			If crSigCdOpeD.chkImpDoc <> 0 
+				ThisForm.ChkImpDoc = .T.
+
+				lcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)
+				.poDataMgr.CursorQuery([SigMvCab], [crSigMvEtd], [EmpDopNums], lcEdn, [Impress])
+				If Not Used([crSigMvEtd])
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigMvEtd)])
+					Return 0
+				EndIf
+
+				If !Eof('crSigMvEtd') And crSigMvEtd.Impress <> 0 &&Já Foi Impresso
+					llAcessReImp = fChecaAcesso(padl(crSigCdOpeD.nDopes,8,'0'), "REIMPDOC" ) 
+					ThisForm.ChkImpDocAcess = llAcessReImp 
+					With .BtnReport
+						.docExcel.Enabled = llAcessReImp And ThisForm.lAcExcel
+						.Imprime.Enabled = llAcessReImp And ThisForm.lAcImprimir
+						.Value = 2				
+					EndWith 
+				EndIf 
+			EndIf 
+		EndIf
+
+		* Campos Usados Do SigCdOpe
+		* Opers		= Tipo da Operação = 1-Entrada; 2-Saida
+		* NDopes    = Número da Operação
+		* Docus		= Tipo de Documento
+		* Casas     = Casas Decimais da Operação
+		* CMoes     = Moeda da Operação
+		* TipoNfs	= Tipo de Numeração da NF
+		* Dcpns		= Imprime Fator
+		.poDataMgr.CursorQuery([SigCdOpe], [LocalOpe], [Dopes], Padr(.pcDopes, 20), [Opers, NDopes, Docus, Casas, CMoes, TipoNfs, Dcpns, NCPesos, cupfis, Habservs])
+		Go Top In LocalOpe
+		If Eof([LocalOpe])
+			Return .f.
+		EndIf
+		If Not InList(LocalOpe.Docus, 3, 6, 10, 11) && Fixo Horizontal e Vertical
+			ThisForm.chkObs.Visible = .f.
+			ThisForm.chkObs.Value   = (LocalOpe.Docus = 6)
+		EndIf
+		
+		If INLIST(LocalOpe.Docus,6,10)
+			ThisForm.chkImagem.Visible = .T.
+		EndIf 
+		
+		.Podatamgr.cursorquery('SigCdPaf','CrSigCdPaf','dopes',fDecriptografar(ThisForm.pcDopes),[docs])
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lcPrn, lcPmt, lnVia
+
+_Prompt = Iif(InList(ThisForm.Tpimpressao, 2, 4), [], [Prompt])
+
+Do Case
+	Case Inlist(LocalOpe.Docus,3,11) && Fixo Horizontal
+		If Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4
+			Report Form SigReIf2 Preview NoConsole
+		Else 
+			IF LocalDcOpe.DckIcmIpi<>6
+				Report Form SigReIfx Preview NoConsole
+			ELSE
+				DELETE FOR EMPTY(cpros)
+				Report Form SigReHfi Preview NoConsole		&& para en primeur
+			ENDIF
+			
+		EndIf 
+
+	Case (LocalOpe.Docus = 6) && Fixo Vertical
+		If ThisForm.chkImagem.Value
+			If (LocalDcOpe.dckpeso = 1)
+				* Com Peso
+				Report Form SigRevf5 To Printer &_Prompt NoConsole
+			Else
+				Report Form SigRevf6 To Printer &_Prompt NoConsole
+			EndIf
+		Else
+			If (LocalDcOpe.dckpeso = 1)
+				* Com Peso
+				Report Form SigRevf2 To Printer &_Prompt NoConsole
+			Else
+				Report Form SigRevfx To Printer &_Prompt NoConsole
+			EndIf
+		EndIf 	
+
+	Case (LocalOpe.Docus = 7) && Nota de Débito
+		Report Form SigRevf3 To Printer &_Prompt NoConsole
+
+	Case InList(LocalOpe.Docus,8,12) && Locação
+		lcSep = Set([Separator])
+		lcPnt = Set([Point])
+		Set Separator To [,]
+		Set Point To [.]
+		
+		If LocalOpe.Docus = 8
+			Report Form SigRevf4 To Printer &_Prompt NoConsole
+		Else
+			Report Form SigRevf0 To Printer &_Prompt NoConsole
+		EndIf 
+	
+		Set Separator To (lcSep)
+		Set Point To (lcPnt)
+
+	Case (LocalOpe.Docus = 9) && Fixo colunas
+		Report Form SigRevfc To Printer &_Prompt NoConsole
+
+		If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+			Select crCabecalho
+			Go Top		
+			Select crDados2
+			Go Top
+			Report Form SigRevfc To Printer &_Prompt NoConsole
+		Endif
+		
+	Case (LocalOpe.Docus = 10) && mena - 08/11/2016 tres vias por pagina - monteCarlo
+		If ThisForm.chkImagem.Value
+			Report Form SigRevfs To Printer &_Prompt NoConsole
+		Else
+			Report Form SigRevfs To Printer &_Prompt NoConsole
+		EndIf 	
+
+
+	Otherwise 				  && Fixo c/ Imagem
+		Report Form SigReIfi To Printer &_Prompt NoConsole
+EndCase
+
+If (LocalDCOpe.dckTermos = 1) And Not (LocalOpe.Docus = 7)
+	lnVia = Iif(LocalDCOpe.ViaTermos > 0, LocalDCOpe.ViaTermos, 1)
+	
+	For I = 1 To lnVia
+		Select crCabecalho
+		Go Top
+
+		Report Form SigReIft To Printer &_Prompt NoConsole
+	Next
+Endif
+
+*** Tiago - 26/06/2015 - Elisangela Camargo - Impressão duplicata impressora laser
+If LocalDcOpe.ImpDups == 3
+	llImpDup = .f.
+	Select LocalPar
+	Scan
+		=ThisForm.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',LocalPar.Fpags)
+		If crSigOpFp.ImpDups # 1
+			Delete
+		Else
+			llImpDup = .t.
+		EndIf
+	Endscan
+	If llImpDup And crSigOpFp.ImpDups == 1 And MessageBox('Confirma impressão da Duplicata ?(S/N)',4+32+256,'') = 6
+		Select crCabecalho
+		Go Top
+
+		Select LocalPar
+		Go top
+		Report Form SigReDpc To Printer &_Prompt NoConsole
+	Endif
+Endif
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documentoexcel
+------------------------------------------------------------
+PROCEDURE documentoexcel
+Select CItens as Itens, CPros as Produtos, Reffs as Referencia, ;
+	   Padr(DPros, 254) as Descricao, CUnis as Uni, Qtds, ;
+	   Units as Unitario, Moedas as Moeda, Totas as Total, Aliqs as Aliquota, ;
+	   ValIpis as Ipis, Obs ;
+  From crDados ;
+ Where Not Empty(CPros) ;
+  Into Cursor crExcel
+  
+Select crExcel
+Go Top In crExcel
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Local lcPrn, lcPmt, lnVia
+
+lcTabela = Alias()
+Thisform.pcArqEmail = []
+Do form SigPrPdf With thisform
+Select (lcTabela)
+
+If !Empty(Thisform.pcArqEmail)
+	If File(Thisform.pcArqEmail) And Messagebox([Já existe o arquivo ] + Thisform.pcArqEmail + [. Deseja continuar?],4+32+256,[Geração Arquivo]) = 7
+		Return .f.
+	Endif
+	
+	If Inlist(Lower(Alltrim(JustExt(Thisform.pcArqEmail))),[xls],[txt])
+		ThisForm.DocumentoExcel()
+		lPrintPDFCreator = .t.
+	Else	
+		Do Case
+			Case inlist(LocalOpe.Docus,3,11) && Fixo Horizontal
+				If Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4
+*!*						Report Form SigReIf2 To Printer NoConsole
+					thisform.memail2([SigReIf2])
+				Else 
+*!*						Report Form SigReIfx To Printer NoConsole
+					thisform.memail2([SigReIfx])					
+				EndIf 
+
+			Case (LocalOpe.Docus = 6) && Fixo Vertical
+				If ThisForm.chkImagem.Value
+					If (LocalDcOpe.dckpeso = 1)
+						* Com Peso
+	*!*						Report Form SigRevf2 To Printer NoConsole
+						thisform.memail2([SigRevf5])					
+					Else
+	*!*						Report Form SigRevfx To Printer NoConsole
+						thisform.memail2([SigReIf6])
+					EndIf
+				Else
+					If (LocalDcOpe.dckpeso = 1)
+						* Com Peso
+	*!*						Report Form SigRevf2 To Printer NoConsole
+						thisform.memail2([SigRevf2])					
+					Else
+	*!*						Report Form SigRevfx To Printer NoConsole
+						thisform.memail2([SigReIfx])
+					EndIf	
+				EndIf 	
+
+			Case (LocalOpe.Docus = 7) && Nota de Débito
+*!*					Report Form SigRevf3 To Printer NoConsole
+				thisform.memail2([SigRevf3])				
+
+			Case InList(LocalOpe.Docus,8,12) && Locação
+				lcSep = Set([Separator])
+				lcPnt = Set([Point])
+				Set Separator To [,]
+				Set Point To [.]
+				
+				If LocalOpe.Docus = 8
+					thisform.memail2([SigRevf4])
+				Else
+					thisform.memail2([SigRevf0])
+				EndIf 
+				
+*!*					Report Form SigRevf4 To Printer NoConsole
+
+				Set Separator To (lcSep)
+				Set Point To (lcPnt)
+
+			Case (LocalOpe.Docus = 9) && Fixo colunas
+				thisform.memail2([SigRevfc])
+
+				If Int(Val(Substr(LocalOpe2.ConfigGers, 211, 01))) = 1
+					Select crCabecalho
+					Go Top		
+					Select crDados2
+					Go Top
+					thisform.memail2([SigRevfc])
+				Endif
+				
+			Otherwise 				  && Fixo c/ Imagem
+*!*					Report Form SigReIfi To Printer NoConsole
+				thisform.memail2([SigReIfi])				
+		Endcase
+	Endif
+Endif
+
+If (LocalDCOpe.dckTermos = 1) And Not (LocalOpe.Docus = 7)
+	lnVia = Iif(LocalDCOpe.ViaTermos > 0, LocalDCOpe.ViaTermos, 1)
+	
+	For I = 1 To lnVia
+		Select crCabecalho
+		Go Top
+
+		Report Form SigReIft To Printer NoConsole
+	Next
+Endif
+
+*** Tiago - 26/06/2015 - Elisangela Camargo - Impressão duplicata impressora laser
+If LocalDcOpe.ImpDups == 3 And Inlist(Lower(Alltrim(JustExt(Thisform.pcArqEmail))),[pdf])
+
+	llImpDup = .f.
+	Select LocalPar
+	Scan
+		=ThisForm.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',LocalPar.Fpags)
+		If crSigOpFp.ImpDups # 1
+			Delete
+		Else
+			llImpDup = .t.
+		EndIf
+	Endscan
+	If llImpDup And crSigOpFp.ImpDups == 1 And MessageBox('Confirma impressão da Duplicata ?(S/N)',4+32+256,'') = 6
+		Select crCabecalho
+		Go Top
+
+		Select LocalPar
+		Go top
+*!*			Report Form SigReDpc To Printer NoConsole
+		thisform.memail2([SigReDpc])		
+	Endif
+Endif
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIFX
+RESERVED3 (ClassInfo): chkimpdoc
+chkimpdocacess
+imgbranco
+imglogotipo
+imgtecnicas
+pcdopes
+pcemps
+pchkimpdoc
+pcnumes
+podatamgr
+podatamgr2
+tpimpressao
+*carregasgrus 
+*memail2 
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

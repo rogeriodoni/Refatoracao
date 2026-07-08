@@ -1,0 +1,18 @@
+﻿All changes verified. Here's a summary of what Phase 6 added:
+
+**Critical fix:**
+- `AlternarPagina(par_nPagina)` ÔÇö was called by `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnSalvarClick`, `BtnCancelarClick` but never defined. The form would crash on any CRUD action.
+
+**4 missing BINDEVENT registrations in `ConfigurarPgDados`:**
+- `txt_4c_CProEq` (line 797) ÔåÆ `KeyPressEquivalente`
+- `txt_4c_Conjunto` (line 1128) ÔåÆ `KeyPressConjunto`
+- `txt_4c_Cor` (line 1610) ÔåÆ `KeyPressCor`
+- `txt_4c_Local` (line 2059) ÔåÆ `KeyPressLocal`
+
+**8 new methods (4 KeyPress handlers + 4 lookup implementations):**
+- `AbrirLookupEquivalente` ÔÇö queries `SigCdPro` (cpros/dpros)
+- `AbrirLookupCor` ÔÇö queries `SigCdCor` (cods/descs)
+- `AbrirLookupLocal` ÔÇö queries `SigPrLcl` (codigos/descricaos)
+- `AbrirLookupConjunto` ÔÇö queries `SigCdPro` (conjuntos field)
+
+The existing lookups from Phase 5 (Grupo, Subgrupo, Linha, Cole├º├úo, Fornecedor, Tamanho, Modelo, Acabamento, Classifica├º├úo, Unidade 1, Unidade 2) remain unchanged and fully functional. The file is now 3985 lines.

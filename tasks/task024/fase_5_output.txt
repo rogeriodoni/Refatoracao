@@ -1,0 +1,15 @@
+﻿O arquivo `Formsigrevto.prg` j├í est├í **completamente implementado** com 1289 linhas. Fases anteriores produziram a implementa├º├úo completa:
+
+- `ConfigurarCabecalho()` ÔÇö cabe├ºalho escuro com t├¡tulo
+- `ConfigurarBotoes()` ÔÇö 4 bot├Áes (Visualizar, Imprimir, Documento, Encerrar)
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 1 page de filtros
+- `ConfigurarPaginaLista()` ÔÇö **todos** os campos de filtro (Opera├º├úo, Per├¡odo, Moeda, Empresa) com BINDEVENTs
+- Todos os lookups: `AbrirBuscaOperacao`, `AbrirBuscaMoeda`, `AbrirBuscaMoedaDesc`, `AbrirBuscaEmpresa`, `AbrirBuscaDesEmpresa`
+- Todos os handlers: `TeclaOperacao`, `TeclaMoeda`, `TeclaMoedaDesc`, `TeclaEmpresa`, `TeclaDesEmpresa`
+- `ValidarFiltros`, `ValidarPeriodo`, `FormParaRelatorio`, `LimparCampos`, `BOParaForm`, `HabilitarCampos`
+- `BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick`, `BtnSairClick`
+- `Destroy()` correto (sem Release no BO)
+
+**Por que a Fase 5 n├úo tem o que adicionar:** A instru├º├úo da fase menciona `ConfigurarPaginaDados()` ÔÇö conceito de form CRUD (Page2 de edi├º├úo). Este ├® um form de **RELAT├ôRIO** (frmrelatorio), que tem layout FLAT: todos os filtros ficam em `ConfigurarPaginaLista()` (equivalente funcional), sem Page2 de dados. Isso est├í implementado e correto.
+
+Nenhuma modifica├º├úo ├® necess├íria. O arquivo est├í pronto para a Fase 6 (integra├º├úo: menu.prg e config.prg).

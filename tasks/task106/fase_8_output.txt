@@ -1,0 +1,19 @@
+﻿Arquivo completo e correto. Fase 8 conclu├¡da: 9 m├®todos adicionados ao `FormSIGREGDP.prg` e integra├º├úo no `menu.prg` com `BAR 129` e `AbrirFormSIGREGDP()`.
+
+**Resumo das altera├º├Áes:**
+
+**FormSIGREGDP.prg** ÔÇö m├®todos adicionados:
+- `BtnBuscarClick()` ÔåÆ delega para `BtnProcessarClick()`
+- `BtnEncerrarClick()` ÔåÆ fecha o form (`Release()`)
+- `BtnSalvarClick()` ÔåÆ delega para `BtnImprimirClick()`
+- `BtnCancelarClick()` ÔåÆ limpa filtros, faz ZAP do cursor, atualiza bot├Áes
+- `FormParaBO()` ÔåÆ delega para `FormParaRelatorio()` (compatibilidade FormBase)
+- `BOParaForm()` ÔåÆ stub justificado (form de relat├│rio n├úo carrega dados de volta)
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ habilita/desabilita todos os 5 controles de filtro
+- `CarregarLista()` ÔåÆ faz `Refresh()` no grid
+- `AjustarBotoesPorModo()` ÔåÆ desabilita Visualizar/Imprimir/DocExcel/SelTudo/Desmarcar enquanto n├úo houver dados processados; chamado no `InicializarForm()` e ap├│s `BtnProcessarClick()`
+
+**menu.prg** ÔÇö integra├º├úo:
+- `DEFINE BAR 128/129` em `popRelatorios` com caption "Emiss├úo Global de Duplicatas/Boletos"
+- `ON SELECTION BAR 129` ÔåÆ `AbrirFormSIGREGDP`
+- `PROCEDURE AbrirFormSIGREGDP()` com padr├úo can├┤nico (`VARTYPE`/`Show()`/`MostrarErro`)

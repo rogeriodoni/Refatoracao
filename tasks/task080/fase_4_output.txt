@@ -1,0 +1,20 @@
+﻿Tudo correto. Fase 4 conclu├¡da com sucesso.
+
+**Resumo das altera├º├Áes:**
+
+**`SIGREDIRBO.prg`:**
+- Propriedade `this_cUltimoArquivoExcel = ""` adicionada
+- M├®todo `ExportarExcel()` adicionado: chama `PrepararDados()` internamente e exporta `cursor_4c_Dados` para arquivo `.xls` com nome datado
+
+**`FormSIGREDIR.prg`:**
+- `InicializarForm()` agora chama `THIS.ConfigurarFiltros()` ap├│s criar SIGREDIRBO com sucesso
+- `ConfigurarFiltros()` ÔÇö adiciona todos os controles na Page1:
+  - Labels (Ano Base, Fornecedor, Empresas)
+  - `txt_4c_AnoBase`, `txt_4c_Fornec`, `txt_4c_Dforn` (com ReadOnly din├ómico)
+  - `grd_4c_Dados` com CheckBox em Column1 (padr├úo anti-Error 1767) ligado ao `cursor_4c_Empresas`
+  - `chk_4c_MarcaEmp` sobre o header do Column1 (`ZOrder(0)`)
+  - `obj_4c_CmdEmps` com bot├Áes "Marcar Todas"/"Desmarcar"
+  - 9 BINDEVENTs conectando todos os bot├Áes e campos
+- Handlers adicionados: `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnEncerrarClick`
+- Lookup bidirecional: `TeclaFornecKeyPress`/`TeclaDfornKeyPress` + `ValidarFornec` + `AbrirBuscaFornec`/`AbrirBuscaFornecPorNome` via `FormBuscaAuxiliar`
+- Controle de empresas: `BtnMarcaEmpClick`, `BtnCmdEmp1Click`, `BtnCmdEmp2Click`

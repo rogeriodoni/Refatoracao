@@ -1,0 +1,21 @@
+﻿Phase 5 is complete. Here's a summary of what was implemented:
+
+**Phase 5/8 ÔÇö `ConfigurarPaginaDados()` ÔÇö campos da Page2:**
+
+**Visual structure (from layout.json positions):**
+- 4 Shape borders: Shape1 (Lan├ºamento, top=153), Shape3 (D├®bito, top=224), Shape2 (Cr├®dito, top=224), Shape6 (Hist├│rico, top=350)
+- 22 Labels matching all original `Say` objects, built with `AdicionarLabel()` helper
+- New `AdicionarLabel()` PROTECTED helper method to reduce repetition
+
+**Fields added to Page2:**
+- **Lan├ºamento section:** `txt_4c_Fweditdata_DATA`, `txt_4c_Fweditdata_VENC`, `txt_4c_DtEmis` (dates), `txt_4c_Nota`, `txt_4c__Usuario` (ReadOnly), `txt_4c_Job` + `txt_4c_DJob` (ReadOnly description), `txt_4c_DOCU`
+- **D├®bito section:** `txt_4c_OPER`, `txt_4c_Grupo` + `txt_4c_Dgrupo` (ReadOnly), `txt_4c_Conta` + `txt_4c_Dconta` (ReadOnly), `txt_4c_VALOR`, `txt_4c_MOEDA`, `txt_4c_COTACAO`, `cmd_4c_Alteracotacao` ($)
+- **Cr├®dito section:** `txt_4c_SOPER` (ReadOnly ÔÇö auto-set), `txt_4c_SGRUPO` + `txt_4c_Sdgrupo` (ReadOnly), `txt_4c_SCONTA` + `txt_4c_Sdconta` (ReadOnly), `txt_4c_SVALOR`, `txt_4c_Smoeda`, `txt_4c_SCOTACAO`, `cmd_4c_Alterascotacao` ($)
+- **Hist├│rico section:** `txt_4c_HIST`, `txt_4c_Hist2`
+- **OptionGroup:** `obj_4c_Opcao_conta` (Sim/N├úo, Width=99)
+
+**KeyPress handlers (all PUBLIC):** OPER validation (D/C + auto-SOPER), VALOR/COTACAO/SVALOR/SCOTACAO cross-calculation, Grupo/Conta/SGrupo/SConta (F4=lookup, Enter=validate)
+
+**Lookup methods:** `AbrirLookupGrupo()` and `AbrirLookupConta()` using `FormBuscaAuxiliar` with `SigCdGcr`/`SigCdCcr`; `ValidarGrupo()` and `ValidarConta()` for typed-in code validation; `BuscarDescricaoJob()` for job description
+
+**BOParaForm()** updated to also fetch descriptions from `SigCdGcr`, `SigCdCcr`, `SigCdJob` when loading records

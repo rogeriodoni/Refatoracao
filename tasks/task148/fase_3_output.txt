@@ -1,0 +1,17 @@
+﻿O arquivo foi criado corretamente. Fase 3/8 entregue.
+
+**Resumo da Fase 3:**
+
+Arquivo criado: `C:\4c\projeto\app\forms\cadastros\Formsigpdmp7.prg`
+
+**O que foi implementado:**
+
+- **DEFINE CLASS Formsigpdmp7** com todas as propriedades visuais do legado (`Height=600`, `Width=1000`, `DataSession=2`, `MinButton=.T.`, etc.)
+- **Propriedades de estado** mapeadas do legado: `this_cDopp`, `this_cPQuery`, `this_oParentForm`, `this_cPcEscolha`, `this_lEditaOrig`, `this_lAtFoco`, cache de nomes dos containers
+- **Init(par_cQuery, par_oFormPai)** ÔÇö captura `pQuery` e `pForm` do legado, propaga empresa do pai
+- **InicializarForm()** ÔÇö cria BO, cursores placeholder (`cursor_4c_Dados`, `TmpOperacao`) com `SET NULL ON`, chama ConfigurarPageFrame/Lista/Dados, respeita `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö `Top=-29`, `Tabs=.F.`, `Height=631` (compensando +4 do runtime), `Picture=new_background.jpg` (id├¬ntico ao legado)
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` vazio (bot├Áes CRUD na Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` (padr├úo can├┤nico `Left=917`)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` com `cmd_4c_Confirmar` e `cmd_4c_Cancelar`
+- **CarregarLista()** ÔÇö executa `BO.Buscar()`, configura grid via `PEMSTATUS` (n├úo crasha se grid ainda n├úo existir na Fase 3)
+- **AlternarPagina()**, **FormatarGridLista()**, **TornarControlesVisiveis()**, **Destroy()**

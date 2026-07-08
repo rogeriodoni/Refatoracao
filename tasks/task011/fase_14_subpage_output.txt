@@ -1,0 +1,24 @@
+﻿The file has grown from 10,747 to 11,389 lines (+642 lines), ENDDEFINE is at line 11,389, and all methods are in place. The implementation is complete.
+
+Here's a summary of what was added to `FormProduto.prg`:
+
+**Edit 1 ÔÇö `ConfigurarPaginaDados()` (line 650):**
+Added `THIS.ConfigurarPgpgDesigner(loc_oPgf.Page7)` before `TornarControlesVisiveis`.
+
+**Edit 2 ÔÇö New `PROTECTED PROCEDURE ConfigurarPgpgDesigner(par_oPage)` (line 5963):**
+- `cursor_4c_Tarefas` (DtInis T, DtFims T, Usuars C(10), Tarefas C(10), ObsTarefas M, CPros C(14), pkChaves C(30))
+- `cursor_4c_Arquivos` (Arquivos C(254), CPros C(14), pkChaves C(30))
+- `grd_4c_Designer` ÔÇö 4 cols (Data In├¡cio / Data Conclus├úo / Usu├írio / Tarefa), top=160, left=10, 495├ù238
+- `lbl_4c_Say31` ÔÇö "Observa├º├úo da Tarefa", top=144, left=583
+- `obj_4c_GetObsTarefas` ÔÇö EditBox, top=160, left=584, 407├ù238, ControlSource=ObsTarefas
+- `cmd_4c_BtnIniTarefa` / `cmd_4c_BtnFimTarefa` ÔÇö 42├ù42, left=509
+- `grd_4c_Arquivos` ÔÇö 1 col "Arquivos Para Designer", top=415, left=10, 495├ù202
+- `cmd_4c_BtnInsArqs` / `cmd_4c_BtnExcArqs` / `cmd_4c_BtnOpnArqs` ÔÇö 42├ù42, left=509
+- `shp_4c_Shape1` ÔÇö border shape, top=415, left=584, 407├ù202
+- `img_4c_ImgArqJpg` ÔÇö image preview, top=417, left=586, 403├ù198, Visible=.F.
+
+**Edit 3 ÔÇö 9 new PUBLIC handler methods (lines 6315ÔÇô6592):**
+`GrdDesignerAfterRowColChange`, `DesignerCol4Valid` (SigCdCad lookup), `GrdArquivosAfterRowColChange` (image preview), `BtnIniTarefaClick`, `BtnFimTarefaClick`, `BtnInsArqsClick`, `BtnOpnArqsClick`, `BtnExcArqsClick`, `ImgArqJpgClick`.
+
+**Edit 4 ÔÇö `Destroy()`:**
+Array expanded from 40ÔåÆ42, added `cursor_4c_Tarefas` (41) and `cursor_4c_Arquivos` (42), loop updated to `TO 42`.

@@ -1,0 +1,692 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrevto.SCX
+* Data/Hora: 15/05/26 10:25:50
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREVTO
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpresa
+  Parent: SIGREVTO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGREVTO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREVTO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesEmpresa
+  Parent: SIGREVTO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_a
+  Parent: SIGREVTO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREVTO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREVTO
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREVTO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dopes
+  Parent: SIGREVTO
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREVTO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_moeda
+  Parent: SIGREVTO
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_moeda_desc
+  Parent: SIGREVTO
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 136
+  Left = -16
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório Total Por Operação"
+  ControlBox = .F.
+  FontSize = 9
+  ClipControls = .F.
+  Name = "SIGREVTO"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 524
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.getEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 267
+  MaxLength = 3
+  TabIndex = 11
+  Top = 204
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Operação :"
+  Left = 208
+  Top = 134
+  Width = 56
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Empresa :"
+  Left = 214
+  Top = 207
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.getDesEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 300
+  TabIndex = 12
+  Top = 204
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getDesEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.lbl_a
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 350
+  Top = 159
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 361
+  MaxLength = 10
+  TabIndex = 6
+  Top = 154
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 267
+  MaxLength = 10
+  TabIndex = 4
+  Top = 154
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Periodo :"
+  Left = 219
+  Top = 159
+  Width = 45
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.get_dopes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 267
+  MaxLength = 20
+  SpecialEffect = 0
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 129
+  Width = 150
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 8
+  Name = "get_dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Moeda :"
+  Left = 223
+  Top = 184
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.get_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  InputMask = ""
+  Left = 267
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 179
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Name = "get_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVTO.get_moeda_desc
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  InputMask = ""
+  Left = 300
+  MaxLength = 15
+  SpecialEffect = 0
+  TabIndex = 9
+  ToolTipText = ""
+  Top = 179
+  Width = 115
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 11
+  Name = "get_moeda_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREVTO
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReVto To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReVto To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select MoedaPs ] + ;
+				    [From SigCdPam]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPam') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPam)')
+			Return 0
+		EndIf
+		Go Top In crSigCdPam
+
+		.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', 'CMoes', crSigCdPam.MoedaPs)
+
+		.get_dopes.Value       = ''
+		.get_dt_inicial.Value  = Date()
+		.get_dt_final.Value    = Date()
+		.get_moeda.Value       = crSigCdPam.MoedaPs
+		.get_moeda_desc.Value  = crSigCdMoe.DMoes
+		.Refresh
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+Local lcCbEmpresa, lcTitulo, lcPeriodo, lcOperacao, ldInicial, ldFinal, lcMoeda, lcTalk, lcMoeOpe, lnValVars, lnValDevs
+
+lcOperacao   = Padr(ThisForm.get_dopes.Value, 20)
+ldInicial    = ThisForm.get_dt_inicial.Value
+ldFinal      = ThisForm.get_dt_final.Value
+lcMoeda		 = ThisForm.get_moeda.Value
+lcEmp		 = ThisForm.getEmpresa.Value
+lnValVars    = 0
+lnValDevs	 = 0
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)
+lcCbEmpresa = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcCbTitulo  = 'Relatório Total Por Operação - ' + Alltrim(Proper(lcOperacao)) + ;
+			  IIF(EMPTY(lcEmp),'',' - Empresa : ' + lcEmp)
+lcCbPeriodo = 'Período de ' + Dtoc(ldInicial) + ' à ' + Dtoc(ldFinal)
+
+Create Cursor csCabecalho (cb_empresa c(80), cb_titulo c(80), cb_periodo c(80))
+Insert Into csCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+				 Values (lcCbEmpresa, lcCbTitulo, lcCbPeriodo)
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', lcOperacao)
+If Not Eof('crSigCdOpe')
+	lcMoeOpe = crSigCdOpe.CMoes
+EndIf
+
+pDtI = fDtoSQL(ldInicial)
+pDtF = fDtoSQL(ldFinal, '23:59:59')
+
+If Empty(lcMoeOpe)
+	lcQuery = [Select Emps, Dopes, Numes, Datas, MoeFpgs, Valos ] + ;
+			    [From SigMvPar ] + ;
+			   [Where Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		   		 IIF(EMPTY(lcEmp),[],[Emps = '] + lcEmp + [' And ]) + ;			   
+			   		 [Dopes = '] + lcOperacao + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvPar') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvPar)')
+		Return 0
+	EndIf
+
+	Select Emps, Dopes, lcMoeda as lcMoeda, lnValVars as mValVars, lnValDevs as mValDevs, ;
+		   Sum(Iif(lcMoeda = Moefpgs, Valos, Valos * fBuscarCotacao(Moefpgs, Datas, ThisForm.poDataMgr) / fBuscarCotacao(lcMoeda, Datas, ThisForm.poDataMgr))) as mValos ;
+	  From crSigMvPar ;
+	  GROUP BY Emps, Dopes, lcMoeda, 4, 5;
+	  ORDER BY Emps, Dopes, lcMoeda, 4, 5;
+	  Into Cursor csRelatorio
+Else
+	lcQuery = [Select Emps, Dopes, Numes, Datas, ValVars, ValDevs, Valos ] + ;
+			    [From SigMvCab ] + ;
+			   [Where Datas BetWeen ?pDtI And ?pDtF And ] + ;
+			   		 IIF(EMPTY(lcEmp),[],[Emps = '] + lcEmp + [' And ]) + ;			   
+			   		 [Dopes = '] + lcOperacao + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCab') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCab)')
+		Return 0
+	EndIf
+
+	Select Emps, Dopes, lcMoeda as lcMoeda, ;
+		   Sum(Iif(lcMoeda = lcMoeOpe, ValVars, ValVars * fBuscarCotacao(lcMoeOpe, Datas, ThisForm.poDataMgr) / fBuscarCotacao(lcMoeda, Datas, ThisForm.poDataMgr))) as mValVars, ;
+		   Sum(Iif(lcMoeda = lcMoeOpe, ValDevs, ValDevs * fBuscarCotacao(lcMoeOpe, Datas, ThisForm.poDataMgr) / fBuscarCotacao(lcMoeda, Datas, ThisForm.poDataMgr))) as mValDevs, ;
+		   Sum(Iif(lcMoeda = lcMoeOpe, Valos,   Valos   * fBuscarCotacao(lcMoeOpe, Datas, ThisForm.poDataMgr) / fBuscarCotacao(lcMoeda, Datas, ThisForm.poDataMgr))) as mValos ;
+	  From crSigMvCab ;
+	  GROUP BY Emps, Dopes, lcMoeda;
+	  ORDER BY Emps, Dopes, lcMoeda;
+	  Into Cursor csRelatorio
+EndIf
+Select csRelatorio
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReVto Preview NoConsole
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVTO.getEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getEmpresa, ThisForm.getDesEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVTO.getDesEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getEmpresa, ThisForm.getDesEmpresa)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getEmpresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVTO.get_dopes
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoMovmto(Usuar, This.Value, This)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVTO.get_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value 	  = crListaRemota.CMoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value 	  = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVTO.get_moeda_desc
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value 	  = crListaRemota.CMoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value 	  = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_moeda.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREVTO
+RESERVED3 (ClassInfo): codquas Código do arquivo SCEPRO para filtrar a qualidade a ser utilizada
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

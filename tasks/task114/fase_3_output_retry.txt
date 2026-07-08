@@ -1,0 +1,10 @@
+﻿Phase 3 complete. The Form file `C:\4c\projeto\app\forms\relatorios\Formsigrehpr.prg` was already substantially implemented from a prior pipeline run (1441 lines, REPORT-type FLAT layout, no PageFrame), so I verified the structure and added the missing `loc_oErro` LOCAL declaration in `InicializarForm()` to comply with VFP9 best practices.
+
+Phase 3 base structure now confirmed present:
+- `DEFINE CLASS Formsigrehpr AS FormBase` with original dimensions (Width=800, Height=320, TitleBar=0)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (no double-initialization)
+- `InicializarForm()` with `gb_4c_ValidandoUI` guard, BO creation, and call to all `Configurar*()` sub-methods
+- `AtualizarEstadoControles()` override (no-op for REPORT)
+- `ConfigurarCabecalho()` ÔÇö opaque header container `cnt_4c_Cabecalho` (BackStyle=1, BackColor=RGB(100,100,100)) with `lbl_4c_Sombra` + `lbl_4c_Titulo`
+- `ConfigurarBotoesRelatorio()` ÔÇö single `cmg_4c_Botoes` CommandGroup (4 buttons: Visualizar / Imprimir / Excel / Encerrar) per framework.vcx geometry
+- `Destroy()` ÔÇö sets `this_oRelatorio = .NULL.` (no `.Release()`), then `DODEFAULT()`

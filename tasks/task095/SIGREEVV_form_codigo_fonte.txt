@@ -1,0 +1,944 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREEVV.SCX
+* Data/Hora: 05/06/2026 02:27:37
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREEVV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREEVV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTabela
+  Parent: SIGREEVV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDTabela
+  Parent: SIGREEVV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getValorIni
+  Parent: SIGREEVV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getValorFin
+  Parent: SIGREEVV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntMensagem
+  Parent: SIGREEVV
+  Class: container
+  BaseClass: container
+
+Objeto: lblMensagem
+  Parent: SIGREEVV.cntMensagem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREEVV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREEVV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGREEVV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDGrupo
+  Parent: SIGREEVV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getConta
+  Parent: SIGREEVV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getGrupo
+  Parent: SIGREEVV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: chkFranquias
+  Parent: SIGREEVV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkZerados
+  Parent: SIGREEVV
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREEVV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGREEVV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Estoque Por Valor de Venda"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  Name = "SIGREEVV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Tab. Desconto :"
+  Left = 194
+  Top = 111
+  Width = 79
+  TabIndex = 1
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getTabela
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 278
+  TabIndex = 2
+  Top = 108
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getTabela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getDTabela
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 360
+  MaxLength = 0
+  TabIndex = 3
+  Top = 108
+  Width = 255
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "getDTabela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getValorIni
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "99,999,999"
+  Left = 278
+  TabIndex = 11
+  Top = 187
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getValorIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getValorFin
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "99,999,999"
+  Left = 374
+  MaxLength = 0
+  TabIndex = 13
+  Top = 187
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getValorFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.cntMensagem
+------------------------------------------------------------
+  Top = 510
+  Left = 152
+  Width = 473
+  Height = 56
+  SpecialEffect = 0
+  TabIndex = 2
+  ZOrderSet = 8
+  Name = "cntMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.cntMensagem.lblMensagem
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontSize = 12
+  Alignment = 2
+  Caption = "Aguarde!!!"
+  Height = 22
+  Left = 20
+  Top = 18
+  Width = 445
+  ForeColor = 0,0,128
+  Name = "lblMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Faixa de Valor :"
+  Left = 196
+  Top = 190
+  Width = 77
+  TabIndex = 10
+  ZOrderSet = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 364
+  Top = 190
+  Width = 8
+  TabIndex = 12
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getDConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 360
+  MaxLength = 40
+  TabIndex = 9
+  Top = 160
+  Width = 298
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 360
+  MaxLength = 20
+  TabIndex = 6
+  Top = 133
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getConta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 278
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 160
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 278
+  MaxLength = 10
+  TabIndex = 5
+  Top = 133
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.chkFranquias
+------------------------------------------------------------
+  Top = 213
+  Left = 278
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Incluir Franquias"
+  Value = 0
+  TabIndex = 14
+  ZOrderSet = 15
+  Name = "chkFranquias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.chkZerados
+------------------------------------------------------------
+  Top = 213
+  Left = 418
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Incluir Zerados"
+  Value = 0
+  TabIndex = 15
+  ZOrderSet = 16
+  Name = "chkZerados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Left = 235
+  Top = 137
+  Width = 38
+  TabIndex = 4
+  ZOrderSet = 17
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVV.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Left = 235
+  Top = 165
+  Width = 38
+  TabIndex = 7
+  ZOrderSet = 18
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREEVV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReEvv To Printer
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReEvv To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	ThisForm.Percentual = 0
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcTab, lcGru, lcCon, lcDtb, lnVlI, lnVlF, lnPct, llFra, llZer, lcTit, lcSub, lcCep, lnZer, lnTot
+
+lcTab = Padr(ThisForm.getTabela.Value,  10)
+lcGru = Padr(ThisForm.getGrupo.Value,   10)
+lcCon = Padr(ThisForm.getConta.Value,   10)
+lcDtb = Padr(ThisForm.getDTabela.Value, 30)
+lnVlI = ThisForm.getValorIni.Value
+lnVlF = ThisForm.getValorFin.Value
+lnPct = 1 - (ThisForm.Percentual / 100)
+llFra = (ThisForm.chkFranquias.Value = 1)
+llZer = (ThisForm.chkZerados.Value = 1)
+
+lcTit = ThisForm.Caption
+lcSub = 'Tabela : ' + Alltrim(lcTab) + ' - ' + Alltrim(lcDtb) + ;
+		Iif(Empty(lcGru), '', ' - Grupo : ' + Alltrim(lcGru)) + ;
+		Iif(Empty(lcCon), '', ' - Conta : ' + Alltrim(lcCon))
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcCep = Alltrim(_Empr) + Iif(Eof('crSigCdEmp'), '', ' - ' + Alltrim(crSigCdEmp.Razas))
+lcFxa = Alltrim(Str(lnVlI, 10)) + ' / ' + Alltrim(Str(lnVlF, 10))
+
+Create Cursor crCabecalho (Empresa c(80), Titulo c(80), SubTitulo c(80), Faixa c(80), MedFaixa n(10, 2), MedGeral n(10, 2))
+Insert Into crCabecalho (Empresa, Titulo, SubTitulo, Faixa) Values (lcCep, lcTit, lcSub, lcFxa)
+
+* Apanhando Todas as Cotações Disponíveis Para o Dia
+Wait Window 'Aguarde!!! Processando Cotações...' NoWait
+lcQuery = [Select CMoes, MoeQs, QtdEqs, 000000000000.00 as Valor, 000000000000.00 as ValCustos ] + ;
+			[From SigCdMoe ] + ;
+		   [Order By CMoes]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdMoe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdMoe)')
+	Return 0
+EndIf
+Select crSigCdMoe
+Index On CMoes Tag CMoes
+Scan
+	If Not Empty(crSigCdMoe.MoeQs)
+		Replace ValCustos With fBuscarCotacao(crSigCdMoe.MoeQs, Datetime(), ThisForm.poDataMgr) * crSigCdMoe.QtdEqs In crSigCdMoe
+	Else
+		Replace ValCustos With fBuscarCotacao(crSigCdMoe.CMoes, Datetime(), ThisForm.poDataMgr) In crSigCdMoe
+	EndIf
+	Replace Valor With fBuscarCotacao(crSigCdMoe.CMoes, Datetime(), ThisForm.poDataMgr) In crSigCdMoe
+EndScan
+
+* Apanhando o Estoque de Todas as Empresas
+Wait Window 'Aguarde!!! Processando Estoques...' NoWait
+lcQuery = [Select Emps, CPros, Sum(Sqtds) as SQtds ] + ;
+			[From SigMvEst ] + ;
+		   [Where 0 = 0 ] + ;
+		   		  Iif(Empty(lcGru), [], [ And Grupos = '] + lcGru + [']) + ;
+		   		  Iif(Empty(lcCon), [], [ And Estos = '] + lcCon + [']) + ;
+		   [Group By Emps, CPros]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvEst') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvEst)')
+	Return 0
+EndIf
+Select crSigMvEst
+Index On CPros Tag CPros
+
+* Apanhando as Empresas Que Não Devem Ser Processadas
+Wait Window 'Aguarde!!! Processando Empresas...' NoWait
+lcQuery = [Select Cemps ] + ;
+			[From SigCdEmp ] + ;
+		   [Where Not Ativas = 1 Or ] + ;
+		   		 [Nemps < 1 ] + ;
+		   		 Iif(llFra, [], [Or Nums = 1 ]) + ;
+		   [Order By Cemps]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdEmp') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdEmp)')
+	Return 0
+EndIf
+Select crSigCdEmp
+Scan
+	Delete From crSigMvEst Where Emps = crSigCdEmp.Cemps
+EndScan
+
+* Apanhando os Produtos Para Processar
+Wait Window 'Aguarde!!! Processando Produtos...' NoWait
+lcQuery = [Select CPros, PVens, Moevs, CustoFs, MoecusFs ] + ;
+			[From SigCdPro ] + ;
+		   [Order By CPros]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPro') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPro)')
+	Return 0
+EndIf
+
+* Atribuindo os Valores Nas Peças dos Estoques
+Wait Window 'Aguarde!!! Processando Valores de Venda...' NoWait
+Select a.Emps, a.CPros, a.Sqtds * b.PVens * c.Valor * lnPct as PVens, ;
+	   b.Moevs, a.Sqtds, a.Sqtds * b.CustoFs as CustoFs, b.MoecusFs ;
+  From crSigMvEst a, crSigCdPro b, crSigCdMoe c ;
+ Where a.CPros = b.CPros And ;
+ 	   b.Moevs = c.CMoes ;
+  Into Cursor crVenda ReadWrite
+
+Select a.Emps, a.CPros, a.PVens, a.Moevs, a.Sqtds, a.CustoFs * b.ValCustos as CustoFs, a.MoecusFs ;
+  From crVenda a, crSigCdMoe b ;
+ Where a.MoecusFs = b.CMoes ;
+ Order By a.Emps, a.CPros ;
+  Into Cursor crProcessar ReadWrite
+
+* Somando os Estoques por Empresa (Geral)
+Select Emps, Sum(Sqtds) as Qtds, Sum(PVens) as Total, Sum(CustoFs) as TotalCusto ;
+  From crProcessar ;
+ Group By Emps ;
+  Into Cursor crTotPorEmp
+
+* Somando os Estoques por Empresa (Filtrado Pela Faixa Informada)
+Select Emps, Sum(Sqtds) as Qtds, Sum(PVens) as Total, Sum(CustoFs) as TotalCusto ;
+  From crProcessar ;
+ Where (PVens / Sqtds) BetWeen lnVlI And lnVlF ;
+ Group By Emps ;
+  Into Cursor crTotPorFxa
+
+* Agrupando Totais Por Faixa Selecionada e no Geral
+lnZer = 0000000000000.00
+
+Select a.Emps, Val(Str(Nvl(b.Qtds, lnZer), 15, 2)) as QtdsFaixa, ;
+	   Val(Str(Nvl(b.Total, lnZer), 15, 2)) as TotalFaixa, ;
+	   Val(Str(a.Qtds, 15, 2)) as QtdsGeral, Val(Str(a.Total, 15, 2)) as TotalGeral, ;
+	   lnZer as PctFaixa, lnZer as PctGeral, Val(Str(a.TotalCusto, 15, 2)) as TotCusGeral, ;
+	   Val(Str(Nvl(b.TotalCusto, 0), 15, 2)) as TotCusFaixa, 000 as Ordem ;
+  From crTotPorEmp a Left Join crTotPorFxa b ;
+    On a.Emps = b.Emps ;
+ Order By a.Emps ; 
+  Into Cursor crImprimir ReadWrite
+
+lnOrd = 0
+Select crImprimir
+Sum TotalFaixa To lnTot
+Scan
+	If (crImprimir.TotalFaixa <> 0)
+		Replace PctFaixa With (crImprimir.TotalFaixa / lnTot) * 100, ;
+				PctGeral With (crImprimir.TotalFaixa / crImprimir.TotalGeral) * 100 In crImprimir
+	EndIf
+
+	If Not llZer And Empty(crImprimir.QtdsFaixa)
+		Delete In crImprimir
+	Else
+		lnOrd = lnOrd + 1
+		Replace Ordem With lnOrd In crImprimir
+	EndIf
+EndScan
+
+Select Avg(PctFaixa) as MedFaixa, Avg(PctGeral) as MedGeral ;
+  From crImprimir ;
+  Into Cursor crMedias
+Go Top In crMedias
+
+Replace MedFaixa With Nvl(crMedias.MedFaixa,0), ; 
+		MedGeral With Nvl(crMedias.MedGeral,0) In crCabecalho
+
+Wait Clear
+
+Select crImprimir
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReEvv Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	If Empty(ThisForm.getTabela.Value)
+		=Messagebox('Tabela de Desconto Inválida!!!', 0+48, '')
+		ThisForm.getTabela.SetFocus
+		Return 0
+	EndIf
+
+	If (ThisForm.getValorIni.Value < 0)
+		=Messagebox('Faixa Inicial de Valor Inválida!!!', 0+48, '')
+		ThisForm.getValorIni.SetFocus
+		Return 0
+	EndIf
+
+	If (ThisForm.getValorIni.Value > ThisForm.getValorFin.Value)
+		=Messagebox('Faixa Inicial de Valor Maior do Que a Final!!!', 0+48, '')
+		ThisForm.getValorIni.SetFocus
+		Return 0
+	EndIf
+EndIf 
+
+frmrelatorio::btnReport.Click
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getTabela
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(Padr(This.Value, 10))
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;
+						   'crListaRemota', 'Codigos', Padr(This.Value, 10), 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Tabela')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.mAddColuna('Descos',  '9999.99', '%')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getTabela.Value  = crListaRemota.Codigos
+	ThisForm.getDTabela.Value = crListaRemota.Descrs
+	ThisForm.Percentual 			   = crListaRemota.Descos
+	Use In crListaRemota
+Else
+	ThisForm.getTabela.Value  = ''
+	ThisForm.getDTabela.Value = ''
+	ThisForm.Percentual 			   = 0
+EndIf
+ThisForm.getTabela.Refresh
+ThisForm.getDTabela.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getDTabela
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.mAddColuna('Codigos', '', 'Tabela')
+		loLista.mAddColuna('Descos',  '9999.99', '%')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getTabela.Value  = crListaRemota.Codigos
+	ThisForm.getDTabela.Value = crListaRemota.Descrs
+	ThisForm.Percentual 			   = crListaRemota.Descos
+	Use In crListaRemota
+Else
+	ThisForm.getTabela.Value  = ''
+	ThisForm.getDTabela.Value = ''
+	ThisForm.Percentual 			   = 0
+EndIf
+ThisForm.getTabela.Refresh
+ThisForm.getDTabela.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getTabela.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getDConta
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getConta, This)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getConta.Value = ''
+		ThisForm.getConta.Refresh
+	EndIf
+Else
+	ThisForm.getConta.Value = ''
+	ThisForm.getConta.Refresh
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.getGrupo.Value) And Empty(ThisForm.getConta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getDGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)
+Else
+	ThisForm.getGrupo.Value = ''	
+	ThisForm.getGrupo.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getGrupo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getConta
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This, ThisForm.getDConta)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDConta.Value = ''
+		ThisForm.getDConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDConta.Value = ''
+	ThisForm.getDConta.Refresh
+	Return .t.
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVV.getGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)
+Else
+	ThisForm.getDGrupo.Value = ''	
+	ThisForm.getDGrupo.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREEVV
+RESERVED3 (ClassInfo): percentual
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

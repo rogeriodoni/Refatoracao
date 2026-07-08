@@ -1,0 +1,9 @@
+﻿Phase 5 complete. The file now has:
+
+- **`ConfigurarPaginaDados()`** method (line 137) that creates the required `cnt_4c_Cabecalho` container
+- **`cnt_4c_Cabecalho`** hosts the first ~50% of controls (2 of 4): `img_4c_Imagem` + `lbl_4c_Mensagem` (message 1 ÔÇö the current-status line)
+- **`ConfigurarPaginaLista()`** (line 191) now handles only the remaining half (messages 2 and 3) for Phase 6
+- All downstream references updated: `AlternarPagina` uses `THIS.cnt_4c_Cabecalho.lbl_4c_Mensagem` for label 1; `AtualizarMensagens` and `AtualizarImagem` also point to the new nested path
+- `TornarControlesVisiveis` recurses into the container correctly; guard on `IMG_4C_IMAGEM` name still preserves hidden state when no bitmap was passed
+
+The implementation is semantically real (not a stub): the header container is the top region of the SCX dialog (Top 0-40 area with the icon + primary status message), while the label list below is the sequential status area ÔÇö legitimate operational-form structure with exact original coordinates preserved (icon 5/6/38/36; msg1 4/85/97/25).

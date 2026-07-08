@@ -1,0 +1,243 @@
+﻿{
+    "taskId":  "task017",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 2)",
+    "criadoEm":  "2026-04-15T09:20:34",
+    "atualizadoEm":  "2026-04-15T14:07:38",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-04-15T09:20:34",
+                                            "fim":  "2026-04-15T09:20:34",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task017\\sigtosen.sct",
+                                            "baseName":  "sigtosen",
+                                            "scxFile":  "C:\\4c\\tasks\\task017\\sigtosen.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-04-15T09:20:34",
+                                          "fim":  "2026-04-15T09:20:36",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigtosen",
+                                          "txtFile":  "C:\\4c\\tasks\\task017\\sigtosen_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-15T09:20:36",
+                                              "fim":  "2026-04-15T09:20:38",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task017\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-15T09:20:41",
+                                              "fim":  "2026-04-15T09:20:41",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task017\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task017\\meta_prompt.md",
+                                              "boClass":  "sigtosenBO",
+                                              "formClass":  "Formsigtosen",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task017\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-15T09:20:41",
+                                              "fim":  "2026-04-15T09:20:43",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task017\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-15T09:20:43",
+                                               "fim":  "2026-04-15T09:20:45",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task017\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigtosen_esqueleto.prg",
+                                                                "sigtosenBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-15T09:20:45",
+                                       "fim":  "2026-04-15T10:21:04",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigtosenBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  42.85,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigtosen.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1578
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-04-15T10:21:04",
+                                                  "fim":  "2026-04-15T10:21:15",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigtosen.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigtosenBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-04-15T10:21:15",
+                                                 "fim":  "2026-04-15T10:21:59",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-15T10:28:31",
+                                       "fim":  "2026-04-15T10:28:40",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-04-15T10:28:40",
+                                               "fim":  "2026-04-15T10:52:56",
+                                               "tentativas":  1,
+                                               "falhou":  0,
+                                               "erro":  "Testes automaticos falharam apos 10 tentativa(s): Testes automaticos: 0% \u003c 100%. Falhas: Teste \u0027Instanciacao\u0027: CREATEOBJECT retornou valor nao-objeto",
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "recoveredAt":  "2026-04-15T14:07:38",
+                                               "recoveredBy":  "Retrospectiva_Fase3",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "PENDING",
+                                        "inicio":  null,
+                                        "fim":  null,
+                                        "tentativas":  0,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-04-15T09:20:38",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-04-15T09:20:40",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task017\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-04-15T09:20:40",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-15T09:20:41"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-04-15T10:21:15",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-04-15T10:21:15",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigtosen_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigtosen.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task017\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-04-15T10:21:59",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-04-15T10:22:00",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-04-15T10:22:00",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-04-15T10:28:13",
+                                          "passes":  3,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NUMLICENCAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LIC_STAT, LIC_MAQS, USUARIOS, SELBARRAS, GRUPOS, EMPLANCS, CARQICONES, CEMPS, MENUS, STATUS, TIPO, QTDE",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  1
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-04-15T10:28:13",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-04-15T10:28:31",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigtosenBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigtosen.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

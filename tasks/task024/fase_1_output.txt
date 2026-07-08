@@ -1,0 +1,19 @@
+﻿**Fase 1 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigrevtoBO.prg` criado com:
+
+**Propriedades declaradas (7 filtros + 3 auxiliares):**
+| Propriedade | Tipo | Origem no legado |
+|---|---|---|
+| `this_cDopes` | C | `get_dopes` (Dopes C20) |
+| `this_dDtInicial` | D | `get_dt_inicial` |
+| `this_dDtFinal` | D | `get_dt_final` |
+| `this_cMoeda` | C | `get_moeda` (CMoes C3) |
+| `this_cMoedaDesc` | C | `get_moeda_desc` (DMoes) |
+| `this_cEmpresa` | C | `getEmpresa` (Cemps C3, opcional) |
+| `this_cDesEmpresa` | C | `getDesEmpresa` (Razas) |
+| `this_cMoedaOpe` | C | derivado de SigCdOpe.CMoes em PrepararDados |
+| `this_cNomeEmpresa` | C | derivado de SigCdEmp.Razas para cabe├ºalho |
+| `this_cCursorDados` | C | cursor de sa├¡da do relat├│rio |
+
+**`Init()`**: define `this_cTabela = "SigMvCab"` e `this_cCampoChave = ""`, chama `DODEFAULT()` ÔÇö padr├úo id├¬ntico ao SIGREVISBO.
+
+**`Destroy()`**: fecha todos os cursores auxiliares que ser├úo criados nas fases seguintes.

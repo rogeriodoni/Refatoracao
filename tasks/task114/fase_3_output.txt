@@ -1,0 +1,20 @@
+﻿O arquivo `Formsigrehpr.prg` j├í existe e est├í **completamente implementado** ÔÇö muito al├®m do escopo da Fase 3. Uma execu├º├úo anterior do pipeline j├í produziu o form completo com todas as 8 fases de conte├║do. Aqui est├í o resumo do que o arquivo cont├®m:
+
+**Fase 3 (estrutura base) ÔÇö conclu├¡da:**
+- `DEFINE CLASS Formsigrehpr AS FormBase` com todas as propriedades do original (Width=800, Height=320, DataSession=2, ControlBox=.F., TitleBar=0)
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` completo com verifica├º├úo de `gb_4c_ValidandoUI` e cria├º├úo do BO
+- `Destroy()` correto: `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+**Fases 4ÔÇô8 (j├í presentes no arquivo):**
+- `ConfigurarCabecalho()` ÔÇö container escuro (RGB 100,100,100) com labels sombra/t├¡tulo
+- `ConfigurarBotoesRelatorio()` ÔÇö CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), padr├úo BINDEVENT correto
+- Todos os 8 m├®todos `ConfigurarFiltros*` com posi├º├Áes exatas do original
+- `ConfigurarEventos()` com BINDEVENTs para KeyPress/DblClick de todos os campos
+- `FormParaRelatorio()`, `InicializarCampos()`, `CarregarEmpresaLogada()`, `AtualizarHabilitacaoCampos()`
+- `TipoAlterado()` equivalente ao `opt_nr_tipo.Valid` original
+- Todos os validadores: `ValidarCdGrEstoque`, `ValidarDsGrEstoque`, `ValidarCdEstoque`, `ValidarDsEstoque`, `ValidarCdCodigo`, `ValidarDsCodigo`, `ValidarCdBarra`, `ValidarEmpresa`, `ValidarDesEmpresa`
+- Todos os lookups via `FormBuscaAuxiliar`: `AbrirBuscaGrEstoque`, `AbrirBuscaEstoque`, `AbrirBuscaCodigo`, `AbrirBuscaEmpresa`
+- Handlers de teclado para todos os campos (F4=115, ENTER=13, TAB=9)
+
+**Arquivo est├í correto e completo.** A Fase 3 est├í conclu├¡da ÔÇö o arquivo cobre todo o pipeline (Fases 3ÔÇô8). Pr├│ximo passo ser├í a integra├º├úo em `config.prg` e `menu.prg`.

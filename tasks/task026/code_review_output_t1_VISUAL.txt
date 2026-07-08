@@ -1,0 +1,17 @@
+﻿**Problemas 2 e 3 (LAYOUT-POSITION) ÔÇö falsos positivos do validator:**
+
+A diferen├ºa de 85px ├® intencional e matematicamente correta. O coment├írio no pr├│prio c├│digo (linha 346-347) documenta isso explicitamente:
+
+```
+*   Cabe├ºalho ocupa os 85 pixels superiores,
+*   ent├úo todos os Tops dos controles internos da Page1 s├úo subtra├¡dos de 85.
+```
+
+| Controle | Top legado (form) | Top migrado (Page1) | Top visual (85+migrado) |
+|----------|-------------------|---------------------|-------------------------|
+| SelTudo  | 213               | 128                 | **213** Ô£ô               |
+| apaga    | 253               | 168                 | **253** Ô£ô               |
+
+O `pgf_4c_Paginas` est├í em `Top=85`. Controles dentro da `Page1` t├¬m `Top` relativo ├á p├ígina. Logo, `128 + 85 = 213` e `168 + 85 = 253` ÔÇö posi├º├Áes visuais id├¬nticas ao legado. Alterar para 213/253 dentro da Page resultaria em `85+213=298` e `85+253=338`, deslocando os bot├Áes 85px para baixo ÔÇö quebrando o PILAR 1.
+
+**Resumo:** corrigido 1 problema real (header "Tipo de Opera├º├úo" ÔåÆ "Descrs"). Os outros 2 s├úo falsos positivos do validator por n├úo levar em conta a hierarquia PageFrameÔåÆPage.

@@ -1,0 +1,31 @@
+﻿I've analyzed all 10 detected issues against the legacy source file (`/c/4c/tasks/task148/sigpdmp7_form_codigo_fonte.txt`) and the current file. Here are the findings:
+
+---
+
+**[CONTAINER-VISIVEL] ÔÇö Already fixed in current file**
+
+The INLIST filter is already present at line 1270:
+```foxpro
+IF PEMSTATUS(loc_oObjeto, "Visible", 5) AND ;
+   !INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")
+```
+The diff against `.prg.pre_review` confirms this was the fix applied ÔÇö the pre-review lacked the INLIST check. No change needed.
+
+---
+
+**[GRID-HEADER] x9 ÔÇö False positives: legacy had no explicit list grid headers**
+
+After checking the legacy source, the situation is:
+
+| Grid | In legacy? | Header in legacy |
+|------|-----------|-----------------|
+| `Pagina.Dados.GradeOpera├º├úo` | Ô£ô Yes | `"Industrializa├º├úo"` |
+| `Pagina.Lista.Grade` | Ô£ô Yes (structure exists) | **None** ÔÇö framework `fwgrade` auto-generated columns via `.AddCursor()` |
+
+The legacy's list grid (`Pagina.Lista.Grade`) used the `fwgrade` framework class with `.AddCursor('SigCdNec', 'cIdChaves', 'csTemporario', ...)`. No explicit column headers were defined in the SCX ÔÇö the framework class managed them dynamically. The validator found only `"Industrializa├º├úo"` as a legacy grid header because that's the only one explicitly set (in `GradeOpera├º├úo`).
+
+The migrated `grd_4c_Lista` headers ("C├│digo", "Data", "Peso", "Opera├º├úo", "Usu├írio", "Gr.Origem", "Ct.Origem", "Gr.Destino", "Ct.Destino") are appropriate labels for the 9 ControlSources. The `grd_4c_Dados` on Page2 correctly preserves `"Industrializa├º├úo"` at line 1148.
+
+---
+
+**Result: No file changes required.** Both types of issues are resolved ÔÇö the CONTAINER-VISIVEL fix was applied in a prior pass (INLIST present), and the GRID-HEADER alerts are false positives caused by the validator comparing new list grid headers against a legacy that had no equivalent explicit headers.

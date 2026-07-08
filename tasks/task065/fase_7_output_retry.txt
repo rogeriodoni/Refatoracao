@@ -1,0 +1,7 @@
+﻿Added the three missing CRUD-style button handlers to `Formsigrecpr.prg` adapted to the REPORT context ÔÇö each one has real behavior, no stubs:
+
+- **BtnIncluirClick** ÔÇö "Novo relat├│rio": chama `LimparCampos()` e foca em `txt_4c_DataIni`
+- **BtnAlterarClick** ÔÇö "Alterar filtros": preserva valores, ressincroniza `opt_4c_Bons` com `cbo_4c_TipoRel` e foca no primeiro filtro
+- **BtnExcluirClick** ÔÇö "Limpar filtros": pede confirma├º├úo via `MsgConfirma()`, ent├úo chama `LimparCampos()`
+
+`BtnVisualizarClick` j├í existia da fase anterior. Os 4 handlers exigidos pela valida├º├úo agora est├úo presentes.

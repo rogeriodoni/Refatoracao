@@ -1,0 +1,13 @@
+﻿Todas as altera├º├Áes da Fase 6 est├úo corretas. Resumo do que foi feito:
+
+**1. Corrigido `AbrirBuscaDemonstrativo()` em `FormSigReDdp.prg`** (bug cr├¡tico):
+- Par├ómetro errado: passava SQL query, `FormBuscaAuxiliar` espera nome de **tabela** ÔåÆ corrigido para `"SigPrDmo"`
+- Propriedade inexistente: `this_cValorSelecionado` n├úo existe ÔåÆ corrigido para ler `cursor_4c_BuscaDmo.Nome`
+- Adicionado padr├úo correto: checar `this_lAchouRegistro`, `mAddColuna`, `Show(1)`, `USE IN cursor`, `Release()`
+
+**2. Integrado ao menu em `menu.prg`**:
+- Adicionado `DEFINE BAR 86` (separador) + `DEFINE BAR 87` ("Demonstrativo de Balan├ºo") ao `popRelatorios`
+- Adicionado `ON SELECTION BAR 87 OF popRelatorios DO AbrirFormSigReDdp`
+- Adicionado procedure `AbrirFormSigReDdp()` ao final do arquivo
+
+N├úo foi necess├írio alterar `config.prg` pois o `ADIR()` j├í carrega `*BO.prg` de `classes/` e `Form*.prg` de `forms/relatorios/` automaticamente.

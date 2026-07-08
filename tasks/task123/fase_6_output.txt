@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com todas as mudan├ºas aplicadas:
+
+**Resumo das altera├º├Áes na Fase 6:**
+
+1. **`HeaderHeight = 0`** adicionado em ambas as grades ÔÇö oculta os cabe├ºalhos de coluna, replicando o comportamento do original (que tamb├®m tinha `HeaderHeight = 0`)
+
+2. **`AllowHeaderSizing = .F.`** e **`AllowRowSizing = .F.`** ÔÇö impede redimensionamento de cabe├ºalhos e linhas, fiel ao original
+
+3. **`Column1.Sparse = .F.`** ÔÇö corre├º├úo cr├¡tica de fidelidade visual: o CheckBox agora aparece em **todas** as linhas do grid, n├úo apenas na linha corrente. Sem isso, linhas n├úo-correntes mostravam `.T.`/`.F.` como texto
+
+4. **`QuandoSubTotDat()`** ÔÇö novo handler PUBLIC que retorna `(opt_4c_OptTipos.Value = 1)`, replicando o `chkSubTotDat.When = Return (optTipos.Value = 1)` do original
+
+5. **BINDEVENT `chk_4c_ChkSubTotDat.When`** em `VincularEventos()` ÔÇö conecta o handler acima, impedindo foco no checkbox quando modo Resumido est├í selecionado
+
+6. **Refresh de grade** em `BtnVisualizarClick` e `BtnImprimirClick` ÔÇö `GO BOTTOM + Refresh() + GO TOP` antes do processamento, replicando o `Go Bottom In csOperacoesE / Refresh / Go Top` do `btnReport.Click` original para garantir que o ├║ltimo estado do CheckBox seja commitado no cursor antes de filtrar

@@ -1,0 +1,14 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito na Fase 3:
+
+**Arquivo existente verificado** ÔÇö `Formsigrecmc.prg` (1925 linhas) j├í continha a estrutura completa de todas as 8 fases de uma execu├º├úo anterior. Tr├¬s problemas foram corrigidos e a integra├º├úo com o menu foi adicionada:
+
+**Corre├º├Áes em `Formsigrecmc.prg`:**
+1. `cmg_4c_Botoes.Left`: `528` ÔåÆ `529` (valor can├┤nico do framework)
+2. `FontName` de todos os 4 bot├Áes: `"Tahoma"` ÔåÆ `"Comic Sans MS"` (padr├úo obrigat├│rio para forms REPORT)
+3. `Buttons(3).Picture`: `"geral_envelope_32.jpg"` ÔåÆ `"relatorio_excel_26.jpg"` (├¡cone correto para Excel)
+
+**Integra├º├úo em `menu.prg`:**
+4. `ON SELECTION BAR 3 OF popRelatorios DO AbrirFormsigrecmc` adicionado (BAR 3 = "Clientes" j├í existia sem handler)
+5. Procedure `AbrirFormsigrecmc()` adicionada ao final do arquivo
+
+O config.prg j├í carrega automaticamente via ADIR() todos `*BO.prg` e `Form*.prg`, sem necessidade de registro manual.

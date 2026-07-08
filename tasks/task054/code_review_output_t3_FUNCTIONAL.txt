@@ -1,0 +1,6 @@
+﻿Corre├º├úo conclu├¡da. O problema era que `THIS.Width` dentro dos blocos `WITH .cmg_4c_Botoes` e `WITH .Buttons(n)` retornava a largura do form (700px), sendo atribu├¡da erroneamente onde valores espec├¡ficos eram necess├írios:
+
+- `cmg_4c_Botoes.Width`: 700 ÔåÆ **273** (conforme coment├írio: Buttons Left=2,68,134,200 Width=65 ÔåÆ 200+65+8=273)
+- `Buttons(1..4).Width`: 700 ÔåÆ **65** cada
+
+Isso causaria bot├Áes sobrepostos e extrapolando o container do cabe├ºalho em runtime.

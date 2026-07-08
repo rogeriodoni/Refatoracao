@@ -1,0 +1,19 @@
+﻿**Fase 1 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\sigpdmp7BO.prg` foi criado com:
+
+- **42 propriedades** mapeadas de todos os campos da tabela `SigCdNec` (schema confirmado), incluindo:
+  - Chaves do sistema: `this_cCidchaves`, `this_cEmpdnps`
+  - Chaves de neg├│cio: `this_cEmps`, `this_cDopps`, `this_nNumps`
+  - Datas: `this_dDatas`, `this_dDatars`, `this_dDatatrans`
+  - Grupos/Contas Origem, Destino e Respons├ível
+  - Todos os campos bit como `this_l*` (9 flags l├│gicos)
+  - Todos os contadores num├®ricos como `this_n*`
+  - Campos de texto e usu├írios como `this_c*`
+
+- **`Init()`** configurando:
+  - `this_cTabela = "SigCdNec"` (tabela principal da lista)
+  - `this_cCampoChave = "cidchaves"` (PK do sistema)
+  - Com TRY/CATCH e RETURN fora do bloco
+
+- **`ObterChavePrimaria()`** para o sistema de auditoria
+
+A Fase 2 adicionar├í `CarregarDoCursor()`, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()`.

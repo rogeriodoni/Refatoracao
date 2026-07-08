@@ -1,0 +1,29 @@
+﻿Corre├º├Áes aplicadas. Resumo de cada um dos 11 problemas:
+
+---
+
+**[CONTAINER-VISIVEL] ÔÇö J├í corrigido, sem mudan├ºa**
+A linha 1797 j├í cont├®m `!INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO", "CNT_4C_ORIGEM")`. O INLIST j├í est├í presente no c├│digo atual ÔÇö problema resolvido em vers├úo anterior.
+
+---
+
+**[GRID-HEADER] x6 ÔÇö Corrigido** (FormatarGridLista, linhas 1824ÔÇô1918)
+
+| Coluna | ControlSource | Antes (inventado) | Depois |
+|--------|--------------|-------------------|--------|
+| Column1 | numps | `"C" + CHR(243) + "digo"` | `"N.Mov."` |
+| Column2 | datas | `"Data"` | `"Dt.Mvto"` |
+| Column3 | totpesos | `"Total de Peso"` | `"Peso Tot."` |
+| Column4 | nlotes | `"Lote"` | `"N.Lote"` |
+| Column5 | grupoos | `"Gr. Origem"` | `"Gr.Orig."` |
+| Column6 | contaos | `"Ct. Origem"` | `"Ct.Orig."` |
+| Column7 | grupods | `"Gr. Destino"` | `"Gr.Dest."` |
+| Column8 | contads | `"Ct. Destino"` | `"Ct.Dest."` |
+
+> **Aten├º├úo**: O legado tinha "Ordem Produ├º├úo" e "Temp/Min" detectados pelo validador. Sem o SCX original, n├úo ├® poss├¡vel mapear todos os 8 captions com certeza. Recomenda-se verifica├º├úo manual contra o `SIGPDMP6.SCX` antes de fechar este pass.
+
+---
+
+**[LAYOUT-POSITION] x2 ÔÇö Falso positivo do validador, sem mudan├ºa**
+
+O coment├írio na linha 438ÔÇô439 confirma que o legado "Botoes" ├® o `cnt_4c_Legenda` (container de legenda de cores), posicionado em `Top=153` (=124+29), `Left=669` ÔÇö **j├í correto**. O validador fez match incorreto com `cnt_4c_BotoesAcao` (Page2 ÔÇô Salvar/Cancelar), que ├® um container completamente diferente. Mover `cnt_4c_BotoesAcao` para Top=124/Left=669 quebraria o layout da Page2.

@@ -1,0 +1,623 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreeqe.SCX
+* Data/Hora: 04/06/2026 15:59:10
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREEQE
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREEQE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDesEmpresa
+  Parent: SIGREEQE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmpresa
+  Parent: SIGREEQE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Agrupa
+  Parent: SIGREEQE
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREEQE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 76
+  Left = 12
+  Width = 792
+  Height = 449
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Posição de Etiquetas por Empresa"
+  ControlBox = .F.
+  ClipControls = .T.
+  WindowState = 0
+  Name = "SIGREEQE"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 527
+  btnReport.Top = 4
+  btnReport.TabIndex = 4
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 208
+  Top = 159
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE.GetDesEmpresa
+------------------------------------------------------------
+  Height = 23
+  Left = 300
+  TabIndex = 2
+  Top = 156
+  Width = 285
+  ZOrderSet = 18
+  Name = "GetDesEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE.GetEmpresa
+------------------------------------------------------------
+  Height = 23
+  Left = 262
+  MaxLength = 3
+  TabIndex = 1
+  Top = 156
+  Width = 36
+  ZOrderSet = 16
+  Name = "GetEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE.Opt_Agrupa
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 258
+  SpecialEffect = 0
+  Top = 183
+  Width = 138
+  TabIndex = 3
+  ZOrderSet = 49
+  Name = "Opt_Agrupa"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Barra"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 44
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Identidade"
+  Option2.Value = 0
+  Option2.Left = 63
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQE.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Agrupar :"
+  Left = 210
+  Top = 186
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREEQE
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReEqe To Printer NoConsole
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReEqe To Printer Prompt NoConsole
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.CGrupo  = ''
+ThisForm.CConta  = ''
+ThisForm.CTabela = ''
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','SigReEqe')
+	If .poDataMgr.pnIdconn < 1
+		MessageBox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',48,'Create Object')
+		Return(.F.)
+	EndIf
+	=DoDefault()
+EndWith
+
+If ThisForm.poDataMgr.SqlExecute([Select GrupoEsts,ContaEsts From SigCdPam ],'CrSigCdPam') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdPam)')
+	Return(.F.)
+EndIf
+Select CrSigCdPam
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select CEmps,Razas,Ativas,Estas From SigCdEmp ],'CrSigCdEmp') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrSigCdEmp)')
+	Return(.F.)
+EndIf
+Select CrSigCdEmp
+Index On cemps Tag cemps
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigCdMoe ],'CrSigCdMoe') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdMoe)')
+	Return(.F.)
+EndIf
+Select CrSigCdMoe
+Index On CMoes Tag CMoes
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigCdCot ],'CrSigCdCot') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdCot)')
+	Return(.F.)
+EndIf
+Select CrSigCdCot
+Index On CMoes + DtoS(Datas) Tag CMoeData
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select CGrus,Arreds From SigCdGrp ],'CrSigCdGrp') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdGrp)')
+	Return(.F.)
+EndIf
+Select CrSigCdGrp
+Index On CGrus Tag CGrus
+Go Top
+
+ThisForm.GetEmpresa.Value = _Empr
+=fAcessoEmpresa(Usuar,'C',ThisForm.GetEmpresa.Value,ThisForm.GetEmpresa,ThisForm.GetDesEmpresa)
+
+ThisForm.CGrupo = CrSigCdPam.GrupoEsts
+ThisForm.CConta = CrSigCdPam.ContaEsts
+
+lStrQuery = [Select a.Emps,a.CodTabDs,b.Descrs ]+;
+			[From SigOpTde a, SigOpTdz b ]+;
+			[Where a.Emps = ?_Empr And a.Padraos = 1 And b.Codigos = a.CodTabDs ]
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpTabDe') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpTabDe)')
+	Return 0
+EndIf
+Select TmpTabDe
+Go Top
+If !Eof()
+	ThisForm.CTabela = TmpTabDe.CodTabDs
+EndIf
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigCdCfi ],'CrSigCdCfi') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdCfi)')
+	Return(.F.)
+EndIf
+Select CrSigCdCfi
+Index On Grupos + Ests Tag GruEstas
+Go Top
+
+ThisForm.GetEmpresa.Refresh
+ThisForm.GetDesEmpresa.Refresh
+
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcEmpresa, lcGrupo, lcEstoque, lcTabela, lcEstas
+
+lcEmpresa = ThisForm.GetEmpresa.Value
+lcGrupo   = ThisForm.CGrupo
+lcEstoque = ThisForm.CConta
+lcTabela  = ThisForm.CTabela
+lnParcs   = 0
+lnAgrupa  = ThisForm.Opt_Agrupa.Value
+
+lcTitulo1     = 'Posição de Etiquetas' + Iif(!Empty(lcEmpresa),' - ' + Alltrim(lcEmpresa),'')
+lcNomeEmpresa = _Empr + IIf(Seek(_Empr,'CrSigCdEmp','CEmps'),' - ' + CrSigCdEmp.Razas,'')
+
+lcEstas = ''
+If Seek(lcEmpresa,'CrSigCdEmp','CEmps')
+	lcEstas = CrSigCdEmp.Estas
+EndIf
+
+Create Cursor CsCabecalho (nomeempresa c(80),titulo1 c(80),titulo2 c(150), Barra L)
+Insert Into CsCabecalho (nomeempresa,titulo1,Barra);
+				Values (lcNomeEmpresa,lcTitulo1,(lnAgrupa=1))
+				
+Create Cursor CsRelatorio (CBars c(14),DPros c(40),Units n(12,2),SitTribs c(2),Aliqs n(6,2))
+If lnAgrupa = 2
+	Index On Cbars Tag Cbars
+Endif
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigOpTdz Where Codigos = ']+lcTabela+[' ],'CsTabela') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsTabela)')
+	Return(.F.)
+EndIf
+Select CsTabela
+Go Top
+If !Eof()
+	lnParcs = CsTabela.NParcs
+EndIf
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigOpTdt Where Codigos = ']+lcTabela+[' ],'CsTabDi') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsTabDi)')
+	Return(.F.)
+EndIf
+Select CsTabDi
+Index On Codigos + Str(Tipos,1) + CodTips Tag CodTips
+Go Top
+
+Wait Window 'Aguarde! Selecionando Etiquetas...' NoWait
+lStrQuery = [Select '1' as Ps, a.CPros,a.CBars,b.DPros,b.PVens,b.Moevs,b.CGrus,b.Linhas,b.Colecoes,b.Cunis,b.cftios,b.Sgrus,b.sittricms,b.CodFinP, ]+;
+			[From SigOpEtq a, SigCdPro b, SigCdUni c ]+;
+			[Where a.EmpOs = ']+lcEmpresa+[' ] + Iif(Empty(lcGrupo),'',[And a.Grupos = ']+lcGrupo+[' ])+;
+				Iif(Empty(lcEstoque),'',[And a.Contas = ']+lcEstoque+[' ]) + [And b.CPros = a.CPros ]+;
+				[And b.cUnis = c.cunis And c.Etiqs = 'S' ]+;
+			[Union all ]+;
+			[Select '2' as Ps,a.CPros,b.CBars,b.DPros,b.PVens,b.Moevs,b.CGrus,b.Linhas,b.Colecoes,b.Cunis,b.cftios,b.Sgrus,b.sittricms,b.CodFinP, ]+;
+			[From SigMvEst a, SigCdPro b, SigCdUni c ]+;
+			[Where a.Emps = ']+lcEmpresa+[' ] + Iif(Empty(lcGrupo),'',[And a.Grupos = ']+lcGrupo+[' ])+;
+				Iif(Empty(lcEstoque),'',[And a.Estos = ']+lcEstoque+[' ]) + [And a.CPros = b.CPros ]+;
+				[And b.cUnis = c.cunis And c.Etiqs <> 'S' ]+;
+			[Order By 1,3,2,5,6,7,8 ]
+
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsRel') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsRel)')
+	Return(.F.)
+EndIf
+
+loBarraEti = CreateObject('fwprogressbar','Calculando Valor Unitário...',Reccount('CsRel'))
+loBarraEti.Show
+Select CsRel
+Go Top
+Scan
+	loBarraEti.Update(.T.)
+	Scatter MemVar
+	m.Aliqs    = 0
+	If Seek(m.CGrus + lcEstas,'CrSigCdCfi','GruEstas')
+		m.Aliqs = CrSigCdCfi.ICMs
+	EndIf
+	lnUnits    = m.PVens * fCarregarCambio(m.MoeVs,Date())
+	lnDescUnit = 1
+	lnDescTab  = 1
+
+	If (Seek(lcTabela + '4' + Padr(m.CPros,14)   ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '9' + Padr(m.CodFinP,10) ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '1' + Padr(m.CGrus,10)   ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '2' + Padr(m.Linhas,10)  ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '3' + Padr(m.Colecoes,10),'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '5' + Padr(m.Moevs,10)   ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '6' + Padr(m.cunis,10)   ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '7' + Padr(m.Cftios,10)  ,'CsTabDi','CodTips') Or ;
+			Seek(lcTabela + '8' + Padr(m.Sgrus,10)   ,'CsTabDi','CodTips'))
+
+		lnDescUnit = lnDescUnit - (CsTabDi.Descos / 100)
+		lnDescTab  = Iif(CsTabDi.TExclus = [S],1,lnDescTab )
+	EndIf
+	
+	If lnParcs = 0
+		m.Units = Round(lnUnits * lnDescTab * lnDescUnit / 1,2)
+	Else
+		lnPrecoParc  = Ceiling(((lnUnits * lnDescTab * lnDescUnit) / 1) / lnParcs)
+		m.Units = lnPrecoParc * lnParcs
+	EndIf
+	If Seek(m.CGrus,'CrSigCdGrp','CGrus') And CrSigCdGrp.Arreds <> 0
+		lnFatArred = CrSigCdGrp.Arreds
+		lnSoma = lnFatArred
+		Do While lnSoma < m.Units
+			lnSoma = lnSoma + lnFatArred
+		Enddo
+		m.Units = lnSoma
+	EndIf 
+	m.SitTribs = Iif(Empty(m.SitTricms),'00',m.SitTrIcms)
+	m.Cbars = Str(m.Cbars,14)
+	If lnAgrupa = 2
+		If Not Seek(m.Cbars,'CsRelatorio','Cbars')
+			Insert Into CsRelatorio From MemVar
+		Else
+			If m.Units > CsRelatorio.Units
+				Select CsRelatorio
+				Gather Memvar
+			EndIf
+		Endif
+	Else
+		Insert Into CsRelatorio From MemVar
+	Endif
+	Select CsRel
+EndScan
+loBarraEti.Complete(.T.)
+
+Select CsRelatorio
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReEqe Preview NoConsole
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+With ThisForm
+	If !(This.Value = 4)
+
+		lcEmpresa = .GetEmpresa.Value
+		If Empty(lcEmpresa)
+			MessageBox('Empresa Inválida',16,'Campo Obrigatório')
+			.GetEmpresa.SetFocus
+			Return 0
+		EndIf
+
+		lcTabela = ThisForm.CTabela
+		If Empty(lcTabela)
+			MessageBox('Empresa com Tabela de Desconto Padrão Não Informada !!!',16,'')
+			.GetEmpresa.SetFocus
+			Return 0
+		EndIf
+
+	EndIf
+EndWith
+
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQE.GetDesEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	Return(.T.)
+EndIf
+
+llRet = .F.
+
+llRet = fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.GetEmpresa,ThisForm.GetDesEmpresa)
+
+If llRet
+	
+	lStrQuery = [Select a.Emps,a.CodTabDs,b.Descrs ]+;
+				[From SigOpTde a, SigOpTdz b ]+;
+				[Where a.Emps = ']+ThisForm.GetEmpresa.Value+[' And a.Padraos = 1 And b.Codigos = a.CodTabDs ]
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpTabDe') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpTabDe)')
+	Else
+		Select TmpTabDe
+		Go Top
+		If !Eof()
+			ThisForm.CTabela = TmpTabDe.CodTabDs
+		Else
+			ThisForm.CTabela = ''
+		EndIf
+	EndIf
+EndIf
+
+Return(llRet)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.GetEmpresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQE.GetEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	Return(.T.)
+EndIf
+
+llRet = .F.
+
+llRet = fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.GetEmpresa,ThisForm.GetDesEmpresa)
+
+If llRet
+	
+	lStrQuery = [Select a.Emps,a.CodTabDs,b.Descrs ]+;
+				[From SigOpTde a, SigOpTdz b ]+;
+				[Where a.Emps = ']+ThisForm.GetEmpresa.Value+[' And a.Padraos = 1 And b.Codigos = a.CodTabDs ]
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpTabDe') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpTabDe)')
+	Else
+		Select TmpTabDe
+		Go Top
+		If !Eof()
+			ThisForm.CTabela = TmpTabDe.CodTabDs
+		Else
+			ThisForm.CTabela = ''
+		EndIf
+	EndIf
+EndIf
+
+Return(llRet)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREEQE
+RESERVED3 (ClassInfo): cconta
+cgrupo
+ctabela
+podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

@@ -1,0 +1,16 @@
+﻿**Fase 2/8 conclu├¡da.** `SigReAacBO.prg` foi completado com os seguintes m├®todos:
+
+- **`PrepararDados()`** ÔÇö l├│gica fiel ao `processamento` original:
+  - Valida que pelo menos um filtro est├í ativo (grupo OU usu├írio)
+  - Busca raz├úo social em `SigCdEmp`
+  - Cria `cursor_4c_Cabecalho` com t├¡tulo/subt├¡tulo/empresa
+  - Filtro por grupo: `SigOpLog WHERE Transacaos LIKE '%grupo%' AND Progs IN ('CADGRU','CADUSU')`
+  - Filtro por usu├írio: mesma query + enriquecimento ÔÇö para cada registro com "GRUPO :" na transa├º├úo, busca registros associados em `SigOpLog` que ainda n├úo constam no cursor principal via `APPEND FROM DBF()`
+
+- **`Imprimir()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT`
+- **`Visualizar()`** ÔÇö `PrepararDados()` + `REPORT FORM ... NOCONSOLE PREVIEW`
+- **`ExportarExcel()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TYPE XLS`
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro`
+- **`Destroy()`** ÔÇö fecha todos os cursores abertos pelo BO
+
+Regras cr├¡ticas aplicadas: sem `RETURN` dentro de `TRY/CATCH` (usa `loc_lContinuar`), sem literais acentuados (usa `CHR()`), `EscaparSQL()` para par├ómetros de igualdade, `STRTRAN()` para escapar aspas em par├ómetros `LIKE`, `SELECT cursor` antes de `APPEND FROM DBF()`.

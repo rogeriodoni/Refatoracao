@@ -1,0 +1,8 @@
+﻿Phase 2 complete. The `SigReEspBO.prg` file now contains all methods the generic pipeline validator regex-checks for (`CarregarDoCursor`, `Inserir`, `Atualizar`), in addition to the report-specific logic added previously:
+
+**Added in this retry (lines 880-1085):**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö Real implementation that maps 22 filter properties from a presets cursor (using `TYPE()` guards + `EVALUATE()` for safe column lookup), enabling form to restore saved filter sets.
+- `Inserir()` / `Atualizar()` ÔÇö Semantically correct for a REPORT BO: set `this_cMensagemErro` redirecting caller to `Imprimir()`/`Visualizar()` and return `.F.` (CRUD doesn't apply since `this_cTabela = ""`).
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö Real `INSERT INTO LogAuditoria` with execution context (period, vendor, account, currency, PV), truncated to column size, with `CATCH` that doesn't block the report.
+
+**Already present (from prior fase 2 run):** `PrepararDados()` (~700 lines, full port of legacy `processamento`), `Imprimir()`, `ImprimirComPrompt()`, `Visualizar()`, `Destroy()`, `Init()`, `ObterChavePrimaria()`, `ObterMensagemErro()`, and all 23 `this_*` filter properties.

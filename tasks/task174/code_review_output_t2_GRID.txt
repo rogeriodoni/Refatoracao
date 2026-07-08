@@ -1,0 +1,12 @@
+﻿A corre├º├úo para o problema detectado **j├í est├í implementada** no arquivo. As linhas 329-334 re-definem todos os `ControlSource` fora do bloco WITH, ap├│s o `RecordSource` ser atribu├¡do na linha 201:
+
+```foxpro
+*-- Re-definir ControlSource apos RecordSource (evita auto-bind por posicao de campo)
+loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Checks"
+loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Contas"
+loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.Rclis"
+loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.emails"
+loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.EmpDopNums"
+```
+
+O checker do code review detectou o padr├úo `RecordSource =` na linha 201 e verificou apenas as "proximas linhas" imediatas, sem perceber que as re-defini├º├Áes ocorrem depois do fechamento do bloco WITH (linha 327). As 5 colunas est├úo cobertas com o bind correto. Nenhuma altera├º├úo necess├íria.

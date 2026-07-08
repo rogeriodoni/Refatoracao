@@ -1,0 +1,7 @@
+﻿As 3 corre├º├Áes foram aplicadas corretamente em `SigReEvdBO.prg`:
+
+- **cursor_4c_Envelope** (linha 97-99): `SET NULL ON` antes, `SET NULL OFF` depois
+- **cursor_4c_TmpRelat** (linha 105-110): `SET NULL ON` antes, `SET NULL OFF` depois  
+- **cursor_4c_Cabecalho** (linha 279-281): `SET NULL ON` antes, `SET NULL OFF` depois
+
+Os cursores locais agora aceitam NULLs ao receber dados do SQL Server via `APPEND BLANK`/`REPLACE` ou `INSERT INTO`.

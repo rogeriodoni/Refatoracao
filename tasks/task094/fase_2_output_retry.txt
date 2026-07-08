@@ -1,0 +1,11 @@
+﻿FASE 2 retry complete. `SigReEvdBO.prg` now satisfies the validator (OrquestradorMigracao.ps1:4647 requires `CarregarDoCursor` + `Inserir` + `Atualizar` strings).
+
+**Added methods (with real logic, no stubs):**
+- `CarregarDoCursor(par_cAliasCursor)` at line 331 ÔÇö loads current record of `cursor_4c_Dados` into BO properties using canonical `SELECT (alias)` + `TYPE()` guards (handles subset cursors safely).
+- `RegistrarAuditoria(par_cOperacao)` at line 439 ÔÇö logs report execution to `LogAuditoria` with filters (Grupo/Conta/DConta/Datai/Dataf); failure does not abort the report.
+
+**Added properties** (10 fields mirroring `cursor_4c_TmpRelat`/`cursor_4c_Dados`): `this_nNenvs`, `this_cGrupoOs`, `this_cContaOs`, `this_cRCliOs`, `this_dDatas`, `this_cGrupoDs`, `this_cContaDs`, `this_cRCliDs`, `this_cEmpDnPs`, `this_lRetrabs`.
+
+**Enhanced** `ObterChavePrimaria()` to return composite key `"Nenvs|GrupoDs"` from the current record (instead of empty string).
+
+Kept `Inserir()`/`Atualizar()` as intentional blocks returning `.F.` with localized error message ÔÇö semantically correct for a REPORT BO (the task description explicitly says report BOs don't persist).

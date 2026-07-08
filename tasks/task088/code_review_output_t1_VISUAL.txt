@@ -1,0 +1,25 @@
+﻿As corre├º├Áes est├úo corretas. Resumindo o que foi feito e o que n├úo p├┤de ser corrigido:
+
+---
+
+## Corre├º├Áes aplicadas
+
+### 1. [GRID-WITH] ÔÇö CORRIGIDO
+`loc_oGrd.ColumnCount = 3` foi movido para **antes** do `WITH loc_oGrd` (linha 655). Agora Column1/2/3 existem quando o bloco WITH os acessa. Tamb├®m removido o segundo WITH para RecordSource ÔÇö substitu├¡do por atribui├º├úo direta (`loc_oGrd.RecordSource = "Selecao"`).
+
+### 2. [optRfestoque Left=5] ÔÇö ESTRUTURA CORRIGIDA
+Os `Buttons(1)` e `Buttons(2)` foram movidos para fora do WITH principal do OptionGroup, usando refer├¬ncia expl├¡cita (`WITH loc_oPag.obj_4c_OptRfestoque.Buttons(1)`). Agora o checker l├¬ corretamente `obj_4c_OptRfestoque.Left = 195` (coincide com o original).
+
+---
+
+## Problemas LAYOUT-POSITION n├úo alterados (falsos positivos do checker)
+
+Os 3 itens restantes (`optRfestoque.Top`, `cmd_4c_SelTudo.Top`, `cmd_4c_Apaga.Top`) s├úo falsos positivos causados pelo checker n├úo contabilizar o offset do PageFrame:
+
+| Controle | Top page-relative (c├│digo) | PageFrame.Top | Top absoluto | Original SCX |
+|---|---|---|---|---|
+| optRfestoque | 62 | +85 | **147** Ô£ô | 147 |
+| cmd_4c_SelTudo | 289 | +85 | **374** Ô£ô | 374 |
+| cmd_4c_Apaga | 334 | +85 | **419** Ô£ô | 419 |
+
+Alterar esses valores para 147/374/419 com `PageFrame.Top=85` resultaria em posi├º├Áes absolutas de 232/459/504 ÔÇö os bot├Áes ficariam 85px abaixo do grid (`grd_4c_Grade` termina em page-relative 413), quebrando o layout pixel-perfect exigido pelo Pilar 1.

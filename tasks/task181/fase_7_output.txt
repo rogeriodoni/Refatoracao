@@ -1,0 +1,9 @@
+﻿Fase 7 conclu├¡da. Foram adicionados 3 elementos ao `FormSigPrEtq.prg`:
+
+1. **`AtualizarEstadoColunas()`** (linha 2390) ÔÇö replica os `When` events das colunas do original:
+   - `col_cpros/dpros/DPro2s`: `ReadOnly = .T.` quando a linha j├í tem produto (SIGPRETQ n├úo permitia editar produto de linha existente)
+   - `col_par` (Parcelas): `ReadOnly = .T.` a menos que `opt_Preco.Value = 6` (Parcelamento)
+
+2. **`OptPrecoInteractiveChange()`** (linha 2380) ÔÇö disparado quando o usu├írio muda a op├º├úo de Pre├ºo, atualizando o estado de Parcelas em tempo real
+
+3. **BINDEVENT** `obj_4c_Opt_Preco.InteractiveChange` ÔåÆ `OptPrecoInteractiveChange` (linha 100) e chamada de `AtualizarEstadoColunas()` ao final de `GrdDadosAfterRowColChange` (linha 2066)

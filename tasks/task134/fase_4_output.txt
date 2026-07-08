@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`InicializarForm()` atualizado** ÔÇö chamada a `ConfigurarPaginaLista()` inserida entre `ConfigurarCabecalho` e `ConfigurarAguarde` (z-order correto: grid/bot├Áes embaixo, Aguarde no topo)
+
+2. **`Activate()`** ÔÇö dispara `BtnProcessarClick()` automaticamente na primeira ativa├º├úo, assim como o legado fazia
+
+3. **`ConfigurarPaginaLista()`** ÔÇö cria todos os controles operacionais:
+   - `shp_4c_ShpRp` (fundo vis├¡vel s├│ ap├│s processar)
+   - `cmd_4c_Processar` (vis├¡vel desde o in├¡cio)
+   - `cmd_4c_CmdRpview` / `cmd_4c_CmdRpPrint` (ocultos at├® processar)
+   - `obj_4c_CmdGprocessa` (CommandGroup Encerrar, top-right em 800px)
+   - `obj_4c_Arquivos` (listbox de grupos)
+   - `lbl_4c_Label7` (label "Grupos :")
+   - `grd_4c_Dados` (10 colunas mapeadas para `csRel.Mat2s`, `Dcompo2s`, `CUnis`, `QtdMins`, `Qtds`, `QtdReqs`, `QtdPedcs`, `QtdComps`, `QtdEmphs`, `QtdPfins`)
+   - `lbl_4c_Label3` / `lbl_4c_Label4` (notas de rodap├®)
+
+4. **Handlers** ÔÇö `BtnProcessarClick`, `BtnCmdRpviewClick`, `BtnCmdRpPrintClick`, `BtnCmdGprocessaClick`, `ArquivosInteractiveChange` ÔÇö todos com l├│gica real baseada no legado

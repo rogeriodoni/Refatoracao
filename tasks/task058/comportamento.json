@@ -1,0 +1,463 @@
+{
+  "resumo": {
+    "totalMetodos": 25,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 18,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fXmlToCursor", "fChecaAcesso", "fDtoSQL", "fwBuscaInt", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "Parameters pcCursor, pcNivAnt, pcCurDest\n\nLocal lnOldSel, lcXML\n\nlnOldSel = Select()\nlcXML = []\n\nIf Used([CrAux])\n\tUse in CrAux\nEndIf \n\nSelect &pcCursor.\nSelect cidchaves, Cods, Descs, 0 as Marcas, Space(4) as Codigo From &pcCursor. Where 1=0 Into Cursor CrAux ReadWrite\n\nSelect &pcCursor.\t\nGo top\n\nScan \t\t\t\n\tlcXML = Nvl(&pcCursor..Nivel,[])\n\tZap in CrAux\n\tIf Not Empty(lcXML)\n\t\t= fXmlToCursor(lcXML, [CrAux], .f.)\n\t\tSelect CrAux\n\t\tScan For CrAux.Marcas <> 0\n\t\t\tSelect &pcCurDest.\n\t\t\tAppend Blank \n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fXmlToCursor",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnt To Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnt To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Init",
+      "linhas": 84,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\tThisForm.poDataMgr.CursorQuery([SigCdPam], [LocalPam], .f., .f., [GrPadVens])\n\t\tIf Not Used([LocalPam])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalPam)])\n\t\t\tReturn .f.\n\t\tEndIf\n\t\t\n\t\tGo Top In LocalPam\n\t\tIf Empty(LocalPam.GrPadVens)\n\t\t\t=MessageBox([O Grupo Padrão de Vendedores Não Está Configurado Nos] + Chr(13) + ;\n\t\t\t\t\t\t[Parâmetros do Siste... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "CursorQuery,Value = Date,SqlExecute,ReverterXML",
+        "controlesReferenciados": "OptLocal,option1,option2,option3",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 195,
+      "codigoOriginal": "Private pDtI, pDtF\nLocal lcLocals, lcVends, lnLocal, ldData, lcLocalizacao\n\nlnOrdem = ThisForm.OptOrdem.Value\nlcLocalizacao = []\nlcBase = ThisForm.getBase.Value\nlcNvl2 = ThisForm.getNvl2.Value\nlcNvl3 = ThisForm.getNvl3.Value\nlcNvl4 = ThisForm.getNvl4.Value\n\n\nlcLocalizacao = Alltrim(lcBase)+Alltrim(lcNvl2)+Alltrim(lcNvl3)+Alltrim(lcNvl4)\n\nWait Window 'Aguarde Processamento!' Nowait\n\nCreate Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), Titulo2 c(200), Figura c(10))\nThisform.poDataMgr.Curso... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "OptOrdem,OptLocal",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnt Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If (This.Value <> 4)\n\tIf Empty(ThisForm.getDatas.Value)\t\n\t\t=Messagebox('Data Inválida!', 16, 'Aviso')\n\t\tThisForm.getDatas.SetFocus()\n\t\tReturn 0\n\tEndIf\n\n\nEndIf\n\nfrmrelatorio::btnReport.Click\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getConta",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ;\n\t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[')))) ] + ;\n\t\t\t[And a.grupos = ']+LocalPam.GrPadVens+[' ]... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getBase",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigLcNv1', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Localização')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Cods\n\tThisForm.getDBase.Value = crListaRemota.Descs\n\t\n\tUse In crListaRemota\n\nEndIf\nThis.Refresh\nThisForm.getDBase.Refresh \n* Fim ******... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getBase",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.getDBase.Value = []\nThisForm.getNvl2.Value = []\nThisForm.getDNvl2.Value = []\nThisForm.getNvl3.Value = []\nThisForm.getDNvl3.Value = []\nThisForm.getNvl4.Value = []\nThisForm.getDNvl4.Value = []\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl2",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loBrow, lcNivel\n\nlcNivel = Alltrim(ThisForm.getBase.Value)\n\nIf !IsEmpty(This.Value)\n\tSelect * From CrSigLcNv2 Where Cods = lcNivel ;\n\t\tInto Cursor LocalNivel Readwrite\n\n\tSelect LocalNivel\n\tIndex On Codigo Tag Codigo\n\tSet Near On\n\tIf !Seek(This.Value)\n\t\tloBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )\n\t\tloBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )\n\t\tloBrow.AddColuna( 'Descs', '', 'Descrção', .F. )\n\t\tloBrow.Show\n\t\tThis.Value = LocalNivel.Codi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl2",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If Empty(ThisForm.getBase.Value)\n\tWait Window [Nível Anterior não Informado.] Nowait\n\tReturn .F.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl2",
+      "evento": "InteractiveChange",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.getDNvl2.Value = []\nThisForm.getNvl3.Value = []\nThisForm.getDNvl3.Value = []\nThisForm.getNvl4.Value = []\nThisForm.getDNvl4.Value = []",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDConta",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "Local lcVends, loLista\nlcVends  = []\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ;\n\t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ;\n\t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute,Value = Evaluate",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.getConta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl3",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loBrow, lcNivel\n\nlcNivel = Alltrim(ThisForm.getNvl2.Value)\n\nIf !IsEmpty(This.Value)\n\tSelect * From CrSigLcNv3 Where Cods = lcNivel ;\n\t\tInto Cursor LocalNivel Readwrite\n\n\tSelect LocalNivel\n\tIndex On Codigo Tag Codigo\n\tSet Near On\n\tIf !Seek(This.Value)\n\t\tloBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )\n\t\tloBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )\n\t\tloBrow.AddColuna( 'Descs', '', 'Descrção', .F. )\n\t\tloBrow.Show\n\t\tThis.Value = LocalNivel.Codi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl3",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "If Empty(ThisForm.getNvl2.Value)\n\tWait Window [Nível Anterior não Informado.] Nowait\n\tReturn .F.\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl3",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.getDNvl3.Value = []\nThisForm.getNvl4.Value = []\nThisForm.getDNvl4.Value = []",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDBase",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDNvl2",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDNvl3",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl4",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.getDNvl4.Value = []",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl4",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If Empty(ThisForm.getNvl3.Value)\n\tWait Window [Nível Anterior não Informado.] Nowait \n\tReturn .F.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getNvl4",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loBrow, lcNivel\n\nlcNivel = Alltrim(ThisForm.getNvl3.Value)\n\nIf !IsEmpty(This.Value)\n\tSelect * From CrSigLcNv4 Where Cods = lcNivel Into Cursor LocalNivel Readwrite\n\tSelect LocalNivel\n\tIndex On Codigo Tag Codigo\n\tSet Near On\n\tIf !Seek(This.Value)\n\t\tloBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )\n\t\tloBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )\n\t\tloBrow.AddColuna( 'Descs', '', 'Descrção', .F. )\n\t\tloBrow.Show\n\t\tThis.Value = LocalNivel.Codigo\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDNvl4",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECNT.Procedure",
+      "queryOriginal": "Select cidchaves, Cods, Descs, 0 as Marcas, Space(4) as Codigo From &pcCursor. Where 1=0 Into Cursor CrAux ReadWrite",
+      "tabelas": "",
+      "colunas": "cidchaves,Cods,Descs,CrAux,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ; \t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[')))) ] + ; \t\t\t[And a.grupos = ']+LocalPam.GrPadVens+[' ]... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars,Value+[,GrPadVens+[",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getNvl2.Valid",
+      "queryOriginal": "\tSelect * From CrSigLcNv2 Where Cods = lcNivel ; \t\tInto Cursor LocalNivel Readwrite",
+      "tabelas": "CrSigLcNv2",
+      "colunas": "Cods,lcNivel,LocalNivel,Readwrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getDConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ; \t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ; \t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getNvl3.Valid",
+      "queryOriginal": "\tSelect * From CrSigLcNv3 Where Cods = lcNivel ; \t\tInto Cursor LocalNivel Readwrite",
+      "tabelas": "CrSigLcNv3",
+      "colunas": "Cods,lcNivel,LocalNivel,Readwrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getNvl4.Valid",
+      "queryOriginal": "\tSelect * From CrSigLcNv4 Where Cods = lcNivel Into Cursor LocalNivel Readwrite",
+      "tabelas": "CrSigLcNv4",
+      "colunas": "Cods,lcNivel,LocalNivel,Readwrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdAcJ", "SigCdGcr", "CrSigLcNv2", "CrSigLcNv3", "CrSigLcNv4"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

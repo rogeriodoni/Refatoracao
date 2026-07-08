@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto com 8 m├®todos (Init, ObterChavePrimaria, InicializarConexao, Processar + 4 ProcessarXxx) e ENDDEFINE na linha 810.
+
+**Fase 2 conclu├¡da.** O `SigPrCccBO.prg` agora tem a implementa├º├úo completa:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `SYS(2015)+SYS(2015)` (chave gerada para SigOpClU)
+- **`InicializarConexao()`** ÔÇö cria `fSqlConector('RECSALDO')` com cursores `CrSigOpClU` e `CrSigCdPam` (necess├írio para as fun├º├Áes legadas `fRecalculaS/P/C`)
+- **`Processar(par_oForm)`** ÔÇö orquestra os 4 tipos de rec├ílculo com base nas flags `this_lProcessar*`
+- **`ProcessarContaCorrente()`** ÔÇö reconstr├│i saldos de `SigMvCcr` via `fRecalculaS`, com suporte a filtros por empresa/grupo/conta/moeda/data
+- **`ProcessarEstoque()`** ÔÇö reconstr├│i saldos de `SigMvHst` via `fRecalculaP`, com filtro por `EmpGruEsts` composto ou ranges
+- **`ProcessarCusto()`** ÔÇö recalcula custo de produtos via `fRecalculaC`, respeitando o par├ómetro `CalcCustos` de `SigCdPac`
+- **`ProcessarUltimaCompra()`** ÔÇö reconstr├│i `SigOpClU` a partir de `SigMvCab`/`SigMvItn` e atualiza `SigCdCli` e `SigCdPro`
+
+Todos os m├®todos seguem as regras VFP9: sem RETURN dentro de TRY/CATCH, sem acentos literais (CHR()), sem MESSAGEBOX (MsgErro()), padr├úo `DO WHILE .T. ... EXIT` para sa├¡das m├║ltiplas.

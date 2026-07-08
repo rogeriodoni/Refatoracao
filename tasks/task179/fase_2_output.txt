@@ -1,0 +1,18 @@
+﻿O `sigpres2BO.prg` est├í completo com todos os m├®todos CRUD. Aqui est├í o resumo do que foi implementado na Fase 2:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT de SigMvCab filtrado por `this_cDopes` ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cEmpDopNums)` | PUBLIC | Carrega cabecalho completo pelo EmpDopNums; seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Mapeia todos os campos do cursor para propriedades BO (com `SELECT (alias)` obrigat├│rio) |
+| `CarregarItens(par_cEmpDopNums)` | PUBLIC | SELECT de SigMvPec ÔåÆ `cursor_4c_Itens` (para o grid de produtos) |
+| `CarregarOperacao(par_cDopes)` | PUBLIC | SELECT de SigCdOpe ÔåÆ popula `this_nBlqDatas` e `this_nDtEntrs` |
+| `CarregarDescricaoConta(par_cConta)` | PUBLIC | Helper: busca Rclis de SigCdCli para exibi├º├úo nos campos de descri├º├úo |
+| `Atualizar()` | PROTECTED | UPDATE SigMvCab com Datas, GrupoOs/Ds, ContaOs/Ds, Vends, Grvends, PrazoEnts, Notas, Tabds, Obses, DtAlts |
+| `Inserir()` | PROTECTED | Stub ÔÇö n├úo aplic├ível para este form operacional |
+| `ExecutarExclusao()` | PROTECTED | Stub ÔÇö n├úo aplic├ível para este form operacional |
+
+**Propriedades adicionadas (vs Fase 1):**
+- `this_cGrresps` / `this_cResps` / `this_cDResps` ÔÇö grupo/c├│digo/descri├º├úo do representante (SigMvCab.grresps/resps)

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Os 3 falhas eram cascade de uma ├║nica causa:
+
+1. **BtnIncluirNavegacao** (linha 992): o teste chamava `BtnCancelarClick()` para voltar ├á Page1, mas o m├®todo invocava `BtnEncerrarClick()` ÔåÆ `THIS.Release()`, destruindo o form. O acesso a `THIS.oForm` depois disso gerou "Unknown member OFORM".
+
+2. **BtnEncerrarExiste** e **LookupMetodosExistem**: com o form destru├¡do, `PEMSTATUS(THIS.oForm, ...)` e `AMEMBERS(..., THIS.oForm, 1)` falharam com "Function argument value, type, or count is invalid".
+
+**Fix**: `BtnCancelarClick` agora navega para Page1 em vez de fechar o form. Para REPORT forms faz sentido sem├óntico: "Cancelar" = "voltar aos filtros"; "Encerrar" = fechar o form.

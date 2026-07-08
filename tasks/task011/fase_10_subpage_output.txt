@@ -1,0 +1,28 @@
+﻿The implementation is complete and correct. Here's a summary of all changes made to `FormProduto.prg`:
+
+**1. `ConfigurarPaginaDados()` (line 638)** ÔÇö added call before `TornarControlesVisiveis`:
+```foxpro
+THIS.ConfigurarPgpgCusto(loc_oPgf.Page6)
+```
+
+**2. `ConfigurarPgpgCusto()` (lines 3563ÔÇô3972)** ÔÇö new PROTECTED method with:
+- `cursor_4c_CustoCompo` placeholder (12 display fields + CGrus + tipos)
+- `cursor_4c_TotGrupoCusto` placeholder (Grupo/ValGrupo/Moeda)
+- `cbo_4c_CmbTipos` ComboBox (Tipo, top=154) + BINDEVENT InteractiveChange
+- `lbl_4c_Label1` ("Tipo :", top=159)
+- `grd_4c_CustoCompo` Grid (12 cols, top=178) + RecordSource + ControlSources + Headers + Widths + BINDEVENT AfterRowColChange
+- `obj_4c_CmdgCusto` CommandGroup (2 buttons: Inserir/Excluir, top=240) + BINDEVENT Click
+- `lbl_4c_Label16` ("Descri├º├úo :", top=415)
+- `txt_4c_Desc` TextBox ReadOnly (top=412)
+- `lbl_4c_Label2` ("Grupo :", top=415)
+- `txt_4c_DGruCompos` TextBox ReadOnly (top=412)
+- `lbl_4c_Label3` ("Resumo por Grupo", top=445)
+- `shp_4c_Shape2` Shape (top=460, h=2)
+- `grd_4c_GruCusto` Grid (3 cols, top=468) bound to `cursor_4c_TotGrupoCusto`
+
+**3. Handler methods (lines 6005ÔÇô6103)**:
+- `GrdCustoCompoAfterRowColChange` ÔÇö updates `txt_4c_Desc` (dcompos) and `txt_4c_DGruCompos` (SQLEXEC lookup SigCdGrp by CGrus)
+- `CmdgCustoClick` ÔÇö Inserir (APPEND BLANK) / Excluir (DELETE) on `cursor_4c_CustoCompo`
+- `CboTiposCustoInteractiveChange` ÔÇö GO TOP + Refresh grid
+
+**4. `Destroy()` (line 6624)** ÔÇö expanded from 35 to 37 cursors, adding `cursor_4c_CustoCompo` (#36) and `cursor_4c_TotGrupoCusto` (#37)

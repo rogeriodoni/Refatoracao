@@ -1,0 +1,15 @@
+﻿All three required method names (`CarregarDoCursor`, `Inserir`, `Atualizar`) are present and the file compiles structurally (`DEFINE CLASS` ÔåÆ `ENDDEFINE` properly bracket the methods).
+
+**Fase 2 completa** em `C:\4c\projeto\app\classes\SigPdMpfBO.prg`:
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|--------------|--------|
+| `ObterChavePrimaria()` | PROTECTED | Retorna `cidchaves` (PK de SigCdNec) |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia 15 colunas de SigCdNec via `TYPE()`+`TratarNulo()` |
+| `ValidarDados()` | PROTECTED | Valida├º├úo para Inserir/Atualizar |
+| `Inserir()` | PUBLIC | INSERT completo em SigCdNec (40 colunas) + `RegistrarAuditoria("INSERIR")` |
+| `Atualizar()` | PUBLIC | UPDATE em SigCdNec pelo `cidchaves` + `RegistrarAuditoria("ATUALIZAR")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE pelo `cidchaves` + `RegistrarAuditoria("EXCLUIR")` |
+| `ValidarFiltros()`, `ConstruirSQL()`, `ExecutarConsulta()` | ÔÇö | Consulta operacional (Fase 1) |
+
+Propriedades adicionadas para CRUD: `this_cCidChaves`, `this_dDatas`, `this_cDopps`, `this_cEmps`, `this_cContaOs/Ds`, `this_cGrupoOs/Ds`, `this_nNumps`, `this_nNops`, `this_cUsuars`, `this_nTotPesos`, `this_cDocus`, `this_cLocals`, `this_cEmpDnps`, `this_cJobs`. Todas usadas em `CarregarDoCursor`, `Inserir` e `Atualizar`. Sem stubs, sem TODOs.

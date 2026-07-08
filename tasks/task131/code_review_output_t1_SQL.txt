@@ -1,0 +1,21 @@
+﻿Fiz uma an├ílise completa em ambos os arquivos. O resultado da verifica├º├úo:
+
+**Falso positivo ÔÇö nenhuma altera├º├úo necess├íria.**
+
+A investiga├º├úo mostrou:
+
+1. **SQL correto (SigReIr1BO.prg, linha 110):**
+   ```foxpro
+   "SELECT GesInd, TpInstalas, moedaps FROM SigCdPam", "CsSigCdPam"
+   ```
+   Sem WHERE ÔÇö id├¬ntico ao original `Select GesInd, TpInstalas, moedaps From SigCdPam`.
+
+2. **O que o tool detectou (FormSigReIr1.prg, linha 1145):**
+   ```foxpro
+   IF !EOF() AND CsSigCdPam.GesInd = 1
+   ```
+   Isso **n├úo ├® um WHERE SQL** ÔÇö ├® l├│gica VFP executada *ap├│s* buscar o cursor. O c├│digo migrado faz exatamente o que o original fazia: busca SigCdPam sem filtro e ent├úo verifica se `GesInd = 1` para ocultar controles de ordem/descri├º├úo/barras/localiza├º├úo.
+
+3. **Nenhuma ocorr├¬ncia** de `WHERE ... GesInd` em qualquer query SQL em nenhum dos dois arquivos (confirmado por grep em todo o diret├│rio).
+
+A ferramenta de an├ílise confundiu a condi├º├úo VFP `IF CsSigCdPam.GesInd = 1` com um filtro SQL inventado. Remover essa verifica├º├úo quebraria a regra de neg├│cio (ocultar controles para empresas com GesInd = 1). O c├│digo est├í correto.

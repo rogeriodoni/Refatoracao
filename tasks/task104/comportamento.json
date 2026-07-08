@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFun Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Procedure",
+      "linhas": 83,
+      "codigoOriginal": "Private pCdI, pCdF\nWait Window 'Aguarde Processamento!' NoWait\n\nCreate Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), Titulo2 c(200), Figura c(10), ImpObs l)\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nlcEmpresa = _Empr + ' - ' + Alltrim(crSigCdEmp.Razas)\nlcTitulo  = 'Relação tubos fundição'\nlcTitulo2 = 'Fundição - ' + ThisForm.GetFundI.Value + ' até ' + ThisForm.GetFundF.Value\n\nInsert Into csCabecalho (NomeEmpresa, Titulo, Titulo2, ImpObs) Values (lc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tENDIF\nEndWith\n\n*!*\tLparameters _Fundicao, _Conexao\n\n*!*\tWith ThisForm\n*!*\t\t.poDataMgr \t\t= _Conexao\n*!*\t\t.getFundI.Value = _Fundicao\n*!*\t\t.getFundF.Value = _Fundicao\n*!*\t\t.Refresh\n\n*!*\t\t=DoDefault()\n*!*\tEndWith\n* Fim **********************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFun To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFun To Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFUN",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If Empty(thisform.getFundi.Value) Or Empty(thisform.getFundf.Value)\n\tMessageBox([No. de fundição é obrigatório.],64,[Aviso])\n\tthisform.getFundi.SetFocus()\n\tReturn .f.\nEndIf\n\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) Or Empty,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFUN.Procedure",
+      "queryOriginal": "Insert Into csCabecalho (NomeEmpresa, Titulo, Titulo2, ImpObs) Values (lc... [TRUNCADO]",
+      "tabelas": "csCabecalho",
+      "colunas": "NomeEmpresa,Titulo,Titulo2,ImpObs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csCabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

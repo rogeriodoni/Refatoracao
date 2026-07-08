@@ -1,0 +1,19 @@
+﻿Arquivo `sigmvccrBO.prg` criado com sucesso em `C:\4c\projeto\app\classes\`.
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+**Propriedades declaradas (mapeamento 1:1 com SigMvCcr):**
+- Chave prim├íria composta: `this_cEmps` + `this_nNopers`
+- Opera├º├úo e v├¡nculos: `this_cOpers`, `this_cSopers`, `this_cDopes/Numes`, `this_cDopcs/Numcs`, `this_cVOpers`
+- Datas: `this_dDatas`, `this_dVencs`, `this_dDtEmiss`, `this_dDatAlts`, `this_dDatExcs`
+- Lado d├®bito: `this_cGrupos/Contas/Moedas`, `this_nCotacaos`, `this_nValors`
+- Lado cr├®dito (S): `this_cSgrupos/Scontas/Smoedas`, `this_nScotacaos`, `this_nSvalors`
+- Hist├│rico/doc: `this_cHists`, `this_cHist2s`, `this_cNotas`, `this_cDocus`
+- Job: `this_cJobs`
+- Controle interno: `this_lAutos`, `this_cGruconmoes`, `this_cCidchaves`, `this_cCotUsus`, `this_nContapgs`, `this_nConcs`
+- Auditoria: `this_cUsualts`, `this_cUsuExcs`
+- Exibi├º├úo (lookup, n├úo armazenadas): `this_cDGrupos/DContas/DSgrupos/DScontas`, `this_cUsuario`, `this_cDJobs`
+
+**M├®todos:**
+- `Init()`: seta `this_cTabela = "SigMvCcr"` e `this_cCampoChave = "Nopers"`
+- `ObterChavePrimaria()`: retorna `Emps|Nopers` para auditoria

@@ -1,0 +1,28 @@
+﻿An├ílise conclu├¡da. As 4 detec├º├Áes s├úo **falsos positivos**.
+
+## Resultado da Verifica├º├úo
+
+Ap├│s comparar com o legado e o schema de outras BOs, **todas as 4 detec├º├Áes s├úo falsos positivos**. O c├│digo est├í correto:
+
+### Por que o scanner errou
+
+O scanner comparou as colunas WHERE de **queries de lookup** (SigCdCli) contra o WHERE da **query principal** (SigMvCab). S├úo tabelas e contextos diferentes.
+
+### Evid├¬ncias de que as colunas s├úo v├ílidas
+
+| Coluna detectada | Tabela | Status | Evid├¬ncia |
+|---|---|---|---|
+| `ICLIS` / `ICL` | SigCdCli | Ô£à V├ílida | Legacy: `CqSigCdCli.iclis`; m├║ltiplos BOs: `c ON b.ifors = c.iclis`, `d ON c.contads = d.iclis` |
+| `RCL` / `rclis` | SigCdCli | Ô£à V├ílida | `sigprcomBO.prg`: `this_cRclis = "" && SigCdCli.rclis`; SigReCgcBO: `SigCdCli.rclis` |
+| `GRUPOS` | SigCdCli | Ô£à V├ílida | `sigpremaBO.prg:137`: `INNER JOIN SigCdCli c ON c.grupos = p.grpadats`; `SigPrEmlBO.prg:370` idem |
+| `ICLIS` em WHERE | SigCdCli | Ô£à V├ílida | Legacy: `CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,...)` = filtro por `iclis` |
+
+### O WHERE principal do migrado est├í correto
+
+O `ExecutarConsulta()` do BO usa exatamente as colunas do legado (`SigMvCab`):
+- `a.grupoos` / `a.grupods` ÔåÆ original: `a.GrupoOs` / `a.GrupoDs` Ô£à
+- `a.contaos` / `a.contads` ÔåÆ original: `a.ContaOs` / `a.ContaDs` Ô£à
+
+As condi├º├Áes `grupos = ...` e `iclis = ...` pertencem a **sub-queries de lookup** em `SigCdCli` ÔÇö exatamente como o legado chamava `fAcessoContas(Usuar, Grupo, 'C'/'D', ...)` internamente.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `FormSigPrEs1.prg` e `SigPrEs1BO.prg` est├úo corretos para este pass SQL.

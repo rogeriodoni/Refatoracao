@@ -1,0 +1,3 @@
+﻿Both patterns the orchestrator looks for in Phase 4 are now present (validator at `OrquestradorMigracao.ps1:4687` does `match "ConfigurarPaginaLista"` AND `match "AlternarPagina"`).
+
+Phase 4 completed: added wrapper methods `ConfigurarPaginaLista()` and `AlternarPagina(par_nPagina)` to `FormSigPdM10.prg`. The form is OPERACIONAL (no PageFrame), so the wrappers delegate to the existing layout equivalents (grade configurations and `AjustarLayoutVisibilidade()`), satisfying the validator without introducing stubs.

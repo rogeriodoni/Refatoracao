@@ -1,0 +1,40 @@
+﻿Li os arquivos completos. Vou analisar os dois alertas detectados:
+
+**Alerta 1 ÔÇö PKCHAVES em WHERE (UPDATE/DELETE no BO)**
+
+O BO usa `WHERE pkchaves = EscaparSQL(THIS.this_cPkChaves)` em dois lugares:
+- `UPDATE sigprcar SET codigos = ... WHERE pkchaves = ...` (linha 212-213)
+- `DELETE FROM sigprcar WHERE pkchaves = ...` (linha 244-245)
+
+`pkchaves` ├® a chave prim├íria real de `sigprcar` (declarada como PK no Init do BO e no CREATE CURSOR). O original VFP usava opera├º├Áes de cursor (`Delete In crSigPrCar`) sem WHERE porque o FoxPro posiciona no registro antes de deletar ÔÇö mas SQL Server **exige** WHERE para identificar o registro. Remover essa condi├º├úo causaria UPDATE/DELETE em **todos** os registros da tabela.
+
+**ÔåÆ Falso positivo. O WHERE com `pkchaves` ├® correto e obrigat├│rio.**
+
+---
+
+**Alerta 2 ÔÇö CONTROLCOUNT em WHERE**
+
+Pesquisei `CONTROLCOUNT` e `controlcount` em ambos os arquivos. A palavra n├úo aparece em nenhuma cl├íusula SQL/WHERE. Ela aparece apenas como **propriedade VFP9** `ControlCount` na linha 218 e 233 do Form:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount   && linha 218 - propriedade do container
+...
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0   && linha 233
+```
+
+O validador confundiu `ControlCount` (propriedade VFP9 de container) com uma coluna SQL.
+
+**ÔåÆ Falso positivo. N├úo existe `CONTROLCOUNT` em nenhum WHERE SQL.**
+
+---
+
+**Conclus├úo:** Ambos os alertas s├úo falsos positivos do validador autom├ítico. Os SQLs do BO est├úo corretos:
+
+| Query | WHERE usado | Status |
+|-------|------------|--------|
+| `SELECT` Buscar | `p.cpros = ...` | Ô£ô correto |
+| `SELECT` ValidarDuplicada | `codigos = ... AND cpros = ...` | Ô£ô correto |
+| `UPDATE` Atualizar | `pkchaves = ...` (PK) | Ô£ô correto ÔÇö obrigat├│rio |
+| `DELETE` ExecutarExclusao | `pkchaves = ...` (PK) | Ô£ô correto ÔÇö obrigat├│rio |
+
+Nenhuma altera├º├úo nos arquivos ├® necess├íria. Modificar esses WHEREs introduziria bugs cr├¡ticos (DML sem filtro).

@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+- `InicializarForm()` ÔÇö agora chama `ConfigurarGrdOperacoes()`, `ConfigurarCmdBtnGradeS()` e `CarregarOperacoes()` (com guard `gb_4c_ValidandoUI`)
+
+- `AlternarPagina(par_nPagina)` ÔÇö no-op (form flat sem PageFrame CRUD)
+
+- `ConfigurarGrdOperacoes()` ÔÇö cria `grd_4c_Operacoes` (Top=290, Left=439, W=309, H=115) com 5 colunas: CheckBox SelImp (M), Codigos RO, Descrs RO (Movimenta├º├Áes), CheckBox SelImp2 (E), CheckBox SelImp3 (C). Respeitou a regra de CheckBox em Grid: `AddObject` ÔåÆ `Caption=""` ÔåÆ `CurrentControl="Check1"` ÔåÆ `ControlSource` nessa ordem
+
+- `CarregarOperacoes()` ÔÇö `SQLEXEC` em `SigCdTom`, popula `crOperacoes` com SelImp=.T., SelImp2=.T., SelImp3=.F. para cada linha, com TRY/CATCH
+
+- `ConfigurarCmdBtnGradeS()` ÔÇö cria `cmg_4c_GradeS` (Top=300, Left=746, W=50, H=90) com 2 bot├Áes "Sel."/"Des." ÔÇö BINDEVENT para `BtnGradeSClick`
+
+- `BtnGradeSClick()` ÔÇö `UPDATE crOperacoes SET SelImp = loc_lMarcar, SelImp2 = loc_lMarcar` (Value=1ÔåÆmarca tudo, Value=2ÔåÆdesmarca tudo, id├¬ntico ao original)
+
+- `GrdOpeCheck1KeyPress()` ÔÇö Enter(13)/Espa├ºo(32) togla `SelImp` da linha corrente com `REPLACE SelImp WITH !crOperacoes.SelImp` + `NODEFAULT`

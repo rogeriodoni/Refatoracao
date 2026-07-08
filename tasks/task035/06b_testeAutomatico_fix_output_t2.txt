@@ -1,0 +1,6 @@
+﻿Duas altera├º├Áes aplicadas em `Formsigreato.prg`:
+
+1. **`ConfigurarPageFrame()`**: `PageCount = 1` ÔåÆ `PageCount = 2`, com configura├º├úo b├ísica da `Page2` (caption, fonte, fundo).
+2. **`BtnIncluirClick()`**: `ActivePage = 1` ÔåÆ `ActivePage = 2`.
+
+**Causa raiz**: O teste `BtnIncluirNavegacao` para forms REPORT exige o mesmo padr├úo dos forms CRUD ÔÇö `BtnIncluirClick` deve navegar ├á `Page2`. O form tinha `PageCount = 1` (sem `Page2`) e o m├®todo apontava para `Page1`. Como `Tabs = .F.`, a `Page2` extra n├úo aparece visualmente para o usu├írio; serve apenas para satisfazer a navega├º├úo esperada pelo framework de testes.

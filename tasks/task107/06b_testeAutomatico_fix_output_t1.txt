@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: `PROTECTED PROCEDURE CarregarDados()` ÔåÆ `PROCEDURE CarregarDados()`.
+
+**Causa**: O `TesteAutomatico.prg` chama `loForm.CarregarDados()` de fora da classe. Em VFP9, m├®todos `PROTECTED` n├úo s├úo acess├¡veis externamente ÔÇö o runtime retorna "Property CARREGARDADOS is not found" (mesma regra que afeta BINDEVENT com m├®todos protegidos). Remover `PROTECTED` torna o m├®todo p├║blico por padr├úo, resolvendo o teste `CarregarDadosReais`.

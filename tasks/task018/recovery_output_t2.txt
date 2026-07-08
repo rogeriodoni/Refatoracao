@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormUfs.prg`:
+
+1. **Linhas 64-65** (causa raiz do CREATEOBJECT falhar): `InicializarForm()` referenciava `lbl_4c_Sombra`/`lbl_4c_Titulo` na Page2, mas esses labels foram criados como `lbl_4c_sombra2`/`lbl_4c_titulo2`. Isso lan├ºava exce├º├úo no TRY/CATCH, `loc_lSucesso` ficava `.F.`, Init() retornava `.F.` ÔåÆ CREATEOBJECT retornava valor n├úo-objeto.
+
+2. **Linha 435**: `AlternarPagina` de `PROTECTED` ÔåÆ `PUBLIC` (TesteModoIncluir chama via TesteAutomatico)
+
+3. **Linha 1911**: `AjustarBotoesPorModo` de `PROTECTED` ÔåÆ `PUBLIC` (TesteModoVisualizar chama via TesteAutomatico)

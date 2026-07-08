@@ -1,0 +1,15 @@
+﻿Corre├º├Áes aplicadas. Resumo da an├ílise e das mudan├ºas:
+
+---
+
+**NDOPES** ÔÇö Falso positivo. O original usa `cursorquery("SigCdOpe","CrOpe","nDopes",ndope)`, que ├® funcionalmente id├¬ntico ao `WHERE nDopes = TRANSFORM(loc_nNdope)` migrado. Coluna real no schema. Sem altera├º├úo.
+
+**CODIGOS** ÔÇö A condi├º├úo `WHERE codigos = ...` em `SigCdGcr` estava correta (confirmado via `fAcessoContab` que usa `SigCdGcr.Codigos`). O bug real era a coluna de descri├º├úo: `descs` n├úo existe em `SigCdGcr` ÔÇö o nome correto (confirmado no schema e em `fAcessoContab`) ├® `descrs`. Corrigido em 4 locais:
+- `SELECT TOP 1 codigos, descrs FROM SigCdGcr`
+- `cursor_4c_SigrehprGcrVl.descrs`
+- `mAddColuna("descrs", ...)`
+- `ALLTRIM(descrs)` na leitura do cursor de busca
+
+**ICLIS** ÔÇö A condi├º├úo `WHERE iclis = ...` ├® correta (chave prim├íria de `SigCdCli`, usado por `fAcessoContas`). A condi├º├úo inventada era o filtro de grupo: `iclis LIKE grupo%` usa a coluna errada. O original (`fAcessoContas`) filtra por `a.Grupos = pGrp`. Corrigido em 2 locais:
+- `ValidarCdEstoque`: `" AND grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))`
+- `AbrirBuscaEstoque`: `"grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))`

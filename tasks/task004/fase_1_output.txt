@@ -1,0 +1,14 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado: `C:\4c\projeto\app\classes\sigmvccrBO.prg`
+
+**O que foi feito:**
+- Corrigida a tabela incorreta do `analise.json` (`SigCdCli` ÔåÆ `SigMvCcr`) ÔÇö confirmado pelos SQLs no `comportamento.json`
+- Declaradas **todas as propriedades** extra├¡das da an├ílise comportamental e layout:
+  - Identifica├º├úo: `this_cEmps`, `this_nNopers` (chave composta)
+  - Datas: `this_dDatas`, `this_dVencs`, `this_dDtEmis`, `this_dDatalts`, `this_dDatExcs`
+  - Opera├º├úo principal (D/C): grupo, conta, moeda, valor, cota├º├úo + descri├º├Áes derivadas
+  - Opera├º├úo sim├®trica (contrapartida): mesmos campos com prefixo `S`
+  - Hist├│rico/documentos: `this_cHists`, `this_cHist2s`, `this_cNotas`, `this_cDocus`
+  - Job: `this_cJobs`, `this_cDJobs`
+  - Campos internos legados: `this_cCidChaves`, `this_cVopers`, `this_cGruConMoes`, `this_nContaPgs`, etc.
+- `Init()`: seta `this_cTabela = "SigMvCcr"` e `this_cCampoChave = "Nopers"`
+- `ObterChavePrimaria()`: retorna `Emps/Nopers` (chave composta para auditoria)

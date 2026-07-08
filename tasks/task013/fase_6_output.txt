@@ -1,0 +1,25 @@
+﻿All 4 lookup field groups now have:
+- BINDEVENT registrations (KeyPress F4 + LostFocus) in `ConfigurarPgDadosP2`
+- LostFocus validation handlers (validate code, show error, clear on invalid)
+- AbrirLookup* methods (complete FormBuscaAuxiliar with mAddColuna + Show + result handling)
+- Description fills in `PreencherDescricoesPgDadosP2`
+
+Also fixed the literal accent `├¡` in `chk_4c_GarVit.Caption` ÔåÆ `"Vital" + CHR(237) + "cia"`.
+
+Summary of changes made to `FormProduto.prg`:
+
+1. **Fixed literal accent** in `chk_4c_GarVit.Caption` (VFP9 rule: no literal accented chars in .PRG)
+
+2. **Added BINDEVENT registrations** in `ConfigurarPgDadosP2` for:
+   - `txt_4c_CodFinP` ÔåÆ Modelo (SigCdFip)
+   - `txt_4c_CodAcb` ÔåÆ Acabamento (SigCdAca)
+   - `txt_4c_Class` ÔåÆ Classifica├º├úo (SigCdCls)
+   - `txt_4c_Local` ÔåÆ Local (SigPrLcl)
+
+3. **Expanded `PreencherDescricoesPgDadosP2`** to also fill descriptions for CodFinP (SigCdFip.descs), CodAcb (SigCdAca.descrs), Class (SigCdCls.descs, filtered by cgrus), and Local (SigPrLcl validation)
+
+4. **Added 12 new handler methods**:
+   - `TxtCodFinPKeyPress` / `TxtCodFinPLostFocus` / `AbrirLookupModelo`
+   - `TxtCodAcbKeyPress` / `TxtCodAcbLostFocus` / `AbrirLookupAcabamento`
+   - `TxtClassKeyPress` / `TxtClassLostFocus` / `AbrirLookupClassificacao`
+   - `TxtLocalKeyPress` / `TxtLocalLostFocus` / `AbrirLookupLocal`

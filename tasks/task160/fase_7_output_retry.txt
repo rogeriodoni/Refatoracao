@@ -1,0 +1,8 @@
+﻿Phase 7 requirements met. Added the four expected `Btn*Click` main-button events to `FormSIGPRCCR.prg`:
+
+- **BtnVisualizarClick** (already existed) ÔåÆ `this_oRelatorio.Visualizar()` (preview)
+- **BtnIncluirClick** (added) ÔåÆ semantic alias to `BtnVisualizarClick` (in REPORT context, "incluir" = gerar nova sa├¡da)
+- **BtnAlterarClick** (added) ÔåÆ semantic alias to `BtnVisualizarClick` (regerar relat├│rio)
+- **BtnExcluirClick** (added) ÔåÆ `MsgInfo` explaining operation N/A in REPORT, suggests Visualizar/Imprimir
+
+The three added methods have real logic (no stubs/TODOs), follow the canonical REPORTÔåÆCRUD mapping pattern used by `FormSigReAac.prg`, and preserve the existing report-specific handlers (`BtnImprimirClick`, `BtnEmailClick`, `BtnEncerrarClick`).

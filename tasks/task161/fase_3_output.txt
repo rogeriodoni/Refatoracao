@@ -1,0 +1,11 @@
+﻿Arquivo correto. **Fase 3/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSigPrCfn.prg` criado com a estrutura base do form operacional SIGPRCFN.
+
+O que foi entregue:
+- **`DEFINE CLASS FormSigPrCfn AS FormBase`** com propriedades de form compacto modal (620├ù320, TitleBar=0, ControlBox=.F., DataSession=2)
+- **6 propriedades `this_nPar*/this_dPar*`** para receber os par├ómetros do chamador (pVal, pTip, pJMe, pJDi, pDtB, pDtF)
+- **`Init()`** armazena par├ómetros antes de `DODEFAULT()` ÔåÆ FormBase.Init() ÔåÆ InicializarForm()
+- **`InicializarForm()`** cria SigPrCfnBO, define Caption/Picture, chama ConfigurarCabecalho (sem RETURN dentro de TRY ÔÇö regra #1)
+- **`ConfigurarCabecalho()`** cria cnt_4c_Cabecalho (cinza RGB 100,100,100) + lbl_4c_Sombra/lbl_4c_Titulo (AutoSize=.F., Width=loc_nFormWidth) + cnt_4c_Saida transparente com cmd_4c_Encerrar can├┤nico (75├ù75, Caption="Encerrar", Themes=.T.)
+- **`CmdEncerrarClick()`**, **`TornarControlesVisiveis()`**, **`Destroy()`**
+
+Pr├│xima fase (4/8): adicionar os campos calculadora ÔÇö TextBoxes (getValorBase, getJurosMes, getJurosDia, getDataBase, getDataFinal, getDias, getValorJuros, getValorTotal, GetValorpar), Labels, OptionGroups (optCalculo, optDias) e vencimentos (getvenc1-10).

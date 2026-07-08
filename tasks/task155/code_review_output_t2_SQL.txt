@@ -1,0 +1,21 @@
+﻿An├ílise conclu├¡da. Ap├│s verifica├º├úo completa dos arquivos e do schema:
+
+**EMPDNPS**
+- `EmpDNps` existe como coluna e ├¡ndice em **ambas** as tabelas:
+  - `SigCdNec`: ├¡ndice `[empdnps]` e ├¡ndice composto `[ix_4]` (`chksubn, empdnps`)
+  - `SigPdMvf`: ├¡ndice `[empdnps]`
+- As condi├º├Áes `WHERE EmpDNps = ...` nas linhas 104 e 136 do BO s├úo **tradu├º├Áes corretas** das opera├º├Áes de SEEK do legado (`If Seek(...)` / `Select crSigCdNec`) para SQL. N├úo s├úo inventadas ÔÇö s├úo necess├írias para filtrar o registro certo.
+
+**CONTROLCOUNT**
+- `ControlCount` **n├úo existe em nenhum WHERE SQL** no c├│digo. Aparece apenas em VFP object property check na linha 157 do form:
+  ```
+  IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+  ```
+  Isso ├® c├│digo VFP puro (acesso ├á propriedade de objeto), n├úo SQL.
+
+**Conclus├úo: Ambos os problemas s├úo falsos positivos do detector.**
+
+- `EMPDNPS`: coluna v├ílida no schema real, condi├º├úo leg├¡tima (transla├º├úo de SEEK ÔåÆ WHERE)
+- `CONTROLCOUNT`: detectado erroneamente ÔÇö n├úo est├í em nenhuma cl├íusula WHERE de SQL
+
+**Nenhuma altera├º├úo ├® necess├íria nos arquivos.** Os arquivos `FormSigPrAop.prg` e `SigPrAopBO.prg` est├úo corretos em rela├º├úo ao SQL.

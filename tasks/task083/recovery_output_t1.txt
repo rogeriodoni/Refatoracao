@@ -1,0 +1,3 @@
+﻿**Causa raiz:** `ConfigurarBINDEVENTs()` referenciava `grd_4c_Orcs.Column1.Check1`, mas esse controle nunca foi criado. O setup do grid (linhas 846-854) adicionou `check12` e `check13`, com `check13` como `CurrentControl`. O acesso ├á propriedade inexistente `Check1` jogava exce├º├úo dentro do `TRY` de `InicializarForm()`, que capturava no `CATCH`, retornava `.F.`, e fazia o `CREATEOBJECT("Formsigredtv")` retornar n├úo-objeto.
+
+**Corre├º├úo:** Trocados os 4 `BINDEVENT` de `.Check1` para `.check13` (o controle ativo do `CurrentControl`).

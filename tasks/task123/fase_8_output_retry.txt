@@ -1,0 +1,21 @@
+﻿Phase 8 consolidated. Summary of state:
+
+**FASE 8/8 - Eventos Auxiliares e Consolida├º├úo (CONCLU├ìDA)**
+
+`Formsigreimp.prg` (REPORT form, frmrelatorio - 1700+ linhas) j├í cont├®m todos os equivalentes n├úo-CRUD:
+
+| CRUD esperado pelo prompt | REPORT equivalente (implementado) |
+|---|---|
+| `BtnBuscarClick` / `BtnSalvarClick` | `BtnVisualizarClick` (L.1068) + `BtnImprimirClick` (L.1105) |
+| `BtnCancelarClick` / `BtnEncerrarClick` | `BtnEncerrarClick` (L.1141) |
+| `FormParaBO` / `BOParaForm` | `FormParaRelatorio` (L.979) - 8 filtros completos (DtInicial, DtFinal, Empresa, DEmpresa, Conta, DConta, SubTotDat, OptTipos) |
+| `LimparCampos` | `LimparCampos` (L.999) - todos os 8 filtros zerados |
+| `CarregarLista` | `sigreimpBO.CarregarTiposOperacoes()` - popula `csOperacoesE`/`csOperacoesS` de SigCdTom |
+| `HabilitarCampos` | `AtualizarVisibilidadeFiltros` (L.1609) - replica `When` de DEmpresa/DConta |
+| `AjustarBotoesPorModo` | N/A (REPORT n├úo muda modo) |
+
+**Integra├º├úo conclu├¡da:**
+- `config.prg` (L.263, L.293): `ADIR()` j├í carrega `*BO.prg` e `Form*.prg` automaticamente ÔÇö sem edi├º├úo manual
+- `menu.prg`: BAR 154 (separador) + BAR 155 ("Comparativo de Impostos") em popRelatorios; `ON SELECTION BAR 155` ÔåÆ `AbrirFormsigreimp`; `PROCEDURE AbrirFormsigreimp` (L.3410) seguindo o padr├úo can├┤nico (VARTYPE="O", `Show()` sem par├ómetro, sem `.Release()` p├│s-Show, `MostrarErro` em CATCH)
+
+Header da Fase 8 atualizado em `Formsigreimp.prg` documentando o mapeamento CRUDÔåÆREPORT e a integra├º├úo realizada.

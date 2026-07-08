@@ -1,0 +1,11 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigReEvdBO.prg` criado com:
+
+- **5 propriedades** extra├¡das do formul├írio original:
+  - `this_cGrupo` ÔÇö filtro de grupo (SigCdGcr)
+  - `this_cConta` ÔÇö c├│digo da conta/cliente (SigCdCli.IClis)
+  - `this_cDConta` ÔÇö descri├º├úo da conta (SigCdCli.RClis)
+  - `this_dDatai` / `this_dDataf` ÔÇö per├¡odo de busca
+
+- **Init() completo** que espelha o `PROCEDURE Init` original: carrega `cursor_4c_Grupos` (SigCdGcr WHERE GerBals=1) e `cursor_4c_Clientes` (SigCdCli WHERE GerBals=1) via `SQLEXEC`, sem RETURN dentro de TRY/CATCH.
+
+Pr├│xima fase: **Fase 2/8 ÔÇö PrepararDados()**, que implementa toda a l├│gica do `PROCEDURE processamento` original (cria├º├úo dos cursores Envelope/TmpRelat, queries nested, progress bar, montagem do CsSelecao).

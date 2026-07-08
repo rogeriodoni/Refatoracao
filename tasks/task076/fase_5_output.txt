@@ -1,0 +1,14 @@
+﻿Fase 5/8 conclu├¡da. O arquivo `Formsigredcu.prg` foi atualizado com:
+
+- **`ConfigurarPaginaDados()`** (PROTECTED) ÔÇö cria os primeiros 4 controles com posi├º├Áes exatas do original:
+  - `chk_4c_ChkImagem` ÔÇö Top=88, "Imprimir Imagem"
+  - `chk_4c_ChkItensP` ÔÇö Top=105, "Imprimir Apenas Itens Pendentes"
+  - `chk_4c_ChkDescIng` ÔÇö Top=122, "Imprimir Descri├º├úo em Ingl├¬s" (CHR correto)
+  - `chk_4c_ChkCompo` ÔÇö Top=139, "Inibir Composi├º├úo Desmembrada" (CHR correto)
+  - Todos com AutoSize=.T., BackStyle=0, ForeColor=RGB(90,90,90), Value=0
+
+- **4 handlers de Click** (PUBLIC, sem PROTECTED ÔÇö obrigat├│rio para BINDEVENT): `ChkImagemClick`, `ChkItensPClick`, `ChkDescIngClick`, `ChkCompoClick` ÔÇö cada um sincroniza a propriedade correspondente no BO e chama `PrepararDados()` para reprocessar o documento, replicando o comportamento do `SigPrIdc` legado.
+
+- **`ConfigurarPageFrame()`** atualizado para chamar `ConfigurarPaginaDados()` antes de `ConfigurarPaginaLista()`.
+
+Fase 6/8 completar├í os 3 controles restantes: `chk_4c_ChkImpPag`, `obj_4c_OptAgrupa` e `lbl_4c_Agrupa`.

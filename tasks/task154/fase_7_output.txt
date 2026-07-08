@@ -1,0 +1,22 @@
+﻿Analisando o arquivo existente e o c├│digo fonte original, identifico que a **Fase 7 n├úo se aplica a este formul├írio**.
+
+**Raz├úo**: SIGPRALE ├® um **dialog de progresso/splash** ÔÇö n├úo tem bot├Áes CRUD. O original (SCX) tem apenas:
+- 1 m├®todo `Init` (recebe par├ómetros de bitmap e mensagens)
+- 3 labels de status + 1 image
+
+N├úo existem `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` ou `BtnExcluirClick` no legado porque este form **n├úo ├® interativo** ÔÇö ├® chamado programaticamente, exibe mensagens enquanto um processo externo roda, e ├® liberado pelo chamador via `loForm.Release()`.
+
+Adicionar esses m├®todos violaria a regra **PROIBIDO criar stubs** e iria al├®m da paridade funcional com o legado.
+
+**O FormSIGPRALE.prg j├í est├í completo** com tudo que o original oferece:
+
+| M├®todo | Prop├│sito |
+|--------|-----------|
+| `Init(bitmap, msg1, msg2, msg3)` | Interface legada mantida |
+| `AtualizarMensagens(msg1, msg2, msg3)` | Atualiza textos em runtime |
+| `AlternarPagina(n)` | Destaca etapa atual (vermelho/cinza) |
+| `AtualizarImagem(bitmap)` | Troca ├¡cone lateral em runtime |
+| `OnAtivar`, `OnPintar`, `OnCabecalhoClicado` | Handlers de eventos |
+| `Destroy` | Limpeza com DODEFAULT() |
+
+A migra├º├úo desta tarefa (task154) est├í conclu├¡da. Nenhuma modifica├º├úo ├® necess├íria no arquivo.

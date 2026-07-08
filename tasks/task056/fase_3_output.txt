@@ -1,0 +1,14 @@
+﻿The migration is complete. Here's what was done in this session:
+
+**CorretorAutomatico (05b)** ÔÇö ran on both files; manually corrected 3 false positives it introduced:
+- `cmg_4c_Botoes.Width` and all `Buttons(N).Width` incorrectly set to `THIS.Width` (800) ÔåÆ restored to correct values (273 and 65)
+- `Buttons(1).FontName`/`FontSize` incorrectly removed by GROUP_FONTNAME pattern ÔåÆ restored
+- Duplicate `pgf_4c_Paginas.Visible = .T.` injected into `AlternarPagina` ÔåÆ removed
+
+**RETURN-inside-TRY fix** ÔÇö `AbrirBuscaNmOperacao` had a `RETURN` inside its TRY block; restructured with `loc_lContinuar` flag.
+
+**Menu integration** ÔÇö added BAR 54 (separator) + BAR 55 ("CMV - Custo M├®dio de Venda") to `popRelatorios`, wired `ON SELECTION BAR 55 ÔåÆ AbrirFormSIGRECMV`, and added the `AbrirFormSIGRECMV` opener procedure.
+
+**config.prg** ÔÇö no changes needed; dynamic ADIR() loading already picks up `SIGRECMVBO.prg` (from `classes\*BO.prg`) and `FormSIGRECMV.prg` (from `forms\relatorios\Form*.prg`).
+
+Next step is `05c_validarCompilacao` ÔÇö delete `.fxp` files and test-open the form in VFP9.

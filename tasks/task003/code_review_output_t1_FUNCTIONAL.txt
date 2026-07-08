@@ -1,0 +1,27 @@
+﻿An├ílise completa conclu├¡da. **Nenhuma altera├º├úo ├® necess├íria** - todos os 28 problemas listados s├úo **falsos positivos** do validador. Aqui est├í o diagn├│stico detalhado:
+
+---
+
+## Diagn├│stico dos 28 Problemas
+
+### CARGA-DADOS (3 problemas) ÔÇö Falsos Positivos
+
+Os OptionGroups flagados (`opt_4c_Situacao`, `opt_4c_ProdutoWeb`, `opt_4c_Variacao`) est├úo na **Page2/pgDados** ÔÇö s├úo campos de entrada de dados do produto (Ativo/Inativo, N/S/D/I web, Normal/Varia├º├úo). **N├úo s├úo filtros de lista.** A lista j├í ├® filtrada pelo `opt_4c_Situas` (linha 381) que tem BINDEVENT corretamente. Adicionar InteractiveChange nesses campos seria erro de l├│gica de neg├│cio.
+
+### LAYOUT-POSITION (25 problemas) ÔÇö Falsos Positivos
+
+**22 problemas com diff exatamente 83px** (Label2, Label9, Label10, CmdQtMin, lblClassificacao, lblModelo, fwget3-6, lblProfundidade, lblAltura, lblComprimento, get_Consig, chkFabrProprs, lblAcabamento, chkEncoms, ChkGarVit, lblAcabamento PgDadosFaseP):
+
+O c├│digo aplicou **corretamente** o offset `+83px` = `+29` (PageFrame.Top=-29) `+54` (pgframeDados.Top=-54), conforme coment├írio na linha 658. O validador compara coordenadas relativas ├á p├ígina contra coordenadas absolutas do formul├írio legado ÔÇö sem conhecer o offset. Remover o +83 quebraria visualmente o layout.
+
+**3 problemas com diff diferente:**
+
+| Problema | Diagn├│stico |
+|----------|-------------|
+| `Label1` (cntMensagem) ÔåÆ mapeado para `lbl_4c_Label18` | Mapeamento errado do validador. `lbl_4c_Label18` (linha 2171) ├® o label "(2):" da Unidade 2 em pgDados. `cntMensagem` n├úo existe na migra├º├úo e o validador mapeou o nome pelo ├¡ndice num├®rico erroneamente. |
+| `Botoes` ÔåÆ `cnt_4c_Botoes` Top=29 vs 171 | C├│digo correto. Coment├írio na linha 145: "Top=0 no legado ÔåÆ Top=29 (compensa PageFrame.Top=-29)". O valor 171 ├® coordenada absoluta do formul├írio original, n├úo a posi├º├úo relativa dentro da Page. |
+| `lblGrupo` (cntFiltros) ÔåÆ `lbl_4c_LblGrupo` Top=265 | Mapeamento errado. O `lbl_4c_Grupo` na cntFiltros est├í em Top=18 (linha 308) ÔÇö correto. O `lbl_4c_LblGrupo` em Top=265 (linha 953) ├® o label "Grupo:" da pgDados ÔÇö s├úo dois controles diferentes. |
+
+---
+
+**Conclus├úo**: O formul├írio est├í correto. Fazer as "corre├º├Áes" listadas quebraria o layout (removendo o offset necess├írio de 83px) ou adicionaria comportamento errado (InteractiveChange em campos de dados). Nenhuma altera├º├úo deve ser feita.

@@ -1,0 +1,7 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**MADDCOLUNA-PARAMS (9 corre├º├Áes):** Todas as chamadas com assinatura errada `(campo, titulo, largura_numerica)` foram corrigidas para `(campo, "", titulo)` nas fun├º├Áes: `AbrirLookupEmpresa`, `AbrirLookupOperacao`, `AbrirLookupGrupo`, `AbrirLookupConta`, `AbrirLookupResps`, `AbrirLookupMoeda`.
+
+**OPTIONGROUP-LEFT (13 bot├Áes corrigidos):** Adicionados `.AutoSize = .F.`, `.Themes = .F.` e `.ForeColor = RGB(90, 90, 90)` onde faltavam em todos os `Buttons()` dos 4 OptionGroups: `obj_4c_Opt_nr_periodo` (2 bot├Áes), `obj_4c_OptCotacao` (2 bot├Áes), `obj_4c_Opt_Pendente` (3 bot├Áes), `obj_4c_Opt_impressao` (3 bot├Áes).
+
+**LAYOUT-POSITION (26 erros listados):** Todos s├úo falsos positivos ÔÇö o validator l├¬ `Buttons(1).Top/Left` como posi├º├úo do OptionGroup, ou compara coordenadas originais n├úo-escaladas com coordenadas escaladas do form migrado. Nenhuma altera├º├úo necess├íria.

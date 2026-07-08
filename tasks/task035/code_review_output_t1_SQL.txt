@@ -1,0 +1,25 @@
+﻿Ap├│s ler os arquivos e analisar todas as 6 ocorr├¬ncias, meu diagn├│stico ├®:
+
+## Resultado da verifica├º├úo: Todos os 6 itens s├úo FALSOS POSITIVOS
+
+O detector comparou os WHERE das queries SQL Server do c├│digo migrado com os WHERE das queries VFP locais do c├│digo original. S├úo contextos completamente diferentes - os WHERE originais operam sobre **cursores locais** (`crImpressao`, `csOperacoesE`, etc.), enquanto os WHERE migrados operam diretamente no **SQL Server** (`SigMvHst`, `SigCdPro`).
+
+### An├ílise item a item
+
+| Coluna flagada | Onde aparece | Justificativa |
+|---|---|---|
+| `EMPS` | `WHERE h.Emps = EscaparSQL(loc_cEmp)` | Filtro obrigat├│rio por empresa em sistema multi-empresa. Sem ele, retorna dados de todas as filiais. |
+| `DATAS` | `AND h.Datas BETWEEN loc_cDtI AND loc_cDtF` | O form tem controles de data (`dtDtInicial`/`dtDtFinal`) ÔÇö este filtro ├® o n├║cleo do relat├│rio por per├¡odo. |
+| `CGRUS` | `AND p.CGrus = EscaparSQL(...)` | Filtro **opcional**, protegido por `IF !EMPTY(THIS.this_cGrupo)`. O form tem `txt_4c_Grupo` + `AbrirBuscaGrupo`. |
+| `LINHAS` | `AND p.Linhas = EscaparSQL(...)` | Filtro **opcional**, protegido por `IF !EMPTY(THIS.this_cLin)`. O form tem `txt_4c_Linha` + `AbrirBuscaLinha`. |
+| `IFORS` | `AND p.IFors = EscaparSQL(...)` | Filtro **opcional**, protegido por `IF !EMPTY(THIS.this_cFornecedor)`. O form tem `txt_4c_Fornecedor` + `AbrirBuscaFornecedor`. |
+| `ICLIS` | `WHERE iclis = EscaparSQL(par_cCodigo)` em `ValidarFornecedor` | PK lookup padr├úo em SIGCDCLI. `iclis` ├® a chave prim├íria da tabela de clientes/fornecedores. |
+
+### Por que n├úo ├® poss├¡vel remover
+
+A instru├º├úo do pass diz explicitamente: **"NAO alterar logica de negocio"**. Remover qualquer dessas condi├º├Áes quebraria:
+- `EMPS`/`DATAS`: o relat├│rio retornaria dados de todas as empresas e todos os per├¡odos hist├│ricos
+- `CGRUS`/`LINHAS`/`IFORS`: os filtros opcionais da interface deixariam de funcionar
+- `ICLIS`: o lookup de fornecedor quebraria
+
+**Nenhuma altera├º├úo foi feita nos arquivos.** As 6 flags s├úo falsos positivos gerados pela compara├º├úo incorreta entre queries SQL Server (c├│digo migrado) e queries VFP em cursores locais (c├│digo original). O c├│digo SQL est├í correto.

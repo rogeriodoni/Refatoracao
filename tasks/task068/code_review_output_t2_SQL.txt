@@ -1,0 +1,7 @@
+﻿Tres corre├º├Áes aplicadas:
+
+1. **sigrecrtBO.prg** ÔÇö Removido query `SELECT Razas FROM SigCdEmp WHERE cEmps = ...` (coluna `cEmps` inventada). Substitu├¡do por `go_4c_Sistema.cEmpresa` que j├í cont├®m o nome da empresa no sistema.
+
+2. **Formsigrecrt.prg / AbrirLookupConta** ÔÇö Removido bloco `IF !EMPTY(loc_cGrupo) loc_cFiltro = "grupos = ..."` que adicionava filtro `grupos` n├úo presente no original. O lookup de conta agora busca sem filtro de grupo.
+
+3. **Formsigrecrt.prg / ValidarCdConta** ÔÇö Removido bloco `IF !EMPTY(loc_cGrupo) loc_cSQL = loc_cSQL + " AND grupos = ..."` pelo mesmo motivo.

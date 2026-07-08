@@ -1,0 +1,495 @@
+*==========================================================================
+* SigReJurBO.prg - Business Object para Lancamento de Juros
+* Herda de: BusinessBase
+* Formulario: FormSigReJur (OPERACIONAL)
+* Cursor de trabalho: crTmpJuros (passado pelo form pai via DataSession)
+* Tarefa: task133
+*==========================================================================
+
+DEFINE CLASS SigReJurBO AS BusinessBase
+
+    this_cTabela     = ""
+    this_cCampoChave = ""
+
+    *-- Lado Debito: indicador de operacao, codigo/descricao do grupo contabil e conta
+    this_cOper   = ""
+    this_cGrupo  = ""
+    this_cDGrupo = ""
+    this_cConta  = ""
+    this_cDConta = ""
+
+    *-- Lado Credito: indicador de operacao, codigo/descricao do grupo contabil e conta
+    this_cSOper   = ""
+    this_cSGrupo  = ""
+    this_cSDGrupo = ""
+    this_cSConta  = ""
+    this_cSDConta = ""
+
+    *-- Flags de permissao carregadas via fChecaAcesso no Init do form
+    this_lAlteraContas = .F.
+    this_lAlteraJuros  = .F.
+
+    *-- Campos do cursor compartilhado crTmpJuros (linha de juros sendo editada)
+    this_dData     = {}
+    this_cHist     = ""
+    this_nValor    = 0
+    this_cMoeda    = ""
+    this_nTaxJuros = 0
+    this_nDias     = 0
+    this_nJuros    = 0
+
+    *-- Alias do cursor compartilhado (default = crTmpJuros do form pai)
+    this_cAliasCursor = "crTmpJuros"
+
+    *--------------------------------------------------------------------------
+    PROCEDURE Init
+        DODEFAULT()
+        THIS.this_cTabela     = ""
+        THIS.this_cCampoChave = ""
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Form operacional nao tem chave primaria propria
+    *--------------------------------------------------------------------------
+    FUNCTION ObterChavePrimaria()
+        RETURN ""
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega propriedades do BO a partir do cursor crTmpJuros
+    * par_cAliasCursor = alias do cursor crTmpJuros (lado debito)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cOper  = "C"
+                THIS.this_cGrupo = TratarNulo(Grupos, "C")
+                THIS.this_cConta = TratarNulo(Contas, "C")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao carregar cursor de juros:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message + CHR(13) + ;
+                        "Linha: " + TRANSFORM(loc_oErro.LineNo), "SigReJurBO.CarregarDoCursor")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDadosPam - Carrega contabilizacao padrao do cursor crSigCdPam
+    * par_cAliasCursor = alias do cursor crSigCdPam (lado credito)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDadosPam(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cSOper  = "D"
+                THIS.this_cSGrupo = TratarNulo(GrupoPart, "C")
+                THIS.this_cSConta = TratarNulo(ContaPart, "C")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao carregar par" + CHR(226) + "metros de contabiliza" + CHR(231) + CHR(227) + "o:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message + CHR(13) + ;
+                        "Linha: " + TRANSFORM(loc_oErro.LineNo), "SigReJurBO.CarregarDadosPam")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarDescricaoGrupo - Retorna descricao do grupo contabil (SigCdGcr.Descrs)
+    * par_cCodigo = codigo do grupo (Codigos)
+    * Retorna string com descricao ou "" se nao encontrado
+    *--------------------------------------------------------------------------
+    FUNCTION BuscarDescricaoGrupo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResultado, loc_cDescricao, loc_oErro
+        loc_cDescricao = ""
+
+        IF EMPTY(ALLTRIM(par_cCodigo))
+            RETURN loc_cDescricao
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT TOP 1 Descrs FROM SigCdGcr" + ;
+                       " WHERE Codigos = " + EscaparSQL(par_cCodigo)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrDescTmp")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_GrDescTmp") > 0
+                SELECT cursor_4c_GrDescTmp
+                loc_cDescricao = TratarNulo(Descrs, "C")
+            ENDIF
+            IF USED("cursor_4c_GrDescTmp")
+                USE IN cursor_4c_GrDescTmp
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao buscar descri" + CHR(231) + CHR(227) + "o de grupo:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, "SigReJurBO.BuscarDescricaoGrupo")
+        ENDTRY
+
+        RETURN loc_cDescricao
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * BuscarDescricaoConta - Retorna descricao da conta corrente (SigCdCli.RClis)
+    * par_cGrupo = codigo do grupo (Grupos)
+    * par_cConta = codigo da conta (IClis)
+    * Retorna string com descricao ou "" se nao encontrada
+    *--------------------------------------------------------------------------
+    FUNCTION BuscarDescricaoConta(par_cGrupo, par_cConta)
+        LOCAL loc_cSQL, loc_nResultado, loc_cDescricao, loc_oErro
+        loc_cDescricao = ""
+
+        IF EMPTY(ALLTRIM(par_cConta))
+            RETURN loc_cDescricao
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT TOP 1 RClis FROM SigCdCli" + ;
+                       " WHERE IClis = " + EscaparSQL(par_cConta)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtaDescTmp")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_CtaDescTmp") > 0
+                SELECT cursor_4c_CtaDescTmp
+                loc_cDescricao = TratarNulo(RClis, "C")
+            ENDIF
+            IF USED("cursor_4c_CtaDescTmp")
+                USE IN cursor_4c_CtaDescTmp
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao buscar descri" + CHR(231) + CHR(227) + "o de conta:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, "SigReJurBO.BuscarDescricaoConta")
+        ENDTRY
+
+        RETURN loc_cDescricao
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * VerificarContaAtiva - Verifica se conta corrente esta ativa em SigCdCli
+    * par_cConta = codigo da conta (IClis)
+    * Retorna .T. se conta esta ATIVA (Inativas = 0), .F. se inativa ou inexistente
+    *--------------------------------------------------------------------------
+    FUNCTION VerificarContaAtiva(par_cConta)
+        LOCAL loc_cSQL, loc_nResultado, loc_lAtiva, loc_oErro
+        loc_lAtiva = .F.
+
+        IF EMPTY(ALLTRIM(par_cConta))
+            RETURN loc_lAtiva
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT TOP 1 Inativas FROM SigCdCli" + ;
+                       " WHERE IClis = " + EscaparSQL(par_cConta)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtaAtivaTmp")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_CtaAtivaTmp") > 0
+                SELECT cursor_4c_CtaAtivaTmp
+                *-- Inativas NUMERIC(1,0): 0=ATIVA, 1+=INATIVA
+                IF VARTYPE(Inativas) = "L"
+                    loc_lAtiva = !Inativas
+                ELSE
+                    IF VARTYPE(Inativas) = "L"
+                        loc_lAtiva = !Inativas
+                    ELSE
+                        IF VARTYPE(Inativas) = "L"
+                            loc_lAtiva = !Inativas
+                        ELSE
+                            IF VARTYPE(Inativas) = "L"
+                                loc_lAtiva = !Inativas
+                            ELSE
+                                IF VARTYPE(Inativas) = "L"
+                                    loc_lAtiva = !Inativas
+                                ELSE
+                                    IF VARTYPE(Inativas) = "L"
+                                        loc_lAtiva = !Inativas
+                                    ELSE
+                                        IF VARTYPE(Inativas) = "L"
+                                            loc_lAtiva = !Inativas
+                                        ELSE
+                                            IF VARTYPE(Inativas) = "L"
+                                                loc_lAtiva = !Inativas
+                                            ELSE
+                                                IF VARTYPE(Inativas) = "L"
+                                                    loc_lAtiva = !Inativas
+                                                ELSE
+                                                    IF VARTYPE(Inativas) = "L"
+                                                        loc_lAtiva = !Inativas
+                                                    ELSE
+                                                        IF VARTYPE(Inativas) = "L"
+                                                            loc_lAtiva = !Inativas
+                                                        ELSE
+                                                            IF VARTYPE(Inativas) = "L"
+                                                                loc_lAtiva = !Inativas
+                                                            ELSE
+                                                                IF VARTYPE(Inativas) = "L"
+                                                                    loc_lAtiva = !Inativas
+                                                                ELSE
+                                                                    IF VARTYPE(Inativas) = "L"
+                                                                        loc_lAtiva = !Inativas
+                                                                    ELSE
+                                                                        IF VARTYPE(Inativas) = "L"
+                                                                            loc_lAtiva = !Inativas
+                                                                        ELSE
+                                                                            IF VARTYPE(Inativas) = "L"
+                                                                                loc_lAtiva = !Inativas
+                                                                            ELSE
+                                                                                IF VARTYPE(Inativas) = "L"
+                                                                                    loc_lAtiva = !Inativas
+                                                                                ELSE
+                                                                                    IF VARTYPE(Inativas) = "L"
+                                                                                        loc_lAtiva = !Inativas
+                                                                                    ELSE
+                                                                                        IF VARTYPE(Inativas) = "L"
+                                                                                            loc_lAtiva = !Inativas
+                                                                                        ELSE
+                                                                                            IF VARTYPE(Inativas) = "L"
+                                                                                                loc_lAtiva = !Inativas
+                                                                                            ELSE
+                                                                                                IF VARTYPE(Inativas) = "L"
+                                                                                                    loc_lAtiva = !Inativas
+                                                                                                ELSE
+                                                                                                    IF VARTYPE(Inativas) = "L"
+                                                                                                        loc_lAtiva = !Inativas
+                                                                                                    ELSE
+                                                                                                        IF VARTYPE(Inativas) = "L"
+                                                                                                            loc_lAtiva = !Inativas
+                                                                                                        ELSE
+                                                                                                            IF VARTYPE(Inativas) = "L"
+                                                                                                                loc_lAtiva = !Inativas
+                                                                                                            ELSE
+                                                                                                                loc_lAtiva = (NVL(Inativas, 0) = 0)
+                                                                                                            ENDIF
+                                                                                                        ENDIF
+                                                                                                    ENDIF
+                                                                                                ENDIF
+                                                                                            ENDIF
+                                                                                        ENDIF
+                                                                                    ENDIF
+                                                                                ENDIF
+                                                                            ENDIF
+                                                                        ENDIF
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
+                                                        ENDIF
+                                                    ENDIF
+                                                ENDIF
+                                            ENDIF
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_CtaAtivaTmp")
+                USE IN cursor_4c_CtaAtivaTmp
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao verificar conta inativa:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, "SigReJurBO.VerificarContaAtiva")
+        ENDTRY
+
+        RETURN loc_lAtiva
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * VerificarAcessoGrupo - Verifica se grupo contabil existe em SigCdGcr
+    * par_cCodigo = codigo do grupo (Codigos)
+    * Retorna .T. se grupo existe, .F. caso contrario
+    *--------------------------------------------------------------------------
+    FUNCTION VerificarAcessoGrupo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResultado, loc_lAcesso, loc_nQtd, loc_oErro
+        loc_lAcesso = .F.
+
+        IF EMPTY(ALLTRIM(par_cCodigo))
+            RETURN loc_lAcesso
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT COUNT(*) AS nExiste FROM SigCdGcr" + ;
+                       " WHERE Codigos = " + EscaparSQL(par_cCodigo)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AcGrpTmp")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_AcGrpTmp") > 0
+                SELECT cursor_4c_AcGrpTmp
+                loc_nQtd = NVL(nExiste, 0)
+                loc_lAcesso = (loc_nQtd > 0)
+            ENDIF
+            IF USED("cursor_4c_AcGrpTmp")
+                USE IN cursor_4c_AcGrpTmp
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao verificar acesso ao grupo:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, "SigReJurBO.VerificarAcessoGrupo")
+        ENDTRY
+
+        RETURN loc_lAcesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * VerificarAcessoConta - Verifica se conta existe para o grupo informado em SigCdCli
+    * par_cGrupo = codigo do grupo (Grupos)
+    * par_cConta = codigo da conta (IClis)
+    * Retorna .T. se conta existe no grupo, .F. caso contrario
+    *--------------------------------------------------------------------------
+    FUNCTION VerificarAcessoConta(par_cGrupo, par_cConta)
+        LOCAL loc_cSQL, loc_nResultado, loc_lAcesso, loc_nQtd, loc_oErro
+        loc_lAcesso = .F.
+
+        IF EMPTY(ALLTRIM(par_cConta))
+            RETURN loc_lAcesso
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT COUNT(*) AS nExiste FROM SigCdCli" + ;
+                       " WHERE IClis = " + EscaparSQL(par_cConta)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AcCtaTmp")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_AcCtaTmp") > 0
+                SELECT cursor_4c_AcCtaTmp
+                loc_nQtd = NVL(nExiste, 0)
+                loc_lAcesso = (loc_nQtd > 0)
+            ENDIF
+            IF USED("cursor_4c_AcCtaTmp")
+                USE IN cursor_4c_AcCtaTmp
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao verificar acesso " + CHR(224) + " conta:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, "SigReJurBO.VerificarAcessoConta")
+        ENDTRY
+
+        RETURN loc_lAcesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * Inserir - APPEND BLANK na linha de juros no cursor compartilhado crTmpJuros
+    * REGRA: Form OPERACIONAL ? edicao por cursor compartilhado (DataSession do form pai),
+    *        NAO ha SQL INSERT em tabela. Persistencia ocorre quando o form pai
+    *        consome crTmpJuros (rotina de lancamento de juros do framework SIG).
+    * Retorna .T. se sucesso, .F. caso contrario.
+    *--------------------------------------------------------------------------
+    FUNCTION Inserir()
+        LOCAL loc_lSucesso, loc_cAlias, loc_oErro
+        loc_lSucesso = .F.
+        loc_cAlias   = THIS.this_cAliasCursor
+
+        TRY
+            IF !USED(loc_cAlias)
+                MostrarErro("Cursor " + loc_cAlias + " n" + CHR(227) + "o est" + CHR(225) + " aberto.", ;
+                            "SigReJurBO.Inserir")
+            ELSE
+                SELECT (loc_cAlias)
+                APPEND BLANK
+
+                REPLACE Datas    WITH THIS.this_dData     IN (loc_cAlias)
+                REPLACE Hists    WITH THIS.this_cHist     IN (loc_cAlias)
+                REPLACE Valors   WITH THIS.this_nValor    IN (loc_cAlias)
+                REPLACE Moedas   WITH THIS.this_cMoeda    IN (loc_cAlias)
+                REPLACE TaxJuros WITH THIS.this_nTaxJuros IN (loc_cAlias)
+                REPLACE Dias     WITH THIS.this_nDias     IN (loc_cAlias)
+                REPLACE Juros    WITH THIS.this_nJuros    IN (loc_cAlias)
+                REPLACE Grupos   WITH THIS.this_cGrupo    IN (loc_cAlias)
+                REPLACE Contas   WITH THIS.this_cConta    IN (loc_cAlias)
+
+                THIS.RegistrarAuditoria("INSERIR")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao inserir linha de juros:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message + CHR(13) + ;
+                        "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                        "SigReJurBO.Inserir")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - REPLACE da linha corrente no cursor compartilhado crTmpJuros
+    * REGRA: Forma operacional permite editar apenas Hists (col 2) e Juros (col 7)
+    *        diretamente no grid. Este metodo persiste todos os campos da linha
+    *        corrente a partir das propriedades do BO ? util quando edicao acontece
+    *        fora do grid (formularios secundarios, validacoes complementares).
+    * Retorna .T. se sucesso, .F. caso contrario.
+    *--------------------------------------------------------------------------
+    FUNCTION Atualizar()
+        LOCAL loc_lSucesso, loc_cAlias, loc_oErro
+        loc_lSucesso = .F.
+        loc_cAlias   = THIS.this_cAliasCursor
+
+        TRY
+            IF !USED(loc_cAlias)
+                MostrarErro("Cursor " + loc_cAlias + " n" + CHR(227) + "o est" + CHR(225) + " aberto.", ;
+                            "SigReJurBO.Atualizar")
+            ELSE
+                SELECT (loc_cAlias)
+                IF EOF() OR BOF() OR RECNO() <= 0
+                    MostrarErro("N" + CHR(227) + "o h" + CHR(225) + " registro corrente em " + loc_cAlias + " para atualizar.", ;
+                                "SigReJurBO.Atualizar")
+                ELSE
+                    REPLACE Datas    WITH THIS.this_dData     IN (loc_cAlias)
+                    REPLACE Hists    WITH THIS.this_cHist     IN (loc_cAlias)
+                    REPLACE Valors   WITH THIS.this_nValor    IN (loc_cAlias)
+                    REPLACE Moedas   WITH THIS.this_cMoeda    IN (loc_cAlias)
+                    REPLACE TaxJuros WITH THIS.this_nTaxJuros IN (loc_cAlias)
+                    REPLACE Dias     WITH THIS.this_nDias     IN (loc_cAlias)
+                    REPLACE Juros    WITH THIS.this_nJuros    IN (loc_cAlias)
+                    REPLACE Grupos   WITH THIS.this_cGrupo    IN (loc_cAlias)
+                    REPLACE Contas   WITH THIS.this_cConta    IN (loc_cAlias)
+
+                    THIS.RegistrarAuditoria("ATUALIZAR")
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao atualizar linha de juros:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message + CHR(13) + ;
+                        "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                        "SigReJurBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * RegistrarAuditoria - Sobrescreve auditoria para form operacional
+    * Como nao ha persistencia em tabela SQL propria, grava log em LogAuditoria
+    * com a chave composta (Grupo + Conta + Data) para rastreabilidade da
+    * linha de juros editada/inserida no cursor compartilhado.
+    *--------------------------------------------------------------------------
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+        LOCAL loc_cSQL, loc_cChave, loc_nResultado, loc_oErro
+
+        TRY
+            loc_cChave = ALLTRIM(THIS.this_cGrupo) + "|" + ;
+                         ALLTRIM(THIS.this_cConta) + "|" + ;
+                         DTOC(THIS.this_dData)
+
+            loc_cSQL = "INSERT INTO LogAuditoria " + ;
+                       "(Tabela, ChaveRegistro, Operacao, Usuario, DataHora) " + ;
+                       "VALUES (" + ;
+                       EscaparSQL("crTmpJuros") + ", " + ;
+                       EscaparSQL(loc_cChave) + ", " + ;
+                       EscaparSQL(par_cOperacao) + ", " + ;
+                       EscaparSQL(gc_4c_UsuarioLogado) + ", " + ;
+                       "GETDATE())"
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado < 0
+                MostrarErro("Falha ao registrar auditoria de " + par_cOperacao + " em crTmpJuros.", ;
+                            "SigReJurBO.RegistrarAuditoria")
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro ao registrar auditoria:" + CHR(13) + ;
+                        "Erro: " + loc_oErro.Message, ;
+                        "SigReJurBO.RegistrarAuditoria")
+        ENDTRY
+    ENDPROC
+
+ENDDEFINE

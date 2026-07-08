@@ -1,0 +1,326 @@
+{
+  "resumo": {
+    "totalMetodos": 19,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fAcessoEmpresa", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCad To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCad To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Init",
+      "linhas": 31,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\t.LockScreen = .t.\n\t\t.getCdEmpresa.Value   = Space(03)\n\t\t.getDsEmpresa.Value   = Space(40)\n\t\t.getCdGrEstoque.Value = Space(10)\n\t\t.getDsGrEstoque.Value = Space(20)\n\t\t.getCdEstoque.Value   = Space(10)\n\t\t.getDsEstoque.Value   = Space(40)\n\t\t.getDatai.Value       = Date()\n\t\t.getDataf.Value       = Date()\n\n\t\t.getDatai.Value = Ctod('')\n\t\t.getDataf.Value = Ctod('')\n\t\t.Getdtlf.Value  = Ctod('')\n\t\t.Get... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 50,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nm.lcEmpresa = _Empr + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\nm.ldDatai   = ThisForm.getDatai.Value\nm.ldDataf   = ThisForm.getDataf.Value\nm.ldDtlI    = ThisForm.GetdtlI.Value\nm.ldDtlF    = ThisForm.GetDtlf.Value\nm.lcCemp    = ThisForm.getCdEmpresa.Value\nm.lcDemp    = ThisForm.getDsEmpresa.Value\nm.lcCgrupo  = ThisForm.getCdGrEstoque.Value\nm.lcDgrupo  = ThisForm.getDsGrEstoque.Value\nm.lcCconta  = ThisForm.getCdE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCad Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If (This.Value <> 4)\n\tIf (ThisForm.getDatai.Value > ThisForm.getDataf.Value)\n\t\t=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')\n\t\tThisForm.getDataf.SetFocus\n\t\tReturn 0\n\tEndIf\n\tIf (ThisForm.GetDtlI.Value > ThisForm.GetDtlf.Value)\n\t\t=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')\n\t\tThisForm.Getdtlf.SetFocus\n\t\tReturn 0\n\tEndIf\nEndIf\nfrmrelatorio::btnReport.Click\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDatai",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.GetDtlI",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.GetCdEmpresa, ThisForm.GetDsEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getCdEmpresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.value, ThisForm.GetCdEmpresa, ThisForm.GetDsEmpresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsGrEstoque",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'D', This.Value, This.Parent.getCdGrEstoque, This.Parent.getDsGrEstoque)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsGrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(Thisform.getCdGrEstoque.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getCdGrEstoque",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, This.Parent.getCdGrEstoque, This.Parent.getDsGrEstoque)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsEstoque",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local llRetorno\n\nIf Empty(This.Value)\n\tllRetorno = .t.\nElse\t\n\tllRetorno = (fAcessoContas(Usuar, ThisForm.getCdGrEstoque.Value, 'D', This.Value, ThisForm.getCdEstoque, ThisForm.getDsEstoque))\nEndIf\n\nIf Not llRetorno\n\t=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')\n\tThisForm.getCdEstoque.Value = ''\n\tThisForm.getDsEstoque.Value = ''\n\tThisForm.getCdEstoque.Refresh\n\tThisForm.getDsEstoque.Refresh\nEndIf\n\nReturn(llRetorno)\n* Fim *****************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getDsEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdEstoque.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECAD.getCdEstoque",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local llRetorno\n\nIf Empty(This.Value)\n\tllRetorno = .t.\nElse\t\n\tllRetorno = (fAcessoContas(Usuar, ThisForm.getCdGrEstoque.Value, 'C', This.Value, ThisForm.getCdEstoque, ThisForm.getDsEstoque))\nEndIf\n\nIf Not llRetorno\n\t=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')\n\tThisForm.getCdEstoque.Value = ''\n\tThisForm.getDsEstoque.Value = ''\n\tThisForm.getCdEstoque.Refresh\n\tThisForm.getDsEstoque.Refresh\nEndIf\n\nReturn llRetorno\n* Fim ******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

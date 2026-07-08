@@ -1,0 +1,12 @@
+﻿Phase 2 (BO) is now complete with the report-specific equivalents of the requested CRUD methods:
+
+**Methods in SIGREAGVBO.prg (614 lines, all functional, no stubs):**
+- `Init()` ÔÇö sets FRX path and report title
+- `PrepararDados()` ÔÇö full 287-line replica of the original `processamento` (cabe├ºalho da empresa, opera├º├Áes, promo├º├Áes, produtos, convers├úo de moeda, m├®dias, hist├│rico de pre├ºos, agrega├º├Áes, movimenta├º├Áes, saldos/percentuais), com TRY/CATCH usando padr├úo `DO WHILE / EXIT` e limpeza completa de cursores tempor├írios
+- `Imprimir()`, `Visualizar()`, `GerarExcel()` ÔÇö cada um chama `PrepararDados()` + `REPORT FORM` + `RegistrarAuditoria(op)`
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö registra cada execu├º├úo do relat├│rio em `LogAuditoria` (Tabela="SIGREAGV", chave=grupo/moeda, usu├írio, data/hora). Falha em audit n├úo bloqueia o relat├│rio.
+- `ObterChavePrimaria()` ÔÇö devolve `<Colecoes>/<CMoes>` (ou `GERAL/<CMoes>`) como chave da execu├º├úo
+- `BuscarCotacao(par_cMoeda)` ÔÇö substitui `fBuscarCotacao` consultando `SigCdCot`
+- `Destroy()` ÔÇö fecha `crCabecalho` e `cursor_4c_Imprimir`
+
+Schema verificado: `SigCdCot(cmoes,datas,horas,valos)` e `sigcdemp(cemps,razas)` existem com os nomes/tipos usados nas queries.

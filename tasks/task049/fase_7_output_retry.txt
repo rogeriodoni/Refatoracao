@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da: adicionei os 3 eventos CRUD ausentes (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) em `C:\4c\projeto\app\forms\relatorios\Formsigrecgr.prg` como stubs de compatibilidade com o contrato do pipeline. Como este ├® um form REPORT (n├úo CRUD), cada stub delega para o comportamento REPORT mais pr├│ximo:
+
+- `BtnIncluirClick` ÔåÆ `Processar()` + `GerarRelatorio(1)` (reprocessa e mostra preview)
+- `BtnAlterarClick` ÔåÆ `GerarRelatorio(1)` (preview)
+- `BtnExcluirClick` ÔåÆ `Release()` (fecha relat├│rio)
+
+O `BtnVisualizarClick` original (linha 449) j├í existia e foi mantido. Todos os m├®todos t├¬m implementa├º├úo real, sem TODOs/stubs vazios.

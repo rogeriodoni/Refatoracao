@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. A Fase 4 adicionou todos os elementos funcionais ao `FormSIGREAGV.prg`:
+
+**O que foi adicionado:**
+
+- `ConfigurarBINDEVENTs()` ÔÇö conecta os 4 bot├Áes do CommandGroup e os 4 campos de filtro aos seus handlers (chamado no `InicializarForm` ap├│s `ConfigurarFiltros`)
+- `AjustarCamposDescricao()` ÔÇö replica o comportamento `When` do original: `txt_4c_DColecao` fica habilitado s├│ quando `txt_4c_Colecao` est├í vazio (e idem para Moeda/DMoeda)
+- `FormParaRelatorio()` ÔÇö transfere os valores dos 4 campos de filtro para as propriedades correspondentes do `SIGREAGVBO`
+- `CmgBotoesClick()` ÔÇö despacha para `Visualizar()`, `Imprimir()`, `GerarExcel()` ou `Release()` conforme `Value` do CommandGroup
+- `TxtColecaoKeyPress / TxtDColecaoKeyPress / TxtMoedaKeyPress / TxtDMoedaKeyPress` ÔÇö F4 abre lookup direto; Enter/Tab valida o valor digitado (se vazio limpa o par, se preenchido abre lookup)
+- `AbrirBuscaColecao / AbrirBuscaMoeda` ÔÇö abrem `FormBuscaAuxiliar` por c├│digo ou por descri├º├úo, preenchendo ambos os campos do par ap├│s a sele├º├úo

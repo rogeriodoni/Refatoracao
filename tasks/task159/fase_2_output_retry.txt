@@ -1,0 +1,9 @@
+﻿Fase 2 completa. O BO `sigprccpBO.prg` agora tem os m├®todos CRUD:
+
+- **ObterChavePrimaria()** (linha 175, PROTECTED) ÔÇö retorna `this_cIdChaves`
+- **CarregarDoCursor()** (linha 1687) ÔÇö mapeia TODAS as 33 colunas de SigPrCpo
+- **Inserir()** (linha 1766, PROTECTED) ÔÇö SQL INSERT completo + `RegistrarAuditoria("INSERT")`
+- **Atualizar()** (linha 1840, PROTECTED) ÔÇö SQL UPDATE completo + `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** (linha 1907, PROTECTED) ÔÇö DELETE + `RegistrarAuditoria("DELETE")`
+
+Adicionadas 33 propriedades `this_*` para todas as colunas da tabela SigPrCpo (cats, cgrus, cpros, datatrans, dcompos, dscgrp, etiqs, grupos, mats, moeds, obscompos, ordems, pcompos, qtds, qtscons, unicompos, compos, ordcompos, cidchaves, qtdcvs, vlrcvs, dtmovs, cunips, markcvs, pesos, totas, tpalts, vlrpvs, ordts, tipos, matriz, obsofs, PedraPrincipal). Arquivo cresceu de 1659 para 1936 linhas.

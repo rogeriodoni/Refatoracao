@@ -1,0 +1,295 @@
+*==============================================================================
+* ProcessamentoBloqueioContaBO.prg
+* Business Object para Processamento de Bloqueio/Desbloqueio de Contas
+*==============================================================================
+* Descricao: Processa bloqueio/desbloqueio de contas baseado em criterios
+* Autor: Sistema 4C
+* Data: 2026-02-05
+*==============================================================================
+
+DEFINE CLASS ProcessamentoBloqueioContaBO AS Custom
+    *--------------------------------------------------------------------------
+    * Propriedades
+    *--------------------------------------------------------------------------
+    this_dDataInicial = {}
+    this_dDataFinal = {}
+    this_cSituacao = ""
+    this_nOpcaoBloqueio = 1  && 1=Bloqueio, 2=Desbloqueio
+    this_nOpcaoFiltro = 1    && 1=Atraso, 2=Aberto, 3=Ambos
+
+    *--------------------------------------------------------------------------
+    * Init
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.LimparPropriedades()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparPropriedades
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparPropriedades()
+        THIS.this_dDataInicial = {}
+        THIS.this_dDataFinal = {}
+        THIS.this_cSituacao = ""
+        THIS.this_nOpcaoBloqueio = 1
+        THIS.this_nOpcaoFiltro = 1
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarParametros - Valida parametros antes de processar
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarParametros()
+        LOCAL loc_lResultado
+        loc_lResultado = .T.
+
+        TRY
+            IF EMPTY(THIS.this_cSituacao)
+                MsgAviso("Situa" + CHR(231) + CHR(227) + "o N" + CHR(227) + "o Informada!")
+                loc_lResultado = .F.
+            ENDIF
+
+            IF EMPTY(THIS.this_dDataInicial) OR EMPTY(THIS.this_dDataFinal)
+                MsgAviso("Per" + CHR(237) + "odo N" + CHR(227) + "o Informado!")
+                loc_lResultado = .F.
+            ENDIF
+
+            IF THIS.this_dDataInicial > THIS.this_dDataFinal
+                MsgAviso("Data Inicial n" + CHR(227) + "o deve ser maior que a Data Final.")
+                loc_lResultado = .F.
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao validar par" + CHR(226) + "metros:" + CHR(13) + loException.Message, "Erro")
+            loc_lResultado = .F.
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarUltimoVencimento - Busca ultimo vencimento por conta
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarUltimoVencimento()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                SELECT b.ContaDs as Contas, MAX(a.Vencs) as UltVencs, c.Situas
+                FROM SigMvPar a
+                JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums
+                JOIN SigOpFp d ON d.Fpags = a.Fpags
+                JOIN SigCdCli c ON c.IClis = b.ContaDs
+                WHERE b.ContaDs <> SPACE(10)
+                AND <<IIF(THIS.this_nOpcaoBloqueio = 1, "a.VPags <> a.Valos", "a.VPags = a.Valos")>>
+                AND d.Infos <> 'T'
+                AND c.Situas <> '<<THIS.this_cSituacao>>'
+                GROUP BY b.ContaDs, c.Situas
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "crUltVencs")
+
+            IF loc_nResultado < 0
+                MostrarErro("Erro ao buscar " + CHR(250) + "ltimo vencimento:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                loc_lSucesso = .F.
+            ELSE
+                SELECT crUltVencs
+                INDEX ON Contas TAG Contas
+                GO TOP
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro:" + CHR(13) + loException.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarContasProcessar - Busca contas para processar baseado no periodo
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarContasProcessar()
+        LOCAL loc_cSQL, loc_cFiltro, loc_nResultado, loc_lSucesso
+        LOCAL pDti, pDtf
+        loc_lSucesso = .F.
+
+        TRY
+            * Prepara parametros de data
+            pDti = FormatarDataSQL(THIS.this_dDataInicial)
+            pDtf = FormatarDataSQL(THIS.this_dDataFinal)
+
+            * Define filtro baseado na opcao
+            DO CASE
+            CASE THIS.this_nOpcaoFiltro = 1  && Somente com Parcelas em Atraso
+                loc_cFiltro = "a.VPags <> a.Valos"
+
+            CASE THIS.this_nOpcaoFiltro = 2  && Somente com Vendas em Aberto
+                loc_cFiltro = "a.VPags = a.Valos"
+
+            CASE THIS.this_nOpcaoFiltro = 3  && Ambos
+                loc_cFiltro = "0=0"
+                IF THIS.this_nOpcaoBloqueio = 2  && Desbloqueio
+                    loc_cFiltro = "a.valos = a.vpags " + ;
+                        "AND b.ContaDs NOT IN ( " + ;
+                        "SELECT DISTINCT b.ContaDs " + ;
+                        "FROM SigMvPar a " + ;
+                        "JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums " + ;
+                        "JOIN SigCdCli c ON c.IClis = b.ContaDs " + ;
+                        "JOIN SigOpFp d ON d.FPags = a.FPags " + ;
+                        "JOIN SigCdGcr g ON c.Grupos = g.Codigos " + ;
+                        "WHERE b.ContaDs <> SPACE(10) " + ;
+                        "AND d.Infos <> 'T' " + ;
+                        "AND g.Coletors = 2 " + ;
+                        "AND a.valos <> a.vpags )"
+                ENDIF
+            ENDCASE
+
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                SELECT b.ContaDs as Contas, c.RClis as DescConta, MAX(a.Vencs) as Vencs, c.Situas
+                FROM SigMvPar a
+                JOIN SigMvCab b ON a.EmpDopNums = b.EmpDopNums
+                JOIN SigCdCli c ON c.IClis = b.ContaDs
+                JOIN SigOpFp d ON d.FPags = a.FPags
+                JOIN SigCdGcr g ON c.Grupos = g.Codigos
+                WHERE b.ContaDs <> SPACE(10)
+                AND a.Vencs BETWEEN <<pDti>> AND <<pDtf>>
+                AND d.Infos <> 'T'
+                AND g.Coletors = 2
+                AND c.Situas <> '<<THIS.this_cSituacao>>'
+                AND <<loc_cFiltro>>
+                GROUP BY b.ContaDs, c.RClis, c.Situas
+            ENDTEXT
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "crResult")
+
+            IF loc_nResultado < 0
+                MostrarErro("Erro ao buscar contas:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                loc_lSucesso = .F.
+            ELSE
+                SELECT crResult
+                INDEX ON Contas TAG Conta
+                GO TOP
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro:" + CHR(13) + loException.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CriarCursorFinal - Cria cursor final com contas a processar
+    *--------------------------------------------------------------------------
+    PROCEDURE CriarCursorFinal()
+        LOCAL loc_cCondicao, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            * Define condicao baseado na opcao
+            DO CASE
+            CASE THIS.this_nOpcaoFiltro = 1
+                loc_cCondicao = "a.UltVencs < b.Vencs"
+            CASE THIS.this_nOpcaoFiltro = 2
+                loc_cCondicao = "a.UltVencs >= b.Vencs"
+            CASE THIS.this_nOpcaoFiltro = 3
+                loc_cCondicao = "0=0"
+            ENDCASE
+
+            SELECT a.Contas, b.DescConta, a.UltVencs, b.Vencs, b.Situas ;
+                FROM crUltVencs a ;
+                INNER JOIN crResult b ON a.Contas = b.Contas ;
+                WHERE &loc_cCondicao ;
+                INTO CURSOR crDados READWRITE
+
+            SELECT * FROM crDados INTO CURSOR crErros READWRITE
+
+            SELECT crDados
+            INDEX ON Contas TAG Contas
+            GO TOP
+
+            IF RECCOUNT() = 0
+                MsgAviso("Nenhum Registro foi Selecionado.")
+                loc_lSucesso = .F.
+            ELSE
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao criar cursor final:" + CHR(13) + loException.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarSituacoes - Atualiza situacoes das contas
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarSituacoes()
+        LOCAL loc_cSQL, loc_nResultado, loc_nErros, loc_lSucesso, loc_cTexto
+        LOCAL pDt
+        loc_nErros = 0
+        loc_lSucesso = .T.
+        pDt = DATETIME()
+
+        TRY
+            SELECT crDados
+            SCAN
+                TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                    UPDATE SigCdCli
+                    SET Situas = '<<THIS.this_cSituacao>>',
+                        usualts = '<<gc_4c_UsuarioLogado>>',
+                        dtalts = <<FormatarDataSQL(pDt)>>
+                    WHERE IClis = '<<ALLTRIM(crDados.Contas)>>'
+                ENDTEXT
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+                IF loc_nResultado < 0
+                    INSERT INTO crErros (Contas, DescConta) VALUES (crDados.Contas, crDados.DescConta)
+                    loc_nErros = loc_nErros + 1
+                    loc_lSucesso = .F.
+                ENDIF
+
+                *-- Log dos clientes alterados (TODO: implementar fGravarLog ou usar RegistrarAuditoria)
+                *-- loc_cTexto = "Tabela(SIGCDCLI - ICLIS)=" + ALLTRIM(crDados.Contas) + ;
+                *--              " Sit.Anterior =" + ALLTRIM(crDados.Situas) + ;
+                *--              " Sit.Atual =" + ALLTRIM(THIS.this_cSituacao)
+                *-- = fGravarLog('C', 'FormProcessamentoBloqueioContas', 'SIGBLCTA', loc_cTexto, gc_4c_UsuarioLogado)
+            ENDSCAN
+
+        CATCH TO loException
+            MostrarErro("Erro ao atualizar situa" + CHR(231) + CHR(245) + "es:" + CHR(13) + loException.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterTituloRelatorio - Retorna titulo do relatorio
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterTituloRelatorio()
+        LOCAL loc_cTitulo
+
+        loc_cTitulo = "Processamento de " + IIF(THIS.this_nOpcaoBloqueio = 1, "Bloqueio", "Desbloqueio") + " - "
+
+        DO CASE
+        CASE THIS.this_nOpcaoFiltro = 1
+            loc_cTitulo = loc_cTitulo + "Somente com Parcelas em Atraso"
+        CASE THIS.this_nOpcaoFiltro = 2
+            loc_cTitulo = loc_cTitulo + "Somente com Vendas em Aberto"
+        CASE THIS.this_nOpcaoFiltro = 3
+            loc_cTitulo = loc_cTitulo + "Com Parcelas em Atraso e Venda em Aberto"
+        ENDCASE
+
+        RETURN loc_cTitulo
+    ENDPROC
+
+ENDDEFINE

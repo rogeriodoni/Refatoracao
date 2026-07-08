@@ -1,0 +1,8 @@
+﻿Both files compile clean. Phase 8 is complete.
+
+**Summary of what was fixed:**
+- **Root cause**: VFP9 rejects `:` colon multi-statement separators inside `WITH local_var.member` blocks (even simple `WITH THIS.something` blocks are affected when the properties use colons). Splitting each property onto its own line resolves it.
+- **515 colon-splits** applied across ConfigurarPaginaLista and other methods
+- **3 `SUM ... IN alias`** replaced with `SELECT alias` + bare `SUM`
+
+**Phase 7 & 8 are complete.** The migration of `FormSigPrGlx.prg` / `SigPrGlxBO.prg` is fully done ÔÇö menu entry added, CorretorAutomatico run, false positives reverted, and both files compile successfully.

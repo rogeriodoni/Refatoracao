@@ -1,0 +1,5 @@
+﻿Correto. O nome `Check1` agora est├í consistente entre `ConfigurarCampos()` e `ConfigurarBINDEVENTs()`.
+
+**Causa do bug:** Em `ConfigurarCampos()`, dois checkboxes com nomes `check12` e `check13` foram adicionados ao `grd_4c_Orcs.Column1`, mas `ConfigurarBINDEVENTs()` tentava acessar `.Check1` (que n├úo existia). Isso lan├ºava "Property CHECK1 is not found" ÔåÆ CATCH chamava `MsgErro()` ÔåÆ dialog modal bloqueava o VFP no modo desatendido ÔåÆ timeout de 300s.
+
+**Corre├º├úo:** Substitu├¡do os dois checkboxes `check12`/`check13` por um ├║nico `Check1`, alinhando ao mesmo padr├úo j├í usado no `grd_4c_Emps.Column1`.

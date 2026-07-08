@@ -1,0 +1,27 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormProduto.prg` criado. Fase 3 completa.
+
+**O que foi implementado:**
+
+| Elemento | Detalhe |
+|---|---|
+| `DEFINE CLASS FormProduto AS FormBase` | Width=1000, Height=600, sem TitleBar/ControlBox |
+| `Init()` | Apenas `RETURN DODEFAULT()` ÔÇö FormBase chama InicializarForm |
+| `InicializarForm()` | Guarda `gb_4c_ValidandoUI`, cria ProdutoBO, chama ConfigurarPageFrame |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas`, Top=-29, Tabs=.F., PageCount=2 |
+| `ConfigurarPage1()` | cnt_4c_Cabecalho (Top=31), cnt_4c_Botoes (Top=29), cnt_4c_Saida (Top=29), 5 bot├Áes CRUD + Encerrar |
+| `ConfigurarPage2()` | cnt_4c_BotoesAcao (Top=38), cmd_4c_Confirmar + cmd_4c_Cancelar |
+| `TornarControlesVisiveis()` | Filtra por `"_4c_" $ Name` ÔÇö evita ativar containers flutuantes do legado |
+| `FormatarGridLista()` | Stub vazio para Fase 4 |
+| `Destroy()` | Libera BO + DODEFAULT() |
+
+**Compensa├º├úo PageFrame aplicada:**
+- cnt_4c_Cabecalho: Top = 2+29 = **31**
+- cnt_4c_Botoes/Saida: Top = 0+29 = **29**
+- cnt_4c_BotoesAcao: Top = 9+29 = **38**
+
+**Pr├│ximas fases:**
+- **Fase 4**: Grid `grd_4c_Lista` + container de filtros em Page1
+- **Fase 5**: TextBoxes de `pgDados` (produto, descri├º├úo, grupo, etc.)
+- **Fase 6**: Sub-p├íginas restantes (pgComposicao, pgDadosFiscais, etc.)
+- **Fase 7**: BINDEVENTs + handlers de eventos
+- **Fase 8**: Lookups, valida├º├Áes, integra├º├úo config.prg/menu.prg

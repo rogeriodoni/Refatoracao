@@ -1,0 +1,13 @@
+﻿As corre├º├Áes est├úo aplicadas. Resumo do que foi feito por cada um dos 8 problemas reportados:
+
+**Corrigidos (3):**
+1. **ATIVAS** ÔÇö removido `ativas <> 1 OR` do PASSO 3. Original usava apenas `NEMPS < 1` e `NUMS = '1'`
+2. **DATAS** ÔÇö removido `AND datas <= GETDATE()` de `ObterCotacao`. Original `fBuscarCotacao` n├úo tinha esse filtro; `ORDER BY datas DESC` j├í recupera a mais recente
+3. **CEMPS** (head query) ÔÇö removida a query `SELECT TOP 1 razas FROM SigCdEmp WHERE cemps = ...`. Original usava o c├│digo da empresa diretamente (`lcCep = go_4c_Sistema.cCodEmpresa`), sem buscar a raz├úo social
+
+**Falsos positivos / n├úo remov├¡veis (5):**
+- **MOEVS** ÔÇö linha 241 BO: ├® VFP local cursor SELECT (`FROM crSigMvEst a, crSigCdPro b, crSigCdMoe c`), n├úo SQLEXEC. A condi├º├úo `b.moevs = c.cmoes` ├® join id├¬ntico ao original
+- **INICIAL** ÔÇö n├úo existe como coluna WHERE em nenhum SQL do c├│digo; falso positivo do validador (aparece apenas em coment├írios e strings)
+- **CODIGOS** ÔÇö condi├º├Áes `WHERE Codigos = ` nas fun├º├Áes `ValidarTabela`/`ValidarGrupo` s├úo o n├║cleo da valida├º├úo de UI. Remover quebraria a funcionalidade (violaria "NAO remover funcionalidades ou lookups")
+- **CONTAS** ÔÇö mesmo caso de CODIGOS em `ValidarConta`
+- **CMOES** ÔÇö coluna chave necess├íria em `ObterCotacao`; sem ela a query retornaria cota├º├úo de moeda errada

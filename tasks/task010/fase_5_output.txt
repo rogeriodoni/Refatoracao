@@ -1,0 +1,13 @@
+﻿The file is complete and well-structured. All 5 edits for Phase 6 are done:
+
+1. **ConfigurarPaginaDados()** ÔÇö now calls `ConfigurarPaginaDadosParte2()` after Parte1
+2. **ConfigurarPaginaDadosParte2()** ÔÇö adds all 51 controls with `top >= 236` in PagDados.Page1:
+   - Separator line `shp_4c_Shp03`
+   - "Especifica├º├Áes Para NF-e" bold Verdana label
+   - IPI section (left side): `cbo_4c_CmbIpi`, `cbo_4c_CmbIpiI`, `txt_4c_Gergia1`, `txt_4c_Aliqs`, `cbo_4c_Combo7`, `cbo_4c_Combo1`, `cbo_4c_Combo2`, `cbo_4c_CmbBIPI`, `txt_4c_BcIPI`, `cbo_4c_Combo8`, 3 checkboxes (FreteIPI/SegIPI/DespIPI)
+   - NF-e section (right side): `txt_4c_IPICST`, `txt_4c_PISCST`, `txt_4c_COFCST`, `txt_4c_ISSQNL`, `txt_4c_IPIEnq`, 4 aliquota fields + `%` labels, `obj_4c_Fwoption1` (5 buttons), `obj_4c_Fwoption2` (2 buttons), `txt_4c_AliqII`
+   - BINDEVENT for `cmbIpiI.InteractiveChange` ÔåÆ `AtualizarCombo8`
+3. **AtualizarCombo8()** ÔÇö PUBLIC, toggles `cbo_4c_Combo8.Enabled` based on cmbIpiI selection
+4. **FormParaBO()** ÔÇö extended with all Part 2 IPI + NF-e fields
+5. **BOParaForm()** ÔÇö extended with Part 2 fields including CmbBIPI multi-case display and Fwoption1/2 value clamping
+6. **LimparCampos()** ÔÇö extended with Part 2 defaults

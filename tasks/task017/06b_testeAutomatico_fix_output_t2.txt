@@ -1,0 +1,9 @@
+﻿Duas corre├º├Áes aplicadas:
+
+**Causa raiz 1** ÔÇö `fConfigGeral: File 'fconfiggeral.prg' does not exist.`  
+Removido o bloco `TRY/fConfigGeral()/CATCH/MsgErro`. A fun├º├úo n├úo faz parte da arquitetura 4c (n├úo existe no projeto). O `MsgErro` dentro do CATCH mostrava dialog que, combinado com o fluxo seguinte, levava ├á falha.
+
+**Causa raiz 2** ÔÇö `Erro: Property USUARIO is not found.`  
+Em `ValidarUsuario()`, `goSistema.Usuario = loc_cUsuario` era chamado sem verificar se a propriedade existe. Se `goSistema` existe mas n├úo tem `Usuario`, VFP9 lan├ºa exce├º├úo. A exce├º├úo subia para o TRY externo de `InicializarForm()`, que a capturava, chamava `MsgErro` com t├¡tulo "Erro" e retornava `.F.` ÔåÆ `FormBase.Init()` retornava `.F.` ÔåÆ `CREATEOBJECT` retornava n├úo-objeto.
+
+A corre├º├úo adiciona `PEMSTATUS(goSistema, "Usuario", 5)` antes da atribui├º├úo, tornando-a segura.

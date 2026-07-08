@@ -1,0 +1,6 @@
+﻿Arquivo correto. Fase 1 conclu├¡da: `C:\4c\projeto\app\classes\sigregnfBO.prg` criado com:
+
+- **7 propriedades declaradas**: filtros (`this_cSeries`, `this_cUsuars`), estado (`this_lNotasAnt`), dado auxiliar (`this_cMascNums`), nomes de cursors (`this_cCursorNFis`, `this_cCursorClientes`, `this_cCursorSeries`), mensagem de erro
+- **`Init()`**: cria os 2 cursors de trabalho persistentes (equivalente ao `Load` + `Init` do legado), carrega `SigCdPam` para `MascNums` e `SigCdSer` indexado por `EmpCods` ÔÇö mantido aberto para uso em `SelecionarDados` (Fase 2)
+- **`Destroy()`**: libera os 10 cursors que o BO pode abrir durante o ciclo de vida
+- Sem `RETURN` dentro de TRY/CATCH, sem acentos literais, CATCH n├úo silencioso

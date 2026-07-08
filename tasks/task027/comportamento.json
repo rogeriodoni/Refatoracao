@@ -1,0 +1,355 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 16,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fAcessoContas", "fAcessoContab", "fwBuscaExt", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 851,
+      "codigoOriginal": "LParameters pcEmpEst, pcGruEst, pcEstEst, pcGGrupo\n\nPrivate lcDtIni, lcDtFin, lcDtAnt\n\nLocal lcDsEstoque, lcCdGGrupo,lcDsGGrupo, ldDtInicial, ldDtFinal, lcConexao, lnCdBarra, lcTalk, ;\n\t  lcEscape, lcMacro1, llObs, lcWhere, lcBusca, lcEmpEst, lcGruEst, lcEstEst, lcGGrupo\n\nldDtInicial = ThisForm.get_dt_inicial.Value\nldDtFinal   = ThisForm.get_dt_final.Value\nldDtAnt     = ldDtInicial - 1\nlcConexao   = ThisForm.podataMgr.GetDriver()\nlcDtIni     = fDtoSQL(ldDtInicial)\nlcDtFin     = fDtoSQL(ldDtFinal... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "GetDriver,SqlExecute,GetDatabase",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Report Form SigReAe1 Preview NoConsole\n\nSelect CsDiferenca\nGo Top\nIf !Eof()\n\tIf MessageBox('Deseja Visualizar o Relatório de Divergências ?',1+32,'') = 1\n\t\tReport Form SigReAe2 Preview NoConsole\n\tEndIf\nEndIf\n\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 75,
+      "codigoOriginal": "Local lcEmpresa, lcGrupo, lcEstoque, lcGGrp, ldDtInicial, ldDtFinal, llInicio, llProcessa\n\nlcEmpresa   = ThisForm.getEmpresa.Value\nlcGrupo     = ThisForm.get_Cd_GrEstoque.Value\nlcEstoque   = ThisForm.get_cd_estoque.Value\nlcGGrp      = ThisForm.get_cd_ggrupo.Value\nldDtInicial = ThisForm.get_dt_inicial.Value\nldDtFinal   = ThisForm.get_dt_final.Value\n\nlcTitulo1   = 'Análise de Estoque por Grande Grupo'\nlcTitulo2   = 'Grupo: ' + IIf(Empty(lcGrupo),'Todos',AllTrim(lcGrupo) + ' - ' + AllTrim(ThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque,get_cd_ggrupo,get_dt_inicial,get_dt_final,get_Ds_GrEstoque,get_ds_estoque",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.poDataMgr = CreateObject('fSqlConector',thisform.Name)\n\nlnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cemps,razas,ativas From SigCdEmp ],'CrSigCdEmp')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\n\nSelect CrSigCdEmp\nIndex On cemps Tag cemps\nGo Top\n\nlnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cgrus,mercs,cestoqs From SigCdGrp ],'CrSigCdGrp')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute,Value       = Space,Value    = Space,Value = Space,Value   = Space,Value   = Date,Value     = Date",
+        "controlesReferenciados": "get_cd_grestoque,get_cd_estoque,get_ds_estoque,get_cd_ggrupo,get_ds_ggrupo,get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Report Form SigReAe1 To Printer Prompt NoConsole\n\nSelect CsDiferenca\nGo Top\nIf !Eof()\n\tIf MessageBox('Deseja Imprimir o Relatório de Divergências ?',1+32,'') = 1\n\t\tReport Form SigReAe2 To Printer Prompt NoConsole\n\tEndIf\nEndIf\n\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "With ThisForm\n\n\tIf !(This.Value = 4)\n\t\t* Consiste o campo estoque\n\t\tlcCdGruEst = .get_cd_grestoque.Value\n\t\tIf !Empty(lcCdGruEst) And !(.poDataMgr.ChkRegister('SigCdGcr','codigos',lcCdGruEst))\n\t\t\tMessageBox('Grupo de Estoque Inválido.',16,'')\n\t\t\t.get_cd_grestoque.SetFocus\n\t\t\tReturn(.F.)\n\t\tEndIf\n\n\t\tlcCdEst = .get_cd_estoque.Value\n\t\tIf !Empty(lcCdEst) And !(.poDataMgr.ChkRegister('SigCdCli','iclis',lcCdEst))\n\t\t\tMessageBox('Conta de Estoque Inválida.',16,'')\n\t\t\t.get_cd_estoque.SetFocus\n\t\t\tReturn(.F.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,ChkRegister('SigCdGcr',get_cd_estoque,ChkRegister('SigCdCli',get_cd_ggrupo,ChkRegister('SigCdGpr',get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local lcGrupo\nlcGrupo = ThisForm.get_cd_grestoque.Value\n\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'D',This.Value,This.Parent.get_cd_estoque,This.Parent.get_ds_estoque)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value   = ''\n\t\tThis.Refresh\n\t\tThis.Parent.get_cd_estoque.Value   = ''\n\t\tThis.Parent.get_cd_estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.Parent.get_cd_estoque.Value   = ''\n\tThis.Parent.get_cd_estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.get_cd_grestoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,grupo,'C',This.Value,This,This.Parent.get_ds_estoque)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value   = ''\n\t\tThis.Refresh\n\t\tThis.Parent.get_ds_estoque.Value   = ''\n\t\tThis.Parent.get_ds_estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.Parent.get_ds_estoque.Value = ''\n\tThis.Parent.get_ds_estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_grestoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'D',This.Value,This.Parent.get_cd_grestoque,This.Parent.get_ds_grestoque)\nElse\n\tThis.Parent.get_cd_grestoque.Value = ''\n\tThis.Parent.get_cd_grestoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_ds_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This,This.Parent.get_ds_grestoque)\nElse\n\tThis.Parent.get_ds_grestoque.Value = ''\n\tThis.Parent.get_ds_grestoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_ds_ggrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_ggrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_ggrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_ds_ggrupo",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.get_cd_ggrupo.Value = ''\n\tThisForm.get_cd_ggrupo.Refresh\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','TmpGGrupo','descs',This.Value,'Grande Grupo',.T.)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('descs','','Descrição')\n\t\tm.loLista.mAddColuna('codigos','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('TmpGGrupo')\n\t\tThisForm.get_cd_ggrupo.Value = Evaluate('TmpGGrupo.codigos')\n\t\tThisForm.get_ds_g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_cd_ggrupo,get_ds_ggrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.get_cd_ggrupo",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.get_cd_ggrupo.Value = ''\n\tThisForm.get_cd_ggrupo.Refresh\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','TmpGGrupo','codigos',This.Value,'Grande Grupo',.T.)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('codigos','','Código')\n\t\tm.loLista.mAddColuna('descs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('TmpGGrupo')\n\t\tThisForm.get_cd_ggrupo.Value = Evaluate('TmpGGrupo.codigos')\n\t\tThisForm.get_ds... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_cd_ggrupo,get_ds_ggrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.getEmpresa,ThisForm.getDesEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.getDesEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.getEmpresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAEG.getDesEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREAEG.Init",
+      "queryOriginal": "lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cemps,razas,ativas From SigCdEmp ],'CrSigCdEmp')",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,ativas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREAEG.Init",
+      "queryOriginal": "lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cgrus,mercs,cestoqs From SigCdGrp ],'CrSigCdGrp')",
+      "tabelas": "SigCdGrp",
+      "colunas": "cgrus,mercs,cestoqs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "SigCdGrp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

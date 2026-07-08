@@ -1,0 +1,19 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigReEtlBO.prg` criado com:
+
+- **31 propriedades** cobrindo todos os filtros do formul├írio:
+  - Empresa (code + desc)
+  - Grupo cont├íbil + Conta de estoque (code + desc cada)
+  - Grupo de Venda/Cole├º├úo (code + desc)
+  - Hierarquia de localiza├º├úo: Base, Nvl2, Nvl3, Nvl4 (code + desc cada)
+  - Localiza├º├úo direta (code + desc)
+  - Grande Grupo, Grupo Produto, Subgrupo (code + desc cada)
+  - Produto (code + desc)
+  - Fornecedor (code + desc)
+  - `this_nTipoRelatorio` (1-6 ÔÇö mapeado de `optSinAna`)
+  - `this_nSubTotais` (0/1 ÔÇö mapeado de `Opt_Subt` checkbox)
+  - `this_nOrdem` (1-4 ÔÇö mapeado de `OptOrdem`)
+  - `this_cFRXAtual` (FRX selecionado em PrepararDados com base no tipo)
+- `Init()` chamando `DODEFAULT()`
+- `Destroy()` chamando `DODEFAULT()`
+
+A pr├│xima fase (2/8) adicionar├í `PrepararDados()` com toda a l├│gica SQL do m├®todo `processamento` original ÔÇö incluindo `ReverterXML`, as duas cl├íusulas WHERE e a sele├º├úo do FRX correto por tipo.

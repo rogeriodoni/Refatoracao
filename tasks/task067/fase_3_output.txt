@@ -1,0 +1,12 @@
+﻿Arquivo criado com sucesso. Verifica├º├úo dos pontos cr├¡ticos:
+
+**O que foi criado em Fase 3:**
+- `DEFINE CLASS Formsigrecrp AS FormBase` ÔÇö dimens├Áes `800x320` (fiel ao original `800x300`, ligeiramente mais alto)
+- `Init()` ÔÇö delega apenas para `DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` ÔÇö instancia `sigrecrpBO`, chama `CriarCabecalho()` e `CriarBotoesRelatorio()`, sem `RETURN` dentro do TRY/CATCH
+- `AtualizarEstadoControles()` ÔÇö override vazio intencional (form REPORT n├úo tem l├│gica CRUD)
+- `CriarCabecalho()` ÔÇö `cnt_4c_Cabecalho` com `BackColor=RGB(100,100,100)` (cinza m├®dio correto), `lbl_4c_Sombra` (preto, Top=15) + `lbl_4c_Titulo` (branco, Top=18) em Tahoma 16
+- `CriarBotoesRelatorio()` ÔÇö `cmg_4c_Botoes` com `Left=526` (fiel ao original `btnReport.Left=526`), 4 bot├Áes Comic Sans MS, `Buttons(4).Cancel=.T.`; **sem BINDEVENTs** (Fase 7-8)
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` (objeto Custom n├úo tem `.Release()`) + `DODEFAULT()`
+
+**O que vem nas pr├│ximas fases (n├úo inclu├¡do para evitar stubs):** controles de filtro (OptionGroup, TextBoxes, Labels), lookups F4, `FormParaRelatorio()`, `LimparCampos()`, `BtnVisualizarClick()` etc.

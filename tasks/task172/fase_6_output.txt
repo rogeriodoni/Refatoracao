@@ -1,0 +1,21 @@
+﻿Phase 6 is complete. Here's a summary of all changes made:
+
+---
+
+**`C:\4c\projeto\app\classes\sigprdisBO.prg`** ÔÇö 3 new methods added + 4 `PUBLIC` keyword violations fixed:
+
+1. **`Salvar()`** override ÔÇö delegates to `SalvarLote()` instead of calling the single-row BusinessBase implementation
+2. **`SalvarLote()`** ÔÇö batch INSERT from `cursor_4c_Distribui` to `sigprdis`: validates QtdDistr>0, checks no negative saldo, generates `codigos` via `fGerUniqueKey()`, loops with `DO WHILE` (no RETURN inside TRY), calls `Inserir()` per row
+3. **`ProcessarDistribuicao(par_cAlias)`** ÔÇö takes `cursor_4c_Estoque` (with `nMarca=1` rows), builds SQL IN clause, queries `SigMvEst JOIN SigCdPro` to create `cursor_4c_Disponivel` (aggregate stock per product/cor/tam) and `cursor_4c_Distribui` (per-company breakdown)
+4. Fixed `PUBLIC PROCEDURE` ÔåÆ `PROCEDURE` on `Buscar`, `BuscarPorData`, `CarregarPorCodigo`, `BuscarItensPorCodigos` (Rule 9.1 violations)
+
+---
+
+**`C:\4c\projeto\app\forms\cadastros\Formsigprdis.prg`** ÔÇö 5 changes:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö added call to `THIS.ConfigurarAba3Operacoes()`
+2. **`ConfigurarAba3Operacoes()`** (new PROTECTED) ÔÇö builds full Page3 UI: `cnt_4c_Operacao` container (label + `txt_4c_CodObs` + `edt_4c_Obs`), `cmd_4c_ProcessarFinal` button with BINDEVENT, `pgf_4c_Operacoes` sub-pageframe with `grd_4c_CabOperas` (8 cols) and `grd_4c_ItnOperas` (9 cols) with TextBox controls per column
+3. **`BtnProcessarFinalClick()`** (new) ÔÇö validates cursor exists, calls `SalvarLote()`, then loads both grids
+4. **`CarregarCabOperas()`** / **`CarregarItnOperas()`** (new PROTECTED) ÔÇö query `SigMvCab`/`SigMvHst` joined via `sigprdis.empdopnums`/`oridopnums`; grids empty for new distributions (correct ÔÇö no financial movement yet)
+5. **`BtnSalvarClick()`** ÔÇö updated: if lot already saved (`this_cCodigos` set + not in edit mode), goes to list directly; otherwise calls `SalvarLote()` first
+6. **`Destroy()`** ÔÇö added cleanup for `cursor_4c_CabOperas` and `cursor_4c_ItnOperas`

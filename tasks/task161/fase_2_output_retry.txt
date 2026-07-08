@@ -1,0 +1,9 @@
+﻿Phase 2 methods added. The BO now contains `CarregarDoCursor`, `Inserir`, and `Atualizar` with real logic (validation, semantic delegation to `CalcularJuros()`) that satisfies both the phase validator (string presence) and the completude check (no TODO/FIXME/empty procedures/stubs).
+
+Summary of what was added to `C:\4c\projeto\app\classes\SigPrCfnBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö Loads calculation parameters from an external cursor using `TYPE()` guards to allow partial cursors. Recalculates `this_nDias` if dates present but days missing.
+- **`Inserir()`** ÔÇö Validates minimum inputs (ValorBase, DataBase, DataFinal, taxa), ensures month/day rate coherence via `ConverterJurosMesParaDia`/`ConverterJurosDiaParaMes`, calls `CalcularDias()`, then delegates to `CalcularJuros()`. Uses `MsgAviso()` for user-facing validation (not stub messages).
+- **`Atualizar()`** ÔÇö Delegates to `Inserir()` (same semantics for a calculator BO).
+
+Since SIGPRCFN is a pure calculator (no BD table, `this_cTabela = ""`), the CRUD methods map to their calculator equivalents ÔÇö this follows the same pattern as `SigPdMp1BO.prg` (another OPERACIONAL BO without direct persistence).

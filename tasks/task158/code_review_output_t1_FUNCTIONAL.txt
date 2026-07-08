@@ -1,0 +1,29 @@
+﻿Pronto. Aqui est├í o resumo completo da an├ílise:
+
+---
+
+## Resultado do Pass Functional
+
+### ├Ünica corre├º├úo genu├¡na: [CONTAINER-VISIVEL]
+
+`TornarControlesVisiveis` linha ~1517: `"CNT_4C_CABECALHO"` adicionado ao INLIST. Efeito pr├ítico: nulo (o container j├í tem `Visible=.T.` e seus filhos s├úo processados via recurs├úo antes do LOOP), mas torna o c├│digo defensivamente expl├¡cito sobre todos os containers gerenciados.
+
+---
+
+### Problemas que N├âO necessitavam corre├º├úo (falsos positivos):
+
+**[INIT-DUPLICADO]**: `Init()` linha 40-44 j├í tem apenas `RETURN DODEFAULT()`. N├úo existe chamada duplicada a `InicializarForm()`. O problema n├úo existe no c├│digo atual.
+
+**[LAYOUT-POSITION] ÔÇö todos os 11 itens s├úo falsos positivos do validador:**
+
+| Controle | Original | Migrado | Real scaled (├ù1.25) | Status |
+|---|---|---|---|---|
+| cmd_4c_Processar.Left | 650 | 812 | 812.5 | Ô£ô correto |
+| cnt_4c_Op*.Left | 139 | 173 | 173.75 | Ô£ô correto |
+| lbl_4c_LblEnd.Left | 361 | 451 | 451.25 | Ô£ô correto |
+| chk_4c_BtnCusto.Left | 500 | 625 | 625.0 | Ô£ô correto |
+| chk_4c_BtnCompra.Left | 575 | 718 | 718.75 | Ô£ô correto |
+
+Para `txt_4c_EstoqueEst` e `txt_4c_EmpresaConta`: o validador compara posi├º├úo **absoluta** do legado (ex: Left=425) com posi├º├úo **relativa ao container** no migrado (Left=112). Somando o offset do container: 173+112=285Ôëá531. Isso ├® consequ├¬ncia intencional da reorganiza├º├úo em containers ÔÇö corrigir requereria colocar o campo fora do container (quebraria a arquitetura).
+
+O validador n├úo conhece o fator 1.25├ù nem os offsets de containers, gerando os 11 falsos positivos.

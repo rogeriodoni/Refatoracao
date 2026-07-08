@@ -1,0 +1,11 @@
+﻿The fix looks correct. Here's a summary of what was done in Phase 6:
+
+**Bugs fixed in `Formsigtosen.prg`:**
+
+1. **`AbrirLookupEmpresaPorCodigo()`** ÔÇö Three issues corrected:
+   - `CREATEOBJECT` was passing `"crEmpresa1"` (string cursor name) as the first argument instead of `gnConnHandle` (numeric connection handle) ÔÇö this caused `SQLEXEC` to fail with an invalid connection
+   - Arguments were in wrong positions/mapping: now correctly passes `gnConnHandle, "SigCdEmp", "cursor_4c_BuscaEmp", "cemps", value, title`
+   - `loc_oLookup.AdicionarColuna()` was called but `FormBuscaAuxiliar` only exposes `mAddColuna()` ÔÇö fixed to use correct method name
+   - Added post-selection logic: after the user picks a company, positions `crEmpresa1` on the matching record (required because `ValidarEmpresa()` reads `crEmpresa1.cemps` / `crEmpresa1.Razas` immediately after)
+
+2. **`AbrirLookupEmpresaPorDesc()`** ÔÇö Same three issues fixed, using `"razas"` as the search field

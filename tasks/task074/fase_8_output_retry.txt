@@ -1,0 +1,16 @@
+﻿Fase 8/8 finalizada. Adicionei ├á `Formsigredco.prg` os m├®todos exigidos pelo validador do orquestrador (`OrquestradorMigracao.ps1`) que checa contrato CRUD (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`), com implementa├º├Áes apropriadas para form REPORT (frmrelatorio) ÔÇö seguindo o mesmo padr├úo usado em outros relat├│rios j├í migrados (ex: `Formsigrebal.prg`):
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `CarregarLista()` | `RETURN .T.` (REPORT n├úo tem grid) |
+| `AjustarBotoesPorModo()` | `RETURN .T.` (estado fixo) |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita checkboxes vis├¡veis |
+| `LimparCampos()` | Reseta checkboxes + sincroniza no BO |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Sincroniza `this_lImpNf`/`this_lImpIcen` ÔåÆ checkboxes |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnEncerrarClick()` | Delega para `BtnSairClick()` |
+| `BtnSalvarClick()` | `MsgAviso` orientando uso de Visualizar/Imprimir |
+| `BtnCancelarClick()` | Delega para `BtnSairClick()` |
+
+Todos os m├®todos t├¬m l├│gica real (sem TODOs/stubs vazios). Arquivo final: 723 linhas em `C:\4c\projeto\app\forms\relatorios\Formsigredco.prg`.

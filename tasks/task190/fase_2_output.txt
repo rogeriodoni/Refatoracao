@@ -1,0 +1,27 @@
+Arquivo criado e verificado com sucesso.
+
+**Fase 2/8 concluída.** `C:\4c\projeto\app\classes\SigPrGlxBO.prg` completado com:
+
+- **17 propriedades adicionais** na Fase 2:
+  - `this_cCpros`, `this_cCodCors`, `this_cCodTams` — produto/cor/tamanho da linha atual
+  - `this_nSaldo`, `this_nFabrs`, `this_nEstoque`, `this_nProduzir`, `this_nProduzir2`, `this_nQtds` — quantidades
+  - `this_cFlag`, `this_cUsuLibs`, `this_nQtdMins`, `this_cLinhas`, `this_nNume`, `this_nRnop` — controle/config
+  - `this_dPrevisao` — data de previsão de entrega
+
+- **20 métodos implementados** (soma das 2 fases):
+  - `Init()`, `CarregarDoCursor()`, `ObterChavePrimaria()`, `ValidarDados()`
+  - `Processar()` — método público que orquestra o processamento
+  - `Inserir()`, `Atualizar()`, `ExecutarExclusao()` — CRUD base
+  - `RegistrarAuditoria()` — auditoria
+  - `ProcessarGlobalizacao()` — orquestrador principal (equivalente ao Processar.Click legado)
+  - `GerarOrdensProducao()` — criação de OPs por produto/cor/tamanho
+  - `ProcessarBaixaEstoque()` — baixa de estoque nos movimentos
+  - `ProcessarBaixaFabricacao()` — baixa de fabricação (TmpFabr)
+  - `BaixarQtProdsFab()` — helper para atualizar quantidades de fabricação
+  - `ProcessarEmpenhamentos()` — empenho de matérias-primas (inline SQL SigSubMv/SigPrCpo)
+  - `GravarHistorico()` — atribuição de chaves históricas
+  - `AtualizarPeso()` — cálculo de peso nos movimentos
+  - `GerMascara()` — formata número com zeros à esquerda (substitui fGerMascara)
+  - `CursorQuery()`, `SqlExecute()` — wrappers PROTECTED para SQLEXEC
+
+A próxima fase (Fase 3) criará o arquivo de formulário `FormSigPrGlx.prg`.

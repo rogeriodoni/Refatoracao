@@ -1,0 +1,1427 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdMp4.SCX
+* Data/Hora: 19/06/2026 02:26:51
+* Total de registros: 45
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDMP4
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDMP4
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDMP4.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDMP4.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPDMP4
+  Class: shape
+  BaseClass: shape
+
+Objeto: Operação
+  Parent: SIGPDMP4
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGPDMP4.Operação
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCodigo
+  Parent: SIGPDMP4.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmpresa
+  Parent: SIGPDMP4.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOperação
+  Parent: SIGPDMP4.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGPDMP4
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPDMP4.Grade.Column8
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDMP4.Grade.Column11
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDMP4.Grade.Column11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGPDMP4
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descr
+  Parent: SIGPDMP4
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGPDMP4
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPDMP4.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGPDMP4
+  Class: label
+  BaseClass: label
+
+Objeto: get_Cor
+  Parent: SIGPDMP4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Tam
+  Parent: SIGPDMP4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: ok
+  Parent: SIGPDMP4
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPDMP4
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Desagregar Componentes Agregados"
+  ControlBox = .F.
+  Closable = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGPDMP4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 897
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Operação
+------------------------------------------------------------
+  Top = 104
+  Left = 12
+  Width = 378
+  Height = 40
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "Operação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Operação.Say1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = "Movimentação :"
+  Left = 17
+  Top = 12
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Operação.GetCodigo
+------------------------------------------------------------
+  ControlSource = "tmpnens.numps"
+  Format = "L"
+  InputMask = "9999999999"
+  Left = 293
+  ReadOnly = .T.
+  Top = 8
+  Width = 81
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Operação.GetEmpresa
+------------------------------------------------------------
+  ControlSource = "tmpnens.emps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 97
+  ReadOnly = .T.
+  Top = 8
+  Width = 36
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Operação.GetOperação
+------------------------------------------------------------
+  ControlSource = "tmpnens.dopps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 135
+  ReadOnly = .T.
+  Top = 8
+  Width = 156
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetOperação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade
+------------------------------------------------------------
+  ColumnCount = 11
+  Height = 417
+  Left = 9
+  Panel = 1
+  ReadOnly = .F.
+  RecordMark = .F.
+  RecordSource = ""
+  TabIndex = 1
+  Top = 147
+  Width = 982
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Courier New"
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Width = 110
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Format = "L"
+  Column1.InputMask = "9999999999"
+  Column1.Name = "Column1"
+  Column2.ColumnOrder = 5
+  Column2.ControlSource = ""
+  Column2.Width = 40
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column4"
+  Column3.ColumnOrder = 8
+  Column3.ControlSource = ""
+  Column3.Width = 100
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 100
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column5"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 3
+  Column5.Width = 140
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column2"
+  Column6.ColumnOrder = 7
+  Column6.Width = 40
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.ColumnOrder = 9
+  Column7.Width = 100
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.BackColor = 245,251,136
+  Column7.Name = "Column7"
+  Column8.ColumnOrder = 1
+  Column8.Width = 20
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .F.
+  Column8.Sparse = .F.
+  Column8.Name = "Column8"
+  Column9.ColumnOrder = 6
+  Column9.Width = 100
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Name = "Column9"
+  Column10.Width = 100
+  Column10.Movable = .F.
+  Column10.Resizable = .F.
+  Column10.ReadOnly = .F.
+  Column10.BackColor = 245,251,136
+  Column10.Name = "Column10"
+  Column11.Width = 100
+  Column11.Resizable = .F.
+  Column11.ReadOnly = .F.
+  Column11.BackColor = 245,251,136
+  Column11.Name = "Column11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Industrialização"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Format = "L"
+  InputMask = "9999999999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unid."
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso Fabr"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Componente"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unid."
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde"
+  ForeColor = 36,84,155
+  BackColor = 245,251,136
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column7.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  Caption = ""
+  ForeColor = 36,84,155
+  BackColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column8.Check1
+------------------------------------------------------------
+  Top = 24
+  Left = 5
+  Height = 17
+  Width = 60
+  Alignment = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column9.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column10.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso"
+  ForeColor = 36,84,155
+  BackColor = 245,251,136
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column10.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column11.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso Fabr"
+  ForeColor = 36,84,155
+  BackColor = 245,251,136
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Grade.Column11.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 27
+  Top = 573
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Get_descr
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "tmpDistrib.cdescs"
+  Height = 23
+  Left = 84
+  TabIndex = 3
+  Top = 569
+  Width = 335
+  ForeColor = 0,0,0
+  Name = "Get_descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Container1
+------------------------------------------------------------
+  Top = 126
+  Left = 667
+  Width = 324
+  Height = 22
+  SpecialEffect = 2
+  BackColor = 245,251,136
+  BorderColor = 219,219,219
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Desagrega Parcialmente"
+  Height = 15
+  Left = 92
+  Top = 4
+  Width = 118
+  ForeColor = 0,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cor :"
+  Height = 15
+  Left = 435
+  Top = 573
+  Width = 26
+  TabIndex = 21
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.get_Cor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 463
+  Margin = 0
+  TabIndex = 7
+  Top = 569
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "get_Cor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.get_Tam
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 578
+  Margin = 0
+  TabIndex = 7
+  Top = 569
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "get_Tam"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 925
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<OK"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMP4.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tamanho :"
+  Height = 15
+  Left = 523
+  Top = 573
+  Width = 53
+  TabIndex = 21
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDMP4
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm
+
+This.LockScreen = .t.
+
+ThisForm.ParentForm = pForm
+ThisForm.pcEscolha  = pForm.pcEscolha
+ThisForm.poDataMgr  = pForm.poDataMgr
+
+Set DataSession To pForm.DataSessionId
+
+ThisForm.Caption = 'Desagregar Componentes '
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+
+Select xNensi
+ThisForm.RecnoAnt = Recno()
+Create Cursor TmpDistrib (Marca L, Nops n(10), Nenvs n(10), CodPds c (10), CMats c(14), CUnis c(3), Qtds n(10,3), ;
+						  Pesos n(10,3), Pesofs n(10,3), CDescs c(40), CGrus c(3), TpOps c(15), cUniPs c(3), ;
+						  Qtd2s n(10,3), Peso2s n(10,3), Pesof2s n(10,3), CodCors c(4), codTams c(4))
+Select xNensi
+Set Order to NopCMat
+Scan
+	If Visivel
+		Loop
+	EndIf
+	Insert Into TmpDistrib (Nops, Nenvs, Qtd2s, Peso2s, Pesof2s, CUnis, CMats, CDescs, CGrus, Qtds, Pesos, ;
+							Pesofs, cUniPs, CodCors, codTams ) ;
+					Values (xNensi.Nops, xNensi.Nenvs, xNensi.Qtds, xNensi.Peso2s, xNensi.Pesos, xNensi.CUnis, ;
+							xNensi.CMats, xNensi.CDescs, xNensi.CGrus, xNensi.Qtds, xNensi.Peso2s, xNensi.Pesos, ;
+							xNensi.cUniPs, xNensi.CodCors, xNensi.CodTams )
+EndScan
+
+Select TmpDistrib
+Go Top
+With ThisForm.Grade
+	.RecordSource = 'TmpDistrib'
+	.Column8.ControlSource   = 'TmpDistrib.Marca'
+	.Column1.ControlSource   = 'TmpDistrib.NOps'
+	.Column1.Header1.Caption = ThisForm.ParentForm.Titulo
+	.Column2.ControlSource   = 'TmpDistrib.cMats'
+	.Column5.ControlSource   = 'TmpDistrib.Qtds'
+	.Column4.ControlSource   = 'TmpDistrib.CUnis'
+	.Column9.ControlSource   = 'TmpDistrib.Pesos'
+	.Column6.ControlSource   = 'TmpDistrib.cUnips'
+	.Column3.ControlSource   = 'TmpDistrib.Pesofs'
+	.Column7.ControlSource   = 'TmpDistrib.Qtd2s'
+	.Column10.ControlSource   = 'TmpDistrib.Peso2s'
+	.Column11.ControlSource   = 'TmpDistrib.Pesof2s'
+	.Refresh
+EndWith
+
+With This.Balança
+	.Porta 		  = crSigCdPam.BalPortas
+	.Velocidade   = crSigCdPam.BalVelocs
+	.TipoParidade = crSigCdPam.BalTppars
+	.Bits 		  = crSigCdPam.BalBits
+	.Paridade 	  = crSigCdPam.BalParids
+
+	If (crSigCdPam.BalPortas = 0)
+		.Leitura = 'T'
+	EndIf
+EndWith
+
+This.LockScreen = .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Operação.GetCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Operação.GetEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Operação.GetOperação
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.Get_Cor.Value = Tmpdistrib.CodCors
+ThisForm.Get_Tam.Value = Tmpdistrib.CodTams
+ThisForm.get_descr.Refresh
+ThisForm.Get_Cor.Refresh
+ThisForm.Get_Tam.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', TmpDistrib.CUnis, 'Fators,QtEqualPs,cestos')
+Ok = (LocalUni.Fators <> 0 And CrSigCdOpd.PesoBals # 1 And crSigCdOpd.GrOdns <> 1 And TmpDistrib.Marca)
+Return ( Ok )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value >= TmpDistrib.Qtds And CrSigCdOpd.LibrPqs <> 1
+	MessageBox('Desagregar Parcialmente: Qtde tem que ser menor do que a original',0+16,'')
+	This.Value = TmpDistrib.Qtds
+	Return 0
+EndIf
+
+If (LocalUni.Fators <> 0)
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')
+	ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')
+	
+	If ( ( CrTmpGru.TpMovs <> 1 And LocalUni.Fators <> 1 ) OR ( LocalUni.QtEqualPs = [S] ) ) && And LocalUni.cEstos <> '3'
+		Select TmpDistrib
+		Replace Pesof2s With (TmpDistrib.Qtd2s * LocalUni.Fators) In TmpDistrib
+	Else && Tiago - 17/02/2014 - Mondoro - Se não tem fator puxa o peso médio do cadastro do componente
+		If LocalUni.Fators = 1
+			ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'pesoms')
+			Select TmpDistrib
+			replace Pesof2s with TmpDistrib.Qtd2s * CrTmpPro.Pesoms	
+		Endif
+	Endif
+Else && Tiago - 17/02/2014 - Mondoro - Se não tem fator puxa o peso médio do cadastro do componente
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'pesoms')
+	Select TmpDistrib
+	replace Pesos with TmpDistrib.Qtd2s * CrTmpPro.Pesoms	
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column10.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Local m.retorno
+m.Retorno = .f.
+If Not IsEmpty(TmpDistrib.cunis)
+	lcSql = [Select cEstos From SigCdUni Where cunis = ']+TmpDistrib.cunis+[']
+	ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpUni')
+	If TmpUni.cEstos = '3' And Not IsEmpty(TmpDistrib.cUniPs)
+		m.Retorno = .t.
+	EndIf
+EndIf
+Return (m.retorno And Tmpdistrib.Marca)
+		
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value >= TmpDistrib.Pesos And CrSigCdOpd.LibrPqs <> 1
+	MessageBox('Desagregar Parcialmente:Peso tem que ser menor do que Original',0+16,'')
+	This.Value = TmpDistrib.Pesos
+	Return 0
+EndIf
+
+lcSql = [Select cEstos, Fators, QtEqualPs From SigCdUni Where cunis = ']+TmpDistrib.cuniPs+[']
+ThisForm.Podatamgr.Sqlexecute(lcsql,'LocalUni2')
+
+If (LocalUni2.Fators <> 0) 
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')
+	ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')
+	
+	If ( CrTmpGru.TpMovs <> 1 And LocalUni2.Fators <> 1 ) OR ( LocalUni2.QtEqualPs = [S] ) 
+		Select TmpDistrib
+		Replace Pesof2s With (TmpDistrib.Peso2s * LocalUni2.Fators) In TmpDistrib
+	Endif
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Grade.Column11.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If (crSigCdOpd.GrOdns = 1 Or Not TmpDistrib.Marca) Or (Not IsEmpty(CrSigCdPam.cUnippads) and TmpDistrib.cUniPs = CrSigCdPam.cUnipPads )
+	Return .f.
+EndIf
+
+ThisForm.Balança.Ativa(This)
+If (This.Value <> 0) And (Lastkey() <> 27) And Not ThisForm.Balança.TempoEsgotado
+	This.Valid
+	Return .f.
+EndIf
+If CrSigCdOpd.PesoBals = 1
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')
+	ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')
+	If ( CrTmpGru.TpMovs <> 1 And LocalUni.Fators <> 1 ) OR ( LocalUni.QtEqualPs = [S] ) 
+		Select TmpDistrib
+		Replace Qtd2s With (TmpDistrib.Pesof2s / LocalUni.Fators) In TmpDistrib
+	Else
+		*** Tiago - 16/12/2011 - Vianna - Se o produto controla QTD E PESO tem que calcular a segunda unidade
+		If LocalUni.cEstos = '3' and Not IsEmpty(TmpDistrib.cUniPs) And ( ( CrTmpGru.TpMovs <> 1 And LocalUni2.Fators <> 1 ) OR ( LocalUni2.QtEqualPs = [S] ) )
+			Select TmpDistrib
+			Replace Peso2s With (TmpDistrib.Pesof2s / LocalUni2.Fators) In TmpDistrib
+		Endif
+		***		
+	Endif
+Endif
+Return CrSigCdOpd.PesoBals # 1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value >= TmpDistrib.Pesofs And CrSigCdOpd.LibrPqs <> 1
+	MessageBox('Desagregar Parcialmente:Peso Fabr tem que ser menor do que Original',0+16,'')
+	This.Value = TmpDistrib.Pesofs
+	Return 0
+EndIf
+
+ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', TmpDistrib.CUnis, 'Fators,qtequalps,cestos')
+ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni2', 'CUnis', TmpDistrib.CUniPs, 'Fators,QtEqualPs,cestos')
+
+If (LocalUni.Fators <> 0)
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')
+	ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')
+
+	If ( ( CrTmpGru.TpMovs <> 1 And LocalUni.Fators <> 1 ) OR ( LocalUni.QtEqualPs = [S] ) ) &&And LocalUni.cestos <> '3'
+		Select TmpDistrib
+		Replace Qtd2s With (TmpDistrib.Pesof2s / Iif(Empty(LocalUni.Fators), 1, LocalUni.Fators)) In TmpDistrib
+	Else
+		*** Tiago - 16/12/2011 - Vianna - Se o produto controla QTD E PESO tem que calcular a segunda unidade
+*!*			If (LocalUni2.Fators <> 0) And LocalUni.cEstos = '3' and Not IsEmpty(TmpDistrib.cUniPs) And ( ( CrTmpGru.TpMovs <> 1 And LocalUni2.Fators <> 1 ) OR ( LocalUni2.QtEqualPs = [S] ) )
+		If LocalUni.cEstos = '3' and Not IsEmpty(TmpDistrib.cUniPs) And ( ( CrTmpGru.TpMovs <> 1 And LocalUni2.Fators <> 1 ) OR ( LocalUni2.QtEqualPs = [S] ) )		
+		
+			Select TmpDistrib
+			Replace Peso2s With (TmpDistrib.Pesof2s / Iif(Empty(LocalUni2.Fators), 1, LocalUni2.Fators)) In TmpDistrib
+		Endif
+		***
+	Endif
+EndIf
+IF CrSigCdOpd.PesoBals = 1
+	Keyboard '{DNARROW}'
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.Get_descr
+* Classe: fwget (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.get_Cor
+* Classe: textbox (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.get_Tam
+* Classe: textbox (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMP4.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpDistrib
+Scan
+	Select xNensi
+	Set Order To NopCmat
+	If Seek(Str(TmpDistrib.Nops,10)+TmpDistrib.Cmats)
+		Scan while Nops = TmpDistrib.Nops And Cmats = TmpDistrib.Cmats
+			If Qtds = TmpDistrib.Qtds And Peso2s = TmpDistrib.Pesos And Pesos = TmpDistrib.Pesofs
+				Replace Visivel With .t.,;
+						Rateio  With 3
+				If TmpDistrib.Marca
+					Replace Pesos  With TmpDistrib.Pesofs - TmpDistrib.Pesof2s,;
+							Qtds   With TmpDistrib.Qtds   - TmpDistrib.Qtd2s,;
+							Peso2s with TmpDistrib.Pesos  - TmpDistrib.Peso2s
+				EndIf
+				Exit
+			EndIf
+		EndScan
+	Endif
+Endscan
+
+ThisForm.ParentForm.Enabled = .t.
+
+Select xNensi
+Set Order To Editar
+
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDMP4
+RESERVED3 (ClassInfo): parentform
+pcescolha
+podatamgr
+recnoant
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

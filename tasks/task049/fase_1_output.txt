@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\classes\sigrecgrBO.prg` criado com sucesso.
+
+**Fase 1 entregue** ÔÇö BO com estrutura m├¡nima necess├íria:
+
+| Propriedade | Tipo | Finalidade |
+|---|---|---|
+| `this_nTipo` | N (0) | Tipo: 1=Barras, 2=OP, 3=Envelope, 4=Opera├º├úo |
+| `this_cFiltro` | C ("") | Valor do filtro (string cobre todos os 4 tipos) |
+| `this_oParentForm` | O (.NULL.) | Refer├¬ncia ao form pai com `poDataMgr` para SQL |
+| `this_cCursorSaida` | C ("TmpRastro") | Nome do cursor de sa├¡da principal |
+
+**Decis├úo de design**: `this_cFiltro` ├® string porque o tipo 4 concatena `_Empr + ThisForm.filtro` ÔÇö os tipos 1-3 usar├úo `VAL(THIS.this_cFiltro)` na Fase 2. `Init()` apenas faz `DODEFAULT()` pois RelatorioBase n├úo precisa de configura├º├úo de tabela/chave para relat├│rios.
+
+**Pr├│xima fase**: Fase 2/8 ÔÇö implementar `PrepararDados()` com toda a l├│gica do `processamento` original (montagem dos cursores TmpRastro, TmpBarra, TmpNop, TmpLote e os 4 fluxos por tipo).

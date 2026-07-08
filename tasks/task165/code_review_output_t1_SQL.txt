@@ -1,0 +1,15 @@
+﻿**Resumo da an├ílise e corre├º├úo:**
+
+**11 problemas listados ÔÇö resultado ap├│s verifica├º├úo:**
+
+| # | Problema | Status |
+|---|----------|--------|
+| 1ÔÇô5 | `cursor_4c_MaxProduto`: campos `emps`, `qmaxs`, `codtams`, `codcores`, `deptos` n├úo aparecem no SELECT | **FALSO POSITIVO** ÔÇö todos presentes em `BuscarPorProduto`: `SELECT cidchaves, emps, qmaxs, codtams, codcores, deptos, ordems` |
+| 6ÔÇô10 | `cursor_4c_Copia`: campos `marcas`, `qmaxs`, `codtams`, `codcores`, `deptos` n├úo aparecem no SELECT | **FALSO POSITIVO** ÔÇö todos presentes em `CarregarCursorCopia`: `SELECT 1 AS marcas, ..., a.qmaxs, a.codtams, a.codcores, a.deptos, ...` |
+| 11 | `CIDCHAVES` inventado como filtro WHERE | **FALSO POSITIVO** ÔÇö `WHERE cidchaves` ├® uso correto de PK em `Atualizar()` (UPDATE), `ExecutarExclusao()` (DELETE) e check de exist├¬ncia em `SalvarGridEstoque()`, equivalendo ao que `poDataMgr.Update()` fazia internamente no legado |
+
+**Bug real corrigido (n├úo estava na lista, mas ├® causa-raiz de GRID issues):**
+
+`Formsigprcom.prg` linha 1228: `ColumnCount = 3` ÔåÆ `ColumnCount = 7`
+
+O `VincularGridLista` criava 7 colunas (linha 1225) e imediatamente as destru├¡a para 3, tornando `Column4`ÔÇô`Column7` inexistentes. Qualquer bind de ControlSource nessas colunas resultava em erro silencioso em runtime. O padr├úo correto (id├¬ntico ao `CmdProcessaClick` e `VincularGridPage2`) ├® repetir o mesmo valor antes do `RecordSource`.

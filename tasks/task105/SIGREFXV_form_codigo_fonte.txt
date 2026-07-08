@@ -1,0 +1,1294 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREFXV.SCX
+* Data/Hora: 05/06/2026 14:34:32
+* Total de registros: 28
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFXV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDataSaldo
+  Parent: SIGREFXV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: SayEstoqueEm
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptRfEstoque
+  Parent: SIGREFXV
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdEstoque
+  Parent: SIGREFXV
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREFXV.grdEstoque.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREFXV.grdEstoque.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREFXV.grdEstoque.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREFXV.grdEstoque.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_moeda
+  Parent: SIGREFXV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGREFXV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_FichaT
+  Parent: SIGREFXV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGREFXV
+  Class: label
+  BaseClass: label
+
+Objeto: lbl_grupo
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_grupo
+  Parent: SIGREFXV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_grupo
+  Parent: SIGREFXV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGREFXV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGRus
+  Parent: SIGREFXV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getGGrus
+  Parent: SIGREFXV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Aguarde
+  Parent: SIGREFXV
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGREFXV.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGREFXV.Aguarde
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 125
+  Left = 48
+  Width = 792
+  Height = 447
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 398
+  Width = 761
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Posição de Estoque  por Grupo de Produto/Faixa de Valor"
+  ControlBox = .F.
+  Name = "SIGREFXV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .F.
+  btnReport.Visualiza.Top = 0
+  btnReport.Visualiza.Left = 31
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 0
+  btnReport.Imprime.Left = 106
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 0
+  btnReport.DocExcel.Left = 181
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 0
+  btnReport.Sair.Left = 256
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 148
+  btnReport.Left = 408
+  btnReport.Top = 3
+  btnReport.Width = 348
+  btnReport.TabIndex = 18
+  btnReport.ZOrderSet = 6
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 60
+  REGISTRY1.Left = 168
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.GetDataSaldo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 25
+  Left = 244
+  MaxLength = 10
+  TabIndex = 4
+  Top = 146
+  Visible = .F.
+  Width = 79
+  ZOrderSet = 1
+  Name = "GetDataSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.SayEstoqueEm
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "em"
+  Height = 15
+  Left = 225
+  Top = 150
+  Visible = .F.
+  Width = 16
+  TabIndex = 3
+  ZOrderSet = 2
+  Name = "SayEstoqueEm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Posição :"
+  Left = 112
+  Top = 129
+  Width = 45
+  TabIndex = 1
+  ZOrderSet = 3
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.OptRfEstoque
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 162
+  SpecialEffect = 0
+  Top = 126
+  Width = 143
+  TabIndex = 2
+  ZOrderSet = 4
+  Name = "OptRfEstoque"
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Atual"
+  Option1.Left = 1
+  Option1.Top = 4
+  Option1.Width = 43
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.BackStyle = 0
+  Option2.Caption = "Retroativa"
+  Option2.Left = 66
+  Option2.Top = 4
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.grdEstoque
+------------------------------------------------------------
+  ColumnCount = 2
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 224
+  Left = 360
+  Panel = 1
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 17
+  Top = 141
+  Width = 182
+  GridLineColor = 128,128,128
+  ZOrderSet = 5
+  Name = "grdEstoque"
+  Column1.FontSize = 8
+  Column1.Width = 50
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 100
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Format = "!K"
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.grdEstoque.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.grdEstoque.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.grdEstoque.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Estoque"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.grdEstoque.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  Left = 165
+  MaxLength = 3
+  TabIndex = 6
+  Top = 186
+  Width = 31
+  ZOrderSet = 7
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.lbl_moeda
+------------------------------------------------------------
+  Caption = "Moeda :"
+  Height = 15
+  Left = 116
+  Top = 189
+  Width = 41
+  TabIndex = 5
+  ZOrderSet = 8
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Height = 25
+  Left = 198
+  MaxLength = 15
+  TabIndex = 7
+  Top = 186
+  Width = 117
+  ZOrderSet = 9
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Get_FichaT
+------------------------------------------------------------
+  Format = "K!"
+  Height = 25
+  Left = 165
+  MaxLength = 20
+  TabIndex = 9
+  Top = 213
+  Width = 150
+  ZOrderSet = 10
+  Name = "Get_FichaT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Say1
+------------------------------------------------------------
+  WordWrap = .T.
+  Caption = "Complemento Caracteristica :"
+  Height = 28
+  Left = 82
+  Top = 209
+  Width = 75
+  TabIndex = 8
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Estoques"
+  Height = 15
+  Left = 414
+  Top = 124
+  Width = 53
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 119
+  Top = 270
+  Width = 38
+  TabIndex = 13
+  ZOrderSet = 13
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.get_ds_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  Left = 202
+  MaxLength = 20
+  TabIndex = 15
+  Top = 267
+  Width = 146
+  ZOrderSet = 14
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.get_cd_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 165
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 14
+  ToolTipText = ""
+  Top = 267
+  Width = 35
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 15
+  Name = "get_cd_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Grande Grupo :"
+  Height = 15
+  Left = 81
+  Top = 243
+  Width = 76
+  TabIndex = 10
+  ZOrderSet = 16
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.getDGRus
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  Left = 202
+  MaxLength = 40
+  TabIndex = 12
+  Top = 240
+  Width = 146
+  ZOrderSet = 17
+  Name = "getDGRus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.getGGrus
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 165
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 11
+  ToolTipText = ""
+  Top = 240
+  Width = 35
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 18
+  Name = "getGGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Aguarde
+------------------------------------------------------------
+  Top = 190
+  Left = 261
+  Width = 350
+  Height = 110
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 19
+  BackColor = 255,255,255
+  ZOrderSet = 19
+  Name = "Aguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Aguarde.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 27
+  Left = 12
+  Top = 13
+  Width = 326
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFXV.Aguarde.Label2
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Processando Dados"
+  Height = 27
+  Left = 9
+  Top = 47
+  Width = 332
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFXV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReFxv Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+ThisForm.Aguarde.Visible = .t.
+
+lcMoeda     = ThisForm.get_cd_moeda.Value
+lnNrPeriodo = ThisForm.optRfEstoque.Value
+lcCarac     = Thisform.Get_FichaT.Value
+lnCotMoe    = fBuscarCotacao(lcMoeda,Date(),ThisForm.PodataMgr)
+lcGrupo     = ThisForm.Get_cd_grupo.Value
+lcDgrupo    = ThisForm.Get_ds_grupo.Value
+pDat        = fDtoSQL(ThisForm.GetDataSaldo.Value,'23:59:59')
+lcGde		= ThisForm.getGGrus.Value
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)
+lcNmEmpresa  =  Iif(Eof('crSigCdEmp'), '', Alltrim(crSigCdEmp.Razas))
+
+lcNmTitulo   =  'Estoque Por Faixa de Preço '+Iif(Not Empty(lcGrupo),'Grupo:'+Alltrim(lcGrupo)+'-'+Alltrim(lcDgrupo),'')
+lcNmPeriodo  =  'Em '+Iif(lnNrPeriodo=1,Dtoc(Date()),Dtoc(ThisForm.getDataSaldo.Value)) + '  Moeda:'+lcMoeda
+lcCbEmpresa  = ''
+
+* Cria Arquivo Cabeçalho
+Create Cursor csCabecalho (nm_empresa c(80),nm_titulo c(80),nm_periodo c(80),cb_empresa c(80))
+
+Insert Into csCabecalho (nm_empresa, nm_titulo, nm_periodo,cb_empresa ) ;
+				 Values (lcNmEmpresa, lcNmTitulo, lcNmPeriodo,lcCbEmpresa )
+
+
+Create Cursor CsRelatorio (cTits c(20), cResps c(100), Cgrus c(3), ps n(2), cUnis c(3), Descrs c(20), FaixaIs n(12,2),;
+		FaixaFs n(12,2), Pvens n(12,2), Qtds n(12,3), Pesos n(12,3), TotQtds n(12,2), TotPesos n(12,3), cUnips c(3))
+Index On cResps + Cgrus + Str(FaixaIs,12,2) + Str(Faixafs,12,2) + Str(Ps,2) + Str(pvens,12,2) + cUnis + cUniPs Tag Quebra
+
+lcSql = [Select a.codigos,b.descrs,b.faixafs,b.faixais from SigCdPpc a, SigCdPpi b ]+;
+		[Where a.ngrupos = 1 and a.cidchaves = b.fkchaves ]
+
+If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpProP') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpProp)')
+	ThisForm.Aguarde.Visible = .f.
+	Return(.F.)
+EndIf
+
+Select TmpProp
+Index On Codigos + Str(Faixais,12,2) + Str(FaixaFs,12,2) Tag Codigos
+
+Select CsEstoque
+Scan
+	If Empty(Grupos) And Empty(Emps)
+		Loop
+	Endif
+	Scatter Memvar
+	If lnNrPeriodo = 1
+		lcSql = [Select a.Cpros, 'E' as Opers, Sum(a.Sqtds) as Sqtds, Sum(a.sPesos) as sPesos, ] + ;
+					   [b.cUnis, b.pVens, b.Moevs, b.Cgrus, b.cUniPs ] + ;
+				  [From SigMvEst a, SigCdPro b, SigCdGrp c ] + ;
+				 [Where a.Grupos = '] + m.Grupos + [' And ] + ;
+				 		Iif(Empty(m.Emps), [], [a.Emps = '] + m.Emps + [' And ]) + ;
+				 		[a.Cpros = b.Cpros And ] + ;
+				 		Iif(Empty(lcGrupo), [], [b.Cgrus = '] + lcGrupo + [' And ]) + ;
+				 		[b.CGrus = c.CGrus And ] + ;
+				 		[c.Mercs = '] + lcGde + [' ] + ;
+				 [Group By a.Cpros, b.Cunis, b.pVens, b.Moevs, b.Cgrus, b.cunips]
+				
+	Else
+		lcSql = [Select a.Cpros, a.Opers, Sum(a.Qtds) as Sqtds, Sum(a.Pesos) as sPesos, ] + ;
+					   [b.cUnis, b.pVens, b.Moevs, b.Cgrus, b.cUniPs ] + ;
+				  [From SigMvHst a, SigCdPro b, SigCdGrp c ] + ;
+				 [Where a.Grupos = '] + m.Grupos + [' And ] + ;
+				 	    [a.Datas <= ?pDat And ] + ;
+				 	    Iif(Empty(m.Emps), [], [a.Emps = '] + m.Emps + [' And ]) + ;
+				 	    [a.Cpros = b.Cpros And ] + ;
+				 	    Iif(Empty(lcGrupo), [], [b.Cgrus = '] + lcGrupo + [' And ]) + ;
+				 		[b.CGrus = c.CGrus And ] + ;
+				 		[c.Mercs = '] + lcGde + [' ] + ;
+				[Group By a.Cpros, a.Opers, b.Cunis, b.pVens, b.Moevs, b.cgrus, b.cunips]
+	EndIf
+			
+	If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpEst') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpProp)')
+		ThisForm.Aguarde.Visible = .f.
+		Return(.F.)
+	EndIf
+	Select TmpEst
+	Scan
+		If Sqtds = 0 And sPesos = 0
+			Loop
+		Endif
+		Scatter Memvar
+		lcSql = [Select Resps From SigCdPft Where cTits = ']+Padr(Alltrim(lcCarac),20)+[' And ]+;
+				[Cpros = ']+TmpEst.Cpros+[' ]
+		If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpProft') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpProft)')
+			ThisForm.Aguarde.Visible = .f.
+			Return(.F.)
+		EndIf
+
+		Select TmpProft
+		Go Top
+		lcResp = Strtran(TmpProft.Resps,Chr(13),'')
+		lcResp = Strtran(lcResp,Chr(10),'')
+		lcResp = left(lcResp,100)
+		lcResp = Padr(Iif(isEmpty(lcResp),' ',lcResp),100)
+		
+		lnpVen = m.Pvens		
+		If Moevs <> lcMoeda
+			lnCota = fBuscarCotacao(Moevs,Date(),ThisForm.Podatamgr)
+			lnpVen = Round(m.pVens * lnCota / lnCotMoe,2)
+		EndIf
+		
+		Select TmpProP
+		Locate For Codigos = m.Cgrus And Between(LnPVen,FaixaIs,FaixaFs)
+		If Not Eof()
+			Select CsRelatorio
+			If Not Seek(lcResp+m.Cgrus+Str(TmpProp.Faixais,12,2)+Str(TmpProp.FaixaFs,12,2)+Str(1,2)+Str(LnPVen,12,2)+m.Cunis+m.cUnips)
+				Append Blank
+				Replace cResps  With lcResp,;
+						Cgrus   With m.Cgrus,;
+						cUnis   With m.Cunis,;
+						Descrs  With TmpProP.Descrs,;
+						FaixaIs With TmpProP.FaixaIs,;
+						FaixaFs With TmpProP.FaixaFs,;
+						PVens   With LnpVen,;
+						cUniPs  With m.cUniPs,;
+						ps      with 1,;
+						cTits   With lcCarac
+			EndIf
+			Replace Qtds     With Qtds + (m.Sqtds * Iif(m.Opers=[E],1,-1)),;
+					Pesos    With Pesos + (m.sPesos * Iif(m.Opers=[E],1,-1)),;
+					TotQtds  With Round(Qtds * pVens,2),;
+					TotPesos With Round(Pesos * pVens,2)
+		EndIf
+	EndScan
+EndScan
+
+Select cTits, cResps, Cgrus, 9 as Ps, cUnis, Space(20) as Descrs, FaixaIs, FaixaFs, 0 as  Pvens, cUniPs, ;
+		Sum(Qtds) as Qtds, sum(Pesos) as Pesos, sum(TotQtds) as TotQtds From CsRelatorio ;
+		Group by 1,2,3,4,5,6,7,8,9,10;
+union all ;
+Select cTits, Replicate(Chr(254),100) as cResps, Replicate(Chr(254),3) as Cgrus, 9 as Ps, cUnis, Padr('Total Geral',20) as Descrs, ;
+		00000000.00 as FaixaIs, 000000000.00 as FaixaFs, 0 as  Pvens, cUniPs, ;
+		Sum(Qtds) as Qtds, sum(Pesos) as Pesos, sum(TotQtds) as TotQtds From CsRelatorio ;
+		Group by 1,2,3,4,5,6,7,8,9,10;
+Into Cursor DbTotal
+	
+Select CsRelatorio
+Append From Dbf('DbTotal')
+
+ThisForm.Aguarde.Visible = .f.
+Select CsRelatorio
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor CsEstoque (Emps c(3), Grupos c(10))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+	
+		With ThisForm.GrdEstoque
+			.Recordsource = 'CsEstoque'
+			.Column1.Controlsource = 'CsEstoque.Emps'
+			.Column2.Controlsource = 'CsEstoque.Grupos'
+		EndWith
+		
+		Select CsEstoque
+		Append Blank
+			
+		=DoDefault()
+
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReFxv To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReFxv To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4)
+	If Empty(ThisForm.get_cd_moeda.Value)
+		=MessageBox('Moeda Obrigatória!!!', 16, '')
+		ThisForm.get_cd_moeda.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.getGGrus.Value)
+		=MessageBox('Grande Grupo Obrigatório!!!', 16, 'Atenção!!!')
+		ThisForm.getGGrus.SetFocus
+		Return 0
+	EndIf
+	
+	Select * From CsEstoque Into Cursor ChecDados where grupos+Emps <> ' ' ReadWrite
+	Select ChecDados
+	Index On Grupos + Emps Tag Grupos
+	Scan
+		lcGrupo = Grupos
+		lcEmp   = Emps
+		Skip
+		If Grupos = lcGrupo And Emps = lcEmp
+			MessageBox('Incosistencia na grade de Estoque!!!'+Chr(13)+;
+				lcEmp+'/'+lcGrupo+' Esta duplicado',0,'ERRO')
+			Return 0
+		EndIf
+		If lcEmp = ' ' And Grupos = lcGrupo
+			MessageBox('Incosistencia na grade de Estoque!!!'+Chr(13)+;
+				'Grupo:'+lcGrupo+' Com empresa em branco '+Chr(13)+;
+				'não pode estar relacionado com outra empresa',0,'ERRO')
+			Return 0
+		EndIf
+		Skip -1
+	EndScan
+EndIf
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.GetDataSaldo
+* Classe: textbox (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.OptRfEstoque.Value = 2)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.OptRfEstoque
+* Classe: fwoption (Base: optiongroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With ThisForm
+	.GetDataSaldo.Value = IIf(This.Value = 1,{},IIf(Empty(.GetDataSaldo.Value),Date(),.GetDataSaldo.Value))
+	.GetDataSaldo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+With Thisform
+	If This.Value = 1
+		.SayEstoqueEm.Visible = .F.
+		.GetDataSaldo.Visible = .F.
+	Else
+		.SayEstoqueEm.Visible = .T.
+		.GetDataSaldo.Visible = .T.
+	EndIf
+	.GetDataSaldo.Refresh
+EndWith
+		
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.grdEstoque.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.grdEstoque.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'C', This.Value, This, '')
+Else
+	This.Value = ''
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select CsEstoque
+Locate For Emps = ' ' and Grupos = ' '
+If Eof()
+	Append Blank
+EndIf
+Keyboard '{DNARROW}'
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_moeda.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.Get_FichaT
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrCpP', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Título Características')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Codigos
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.get_ds_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(Thisform.Get_Cd_Grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With ThisForm
+	If Empty(This.Value)
+		.Get_Cd_Grupo.Value = ''
+		.Get_Cd_Grupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('DGrus','','Descrição')
+			m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+			m.loLista.Show()
+		EndIf
+		If LastKey() <> 27 And Used('CrGrupos')
+			.Get_Cd_Grupo.Value = Evaluate('CrGrupos.cgrus')
+			.Get_Ds_Grupo.Value = Evaluate('CrGrupos.dgrus')
+		Else
+			.Get_Cd_Grupo.Value = ''
+			.Get_Ds_Grupo.Value = ''
+		EndIf
+	EndIf
+	.Get_Cd_Grupo.Refresh
+	.Get_Ds_Grupo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.get_cd_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With ThisForm
+	If Empty(This.Value)
+		.Get_Ds_Grupo.Value = ''
+		.Get_Ds_Grupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+			m.loLista.mAddColuna('DGrus','','Descrição')
+			m.loLista.Show()
+		EndIf
+		If LastKey() <> 27 And Used('CrGrupos')
+			.Get_Cd_Grupo.Value = Evaluate('CrGrupos.cgrus')
+			.Get_Ds_Grupo.Value = Evaluate('CrGrupos.dgrus')
+		Else
+			.Get_Cd_Grupo.Value = ''
+			.Get_Ds_Grupo.Value = ''
+		EndIf
+	EndIf
+	.Get_Cd_Grupo.Refresh
+	.Get_Ds_Grupo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.getDGRus
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.getGGrus.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getGGrus.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)
+	ThisForm.getDGRus.Value = Iif(Lastkey()=27, '', crListaRemota.Descs)
+	Use In crListaRemota
+Else
+	ThisForm.getGGrus.Value = ''
+	ThisForm.getDGRus.Value = ''
+EndIf
+ThisForm.getGGrus.Refresh
+ThisForm.getDGRus.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFXV.getGGrus
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getGGrus.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)
+	ThisForm.getDGRus.Value = Iif(Lastkey()=27, '', crListaRemota.Descs)
+	Use In crListaRemota
+Else
+	ThisForm.getGGrus.Value = ''
+	ThisForm.getDGRus.Value = ''
+EndIf
+ThisForm.getGGrus.Refresh
+ThisForm.getDGRus.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFXV
+RESERVED3 (ClassInfo): naltura
+nfaltura
+nsaltura
+ntopbot
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

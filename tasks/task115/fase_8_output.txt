@@ -1,0 +1,21 @@
+﻿Tudo em ordem. A Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado:**
+
+**Formsigrehtc.prg** ÔÇö 9 m├®todos inseridos antes do `Destroy()`:
+- `BtnBuscarClick()` ÔÇö alias CRUD: chama Visualizar (preview)
+- `BtnEncerrarClick()` ÔÇö alias CRUD: fecha o form
+- `BtnSalvarClick()` ÔÇö alias CRUD: chama Imprimir
+- `BtnCancelarClick()` ÔÇö alias CRUD: limpa filtros e foca primeiro campo
+- `FormParaBO()` ÔÇö delega para `FormParaRelatorio()`
+- `BOParaForm()` ÔÇö restaura todos os 11 campos do form a partir do BO
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita os 11 controles de filtro
+- `CarregarLista()` ÔÇö retorna `.T.` (REPORT n├úo tem lista CRUD)
+- `AjustarBotoesPorModo()` ÔÇö mant├®m `cmg_4c_Botoes` sempre habilitado
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 142/143 OF popRelatorios` (separador + "Cheques Emitidos")
+- `ON SELECTION BAR 143 OF popRelatorios DO AbrirFormsigrehtc`
+- `PROCEDURE AbrirFormsigrehtc()` no padr├úo can├┤nico (`VARTYPE = "O"`, `Show()` sem par├ómetro, `MostrarErro` no catch)
+
+**config.prg** ÔÇö sem altera├º├úo necess├íria: carrega `*BO.prg` de `app\classes\` e `Form*.prg` de `forms\relatorios\` automaticamente.

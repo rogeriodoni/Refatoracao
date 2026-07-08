@@ -1,0 +1,688 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdDpt.SCX
+* Data/Hora: 30/03/26 09:40:26
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDPT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getcodigos
+  Parent: SIGCDDPT.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescricaos
+  Parent: SIGCDDPT.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getDiretores
+  Parent: SIGCDDPT.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label4
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Optiongroup1
+  Parent: SIGCDDPT.pagina.dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label5
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Optiongroup2
+  Parent: SIGCDDPT.pagina.dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label6
+  Parent: SIGCDDPT.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: optAutos
+  Parent: SIGCDDPT.pagina.dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Departamentos"
+  Name = "SIGCDDPT"
+  pagina.ErasePage = .T.
+  pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  pagina.lista.cntSombra.Width = 1100
+  pagina.lista.cntSombra.Height = 80
+  pagina.lista.cntSombra.Name = "cntSombra"
+  pagina.lista.grade.FontName = "Tahoma"
+  pagina.lista.grade.Height = 470
+  pagina.lista.grade.Left = 30
+  pagina.lista.grade.Top = 107
+  pagina.lista.grade.Width = 941
+  pagina.lista.grade.ForeColor = 90,90,90
+  pagina.lista.grade.Name = "grade"
+  pagina.lista.grupo_op.AutoSize = .T.
+  pagina.lista.grupo_op.inserir.Top = 5
+  pagina.lista.grupo_op.inserir.Left = 5
+  pagina.lista.grupo_op.inserir.Height = 75
+  pagina.lista.grupo_op.inserir.Width = 75
+  pagina.lista.grupo_op.inserir.Name = "inserir"
+  pagina.lista.grupo_op.consultar.Top = 5
+  pagina.lista.grupo_op.consultar.Left = 80
+  pagina.lista.grupo_op.consultar.Height = 75
+  pagina.lista.grupo_op.consultar.Width = 75
+  pagina.lista.grupo_op.consultar.Name = "consultar"
+  pagina.lista.grupo_op.alterar.Top = 5
+  pagina.lista.grupo_op.alterar.Left = 155
+  pagina.lista.grupo_op.alterar.Height = 75
+  pagina.lista.grupo_op.alterar.Width = 75
+  pagina.lista.grupo_op.alterar.Name = "alterar"
+  pagina.lista.grupo_op.excluir.Top = 5
+  pagina.lista.grupo_op.excluir.Left = 230
+  pagina.lista.grupo_op.excluir.Height = 75
+  pagina.lista.grupo_op.excluir.Width = 75
+  pagina.lista.grupo_op.excluir.Name = "excluir"
+  pagina.lista.grupo_op.procurar.Top = 5
+  pagina.lista.grupo_op.procurar.Left = 305
+  pagina.lista.grupo_op.procurar.Height = 75
+  pagina.lista.grupo_op.procurar.Width = 75
+  pagina.lista.grupo_op.procurar.Name = "procurar"
+  pagina.lista.grupo_op.Left = 544
+  pagina.lista.grupo_op.Top = 0
+  pagina.lista.grupo_op.Name = "grupo_op"
+  pagina.lista.grupo_saida.sair.Top = 5
+  pagina.lista.grupo_saida.sair.Left = 5
+  pagina.lista.grupo_saida.sair.Height = 75
+  pagina.lista.grupo_saida.sair.Width = 75
+  pagina.lista.grupo_saida.sair.Name = "sair"
+  pagina.lista.grupo_saida.Height = 85
+  pagina.lista.grupo_saida.Left = 919
+  pagina.lista.grupo_saida.Top = 0
+  pagina.lista.grupo_saida.Width = 85
+  pagina.lista.grupo_saida.Name = "grupo_saida"
+  pagina.lista.cntFiltros.Name = "cntFiltros"
+  pagina.lista.Picture = ..\framework\imagens\fundo_cad_1003.jpg
+  pagina.lista.Name = "lista"
+  pagina.dados.grupo_salva.salva.Top = 5
+  pagina.dados.grupo_salva.salva.Left = 5
+  pagina.dados.grupo_salva.salva.Name = "salva"
+  pagina.dados.grupo_salva.cancelar.Top = 5
+  pagina.dados.grupo_salva.cancelar.Left = 80
+  pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  pagina.dados.grupo_salva.Height = 85
+  pagina.dados.grupo_salva.Left = 834
+  pagina.dados.grupo_salva.Top = 4
+  pagina.dados.grupo_salva.Width = 160
+  pagina.dados.grupo_salva.TabIndex = 11
+  pagina.dados.grupo_salva.Name = "grupo_salva"
+  pagina.dados.Picture = ..\framework\imagens\fundo_cad_1003.jpg
+  pagina.dados.Name = "dados"
+  pagina.ActivePage = 1
+  pagina.Width = 1003
+  pagina.Name = "pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 377
+  Top = 158
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição :"
+  Height = 15
+  Left = 364
+  Top = 181
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.getcodigos
+------------------------------------------------------------
+  ControlSource = "crSigCdDpt.codigos"
+  Format = "K!"
+  Left = 421
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 152
+  Width = 80
+  BorderColor = 100,100,100
+  Name = "getcodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.getDescricaos
+------------------------------------------------------------
+  ControlSource = "crSigCdDpt.Descricaos"
+  Format = "K!"
+  Height = 23
+  Left = 421
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 177
+  Width = 290
+  BorderColor = 100,100,100
+  Name = "getDescricaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Diretor :"
+  Height = 15
+  Left = 377
+  Top = 206
+  Width = 42
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.getDiretores
+------------------------------------------------------------
+  ControlSource = "crSigCdDpt.Diretors"
+  Format = "K!"
+  Height = 23
+  Left = 421
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 202
+  Width = 80
+  BorderColor = 100,100,100
+  Name = "getDiretores"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Obriga Subclas. Encerramento :"
+  Height = 15
+  Left = 265
+  Top = 231
+  Width = 154
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdDpt.nChkSubs"
+  Height = 24
+  Left = 416
+  Top = 228
+  Width = 109
+  TabIndex = 8
+  Name = "Optiongroup1"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 3
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 17
+  Option2.Left = 61
+  Option2.Top = 3
+  Option2.Width = 61
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo :"
+  Height = 15
+  Left = 390
+  Top = 249
+  Width = 29
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Optiongroup2
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdDpt.nChkTipos"
+  Height = 24
+  Left = 416
+  Top = 246
+  Width = 109
+  TabIndex = 10
+  Name = "Optiongroup2"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 3
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 17
+  Option2.Left = 61
+  Option2.Top = 3
+  Option2.Width = 61
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Automático:"
+  Height = 15
+  Left = 359
+  Top = 267
+  Width = 60
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDPT.pagina.dados.optAutos
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdDpt.autos"
+  Height = 24
+  Left = 416
+  Top = 264
+  Width = 109
+  TabIndex = 10
+  Name = "optAutos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 3
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 61
+  Option2.Top = 3
+  Option2.Width = 61
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDPT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+With ThisForm
+	.LockScreen = .T.
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDatamgr
+			.AddCursor('SigCdDpt','codigos','crSigCdDpt','',ThisForm.pagina.lista.grade)
+			.pfSqlTabela(1).pColuna('codigos',	   '', '', 'Código',	   080, .T.)
+			.pfSqlTabela(1).pColuna('Descricaos', '', '', 'Departamento', 290, .T.)
+			.pfSqlTabela(1).pColuna('Diretors',   '', '', 'Diretor',	   080, .T.)
+		EndWith
+
+		=DoDefault()
+
+		.LockScreen = .F.
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+ThisForm.poDataMgr.LocateCursor('crSigCdDpt','codigos',ThisForm.Pagina.Dados.getcodigos.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE pagina.lista.grupo_op.Click
+Lparameters lnOpcao
+
+lnOpcao = Iif(Type("lnOpcao")=='N',lnOpcao,This.Value)
+
+If !dodefault( lnOpcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case && Ativa o Foco do mouse, de acordo com o Tipo de Escolha
+    Case INLIST(ThisForm.pcEscolha,'INSERIR')
+		ThisForm.Pagina.Dados.OptAutos.Value=2
+	Case INLIST(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+		ThisForm.Pagina.Dados.getcodigos.SetFocus
+
+	Case ThisForm.pcEscolha=='ALTERAR'
+		ThisForm.Pagina.Dados.GETDescricaos.SetFocus
+        ThisForm.Pagina.Dados.OptAutos.Value=IIF(EMPTY(ThisForm.Pagina.Dados.OptAutos.Value),2,ThisForm.Pagina.Dados.OptAutos.Value)
+	Case INLIST(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')
+		This.Parent.Parent.dados.grupo_salva.salva.SetFocus 
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.salva.Click
+*Faz Validacao dos Campos, nas Seguinte Operacoes
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	If Empty(crSigCdDpt.codigos)
+		Messagebox( 'O Código precisa ser Informado...', 48, '' )
+		ThisForm.Pagina.Dados.getcodigos.SetFocus
+		Return
+	EndIf
+	If Empty(crSigCdDpt.descricaos)
+		Messagebox( 'A Descrição precisa ser Informada...', 48, '' )
+		ThisForm.Pagina.Dados.getDescricaos.SetFocus
+		Return
+	EndIf
+
+	*Verifica se o registro já existe
+	If ThisForm.pcEscolha = 'INSERIR' And ThisForm.poDataMgr.ChkRegister('SigCdDpt','codigos',ThisForm.Pagina.Dados.getcodigos.Value)
+		Messagebox( 'Código do Departamento já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.getcodigos.SetFocus
+		Return
+	ENDIF
+	
+	*-- Select para ver se já existe registro automático cadastrado paa uso na tela de atendimento
+	If ThisForm.Pagina.Dados.OptAutos.Value = 1	
+		lcQuery = [Select * from sigcddpt Where autos = 1 And Codigos <> '] + ThisForm.Pagina.Dados.getcodigos.Value + [']
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSel]) < 1)
+		   =MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalSel)])
+		   Return .f.
+		Endif
+	    *- Verifica se já existe resgistro automático - Inclusão
+		If Reccount('LocalSel')>0
+			=MessageBox( 'Já existe registro com código automático!', 48, 'Aviso' )
+			ThisForm.Pagina.Dados.OptAutos.option2.SetFocus()
+			Return .f.
+		Endif
+	Endif
+Else
+	If ThisForm.pcEscolha = 'EXCLUIR'
+		If ThisForm.poDataMgr.ChkRegister('SigCdUsu','deptos',ThisForm.Pagina.Dados.getcodigos.Value)
+			Messagebox( 'Existem Usuários que utilizam esse Departamento!', 48, 'Exclusão não permetida' )
+			ThisForm.Pagina.Dados.Grupo_Salva.Cancelar.SetFocus
+			Return
+		Endif
+	EndIf
+Endif
+
+= DoDefault()
+
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+= DoDefault()
+If ThisForm.plCancelar
+	ThisForm.LockScreen = .t.
+	ThisForm.mAtivapagina1
+	ThisForm.LockScreen = .f.
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.Activate
+------------------------------------------------------------
+PROCEDURE pagina.dados.Activate
+DODEFAULT()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDPT.pagina.dados.getcodigos
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDPT.pagina.dados.getDescricaos
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDPT.pagina.dados.getDiretores
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;
+						   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .t.,.f.,[Not cAtivos='N'])
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Usuarios', '', 'Diretor')
+		loLista.mAddColuna('NComps',   '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, '', crListaRemota.Usuarios)
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

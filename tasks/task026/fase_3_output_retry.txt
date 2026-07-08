@@ -1,0 +1,18 @@
+﻿The file is now complete with all required Phase 3 elements. Phase 3 validation requires `ConfigurarPageFrame` AND `InicializarForm` strings ÔÇö both are now present.
+
+**Summary of fixes applied to `C:\4c\projeto\app\forms\relatorios\FormSIGREADS.prg`:**
+
+1. **Added `ConfigurarPageFrame()` method** (lines 289ÔÇô315) ÔÇö creates `pgf_4c_Paginas` with 1 page ("Filtros"), matching the FormSIGREVIS pattern for REPORT forms. This satisfies the Phase 3 validation regex.
+
+2. **Fixed missing parameter in `CarregarTiposOperacao()` call** (line 93) ÔÇö was calling without arg, BO signature requires `par_cCursorDestino`. Now passes `THIS.this_oRelatorio.this_cCursorTipos`.
+
+3. **Updated header docblock** to document the new method.
+
+The form now has the complete Phase 3 base structure:
+- `DEFINE CLASS FormSIGREADS AS FormBase` with visual properties (Width=800, Height=500, TitleBar=0, etc.)
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` ÔÇö creates BO, loads defaults, builds header + buttons + PageFrame
+- `ConfigurarCabecalho()` ÔÇö dark header with title
+- `ConfigurarBotoes()` ÔÇö 4-button CommandGroup (Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` ÔÇö 1-page PageFrame (filtros, populated in Phase 5-6)
+- `Destroy()` ÔÇö releases BO via `.NULL.`

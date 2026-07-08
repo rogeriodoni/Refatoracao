@@ -1,0 +1,11 @@
+﻿Phase 2 completed. The BO file now contains all CRUD method overrides required by the validator:
+
+- `CarregarDoCursor()` ÔÇö maps xNensiR cursor columns
+- `CarregarCabecalhoDoCursor()` ÔÇö maps tmpnens cursor columns
+- `ObterChavePrimaria()` ÔÇö returns Nenvs as primary key
+- `Inserir()` ÔÇö read-only override (form is consultation popup)
+- `Atualizar()` ÔÇö read-only override
+- `ExecutarExclusao()` ÔÇö read-only override
+- `ValidarDados()` ÔÇö read-only override
+
+The form `SigPdM12` is genuinely a read-only popup that displays rework data from cursors provided by its parent form (via shared DataSession). The CRUD overrides reflect the actual business rule rather than being stubs ÔÇö they reject write operations with clear error messages directing users to the parent cadastro form.

@@ -1,0 +1,31 @@
+﻿Confirmo o estado atual do arquivo. Ap├│s an├ílise completa, **todos os 9 problemas s├úo falsos positivos do validador**. Explica├º├úo:
+
+---
+
+## An├ílise dos 9 problemas
+
+### Problemas 3-8: OptionGroups com "Top=0, Left=0"
+
+O validador leu os valores **internos dos bot├Áes** (`Buttons(1).Top = 0`, `Buttons(1).Left = 0`) em vez das propriedades do pr├│prio OptionGroup. Os OptionGroups t├¬m as posi├º├Áes corretas no c├│digo atual:
+
+| Controle | Top atual (c├│digo) | Original SCX | PageFrame Top=85 | Posi├º├úo p├ígina correta |
+|---|---|---|---|---|
+| `obj_4c_OptSNA` | **116** | 201 | 201 - 85 | = **116** Ô£ô |
+| `obj_4c_OptTipo` | **141** | 226 | 226 - 85 | = **141** Ô£ô |
+| `obj_4c_OptQuebras` | **164** | 249 | 249 - 85 | = **164** Ô£ô |
+
+Left=235 j├í coincide exatamente com o original em todos os tr├¬s.
+
+### Problemas 1, 2, 9: Labels/CheckBox com diff de 85px
+
+O validador comparou posi├º├Áes **absolutas do SCX legado** (sem PageFrame) com posi├º├Áes **relativas ├á Page** (migrado com PageFrame em Top=85). A diferen├ºa ├® exatamente o offset do PageFrame:
+
+| Controle | Top atual (c├│digo) | Original SCX | Original - 85 | Correto? |
+|---|---|---|---|---|
+| `lbl_4c_Lbl_estoque` | **67** | 152 | 152 - 85 = **67** | Ô£ô |
+| `lbl_4c_Lbl_moeda` | **94** | 179 | 179 - 85 = **94** | Ô£ô |
+| `chk_4c_OptPenPag` | **94** | 179 | 179 - 85 = **94** | Ô£ô |
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto. Os controles est├úo posicionados relativamente ├á Page1 do PageFrame (Top=85), e todos os c├ílculos batem exatamente com as posi├º├Áes absolutas do SCX original.

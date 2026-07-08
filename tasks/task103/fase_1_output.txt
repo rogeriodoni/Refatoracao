@@ -1,0 +1,15 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\SigReFtpBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+
+- **Heran├ºa**: `RelatorioBase` (correto para relat├│rios)
+- **Propriedades declaradas**:
+  - `this_cTabela` / `this_cCampoChave` ÔÇö cursor fonte (`csDetalhes`, chave `Ordems`)
+  - `this_cCodProd` / `this_cNomProd` ÔÇö par├ómetros de entrada do produto (equivalente a `pcProd`/`pdProd` do legado)
+  - `this_nTipoRelatorio` ÔÇö 1=Reduzida (`SigReFtp.frx`), 2=Expandida (`SigReFt1.frx`)
+  - `this_cCursorSel` ÔÇö nome do cursor de sele├º├úo (equivalente ao `csSelekTon` do legado)
+  - `this_cArqRelReduzido` / `this_cArqRelExpandido` ÔÇö paths dos FRX
+  - `this_cMensagemErro` ÔÇö mensagens de erro
+- **Init()**: configura os paths dos dois FRX usando `gc_4c_CaminhoReports`
+
+**Pr├│xima fase (Fase 2)**: completar o BO com `PrepararDados()` (cria `cursor_4c_SelSigReFtp` a partir de `csDetalhes`), `Processamento()` (filtra `csDetalhes` pelas marca├º├Áes), `SelecionarTodos()` e `DeselecionarTodos()`.

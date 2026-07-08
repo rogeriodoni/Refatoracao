@@ -1,0 +1,13 @@
+﻿Arquivo `cfoBO.prg` criado com sucesso. **Fase 1/8 conclu├¡da.**
+
+**Resumo do que foi criado** ÔÇö `C:\4c\projeto\app\classes\cfoBO.prg`:
+
+- **68 propriedades declaradas** cobrindo todas as colunas da tabela `SIGCDCFO` (schema.sql linhas 1815-1889)
+- Organizadas em 7 grupos sem├ónticos: Dados Principais, ICMS, IPI, Especifica├º├Áes NF-e, Integra├º├úo Cont├íbil, Integra├º├úo Fiscal, Outros
+- Tipos corretos: `this_c*` para campos CHAR, `this_n*` para campos NUMERIC
+- **Init()** configurando:
+  - `this_cTabela = "SIGCDCFO"` 
+  - `this_cCampoChave = "codigos"`
+- **ObterChavePrimaria()** retornando `this_cCodigos` (para auditoria)
+
+**Nota importante:** O `analise.json` tinha `tabela: "SigCdIcm"` incorretamente ÔÇö a tabela principal ├® `SIGCDCFO` (confirmado via schema.sql e ControlSources do c├│digo legado). `SigCdIcm` ├® apenas a tabela de lookup para o campo `sittribs`.

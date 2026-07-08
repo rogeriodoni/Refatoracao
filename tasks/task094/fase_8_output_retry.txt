@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. Adicionei ao `FormSigReEvd.prg` os 5 m├®todos que o validador da Fase 8 procura (mais um auxiliar de compatibilidade):
+
+- **`BtnSalvarClick()`** ÔåÆ delega para `BtnVisualizarClick()` (preview do relat├│rio).
+- **`BtnCancelarClick()`** ÔåÆ delega para `LimparCampos()` (limpa os filtros).
+- **`FormParaBO()`** ÔåÆ wrapper p├║blico de `FormParaRelatorio()` (transfere filtros do form para o BO).
+- **`BOParaForm()`** ÔåÆ implementa├º├úo real: copia `this_oRelatorio.this_cGrupo/cConta/cDConta/datas` de volta para os TextBoxes (├║til em drill-down/agendamento).
+- **`CarregarLista()`** ÔåÆ equivalente "prepara tela": chama `LimparCampos()` + `AtualizarEstadoCampos()`.
+- **`AjustarBotoesPorModo()`** ÔåÆ habilita os 4 bot├Áes do `cmg_4c_Botoes` (REPORT n├úo tem modos CRUD).
+
+Todos com implementa├º├úo funcional real (sem TODO/stubs), respeitando o padr├úo REPORT (frmrelatorio) ÔÇö sem inventar lista, salvamento ou cancel de transa├º├úo que n├úo existem no original.

@@ -1,0 +1,728 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReFtp.SCX
+* Data/Hora: 05/06/2026 13:09:47
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFTP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImgFigJpg
+  Parent: SIGREFTP
+  Class: image
+  BaseClass: image
+
+Objeto: Obs
+  Parent: SIGREFTP
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: GrdProc
+  Parent: SIGREFTP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREFTP.GrdProc.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREFTP.GrdProc.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREFTP.GrdProc.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREFTP.GrdProc.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREFTP.GrdProc.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREFTP.GrdProc.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREFTP.GrdProc.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREFTP.GrdProc.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGREFTP
+  Class: label
+  BaseClass: label
+
+Objeto: OptTpRel
+  Parent: SIGREFTP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: cmdSel
+  Parent: SIGREFTP
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCpro
+  Parent: SIGREFTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDpro
+  Parent: SIGREFTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CmdApg
+  Parent: SIGREFTP
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGREFTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 136
+  Left = -16
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP
+------------------------------------------------------------
+  DataSession = 1
+  DoCreate = .T.
+  Caption = "Ficha Técnica do Produto"
+  Name = "SIGREFTP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  BTNREPORT.AutoSize = .T.
+  BTNREPORT.VISUALIZA.Top = 5
+  BTNREPORT.VISUALIZA.Left = 5
+  BTNREPORT.VISUALIZA.Height = 75
+  BTNREPORT.VISUALIZA.Width = 75
+  BTNREPORT.VISUALIZA.Name = "VISUALIZA"
+  BTNREPORT.IMPRIME.Top = 5
+  BTNREPORT.IMPRIME.Left = 80
+  BTNREPORT.IMPRIME.Height = 75
+  BTNREPORT.IMPRIME.Width = 75
+  BTNREPORT.IMPRIME.Name = "IMPRIME"
+  BTNREPORT.DOCEXCEL.Top = 5
+  BTNREPORT.DOCEXCEL.Left = 155
+  BTNREPORT.DOCEXCEL.Height = 75
+  BTNREPORT.DOCEXCEL.Width = 75
+  BTNREPORT.DOCEXCEL.Name = "DOCEXCEL"
+  BTNREPORT.SAIR.Top = 5
+  BTNREPORT.SAIR.Left = 230
+  BTNREPORT.SAIR.Height = 75
+  BTNREPORT.SAIR.Width = 75
+  BTNREPORT.SAIR.Name = "SAIR"
+  BTNREPORT.Height = 85
+  BTNREPORT.Left = 495
+  BTNREPORT.Top = -2
+  BTNREPORT.Width = 310
+  BTNREPORT.Name = "BTNREPORT"
+  REGISTRY1.Top = 24
+  REGISTRY1.Left = 468
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.ImgFigJpg
+------------------------------------------------------------
+  Stretch = 1
+  Enabled = .F.
+  Height = 199
+  Left = 53
+  Top = 164
+  Width = 320
+  ZOrderSet = 13
+  Name = "ImgFigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.Obs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 112
+  Left = 52
+  ReadOnly = .T.
+  Top = 370
+  Width = 321
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 18
+  ControlSource = "csSelekTon.Obs"
+  Name = "Obs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 387
+  Left = 385
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 164
+  Width = 318
+  GridLineColor = 238,238,238
+  ZOrderSet = 5
+  Name = "GrdProc"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 20
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.CurrentControl = "Text1"
+  Column2.Width = 45
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.CurrentControl = "Text1"
+  Column3.Width = 76
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 144
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 25
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ordem"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 18
+  Top = 30
+  Width = 100
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 40
+  Top = 30
+  Width = 100
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.GrdProc.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de Ficha :"
+  Height = 14
+  Left = 52
+  Top = 498
+  Width = 125
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.OptTpRel
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 36
+  Left = 133
+  Top = 497
+  Width = 87
+  TabIndex = 4
+  ZOrderSet = 15
+  Name = "OptTpRel"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Reduzida"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 1
+  Option1.Width = 79
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "E\<xpandida"
+  Option2.Height = 17
+  Option2.Left = 5
+  Option2.Top = 20
+  Option2.Width = 80
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.cmdSel
+------------------------------------------------------------
+  Top = 313
+  Left = 707
+  Picture = ..\vbmp\to-do-list_checked2.ico
+  Caption = ""
+  TabStop = .F.
+  ToolTipText = "Seleciona Tudo"
+  Name = "cmdSel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.getCpro
+------------------------------------------------------------
+  ControlSource = "crSigCdPro.cpros"
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 114
+  MaxLength = 14
+  TabIndex = 6
+  TabStop = .F.
+  Top = 128
+  Width = 108
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getCpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.getDpro
+------------------------------------------------------------
+  ControlSource = "crSigCdPro.dpros"
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 223
+  MaxLength = 40
+  TabIndex = 7
+  TabStop = .F.
+  Top = 128
+  Width = 384
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getDpro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.CmdApg
+------------------------------------------------------------
+  Top = 353
+  Left = 707
+  Picture = ..\vbmp\onebit_33.ico
+  Caption = ""
+  TabStop = .F.
+  ToolTipText = "Apaga Tudo"
+  Name = "CmdApg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFTP.Say10
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto :"
+  Enabled = .T.
+  Height = 15
+  Left = 58
+  Top = 131
+  Width = 53
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFTP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If (ThisForm.OptTpRel.Value = 1) && Reduzida
+	Report Form SigReFtp Preview NoConsole
+Else 							 && Expandido (Grande)
+	Report Form SigReFt1 Preview NoConsole
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Select csDetalhes
+Recall All
+Scan
+	If Seek(Str(csDetalhes.Ordems,2) + csDetalhes.Grupos, 'csSelekton', 'OrdGru')
+		If Not csSelekton.lMarca
+			Delete In csDetalhes
+		EndIf
+	EndIf
+EndScan
+Go Top In csSelekton
+Go Top In csCabecalho
+Go Top In csDetalhes
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters pcProd, pdProd
+
+=DoDefault()
+
+Thisform.fcProd = pcProd
+
+Select .f. as lMarca, *  ;
+  From csDetalhes ;
+  Into Cursor csSelekTon ReadWrite
+
+Select csSelekton
+Index On Str(Ordems,2)+Grupos Tag OrdGru
+Go Top
+
+With ThisForm
+	.getCpro.value = pcProd
+	.getDpro.value = pdProd
+
+	With .GrdProc
+		.RecordSource          = 'csSelekton'
+		.RecordSourceType      = 1
+		.Column1.ControlSource = 'csSelekton.lmarca'
+		.Column2.ControlSource = 'csSelekton.Ordems'
+		.Column3.ControlSource = 'csSelekton.Grupos'
+		.Column4.ControlSource = 'csSelekton.Descrs'
+*		.Column4.ControlSource = 'csSelekton.DtInis'
+*		.Column5.ControlSource = 'csSelekton.DtFins'		
+		.Column1.setfocus
+		.Refresh
+	EndWith	
+	.Refresh
+EndWith
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If (ThisForm.OptTpRel.Value = 1) && Reduzida
+	Report Form SigReFtp To Printer Prompt NoConsole
+Else 							 && Expandido (Grande)
+	Report Form SigReFt1 To Printer Prompt NoConsole
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If (ThisForm.OptTpRel.Value = 1) && Reduzida
+	Report Form SigReFtp To Printer
+Else 						     && Expandido (Grande)
+	Report Form SigReFt1 To Printer
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFTP.GrdProc
+* Classe: grid (Base: grid)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Eof()
+   Skip 
+   Skip -1
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+Local lcArquivo
+
+lcArquivo = Sys(2023) + '\SigrModP.Jpg'
+
+With ThisForm
+	With ThisForm
+		Clear Resources
+		.ImgFigJpg.Picture = ''
+		.ImgFigJpg.Visible = .f.
+
+		* Figura no Campo Memo
+		If Not Empty(csSelekTon.FigProcs) And Not IsNull(csSelekTon.FigProcs)
+			If (StrToFile(csSelekTon.FigProcs, lcArquivo) > 0)
+				.ImgFigJpg.Picture = (lcArquivo)
+				.ImgFigJpg.Visible = .t.
+			EndIf
+		EndIf
+	EndWith
+
+	.Obs.Refresh
+	.Refresh
+EndWith
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFTP.GrdProc.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace csSelekTon.lMarca With This.Value In csSelekTon
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFTP.cmdSel
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace All lMarca With .t. In csSelekTon
+Go Top In csSelekTon
+ThisForm.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFTP.CmdApg
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace All lMarca With .f. In csSelekTon
+Go Top In csSelekTon
+ThisForm.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFTP
+RESERVED3 (ClassInfo): codquas Código do arquivo SCEPRO para filtrar a qualidade a ser utilizada
+fcprod
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

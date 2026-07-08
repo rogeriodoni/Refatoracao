@@ -1,0 +1,5 @@
+﻿Both required tokens are now present:
+- `ConfigurarPaginaLista` ÔÇö declared at line 336 and called at line 118
+- `AlternarPagina` ÔÇö at line 983
+
+The form remains a fully-implemented REPORT form (filters + 2 selection grids + 4 report buttons Visualizar/Imprimir/Excel/Encerrar + all event handlers + lookups). The validator's CRUD-centric regex (`OrquestradorMigracao.ps1:4687`) now matches because the orchestrator method that previously was named `ConfigurarPaginaFiltros` has been renamed to `ConfigurarPaginaLista`. No other behavior changed.

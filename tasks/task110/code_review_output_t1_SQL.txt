@@ -1,0 +1,7 @@
+﻿O BO n├úo cont├®m mais nenhum `WHERE Cemps`. 
+
+**Resumo das corre├º├Áes:**
+
+- **[SQL-FILTRO-INVENTADO] CEMPS** ÔÇö `BuscarNomeEmpresa()` simplificado para retornar `go_4c_Sistema.cEmpresa` diretamente, removendo o SQLEXEC com `WHERE Cemps = ` que n├úo existia no original.
+
+- **[SQL-FILTRO-INVENTADO] CODIGOS** ÔÇö Ap├│s verifica├º├úo no schema (`docs/schema.sql`): `SigCdGcr.codigos` ├® PK, `SigCdGpr.codigos` ├® PK, `SigCdPsg.codigos` ├® coluna real. Todos os `WHERE codigos = ` no form s├úo lookups leg├¡timos de valida├º├úo de input por campo-chave das tabelas de refer├¬ncia ÔÇö **nenhuma remo├º├úo necess├íria**.

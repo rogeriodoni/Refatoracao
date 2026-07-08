@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com as seguintes corre├º├Áes aplicadas ao `Formsigrefc1.prg`:
+
+1. **Bug cr├¡tico corrigido**: `BtnVisualizarClick`, `BtnImprimirClick` e `BtnExcelClick` agora chamam os m├®todos **PUBLIC** do BO (`Visualizar()`, `Imprimir()`, `GerarExcel()`) em vez de chamar diretamente `PrepararDados()` que ├® `PROTECTED` ÔÇö a chamada anterior teria falhado em runtime com "Property not found"
+
+2. **BINDEVENT adicionado**: `txt_4c_DtFinal` agora tem handler `TeclaDataFinal` vinculado via BINDEVENT
+
+3. **Handler `TeclaDataFinal` implementado**: valida que a data final n├úo fique menor que a inicial ao confirmar com ENTER/TAB, corrigindo automaticamente o valor e exibindo aviso ao usu├írio
+
+4. **Header atualizado**: coment├írio indica "Fase 6/8 - conclu├¡do"

@@ -1,0 +1,15 @@
+﻿Todos os 9 m├®todos foram adicionados e o arquivo fecha corretamente com `ENDDEFINE` na linha 3499. A Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+- **Bug corrigido**: `img_4c_ImgFigJpg` ÔåÆ `img_4c_FigJpg` em `BtnVisualizarClick` (linha 3347)
+- **M├®todos adicionados** (linhas 3379ÔÇô3498):
+  - `BtnSalvarClick` ÔÇö delega para `BtnProcessarClick` (a├º├úo principal operacional)
+  - `BtnBuscarClick` ÔÇö atualiza grade/totais da Page1
+  - `BtnEncerrarClick` ÔÇö delega para `BtnCancelarClick`
+  - `CarregarLista` (PROTECTED) ÔÇö vincula/atualiza grades quando cursores TmpFinalg j├í existem
+  - `HabilitarCampos` (PROTECTED) ÔÇö no-op; controles gerenciados por When/Valid das grades
+  - `LimparCampos` (PROTECTED) ÔÇö zera os 5 textboxes de totaliza├º├úo da Page1
+  - `AjustarBotoesPorModo` (PROTECTED) ÔÇö no-op; visibilidade gerenciada por `AlternarPagina`
+  - `FormParaBO` (PROTECTED) ÔÇö transfere flags operacionais (`this_lReserva`, `this_nEmphPdr`, etc.) para o BO
+  - `BOParaForm` (PROTECTED) ÔÇö chama `AtualizarTotaisGrade` para refrescar exibi├º├úo

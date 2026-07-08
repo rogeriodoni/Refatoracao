@@ -1,0 +1,14 @@
+﻿Arquivo `C:\4c\projeto\app\forms\relatorios\FormSigReDdp.prg` criado com sucesso. Aqui o resumo do que foi entregue na Fase 3/8:
+
+**Estrutura completa inclu├¡da:**
+- `DEFINE CLASS FormSigReDdp AS FormBase` com propriedades visuais exatas do original (`Width=800, Height=300, DataSession=2, TitleBar=0, ControlBox=.F.`)
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia `SigReDdpBO`, chama ConfigurarCabecalho/Botoes/PageFrame/PaginaLista, vincula BINDEVENTs dos 4 bot├Áes, chama `LimparCampos()`, seta `Visible=.T.`
+- `ConfigurarCabecalho()` ÔÇö container escuro RGB(100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), geometria exata do framework
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 1 p├ígina "Filtros" (padr├úo REPORT, n├úo CRUD)
+- `ConfigurarPaginaLista()` ÔÇö 2 TextBoxes (`txt_4c_Demonstrativo` + `txt_4c_DtFinal`) e 2 Labels, posi├º├Áes relativas ao PageFrame
+- `LimparCampos()`, `FormParaRelatorio()`, `ValidarFiltros()`
+- `AbrirBuscaDemonstrativo()` + `TxtDemonstrativoKeyPress()` ÔÇö lookup F4/Enter/Tab para `SigPrDmo.Nome`
+- `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnExcelClick()`, `BtnSairClick()`
+- `Destroy()` ÔÇö libera o BO com `= .NULL.` (n├úo `.Release()`)

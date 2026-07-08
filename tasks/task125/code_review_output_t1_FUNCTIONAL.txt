@@ -1,0 +1,10 @@
+﻿Arquivo salvo. Resumo das corre├º├Áes aplicadas:
+
+**OPTIONGROUP-LEFT (11 ocorr├¬ncias corrigidas):**
+- Todos os 11 OptionGroups (`optg_4c_TipoRel` com 8 buttons, `optg_4c_TipoAnal` com 3, e 9 grupos com 2 buttons) agora t├¬m `.FontName = "Tahoma"`, `.FontSize = 8`, `.FontBold = .F.`, `.AutoSize = .T.` e `.Themes = .F.` em **cada** Button, eliminando o risco de sobreposi├º├úo e renderiza├º├úo inconsistente.
+
+**GRID-WITH (1 ocorr├¬ncia corrigida):**
+- `ColumnCount = 3` e `RecordSource = "CsOperacaos"` movidos para **fora** do bloco `WITH`, usando refer├¬ncia expl├¡cita `loc_oPagina.grd_4c_Operacaos.ColumnCount = 3`. As propriedades `.Column1.*`, `.Column2.*`, `.Column3.*` tamb├®m acessadas via refer├¬ncia expl├¡cita ap├│s o `ENDWITH`, eliminando o erro "Unknown member COLUMN1".
+
+**LAYOUT-POSITION (4 ocorr├¬ncias ÔÇö falsos positivos):**
+- `optg_4c_TipoLeitura.Top = 181` e `.Left = 131` j├í est├úo corretos (266ÔêÆ85=181, Left bate com original). O checker comparou posi├º├úo absoluta SCX vs. Page1-relativa sem considerar o offset do PageFrame. `cmd_4c_Apaga.Top = 235` (=320ÔêÆ85) e `cmd_4c_SelTudo.Top = 194` (=279ÔêÆ85) igualmente corretos. Nenhuma altera├º├úo necess├íria.

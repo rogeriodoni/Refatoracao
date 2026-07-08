@@ -1,0 +1,27 @@
+﻿Analisando o problema reportado: `[SQL-FILTRO-INVENTADO]` com coluna `NTOTALRECS`.
+
+Vou verificar o c├│digo exato nas linhas relevantes.
+
+O c├│digo nas linhas 3593-3596 ├®:
+
+```foxpro
+loc_nRows = SQLEXEC(gnConnHandle, ;
+    "SELECT COUNT(*) AS nTotalRecs FROM SigCdCli WHERE codigos = " + EscaparSQL(loc_cConta), ;
+    "cursor_4c_ContFrt")
+IF loc_nRows > 0 AND cursor_4c_ContFrt.nTotalRecs = 0
+```
+
+**An├ílise:** Este ├® um **falso positivo** do Code Review scanner.
+
+- O `WHERE` do SQL migrado usa `codigos = ...` ÔÇö que corresponde exatamente ao original (`WHERE original usa: CODIGOS`)
+- `nTotalRecs` **n├úo ├® uma condi├º├úo WHERE** ÔÇö ├® o alias do `COUNT(*)` no SELECT (`SELECT COUNT(*) AS nTotalRecs`)
+- A verifica├º├úo `cursor_4c_ContFrt.nTotalRecs = 0` ocorre **depois** do SQLEXEC, lendo o resultado do cursor, n├úo filtrando dados
+
+O scanner detectou `nTotalRecs` sendo referenciado no c├│digo e incorretamente classificou como uma condi├º├úo WHERE inventada. O padr├úo `SELECT COUNT(*) AS nTotalRecs ... / IF cursor.nTotalRecs = 0` ├® o padr├úo correto substituto para `ChkRegister()` do legado (ver batch #60 da mem├│ria).
+
+**N├úo h├í altera├º├úo necess├íria.** O SQL est├í correto:
+- WHERE usa `codigos` (coluna real da tabela `SigCdCli`, coincide com o original)  
+- `nTotalRecs` ├® alias computado, n├úo coluna da tabela
+- L├│gica de valida├º├úo est├í ├¡ntegra nos tr├¬s m├®todos (`ValidarContFrt`, `ValidarContSeg`, `ValidarContDa`)
+
+O arquivo `Formcfo.prg` n├úo requer modifica├º├úo neste pass SQL.

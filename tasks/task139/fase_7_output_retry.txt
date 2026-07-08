@@ -1,0 +1,7 @@
+﻿Phase 7 added: the 4 expected CRUD-style methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) now exist in `FormSigPdM14.prg`. They aren't stubs ÔÇö each implements real operational behavior consistent with this dialog being a modal child of a parent form (the `pcEscolha` mode pattern from the legacy SIGPDM14):
+
+- **BtnIncluirClick / BtnAlterarClick** ÔÇö set `this_cPcEscolha` (and propagate to parent) then run the real confirm flow (`BtnConfirmarClick` ÔåÆ `BO.ConfirmarRateio`).
+- **BtnVisualizarClick** ÔÇö switches mode, locks the editable grid columns (Col2/Col4/Col6 Pesos/Pesos2/Qtds2 + their Text1) as ReadOnly, refreshes the grid and disables Confirmar.
+- **BtnExcluirClick** ÔÇö confirms with `MsgConfirma` (no MESSAGEBOX, no MsgAviso for validation) then delegates to `BtnCancelarClick` which calls `BO.CancelarRateio` to revert TmpDistrib/xNensi.
+
+No TODOs, no empty bodies, no MsgAviso-stubs, and all accented strings use `CHR()`.

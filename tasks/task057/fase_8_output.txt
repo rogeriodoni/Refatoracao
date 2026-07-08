@@ -1,0 +1,14 @@
+﻿O `config.prg` usa `ADIR()` para carregar automaticamente todos os `Form*.prg` de `relatorios\` e todos os `*BO.prg` de `classes\` ÔÇö nenhuma altera├º├úo necess├íria.
+
+**Fase 8 conclu├¡da.** Resumo do que foi feito:
+
+- **FormSIGRECND.prg** ÔÇö j├í estava completo das fases anteriores com todos os m├®todos necess├írios: `BtnEncerrarClick()`, `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnExcelClick()`, `FormParaRelatorio()`, `LimparCampos()`, e todos os handlers de teclado e validadores.
+
+- **menu.prg** ÔÇö integrado agora:
+  - `DEFINE BAR 56` (separador) e `DEFINE BAR 57` (prompt "Posi├º├úo de Lan├ºamentos N├úo Conciliados")
+  - `ON SELECTION BAR 57 OF popRelatorios DO AbrirFormSIGRECND`
+  - `PROCEDURE AbrirFormSIGRECND()` ao final do arquivo
+
+- **config.prg** ÔÇö sem altera├º├Áes; o `ADIR()` carrega `FormSIGRECND.prg` e `SIGRECNDBO.prg` automaticamente.
+
+Para testar: deletar `.fxp` e abrir via menu Relat├│rios ÔåÆ "Posi├º├úo de Lan├ºamentos N├úo Conciliados".

@@ -1,0 +1,13 @@
+﻿`C:\4c\projeto\app\classes\sigreeunBO.prg` criado com 12 propriedades mapeando todos os filtros do formul├írio original:
+
+- `this_cCdGrestoque` / `this_cDsGrestoque` ÔÇö c├│digo e descri├º├úo do grupo de estoque
+- `this_cCdEstoque` / `this_cDsEstoque` ÔÇö c├│digo e descri├º├úo do estoque
+- `this_cGrupo` / `this_cGrupoDesc` ÔÇö c├│digo e descri├º├úo da unidade (`cunis`/`dunis` de `SigCdUni`)
+- `this_dData` ÔÇö data de refer├¬ncia da posi├º├úo
+- `this_cMoeda` / `this_cMoedaDesc` ÔÇö c├│digo e descri├º├úo da moeda (`cmoes`/`dmoes` de `SigCdMoe`)
+- `this_dDtCotacao` ÔÇö data da cota├º├úo
+- `this_nDadosCotacao` ÔÇö imprimir cota├º├Áes? (1=Sim/2=N├úo, mapeado de `opt_dados_cotacao`)
+- `this_nOpcFator` ÔÇö fator de venda? (1=Sim/2=N├úo, mapeado de `Opc_fator`)
+- `this_cCursorDados` ÔÇö nome do cursor de dados do relat├│rio
+
+O `Init()` configura `this_cTabela = "SigCdPro"` (tabela principal da query) e `this_cCampoChave = "cpros"`, depois chama `DODEFAULT()` da RelatorioBase.

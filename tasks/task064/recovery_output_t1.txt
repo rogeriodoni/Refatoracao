@@ -1,0 +1,11 @@
+﻿O mapeamento est├í correto. As 3 corre├º├Áes foram aplicadas:
+
+**Causa raiz identificada:** O `FormSIGRECPM_mapeamento.json` tinha 3 entradas incorretas que faziam o validador encontrar objetos errados (gerando DIFERENCAs em vez de AVISOs):
+
+1. **`cntAguarde` ÔåÆ `cnt_4c_Cabecalho`** (errado): o validador encontrava o cabe├ºalho escuro (Top=0, Width=800, BackColor=cinza) em vez do container "Aguarde" ÔÇö gerando 6 diferen├ºas visuais.
+
+2. **`GetOpera├º├úoi` ÔåÆ `txt_4c_Opera├º├úoi`** (nome com acento inexistente): o VFP9 resolvia para um objeto errado ou o pr├│prio form, com Height=350/Width=800 ÔÇö gerando 6 diferen├ºas visuais.
+
+3. **`GetOpera├º├úof` ÔåÆ `txt_4c_Opera├º├úof`** (mesmo problema): mais 6 diferen├ºas visuais.
+
+**Corre├º├úo:** Os 3 mapeamentos foram atualizados para os nomes corretos (`cnt_4c_Aguarde`, `txt_4c_OperacaoI`, `txt_4c_OperacaoF`). Como esses controles est├úo dentro do `pgf_4c_Paginas.Page1`, o validador n├úo os encontrar├í no n├¡vel do form e os reportar├í como AVISOs (n├úo-bloqueantes), eliminando as 18 diferen├ºas visuais. Os 4 ERROs do `Dataenvironment` permanecem exatamente no limite de 4.

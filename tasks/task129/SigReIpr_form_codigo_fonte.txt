@@ -1,0 +1,825 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReIpr.SCX
+* Data/Hora: 06/06/2026 17:38:31
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIPR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREIPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Option
+  Parent: SIGREIPR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OpOrdem
+  Parent: SIGREIPR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkEnderecos
+  Parent: SIGREIPR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkTelefones
+  Parent: SIGREIPR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: ChkClassif
+  Parent: SIGREIPR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkRepres
+  Parent: SIGREIPR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkDtCom
+  Parent: SIGREIPR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say3
+  Parent: SIGREIPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGREIPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_desc
+  Parent: SIGREIPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 192
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 292
+  Width = 596
+  DoCreate = .T.
+  Caption = "Relatório de Mailing"
+  Name = "SIGREIPR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 81
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 157
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 233
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 287
+  btnReport.Top = -2
+  btnReport.Width = 313
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 122
+  REGISTRY1.Left = 528
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  Caption = "Ordem da Impressão : "
+  Height = 15
+  Left = 31
+  Top = 190
+  Width = 112
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Option
+------------------------------------------------------------
+  ButtonCount = 6
+  BackStyle = 0
+  Value = 2
+  Height = 58
+  Left = 154
+  SpecialEffect = 1
+  Top = 190
+  Width = 283
+  TabIndex = 11
+  BorderColor = 90,90,90
+  Name = "Option"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Alfabética"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 21
+  Option1.Width = 66
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "CEP"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Data de Nascimento"
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Top = 40
+  Option3.Width = 114
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Data de Casamento"
+  Option4.Height = 15
+  Option4.Left = 143
+  Option4.Top = 4
+  Option4.Width = 113
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Nascimento Cônjuge"
+  Option5.Height = 15
+  Option5.Left = 143
+  Option5.Top = 21
+  Option5.Width = 116
+  Option5.AutoSize = .T.
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+  Option6.FontName = "Tahoma"
+  Option6.FontSize = 8
+  Option6.BackStyle = 0
+  Option6.Caption = "Data Comemorativa"
+  Option6.Height = 15
+  Option6.Left = 143
+  Option6.Top = 40
+  Option6.Width = 113
+  Option6.AutoSize = .T.
+  Option6.ForeColor = 90,90,90
+  Option6.Name = "Option6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.OpOrdem
+------------------------------------------------------------
+  ButtonCount = 2
+  OLEDropEffects = 2
+  BackStyle = 0
+  Value = 2
+  Height = 58
+  Left = 445
+  SpecialEffect = 1
+  Top = 190
+  Width = 102
+  TabIndex = 12
+  BorderColor = 90,90,90
+  Name = "OpOrdem"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Descendente"
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 10
+  Option1.Width = 91
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "OpcDesc"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Ascendente"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 5
+  Option2.Top = 32
+  Option2.Width = 91
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "OpcAsc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.chkEnderecos
+------------------------------------------------------------
+  Top = 148
+  Left = 154
+  Height = 15
+  Width = 68
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Endereços"
+  Value = .T.
+  SpecialEffect = 1
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "chkEnderecos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.chkTelefones
+------------------------------------------------------------
+  Top = 148
+  Left = 261
+  Height = 15
+  Width = 65
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Telefones"
+  Value = .T.
+  SpecialEffect = 1
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "chkTelefones"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.ChkClassif
+------------------------------------------------------------
+  Top = 168
+  Left = 154
+  Height = 15
+  Width = 79
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Classificação"
+  Value = .T.
+  SpecialEffect = 1
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "ChkClassif"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.chkRepres
+------------------------------------------------------------
+  Top = 168
+  Left = 261
+  Height = 15
+  Width = 90
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Representante"
+  Value = .T.
+  SpecialEffect = 1
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "chkRepres"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.chkDtCom
+------------------------------------------------------------
+  Top = 148
+  Left = 365
+  Height = 15
+  Width = 123
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Datas Comemorativas"
+  Value = .T.
+  SpecialEffect = 1
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "chkDtCom"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  Caption = "Incluir Campos : "
+  Height = 15
+  Left = 61
+  Top = 148
+  Width = 82
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  Caption = "Seleção : "
+  Left = 94
+  Top = 123
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Get_codigo
+------------------------------------------------------------
+  Height = 23
+  Left = 152
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 120
+  Width = 77
+  BorderColor = 36,84,155
+  ZOrderSet = 13
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPR.Get_desc
+------------------------------------------------------------
+  Height = 23
+  Left = 231
+  MaxLength = 30
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 120
+  Width = 316
+  BorderColor = 36,84,155
+  ZOrderSet = 14
+  Name = "Get_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIPR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE retiracharespecial
+------------------------------------------------------------
+PROCEDURE retiracharespecial
+Lparameters Conteudo
+Local sRetorno
+
+sRetorno = Strtran(Conteudo,'á','a')
+sRetorno = Strtran(Conteudo,'ã','a')
+sRetorno = Strtran(Conteudo,'à','a')
+sRetorno = Strtran(Conteudo,'â','a')
+sRetorno = Strtran(Conteudo,'ä','a')
+sRetorno = Strtran(Conteudo,'è','e')
+sRetorno = Strtran(Conteudo,'é','e')
+sRetorno = Strtran(Conteudo,'ê','e')
+sRetorno = Strtran(Conteudo,'ë','e')
+sRetorno = Strtran(Conteudo,'í','i')
+sRetorno = Strtran(Conteudo,'ï','i')
+sRetorno = Strtran(Conteudo,'ì','i')
+sRetorno = Strtran(Conteudo,'î','i')
+sRetorno = Strtran(Conteudo,'õ','o')
+sRetorno = Strtran(Conteudo,'ö','o')
+sRetorno = Strtran(Conteudo,'ó','o')
+sRetorno = Strtran(Conteudo,'ò','o')
+sRetorno = Strtran(Conteudo,'ô','o')
+sRetorno = Strtran(Conteudo,'ü','u')
+sRetorno = Strtran(Conteudo,'ú','u')
+sRetorno = Strtran(Conteudo,'ù','u')
+sRetorno = Strtran(Conteudo,'û','u')
+sRetorno = Strtran(Conteudo,'ç','c')
+sRetorno = Strtran(Conteudo,'Ç','C')
+sRetorno = Strtran(Conteudo,'ñ','n')
+sRetorno = Strtran(Conteudo,'Ñ','N')
+sRetorno = Strtran(Conteudo,'-',' ')
+sRetorno = Strtran(Conteudo,Chr(39),'')
+
+sRetorno = Strtran(Conteudo,'Á','A')
+sRetorno = Strtran(Conteudo,'Ä','A')
+sRetorno = Strtran(Conteudo,'Ã','A')
+sRetorno = Strtran(Conteudo,'Â','A')
+sRetorno = Strtran(Conteudo,'À','A')
+sRetorno = Strtran(Conteudo,'È','E')
+sRetorno = Strtran(Conteudo,'É','E')
+sRetorno = Strtran(Conteudo,'Ê','E')
+sRetorno = Strtran(Conteudo,'Ë','E')
+sRetorno = Strtran(Conteudo,'Í','I')
+sRetorno = Strtran(Conteudo,'Ï','I')
+sRetorno = Strtran(Conteudo,'Ì','I')
+sRetorno = Strtran(Conteudo,'Î','I')
+sRetorno = Strtran(Conteudo,'Õ','O')
+sRetorno = Strtran(Conteudo,'Ö','O')
+sRetorno = Strtran(Conteudo,'Ó','O')
+sRetorno = Strtran(Conteudo,'Ò','O')
+sRetorno = Strtran(Conteudo,'Ô','O')
+sRetorno = Strtran(Conteudo,'Ü','U')
+sRetorno = Strtran(Conteudo,'Ú','U')
+sRetorno = Strtran(Conteudo,'Ù','U')
+sRetorno = Strtran(Conteudo,'Û','U')
+
+Return sRetorno
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigMlda Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local llImpTel, llImpEnd
+
+Private pCod
+
+pCod = Thisform.Get_Codigo.Value
+
+ThisForm.poDataMgr.Requery('crSigMlCab')
+
+llImpTel = ThisForm.chkTelefones.Value
+llImpEnd = ThisForm.chkEnderecos.Value
+llImpCom = ThisForm.chkDtCom.Value
+llImpClf = ThisForm.ChkClassif.Value
+llImpRep = ThisForm.chkRepres.Value
+lcTitulo = 'Relação Para Mala Direta'
+lcSubTit = pCod + ' - '+ThisForm.Get_desc.Value
+
+Create Cursor CsCabecalho (Titulo c(100), SubTitulo c(100))
+Insert Into Cscabecalho (Titulo, Subtitulo ) VALUES (lcTitulo,lcSubTit)
+
+Set Talk Window
+Set Talk On
+
+Select IClis, RClis, Profiss, Nvl(Nascs, Ctod('')) as Nascs, ;
+	   Nvl(UltComps, Ctod('')) as UltComps, Sexos, Tel1s, Tel2s, ;
+	   Endes, Nums, Compls, Bairs, Cidas, Ceps, Estas, Quebras as Quebras, ;
+	   llImpTel as ImpTel, llImpEnd as ImpEnd, llImpCom as ImpCom, llImpClf as ImpClf, llImpRep as ImpRep, ;
+	   DDDs, DesDtCom, Nvl(Iif(DatDtCom=Ctod('01/01/1900'),Null,DatDtCom), Ctod('')) as DatDtCom, cpfs, TelDtCom, ;
+	   Nvl(DtCasas, Ctod('')) as DtCasas, Nvl(DtnCons, Ctod('')) as DtnCons, eMails, Codigos, ;
+	   Space(10) as CodReps ;
+From crSigMlCab ;
+Order By Quebras, Ceps ;
+Into Cursor Relacao readwrite
+
+If llImpRep
+	Select Relacao 
+	Scan
+		lcQuery = [Select ContaVens ] + ;
+			    	[From SigCdCli ] + ;
+			       [Where IClis = '] + Relacao.IClis + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCdCli]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCdCli)])
+			Return .f.
+		EndIf
+		Select LocalCdCli
+		Go Top In LocalCdCli
+		If Not Eof([LocalCdCli])
+			Replace CodReps With LocalCdCli.ContaVens In Relacao
+		EndIf
+	EndScan
+EndIf
+
+Set Talk Off
+
+Select Relacao
+Do Case 
+	Case (ThisForm.Option.Value=1) && Alfabética
+		Index On Quebras + RClis + IClis Tag RClis
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + RClis + IClis DESCENDING Tag RClis
+		Endif
+
+	Case (ThisForm.Option.Value=2) && Cep
+		Index On Quebras + Ceps + IClis Tag Ceps
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + Ceps + IClis DESCENDING Tag Ceps
+		Endif
+
+	Case (ThisForm.Option.Value=3) && Data de Nascimento
+		Index On Quebras + Substr(Dtos(Nascs),5) + IClis Tag Nascs
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + Substr(Dtos(Nascs),5) + IClis DESCENDING Tag Nascs
+		Endif
+
+	Case (ThisForm.Option.Value=4) && Data de Casamento
+		Index On Quebras + Substr(Dtos(dtcasas),5) + IClis Tag Nascs
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + Substr(Dtos(dtcasas),5) + IClis DESCENDING Tag Nascs
+		Endif
+
+	Case (ThisForm.Option.Value=5) && Data de Nasc. Conjuge
+		Index On Quebras + Substr(Dtos(dtncons),5) + IClis Tag Nascs
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + Substr(Dtos(dtncons),5) + IClis DESCENDING Tag Nascs
+		Endif
+
+	Case (ThisForm.Option.Value=6) && Data Comemorativas
+		Index On Quebras + Substr(Dtos(DatDtCom),5) + IClis Tag Nascs
+		If ThisForm.Opordem.value = 1
+			Index On Quebras + Substr(Dtos(DatDtcom),5) + IClis DESCENDING Tag Nascs
+		Endif
+EndCase
+Go Top In Relacao
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters _Acesso
+
+Private pCod
+
+=fConfigGeral()
+
+=DoDefault()
+
+pCod = Space(10)
+
+lcQryMala = 'Select a.IClis, a.RClis, a.Profiss, a.Nascs, a.UltComps , a.Sexos , a.Tel1s , a.Tel2s , ' + ;
+				   'a.Endes , a.Nums , a.Compls , a.Bairs , a.Cidas , a.Ceps , a.Estas , a.Quebras , ' + ;
+				   'a.cIdChaves , b.IClis , b.DDDs, a.DesDtCom, a.DatDtCom, a.cpfs, a.TelDtCom, a.DtCasas, '+;
+				   'a.DtnCons, b.eMails, b.Codigos  ' + ;
+			  'From SigMlCab a, SigCdCli b ' + ;
+			  'Where a.Codigos = ?pCod And b.IClis = a.IClis ' + ;
+			  'Order By a.IClis, a.RClis, a.Profiss, a.Nascs, a.UltComps , a.Sexos , a.Tel1s , a.Tel2s , ' + ;
+			  	'a.Endes , a.Nums , a.Compls , a.Bairs , a.Cidas , a.Ceps , a.Estas , a.Quebras , a.cIdChaves , ' + ;
+			  	'b.IClis , b.DDDs '
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDataMgr
+		.AddCursor('SigMlCab', 'cIdChaves', 'crSigMlCab', '', '', lcQryMala)
+	EndWith
+EndWith
+
+* Checando se Existe Algum Usuário Cadastrado Para Liberar o Acesso Ao Formulário
+lcQuery = [Select pkChaves ] + ;
+			[From SigCdAcU ] + ;
+		   [Where Programas  = '] + Padr('SIGREIPR',  15) + [' And ] + ;
+		   		 [Parametros = '] + Padr('LIBERAIMP',10) + [' ] + ;
+		   [Order By pkChaves]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdAcU') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdAcU)')
+	Return .f.
+EndIf
+Go Top In crSigCdAcU
+If Not Eof('crSigCdAcU')
+	Do Form SigSnSen With [], [SIGREIPR], [LIBERAIMP], [USUARIO] To loObj
+
+	If (Type('loObj')='O') And Not Empty(loObj.Usuario)
+		If loObj.Acesso
+			=fGravarLog('T', 'MALADIRETA', Usuar, 'Foi Liberada a Impressão ' + ;
+						  'de Relação de Etiquetas Pelo Usuário ' + loObj.Usuario)
+		Else
+			=fGravarLog('T', 'MALADIRETA', Usuar, 'Houve Uma Tentativa de Liberação ' + ;
+						  'de Impressão de Relação Etiquetas Pelo Usuário ' + loObj.Usuario)
+			Return .f.
+		EndIf
+	EndIf
+
+	Release loObj
+EndIf
+* Fim da Checagem de Usuário Cadastrado Para Liberar o Acesso Ao Formulário
+
+ThisForm.poDatamgr.SqlExecute([Select TpInstalas From SigCdPam],'crSigCdPam')
+ThisForm.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigMlda To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigMlda To Printer
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPR.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPR.Get_desc
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_codigo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIPR
+RESERVED3 (ClassInfo): podatamgr
+*retiracharespecial 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

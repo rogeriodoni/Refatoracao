@@ -1,0 +1,11 @@
+﻿Phase 2 is complete. The `SigPdM13BO.prg` now contains all required CRUD methods at 338 lines:
+
+- **ObterChavePrimaria()** (line 42) ÔÇô retorna `this_nNenvs`
+- **CarregarDoCursor()** (line 49) ÔÇô mapeia EmpDnPs/Cmats/Qtds/TpOps
+- **Inserir()** (line 202) ÔÇô INSERT em SigCdNei + `RegistrarAuditoria("INSERIR")`
+- **Atualizar()** (line 240) ÔÇô UPDATE com WHERE composto Nenvs+EmpDnPs+Cmats + `RegistrarAuditoria("ALTERAR")`
+- **ExecutarExclusao()** (line 276) ÔÇô DELETE PROTECTED + `RegistrarAuditoria("EXCLUIR")`
+- **RegistrarAuditoria()** (line 306) ÔÇô INSERT em LogAuditoria com chave `this_nNenvs`
+- **FormatarDatetimeSQL()** ÔÇô helper para CONVERT SQL Server
+
+Usa `FormatarNumeroSQL()` e `EscaparSQL()` conforme regras VFP cr├¡ticas, todos os m├®todos em TRY/CATCH com flag `loc_lSucesso` (sem RETURN dentro do TRY), e MsgErro nos catches conforme regra #9.

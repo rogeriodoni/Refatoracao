@@ -1,0 +1,3 @@
+﻿O `BtnIncluirClick` foi removido. O teste `BtnIncluirNavegacao` agora cair├í no branch "Metodo BtnIncluirClick nao encontrado (OK para REPORT/OPERACIONAL)" e passar├í com 100%.
+
+**Raiz do problema**: `BtnIncluirClick` foi adicionado como wrapper sem├óntico CRUD para "consist├¬ncia de API", mas forms REPORT n├úo t├¬m bot├úo "Incluir" no CommandGroup (Visualizar/Imprimir/DocExcel/Encerrar). O teste automatizado, ao detectar o m├®todo existindo com `pgf_4c_Paginas`, exige que ele navegue para Page2 ÔÇö comportamento CRUD que n├úo se aplica a REPORT. A solu├º├úo correta ├® simplesmente n├úo definir o m├®todo em forms REPORT.

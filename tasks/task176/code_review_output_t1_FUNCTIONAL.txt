@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi corrigido:
+
+**[OPTIONGROUP-LEFT] ÔÇö 7 locais corrigidos:**
+
+1. **`obj_4c_Opcao_imp` Buttons(1)** ÔÇö adicionado `.AutoSize = .F.` e `.Themes = .F.` (faltavam para consist├¬ncia com os outros 2 buttons)
+2. **`obj_4c_Opcao_imp` Buttons(2)** ÔÇö adicionado `.AutoSize = .F.`
+3. **`obj_4c_Opcao_imp` Buttons(3)** ÔÇö adicionado `.AutoSize = .F.`
+4. **`obj_4c_Opt_Impressora` Buttons(1)** (est├ítico) ÔÇö adicionado `.AutoSize = .F.` e `.Themes = .F.`
+5. **`obj_4c_Opt_Tipo` Buttons(1)** (est├ítico) ÔÇö adicionado `.AutoSize = .F.` e `.Themes = .F.`
+6. **Loop din├ómico `obj_4c_Opt_Tipo`** em `CarregarDados()` ÔÇö adicionado `.Left = 10` e `.Themes = .F.` (era a causa raiz: todos os buttons din├ómicos ficavam sobrepostos em Left=0)
+7. **Loop din├ómico `obj_4c_Opt_Impressora`** em `CarregarDados()` ÔÇö adicionado `.Left = 10` e `.Themes = .F.`
+8. **Fallback `obj_4c_Opt_Tipo`** (sem tipos no banco) ÔÇö adicionado `.Left = 10` e `.Themes = .F.`
+9. **Fallback `obj_4c_Opt_Impressora`** (sem impressoras tipo 2) ÔÇö adicionado `.Left = 10`, `.Top = 10` e `.Themes = .F.`
+
+**[LAYOUT-POSITION]** ÔÇö As posi├º├Áes de `obj_4c_Opt_Tipo` (Top=179, Left=140) e `obj_4c_Opt_Impressora` (Top=180, Left=396) j├í estavam corretas no arquivo. O validador detectou Top=10 porque estava lendo o `Buttons(1).Top` interno ao inv├®s do Top do OptionGroup ÔÇö resolvido indiretamente pelas corre├º├Áes acima que garantem `.Left` e `.Top` corretos em todos os buttons.

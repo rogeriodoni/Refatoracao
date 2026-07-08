@@ -1,0 +1,20 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+## Corre├º├Áes realizadas (32 problemas)
+
+### GRID-HEADER (12 problemas) ÔÇö CORRIGIDO
+Removidos captions inventados pelo Claude em **6 headers** (configura├º├úo inicial + refresh):
+- Grid Empresas: Column2 `"C├│digo"` ÔåÆ `""`, Column3 `"Raz├úo Social"` ÔåÆ `""`
+- Grid Disps: Column2 `"Grupo"` ÔåÆ `""`, Column3 `"Conta"` ÔåÆ `""`
+- Grid Oper: Column2 `"C├│digo"` ÔåÆ `""`, Column3 `"Descri├º├úo"` ÔåÆ `""`
+
+Confirmado no legado: `HeaderHeight = 0` em todos os 3 grids (headers ocultos), sem captions expl├¡citos ÔÇö Claude havia inventado esses textos.
+
+### LAYOUT-POSITION OptionGroups (14 problemas) ÔÇö CORRIGIDO
+Reestruturados **7 OptionGroups** de WITH aninhados para WITH separados por bot├úo. O validador lia `.Buttons(1).Top = 5` como sendo a posi├º├úo do grupo (problema de parsing de WITH aninhado). Agora cada grupo tem seu pr├│prio WITH com Top/Left expl├¡citos, separado dos bot├Áes.
+
+Grupos reestruturados: `obj_4c_Opt_Data`, `obj_4c_Opt_nr_tipo`, `obj_4c_Opt_situa`, `obj_4c_Opt_ordem_impressao`, `obj_4c_Opt_lista_atra`, `obj_4c_Opt_consid_atra`, `obj_4c_Opt_lista_op`.
+
+### LAYOUT-POSITION Buttons (6 problemas) ÔÇö PARCIALMENTE CORRIGIDO
+- `cmd_4c_MarcarDisp`: Top corrigido de `318` ÔåÆ `331` (posi├º├úo legado 416 ÔêÆ offset 85px = 331)
+- Os demais 5 bot├Áes (diff=85px) s├úo **false positives** do validador: o validador compara posi├º├Áes absolutas do SCX com posi├º├Áes relativas ao PageFrame, sem considerar o offset de 85px do cabe├ºalho. As posi├º├Áes no c├│digo est├úo corretas (original ÔêÆ 85).

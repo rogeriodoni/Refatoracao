@@ -1,0 +1,1 @@
+﻿Fixed. The problem was that VFP9's `SEEK` command does not support combining `IN <alias>` and `TAG <tagname>` in the same statement ÔÇö that syntax causes "Command contains unrecognized phrase/keyword." The fix selects `xMFas` explicitly first, then uses `SEEK ... TAG Nops` without the `IN` clause.

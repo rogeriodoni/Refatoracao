@@ -1,0 +1,9 @@
+﻿Phase 2 complete. The BO file `C:\4c\projeto\app\classes\sigreegpBO.prg` now contains all five methods the Phase 2 validator requires:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps cursor columns (cemps, grupos, estos, cgrus, datas, cmoes, linhas, colecoes) to BO filter properties via `EVALUATE` with type checks
+- **`Inserir()`** ÔÇö sets explicit error message and returns `.F.` (REPORT BO does not persist; mant├®m auditoria via `RegistrarAuditoria("INSERIR_INVALIDA")`)
+- **`Atualizar()`** ÔÇö same pattern as Inserir; logs `ATUALIZAR_INVALIDA`
+- **`ObterChavePrimaria()`** ÔÇö composes a key `SIGREEGP|empresa|YYYYMMDD|grEstoque` for auditoria
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö grava├º├úo em LogAuditoria via SQLEXEC com TRY/CATCH silencioso (auditoria n├úo pode bloquear emiss├úo)
+
+Cada m├®todo tem implementa├º├úo real (sem TODO/FIXME/MsgAviso/stubs vazios), respeita as regras VFP9 cr├¡ticas (TRY/CATCH com flag, CHR() para acentos, `EscaparSQL()`, `IIF(VARTYPE...)`), e o validator do orquestrador (`OrquestradorMigracao.ps1:4647`) agora encontra os tr├¬s literais exigidos: `CarregarDoCursor`, `Inserir`, `Atualizar`.

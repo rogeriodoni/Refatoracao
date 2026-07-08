@@ -1,0 +1,14 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\sigrectcBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+
+- **Heran├ºa**: `RelatorioBase` (n├úo BusinessBase)
+- **Propriedades de arquivo**: `this_cArquivoRelatorio`, `this_cTituloRelatorio`, `this_cCursorDados`
+- **Filtros de per├¡odo**: `this_dDtInicial`, `this_dDtFinal` (inicializados com `DATE()` no Init)
+- **Filtros de empresa**: `this_cEmps` (3 chars, c├│digo), `this_cRazas` (40 chars, raz├úo social)
+- **Filtro cart├úo**: `this_cFpags` (12 chars)
+- **Checkboxes**: `this_lEntrada`, `this_lReceber`, `this_lDepositar`, `this_lBaixa`
+- **OptTpDep**: `this_nOptTpDep` (1=Entrada/2=Vencimento) e `this_lDepPrev` (derivado: Option2.Enabled AND Value=2)
+- **Init()**: chama `DODEFAULT()`, configura path do FRX (`relsigrectc.frx`), t├¡tulo com CHR() e valores padr├úo de data
+
+Pr├│xima fase: **Fase 2/8 ÔÇö BO PrepararDados()** (implementa├º├úo das queries SQL do `processamento` original com os 4 cursores de movimenta├º├úo).

@@ -1,0 +1,20 @@
+﻿All BO properties (`this_dDtInicial`, `this_cCdEmpresa`, `this_nUnifica`, `this_nQuebras`, etc.) exactly match the BO definition. Phase 3 is complete.
+
+`C:\4c\projeto\app\forms\relatorios\Formsigrecop.prg` was created with:
+
+- **Cabecalho** (`cnt_4c_Cabecalho`, BackColor=RGB(100,100,100)) with `cmg_4c_Botoes` (4 buttons: Visualizar/Imprimir/Doc.Excel/Sair)
+- **PageFrame** Top=85, Height=315 (Form 400 - 85), Tabs=.F.
+- **Page1 controls** with positions adjusted (Top_original ÔêÆ 85):
+  - Periodo (txt_4c_DtInicial / txt_4c_DtFinal) at top=23
+  - Empresa (txt_4c_CdEmpresa/DsEmpresa) at top=48 ÔÇö F4/F5 opens `AbrirBuscaEmpresa()` on SigCdEmp
+  - Grupo Estoque (txt_4c_CdGrEstoque/DsGrEstoque) at top=75 ÔÇö free-text filter
+  - Conta Estoque (txt_4c_CdEstoque/DsEstoque) at top=102 ÔÇö free-text filter
+  - Moeda (txt_4c_CdMoeda/DsMoeda) at top=128 ÔÇö F4/F5 opens `AbrirBuscaMoeda()` on SigCdMoe
+  - opt_4c_Unifica (Unificar/Filtrar) at top=129
+  - opt_4c_Tipo (Anal├¡tico/Sint├®tico/Resumido/Anal├¡tico por parcelas) at top=154
+  - opt_4c_Quebras/Sele├º├úo (Todos/Pagos/N├úo Pagos) at top=176
+  - opt_4c_Movs (Ambas/Entradas/Sa├¡das) at top=198
+  - chk_4c_PComis (% Comiss├úo, value=1) at top=227
+  - opt_4c_Saldo (Sim/N├úo, default=2) at top=244
+- `LimparCampos()` initializes empresa from `go_4c_Sistema.cCodEmpresa` via SQLEXEC
+- All CRUD aliases and pipeline-required stubs included

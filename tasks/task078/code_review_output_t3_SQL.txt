@@ -1,0 +1,9 @@
+﻿A verifica├º├úo est├í completa. O `WHERE IClis = ...` na linha 1416 do `FormSIGREDES.prg` ├® uma **query de lookup de valida├º├úo** (procedimento `ValidarVend`), n├úo uma condi├º├úo inventada no WHERE principal do relat├│rio.
+
+Confirma├º├Áes:
+1. `IClis` ├® a chave prim├íria de `SigCdCli`, usada em JOIN no query principal: `c.IClis = a.Vends` (SIGREDESBO.prg linha 304)
+2. O padr├úo `WHERE IClis = <c├│digo>` ├® o padr├úo standard do sistema, usado em mais de 30 lugares no codebase
+3. A pr├│pria fun├º├úo `fAcessoContas` em `functions.prg` (linha 900) usa exatamente `WHERE a.IClis = '...'` internamente ÔÇö ├® ela que o `ValidarVend` replica
+4. O WHERE do query principal do relat├│rio **n├úo cont├®m IClis** ÔÇö os filtros s├úo `a.datars`, `c.Grupos`, `a.Emps`, `a.vends`, etc.
+
+**Resultado da verifica├º├úo**: Falso positivo do auto-checker. O checker escaneou todos os `WHERE` do arquivo e encontrou o `IClis` na sub-query de valida├º├úo de campos, n├úo no filtro principal do relat├│rio. Nenhuma altera├º├úo ├® necess├íria ÔÇö o c├│digo est├í correto.

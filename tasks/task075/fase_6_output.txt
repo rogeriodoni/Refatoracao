@@ -1,0 +1,14 @@
+﻿Ambas as altera├º├Áes est├úo corretas. 
+
+**Resumo da Fase 6:**
+
+O `FormSigReDct.prg` j├í estava funcionalmente completo desde a Fase 5 ÔÇö o formul├írio original (`SIGREDCT`) ├® um `frmrelatorio` flat com apenas 2 checkboxes (`ImpTotal`, `ImpCodBarra`) e zero lookups ou TextBoxes de entrada de dados. N├úo havia "50% restantes" para adicionar.
+
+O que foi feito na Fase 6:
+
+1. **`functions.prg`** ÔÇö Implementada a fun├º├úo `fAltBar2de5()` (Interleaved 2 of 5 barcode encoder), que era referenciada como fun├º├úo externa tanto no `SigReDctBO.prg` quanto no `Formsigregli.prg` mas n├úo estava definida em lugar algum no novo sistema. A fun├º├úo:
+   - Remove espa├ºos da string num├®rica
+   - Garante n├║mero par de d├¡gitos (padding com "0" ├á esquerda se necess├írio)
+   - Retorna `"(" + dados + ")"` ÔÇö formato padr├úo para fontes de c├│digo de barras I2of5
+
+2. **`FormSigReDct.prg`** ÔÇö Header atualizado para registrar que a Fase 6 foi conclu├¡da com a justificativa de n├úo haver campos/lookups para adicionar.

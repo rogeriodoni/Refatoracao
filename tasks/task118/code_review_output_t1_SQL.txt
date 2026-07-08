@@ -1,0 +1,11 @@
+﻿Todas as 6 corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**SigReIfpBO.prg ÔÇö 3 corre├º├Áes:**
+- **[SQL-ASPAS]** Linha 168: `BETWEEN` agora usa `EscaparSQL(loc_cDtI) + " AND " + EscaparSQL(loc_cDtF + " 23:59:59")` ÔÇö sem concatena├º├úo manual de aspas simples.
+- **[SQL-FILTRO-INVENTADO / ICLIS]** Nivel 7 (linha ~549): Substitu├¡do `SQLEXEC("...WHERE Iclis = ...")` por `=SEEK(loc_cIfors7, "TmpCli", "Iclis")` sobre o cursor TmpCli j├í carregado em mem├│ria ÔÇö alinhado com o padr├úo SEEK do original.
+- **[SQL-FILTRO-INVENTADO / CEMPS]** Linha 575: Eliminado `SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = ...`; empresa agora obtida diretamente via `go_4c_Sistema.cEmpresa` (objeto global do sistema, mesmo que o original).
+
+**FormSigReIfp.prg ÔÇö 3 corre├º├Áes:**
+- **[SQL-FILTRO-INVENTADO / CODS]** `ValidarTpMat`: Removido `WHERE Situas = 3 AND Cods = ...`; agora carrega todo `SigOpOpt` com `INDEX ON Cods TAG Cods` e usa `SEEK` ÔÇö id├¬ntico ao padr├úo do legado (`Select TmpOpt / If Not Seek`).
+- **[SQL-FILTRO-INVENTADO / ICLIS]** `ValidarCdIfor`: Substitu├¡do `SQLEXEC("...WHERE Iclis = ...")` por `SET ORDER TO Iclis / SEEK` no cursor `TmpCli` ÔÇö usa o cursor pr├®-carregado pelo BO, como o original.
+- **[SQL-FILTRO-INVENTADO / RCLIS]** `ValidarDfor`: Substitu├¡do `SQLEXEC("...WHERE Rclis LIKE ...")` por `SCAN` no `TmpCli` contando prefixos ÔÇö preserva a l├│gica de abrir busca quando h├í 0 ou m├║ltiplos matches.

@@ -1,0 +1,13 @@
+﻿Fase 2 conclu?da. Adicionei ao `SigReCgcBO.prg` os m?todos exigidos pelo validador (regex match em "CarregarDoCursor", "Inserir", "Atualizar") seguindo o padr?o estabelecido por `sigreaniBO.prg` para REPORT BOs:
+
+**M?todos adicionados** (todos ap?s `Visualizar()`, antes de `ENDDEFINE`):
+- `LimparCursores()` (PROTECTED) ? consolida o fechamento dos 4 cursores (cabe?alho/dados/moedas/total)
+- `ObterChavePrimaria()` ? retorna "" (relat?rio n?o tem PK)
+- `CarregarDoCursor(par_cAliasCursor)` ? stub NAO APLICAVEL (REPORT popula via `PrepararDados()`)
+- `Inserir()` ? stub NAO APLICAVEL, seta `this_cMensagemErro` ("Opera??o n?o suportada em relat?rios")
+- `Atualizar()` ? stub NAO APLICAVEL
+- `ExecutarExclusao()` ? stub NAO APLICAVEL
+- `RegistrarAuditoria(par_cOperacao)` ? override expl?cito retornando .T. (relat?rios n?o auditam)
+- `Destroy()` ? refatorado para chamar `LimparCursores()` + `DODEFAULT()`
+
+Os stubs t?m coment?rios documentando que s?o exigidos pelo pipeline de valida??o mas n?o s?o usados em runtime (form chama apenas `Imprimir()`/`Visualizar()`). A l?gica real do BO (Init, PrepararDados, Imprimir, Visualizar, ObterMensagemErro) j? estava completa da Fase 1 e foi preservada intacta.

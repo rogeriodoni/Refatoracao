@@ -1,0 +1,14 @@
+﻿A corre├º├úo est├í aplicada corretamente. Aqui est├í um resumo do que foi encontrado e corrigido na Fase 6:
+
+**An├ílise do FormSIGREGDP.prg (Fase 6/8):**
+
+O form j├í estava estruturalmente completo desde fases anteriores ÔÇö todos os controles do original est├úo presentes:
+- Filtros: `txt_4c_Serie`, `txt_4c_NFIni`, `txt_4c_NFFim`, `opt_4c_Selecao`, `cmd_4c_Processar`
+- Grid com 8 colunas (`grd_4c_Dados`)
+- Bot├Áes de sele├º├úo (`cmd_4c_SelTudo`, `cmd_4c_Desmarcar`)
+
+**├Ünico lookup do original (Get_S├®rie ÔåÆ SigCnFNf)** tinha 3 bugs no `TeclaSerieKeyPress`:
+
+1. **`AdicionarColuna` n├úo existe** em `FormBuscaAuxiliar` ÔåÆ corrigido para `mAddColuna("series", "", "C├│digos")`
+2. **F4 em campo vazio n├úo abria lookup** ÔåÆ corrigido: F4 (115) sempre abre, ENTER/TAB s├│ abre se `!EMPTY`
+3. **`loc_oBusca.Release()` ausente** ÔåÆ adicionado ap├│s leitura do resultado para liberar o objeto

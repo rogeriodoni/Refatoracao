@@ -1,0 +1,16 @@
+﻿Arquivo criado corretamente em `C:\4c\projeto\app\forms\relatorios\Formsigrehtc.prg` (281 linhas).
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Delega a `DODEFAULT()` |
+| `InicializarForm()` | Cria BO sigrehtcBO, chama ConfigurarPageFrame/Cabecalho/Botoes |
+| `ConfigurarPageFrame()` | Caption, Picture, propriedades de janela (Width=800, Height=300 do original) |
+| `ConfigurarCabecalho()` | Container cinza RGB(100,100,100) com lbl_4c_Sombra e lbl_4c_Titulo |
+| `ConfigurarBotoes()` | CommandGroup cmg_4c_Botoes com 4 bot├Áes (Visualizar/Imprimir/Excel/Sair), canonical Left=529 |
+| `AtualizarEstadoControles()` | Override REPORT ÔÇö no-op |
+| `AlternarPagina()` | Override REPORT ÔÇö atualiza this_nPaginaAtual |
+| `Destroy()` | Libera this_oRelatorio, chama DODEFAULT() |
+
+**Pr├│ximas fases:** Fase 4 ÔÇö campos de filtro (TextBoxes, OptionGroups); Fases 7-8 ÔÇö BINDEVENTs e handlers dos bot├Áes (BtnVisualizarClick, BtnImprimirClick, FormParaRelatorio, ValidarCdGrEstoque, ValidarCdContas).

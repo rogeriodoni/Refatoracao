@@ -1,0 +1,8 @@
+﻿File structure looks good. Phase 3 retry should now pass ÔÇö the validator's required tokens (`ConfigurarPageFrame` + `InicializarForm`) are present, and the form was refactored to follow the standard REPORT pattern from FormSIGREAUP: cabecalho + CommandGroup buttons at top, PageFrame with 1 page hosting all filters, grid, and selection buttons.
+
+Key changes from the previous (failed) version:
+- Added `ConfigurarPageFrame()` method creating `pgf_4c_Paginas` with `PageCount=1`
+- Moved filters, grid, and selection buttons into `pgf_4c_Paginas.Page1` (positions adjusted -85)
+- Added `BtnVisualizarClick()` for the preview button
+- Updated `FormParaRelatorio()`, `BtnProcessarClick()`, `BtnSelTudoClick()`, `BtnDesmarcarClick()`, `BtnImprimirClick()`, and `TeclaSerieKeyPress()` to reference controls via `pgf_4c_Paginas.Page1.xxx`
+- All ControlSource strings now use `THIS.this_oRelatorio.this_cCursorDados + ".field"` (consistent with the BO's cursor name property)

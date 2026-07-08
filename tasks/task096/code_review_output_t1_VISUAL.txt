@@ -1,0 +1,22 @@
+﻿A an├ílise confirma o que eu suspeitava. Aqui est├í o racioc├¡nio:
+
+**Este ├® um falso positivo do validador.**
+
+A matem├ítica da posi├º├úo absoluta:
+- `PageFrame.Top = 85` (linha 283)
+- `opt_4c_TpRel.Top = 89` (page-relative, linha 459)
+- **Posi├º├úo absoluta no form = 85 + 89 = 174** Ô£ô
+
+O original SCX tinha `TpRel.Top = 174` em coordenadas absolutas do form. A migra├º├úo corretamente subtraiu o offset do PageFrame (85px) para obter a posi├º├úo relativa ├á page: `174 - 85 = 89`. Isso ├® exatamente o valor atual.
+
+O validador comparou a coordenada page-relativa do migrado (89) com a coordenada absoluta do original (174) sem descontar o `PageFrame.Top`, reportando um diff de 85px ÔÇö que ├® exatamente o offset do PageFrame.
+
+**Evid├¬ncias adicionais de que o padr├úo ├® consistente:**
+- `txt_4c_DtInicial`: coment├írio diz `original Top=145` ÔåÆ migrado `Top=60` ÔåÆ diff=85 (mesmo offset, n├úo flagrado)
+- `opt_4c_TpRel`: original `Top=174` ÔåÆ migrado `Top=89` ÔåÆ diff=85 (mesmo offset, flagrado incorretamente)
+
+**Alterar `Top` para 174 seria errado** porque:
+1. Posi├º├úo absoluta ficaria `85 + 174 = 259` ÔÇö 85px abaixo do original
+2. O OptionGroup ficaria completamente desalinhado do `lbl_4c_LblTipo` (Top=94), cujo `Button(1).Top=5` dentro do grupo alinha perfeitamente com o label: `89 + 5 = 94` Ô£ô
+
+**O arquivo n├úo precisa de altera├º├úo.** A posi├º├úo `Top=89` est├í correta. O problema reportado ├® um falso positivo do validador causado por compara├º├úo de coordenadas page-relativas com coordenadas absolutas sem compensar o `PageFrame.Top=85`.

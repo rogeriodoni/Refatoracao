@@ -1,0 +1,12 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formsigrecog.prg` foi atualizado com todos os m├®todos necess├írios:
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaFiltros()`** ÔÇö cria os 13 controles de filtro na Page1 (per├¡odo, empresa, vendedor, moeda) com posi├º├Áes exatas do original ajustadas para o PageFrame (`top_original - 85`), mais os 8 BINDEVENTs de KeyPress
+- **`AlternarPagina()`** ÔÇö stub conforme spec (form tem 1 p├ígina)
+- **`FormParaRelatorio()`** ÔÇö copia campos ÔåÆ BO (todos os 8 filtros)
+- **`LimparCampos()`** ÔÇö inicializa datas com `DATE()` e limpa os demais campos
+- **Bot├Áes** ÔÇö `BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick`, `BtnEncerrarClick` (handlers BINDEVENT p├║blicos para `cmg_4c_Botoes.Buttons(1-4)`)
+- **Tecla\*** ÔÇö 8 handlers KeyPress (F4=115 abre busca; ENTER=13/TAB=9 valida)
+- **Validar\*** ÔÇö `ValidarEmpresa`, `ValidarEmpresaDesc`, `ValidarVendedor`, `ValidarVendedorDesc`, `ValidarMoeda`, `ValidarMoedaDesc` (sem RETURN dentro de TRY/CATCH)
+- **AbrirBusca\*** ÔÇö padr├úo Mode 1 do `FormBuscaAuxiliar` com `CREATEOBJECT(..., gnConnHandle, tabela, cursor, campo, valor, titulo)` + `mAddColuna` + `Release()` expl├¡cito

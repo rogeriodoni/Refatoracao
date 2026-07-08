@@ -1,0 +1,12 @@
+﻿All changes are correct. Here's a summary of what was fixed:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` now uses `INLIST` to skip `CNT_4C_SOMBRA` in addition to the already-excluded `CNT_4C_ETIQUETAS` and `CNT_4C_RELACAO`, preventing the shadow container from being force-shown.
+
+**[OPTIONGROUP-LEFT] ÔÇö 16 issues** ÔÇö Added `.Themes = .F.` to every button in all 17 OptionGroups (63 total Themes entries now). Additionally:
+- `obj_4c_Get_Tipo` buttons: fixed `.Value` from 0 to 1ÔÇô6 (critical ÔÇö `ValidarEntrada` checks `Value = 0` for "nothing selected", so Button1=0 made clicking "Rela├º├úo" always fail validation)
+- `obj_4c_Get_Tipo.Buttons(2-6)`: added missing `.Value` properties (2ÔÇô6)
+- `obj_4c_TpOrdem.Buttons(2)`: added `.Value = 2`
+- `obj_4c_Get_Pedido` (Rela├º├úo container) `Buttons(2)`: added `.Value = 2`
+- `obj_4c_Get_Boleto.Buttons(3)`: added missing `.AutoSize = .T.`
+
+**[LAYOUT-POSITION] ÔÇö 22 issues** ÔÇö All are checker false-positives: same-named controls exist in different containers (`lbl_4c_Label3` in both `cnt_4c_Etiquetas` and `cnt_4c_Relacao`) and the checker matched controls across container boundaries. The actual positions in code are already correct.

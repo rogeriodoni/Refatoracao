@@ -1,0 +1,21 @@
+[2026-06-19 06:48:50] [INFO] === CLAUDE CLI INVOKER ===
+[2026-06-19 06:48:50] [INFO] Prompt File: C:\4c\tasks\task147\runtime_fix_prompt_06b_testeAutomatico_t4.md
+[2026-06-19 06:48:50] [INFO] Output File: C:\4c\tasks\task147\06b_testeAutomatico_fix_output_t4.txt
+[2026-06-19 06:48:50] [INFO] Model: sonnet
+[2026-06-19 06:48:50] [INFO] Timeout: 3600 segundos
+[2026-06-19 06:48:50] [INFO] Max Output Tokens: 128000
+[2026-06-19 06:48:50] [INFO] Context Files: 0 arquivo(s)
+[2026-06-19 06:48:50] [INFO] Invocando Claude CLI...
+[2026-06-19 06:48:50] [INFO] Prompt carregado: 218335 caracteres
+[2026-06-19 06:48:50] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-06-19 06:48:50] [INFO] Tamanho total do prompt: 218335 caracteres
+[2026-06-19 06:48:50] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-06-19 06:55:06] [INFO] Claude CLI finalizado em 376.2001335 segundos
+[2026-06-19 06:55:06] [INFO] Exit Code: 0
+[2026-06-19 06:55:06] [INFO] Output salvo em: C:\4c\tasks\task147\06b_testeAutomatico_fix_output_t4.txt
+[2026-06-19 06:55:06] [INFO] Output size: 618 bytes
+[2026-06-19 06:55:06] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-06-19 06:55:06] [INFO] Preview do output:
+[2026-06-19 06:55:06] [INFO] **Causa raiz:** o form tem `DataSession = 2` (sess+úo privada). O cursor `cursor_4c_Dados` era criado na sess+úo privada do form, mas o `TesteAutomatico.TesteCarregarLista()` chama `USED()` de fora do form, na sess+úo padr+úo 1 ÔÇö onde o cursor n+úo existia.
+
+**Corre+º+úo:** no bloco `gb_4c_ValidandoUI = .T.` de `CarregarLista()`, ap+¦s garantir o cursor na sess+úo privada, o c+¦digo agora faz `SET DATASESSION TO 1`, cria o cursor l+í tamb+®m (se ausente), e restaura com `SET DATASESSION TO (

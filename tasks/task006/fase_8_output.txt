@@ -1,0 +1,18 @@
+﻿A migra├º├úo da Fase 8/8 est├í **completa**. O arquivo `Formsigmvccr.prg` j├í continha todos os m├®todos necess├írios implementados nas fases anteriores:
+
+**M├®todos verificados:**
+- `BtnBuscarClick()` ÔÇö recarrega lista com filtro de per├¡odo
+- `BtnEncerrarClick()` ÔÇö fecha o formul├írio
+- `BtnSalvarClick()` ÔÇö salva com valida├º├Áes obrigat├│rias ANTES do TRY, chama `Salvar()` sem par├ómetro
+- `BtnCancelarClick()` ÔÇö volta para lista + `CarregarLista()`
+- `FormParaBO()` ÔÇö transfere todos os campos: DATA, VENC, EMIS, NF, DOCU, OPER, GRUPO, CONTA, MOEDA, VALOR, COTACAO, SGRUPO, SCONTA, SMOEDA, SVALOR, SCOTACAO, HIST, HIST2, JOB, OPCAO_CONTA
+- `BOParaForm()` ÔÇö carrega todos os campos + busca descri├º├Áes de Grupo/Conta/Job via SQL
+- `HabilitarCampos()` ÔÇö habilita/desabilita todos os 18 campos edit├íveis + bot├úo Salvar
+- `LimparCampos()` ÔÇö limpa todos os campos para novo registro
+- `CarregarLista()` ÔÇö usa cursor tempor├írio + ZAP + APPEND (preserva colunas do Grid)
+- `AlternarPagina()` ÔÇö alterna Page1/Page2 e recarrega lista ao voltar
+
+**Integra├º├úo:**
+- `sigmvccrBO.prg` ÔÇö existe em `app/classes/` (carregado automaticamente por ADIR)
+- `Formsigmvccr.prg` ÔÇö existe em `app/forms/cadastros/` (carregado automaticamente por ADIR)  
+- `menu.prg` ÔÇö `AbrirFormsigmvccr()` + `ON SELECTION BAR 7 OF popMovimentos` j├í presentes

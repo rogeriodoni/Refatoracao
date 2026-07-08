@@ -1,0 +1,12 @@
+﻿O arquivo est├í correto. Fase 8 conclu├¡da.
+
+**O que foi adicionado em FormSigPdM11.prg (linhas 1315ÔÇô1379):**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `AjustarBotoesPorModo()` | PUBLIC | API p├║blica que delega para `AjustarModoEdicao()` ÔÇö permite form pai chamar ajuste de modo sem acessar m├®todo protegido |
+| `HabilitarCampos(par_lHabilitar)` | PUBLIC | Habilita/desabilita colunas edit├íveis do grid com par├ómetro opcional; sem par├ómetro l├¬ `this_cPcEscolha` |
+| `CarregarLista()` | PUBLIC | Religa `grd_4c_Grade.RecordSource = "xNensiS"`, atualiza `txt_4c_DescCat` e indicadores ÔÇö ├║til quando o form pai modifica xNensiS sem recriar o sub-form |
+| `FormatarGridLista(par_oGrid)` | PROTECTED | Padr├úo de formata├º├úo do grid (Verdana/8pt/Bold) para manuten├º├úo futura |
+
+**M├®todos do Phase 8 n├úo aplic├íveis a este form:** `FormParaBO/BOParaForm` (sem Page2 com campos individuais), `LimparCampos` (cursor compartilhado com pai), `BtnBuscarClick/BtnEncerrarClick/BtnSalvarClick/BtnCancelarClick` (sub-form usa apenas `BtnOkClick` conforme original `ok.Click` do legado).

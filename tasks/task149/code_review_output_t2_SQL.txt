@@ -1,0 +1,26 @@
+﻿Ap├│s leitura completa dos dois arquivos, analisando cada um dos tr├¬s flags reportados:
+
+**CPROS (Forma/BO linhas 847 e 194):**
+```foxpro
+"SELECT DPros, FigJpgs FROM SigCdPro WHERE CPros = " + EscaparSQL(...)
+```
+Este ├® um SQL para a tabela **SigCdPro** (produto), **n├úo** para SigCdNcf. `CPros` ├® a chave prim├íria de `SigCdPro` (c├│digo do produto). O original usava `poDataMgr.CursorQuery` que encapsulava esse filtro internamente ÔÇö a tradu├º├úo para SQLEXEC mant├®m o filtro equivalente. Remover o WHERE tornaria a query `SELECT DPros, FigJpgs FROM SigCdPro` sem filtro, retornando todos os produtos ÔÇö isso quebraria a exibi├º├úo da imagem.
+
+**CONTROLCOUNT:**
+Pesquisando o arquivo inteiro: `ControlCount` aparece **apenas** como propriedade VFP de objeto (linha 336 e 359 em `TornarControlesVisiveis`), nunca em string SQL nem em cl├íusula WHERE. O scanner interpretou erroneamente acesso a propriedade VFP como coluna SQL.
+
+**XNENS:**
+N├úo existe nenhuma string SQL com `XNENS` em cl├íusula WHERE. `xNensiN` aparece como alias de cursor VFP (`SELECT xNensiN`, `USED("xNensiN")`), nunca dentro de um SQL passado ao SQLEXEC.
+
+---
+
+**Resultado da verifica├º├úo:** os tr├¬s flags s├úo **falsos positivos** do scanner autom├ítico.
+
+- O WHERE `CPros = ...` ├® tradu├º├úo correta e necess├íria de `poDataMgr.CursorQuery` ÔÇö remover quebraria a funcionalidade
+- `CONTROLCOUNT` e `XNENS` n├úo existem como condi├º├Áes WHERE em nenhum SQL dos arquivos
+
+Os SQLs de NCF no c├│digo migrado est├úo corretos e alinhados com o original:
+- Form linha 1075: `WHERE (Emps = ... OR Emps = ' ')` Ô£ô id├¬ntico ao legado
+- BO `BuscarNcf` linha 157: `WHERE Emps = ... OR Emps = ' '` Ô£ô id├¬ntico ao legado
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos conforme o c├│digo legado.

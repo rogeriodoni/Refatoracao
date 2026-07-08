@@ -1,0 +1,18 @@
+﻿Fase 5 conclu├¡da. Foram adicionados ao `Formsigrecor.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö chamada de `InicializarForm()`, vincula via BINDEVENT:
+- Bot├Áes 1-4 do `cmg_4c_Botoes` ÔåÆ handlers de clique
+- `txt_4c__dt_inicial` / `txt_4c__dt_final` ÔåÆ `TeclaDataInicial/Final`
+- `txt_4c__Cd_GrEstoque` / `txt_4c__Ds_GrEstoque` ÔåÆ `TeclaCdGrEstoque/DsGrEstoque`
+- `txt_4c__cd_estoque` / `txt_4c__ds_estoque` ÔåÆ `TeclaCdEstoque/DsEstoque`
+
+**Bot├Áes do relat├│rio** (4 handlers completos):
+- `BtnVisualizarClick` ÔåÆ `FormParaRelatorio()` + `BO.Visualizar()`
+- `BtnImprimirClick` ÔåÆ `FormParaRelatorio()` + `BO.Imprimir()`
+- `BtnExcelClick` ÔåÆ `PrepararDados()` + `COPY TO XL5`
+- `BtnEncerrarClick` ÔåÆ `THIS.Release()`
+
+**Handlers KeyPress + Validar + AbrirBusca** para os 6 campos da primeira metade:
+- Datas: handlers triviais (sem lookup)
+- Grupo de Estoque (Cd + Ds): `ValidarCdGrEstoque` consulta `SigCdGcr`; `AbrirBuscaCdGrEstoque/DsGrEstoque` usam `FormBuscaAuxiliar`
+- Conta de Estoque (Cd + Ds): `ValidarCdEstoque` consulta `SigCdGcr WHERE grufals = grupo`; `AbrirBuscaCdEstoque/DsEstoque` com filtro por grupo

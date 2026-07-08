@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi executada com sucesso.
+
+**O que foi adicionado a `Formsigprdft.prg`:**
+
+1. **`ConfigurarLayout()`** atualizado para chamar `ConfigurarCamposEntrada()`, `ConfigurarOptionGroup()` e `VincularEventos()`
+
+2. **`AlternarPagina()`** ÔÇö no-op para satisfazer o pipeline (form ├® flat, sem Pages)
+
+3. **`ConfigurarCamposEntrada()`** ÔÇö todos os 11 controles visuais do original: Labels (VALOR, NUMERO CART├âO, 4 ULTIMOS DIGITOS, TIPO DE VENDA, N┬║ PARCELAS, 1┬¬ PARCELA/VENCTO) + TextBoxes (txt_4c_Valor, txt_4c_Cartao, txt_4c_Digitos, txt_4c_Text1, txt_4c_Datas) com posi├º├Áes pixel-perfect do SCX
+
+4. **`ConfigurarOptionGroup()`** ÔÇö Optiongroup1 ÔåÆ obj_4c_TipoVenda (├Ç Vista / Parcelado)
+
+5. **`VincularEventos()`** ÔÇö BINDEVENT para todos os handlers via GotFocus e KeyPress (nunca LostFocus para lookups)
+
+6. **`ExecutarLoopSiTef()`** ÔÇö loop principal `DO WHILE` com `ContinuaFuncaoSiTefInterativo` usando vari├íveis LOCAL para @byref; trata cmd=21 (mensagem), cmd=22 (aguarda entrada), cmd=23 (PIN pad), cmd=30 (fim)
+
+7. **`ProcessarFimTransacao()`** ÔÇö confirma via `FinalizaTransacaoSiTefInterativo`, extrai campos do Buffer e chama `BO.MontarRetorno()`
+
+8. **Todos os handlers de evento** ÔÇö `TxtDigitosGotFocus`, `TxtDigitosKeyPress`, `TxtText1GotFocus/LostFocus/KeyPress`, `TxtDatasGotFocus/KeyPress`, `OgTipoVendaInteractiveChange/KeyPress`, `CmdCancelaClick` ÔÇö todos com `LPARAMETERS` onde exigido, `TRY/CATCH` com `MsgErro` e `RETURN` nunca dentro do TRY.

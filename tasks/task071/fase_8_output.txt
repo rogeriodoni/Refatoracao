@@ -1,0 +1,14 @@
+﻿Tudo correto. Resumo do que foi feito na Fase 8/8:
+
+**`Formsigrectc.prg`** ÔÇö 6 m├®todos adicionados antes de `ENDDEFINE`:
+- `BtnBuscarClick()` ÔåÆ delega para `BtnVisualizarClick()`
+- `BtnSalvarClick()` ÔåÆ delega para `BtnImprimirClick()`
+- `BtnCancelarClick()` ÔåÆ delega para `BtnEncerrarClick()`
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ habilita/desabilita `cmg_4c_Botoes` conforme BO inicializado
+- `CarregarLista()` ÔåÆ for├ºa refresh do PageFrame (sem-op sem├óntico em REPORT)
+- `AjustarBotoesPorModo()` ÔåÆ stub vazio (sem modos CRUD em REPORT)
+
+**`menu.prg`** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 82` (separador) + `DEFINE BAR 83` ("Movimenta├º├úo de Cart├Áes") em `popRelatorios`
+- `ON SELECTION BAR 83 OF popRelatorios DO AbrirFormsigrectc`
+- Procedure `AbrirFormsigrectc()` no padr├úo can├┤nico do sistema (`VARTYPE(loForm) = "O"` + `loForm.Show()`)

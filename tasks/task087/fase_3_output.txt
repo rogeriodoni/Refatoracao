@@ -1,0 +1,13 @@
+﻿O arquivo foi criado com sucesso em `C:\4c\projeto\app\forms\relatorios\Formsigreeqe.prg`.
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+- **DEFINE CLASS Formsigreeqe AS FormBase** ÔÇö propriedades exatas do original (`Width=800`, `Height=300`, `DataSession=2`, `ControlBox=.F.`, `TitleBar=0`, `WindowType=1`)
+- **Init()** ÔÇö retorna `DODEFAULT()` (padr├úo correto)
+- **InicializarForm()** ÔÇö instancia `sigreeqeBO`, configura cabecalho + bot├Áes + pageframe, verifica `gb_4c_ValidandoUI` implicitamente via o BO
+- **ConfigurarCabecalho()** ÔÇö container `cnt_4c_Cabecalho` com `BackColor=RGB(100,100,100)`, labels sombra/t├¡tulo em branco
+- **ConfigurarBotoes()** ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes completos (Visualizar/Imprimir/Excel/Encerrar), ├¡cones `relatorio_*_26.jpg`, geometria exata do framework
+- **ConfigurarPageFrame()** ÔÇö `pgf_4c_Paginas` com 1 p├ígina "Filtros" posicionada abaixo do cabe├ºalho (`Top=85`), com fundo `fundo_cad_1003.jpg`
+- **Destroy()** ÔÇö libera `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+As fases 4-8 adicionar├úo os campos filtro (empresa, agrupamento), `FormParaRelatorio()`, `LimparCampos()`, BINDEVENTs e handlers de bot├úo.

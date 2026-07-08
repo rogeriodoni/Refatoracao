@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Resumo da Fase 3 conclu├¡da:
+
+**`FormSigPrGl2.prg` - Problemas corrigidos:**
+
+| Problema | Corre├º├úo |
+|----------|----------|
+| `ConfigurarCabecalho()` chamada mas n├úo definida | Adicionado m├®todo que cria `cnt_4c_Cabecalho` com `lbl_4c_Sombra` + `lbl_4c_Titulo` (padr├úo cinza RGB 100,100,100) |
+| `TornarControlesVisiveis()` chamada mas n├úo definida | Adicionado m├®todo recursivo que itera Controls + Pages de PageFrames |
+| `gc_4c_Icones` (vari├ível errada) | Substitu├¡do por `gc_4c_CaminhoIcones` em todos os 4 pontos |
+| ├ìcone SelTudo: `geral_marcar_26.jpg` | Corrigido para `geral_selecionar_26.jpg` (igual ao original) |
+| `Destroy()` n├úo restaurava o form pai | Reescrito para reabilitar `this_oParentForm.Enabled` e limpar refer├¬ncias |
+
+O arquivo j├í possu├¡a a estrutura completa (grids, controles, handlers), ent├úo a fase 3 consistiu em corrigir os bugs cr├¡ticos que impediriam a instancia├º├úo do form.

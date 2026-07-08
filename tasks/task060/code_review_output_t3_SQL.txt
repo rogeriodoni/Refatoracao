@@ -1,0 +1,37 @@
+﻿Ambos os problemas detectados s├úo **falsos positivos** do analisador est├ítico. Veja a an├ílise:
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna '2'** ÔÇö Falso positivo
+
+O `2` encontrado est├í em condi├º├Áes VFP `SCAN FOR` (linha 285 e 308), **n├úo** em cl├íusulas SQL `WHERE`:
+
+```foxpro
+* Linha 285 - SCAN de cursor local, n├úo SQL
+SCAN FOR crSigCdOpe.caixas = 1 AND crSigCdOpe.copers = 2 AND ...
+
+* Linha 308 - idem
+SCAN FOR crSigCdOpe.copers = 2 AND crSigCdOpe.calcfecs = 1
+```
+
+`copers` ├® uma coluna real de `SigCdOpe` (presente no SELECT original: `copers,ccomis,comcargs,vendas,calcfecs...`). O `2` ├® um valor de compara├º├úo leg├¡timo, n├úo um nome de coluna inventado.
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna 'CMOEDATA'** ÔÇö Falso positivo
+
+O `CMOEDATA` ├® um **nome de tag de ├¡ndice VFP**, criado na linha 1087 e usado nas linhas 1220 e 1252:
+
+```foxpro
+* Linha 1087 - cria ├¡ndice no cursor local
+INDEX ON PADR(cmoes, 3) + DTOS(datas) TAG CMOEDATA
+
+* Linha 1220/1252 - ativa a ordem pelo tag
+SET ORDER TO CMOEDATA
+```
+
+N├úo h├í cl├íusula SQL `WHERE cmoedata = ...` em lugar nenhum. ├ë indexa├º├úo local de cursor VFP.
+
+---
+
+**Conclus├úo**: O c├│digo est├í correto. Remover essas constru├º├Áes quebraria a funcionalidade (os loops de c├ílculo de comiss├úo e a busca de cota├º├úo de moeda). Nenhuma altera├º├úo necess├íria neste pass ÔÇö os dois itens s├úo falsos positivos do validador est├ítico que confundiu condi├º├Áes `SCAN FOR` do VFP e nomes de tags de ├¡ndice com colunas de `WHERE` SQL.

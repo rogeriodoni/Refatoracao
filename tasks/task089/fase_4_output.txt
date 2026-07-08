@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**Resumo das mudan├ºas aplicadas:**
+
+- **`ConfigurarPaginaResultado()`** (novo): Cria `grd_4c_Dados` na Page1 com 9 colunas (Grupo, Conta, Linha, Peso, Quantidade, $Venda, Moe, $Custo, Moe) ÔÇö larguras, formatos num├®ricos e headers id├¬nticos ao original.
+
+- **`ConfigurarPaginaProdutos()`** (novo): Cria `grd_4c_Dados` na Page2 com 8 colunas (Referencia, Descri├º├úo, Peso, Quantidade, $Venda, Moe, $Custo, Moe) ÔÇö RecordSource ser├í definido na Fase 7 quando Page2 ativar.
+
+- **`AlternarPagina()`** (novo): Muda `pgf_4c_Paginas.ActivePage` conforme `opt_4c_Opcao.Value` (1=Page2 Anal├¡tico, 2=Page1 Sint├®tico).
+
+- **`InicializarForm()`** (atualizado): Chama os dois novos m├®todos ap├│s `ConfigurarPageFrame()`, e carrega `cursor_4c_TempoGr` no grid da Page1 com `DynamicForeColor` para colora├º├úo condicional (azul=Quebra='1', vermelho=Tipos='6').

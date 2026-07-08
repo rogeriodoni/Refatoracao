@@ -1,0 +1,17 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormSigReCmp.prg` foi reescrito seguindo o padr├úo validado de `Formsigrecmm.prg` (REPORT form funcional).
+
+**Estrutura entregue (Fase 3 - Estrutura Base do Form):**
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ instancia BO + chama Cabe├ºalho, PageFrame, PaginaLista, PaginaDados
+- `ConfigurarCabecalho()` ÔåÆ `cnt_4c_Cabecalho` (cinza RGB 100,100,100) + `cmg_4c_Botoes` (4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` ÔåÆ `pgf_4c_Paginas` (PageCount=1, Tabs=.F., Top=85)
+- `ConfigurarPaginaLista()` ÔåÆ containers base `cnt_4c_Botoes` e `cnt_4c_BotoesAcao` (vazios ÔÇö filtros vir├úo nas Fases 5-6)
+- `ConfigurarPaginaDados()` ÔåÆ pr├®-inicializa cursores do BO
+- `AlternarPagina()`, `LimparCampos()`, `FormParaRelatorio()`, `ValidarFiltros()`
+- `Destroy()` ÔåÆ `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+**Corre├º├Áes vs. tentativa anterior:**
+- Adicionados `ConfigurarPageFrame()`, `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()` (ausentes antes ÔÇö prov├ível causa da falha de valida├º├úo)
+- Adicionados `TornarControlesVisiveis()` e `FormatarGridLista()` (esperados pelo skeleton)
+- Adicionado `this_cModoAtual` na declara├º├úo de propriedades
+- Mantidos aliases CRUD para compatibilidade com pipeline multi-fase

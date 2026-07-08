@@ -1,0 +1,2494 @@
+*==============================================================================
+* FORMSIGREIPE.PRG
+* Impressao de Etiquetas
+* Tipo: REPORT (herda FormBase, BO herda RelatorioBase)
+* Migrado de: SIGREIPE.SCX (frmrelatorio)
+*
+* FASE 3/8 - Estrutura base do formulario
+*   * Propriedades visuais (Width=819, Height=558)
+*   * Init() / InicializarForm() / Destroy()
+*   * ConfigurarCabecalho() (faixa escura com titulo)
+*   * ConfigurarBotoes()    (cmg_4c_Botoes: Visualizar/Imprimir/ImpDireto/Encerrar)
+*   * ConfigurarPageFrame() (pgf_4c_Paginas com 1 pagina para filtros)
+*   * LimparCampos()        (reinicia propriedades do BO)
+*==============================================================================
+
+DEFINE CLASS Formsigreipe AS FormBase
+
+    *-- Dimensoes exatas do original (Width=819, Height=558)
+    Height      = 558
+    Width       = 819
+    DataSession = 2
+    ShowWindow  = 1
+    WindowType  = 1
+    AutoCenter  = .T.
+    BorderStyle = 2
+    ControlBox  = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    ShowTips    = .T.
+
+    *-- BO de relatorio (sigreipeBO herda RelatorioBase)
+    this_oRelatorio    = .NULL.
+    this_cMensagemErro = ""
+
+    *-- Parametros de impressao termica (carregados em CarregarImpressoras)
+    this_nTpImp    = 1
+    this_nAjVerts  = 0
+    this_nAjHorzs  = 0
+    this_nAjDenss  = 10
+    this_nAjVelos  = 1
+
+    *--------------------------------------------------------------------------
+    * Init - Delega para FormBase.Init() que chama InicializarForm()
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Cria estrutura base do formulario de etiquetas
+    *   1. Configura Caption e Picture de fundo
+    *   2. Instancia sigreipeBO
+    *   3. Verifica conexao SQL (replica verificacao SigCdAcU do original)
+    *   4. Cria cabecalho, botoes e PageFrame
+    *   5. Limpa filtros para valores padrao
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_lContinuar, loc_nResult
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+        TRY
+            THIS.Caption = "Impress" + CHR(227) + "o de Etiquetas"
+
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            *-- Instanciar BO de relatorio
+            THIS.this_oRelatorio = CREATEOBJECT("sigreipeBO")
+            IF VARTYPE(THIS.this_oRelatorio) != "O"
+                MsgErro("Erro ao criar sigreipeBO" + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oRelatorio), "Erro")
+                loc_lContinuar = .F.
+            ENDIF
+
+            *-- Verificar conexao SQL (replica verificacao SigCdAcU do Init original)
+            *   Se a query falha, ha problema de conexao -> abortar
+            IF loc_lContinuar AND ;
+               (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
+
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT pkChaves FROM SigCdAcU" + ;
+                    " WHERE RTRIM(Programas) = 'SIGREIPE'" + ;
+                    " AND RTRIM(Parametros) = 'LIBERAIMP'" + ;
+                    " ORDER BY pkChaves", "cursor_4c_AcU")
+
+                IF USED("cursor_4c_AcU")
+                    USE IN cursor_4c_AcU
+                ENDIF
+
+                IF loc_nResult < 0
+                    MsgErro("Favor Reinicializar o Processo!!!" + CHR(13) + ;
+                        "Falha na conex" + CHR(227) + "o (SigCdAcU).", "Erro")
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarBotoes()
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarPaginaLista()
+                THIS.ConfigurarPaginaDados()
+                THIS.ConfigurarPaginaDados2()
+                THIS.CarregarImpressoras()
+
+                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                THIS.LimparCampos()
+                THIS.Visible = .T.
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Container escuro superior com titulo
+    *   Original cntSombra: Top=0, Left=0, Width=852, Height=80
+    *   No novo sistema: Width=THIS.Width (819), fundo RGB(100,100,100)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+
+            *-- Sombra deslocada 2px (efeito 3D para o titulo branco)
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 22
+                .Left      = 22
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Impress" + CHR(227) + "o de Etiquetas"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+
+            *-- Titulo em branco sobre a sombra
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 20
+                .Left      = 20
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Impress" + CHR(227) + "o de Etiquetas"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoes - CommandGroup com 4 botoes do relatorio
+    *   Original btnReport: Top=-2, Left=512, Width=310, Height=85
+    *   Botoes originais: Visualiza(L=5,W=75), Imprime(L=80), DocExcel(L=155), Sair(L=230)
+    *   No novo sistema usa cmg_4c_Botoes (CommandGroup padrao frmrelatorio)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoes()
+        THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+        WITH THIS.cmg_4c_Botoes
+            .Top           = 0
+            .Left          = 509
+            .Width         = 308
+            .Height        = 80
+            .ButtonCount   = 4
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 1
+            .Themes        = .F.
+            .Visible       = .T.
+
+            *-- Visualizar - preview em tela (original: visualizacao())
+            WITH .Buttons(1)
+                .Top             = 5
+                .Left            = 5
+                .Width           = 70
+                .Height          = 70
+                .Caption         = "Visualizar"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Gerar pr" + CHR(233) + "via em tela"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            *-- Imprimir - impressora com dialogo (original: impressao())
+            WITH .Buttons(2)
+                .Top             = 5
+                .Left            = 79
+                .Width           = 70
+                .Height          = 70
+                .Caption         = "Imprimir"
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Imprimir com di" + CHR(225) + "logo de impressora"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            *-- Imprimir Direto - sem dialogo (original: documento())
+            WITH .Buttons(3)
+                .Top             = 5
+                .Left            = 153
+                .Width           = 70
+                .Height          = 70
+                .Caption         = "Impr. Direto"
+                .WordWrap        = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Imprimir direto (sem di" + CHR(225) + "logo)"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            *-- Encerrar - fechar formulario (original: Sair)
+            WITH .Buttons(4)
+                .Top             = 5
+                .Left            = 227
+                .Width           = 70
+                .Height          = 70
+                .Caption         = "Encerrar"
+                .WordWrap        = .T.
+                .Cancel          = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "[Esc] Encerrar"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+        ENDWITH
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(2), "Click", THIS, "BtnImprimirClick")
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(3), "Click", THIS, "BtnImpDiretoClick")
+        BINDEVENT(THIS.cmg_4c_Botoes.Buttons(4), "Click", THIS, "BtnEncerrarClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - PageFrame com 1 pagina para os controles de filtro
+    *   O form original e FLAT (sem PageFrame), mas no novo padrao os campos
+    *   sao agrupados em PageFrame para consistencia com o sistema.
+    *   Posicionado logo abaixo do cabecalho (80px) ate o fim do form.
+    *   Page1 recebe os controles de filtro nas fases seguintes (4-6).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oPgf
+
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        loc_oPgf = THIS.pgf_4c_Paginas
+
+        loc_oPgf.PageCount = 1
+
+        loc_oPgf.Top    = 82
+        loc_oPgf.Left   = -1
+        loc_oPgf.Width  = THIS.Width + 2
+        loc_oPgf.Height = THIS.Height - 82
+        loc_oPgf.Tabs   = .F.
+
+        loc_oPgf.Page1.Caption   = "Filtros"
+        loc_oPgf.Page1.FontName  = "Tahoma"
+        loc_oPgf.Page1.FontSize  = 8
+        loc_oPgf.Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.Page1.BackColor = RGB(255, 255, 255)
+        loc_oPgf.Page1.ForeColor = RGB(90, 90, 90)
+
+        loc_oPgf.Visible    = .T.
+        loc_oPgf.ActivePage = 1
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Reinicia todas as propriedades de filtro do BO
+    *   Sincronizado com as propriedades declaradas em sigreipeBO.prg
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCampos()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            WITH THIS.this_oRelatorio
+                .this_cCodigos        = ""
+                .this_cDescs          = ""
+                .this_cNmOperacao     = ""
+                .this_dDtInicial      = {}
+                .this_dDtFinal        = {}
+                .this_nConta          = 2
+                .this_nColunas        = 2
+                .this_nQtdEtiq        = 1
+                .this_nOrdem          = 2
+                .this_nOrdemDir       = 2
+                .this_nImpPais        = 2
+                .this_nImpCodigo      = 1
+                .this_nImpMaius       = 2
+                .this_nImpContatos    = 2
+                .this_nImpressora     = 1
+                .this_cNomeImpressora = ""
+            ENDWITH
+        ENDIF
+        LOCAL loc_oPg1
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+        IF PEMSTATUS(loc_oPg1, "txt_4c_Codigo", 5)
+            loc_oPg1.txt_4c_Codigo.Value       = ""
+            loc_oPg1.txt_4c_Desc.Value         = ""
+            loc_oPg1.txt_4c__nm_operacao.Value = ""
+            loc_oPg1.txt_4c__dt_inicial.Value  = {}
+            loc_oPg1.txt_4c__dt_final.Value    = {}
+            loc_oPg1.obj_4c_Spn_qtdetiq.Value  = 1
+            loc_oPg1.obj_4c_Opt_conta.Value    = 2
+        ENDIF
+        IF PEMSTATUS(loc_oPg1, "obj_4c_Option", 5)
+            loc_oPg1.obj_4c_Option.Value         = 2
+            loc_oPg1.obj_4c_OpOrdem.Value        = 2
+            loc_oPg1.obj_4c_OpColunas.Value      = 2
+            loc_oPg1.obj_4c_OptPais.Value        = 2
+            loc_oPg1.obj_4c_OptCodigo.Value      = 1
+            loc_oPg1.obj_4c_OptProper.Value      = 2
+            loc_oPg1.obj_4c_OptContatos.Value    = 2
+            loc_oPg1.obj_4c_Opt_Impressora.Value = 1
+        ENDIF
+        THIS.AtualizarEstadoControles()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera BO e cursor ao encerrar (NAO usar .Release() em Custom)
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            THIS.this_oRelatorio = .NULL.
+        ENDIF
+        IF USED("cursor_4c_Operacoes")
+            USE IN cursor_4c_Operacoes
+        ENDIF
+        IF USED("Relacao")
+            USE IN Relacao
+        ENDIF
+        IF USED("CsCabecalho")
+            USE IN CsCabecalho
+        ENDIF
+        IF USED("DbImpressao")
+            USE IN DbImpressao
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Adiciona grid de operacoes e botoes na Page1
+    *   Original grdOper: top=207, left=17, width=727, height=148, 6 colunas
+    *   Original SelTudo: top=220, left=756, w=45, h=45
+    *   Original apaga:   top=264, left=756, w=45, h=45
+    *   Na Page1 (PageFrame.Top=82): top ajustado 207-82=125, 220-82=138, 264-82=182
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        *-- Cursor placeholder com mesmo esquema do SQLEXEC em ValidarDtFinal
+        IF USED("cursor_4c_Operacoes")
+            USE IN cursor_4c_Operacoes
+        ENDIF
+        SET NULL ON
+        CREATE CURSOR cursor_4c_Operacoes (;
+            Marcas    I,;
+            Emps      C(2),;
+            Dopes     C(6),;
+            Numes     N(8,0),;
+            DescOrigs C(60),;
+            DescDests C(60),;
+            ContaEs   C(15),;
+            LocalEnts N(8,0))
+        SET NULL OFF
+
+        THIS.ConfigurarGridOperacoes(loc_oPagina)
+        THIS.ConfigurarBotoesSelecao(loc_oPagina)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarGridOperacoes - Grid com 6 colunas para selecao de operacoes
+    *   CheckBox em Column1: AddObject -> Caption/Value -> CurrentControl -> ControlSource
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarGridOperacoes(par_oPage)
+        LOCAL loc_oGrid
+
+        par_oPage.AddObject("grd_4c_GrdOper", "Grid")
+        loc_oGrid = par_oPage.grd_4c_GrdOper
+
+        WITH loc_oGrid
+            .Top                = 125
+            .Left               = 17
+            .Width              = 727
+            .Height             = 148
+            .ColumnCount        = 6
+            .RecordSource       = "cursor_4c_Operacoes"
+            .RecordMark         = .F.
+            .DeleteMark         = .F.
+            .ReadOnly           = .F.
+            .FontName           = "Verdana"
+            .FontSize           = 8
+            .ForeColor          = RGB(90, 90, 90)
+            .BackColor          = RGB(255, 255, 255)
+            .GridLineColor      = RGB(238, 238, 238)
+            .HighlightBackColor = RGB(255, 255, 255)
+            .HighlightForeColor = RGB(15, 41, 104)
+            .HighlightStyle     = 2
+            .ScrollBars         = 2
+            .RowHeight          = 16
+
+            *-- Column1: Marcas (CheckBox) - ordem critica obrigatoria
+            WITH .Column1
+                .Width     = 30
+                .Alignment = 2
+                .Sparse    = .F.
+                .AddObject("Check1", "CheckBox")
+                .Check1.Caption = ""
+                .Check1.Value   = 0
+                .Check1.Width   = 25
+                .Check1.Height  = 14
+                .CurrentControl  = "Check1"
+                .ControlSource   = "cursor_4c_Operacoes.Marcas"
+                .Header1.Caption = ""
+            ENDWITH
+
+            *-- Column2: Emps
+            WITH .Column2
+                .Width           = 40
+                .ControlSource   = "cursor_4c_Operacoes.Emps"
+                .Header1.Caption = "Emp"
+            ENDWITH
+
+            *-- Column3: Dopes (Operacao)
+            WITH .Column3
+                .Width           = 80
+                .ControlSource   = "cursor_4c_Operacoes.Dopes"
+                .Header1.Caption = "Opera" + CHR(231) + CHR(227) + "o"
+            ENDWITH
+
+            *-- Column4: Numes (Codigo)
+            WITH .Column4
+                .Width           = 70
+                .ControlSource   = "cursor_4c_Operacoes.Numes"
+                .Header1.Caption = CHR(67) + CHR(243) + "digo"
+            ENDWITH
+
+            *-- Column5: DescOrigs (Conta Origem)
+            WITH .Column5
+                .Width           = 255
+                .ControlSource   = "cursor_4c_Operacoes.DescOrigs"
+                .Header1.Caption = "Origem"
+            ENDWITH
+
+            *-- Column6: DescDests (Conta Destino) - 30+40+80+70+255+252=727
+            WITH .Column6
+                .Width           = 252
+                .ControlSource   = "cursor_4c_Operacoes.DescDests"
+                .Header1.Caption = "Destino"
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoesSelecao - Botoes SelTudo e Apaga ao lado direito do grid
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoesSelecao(par_oPage)
+        *-- SelTudo: selecionar todos (original top=220, left=756, w=45, h=45 -> Page1: top=138)
+        par_oPage.AddObject("cmd_4c_SelTudo", "CommandButton")
+        WITH par_oPage.cmd_4c_SelTudo
+            .Top           = 138
+            .Left          = 756
+            .Width         = 45
+            .Height        = 45
+            .Caption       = "Todos"
+            .FontName      = "Tahoma"
+            .FontBold      = .T.
+            .FontSize      = 7
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 0
+            .Themes        = .F.
+            .MousePointer  = 15
+            .WordWrap      = .T.
+            .ToolTipText   = "Selecionar todos os registros"
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(par_oPage.cmd_4c_SelTudo, "Click", THIS, "CmdSelTudoClick")
+
+        *-- Apaga: desmarcar todos (original top=264, left=756, w=45, h=45 -> Page1: top=182)
+        par_oPage.AddObject("cmd_4c_Apaga", "CommandButton")
+        WITH par_oPage.cmd_4c_Apaga
+            .Top           = 182
+            .Left          = 756
+            .Width         = 45
+            .Height        = 45
+            .Caption       = "Nenhum"
+            .FontName      = "Tahoma"
+            .FontBold      = .T.
+            .FontSize      = 7
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 0
+            .Themes        = .F.
+            .MousePointer  = 15
+            .WordWrap      = .T.
+            .ToolTipText   = "Desmarcar todos os registros"
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(par_oPage.cmd_4c_Apaga, "Click", THIS, "CmdApagaClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CmdSelTudoClick - Marca todos os registros do grid (Marcas=1)
+    *   Replica: Select tmpOper + Replace All tmpOper.marcas with 1
+    *--------------------------------------------------------------------------
+    PROCEDURE CmdSelTudoClick()
+        IF USED("cursor_4c_Operacoes")
+            SELECT cursor_4c_Operacoes
+            REPLACE ALL Marcas WITH 1
+            GO TOP
+            THIS.pgf_4c_Paginas.Page1.grd_4c_GrdOper.Refresh()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CmdApagaClick - Desmarca todos os registros do grid (Marcas=0)
+    *   Replica: Select TmpOper + Replace All TmpOper.marcas with 0
+    *--------------------------------------------------------------------------
+    PROCEDURE CmdApagaClick()
+        IF USED("cursor_4c_Operacoes")
+            SELECT cursor_4c_Operacoes
+            REPLACE ALL Marcas WITH 0
+            GO TOP
+            THIS.pgf_4c_Paginas.Page1.grd_4c_GrdOper.Refresh()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Alterna para pagina indicada no PageFrame
+    *   Formulario de etiquetas usa PageCount=1 (todos os controles em Page1)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        IF par_nPagina >= 1 AND par_nPagina <= THIS.pgf_4c_Paginas.PageCount
+            THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Adiciona campos de filtro (primeira metade) em Page1
+    *   Controles: Say1, Get_codigo, Get_desc, lbl_dopes, get_nm_operacao,
+    *              lbl_periodo, get_dt_inicial, lbl_periodo_a, get_dt_final,
+    *              Say8, spn_qtdetiq, Say5, opt_conta
+    *   Top ajustado: top_original - 82 (compensa PageFrame.Top=82)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        *-- Rotulo "Selecao :" (Say1: top=104, left=46)
+        loc_oPagina.AddObject("lbl_4c_Label1", "Label")
+        WITH loc_oPagina.lbl_4c_Label1
+            .Top       = 22
+            .Left      = 46
+            .Caption   = "Sele" + CHR(231) + CHR(227) + "o :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Campo Codigo (Get_codigo: top=100, left=97, width=66, maxlength=8)
+        loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
+        WITH loc_oPagina.txt_4c_Codigo
+            .Top           = 18
+            .Left          = 97
+            .Width         = 66
+            .Height        = 21
+            .MaxLength     = 8
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Value         = ""
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_Codigo, "KeyPress", THIS, "TxtCodigoKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c_Codigo, "DblClick", THIS, "AbrirBuscaCodigo")
+
+        *-- Campo Descricao (Get_desc: top=100, left=165, width=220, maxlength=30)
+        loc_oPagina.AddObject("txt_4c_Desc", "TextBox")
+        WITH loc_oPagina.txt_4c_Desc
+            .Top           = 18
+            .Left          = 165
+            .Width         = 220
+            .Height        = 21
+            .MaxLength     = 30
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Value         = ""
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c_Desc, "KeyPress", THIS, "TxtDescKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c_Desc, "DblClick", THIS, "AbrirBuscaDesc")
+
+        *-- Rotulo "Operacao :" (lbl_dopes: top=128, left=36)
+        loc_oPagina.AddObject("lbl_4c_Lbl_dopes", "Label")
+        WITH loc_oPagina.lbl_4c_Lbl_dopes
+            .Top       = 46
+            .Left      = 36
+            .Width     = 56
+            .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Campo Operacao (get_nm_operacao: top=125, left=97, width=150)
+        *   FontName=Courier New, FontSize=9, Format=K! (uppercase automatico)
+        loc_oPagina.AddObject("txt_4c__nm_operacao", "TextBox")
+        WITH loc_oPagina.txt_4c__nm_operacao
+            .Top           = 43
+            .Left          = 97
+            .Width         = 150
+            .Height        = 21
+            .MaxLength     = 20
+            .SpecialEffect = 1
+            .FontName      = "Courier New"
+            .FontSize      = 9
+            .Format        = "K!"
+            .Value         = ""
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c__nm_operacao, "KeyPress",  THIS, "TxtNmOperacaoKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c__nm_operacao, "KeyPress", THIS, "TxtNmOperacaoLostFocus")
+
+        *-- Rotulo "Periodo :" (lbl_periodo: top=151, left=47)
+        loc_oPagina.AddObject("lbl_4c_Lbl_periodo", "Label")
+        WITH loc_oPagina.lbl_4c_Lbl_periodo
+            .Top       = 69
+            .Left      = 47
+            .Caption   = "Per" + CHR(237) + "odo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data inicial (get_dt_inicial: top=148, left=97, width=80)
+        *   Desabilitado ate que Operacao seja preenchida (When original)
+        loc_oPagina.AddObject("txt_4c__dt_inicial", "TextBox")
+        WITH loc_oPagina.txt_4c__dt_inicial
+            .Top           = 66
+            .Left          = 97
+            .Width         = 80
+            .Height        = 21
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .Value         = {}
+            .Enabled       = .F.
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Rotulo separador "a" (lbl_periodo_a: top=151, left=182)
+        loc_oPagina.AddObject("lbl_4c_Lbl_periodo_a", "Label")
+        WITH loc_oPagina.lbl_4c_Lbl_periodo_a
+            .Top       = 69
+            .Left      = 182
+            .Width     = 8
+            .Caption   = CHR(224)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data final (get_dt_final: top=148, left=194, width=80)
+        *   Ao sair (ENTER/TAB): executa ValidarDtFinal que popula o grid
+        loc_oPagina.AddObject("txt_4c__dt_final", "TextBox")
+        WITH loc_oPagina.txt_4c__dt_final
+            .Top           = 66
+            .Left          = 194
+            .Width         = 80
+            .Height        = 21
+            .SpecialEffect = 1
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .Value         = {}
+            .Enabled       = .F.
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.txt_4c__dt_final, "KeyPress", THIS, "TxtDtFinalKeyPress")
+
+        *-- Rotulo "Qtd. copias :" (Say8: top=151, left=281, FontName=Verdana)
+        loc_oPagina.AddObject("lbl_4c_Label8", "Label")
+        WITH loc_oPagina.lbl_4c_Label8
+            .Top       = 69
+            .Left      = 281
+            .Width     = 75
+            .Caption   = "Qtd. c" + CHR(243) + "pias :"
+            .FontName  = "Verdana"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Spinner quantidade de etiquetas (spn_qtdetiq: top=148, left=360, range 1..10)
+        loc_oPagina.AddObject("obj_4c_Spn_qtdetiq", "Spinner")
+        WITH loc_oPagina.obj_4c_Spn_qtdetiq
+            .Top               = 66
+            .Left              = 360
+            .Width             = 53
+            .Height            = 21
+            .SpecialEffect     = 1
+            .SpinnerHighValue  = 10
+            .SpinnerLowValue   = 1
+            .KeyboardHighValue = 10
+            .KeyboardLowValue  = 1
+            .Value             = 1
+            .Enabled           = .F.
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Rotulo "Conta :" (Say5: top=176, left=54)
+        loc_oPagina.AddObject("lbl_4c_Label5", "Label")
+        WITH loc_oPagina.lbl_4c_Label5
+            .Top       = 94
+            .Left      = 54
+            .Width     = 38
+            .Caption   = "Conta :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup Conta (opt_conta: top=172, left=91, width=135, Value=2=Destino)
+        *   Option1="Origem" (Value=0), Option2="Destino" (Value=1), grupo Value=2
+        loc_oPagina.AddObject("obj_4c_Opt_conta", "OptionGroup")
+        WITH loc_oPagina.obj_4c_Opt_conta
+            .Top           = 90
+            .Left          = 91
+            .Width         = 135
+            .Height        = 25
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 1
+            .Value         = 2
+            .Enabled       = .F.
+
+            WITH .Buttons(1)
+                .Caption   = "Origem"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Value     = 0
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 5
+                .Width     = 52
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "Destino"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 68
+                .Top       = 5
+                .Width     = 54
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.obj_4c_Opt_conta, "InteractiveChange", THIS, "OptContaInteractiveChange")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarEstadoControles - Habilita/desabilita campos conforme estado atual
+    *   Replica os eventos When do original:
+    *     txt_4c_Codigo.When:       !lTemNmOp   (desabilitado se operacao preenchida)
+    *     txt_4c_Desc.When:         !lTemNmOp AND !lTemCodigo
+    *     txt_4c__nm_operacao.When: !lTemCodigo (desabilitado se codigo preenchido)
+    *     datas/spinner/conta.When: lTemNmOp    (somente quando operacao preenchida)
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarEstadoControles()
+        LOCAL loc_oPg1, loc_lTemNmOp, loc_lTemCodigo
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+
+        IF !PEMSTATUS(loc_oPg1, "txt_4c_Codigo", 5)
+            RETURN
+        ENDIF
+
+        loc_lTemNmOp   = !EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
+        loc_lTemCodigo = !EMPTY(ALLTRIM(loc_oPg1.txt_4c_Codigo.Value))
+
+        loc_oPg1.txt_4c_Codigo.Enabled         = !loc_lTemNmOp
+        loc_oPg1.txt_4c_Desc.Enabled           = !loc_lTemNmOp AND !loc_lTemCodigo
+        loc_oPg1.txt_4c__nm_operacao.Enabled   = !loc_lTemCodigo
+        loc_oPg1.txt_4c__dt_inicial.Enabled    = loc_lTemNmOp
+        loc_oPg1.txt_4c__dt_final.Enabled      = loc_lTemNmOp
+        loc_oPg1.obj_4c_Spn_qtdetiq.Enabled    = loc_lTemNmOp
+        loc_oPg1.obj_4c_Opt_conta.Enabled      = loc_lTemNmOp
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TxtCodigoKeyPress - F4/F5 abre busca direta; ENTER/TAB valida e preenche desc
+    *--------------------------------------------------------------------------
+    PROCEDURE TxtCodigoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            THIS.AbrirBuscaCodigo()
+        ELSE
+            IF INLIST(par_nKeyCode, 13, 9)
+            THIS.ValidarCodigo()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TxtDescKeyPress - F4/F5 abre busca direta; ENTER/TAB valida e preenche codigo
+    *--------------------------------------------------------------------------
+    PROCEDURE TxtDescKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 115, 116)
+            THIS.AbrirBuscaDesc()
+        ELSE
+            IF INLIST(par_nKeyCode, 13, 9)
+            THIS.ValidarDesc()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TxtNmOperacaoKeyPress - ENTER/TAB valida operacao e atualiza estado dos campos
+    *--------------------------------------------------------------------------
+    PROCEDURE TxtNmOperacaoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 13, 9)
+            THIS.ValidarNmOperacao()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TxtNmOperacaoLostFocus - Limpa datas se campo Operacao ficou vazio
+    *   Replica: get_nm_operacao.LostFocus do original
+    *--------------------------------------------------------------------------
+    PROCEDURE TxtNmOperacaoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_oPg1
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+        IF EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
+            loc_oPg1.txt_4c__dt_inicial.Value = {}
+            loc_oPg1.txt_4c__dt_final.Value   = {}
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TxtDtFinalKeyPress - ENTER/TAB dispara consulta SQL e popula o grid
+    *--------------------------------------------------------------------------
+    PROCEDURE TxtDtFinalKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 13, 9)
+            THIS.ValidarDtFinal()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * OptContaInteractiveChange - Re-executa consulta quando Conta muda
+    *   Replica: opt_conta.InteractiveChange do original
+    *--------------------------------------------------------------------------
+    PROCEDURE OptContaInteractiveChange()
+        LOCAL loc_oPg1
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+        IF !EMPTY(loc_oPg1.txt_4c__dt_inicial.Value) AND ;
+           !EMPTY(loc_oPg1.txt_4c__dt_final.Value)
+            THIS.ValidarDtFinal()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarCodigo - Busca por Codigos em SigMlItn e preenche Descricao
+    *   Replica: Get_codigo.Valid do original (fwbuscaext por Codigos)
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarCodigo()
+        LOCAL loc_oPg1, loc_cValor, loc_oForm
+        loc_oPg1  = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg1.txt_4c_Codigo.Value)
+
+        IF EMPTY(loc_cValor)
+            loc_oPg1.txt_4c_Codigo.Value = ""
+            loc_oPg1.txt_4c_Desc.Value   = ""
+            THIS.AtualizarEstadoControles()
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigMlItn", "cursor_4c_BuscaCodigo", "Codigos", loc_cValor, ;
+                "Sele" + CHR(231) + CHR(227) + "o")
+
+            IF VARTYPE(loc_oForm) != "O"
+                RETURN
+            ENDIF
+
+            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
+                loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaCodigo.Codigos)
+                loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaCodigo.Descs)
+            ELSE
+                IF !loc_oForm.this_lAchouRegistro
+                loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
+                loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oForm.Show()
+                IF loc_oForm.this_lSelecionou
+                    loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaCodigo.Codigos)
+                    loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaCodigo.Descs)
+                ELSE
+                    loc_oPg1.txt_4c_Codigo.Value = ""
+                    loc_oPg1.txt_4c_Desc.Value   = ""
+                ENDIF
+                ENDIF
+            ENDIF
+
+            IF USED("cursor_4c_BuscaCodigo")
+                USE IN cursor_4c_BuscaCodigo
+            ENDIF
+            loc_oForm.Release()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+
+        loc_oPg1.txt_4c_Codigo.Refresh()
+        loc_oPg1.txt_4c_Desc.Refresh()
+        THIS.AtualizarEstadoControles()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDesc - Busca por Descs em SigMlItn e preenche Codigo
+    *   Replica: Get_desc.Valid do original (fwbuscaext por Descs)
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDesc()
+        LOCAL loc_oPg1, loc_cValor, loc_oForm
+        loc_oPg1  = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg1.txt_4c_Desc.Value)
+
+        IF EMPTY(loc_cValor)
+            loc_oPg1.txt_4c_Codigo.Value = ""
+            loc_oPg1.txt_4c_Desc.Value   = ""
+            THIS.AtualizarEstadoControles()
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigMlItn", "cursor_4c_BuscaDesc", "Descs", loc_cValor, ;
+                "Sele" + CHR(231) + CHR(227) + "o")
+
+            IF VARTYPE(loc_oForm) != "O"
+                RETURN
+            ENDIF
+
+            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
+                loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaDesc.Codigos)
+                loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaDesc.Descs)
+            ELSE
+                IF !loc_oForm.this_lAchouRegistro
+                loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
+                loc_oForm.Show()
+                IF loc_oForm.this_lSelecionou
+                    loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaDesc.Codigos)
+                    loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaDesc.Descs)
+                ELSE
+                    loc_oPg1.txt_4c_Codigo.Value = ""
+                    loc_oPg1.txt_4c_Desc.Value   = ""
+                ENDIF
+                ENDIF
+            ENDIF
+
+            IF USED("cursor_4c_BuscaDesc")
+                USE IN cursor_4c_BuscaDesc
+            ENDIF
+            loc_oForm.Release()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+
+        loc_oPg1.txt_4c_Codigo.Refresh()
+        loc_oPg1.txt_4c_Desc.Refresh()
+        THIS.AtualizarEstadoControles()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirBuscaCodigo - Lookup direto (F4/DblClick) em SigMlItn por Codigos
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirBuscaCodigo()
+        LOCAL loc_oPg1, loc_oForm
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigMlItn", "cursor_4c_BuscaCodigo", "Codigos", "", ;
+                "Sele" + CHR(231) + CHR(227) + "o")
+
+            IF VARTYPE(loc_oForm) != "O"
+                RETURN
+            ENDIF
+
+            loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
+            loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oForm.Show()
+
+            IF loc_oForm.this_lSelecionou
+                loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaCodigo.Codigos)
+                loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaCodigo.Descs)
+                loc_oPg1.txt_4c_Codigo.Refresh()
+                loc_oPg1.txt_4c_Desc.Refresh()
+                THIS.AtualizarEstadoControles()
+            ENDIF
+
+            IF USED("cursor_4c_BuscaCodigo")
+                USE IN cursor_4c_BuscaCodigo
+            ENDIF
+            loc_oForm.Release()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirBuscaDesc - Lookup direto (F4/DblClick) em SigMlItn por Descs
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirBuscaDesc()
+        LOCAL loc_oPg1, loc_oForm
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+
+        TRY
+            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigMlItn", "cursor_4c_BuscaDesc", "Descs", "", ;
+                "Sele" + CHR(231) + CHR(227) + "o")
+
+            IF VARTYPE(loc_oForm) != "O"
+                RETURN
+            ENDIF
+
+            loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
+            loc_oForm.Show()
+
+            IF loc_oForm.this_lSelecionou
+                loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaDesc.Codigos)
+                loc_oPg1.txt_4c_Desc.Value   = ALLTRIM(cursor_4c_BuscaDesc.Descs)
+                loc_oPg1.txt_4c_Codigo.Refresh()
+                loc_oPg1.txt_4c_Desc.Refresh()
+                THIS.AtualizarEstadoControles()
+            ENDIF
+
+            IF USED("cursor_4c_BuscaDesc")
+                USE IN cursor_4c_BuscaDesc
+            ENDIF
+            loc_oForm.Release()
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarNmOperacao - Valida acesso a operacao (replica fAcessoMovmto)
+    *   Verifica se o codigo de operacao existe em SigMvCab.Dopes
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarNmOperacao()
+        LOCAL loc_oPg1, loc_cValor, loc_cSQL, loc_nResult
+        loc_oPg1  = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value)
+
+        IF EMPTY(loc_cValor)
+            THIS.AtualizarEstadoControles()
+            RETURN
+        ENDIF
+
+        TRY
+            loc_cSQL    = "SELECT TOP 1 Dopes FROM SigMvCab" + ;
+                          " WHERE RTRIM(Dopes) = " + EscaparSQL(loc_cValor)
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NmOpVal")
+
+            IF loc_nResult > 0
+                SELECT cursor_4c_NmOpVal
+                IF EOF()
+                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o '" + loc_cValor + ;
+                        "' n" + CHR(227) + "o encontrada.", "Aviso")
+                    loc_oPg1.txt_4c__nm_operacao.Value = ""
+                ENDIF
+            ENDIF
+
+            IF USED("cursor_4c_NmOpVal")
+                USE IN cursor_4c_NmOpVal
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+
+        THIS.AtualizarEstadoControles()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDtFinal - Executa SQL e popula grid com operacoes do periodo
+    *   Replica: get_dt_final.Valid do original
+    *   SQL: SigMvCab JOIN SigCdCli (b=ContaOs, c=ContaDs) com todos os campos
+    *   Cursor READWRITE (para marcacao via CheckBox no grid)
+    *   lnConta=1 -> usar dados de SigCdCli da Conta Origem (b.*)
+    *   lnConta=2 -> usar dados de SigCdCli da Conta Destino (c.*)
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDtFinal()
+        LOCAL loc_oPg1, loc_cDopes, loc_dDataIni, loc_dDataFin
+        LOCAL loc_nConta, loc_cSQL, loc_nResult, loc_oGrid
+        loc_oPg1     = THIS.pgf_4c_Paginas.Page1
+        loc_cDopes   = ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value)
+        loc_dDataIni = loc_oPg1.txt_4c__dt_inicial.Value
+        loc_dDataFin = loc_oPg1.txt_4c__dt_final.Value
+        loc_nConta   = loc_oPg1.obj_4c_Opt_conta.Value
+        loc_oGrid    = loc_oPg1.grd_4c_GrdOper
+
+        IF EMPTY(loc_dDataFin)
+            RETURN
+        ENDIF
+
+        loc_oGrid.RecordSource = ""
+
+        TRY
+            IF loc_nConta = 1
+                loc_cSQL = "SELECT 0 AS Marcas, a.Emps, a.Dopes, a.Numes, " + ;
+                           "b.RClis AS DescOrigs, c.RClis AS DescDests, " + ;
+                           "a.ContaEs, a.LocalEnts, " + ;
+                           "b.IClis, b.RClis, b.Endes, b.Nums, b.Compls, " + ;
+                           "b.Bairs, b.Cidas, b.Ceps, b.Estas, b.Tel1s, " + ;
+                           "b.Tel2s, b.Faxs, b.Nascs, '' AS cIdChaves, " + ;
+                           "b.Codigos, b.Paises, b.Contato " + ;
+                           "FROM SigMvCab a " + ;
+                           "INNER JOIN SigCdCli b ON a.ContaOs = b.Iclis " + ;
+                           "INNER JOIN SigCdCli c ON a.ContaDs = c.Iclis " + ;
+                           "WHERE RTRIM(a.Dopes) = " + EscaparSQL(loc_cDopes) + ;
+                           " AND a.Datas BETWEEN " + FormatarDataSQL(loc_dDataIni) + ;
+                           " AND " + FormatarDataSQL(loc_dDataFin) + ;
+                           " ORDER BY a.Numes"
+            ELSE
+                loc_cSQL = "SELECT 0 AS Marcas, a.Emps, a.Dopes, a.Numes, " + ;
+                           "b.RClis AS DescOrigs, c.RClis AS DescDests, " + ;
+                           "a.ContaEs, a.LocalEnts, " + ;
+                           "c.IClis, c.RClis, c.Endes, c.Nums, c.Compls, " + ;
+                           "c.Bairs, c.Cidas, c.Ceps, c.Estas, c.Tel1s, " + ;
+                           "c.Tel2s, c.Faxs, c.Nascs, '' AS cIdChaves, " + ;
+                           "c.Codigos, c.Paises, c.Contato " + ;
+                           "FROM SigMvCab a " + ;
+                           "INNER JOIN SigCdCli b ON a.ContaOs = b.Iclis " + ;
+                           "INNER JOIN SigCdCli c ON a.ContaDs = c.Iclis " + ;
+                           "WHERE RTRIM(a.Dopes) = " + EscaparSQL(loc_cDopes) + ;
+                           " AND a.Datas BETWEEN " + FormatarDataSQL(loc_dDataIni) + ;
+                           " AND " + FormatarDataSQL(loc_dDataFin) + ;
+                           " ORDER BY a.Numes"
+            ENDIF
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpQuery")
+
+            IF loc_nResult > 0
+                IF USED("cursor_4c_Operacoes")
+                    USE IN cursor_4c_Operacoes
+                ENDIF
+                SELECT * FROM cursor_4c_TmpQuery INTO CURSOR cursor_4c_Operacoes READWRITE
+                IF USED("cursor_4c_TmpQuery")
+                    USE IN cursor_4c_TmpQuery
+                ENDIF
+
+                SELECT cursor_4c_Operacoes
+                IF !EOF()
+                    GO TOP
+                    loc_oGrid.ColumnCount = 3
+                    loc_oGrid.RecordSource = "cursor_4c_Operacoes"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_Operacoes.Marcas"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_Operacoes.Emps"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_Operacoes.Dopes"
+                ELSE
+                    MsgAviso("Nenhum movimento encontrado nesse per" + ;
+                        CHR(237) + "odo.", "Aviso")
+                ENDIF
+            ELSE
+                IF USED("cursor_4c_TmpQuery")
+                    USE IN cursor_4c_TmpQuery
+                ENDIF
+                MsgErro("Erro ao consultar movimentos de " + loc_cDopes + ".", "Erro")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+        ENDTRY
+
+        loc_oGrid.Refresh()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados2 - Adiciona controles de ordenacao e impressao em Page1
+    *   Controles: Say2/Option/OpOrdem (ordenacao), OpColunas (modelo etiqueta),
+    *              Label3/Opt_Impressora (termica), Say4/OptPais, Say6/OptCodigo,
+    *              Say7/OptProper, Say9/OptContatos
+    *   Top ajustado: top_original - 82 (PageFrame.Top=82)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados2()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        *-- Rotulo "Ordenacao :" (Say2: top=363, left=18)
+        loc_oPagina.AddObject("lbl_4c_Say2", "Label")
+        WITH loc_oPagina.lbl_4c_Say2
+            .Top       = 281
+            .Left      = 18
+            .Width     = 76
+            .Caption   = "Ordena" + CHR(231) + CHR(227) + "o :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup tipo de ordenacao (Option: top=378, left=18, Value=2=CEP)
+        loc_oPagina.AddObject("obj_4c_Option", "OptionGroup")
+        WITH loc_oPagina.obj_4c_Option
+            .Top           = 296
+            .Left          = 18
+            .Width         = 102
+            .Height        = 64
+            .ButtonCount   = 3
+            .BackStyle     = 0
+            .SpecialEffect = 1
+            .BorderColor   = RGB(90, 90, 90)
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "Alfab" + CHR(233) + "tica"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 23
+                .Width     = 66
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "CEP"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 6
+                .Width     = 37
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(3)
+                .Caption   = "Data Nasc."
+                .WordWrap        = .T.
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 42
+                .Width     = 71
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- OptionGroup direcao de ordenacao (OpOrdem: top=451, left=18, Value=2=Descendente)
+        loc_oPagina.AddObject("obj_4c_OpOrdem", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OpOrdem
+            .Top           = 369
+            .Left          = 18
+            .Width         = 102
+            .Height        = 83
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .SpecialEffect = 1
+            .BorderColor   = RGB(90, 90, 90)
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "Ascendente"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 23
+                .Width     = 75
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "Descendente"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 6
+                .Width     = 81
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- OptionGroup modelo de etiqueta (OpColunas: top=378, left=125, Value=2=2Colunas)
+        *   Valores: 1=3col-DN, 2=2col, 3=9lin, 4=9x3, 5=A4355, 6=2ColMarg, 7=Termica, 8=Pimaco6181, 9=TermicaZ
+        loc_oPagina.AddObject("obj_4c_OpColunas", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OpColunas
+            .Top           = 296
+            .Left          = 125
+            .Width         = 100
+            .Height        = 156
+            .ButtonCount   = 9
+            .BackStyle     = 0
+            .SpecialEffect = 1
+            .BorderColor   = RGB(90, 90, 90)
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "3 Colunas"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 22
+                .Width     = 65
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "2 Colunas"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 6
+                .Width     = 65
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(3)
+                .Caption   = "9 Linhas"
+                .WordWrap        = .T.
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 38
+                .Width     = 57
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(4)
+                .Caption   = "9 x 3 "
+                .WordWrap        = .T.
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 54
+                .Width     = 45
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(5)
+                .Caption     = "A4355"
+                .ToolTipText = "Etiqueta Pimaco A4355"
+                .FontName    = "Comic Sans MS"
+                .FontSize    = 8
+                .BackStyle   = 0
+                .ForeColor   = RGB(90, 90, 90)
+                .Height      = 15
+                .Left        = 5
+                .Top         = 70
+                .Width       = 49
+                .AutoSize    = .T.
+                .Themes      = .F.
+            ENDWITH
+
+            WITH .Buttons(6)
+                .Caption   = "2 Cols-Marg "
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 17
+                .Left      = 5
+                .Top       = 86
+                .Width     = 89
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(7)
+                .Caption   = "T" + CHR(233) + "rmica"
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 103
+                .Width     = 55
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(8)
+                .Caption   = "Pimaco 6181"
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 17
+                .Left      = 5
+                .Top       = 120
+                .Width     = 90
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(9)
+                .Caption   = "T" + CHR(233) + "rmica Z"
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 17
+                .Left      = 5
+                .Top       = 137
+                .Width     = 85
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- Rotulo "Impressora" (Label3: top=364, left=228, FontBold)
+        loc_oPagina.AddObject("lbl_4c_Label3", "Label")
+        WITH loc_oPagina.lbl_4c_Label3
+            .Top       = 282
+            .Left      = 228
+            .Caption   = " Impressora "
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup impressora termica (Opt_Impressora: top=378, left=230)
+        *   ButtonCount=1 inicial; CarregarImpressoras expande dinamicamente
+        loc_oPagina.AddObject("obj_4c_Opt_Impressora", "OptionGroup")
+        WITH loc_oPagina.obj_4c_Opt_Impressora
+            .Top           = 296
+            .Left          = 230
+            .Width         = 215
+            .Height        = 156
+            .ButtonCount   = 1
+            .BackStyle     = 0
+            .SpecialEffect = 1
+            .BorderColor   = RGB(90, 90, 90)
+            .Value         = 1
+
+            WITH .Buttons(1)
+                .Caption   = "Gen" + CHR(233) + "rico/Somente Texto"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Value     = 1
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 16
+                .Left      = 9
+                .Top       = 10
+                .Width     = 210
+                .AutoSize  = .F.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- Rotulo "Imprimir Pais :" (Say4: top=424, left=595)
+        loc_oPagina.AddObject("lbl_4c_Say4", "Label")
+        WITH loc_oPagina.lbl_4c_Say4
+            .Top       = 342
+            .Left      = 595
+            .Width     = 69
+            .Caption   = "Imprimir Pa" + CHR(237) + "s :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup Imprimir Pais (OptPais: top=419, left=669, Value=2=Nao)
+        loc_oPagina.AddObject("obj_4c_OptPais", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OptPais
+            .Top           = 337
+            .Left          = 669
+            .Width         = 104
+            .Height        = 26
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 0
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 5
+                .Width     = 34
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 56
+                .Top       = 5
+                .Width     = 37
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- Rotulo "Imprimir Codigo :" (Say6: top=440, left=581)
+        loc_oPagina.AddObject("lbl_4c_Say6", "Label")
+        WITH loc_oPagina.lbl_4c_Say6
+            .Top       = 358
+            .Left      = 581
+            .Width     = 83
+            .Caption   = "Imprimir C" + CHR(243) + "digo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup Imprimir Codigo (OptCodigo: top=436, left=669, Value=1=Sim)
+        loc_oPagina.AddObject("obj_4c_OptCodigo", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OptCodigo
+            .Top           = 354
+            .Left          = 669
+            .Width         = 104
+            .Height        = 26
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 0
+            .Value         = 1
+
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Value     = 1
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 5
+                .Width     = 34
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 56
+                .Top       = 5
+                .Width     = 37
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- Rotulo "Imprime Iniciais em Maiusculo :" (Say7: top=457, left=516)
+        loc_oPagina.AddObject("lbl_4c_Say7", "Label")
+        WITH loc_oPagina.lbl_4c_Say7
+            .Top       = 375
+            .Left      = 516
+            .Width     = 148
+            .Caption   = "Imprime Iniciais em Mai" + CHR(250) + "sculo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup Maiusculo/Proper (OptProper: top=452, left=669, Value=2=Nao)
+        loc_oPagina.AddObject("obj_4c_OptProper", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OptProper
+            .Top           = 370
+            .Left          = 669
+            .Width         = 104
+            .Height        = 26
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 0
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 5
+                .Width     = 34
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 56
+                .Top       = 5
+                .Width     = 37
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+
+        *-- Rotulo "Usar Nome de Contato se Preenchido :" (Say9: top=476, left=476)
+        loc_oPagina.AddObject("lbl_4c_Say9", "Label")
+        WITH loc_oPagina.lbl_4c_Say9
+            .Top       = 394
+            .Left      = 476
+            .Width     = 188
+            .Caption   = "Usar Nome de Contato se Preenchido :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup Usar Contato (OptContatos: top=471, left=669, Value=2=Nao)
+        loc_oPagina.AddObject("obj_4c_OptContatos", "OptionGroup")
+        WITH loc_oPagina.obj_4c_OptContatos
+            .Top           = 389
+            .Left          = 669
+            .Width         = 104
+            .Height        = 26
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 0
+            .Value         = 2
+
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 5
+                .Top       = 5
+                .Width     = 34
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Value     = 1
+                .FontName  = "Comic Sans MS"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Height    = 15
+                .Left      = 56
+                .Top       = 5
+                .Width     = 37
+                .AutoSize  = .T.
+                .Themes    = .F.
+            ENDWITH
+
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarImpressoras - Carrega impressoras termicas autorizadas para o usuario
+    *   1. Consulta SigCdPam/SigCdPac para parametros de impressao termica
+    *   2. APRINTERS() lista todas as impressoras Windows instaladas
+    *   3. SQLEXEC filtra impressoras termicas (SigSyImp+SigCdmp, nTpImpres=2)
+    *   4. Expande ButtonCount de obj_4c_Opt_Impressora com impressoras encontradas
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarImpressoras()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_nMaxImpEti
+        LOCAL loc_nPrinters, loc_nI, loc_nCnt, loc_nImp, loc_nOk, loc_lcI
+        LOCAL loc_nTop, loc_nHeight, loc_oPg1, loc_oOptImp
+        DIMENSION loc_laPrinters(10, 2)
+        DIMENSION loc_laImpOk(1)
+        loc_lSucesso  = .F.
+        loc_nMaxImpEti = 5
+
+        TRY
+            *-- Parametros de impressao termica: SigCdPam
+            loc_nResult = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_SigCdPam")
+            IF loc_nResult > 0 AND !EOF("cursor_4c_SigCdPam")
+                SELECT cursor_4c_SigCdPam
+                GO TOP
+                THIS.this_nTpImp   = IIF(cursor_4c_SigCdPam.ImpEtis <> 0, cursor_4c_SigCdPam.ImpEtis, 1)
+                THIS.this_nAjVerts = cursor_4c_SigCdPam.AjVerts
+                THIS.this_nAjHorzs = cursor_4c_SigCdPam.AjHorzs
+                loc_nMaxImpEti     = IIF(cursor_4c_SigCdPam.nMaxImpEti > 5, cursor_4c_SigCdPam.nMaxImpEti, 5)
+            ENDIF
+            IF USED("cursor_4c_SigCdPam")
+                USE IN cursor_4c_SigCdPam
+            ENDIF
+
+            *-- Ajustes de impressora: SigCdPac
+            loc_nResult = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPac", "cursor_4c_SigCdPac")
+            IF loc_nResult > 0 AND !EOF("cursor_4c_SigCdPac")
+                SELECT cursor_4c_SigCdPac
+                GO TOP
+                THIS.this_nAjDenss = IIF(cursor_4c_SigCdPac.AjDens < 10, 10, cursor_4c_SigCdPac.AjDens)
+                THIS.this_nAjVelos = IIF(cursor_4c_SigCdPac.AjVelos < 1, 1, cursor_4c_SigCdPac.AjVelos)
+            ENDIF
+            IF USED("cursor_4c_SigCdPac")
+                USE IN cursor_4c_SigCdPac
+            ENDIF
+
+            *-- Lista de impressoras Windows (APRINTERS retorna array 2D: nome, porta)
+            loc_nPrinters = APRINTERS(loc_laPrinters)
+            IF loc_nPrinters > 0
+                FOR loc_nI = 1 TO loc_nPrinters
+                    loc_laPrinters(loc_nI, 1) = UPPER(loc_laPrinters(loc_nI, 1))
+                ENDFOR
+                =ASORT(loc_laPrinters)
+            ENDIF
+
+            *-- Impressoras termicas autorizadas para o usuario (SigSyImp+SigCdmp)
+            loc_cSQL = "SELECT simp.Impres" + ;
+                       " FROM SigSyImp syimp, SigCdmp simp" + ;
+                       " WHERE syimp.UsuAcess = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                       " AND syimp.CImps = simp.Impres AND simp.nTpImpres = 2" + ;
+                       " UNION ALL" + ;
+                       " SELECT simp2.Impres" + ;
+                       " FROM SigCdAcG acg, SigSyImp syimp2, SigCdmp simp2" + ;
+                       " WHERE acg.Usuarios = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                       " AND acg.Grupos = syimp2.GrAcess" + ;
+                       " AND syimp2.CImps = simp2.Impres AND simp2.nTpImpres = 2"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCImp")
+            IF loc_nResult > 0 AND RECCOUNT("cursor_4c_TmpCImp") > 0
+                SELECT DISTINCT Impres FROM cursor_4c_TmpCImp ;
+                    ORDER BY Impres ;
+                    INTO CURSOR cursor_4c_SigCdmp READWRITE
+            ELSE
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT DISTINCT Impres FROM SigCdmp WHERE nTpImpres = 2 ORDER BY Impres", ;
+                    "cursor_4c_SigCdmp")
+            ENDIF
+            IF USED("cursor_4c_TmpCImp")
+                USE IN cursor_4c_TmpCImp
+            ENDIF
+
+            *-- Cruzar impressoras autorizadas com as instaladas no Windows
+            loc_nCnt = 0
+            loc_nImp = 1
+            IF loc_nPrinters > 0 AND USED("cursor_4c_SigCdmp") AND RECCOUNT("cursor_4c_SigCdmp") > 0
+                SELECT cursor_4c_SigCdmp
+                GO TOP
+                SCAN
+                    loc_nOk = ASCAN(loc_laPrinters, ALLTRIM(UPPER(cursor_4c_SigCdmp.Impres)))
+                    IF loc_nOk <> 0
+                        loc_nCnt = loc_nCnt + 1
+                        DIMENSION loc_laImpOk(loc_nCnt)
+                        loc_laImpOk(loc_nCnt) = loc_laPrinters(loc_nOk)
+                        loc_nImp = loc_nImp + 1
+                    ENDIF
+                ENDSCAN
+            ENDIF
+            loc_nImp = loc_nImp - 1
+            IF USED("cursor_4c_SigCdmp")
+                USE IN cursor_4c_SigCdmp
+            ENDIF
+
+            *-- Configurar botoes da OptionGroup de impressoras
+            loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+            IF !PEMSTATUS(loc_oPg1, "obj_4c_Opt_Impressora", 5)
+                RETURN
+            ENDIF
+            loc_oOptImp = loc_oPg1.obj_4c_Opt_Impressora
+            loc_nTop    = 10
+            loc_nHeight = 15
+
+            IF loc_nImp > 0
+                loc_oOptImp.ButtonCount = MIN(loc_nImp, loc_nMaxImpEti)
+                FOR loc_nI = 1 TO loc_oOptImp.ButtonCount
+                    loc_lcI = ALLTRIM(STR(loc_nI))
+                    WITH loc_oOptImp.Buttons(loc_nI)
+                        .AutoSize  = .F.
+                        .Caption   = " \<" + loc_lcI + ". " + loc_laImpOk(loc_nI)
+                        .FontSize  = 8
+                        .ForeColor = RGB(36, 84, 155)
+                        .Tag       = UPPER(loc_laImpOk(loc_nI))
+                        .Left      = 9
+                        .Top       = loc_nTop
+                        .Width     = 210
+                        .BackStyle = 0
+                        .Themes    = .F.
+                    ENDWITH
+                    loc_nTop    = loc_nTop + 20
+                    loc_nHeight = loc_nHeight + 20
+                ENDFOR
+            ELSE
+                loc_oOptImp.ButtonCount = 1
+                loc_nOk = ASCAN(loc_laPrinters, "GEN" + CHR(233) + "RICO/SOMENTE TEXTO")
+                WITH loc_oOptImp.Buttons(1)
+                    .AutoSize  = .F.
+                    .Caption   = " \<0. Gen" + CHR(233) + "rico/Somente Texto"
+                    .FontName        = "Comic Sans MS"
+                    .Enabled   = (loc_nOk <> 0)
+                    .FontSize  = 8
+                    .ForeColor = RGB(36, 84, 155)
+                    .Tag       = "GEN" + CHR(233) + "RICO/SOMENTE TEXTO"
+                    .Left      = 9
+                    .Width     = 210
+                    .Themes    = .F.
+                ENDWITH
+                loc_nHeight = loc_nHeight + 20
+                loc_nImp    = IIF(loc_oOptImp.Buttons(1).Enabled, 1, 0)
+            ENDIF
+
+            loc_oOptImp.Enabled = (loc_nImp > 1)
+            loc_oOptImp.Height  = loc_nHeight
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro CarregarImpressoras")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaRelatorio - Transfere valores dos controles do form para o BO
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaRelatorio()
+        LOCAL loc_oPg1, loc_nImpres
+        IF VARTYPE(THIS.this_oRelatorio) <> "O"
+            RETURN
+        ENDIF
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+        WITH THIS.this_oRelatorio
+            IF PEMSTATUS(loc_oPg1, "txt_4c_Codigo", 5)
+                .this_cCodigos    = ALLTRIM(loc_oPg1.txt_4c_Codigo.Value)
+                .this_cDescs      = ALLTRIM(loc_oPg1.txt_4c_Desc.Value)
+                .this_cNmOperacao = ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value)
+                .this_dDtInicial  = loc_oPg1.txt_4c__dt_inicial.Value
+                .this_dDtFinal    = loc_oPg1.txt_4c__dt_final.Value
+                .this_nQtdEtiq    = loc_oPg1.obj_4c_Spn_qtdetiq.Value
+                .this_nConta      = loc_oPg1.obj_4c_Opt_conta.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "obj_4c_Option", 5)
+                .this_nOrdem       = loc_oPg1.obj_4c_Option.Value
+                .this_nOrdemDir    = loc_oPg1.obj_4c_OpOrdem.Value
+                .this_nColunas     = loc_oPg1.obj_4c_OpColunas.Value
+                .this_nImpPais     = loc_oPg1.obj_4c_OptPais.Value
+                .this_nImpCodigo   = loc_oPg1.obj_4c_OptCodigo.Value
+                .this_nImpMaius    = loc_oPg1.obj_4c_OptProper.Value
+                .this_nImpContatos = loc_oPg1.obj_4c_OptContatos.Value
+                .this_nImpressora  = loc_oPg1.obj_4c_Opt_Impressora.Value
+                loc_nImpres = loc_oPg1.obj_4c_Opt_Impressora.Value
+                IF loc_nImpres >= 1
+                    .this_cNomeImpressora = ALLTRIM(loc_oPg1.obj_4c_Opt_Impressora.Buttons(loc_nImpres).Tag)
+                ELSE
+                    .this_cNomeImpressora = ""
+                ENDIF
+            ENDIF
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Processamento - Constroi cursor Relacao e CsCabecalho para impressao
+    *   Modo Mala Direta (nm_operacao vazio): SigMlCab+SigCdCli via BO
+    *   Modo Operacao (cursor_4c_Operacoes): SELECT marcados com copias UNION ALL
+    *   Aplica optContatos, optProper e INDEX ON para ordenacao
+    *--------------------------------------------------------------------------
+    PROCEDURE Processamento()
+        LOCAL loc_lSucesso, loc_oPg1, loc_lModoOp, loc_nQtd, loc_nX
+        LOCAL loc_nOrdem, loc_nOrdemDir, loc_nContatos, loc_nProper, loc_cQuery
+        loc_lSucesso = .F.
+        TRY
+            THIS.FormParaRelatorio()
+            loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+
+            *-- Cursor CsCabecalho: flags de impressao usados pelos arquivos LBX
+            IF USED("CsCabecalho")
+                USE IN CsCabecalho
+            ENDIF
+            CREATE CURSOR CsCabecalho (llImpPais L, llImpCodigos L)
+            APPEND BLANK
+            REPLACE llImpPais WITH ;
+                IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptPais", 5) AND loc_oPg1.obj_4c_OptPais.Value = 1, .T., .F.) ;
+                IN CsCabecalho
+            REPLACE llImpCodigos WITH ;
+                IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptCodigo", 5) AND loc_oPg1.obj_4c_OptCodigo.Value = 1, .T., .T.) ;
+                IN CsCabecalho
+
+            loc_nContatos = IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptContatos", 5), loc_oPg1.obj_4c_OptContatos.Value, 2)
+            loc_nProper   = IIF(PEMSTATUS(loc_oPg1, "obj_4c_OptProper", 5),   loc_oPg1.obj_4c_OptProper.Value,   2)
+            loc_nOrdem    = IIF(PEMSTATUS(loc_oPg1, "obj_4c_Option", 5),      loc_oPg1.obj_4c_Option.Value,      2)
+            loc_nOrdemDir = IIF(PEMSTATUS(loc_oPg1, "obj_4c_OpOrdem", 5),     loc_oPg1.obj_4c_OpOrdem.Value,     2)
+            loc_lModoOp   = PEMSTATUS(loc_oPg1, "txt_4c__nm_operacao", 5) AND ;
+                            !EMPTY(ALLTRIM(loc_oPg1.txt_4c__nm_operacao.Value))
+
+            IF loc_lModoOp
+                IF !USED("cursor_4c_Operacoes") OR FCOUNT("cursor_4c_Operacoes") <= 8
+                    MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o carregada. " + ;
+                             "Informe o per" + CHR(237) + "odo e pressione Enter.", ;
+                             "Impress" + CHR(227) + "o")
+                ELSE
+                    loc_nQtd = IIF(PEMSTATUS(loc_oPg1, "obj_4c_Spn_qtdetiq", 5), ;
+                                  loc_oPg1.obj_4c_Spn_qtdetiq.Value, 1)
+                    IF USED("Relacao")
+                        USE IN Relacao
+                    ENDIF
+                    IF loc_nQtd <= 1
+                        SELECT IClis, RClis, Endes, Nums, Compls, Bairs, Cidas, ;
+                               Ceps, Estas, Tel1s, Tel2s, Faxs, Nascs, cIdChaves, ;
+                               Codigos, paises, Contato ;
+                               FROM cursor_4c_Operacoes WHERE Marcas = 1 ;
+                               INTO CURSOR Relacao READWRITE
+                    ELSE
+                        *-- Multiplas copias via UNION ALL (replica logica original com ExecScript)
+                        loc_cQuery = ""
+                        FOR loc_nX = 1 TO loc_nQtd
+                            IF !EMPTY(loc_cQuery)
+                                loc_cQuery = loc_cQuery + CHR(13) + CHR(10) + ;
+                                             "UNION ALL" + CHR(13) + CHR(10)
+                            ENDIF
+                            loc_cQuery = loc_cQuery + ;
+                                "SELECT IClis, RClis, Endes, Nums, Compls, Bairs, Cidas," + ;
+                                " Ceps, Estas, Tel1s, Tel2s, Faxs, Nascs, cIdChaves," + ;
+                                " Codigos, paises, Contato" + ;
+                                " FROM cursor_4c_Operacoes n" + ALLTRIM(STR(loc_nX)) + ;
+                                " WHERE Marcas = 1"
+                        ENDFOR
+                        loc_cQuery = loc_cQuery + " INTO CURSOR Relacao READWRITE"
+                        EXECSCRIPT(loc_cQuery)
+                    ENDIF
+                    loc_lSucesso = .T.
+                ENDIF
+            ELSE
+                IF THIS.this_oRelatorio.PrepararDadosMalaDireta()
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao carregar dados")
+                ENDIF
+            ENDIF
+
+            IF loc_lSucesso
+                *-- Substituir nome pelo contato se preenchido
+                IF loc_nContatos = 1 AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                    REPLACE ALL RClis WITH IIF(EMPTY(Contato), RClis, Contato) IN Relacao
+                ENDIF
+                *-- Proper case nos nomes
+                IF loc_nProper = 1 AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                    REPLACE ALL RClis WITH PROPER(RClis) IN Relacao
+                ENDIF
+                *-- Ordenacao por indice
+                IF USED("Relacao") AND RECCOUNT("Relacao") > 0
+                    SELECT Relacao
+                    DO CASE
+                        CASE loc_nOrdem = 1  && Alfabetica
+                            IF loc_nOrdemDir = 2
+                                INDEX ON RClis + IClis DESCENDING TAG RClis
+                            ELSE
+                                INDEX ON RClis + IClis TAG RClis
+                            ENDIF
+                        CASE loc_nOrdem = 2  && CEP
+                            IF loc_nOrdemDir = 2
+                                INDEX ON Ceps + IClis DESCENDING TAG Ceps
+                            ELSE
+                                INDEX ON Ceps + IClis TAG Ceps
+                            ENDIF
+                        CASE loc_nOrdem = 3  && Data de Nascimento
+                            IF loc_nOrdemDir = 2
+                                INDEX ON SUBSTR(DTOS(Nascs), 5) + IClis DESCENDING TAG Nascs
+                            ELSE
+                                INDEX ON SUBSTR(DTOS(Nascs), 5) + IClis TAG Nascs
+                            ENDIF
+                    ENDCASE
+                    GO TOP IN Relacao
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro Processamento")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirTermica - Impressao em impressora termica modelo 45 (SigOpEtq)
+    *   Cria DbImpressao a partir de Relacao (SPACE(60) como Obs, copiado de IClis)
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirTermica()
+        LOCAL loc_lSucesso, loc_lcNomeImp, loc_oPg1, loc_nImpres
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.Processamento() AND THIS.this_oRelatorio.PrepararDbImpressao()
+                loc_oPg1      = THIS.pgf_4c_Paginas.Page1
+                loc_lcNomeImp = ""
+                IF PEMSTATUS(loc_oPg1, "obj_4c_Opt_Impressora", 5)
+                    loc_nImpres = loc_oPg1.obj_4c_Opt_Impressora.Value
+                    IF loc_nImpres >= 1
+                        loc_lcNomeImp = ALLTRIM(loc_oPg1.obj_4c_Opt_Impressora.Buttons(loc_nImpres).Tag)
+                    ENDIF
+                ENDIF
+                TRY
+                    =SigOpEtq(.F., .F., .F., 45, THIS.this_nTpImp, THIS.this_nAjVerts, ;
+                             THIS.this_nAjHorzs, THIS.this_nAjDenss, .F., .F., .F., ;
+                             loc_lcNomeImp, , , THIS.this_nAjVelos, .F., .F.)
+                CATCH TO loc_oEtq
+                    MsgErro(loc_oEtq.Message, "SigOpEtq n" + CHR(227) + "o dispon" + CHR(237) + "vel")
+                ENDTRY
+                MsgInfo("Impress" + CHR(227) + "o Conclu" + CHR(237) + "da!!!", ;
+                    "T" + CHR(233) + "rmica")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ImprimirTermica")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirTermicaZ - Impressao em impressora termica modelo 96 (SigOpEtq)
+    *   DbImpressao usa SPACE(10) para Obs (replica imptermicaz do original)
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirTermicaZ()
+        LOCAL loc_lSucesso, loc_lcNomeImp, loc_oPg1, loc_nImpres
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.Processamento()
+                IF USED("DbImpressao")
+                    USE IN DbImpressao
+                ENDIF
+                IF USED("Relacao") AND RECCOUNT("Relacao") > 0
+                    SELECT *, '1' AS cpros, 1 AS qtds, 0 AS cbars, SPACE(10) AS Obs ;
+                        FROM Relacao INTO CURSOR DbImpressao READWRITE
+                    SELECT DbImpressao
+                    GO TOP
+                    REPLACE ALL Obs WITH IClis IN DbImpressao
+
+                    loc_oPg1      = THIS.pgf_4c_Paginas.Page1
+                    loc_lcNomeImp = ""
+                    IF PEMSTATUS(loc_oPg1, "obj_4c_Opt_Impressora", 5)
+                        loc_nImpres = loc_oPg1.obj_4c_Opt_Impressora.Value
+                        IF loc_nImpres >= 1
+                            loc_lcNomeImp = ALLTRIM(loc_oPg1.obj_4c_Opt_Impressora.Buttons(loc_nImpres).Tag)
+                        ENDIF
+                    ENDIF
+                    TRY
+                        =SigOpEtq(.F., .F., .F., 96, THIS.this_nTpImp, THIS.this_nAjVerts, ;
+                                 THIS.this_nAjHorzs, THIS.this_nAjDenss, .F., .F., .F., ;
+                                 loc_lcNomeImp, , , THIS.this_nAjVelos, .F., .F.)
+                    CATCH TO loc_oEtq
+                        MsgErro(loc_oEtq.Message, "SigOpEtq n" + CHR(227) + "o dispon" + CHR(237) + "vel")
+                    ENDTRY
+                    MsgInfo("Impress" + CHR(227) + "o Conclu" + CHR(237) + "da!!!", ;
+                        "T" + CHR(233) + "rmica Z")
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgAviso("Nenhum registro para imprimir.", ;
+                        "T" + CHR(233) + "rmica Z")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ImprimirTermicaZ")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Processamento + LABEL FORM PREVIEW (ou Termica)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_oPg1, loc_nColunas, loc_lOk
+        loc_lOk = .F.
+        TRY
+            loc_oPg1     = THIS.pgf_4c_Paginas.Page1
+            loc_nColunas = 2
+            IF PEMSTATUS(loc_oPg1, "obj_4c_OpColunas", 5)
+                loc_nColunas = loc_oPg1.obj_4c_OpColunas.Value
+            ENDIF
+
+            IF loc_nColunas = 7
+                THIS.ImprimirTermica()
+                loc_lOk = .T.
+            ELSE
+                IF loc_nColunas = 9
+                THIS.ImprimirTermicaZ()
+                loc_lOk = .T.
+            ELSE
+                IF THIS.Processamento() AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                DO CASE
+                    CASE loc_nColunas = 1
+                        LABEL FORM SigMldDn PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 2
+                        LABEL FORM SigMld2 PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 3
+                        LABEL FORM SigMld3 PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 4
+                        LABEL FORM SigMld4 PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 5
+                        LABEL FORM SigMld5 PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 6
+                        LABEL FORM SigMld2C PREVIEW NOCONSOLE
+                    CASE loc_nColunas = 8
+                        LABEL FORM SigMld2K PREVIEW NOCONSOLE
+                ENDCASE
+                loc_lOk = .T.
+            ELSE
+                MsgAviso("Nenhum registro encontrado para visualizar.", "Visualizar")
+                ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro Visualizar")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImprimirClick - Processamento + LABEL FORM TO PRINTER PROMPT
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImprimirClick()
+        LOCAL loc_oPg1, loc_nColunas, loc_lOk
+        loc_lOk = .F.
+        TRY
+            loc_oPg1     = THIS.pgf_4c_Paginas.Page1
+            loc_nColunas = 2
+            IF PEMSTATUS(loc_oPg1, "obj_4c_OpColunas", 5)
+                loc_nColunas = loc_oPg1.obj_4c_OpColunas.Value
+            ENDIF
+
+            IF loc_nColunas = 7
+                THIS.ImprimirTermica()
+                loc_lOk = .T.
+            ELSE
+                IF loc_nColunas = 9
+                THIS.ImprimirTermicaZ()
+                loc_lOk = .T.
+            ELSE
+                IF THIS.Processamento() AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                DO CASE
+                    CASE loc_nColunas = 1
+                        LABEL FORM SigMldDn TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 2
+                        LABEL FORM SigMld2 TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 3
+                        LABEL FORM SigMld3 TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 4
+                        LABEL FORM SigMld4 TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 5
+                        LABEL FORM SigMld5 TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 6
+                        LABEL FORM SigMld2C TO PRINTER PROMPT NOCONSOLE
+                    CASE loc_nColunas = 8
+                        LABEL FORM SigMld2K TO PRINTER PROMPT NOCONSOLE
+                ENDCASE
+                loc_lOk = .T.
+            ELSE
+                MsgAviso("Nenhum registro encontrado para imprimir.", "Imprimir")
+                ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro Imprimir")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImpDiretoClick - Processamento + LABEL FORM TO PRINTER (sem dialogo)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImpDiretoClick()
+        LOCAL loc_oPg1, loc_nColunas, loc_lOk
+        loc_lOk = .F.
+        TRY
+            loc_oPg1     = THIS.pgf_4c_Paginas.Page1
+            loc_nColunas = 2
+            IF PEMSTATUS(loc_oPg1, "obj_4c_OpColunas", 5)
+                loc_nColunas = loc_oPg1.obj_4c_OpColunas.Value
+            ENDIF
+
+            IF loc_nColunas = 7
+                THIS.ImprimirTermica()
+                loc_lOk = .T.
+            ELSE
+                IF loc_nColunas = 9
+                THIS.ImprimirTermicaZ()
+                loc_lOk = .T.
+            ELSE
+                IF THIS.Processamento() AND USED("Relacao") AND RECCOUNT("Relacao") > 0
+                DO CASE
+                    CASE loc_nColunas = 1
+                        LABEL FORM SigMldDn TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 2
+                        LABEL FORM SigMld2 TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 3
+                        LABEL FORM SigMld3 TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 4
+                        LABEL FORM SigMld4 TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 5
+                        LABEL FORM SigMld5 TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 6
+                        LABEL FORM SigMld2C TO PRINTER NOCONSOLE
+                    CASE loc_nColunas = 8
+                        LABEL FORM SigMld2K TO PRINTER NOCONSOLE
+                ENDCASE
+                loc_lOk = .T.
+            ELSE
+                MsgAviso("Nenhum registro encontrado para imprimir.", "Imprimir Direto")
+                ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro ImpDireto")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Fecha o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnIncluirClick - Alterna para pagina de parametros/filtros
+    *   Em form REPORT, "Incluir" navega para a aba de parametros para o
+    *   usuario configurar os filtros antes de gerar o relatorio.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        TRY
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O" AND THIS.pgf_4c_Paginas.PageCount >= 2
+                THIS.AlternarPagina(2)
+            ELSE
+                THIS.AlternarPagina(1)
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro BtnIncluir")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnAlterarClick - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui operacao Alterar - usar Visualizar/Imprimir
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirClick - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui operacao Excluir - usar Visualizar/Imprimir
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnBuscarClick - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui operacao Buscar separada - usa filtros inline
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarClick()
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSalvarClick - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui operacao Salvar - dados sao somente leitura
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSalvarClick()
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Limpa os filtros e reinicia o formulario
+    *   Em form REPORT, "Cancelar" reinicia todos os filtros para valores padrao
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        THIS.LimparCampos()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Compatibilidade com FormBase; delega para FormParaRelatorio
+    *   Form REPORT usa FormParaRelatorio() para transferir filtros ao BO
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        THIS.FormParaRelatorio()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao carrega dados do BO de volta para o form
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        RETURN
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Atualiza estado de habilitacao dos controles
+    *   Delega para AtualizarEstadoControles que implementa a logica real
+    *--------------------------------------------------------------------------
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        THIS.AtualizarEstadoControles()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui grade de lista - usa filtros + LABEL FORM
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Nao aplicavel a formulario de relatorio
+    *   Form REPORT nao possui modos CRUD - botoes sao sempre os mesmos
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        RETURN
+    ENDPROC
+
+ENDDEFINE

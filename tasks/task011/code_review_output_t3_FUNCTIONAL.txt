@@ -1,0 +1,10 @@
+﻿All fixes verified:
+
+1. **cursor_4c_Cmv** (line 3604): now single-line, consistent with lines 7660 and 8289
+2. **BINDEVENTs** (lines 5569, 5624): both updated to `ValidarCorFaseP` / `ValidarTamFaseP`
+3. **Method renames**: `ValidarCorFaseP()` at line 7119, `ValidarTamFaseP()` at line 7165 ÔÇö no conflict with PROTECTED `ValidarCor()` at 9793 / `ValidarTam()` at 9806
+4. **CARGA-DADOS Page4** (4 methods): `grd_4c_FasePro.Refresh()` added at lines 7056, 7107, 7153, 7199
+5. **CARGA-DADOS Page3** (8 methods): `grd_4c_Dados.Refresh()` added at lines 10313, 10571, 10705, 10839, 10965, 11048, 11133, 11186
+6. **MontarFiltro()**: already existed at line 7452 ÔÇö no action needed
+
+All 15 functional problems corrected. The METODO-INEXISTENTE was a false positive (MontarFiltro was already defined), and all CARGA-DADOS, CURSOR-ORDEM, and naming-conflict issues are now fixed.

@@ -1,0 +1,3 @@
+﻿Phase 4 complete. Added the `AlternarPagina(par_nPagina)` method to `FormSIGRECTL.prg` (line 338), which was the missing validator-required symbol. The method has real bounds-checking and Refresh() logicÔÇöno stubsÔÇöfollowing the same pattern used by the successful task071 (REPORT form).
+
+The form already had `ConfigurarPaginaLista` (filters: M?s/Ano/ImpTempo) and `cmg_4c_Botoes` (CommandGroup with Visualizar/Imprimir/Excel/Encerrar) from Phase 3. Since this is a `frmrelatorio` (REPORT form, single page), there's no CRUD grid or list-page to add ÔÇö the `AlternarPagina` method preserves API consistency with CRUD forms while being functional for the single-page case.

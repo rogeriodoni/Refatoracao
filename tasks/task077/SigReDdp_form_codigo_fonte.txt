@@ -1,0 +1,608 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReDdp.SCX
+* Data/Hora: 04/06/2026 01:02:21
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDDP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREDDP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Demonstrativo
+  Parent: SIGREDDP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_vencimento
+  Parent: SIGREDDP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREDDP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 8
+  Left = 3
+  Width = 388
+  Height = 113
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDDP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Demonstrativo de Balanço"
+  Name = "SIGREDDP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 3
+  btnReport.ZOrderSet = 6
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDDP.Say4
+------------------------------------------------------------
+  Caption = "Tipo : "
+  Left = 301
+  Top = 149
+  TabIndex = 4
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDDP.Get_Demonstrativo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 20
+  TabIndex = 1
+  Top = 144
+  Width = 154
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "Get_Demonstrativo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDDP.lbl_vencimento
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Data : "
+  Left = 298
+  Top = 174
+  Width = 35
+  TabIndex = 5
+  ZOrderSet = 4
+  Name = "lbl_vencimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDDP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  InputMask = ""
+  Left = 336
+  MaxLength = 10
+  TabIndex = 2
+  Top = 171
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDDP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReDdp Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+If Used('crSigCdCli')
+	Use In crSigCdCli
+EndIf
+If Used('crSigMvHst')
+	Use In crSigMvHst
+EndIf
+If Used('crSigMvEst')
+	Use In crSigMvEst
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+ldFinal     = ThisForm.get_dt_final.Value
+lcConfig	= ThisForm.get_Demonstrativo.Value
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcCbEmpresa = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcCbTitulo  = 'Demonstrativo de Balanço ' + Alltrim(lcConfig)
+lcCbPeriodo = 'Data : ' + Dtoc(ldFinal)
+	
+Create Cursor csCabecalho (cb_empresa c(80), cb_titulo c(80), cb_periodo c(80), SdInicial n(12,3))
+Insert Into csCabecalho (cb_empresa, cb_titulo, cb_periodo) Values (lcCbEmpresa, lcCbTitulo, lcCbPeriodo)
+
+Create Cursor TmpResult (Ordem n(3), Grupos c(10), Contas c(10), Nome c(50), TpOps c(15), Operas c(1), Qtds n(12,3))
+Index On Ordem Tag Ordem
+
+lnSaldo = 0
+
+ThisForm.poDataMgr.CursorQuery('SigPrDmo', 'crSigPrDmo', 'Nome', lcConfig, 'Grupos, Contas')
+
+pDtI = fDtoSQL(ldFinal)
+pDtF = fDtoSQL(ldFinal, '23:59:59')
+
+lcQuery = [Select Emps, Grupos, Contas, Datas, Codigos ] + ;
+		    [From SigCdFcx ] + ;
+		   [Where Emps = '] + _Empr + [' And ] + ;
+		   		 [Grupos = '] + crSigPrDmo.Grupos + [' And ] + ;
+		   		 [Contas = '] + crSigPrDmo.Contas + [' And ] + ;
+		   		 [Datas <= ?pDtF ] + ; 
+		   [Order By Emps, Grupos, Contas, Datas, Codigos]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdFcx') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFcx)')
+	Return 0
+EndIf
+
+Select crSigCdFcx
+Index On Dtos(Datas) Tag GrConDat
+Set Order to GrConDat Descending
+Set Near On
+Seek Dtos(ldFinal)
+Set Near Off
+Set Order to GrConDat Ascending
+oProg = CreateObject('fwprogressbar', 'Processando Dados dos Fechamentos...', Reccount())
+oProg.Show
+Scan While (Datas <= pDtF)
+	oProg.Update(.t.)
+
+	lcQuery = [Select Emps, Codigos, CPros, Saldos ] + ;
+			    [From SigOpCfe ] + ;
+			   [Where Emps = '] + _Empr + [' And ] + ;
+			   		 [Codigos = ] + Alltrim(Str(crSigCdFcx.Codigos)) + [ ] + ;
+			   [Order By Emps, Codigos, CPros, Saldos]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpCfe') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpCfe)')
+		Return 0
+	EndIf
+
+	Select crSigOpCfe
+	Scan
+		If (crSigOpCfe.CPros = crSigCdPam.Ouros)
+			lnQtde  = crSigOpCfe.Saldos
+			lnSaldo = lnSaldo + lnQtde
+
+			Insert Into TmpResult (Grupos, Contas, TpOps, Qtds) ;
+						   Values (crSigPrDmo.Grupos, crSigPrDmo.Contas, 'Saldo Inicial', lnQtde)
+		EndIf
+	EndScan
+EndScan
+oProg.Complete
+
+Select csCabecalho
+Go Top
+Replace csCabecalho.SdInicial With lnSaldo
+
+lnSubTotal = lnSaldo
+
+lcQuery = [Select Nome, Ordems, Grupos, Contas, Operas, TpOps ] + ;
+		    [From SigCdDpr ] + ;
+		   [Where Nome = '] + lcConfig + [' ] + ;
+		   [Order By Nome, Ordems, Grupos, Contas, Operas, TpOps]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdDpr') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdDpr)')
+	Return 0
+EndIf
+Set Step On 
+Select crSigCdDpr
+oProg = CreateObject('fwprogressbar', 'Processando Dados do Demonstrativo...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	If (crSigCdDpr.Operas = 'T') && Sub-Total
+		Insert Into TmpResult (Operas, Qtds, Ordem, Nome) ;
+					   Values ('T', lnSubTotal, crSigCdDpr.Ordems, Iif(crSigCdDpr.Ordems=999, 'Total Geral', 'Sub-Total'))
+		Loop
+	EndIf
+	
+	If Inlist(crSigCdDpr.Operas, 'E', 'S', 'P')
+		lcQuery = [Select Emps, Grupos, Contas, Datas, Codigos ] + ;
+				    [From SigCdFcx ] + ;
+				   [Where Emps = '] + _Empr + [' And ] + ;
+				   		 [Grupos = '] + crSigCdDpr.Grupos + [' And ] + ;
+				   		 [Contas = '] + crSigCdDpr.Contas + [' And ] + ;
+				   		 [Datas <= ?pDtF ] + ; 
+				   [Order By Emps, Grupos, Contas, Datas, Codigos]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdFcx') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFcx)')
+			Return 0
+		EndIf
+
+		Select crSigCdFcx
+		Index On Dtos(Datas) tag GrConDat
+		Set Order to GrConDat Descending
+		Set Near On
+		Seek Dtos(ldFinal)
+		Set Near Off
+		Set Order to GrConDat Ascending
+		Scan While (Datas <= pDtF)
+			If (crSigCdDpr.Operas = 'P')
+				lcNome = Iif(Seek(crSigCdDpr.Contas, 'crSigCdCli', 'IClis'), crSigCdCli.Rclis, '')
+
+				lcQuery = [Select Emps, Codigos, CPros, Pesagems ] + ;
+						    [From SigOpCfe ] + ;
+						   [Where Emps = '] + _Empr + [' And ] + ;
+						   		 [Codigos = ] + Alltrim(Str(crSigCdFcx.Codigos)) + [ ] + ;
+						   [Order By Emps, Codigos, CPros, Pesagems]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpCfe') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpCfe)')
+					Return 0
+				EndIf
+
+				Select crSigOpCfe
+				Scan
+					If (crSigOpCfe.CPros = crSigCdPam.Ouros)
+						Insert Into TmpResult (Grupos, Contas, Nome, TpOps, Operas, Qtds, Ordem) ;
+									   Values (crSigCdDpr.Grupos, crSigCdDpr.Contas, lcNome, 'PESAGEM', ;
+											   crSigCdDpr.Operas, crSigOpCfe.Pesagems, crSigCdDpr.Ordems)
+						lnSubTotal = lnSubTotal - crSigOpCfe.Pesagems
+					EndIf
+				EndScan
+			Else
+				lcQuery = [Select Emps, Codigos, CPros, TpOps, PesoEnts, PesoSais ] + ;
+						    [From SigCdFes ] + ;
+						   [Where Emps = '] + _Empr + [' And ] + ;
+						   		 [Codigos = ] + Alltrim(Str(crSigCdFcx.Codigos)) + [ ] + ;
+						   [Order By Emps, Codigos, CPros, TpOps, PesoEnts, PesoSais]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdFes') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdFes)')
+					Return 0
+				EndIf
+
+				Select crSigCdFes
+				Scan
+					If (crSigCdFes.CPros = crSigCdPam.Ouros) And (crSigCdFes.TpOps = crSigCdDpr.TpOps)
+						lcNome = Iif(Seek(crSigCdDpr.Contas, 'crSigCdCli', 'Iclis'), crSigCdCli.Rclis, '')
+						lnQtde = Iif(crSigCdDpr.Operas = 'E', crSigCdFes.PesoEnts, crSigCdFes.PesoSais)
+
+						Insert Into TmpResult (Grupos, Contas, Nome, TpOps, Operas, Qtds, Ordem) ;
+									   Values (crSigCdDpr.Grupos, crSigCdDpr.Contas, lcNome, crSigCdFes.TpOps, ;
+											   crSigCdDpr.Operas, lnQtde, crSigCdDpr.Ordems)
+
+						If (crSigCdDpr.Operas = 'E')
+							lnSubTotal = lnSubTotal + lnQtde
+						Else
+							lnSubTotal = lnSubTotal - lnQtde
+						EndIf
+					EndIf
+				EndScan
+			EndIf
+		EndScan
+	Else
+		lnPeso  = 0
+		lnOrdem = crSigCdDpr.Ordems
+		If Empty(crSigCdDpr.Contas)
+			lcNome = 'Saldo das Fases'
+		Else
+			lcNome = Iif(Seek(crSigCdDpr.Contas, 'crSigCdCli', 'Iclis'), crSigCdCli.Rclis, '')
+		EndIf
+
+		Scan While (crSigCdDpr.Nome = lcConfig) And (crSigCdDpr.Operas = 'H')
+			oProg.Update(.t.)
+
+			If (ThisForm.poDataMgr.getDriver() = 'foxpro')
+				Select crSigMvEst
+				lcChave = _Empr + crSigCdDpr.Grupos 
+				Set Order to EmpEstpro
+				Set Near On
+				Seek lcChave + crSigCdDpr.Contas + crSigCdPam.Ouros
+				Set Near Off
+				Scan While lcChave = Emps + Grupos And Estos = Alltrim(crSigCdDpr.Contas) 
+					If CPros <> crSigCdPam.Ouros
+						Loop
+					EndIf
+					Select crSigMvHst
+					Set Order to EmpEstPro Descending
+					Set Near On
+					=Seek(lcChave + crSigMvEst.Estos + crSigCdPam.Ouros + Dtos(ldFinal))
+					Set Near Off
+					If Emps + Grupos + Estos + CPros = lcChave + crSigMvEst.Estos + crSigCdPam.Ouros
+						lnPeso = lnPeso + crSigMvHst.Sqtds
+					EndIf
+				EndScan
+			Else
+				pGrI = crSigCdDpr.Contas
+				pGrF = Iif(Empty(Alltrim(crSigCdDpr.Contas)), Replicate(Chr(254), 20), crSigCdDpr.Contas)
+				
+				lcQuery = [Select Emps, Grupos, Estos, CPros ] + ;
+						    [From SigMvEst ] + ;
+						   [Where EmpGruEsts BetWeen '] + _Empr + crSigCdDpr.Grupos + pGrI + [' And ] + ;
+						   		 					['] + _Empr + crSigCdDpr.Grupos + pGrF + [' And ] + ;	
+								 [CPros = '] + crSigCdPam.Ouros + [' And ] + ;
+								 [Not Sqtds = 0 ] + ;
+						   [Order By Emps, Grupos, Estos, CPros]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvEst') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvEst)')
+					Return 0
+				EndIf
+
+				Select crSigMvEst
+				Index On Emps + Grupos + Estos + CPros Tag EmpEstPro
+				Set Order to EmpEstpro
+				Set Near On
+				Seek _Empr + crSigCdDpr.Grupos + crSigCdDpr.Contas + crSigCdPam.Ouros
+				Set Near Off
+				Scan While _Empr + crSigCdDpr.Grupos = Emps + Grupos And Estos = Alltrim(crSigCdDpr.Contas)
+					lcQuery = [Select Top 1 EmpGruEsts, Cpros, cIdChaves, Sqtds ] + ;
+								[From SigMvHst ] + ;
+							   [Where EmpGruEsts = '] + _Empr + crSigCdDpr.Grupos + crSigMvEst.Estos + [' And ] + ;
+							   		 [Cpros = '] + crSigCdPam.Ouros + [' And ] + ;
+							   		 [Datas <= ?pDtF ] + ;
+							   [Order By EmpGruEsts Asc, Cpros Asc, cIdChaves Desc]
+
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvHst') < 1)
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvHst)')
+						Return 0
+					EndIf
+					Select crSigMvHst
+					Go Top
+					If Not Eof('crSigMvHst')
+						lnPeso = lnPeso + crSigMvHst.Sqtds
+					EndIf
+				EndScan
+			EndIf
+		EndScan
+		
+		If (lnPeso <> 0)
+			Insert Into TmpResult (Grupos, Contas, Nome, Operas, Qtds, Ordem) ;
+						   Values (crSigCdDpr.Grupos, crSigCdDpr.Contas, lcNome, 'H', lnPeso, lnOrdem)
+			lnSubTotal = lnSubTotal + lnPeso
+		EndIf
+		Select crSigCdDpr
+		Skip - 1
+	EndIf
+EndScan
+oProg.Complete
+
+Select TmpResult
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'Ouros')
+
+		If (ThisForm.poDataMgr.getDriver() = 'foxpro')
+			lcDiretorio = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))
+			Use &lcDiretorio.\SigMvHst Alias crSigMvHst In 0
+			Use &lcDiretorio.\SigMvEst Alias crSigMvEst In 0
+			Use &lcDiretorio.\SigCdCli Alias crSigCdCli In 0
+		Else
+			lcQuery = [Select IClis, RClis ] + ;
+					    [From SigCdCli]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+				Return 0
+			EndIf
+			Select crSigCdCli
+			Index On IClis Tag IClis
+		EndIf
+
+		.get_dt_final.Value = Date()
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReDdp to Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReDdp to Print NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4)
+	If Empty(ThisForm.get_Demonstrativo.Value)
+		=Messagebox('Nome do Demonstrativo Inválido!!!', 16, '')
+		ThisForm.get_Demonstrativo.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.get_dt_final.Value)
+		=Messagebox('Data Inválida!!!', 16, '')
+		ThisForm.get_dt_final.SetFocus
+		Return 0
+	EndIf
+EndIf
+
+frmrelatorio::btnReport.Click
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDDP.Get_Demonstrativo
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrDmo', ;
+						   'crListaRemota', 'Nome', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Nome', '', 'Demonstrativo')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Nome
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDDP
+RESERVED3 (ClassInfo): podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

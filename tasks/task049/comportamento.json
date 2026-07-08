@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECGR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCgr Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGR",
+      "evento": "Procedure",
+      "linhas": 490,
+      "codigoOriginal": "Local lnCodBars, lnOp, lnEnv, lcEDN, lnTipo\n\nlnTipo = ThisForm.Tipo\n\nThisForm.Aguarde.Visible = .t.\nThisForm.Refresh\n\nCreate Cursor TmpRastro (Cbars n(8), Cpros c(14), Dpros c(40), Tipos c(1), ImpCab l,;\n\t\t\t\t\t\tNops n(10), cFunds n(6), Tubos n(2), Dtfunds d, CodMaqfs c(10),;\n\t\t\t\t\t\tnNumes c(10), Numes n(10), DtLotes d, Ifors c(10), Dfors c(30), ;\n\t\t\t\t\t\tCodigos n(6), DtRgans d, Codtpans n(2), Descs c(20), Resps c(30), ;\n\t\t\t\t\t\tPesoams n(9,2), Dtamos d, nLotes n(10), nfunds n(6), RgNops n(10), ;\n\t\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "SqlExecute,GetDatabase,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGR",
+      "evento": "Init",
+      "linhas": 9,
+      "codigoOriginal": "LParameters _Tipo, _Filtro, _Form\n\nThisForm.Filtro \t= _Filtro\nThisForm.Tipo   \t= _Tipo\nThisForm.ParentForm = _Form\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCgr to Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCgr to Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

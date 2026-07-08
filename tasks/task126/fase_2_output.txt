@@ -1,0 +1,10 @@
+﻿Phase 3 is complete. `FormSigReInv.prg` was created at `C:\4c\projeto\app\forms\relatorios\FormSigReInv.prg` with:
+
+- **Full FLAT layout** (Height=600, Width=800, no PageFrame) matching the original SCX dimensions
+- **All filter controls** reproduced at exact legacy positions: empresa, Inv1/2/3 checkboxes, Saldo1/2, Valor1-5 (UEPS/PEPS/Custo/CustoM├®dio/Venda), MoeFator, ValFator (read-only), Moeda, MoedaDesc, Opt_ICMS, OptPosicao, DataSaldo
+- **4-button CommandGroup**: Visualizar / Imprimir / Gera TXT / Encerrar (button 3 maps to `Command1.Click` = `GerarArquivoTXT`)
+- **All control events** wired via BINDEVENT to PUBLIC methods: ValidCdEmpresa, WhenDsEmpresa, ValidMoeFator, ValidMoeda, WhenMoedaDesc, ValidMoedaDesc, IcmsInteractiveChange, PosicaoInteractiveChange, ValidSaldo1/2, ValidValor1-5
+- **Mutual-exclusion logic** for Valor checkboxes (only one at a time) and Saldo enable/disable when UEPS/PEPS selected
+- **FormParaRelatorio()** transfers all filter values to BO properties before calling Visualizar/Imprimir/GerarTXT
+- **CarregarCambio** changed from PROTECTED to public in the BO so the form can call it for `ValidMoeFator`
+- **DMoes lookup** uses `TmpMoe` cursor (which has both CMoes and DMoes indexes) instead of `CrSigCdMoe`

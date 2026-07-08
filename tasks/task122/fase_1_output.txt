@@ -1,0 +1,7 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigreimcBO.prg` criado com:
+
+- **Propriedades declaradas**: `this_cEmp`, `this_cSerie`, `this_dEmisDe`, `this_dEmisAte`, `this_cEDNs`, `this_lEmpEdns`, `this_cNotaIni`, `this_cNotaFim`, `this_nCopias`, `this_cCursorDados`
+- **Init()**: configura `this_cTabela = "SigNfCor"` e `this_cCampoChave = "cnfis"`, retorna `DODEFAULT()`
+- **M├®todos completos antecipados** (al├®m do exigido na Fase 1): `InicializarFiltros()` (carrega `viacarta` de SigCdPam), `PrepararDados()` (replica l├│gica exata do `processamento` legado ÔÇö cursor XCorNf com N vias por NF), `Imprimir()`, `Visualizar()`, `ObterMensagemErro()`, `Destroy()` (limpa cursors)
+
+A l├│gica do `PrepararDados()` reproduz fielmente o original: monta o JOIN de `SigNfCor + SigMvNfi + SigCdCli + SigCcOco`, replica cada registro `this_nCopias` vezes com `numvias` sequencial, e indexa o cursor de sa├¡da pela mesma chave do legado.

@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo do que foi encontrado e feito:
+
+**9 problemas listados ÔÇö estado no c├│digo atual:**
+- **[OPTIONGROUP-LEFT]**: J├í corrigido. Todos os 4 `Buttons` do `obj_4c_OptLocal` t├¬m `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes` definidos explicitamente.
+- **[LAYOUT-POSITION] x8**: Falsos positivos do validador. As posi├º├Áes `Top = original - 85` s├úo coordenadas relativas ├á `Page1` ÔÇö corretas, pois `PageFrame.Top = 85`. No runtime a posi├º├úo absoluta coincide exatamente com o original (ex: `Page1.Top(85) + Control.Top(14) = 99 = original`).
+
+**Corre├º├úo aplicada ÔÇö bug funcional em `ValidarDataParaRelatorio`:**
+O m├®todo sempre exigia data, mesmo quando `OptLocal.Value = 4` (modo Diferen├ºas), onde a data n├úo ├® obrigat├│ria. O coment├írio do pr├│prio c├│digo j├í dizia `"Equivalente ao 'If (This.Value <> 4) If Empty(getDatas.Value)'"` e o BO em `PrepararDados` j├í fazia o check corretamente. A valida├º├úo do form agora est├í consistente com o original legado e o BO.

@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. A Fase 8 adicionou os seguintes m├®todos ao `FormSIGPREST.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnEncerrarClick()` | Delega para `CmdCancelaClick()` com guard de processamento |
+| `BtnSalvarClick()` | Delega para `CmdOKClick()` (Gerar = Salvar neste OPERACIONAL) |
+| `BtnCancelarClick()` | Chama `LimparCampos()` para resetar o dialog |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` (mostra info do diret├│rio) |
+| `FormParaBO()` | Copia `.Value` dos checkboxes para `this_lGeraArquivos` / `this_lGeraIndices` no BO |
+| `BOParaForm()` | Copia propriedades do BO de volta para os checkboxes (com `IIF(..., 1, 0)`) |
+| `HabilitarCampos()` | Habilita/desabilita os 4 controles interativos do dialog |
+| `LimparCampos()` | Reseta ambos checkboxes para 1, limpa label, reabilita tudo e seta foco |
+| `CarregarLista()` | Retorna `.T.` (OPERACIONAL sem grid ÔÇö compatibilidade com pipeline) |
+| `AjustarBotoesPorModo()` | Aceita string `"PRONTO"/"PROCESSANDO"/"CONCLUIDO"` e delega para `AlternarPagina()` |

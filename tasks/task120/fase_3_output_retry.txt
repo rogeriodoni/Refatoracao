@@ -1,0 +1,11 @@
+﻿Phase 3 fix complete. The validator at OrquestradorMigracao.ps1:4672 requires both `ConfigurarPageFrame` AND `InicializarForm` strings ÔÇö the existing file only had the latter because SIGREIFX is a REPORT form (originally FLAT).
+
+**Changes applied to `Formsigreifx.prg`:**
+
+1. **Added `ConfigurarPageFrame()` method** (line 361) ÔÇö creates `pgf_4c_Paginas` with 1 page ("Filtros") positioned below the buttons (Top=80, Height=50, Tabs=.F.). Follows the same pattern used in `FormSIGREADS.prg`.
+2. **Moved checkboxes into `pgf_4c_Paginas.Page1`** ÔÇö `ConfigurarCheckBoxes()` now adds `chk_4c_ChkObs` and `chk_4c_ChkImagem` to Page1 with Tops adjusted (89ÔåÆ9, 105ÔåÆ25) for the new parent.
+3. **Updated `FormParaRelatorio()`** to reference checkboxes via `THIS.pgf_4c_Paginas.Page1.chk_4c_*`.
+4. **Wired `THIS.ConfigurarPageFrame()` into `InicializarForm()`** between `ConfigurarBotoes()` and `ConfigurarCheckBoxes()`.
+5. Updated the file header comment to document that filters live in the PageFrame.
+
+The implementation is functional (no stubs), preserves the original layout intent (checkboxes stay at the same visual position because Page1 starts at Y=80), and satisfies the orchestrator's Phase 3 string-match validation.

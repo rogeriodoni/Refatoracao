@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com as seguintes corre├º├Áes aplicadas:
+
+**Problemas corrigidos nos 4 m├®todos `AbrirBusca*`:**
+
+1. **7┬║ par├ómetro `.F.` removido** ÔÇö `FormBuscaAuxiliar` s├│ aceita 6 par├ómetros `(gnConnHandle, tabela, cursor, campo, valor, t├¡tulo)`. O `.F.` extra causaria erro de argumento.
+
+2. **L├│gica de condi├º├úo corrigida** ÔÇö padr├úo can├┤nico do `docs/lookup_implementation.md`:
+   - `IF this_lSelecionou AND this_lAchouRegistro` ÔåÆ auto-encontrou ├║nico registro, preenche campos direto
+   - `ELSEIF !this_lAchouRegistro` ÔåÆ n├úo encontrou (ou campo vazio), adiciona colunas e chama `Show(1)`
+   - Antes estava: `IF this_lSelecionou` / `ELSE IF this_lAchouRegistro OR EMPTY(valor)` ÔÇö que silenciosamente ignorava o caso de valor digitado mas n├úo encontrado no banco
+
+3. **`Show()` ÔåÆ `Show(1)`** ÔÇö exibi├º├úo explicitamente modal
+
+**Adicionados:**
+- 4 BINDEVENTs de `DblClick` em `ConfigurarFiltros()`
+- 4 handlers `TxtXxxDblClick()` p├║blicos (respeitando as regras `When` do legado para `DGrupo` e `DConta`)

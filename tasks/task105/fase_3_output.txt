@@ -1,0 +1,19 @@
+﻿O arquivo foi criado corretamente. Fase 3/8 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\relatorios\FormSIGREFXV.prg`** criado com 334 linhas contendo:
+
+| M├®todo | Status | Notas |
+|--------|--------|-------|
+| `Init()` | Ô£à Completo | `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à Completo | Instancia BO, cria `CsEstoque`, monta estrutura |
+| `ConfigurarCabecalho()` | Ô£à Completo | Header cinza escuro (100,100,100) + labels sombra/t├¡tulo |
+| `ConfigurarBotoes()` | Ô£à Completo | `cmg_4c_Botoes` CommandGroup com 4 bot├Áes, alinhado ├á direita |
+| `ConfigurarPageFrame()` | Ô£à Completo | 1 page (Filtros), Top=85, sem tabs |
+| `Destroy()` | Ô£à Completo | Nula BO, fecha `CsEstoque`, chama `DODEFAULT()` |
+
+**Decis├Áes de design:**
+- Dimens├Áes **exatas do original**: Width=761, Height=398 (PILAR 1)
+- `cmg_4c_Botoes.Left = THIS.Width - 273 - 5 = 483` ÔÇö alinhado ├á direita com 5px de margem (├║ltimo bot├úo termina em px 751, dentro dos 761)
+- `CsEstoque` criado em `InicializarForm()` com 1 linha em branco inicial (replica comportamento legado)
+- BINDEVENTs dos bot├Áes ser├úo adicionados na Fase 7/8 (eventos)
+- Campos de filtro (TextBoxes, OptionGroup, Grid) nas Fases 4-6

@@ -1,0 +1,7 @@
+﻿Corrijo conclu├¡da. Resumo:
+
+**2 corre├º├Áes aplicadas em `sigreappBO.prg`:**
+- Linha 282: `"where a.Dopes = '" + loc_cDopes + "'"` ÔåÆ `"where a.Dopes = " + EscaparSQL(loc_cDopes)`
+- Linha 289: `"from SigCdPgr where Dopes = '" + loc_cDopes + "'"` ÔåÆ `"from SigCdPgr where Dopes = " + EscaparSQL(loc_cDopes)`
+
+**SQL-FILTRO-INVENTADO (CMoes): falso positivo.** O campo de moeda (`txt_4c__cd_moeda`) existe no original (confirmado pelo mapeamento `SIGREAPP.get_cd_moeda`). Os `WHERE CMoes` nas linhas 1047 e 1726 do form s├úo lookups leg├¡timos de descri├º├úo de moeda em SigCdMoe, j├í usando `EscaparSQL()` corretamente. Nenhuma altera├º├úo necess├íria no form.

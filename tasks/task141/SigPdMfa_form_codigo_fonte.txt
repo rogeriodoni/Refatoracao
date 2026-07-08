@@ -1,0 +1,1025 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdMfa.SCX
+* Data/Hora: 18/06/2026 19:37:56
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDMFA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPDMFA
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_conta
+  Parent: SIGPDMFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPDMFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DLinha
+  Parent: SIGPDMFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Linha
+  Parent: SIGPDMFA
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_dconta
+  Parent: SIGPDMFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGPDMFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Op
+  Parent: SIGPDMFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGPDMFA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Aguarde
+  Parent: SIGPDMFA
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPDMFA.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPDMFA.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: cntSombra
+  Parent: SIGPDMFA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDMFA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDMFA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Processa
+  Parent: SIGPDMFA
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGPDMFA
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPDMFA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 5
+  Left = 65
+  Width = 344
+  Height = 131
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 279
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Mudança de Fase Automática"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGPDMFA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 699
+  Height = 19
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_conta
+------------------------------------------------------------
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 175
+  Width = 80
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Linha : "
+  Left = 151
+  Top = 130
+  Width = 37
+  TabIndex = 8
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_DLinha
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 275
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 125
+  Width = 273
+  ZOrderSet = 3
+  Name = "Get_DLinha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_Linha
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 194
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 1
+  ToolTipText = ""
+  Top = 125
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Linha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_dconta
+------------------------------------------------------------
+  Height = 23
+  Left = 357
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 175
+  Width = 297
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "O.P. :"
+  Left = 157
+  Top = 153
+  Width = 31
+  TabIndex = 7
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_Op
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 194
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 151
+  Width = 52
+  Name = "Get_Op"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Get_grupo
+------------------------------------------------------------
+  Left = 194
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 175
+  Width = 80
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Aguarde
+------------------------------------------------------------
+  Top = 115
+  Left = 296
+  Width = 207
+  Height = 49
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 21
+  BackColor = 255,255,255
+  ZOrderSet = 9
+  Name = "Aguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Aguarde.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 18
+  Left = 68
+  Top = 8
+  Width = 70
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Aguarde.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Processando"
+  Height = 18
+  Left = 61
+  Top = 26
+  Width = 85
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 648
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerra"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMFA.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo/Conta : "
+  Height = 15
+  Left = 114
+  Top = 177
+  Width = 74
+  TabIndex = 9
+  ZOrderSet = 13
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDMFA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+
+Private pIds
+
+pIds = Replicate(Chr(254), 20)
+
+lcQryNens = [Select * From SigCdNec Where cIdChaves = '] + pIds + [']
+lcQryMFas = [Select * From SigPdMvf Where cIdChaves = '] + pIds + [']
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdNec', 'cIdChaves', 'UpSigCdNec', '', '', lcQryNens)
+			.AddCursor('SigPdMvf', 'cIdChaves', 'UpSigPdMvf', '', '', lcQryMFas)
+		EndWith
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac')
+		ThisForm.SigKey = CrSigCdPac.SigKeys
+		
+		ThisForm.poDataMgr.CursorQuery('SigPdMvf', 'xMFas', 'cIdChaves', Replicate(Chr(254), 20))
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'DopEntAuts, DoppPads, DoppServs')
+
+		lcQuery = [Select Codigos, Descrs ] + ;
+				    [From SigCdGcr ] + ;
+				   [Where GerBals = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpGccr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpGccr)')
+			Return 0
+		EndIf
+		Select TmpGccr
+		Index On Codigos Tag BalCodigo
+		Index On Descrs  Tag BalDescrs
+
+		If (ThisForm.poDataMgr.getDriver() = 'foxpro')
+			lcDiretorio = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))
+			Use &lcDiretorio.\SigCdCli Alias TmpCli In 0
+		Else
+			lcQuery = [Select IClis, RClis, Grupos, Inativas ] + ;
+					    [From SigCdCli ] + ;
+				   	   [Where GerBals = 1]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpCli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+				Return 0
+			EndIf
+			Select TmpCli
+			Index On IClis Tag IClis
+			Index On Iclis Tag BalCodigo
+			Index on RClis Tag BalNome
+		EndIf
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not Seek(This.Value, 'TmpCli', 'BalCodigo')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpCli', 'BalCodigo', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('Iclis',  '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('Rclis',  '', 'Descrição', .t., 'BalNome')
+		loBrowse.AddColuna('Grupos', '', 'Grupo')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(TmpCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		Thisform.Get_Conta.Value  = Iif(Lastkey()=27, '', TmpCli.IClis)
+		Thisform.Get_dConta.Value = Iif(Lastkey()=27, '', TmpCli.RClis)
+	Else
+		Thisform.Get_dConta.Value = TmpCli.RClis
+	EndIf
+
+	If Empty(ThisForm.get_grupo.Value) 
+		ThisForm.get_grupo.Value = TmpCli.Grupos
+	EndIf
+
+	If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, '', '', '', '', ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		Thisform.Get_Conta.Value  = ''
+		Thisform.Get_dConta.Value = ''
+	EndIf
+
+	ThisForm.get_conta.Refresh
+	ThisForm.get_dconta.Refresh
+	ThisForm.get_grupo.Refresh
+Else
+	Thisform.Get_DConta.Value = ''
+EndIf
+Return .t.
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Get_DLinha
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',  '', 'Descrição')
+		loLista.mAddColuna('Linhas', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Linha.Value  = crListaRemota.Linhas
+	This.Parent.Get_dLinha.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	This.Parent.Get_Linha.Value  = ''
+	This.Parent.Get_dLinha.Value = ''
+EndIf
+This.Parent.Get_Linha.Refresh
+This.Parent.Get_dLinha.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Linha.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Get_Linha
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;
+						   'crListaRemota', 'Linhas', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Linhas', '', 'Código')
+		loLista.mAddColuna('Descs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Linha.Value  = crListaRemota.Linhas
+	This.Parent.Get_dLinha.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	This.Parent.Get_Linha.Value  = ''
+	This.Parent.Get_dLinha.Value = ''
+EndIf
+This.Parent.Get_Linha.Refresh
+This.Parent.Get_dLinha.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not Seek(This.Value, 'TmpCli', 'BalNome')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpCli', 'BalNome', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('RClis',  '', 'Descrição', .t., 'BalNome')
+		loBrowse.AddColuna('Iclis',  '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('Grupos', '', 'Grupo')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(TmpCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		ThisForm.Get_Conta.Value  = Iif(Lastkey()=27, '', TmpCli.IClis)
+		ThisForm.Get_dConta.Value = Iif(Lastkey()=27, '', TmpCli.RClis)
+	Else
+		ThisForm.Get_Conta.Value = TmpCli.Iclis
+	EndIf
+
+	If Empty(ThisForm.get_grupo.Value)
+		ThisForm.get_grupo.Value = TmpCli.Grupos
+	EndIf
+
+	If Not fAcessoContas(Usuar, ThisForm.Get_Grupo.Value, 'C', ThisForm.Get_Conta.Value, '', '', '', ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		ThisForm.Get_Conta.Value  = ''
+		ThisForm.Get_dConta.Value = ''
+	EndIf
+
+	ThisForm.get_conta.Refresh
+	ThisForm.get_dconta.Refresh
+	ThisForm.get_grupo.Refresh
+Else
+	ThisForm.Get_Conta.Value = ''
+EndIf
+Return .t.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Conta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Seek(This.Value, 'TmpGccr', 'BalCodigo')
+	loBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'BalCodigo', This.Value, 'Cadastro de Grupos')
+	loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')
+	loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')
+	loBrowse.Show
+	This.Value = Iif(Lastkey() = 27, '', TmpGccr.Codigos)
+EndIf
+
+If Not fAcessoContab(Usuar, 'C', This.Value, '', '', This.Parent.Get_Grupo.Value, ThisForm.poDataMgr)
+	=Messagebox('Acesso Negado!!!', 48, '')
+	This.Value = ''
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Processa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private lnOpI, lnOpF
+Local lcEmpresa, lcGrupo, lcConta, lcLinha, lcOperacao, lcFornece, lnItens, lnNumero
+
+lcLinha = ThisForm.Get_Linha.Value
+lcGrupo = ThisForm.Get_grupo.Value
+lcConta = ThisForm.Get_Conta.Value
+lnOp    = ThisForm.Get_Op.Value
+
+If Empty(lcLinha)
+	=Messagebox('É Obrigatório Informar a Linha!!!', 32, '')
+	ThisForm.Get_Linha.SetFocus
+	Return 0
+EndIf
+
+If Empty(lnOp)
+	=Messagebox('É Obrigatório Informar a Op!!!', 32, '')
+	ThisForm.Get_Op.SetFocus
+	Return 0
+EndIf
+
+If Empty(lcGrupo)
+	=Messagebox('É Obrigatório Informar o Grupo!!!', 32, '')
+	ThisForm.Get_Grupo.SetFocus
+	Return 0
+EndIf
+
+If Empty(lcConta)
+	=Messagebox('É Obrigatório Informar a Conta!!!', 32, '')
+	ThisForm.Get_Conta.SetFocus
+	Return 0
+EndIf
+
+Zap In xMfas
+
+lcDop	   = crSigCdPam.DopEntAuts
+lcOperacao = crSigCdPam.DoppPads
+lcServico  = crSigCdPam.DoppServs
+
+If Empty(lcDop)
+	=Messagebox('Operação Não Informada no Cadastro de Parâmetros!!!', 32, '')
+	ThisForm.Cancela.SetFocus
+	Return 0
+EndIf
+
+ThisForm.Aguarde.Zorder
+ThisForm.Aguarde.Visible = .t.
+ThisForm.Aguarde.Refresh
+
+ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'crSigCdOpd', 'Dopps', lcDop, 'GruOrigs, ConOrigs, Seqs')
+
+lnOpI = lnOp * 10000
+lnOpF = lnOp * 10000 + 9999
+
+lcQuery = [Select Nops, cIdChaves, Emps, Grupods, Contads, CodPds, Unids, Obsps, Ordems, Obss ] + ;
+		    [From SigPdMvf ] + ;
+		   [Where Nops BetWeen ?lnOpI And ?lnOpF]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf)')
+	Return 0
+EndIf
+
+_SelItem = .f.
+
+Select crSigPdMvf
+Index On Str(Nops, 10) + cIdChaves Tag Nops
+Set Order to Nops Descending
+Scan
+	llPula   = .t.
+	lnOpPula = crSigPdMvf.Nops
+
+	pEdn = crSigPdMvf.Emps + lcOperacao + Str(crSigPdMvf.Nops, 10)
+	ThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNps', pEdn, 'ChkSubn')
+	Select crSigCdNec
+	If Not Eof('crSigCdNec')
+		If Not crSigCdNec.ChkSubn And (crSigPdMvf.Emps = _Empr)
+			llPula = .f.
+		EndIf
+	EndIf
+	
+	pEdn = crSigPdMvf.Emps + lcServico + Str(crSigPdMvf.Nops, 10)
+	ThisForm.poDataMgr.CursorQuery('SigCdNec', 'crSigCdNec', 'EmpDNps', pEdn, 'ChkSubn')
+	Select crSigCdNec
+	If Not Eof('crSigCdNec')
+		If Not crSigCdNec.ChkSubn And (crSigPdMvf.Emps = _Empr)
+			llPula = .f.
+		EndIf
+	EndIf
+	
+	Select crSigPdMvf
+	If llPula
+		Scan While Nops = lnOpPula
+		EndScan
+		Skip -1
+		Loop
+	EndIf
+
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crSigPdMvf.CodPds, 'Linhas, PesoMs')
+
+	If (crSigPdMvf.Grupods = crSigCdOpd.GruOrigs) And (crSigPdMvf.Contads = crSigCdOpd.ConOrigs) And ;
+	   (crSigPdMvf.Emps = _Empr) And (crSigCdPro.Linhas = lcLinha)
+	
+		ThisForm.poDataMgr.CursorQuery('SigOpPic', 'crSigOpPic', 'Nops', crSigPdMvf.Nops, 'Qtds')
+		Select crSigOpPic
+		Sum Qtds to _Qtde
+		_TPeso = _Qtde * crSigCdPro.PesoMs
+	
+		Insert Into xMFas (Emps, Dopps, Datars, Datas, Usuars, Grupoos, Contaos, Grupods, Contads, ;
+						   NOps, NEnvs, Codpds, Unids, Pesos, Qtds, Obsps, Ordems, Obss) ;
+				   Values (_Empr, lcDop, Datetime(), Datetime(), Usuar, crSigCdOpd.GruOrigs, ;
+				   		   crSigCdOpd.ConOrigs, lcGrupo, lcConta, crSigPdMvf.Nops, crSigPdMvf.Nops, ;
+				   		   crSigPdMvf.Codpds, crSigPdMvf.Unids, _TPeso, _Qtde, crSigPdMvf.Obsps, ;
+				   		   crSigPdMvf.Ordems, crSigPdMvf.Obss)
+		_SelItem = .t.
+	EndIf
+	
+	Select crSigPdMvf
+	Scan While Nops = lnOpPula
+	EndScan
+	Skip -1
+EndScan
+
+llTransOk1 = .t.
+
+If _SelItem
+	_Inicio = fGerUniqueKey(Alltrim(lcDop) + _Empr)
+	lcIds = Dtos(Date()) + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999') + ThisForm.Sigkey 
+	
+	Select UpSigCdNec
+	Append Blank
+	Replace Emps      With _Empr, ;
+			Dopps     With lcDop, ;
+			Numps     With _Inicio, ;
+			Datas     With Datetime(),;
+			Usuars    With Usuar, ;
+			Datars    With Datetime(), ;
+			Grupoos   With crSigCdOpd.GruOrigs, ;
+			Contaos   With crSigCdOpd.ConOrigs, ;
+			Grupods   With lcGrupo, ;
+			Contads   With lcConta, ;
+			cIdChaves With lcIds, ;
+			EmpDNps   With _Empr + lcDop + Str(_Inicio, 10)
+	
+	Select xMFas
+	Scan
+		_Ordem = 1	
+		If (crSigCdOpd.Seqs = 1)
+			pOrd = xMFas.Ordems + 1
+
+			lcQuery = [Select Grupos ] + ;
+					    [From SigCdPrf ] + ;
+					   [Where Produtos = '] + xMFas.CodPds + [' And ] + ;
+					   		 [Ordems = ?pOrd]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPrf') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPrf)')
+				Return 0
+			EndIf
+
+			Select crSigCdPrf
+			Go Top
+			If Not Eof('crSigCdPrf') And (crSigCdPrf.Grupos = lcGrupo)
+				_Ordem = pOrd
+			Else
+				pOrd = xMFas.Ordems + 1
+
+				lcQuery = [Select Grupos, Ordems ] + ;
+						    [From SigCdPrf ] + ;
+						   [Where Produtos = '] + xMFas.CodPds + [' And ] + ;
+						   		 [Grupos = '] + lcGrupo + [' And ] + ;
+						   		 [Ordems = ?pOrd]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPrf') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPrf)')
+					Return 0
+				EndIf
+
+				Select crSigCdPrf
+				Go Top
+				If Not Eof('crSigCdPrf') And (crSigCdPrf.Grupos = lcGrupo)
+					If (crSigCdPrf.Grupos = lcGrupo)
+						_Ordem = crSigCdPrf.Ordems
+					Else
+						Skip -1
+						If (crSigCdPrf.Grupos = lcGrupo)
+							_Ordem = crSigCdPrf.Ordems
+						Else
+							_Ordem = 0
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+		Else
+			_Ordem = xMFas.Ordems
+		EndIf
+		
+		Insert Into UpSigPdMvf (Emps, Dopps, Numps, Datars, Datas, Usuars, Grupoos, Contaos, Grupods, Contads, ;
+							   NOps, NEnvs, Dataps, Dataes, Obss, Codpds, Unids, Pesos, Qtds, Obsps, Inicios, ;
+							   Finals, Ordems, cIdChaves, EmpDopNums, EmpDNps) ;
+					   Values (_Empr, lcdop, _Inicio, Datetime(), Datetime(), Usuar, crSigCdOpd.Gruorigs, ;
+					 		   crSigCdOpd.ConOrigs, lcGrupo, lcConta, xMFas.NOps, xMFas.Nenvs, Datetime(), ;
+							   xMFas.Dataes, xMFas.Obss, xMFas.Codpds, xMFas.Unids, xMFas.Pesos, xMFas.Qtds, ;
+							   xMFas.Obsps, xMFas.Inicios, xMFas.Finals, _Ordem, ;
+							   Dtos(Date())+Transform(fGerUniqueKey(Dtos(Date())),"@L 999999") + ThisForm.Sigkey , ;
+							   _Empr + Space(20) + Str(0, 6), _Empr + lcdop + Str(_Inicio, 10))
+	EndScan
+
+	If Not ThisForm.poDataMgr.Update('UpSigCdNec')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - UpSigCdNec)')
+		Return 0
+	EndIf
+	If Not ThisForm.poDataMgr.Update('UpSigPdMvf')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - UpSigPdMvf)')
+		Return 0
+	EndIf
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+		Return 0
+	EndIf
+EndIf
+
+=Messagebox('Processamento Finalizado...', 32, '')
+
+ThisForm.Aguarde.Visible = .f.
+
+ThisForm.Get_Linha.Value  = Space(10)
+ThisForm.Get_DLinha.Value = Space(30)
+ThisForm.Get_Grupo.Value  = Space(10)
+ThisForm.Get_Conta.Value  = Space(10)
+ThisForm.Get_Dconta.Value = Space(30)
+ThisForm.Get_op.Value     = 0
+
+ThisForm.Get_linha.Refresh
+ThisForm.get_Dlinha.Refresh
+ThisForm.get_grupo.Refresh
+thisform.get_conta.Refresh
+thisform.get_dconta.Refresh
+ThisForm.Get_Linha.SetFocus
+ThisForm.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMFA.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDMFA
+RESERVED3 (ClassInfo): podatamgr
+sigkey
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

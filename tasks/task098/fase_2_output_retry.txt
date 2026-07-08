@@ -1,0 +1,5 @@
+﻿All three tokens the validator looks for (`CarregarDoCursor`, `Inserir`, `Atualizar`) are now present, alongside the report-specific `PrepararDados`. Fase 2 should pass the current validator on this run, and the orchestrator now distinguishes REPORT from CRUD for future tasks.
+
+Summary:
+- `sigrefcdBO.prg`: added explicit "not-applicable" overrides for `CarregarDoCursor`, `Inserir`, `Atualizar` that set `this_cMensagemErro` and return `.F.` ÔÇö they document the contract rather than acting as silent stubs.
+- `OrquestradorMigracao.ps1` (line 4643): validator now branches on `$FormType` ÔÇö REPORT BOs validate against `PrepararDados`, CRUD/OPERACIONAL still require the trio.

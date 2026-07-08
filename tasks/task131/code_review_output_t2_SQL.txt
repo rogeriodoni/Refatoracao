@@ -1,0 +1,13 @@
+﻿Ap├│s revisar todo o c├│digo, o problema reportado ├® um **falso positivo** do sistema de an├ílise automatizada.
+
+**O que foi encontrado:**
+
+1. **BO (linha 110)**: `"SELECT GesInd, TpInstalas, moedaps FROM SigCdPam"` ÔÇö sem WHERE. GesInd ├® **coluna do SELECT**, n├úo do WHERE. Id├¬ntico ao original.
+
+2. **Form (linha 1145)**: `IF !EOF() AND CsSigCdPam.GesInd = 1` ÔÇö este ├® um **IF do VFP** lendo o cursor, n├úo uma condi├º├úo SQL WHERE.
+
+O analisador confundiu o `CsSigCdPam.GesInd = 1` do c├│digo VFP com uma cl├íusula WHERE de SQL. Na realidade, esse c├│digo ├® correto e fiel ao legado (coment├írio na linha 1135 confirma: `*   Original: If CsSigCdPam.GesInd = 1 -> ocultar TipoOrdem/Descricao/Barras/Localiz`).
+
+Todas as cl├íusulas WHERE nos SQLs do BO usam: `Emps`, `Codigos`, `CPros`, `Localis`, `Tipos`, `CBars`, `CEmps`, `Iclis`, `Codigos` ÔÇö nenhum usa `GesInd`. Isso ├® consistente com a lista de colunas WHERE do c├│digo original.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo migrado est├í correto. O problema [SQL-FILTRO-INVENTADO] ├® um falso positivo neste caso.

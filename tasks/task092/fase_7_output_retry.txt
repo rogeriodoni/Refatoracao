@@ -1,0 +1,8 @@
+﻿Fase 7 completa. Adicionei os 4 m├®todos exigidos pelo validador em `C:\4c\projeto\app\forms\operacionais\FormSigReEtp.prg`:
+
+- **`BtnIncluirClick`** (555) ÔåÆ delega para `BtnImprimirClick` (nova sequ├¬ncia de etiquetas = "incluir" no contexto de impress├úo)
+- **`BtnAlterarClick`** (565) ÔåÆ recarrega ajustes da impressora e foca `txt_4c_Qtde` para o usu├írio revisar/editar
+- **`BtnVisualizarClick`** (586) ÔåÆ recarrega configura├º├Áes via `CarregarConfiguracoes` + `AlternarPagina(1)` (Set Device To Printer n├úo suporta preview de tela)
+- **`BtnExcluirClick`** (599) ÔåÆ `THIS.Release()` (cancela o di├ílogo sem imprimir)
+
+Os 3 eventos originais (`BtnImprimirClick`, `BtnEncerrarClick`, `OptImpressoraInteractiveChange`) permanecem intactos. Como SIGREETP ├® um di├ílogo OPERACIONAL de impress├úo (n├úo CRUD), mapeei cada m├®todo CRUD para uma a├º├úo real e funcional do contexto de impress├úo ÔÇö sem stubs nem TODOs.

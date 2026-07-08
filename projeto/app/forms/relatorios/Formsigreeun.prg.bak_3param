@@ -1,0 +1,1652 @@
+*==============================================================================
+* FORMSIGREEUN.PRG
+* Relat" + CHR(243) + "rio: Posi" + CHR(231) + CHR(227) + "o de Estoque por Unidade
+* Tipo: REPORT (herda FormBase, BO herda RelatorioBase)
+* Migrado de: SIGREEUN.SCX (frmrelatorio)
+*
+* Filtros (Page1 - todos num" + CHR(233) + "rica de REPORT, 1 p" + CHR(225) + "gina):
+*   - Grupo de Estoque (SigCdGcr: Codigos/Descrs)
+*   - Estoque/Conta   (SigCdCli: iclis/rclis, filtrado por Grupo)
+*   - Unidade         (SigCdUni: cunis/dunis)
+*   - Data de refer" + CHR(234) + "ncia
+*   - Moeda           (SigCdMoe: cmoes/dmoes)
+*   - Data da Cota" + CHR(231) + CHR(227) + "o
+*   - Imprimir Cota" + CHR(231) + CHR(227) + "o (1=Sim / 2=N" + CHR(227) + "o)
+*   - Fator de Venda  (1=Sim / 2=N" + CHR(227) + "o)
+*==============================================================================
+
+DEFINE CLASS FormSIGREEUN AS FormBase
+
+    *-- Dimens" + CHR(245) + "es exatas do original: Width=800, Height=300
+    Height      = 300
+    Width       = 800
+    DataSession = 2
+    ShowWindow  = 1
+    WindowType  = 1
+    AutoCenter  = .T.
+    BorderStyle = 2
+    ControlBox  = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    ShowTips    = .T.
+
+    *-- Refer" + CHR(234) + "ncia ao BO do relat" + CHR(243) + "rio
+    this_oRelatorio    = .NULL.
+    this_cMensagemErro = ""
+
+    *--------------------------------------------------------------------------
+    * Init - Delega para FormBase.Init() que chama THIS.InicializarForm()
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Cria estrutura completa do formulario de relatorio
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_lContinuar
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+        TRY
+            THIS.Caption = "Posi" + CHR(231) + CHR(227) + "o de Estoque por Unidade"
+
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            THIS.this_oRelatorio = CREATEOBJECT("sigreeunBO")
+            IF VARTYPE(THIS.this_oRelatorio) != "O"
+                MsgErro("Erro ao criar sigreeunBO" + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oRelatorio), "Erro")
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarBotoes()
+                THIS.ConfigurarPageFrame()
+
+                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                THIS.ConfigurarPaginaLista()
+
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(2), "Click", THIS, "BtnImprimirClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(3), "Click", THIS, "BtnExcelClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(4), "Click", THIS, "BtnSairClick")
+
+                THIS.LimparCampos()
+
+                THIS.Visible = .T.
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Container escuro superior com titulo do relatorio
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 22
+                .Left      = 22
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Posi" + CHR(231) + CHR(227) + "o de Estoque por Unidade"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 20
+                .Left      = 20
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Posi" + CHR(231) + CHR(227) + "o de Estoque por Unidade"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoes - CommandGroup: Visualizar / Imprimir / Excel / Encerrar
+    *   Original btnReport.Left=531, 4 botoes de 60px cada
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoes()
+        THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+        WITH THIS.cmg_4c_Botoes
+            .Top           = 0
+            .Left          = 529
+            .Width         = 273
+            .Height        = 80
+            .ButtonCount   = 4
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 1
+            .Themes        = .F.
+            .Visible       = .T.
+
+            WITH .Buttons(1)
+                .Top             = 5
+                .Left            = 5
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Visualizar"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Gerar o Relat" + CHR(243) + "rio no V" + CHR(237) + "deo"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Top             = 5
+                .Left            = 71
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Imprimir"
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Enviar o Relat" + CHR(243) + "rio Para Impressora"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(3)
+                .Top             = 5
+                .Left            = 137
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "\<Arquivos Email"
+                .WordWrap        = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Arquivos Email"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(4)
+                .Top             = 5
+                .Left            = 203
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Encerrar"
+                .WordWrap        = .T.
+                .Cancel          = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "[Esc] Encerrar"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - PageFrame com 1 pagina ("Filtros")
+    *   Top=85 (abaixo do cabecalho), Height=215, Tabs=.F.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oPgf
+
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        loc_oPgf = THIS.pgf_4c_Paginas
+
+        loc_oPgf.PageCount = 1
+
+        loc_oPgf.Top    = 85
+        loc_oPgf.Left   = -1
+        loc_oPgf.Width  = THIS.Width + 2
+        loc_oPgf.Height = THIS.Height - 85
+        loc_oPgf.Tabs   = .F.
+
+        loc_oPgf.Page1.Caption   = "Filtros"
+        loc_oPgf.Page1.FontName  = "Tahoma"
+        loc_oPgf.Page1.FontSize  = 8
+        loc_oPgf.Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.Page1.BackColor = RGB(255, 255, 255)
+        loc_oPgf.Page1.ForeColor = RGB(90, 90, 90)
+
+        loc_oPgf.Visible    = .T.
+        loc_oPgf.ActivePage = 1
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Linhas 1-4: Grupo, Conta, Unidade, Data
+    *   Posicoes relativas ao Page1 (PageFrame.Top=85):
+    *     Row1 Grupo:    Top=9  (original 95-85=10)
+    *     Row2 Conta:    Top=34 (original 120-85=35)
+    *     Row3 Unidade:  Top=59 (original 145-85=60)
+    *     Row4 Data:     Top=84 (original 170-85=85)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+
+        *-- Linha 1: Grupo de Estoque (SigCdGcr)
+        loc_oPg.AddObject("lbl_4c_LblGrEst", "Label")
+        WITH loc_oPg.lbl_4c_LblGrEst
+            .Top       = 13
+            .Left      = 225
+            .Width     = 40
+            .Height    = 15
+            .Caption   = "Grupo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_CdGrestoque", "TextBox")
+        WITH loc_oPg.txt_4c_CdGrestoque
+            .Top         = 9
+            .Left        = 270
+            .Width       = 80
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 10
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_DsGrestoque", "TextBox")
+        WITH loc_oPg.txt_4c_DsGrestoque
+            .Top         = 9
+            .Left        = 352
+            .Width       = 290
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 40
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Linha 2: Estoque/Conta (SigCdCli filtrado por Grupo)
+        loc_oPg.AddObject("lbl_4c_LblEstoque", "Label")
+        WITH loc_oPg.lbl_4c_LblEstoque
+            .Top       = 38
+            .Left      = 225
+            .Width     = 40
+            .Height    = 15
+            .Caption   = "Conta :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_CdEstoque", "TextBox")
+        WITH loc_oPg.txt_4c_CdEstoque
+            .Top         = 34
+            .Left        = 270
+            .Width       = 80
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 10
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_DsEstoque", "TextBox")
+        WITH loc_oPg.txt_4c_DsEstoque
+            .Top         = 34
+            .Left        = 352
+            .Width       = 290
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 40
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Linha 3: Unidade (SigCdUni)
+        loc_oPg.AddObject("lbl_4c_LblUnidade", "Label")
+        WITH loc_oPg.lbl_4c_LblUnidade
+            .Top       = 63
+            .Left      = 215
+            .Width     = 50
+            .Height    = 15
+            .Caption   = "Unidade :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_CdUnidade", "TextBox")
+        WITH loc_oPg.txt_4c_CdUnidade
+            .Top         = 59
+            .Left        = 270
+            .Width       = 31
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 3
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_DsUnidade", "TextBox")
+        WITH loc_oPg.txt_4c_DsUnidade
+            .Top         = 59
+            .Left        = 303
+            .Width       = 203
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 20
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Linha 4: Data de referencia
+        loc_oPg.AddObject("lbl_4c_LblData", "Label")
+        WITH loc_oPg.lbl_4c_LblData
+            .Top       = 88
+            .Left      = 232
+            .Width     = 30
+            .Height    = 15
+            .Caption   = "Data :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_Data", "TextBox")
+        WITH loc_oPg.txt_4c_Data
+            .Top         = 84
+            .Left        = 270
+            .Width       = 80
+            .Height      = 23
+            .Value       = {}
+            .Format      = "D"
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(90, 90, 90)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        THIS.ConfigurarPaginaDados()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Linhas 5-8: Moeda, DtCotacao, ImpCotacao, FatorVenda
+    *   Tambem vincula todos os BINDEVENTs de lookup e teclado.
+    *   Posicoes relativas ao Page1:
+    *     Row5 Moeda:      Top=109 (original 195-85=110)
+    *     Row6 DtCotacao:  Top=134 (original 220-85=135)
+    *     Row7 ImpCotacao: Top=157 (original 243-85=158)
+    *     Row8 FatorVenda: Top=182 (original 268-85=183)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+
+        *-- Linha 5: Moeda (SigCdMoe)
+        loc_oPg.AddObject("lbl_4c_LblMoeda", "Label")
+        WITH loc_oPg.lbl_4c_LblMoeda
+            .Top       = 113
+            .Left      = 222
+            .Width     = 43
+            .Height    = 15
+            .Caption   = "Moeda :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_CdMoeda", "TextBox")
+        WITH loc_oPg.txt_4c_CdMoeda
+            .Top         = 109
+            .Left        = 270
+            .Width       = 31
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 3
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_DsMoeda", "TextBox")
+        WITH loc_oPg.txt_4c_DsMoeda
+            .Top         = 109
+            .Left        = 303
+            .Width       = 115
+            .Height      = 23
+            .Value       = ""
+            .MaxLength   = 15
+            .Format      = "!"
+            .FontName    = "Courier New"
+            .FontSize    = 9
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(0, 0, 0)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Linha 6: Data da Cotacao
+        loc_oPg.AddObject("lbl_4c_LblDtCotacao", "Label")
+        WITH loc_oPg.lbl_4c_LblDtCotacao
+            .Top       = 138
+            .Left      = 196
+            .Width     = 68
+            .Height    = 15
+            .Caption   = "Dt. Cota" + CHR(231) + CHR(227) + "o :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("txt_4c_DtCotacao", "TextBox")
+        WITH loc_oPg.txt_4c_DtCotacao
+            .Top         = 134
+            .Left        = 270
+            .Width       = 80
+            .Height      = 23
+            .Value       = {}
+            .Format      = "D"
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .BackColor   = RGB(255, 255, 255)
+            .ForeColor   = RGB(90, 90, 90)
+            .BorderStyle = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Linha 7: Imprimir Cotacao (1=Sim / 2=Nao) - ButtonCount ANTES de Buttons()
+        loc_oPg.AddObject("lbl_4c_LblImpCotacao", "Label")
+        WITH loc_oPg.lbl_4c_LblImpCotacao
+            .Top       = 162
+            .Left      = 173
+            .Width     = 92
+            .Height    = 15
+            .Caption   = "Imprime Cota" + CHR(231) + CHR(227) + "o :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("opt_4c_ImpCotacao", "OptionGroup")
+        loc_oPg.opt_4c_ImpCotacao.ButtonCount = 2
+        WITH loc_oPg.opt_4c_ImpCotacao
+            .Top         = 157
+            .Left        = 264
+            .Width       = 97
+            .Height      = 23
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .T.
+        ENDWITH
+        WITH loc_oPg.opt_4c_ImpCotacao.Buttons(1)
+            .Caption   = "Sim"
+            .Left      = 5
+            .Top       = 5
+            .Width     = 34
+            .Height    = 15
+            .FontName  = "Comic Sans MS"
+            .FontSize  = 8
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .ForeColor = RGB(90, 90, 90)
+        ENDWITH
+        WITH loc_oPg.opt_4c_ImpCotacao.Buttons(2)
+            .Caption   = "N" + CHR(227) + "o"
+            .Left      = 51
+            .Top       = 5
+            .FontName  = "Comic Sans MS"
+            .FontSize  = 8
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .ForeColor = RGB(90, 90, 90)
+        ENDWITH
+        loc_oPg.opt_4c_ImpCotacao.Value = 1
+
+        *-- Linha 8: Fator de Venda (1=Sim / 2=Nao) - ButtonCount ANTES de Buttons()
+        loc_oPg.AddObject("lbl_4c_LblFatorVenda", "Label")
+        WITH loc_oPg.lbl_4c_LblFatorVenda
+            .Top       = 187
+            .Left      = 180
+            .Width     = 85
+            .Height    = 15
+            .Caption   = "Fator de Venda :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg.AddObject("opt_4c_FatorVenda", "OptionGroup")
+        loc_oPg.opt_4c_FatorVenda.ButtonCount = 2
+        WITH loc_oPg.opt_4c_FatorVenda
+            .Top         = 182
+            .Left        = 264
+            .Width       = 97
+            .Height      = 23
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .T.
+        ENDWITH
+        WITH loc_oPg.opt_4c_FatorVenda.Buttons(1)
+            .Caption   = "Sim"
+            .Left      = 5
+            .Top       = 5
+            .Width     = 34
+            .Height    = 15
+            .FontName  = "Comic Sans MS"
+            .FontSize  = 8
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .ForeColor = RGB(90, 90, 90)
+        ENDWITH
+        WITH loc_oPg.opt_4c_FatorVenda.Buttons(2)
+            .Caption   = "N" + CHR(227) + "o"
+            .Left      = 51
+            .Top       = 5
+            .FontName  = "Comic Sans MS"
+            .FontSize  = 8
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .ForeColor = RGB(90, 90, 90)
+        ENDWITH
+        loc_oPg.opt_4c_FatorVenda.Value = 1
+
+        *-- BINDEVENTs: KeyPress para lookup F4/ENTER/TAB
+        BINDEVENT(loc_oPg.txt_4c_CdGrestoque, "KeyPress", THIS, "TeclaCdGrEst")
+        BINDEVENT(loc_oPg.txt_4c_DsGrestoque, "KeyPress", THIS, "TeclaDsGrEst")
+        BINDEVENT(loc_oPg.txt_4c_CdEstoque,   "KeyPress", THIS, "TeclaCdEstoque")
+        BINDEVENT(loc_oPg.txt_4c_DsEstoque,   "KeyPress", THIS, "TeclaDsEstoque")
+        BINDEVENT(loc_oPg.txt_4c_CdUnidade,   "KeyPress", THIS, "TeclaCdUnidade")
+        BINDEVENT(loc_oPg.txt_4c_DsUnidade,   "KeyPress", THIS, "TeclaDsUnidade")
+        BINDEVENT(loc_oPg.txt_4c_CdMoeda,     "KeyPress", THIS, "TeclaCdMoeda")
+        BINDEVENT(loc_oPg.txt_4c_DsMoeda,     "KeyPress", THIS, "TeclaDsMoeda")
+
+        *-- BINDEVENTs: DblClick tambem abre lookup (equivalente ao F4)
+        BINDEVENT(loc_oPg.txt_4c_CdGrestoque, "DblClick", THIS, "AbrirBuscaCdGrEst")
+        BINDEVENT(loc_oPg.txt_4c_DsGrestoque, "DblClick", THIS, "AbrirBuscaDsGrEst")
+        BINDEVENT(loc_oPg.txt_4c_CdEstoque,   "DblClick", THIS, "AbrirBuscaCdEstoque")
+        BINDEVENT(loc_oPg.txt_4c_DsEstoque,   "DblClick", THIS, "AbrirBuscaDsEstoque")
+        BINDEVENT(loc_oPg.txt_4c_CdUnidade,   "DblClick", THIS, "AbrirBuscaCdUnidade")
+        BINDEVENT(loc_oPg.txt_4c_DsUnidade,   "DblClick", THIS, "AbrirBuscaDsUnidade")
+        BINDEVENT(loc_oPg.txt_4c_CdMoeda,     "DblClick", THIS, "AbrirBuscaCdMoeda")
+        BINDEVENT(loc_oPg.txt_4c_DsMoeda,     "DblClick", THIS, "AbrirBuscaDsMoeda")
+
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Restaura valores iniciais do formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCampos()
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            loc_oPg.txt_4c_CdGrestoque.Value  = ""
+            loc_oPg.txt_4c_DsGrestoque.Value  = ""
+            loc_oPg.txt_4c_CdEstoque.Value    = ""
+            loc_oPg.txt_4c_DsEstoque.Value    = ""
+            loc_oPg.txt_4c_CdUnidade.Value    = ""
+            loc_oPg.txt_4c_DsUnidade.Value    = ""
+            loc_oPg.txt_4c_Data.Value         = DATE()
+            loc_oPg.txt_4c_CdMoeda.Value      = ""
+            loc_oPg.txt_4c_DsMoeda.Value      = ""
+            loc_oPg.txt_4c_DtCotacao.Value    = DATE()
+            loc_oPg.opt_4c_ImpCotacao.Value   = 1
+            loc_oPg.opt_4c_FatorVenda.Value   = 1
+            THIS.AtualizarEstadoCamposDescricao()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Reposiciona foco no campo Data (unica pagina)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg
+        TRY
+            loc_oPgf = THIS.pgf_4c_Paginas
+            IF VARTYPE(loc_oPgf) != "O"
+                RETURN
+            ENDIF
+            IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
+                loc_nDestino = 1
+            ELSE
+                loc_nDestino = INT(par_nPagina)
+            ENDIF
+            IF loc_nDestino < 1
+                loc_nDestino = 1
+            ENDIF
+            IF loc_nDestino > loc_oPgf.PageCount
+                loc_nDestino = loc_oPgf.PageCount
+            ENDIF
+            loc_oPgf.ActivePage = loc_nDestino
+            loc_oPg = loc_oPgf.Pages(loc_nDestino)
+            IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Data", 5)
+                loc_oPg.txt_4c_Data.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro AlternarPagina")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaRelatorio - Copia controles do form para propriedades do BO
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaRelatorio()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+        WITH THIS.this_oRelatorio
+            .this_cCdGrestoque  = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+            .this_cDsGrestoque  = ALLTRIM(loc_oPg.txt_4c_DsGrestoque.Value)
+            .this_cCdEstoque    = ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value)
+            .this_cDsEstoque    = ALLTRIM(loc_oPg.txt_4c_DsEstoque.Value)
+            .this_cGrupo        = ALLTRIM(loc_oPg.txt_4c_CdUnidade.Value)
+            .this_cGrupoDesc    = ALLTRIM(loc_oPg.txt_4c_DsUnidade.Value)
+            .this_dData         = loc_oPg.txt_4c_Data.Value
+            .this_cMoeda        = ALLTRIM(loc_oPg.txt_4c_CdMoeda.Value)
+            .this_cMoedaDesc    = ALLTRIM(loc_oPg.txt_4c_DsMoeda.Value)
+            .this_dDtCotacao    = loc_oPg.txt_4c_DtCotacao.Value
+            .this_nDadosCotacao = loc_oPg.opt_4c_ImpCotacao.Value
+            .this_nOpcFator     = loc_oPg.opt_4c_FatorVenda.Value
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Gera relatorio em preview de tela
+    *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cFrxPath
+        TRY
+            THIS.FormParaRelatorio()
+            IF !THIS.this_oRelatorio.PrepararDados()
+                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                RETURN
+            ENDIF
+            THIS.ExecutarReportForm("SigReEun", "PREVIEW")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImprimirClick - Envia relatorio para impressora com dialogo
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImprimirClick()
+        LOCAL loc_cFrxPath
+        TRY
+            THIS.FormParaRelatorio()
+            IF !THIS.this_oRelatorio.PrepararDados()
+                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                RETURN
+            ENDIF
+            THIS.ExecutarReportForm("SigReEun", "PRINTER_PROMPT")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcelClick - Exporta cursor dbRelatorio para arquivo XLS
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcelClick()
+        LOCAL loc_cArquivo, loc_cCursor
+        TRY
+            THIS.FormParaRelatorio()
+            IF !THIS.this_oRelatorio.PrepararDados()
+                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                RETURN
+            ENDIF
+            loc_cCursor = "dbRelatorio"
+            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                RETURN
+            ENDIF
+            loc_cArquivo = PUTFILE("Salvar como...", "SigReEun", "XLS")
+            IF !EMPTY(loc_cArquivo)
+                SELECT (loc_cCursor)
+                COPY TO (loc_cArquivo) TYPE XLS
+                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                    loc_cArquivo, "Excel")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSairClick - Fecha o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSairClick()
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * MAPEAMENTO CRUD -> REPORT
+    *==========================================================================
+
+    PROCEDURE BtnIncluirClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnAlterarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick()
+        MsgAviso("Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
+            "o dispon" + CHR(237) + "vel em relat" + CHR(243) + "rios." + CHR(13) + ;
+            "Use Visualizar ou Imprimir para gerar o relat" + CHR(243) + "rio.", ;
+            "Aten" + CHR(231) + CHR(227) + "o")
+    ENDPROC
+
+    *==========================================================================
+    * HANDLERS DE TECLADO - BINDEVENT KeyPress (F4=115, ENTER=13, TAB=9)
+    *==========================================================================
+
+    PROCEDURE TeclaCdGrEst(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaCdGrEst()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarCdGrEst()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDsGrEst(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaDsGrEst()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarDsGrEst()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaCdEstoque(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaCdEstoque()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarCdEstoque()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDsEstoque(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaDsEstoque()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarDsEstoque()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaCdUnidade(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaCdUnidade()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarCdUnidade()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDsUnidade(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaDsUnidade()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarDsUnidade()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaCdMoeda(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaCdMoeda()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarCdMoeda()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDsMoeda(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaDsMoeda()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarDsMoeda()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - GRUPO DE ESTOQUE (SigCdGcr: Codigos/Descrs)
+    * Equivalente ao fAcessoContab do legado (modo C=por codigo, D=por descricao)
+    * Ao trocar o Grupo, limpa o campo Conta (estoque) pois o filtro muda.
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaCdGrEst()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdGcr", "cursor_4c_BuscaGrEst", "Codigos", loc_cValor, ;
+            "Grupo de Estoque", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_CdGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Codigos)
+                loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Descrs)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrEst")
+                        loc_oPg.txt_4c_CdGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Codigos)
+                        loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Descrs)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaGrEst")
+            USE IN cursor_4c_BuscaGrEst
+        ENDIF
+        loc_oPg.txt_4c_CdEstoque.Value = ""
+        loc_oPg.txt_4c_DsEstoque.Value = ""
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsGrEst()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsGrestoque.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdGcr", "cursor_4c_BuscaGrEst", "Descrs", loc_cValor, ;
+            "Grupo de Estoque", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Descrs)
+                loc_oPg.txt_4c_CdGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Codigos)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrEst")
+                        loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Descrs)
+                        loc_oPg.txt_4c_CdGrestoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.Codigos)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaGrEst")
+            USE IN cursor_4c_BuscaGrEst
+        ENDIF
+        loc_oPg.txt_4c_CdEstoque.Value = ""
+        loc_oPg.txt_4c_DsEstoque.Value = ""
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarCdGrEst()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_DsGrestoque.Value = ""
+            loc_oPg.txt_4c_CdEstoque.Value   = ""
+            loc_oPg.txt_4c_DsEstoque.Value   = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr" + ;
+            " WHERE Codigos = " + EscaparSQL(loc_cValor)
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrEstVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_GrEstVal
+            IF !EOF()
+                loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_GrEstVal.Descrs)
+            ELSE
+                loc_oPg.txt_4c_DsGrestoque.Value = ""
+                THIS.AbrirBuscaCdGrEst()
+            ENDIF
+        ELSE
+            loc_oPg.txt_4c_DsGrestoque.Value = ""
+            THIS.AbrirBuscaCdGrEst()
+        ENDIF
+        IF USED("cursor_4c_GrEstVal")
+            USE IN cursor_4c_GrEstVal
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarDsGrEst()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsGrestoque.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_CdGrestoque.Value = ""
+            loc_oPg.txt_4c_CdEstoque.Value   = ""
+            loc_oPg.txt_4c_DsEstoque.Value   = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT Codigos, Descrs FROM SigCdGcr" + ;
+            " WHERE Descrs LIKE " + EscaparSQL(loc_cValor + "%")
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrEstVal2")
+        IF loc_nResult > 0
+            SELECT cursor_4c_GrEstVal2
+            IF !EOF()
+                loc_oPg.txt_4c_CdGrestoque.Value = ALLTRIM(cursor_4c_GrEstVal2.Codigos)
+                loc_oPg.txt_4c_DsGrestoque.Value = ALLTRIM(cursor_4c_GrEstVal2.Descrs)
+            ELSE
+                THIS.AbrirBuscaDsGrEst()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaDsGrEst()
+        ENDIF
+        IF USED("cursor_4c_GrEstVal2")
+            USE IN cursor_4c_GrEstVal2
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - ESTOQUE/CONTA (SigCdCli: iclis/rclis, filtrado por Grupo)
+    * Equivalente ao fAcessoContas do legado (modo C=por codigo, D=por descricao)
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaCdEstoque()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg, loc_cGrupo, loc_cWhere
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value)
+        loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        loc_cWhere = IIF(EMPTY(loc_cGrupo), "", "Grupos = " + EscaparSQL(loc_cGrupo))
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdCli", "cursor_4c_BuscaEstoque", "iclis", loc_cValor, ;
+            "Sele" + CHR(231) + CHR(227) + "o de Estoque", ;
+            .F., .T., loc_cWhere)
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.iclis)
+                loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.rclis)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("rclis", "", "Nome")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEstoque")
+                        loc_oPg.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.iclis)
+                        loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.rclis)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaEstoque")
+            USE IN cursor_4c_BuscaEstoque
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsEstoque()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg, loc_cGrupo, loc_cWhere
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsEstoque.Value)
+        loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        loc_cWhere = IIF(EMPTY(loc_cGrupo), "", "Grupos = " + EscaparSQL(loc_cGrupo))
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdCli", "cursor_4c_BuscaEstoque", "rclis", loc_cValor, ;
+            "Sele" + CHR(231) + CHR(227) + "o de Estoque", ;
+            .F., .T., loc_cWhere)
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.rclis)
+                loc_oPg.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.iclis)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("rclis", "", "Nome")
+                    loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEstoque")
+                        loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.rclis)
+                        loc_oPg.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_BuscaEstoque.iclis)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaEstoque")
+            USE IN cursor_4c_BuscaEstoque
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarCdEstoque()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_cGrupo
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value)
+        loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_DsEstoque.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE iclis = " + ;
+            EscaparSQL(loc_cValor)
+        IF !EMPTY(loc_cGrupo)
+            loc_cSQL = loc_cSQL + " AND Grupos = " + EscaparSQL(loc_cGrupo)
+        ENDIF
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EstVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_EstVal
+            IF !EOF()
+                loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_EstVal.rclis)
+            ELSE
+                loc_oPg.txt_4c_DsEstoque.Value = ""
+                THIS.AbrirBuscaCdEstoque()
+            ENDIF
+        ELSE
+            loc_oPg.txt_4c_DsEstoque.Value = ""
+            THIS.AbrirBuscaCdEstoque()
+        ENDIF
+        IF USED("cursor_4c_EstVal")
+            USE IN cursor_4c_EstVal
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarDsEstoque()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_cGrupo
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsEstoque.Value)
+        loc_cGrupo = ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_CdEstoque.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE rclis LIKE " + ;
+            EscaparSQL(loc_cValor + "%")
+        IF !EMPTY(loc_cGrupo)
+            loc_cSQL = loc_cSQL + " AND Grupos = " + EscaparSQL(loc_cGrupo)
+        ENDIF
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EstVal2")
+        IF loc_nResult > 0
+            SELECT cursor_4c_EstVal2
+            IF !EOF()
+                loc_oPg.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_EstVal2.iclis)
+                loc_oPg.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_EstVal2.rclis)
+            ELSE
+                THIS.AbrirBuscaDsEstoque()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaDsEstoque()
+        ENDIF
+        IF USED("cursor_4c_EstVal2")
+            USE IN cursor_4c_EstVal2
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - UNIDADE (SigCdUni: cunis/dunis)
+    * Equivalente ao fwbuscaext em 'SigCdUni'/'CrUnidades' do legado
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaCdUnidade()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdUnidade.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdUni", "cursor_4c_BuscaUnid", "cunis", loc_cValor, ;
+            "Unidades", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_CdUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.cunis)
+                loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.dunis)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("cunis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dunis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUnid")
+                        loc_oPg.txt_4c_CdUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.cunis)
+                        loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.dunis)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaUnid")
+            USE IN cursor_4c_BuscaUnid
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsUnidade()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsUnidade.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdUni", "cursor_4c_BuscaUnid", "dunis", loc_cValor, ;
+            "Unidades", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.dunis)
+                loc_oPg.txt_4c_CdUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.cunis)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("dunis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.mAddColuna("cunis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUnid")
+                        loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.dunis)
+                        loc_oPg.txt_4c_CdUnidade.Value = ALLTRIM(cursor_4c_BuscaUnid.cunis)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaUnid")
+            USE IN cursor_4c_BuscaUnid
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarCdUnidade()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdUnidade.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_DsUnidade.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT cunis, dunis FROM SigCdUni WHERE cunis = " + ;
+            EscaparSQL(loc_cValor)
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_UnidVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_UnidVal
+            IF !EOF()
+                loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_UnidVal.dunis)
+            ELSE
+                loc_oPg.txt_4c_DsUnidade.Value = ""
+                THIS.AbrirBuscaCdUnidade()
+            ENDIF
+        ELSE
+            loc_oPg.txt_4c_DsUnidade.Value = ""
+            THIS.AbrirBuscaCdUnidade()
+        ENDIF
+        IF USED("cursor_4c_UnidVal")
+            USE IN cursor_4c_UnidVal
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarDsUnidade()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsUnidade.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_CdUnidade.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT cunis, dunis FROM SigCdUni WHERE dunis LIKE " + ;
+            EscaparSQL(loc_cValor + "%")
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_UnidVal2")
+        IF loc_nResult > 0
+            SELECT cursor_4c_UnidVal2
+            IF !EOF()
+                loc_oPg.txt_4c_CdUnidade.Value = ALLTRIM(cursor_4c_UnidVal2.cunis)
+                loc_oPg.txt_4c_DsUnidade.Value = ALLTRIM(cursor_4c_UnidVal2.dunis)
+            ELSE
+                THIS.AbrirBuscaDsUnidade()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaDsUnidade()
+        ENDIF
+        IF USED("cursor_4c_UnidVal2")
+            USE IN cursor_4c_UnidVal2
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - MOEDA (SigCdMoe: cmoes/dmoes)
+    * Equivalente ao fwbuscaext em 'SigCdMoe'/'CrMoedas' do legado
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaCdMoeda()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdMoeda.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdMoe", "cursor_4c_BuscaMoe", "cmoes", loc_cValor, ;
+            "Moedas", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_CdMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.cmoes)
+                loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.dmoes)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
+                        loc_oPg.txt_4c_CdMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.cmoes)
+                        loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.dmoes)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaMoe")
+            USE IN cursor_4c_BuscaMoe
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROCEDURE AbrirBuscaDsMoeda()
+        LOCAL loc_cValor, loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsMoeda.Value)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdMoe", "cursor_4c_BuscaMoe", "dmoes", loc_cValor, ;
+            "Moedas", .F., .T., "")
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.dmoes)
+                loc_oPg.txt_4c_CdMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.cmoes)
+            ELSE
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
+                        loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.dmoes)
+                        loc_oPg.txt_4c_CdMoeda.Value = ALLTRIM(cursor_4c_BuscaMoe.cmoes)
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaMoe")
+            USE IN cursor_4c_BuscaMoe
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarCdMoeda()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdMoeda.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_DsMoeda.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT cmoes, dmoes FROM SigCdMoe WHERE cmoes = " + ;
+            EscaparSQL(loc_cValor)
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MoeVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_MoeVal
+            IF !EOF()
+                loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_MoeVal.dmoes)
+            ELSE
+                loc_oPg.txt_4c_DsMoeda.Value = ""
+                THIS.AbrirBuscaCdMoeda()
+            ENDIF
+        ELSE
+            loc_oPg.txt_4c_DsMoeda.Value = ""
+            THIS.AbrirBuscaCdMoeda()
+        ENDIF
+        IF USED("cursor_4c_MoeVal")
+            USE IN cursor_4c_MoeVal
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarDsMoeda()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsMoeda.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_CdMoeda.Value = ""
+            THIS.AtualizarEstadoCamposDescricao()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT cmoes, dmoes FROM SigCdMoe WHERE dmoes LIKE " + ;
+            EscaparSQL(loc_cValor + "%")
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MoeVal2")
+        IF loc_nResult > 0
+            SELECT cursor_4c_MoeVal2
+            IF !EOF()
+                loc_oPg.txt_4c_CdMoeda.Value = ALLTRIM(cursor_4c_MoeVal2.cmoes)
+                loc_oPg.txt_4c_DsMoeda.Value = ALLTRIM(cursor_4c_MoeVal2.dmoes)
+            ELSE
+                THIS.AbrirBuscaDsMoeda()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaDsMoeda()
+        ENDIF
+        IF USED("cursor_4c_MoeVal2")
+            USE IN cursor_4c_MoeVal2
+        ENDIF
+        THIS.AtualizarEstadoCamposDescricao()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarEstadoCamposDescricao - Controla ReadOnly/Enabled dos campos
+    *   Descricao ReadOnly quando codigo preenchido (When do legado).
+    *   DtCotacao habilitada somente quando Moeda preenchida (When do legado).
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarEstadoCamposDescricao()
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            loc_oPg.txt_4c_DsGrestoque.ReadOnly = !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdGrestoque.Value))
+            loc_oPg.txt_4c_DsEstoque.ReadOnly   = !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value))
+            loc_oPg.txt_4c_DsUnidade.ReadOnly   = !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdUnidade.Value))
+            loc_oPg.txt_4c_DsMoeda.ReadOnly     = !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdMoeda.Value))
+            loc_oPg.txt_4c_DtCotacao.Enabled    = !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdMoeda.Value))
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * INTERFACE FORMBASE - stubs e traducoes CRUD->REPORT
+    *==========================================================================
+
+    PROCEDURE AtualizarEstadoControles()
+        RETURN
+    ENDPROC
+
+    PROCEDURE CarregarLista()
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Data", 5)
+                loc_oPg.txt_4c_Data.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN .T.
+    ENDPROC
+
+    PROTECTED PROCEDURE FormParaBO()
+        THIS.FormParaRelatorio()
+    ENDPROC
+
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPg
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) != "O"
+                RETURN
+            ENDIF
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            WITH THIS.this_oRelatorio
+                loc_oPg.txt_4c_CdGrestoque.Value = .this_cCdGrestoque
+                loc_oPg.txt_4c_DsGrestoque.Value = .this_cDsGrestoque
+                loc_oPg.txt_4c_CdEstoque.Value   = .this_cCdEstoque
+                loc_oPg.txt_4c_DsEstoque.Value   = .this_cDsEstoque
+                loc_oPg.txt_4c_CdUnidade.Value   = .this_cGrupo
+                loc_oPg.txt_4c_DsUnidade.Value   = .this_cGrupoDesc
+                loc_oPg.txt_4c_Data.Value        = .this_dData
+                loc_oPg.txt_4c_CdMoeda.Value     = .this_cMoeda
+                loc_oPg.txt_4c_DsMoeda.Value     = .this_cMoedaDesc
+                loc_oPg.txt_4c_DtCotacao.Value   = .this_dDtCotacao
+                loc_oPg.opt_4c_ImpCotacao.Value  = .this_nDadosCotacao
+                loc_oPg.opt_4c_FatorVenda.Value  = .this_nOpcFator
+            ENDWITH
+            THIS.AtualizarEstadoCamposDescricao()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPg, loc_lHab
+        TRY
+            IF PCOUNT() = 0
+                loc_lHab = .T.
+            ELSE
+                loc_lHab = par_lHabilitar
+            ENDIF
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            loc_oPg.txt_4c_CdGrestoque.Enabled  = loc_lHab
+            loc_oPg.txt_4c_CdEstoque.Enabled    = loc_lHab
+            loc_oPg.txt_4c_CdUnidade.Enabled    = loc_lHab
+            loc_oPg.txt_4c_Data.Enabled         = loc_lHab
+            loc_oPg.txt_4c_CdMoeda.Enabled      = loc_lHab
+            loc_oPg.opt_4c_ImpCotacao.Enabled   = loc_lHab
+            loc_oPg.opt_4c_FatorVenda.Enabled   = loc_lHab
+            IF loc_lHab
+                THIS.AtualizarEstadoCamposDescricao()
+            ELSE
+                loc_oPg.txt_4c_DsGrestoque.Enabled = .F.
+                loc_oPg.txt_4c_DsEstoque.Enabled   = .F.
+                loc_oPg.txt_4c_DsUnidade.Enabled   = .F.
+                loc_oPg.txt_4c_DsMoeda.Enabled     = .F.
+                loc_oPg.txt_4c_DtCotacao.Enabled   = .F.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE AjustarBotoesPorModo()
+        TRY
+            IF VARTYPE(THIS.cmg_4c_Botoes) = "O"
+                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(4).Enabled = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnBuscarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnEncerrarClick()
+        THIS.BtnSairClick()
+    ENDPROC
+
+    PROCEDURE BtnSalvarClick()
+        THIS.BtnImprimirClick()
+    ENDPROC
+
+    PROCEDURE BtnCancelarClick()
+        LOCAL loc_oPg
+        TRY
+            THIS.LimparCampos()
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Data", 5)
+                loc_oPg.txt_4c_Data.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera referencia ao BO
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            THIS.this_oRelatorio = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

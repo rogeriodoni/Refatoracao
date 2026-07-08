@@ -1,0 +1,3 @@
+﻿Removida a linha `DataSession = 2`. O `CarregarLista()` j├í lida corretamente com o caso de sess├úo 1 (o `IF loc_nSessaoAtual <> 1` evita criar cursor duplicado).
+
+**Causa raiz:** `DataSession = 2` em `DEFINE CLASS` de subclasse, quando instanciado via `CREATEOBJECT` (sem `DO FORM`/`READ EVENTS`), faz o VFP9 tentar executar `datasession.prg` ao inv├®s de tratar como propriedade nativa ÔÇö impedindo o `Init` de completar e causando `CREATEOBJECT retornou valor nao-objeto`.

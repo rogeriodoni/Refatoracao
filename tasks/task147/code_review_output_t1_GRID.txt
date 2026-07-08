@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: `ColumnCount = 3` ÔåÆ `ColumnCount = 8`.
+
+**Racioc├¡nio:** `ColumnCount = 3` destru├¡a Column4ÔÇôColumn8 no momento em que eram atribu├¡dos `RecordSource` e chamado `FormatarGridLista()`. Com `ColumnCount = 8`, as 8 colunas permanecem intactas, o auto-bind do VFP ocorre sobre todas elas, e em seguida `FormatarGridLista()` redefine corretamente o `.ControlSource` de todas as 8 colunas ÔÇö satisfazendo a regra GRID-RECORDSOURCE-AUTOBIND.

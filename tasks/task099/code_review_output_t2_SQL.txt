@@ -1,0 +1,7 @@
+﻿Both fixes are applied correctly. Here's a summary of what changed:
+
+**`ValidarCdEmpresa`** (was lines 1692-1709): Removed the `SQLEXEC` with `WHERE Cemps = ...`. Now uses `SEEK(loc_cValor, "CrSigCdEmp", "Cemps")` on the pre-loaded cursor ÔÇö exactly the same pattern used in the original (`Seek(lcEmpresa,'CrSigCdEmp','Cemps')`).
+
+**`ValidarDsEmpresa`** (was lines 1720-1736): Removed the `SQLEXEC` with `WHERE Razas LIKE ...`. Now uses `LOCATE FOR` on `CrSigCdEmp` with an uppercase prefix match ÔÇö since there's no Razas index, LOCATE is the correct local-cursor equivalent of the original's approach.
+
+Both procedures now rely entirely on the `CrSigCdEmp` cursor that the BO already loads and indexes at startup, eliminating the invented WHERE conditions on `CEMPS` and `RAZAS`.

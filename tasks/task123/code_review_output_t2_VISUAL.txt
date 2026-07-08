@@ -1,0 +1,20 @@
+﻿O arquivo j├í est├í com os valores corretos. O `opt_4c_OptTipos` na linha 634-635 j├í tem `.Top = 188` e `.Left = 92`, que coincidem exatamente com os valores originais reportados.
+
+Os problemas listados s├úo **falsos positivos** do validador: ele confundiu a posi├º├úo RELATIVA interna dos `Buttons(1)` (`.Top = 3`, `.Left = 5`) com a posi├º├úo ABSOLUTA do OptionGroup (`.Top = 188`, `.Left = 92`).
+
+Evid├¬ncia direta:
+- Diferen├ºa reportada em Top: 188 - 3 = **185px** Ô£ô (confirma que o validador leu o Buttons(1).Top)
+- Diferen├ºa reportada em Left: 92 - 5 = **87px** Ô£ô (confirma que o validador leu o Buttons(1).Left)
+
+O c├│digo atual est├í correto:
+```foxpro
+WITH par_oPagina.opt_4c_OptTipos
+    .Top  = 188   ÔåÉ j├í ├® o valor original
+    .Left = 92    ÔåÉ j├í ├® o valor original
+    ...
+    WITH .Buttons(1)
+        .Top  = 3   ÔåÉ posi├º├úo relativa DENTRO do grupo (correto)
+        .Left = 5   ÔåÉ posi├º├úo relativa DENTRO do grupo (correto)
+```
+
+**Nenhuma altera├º├úo necess├íria.** O `Formsigreimp.prg` est├í em conformidade com o layout original para este controle.

@@ -1,0 +1,12 @@
+﻿The refactor is complete. Fase 4 now provides:
+
+- `ConfigurarPageFrame()` at line 113 ÔÇö creates `pgf_4c_Paginas` with `PageCount=2` (Filtros/Dados), Tabs hidden
+- `ConfigurarPaginaLista()` at line 401 (PROTECTED) ÔÇö adds `grd_4c_Operacoes` (5 columns) and `cmg_4c_GradeS` (Sel./Des. buttons) to `Page1`
+- `AlternarPagina(par_nPagina)` at line 377 ÔÇö switches active page when valid
+
+Key choices and safety guards applied:
+- Grid `ColumnCount = 5` set before column access; `CheckBox AddObject` precedes `CurrentControl = "Check1"`; `ControlSource` set on Column (not Check1) ÔÇö avoids Error 1767
+- `RecordSource` assigned after column setup; column headers reconfigured afterward (rule: RecordSource resets headers)
+- `BINDEVENT` for `Column1.Check1 KeyPress` and `cmg_4c_GradeS Click` (handlers are PUBLIC by default)
+- `BtnGradeSClick`, `GrdOpeCheck1KeyPress` and `CarregarOperacoes` updated to reach the grid through `THIS.pgf_4c_Paginas.Page1.grd_4c_Operacoes`
+- Old `ConfigurarGrdOperacoes` / `ConfigurarCmdBtnGradeS` (which added controls directly to the form) were removed to prevent duplicate `AddObject` calls ÔÇö their logic is consolidated inside `ConfigurarPaginaLista`

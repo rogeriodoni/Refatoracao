@@ -1,0 +1,6 @@
+﻿3 occurrences fixed in `Formcfo.prg` (ValidarContFrt, ValidarContSeg, ValidarContDa):
+
+- `SELECT COUNT(*) AS nTotalRecs FROM SigCdCli WHERE codigos = ...` ÔåÆ `SELECT codigos FROM SigCdCli WHERE codigos = ...`
+- `cursor_4c_ContXxx.nTotalRecs = 0` ÔåÆ `RECCOUNT("cursor_4c_ContXxx") = 0`
+
+The WHERE clause still uses only `codigos` (matching the original), and existence is checked via `RECCOUNT()` instead of the aliased `nTotalRecs` column. Logic is identical.

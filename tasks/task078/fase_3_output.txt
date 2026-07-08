@@ -1,0 +1,14 @@
+﻿**Fase 3/8 conclu├¡da.** O arquivo `FormSIGREDES.prg` j├í existia com implementa├º├úo completa (fases 3-8 consolidadas em 2001 linhas). As seguintes a├º├Áes foram executadas:
+
+**FormSIGREDES.prg** ÔÇö j├í completo com toda a estrutura:
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` com BO, cabecalho, bot├Áes, PageFrame, filtros, BINDEVENTs
+- `ConfigurarCabecalho()`, `ConfigurarBotoes()` (cmg_4c_Botoes com 4 bot├Áes), `ConfigurarPageFrame()`, `ConfigurarFiltros()`
+- Todos os handlers de teclado, valida├º├Áes, lookups e `Destroy()`
+
+**menu.prg** ÔÇö adicionado:
+- `DEFINE BAR 88` (separador) e `DEFINE BAR 89` ("Cotas de Desconto")
+- `ON SELECTION BAR 89 OF popRelatorios DO AbrirFormSIGREDES`
+- Procedure `AbrirFormSIGREDES()` com padr├úo correto (`VARTYPE`, `Show()`, `MostrarErro`)
+
+O config.prg carrega automaticamente via `ADIR()` ÔÇö sem registro manual necess├írio.

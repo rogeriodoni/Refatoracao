@@ -1,0 +1,5 @@
+﻿Fixed. The bug was in `ConfigurarGrades()`: both `grd_4c_OperacoesS.Column1` and `grd_4c_SigCdCeg.Column1` had their CheckBox controls added under names `chk_4c_marca2` and `chk_4c_marca3` respectively, but `CurrentControl` was incorrectly set to `"chk_4c_Marca"` (the name from the first grid). VFP9 evaluates `CurrentControl` against the actual objects in that column, so referencing a non-existent name causes "Expression evaluated to an illegal value."
+
+Changes:
+- `grd_4c_OperacoesS.Column1.CurrentControl = "chk_4c_marca2"` (was `"chk_4c_Marca"`)
+- `grd_4c_SigCdCeg.Column1.CurrentControl = "chk_4c_marca3"` (was `"chk_4c_Marca"`)

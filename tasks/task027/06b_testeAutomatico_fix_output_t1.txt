@@ -1,0 +1,1 @@
+﻿Fixed. The change moves `loc_lSucesso = .T.` to right after the date initialization, before the `SQLEXEC` calls. The cursor loading is now non-fatal ÔÇö if the DB connection is unavailable (as in test mode), the BO is still created successfully and `this_cMensagemErro` records what failed. At runtime with a valid connection the cursors load normally.

@@ -1,0 +1,1023 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRCPR.SCX
+* Data/Hora: 07/07/2026 10:49:09
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCPR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCPR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCPR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRCPR
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Data
+  Parent: SIGPRCPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Leitura
+  Parent: SIGPRCPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Txt_Leitura
+  Parent: SIGPRCPR
+  Class: label
+  BaseClass: label
+
+Objeto: Sair
+  Parent: SIGPRCPR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Ok
+  Parent: SIGPRCPR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Conferencia
+  Parent: SIGPRCPR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGPRCPR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCPR.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPR.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPR.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPR.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPR.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPR.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPR.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPR.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPR.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPR.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 98
+  Left = 31
+  Width = 410
+  Height = 110
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Conferência e Reserva de Produção"
+  ControlBox = .F.
+  Closable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  ContinuousScroll = .F.
+  Name = "SIGPRCPR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data : "
+  Height = 15
+  Left = 133
+  Top = 110
+  Width = 35
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Get_Data
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  Height = 23
+  InputMask = ""
+  Left = 170
+  ReadOnly = .T.
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 107
+  Width = 80
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "Get_Data"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Get_Leitura
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "99999999999999"
+  Left = 221
+  TabIndex = 7
+  Top = 355
+  Visible = .F.
+  Width = 108
+  BorderColor = 100,100,100
+  Name = "Get_Leitura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Txt_Leitura
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código de barra :"
+  Height = 15
+  Left = 133
+  Top = 359
+  Visible = .F.
+  Width = 86
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Txt_Leitura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Sair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Ok"
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Conferencia
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Picture = ..\framework\imagens\geral_servicos_60.jpg
+  Caption = "\<Conf. Auto"
+  Name = "Conferencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 207
+  Left = 133
+  Panel = 1
+  ReadOnly = .T.
+  RecordSource = "TmpBaixa"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 6
+  Top = 140
+  Visible = .F.
+  Width = 534
+  Name = "Grade"
+  Column1.FontSize = 8
+  Column1.ControlSource = "CodBarra"
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .F.
+  Column1.DynamicForeColor = "Iif( TmpBaixa.QtdeLido#0, Rgb( 0,0,255 ), Rgb( 0,0,0 ) )"
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = "CPros"
+  Column2.Width = 108
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .F.
+  Column2.DynamicForeColor = "Iif( TmpBaixa.QtdeLido#0, Rgb( 0,0,255 ), Rgb( 0,0,0 ) )"
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = "Dopes"
+  Column3.Width = 154
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .F.
+  Column3.DynamicForeColor = "Iif( TmpBaixa.QtdeLido#0, Rgb( 0,0,255 ), Rgb( 0,0,0 ) )"
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ControlSource = "Numes"
+  Column4.Width = 61
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .F.
+  Column4.DynamicForeColor = "Iif( TmpBaixa.QtdeLido#0, Rgb( 0,0,255 ), Rgb( 0,0,0 ) )"
+  Column4.Name = "Column4"
+  Column5.FontSize = 8
+  Column5.ControlSource = "QtdeLido"
+  Column5.Width = 75
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Visible = .F.
+  Column5.DynamicForeColor = "Iif( TmpBaixa.QtdeLido#0, Rgb( 0,0,255 ), Rgb( 0,0,0 ) )"
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód. Barra"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPR.Grade.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCPR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregabars
+------------------------------------------------------------
+PROCEDURE carregabars
+Private pVal, pDat
+Select TmpBaixa
+Delete All
+
+_DopeCit = crSigCdPam.DopeCitens
+
+Select TmpEnc
+Delete All For Empty(Dopps) Or Empty(Numps)
+Scan
+	_Chave = _Empr + TmpEnc.Dopps + Str(TmpEnc.Numps, 6)
+
+	ThisForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'EmpDopNums', _Chave)
+	Select crSigOpEtq
+	Scan
+		If (Grupos + Contas = crSigCdPam.GruConfs + crSigCdPam.ConConfs)
+			ThisForm.poDataMgr.CursorQuery('SigMvCab', 'LocalEest', 'EmpDopNums', crSigOpEtq.Empos + crSigOpEtq.DopeOs + Str(crSigOpEtq.NumeOs, 6))
+			ThisForm.poDataMgr.CursorQuery('SigCdOpe',  'crSigCdOpe',  'Dopes', LocalEest.Dopes)
+			If (crSigCdOpe.Globalizas = 1) Or (crSigCdOpe.Servicos = 1)
+				_TGrupo = LocalEest.Grupoos
+				_TConta = LocalEest.Contaos
+			Else
+				_TGrupo = LocalEest.Grupods
+				_TConta = LocalEest.Contads
+			EndIf
+
+			_Grupo = Iif(Empty(crSigCdPam.GruReservs), _TGrupo, crSigCdPam.GruReservs)
+			_Conta = Iif(Empty(crSigCdPam.ConReservs), _TConta, crSigCdPam.ConReservs)
+			
+			ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crSigOpEtq.CPros)
+			ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'crSigCdGrp', 'CGrus', crSigCdPro.CGrus)
+			lnTipoEstos = Iif(InList(crSigCdGrp.TipoEstos, 2, 3, 4), crSigCdGrp.TipoEstos, 1)
+
+			ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', _TConta)
+			
+			_QtEti = crSigOpEtq.Qtds
+			_QtCit = 0
+
+			If Not Empty(_DopeCit)
+				ThisForm.poDataMgr.CursorQuery('SigMvCab', 'LocalEest', 'EmpDopNums', crSigOpEtq.Empos + _DopeCit + Str(crSigOpEtq.NumeOs, 6))
+				Select crSigMvCab
+				If Not Eof()
+					If (lntipoEstos = 1)
+						lcQuery = [Select cIdChaves, QtBaixas, Qtds ] + ;
+								    [From SigMvItn ] + ;
+								   [Where EmpDopNums = '] + crSigOpEtq.Empos + _DopeCit + Str(crSigOpEtq.NumeOs, 6) + [' And ] + ;
+								   		 [CPros = '] + crSigOpEtq.Cpros + [']
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalEestI') < 1)
+							=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalEestI)')
+							Return 0
+						EndIf
+						_Baixa = crSigOpEtq.Qtds
+
+						Select LocalEestI
+						Go Top
+						Scan While (_Baixa > 0)
+							If (LocalEestI.Qtds - LocalEestI.QtBaixas <> 0)
+								_Pendente = LocalEestI.Qtds - LocalEestI.QtBaixas
+								If (_Pendente > _Baixa)
+									pVal = _Baixa
+									_Baixa = 0
+								Else
+									pVal = _Pendente
+									_Baixa = _Baixa - _Pendente
+								EndIf
+
+								pDat    = Datetime()
+								llBaixa = Iif(LocalEestI.QtBaixas + pVal = LocalEestI.Qtds,.t.,.f.)
+
+								lcQuery = [Update SigMvItn ] + ;
+											 [Set QtBaixas = QtBaixas + ?pVal, ChkSubn = ?llBaixa, ] + ;
+											 	 [DtAlts = ?pDat ] + ;
+										   [Where cIdChaves = '] + LocalEestI.cIdChaves + [']
+
+								If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+									=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigMvItn 1)')
+									Return 0
+								EndIf
+							EndIf
+						EndScan
+					Else
+						lcQuery = [Select cIdChaves, EmpDopNums, CItens, QtBaixas, Qtds ] + ;
+								    [From SigMvIts ] + ;
+								   [Where EmpDopNums = '] + crSigOpEtq.Empos + _DopeCit + Str(crSigOpEtq.NumeOs, 6) + [' And ] + ;
+								   		 [CPros = '] + crSigOpEtq.Cpros + [' And ] + ;
+								   		 [CodCors = '] + crSigOpEtq.CodCors + [' And ] + ;
+								   		 [CodTams = '] + crSigOpEtq.CodTams + [']
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalEstI2') < 1)
+							=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalEstI2)')
+							Return 0
+						EndIf
+
+						_Baixa = crSigOpEtq.Qtds
+
+						Select LocalEstI2
+						Scan While _Baixa > 0
+							lcQuery = [Select cIdChaves, QtBaixas, Qtds ] + ;
+									    [From SigMvItn ] + ;
+									   [Where EmpDopNums = '] + LocalEstI2.EmpDopNums + [' And ] + ;
+									   		 [CItens = ] + Str(LocalEstI2.CItens, 4)
+
+							If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalEestI') < 1)
+								=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalEestI - CItens)')
+								Return 0
+							EndIf
+
+							_Pendente = LocalEsti2.Qtds - LocalEsti2.QtBaixas
+							If (_Pendente <> 0)
+								If (_Pendente > _Baixa)
+									pVal = _Baixa
+								Else
+									pVal = _Pendente
+								EndIf
+								pDat = Datetime()
+								llBaixa = Iif(LocalEstI2.QtBaixas + pVal = LocalEstI2.Qtds,.t.,.f.)
+
+								lcQuery = [Update SigMvIts ] + ;
+											 [Set QtBaixas = QtBaixas + ?pVal, ChkSubn = ?llBaixa ] + ;
+										   [Where cIdChaves = '] + LocalEstI2.cIdChaves + [']
+
+								If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+									=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigMvIts 1)')
+									Return 0
+								EndIf
+
+								lcQuery = [Update SigMvItn ] + ;
+											 [Set QtBaixas = QtBaixas + ?pVal, ] + ;
+											 	 [DtAlts = ?pDat ] + ;
+										   [Where cIdChaves = '] + LocalEestI.cIdChaves + [']
+
+								If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+									=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - SigMvItn 3)')
+									Return 0
+								EndIf
+
+								If (_Pendente > _Baixa)
+									_Baixa = 0
+								Else
+									_Baixa = _Baixa - _Pendente
+								EndIf
+							EndIf
+						EndScan
+					EndIf
+					_QtCit = _QtEti - _Baixa
+				EndIf
+			EndIf
+			
+			_QtEti = crSigOpEtq.Qtds - _QtCit
+			
+			_Grupo = Iif(Empty(crSigCdCli.GruProds), _Grupo, crSigCdCli.GruProds)
+			_Conta = Iif(Empty(crSigCdCli.ConProds), _Conta, crSigCdCli.ConProds)
+			
+			If (_QtEti <> 0)
+				Insert Into TmpBaixa (CodBarra, CPros, Dopes, Numes, Qtde, Nops, Grupods, Contads) ;
+							  Values (crSigOpEtq.CBars, crSigOpEtq.Cpros, crSigOpEtq.DopeOs, crSigOpEtq.NumeOs, ;
+							  		  _QtEti, crSigOpEtq.Nops, _Grupo, _Conta)
+			EndIf
+
+			If (_QtCit <> 0)
+				Insert Into TmpBaixa (CodBarra, CPros, Dopes, Numes, Qtde, Nops, Grupods, Contads) ;
+							  Values (crSigOpEtq.CBars, crSigOpEtq.Cpros, crSigOpEtq.DopeOs, crSigOpEtq.NumeOs, ;
+							  		  _QtCit, crSigOpEtq.Nops, crSigCdPam.GrupoEsts, crSigCdPam.ContaEsts)
+			EndIf
+		EndIf
+	EndScan
+EndScan
+
+Select TmpBaixa
+Go Top
+If Eof()
+	=Messagebox('Nenhuma Etiqueta Selecionada Nesta Operação!!!', 32, '')
+EndIf
+
+ThisForm.Grade.Visible = Not Eof()
+ThisForm.Txt_Leitura.Visible = Not Eof()
+ThisForm.Get_Leitura.Visible = Not Eof()
+ThisForm.Ok.Visible = Not Eof()
+ThisForm.Conferencia.Visible = !Eof()
+ThisForm.Get_Leitura.SetFocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Form
+
+ThisForm.ParentForm = _Form
+
+ThisForm.DataSessionId  = ThisForm.ParentForm.DataSessionId
+ThisForm.Get_Data.Value = ThisForm.ParentForm.Get_Data.Value
+ThisForm.poDataMgr		= ThisForm.ParentForm.poDataMgr
+Thisform.SigKey = CrSigCdPac.SigKeys
+
+ThisForm.CarregaBars
+
+with ThisForm.Grade
+	.RecordSource = 'TmpBaixa'
+	.Column1.ControlSource = 'TmpBaixa.CodBarra'
+	.Column2.ControlSource = 'TmpBaixa.Cpros'
+	.Column3.ControlSource = 'TmpBaixa.Dopes'
+	.Column4.ControlSource = 'TmpBaixa.Numes'
+	.Column5.ControlSource = 'TmpBaixa.QtdeLido'
+	.Refresh
+EndWith
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPR.Get_Data
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPR.Get_Leitura
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Set Confirm On
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select TmpBaixa
+Set Order to CodBarra
+
+If Not Empty(This.Value)
+	If Seek(This.Value)
+		If (TmpBaixa.QtdeLido = 0)
+			Replace QtdeLido With TmpBaixa.Qtde In TmpBaixa
+		Else
+			=Messagebox('Código de Barras Já Foi Lido!!!', 32, '')
+		EndIf
+		ThisForm.Grade.Refresh
+		=Seek(This.Value)
+		ThisForm.Grade.Refresh
+	Else
+		=Messagebox('Código de Barras Não Cadastrado!!!', 32, '')
+	EndIf
+	This.Value = 0
+	Return 0
+EndIf
+
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Set Confirm Off
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPR.Sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.Enabled = .t.
+
+ThisForm.Release
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPR.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private pDat, pBar
+
+If Messagebox('Confirma a Conferência das Etiquetas?', 4+32+256, '') = 7
+	ThisForm.Get_Leitura.SetFocus
+	Return 0
+EndIf
+
+Zap In crSigMvCab
+Zap In crSigMvItn
+Zap In crSigMvHst
+
+Create Cursor xGrava (Grupo c(10), Conta c(10), CPros c(14), Qtds n(12,3))
+Index On Grupo + Conta Tag GruConta
+
+Select xGrava
+Select Distinct Grupods, Contads ;
+  From TmpBaixa ;
+ Where QtdeLido <> 0 ;
+  Into Cursor xCabec
+
+_Dope = crSigCdPam.TransfEncs
+
+Select xCabec
+Scan
+	_Nume = fGerUniqueKey(_Empr + _Dope)
+
+	Insert Into crSigMvCab (Emps, Dopes, Numes, MascNum, Datas, Datars, Usuars, Grupoos, Contaos, ;
+						   Grupods, Contads, EmpDopNums, cIdchaves, DtAlts, EmpGopNums) ;
+				   Values (_Empr, _Dope, _Nume, Alltrim(fGerMascara(_Nume)), Datetime(), Datetime(), ;
+				   		   Usuar, crSigCdPam.GruConfs, crSigCdPam.ConConfs, xCabec.Grupods, ;
+				   		   xCabec.Contads, _Empr + _Dope + Str(_Nume, 6), fUniqueIds(), Datetime(), ;
+				   		   _Empr + Space(20) + Str(0, 6))
+
+	lnItem = 0
+	Select TmpBaixa
+	Set Order to GruConta
+	Seek xCabec.Grupods + xCabec.Contads
+	Scan While Grupods + Contads = xCabec.Grupods + xCabec.Contads for QtdeLido <> 0
+		lnItem = lnItem + 1
+		ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', TmpBaixa.CPros, 'DPros, CUnis')
+		ThisForm.poDataMgr.CursorQuery('SigOpEtq', 'crSigOpEtq', 'CBars', TmpBaixa.CodBarra, 'CodCors, CodTams, Empos')
+
+		Insert Into crSigMvItn (CItens, Emps, Dopes, Numes, CPros, Qtds, Cunis, DPros, Opers, ;
+								CodBarras, EmpDopNums, cIdChaves, DtAlts) ;
+						Values (lnItem, _Empr, _Dope, _Nume, TmpBaixa.CPros, TmpBaixa.QtdeLido, ;
+								crSigCdPro.Cunis, crSigCdPro.Dpros, 'S', TmpBaixa.CodBarra, ;
+								_Empr + _Dope + Str(_Nume,6), fUniqueIds(), Datetime())
+
+		*** Tiago - 23/10/2015 - Definido com o Richard que vamos gravar no cidchaves a mesma letra da movimentação para padronizar, assim a ordem do histórico fica correta	
+*!*			pCidC = Dtos(Date()) + 'K' + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999') + ThisForm.Sigkey 
+		pCidC = Dtos(Date()) + 'S' + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999') + ThisForm.Sigkey 
+		pSeq  = fGerUniqueKey('HISTBAR')
+
+		Insert Into crSigMvHst (Usuars, Datas, Datars, Emps, Empos, Dopes, Numes, Cpros, Qtds, Opers, Grupos, Estos, ;
+							  CodBarras, CodCors, CodTams, cIdChaves, EmpDopNums, EmpGruEsts, OriDopNums, Seqs) ;
+					  Values (Usuar, Datetime(), Datetime(), CrSigOpEtq.Empos, _Empr, _Dope, _Nume, TmpBaixa.CPros, ;
+					  		  TmpBaixa.QtdeLido, 'S', crSigCdPam.GruConfs, crSigCdPam.ConConfs, ;
+					  		  TmpBaixa.CodBarra, crSigOpEtq.CodCors, crSigOpEtq.CodTams, pCidC, ;
+					  		  CrSigOpEtq.Empos + _Dope + Str(_Nume, 6), CrSigOpEtq.Empos + crSigCdPam.GruConfs + crSigCdPam.ConConfs, ;
+					  		  _Empr + _Dope + Str(_Nume, 6), pSeq)
+
+		=fRecalculaP(crSigMvHst.Emps, crSigMvHst.Grupos, crSigMvHst.Estos, crSigMvHst.Cpros, crSigMvHst.Datas, crSigMvHst.CodCors, crSigMvHst.CodTams, ThisForm.poDataMgr)
+		=fRecalculaC(crSigMvHst.Emps, crSigMvHst.CPros, crSigMvHst.Datas, ThisForm.poDataMgr)
+
+		*** Tiago - 23/10/2015 - Definido com o Richard que vamos gravar no cidchaves a mesma letra da movimentação para padronizar, assim a ordem do histórico fica correta	
+*!*			pCidC = Dtos(Date()) + 'H' + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999') + ThisForm.Sigkey 
+		pCidC = Dtos(Date()) + 'E' + Transform(fGerUniqueKey(Dtos(Date())), '@L 999999') + ThisForm.Sigkey 
+		pSeq  = fGerUniqueKey('HISTBAR')
+
+		Insert Into crSigMvHst (Usuars, Datas, Datars, Emps, Empos, Dopes, Numes, Cpros, Qtds, Opers, Grupos, Estos, ;
+							  CodBarras, CodCors, CodTams, CidChaves, EmpDopNums, EmpGruEsts, OriDopNums, Seqs) ;
+					  Values (Usuar, Datetime(), Datetime(), CrSigOpEtq.Empos, _Empr, _Dope, _Nume, TmpBaixa.CPros, ;
+					  		  TmpBaixa.QtdeLido, 'E',  xCabec.Grupods, xCabec.Contads, TmpBaixa.CodBarra, ;
+					  		  crSigOpEtq.CodCors, crSigOpEtq.CodTams, pCidC, CrSigOpEtq.Empos + _Dope + Str(_Nume, 6), ;
+					  		  CrSigOpEtq.Empos + xCabec.Grupods + xCabec.Contads, _Empr + _Dope + Str(_Nume, 6), pSeq)
+
+		=fRecalculaP(crSigMvHst.Emps, crSigMvHst.Grupos, crSigMvHst.Estos, crSigMvHst.Cpros, crSigMvHst.Datas, crSigMvHst.CodCors, crSigMvHst.CodTams, ThisForm.poDataMgr)
+		=fRecalculaC(crSigMvHst.Emps, crSigMvHst.CPros, crSigMvHst.Datas, ThisForm.poDataMgr)
+
+		pDat = Datetime()
+		pBar = TmpBaixa.CodBarra
+
+		lcQuery = [Update SigOpEtq ] + ;
+					 [Set Grupos = '] + xCabec.Grupods + [', ] + ;
+					 	 [Contas = '] + xCabec.Contads + [', ] + ;
+					 	 [DtMovs = ?pDat ] + ;
+				   [Where CBars = ?pBar]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpEtq') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpEtq)')
+			Return 0
+		EndIf
+	EndScan
+EndScan
+
+Select Min(Datas) as Datas From CrSigMvCab Into Cursor TmpGdm
+
+llTaOk = .t.
+If Not ThisForm.poDataMgr.Update('crSigMvCab')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvCab)')
+	llTaOk = .f.
+EndIf
+
+If llTaOk
+	If Not ThisForm.poDataMgr.Update('crSigMvItn')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvItn)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If Not ThisForm.poDataMgr.Update('crSigMvHst')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvHst)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk And Not fRecalculaP(.t., ThisForm.poDataMgr)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpClP)')
+	llTaOk = .f.
+EndIf
+If llTaOk And Not fRecalculaC(.t., .f., .f., ThisForm.poDataMgr)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpClC)')
+	llTaOk = .f.
+EndIf
+
+If llTaOk
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+		llTaOk = .f.
+	EndIf
+EndIf
+If Not llTaOk
+	ThisForm.Podatamgr.rollback()
+EndIf
+
+ThisForm.ParentForm.Enabled = .t.
+
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPR.Conferencia
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpBaixa
+Set Order to CodBarra
+Replace all TmpBaixa.QtdeLido with TmpBaixa.Qtde
+ThisForm.Grade.Refresh
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCPR
+RESERVED3 (ClassInfo): parentform
+podatamgr
+sigkey
+*carregabars 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

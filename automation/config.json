@@ -1,0 +1,118 @@
+{
+  "version": "2.1",
+  "database": {
+    "server": "192.168.15.101,1435",
+    "database": "DB_MBAHIA",
+    "user": "sa",
+    "password": "SqlServer2022!",
+    "comentario": "Credenciais para extracao de schema via SQLCMD"
+  },
+  "paths": {
+    "origem": "C:\\4c\\origem",
+    "tasks": "C:\\4c\\tasks",
+    "projeto": "C:\\4c\\projeto",
+    "vfp9": "C:\\Program Files (x86)\\Microsoft Visual FoxPro 9",
+    "automation": "C:\\4c\\automation",
+    "solicitacaoTestManual": "C:\\4c\\SolicitacaoTesteManual"
+  },
+  "validacao": {
+    "maxProblemas": 10,
+    "maxProblemasRecomendado": 37,
+    "testesAutomaticosMinimo": 100,
+    "enforceQualityGates": true,
+    "layoutThresholdPx": 5,
+    "layoutMaxErrors": 0,
+    "sqlSchemaBlocking": true,
+    "comentario": "37 = 4 Dataenvironment + 33 FormBase (aceitaveis) | testesAutomaticosMinimo = 100% | enforceQualityGates = true | layoutThresholdPx = tolerancia posicao em pixels | layoutMaxErrors = 0 (informativo, nao-bloqueante) | sqlSchemaBlocking = true (problemas SQL schema bloqueiam pipeline)"
+  },
+  "retry": {
+    "maxTentativasMigracao": 3,
+    "maxTentativasTestForm": 5,
+    "maxTentativasValidacao": 5,
+    "maxTentativasRuntimeFix": 10,
+    "delaySegundos": 5
+  },
+  "rateLimitRetry": {
+    "maxRetries": 6,
+    "initialDelaySeconds": 65,
+    "maxDelaySeconds": 600,
+    "backoffMultiplier": 2,
+    "usageLimitWaitSeconds": 25200,
+    "comentario": "Retry automatico para rate limit da API Anthropic. initialDelaySeconds=65 garante reset do limite de 1 minuto (TPM/RPM). backoffMultiplier=2 aplica backoff exponencial: 65s, 130s, 260s, 300s (cap). usageLimitWaitSeconds=25200 (7h) e o fallback quando retry-after nao esta na mensagem de erro."
+  },
+  "claude": {
+    "model": "sonnet",
+    "timeout": 3600,
+    "maxOutputTokens": 128000,
+    "commentMaxTokens": 100000,
+    "comentario": "timeout 3600s (60min) | maxOutputTokens 128000 evita truncamento de output"
+  },
+  "vfp": {
+    "timeout": 300,
+    "commentDefaultTimeout": "5 minutos para scripts VFP (aumentado de 120s por causa do AnalisadorComportamento com schema.sql grande)",
+    "exitCodes": {
+      "0": "sucesso",
+      "1": "erro VFP (normal para GUI - validar pelo arquivo de saida)",
+      "2": "erro critico (form nao encontrado, etc.)",
+      "3": "script PRG nao encontrado",
+      "4": "TIMEOUT (VFP9 nao finalizou e foi encerrado forcadamente)",
+      "99": "excecao inesperada"
+    }
+  },
+  "logging": {
+    "nivel": "INFO",
+    "formato": "json",
+    "rotateSize": "10MB"
+  },
+  "novasFerramentas": {
+    "analisadorTarefa": {
+      "habilitado": true,
+      "timeout": 60,
+      "outputFile": "analise.json",
+      "comentario": "Extrai dados estruturados do TXT para alimentar Claude"
+    },
+    "geradorEsqueletos": {
+      "habilitado": true,
+      "timeout": 60,
+      "outputDir": "esqueletos",
+      "completudeEstimada": 70,
+      "comentario": "Gera codigo base de BO e Form com ~70% completo"
+    },
+    "corretorAutomatico": {
+      "habilitado": true,
+      "criarBackup": true,
+      "antiPadroes": [
+        "RETURN_NO_TRY",
+        "INICIALIZAR_DUPLICADO",
+        "SHOW_MODAL",
+        "RELEASE_APOS_SHOW",
+        "SALVAR_PARAMETRO",
+        "NOME_PROPRIEDADE",
+        "ALIAS_COM_PONTO",
+        "VAL_DESNECESSARIO",
+        "GRID_PROPRIEDADE_INVALIDA",
+        "BOM_UTF8"
+      ],
+      "comentario": "Aplica correcoes automaticas para anti-padroes conhecidos"
+    },
+    "validarCompilacao": {
+      "habilitado": true,
+      "timeout": 60,
+      "outputFile": "resultado_compilacao.json",
+      "comentario": "Compila arquivos .prg e verifica erros de sintaxe antes de testar"
+    },
+    "testeAutomatico": {
+      "habilitado": true,
+      "timeout": 120,
+      "outputFile": "teste_resultado.json",
+      "testes": [
+        "Instanciacao",
+        "CarregarLista",
+        "ModoIncluir",
+        "ModoVisualizar",
+        "Fechar"
+      ],
+      "comentario": "Testa CRUD basico automaticamente"
+    }
+  }
+}

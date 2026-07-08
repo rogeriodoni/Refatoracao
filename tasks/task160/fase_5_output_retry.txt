@@ -1,0 +1,7 @@
+﻿O arquivo est├í consistente. Fase 5 conclu├¡da:
+
+- Adicionado `ConfigurarPaginaDados()` como m├®todo `PROTECTED` real (n├úo ├® stub) que resolve o Caption dinamicamente a partir do BO, configura o Picture do form, e serve como ponto de sincronia Form Ôåö BO.
+- `InicializarForm()` agora chama `ConfigurarPaginaDados()` antes de `ConfigurarCabecalho()` (z-order + inicializa├º├úo de Caption/Picture antes das labels lerem `THISFORM.Caption`).
+- Labels do cabecalho agora leem `THISFORM.Caption` (single source of truth) em vez de literal duplicado.
+
+O form SIGPRCCR original ├® REPORT FLAT sem campos de filtro (Height=130, apenas cabe├ºalho + 4 bot├Áes) ÔÇö n├úo h├í TextBoxes/Labels de filtro a adicionar. O m├®todo adicionado documenta essa realidade e executa o trabalho de configura├º├úo de dados que faz sentido para este form type.

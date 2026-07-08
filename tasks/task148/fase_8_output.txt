@@ -1,0 +1,9 @@
+﻿Estrutura correta, todos os `PROCEDURE`/`ENDPROC` balanceados e `ENDDEFINE` no lugar certo em ambos os arquivos.
+
+**Fase 8 conclu├¡da.** As ├║nicas pe├ºas que faltavam foram adicionadas:
+
+1. **`VerificarPeriodoBloqueado(par_dData)`** no `sigpdmp7BO.prg` ÔÇö m├®todo chamado em `ValidarDataMov()` mas ausente, causaria crash em runtime. A implementa├º├úo tenta usar as fun├º├Áes `fVerificaBloqueio`/`fBloqueioPorPeriodo` do Framework legado se dispon├¡veis, com fallback seguro (`.F.`) quando n├úo est├úo.
+
+2. **`Activate()`** em `Formsigpdmp7.prg` ÔÇö replica o comportamento do legado: posiciona o cursor `crSigCdOpd` no `Dopp` corrente e define foco autom├ítico conforme o modo (`this_lAtFoco`/`this_cPcEscolha`).
+
+O restante das tarefas da Fase 8 (BtnBuscarClick, BtnEncerrarClick, BtnSalvarClick, BtnCancelarClick, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, CarregarLista, AjustarBotoesPorModo) j├í estavam completamente implementados nas Fases 3ÔÇô7. A integra├º├úo com `config.prg` (carga din├ómica via `ADIR`) e `menu.prg` (`AbrirFormsigpdmp7` + `DEFINE BAR`) tamb├®m j├í estava pronta.

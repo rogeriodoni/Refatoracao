@@ -1,0 +1,19 @@
+﻿The implementation is now corrected. Here's a summary of what was fixed from the previous session's work:
+
+**Bugs fixed in `ConfigurarPgPgDadosConsP`:**
+
+1. **Wrong cursor fields** ÔÇö Previous `cursor_4c_GrdCons` used `CPros, DPros, ...` but original code at line 14012 shows it uses `crSigPrCpo` fields: `Mats, Dcompos, Qtds, UniCompos, Grupos, Dscgrp, Ordems, QtsCons, Cats`
+
+2. **Wrong column order/ControlSources** ÔÇö Column2 was mapped to `Qtds` (wrong ÔÇö it's now `Dcompos`). Column7 was also mapped to `Qtds` (duplicate). Real mapping: Column9 in original has `ColumnOrder=2` (description), so visual order is: Mats | Dcompos | Qtds | UniCompos | Grupos | Dscgrp | Ordems | QtsCons | Cats
+
+3. **Wrong column widths** ÔÇö Updated to match originals: 108, 223, 60, 25, 105, 254(Ôëê290-remap), 35, 60, 52
+
+4. **Wrong `cursor_4c_GrDTEMP` fields** ÔÇö Changed from `Agrupamentos N(4,0), Tempos N(12,4)` to `agrupas C(3), pertemps N(12,3)` (matching `crSigProTp`)
+
+5. **Missing `txt_4c_Qtcpnt` properties** ÔÇö Added `InputMask="999"`, `Alignment=3`, `MaxLength=3`, `Value=0`
+
+6. **Missing `chk_4c_ChkFund` properties** ÔÇö Added `SpecialEffect=1`, `AutoSize=.T.`, `Alignment=0`, `ForeColor=RGB(90,90,90)`, `Value=.F.`
+
+7. **BOParaForm not populating Page5 controls** ÔÇö Added `qtdcpnts` and `chkfunds` to `CarregarDadosSigCdPro` SQL query, added value assignments for `txt_4c_Qtcpnt` and `chk_4c_ChkFund`, and added clearing code
+
+8. **`GrdConsAfterRowColChange` referencing wrong field** ÔÇö Changed `!EMPTY(cursor_4c_GrdCons.CPros)` ÔåÆ `!EOF("cursor_4c_GrdCons")`, added `LPARAMETERS`

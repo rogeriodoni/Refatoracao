@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. O arquivo `Formsigrecrp.prg` agora tem:
+
+**`ConfigurarPaginaDados()` expandido** com BINDEVENTs completos para todos os 8 pares de campos:
+- `txt_4c_Grupo` / `txt_4c__Ds_Grupo` ÔåÆ `TeclaGrupoCod` / `TeclaGrupoDesc` / `AbrirBuscaGrupoCont` (j├í existia)
+- `txt_4c_Conta` / `txt_4c_DCONTA` ÔåÆ `TeclaContaCod` / `TeclaContaDesc` / `AbrirBuscaContaCont` (j├í existia)
+- `txt_4c_Sgrupo` / `txt_4c_Dsgrupo` ÔåÆ `TeclaSgrupoCod` / `TeclaSgrupoDesc` / `AbrirBuscaSgrupoCont` (**novo**)
+- `txt_4c_Sconta` / `txt_4c_DsConta` ÔåÆ `TeclaScontaCod` / `TeclaScontaDesc` / `AbrirBuscaSconta` (**novo**)
+- `txt_4c__cd_empresa` / `txt_4c__ds_empresa` ÔåÆ `TeclaEmpresaCod` / `TeclaEmpresaDesc` / `AbrirBuscaEmpresa` (**novo**)
+- `txt_4c__cd_moeda` / `txt_4c__ds_moeda` ÔåÆ `TeclaMoedaCod` / `TeclaMoedaDesc` / `AbrirBuscaMoeda` (**novo**)
+
+**16 novos m├®todos adicionados**, todos completos com: valida├º├úo por c├│digo (SQLEXEC), FormBuscaAuxiliar com mAddColuna, preenchimento dos pares codigo/descricao e limpeza de cursores. Tabelas usadas: `SigCdGcr` (Codigos/Descrs), `SigCdCli` (iclis/rclis), `sigcdemp` (cemps/razas), `SigCdMoe` (cmoes/dmoes) ÔÇö todas confirmadas no schema.sql.

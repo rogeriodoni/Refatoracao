@@ -1,0 +1,9 @@
+﻿**Fase 2/8 conclu├¡da.** `SIGPRESTBO.prg` foi completado com:
+
+- **`CarregarDoCursor()`** ÔÇö l├¬ `lGeraArquivos`/`lGeraIndices` de cursor para propriedades do BO
+- **`GerarEstrutura(par_cDirAtual)`** ÔÇö implementa├º├úo completa da l├│gica do `OK.Click` bloco 1: cria `ArqDBF.DBF` com estrutura de campos de todos os DBFs encontrados no diret├│rio, com barra de progresso via `fwProgressBar`
+- **`GerarIndices(par_cDirAtual)`** ÔÇö implementa├º├úo completa do bloco 2: cria `ArqInd.DBF` com tags CDX de todos os DBFs; early-exit via flag (sem `RETURN` dentro do `TRY/CATCH`)
+- **`CarregarLogo()`** ÔÇö carrega logo da empresa via SQLEXEC em `csLogoTipo`
+- **`ObterChavePrimaria()`** ÔÇö j├í existia, retorna `""` (sem chave, form utilit├írio)
+
+Corre├º├Áes aplicadas vs. original: `STRT()` ÔåÆ `STRTRAN()`, acentos ÔåÆ `CHR()`, `MESSAGEBOX` ÔåÆ `MsgAviso`/`MsgErro`, `CATCH` nunca silencioso (inclui linha do erro).

@@ -1,0 +1,700 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRIBL.SCX
+* Data/Hora: 07/07/2026 10:54:05
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRIBL
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRIBL
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRIBL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRIBL.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label31
+  Parent: SIGPRIBL
+  Class: label
+  BaseClass: label
+
+Objeto: cmdGImprimir
+  Parent: SIGPRIBL
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getLocals
+  Parent: SIGPRIBL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getTxtCds
+  Parent: SIGPRIBL
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: lblAviso
+  Parent: SIGPRIBL
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRIBL
+  Class: label
+  BaseClass: label
+
+Objeto: getFPags
+  Parent: SIGPRIBL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGPRIBL
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL
+------------------------------------------------------------
+  Height = 400
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Impressão de Boleto Bancário"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGPRIBL"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1020
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.Label31
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = " Texto de Responsabilidade do Cedente "
+  Height = 15
+  Left = 82
+  Top = 251
+  Width = 196
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label31"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.cmdGImprimir
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 88
+  Left = 835
+  SpecialEffect = 1
+  Top = -2
+  Width = 173
+  TabIndex = 8
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdGImprimir"
+  Command1.Top = 5
+  Command1.Left = 11
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.ToolTipText = "Imprimir"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdImprimir"
+  Command2.Top = 5
+  Command2.Left = 87
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdSaida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.getLocals
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCnFbl.clocals"
+  Format = "K"
+  Height = 69
+  Left = 84
+  MaxLength = 100
+  TabIndex = 4
+  Top = 168
+  Width = 798
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "getLocals"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.getTxtCds
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 69
+  Left = 84
+  TabIndex = 6
+  Top = 268
+  Width = 798
+  ForeColor = 0,0,0
+  Name = "getTxtCds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.lblAviso
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Não Existe Configuração de Boleto"
+  Left = 89
+  Top = 351
+  Width = 213
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "lblAviso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = " Condição de Pagamento "
+  Height = 15
+  Left = 82
+  Top = 93
+  Width = 124
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.getFPags
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 84
+  MaxLength = 12
+  TabIndex = 2
+  Top = 110
+  Width = 94
+  ForeColor = 0,0,0
+  Name = "getFPags"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBL.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = " Local de Pagamento "
+  Height = 15
+  Left = 82
+  Top = 151
+  Width = 104
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRIBL
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atualizaboleto
+------------------------------------------------------------
+PROCEDURE atualizaboleto
+Lparameters lpCond
+
+Private pPag
+
+pPag = Padr(lpCond, 12)
+
+With ThisForm
+	.poDataMgr.Requery('crSigCnFBl')
+
+	Select crSigCnFBl
+	Go Top
+
+	If Eof('crSigCnFBl')
+		.getTxtCds.Enabled = .f.
+		.getLocals.Enabled = .f.
+		.lblAviso.Visible  = .t.
+		.cmdGImprimir.cmdImprimir.Enabled = .f.
+		.cmdGImprimir.Value = 2
+	Else
+		.getTxtCds.Enabled = .t.
+		.getLocals.Enabled = .t.
+		.lblAviso.Visible  = .f.
+		.getTxtCds.Value   = crSigCnFBl.cTxtCds
+		.cmdGImprimir.cmdImprimir.Enabled = .t.
+	EndIf
+
+	.getTxtCds.Refresh
+	.getLocals.Refresh
+	.cmdGImprimir.Refresh
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE grdetalhe
+------------------------------------------------------------
+PROCEDURE grdetalhe
+Lparameters lnLinha, lnColuna, lcDetalhe, lcEstilo, lclinesize, lcheight
+
+lnLinha   = Iif(Type('lnLinha')  =='N', lnLinha,  0)
+lnColuna  = Iif(Type('lnColuna') =='N', lnColuna, 0)
+lcDetalhe = Iif(Type('lcDetalhe')=='C', lcDetalhe,'')
+lcEstilo  = Iif(Type('lcEstilo') =='C', lcEstilo, 'X')
+
+If (Not m.lcEstilo=='*' And (lnColuna<>0 Or lnLinha<>0))
+	Insert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ;
+  		   			Values (lnLinha, lnColuna, lcDetalhe, Alltrim(lcEstilo), lcLineSize, lcHeight)
+EndIf
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters lcChave1, lcNform1
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private pPag
+
+pPag = Space(12)
+
+lcQueryCfgBl  = [Select * From SigCnFBl Where FPags = ?pPag]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', .Name)
+	With .poDataMgr
+		.AddCursor('SigCnFBl', 'cIdChaves', 'crSigCnFBl', '', '',lcQueryCfgBl)
+	EndWith
+
+	.pcChave1 = lcChave1
+	.pcNform1 = lcNform1
+
+	=DoDefault()
+
+	.AtualizaBoleto([]) 
+
+	If Not Used('TprMvCab')
+		Create Cursor TprMvCab (Emps c(3), Dopes c(20), Numes n(6), Parcs c(2))
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIBL.cmdGImprimir
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdImprimir.Click
+------------------------------------------------------------
+PROCEDURE cmdImprimir.Click
+Local lcEscape,lcTalk,lnDecimals,lcFixed,llArea1,llArea2,llArea3,llArea4,llArea5,llArea6,llArea7,lnConta1,lnConta2,lnMemo,lnLnTxt,cLdetalhes,cEstilos,nLinhas,nColunas,;
+      lnQtLinha,cTxtCds,laPrinters,llTemImp,lnConta1,lnNffatorln,lnNffatorcl,lnTamFolha1
+
+m.lnNffatorln = 0
+m.lnNffatorcl = 0
+ThisForm.LockScreen = .t.
+
+If MessageBox('Confirma a Impressão do(s) Boleto(s) Bancário(s)?',32+4,[Confirmação])==6
+
+	Create Cursor Crdados(clocal c(100),vencs c(12),datdoc d,numdoc c(8),valor n(14,2),razaos c(50),cpfs c(20),;
+	                      endcobs c(80),baicobs c(20),cidcobs c(20),estcobs c(2),cepcobs c(9),texto m)                      
+
+	m.lcChave1   = Iif(Type('ThisForm.pcChave1')=='C',ThisForm.pcChave1,'')
+	m.lcEscape   = Set('Escape')
+	m.lcTalk     = Set('Talk')
+	m.lnDecimals = Set('Decimals')
+	m.lcFixed    = Set('Fixed')
+
+	Set Escape Off
+	Set Talk On
+	Set Decimals To 2
+	Set Fixed On
+	
+	m.cTxtCds = ThisForm.getTxtCds.Value
+	
+	Select crSigCnFBl
+	Gather Memo Memvar
+	
+	If ThisForm.Podatamgr.Update('CrSigCnFBl') And ;
+		ThisForm.Podatamgr.commit() > 0
+	Else
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return .f.
+	Endif
+		
+	m.llTemImp = .f.
+	
+	Declare laPrinters [1]
+
+	If Aprinters(m.laPrinters)>0
+
+		For m.lnConta1=1 To Alen(m.laPrinters,1)
+		
+			If Upper(AllTrim(m.laPrinters [m.lnConta1,1]))==Upper(AllTrim(CrSigCnFBl.cNomeImps))
+			
+				m.llTemImp = .t.
+				m.lnConta1 = (Alen(m.laPrinters,1)+1)
+				
+			EndIf
+		
+		EndFor
+		
+	EndIf
+
+	If m.llTemImp
+		If Not Empty(lcChave1)
+			Select TprMvCab
+			Zap
+			Insert Into TprMvCab (Emps, Dopes, Numes) ;
+						 Values (Substr(lcChave1, 1, 3), Substr(lcChave1, 4, 20), Int(Val(Substr(lcChave1, 24, 6))))
+		EndIf
+
+		Select TprMvCab
+		Scan
+			lcChave1 = TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes, 6)
+			lnParcel = Iif(Type('TprMvCab.Parcs')='N', TprMvCab.Parcs, 0)
+			If ThisForm.Podatamgr.cursorquery('SigMvCab','CrTprMvCab', 'EmpDopNums',lcChave1)
+				If ThisForm.Podatamgr.cursorquery('SigMvPar','CrTmpPar','EmpdopNums',lcChave1)
+					If ThisForm.Podatamgr.Cursorquery('SigCdOpe','CrTmpOpe','Dopes',CrTmpPar.Dopes) And ;
+						ThisForm.Podatamgr.Cursorquery('SigOpCdc','CrTmpdcOpe','Dopes',CrTmpPar.Dopes) And CrTmpdcope.ImpBols==1
+						If Thisform.PodataMgr.Cursorquery('SigMvNfi','CrTmpNfis','EmpdopNums',lcChave1)
+							Create Cursor TmpImprime ( Linha n(6,2), Coluna n(6,2), Conteudo c(100), Style c(3),fontname c(64), fontsize i,linesize n(6,2),nheight n(6,2))
+							Index On ( Linha * 1000000000 ) + ( Coluna * 100 ) Tag Ordem
+							Select CrSigCnFBl
+							If IsEmpty(CrSigCnFBl.cFontePdrs)
+								m.lcFonteP = []
+								m.lcFonteG = []
+							Else
+								If IsEmpty(CrSigCnFBl.nTamFontes)
+									m.lcFonteP = [Font ']+AllTrim(CrSigCnFBl.cFontePdrs)+[',9]
+									m.lcFonteG = [Font ']+AllTrim(CrSigCnFBl.cFontePdrs)+[',11]
+								Else
+									m.lcFonteP = [Font ']+AllTrim(CrSigCnFBl.cFontePdrs)+[',]+AllTrim(Str(CrSigCnFBl.nTamFontes,3))
+									m.lcFonteG = [Font ']+AllTrim(CrSigCnFBl.cFontePdrs)+[',]+AllTrim(Str((CrSigCnFBl.nTamFontes+2),3))
+								EndIf
+							EndIf
+							m.lnConta1 = 0
+
+							=ThisForm.Podatamgr.cursorquery('SigCdCli','CrTmpCli','Iclis',Iif(CrTmpOpe.Nfiscals==1,CrTprMvCab.Contaos,CrTprMvCab.Contads))
+							
+							Zap in CrDados
+
+							Select CrTmpPar
+							Go Top
+							
+							Scan
+								llTaOk = .t.
+								If (lnParcel > 0)
+									If (CrTmpPar.Parcs <> lnParcel)
+										llTaOk = .f.
+									EndIf
+								EndIf
+								
+								If llTaOk And ThisForm.Podatamgr.cursorquery('SigOpFp','CrTmpFpag','Fpags',CrTmpPar.Fpags) And CrTmpFpag.ImpBols==1
+									Zap in tmpImprime
+								
+									xVenc = Iif( CrTmpFpag.ImpNotas = 1, Dtoc( CrTmpPar.Vencs ), CrTmpPar.FPags )
+									m.lnConta1 = (m.lnConta1+1)
+									Insert into Crdados  values(CrSigCnFBl.cLocals, xVenc, CrTmpPar.Datas, CrtmpNfis.NFis+'-'+Str(Crtmppar.parcs,1),;
+									                            CrTmpPar.Valos,CrTmpCli.Razaos,CrTmpCli.Cpfs,;
+									                            IIf(.Not.IsEmpty(CrTmpCli.EndCobs),CrTmpCli.EndCobs,CrTmpCli.Endes),;
+									                            Iif(.Not.IsEmpty(CrTmpCli.BaiCobs),CrTmpCli.BaiCobs, CrTmpCli.Bairs),;
+									                            IIf(.Not.IsEmpty(CrTmpCli.CidCobs),CrTmpCli.CidCobs,CrTmpCli.Cidas),;
+									                            Iif(.Not.IsEmpty(CrTmpCli.EstCobs),CrTmpCli.EstCobs,CrTmpCli.Estas),;
+									                            Iif(.Not.IsEmpty(CrTmpCli.CepCobs),CrTmpCli.CepCobs,CrTmpCli.Ceps),;
+									                            m.ctxtcds)
+								EndIf
+							EndScan
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnLocals,CrSigCnFBl.nClLocals,'Crdados.cLocal',,60,1)  && Local de Pagamento...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnDtVencs,CrSigCnFBl.nClDtVencs,'Crdados.Vencs',,9,1)  && Data do Vencimento...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnDtDocs,CrSigCnFBl.nClDtDocs,'Dtoc(Crdados.Datdoc)',,9,1)  && Data do Documento...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnNrDocs,CrSigCnFBl.nClNrDocs,'Crdados.numdoc',,9,1)  && No. do Documento...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnVlDocs,CrSigCnFBl.nClVlDocs,"TransForm(CrDados.Valor,'@Z 999,999,999.99')",,15,1)  && Valor do Documento...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnRazClis,CrSigCnFBl.nClRazClis,'AllTrim(Crdados.Razaos)',,50,1)  && Razao Social...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnCgcClis,CrSigCnFBl.nClCgcClis,'AllTrim(Crdados.Cpfs)',,20,1)  && C.G.C. do cliente...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnEndCobs,CrSigCnFBl.nClEndCobs,'AllTrim(Crdados.EndCobs)',,80,1)  && Endereco de Cobranca...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnBaiCobs,CrSigCnFBl.nClBaiCobs,'AllTrim(Crdados.BaiCobs)',,20,1)  && Bairro de Cobranca...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnCidCobs,CrSigCnFBl.nClCidCobs,'AllTrim(Crdados.CidCobs)',,20,1)  && Cidade de Cobranca...	
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnEstCobs,CrSigCnFBl.nClEstCobs,'AllTrim(Crdados.EstCobs)',,2,1)  && Estado de Cobranca...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLnCepCobs,CrSigCnFBl.nClCepCobs,'AllTrim(Crdados.CepCobs)',,9,1)  && Cep de Cobranca...
+							ThisForm.GrDetalhe(CrSigCnFBl.nLntxtcds,CrSigCnFBl.nCltxtcds,'Crdados.texto',,60,6)  && Cep de Cobranca...
+							
+							m.lnTamFolha1 = Val(Alltrim(Substr(CrSigCnFBl.cTamfolha,(At('/',CrSigCnFBl.cTamfolha,1)+1),(At('/',CrSigCnFBl.cTamfolha,2)-(At('/',CrSigCnFBl.cTamfolha,1)+1)))))
+																										 
+							do SigPrIbl with 'tmpimprime',AllTrim(CrSigCnFBl.cNomeImps),'to printer noconsole',0,m.lnTamFolha1,m.lnNffatorln,m.lnNffatorcl,'crdados',17
+						Else
+							MessageBox( "Esta Operação não possui Nota Fiscal Cadastrada.", 48,[Atenção!!!])
+						EndIf
+					Else
+						MessageBox( "Operação sem Impressão de Boleto Bancário Habilitado.", 48,[Atenção!!!])
+					EndIf
+				Else
+					MessageBox( "Nenhuma Forma de Pagamento Encontrada Nessa Operação.", 48,[Atenção!!!])
+				EndIf
+			Else
+				MessageBox( "Esta Operação Não Encontrou Movimentação.", 48,[Atenção!!!])
+			EndIf
+		EndScan
+	Else
+		MessageBox( "Nenhuma Impressora de Boleto Configurada ou Instalada.", 48,[Atenção!!!])
+	EndIf
+
+	If Type('ThisForm.pcNform1')=='O'
+		 
+		ThisForm.pcNform1.Enabled = .t.
+	
+	EndIf
+
+	ThisForm.poDataMgr.Release
+	Thisform.Release
+Else
+	ThisForm.getLocals.SetFocus
+EndIf
+
+ThisForm.LockScreen = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdSaida.Click
+------------------------------------------------------------
+PROCEDURE cmdSaida.Click
+If (Not ThisForm.cmdGImprimir.cmdImprimir.Enabled) Or ;
+	   (Thisform.cmdGImprimir.cmdImprimir.Enabled And ;
+	    Messagebox('Deseja Abandonar as Impressões do Boleto?', 4+32+256, [Confirmação])==6)
+
+	If Type('ThisForm.pcNform1')=='O'
+		If Type('ThisForm.pcNform1')=='O'
+			ThisForm.pcNform1.Enabled = .t.
+		Else
+			ThisForm.pcNform1.Enabled = .t.
+		EndIf
+	EndIf
+	ThisForm.poDataMgr.Release
+	ThisForm.Release
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIBL.getFPags
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFBl', ;
+						   'crListaRemota', 'FPags', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('FPags', '', 'Condição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, '', crListaRemota.FPags)
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+ThisForm.AtualizaBoleto(This.Value)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRIBL
+RESERVED3 (ClassInfo): pcchave1
+pcnform1
+plinicio
+podatamgr
+*atualizaboleto 
+*grdetalhe 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

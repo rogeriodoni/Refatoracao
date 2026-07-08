@@ -1,0 +1,14 @@
+﻿A migra├º├úo task054 (SIGRECMM) est├í **100% completa**. N├úo h├í nada a fazer na Fase 6/8 porque:
+
+1. **O formul├írio original (`SIGRECMM.SCX`) tem apenas 2 campos**: `getCods` (C├│digo do Relat├│rio) e `getCodVens` (Vendedor) ÔÇö ambos j├í implementados nas fases anteriores.
+
+2. **Todos os lookups est├úo completos**:
+   - `txt_4c_Codigo`: BINDEVENT ÔåÆ `TeclaLookupCodigo` ÔåÆ `AbrirBuscaCodigo()` + `ValidarCodigo()` (filtra por empresa via SigCmCab, equivalente ao `getCods.Valid` com `fwBuscaInt`/`fAcessoEmpresa`)
+   - `txt_4c_CodVens`: BINDEVENT ÔåÆ `TeclaVendedor` ÔåÆ `AbrirBuscaVendedor()` + `ValidarVendedor()` (join SigCmCab/SigCmItn/SigCdCli, equivalente ao `getCodVens.Valid`)
+
+3. **Integra├º├úo completa**:
+   - `sigrecmmBO.prg` em `app/classes/` ÔåÆ carregado pelo ADIR `*BO.prg`
+   - `Formsigrecmm.prg` em `app/forms/relatorios/` ÔåÆ carregado pelo ADIR `Form*.prg`
+   - `AbrirFormsigrecmm()` j├í no menu.prg (linha 1611)
+
+4. **Sem TODO/stubs** ÔÇö implementa├º├úo 100% funcional em ambos os arquivos.

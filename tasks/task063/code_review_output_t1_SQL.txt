@@ -1,0 +1,16 @@
+﻿Agora verifico os 6 itens [SQL-FILTRO-INVENTADO] comparando com o c├│digo original:
+
+**CGRUS, CUNIS, LINHAS, COLECOES** ÔÇö usados em `loc_cWhere` com macro `&loc_cWhere.` filtrando o cursor VFP `cursor_4c_LocalPro`. O original faz exatamente o mesmo: `lcSql = [Select Cpros,cproEqs,Reffs,cgrus,dpros,CGrus,Cunis,Linhas,Colecoes,situas From SigCdPro]` e depois `From LocalPro Where &lcWhere.` com esses mesmos campos. **N├úo s├úo inventados ÔÇö MANTER.**
+
+**CODIGOS** ÔÇö usado em `SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = ...` (form, linha 1244). ├ë o lookup de valida├º├úo do campo Grupo de Estoque, existia no SCX original como VALID/WHEN. **N├úo inventado ÔÇö MANTER.**
+
+**ICLIS** ÔÇö usado em `SELECT TOP 1 iclis, razaos FROM SigCdCli WHERE iclis = ...` (form, linha 1337). Lookup de valida├º├úo da Conta de Estoque. **N├úo inventado ÔÇö MANTER.**
+
+---
+
+Corre├º├Áes aplicadas no BO (`sigrecpeBO.prg`):
+
+- **Linha 294**: `"... Cemps = '" + loc_cEmps + "'"` ÔåÆ `"... Cemps = " + EscaparSQL(loc_cEmps)`
+- **Linha 321**: `"... Emps = '" + loc_cEmps + "' AND Sqtds > 0"` ÔåÆ `"... Emps = " + EscaparSQL(loc_cEmps) + " AND Sqtds > 0"`
+
+Os 6 itens [SQL-FILTRO-INVENTADO] s├úo falsos positivos do validador: todas as colunas flagadas (CGRUS, CUNIS, LINHAS, COLECOES, CODIGOS, ICLIS) t├¬m correspond├¬ncia direta no c├│digo legado original.

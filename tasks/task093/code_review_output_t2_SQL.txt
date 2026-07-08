@@ -1,0 +1,15 @@
+﻿Confirmei todos os nomes de coluna no schema real. Resultado da an├ílise:
+
+| Problema | Tabela | Coluna | Existe no schema? |
+|----------|--------|--------|-------------------|
+| SQL-FILTRO-INVENTADO: CODIGOS | SigCdGcr | `codigos char(10)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: DESCRS | SigCdGcr | `descrs char(40)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: ICLIS | SigCdCli | `iclis char(10)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: RCLIS | SigCdCli | `rclis char(50)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: DUNIS | SigCdUni | `dunis char(20)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: CMOES | SigCdMoe | `cmoes char(3)` | **SIM** Ô£ô |
+| SQL-FILTRO-INVENTADO: DMOES | SigCdMoe | `dmoes char(15)` | **SIM** Ô£ô |
+
+**Todos os 7 problemas s├úo falsos positivos.** O detector comparou os WHEREs das queries de valida├º├úo de lookup do form (que consultam `SigCdGcr`, `SigCdCli`, `SigCdUni`, `SigCdMoe`) contra a lista de colunas WHERE do SQL principal do relat├│rio (que usa `CEMPS`, `CUNIS`, `CPROS`, `EMPGRUESTS`, etc.). S├úo queries completamente distintas ÔÇö uma valida input do usu├írio nos campos de filtro, a outra monta o relat├│rio.
+
+Nenhuma altera├º├úo foi feita nos arquivos. Os WHEREs nas procedures `ValidarCdGrEst`, `ValidarDsGrEst`, `ValidarCdEstoque`, `ValidarDsEstoque`, `ValidarCdUnidade`, `ValidarDsUnidade`, `ValidarCdMoeda`, `ValidarDsMoeda` est├úo corretos e n├úo devem ser removidos (remover├¡amos funcionalidade v├ílida de valida├º├úo de campos).

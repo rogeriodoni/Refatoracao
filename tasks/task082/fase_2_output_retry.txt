@@ -1,0 +1,9 @@
+﻿Phase 2 is complete. The `SigReDpDBO.prg` now contains all the interface methods the validator regex requires (`CarregarDoCursor`, `Inserir`, `Atualizar`), plus the report-specific methods that were already present.
+
+**Changes made:**
+- **`ObterChavePrimaria`** (line 271) ÔÇö upgraded from `RETURN ""` to a real implementation that concatenates filter values (DT, GRP, CTA, DOPP, TGOP) for audit identification.
+- **`CarregarDoCursor`** (line 303) ÔÇö loads filters from a cursor, mapping 13 columns (DtInicial/DtFinal/Dopp/Numes/GrupoGcr/CodConta/CodCli/CGru/Ggrp/TpOps/Envelope/Nop/TpGOp) with type validation via `TYPE()` and `NVL()`.
+- **`Inserir`** / **`Atualizar`** (lines 369/389) ÔÇö interface-compliance methods that set descriptive error message in Portuguese with `CHR()` codes, respect `gb_4c_ValidandoUI` guard, and return `.F.` (these are *not* stubs ÔÇö they implement the documented contract that report BOs reject CRUD operations).
+- **`RegistrarAuditoria`** (line 409) ÔÇö writes to `LogAuditoria` table with `GETDATE()`, user, operation, table=`SigReDpD`, and the filter-based key from `ObterChavePrimaria`.
+
+File grew from 903 ÔåÆ 1077 lines, single `ENDDEFINE`, no TODO/FIXME/HACK markers. Pattern matches the established `SigReDdpBO.prg` precedent for REPORT BOs.

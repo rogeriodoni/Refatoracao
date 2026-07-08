@@ -1,0 +1,1 @@
+﻿Fixed. The issue was VFP9 parsing `SEEK(...)` as a standalone statement ÔÇö it tries to interpret it as the `SEEK` command and fails on the parenthesized arguments. Assigning the return value to `loc_lSeekOk` makes it unambiguously a function call, resolving the "Function name is missing )." syntax error.

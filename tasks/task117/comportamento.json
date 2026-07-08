@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From ]+Iif", "from Dbf", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "goSistema.DirFiscais = ThisForm.cDirFiscais",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.optTipo.Value = 1\n\tIf ThisForm.optAgrupa.Value = 2\n\t\tReport Form SigReIdA Preview NoConsole\n\tElse\n\t\tReport Form SigReIdt Preview NoConsole\n\tEndif\nelse\n\tReport Form SigReIag Preview NoConsole\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipo,optAgrupa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcArq\n\nThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 250,
+      "codigoOriginal": "Set Step On \nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'LocalEmp', 'Cemps', _Empr, 'RazSocs')\n\nCreate Cursor csCabecalho (Empresa c(80),Titulo c(80))\nSelect csCabecalho\nAppend Blank\nReplace Empresa With ThisForm.pcEmps+' - ' +LocalEmp.RazSocs\nReplace Titulo  With Padr(ThisForm.pcDopes, 20)\n\nCreate Cursor crDBImp (Emps c(3), RazSocs c(50), Titulo c(10), Nfs c(10), DtMovs d, ;\n\t\t\t\t\t   Txt01 c(20), GrupEm c(10), Contem c(10), dContem c(50), ;\n\t\t\t\t\t   Txt02 c(20), Grupo c(10), Conta c(10), dConta c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From ]+Iif,from Dbf",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "optTipo,OptAgrupa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 66,
+      "codigoOriginal": "Dodefault()\n\n*!*\tLocal lcArq1,lcArq2,lcStrArqMail\n\n*!*\t#define FileNameOption_JPegLevelLow 3                  && Low JPeg compression \n*!*\t#define FileNameOption_JPegLevelMedium 7               && Medium JPeg compression \n*!*\t#define FileNameOption_JPegLevelHigh 9                 && High JPeg compression \n*!*\t#define FileNameOption_NoPrompte 1                     && 0x01\n*!*\t#define FileNameOption_UseFileName 2                   && 0x02\n*!*\t#define FileNameOption_Embed_Fonts 16                  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "Lparameters pForm, pEmp, pDop, pNum, pNumF, pDir\n\nThisForm.pcEmps  \t = pEmp\nThisForm.pcDopes \t = pDop\nThisForm.pcNumes \t = pNum\nThisForm.Numef   \t = pNumF\nThisForm.pcDiretorio = Iif(Type([pDir])=[C],pDir,[])\nThisForm.cDirFiscais = goSistema.DirFiscais\n\nThisForm.Caption = 'Impressão de Documento de Titulo (' + Alltrim(pDop) + '/' + Alltrim(pNum) + ')'\nThisForm.Contaemail = ' '\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\tThisForm.Podat... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcDiretorio = Iif,cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.optTipo.Value = 1\n\tIf ThisForm.optAgrupa.Value = 2\n\t\tReport Form SigReIdA To Printer Prompt NoConsole\n\tElse\n\t\tReport Form SigReIdt To Printer Prompt NoConsole\n\tEndif\nelse\n\tReport Form SigReIag To Printer Prompt NoConsole\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipo,optAgrupa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.optTipo.Value = 1\n\tIf ThisForm.optAgrupa.Value = 2\n\t\tReport Form SigReIdA To Printer NoConsole\n\tElse\n\t\tReport Form SigReIdt To Printer NoConsole\n\tEndif\nelse\n\tReport Form SigReIag To Printer NoConsole\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipo,optAgrupa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT.OptAgrupa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*Return Not ThisForm.optTipo.Value = 2",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIDT.optTipo",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.optAgrupa.Value = 3",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optAgrupa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

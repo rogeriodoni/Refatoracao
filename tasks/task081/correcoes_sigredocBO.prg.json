@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigredocBO.prg",
+    "timestamp":  "2026-06-04T07:22:42",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1935,
+                          "Original":  "THIS.this_lImagem = (NVL(Imagem, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Imagem)=\"L\" / THIS.this_lImagem = ... / ELSE / THIS.this_lImagem = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1970,
+                          "Original":  "THIS.this_lItensPendentes = (NVL(ItensPendentes, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(ItensPendentes)=\"L\" / THIS.this_lItensPendentes = ... / ELSE / THIS.this_lItensPendentes = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

@@ -1,0 +1,16 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SIGREGDPBO.prg` criado com:
+
+**Propriedades declaradas** (extra├¡das do c├│digo fonte original):
+- `this_cSerieNf` / `this_cNFIni` / `this_cNFFim` ÔÇö filtros dos campos Get_S├®rie, Get_NFIni, Get_NFFim
+- `this_nSelecao` ÔÇö valor do optSelecao (1=Duplicatas, 2=Boletos)
+- `this_cCursorDados` ÔÇö equivalente ao cursor `TmpNFis` do legado (alimenta o grid)
+- `this_cCursorOpFp` ÔÇö `SigOpFp` com FPags/ImpDups/ImpBols/ImpNotas (usado na sele├º├úo do Processar)
+- `this_cCursorPam` ÔÇö `SigCdPam` com MascNums (carregado no Init original)
+- `this_cCursorNfi` / `this_cCursorCli` ÔÇö cursores intermedi├írios do processamento
+- `this_lProcessado` ÔÇö flag de estado p├│s-Processar
+
+**M├®todos inclu├¡dos:**
+- `Init()` ÔÇö configura `this_cTabela`/`this_cCampoChave` (vazios ÔÇö form operacional sem CRUD), chama `DODEFAULT()`
+- `Destroy()` ÔÇö fecha todos os cursores abertos antes de destruir o objeto
+
+**Pr├│xima fase (Fase 2):** adicionar `InicializarCursoresAuxiliares()`, `Processar()` (l├│gica do Processar.Click com SQLEXEC em SigMvNfi/SigMvPar), `PrepararDados()`, e `Imprimir()` (l├│gica do procedure `impressao` com SigIpDup/SigPrIbl/SigPrIbb).

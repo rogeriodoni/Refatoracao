@@ -1,0 +1,5 @@
+﻿Arquivo atualizado. O que foi feito:
+
+**Fase 4 para form REPORT**: `ConfigurarPaginaLista()`, `AlternarPagina()` e bot├Áes CRUD n├úo se aplicam ÔÇö este ├® um frmrelatorio com layout flat. Os stubs de compatibilidade j├í estavam corretos.
+
+**Bug cr├¡tico corrigido**: 4 BINDEVENT de `"Valid"` em TextBox (que n├úo disparam em VFP9) convertidos para `"KeyPress"` com handlers `TeclaXxx(par_nKeyCode, par_nShiftAltCtrl)` que verificam ENTER(13) ou TAB(9) antes de chamar a l├│gica de valida├º├úo. Isso garante que `ValidCdEmpresa`, `ValidMoeFator`, `ValidMoeda` e `ValidMoedaDesc` realmente disparem quando o usu├írio sai de cada campo.

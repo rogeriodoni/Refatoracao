@@ -1,0 +1,20 @@
+﻿Analisei cuidadosamente o arquivo. Deixe-me verificar o ponto exato do grid para confirmar a situa├º├úo.
+
+A estrutura atual nas linhas 655-702 ├®:
+
+```
+657:  loc_oGrd.ColumnCount = 3        ÔåÉ FORA do WITH (linha 657)
+658:  WITH loc_oGrd                   ÔåÉ WITH come├ºa aqui
+659-675: ... apenas propriedades visuais (Top, Left, Width, etc.) ...
+676:  ENDWITH                         ÔåÉ WITH termina aqui
+679-696: loc_oGrd.Column1/2/3.X = ...ÔåÉ FORA do WITH (ap├│s ENDWITH)
+700:  loc_oGrd.RecordSource = "Selecao"ÔåÉ FORA do WITH (ap├│s ENDWITH)
+```
+
+**O problema GRID-WITH descrito n├úo existe no c├│digo atual.** Tanto `.ColumnCount` (linha 657) quanto `.RecordSource` (linha 700) e todos os acessos a `.Column1/.Column2/.Column3` (linhas 679-696) j├í est├úo **fora** do bloco `WITH loc_oGrd`. O WITH block cont├®m apenas propriedades visuais.
+
+O c├│digo j├í segue o padr├úo correto prescrito pela solu├º├úo: refer├¬ncias expl├¡citas (`loc_oGrd.ColumnCount`, `loc_oGrd.RecordSource`, `loc_oGrd.Column1.X`) todas fora do contexto WITH.
+
+Observa├º├úo secund├íria encontrada (fora do escopo deste pass): o CATCH vazio nas linhas 705-708 viola a Regra 9, mas o pass atual s├│ permite corrigir os problemas listados.
+
+**Nenhuma altera├º├úo ├® necess├íria no arquivo** ÔÇö a ├║nica corre├º├úo listada j├í est├í aplicada corretamente no c├│digo atual.

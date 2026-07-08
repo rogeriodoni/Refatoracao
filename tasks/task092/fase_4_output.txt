@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `FormSigReEtp.prg`:**
+
+1. **`InicializarForm()` atualizado** ÔÇö agora chama `ConfigurarControles()` e `CarregarConfiguracoes()` (com guarda `gb_4c_ValidandoUI`) antes de `TornarControlesVisiveis`.
+
+2. **`ConfigurarControles()`** ÔÇö adiciona todos os controles operacionais ao form via `AddObject`: labels (Quantidade, Tipo, Selecione Impressora, Densidade, Horizontal, Vertical), `txt_4c_Qtde`, `cbo_4c_CmbTipos`, `obj_4c_OptImpressora` (com placeholder Option1), spinners de Densiade/Horizontal/Vertical, e `obj_4c_CmdBtnForm` (CommandGroup com bot├Áes Imprimir e Encerrar). BINDEVENTs registrados para os 3 handlers.
+
+3. **`CarregarConfiguracoes()`** ÔÇö chama `BO.CarregarDados()` para obter par├ómetros de `SigCdPam` e `NDopes`, popula `obj_4c_OptImpressora` dinamicamente com impressoras via `BO.CarregarImpressoras()`, inicializa spinners com `AjVerts`/`AjHorzs`, e adiciona os 3 itens ao `cbo_4c_CmbTipos`.
+
+4. **`BtnImprimirClick()`** ÔÇö coleta valores dos controles, popula propriedades do BO (`this_nQtd`, `this_cTip`, etc.), chama `BO.Imprimir()` e ap├│s sucesso chama `BO.Inserir()` para registrar batch e auditoria.
+
+5. **`BtnEncerrarClick()`** e **`OptImpressoraInteractiveChange()`** ÔÇö fecham o form e resetam spinners para os defaults do BO respectivamente.

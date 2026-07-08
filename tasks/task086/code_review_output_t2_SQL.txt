@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**CMOES** (sigreegpBO.prg:796-798): removido `WHERE cmoes = EscaparSQL(par_cMoeda)` da query `SigCdCot`. O original fazia `Select * From SigCdCot` sem filtro por moeda e usava SEEK local. Agora a query carrega todas as cota├º├Áes at├® `datas <=`, ordena por `cmoes, datas DESC` (mais recente primeiro por moeda) e usa `SEEK(par_cMoeda)` no cursor indexado ÔÇö mantendo o comportamento correto.
+
+**LNORDEM**: Ap├│s verifica├º├úo exaustiva, confirmado que `lnOrdem` aparece **apenas em express├Áes VFP** (`IIF(... AND lnOrdem <> 4, ...)`) ÔÇö n├úo em strings SQL. O validador detectou falso positivo. Nenhuma altera├º├úo necess├íria.

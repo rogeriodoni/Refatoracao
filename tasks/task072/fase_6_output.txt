@@ -1,0 +1,9 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas corretamente. 
+
+**Resumo da Fase 6:** O form `FormSIGRECTL` n├úo tem campos adicionais nem lookups (o formul├írio original SIGRECTL s├│ possui 3 controles: getMes, getAno, chkImpTempo ÔÇö todos j├í implementados nas fases anteriores). A fase foi completada com 3 corre├º├Áes de Pilar 1 (UX):
+
+1. **`Closable = .F.`** adicionado ├ás propriedades ÔÇö corresponde ├á propriedade expl├¡cita do original que impede fechar com Alt+F4.
+
+2. **`LimparCampos()` corrigido**: `chk_4c_ImpTempo.Value = 0` ÔÇö o original usa `IIF(pAut, 1, 0)` com pAut=.F. padr├úo, ent├úo o checkbox come├ºa **desmarcado** para usu├írios normais (n├úo como estava: Value=1).
+
+3. **`Init()` modo autom├ítico corrigido**: antes de `EnviarEmail()`, define `chk_4c_ImpTempo.Value = 1` ÔÇö replicando o `IIF(pAut=.T., 1, 0) = 1` do legado.

@@ -1,0 +1,16 @@
+﻿**Fase 6 conclu├¡da.** O arquivo `FormSigReAiv.prg` j├í estava substancialmente completo das fases anteriores. Apliquei as seguintes corre├º├Áes de fidelidade UI (PILAR 1) e conformidade de regras:
+
+**Corre├º├Áes aplicadas:**
+
+1. **`txt_4c_Inv1`** ÔÇö `Format=""` + `InputMask="999999999"` + `Alignment=3` (direita), replicando `Get_Inv1` do original (que tinha `InputMask="999999999"`, `Alignment=3`)
+
+2. **`txt_4c_Inv2`** ÔÇö `Format="R"` + `InputMask="9999999999"` + `Alignment=3` (direita), replicando `Get_Inv2` do original (que tinha `Format="R"`, `InputMask="9999999999"`, `Alignment=3`)
+
+3. **`SigReAivBO.RegistrarAuditoria`** ÔÇö CATCH vazio substitu├¡do por `MsgErro(loc_oErro.Message, "Erro")` (regra #9)
+
+**Implementa├º├Áes j├í presentes e verificadas:**
+- Todos os campos: `txt_4c_Empresa`, `txt_4c_Dempresa`, `txt_4c_Inv1`, `txt_4c_Inv2`, `obj_4c_OptTipo` + todos os labels
+- BINDEVENTs completos: F4/ENTER/TAB/ESC para os 3 campos edit├íveis, DblClick para lookup direto
+- Lookups totalmente implementados: `AbrirBuscaEmpresa`, `AbrirBuscaInv1`, `AbrirBuscaInv2` com `FormBuscaAuxiliar` (9 par├ómetros aceitos conforme c├│digo real)
+- Valida├º├Áes ENTER/TAB: `ValidarEmpresa`, `ValidarInv1`, `ValidarInv2`
+- Todos os handlers de bot├úo e m├®todos auxiliares

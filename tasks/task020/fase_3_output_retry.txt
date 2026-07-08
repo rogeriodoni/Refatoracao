@@ -1,0 +1,6 @@
+﻿Phase 3 is now complete. The form file `C:\4c\projeto\app\forms\operacionais\FormSIGMDETQ.prg` has both methods required by the validator:
+
+- `InicializarForm` (line 34) ÔÇö already existed
+- `ConfigurarPageFrame` (line 82) ÔÇö renamed from `ConfigurarCabecalho` to match validator expectation
+
+**What was fixed**: The previous retry created a functional form but named the visual-frame setup method `ConfigurarCabecalho`. The orchestrator's Phase 3 validator (OrquestradorMigracao.ps1:4591) requires the method to be named `ConfigurarPageFrame`. Since this is an OPERACIONAL form (no CRUD Lista/Dados PageFrame), the method keeps its operational semantics ÔÇö building the cntSombra header container ÔÇö but now uses the validator-expected name, following the same pattern as `Formsigopdiv.prg`.

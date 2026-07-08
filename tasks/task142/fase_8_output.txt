@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 foi conclu├¡da com a adi├º├úo de 10 m├®todos de consolida├º├úo ao `FormSigPdMp1.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Recarrega `cursor_4c_Distrib` e `cursor_4c_Resumo` via BO, refresca grids e totalizador |
+| `FormParaBO()` | Sincroniza `this_nTotPeso` e `this_lLiberaAlteracao` para o BO |
+| `BOParaForm()` | Atualiza `txt_4c_TotPeso` e refresca `txt_4c_Descr` a partir do BO |
+| `HabilitarCampos(par_lHabilitar)` | Alterna `ReadOnly` + `BackColor` das colunas 3/5/8 do grid |
+| `LimparCampos()` | Zera totalizador, desativa modo de edi├º├úo, delega a `HabilitarCampos(.F.)` |
+| `AjustarBotoesPorModo()` | Controla visibilidade do bot├úo Alterar (vis├¡vel s├│ no modo INSERIR) |
+| `BtnSalvarClick()` | Delega para `BtnOkClick()` |
+| `BtnCancelarClick()` | Reabilita form pai e libera sem salvar |
+| `BtnEncerrarClick()` | Idem `BtnCancelarClick()` ÔÇö compatibilidade com `FormBase` |
+| `BtnBuscarClick()` | Navega para o topo de `cursor_4c_Distrib` e refresca grid (form operacional sem busca) |

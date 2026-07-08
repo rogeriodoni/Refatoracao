@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task007",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-04-10T19:06:00",
+    "atualizadoEm":  "2026-04-10T21:23:19",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-04-10T19:06:00",
+                                            "fim":  "2026-04-10T19:06:00",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task007\\sigcdcfo.sct",
+                                            "baseName":  "sigcdcfo",
+                                            "scxFile":  "C:\\4c\\tasks\\task007\\sigcdcfo.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-04-10T19:06:00",
+                                          "fim":  "2026-04-10T19:06:02",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdcfo",
+                                          "txtFile":  "C:\\4c\\tasks\\task007\\sigcdcfo_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T19:06:02",
+                                              "fim":  "2026-04-10T19:06:06",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task007\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T19:06:12",
+                                              "fim":  "2026-04-10T19:06:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task007\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task007\\meta_prompt.md",
+                                              "boClass":  "cfoBO",
+                                              "formClass":  "Formcfo",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task007\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T19:06:13",
+                                              "fim":  "2026-04-10T19:06:16",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task007\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-10T19:06:16",
+                                               "fim":  "2026-04-10T19:06:18",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task007\\esqueletos",
+                                               "arquivos":  [
+                                                                "cfoBO_esqueleto.prg",
+                                                                "Formcfo_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-10T19:06:18",
+                                       "fim":  "2026-04-10T20:31:42",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\cfoBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  155.79,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formcfo.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  5786
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-04-10T20:31:42",
+                                                  "fim":  "2026-04-10T20:31:52",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formcfo.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\cfoBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-04-10T20:31:52",
+                                                 "fim":  "2026-04-10T20:34:07",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-10T21:14:07",
+                                       "fim":  "2026-04-10T21:14:10",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-10T21:14:10",
+                                               "fim":  "2026-04-10T21:23:14",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  6,
+                                               "resultFile":  "C:\\4c\\tasks\\task007\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-04-10T21:23:16",
+                                        "fim":  "2026-04-10T21:23:19",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formcfo_20260410212318.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  1582,
+                                        "avisos":  1578
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-10T21:23:19",
+                                              "fim":  "2026-04-10T21:23:19",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task007_sigcdcfo.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-04-10T19:06:06",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-04-10T19:06:09",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task007\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-04-10T19:06:09",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-10T19:06:12"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-04-10T20:31:52",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-04-10T20:31:52",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formcfo_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formcfo.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task007\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-04-10T20:34:07",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-04-10T20:34:07",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-04-10T20:34:08",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-04-10T21:12:38",
+                                          "passes":  6,
+                                          "problemas":  "[LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=11 vs migrado \u0027lbl_4c_Say18\u0027 Top=371 (diff=360px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=38 vs migrado \u0027lbl_4c_Say22\u0027 Top=183 (diff=145px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=393 vs migrado \u0027lbl_4c_Say37\u0027 Left=616 (diff=223px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=395 vs migrado \u0027lbl_4c_p2Say16\u0027 Top=60 (diff=335px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=69 vs migrado \u0027lbl_4c_p2Say16\u0027 Left=344 (diff=275px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=345 vs migrado \u0027lbl_4c_Say50\u0027 Top=206 (diff=139px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=49 vs migrado \u0027lbl_4c_Say50\u0027 Left=256 (diff=207px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=105 vs migrado \u0027lbl_4c_Say48\u0027 Top=420 (diff=315px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=90 vs migrado \u0027lbl_4c_Say48\u0027 Left=971 (diff=881px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=157 vs migrado \u0027lbl_4c_p2Say10\u0027 Top=34 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=34 vs migrado \u0027lbl_4c_p2Say10\u0027 Left=84 (diff=50px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say14\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=104 vs migrado \u0027lbl_4c_p2Say14\u0027 Top=34 (diff=70px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say14\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=481 vs migrado \u0027lbl_4c_p2Say14\u0027 Left=344 (diff=137px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=157 vs migrado \u0027lbl_4c_p2Say12\u0027 Top=86 (diff=71px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=284 vs migrado \u0027lbl_4c_p2Say12\u0027 Left=125 (diff=159px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=183 vs migrado \u0027lbl_4c_p2Say6\u0027 Top=239 (diff=56px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=812 vs migrado \u0027lbl_4c_p2Say6\u0027 Left=115 (diff=697px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=293 vs migrado \u0027lbl_4c_p2Say15\u0027 Top=60 (diff=233px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=85 vs migrado \u0027lbl_4c_p2Say15\u0027 Left=247 (diff=162px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say38\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=246 vs migrado \u0027lbl_4c_p2Say38\u0027 Top=298 (diff=52px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say38\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=498 vs migrado \u0027lbl_4c_p2Say38\u0027 Left=69 (diff=429px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say17\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=319 vs migrado \u0027lbl_4c_p2Say17\u0027 Top=86 (diff=233px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Top original=207 vs migrado \u0027lbl_4c_p2Say13\u0027 Top=34 (diff=173px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say39\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page1): Left original=827 vs migrado \u0027lbl_4c_p2Say39\u0027 Left=106 (diff=721px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=60 vs migrado \u0027lbl_4c_Say11\u0027 Top=102 (diff=42px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=136 vs migrado \u0027lbl_4c_Say11\u0027 Left=791 (diff=655px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say29\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=477 vs migrado \u0027lbl_4c_Say29\u0027 Left=33 (diff=444px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=57 vs migrado \u0027lbl_4c_Say8\u0027 Top=267 (diff=210px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=477 vs migrado \u0027lbl_4c_Say8\u0027 Left=104 (diff=373px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say30\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=108 vs migrado \u0027lbl_4c_Say30\u0027 Top=269 (diff=161px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say30\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=523 vs migrado \u0027lbl_4c_Say30\u0027 Left=589 (diff=66px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say21\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=31 vs migrado \u0027lbl_4c_Say21\u0027 Top=210 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say21\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=490 vs migrado \u0027lbl_4c_Say21\u0027 Left=652 (diff=162px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=132 vs migrado \u0027lbl_4c_Say18\u0027 Top=371 (diff=239px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=479 vs migrado \u0027lbl_4c_Say18\u0027 Left=77 (diff=402px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=390 vs migrado \u0027lbl_4c_Say22\u0027 Left=51 (diff=339px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say33\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=259 vs migrado \u0027lbl_4c_Say33\u0027 Top=295 (diff=36px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say33\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=121 vs migrado \u0027lbl_4c_Say33\u0027 Left=587 (diff=466px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=112 vs migrado \u0027lbl_4c_Say37\u0027 Top=12 (diff=100px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=77 vs migrado \u0027lbl_4c_Say37\u0027 Left=616 (diff=539px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=138 vs migrado \u0027lbl_4c_Say48\u0027 Top=420 (diff=282px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=69 vs migrado \u0027lbl_4c_Say48\u0027 Left=971 (diff=902px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=164 vs migrado \u0027lbl_4c_Say50\u0027 Top=206 (diff=42px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=57 vs migrado \u0027lbl_4c_Say50\u0027 Left=256 (diff=199px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say18\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=86 vs migrado \u0027lbl_4c_Say18\u0027 Top=371 (diff=285px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say18\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=344 vs migrado \u0027lbl_4c_Say18\u0027 Left=77 (diff=267px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say34\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=278 vs migrado \u0027lbl_4c_Say34\u0027 Top=319 (diff=41px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say34\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=131 vs migrado \u0027lbl_4c_Say34\u0027 Left=565 (diff=434px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say35\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=217 vs migrado \u0027lbl_4c_Say35\u0027 Top=343 (diff=126px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say35\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=18 vs migrado \u0027lbl_4c_Say35\u0027 Left=562 (diff=544px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Top original=6 vs migrado \u0027lbl_4c_Say7\u0027 Top=267 (diff=261px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDCFO.Pagina.Dados.PagDados.Page2): Left original=15 vs migrado \u0027lbl_4c_Say7\u0027 Left=296 (diff=281px, tolerancia=30px)",
+                                          "tentativas":  5,
+                                          "problemasRestantes":  52
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-04-10T21:12:38",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-04-10T21:14:07",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\cfoBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formcfo.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-04-10T21:23:14",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-10T21:23:16",
+                                             "thresholdPx":  5,
+                                             "unmatched":  153,
+                                             "errors":  153,
+                                             "matched":  0,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task007\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

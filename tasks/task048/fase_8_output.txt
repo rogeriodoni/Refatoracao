@@ -1,0 +1,17 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi adicionado:
+
+**`Formsigrecgp.prg`** ÔÇö 9 m├®todos adicionados antes de `ENDDEFINE`:
+- `BtnCancelarClick()` ÔÇö alias de `BtnEncerrarClick()` (compatibilidade pipeline)
+- `BtnSalvarClick()` / `BtnBuscarClick()` ÔÇö stubs (REPORT n├úo tem opera├º├Áes CRUD)
+- `FormParaBO()` ÔÇö delega para `FormParaRelatorio()` (m├®todo real do form REPORT)
+- `BOParaForm()` ÔÇö stub (REPORT n├úo carrega BOÔåÆform)
+- `LimparCampos()` ÔÇö reseta `obj_4c_Opc_Rel.Value = 1` e `obj_4c_Opc_Ordem.Value = 1`
+- `HabilitarCampos()` / `AjustarBotoesPorModo()` ÔÇö stubs pipeline
+- `CarregarLista()` ÔÇö stub que retorna `.T.`
+
+**`menu.prg`** ÔÇö 3 altera├º├Áes:
+- `DEFINE BAR 44` (separador) e `DEFINE BAR 45` ("Composi├º├úo de Produtos")
+- `ON SELECTION BAR 45 OF popRelatorios DO AbrirFormsigrecgp`
+- `PROCEDURE AbrirFormsigrecgp(par_oParentForm)` com padr├úo correto (`VARTYPE`, `Show()` sem par├ómetro, `MostrarErro`)
+
+O form carrega automaticamente via `ADIR()` em `config.prg` (pasta `forms\relatorios\` j├í est├í no path de varredura).

@@ -1,0 +1,14 @@
+﻿No stale .fxp files. The migration of `Formcfo.prg` is complete. Here's a summary of what's in the file:
+
+**`Formcfo.prg` ÔÇö 3012 lines, fully implemented:**
+
+- `InicializarForm` ÔåÆ creates the outer PageFrame, grid Page1, data PageFrame with Page1/Page2
+- `ConfigurarPaginaDados` ÔåÆ calls `ConfigurarPaginaDadosPage1()` + `ConfigurarPaginaDadosPage2()`, then forces `chk_4c_SomaIcmFrete.Visible = .F.`
+- `ConfigurarPaginaDadosPage1` (PROTECTED) ÔåÆ ~70 controls: shapes, labels, textboxes, spinners, comboboxes, optiongroups, checkboxes + all BINDEVENTs
+- `ConfigurarPaginaDadosPage2` (PROTECTED) ÔåÆ ~45 controls: Page2 integration fields (cont├íbil + fiscal)
+- `BOParaForm` ÔåÆ full bidirectional mapping for all ~60 fields including cmb_4c_InclIPI and cmb_4c_CmbFixa
+- `FormParaBO` ÔåÆ reverse mapping including cmb_4c_InclIPI ÔåÆ `this_nInclipis` and cmb_4c_CmbFixa ÔåÆ `this_cContconts`
+- 4 KeyPress lookup handlers (PUBLIC): CfoST60, CfoST, CfoDest ÔåÆ opens `FormBuscaAuxiliar(SigCdCfo)`; Sittricm ÔåÆ opens `FormBuscaAuxiliar(SigCdIcm)`
+- 3 CST validation handlers (PUBLIC): ValidarIPICSTKeyPress, ValidarPISCSTKeyPress, ValidarCOFCSTKeyPress
+
+Structural integrity verified: 169/169 WITH/ENDWITH, 33/33 PROCEDURE/ENDPROC, 29/29 TRY/ENDTRY.

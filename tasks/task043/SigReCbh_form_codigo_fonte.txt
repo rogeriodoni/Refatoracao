@@ -1,0 +1,1512 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReCbh.SCX
+* Data/Hora: 16/05/26 15:08:26
+* Total de registros: 35
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECBH
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGRECBH
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGRECBH
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECBH
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECBH
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_nr_tipo
+  Parent: SIGRECBH
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_opcao
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_quebra
+  Parent: SIGRECBH
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command3
+  Parent: SIGRECBH
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Command4
+  Parent: SIGRECBH
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_respo
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_drespo
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ordem
+  Parent: SIGRECBH
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradeOpera
+  Parent: SIGRECBH
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGRECBH.GradeOpera.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGRECBH.GradeOpera.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGRECBH.GradeOpera.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECBH.GradeOpera.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: ImpFollow
+  Parent: SIGRECBH
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Get_Grupo
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_dep_conta
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dgrupo
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Conta
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGRECBH
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImpTotal
+  Parent: SIGRECBH
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say3
+  Parent: SIGRECBH
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 13
+  Left = -88
+  Width = 1016
+  Height = 622
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH
+------------------------------------------------------------
+  DataSession = 2
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Cheques em Aberto"
+  ControlBox = .F.
+  ClipControls = .T.
+  WindowState = 0
+  Name = "SIGRECBH"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 16
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo : "
+  Left = 157
+  Top = 198
+  Width = 41
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa : "
+  Left = 145
+  Top = 174
+  Width = 53
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 234
+  MaxLength = 40
+  TabIndex = 5
+  Top = 169
+  Width = 290
+  ZOrderSet = 5
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 201
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 169
+  Width = 31
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período : "
+  Left = 150
+  Top = 148
+  Width = 48
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_dt_inicial
+------------------------------------------------------------
+  Format = "K!"
+  Left = 201
+  MaxLength = 10
+  TabIndex = 1
+  Top = 144
+  Width = 80
+  ZOrderSet = 8
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 287
+  Top = 148
+  Width = 8
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_dt_final
+------------------------------------------------------------
+  Format = "K!"
+  Left = 300
+  MaxLength = 10
+  TabIndex = 2
+  Top = 144
+  Width = 80
+  ZOrderSet = 10
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordem : "
+  Left = 154
+  Top = 397
+  Width = 44
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação : "
+  Left = 139
+  Top = 270
+  Width = 59
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.opt_nr_tipo
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 395
+  SpecialEffect = 0
+  Top = 143
+  Width = 167
+  TabIndex = 3
+  ZOrderSet = 13
+  Name = "opt_nr_tipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Vencimento"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 73
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.Alignment = 0
+  Option2.BackStyle = 0
+  Option2.Caption = "Operação"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 97
+  Option2.Top = 5
+  Option2.Width = 65
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_opcao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Quebra: "
+  Left = 153
+  Top = 421
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lbl_opcao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.opt_quebra
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 5
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 4
+  Height = 22
+  Left = 200
+  Top = 417
+  Width = 516
+  TabIndex = 15
+  ZOrderSet = 15
+  Name = "opt_quebra"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Por Cliente"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 1
+  Option1.TabIndex = 8
+  Option1.Top = 5
+  Option1.Width = 70
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Por Responsável"
+  Option2.Height = 15
+  Option2.Left = 87
+  Option2.TabIndex = 9
+  Option2.Top = 5
+  Option2.Width = 98
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Data Venc."
+  Option3.Value = 0
+  Option3.Height = 15
+  Option3.Left = 212
+  Option3.TabIndex = 10
+  Option3.Top = 5
+  Option3.Width = 71
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Sem Quebra"
+  Option4.Value = 1
+  Option4.Height = 17
+  Option4.Left = 309
+  Option4.Top = 5
+  Option4.Width = 88
+  Option4.AutoSize = .F.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "G Empresarial"
+  Option5.Height = 17
+  Option5.Left = 410
+  Option5.Top = 5
+  Option5.Width = 103
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Command3
+------------------------------------------------------------
+  Top = 285
+  Left = 385
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 23
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 32
+  Themes = .F.
+  Name = "Command3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Command4
+------------------------------------------------------------
+  Top = 330
+  Left = 385
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 24
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 34
+  Themes = .F.
+  Name = "Command4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_respo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 201
+  MaxLength = 10
+  TabIndex = 10
+  Top = 244
+  Width = 79
+  ZOrderSet = 18
+  Name = "get_respo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_drespo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 282
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 11
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 244
+  Width = 290
+  ZOrderSet = 19
+  Name = "get_drespo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.get_ordem
+------------------------------------------------------------
+  BoundColumn = 1
+  ColumnCount = 1
+  RowSourceType = 1
+  RowSource = "VALOR,DATA VENCIMENTO,DATA OPERAÇÃO,BANCO"
+  DisplayValue = 
+  Value = 
+  ControlSource = ""
+  Enabled = .T.
+  Height = 24
+  ColumnLines = .F.
+  Left = 202
+  SelectOnEntry = .F.
+  Style = 2
+  TabIndex = 13
+  Top = 394
+  Width = 134
+  ZOrderSet = 20
+  HideSelection = .F.
+  SelectedForeColor = 255,255,255
+  SelectedItemForeColor = 255,255,255
+  SelectedItemBackColor = 0,0,128
+  BoundTo = .T.
+  IMEMode = 0
+  ReadOnly = .F.
+  Name = "get_ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.GradeOpera
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 122
+  Left = 201
+  Panel = 1
+  ReadOnly = .F.
+  RecordSource = "TmpOpera"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 12
+  Top = 270
+  Width = 178
+  GridLineColor = 238,238,238
+  ZOrderSet = 21
+  Name = "GradeOpera"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "TmpOpera.Flag"
+  Column1.Width = 18
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "TmpOpera.Operacaos"
+  Column2.Width = 127
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.GradeOpera.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.GradeOpera.Column1.Check1
+------------------------------------------------------------
+  Top = 35
+  Left = 13
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  Value = .F.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.GradeOpera.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.GradeOpera.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.ImpFollow
+------------------------------------------------------------
+  Top = 398
+  Left = 344
+  Height = 17
+  Width = 124
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir FollowUp"
+  Value = .F.
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "ImpFollow"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Get_Grupo
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 201
+  MaxLength = 10
+  TabIndex = 6
+  Top = 194
+  Width = 79
+  ZOrderSet = 23
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.lbl_dep_conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta : "
+  Left = 157
+  Top = 222
+  Width = 41
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "lbl_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Get_dgrupo
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 282
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 7
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 194
+  Width = 150
+  ZOrderSet = 25
+  Name = "Get_dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Get_Conta
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 201
+  MaxLength = 10
+  TabIndex = 8
+  Top = 219
+  Width = 79
+  ZOrderSet = 26
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Get_dconta
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 282
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 9
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 219
+  Width = 290
+  ZOrderSet = 27
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.ImpTotal
+------------------------------------------------------------
+  Top = 399
+  Left = 474
+  Height = 17
+  Width = 124
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir só Totais"
+  Value = .F.
+  TabIndex = 18
+  ForeColor = 90,90,90
+  Name = "ImpTotal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECBH.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Responsável : "
+  Left = 125
+  Top = 248
+  Width = 73
+  TabIndex = 28
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECBH
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+IF ThisForm.ImpTotal.Value
+	REPORT form SigReCb1 PREVIEW NoConsole
+else
+	report form SigReCb2 preview NoConsole
+ENDIF
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private lcNomeEmpresa,lcTitulo,lcPeriodo,lcOperacao,lcEmissor
+Private lnNrTipo,ldDtInicial,ldDtFinal,lcNmOperacao,lcCdEmpresa,lcDsEmpresa,lnNrOpcao
+Private lcGrupo,lcConta, lcRespo
+
+Private lcVerData,lcVerOperacao,lcVerEmpresa,lcVerOpcao
+Private lcVerEmiGrupo,lcVerEmiConta,lcVerAberto, lsEmp, lcCdEmpresa
+
+* inicializa variáveis de campos
+lnNrTipo     = Thisform.opt_nr_tipo.Value
+ldDtInicial  = Iif(!Empty(Thisform.get_dt_inicial.Value),fDtoSQL(Thisform.get_dt_inicial.Value),Ctod(""))
+ldDtFinal    = Iif(!Empty(Thisform.get_dt_final.Value),fDtoSQL(Thisform.get_dt_final.Value,"23:59:59"),Ctod(""))
+lcGrupo      = Thisform.get_grupo.Value
+lcConta      = Thisform.get_conta.Value
+lcRespo      = Thisform.get_respo.Value
+lcdConta     = Thisform.get_dconta.Value
+lcdrespo     = Thisform.get_drespo.Value
+lnNmOrdem    = Thisform.get_ordem.ListIndex
+lnNrOpcao    = Thisform.opt_quebra.Value
+llImpFol     = Thisform.ImpFollow.Value
+llImpTot     = Thisform.ImpTotal.Value
+lcCdEmpresa  = Thisform.get_cd_empresa.Value
+lcDsEmpresa  = Thisform.get_ds_empresa.Value
+
+
+
+lcTitulo = 'Relatório de Cheques em Aberto'
+Thisform.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _empr)
+lcNomeEmpresa = crSigCdEmp.razas
+lcPeriodo     = Iif(lnNrTipo=2,'Data da Movimentação: ','Data de Vencimento: ')+Dtoc(Thisform.get_dt_inicial.Value)+' à '+Dtoc(Thisform.get_dt_final.Value)
+lcEmissor     = 'Grupo / Conta : '+Iif(Empty(lcGrupo),'Todos',Alltrim(lcGrupo)+' / '+Iif(Empty(lcConta),'Todas',Alltrim(lcConta)+' - '+Alltrim(lcdConta)))
+lcDestino     = 'Responsavel   : '+Iif(Empty(lcRespo),'Todos',Alltrim(lcRespo)+' - '+Alltrim(lcdrespo))
+
+* cria/atualiza cursor de cabeçalho
+Create Cursor CsCabecalho (NomeEmpresa c(80),Titulo c(80),Periodo c(80),Operacao c(80),Emissor c(80), Destino c(80), Quebras l)
+Insert Into CsCabecalho (NomeEmpresa,Titulo,Periodo,Emissor,Destino, Quebras) ;
+	values (lcNomeEmpresa,lcTitulo,lcPeriodo,lcEmissor,lcDestino,(lnNrOpcao#4))
+
+Set Talk Windows
+Set Talk On
+Thisform.MousePointer = 11
+
+lsDatas = Iif(Empty(ldDtFinal) And Empty(ldDtInicial),'', ;
+	Iif(lnNrTipo = 2,' and a.dtents between ?ldDtInicial and ?ldDtFinal ',' and b.vencs between ?ldDtInicial and ?ldDtFinal ') )
+lsGrupo = Iif(Empty(lcGrupo),'',' And b.GrClis = ?lcGrupo')
+lsConta = Iif(Empty(lcConta),'',' And b.Iclis = ?lcConta')
+lsRespo = Iif(Empty(lcRespo),'',' and c.ContaVens = ?lcRespo')
+lsEmp   = Iif(Empty(lcCdEmpresa),'',' and a.emps = ?lcCdEmpresa ')
+
+Set Step On 
+*-- Rafael - 04/04/2018 - Verifica se precisa filtrar empresas de acesso liberado ***
+Select CrTmpAce
+Go Top
+If Empty(lcCdEmpresa) And Reccount('CrTmpAce')>0
+	lsEmp = [ And a.Emps in (']
+	Scan
+		lsEmp = lsEmp + Alltrim(CrTmpAce.Emps)+ [',']
+	Endscan
+	lsEmp = Substr(lsEmp, 1, Len(lsEmp)-2) + [) ]
+Else
+	*-- Rafael - 04/04/2018 - Nao permite nunhuma empresa
+	*lsEmp = [ And a.emps='zzz' ]
+Endif
+
+*** mena - 29/09/2017 - incluido campo Grupo Empresarial ***
+vSql = [Select b.fpags, a.nums, a.numlotes, a.dtents, b.grclis, b.iclis, IsNull(c.Rclis,'') as rclis, IsNull(c.cpfs,'') as cpfs, ]+;
+	[b.vencs, a.bancos, a.agencias, a.ncontas, a.ncheques, ]+;
+	[b.valors, b.emps, b.umovs, IsNull(c.ContaVens,'') as ContaVens, b.GruRes, b.ConRes, b.nAlineas, ]+ ;
+	[(select e.class from sigcdemp e where e.cemps = b.emps) as grEmp ]+ ;
+	[from SigCqChm a, SigChe b ] + ;
+	[left join SigCdCli c on  b.Iclis = c.Iclis ]+;
+	[where a.nums = b.nums ]+;
+	lsDatas + lsGrupo + lsConta + lsRespo + lsEmp
+
+Thisform.podatamgr.SqlExecute(vSql,"csResultado0")
+
+Select a.nums, Max(a.numlotes) As numlotes, Max(a.dtents) As dtents, Max(a.grclis) As grclis, ;
+	Max(a.iclis) As iclis, Max(a.Rclis) As Rclis, Max(a.cpfs) As cpfs, Max(a.vencs) As vencs, ;
+	Max(a.bancos) As bancos, Max(a.agencias) As agencias, Max(a.ncontas) As ncontas, ;
+	Max(a.ncheques) As ncheques, Max(a.valors) As valors, Max(a.emps) As emps, Max(a.umovs) As umovs, ;
+	Max(a.ContaVens) As ContaVens, Max(a.GruRes) As GruRes, Max(a.ConRes) As ConRes, Max(d.Devolvidos) As Devolvidos, ;
+	Max(a.nAlineas) As nAlineas, Max(a.fpags) As fpags, Max(a.grEmp) As grEmp ;
+	from csResultado0 a, tmpopera d ;
+	where a.umovs = d.operacaos And d.Flag ;
+	group By a.nums ;
+	Into Cursor CsResultado
+
+Create Cursor CsRelatorio (Quebras c(60), dtents d, vencs d, umovs c(15), bancos c(3), agencias c(4), ncontas c(10),;
+	ncheques c(6), nums c(8), Descricaos c(70), valors N(12,2), numlotes N(8), emps c(3), ;
+	vDevs N(12,2), vVencs N(12,2), vAvencs N(12,2), Hists c(76), cpfs c(20), QuebraImp c(60), ;
+	nAlineas N(3), fpags c(12), grEmp c(3) )
+
+lcOrdem = 'Quebras+'+Iif(lnNmOrdem=1,'Str(Valors,12,2)+Dtos(Vencs)',;
+	Iif(lnNmOrdem=2,'Dtos(Vencs)+Descricaos+Bancos+Agencias+ncontas+ncheques',;
+	Iif(lnNmOrdem=3,'Dtos(DtEnts)+Dtos(Vencs)+Descricaos+Bancos+Agencias+ncontas+ncheques',;
+	'Bancos+Agencias+ncontas+ncheques')))
+
+Index On &lcOrdem. Tag Impressao
+
+Select CsResultado
+Scan
+	Scatter Memvar
+	Thisform.podatamgr.CursorQuery('SigCdCli','crSigCdCli', 'Iclis', m.ContaVens,[Iclis,Rclis,cpfs])
+
+	If lnNrOpcao = 3
+		m.Quebras    = Dtos(m.vencs)
+		m.QuebraImp  = Dtoc(m.vencs)
+		m.Descricaos = m.iclis+'/'+Alltrim(m.Rclis)+' - '+m.cpfs
+	Else
+		If lnNrOpcao = 2
+			m.Quebras    = CrSigCdCli.iclis + '-' + Alltrim(CrSigCdCli.Rclis)
+			m.Descricaos = m.iclis+'/'+Alltrim(m.Rclis)+' - '+m.cpfs
+			m.QuebraImp  = m.Quebras
+		Else
+			If lnNrOpcao = 1
+				m.Quebras    = m.iclis + '-' + Alltrim(Rclis)
+				m.Descricaos = CrSigCdCli.iclis + '-' + Alltrim(CrSigCdCli.Rclis)+' - '+CrSigCdCli.cpfs
+				m.QuebraImp  = m.Quebras
+
+			Else
+				*** mena - 29/09/2017 - incluida quebra por grupo empresarial ***
+				If lnNrOpcao = 5
+					m.Quebras    = m.grEmp
+					m.Descricaos = m.iclis+'  '+Alltrim(m.fpags)
+					m.QuebraImp  = m.Quebras
+				Else
+					m.Quebras    = Space(60)
+					m.Descricaos = m.iclis+'/'+Alltrim(m.Rclis)+' - '+m.cpfs
+					m.QuebraImp  = m.Quebras
+				Endif
+			Endif
+		Endif
+	Endif
+	Select CsRelatorio
+	Append Blank
+	Gather Memvar
+	Replace vDevs   With Iif(m.Devolvidos='S',m.valors,0),;
+		vVencs  With Iif(m.vencs<Date() And m.Devolvidos#'S',m.valors,0),;
+		vAvencs With Iif(m.vencs>=Date()And m.Devolvidos#'S',m.valors,0)
+	If llImpFol
+		Thisform.podatamgr.CursorQuery('SigCheH','crSigCheH', 'NumS', m.nums)
+		Select crSigCheH
+		If !Eof()
+			Replace CsRelatorio.Hists With crSigCheH.Hists In CsRelatorio
+		Endif
+	Endif
+Endscan
+
+
+Select CsRelatorio
+Go Top
+
+If llImpTot
+	Select Iif(lnNrOpcao<>4,Alltrim(QuebraImp), umovs) As Descricaos, ;
+		sum(valors) As valors, Max(cpfs) As cpfs, ' ' As Quebras ;
+		From CsRelatorio ;
+		Group By 1,4 ;
+		Order By 4, 2 Descending ;
+		Into Cursor csSelecao
+
+	Select csSelecao
+	Go Top
+
+Endif
+
+Thisform.MousePointer = 0
+Set Talk Off
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=DoDefault()
+
+Create Cursor TmpOpera ( Flag l, Operacaos c(15), Devolvidos c(1) )
+Index on Operacaos Tag Operacaos
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')
+		.SqlExecute([Select GRPADVENS From SigCdPam],'crSigCdPam')
+		
+		*** Rafael - 04/04/2018 - seleciona empresas que usuario tem acesso *** 
+		lcQuery = [select emps from sigcdace where usuarios=']+usuar+['] 
+		If (.SqlExecute(lcQuery, 'CrTmpAce') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrTmpAce)')
+			Return 0
+		EndIf
+	
+	EndWith
+		
+Endwith	
+
+Select crSigCdOpt
+Scan for Tipos = 'DB' or Tipos = 'TR'
+	Scatter Memvar
+	Insert Into TmpOpera From Memvar
+Endscan 
+
+Select TmpOpera
+Go Top
+
+=DoDefault()
+* inicialização das variáveis de campo
+thisform.get_dt_inicial.value      = {}
+thisform.get_dt_final.value        = Date()
+thisform.opt_quebra.value          = 4
+thisform.get_ordem.listindex       = 1
+thisform.refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+IF ThisForm.ImpTotal.Value
+	REPORT form SigReCb1 to printer prompt noconsole
+else
+	report form SigReCb2 to printer prompt noconsole
+ENDIF
+
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+if this.value <> 4
+
+	* consiste o campo data final
+	if empty(thisform.get_dt_final.value)
+		messagebox('Data final inválida !',16,'')
+		thisform.get_dt_final.setfocus
+		return(.f.)
+	endif
+	
+	* consiste os campos de datas
+	if thisform.get_dt_final.value < thisform.get_dt_inicial.value
+		messagebox('Data inicial maior que data final !',16,'')
+		thisform.get_dt_inicial.setfocus
+		return(.f.)
+	endif
+		
+	* consiste o campo operação
+	Select TmpOpera
+	llSelect = .f.
+	Scan for flag
+		llSelect = .t.
+	Endscan
+	
+	If !llSelect
+		messagebox('Selecione Operação !',16,'')
+		thisform.GradeOpera.column1.check1.setfocus
+		return(.f.)
+	endif
+
+	* consiste o campo ordem
+	if empty(thisform.get_ordem.value)
+		messagebox('Selecione Ordem para os Dados !',16,'')
+		thisform.get_ordem.setfocus
+		return(.f.)
+	endif
+
+endif
+
+DODEFAULT()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_Cd_Empresa.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Command3
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+m.lnRecno1 = RecNo('tmpOpera')
+UpDate TmpOpera Set Flag=.t.
+If BetWeen(m.lnRecno1,1,RecCount('TmpOpera'))
+	GoTo m.lnRecno1 In ('TmpOpera')
+EndIf
+ThisForm.GradeOpera.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Command4
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+m.lnRecno1 = RecNo('tmpopera')
+UpDate tmpopera Set Flag=.F.
+If BetWeen(m.lnRecno1,1,RecCount('tmpopera'))
+	GoTo m.lnRecno1 In ('tmpopera')
+EndIf
+ThisForm.GradeOpera.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.get_respo
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.lcGrupo = crSigCdPaM.GRPADVENS
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,lcGrupo,'C',This.Value,ThisForm.get_respo,ThisForm.get_drespo)
+		MessageBox('Conta Inválida, Acesso Negado.',16,'')
+		ThisForm.get_respo.Value = ''
+		ThisForm.get_Drespo.Value = ''
+		ThisForm.get_respo.Refresh
+		ThisForm.get_Drespo.Refresh
+		ThisForm.opt_quebra.Value = 3
+		ThisForm.opt_quebra.Refresh
+	EndIf
+Endif
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.get_drespo
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(Thisform.get_respo.value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse,llRetorno,lcGrupo
+
+m.lcGrupo = crSigCdPaM.GRPADVENS
+If .Not.Empty(This.Value)
+	If !fAcessoContas(Usuar,ThisForm.get_respo.Value,'D',This.Value,ThisForm.get_respo,ThisForm.get_drespo)
+		MessageBox('Conta Inválida, Acesso Negado.',16,'')
+		ThisForm.get_respo.Value = ''
+		ThisForm.get_Drespo.Value = ''
+		ThisForm.get_respo.Refresh
+		ThisForm.get_Drespo.Refresh
+	Else
+		ThisForm.opt_quebra.Value = 3
+		ThisForm.opt_quebra.Refresh
+	Endif
+Else
+	ThisForm.get_respo.Value = Space(10)
+	ThisForm.get_drespo.Refresh
+Endif
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)
+If Empty(This.Value)
+	ThisForm.get_conta.Value = ''
+	ThisForm.get_dconta.Value = ''
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Get_dgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_conta.Value = ''
+	ThisForm.get_dconta.Value = ''
+	
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse,llRetorno,lcGrupo
+
+m.lcGrupo = PadR(Thisform.get_Grupo.Value,10)
+
+If .Not.Empty(This.Value)
+	If !fAcessoContas(Usuar, lcGrupo, 'C', This.Value, ThisForm.get_Conta, ThisForm.get_Dconta)
+		MessageBox('Conta Inválida, Acesso Negado.',16,'')
+		ThisForm.get_Conta.Value = ''
+		ThisForm.get_DConta.Value = ''
+		ThisForm.get_Conta.Refresh
+		ThisForm.get_DConta.Refresh
+	Else
+		ThisForm.opt_quebra.Value = 3
+		ThisForm.opt_quebra.Refresh
+	Endif
+
+Else
+	
+	ThisForm.get_Conta.Value = Space(50)
+	ThisForm.get_dConta.Refresh
+
+Endif
+
+Return .t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECBH.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_conta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse,llRetorno,lcGrupo
+
+m.lcGrupo = PadR(ThisForm.get_Grupo.Value,10)
+
+If .Not.Empty(This.Value)
+	If !fAcessoContas(Usuar,ThisForm.get_Conta.Value,'D',This.Value,ThisForm.get_Conta,ThisForm.get_dconta)
+		MessageBox('Conta Inválida, Acesso Negado.',16,'')
+		ThisForm.get_Conta.Value = ''
+		ThisForm.get_DConta.Value = ''
+		ThisForm.get_Conta.Refresh
+		ThisForm.get_DConta.Refresh
+	Else
+		ThisForm.opt_quebra.Value = 3
+		ThisForm.opt_quebra.Refresh
+	Endif
+Else
+	ThisForm.get_Conta.Value = Space(10)
+	ThisForm.get_dConta.Refresh
+Endif
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECBH
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

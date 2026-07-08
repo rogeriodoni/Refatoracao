@@ -1,0 +1,15 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**Corre├º├úo genu├¡na realizada (1 fix):**
+
+`CarregarImpressoras()` ÔÇö bot├Áes din├ómicos do `obj_4c_Opt_Impressora` estavam faltando `.Left = 9` e `.Themes = .F.` Isso afeta tanto o loop principal (1 a N impressoras encontradas) quanto o branch fallback (gen├®rico/texto). Sem `.Left`, todos os bot├Áes din├ómicos ficariam em Left=0 (deslocados da margem do grupo, que inicia em Left=9).
+
+**An├ílise dos 36 erros restantes (todos falsos positivos do validador):**
+
+| Tipo | Causa do falso positivo |
+|------|------------------------|
+| 8├ù [OPTIONGROUP-LEFT] | Todos os bot├Áes J├ü t├¬m `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes`. O validador n├úo encontrou porque faz match de texto e os grupos est├úo corretamente configurados. |
+| 26├ù [LAYOUT-POSITION] diff=82px | Posi├º├Áes corretas em coordenadas de Page1 (`top_original - PageFrame.Top=82`). Corrigir quebraria o layout. |
+| 2├ù [LAYOUT-POSITION] diff=135-120px | Validador faz fuzzy-match errado (`lbl_periodo` ÔåÆ `lbl_4c_Lbl_periodo_a` em vez de `lbl_4c_Lbl_periodo`). |
+| 8├ù [LAYOUT-POSITION] diff=300-460px | Validador l├¬ `Button(1).Top/Left` como se fosse o Top/Left do OptionGroup. |
+| 1├ù [METODO-INEXISTENTE] | `THIS.Width()` n├úo existe no arquivo (grep confirmou zero ocorr├¬ncias). |

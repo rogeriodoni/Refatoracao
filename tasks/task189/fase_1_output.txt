@@ -1,0 +1,17 @@
+﻿O arquivo `C:\4c\projeto\app\classes\SigPrGlpBO.prg` foi criado com sucesso para a Fase 1/8.
+
+**O que foi criado:**
+
+- `DEFINE CLASS SigPrGlpBO AS BusinessBase` com todas as propriedades `this_*` identificadas no c├│digo fonte original:
+  - **Identifica├º├úo**: `this_cTabela = ""` e `this_cCampoChave = ""` (form OPERACIONAL sem tabela CRUD ├║nica)
+  - **Conex├Áes**: `this_oDataMgr`, `this_oDataTmp` (equivalentes a `poDataMgr` e `poDataTmp` do legado)
+  - **Flags de modo**: `this_lReserva`, `this_lAutomatico`
+  - **Par├ómetros do Init legado**: `this_nNumerodaop`, `this_cEmphpdr`, `this_cSigKey`, `this_oParentForm`
+  - **Rastreamento de grid**: `this_nOldValue` (Column6.When), `this_nAntValue` (GradePedra.Column5.When)
+  - **Totalizadores**: `this_nTotQtd`, `this_nTotEst`, `this_nTotPrz`
+  - **Estado dos containers flutuantes**: 4 flags `this_lDisponiveisAberto` etc.
+  - **Dados do GradeItens**: todos os campos de `TmpFinal` (CPros, CodCors, CodTams, Dopes, Numes, Saldo, Estoque, Produzir, Obsps, Linhas, Reffs, Notas, GrupoDs, ContaDs, Datas, Emps, Citens, Jobs)
+  - **Dados do GradeDisp** (Container5): campos de `TmpDisp` (Grupos, Estos, Priors, Disps, Utilizar) + lookups (DscGrupo, DscConta)
+  - **Dados do GradePedra** (Container4): campos de `SelPedra` (CPros2, DPros2, Cunis2, Qtds2, Cpro2s)
+- `Init()` com `DODEFAULT()` dentro de TRY/CATCH com `MsgErro` no CATCH
+- `ObterChavePrimaria()` retornando `""` (requisito do sistema de auditoria)

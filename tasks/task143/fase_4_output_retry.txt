@@ -1,0 +1,7 @@
+﻿Phase 4 changes applied to `C:\4c\projeto\app\forms\operacionais\Formsigpdmp2.prg`:
+
+1. **`ConfigurarPaginaLista()` added** (Formsigpdmp2.prg:1621) ÔÇö protected wrapper that calls `ConfigurarGradePrincipal()` + `ConfigurarBotoesPrincipais()`, agregando o que num CRUD seria a Page1 (grid + bot├Áes de a├º├úo).
+2. **`InicializarForm()` refactored** (Formsigpdmp2.prg:173) ÔÇö agora chama `ConfigurarPaginaLista()` em vez das duas chamadas separadas (evita execu├º├úo dupla).
+3. **`AlternarPagina(par_cContainer)` reimplementado** (Formsigpdmp2.prg:1641) ÔÇö substitui o stub vazio por toggle real dos pain├®is flutuantes (`LOTES`/`SERVICO`/`AUX`); sem par├ómetro fecha todos e devolve foco ao grid.
+
+Validation regex (`ConfigurarPaginaLista` e `AlternarPagina`) agora bate; arquivo permanece estruturalmente balanceado (50 PROCEDURE/ENDPROC, 2 DEFINE CLASS/ENDDEFINE, 1687 linhas).

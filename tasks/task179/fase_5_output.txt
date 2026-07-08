@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 5 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado:
+
+**Fase 5 conclu├¡da ÔÇö `ConfigurarPaginaDados` expandida com os primeiros 50% dos campos da Page2:**
+
+1. **`cnt_4c_BotoesAcao`** ÔÇö bot├Áes Confirmar e Cancelar criados (ambos voltam para Page1)
+2. **`grd_4c_Operacao`** ÔÇö grid das opera├º├Áes dispon├¡veis (top=39, left=679, 1 coluna "Opera├º├úo"), fiel ao `gridLines=1` do original
+3. **`cmd_4c_Entrega`** ÔÇö bot├úo que abre SigOpEnt quando dispon├¡vel (top=36, left=23)
+4. **7 labels + 7 TextBoxes** de cabe├ºalho: C├│digo (txt_4c_Codigo), Data, Prz.Entrega, OP, Docto, Tb.Desconto, Status ÔÇö todos `ReadOnly=.T.` com compensa├º├úo `+29`
+5. **`cmd_4c_SubNiveis`** ÔÇö bot├úo que abre SigMvSbn quando dispon├¡vel (top=154, left=833)
+
+**Novos m├®todos adicionados:**
+- `CarregarOperacaoGrid()` ÔÇö SELECT em SigCdOpe, vincula ao grd_4c_Operacao com header p├│s-RecordSource
+- `BOParaForm()` ÔÇö popula os 7 campos do cabe├ºalho a partir das propriedades do BO
+- `BtnConfirmarClick()` / `BtnCancelarClick()` ÔÇö voltam para Page1 via AlternarPagina(1)
+- `BtnEntregaClick()` / `BtnSubNiveisClick()` ÔÇö abrem sub-formul├írios se dispon├¡veis
+
+`BtnConsultarClick` atualizado para chamar `BOParaForm()` + `CarregarOperacaoGrid()` ap├│s carregar o registro. A Fase 6 adicionar├í: container Origem (com 8 campos de conta/representante), Container1 (observa├º├úo), grid fwgrade1 (10 colunas de itens), imagem FigJpg e campo Get_descr.

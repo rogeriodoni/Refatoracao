@@ -1,0 +1,444 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 18,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fVerEstP", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDM14",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local llRet, lnQuant\n\nlnQuant = TmpDistrib.Qtds2 - xNensi.Qtds\nllRet = fVerEstP(ThisForm.Podatamgr,lnQuant)\n\nReturn (llRet)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerEstP",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14",
+      "evento": "Init",
+      "linhas": 123,
+      "codigoOriginal": "LParameters pForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThis.LockScreen = .t.\n\nThisForm.pcEscolha  = pForm.pcEscolha\nThisForm.ParentForm = pForm\nThisForm.poDataMgr  = pForm.poDataMgr\n\nSet DataSession To pForm.DataSessionId\n\nSelect xNensi\n_cMats  = xNensi.CMats\n_nPesos = xNensi.Pesos\n_nQtds  = xNensi.Qtds\n_cGrus  = xNensi.CGrus\n_cUnis  = xNensi.CUnis\n_cDescs = xNensi.CDescs\n_TpOps  = xNensi.TpOps\n_nLote  = xNensi.nLotes\n_... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecnoAnt = Recno",
+        "controlesReferenciados": "get_Pesof",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', TmpDistrib.CUnis)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column7.Text1",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "Local m.retorno\nm.Retorno = .f.\nIf Not IsEmpty(xNensi.cunis)\n\tlcSql = [Select cEstos From SigCdUni Where cunis = ']+xnensi.cunis+[']\n\tThisForm.Podatamgr.Sqlexecute(lcsql,'TmpUni')\n\tIf TmpUni.cEstos = '3' And Not IsEmpty(xNensi.cUniPs)\n\t\tm.Retorno = .t.\n\tEndIf\nEndIf\nReturn Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') and m.Retorno &&And (xNensi.Rateio = 5) and m.Retorno\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', xNensi.CUnis, 'Fators,QtEqualPs,cestos')\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni2', 'CUnis', xNensi.CUniPs, 'Fators,QtEqualPs,cestos')\n\nIf (LocalUni2.Fators <> 0) And Inlist(ThisForm.ParentForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(xNensi.CMats)\n\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', xNensi.Cmats, 'Cgrus')\n\tThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column8.Text1",
+      "evento": "When",
+      "linhas": 29,
+      "codigoOriginal": "ThisForm.Antvaluep = This.Value\nIf Inlist(ThisForm.ParentForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tThisForm.Balança.Ativa(This)\n\tIf (This.Value <> 0) And (Lastkey() <> 27) And Not ThisForm.Balança.TempoEsgotado\n\t\tThis.Valid\n\t\tReturn .f.\n\tEndIf\n\tIf CrSigCdOpd.PesoBals = 1\n\t\tThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', xNensi.CUnis, 'Fators,QtEqualPs,cestos')\n\t\tThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni2', 'CUnis', xNensi.CUniPs, 'Fators,QtEqualPs,cestos')\n\n\t\tIf (LocalUni... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Ativa,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', xNensi.CUnis, 'Fators,QtEqualPs,cestos')\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni2', 'CUnis', xNensi.CUniPs, 'Fators,QtEqualPs,cestos')\n\nIf (LocalUni.Fators <> 0) And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\tThis.Value <> ThisForm.AntValueP\n\tIf Not ThisForm.fVerEstP() And This.Value <> 0\n\t\tThis.Value = 0\n\t\tReturn 0\n\tEndIf\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,fVerEstP",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column8.Text1",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Skip\nIf !Eof()\n\tSkip -1\n\tThisForm.Grade.Column5.SetFocus\n\tKeyboard '{DNARROW}'\nElse\n\tSkip -1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.antValue = This.Value\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', xNensi.CUnis, 'Fators,QtEqualPs,cestos')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If This.Value <> ThisForm.Antvalue\n\tIf (LocalUni.Fators <> 0) And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\t\tIf Not ThisForm.fVerEstP() And This.Value <> 0\n\t\t\tThis.Value = 0\n\t\t\tReturn 0\n\t\tEndIf\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')\n\t\tThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')\n\t\tIf ( ( CrTmpGru.TpMovs <> 1 And LocalUni.Fators <> 1 ) OR ( LocalUni.QtEqualPs = [S] ) )\n\t\t\tSelect TmpDistrib\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "fVerEstP,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Material.GetMaterial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Material.Get_Pesof",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Material.GetQtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Material.GetPeso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM14.ok",
+      "evento": "Click",
+      "linhas": 56,
+      "codigoOriginal": "Select xNensi\nGo ThisForm.RecnoAnt\nStore 0 to _TPeso,  _TQtde, _TPESO2\n\nThisForm.ParentForm.CtrlAgrega = ThisForm.ParentForm.CtrlAgrega + 1\n_xAmarra = ThisForm.ParentForm.CtrlAGrega\n\nSelect TmpDistrib\nScan\n\tSelect xNensi\n\tSet Order to NopCMatnV && Tiago - 18/03/2016 - Alterado para buscar se tem material já agregado (não visivel) - NopCMat\n\tIf Not Seek(Str(TmpDistrib.Nops, 10) + TmpDistrib.CMats) && Tiago - 17/03/2016 - Não tem NLOTES no índice, com isso estava lançando varias vezes item agregad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM14.Cancelar",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nSelect xNensi\nSet Order to Editar\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDM14.Grade.Column7.Text1.When",
+      "queryOriginal": "\tlcSql = [Select cEstos From SigCdUni Where cunis = ']+xnensi.cunis+['] \tThisForm.Podatamgr.Sqlexecute(lcsql,'TmpUni')",
+      "tabelas": "SigCdUni",
+      "colunas": "cEstos,cunis,cunis+[],Sqlexecutelcsql,TmpUni",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUni"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

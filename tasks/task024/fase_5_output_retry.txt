@@ -1,0 +1,6 @@
+﻿Refatorei `ConfigurarPaginaLista` separando os filtros em dois m├®todos:
+
+- `ConfigurarPaginaLista` (linha 288): filtros prim├írios ÔÇö Opera├º├úo + Per├¡odo (dt_inicial/dt_final) com BINDEVENTs pr├│prios.
+- `ConfigurarPaginaDados` (linha 419): filtros secund├írios ÔÇö Moeda (cod+desc) + Empresa (cod+desc) com BINDEVENTs + chamadas iniciais de `AtualizarEstadoMoedaDesc`/`AtualizarEstadoDesEmpresa`.
+
+`InicializarForm` agora chama os dois sequencialmente. Funcionalidade preservada 100% (todos os campos, BINDEVENTs, lookups e estado inicial mantidos ÔÇö apenas reagrupados). Arquivo passou de 1289 para 1306 linhas.

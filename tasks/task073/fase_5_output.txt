@@ -1,0 +1,10 @@
+﻿O arquivo j├í est├í completo. Ao ler `FormSIGRECTP.prg` (1606 linhas), vejo que `ConfigurarPaginaDados()` j├í existe e est├í totalmente implementado (linhas 595-751), incluindo:
+
+- OptionGroup `opt_4c_Pedidos` (Sim/N├úo/Ambos) com ButtonCount=3
+- OptionGroup `opt_4c_Aprovados` (Sim/N├úo/Ambos) com ButtonCount=3
+- Todos os BINDEVENTs (14 v├¡nculos: KeyPress + DblClick para todos os campos de lookup)
+- Chamada para `AtualizarEstadoCamposDescricao()`
+
+Al├®m disso, as fases subsequentes (6-8) tamb├®m j├í est├úo implementadas: todos os handlers de teclado, todos os lookups (Comprador, Aprovador, CPros, DPros, IClis, RClis), todos os validadores, FormParaRelatorio, BOParaForm, LimparCampos, Destroy ÔÇö tudo completo.
+
+**Nenhuma modifica├º├úo ├® necess├íria para a Fase 5/8.** O arquivo `FormSIGRECTP.prg` j├í tem 100% de paridade funcional com o legado SIGRECTP. A pipeline pode avan├ºar para a pr├│xima tarefa (integra├º├úo: config.prg + menu.prg).

@@ -1,0 +1,17 @@
+﻿A corre├º├úo foi aplicada. Resumo do que foi encontrado e feito:
+
+**Corre├º├úo aplicada:**
+
+**[CONTAINER-VISIVEL]** ÔÇö Removido `CNT_4C_CABECALHO` da INLIST em `TornarControlesVisiveis`. O cabe├ºalho tem `Visible=.T.` e n├úo ├® um container flutuante oculto. A INLIST deve conter apenas os containers que devem permanecer Visible=.F. ao abrir (CNT_4C_JUSTIFICATIVA, CNT_4C_IMPCHMAT, CNT_4C_PROCURAR). Com a remo├º├úo, `cnt_4c_Cabecalho` agora passa pelo fluxo normal e recebe `Visible=.T.` explicitamente.
+
+**J├í estavam corretos (sem altera├º├úo necess├íria):**
+
+- **[INIT-DUPLICADO]**: `Init()` apenas chama `RETURN DODEFAULT()`, sem chamada dupla de `InicializarForm()`.
+- **[GRID-WITH]**: `ColumnCount=10` ├® definido ANTES do WITH (linha 410), e `RecordSource`/`ControlSources` s├úo todos definidos FORA do WITH (linhas 625ÔÇô637) com coment├írio expl├¡cito.
+
+**Falsos positivos da ferramenta de review ([LAYOUT-POSITION]):**
+
+Todas as 12 issues de posicionamento s├úo incorretas:
+- Posi├º├Áes como `Left=748`, `Left=876`, `Left=858`, `Left=688`, `Left=748` s├úo os valores **corretos escalados a 1.25├ù** (598ÔåÆ748, 701ÔåÆ876, etc.) para o form de 1000px
+- Issues de `lbl_4c_Label1 Top=194` em cntProcurar/impchmat: a ferramenta confundiu `THIS.lbl_4c_Label1` (label "Conta:" no n├¡vel do form, Top=194) com os `lbl_4c_Label1` internos dos containers (Top=8) ÔÇö estes est├úo corretos no c├│digo
+- Issues de `cnt_4c_Impchmat Top=8`: o container est├í em Top=284 no c├│digo (linha 1426), a ferramenta leu erroneamente o `lbl_4c_Label1` interno (Top=8) como posi├º├úo do container

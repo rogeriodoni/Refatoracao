@@ -1,0 +1,5 @@
+﻿All 5 fixes applied. The root cause: inside nested `WITH .Buttons(N)` blocks, the LLM used `THIS.Width` (the Form's property = 800px) for button dimensions instead of proper pixel values. This would cause all buttons to render at 800px wide, completely overlapping each other.
+
+**Changes made to `Formsigreanr.prg`:**
+- `cmg_4c_Botoes.Width`: `THIS.Width` ÔåÆ `270` (fits 4 buttons: Button4.Left=203 + Width=62 + 5px margin)
+- `Buttons(1).Width` through `Buttons(4).Width`: `THIS.Width` ÔåÆ `62` (consistent with 66px spacing between button Left positions: 5, 71, 137, 203)

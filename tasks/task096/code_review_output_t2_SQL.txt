@@ -1,0 +1,17 @@
+﻿Ap├│s an├ílise completa, ambos os problemas flagados s├úo **falsos positivos** do validador autom├ítico. Segue o diagn├│stico:
+
+**Por que s├úo falsos positivos:**
+
+1. As condi├º├Áes `WHERE Cemps = ...` (linhas 519, 965) e `WHERE Razas LIKE ...` (linha 998) est├úo em **queries de lookup auxiliares** (`LimparCampos`, `ValidarCdEmpresa`, `ValidarDsEmpresa`) ÔÇö **n├úo nas queries principais do relat├│rio**.
+
+2. O validador comparou TODAS as condi├º├Áes WHERE do arquivo com a lista de colunas do WHERE do SQL original (que ├® somente das queries de relat├│rio), gerando uma detec├º├úo incorreta.
+
+3. `Cemps` e `Razas` s├úo **colunas reais e corretas** da tabela `SigCdEmp`:
+   - `[cemps] [char](3) NOT NULL` ÔÇö linha 3021 do schema
+   - `[razas] [char](40) NOT NULL` ÔÇö linha 3046 do schema
+
+4. O mesmo padr├úo `SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = ...` ├® usado em **65+ outros forms** do sistema (ex: `Formsigreanr.prg` linha 736), sendo o padr├úo can├┤nico para lookup de empresa.
+
+5. O BO (`sigrefc1BO.prg` linha 140) tamb├®m usa `WHERE Cemps = ...` corretamente para montar o t├¡tulo do cabe├ºalho do relat├│rio.
+
+**Nenhuma altera├º├úo necess├íria.** Remover ou modificar essas condi├º├Áes quebraria a funcionalidade de lookup de empresa (exibi├º├úo do nome da empresa ao digitar o c├│digo) que ├® necess├íria e correta para o form.

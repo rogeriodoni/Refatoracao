@@ -1,0 +1,18 @@
+﻿Arquivo criado corretamente em `C:\4c\projeto\app\classes\SigPdMfaBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO declara todas as propriedades mapeadas do c├│digo fonte original:
+
+| Propriedade | Tipo | Origem |
+|---|---|---|
+| `this_cLinha` | C | Get_Linha (MaxLength 10) |
+| `this_cDLinha` | C | Get_DLinha ÔÇö lookup SigCdLin |
+| `this_nOp` | N | Get_Op (InputMask "999999") |
+| `this_cGrupo` | C | Get_grupo ÔÇö lookup TmpGccr |
+| `this_cConta` | C | Get_conta ÔÇö lookup TmpCli |
+| `this_cDconta` | C | Get_dconta ÔÇö lookup TmpCli |
+| `this_cSigKey` | C | SigCdPac.SigKeys (carregado no init) |
+| `this_cDopEntAuts` | C | SigCdPam.DopEntAuts |
+| `this_cDoppPads` | C | SigCdPam.DoppPads |
+| `this_cDoppServs` | C | SigCdPam.DoppServs |
+
+O `Init()` configura `this_cTabela = "SigPdMvf"` e `this_cCampoChave = "cIdChaves"`, depois chama `DODEFAULT()` para deixar o BusinessBase inicializar. Pr├│xima fase: completar os m├®todos `CarregarDoCursor()`, `CarregarCursoresAuxiliares()` e `ProcessarMudancaFase()`.

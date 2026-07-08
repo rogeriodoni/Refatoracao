@@ -1,0 +1,9 @@
+﻿Arquivo completo e ├¡ntegro com 1197 linhas. Fase 4/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaLista()` (PUBLIC)** ÔÇö define o estado inicial do form: `grd_4c_Grade` vis├¡vel/habilitado, `grd_4c_Grade2` oculto, `grp_4c_GrupoSalva` ativo, `grp_4c_GrupoConf` oculto. Chamado em `InicializarForm()` ap├│s `ConfigurarControles()`.
+
+2. **`AlternarPagina(par_nPagina)` (PROCEDURE)** ÔÇö sobrescreve o `FormBase.AlternarPagina()` que usa `pgf_4c_Paginas` (inexistente neste form operacional). Para este form: `par_nPagina=1` = estado de entrada (Grade principal), `par_nPagina=2` = estado de revis├úo (Grade2 resultado).
+
+3. **Refatora├º├úo de `GrupoSalvaClick()` e `GrupoConfClick()`** ÔÇö substitu├¡do o c├│digo inline de toggle por chamadas a `THIS.AlternarPagina(1)` e `THIS.AlternarPagina(2)`, eliminando ~25 linhas duplicadas e centralizando a l├│gica de altern├óncia.

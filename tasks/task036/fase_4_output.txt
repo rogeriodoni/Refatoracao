@@ -1,0 +1,22 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado em `FormSIGREAUP.prg`:**
+
+1. **`ConfigurarCamposFiltro()`** ÔÇö Cria todos os 17 controles exatos do original dentro da Page1 do PageFrame:
+   - Labels de per├¡odo, grupo, conta, O.S., c├│digo, quebra
+   - TextBoxes de data inicial/final (com `Format="K"` e `Value=DATE()`)
+   - TextBoxes de Grupo (c├│digo + descri├º├úo) com estados de habilita├º├úo corretos
+   - TextBoxes de Conta (c├│digo + descri├º├úo) inicialmente desabilitados
+   - TextBox Envelope (num├®rico, alinhado ├á direita)
+   - TextBox C├│digo NCF
+   - CheckBox "Em Percentual (%)"
+   - OptionGroup "Quebra" com 2 op├º├Áes: "Grupo/conta" e "Tipo de Autoriza├º├úo"
+   - BINDEVENTs KeyPress para os 5 campos com lookup
+
+2. **`FormParaRelatorio()`** ÔÇö Transfere valores dos campos do form para o BO antes de gerar relat├│rio
+
+3. **`LimparCampos()`** atualizado ÔÇö Resetar BO + campos do form + estados Enabled
+
+4. **Handlers de bot├Áes** atualizados ÔÇö `BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick` agora chamam `FormParaRelatorio()` antes de `ValidarFiltros()`
+
+5. **M├®todos de lookup completos** ÔÇö `TeclaX`, `ValidarX`, `AbrirBuscaX` para Grupo (por c├│digo e descri├º├úo bidirecional), Conta (por c├│digo e descri├º├úo), e C├│digo NCF ÔÇö replicando fielmente o comportamento dos `Valid events` originais (inclusive o `When` do Conta/DConta via `AtualizarEstadoCampos`)

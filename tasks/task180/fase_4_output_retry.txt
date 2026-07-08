@@ -1,0 +1,12 @@
+﻿Phase 4 complete. Modified `C:\4c\projeto\app\forms\operacionais\FormSIGPREST.prg`:
+
+**Added methods** (adapted to this OPERACIONAL dialog ÔÇö 600├ù191, no PageFrame):
+- `ConfigurarPaginaLista()` ÔÇö configures the working area: tooltips, default checkbox state, keyboard-shortcut BINDEVENTs (F5/ESC), TabIndex order, initial focus.
+- `AlternarPagina(par_nPagina)` ÔÇö real state machine driving the dialog: state 1=PRONTO, 2=PROCESSANDO (blocks UI + shows "Processando..."), 3=CONCLUIDO (re-enables UI, preserves final message).
+- `TrataAtalhoTeclado(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö F5 triggers Gerar, ESC triggers Encerrar.
+
+**Wired into `InicializarForm`**: now calls `ConfigurarPaginaLista()` and `AlternarPagina(1)` to set the initial ready state.
+
+**Refactored `CmdOKClick`**: replaced the manual enable/disable + Refresh code with `AlternarPagina(2)` at start and `AlternarPagina(3)` at end ÔÇö the state machine is actually used, not dead code.
+
+No stubs, no TODOs, no `MsgAviso("... sera implementado ...")` ÔÇö every method has real behavior tied to the dialog's actual purpose.

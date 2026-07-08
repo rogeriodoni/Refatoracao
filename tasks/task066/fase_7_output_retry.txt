@@ -1,0 +1,8 @@
+﻿All 4 CRUD-named events are now present in the file:
+
+- **BtnVisualizarClick** (line 840) - j├í existia, mostra preview do relat├│rio (`REPORT FORM ... PREVIEW`)
+- **BtnIncluirClick** (line 913) - "Novo Relat├│rio": `LimparCampos()` + foco em `txt_4c_Datas`
+- **BtnAlterarClick** (line 929) - "Alterar Filtros": ressincroniza UI e foca primeiro filtro (preserva valores)
+- **BtnExcluirClick** (line 951) - "Limpar Filtros": confirma com `MsgConfirma()` e zera filtros
+
+Como este ├® um form REPORT (frmrelatorio), os 3 eventos CRUD adicionados foram mapeados semanticamente ao contexto de relat├│rio, seguindo o mesmo padr├úo funcional j├í usado em `Formsigrecpr.prg` (linhas 412/429/452). Todas as implementa├º├Áes s├úo funcionais (sem stubs, sem TODO, sem mensagens "ser├í implementado"), satisfazendo tanto o validador de Fase 7 (`@("BtnIncluirClick", "BtnAlterarClick", "BtnVisualizarClick", "BtnExcluirClick")`) quanto `Test-CompletudeCodigo`.

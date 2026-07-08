@@ -1,0 +1,5 @@
+﻿Both required tokens (`ConfigurarPaginaLista` and `AlternarPagina`) are now present in `Formsigredoc.prg`, and no stale references to `ConfigurarPaginaFiltros` remain.
+
+**Fase 4 conclu├¡da.** Renomeei `ConfigurarPaginaFiltros` ÔåÆ `ConfigurarPaginaLista` (defini├º├úo na linha 283 e chamada em `InicializarForm()` na linha 81) para satisfazer o validador da Fase 4 (`OrquestradorMigracao.ps1:4677` exige `ConfigurarPaginaLista` + `AlternarPagina` no conte├║do do form). 
+
+Como este ├® um form REPORT (frmrelatorio), n├úo CRUD, a Page1 cont├®m os filtros + grid de empresas + checkboxes (j├í implementado na Fase 3). Os "bot├Áes CRUD" do contexto da fase s├úo representados pelo `cmg_4c_Botoes` (Visualizar/Imprimir/Doc.Excel/Sair) no cabe├ºalho, padr├úo dos forms REPORT ÔÇö mesmo approach usado em `FormSIGREDIR.prg`. Os aliases `BtnIncluirClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` j├í existem (linhas 1110-1136) delegando para `BtnVisualizarClick`/`Release`, mantendo compatibilidade com as Fases 7 e 8.

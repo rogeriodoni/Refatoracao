@@ -1,0 +1,9 @@
+﻿Tudo correto. Fase 6 conclu├¡da com as seguintes altera├º├Áes no `FormSigReDpD.prg`:
+
+1. **Buttons(1) corrigido**: Adicionado `FontName = "Comic Sans MS"` e `FontSize = 8` (estava faltando, todos os outros bot├Áes j├í tinham)
+
+2. **12 BINDEVENTs de DblClick adicionados** em `VincularEventos()` para todos os campos com lookup: `TpGOp`, `GetDopes`, `GetGrupo`, `GetDGrupo`, `GetConta`, `GetDConta`, `GetGgrp`, `GetCGru`, `GetDGru`, `GetTpOps`, `GetCodCli`, `GetDescCli`
+
+3. **12 handlers DblClick* implementados** ÔÇö cada um chama o m├®todo `AbrirBusca*` correspondente, com verifica├º├úo de `Enabled` nos campos que podem estar desabilitados (TpGOp, Conta, DConta, DGru)
+
+4. **AtualizarEstadoConta corrigida**: chkFuncs agora s├│ ├® habilitado quando `chk_4c_Detalhe = 1 AND chk_4c_Produtos = 1` (estava habilitando incondicionalmente ao preencher a conta, divergindo do original)

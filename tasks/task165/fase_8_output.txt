@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. Tudo implementado:
+
+**M├®todos adicionados ao `Formsigprcom.prg`:**
+- `FormParaBO()` (linha 2294) ÔÇö transfere produto, grupo, fornecedor e flags do form para o BO
+- `BOParaForm()` (linha 2323) ÔÇö preenche os campos da Page2 com dados do BO
+- `HabilitarCampos(par_lHabilitar)` (linha 2350) ÔÇö habilita/desabilita campos conforme o modo (produto edit├ível s├│ em INSERIR/PROCURAR sem produto externo; grupo/fornecedor sempre somente-leitura)
+- `AjustarBotoesPorModo()` (linha 2389) ÔÇö ajusta visibilidade do `cmd_4c_BtnExcluir` e ReadOnly das colunas do grid conforme INSERIR/ALTERAR/CONSULTAR
+
+**Integra├º├úo com o sistema:**
+- `menu.prg`: BAR 32 "Estoque M├íximo" adicionado ao `popMovimentos`, `ON SELECTION BAR 32` vinculado, e fun├º├úo `AbrirFormsigprcom()` adicionada ao final (linha 4043)
+- `config.prg`: n├úo precisou altera├º├úo ÔÇö usa ADIR autom├ítico que j├í carrega `sigprcomBO.prg` (padr├úo `*BO.prg`) e `Formsigprcom.prg` (padr├úo `Form*.prg` em `cadastros\`)

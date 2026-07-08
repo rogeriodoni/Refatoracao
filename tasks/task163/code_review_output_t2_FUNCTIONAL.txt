@@ -1,0 +1,19 @@
+﻿Analisando o c├│digo fornecido, ambos os problemas j├í est├úo corretamente resolvidos:
+
+**Problema 1 ÔÇö [CONTAINER-VISIVEL]**: O filtro INLIST j├í existe em `TornarControlesVisiveis` nas linhas 419-422, e segue o padr├úo correto da mem├│ria: recurs├úo nos filhos acontece **antes** do INLIST+LOOP (linhas 409-417), ent├úo os filhos de `cnt_4c_Cabecalho` recebem `Visible=.T.` e o container em si ├® ignorado pelo LOOP (pois seu `Visible=.T.` j├í foi definido explicitamente em `ConfigurarCabecalho` na linha 166).
+
+```foxpro
+* Recursao ANTES (linhas 409-417) - filhos ficam visiveis
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+    THIS.TornarControlesVisiveis(loc_oObjeto)
+ENDIF
+
+* Depois o LOOP pula o Visible do proprio container (linha 420-422)
+IF INLIST(LOWER(loc_oObjeto.Name), "cnt_4c_cabecalho")
+    LOOP
+ENDIF
+```
+
+**Problema 2 ÔÇö [METODO-INEXISTENTE]**: `ObterIconeSelecionadoNoGrid()` est├í definido como `PROTECTED FUNCTION` nas linhas 517-530, com l├│gica completa (guarda de cursor, tratamento do marcador `< nenhum >`).
+
+**Ambos os problemas est├úo resolvidos no c├│digo atual.** O checker de code review rodou sobre uma vers├úo anterior do arquivo onde esses problemas existiam; a vers├úo entregue para este pass j├í incorpora as corre├º├Áes. Nenhuma altera├º├úo ├® necess├íria ÔÇö fazer mudan├ºas agora introduziria risco de regress├úo sem nenhum benef├¡cio.

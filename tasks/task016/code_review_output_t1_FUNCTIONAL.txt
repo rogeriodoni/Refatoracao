@@ -1,0 +1,27 @@
+﻿All 19 issues are fixed. Summary of changes made:
+
+**`ccrBO.prg`** (1 fix):
+- `[NULL-CURSOR]` ÔÇö Added `SET NULL ON` before `CREATE CURSOR cursor_4c_Dados` and `SET NULL OFF` after, so NULL fields from SQL Server are accepted
+
+**`Formccr.prg`** (18 fixes):
+- `[CONTAINER-VISIVEL]` ÔÇö Fixed `TornarControlesVisiveis()` to skip forcing `Visible=.T.` on Containers that are currently `Visible=.F.` (using `INLIST(loc_cBase, "CONTAINER")` check), and not recurse into hidden containers
+
+- `[OPTIONGROUP-LEFT]` (17 occurrences) ÔÇö Added `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes` to every button in all affected OptionGroups:
+  - `CriarOptSimNao` helper ÔÇö fixes all ~18 Sim/N├úo groups at once
+  - `opt_4c_TpCods` (2 buttons, horizontal)
+  - `opt_4c_TpEmps` (2 buttons, horizontal)
+  - `opt_4c_TpCads` (2 buttons, horizontal)
+  - `opt_4c_OptLimCre` (3 buttons, horizontal)
+  - `opt_4c_OptColetor` (11 buttons, **vertical** ÔÇö Top increments by 19px)
+  - `opt_4c_CpfObrig` (4 buttons, horizontal)
+  - `opt_4c_CepObrig` (3 buttons, horizontal)
+  - `opt_4c_Observacao` (3 buttons, **vertical** ÔÇö Top increments by 21px)
+  - `opt_4c_CpfFixo` (3 buttons, horizontal)
+  - `opt_4c_IntegCont` (3 buttons, horizontal)
+  - `opt_4c_PadPreench` (4 buttons, horizontal)
+  - `opt_4c_OptSaldo` (2 buttons, horizontal)
+  - `opt_4c_OpTipoInvs` (3 buttons, horizontal)
+  - `opt_4c_ChkTrfPeso` (5 buttons, **vertical** ÔÇö Top increments by 19px)
+  - `opt_4c_OptUnifBal` (4 buttons, horizontal)
+  - `opt_4c_OpCompagru` (3 buttons, horizontal)
+  - `opt_4c_CtrlLotes` (3 buttons, horizontal)

@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e bem-formado. A Fase 3/8 foi executada com sucesso.
+
+**`C:\4c\projeto\app\forms\cadastros\Formsigprcom.prg`** criado com 398 linhas.
+
+**O que foi implementado:**
+
+| Elemento | Detalhe |
+|---|---|
+| `DEFINE CLASS` | 17 propriedades: Height=675, Width=1000, Caption, DataSession=2, flags temCor/temTam, modo externo, pcEscolha |
+| `Init()` | DODEFAULT() com TRY/CATCH; sem chamada dupla de InicializarForm |
+| `InicializarForm()` | Cria sigprcomBO, chama ConfigurarPageFrame, CarregarLista (guarda gb_4c_ValidandoUI) |
+| `ConfigurarPageFrame()` | pgf_4c_Paginas: Top=-29, Tabs=.F., 2 pages com new_background.jpg |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (Top=30, labels sombra+t├¡tulo), cnt_4c_Botoes (Top=28, Left=544), cnt_4c_Saida can├┤nico (Left=917) + cmd_4c_Encerrar |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao (Top=26, Left=843) |
+| `CarregarLista()` | Chama BO.Buscar() ÔÇö Grid ser├í vinculado na Fase 4 |
+| `TornarControlesVisiveis()` | Recurs├úo completa; preserva cnt_4c_Copia oculto |
+| `FormatarGridLista()` | Verdana 8 |
+| `Destroy()` | Limpa BO + 4 cursores |
+
+**Pr├│xima fase (4/8):** adicionar Grade + 5 bot├Áes CRUD na Page1, bot├úo btnCopiar, container cnt_4c_Copia com seu grid interno, e bot├Áes Confirmar/Cancelar na Page2.

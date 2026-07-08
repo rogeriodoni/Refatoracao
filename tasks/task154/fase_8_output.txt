@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 foi conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado** (linhas 531ÔÇô713):
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Delega para `CarregarLista()` (refresh completo do dialog) |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` para fechar o dialog |
+| `BtnSalvarClick()` | Captura captions atuais dos labels de volta para as props internas; reforca `AlwaysOnTop` |
+| `BtnCancelarClick()` | `LimparCampos()` + `Release()` ÔÇö permite ao chamador detectar cancelamento via `this_cMensagem1 == ""` |
+| `CarregarLista()` | Re-sincroniza todos os 3 labels e a imagem a partir das props internas; com TRY/CATCH |
+| `FormParaBO()` | Propaga props internas + captions atuais dos labels para `this_oBusinessObject` |
+| `BOParaForm()` | L├¬ props do BO, armazena internamente e chama `CarregarLista()` |
+| `HabilitarCampos()` | No-op intencional (dialog sem campos edit├íveis) |
+| `LimparCampos()` | Zera props, limpa captions, oculta imagem |
+| `AjustarBotoesPorModo()` | No-op intencional (dialog sem bot├Áes de modo CRUD) |
+
+O arquivo final tem 729 linhas e est├í completamente funcional.

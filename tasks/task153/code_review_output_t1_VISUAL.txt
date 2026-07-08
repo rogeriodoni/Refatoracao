@@ -1,0 +1,5 @@
+﻿Both corrections are in place and correct.
+
+**Fix 1 ÔÇö NULL-CURSOR** (line 1828-1830): `SET NULL ON` added before `CREATE CURSOR cursor_4c_CabRel` and `SET NULL OFF` immediately after. The cursor now accepts NULL values, preventing "Field does not accept null values" errors on APPEND FROM.
+
+**Fix 2 ÔÇö NAVEGACAO-PAGINA** (lines 1580-1603): `AlternarPagina` now re-binds `grd_4c_Dados` to `cursor_4c_Filtro` when navigating to page 2, if the cursor exists and has records. Previously, since `AlternarPagina(1)` clears `RecordSource = ""`, a second navigation to page 2 would show an empty grid.

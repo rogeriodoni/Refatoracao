@@ -1,0 +1,20 @@
+﻿O `TornarControlesVisiveis` no arquivo real (linhas 1197-1201) **j├í tem o filtro INLIST** para `CNT_4C_CABECALHO`:
+
+```foxpro
+IF INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+        THIS.TornarControlesVisiveis(loc_oObjeto)
+    ENDIF
+    LOOP
+ENDIF
+```
+
+O problema listado no CODE REVIEW j├í est├í corrigido na vers├úo atual do arquivo:
+
+- O `cnt_4c_Cabecalho` ├® filtrado pelo `INLIST` ÔÇö o `LOOP` impede que `Visible=.T.` seja for├ºado sobre ele
+- A recurs├úo ocorre **antes** do `LOOP` (padr├úo can├┤nico do memory), garantindo que os filhos (`lbl_4c_Sombra`, `lbl_4c_Titulo`) fiquem vis├¡veis
+- Na `ConfigurarPaginaLista`, o container j├í ├® criado com `Visible=.T.` (linha 115), ent├úo n├úo h├í risco de ele ser ocultado
+
+O ├║nico `Visible=.F.` no setup ├® o `img_4c_FigJpg` (linha 1070 ÔÇö Image, n├úo Container), que ├® for├ºado para `.T.` pelo TCV e depois gerenciado em runtime pelo `GrdItensAfterRowColChange`. Isso n├úo foi listado como problema no review e est├í fora do escopo deste pass.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö o [CONTAINER-VISIVEL] j├í estava resolvido no arquivo atual.

@@ -1,0 +1,7 @@
+﻿Migra├º├úo Fase 8/8 conclu├¡da. O FormSigPrGloT.prg j├í estava com todos os m├®todos implementados desde as fases anteriores (BtnBuscarClick, BtnEncerrarClick, BtnConfirmarClick, BtnCancelarClick, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, CarregarLista, AjustarBotoesPorModo).
+
+Nesta fase foram adicionadas as integra├º├Áes que faltavam:
+- **menu.prg**: nova entrada `DEFINE BAR 49 OF popMovimentos` "Processamento Global por Tipo" + `ON SELECTION BAR 49` ÔåÆ `AbrirFormSigPrGloT`
+- **menu.prg**: procedure `AbrirFormSigPrGloT()` seguindo o padr├úo can├┤nico (VARTYPE + Show() sem par├ómetro + MostrarErro no CATCH)
+
+Config.prg j├í carrega automaticamente `SigPrGloTBO.prg` (padr├úo `*BO.prg`) e `FormSigPrGloT.prg` (padr├úo `Form*.prg` em operacionais\), sem necessidade de entrada manual.

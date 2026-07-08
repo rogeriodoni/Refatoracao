@@ -1,0 +1,1 @@
+﻿Fixed. The empresa section in `InicializarValoresPadrao()` now uses the same `gb_4c_ValidandoUI` + `gnConnHandle > 0` guard pattern that the moeda section already used. In test mode, the empresa value is set but `ValidarEmpresaCod()` (which calls `SQLEXEC`) is skipped ÔÇö preventing the "Connection handle is invalid." exception.

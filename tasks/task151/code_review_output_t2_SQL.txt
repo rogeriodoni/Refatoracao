@@ -1,0 +1,14 @@
+﻿Analisei os arquivos completos. Os tr├¬s problemas s├úo **falsos positivos** do validador autom├ítico. Veja a evid├¬ncia:
+
+**CIDCHAVES** ÔÇö aparece apenas nos WHERE de `UPDATE` e `DELETE` (`Atualizar` e `ExecutarExclusao`), que ├® o uso correto de chave prim├íria em opera├º├Áes CRUD. O SELECT de consulta (`ConstruirSQL`) n├úo filtra por `cidchaves`. Remover isso quebraria update/delete de todos os registros da tabela.
+
+**ICL / RCL** ÔÇö o validador encontrou `IClis` e `RClis` (campos de lookup em `SigCdCli`) e fez match de substring contra "ICL"/"RCL". Essas colunas aparecem **apenas em chamadas de `FormBuscaAuxiliar`** (linhas 1023 e 1076 do Form), jamais em cl├íusulas WHERE de SQL:
+
+```foxpro
+"SigCdCli", "cursor_4c_BuscaConta", "IClis", loc_cValor, ...   && lookup, n├úo WHERE
+"SigCdCli", "cursor_4c_BuscaConta", "RClis", loc_cValor, ...   && lookup, n├úo WHERE
+```
+
+O SELECT de consulta (`ConstruirSQL`) usa exatamente as mesmas colunas do legado: `datas`, `emps`, `dopps`, `a.dopps = o.dopps`, `o.grcomps`, `grupoos`, `grupods`, `contaos`, `contads` ÔÇö todos presentes no WHERE original (linhas 916ÔÇô920 do c├│digo legado).
+
+**Nenhuma altera├º├úo ├® necess├íria.** Modificar esses trechos violaria as regras "NAO alterar logica de negocio" e "NAO remover campos, funcionalidades ou lookups" ÔÇö removeria a chave prim├íria dos UPDATEs/DELETEs ou quebraria os lookups de conta.

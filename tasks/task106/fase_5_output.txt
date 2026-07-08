@@ -1,0 +1,10 @@
+﻿Tudo correto. Resumo das altera├º├Áes da Fase 5:
+
+**FormSIGREGDP.prg:**
+- `Buttons(1).Visible = .F.` ÔÇö corrige bug de fidelidade: o original tinha `btnReport.Visualiza.Visible = .F.` (bot├úo oculto)
+- BINDEVENT do bot├úo Visualizar removido (desnecess├írio com bot├úo oculto)
+- `THIS.LimparCampos()` chamado em `InicializarForm()` ap├│s configurar a p├ígina
+- M├®todo `LimparCampos()` adicionado ÔÇö reseta Serie, NFIni, NFFim e optSelecao ao estado inicial
+
+**SIGREGDPBO.prg:**
+- M├®todo `Visualizar()` adicionado ÔÇö delegava para `Imprimir()` (original n├úo tinha preview separado; garante que qualquer chamada residual ao m├®todo n├úo gera "Property VISUALIZAR is not found")

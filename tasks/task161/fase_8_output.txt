@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. A Fase 8 est├í conclu├¡da. Resumo do que foi feito:
+
+**FormSigPrCfn.prg** ÔÇö 10 m├®todos adicionados (linhas 1616ÔÇô1817):
+- `CarregarLista()` ÔÇö compatibilidade com pipeline (retorna `.T.`, sem BD)
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita bot├úo Limpar conforme estado
+- `LimparCampos()` ÔÇö zera todos os campos (Page1 + 10 vencimentos de Page2)
+- `HabilitarCampos(par_lHabilitar)` ÔÇö generaliza├º├úo incluindo o pr├│prio ValorBase
+- `FormParaBO()` ÔÇö transfere 20 campos do form para o BO (entradas + tipo + 10 vencimentos)
+- `BOParaForm()` ÔÇö transfere 21 propriedades do BO de volta ao form (entradas + resultados + 10 vencimentos)
+- `BtnEncerrarClick()` ÔÇö alias CRUD para `CmdEncerrarClick()`
+- `BtnBuscarClick()` ÔÇö N/A para calculadora (compatibilidade)
+- `BtnSalvarClick()` ÔÇö executa c├ílculo via BO (`FormParaBO ÔåÆ Inserir ÔåÆ BOParaForm`)
+- `BtnCancelarClick()` ÔÇö limpa campos e retorna ao in├¡cio
+
+**menu.prg** ÔÇö adicionados BAR 27 (separador), BAR 28 (`C├ílculo de Juros`), `ON SELECTION BAR 28` e procedure `AbrirFormSigPrCfn()` no padr├úo can├┤nico do sistema.

@@ -1,0 +1,30 @@
+[2026-05-15 21:02:35] [INFO] === CLAUDE CLI INVOKER ===
+[2026-05-15 21:02:35] [INFO] Prompt File: C:\4c\tasks\task025\runtime_fix_prompt_06_testForm_t6.md
+[2026-05-15 21:02:35] [INFO] Output File: C:\4c\tasks\task025\06_testForm_fix_output_t6.txt
+[2026-05-15 21:02:35] [INFO] Model: sonnet
+[2026-05-15 21:02:35] [INFO] Timeout: 3600 segundos
+[2026-05-15 21:02:35] [INFO] Max Output Tokens: 128000
+[2026-05-15 21:02:35] [INFO] Context Files: 0 arquivo(s)
+[2026-05-15 21:02:36] [INFO] Invocando Claude CLI...
+[2026-05-15 21:02:36] [INFO] Prompt carregado: 87736 caracteres
+[2026-05-15 21:02:36] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-05-15 21:02:36] [INFO] Tamanho total do prompt: 87736 caracteres
+[2026-05-15 21:02:36] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-05-15 21:23:24] [INFO] Claude CLI finalizado em 1248.1792779 segundos
+[2026-05-15 21:23:24] [INFO] Exit Code: 0
+[2026-05-15 21:23:24] [INFO] Output salvo em: C:\4c\tasks\task025\06_testForm_fix_output_t6.txt
+[2026-05-15 21:23:24] [INFO] Output size: 1973 bytes
+[2026-05-15 21:23:24] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-05-15 21:23:24] [INFO] Preview do output:
+[2026-05-15 21:23:24] [INFO] A corre+º+úo est+í aplicada. Vou agora dar o diagn+¦stico completo do que encontrei.
+
+---
+
+## Diagn+¦stico
+
+### Causa do timeout
+
+Ap+¦s an+ílise detalhada do `TestFormWrapper.prg`, `config.prg`, `RelatorioBase.prg`, `FormBase.prg`, `FormSigReAac.prg` e `SigReAacBO.prg`, o timeout ocorre em **ETAPA 1B** no `SQLSTRINGCONNECT` ÔÇö antes do form sequer ser criado (ETAPA 2). Isso +® um problema de **infraestrutura/ODBC**, n+úo do c+¦digo do form:
+
+```
+[ETAPA 1B] Conectando ao banco de dado

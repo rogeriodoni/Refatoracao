@@ -1,0 +1,23 @@
+﻿Ap├│s verifica├º├úo completa de todos os 5 problemas reportados, comparando o c├│digo migrado com o legado original (`sigreffn_form_codigo_fonte.txt`):
+
+---
+
+**Resultado da verifica├º├úo: todos os 5 casos s├úo falsos positivos.**
+
+### An├ílise detalhada:
+
+| Erro | Linha BO | Condi├º├úo reportada | Situa├º├úo real |
+|------|----------|-------------------|---------------|
+| `'2'` como coluna WHERE | 987 | `WHERE Fase = 2` | **Falso positivo**: coluna ├® `FASE` (v├ílida no original, linha 2234). O `2` ├® um valor, n├úo coluna. |
+| `'CEMPS'` inventado | 283 | `WHERE Cemps = '...'` em SigCdEmp | **Falso positivo**: tradu├º├úo v├ílida de `CursorQuery('SigCdEmp', 'TmpEmp', 'Cemps', _Empr, 'Razas')` do original (linha 1612). |
+| `'DATAS'` inventado | 1114 | `ORDER BY Datas DESC` | **Falso positivo**: `Datas` est├í no `ORDER BY`, **n├úo** no `WHERE`. O validator associou erroneamente a cl├íusula ORDER BY ao WHERE precedente. |
+| `'CMOES'` inventado | 1113, 1147 | `WHERE CMoes = '...'` em SigCdCot | **Falso positivo**: fun├º├Áes novas `BuscarCotacao` / `BuscarCotacaoAtual` substituem `fBuscarCotacao()` do legado. O filtro por CMoes ├® necess├írio e correto ÔÇö remov├¬-lo retornaria a cota├º├úo da primeira moeda aleat├│ria. |
+| `'VALOS'` inventado | 1113 | `SELECT TOP 1 Valos FROM SigCdCot WHERE CMoes...` | **Falso positivo**: `Valos` est├í no `SELECT`, **n├úo** no `WHERE`. O validator confundiu a coluna selecionada com a condi├º├úo de filtro. |
+
+---
+
+**Nenhuma altera├º├úo de c├│digo ├® necess├íria.** Remover qualquer uma dessas condi├º├Áes quebraria a funcionalidade:
+- Remover `WHERE Cemps` ÔåÆ retornaria o nome da primeira empresa (n├úo a atual)
+- Remover `WHERE CMoes` ÔåÆ retornaria a cota├º├úo de uma moeda aleat├│ria, n├úo da moeda selecionada
+
+Todos os problemas detectados pelo validator foram erros de an├ílise est├ítica (tratamento de valores como nomes de coluna, confus├úo entre `ORDER BY` e `WHERE`, e n├úo considera├º├úo de chamadas `CursorQuery` como equivalentes a SQL WHERE).

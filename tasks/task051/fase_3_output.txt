@@ -1,0 +1,16 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\relatorios\Formsigrechp.prg`.
+
+**O que foi implementado na Fase 3:**
+
+- `DEFINE CLASS Formsigrechp AS FormBase` com propriedades visuais exatas do original (Width=800, Height=400, ControlBox=.F., TitleBar=0, DataSession=2)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` com verifica├º├úo de conex├úo, cria├º├úo do BO, chamada de `CarregarParametros()` e `CarregarOperacoes()`, guard `gb_4c_ValidandoUI`
+- `ConfigurarCabecalho()` ÔÇö container cinza m├®dio (RGB 100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo (branco sobre cinza)
+- `ConfigurarBotoesRelatorio()` ÔÇö CommandGroup `cmg_4c_Botoes` (Left=529, Width=273, ButtonCount=4) com BINDEVENTs para Visualizar/Imprimir/Excel/Encerrar. Bot├úo(4) com Cancel=.T.
+- `LimparCampos()` ÔÇö reseta propriedades do BO para valores padr├úo
+- `FormParaRelatorio()` ÔÇö transfer├¬ncia com guards `PEMSTATUS` para suportar controles adicionados nas Fases 5-6
+- `BtnVisualizarClick()` / `BtnImprimirClick()` ÔÇö delegam para `BO.Visualizar()` / `BO.Imprimir()`
+- `BtnExcelClick()` ÔÇö replica a query de `PrepararDados()` diretamente (sem chamar o m├®todo PROTECTED) e exporta com `COPY TO TYPE XLS` + `ShellExecute`
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+**Pr├│ximas fases:** Fase 4 = Grid de opera├º├Áes (GradeOpera) + bot├Áes Marcar/Desmarcar; Fases 5-6 = controles de filtro (datas, empresa, grupos, contas, OptionGroups, ComboBox); Fases 7-8 = BINDEVENTs para valida├º├úo/lookup dos campos.

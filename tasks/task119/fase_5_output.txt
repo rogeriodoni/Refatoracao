@@ -1,0 +1,15 @@
+﻿Arquivo correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi implementado:**
+
+1. **`InicializarForm()`** ÔÇö atualizado para chamar `ConfigurarPaginaDados()` ap├│s montar os filtros, e `LimparCampos()` antes de exibir o form.
+
+2. **Fix no grid** (`ConfigurarPaginaLista`) ÔÇö corrigido cursor `cursor_4c_Empresas` ÔåÆ `CsSigCdEmp` e coluna `DEmps` ÔåÆ `Razas`, alinhando com o que o BO realmente cria em `CarregarDadosAuxiliares()`.
+
+3. **`ConfigurarPaginaDados()`** ÔÇö registra 5 BINDEVENTs: OptGtprelÔåÆ`AjustarVisibilidadePorTipo`, dois campos de empresa e dois campos de data.
+
+4. **`LimparCampos()`** ÔÇö reseta todos os 12 campos de filtro e dispara `AjustarVisibilidadePorTipo`.
+
+5. **Empresa c├│digo/descri├º├úo** ÔÇö `TeclaEmpresa`, `ValidarEmpresa`, `AbrirBuscaEmpresa`, `TeclaDEmpresa`, `ValidarDEmpresa`: valida├º├úo via SEEK em `CrSigCdEmp`; fallback para `FormBuscaAuxiliar` Modo 1 em `SigCdEmp`.
+
+6. **Data Base / Data Base Anterior** ÔÇö `TeclaDtBase`, `ValidarDtBase`, `AbrirBuscaDtBase`, `TeclaDtBasea`, `ValidarDtBasea`: valida├º├úo via SEEK em `CsBases`; lookup Modo 2 compartilhado pelo par├ómetro `par_cCampo`.

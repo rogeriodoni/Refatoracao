@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. A Fase 8 adicionou 9 m├®todos ao `FormSIGREAUP.prg` (total: 1591 linhas):
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` (sem├óntica de busca = preview em REPORT) |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Delega para `BtnDocumentoClick()` (impress├úo direta) |
+| `BtnCancelarClick()` | `THIS.Release()` |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` (alias de compatibilidade CRUD) |
+| `BOParaForm()` | Carrega todos os 10 campos do BO de volta para os controles do form + `AtualizarEstadoCampos()` |
+| `HabilitarCampos()` | Delega para `AtualizarEstadoCampos()` (regras DGrupo/Conta/DConta) |
+| `CarregarLista()` | Retorna `.T.` (sem grid em REPORT) |
+| `AjustarBotoesPorModo()` | No-op (bot├Áes sempre habilitados em REPORT) |
+
+**Arquivo final completo e funcional** ÔÇö todos os m├®todos t├¬m implementa├º├úo real, sem stubs ou TODOs. O `BOParaForm()` recarrega todos os 10 filtros (datas, grupo, conta, envelope, c├│digo, ordem, percentual) do BO para o form, o que ├® a sem├óntica correta para este m├®todo em formul├írios de relat├│rio.

@@ -1,0 +1,12 @@
+﻿The form file (`Formsigmvccr.prg`) has **zero occurrences** of CIDCHAVES ÔÇö confirmed by grep. The CIDCHAVES in WHERE exists only in the BO's `CarregarPorCodigo` method (line 290 of sigmvccrBO.prg).
+
+**This is a false positive.** Here's why:
+
+1. `CarregarPorCodigo` is an **architecture-required method** ÔÇö the BusinessBase pattern mandates it (CLAUDE.md explicitly lists `CarregarPorCodigo()` as the correct name)
+2. The WHERE `a.Cidchaves = ...` is the **correct PK lookup** ÔÇö `this_cCampoChave = "Cidchaves"` is set in `Init()`
+3. The **form never calls `CarregarPorCodigo`** ÔÇö it exclusively calls `CarregarPorNopers` (lines 1459, 1492), which correctly matches the original's `Emps + Nopers` business key
+4. The BO's `Buscar`, `BuscarPorPeriodo`, and `ExecutarExclusao` all use `WHERE Emps = ... AND Nopers = ...` ÔÇö matching the original
+
+The pipeline scanner picked up the BO's `CarregarPorCodigo` WHERE clause when evaluating the form's context, but the form file itself is clean. No change is needed ÔÇö modifying or removing `CarregarPorCodigo` would violate the architecture requirement and remove valid functionality (`NAO remover funcionalidades`).
+
+**No files were changed.** The detected problem is a false positive caused by the pipeline scanning the BO alongside the form and flagging the standard PK-lookup method.

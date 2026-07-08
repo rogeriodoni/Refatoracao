@@ -1,0 +1,18 @@
+﻿`Formsigrecgr.prg` criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`.
+
+**O que foi implementado na Fase 3:**
+
+- **Propriedades**: `Height=160, Width=800` (exatas do original), `TitleBar=0, ControlBox=.F., WindowType=1` ÔÇö forma modal sem barra de t├¡tulo, e as tr├¬s propriedades do form pai: `this_nTipo`, `this_cFiltro`, `this_oParentForm`
+
+- **Init()**: Usa `LPARAMETERS` para receber os 3 params (`nTipo, cFiltro, oParentForm`), armazena-os antes do `DODEFAULT()` (essencial ÔÇö `InicializarForm` os l├¬ durante a inicializa├º├úo)
+
+- **InicializarForm()**: Instancia `sigrecgrBO`, repassa os par├ómetros ao BO, cria o cabe├ºalho escuro
+
+- **ConfigurarCabecalho()**: Container `cnt_4c_Cabecalho` com `RGB(100,100,100)`, labels de sombra e t├¡tulo (padr├úo `frmrelatorio` ÔÇö mesmo padr├úo do `FormSIGREVIS`)
+
+- **Destroy()**: Usa `= .NULL.` (n├úo `.Release()`) no BO Custom, limpa a refer├¬ncia ao form pai
+
+**Pr├│ximas fases:**
+- Fase 4: `ConfigurarBotoes()` (cmg_4c_Botoes com 4 buttons) + `ConfigurarAguarde()` (container Aguarde)
+- Fases 5-6: Sem campos de filtro (form n├úo tem ÔÇö par├ómetros v├¬m via Init)
+- Fases 7-8: BINDEVENTs + `BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocExcelClick`, `BtnEncerrarClick`

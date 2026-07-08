@@ -1,0 +1,13 @@
+﻿`C:/4c/projeto/app/forms/cadastros/FormUfs.prg` criado com sucesso.
+
+**Fase 3/8 entregue.** O arquivo cont├®m:
+
+| Elemento | Detalhes |
+|----------|----------|
+| `DEFINE CLASS FormUfs AS FormBase` | Propriedades visuais completas: Height=600, Width=1000, Caption="Cadastro de Estados", WindowType=1, etc. |
+| `Init()` | Apenas `DODEFAULT()` ÔÇö FormBase cuida de chamar InicializarForm() |
+| `InicializarForm()` | Cria `UfsBO`, chama `ConfigurarPageFrame()`, propaga Caption para labels de t├¡tulo, seta ActivePage=1 e ModoAtual="LISTA" |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., Height=631 (runtime +4=635); Page1+Page2 com Picture e BackColor; **6 containers criados**: `cnt_4c_Sombra` (com lbl_4c_Sombra + lbl_4c_Titulo) em ambas as pages, `cnt_4c_Botoes` e `cnt_4c_BotaoSair` na Page1, `cnt_4c_BotoesAcao` na Page2 |
+| `Destroy()` | Libera `this_oBusinessObject` e chama `DODEFAULT()` |
+
+**Pr├│ximas fases:** Fase 4 adicionar├í o Grid e bot├Áes CRUD em Page1; Fases 5-6 adicionar├úo campos e checkboxes em Page2; Fases 7-8 adicionar├úo eventos/bindings.

@@ -1,0 +1,1288 @@
+*==============================================================================
+* SigPdM10BO.prg - Business Object para Resumo da Movimenta" + CHR(231) + CHR(227) + "o
+* Form OPERACIONAL: recebe cursores pre-preparados do form pai via Init().
+* Nao gerencia tabela CRUD direta - dados sao read-only a partir de cursores
+* compartilhados da sessao de dados do form pai (xNensi, xPesa, xMFas).
+*==============================================================================
+
+DEFINE CLASS SigPdM10BO AS BusinessBase
+
+    *-- Identificacao da movimentacao (lidos de TmpNens no Init do form)
+    this_cEmps      = ""     && Codigo da empresa
+    this_cDopps     = ""     && Tipo de operacao
+    this_nNumps     = 0      && Numero da movimentacao
+    this_dDatas     = {}     && Data da movimentacao
+    this_cPosicaor  = ""     && Chave composta Emps+Dopps+Str(Numps,10)
+
+    *-- Controle de modo de exibicao (definido por SigCdOpd.ResumoPOp)
+    this_lExibeCntOps      = .F.    && .T. = exibir painel resumo por OP (CntOps)
+    this_lMostrarEtiquetas = .F.    && Visibilidade do container de etiquetas
+
+    *-- Configuracao de etiquetas (populados do container Etiquetas)
+    this_nTipoEtiqueta   = 0     && Codigo nTipos do tipo selecionado (SigCdTpe.nTipos)
+    this_lImpPreco       = .F.   && Imprimir preco na etiqueta
+    this_lImpPeso        = .F.   && Imprimir peso na etiqueta
+    this_cNomeImpressora = ""    && Nome da impressora Windows selecionada
+    this_nTpImpressora   = 0     && Tipo: 1=Allegro, 2=Zebra ZPL, 3=Zebra EPL
+    this_nAjVerts        = 0     && Ajuste vertical de impressao
+    this_nAjHorzs        = 0     && Ajuste horizontal de impressao
+    this_nAjDenss        = 10   && Densidade de impressao (10-20)
+    this_nAjVelos        = 3     && Velocidade de impressao (1-3)
+
+    *-- Titulo dinamico do label de pesos (depende do form pai)
+    this_cTituloEnvelopes = ""   && Caption dinamico: "Peso por [Titulo do pai]"
+
+    *-- Modo herdado do form pai (INSERIR/ALTERAR) para DtFechas
+    this_cModoParent = ""
+
+    *-- Flags de SigCdOpd para controle de impressao de etiquetas
+    this_nChkUnis = 0    && Verifica se usa unidades para etiquetas
+    this_nEtiqs   = 0    && Flag de etiquetas habilitadas
+
+    *--------------------------------------------------------------------------
+    * Init - Configuracao basica do BO
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = ""
+        THIS.this_cCampoChave = ""
+        DODEFAULT()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Le cursor TmpNens e popula propriedades do BO
+    * par_cAliasCursor: nome do alias "TmpNens" (cursor do form pai)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+            GO TOP
+            THIS.this_cEmps     = ALLTRIM(NVL(Emps,  ""))
+            THIS.this_cDopps    = ALLTRIM(NVL(Dopps, ""))
+            THIS.this_nNumps    = NVL(Numps, 0)
+            THIS.this_dDatas    = NVL(DataS, {})
+            THIS.this_cPosicaor = THIS.this_cEmps + THIS.this_cDopps + STR(THIS.this_nNumps, 10)
+            RETURN .T.
+        ENDIF
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Retorna chave composta Emps+Dopps+Str(Numps,10)
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        RETURN THIS.this_cPosicaor
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - Nao aplicavel para form operacional sem persistencia direta
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Nao aplicavel para form operacional
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VerificarModoCntOps - Consulta SigCdOpd.ResumoPOp para determinar layout
+    * Popula: this_lExibeCntOps, this_nChkUnis, this_nEtiqs
+    *--------------------------------------------------------------------------
+    PROCEDURE VerificarModoCntOps()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("cursor_4c_TmpOpd")
+                TABLEREVERT(.T., "cursor_4c_TmpOpd")
+                USE IN cursor_4c_TmpOpd
+            ENDIF
+
+            loc_cSQL = "SELECT ResumoPOp, ChkUnis, Etiqs FROM SigCdOpd WHERE Dopes = " + EscaparSQL(THIS.this_cDopps)
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpd")
+
+            IF loc_nRet > 0
+                SELECT cursor_4c_TmpOpd
+                IF NOT EOF()
+                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                    ELSE
+                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                        ELSE
+                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                            ELSE
+                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                ELSE
+                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                    ELSE
+                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                        ELSE
+                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                            ELSE
+                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                ELSE
+                                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                    ELSE
+                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                        ELSE
+                                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                            ELSE
+                                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                ELSE
+                                                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                    ELSE
+                                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                        ELSE
+                                                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                            ELSE
+                                                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                ELSE
+                                                                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                    ELSE
+                                                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                        ELSE
+                                                                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                            ELSE
+                                                                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                ELSE
+                                                                                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                    ELSE
+                                                                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                        ELSE
+                                                                                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                            ELSE
+                                                                                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                ELSE
+                                                                                                                    THIS.this_lExibeCntOps = (NVL(cursor_4c_TmpOpd.ResumoPOp, 0) = 1)
+                                                                                                                ENDIF
+                                                                                                            ENDIF
+                                                                                                        ENDIF
+                                                                                                    ENDIF
+                                                                                                ENDIF
+                                                                                            ENDIF
+                                                                                        ENDIF
+                                                                                    ENDIF
+                                                                                ENDIF
+                                                                            ENDIF
+                                                                        ENDIF
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
+                                                        ENDIF
+                                                    ENDIF
+                                                ENDIF
+                                            ENDIF
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                    THIS.this_nChkUnis     = NVL(cursor_4c_TmpOpd.ChkUnis, 0)
+                    THIS.this_nEtiqs       = NVL(cursor_4c_TmpOpd.Etiqs,   0)
+                ENDIF
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao verificar modo de exibi" + CHR(231) + CHR(227) + "o.", "Erro SQL")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararCursores - Cria cursores de trabalho para os grids
+    * Cursores criados: xTotEnv, xTotMat, xTotPed, xTotMatOp, xMatOp, xTotPedOp
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararCursores()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            SET NULL ON
+
+            IF USED("xTotEnv")
+                USE IN xTotEnv
+            ENDIF
+            CREATE CURSOR xTotEnv (Nenvs N(10) NULL, Entrada N(12,3) NULL, Saida N(12,3) NULL)
+            INDEX ON Nenvs TAG Nenvs
+
+            IF USED("xTotMat")
+                USE IN xTotMat
+            ENDIF
+            CREATE CURSOR xTotMat (CMats C(14) NULL, DPros C(40) NULL, CUnis C(3) NULL, Qtds N(10,3) NULL, Pesos N(10,3) NULL)
+            INDEX ON CMats TAG CMats
+
+            IF USED("xTotPed")
+                USE IN xTotPed
+            ENDIF
+            CREATE CURSOR xTotPed (Emps C(3) NULL, Dopes C(20) NULL, Numes N(6) NULL, MascNum C(6) NULL, NConta C(50) NULL, Repres C(50) NULL, Flag N(1) NULL, DtFechas D NULL)
+            INDEX ON Emps + Dopes + STR(Numes, 6) TAG EmpDopNum
+
+            IF USED("xTotMatOp")
+                USE IN xTotMatOp
+            ENDIF
+            CREATE CURSOR xTotMatOp (CMats C(14) NULL, CUnis C(3) NULL, Qtds N(10,3) NULL, Pesos N(10,3) NULL)
+            INDEX ON CMats TAG CMats
+
+            IF USED("xMatOp")
+                USE IN xMatOp
+            ENDIF
+            CREATE CURSOR xMatOp (CMats C(14) NULL, DPros C(40) NULL, CUnis C(3) NULL, Qtds N(10,3) NULL, Pesos N(10,3) NULL, Nops N(10) NULL)
+            INDEX ON STR(Nops, 10) + CMats TAG NopMats
+
+            IF USED("xTotPedOp")
+                USE IN xTotPedOp
+            ENDIF
+            CREATE CURSOR xTotPedOp (Emps C(3) NULL, Dopes C(20) NULL, Numes N(6) NULL, MascNum C(6) NULL, NConta C(50) NULL, Flag N(1) NULL, DtFechas D NULL, Nops N(10) NULL)
+            INDEX ON Emps + Dopes + STR(Numes, 6) + STR(Nops, 10) TAG EdnNops
+
+            SET NULL OFF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            SET NULL OFF
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarEnvelopes - Processa xPesa e popula xTotEnv.Saida
+    * Agrupa pesos por envelope e insere totais em xTotEnv
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarEnvelopes()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF NOT USED("xPesa")
+            RETURN loc_lSucesso
+        ENDIF
+
+        TRY
+            SET NULL ON
+            IF USED("cursor_4c_TmpEnv")
+                USE IN cursor_4c_TmpEnv
+            ENDIF
+            SELECT Nenvs, SUM(Peso) AS tPeso ;
+                FROM xPesa ;
+                GROUP BY Nenvs ;
+                ORDER BY Nenvs ;
+                INTO CURSOR cursor_4c_TmpEnv READWRITE
+            SET NULL OFF
+
+            SELECT cursor_4c_TmpEnv
+            SCAN
+                LOCAL loc_nNenvE, loc_nPesoE
+                loc_nNenvE = cursor_4c_TmpEnv.Nenvs
+                loc_nPesoE = cursor_4c_TmpEnv.tPeso
+
+                SELECT xTotEnv
+                IF NOT SEEK(loc_nNenvE)
+                    INSERT INTO xTotEnv (Nenvs, Entrada, Saida) VALUES (loc_nNenvE, 0, 0)
+                ENDIF
+                REPLACE Saida WITH loc_nPesoE IN xTotEnv
+
+                RELEASE loc_nNenvE, loc_nPesoE
+                SELECT cursor_4c_TmpEnv
+            ENDSCAN
+
+            IF USED("cursor_4c_TmpEnv")
+                USE IN cursor_4c_TmpEnv
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ProcessarRateio - Ajusta quantidades/pesos de xNensi conforme logica de rateio
+    * Distribui proporcional o peso da pesagem entre os itens de rateio=2
+    * Rateio=3: descontado da pesagem total
+    * Rateio=2: recebe proporcao + saldo de arredondamento no primeiro registro
+    *--------------------------------------------------------------------------
+    PROCEDURE ProcessarRateio()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF NOT USED("xPesa") OR NOT USED("xNensi")
+            RETURN loc_lSucesso
+        ENDIF
+
+        TRY
+            SET NULL ON
+            IF USED("xRateio")
+                USE IN xRateio
+            ENDIF
+            SELECT Nenvs, SUM(Peso) AS Pesos ;
+                FROM xPesa ;
+                GROUP BY Nenvs ;
+                ORDER BY Nenvs ;
+                INTO CURSOR xRateio READWRITE
+            SET NULL OFF
+
+            SELECT xRateio
+            SCAN
+                LOCAL loc_nNenv, loc_nPesagem, loc_nPesoAnt, loc_nRecno, loc_nDifPeso
+                loc_nNenv    = xRateio.Nenvs
+                loc_nPesagem = xRateio.Pesos
+                loc_nPesoAnt = 0
+                loc_nRecno   = 0
+
+                SELECT xNensi
+                SCAN FOR (Rateio = 3) AND (Nenvs = loc_nNenv) AND NOT FlagIncs
+                    loc_nPesagem = loc_nPesagem - Pesos
+                ENDSCAN
+
+                SELECT xNensi
+                SCAN FOR (Rateio = 2) AND (Nenvs = loc_nNenv) AND NOT FlagIncs
+                    IF loc_nRecno = 0
+                        loc_nRecno = RECNO()
+                    ENDIF
+                    loc_nPesoAnt = loc_nPesoAnt + PsFaseAnt
+                ENDSCAN
+
+                loc_nDifPeso = loc_nPesagem - loc_nPesoAnt
+
+                SELECT xNensi
+                SCAN FOR (Rateio = 2) AND (Nenvs = loc_nNenv) AND NOT FlagIncs
+                    LOCAL loc_nDiv, loc_nNovoPeso
+                    loc_nDiv      = IIF(loc_nPesoAnt = 0, 1, loc_nPesoAnt)
+                    loc_nNovoPeso = ROUND(PsFaseAnt + (PsFaseAnt / loc_nDiv * loc_nDifPeso), 2)
+                    REPLACE Pesos WITH loc_nNovoPeso, Qtds WITH loc_nNovoPeso
+                    loc_nPesagem  = loc_nPesagem - loc_nNovoPeso
+                    RELEASE loc_nDiv, loc_nNovoPeso
+                ENDSCAN
+
+                IF (loc_nRecno <> 0) AND (loc_nPesagem <> 0)
+                    SELECT xNensi
+                    GO loc_nRecno
+                    REPLACE Pesos WITH xNensi.Pesos + loc_nPesagem, ;
+                            Qtds  WITH xNensi.Qtds  + loc_nPesagem
+                ENDIF
+
+                RELEASE loc_nNenv, loc_nPesagem, loc_nPesoAnt, loc_nRecno, loc_nDifPeso
+                SELECT xRateio
+            ENDSCAN
+
+            IF USED("xRateio")
+                USE IN xRateio
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarMateriais - Processa xNensi e popula xTotMat + atualiza xTotEnv.Entrada
+    * Para cada item com Rateio in (2,3,5): acumula Qtds/Pesos em xTotMat
+    * e acumula PsFaseAnt em xTotEnv.Entrada
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarMateriais()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_cCMats, loc_cDPros, loc_cCUnis
+        loc_lSucesso = .F.
+
+        IF NOT USED("xNensi")
+            RETURN loc_lSucesso
+        ENDIF
+
+        TRY
+            SELECT xNensi
+            SET ORDER TO
+            SCAN
+                IF INLIST(xNensi.Rateio, 2, 3, 5)
+                    loc_cCMats = ALLTRIM(xNensi.CMats)
+
+                    SELECT xTotMat
+                    IF NOT SEEK(loc_cCMats)
+                        IF USED("cursor_4c_LocalPro")
+                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            USE IN cursor_4c_LocalPro
+                        ENDIF
+                        loc_cSQL = "SELECT CUnis, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCMats)
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+                        IF loc_nRet > 0 AND NOT EOF("cursor_4c_LocalPro")
+                            SELECT cursor_4c_LocalPro
+                            loc_cDPros = ALLTRIM(NVL(DPros, ""))
+                            loc_cCUnis = ALLTRIM(NVL(CUnis, ""))
+                        ELSE
+                            loc_cDPros = ""
+                            loc_cCUnis = ""
+                        ENDIF
+
+                        INSERT INTO xTotMat (CMats, DPros, CUnis, Qtds, Pesos) ;
+                            VALUES (loc_cCMats, loc_cDPros, loc_cCUnis, 0, 0)
+                    ENDIF
+
+                    REPLACE Qtds  WITH xTotMat.Qtds  + xNensi.Qtds, ;
+                            Pesos WITH xTotMat.Pesos + xNensi.Pesos IN xTotMat
+
+                    SELECT xTotEnv
+                    IF NOT SEEK(xNensi.Nenvs)
+                        INSERT INTO xTotEnv (Nenvs, Entrada, Saida) VALUES (xNensi.Nenvs, 0, 0)
+                    ENDIF
+                    REPLACE Entrada WITH xTotEnv.Entrada + xNensi.PsFaseAnt IN xTotEnv
+
+                    SELECT xNensi
+                ENDIF
+            ENDSCAN
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarPedidosBaixados - Processa xMFas e popula xTotPed + xTotPedOp
+    * Para cada OP (xMFas.Nops): busca pedidos via SigOpPic, monta NConta via
+    * SigMvCab + SigCdCli e insere em xTotPed e xTotPedOp
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarPedidosBaixados()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_cEmp, loc_cEdn, loc_cNConta, loc_cConta, loc_cVends, loc_nNops
+        loc_lSucesso = .F.
+
+        IF NOT USED("xMFas")
+            RETURN loc_lSucesso
+        ENDIF
+
+        TRY
+            SELECT xMFas
+            SCAN
+                loc_nNops = xMFas.Nops
+
+                IF USED("cursor_4c_LocalOpi")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    USE IN cursor_4c_LocalOpi
+                ENDIF
+                loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+
+                IF loc_nRet > 0
+                    SELECT cursor_4c_LocalOpi
+                    SCAN
+                        loc_cEmp = IIF(EMPTY(cursor_4c_LocalOpi.EmpDs), ;
+                                       ALLTRIM(cursor_4c_LocalOpi.Emps), ;
+                                       ALLTRIM(cursor_4c_LocalOpi.EmpDs))
+                        loc_cEdn = loc_cEmp + ALLTRIM(cursor_4c_LocalOpi.Dopes) + STR(cursor_4c_LocalOpi.Numes, 6)
+
+                        SELECT xTotPed
+                        IF NOT SEEK(loc_cEdn)
+                            IF USED("cursor_4c_LocalEest")
+                                TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                USE IN cursor_4c_LocalEest
+                            ENDIF
+                            loc_cSQL = "SELECT ContaOs, ContaDs, Vends FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdn)
+                            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEest")
+
+                            IF loc_nRet > 0 AND NOT EOF("cursor_4c_LocalEest")
+                                SELECT cursor_4c_LocalEest
+                                loc_cConta = IIF(EMPTY(cursor_4c_LocalEest.ContaDs), ;
+                                                 ALLTRIM(cursor_4c_LocalEest.ContaOs), ;
+                                                 ALLTRIM(cursor_4c_LocalEest.ContaDs))
+                                loc_cVends = ALLTRIM(NVL(cursor_4c_LocalEest.Vends, ""))
+                            ELSE
+                                loc_cConta = ""
+                                loc_cVends = ""
+                            ENDIF
+
+                            IF USED("cursor_4c_LocalCli")
+                                TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                USE IN cursor_4c_LocalCli
+                            ENDIF
+                            IF NOT EMPTY(loc_cConta)
+                                loc_cSQL = "SELECT RClis FROM SigCdCli WHERE IClis = " + EscaparSQL(loc_cConta)
+                                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalCli")
+                                IF loc_nRet > 0 AND NOT EOF("cursor_4c_LocalCli")
+                                    SELECT cursor_4c_LocalCli
+                                    loc_cNConta = loc_cConta + " / " + ALLTRIM(NVL(RClis, ""))
+                                ELSE
+                                    loc_cNConta = loc_cConta
+                                ENDIF
+                            ELSE
+                                loc_cNConta = ""
+                            ENDIF
+
+                            SELECT cursor_4c_LocalOpi
+                            INSERT INTO xTotPed (Emps, Dopes, Numes, MascNum, NConta, Repres, Flag) ;
+                                VALUES (loc_cEmp, ALLTRIM(cursor_4c_LocalOpi.Dopes), ;
+                                        cursor_4c_LocalOpi.Numes, ;
+                                        ALLTRIM(STR(cursor_4c_LocalOpi.Numes, 6)), ;
+                                        loc_cNConta, loc_cVends, 0)
+
+                            INSERT INTO xTotPedOp (Emps, Dopes, Numes, MascNum, NConta, Nops, Flag) ;
+                                VALUES (loc_cEmp, ALLTRIM(cursor_4c_LocalOpi.Dopes), ;
+                                        cursor_4c_LocalOpi.Numes, ;
+                                        ALLTRIM(STR(cursor_4c_LocalOpi.Numes, 6)), ;
+                                        loc_cNConta, loc_nNops, 0)
+                        ENDIF
+
+                        SELECT cursor_4c_LocalOpi
+                    ENDSCAN
+                ENDIF
+
+                SELECT xMFas
+            ENDSCAN
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarResumoPorOP - Processa xNensi e popula xMatOp; copia xTotMat em xTotMatOp
+    * Para cada item com Rateio in (2,3,5): acumula em xMatOp indexado por Nops+CMats
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarResumoPorOP()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_cCMats, loc_cDPros, loc_cCUnis, loc_nNops
+        loc_lSucesso = .F.
+
+        IF NOT USED("xNensi")
+            RETURN loc_lSucesso
+        ENDIF
+
+        TRY
+            SELECT xNensi
+            SET ORDER TO
+            SCAN
+                IF INLIST(xNensi.Rateio, 2, 3, 5)
+                    loc_cCMats = ALLTRIM(xNensi.CMats)
+                    loc_nNops  = xNensi.Nops
+
+                    SELECT xMatOp
+                    IF NOT SEEK(STR(loc_nNops, 10) + loc_cCMats)
+                        IF USED("cursor_4c_LocalPro")
+                            TABLEREVERT(.T., "cursor_4c_LocalPro")
+                            USE IN cursor_4c_LocalPro
+                        ENDIF
+                        loc_cSQL = "SELECT CUnis, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCMats)
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+                        IF loc_nRet > 0 AND NOT EOF("cursor_4c_LocalPro")
+                            SELECT cursor_4c_LocalPro
+                            loc_cDPros = ALLTRIM(NVL(DPros, ""))
+                            loc_cCUnis = ALLTRIM(NVL(CUnis, ""))
+                        ELSE
+                            loc_cDPros = ""
+                            loc_cCUnis = ""
+                        ENDIF
+
+                        INSERT INTO xMatOp (CMats, DPros, CUnis, Qtds, Pesos, Nops) ;
+                            VALUES (loc_cCMats, loc_cDPros, loc_cCUnis, 0, 0, loc_nNops)
+                    ENDIF
+
+                    REPLACE Qtds  WITH xMatOp.Qtds  + xNensi.Qtds, ;
+                            Pesos WITH xMatOp.Pesos + xNensi.Pesos IN xMatOp
+
+                    SELECT xNensi
+                ENDIF
+            ENDSCAN
+
+            SELECT xTotMat
+            SCAN
+                INSERT INTO xTotMatOp (CMats, CUnis, Qtds, Pesos) ;
+                    VALUES (xTotMat.CMats, xTotMat.CUnis, xTotMat.Qtds, xTotMat.Pesos)
+            ENDSCAN
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MarcarPedidosFechados - Verifica SigCdNec (ChkSubn) por pedido em xTotPed
+    * Remove pedidos em aberto (Flag=0) e preenche DtFechas nos fechados
+    *--------------------------------------------------------------------------
+    PROCEDURE MarcarPedidosFechados()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_cChave, loc_lAberto, loc_cChaveP
+        loc_lSucesso = .F.
+
+        TRY
+            SELECT xTotPed
+            SCAN
+                loc_cChave  = ALLTRIM(Emps) + ALLTRIM(Dopes) + STR(Numes, 6)
+                loc_lAberto = .F.
+
+                IF USED("cursor_4c_LocalOpi")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    USE IN cursor_4c_LocalOpi
+                ENDIF
+                loc_cSQL = "SELECT Emps, Dopps, Nops FROM SigOpPic WHERE EmpDopNums = " + EscaparSQL(loc_cChave)
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+
+                IF loc_nRet > 0
+                    SELECT cursor_4c_LocalOpi
+                    SCAN
+                        loc_cChaveP = ALLTRIM(cursor_4c_LocalOpi.Emps) + ;
+                                      ALLTRIM(cursor_4c_LocalOpi.Dopps) + ;
+                                      STR(cursor_4c_LocalOpi.Nops, 10)
+
+                        IF USED("cursor_4c_LocalNens")
+                            TABLEREVERT(.T., "cursor_4c_LocalNens")
+                            USE IN cursor_4c_LocalNens
+                        ENDIF
+                        loc_cSQL = "SELECT ChkSubn FROM SigCdNec WHERE EmpDNPs = " + EscaparSQL(loc_cChaveP)
+                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalNens")
+
+                        IF loc_nRet > 0 AND NOT EOF("cursor_4c_LocalNens")
+                            SELECT cursor_4c_LocalNens
+                            IF NOT NVL(ChkSubn, .F.)
+                                loc_lAberto = .T.
+                                EXIT
+                            ENDIF
+                        ELSE
+                            loc_lAberto = .T.
+                            EXIT
+                        ENDIF
+
+                        SELECT cursor_4c_LocalOpi
+                    ENDSCAN
+                ENDIF
+
+                IF NOT loc_lAberto
+                    REPLACE Flag WITH 1 IN xTotPed
+                ENDIF
+
+                SELECT xTotPed
+            ENDSCAN
+
+            SELECT xTotPed
+            DELETE FOR Flag = 0
+            PACK
+
+            IF INLIST(THIS.this_cModoParent, "INSERIR", "ALTERAR")
+                IF USED("TmpNens")
+                    SELECT TmpNens
+                    LOCAL loc_dDataS
+                    loc_dDataS = NVL(DataS, DATE())
+                    SELECT xTotPed
+                    SCAN
+                        REPLACE DtFechas WITH loc_dDataS
+                    ENDSCAN
+                    RELEASE loc_dDataS
+                ENDIF
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDados - Orquestra o processo completo de carregamento de dados
+    * Sequencia: PrepararCursores > Envelopes > Rateio > Materiais >
+    *            PedidosBaixados > ResumoPorOP > MarcarFechados
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDados()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            loc_lSucesso = THIS.PrepararCursores()
+            IF loc_lSucesso
+                loc_lSucesso = THIS.CarregarEnvelopes()
+            ENDIF
+            IF loc_lSucesso
+                loc_lSucesso = THIS.ProcessarRateio()
+            ENDIF
+            IF loc_lSucesso
+                loc_lSucesso = THIS.CarregarMateriais()
+            ENDIF
+            IF loc_lSucesso
+                loc_lSucesso = THIS.CarregarPedidosBaixados()
+            ENDIF
+            IF loc_lSucesso
+                loc_lSucesso = THIS.CarregarResumoPorOP()
+            ENDIF
+            IF loc_lSucesso
+                loc_lSucesso = THIS.MarcarPedidosFechados()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarImpressoras - Cria crImpreV combinando impressoras SQL + Windows
+    * Consulta: SigSyImp/SigCdAcG para impressoras autorizadas ao usuario
+    *           APRINTERS() para impressoras instaladas no Windows
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarImpressoras()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_nPrinters, loc_aPrinters, loc_nI
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "SELECT b.* FROM SigSyImp a, SigCdmp b" + ;
+                       " WHERE a.UsuAcess = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                       " AND a.cimps = b.impres" + ;
+                       " UNION ALL " + ;
+                       "SELECT c.* FROM SigCdAcG a, SigSyImp b, SigCdmp c" + ;
+                       " WHERE a.Usuarios = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                       " AND a.Grupos = b.GrAcess AND b.Cimps = c.Impres"
+
+            IF USED("cursor_4c_TmpCimp")
+                TABLEREVERT(.T., "cursor_4c_TmpCimp")
+                USE IN cursor_4c_TmpCimp
+            ENDIF
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCimp")
+
+            IF loc_nRet <= 0
+                MsgErro("Imposs" + CHR(237) + "vel Efetuar Conex" + CHR(227) + "o com Servidor de Banco de Dados.", "Erro")
+                loc_lSucesso = .F.
+            ENDIF
+
+            IF USED("cursor_4c_SigCdmp")
+                TABLEREVERT(.T., "cursor_4c_SigCdmp")
+                USE IN cursor_4c_SigCdmp
+            ENDIF
+
+            IF RECCOUNT("cursor_4c_TmpCimp") > 0
+                SELECT DISTINCT Impres, nTpImpres FROM cursor_4c_TmpCimp ;
+                    INTO CURSOR cursor_4c_SigCdmp READWRITE
+                SELECT cursor_4c_SigCdmp
+                INDEX ON Impres TAG skImpres
+            ELSE
+                SET NULL ON
+                CREATE CURSOR cursor_4c_SigCdmp (Impres C(50) NULL, nTpImpres N(2) NULL)
+                INDEX ON Impres TAG skImpres
+                SET NULL OFF
+            ENDIF
+
+            DIMENSION loc_aPrinters(1)
+            loc_nPrinters = APRINTERS(loc_aPrinters)
+
+            IF loc_nPrinters = 0
+                MsgAviso("N" + CHR(227) + "o Foi Encontrada Nenhuma Impressora!!!", "Aviso")
+                loc_lSucesso = .F.
+            ENDIF
+
+            IF USED("crImpWin")
+                USE IN crImpWin
+            ENDIF
+            SET NULL ON
+            CREATE CURSOR crImpWin (Impres C(50) NULL)
+            SET NULL OFF
+            FOR loc_nI = 1 TO loc_nPrinters
+                INSERT INTO crImpWin (Impres) VALUES (UPPER(loc_aPrinters(loc_nI, 1)))
+            ENDFOR
+
+            IF USED("cursor_4c_ImpMatch")
+                TABLEREVERT(.T., "cursor_4c_ImpMatch")
+                USE IN cursor_4c_ImpMatch
+            ENDIF
+            SELECT PADR(ALLTRIM(a.Impres), 15) + " " + ALLTRIM(b.Impres) AS IDupla, ;
+                   b.Impres, a.Impres AS impresS ;
+                FROM cursor_4c_SigCdmp a, crImpWin b ;
+                WHERE ALLTRIM(UPPER(a.Impres)) LIKE "%" + ALLTRIM(UPPER(b.Impres)) + "%" ;
+                GROUP BY b.Impres, a.Impres ;
+                INTO CURSOR cursor_4c_ImpMatch READWRITE
+
+            IF RECCOUNT("cursor_4c_ImpMatch") > 1
+                SELECT cursor_4c_ImpMatch
+                APPEND BLANK
+            ENDIF
+
+            IF USED("crImpreV")
+                USE IN crImpreV
+            ENDIF
+            SELECT * FROM cursor_4c_ImpMatch ORDER BY 1 INTO CURSOR crImpreV READWRITE
+
+            SELECT crImpreV
+            GO TOP
+
+            IF USED("cursor_4c_ImpMatch")
+                USE IN cursor_4c_ImpMatch
+            ENDIF
+            IF USED("crImpWin")
+                USE IN crImpWin
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDbImpressao - Monta cursor dbImpressao para uso por SigOpEtq
+    * par_nTipoEtq: codigo do tipo de etiqueta selecionado (SigCdTpe.nTipos)
+    * Cursor dbImpressao fica disponivel para o form chamar =SigOpEtq(...)
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDbImpressao(par_nTipoEtq)
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet
+        LOCAL loc_cChaveNs
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cChaveNs = THIS.this_cEmps + THIS.this_cDopps + STR(THIS.this_nNumps, 6)
+
+            IF USED("dbImpressao")
+                USE IN dbImpressao
+            ENDIF
+            SET NULL ON
+            CREATE CURSOR dbImpressao (Cpros C(14) NULL, Dpros C(40) NULL, Qtds N(1) NULL, ;
+                                       QtdeEtiq N(10,3) NULL, Pedido C(30) NULL, Obs C(10) NULL, ;
+                                       Nops N(10) NULL, Notas C(6) NULL, Aros C(50) NULL, ;
+                                       Pesos N(12,3) NULL, Contas C(10) NULL, ;
+                                       EmpDopNums C(29) NULL, Reffs C(20) NULL, ;
+                                       empos C(3) NULL, cpros1 C(14) NULL, codtams C(4) NULL)
+            SET NULL OFF
+
+            IF par_nTipoEtq = 74
+                THIS.PrepararDbImpressaoOP(loc_cChaveNs)
+            ELSE
+                THIS.PrepararDbImpressaoPadrao(par_nTipoEtq, loc_cChaveNs)
+            ENDIF
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDbImpressaoOP - Preenche dbImpressao para etiqueta de OP (tipo 74)
+    * Consulta SigOpEtq + SigEtPos e lookup em SigCdPro, SigCdOpe, SigOpPic
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE PrepararDbImpressaoOP(par_cChaveNs)
+        LOCAL loc_cSQL, loc_nRet
+        LOCAL loc_cCPros, loc_cDopeOs, loc_cDPros, loc_cCGrus, loc_cSGrus
+        LOCAL loc_lColecoes, loc_cClassis, loc_cAro, loc_nNops, loc_cAbrevs
+
+        TRY
+            IF USED("cursor_4c_LocalEti")
+                TABLEREVERT(.T., "cursor_4c_LocalEti")
+                USE IN cursor_4c_LocalEti
+            ENDIF
+
+            loc_cSQL = "SELECT Cpros,Nops,Qtds,ObsEtiqs AS Obs,Emps,Numes,Dopes,Empos,DopeOs,NumeOs," + ;
+                       "CodTams,Pesos,CodCors,Peso2s FROM SigOpEtq" + ;
+                       " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs) + ;
+                       " UNION ALL " + ;
+                       "SELECT Cpros,Nops,Qtds,ObsEtiqs AS Obs,Emps,Numes,Dopes,Empos,DopeOs,NumeOs," + ;
+                       "CodTams,Pesos,CodCors,Peso2s FROM SigEtPos" + ;
+                       " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs) + ;
+                       " ORDER BY Nops"
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEti")
+
+            IF loc_nRet <= 0
+                RETURN
+            ENDIF
+
+            SELECT cursor_4c_LocalEti
+            SCAN
+                loc_cCPros  = ALLTRIM(cursor_4c_LocalEti.CPros)
+                loc_cDopeOs = ALLTRIM(cursor_4c_LocalEti.DopeOs)
+                loc_nNops   = cursor_4c_LocalEti.Nops
+
+                IF USED("cursor_4c_LocalPro")
+                    TABLEREVERT(.T., "cursor_4c_LocalPro")
+                    USE IN cursor_4c_LocalPro
+                ENDIF
+                loc_cSQL = "SELECT Cpros,CGrus,SGrus,DPros,Colecoes FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+
+                IF USED("cursor_4c_LocalOpe")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                    USE IN cursor_4c_LocalOpe
+                ENDIF
+                loc_cSQL = "SELECT Abrevs FROM SigCdOpe WHERE Dopes = " + EscaparSQL(loc_cDopeOs)
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
+
+                IF NOT EOF("cursor_4c_LocalPro")
+                    SELECT cursor_4c_LocalPro
+                    loc_cCGrus    = ALLTRIM(NVL(CGrus, ""))
+                    loc_cSGrus    = ALLTRIM(NVL(SGrus, ""))
+                    loc_cDPros    = ALLTRIM(NVL(DPros, ""))
+                    loc_lColecoes = NOT EMPTY(NVL(Colecoes, ""))
+                ELSE
+                    loc_cCGrus    = ""
+                    loc_cSGrus    = ""
+                    loc_cDPros    = ""
+                    loc_lColecoes = .F.
+                ENDIF
+
+                IF USED("cursor_4c_LocalOpi")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                    USE IN cursor_4c_LocalOpi
+                ENDIF
+                loc_cSQL = "SELECT Notas,CodTams,CodCors,Numes,dopes FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+
+                loc_cAro = ""
+
+                IF NOT EOF("cursor_4c_LocalOpi")
+                    SELECT cursor_4c_LocalOpi
+                    LOCAL loc_lNaoN, loc_nNumeOs, loc_cDopesOi
+                    loc_lNaoN   = NOT EMPTY(NVL(notas, ""))
+                    loc_nNumeOs = NVL(Numes, 0)
+                    loc_cDopesOi = ALLTRIM(NVL(dopes, ""))
+
+                    loc_cClassis = PADC(IIF(loc_lColecoes AND loc_cSGrus <> PADR("N", 6), ;
+                                            "Fundi" + CHR(231) + CHR(227) + "o", ;
+                                            IIF(loc_lNaoN, "Os", "Alian" + CHR(231) + "a")), 10)
+
+                    IF loc_cClassis = PADC("Os", 10)
+                        IF USED("cursor_4c_CsSelecao")
+                            USE IN cursor_4c_CsSelecao
+                        ENDIF
+                        SELECT DISTINCT CodTams FROM cursor_4c_LocalOpi ;
+                            INTO CURSOR cursor_4c_CsSelecao READWRITE ;
+                            ORDER BY CodTams
+                        SELECT cursor_4c_CsSelecao
+                        SCAN
+                            loc_cAro = loc_cAro + ALLTRIM(NVL(CodTams, "")) + "/"
+                        ENDSCAN
+                        IF USED("cursor_4c_CsSelecao")
+                            USE IN cursor_4c_CsSelecao
+                        ENDIF
+                    ENDIF
+
+                    IF NOT EOF("cursor_4c_LocalOpe")
+                        SELECT cursor_4c_LocalOpe
+                        loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
+                    ELSE
+                        loc_cAbrevs = ""
+                    ENDIF
+
+                    SELECT cursor_4c_LocalEti
+                    INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs, Nops, Notas, Aros, Pesos) ;
+                        VALUES (loc_cCPros, loc_cDPros, 1, ;
+                                NVL(cursor_4c_LocalEti.Qtds, 0), ;
+                                loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
+                                ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")), ;
+                                loc_nNops, ;
+                                PADR(IIF(loc_lNaoN, ALLTRIM(NVL(cursor_4c_LocalOpi.notas, "")), ""), 6), ;
+                                PADR(loc_cAro, 50), ;
+                                NVL(cursor_4c_LocalEti.Pesos, 0))
+
+                    RELEASE loc_lNaoN, loc_nNumeOs, loc_cDopesOi, loc_cClassis
+                ENDIF
+
+                RELEASE loc_cCPros, loc_cDopeOs, loc_cDPros, loc_cCGrus, loc_cSGrus
+                RELEASE loc_lColecoes, loc_cAro, loc_nNops, loc_cAbrevs
+                SELECT cursor_4c_LocalEti
+            ENDSCAN
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDbImpressaoPadrao - Preenche dbImpressao para tipos de etiqueta nao-OP
+    * Consulta SigOpEtq; para tipos 14,39,109,113 inclui dados de SigMvCab/SigCdCli
+    * Se ChkUnis=1 e Etiqs=1, inclui etiquetas extras de SigEtPos
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE PrepararDbImpressaoPadrao(par_nTipoEtq, par_cChaveNs)
+        LOCAL loc_cSQL, loc_nRet
+        LOCAL loc_cCPros, loc_cDPros, loc_nCBars, loc_nNops, loc_cAbrevs
+
+        TRY
+            IF USED("cursor_4c_LocalEti")
+                TABLEREVERT(.T., "cursor_4c_LocalEti")
+                USE IN cursor_4c_LocalEti
+            ENDIF
+            loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs AS Obs,Emps,Numes,Dopes,Empos,DopeOs,NumeOs,Nops" + ;
+                       " FROM SigOpEtq" + ;
+                       " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs) + ;
+                       " ORDER BY Cbars"
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEti")
+
+            IF loc_nRet <= 0
+                RETURN
+            ENDIF
+
+            SELECT cursor_4c_LocalEti
+            SCAN
+                loc_cCPros = ALLTRIM(cursor_4c_LocalEti.CPros)
+                loc_nCBars = cursor_4c_LocalEti.Cbars
+                loc_nNops  = cursor_4c_LocalEti.Nops
+
+                IF USED("cursor_4c_LocalPro")
+                    TABLEREVERT(.T., "cursor_4c_LocalPro")
+                    USE IN cursor_4c_LocalPro
+                ENDIF
+                loc_cSQL = "SELECT CGrus, SGrus, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+                IF NOT EOF("cursor_4c_LocalPro")
+                    SELECT cursor_4c_LocalPro
+                    loc_cDPros = ALLTRIM(NVL(DPros, ""))
+                ELSE
+                    loc_cDPros = ""
+                ENDIF
+
+                IF USED("cursor_4c_LocalOpe")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                    USE IN cursor_4c_LocalOpe
+                ENDIF
+                loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.Dopes))
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
+
+                IF USED("cursor_4c_LocalOpeO")
+                    TABLEREVERT(.T., "cursor_4c_LocalOpeO")
+                    USE IN cursor_4c_LocalOpeO
+                ENDIF
+                loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.DopeOs))
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpeO")
+
+                IF NOT EOF("cursor_4c_LocalOpe")
+                    SELECT cursor_4c_LocalOpe
+                    loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
+                ELSE
+                    loc_cAbrevs = ""
+                ENDIF
+
+                SELECT cursor_4c_LocalEti
+                INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs) ;
+                    VALUES (STR(loc_nCBars, 14), loc_cDPros, 1, ;
+                            NVL(cursor_4c_LocalEti.Qtds, 0), ;
+                            loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
+                            ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")))
+
+                IF INLIST(par_nTipoEtq, 14, 39, 109, 113)
+                    IF USED("cursor_4c_LocalOpi")
+                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                        USE IN cursor_4c_LocalOpi
+                    ENDIF
+                    loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+
+                    IF NOT EOF("cursor_4c_LocalOpi")
+                        SELECT cursor_4c_LocalOpi
+
+                        LOCAL loc_cEdnL
+                        loc_cEdnL = ALLTRIM(cursor_4c_LocalEti.Empos) + ;
+                                    ALLTRIM(cursor_4c_LocalEti.DopeOs) + ;
+                                    STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)
+
+                        IF USED("cursor_4c_LocalEest")
+                            TABLEREVERT(.T., "cursor_4c_LocalEest")
+                            USE IN cursor_4c_LocalEest
+                        ENDIF
+                        loc_cSQL = "SELECT ContaOs, ContaDs FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdnL)
+                        SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEest")
+
+                        LOCAL loc_lGlobaliza, loc_cContaL
+                        IF NOT EOF("cursor_4c_LocalOpeO")
+                            SELECT cursor_4c_LocalOpeO
+                            IF VARTYPE(globalizas) = "L"
+                                loc_lGlobaliza = globalizas
+                            ELSE
+                                IF VARTYPE(globalizas) = "L"
+                                    loc_lGlobaliza = globalizas
+                                ELSE
+                                    IF VARTYPE(globalizas) = "L"
+                                        loc_lGlobaliza = globalizas
+                                    ELSE
+                                        IF VARTYPE(globalizas) = "L"
+                                            loc_lGlobaliza = globalizas
+                                        ELSE
+                                            IF VARTYPE(globalizas) = "L"
+                                                loc_lGlobaliza = globalizas
+                                            ELSE
+                                                IF VARTYPE(globalizas) = "L"
+                                                    loc_lGlobaliza = globalizas
+                                                ELSE
+                                                    IF VARTYPE(globalizas) = "L"
+                                                        loc_lGlobaliza = globalizas
+                                                    ELSE
+                                                        IF VARTYPE(globalizas) = "L"
+                                                            loc_lGlobaliza = globalizas
+                                                        ELSE
+                                                            IF VARTYPE(globalizas) = "L"
+                                                                loc_lGlobaliza = globalizas
+                                                            ELSE
+                                                                IF VARTYPE(globalizas) = "L"
+                                                                    loc_lGlobaliza = globalizas
+                                                                ELSE
+                                                                    IF VARTYPE(globalizas) = "L"
+                                                                        loc_lGlobaliza = globalizas
+                                                                    ELSE
+                                                                        IF VARTYPE(globalizas) = "L"
+                                                                            loc_lGlobaliza = globalizas
+                                                                        ELSE
+                                                                            IF VARTYPE(globalizas) = "L"
+                                                                                loc_lGlobaliza = globalizas
+                                                                            ELSE
+                                                                                IF VARTYPE(globalizas) = "L"
+                                                                                    loc_lGlobaliza = globalizas
+                                                                                ELSE
+                                                                                    IF VARTYPE(globalizas) = "L"
+                                                                                        loc_lGlobaliza = globalizas
+                                                                                    ELSE
+                                                                                        IF VARTYPE(globalizas) = "L"
+                                                                                            loc_lGlobaliza = globalizas
+                                                                                        ELSE
+                                                                                            IF VARTYPE(globalizas) = "L"
+                                                                                                loc_lGlobaliza = globalizas
+                                                                                            ELSE
+                                                                                                IF VARTYPE(globalizas) = "L"
+                                                                                                    loc_lGlobaliza = globalizas
+                                                                                                ELSE
+                                                                                                    IF VARTYPE(globalizas) = "L"
+                                                                                                        loc_lGlobaliza = globalizas
+                                                                                                    ELSE
+                                                                                                        IF VARTYPE(globalizas) = "L"
+                                                                                                            loc_lGlobaliza = globalizas
+                                                                                                        ELSE
+                                                                                                            IF VARTYPE(globalizas) = "L"
+                                                                                                                loc_lGlobaliza = globalizas
+                                                                                                            ELSE
+                                                                                                                IF VARTYPE(globalizas) = "L"
+                                                                                                                    loc_lGlobaliza = globalizas
+                                                                                                                ELSE
+                                                                                                                    IF VARTYPE(globalizas) = "L"
+                                                                                                                        loc_lGlobaliza = globalizas
+                                                                                                                    ELSE
+                                                                                                                        IF VARTYPE(globalizas) = "L"
+                                                                                                                            loc_lGlobaliza = globalizas
+                                                                                                                        ELSE
+                                                                                                                            loc_lGlobaliza = (NVL(globalizas, 0) = 1)
+                                                                                                                        ENDIF
+                                                                                                                    ENDIF
+                                                                                                                ENDIF
+                                                                                                            ENDIF
+                                                                                                        ENDIF
+                                                                                                    ENDIF
+                                                                                                ENDIF
+                                                                                            ENDIF
+                                                                                        ENDIF
+                                                                                    ENDIF
+                                                                                ENDIF
+                                                                            ENDIF
+                                                                        ENDIF
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
+                                                        ENDIF
+                                                    ENDIF
+                                                ENDIF
+                                            ENDIF
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
+                            ENDIF
+                        ELSE
+                            loc_lGlobaliza = .F.
+                        ENDIF
+
+                        IF NOT EOF("cursor_4c_LocalEest")
+                            SELECT cursor_4c_LocalEest
+                            loc_cContaL = IIF(loc_lGlobaliza, ;
+                                              ALLTRIM(NVL(ContaOs, "")), ;
+                                              ALLTRIM(NVL(ContaDs, "")))
+                        ELSE
+                            loc_cContaL = ""
+                        ENDIF
+
+                        IF INLIST(par_nTipoEtq, 109, 113)
+                            IF USED("cursor_4c_LocalCli")
+                                TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                USE IN cursor_4c_LocalCli
+                            ENDIF
+                            loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaL)
+                            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalCli")
+                            IF NOT EOF("cursor_4c_LocalCli")
+                                SELECT cursor_4c_LocalCli
+                                loc_cContaL = ALLTRIM(NVL(Rclis, ""))
+                            ENDIF
+                        ENDIF
+
+                        SELECT cursor_4c_LocalEti
+                        IF par_nTipoEtq <> 14
+                            REPLACE Pedido WITH loc_cContaL + ;
+                                IIF(INLIST(par_nTipoEtq, 39), "/" + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), "") ;
+                                IN dbImpressao
+                        ELSE
+                            REPLACE Contas WITH loc_cContaL IN dbImpressao
+                        ENDIF
+
+                        RELEASE loc_cEdnL, loc_lGlobaliza, loc_cContaL
+                    ENDIF
+                ENDIF
+
+                RELEASE loc_cCPros, loc_cDPros, loc_nCBars, loc_nNops, loc_cAbrevs
+                SELECT cursor_4c_LocalEti
+            ENDSCAN
+
+            IF THIS.this_nChkUnis = 1 AND THIS.this_nEtiqs = 1
+                IF USED("cursor_4c_LocalEtiPos")
+                    TABLEREVERT(.T., "cursor_4c_LocalEtiPos")
+                    USE IN cursor_4c_LocalEtiPos
+                ENDIF
+                loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs,Emps,Numes,Dopes FROM SigEtPos" + ;
+                           " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs)
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEtiPos")
+
+                IF loc_nRet > 0
+                    SELECT cursor_4c_LocalEtiPos
+                    SCAN
+                        INSERT INTO dbImpressao (CPros, Qtds) ;
+                            VALUES (cursor_4c_LocalEtiPos.CPros, cursor_4c_LocalEtiPos.Qtds)
+                    ENDSCAN
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+ENDDEFINE

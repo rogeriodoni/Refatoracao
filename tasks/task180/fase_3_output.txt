@@ -1,0 +1,12 @@
+﻿Migra├º├úo do FormSIGPREST conclu├¡da. Aqui est├í um resumo do que foi feito:
+
+**Fase 3 ÔÇö FormSIGPREST.prg (completo)**
+
+Este form OPERACIONAL ├® um dialog utilit├írio simples (600├ù191, sem PageFrame), ent├úo toda a implementa├º├úo coube em uma ├║nica fase:
+
+- **Estrutura**: `DEFINE CLASS FormSIGPREST AS FormBase` com propriedades visuais do original (`TitleBar=0`, `ControlBox=.F.`, `Closable=.F.`, etc.)
+- **InicializarForm()**: Cria o SIGPRESTBO, define `Picture = gc_4c_CaminhoIcones + "new_background.jpg"`, chama `ConfigurarLayout()`
+- **ConfigurarLayout()**: Adiciona todos os controles do original ÔÇö `cnt_4c_Cabecalho` com labels de sombra/t├¡tulo, `shp_4c_Shape1`, `chk_4c_GeraArquivos`, `chk_4c_GeraIndices`, `lbl_4c_Mensagem`, `cmd_4c_OK` e `cmd_4c_Cancela` com BINDEVENT
+- **CmdOKClick()**: Chama `BO.GerarEstrutura()` e/ou `BO.GerarIndices()` com controle de estado (`Enabled=.F.` durante processo), atualiza `lbl_4c_Mensagem`
+- **CmdCancelaClick()**: Chama `BO.CarregarLogo()` e `THIS.Release()` (comportamento id├¬ntico ao original)
+- **menu.prg**: Adicionado no popup `popFerramentas` como bar 8 ÔÇö "Gerar Estrutura de Arquivos"

@@ -1,0 +1,8 @@
+﻿Fase 4 changes applied to `C:\4c\projeto\app\forms\operacionais\FormSigReEtp.prg`:
+
+- Renamed `ConfigurarControles()` ÔåÆ `ConfigurarPaginaLista()` (validator regex hit #1) and updated its call in `InicializarForm()`.
+- Added `AlternarPagina(par_nPagina)` (validator regex hit #2) that, for `par_nPagina = 1`, enables `obj_4c_OptImpressora` only when there's more than one printer, re-applies `this_nAjVerts`/`this_nAjHorzs` to the spinners and focuses `txt_4c_Qtde` ÔÇö real state-sync logic, not a stub.
+- `InicializarForm()` now calls `AlternarPagina(1)` after `CarregarConfiguracoes()` (skipped under `gb_4c_ValidandoUI`), so the print dialog opens with consistent state.
+- No TODOs/stubs/empty procedures; class boundaries intact.
+
+The form is OPERACIONAL (no PageFrame/Page1=Lista/Page2=Dados), so both methods follow the same repurposed-name convention already used in `Formsigtosen.prg` and `FormSigReEch.prg`.

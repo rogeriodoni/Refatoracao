@@ -1,0 +1,1489 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrechp.SCX
+* Data/Hora: 16/05/26 19:53:43
+* Total de registros: 37
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECHP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGRECHP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGRECHP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECHP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECHP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImpFollow
+  Parent: SIGRECHP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: lbl_operacao
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_opcao
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_nr_opcao
+  Parent: SIGRECHP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_emi_grupo
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_emi_grupo
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_emi_conta
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_nr_tipo
+  Parent: SIGRECHP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_emi_conta
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ordem
+  Parent: SIGRECHP
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradeOpera
+  Parent: SIGRECHP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGRECHP.GradeOpera.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGRECHP.GradeOpera.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGRECHP.GradeOpera.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECHP.GradeOpera.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_dep_grupo
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_dep_conta
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command3
+  Parent: SIGRECHP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_ds_dep_grupo
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_dep_conta
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_dep_conta
+  Parent: SIGRECHP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command4
+  Parent: SIGRECHP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say4
+  Parent: SIGRECHP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 32
+  Left = 145
+  Width = 538
+  Height = 374
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Cheques Pendentes"
+  ControlBox = .F.
+  ClipControls = .T.
+  Name = "SIGRECHP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 529
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 195
+  Top = 267
+  Width = 50
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 282
+  MaxLength = 40
+  TabIndex = 12
+  Top = 263
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 249
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 11
+  ToolTipText = ""
+  Top = 263
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 200
+  Top = 125
+  Width = 45
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 249
+  MaxLength = 10
+  TabIndex = 2
+  Top = 120
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 335
+  Top = 125
+  Width = 8
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 348
+  MaxLength = 10
+  TabIndex = 3
+  Top = 120
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordem :"
+  Left = 204
+  Top = 240
+  Width = 41
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.ImpFollow
+------------------------------------------------------------
+  Top = 123
+  Left = 436
+  Height = 17
+  Width = 126
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir FollowUp"
+  Value = .F.
+  TabIndex = 23
+  ForeColor = 90,90,90
+  Name = "ImpFollow"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação :"
+  Left = 189
+  Top = 145
+  Width = 56
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_opcao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Opção : "
+  Left = 394
+  Top = 241
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lbl_opcao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.opt_nr_opcao
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 23
+  Left = 440
+  Top = 237
+  Width = 192
+  TabIndex = 9
+  ZOrderSet = 15
+  Name = "opt_nr_opcao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 4
+  Option1.TabIndex = 8
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 62
+  Option2.TabIndex = 9
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 122
+  Option3.TabIndex = 10
+  Option3.Top = 4
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_cd_emi_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 249
+  MaxLength = 10
+  TabIndex = 19
+  Top = 338
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_cd_emi_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ds_emi_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 330
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 20
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 338
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "get_ds_emi_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_cd_emi_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 249
+  MaxLength = 10
+  TabIndex = 21
+  Top = 363
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "get_cd_emi_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.opt_nr_tipo
+------------------------------------------------------------
+  AutoSize = .T.
+  Left = 242
+  Top = 94
+  TabIndex = 1
+  Name = "opt_nr_tipo"
+  Option1.Caption = "Data de Vencimento"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Data da Operação"
+  Option2.Left = 146
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ds_emi_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 330
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 22
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 363
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "get_ds_emi_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ordem
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BoundColumn = 1
+  ColumnCount = 1
+  RowSourceType = 1
+  RowSource = "VALOR,DATA VENCIMENTO,DATA OPERAÇÃO"
+  DisplayValue = 
+  Value = 
+  ControlSource = ""
+  Enabled = .T.
+  Height = 24
+  ColumnLines = .F.
+  Left = 249
+  SelectOnEntry = .F.
+  Style = 2
+  TabIndex = 8
+  Top = 237
+  Width = 134
+  ZOrderSet = 20
+  HideSelection = .F.
+  ForeColor = 0,0,0
+  SelectedForeColor = 255,255,255
+  SelectedItemForeColor = 255,255,255
+  SelectedItemBackColor = 0,0,128
+  BoundTo = .T.
+  IMEMode = 0
+  ReadOnly = .F.
+  Name = "get_ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.GradeOpera
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 89
+  Left = 249
+  Panel = 1
+  ReadOnly = .F.
+  RecordSource = "TmpOpera"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 5
+  Top = 146
+  Width = 178
+  GridLineColor = 238,238,238
+  ZOrderSet = 21
+  Name = "GradeOpera"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "TmpOpera.Flag"
+  Column1.Width = 18
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "TmpOpera.Operacaos"
+  Column2.Width = 127
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.GradeOpera.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.GradeOpera.Column1.Check1
+------------------------------------------------------------
+  Top = 35
+  Left = 13
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  Value = .F.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.GradeOpera.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.GradeOpera.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_cd_dep_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 249
+  MaxLength = 10
+  TabIndex = 15
+  Top = 288
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Name = "get_cd_dep_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.lbl_dep_conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta/Destino   :"
+  Left = 161
+  Top = 316
+  Width = 84
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "lbl_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Command3
+------------------------------------------------------------
+  Top = 146
+  Left = 429
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 20
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 32
+  Themes = .F.
+  Name = "Command3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ds_dep_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 329
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 16
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 288
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 25
+  Name = "get_ds_dep_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_cd_dep_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 249
+  MaxLength = 10
+  TabIndex = 17
+  Top = 313
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 26
+  Name = "get_cd_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.get_ds_dep_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 329
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 18
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 313
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 27
+  Name = "get_ds_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo/Emissor :"
+  Left = 167
+  Top = 342
+  Width = 78
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 28
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta/Emissor :"
+  Left = 167
+  Top = 366
+  Width = 78
+  TabIndex = 28
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Command4
+------------------------------------------------------------
+  Top = 191
+  Left = 429
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 21
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 34
+  Themes = .F.
+  Name = "Command4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECHP.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo/Destino  :"
+  Left = 164
+  Top = 292
+  Width = 81
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECHP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+select CsRelatorio
+
+report form SigReChp to printer prompt noconsole
+
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')
+	EndWith
+Endwith	
+
+Select crSigCdOpt
+Scan for Tipos = 'DB' or Tipos = 'TR' 
+	Scatter Memvar
+	Insert Into TmpOpera From Memvar
+Endscan 
+
+Select TmpOpera
+Go Top
+
+=DoDefault()
+
+lcSql = [Select TitOpcS, TitOpcN, TitOpcA From SigCdPac]
+If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalParac)')
+	Return .f.
+EndIf
+Select LocalParac
+Go Top
+With ThisForm.Opt_nr_opcao
+	.option1.Caption = Iif(Not Empty(LocalParac.TitOpcs),LocalParac.TitOpcS,[Sim])
+	.option2.Caption = Iif(Not Empty(LocalParac.TitOpcn),LocalParac.TitOpcN,[Nao])
+	.option3.Caption = Iif(Not Empty(LocalParac.TitOpcA),LocalParac.TitOpcA,[Ambos])
+EndWith
+* inicialização das variáveis de campo
+thisform.opt_nr_tipo.value         = 1
+thisform.get_dt_inicial.value      = date()
+thisform.get_dt_final.value        = date()
+thisform.get_cd_empresa.value      = space(03)
+thisform.get_ds_empresa.value      = space(40)
+thisform.opt_nr_opcao.value        = 3
+thisform.get_cd_emi_grupo.value    = space(10)
+thisform.get_ds_emi_grupo.value    = space(20)
+thisform.get_cd_emi_conta.value    = space(10)
+thisform.get_ds_emi_conta.value    = space(40)
+thisform.get_ordem.listindex       = 1
+thisform.refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=DoDefault()
+
+Create Cursor TmpOpera ( Flag l, Operacaos c(15) )
+Index on Operacaos Tag Operacaos
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+* declara as variáveis de cabeçalho
+Private lcNomeEmpresa,lcTitulo,lcPeriodo,lcOperacao,lcEmissor
+* declara as variáveis de campos
+Private lnNrTipo,ldDtInicial,ldDtFinal,lcNmOperacao,lcCdEmpresa,lcDsEmpresa,lnNrOpcao
+Private lcCdEmiGrupo,lcDsEmiGrupo,lcCdEmiConta,lcDsEmiConta
+* declara as variáveis de verificação
+PRIVATE lcVerData,lcVerOperacao,lcVerEmpresa,lcVerOpcao
+private lcVerEmiGrupo,lcVerEmiConta,lcVerAberto
+
+* inicializa variáveis de campos
+lnNrTipo     = thisform.opt_nr_tipo.value
+ldDtInicial  = fDtoSQL(thisform.get_dt_inicial.value)
+ldDtFinal    = fDtoSQL(thisform.get_dt_final.value,"23:59:59")
+lcNmOrdem    = alltrim(thisform.get_ordem.value)
+lcCdEmpresa  = thisform.get_cd_empresa.value
+lcDsEmpresa  = thisform.get_ds_empresa.value
+lnNrOpcao    = thisform.opt_nr_opcao.value
+lcCdEmiGrupo = thisform.get_cd_emi_grupo.value
+lcDsEmiGrupo = thisform.get_ds_emi_grupo.value
+lcCdEmiConta = thisform.get_cd_emi_conta.value
+lcDsEmiConta = thisform.get_ds_emi_conta.value
+lcCdDesGrupo = thisform.get_cd_dep_grupo.value
+lcDsDesGrupo = thisform.get_ds_dep_grupo.value
+lcCdDesConta = thisform.get_cd_dep_conta.value
+lcDsDesConta = thisform.get_ds_dep_conta.value
+llImpFol     = ThisForm.ImpFollow.Value
+
+* inicializa variáveis de verificação
+lcVerData     = iif(lnNrTipo = 2,' and a.dtents between ?ldDtInicial and ?ldDtFinal ',' and b.vencs between ?ldDtInicial and ?ldDtFinal ')
+lcVerEmpresa  = iif(empty(lcCdEmpresa),'',' and a.emps = ?lcCdEmpresa ')
+lcVerOpcao    = iif(lnNrOpcao = 1,' and not a.notas = "'+SPACE(6)+'" ',iif(lnNrOpcao=2,' and a.notas = "'+SPACE(6)+'" ',''))
+lcVerEmiGrupo = iif(empty(lcCdEmiGrupo),'',' and b.grclis = ?lcCdEmiGrupo ')
+lcVerEmiConta = iif(empty(lcCdEmiConta),'',' and b.iclis = ?lcCdEmiConta ')
+lcVerDesGrupo = iif(empty(lcCdDesGrupo),'',' and b.grupos = ?lcCdDesGrupo ')
+lcVerDesConta = iif(empty(lcCdDesConta),'',' and b.contas = ?lcCdDesConta ')
+
+lcVerOrdem    = iif(empty(lcNmOrdem),'', ;
+					iif(thisform.get_ordem.listindex=1,' order by 3', ;
+						iif(thisform.get_ordem.listindex=2,' order by 4',' order by 5')))
+
+* inicializa variáveis de cabeçalho de relatório
+lcTitulo = 'Relatório de Cheques Pendentes'
+ThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _empr)
+lcNomeEmpresa = crSigCdEmp.Razas
+lcPeriodo     = iif(lnNrTipo=2,'Data da Movimentação: ','Data de Vencimento: ')+dtoc(ldDtInicial)+' à '+dtoc(ldDtFinal)+' - '+'Empresa: '+iif(empty(lcCdEmpresa),'Geral',lcCdEmpresa+' - '+alltrim(lcDsEmpresa))
+lcEmissor     = 'Grupo / Conta Emissor  : '+iif(empty(lcCdEmiGrupo),'Todos',alltrim(lcCdEmiGrupo)+' - '+alltrim(lcDsEmiGrupo))+' / '+iif(empty(lcCdEmiConta),'Todas',alltrim(lcCdEmiConta)+' - '+alltrim(lcDsEmiConta))
+lcDestino     = 'Grupo / Conta Destino  : '+iif(empty(lcCddesGrupo),'Todos',alltrim(lcCddesGrupo)+' - '+alltrim(lcDsdesGrupo))+' / '+iif(empty(lcCddesConta),'Todas',alltrim(lcCdEmiConta)+' - '+alltrim(lcDsdesConta))
+
+* cria/atualiza cursor de cabeçalho
+create cursor CsCabecalho (NomeEmpresa c(80),Titulo c(80),Periodo c(80),Operacao c(80),Emissor c(80), Destino c(80))
+insert into CsCabecalho (NomeEmpresa,Titulo,Periodo,Emissor,Destino) ;
+				values (lcNomeEmpresa,lcTitulo,lcPeriodo,lcEmissor,lcDestino)
+
+set talk windows
+set talk on
+thisform.mousepointer = 11
+
+lcArquivo = Iif(llImpFol,'CsTemporario','CsRelatorio')
+
+vSql=[select a.nums, a.numlotes, a.dtents, b.grclis, b.iclis, ]+;
+	 [b.vencs, b.bancos, b.agencias, b.ncontas, b.ncheques, ]+;
+	 [b.valors, b.emps, b.umovs, ' ' as Hists ]+;
+	 [from SigCqChm a, SigChe b ]+;
+	 [where a.nums = b.nums ]+;
+	 lcVerData+lcVerEmpresa+lcVerOpcao+lcVerEmiGrupo+lcVerEmiConta+;
+	 lcVerDesGrupo+lcVerDesConta+;
+     [Order by a.nums, a.numlotes, a.dtents, b.grclis, b.iclis, ]+;
+	 [b.vencs, b.bancos, b.agencias, b.ncontas, b.ncheques, ]+;
+	 [b.valors, b.emps, b.umovs ]
+ThisForm.poDatamgr.SqlExecute(vSql,"SqlTmp0")
+
+
+Select a.nums, Space(50) as RClis, Max(a.valors) as valors, Max(a.vencs) as vencs, Max(a.dtents) as dtents, ;
+	   Max(a.grclis) as grclis, Max(a.numlotes) as numlotes, Max(a.iclis) as iclis, Max(a.bancos) as bancos, ;
+	   Max(a.agencias) as agencias, Max(a.ncontas) as ncontas, Max(a.ncheques) as ncheques, Max(a.emps) as emps, ;
+	   Max(a.umovs) as umovs, Max(a.Hists) as Hists;
+  from SqlTmp0 a, tmpopera d ;
+ where a.umovs = d.operacaos and d.flag ;
+ group by 1, 2 ;
+  into cursor &lcArquivo. &lcVerOrdem. readwrite
+
+If llImpFol
+	Create Cursor CsRelatorio (Nums c(8), Numlotes n(8), dtents d, GrClis c(10), Iclis c(10), Vencs d, ;
+							   Bancos c(3), Agencias c(4), nContas c(10),;
+							   nCheques c(6), Valors n(12,2), Emps c(3), ;
+							   Umovs c(15), Hists c(76), rClis c(50))
+
+	Select CsTemporario
+	Scan
+		Scatter Memvar
+		Select CsRelatorio
+		Append Blank
+		Gather Memvar
+		ThisForm.podatamgr.CursorQuery('SigCheH','crSigCheH', 'Nums', m.Nums)
+		Select crSigCheH
+		If !EOF()
+			Replace CsRelatorio.Hists With crSigCheH.Hists In CsRelatorio
+		Endif
+		ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', 'Iclis', CsRelatorio.Iclis)
+		SELECT crSigCdCli
+		If !EOF()
+			Replace CsRelatorio.rClis With crSigCdCli.rClis
+		Endif
+		Select CsTemporario
+	ENDSCAN
+Else	
+	Select CsRelatorio
+	Scan
+		ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', 'Iclis', CsRelatorio.Iclis)
+		SELECT crSigCdCli
+		If !EOF()
+			Replace CsRelatorio.rClis With crSigCdCli.rClis
+		ENDIF
+		SELECT csRelatorio
+	ENDSCAN
+EndIf
+
+Thisform.mousepointer = 0
+set talk off
+
+select CsRelatorio
+go top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+select CsRelatorio
+
+report form SigReChp preview NoConsole
+
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_Cd_Empresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_cd_emi_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_emi_conta.Value = ''
+	ThisForm.get_ds_emi_conta.Value = ''
+	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_ds_emi_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_emi_conta.Value = ''
+	ThisForm.get_ds_emi_conta.Value = ''
+	
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(empty(thisform.get_cd_emi_grupo.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_cd_emi_conta
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Emi_Conta.Value = ''
+	ThisForm.get_Ds_Emi_Conta.Value = ''
+	ThisForm.get_Cd_Emi_Conta.Refresh
+	ThisForm.get_Ds_Emi_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_ds_emi_conta
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Emi_Conta.Value = ''
+	ThisForm.get_Ds_Emi_Conta.Value = ''
+	ThisForm.get_Cd_Emi_Conta.Refresh
+	ThisForm.get_Ds_Emi_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(empty(thisform.get_cd_emi_conta.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_cd_dep_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_dep_conta.Value = ''
+	ThisForm.get_ds_dep_conta.Value = ''
+	
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.Command3
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+m.lnRecno1 = RecNo('tmpOpera')
+UpDate TmpOpera Set Flag=.t.
+If BetWeen(m.lnRecno1,1,RecCount('TmpOpera'))
+	GoTo m.lnRecno1 In ('TmpOpera')
+EndIf
+ThisForm.GradeOpera.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_ds_dep_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_dep_conta.Value = ''
+	ThisForm.get_ds_dep_conta.Value = ''
+	
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_dep_grupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_cd_dep_conta
+* Classe: fwget (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Dep_Conta.Value = ''
+	ThisForm.get_Ds_Dep_Conta.Value = ''
+	ThisForm.get_Cd_Dep_Conta.Refresh
+	ThisForm.get_Ds_Dep_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.get_ds_dep_conta
+* Classe: fwget (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Dep_Conta.Value = ''
+	ThisForm.get_Ds_Dep_Conta.Value = ''
+	ThisForm.get_Cd_Dep_Conta.Refresh
+	ThisForm.get_Ds_Dep_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_dep_conta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECHP.Command4
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+m.lnRecno1 = RecNo('tmpopera')
+UpDate tmpopera Set Flag=.F.
+If BetWeen(m.lnRecno1,1,RecCount('tmpopera'))
+	GoTo m.lnRecno1 In ('tmpopera')
+EndIf
+ThisForm.GradeOpera.Refresh
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECHP
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 22
+================================================================================

@@ -1,0 +1,9 @@
+﻿Fase 6 conclu├¡da. O ├║nico ponto realmente incompleto era `AbrirBuscaEmpresa` ÔÇö estava usando a API legada errada (pr├®-criava cursor manualmente, n├úo passava `gnConnHandle`, n├úo chamava `mAddColuna()`, n├úo verificava `this_lSelecionou`, n├úo liberava o objeto). Agora segue o padr├úo can├┤nico do `FormBuscaAuxiliar`:
+
+1. `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdEmp", cursor, campo, valor, t├¡tulo)`
+2. `mAddColuna()` para configurar colunas exibidas
+3. `Show()` ÔÇö espera sele├º├úo do usu├írio
+4. Verifica `this_lSelecionou` ÔåÆ preenche `txt_4c_Empresa` + `txt_4c_EmpresaDesc` + `ReadOnly=.T.`
+5. `USE IN cursor_4c_BuscaEmp` + `loc_oBusca.Release()`
+
+O restante da migra├º├úo (sigreanrBO.prg, menu.prg, todos os campos/handlers) j├í estava completo desde as fases anteriores.

@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e bem estruturado. Fase 2 conclu├¡da com sucesso.
+
+**SigPrEs1BO.prg** agora tem 592 linhas com 15 m├®todos implementados:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `Init()` | Configura tabela e chave |
+| `ObterChavePrimaria()` | Para auditoria |
+| `CarregarParametros()` | Carrega `GrPadVens` de `SigCdPam` |
+| `ValidarFiltros()` | Valida empresa, opera├º├úo e per├¡odo |
+| `ExecutarConsulta()` | **Query principal** em `SigMvCab JOIN SigCdOpe` com filtros din├ómicos, indexa por `empdopnums` e corrige NULLs em `prazoents` |
+| `BuscarGrupoPorCodigo/Descricao()` | Lookup `SigCdGcr` (substitui `fAcessoContab`) |
+| `BuscarMoedaPorCodigo/Descricao()` | Lookup `SigCdMoe` (substitui `fwBuscaExt` de moeda) |
+| `BuscarContaPorCodigo/Descricao()` | Lookup `SigCdCli` com filtro de grupo (substitui `fAcessoContas`) |
+| `BuscarResponsavelPorCodigo/Descricao()` | Lookup `SigCdCli` com `this_cGrPadVens` (substitui `fAcessoContas` de vendedor) |
+| `BuscarClientePorCpf()` | Lookup por CPF/CNPJ em `SigCdCli` |
+| `BuscarOperacaoPorNome()` | Valida exist├¬ncia em `SigCdOpe` (substitui `fAcessoMovmto`) |
+| `BuscarEmpresaPorCodigo/Descricao()` | Lookup `sigcdemp` (substitui `fAcessoEmpresa` ÔÇö que n├úo foi portada) |

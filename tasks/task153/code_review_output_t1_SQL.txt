@@ -1,0 +1,9 @@
+﻿Feito. Resumo das 5 issues:
+
+| Issue | A├º├úo | Justificativa |
+|-------|------|---------------|
+| `CONVENIOS` | **Removido** `AND Convenios != ''` de `BuscarConvenio` (BO linha 419) | O original filtrava s├│ por `GruContas` e `NAgencias` ÔÇö condi├º├úo inventada |
+| `CEMPS` | Nenhuma | Coluna PK de `SigCdEmp`; original tamb├®m carregava `crEmpresa WHERE Cemps = ...` |
+| `RAZSOCS` | Nenhuma | Lookup por nome de empresa ÔÇö coluna v├ílida |
+| `ICLIS` | Nenhuma | ├ë o JOIN `a.contas = b.iclis` do `From SigMvCcr a, SigCdCli b` original |
+| `COLUMNCOUNT` | Nenhuma | Falso positivo ÔÇö s├│ aparece como propriedade VFP de grid, nunca em SQL WHERE |

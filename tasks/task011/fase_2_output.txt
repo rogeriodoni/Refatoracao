@@ -1,0 +1,16 @@
+﻿The code looks correct. The form file `C:/4c/projeto/app/forms/cadastros/FormProduto.prg` is now complete at 1594 lines with:
+
+- **Outer PageFrame**: `pgf_4c_Paginas` (Top=-29, 2 pages, Tabs=.F.)
+- **Page1 Lista**: header container, filter container (group + dates + status optiongroup), 7-column grid with checkbox column 7, CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Procurar), Sair button, product count label
+- **Page2 Dados**: Save/Cancel buttons, inner PageFrame `pgf_4c_Dados` (7 tabs: Dados/Composi├º├úo/Dados Fiscais/Fases P./Cons. P./Custo/Designer)
+- **Tab pgDados (Page1)**: All 6 SigPrFtp fields (cpros+dpros display, cgrus+dgru display, cods, coefs, valors, pkchaves)
+- **All CRUD methods**: Properly structured using `this_oBusinessObject.NovoRegistro()`, `.EditarRegistro()`, `.Salvar()`, `.Excluir()`
+- **Lookup handlers**: F4=115, AbrirLookupProduto (SigCdPro), AbrirLookupGrupo (SigCdGrp)
+- **Validation**: ValidarCpros, ValidarCgrus with SQL checks
+- **Filters**: MontarFiltro() with group + date range + status filters
+- **Grid setup**: RecordSource + ControlSource set in CarregarLista, headers re-applied after RecordSource, Column7 CheckBox setup done once at init
+
+Phase 3/8 (FormProduto.prg skeleton) is complete. The remaining phases would add:
+- Phase 4-5: More inner tab content (Composi├º├úo, Dados Fiscais, etc.)
+- Phase 6-7: Additional functionality/lookups for the other tabs
+- Phase 8: Menu integration + testing

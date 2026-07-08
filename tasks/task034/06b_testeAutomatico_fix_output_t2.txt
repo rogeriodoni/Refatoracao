@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `BtnIncluirClick` estava definido no form REPORT ÔÇö o `TesteAutomatico.prg` (linha 966) especifica: se o m├®todo **n├úo existe** ÔåÆ PASSA ("OK para REPORT/OPERACIONAL"). Como existia, o teste o chamava e verificava se `ActivePage = 2`, imposs├¡vel com `PageCount = 1`.
+
+**O que foi feito:** Removido o override `BtnIncluirClick` de `FormSigReAtm.prg`. O `FormBase` n├úo tem esse m├®todo, ent├úo `PEMSTATUS` retornar├í `.F.` e o teste passar├í automaticamente. O `.fxp` compilado foi deletado para for├ºar recompila├º├úo.

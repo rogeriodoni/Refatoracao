@@ -1,0 +1,6 @@
+﻿A corre├º├úo foi aplicada. O problema era:
+
+- `TesteBtnIncluirNavegacao` s├│ passa automaticamente (sem checar navega├º├úo) se `BtnIncluirClick` **n├úo existir** ÔÇö o teste diz explicitamente "OK para REPORT/OPERACIONAL" nesse caso.
+- O form tinha `BtnIncluirClick` definido como stub com `MsgInfo(...)`. Como o form tamb├®m tem `pgf_4c_Paginas`, o teste chamava o m├®todo e verificava `ActivePage=2`, o que nunca acontece num form REPORT com 1 p├ígina.
+
+**Fix**: Removidos `BtnIncluirClick`, `BtnAlterarClick` e `BtnExcluirClick` do form. Nenhum deles tinha BINDEVENT (n├úo estavam vinculados a bot├Áes) e n├úo serviam fun├º├úo real ÔÇö apenas geravam dialogs informativos sem efeito no fluxo. O form REPORT continua funcional com `BtnVisualizarClick`, `BtnImprimirClick`, `BtnGerarExcelClick` e `BtnCancelarClick`.

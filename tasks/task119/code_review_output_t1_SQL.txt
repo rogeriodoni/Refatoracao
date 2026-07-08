@@ -1,0 +1,4 @@
+﻿Feito. Removi os 3 filtros inventados (`DTBASES`, `GRUPOS`, `CONTAS`) do m├®todo `PrepararDados()` em `SigReIfvBO.prg`:
+
+- **Tipo <> 2 (Anal├¡tico/Consulta Barra)**: removidas as condi├º├Áes `LEFT(DTOS(DtBases),6) = loc_cDtBase/loc_cDtBaseA`, `Grupos = loc_cGrupo` e `Contas = loc_cConta`. O cursor `Balancos` agora filtra apenas por `Emps` quando tipo=1, igual ao original.
+- **Tipo = 2 (Sint├®tico)**: removidas as mesmas tr├¬s condi├º├Áes. O filtro de empresa continua via JOIN com `cursor_4c_IfvEmps`, exatamente como o original fazia com `CsEmps`.

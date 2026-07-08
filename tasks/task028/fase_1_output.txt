@@ -1,0 +1,12 @@
+﻿O SIGREAGVBO.prg foi criado com sucesso. O arquivo cont├®m:
+
+**Propriedades declaradas** (4 filtros do formul├írio + 4 de configura├º├úo):
+- `this_cColecoes` / `this_cDescs` ÔÇö Grupo de Venda c├│digo + descri├º├úo (lookup em SigCdCol)
+- `this_cCMoes` / `this_cDMoes` ÔÇö Moeda de Venda c├│digo + descri├º├úo (lookup em SigCdMoe)
+- `this_cArquivoFRX`, `this_cTitulo`, `this_cSubTitulo`, `this_cCursorDados`
+
+**Init()** ÔÇö configura t├¡tulo "Acompanhamento Por Grupo de Venda" e caminho do FRX `SigReAgv.frx`, chama `DODEFAULT()`.
+
+**ObterMensagemErro()** ÔÇö getter simples para `this_cMensagemErro` (chamado pelo Form no BtnImprimirClick).
+
+`PrepararDados()` n├úo foi sobrescrito nesta fase ÔÇö a base RelatorioBase j├í retorna `.T.` e ser├í implementada com a l├│gica complexa de m├║ltiplas queries/cursores na Fase 2.

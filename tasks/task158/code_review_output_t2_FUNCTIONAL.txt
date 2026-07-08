@@ -1,0 +1,61 @@
+﻿An├ílise completa conclu├¡da. Aqui est├í o resultado da verifica├º├úo de cada um dos 13 problemas:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [CONTAINER-VISIVEL] ÔÇö J├ü CORRIGIDO
+
+O c├│digo atual (linhas 1519ÔÇô1529) **j├í tem** o filtro INLIST completo:
+
+```foxpro
+IF INLIST(UPPER(loc_oControl.Name), ;
+    "CNT_4C_CABECALHO", ;
+    "CNT_4C_OPCONTA", "CNT_4C_OPESTOQUE", ;
+    "CNT_4C_OPCUSTO", "CNT_4C_OPCOMPRA", ;
+    "LBL_4C_LBLEND")
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oControl)  ÔåÉ recurs├úo antes do LOOP Ô£ô
+    ENDIF
+    LOOP
+ENDIF
+```
+
+Todos os 4 containers ocultos e o `lbl_4c_LblEnd` s├úo filtrados. Seus filhos recebem `Visible=.T.` via recurs├úo, mas os containers em si nunca s├úo for├ºados pelo m├®todo.
+
+---
+
+### [INIT-DUPLICADO] ÔÇö J├ü CORRIGIDO
+
+`Init()` (linhas 40ÔÇô44) **s├│ chama** `DODEFAULT()`:
+
+```foxpro
+PROCEDURE Init()
+    RETURN DODEFAULT()
+ENDPROC
+```
+
+N├úo h├í chamada duplicada a `InicializarForm()`.
+
+---
+
+### [LAYOUT-POSITION] x11 ÔÇö FALSOS POSITIVOS
+
+O revisor autom├ítico comparou posi├º├Áes **migradas (canvas 1000px)** com posi├º├Áes **originais (canvas 800px)** sem aplicar o fator 1.25x. Todos os valores est├úo corretos:
+
+| Controle | Valor no c├│digo | Original ├ù 1.25 | Status |
+|---|---|---|---|
+| `cmd_4c_Processar` Left | 812 | 650 ├ù 1.25 = 812.5 ÔåÆ **812** | Ô£ô |
+| `cnt_4c_OpEstoque` Left | 173 | 139 ├ù 1.25 = 173.75 ÔåÆ **173** | Ô£ô |
+| `cnt_4c_OpConta` Left | 173 | 139 ├ù 1.25 = 173.75 ÔåÆ **173** | Ô£ô |
+| `lbl_4c_LblEnd` Left | 451 | 361 ├ù 1.25 = 451.25 ÔåÆ **451** | Ô£ô |
+| `chk_4c_BtnCusto` Left | 625 | 500 ├ù 1.25 = **625** | Ô£ô |
+| `cnt_4c_OpCusto` Left | 173 | 139 ├ù 1.25 = 173.75 ÔåÆ **173** | Ô£ô |
+| `chk_4c_BtnCompra` Left | 718 | 575 ├ù 1.25 = 718.75 ÔåÆ **718** | Ô£ô |
+| `cnt_4c_OpCompra` Left | 173 | 139 ├ù 1.25 = 173.75 ÔåÆ **173** | Ô£ô |
+
+Para `txt_4c_EstoqueEst` (Top=62, Left=112) e `txt_4c_EmpresaConta` (Left=93): o revisor comparou posi├º├Áes **relativas ao container** contra posi├º├Áes **absolutas no form legado**. No legado, os controles ficavam no form raiz. No novo design, est├úo dentro de containers. A posi├º├úo Left=93 de `txt_4c_EmpresaConta` ├® exatamente ap├│s o label "Empresa :" (Left=20, Width=71 ÔåÆ termina em 91). A posi├º├úo Top=62 de `txt_4c_EstoqueEst` ├® a 3┬¬ linha natural do container (t├¡tuloÔåÆempresaÔåÆgrupoÔåÆestoque). Ambos corretos.
+
+---
+
+**Conclus├úo: o c├│digo est├í correto em todos os 13 pontos.** O revisor autom├ítico usou uma toler├óncia de 30px sem considerar o fator de escala 1.25x, e comparou coordenadas relativas a containers com coordenadas absolutas do legado. Nenhuma altera├º├úo ├® necess├íria.

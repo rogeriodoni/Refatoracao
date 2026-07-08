@@ -1,0 +1,16 @@
+﻿All edits are correctly applied. Fase 6/8 is complete. Here's a summary of what was added to `Formsigreipe.prg`:
+
+**5 edits applied (2334 total lines):**
+
+1. **BINDEVENT calls** in `ConfigurarBotoes()` ÔÇö wires all 4 toolbar buttons to their handlers
+2. **`ConfigurarPaginaDados2()` + `CarregarImpressoras()` calls** in `InicializarForm()` ÔÇö ensures both run at startup
+3. **OptionGroup resets** in `LimparCampos()` ÔÇö obj_4c_Option, OpOrdem, OpColunas, OptPais, OptCodigo, OptProper, OptContatos, Opt_Impressora all reset to defaults
+4. **Cursor cleanup** in `Destroy()` ÔÇö Relacao, CsCabecalho, DbImpressao all closed on exit
+5. **10 new methods** + 5 thermal-printing form properties:
+   - `ConfigurarPaginaDados2()` ÔÇö 14 controls (2 OptionGroups for sort, OpColunas with 9 models, Opt_Impressora stub, 4 flag OptionGroups with labels)
+   - `CarregarImpressoras()` ÔÇö queries SigCdPam/SigCdPac for thermal params, APRINTERS() + SigSyImp/SigCdmp cross-reference, dynamic ButtonCount expansion
+   - `FormParaRelatorio()` ÔÇö transfers all form control values to the BO
+   - `Processamento()` ÔÇö builds CsCabecalho + Relacao (2 paths: SigMlCab via BO or cursor_4c_Operacoes UNION ALL with copies); applies contato substitution, proper case, INDEX ON ordering
+   - `ImprimirTermica()` / `ImprimirTermicaZ()` ÔÇö PrepararDbImpressao + SigOpEtq(model=45/96) wrapped in TRY/CATCH
+   - `BtnVisualizarClick()` / `BtnImprimirClick()` / `BtnImpDiretoClick()` ÔÇö LABEL FORM dispatch (PREVIEW / PROMPT / direct), thermal shortcut for values 7 and 9
+   - `BtnEncerrarClick()` ÔÇö THIS.Release()

@@ -1,0 +1,8 @@
+﻿As duas ocorr├¬ncias de `CONTROLCOUNT` no arquivo s├úo **falso positivo** da ferramenta de revis├úo. N├úo s├úo condi├º├Áes SQL WHERE - s├úo acessos ├á propriedade VFP9 padr├úo `ControlCount` de containers de controles:
+
+- **Linha 1722**: `FOR loc_i = 1 TO par_oContainer.ControlCount` ÔÇö loop VFP9 sobre controles
+- **Linha 1743**: `PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0` ÔÇö verifica├º├úo se o controle tem subcontroles
+
+Ambas est├úo dentro do m├®todo `TornarControlesVisiveis` (linha 1715), que itera sobre controles visuais do formul├írio. `ControlCount` ├® propriedade nativa VFP9 de containers ÔÇö n├úo existe nenhum `WHERE CONTROLCOUNT` em SQL neste arquivo.
+
+**Nenhuma corre├º├úo necess├íria.** O pass SQL est├í conclu├¡do sem altera├º├Áes.

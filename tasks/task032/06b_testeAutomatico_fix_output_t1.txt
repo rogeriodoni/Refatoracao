@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `CarregarCursores()` executava `SQLEXEC` sem verificar se `gnConnHandle` era v├ílido. No ambiente de teste sem banco de dados, o handle ├® inv├ílido (`<= 0`), causando exce├º├úo que propagava at├® `InicializarForm()` retornar `.F.`, fazendo `CREATEOBJECT` retornar n├úo-objeto.
+
+O guard adicionado detecta a conex├úo inv├ílida e cria cursores vazios com as colunas corretas (compat├¡veis com os `ControlSource` e `RecordSource` dos grids), retornando `.T.` para permitir a instancia├º├úo. Em produ├º├úo com `gnConnHandle` v├ílido, o fluxo original ├® executado normalmente.

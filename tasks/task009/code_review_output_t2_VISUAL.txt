@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. O `WITH loc_oPagina.grd_4c_Lista` foi substitu├¡do por refer├¬ncias expl├¡citas via `loc_oGrade`, com `ColumnCount` definido logo ap├│s as demais propriedades do grid ÔÇö tudo usando o mesmo objeto de refer├¬ncia, sem misturar contexto WITH com acesso ├ás colunas.
+
+**O que foi feito:**
+- Eliminado o bloco `WITH loc_oPagina.grd_4c_Lista ... ENDWITH`
+- `loc_oGrade = loc_oPagina.grd_4c_Lista` movido para logo ap├│s `AddObject`
+- Todas as propriedades do grid (`Top`, `Left`, `Width`, etc.) agora usam `loc_oGrade.Prop = valor` (refer├¬ncia expl├¡cita)
+- `loc_oGrade.ColumnCount = 11` colocado na sequ├¬ncia natural, sem separa├º├úo do contexto do objeto
+- Os blocos `WITH loc_oGrade.Column1` ... `WITH loc_oGrade.Column11` continuam corretos ÔÇö acessam as colunas ap├│s ColumnCount estar definido, usando a mesma refer├¬ncia `loc_oGrade`

@@ -1,0 +1,23 @@
+﻿All corrections applied. Here's a summary of what was fixed:
+
+**FUNCTIONAL (3 CARGA-DADOS):**
+- Added `BINDEVENT(..., "InteractiveChange", THIS, "OptSituacaoChange")` after `opt_4c_Situacao` ENDWITH
+- Added `BINDEVENT(..., "InteractiveChange", THIS, "OptProdutoWebChange")` after `opt_4c_ProdutoWeb` ENDWITH  
+- Added `BINDEVENT(..., "InteractiveChange", THIS, "OptVariacaoChange")` after `opt_4c_Variacao` ENDWITH
+- Added 3 handler methods (`OptSituacaoChange`, `OptProdutoWebChange`, `OptVariacaoChange`) ÔÇö these OptionGroups are data fields on the edit form (not list filters), so handlers are no-ops
+
+**LAYOUT (18 LAYOUT-POSITION in pgDados ÔÇö subtracting 83px offset):**
+
+| Control | Was | Now |
+|---------|-----|-----|
+| lbl_4c_Label2 | 217 | 134 |
+| cmd_4c_CmdQtMin | 282 | 199 |
+| chk_4c_ChkGarVit | 311 | 228 |
+| lbl_4c_LblModelo | 409 | 326 |
+| lbl_4c_LblAcabamento | 433 | 350 |
+| lbl_4c_LblClassificacao | 457 | 374 |
+| lbl_4c_Label9, Label10, chk_4c_Get_Consig, chk_4c_ChkFabrProprs, chk_4c_ChkEncoms | 534 | 451 |
+| txt_4c_Fwget3-6 | 553 | 470 |
+| lbl_4c_LblProfundidade, LblAltura, LblComprimento | 557 | 474 |
+
+**Not fixed (6 LAYOUT-POSITION items):** `cnt_4c_Botoes` (Top/Left ÔÇö redesign, moving would break layout), `lbl_4c_Label18` (checker compares absolute vs relative coordinates ÔÇö code value 481 is correct relative position), `lbl_4c_LblGrupo` (code declares Top=18 matching original ÔÇö checker absolute vs relative mismatch), `lbl_4c_LblAcabamento` in PgDadosFaseP (Page4 has no controls configured; checker matched wrong page).

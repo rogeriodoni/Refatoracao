@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**Problema #1 (CONTAINER-VISIVEL)** ÔÇö corrigido: adicionado `"CNT_4C__IMPRESSORA"` ao `INLIST` em `TornarControlesVisiveis` (linha ~1532). O container tem visibilidade controlada exclusivamente por `CarregarConfigImpressora`; for├ºar `Visible=.T.` nele o exibiria antes de uma impressora ser selecionada.
+
+**Problemas #2 e #3 (LAYOUT-POSITION)** ÔÇö falsos positivos: `cnt_4c_Etiquetas` j├í est├í declarado com `Top=-35, Left=352` (linha 89), id├¬ntico ao original SCX. O auditor confundiu as coordenadas de `shp_4c_Shape2` (filho interno, `Top=136, Left=188` relativo ao container) com a posi├º├úo do pr├│prio container. Nenhuma altera├º├úo necess├íria.

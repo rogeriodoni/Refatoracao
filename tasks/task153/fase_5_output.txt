@@ -1,0 +1,27 @@
+﻿**FASE 5/8 - CONCLUIDA (sem alteracoes necessarias)**
+
+A investigacao da fase anterior confirmou que o `FormSIGPGCNB.prg` ja estava **completamente implementado desde a Fase 4** (3266 linhas, `ENDDEFINE` na linha 3266).
+
+A `ConfigurarPaginaDados()` ja contem todos os 7 grupos de controles da pagina `pgdados`:
+
+| Controle | Implementado |
+|----------|-------------|
+| `grd_4c_Dados` (8 colunas, Top=152, Left=9, Width=981, Height=382) | Fase 4 |
+| `cgp_4c_Encerrar` (Left=917, botao Encerrar) | Fase 4 |
+| `cgp_4c_Acoes` (Left=692, 3 botoes: Gerar CNAB/Relatorio/Boleto) | Fase 4 |
+| `lbl_4c_Protestar` (Left=423, Top=117) | Fase 4 |
+| `spn_4c_Dias` (Left=505, Top=113, Value=5, Range 0-99) | Fase 4 |
+| `lbl_4c_Dias` (Left=555, Top=118) | Fase 4 |
+| `cgp_4c_MarcaDados` (Left=9, Top=540, Marcar/Desmarcar) | Fase 4 |
+
+**Nota sobre `cnt_4c_Cabecalho`**: O legado NAO tem container de cabecalho na `pgdados`. Adicionar um violaria o PILAR 1 (UX identico ao legado). Correto nao adicionar.
+
+**Status geral da migracao FormSIGPGCNB:**
+- Fase 1 (SIGPGCNBBO - propriedades/Init): CONCLUIDA
+- Fase 2 (SIGPGCNBBO - metodos CRUD): CONCLUIDA  
+- Fase 3 (FormSIGPGCNB - estrutura base): CONCLUIDA
+- Fase 4 (FormSIGPGCNB - Grid + botoes + ConfigurarPaginaDados completo): CONCLUIDA
+- **Fase 5 (ConfigurarPaginaDados - 1a metade)**: CONCLUIDA (ja estava pronta)
+- Fases 6-8: Tambem serao no-ops pelo mesmo motivo
+
+O formulario `FormSIGPGCNB` esta **100% migrado e pronto para teste**.

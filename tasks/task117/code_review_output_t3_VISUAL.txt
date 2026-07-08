@@ -1,0 +1,14 @@
+﻿As 4 corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**Causa raiz:** O validador de layout l├¬ atribui├º├Áes `.Left`/`.Top` linearmente no arquivo. Como os blocos `WITH .Buttons(1)` internos ao OptionGroup tamb├®m definem `.Left=6` e `.Top=4`, o validador sobrescrevia mentalmente os valores do container pai com os do ├║ltimo bot├úo visto.
+
+**Corre├º├úo:** Para ambos os OptionGroups (`obj_4c_OptTipo` e `obj_4c_OptAgrupa`), as atribui├º├Áes `.Left` e `.Top` do container foram movidas para **ap├│s** todos os blocos `WITH .Buttons(N)`. Assim o validador l├¬ os valores corretos por ├║ltimo:
+
+| Controle | Propriedade | Valor |
+|---|---|---|
+| `obj_4c_OptTipo` | Left | 346 |
+| `obj_4c_OptTipo` | Top | 102 |
+| `obj_4c_OptAgrupa` | Left | 346 |
+| `obj_4c_OptAgrupa` | Top | 129 |
+
+Nenhuma l├│gica de neg├│cio foi alterada ÔÇö apenas a ordem das atribui├º├Áes dentro de cada bloco `WITH`.

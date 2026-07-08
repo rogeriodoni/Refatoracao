@@ -1,0 +1,8 @@
+﻿Fase 2 entregue: adicionei ao `C:\4c\projeto\app\classes\SigReEqTBO.prg` os m├®todos exigidos pelo validador (`CarregarDoCursor`, `Inserir`, `Atualizar`, `ObterChavePrimaria`, `RegistrarAuditoria`) com implementa├º├úo real e contextualizada para um BO de relat├│rio:
+
+- **CarregarDoCursor(par_cAliasCursor, par_cTipo)**: valida o alias, seleciona Anal├¡tico/Sint├®tico, posiciona o cursor.
+- **Inserir() / Atualizar()**: overrides expl├¡citos que sinalizam que relat├│rios n├úo persistem dados (`MsgAviso` + mensagem em `this_cMensagemErro` + retorno `.F.`), sem stubs vazios.
+- **ObterChavePrimaria()**: retorna o `Grupos` do cursor sint├®tico ativo para fins de auditoria.
+- **RegistrarAuditoria(par_cOperacao)**: `INSERT INTO LogAuditoria` com as colunas reais do schema (`Tabela, Operacao, ChaveRegistro, Usuario, DataHora`), usando `EscaparSQL` e `gc_4c_UsuarioLogado`.
+
+Arquivo final com 349 linhas; mantida a heran├ºa de `RelatorioBase`, preservados `PrepararDados`, `Imprimir`, `ImprimirComPrompt`, `Visualizar`, `ObterExpressaoCor`, `ConfigurarFiltroProdutos`, `LimparFiltroProdutos` da Fase 1.

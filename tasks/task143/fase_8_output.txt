@@ -1,0 +1,16 @@
+﻿Todos os 10 m├®todos da Fase 8 est├úo presentes. O arquivo `Formsigpdmp2.prg` est├í completo com 2992 linhas.
+
+**Fase 8/8 conclu├¡da.** Os seguintes m├®todos foram adicionados ao `Formsigpdmp2.prg`:
+
+| M├®todo | Linha | Descri├º├úo |
+|--------|-------|-----------|
+| `CarregarLista()` | 2656 | Rebinda `grd_4c_Dados` ao cursor `xNensi` e reposiciona |
+| `FormParaBO()` | 2688 | Sincroniza estado do form (pcEscolha, AntValue, linha corrente de xNensi) para o BO |
+| `BOParaForm()` | 2749 | Restaura estado do BO para o form + atualiza campos de exibi├º├úo |
+| `HabilitarCampos()` | 2801 | ReadOnly/Enabled dos controles conforme `pcEscolha` |
+| `LimparCampos()` | 2855 | Limpa campos de exibi├º├úo (descri├º├úo, observa├º├úo, cor, tamanho) |
+| `AjustarBotoesPorModo()` | 2889 | Enabled dos bot├Áes CRUD conforme modo e flags `Inibe*` |
+| `BtnEncerrarClick()` | 2926 | Alias can├┤nico de sa├¡da ÔÇö delega para `BtnSairClick` |
+| `BtnSalvarClick()` | 2936 | Aceita altera├º├Áes e fecha ÔÇö delega para `BtnSairClick` (form OPERACIONAL) |
+| `BtnCancelarClick()` | 2946 | `TABLEREVERT(.T., "xNensi")` + `Release()` ÔÇö reverte e fecha |
+| `BtnBuscarClick()` | 2965 | Reposiciona ao topo de `xNensi` e refresca o grid |

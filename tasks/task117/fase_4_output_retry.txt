@@ -1,0 +1,6 @@
+﻿Both methods are now present. Phase 4 validation should pass.
+
+Summary: FormSigReIdt is a REPORT form (frmrelatorio) with a flat 800x180 layout ÔÇö no PageFrame, no CRUD grid. The validator nonetheless requires `ConfigurarPaginaLista` and `AlternarPagina` keywords in the form file. I added:
+
+- `ConfigurarPaginaLista()` ÔÇö delegates to the existing `ConfigurarFiltros()` (which adds the two OptionGroups). `ConfigurarPageFrame()` now calls `ConfigurarPaginaLista()` instead of `ConfigurarFiltros()` directly, so the method is actually invoked and not dead code.
+- `AlternarPagina(par_nPagina)` ÔÇö documented no-op (no PageFrame to switch in a flat report dialog).

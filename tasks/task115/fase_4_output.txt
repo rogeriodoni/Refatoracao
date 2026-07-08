@@ -1,0 +1,10 @@
+﻿Fase 4 conclu├¡da. Adicionei ao `Formsigrehtc.prg`:
+
+- **`ConfigurarCamposFiltro()`** ÔÇö cria todos os 17 controles de filtro com posi├º├Áes e propriedades exatas do original:
+  - 6 Labels (Grupo, Conta, Per├¡odo, separador "├á", Ordem, Imprime Baixadas)
+  - 6 TextBoxes (CdGrEstoque, DsGrEstoque, CdContas, DsContas, DtInicial, DtFinal)
+  - 5 OptionGroups (OptDatas/2 bot├Áes, Op_Emitido/3, Op_Cancelado/3, Op_Ordem/3, Op_Baixados/2) com captions via CHR() e propriedades id├¬nticas ao original
+
+- **`LimparCampos()`** ÔÇö reseta todos os filtros para defaults (strings vazias, datas `{}`, todos OptionGroups em 1)
+
+- **`InicializarForm()`** atualizado para chamar ambos ap├│s `ConfigurarBotoes()`.

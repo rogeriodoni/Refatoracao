@@ -1,0 +1,6 @@
+﻿Ambos os problemas corrigidos em `Formsigrehtc.prg`:
+
+- **`ValidarCdGrEstoque`** (linha ~814): removido `WHERE cgrus = EscaparSQL(...)`, adicionado `LOCATE FOR ALLTRIM(cgrus) = ALLTRIM(loc_cCodigo)` ap├│s o SQLEXEC.
+- **`ValidarDsGrEstoque`** (linha ~858): removido `WHERE dgrus = EscaparSQL(...)`, adicionado `LOCATE FOR UPPER(ALLTRIM(dgrus)) = UPPER(loc_cDesc)` ap├│s o SQLEXEC.
+
+A l├│gica de valida├º├úo permanece id├¬ntica ÔÇö a diferen├ºa ├® que agora o filtro ├® feito in-memory via LOCATE em vez de via cl├íusula WHERE inventada pela LLM. O BO (`sigrehtcBO.prg`) n├úo precisou de altera├º├Áes.

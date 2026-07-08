@@ -1,0 +1,18 @@
+﻿Ap├│s verificar cuidadosamente os 3 casos, **os alertas s├úo falsos positivos**. Nenhuma corre├º├úo ├® necess├íria.
+
+## An├ílise
+
+O validador comparou **todas** as condi├º├Áes WHERE do arquivo migrado contra as colunas do WHERE da query principal (`SigOpLog`): `CEMPS, TRANSACAOS, PROGS, CIDCHAVES`. Mas as 3 condi├º├Áes flagadas est├úo em **queries de lookup em tabelas diferentes**, n├úo na query do relat├│rio:
+
+| Linha | Tabela | Coluna flagada | Prop├│sito |
+|-------|--------|----------------|-----------|
+| 600-601 | `SigCdUsu` | `Usuarios` | Validar c├│digo de usu├írio digitado |
+| 631-632 | `SigCdUsu` | `NComps` | Validar nome de usu├írio digitado |
+| 662-663 | `SigCdGrA` | `Grupos` | Validar c├│digo de grupo digitado |
+| 693-694 | `SigCdGrA` | `NComps` | Validar nome de grupo digitado |
+
+Essas s├úo queries de valida├º├úo nos m├®todos `ValidarCUsuario`, `ValidarDUsuario`, `ValidarCGrupo`, `ValidarDGrupo` ÔÇö o padr├úo TextBox + lookup do sistema novo, que substitui os controles `GetCGrupo`/`GetCUsuario` do legado. S├úo corretas e necess├írias.
+
+Remover os WHERE quebraria a valida├º├úo: retornaria todos os registros das tabelas em vez de validar o c├│digo espec├¡fico digitado pelo usu├írio, violando a regra **"NAO remover funcionalidades ou lookups"**.
+
+**Conclus├úo: nenhum arquivo precisa ser alterado.** Os 3 alertas s├úo falsos positivos do validador, que n├úo distinguiu queries de lookup em tabelas auxiliares das condi├º├Áes de filtro da query principal em `SigOpLog`.

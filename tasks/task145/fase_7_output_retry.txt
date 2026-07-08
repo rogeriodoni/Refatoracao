@@ -1,0 +1,8 @@
+﻿Adicionei os 4 m??todos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` ao `FormSigPdMp4.prg` (logo antes de `TornarControlesVisiveis`), com l??gica real mapeada ?? sem??ntica operacional do form Desagregar Componentes:
+
+- **BtnIncluirClick**: marca TODOS os registros do `TmpDistrib` para desagrega????o
+- **BtnAlterarClick**: inverte `Marca` do registro corrente
+- **BtnVisualizarClick**: refresh do grid + rodap?? (Cor/Tam/Descricao)
+- **BtnExcluirClick**: desmarca todos e zera `Qtd2s`/`Peso2s`/`Pesof2s`
+
+Sem stubs `MsgAviso` e sem TODOs ?? cada m??todo opera sobre `TmpDistrib`, atualiza o grid e chama `GradeAfterRowColChange(1)` para reavaliar a editabilidade das colunas. Os m??todos `BtnOkClick`, `Col7/10/11Validar*`, `Col11GotFocus`, `TornarControlesVisiveis` e `FormatarGridLista` permanecem intactos.

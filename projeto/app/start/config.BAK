@@ -1,0 +1,355 @@
+*==============================================================================
+* CONFIG.PRG
+* Configuracoes globais da aplicacao
+* Define constantes e configuracoes utilizadas em todo o sistema
+*==============================================================================
+
+*------------------------------------------------------------------------------
+* Configuracoes do Sistema
+*------------------------------------------------------------------------------
+
+* Nome da aplicacao
+#DEFINE APP_NOME "Sistema Visual FoxPro 9"
+#DEFINE APP_VERSAO "1.0.0"
+#DEFINE APP_EMPRESA "Sua Empresa"
+
+*------------------------------------------------------------------------------
+* Configuracoes de Banco de Dados
+*------------------------------------------------------------------------------
+
+* String de conexao SQL Server
+* IMPORTANTE: Ajustar conforme seu ambiente
+#DEFINE DB_SERVER "192.168.15.101"
+#DEFINE DB_NOME "DB_MBAHIA"
+#DEFINE DB_USUARIO "4control"
+#DEFINE DB_SENHA "f2016jstcr%@"
+
+* Timeout de conexao (em segundos)
+#DEFINE DB_TIMEOUT 30
+
+* Timeout de query (em segundos)
+#DEFINE DB_QUERY_TIMEOUT 300
+
+*-- Timeout global de conexao VFP9: evita hang de 300s em servidor inacessivel
+*-- Deve ser chamado ANTES de qualquer SQLSTRINGCONNECT/SQLCONNECT
+=SQLSETPROP(0, "ConnectTimeOut", 30)
+*-- DispLogin=3: impede dialog ODBC de login em modo nao-atendido (pipeline)
+*-- Sem isso, ConnectTimeOut nao funciona: VFP fica bloqueado no modal ODBC
+=SQLSETPROP(0, "DispLogin", 3)
+=SQLSETPROP(0, "DispWarnings", .F.)
+
+*------------------------------------------------------------------------------
+* Configuracoes de Caminhos (padrao: gc_4c_Caminho...)
+* IMPORTANTE: Usar SEMPRE caminhos relativos baseados em SYS(16)
+*------------------------------------------------------------------------------
+
+* Caminho base da aplicacao
+PUBLIC gc_4c_CaminhoBase
+gc_4c_CaminhoBase = JUSTPATH(SYS(16))  && Obtem caminho do PRG atual
+
+* Caminho das classes
+PUBLIC gc_4c_CaminhoClasses
+gc_4c_CaminhoClasses = ADDBS(gc_4c_CaminhoBase) + "..\classes\"
+
+* Caminho dos utilitarios
+PUBLIC gc_4c_CaminhoUtils
+gc_4c_CaminhoUtils = ADDBS(gc_4c_CaminhoBase) + "..\utils\"
+
+* Caminho dos formularios
+PUBLIC gc_4c_CaminhoForms
+gc_4c_CaminhoForms = ADDBS(gc_4c_CaminhoBase) + "..\forms\"
+
+* Caminho dos icones (pasta C:\4c\vbmp\)
+PUBLIC gc_4c_CaminhoIcones
+gc_4c_CaminhoIcones = ADDBS(gc_4c_CaminhoBase) + "..\..\..\vbmp\"
+
+* Caminho dos relatorios
+PUBLIC gc_4c_CaminhoReports
+gc_4c_CaminhoReports = ADDBS(gc_4c_CaminhoBase) + "..\reports\"
+
+*------------------------------------------------------------------------------
+* Aliases para compatibilidade (codigo legado que usa nomes antigos)
+*------------------------------------------------------------------------------
+PUBLIC gcCaminhoBase, gcCaminhoClasses, gcCaminhoUtils, gcCaminhoForms, gcCaminhoIcones, gcCaminhoReports
+gcCaminhoBase = gc_4c_CaminhoBase
+gcCaminhoClasses = gc_4c_CaminhoClasses
+gcCaminhoUtils = gc_4c_CaminhoUtils
+gcCaminhoForms = gc_4c_CaminhoForms
+gcCaminhoIcones = gc_4c_CaminhoIcones
+gcCaminhoReports = gc_4c_CaminhoReports
+
+*-- Alias curto para icones (usado por forms migrados com Picture)
+PUBLIC gc_4c_Icones
+gc_4c_Icones = gc_4c_CaminhoIcones
+
+*------------------------------------------------------------------------------
+* Variaveis Globais Padronizadas (nomenclatura: g + tipo + _4c_ + Nome)
+*------------------------------------------------------------------------------
+
+* Usuario logado (para auditoria)
+PUBLIC gc_4c_UsuarioLogado
+gc_4c_UsuarioLogado = "SISTEMA"
+
+* Logo para relatorios (usa caminho relativo)
+PUBLIC gc_4c_LogoRelatorio
+gc_4c_LogoRelatorio = ADDBS(gc_4c_CaminhoIcones) + "logo.bmp"
+
+* Cabecalho para relatorios
+PUBLIC gc_4c_CabecalhoRelatorio
+gc_4c_CabecalhoRelatorio = "EMPRESA TESTE LTDA"
+
+* Rodape para relatorios
+PUBLIC gc_4c_RodapeRelatorio
+gc_4c_RodapeRelatorio = ""
+
+* Flag de modo UI (validacao automatizada / testes sem banco)
+* .T. = pular queries SQL em LostFocus handlers; .F. = producao normal
+PUBLIC gb_4c_ValidandoUI
+gb_4c_ValidandoUI = .F.
+
+* Objeto Sistema
+PUBLIC go_4c_Sistema
+go_4c_Sistema = CREATEOBJECT("Empty")
+ADDPROPERTY(go_4c_Sistema, "NomeSistema", "Sistema VFP9")
+ADDPROPERTY(go_4c_Sistema, "cEmpresa", "EMPRESA TESTE LTDA")
+ADDPROPERTY(go_4c_Sistema, "cCodEmpresa", "01")
+ADDPROPERTY(go_4c_Sistema, "cCNPJ", "00.000.000/0001-00")
+ADDPROPERTY(go_4c_Sistema, "cEndereco", "")
+ADDPROPERTY(go_4c_Sistema, "cCidade", "")
+ADDPROPERTY(go_4c_Sistema, "cUF", "")
+ADDPROPERTY(go_4c_Sistema, "cTelefone", "")
+ADDPROPERTY(go_4c_Sistema, "cUsuario", "SISTEMA")
+ADDPROPERTY(go_4c_Sistema, "cVersao", "1.0.0")
+ADDPROPERTY(go_4c_Sistema, "BuscaP", .F.)
+ADDPROPERTY(go_4c_Sistema, "BuscaNome", "RClis")
+ADDPROPERTY(go_4c_Sistema, "Matrizes", .F.)
+ADDPROPERTY(go_4c_Sistema, "Transitorio", "")
+
+*------------------------------------------------------------------------------
+* Aliases para compatibilidade com FRX legados
+* NOTA: FRX antigos esperam estas variaveis com nomes especificos
+*------------------------------------------------------------------------------
+PUBLIC gcUsuarioLogado, gcLogoRel, gcCabRel, gcRodRel, goSistema, _EMPR
+gcUsuarioLogado = gc_4c_UsuarioLogado
+gcLogoRel = gc_4c_LogoRelatorio
+gcCabRel = gc_4c_CabecalhoRelatorio
+gcRodRel = gc_4c_RodapeRelatorio
+goSistema = go_4c_Sistema
+_EMPR = go_4c_Sistema.cCodEmpresa
+
+*------------------------------------------------------------------------------
+* Configuracoes de Interface
+*------------------------------------------------------------------------------
+
+* Cor de fundo padrao dos formularios
+#DEFINE COR_FUNDO_FORM RGB(240, 240, 240)
+
+* Cor de fundo dos campos
+#DEFINE COR_FUNDO_CAMPO RGB(255, 255, 255)
+
+* Cor de fundo dos campos desabilitados
+#DEFINE COR_FUNDO_DESABILITADO RGB(240, 240, 240)
+
+* Tamanho de fonte padrao
+#DEFINE FONTE_TAMANHO 9
+
+* Nome da fonte padrao
+#DEFINE FONTE_NOME "Arial"
+
+*------------------------------------------------------------------------------
+* Configuracoes de Formato
+*------------------------------------------------------------------------------
+
+* Formato de data
+SET DATE TO DMY
+SET CENTURY ON
+SET MARK TO "/"
+
+* Separador decimal
+SET POINT TO ","
+
+* Formato de moeda
+SET CURRENCY TO "R$ "
+SET CURRENCY LEFT
+
+* Codepage
+SET COLLATE TO "GENERAL"
+
+*------------------------------------------------------------------------------
+* Configuracoes de Comportamento
+*------------------------------------------------------------------------------
+
+* Desabilita sons de erro
+SET BELL OFF
+
+* Confirmacao de exclusao
+SET DELETED ON
+SET EXACT ON
+
+* Otimizacao
+SET OPTIMIZE ON
+
+* Escape desabilitado (evita que usuario interrompa processamento)
+SET ESCAPE OFF
+
+* Mensagens do sistema
+SET TALK OFF
+SET NOTIFY OFF
+SET CONSOLE OFF
+
+* Status bar
+SET STATUS BAR ON
+
+*------------------------------------------------------------------------------
+* Funcoes de Configuracao
+*------------------------------------------------------------------------------
+
+*------------------------------------------------------------------------------
+* CarregarConfiguracoes - Carrega configuracoes personalizadas
+* Pode ser usado para ler configuracoes de arquivo INI ou registro
+*------------------------------------------------------------------------------
+PROCEDURE CarregarConfiguracoes()
+    * Aqui pode-se implementar leitura de arquivo de configuracao
+    * Por exemplo: ler um arquivo .INI com configuracoes do usuario
+
+    * Exemplo:
+    * LOCAL lcArquivoIni
+    * lcArquivoIni = ADDBS(gcCaminhoBase) + "config.ini"
+    * IF FILE(lcArquivoIni)
+    *     * Ler configuracoes do arquivo
+    * ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* ConfigurarAmbiente - Configura ambiente Visual FoxPro
+* IMPORTANTE: Carrega arquivos DINAMICAMENTE - s?? carrega se existir
+*------------------------------------------------------------------------------
+PROCEDURE ConfigurarAmbiente()
+    LOCAL loc_cArquivo, loc_nArquivos, loc_i
+    LOCAL ARRAY loc_aArquivos[1]
+
+    * Configura path para localizar arquivos
+    SET PATH TO (gcCaminhoBase), ;
+                (gcCaminhoClasses), ;
+                (gcCaminhoUtils), ;
+                (gcCaminhoForms), ;
+                (gcCaminhoIcones)
+
+    * =========================================================================
+    * CLASSES BASE (ordem importa - carregar primeiro)
+    * =========================================================================
+    CarregarSeExistir(gcCaminhoClasses + "dataaccess.prg")
+    CarregarSeExistir(gcCaminhoClasses + "businessbase.prg")
+    CarregarSeExistir(gcCaminhoClasses + "formbase.prg")
+    CarregarSeExistir(gcCaminhoClasses + "gridbase.prg")
+    CarregarSeExistir(gcCaminhoClasses + "relatoriobase.prg")
+    CarregarSeExistir(gcCaminhoClasses + "GeradorRelatorio.prg")
+    CarregarSeExistir(gcCaminhoClasses + "FormBuscaAuxiliar.prg")
+    CarregarSeExistir(gcCaminhoClasses + "FormBuscaSimples.prg")
+    CarregarSeExistir(gcCaminhoClasses + "FormErro.prg")
+    CarregarSeExistir(gcCaminhoClasses + "TextBoxGridLookup.prg")
+    CarregarSeExistir(gcCaminhoClasses + "fSqlConector.prg")
+
+    * =========================================================================
+    * FUNCOES UTILITARIAS
+    * =========================================================================
+    CarregarSeExistir(gcCaminhoUtils + "functions.prg")
+    CarregarSeExistir(gcCaminhoUtils + "messages.prg")
+    CarregarSeExistir(gcCaminhoUtils + "validators.prg")
+
+    * =========================================================================
+    * BUSINESS OBJECTS - Carrega todos os *BO.prg dinamicamente
+    * =========================================================================
+    loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoClasses + "*BO.prg")
+    IF loc_nArquivos > 0
+        FOR loc_i = 1 TO loc_nArquivos
+            SET PROCEDURE TO (gcCaminhoClasses + loc_aArquivos[loc_i, 1]) ADDITIVE
+        ENDFOR
+    ENDIF
+
+    * =========================================================================
+    * CLASSES DE RELATORIOS - Carrega Relatorio*.prg dinamicamente
+    * =========================================================================
+    loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoClasses + "Relatorio*.prg")
+    IF loc_nArquivos > 0
+        FOR loc_i = 1 TO loc_nArquivos
+            SET PROCEDURE TO (gcCaminhoClasses + loc_aArquivos[loc_i, 1]) ADDITIVE
+        ENDFOR
+    ENDIF
+
+    * =========================================================================
+    * FORMULARIOS DE CADASTROS - Carrega todos os Form*.prg dinamicamente
+    * =========================================================================
+    loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoForms + "cadastros\Form*.prg")
+    IF loc_nArquivos > 0
+        FOR loc_i = 1 TO loc_nArquivos
+            SET PROCEDURE TO (gcCaminhoForms + "cadastros\" + loc_aArquivos[loc_i, 1]) ADDITIVE
+        ENDFOR
+    ENDIF
+
+    * =========================================================================
+    * FORMULARIOS DE RELATORIOS - Carrega todos os Form*.prg dinamicamente
+    * =========================================================================
+    loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoForms + "relatorios\Form*.prg")
+    IF loc_nArquivos > 0
+        FOR loc_i = 1 TO loc_nArquivos
+            SET PROCEDURE TO (gcCaminhoForms + "relatorios\" + loc_aArquivos[loc_i, 1]) ADDITIVE
+        ENDFOR
+    ENDIF
+
+    * =========================================================================
+    * FORMULARIOS OPERACIONAIS - Carrega todos os Form*.prg dinamicamente
+    * =========================================================================
+    loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoForms + "operacionais\Form*.prg")
+    IF loc_nArquivos > 0
+        FOR loc_i = 1 TO loc_nArquivos
+            SET PROCEDURE TO (gcCaminhoForms + "operacionais\" + loc_aArquivos[loc_i, 1]) ADDITIVE
+        ENDFOR
+    ENDIF
+
+    * =========================================================================
+    * MENU
+    * =========================================================================
+    CarregarSeExistir(ADDBS(gcCaminhoBase) + "..\menu\menu.prg")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* CarregarSeExistir - Carrega arquivo .prg apenas se existir
+* Evita erro "File does not exist"
+*------------------------------------------------------------------------------
+PROCEDURE CarregarSeExistir(par_cArquivo)
+    IF FILE(par_cArquivo)
+        SET PROCEDURE TO (par_cArquivo) ADDITIVE
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* ObterStringConexao - Retorna string de conexao SQL Server
+* Retorno: string de conexao
+*------------------------------------------------------------------------------
+FUNCTION ObterStringConexao()
+    LOCAL lcStringConexao
+
+    *-- Garantir sem dialog ODBC e timeout mesmo se FXP desatualizado
+    SQLSETPROP(0, "ConnectTimeOut", 30)
+    SQLSETPROP(0, "DispLogin", 3)
+    SQLSETPROP(0, "DispWarnings", .F.)
+
+    lcStringConexao = "DRIVER={SQL Server};" + ;
+                      "SERVER=" + DB_SERVER + ";" + ;
+                      "DATABASE=" + DB_NOME + ";" + ;
+                      "UID=" + DB_USUARIO + ";" + ;
+                      "PWD=" + DB_SENHA + ";" + ;
+                      "Trusted_Connection=No;" + ;
+                      "Login Timeout=30;" + ;
+                      "Connection Timeout=30;"
+
+    RETURN lcStringConexao
+ENDFUNC
+
+*------------------------------------------------------------------------------
+* ObterVersaoCompleta - Retorna versao completa da aplicacao
+*------------------------------------------------------------------------------
+FUNCTION ObterVersaoCompleta()
+    RETURN APP_NOME + " - Vers" + CHR(227) + "o " + APP_VERSAO
+ENDFUNC

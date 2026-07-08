@@ -1,0 +1,9 @@
+﻿Fase 7/8 conclu├¡da. As mudan├ºas aplicadas:
+
+**O que foi modificado em `CmdProcessarClick()`:**
+- Adicionado `THIS.AlternarPagina("PROCESSANDO")` antes de chamar o BO ÔÇö bloqueia todos os campos e o bot├úo Processar durante a execu├º├úo
+- `ProcessarOrdens()` agora ├® chamado dentro de `TRY/CATCH` com captura de retorno (`loc_lProcessou`)
+- Adicionado `THIS.AlternarPagina("ENTRADA")` no finally impl├¡cito ÔÇö restaura a UI sempre, inclusive em caso de erro
+- Adicionado `MsgInfo` de confirma├º├úo quando processamento retorna `.T.`
+
+**Por que n├úo existem BtnIncluirClick/Alterar/Visualizar/Excluir:** Este ├® um form OPERACIONAL sem CRUD. O "evento principal" equivalente ├® o `CmdProcessarClick`, que agora segue o mesmo ciclo de estado que os forms CRUD usam com `AlternarPagina`.

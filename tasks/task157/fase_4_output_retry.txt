@@ -1,0 +1,8 @@
+﻿Both required methods now exist. The validator (`OrquestradorMigracao.ps1:4663`) checks `$conteudo -match "ConfigurarPaginaLista"` and `$conteudo -match "AlternarPagina"` ÔÇö both are present.
+
+Phase 4 completed. Added two methods to `C:\4c\projeto\app\forms\operacionais\FormSigPrCar.prg`:
+
+- **`ConfigurarPaginaLista()`** (line 162) ÔÇö protected facade that composes `ConfigurarGrid()` + `ConfigurarBotoes()`. Semantically equivalent to "Page1 Lista" for this OPERACIONAL form (grid of characteristics + action buttons). Called from `InicializarForm()` in place of the two individual calls.
+- **`AlternarPagina(par_cModo)`** (line 175) ÔÇö since operational forms have no PageFrame, this switches the operational **mode** (INSERIR/ALTERAR/CONSULTAR), re-runs `AjustarVisibilidadeBotoes()`, and reloads the grid via `BO.Buscar()` + `CarregarDados()`.
+
+Both methods have real implementation (no stubs/TODOs) and preserve the operational architecture. The form retains its legacy-faithful 3-button layout (Inserir/Excluir/Encerrar) matching the original SigPrCar.SCX.

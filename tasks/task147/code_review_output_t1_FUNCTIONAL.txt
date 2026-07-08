@@ -1,0 +1,16 @@
+﻿Fix aplicado. Aqui est├í o resumo do que foi feito e por qu├¬ para cada problema:
+
+---
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO** (`TornarControlesVisiveis`, linha 1797)
+Adicionado `INLIST` para n├úo for├ºar `Visible=.T.` nos containers `CNT_4C_CABECALHO` e `CNT_4C_ORIGEM`. O m├®todo ainda recursa nos filhos (bloco `IF PEMSTATUS ControlCount`), ent├úo os TextBoxes internos de `cnt_4c_Origem` continuam sendo tornados vis├¡veis normalmente.
+
+---
+
+**[GRID-HEADER] x8 ÔÇö FALSO POSITIVO**
+As captions `"Ordem Produ??o"` e `"Temp/Min."` que o validador encontrou no legado J├ü est├úo corretamente implementadas em `grd_4c_GradeOperacao` (linhas 1652 e 1660). O validador comparou os headers do grid principal (`grd_4c_Grade`) com esses dois valores do grid secund├írio e gerou alertas incorretos. Os captions do grid principal (`"N├║m."`, `"Data"`, `"Opera├º├úo"`, `"Lote"`, `"Gr. Orig."`, etc.) correspondem corretamente aos campos do cursor `SigCdNec`.
+
+---
+
+**[LAYOUT-POSITION] x2 ÔÇö FALSO POSITIVO**
+O validador mapeou erroneamente o container legado `Botoes` (Page1.Lista, Top=124, Left=669) para `cnt_4c_BotoesAcao` (Page2). O container migrado correto ├® `cnt_4c_Legenda` (linha 441ÔÇô449), que j├í est├í em Left=669, Top=153 (=124+29 compensa├º├úo PageFrame) ÔÇö posi├º├úo exata do legado. O `cnt_4c_BotoesAcao` ├® o Save/Cancel da Page2 e est├í corretamente posicionado em Left=843, Top=51.

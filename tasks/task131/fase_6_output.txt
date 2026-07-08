@@ -1,0 +1,18 @@
+﻿A Fase 6/8 j├í est├í **completamente implementada**. Analisando os arquivos:
+
+**FormSigReIr1.prg** (1648 linhas) - Completo:
+- `ConfigurarPaginaLista()` ÔÇö todos os controles criados: 5 OptionGroups, 4 TextBoxes, 9 Labels, 1 Shape, 1 CheckBox
+- `ConfigurarPaginaDados()` ÔÇö todos os BINDEVENTs registrados (TipoRelatorioChange, TipoAnaliticoChange, 4x KeyPress, 4x DblClick)
+- Lookups completamente implementados:
+  - `AbrirBuscaCdCodigo()` / `AbrirBuscaDsCodigo()` ÔÇö SigCdPro (CPros/DPros)
+  - `AbrirBuscaLocal()` / `AbrirBuscaDLocal()` ÔÇö SigPrLcl (codigos/descricaos)
+  - `ValidarCdCodigo()` / `ValidarDsCodigo()` / `ValidarLocal()` / `ValidarDLocal()`
+- Sem nenhum TODO, stub ou placeholder
+
+**SigReIr1BO.prg** ÔÇö Completo (PrepararDados, InicializarDados, ConverteMoe, etc.)
+
+**Integra├º├úo** ÔÇö J├í feita:
+- config.prg carrega `*BO.prg` e `relatorios\Form*.prg` automaticamente via ADIR()
+- menu.prg tem `AbrirFormSigReIr1` (linha 3659) com sele├º├úo do n├║mero de balan├ºo
+
+O formul├írio ├® REPORT (n├úo CRUD), ent├úo n├úo h├í `cnt_4c_BotoesAcao` ÔÇö os bot├Áes Visualizar/Imprimir/Excel/Encerrar est├úo no `cmg_4c_Botoes` CommandGroup, conforme o padr├úo `frmrelatorio`. A Fase 6 foi conclu├¡da em sess├úo anterior. Pode avan├ºar para a Fase 7/8.

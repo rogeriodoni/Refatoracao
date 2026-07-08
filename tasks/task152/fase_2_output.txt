@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGPDPNSBO.prg` foi completado com os seguintes m├®todos:
+
+**`CarregarDoCursor(par_cAliasCursor)`** ÔÇö carrega as 11 propriedades do BO a partir da linha corrente do `cursor_4c_Grade` (chamado pelo form em `AfterRowColChange`).
+
+**`SelecionarDados()`** ÔÇö equivale ao `selecionadados` do legado. Faz:
+1. ZAP dos cursores `cursor_4c_Grade` e `cursor_4c_Rodape`
+2. SELECT DISTINCT em `crSigMvEstPd` filtrado por `this_cKey` (equivale ao `lpKey`)
+3. Para cada grupo `EmpDopNums`, SQLEXEC contra `SigMvCab JOIN SigCdCli` com cursor tempor├írio `cursor_4c_LocalEest`
+4. INSERT dos resultados em `cursor_4c_Grade` (com convers├úo `TTOD` para campos datetimeÔåÆdate, `IIF(ISNULL())` para NULLs)
+5. Calcula total e insere uma linha no `cursor_4c_Rodape`
+6. Preenche `this_nTotalPendentes`
+
+**`ObterChavePrimaria()`** ÔÇö retorna `this_cKey` (a chave de filtro da sess├úo, n├úo uma PK tradicional pois o form ├® read-only).
+
+Nota: `Inserir/Atualizar` n├úo foram implementados pois este ├® um form OPERACIONAL read-only ÔÇö os grids t├¬m `ReadOnly=.T.` e n├úo h├í edi├º├úo de dados pelo usu├írio.

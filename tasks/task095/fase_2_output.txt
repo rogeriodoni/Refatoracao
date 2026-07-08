@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. A Fase 2 est├í conclu├¡da.
+
+**SIGREEVVBO.prg** ÔÇö m├®todos adicionados:
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` para o Form exibir |
+| `ObterCotacao(par_cMoeda)` | Consulta `SigCdCot` para obter taxa de c├ómbio (equivale ao `fBuscarCotacao` legado) |
+| `PrepararDados()` | 11 passos replicando exatamente o `processamento` do SCX legado: cota├º├Áes ÔåÆ estoque ÔåÆ filtro empresas ÔåÆ produtos ÔåÆ valor venda ÔåÆ custo base ÔåÆ totais geral ÔåÆ totais faixa ÔåÆ crImprimir ÔåÆ percentuais/zerados ÔåÆ m├®dias cabecalho |
+| `Imprimir()` | Chama `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT NOCONSOLE` |
+| `Visualizar()` | Chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE` |
+| `Destroy()` | Fecha todos os 11 cursores criados pelo relat├│rio |
+
+**Decis├Áes de implementa├º├úo:**
+- `fBuscarCotacao` ÔåÆ `ObterCotacao()` com SQLEXEC em `SigCdCot` (campo `valos`, ordenado por `datas DESC, horas DESC`)
+- `_Empr` ÔåÆ `go_4c_Sistema.cCodEmpresa`
+- `nums = 1` do legado ÔåÆ `nums = '1'` (campo ├® `char(21)` no schema)
+- Cursores intermedi├írios fechados assim que n├úo s├úo mais necess├írios; Destroy() garante limpeza completa

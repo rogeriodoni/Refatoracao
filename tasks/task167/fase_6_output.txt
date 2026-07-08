@@ -1,0 +1,20 @@
+﻿File structure confirmed: ENDDEFINE at line 1271, BO is clean. Phase 7 and 8 are complete.
+
+**Phase 7 CorretorAutomatico ÔÇö 3 patterns fixed:**
+
+| Pattern | Issue | Fix |
+|---------|-------|-----|
+| #1 | `RETURN .F.` inside TRY in `InicializarForm` | Restructured to `IF/ELSE` block; RETURN now outside TRY |
+| #16 | `SetAll("FontName"/"FontSize", ..., "Column")` ÔÇö Column has no FontName | Changed to `Grid.FontName = "Verdana"` / `.FontSize = 8` direct assignment |
+| #99 | `Themes = .F.` on standalone `cmd_4c_Sair` and `cmd_4c_Voltar` | Changed to `Themes = .T.` |
+
+**Phase 8 ValidarUIFidelity ÔÇö Manual pass: all clear**
+
+- No literal accented characters (CHR() codes used throughout)
+- No RETURN inside TRY/CATCH (5 RETURNs verified ÔÇö all outside TRY)
+- No forbidden patterns: ISEMPTY, AllowAddNew/Delete/Edit, PageFrame.BackColor, PUBLIC PROCEDURE, ELSEIF, MESSAGEBOX, MostrarAviso, _EMPR, fAcessoEmpresa, Container.BorderStyle
+- CATCH block is non-silent (calls MsgErro)
+- BINDEVENT handler `GrdDadosAfterRowColChange` correctly declares `par_nColIndex`
+- `Destroy()` calls `DODEFAULT()`
+
+**Migration of SIGPRCPD is complete (8/8 phases).** Before testing, delete cached FXP files: `del /s /q C:\4c\projeto\app\*.fxp`

@@ -1,0 +1,48 @@
+﻿Ap├│s an├ílise completa dos dois arquivos, posso determinar com certeza o status de cada um dos 12 problemas detectados:
+
+---
+
+## Resultado da An├ílise: Todos 12 s├úo FALSOS POSITIVOS
+
+### GRID-SQL (11 problemas)
+
+O validador s├│ verificou o **arquivo do form** em busca dos SELECTs que criam os cursors. Mas ambos os cursors s├úo criados no **BO** (`sigprdisBO.prg`), m├®todo `ProcessarDistribuicao()`:
+
+**cursor_4c_Distribui** (BO linha ~488):
+```sql
+SELECT RTRIM(m.emps) AS Cemps,      -- ControlSource: .Cemps Ô£ô
+       m.sqtds AS QtdSaldo,          -- ControlSource: .QtdSaldo Ô£ô
+       CAST(0...) AS QtdDistr,       -- ControlSource: .QtdDistr Ô£ô
+       REPLICATE(' ',20) AS CidChaves -- ControlSource: .CidChaves Ô£ô
+```
+
+**cursor_4c_Disponivel** (BO linha ~460):
+```sql
+SELECT RTRIM(m.cpros) AS Cpros,           -- .Cpros Ô£ô
+       RTRIM(p.dpros) AS Dpros,           -- .Dpros Ô£ô
+       RTRIM(m.codcors) AS CodCors,       -- .CodCors Ô£ô
+       RTRIM(m.codtams) AS CodTams,       -- .CodTams Ô£ô
+       SUM(m.sqtds) AS Sqtds,             -- .Sqtds Ô£ô
+       CAST(0...) AS QtdSaida,            -- .QtdSaida Ô£ô
+       SUM(m.sqtds) AS QtdSaldo           -- .QtdSaldo Ô£ô
+```
+
+Todos os 11 campos existem no SQL do BO. Nenhuma altera├º├úo necess├íria.
+
+---
+
+### SQL-FILTRO-INVENTADO (1 problema)
+
+O validador flagou `WHERE cidchaves = '...'` na BO linha 279, dentro do m├®todo `Atualizar()`:
+
+```sql
+UPDATE sigprdis SET ... WHERE cidchaves = EscaparSQL(THIS.this_cCidChaves)
+```
+
+Isso **n├úo ├® um filtro inventado** ÔÇö ├® o `WHERE` padr├úo de um `UPDATE` pela chave prim├íria. A instru├º├úo "WHERE original usa: CPROS, CODIGOS..." lista colunas de SELECTs, n├úo de UPDATEs. No c├│digo original, o update era feito via `DataManager.Update('crSigPrDis')` (que internamente usa a PK), equivalente ao que o BO novo faz explicitamente.
+
+---
+
+## Conclus├úo
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os 12 problemas detectados pelo validador s├úo todos falsos positivos causados pela limita├º├úo do validador em analisar apenas o arquivo do form, sem rastrear os cursors criados no BO. Os arquivos `Formsigprdis.prg` e `sigprdisBO.prg` est├úo corretos como est├úo.

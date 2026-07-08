@@ -1,0 +1,6 @@
+﻿**Fix applied.** Two `.Themes = .F.` lines removed:
+
+1. `cnt_4c_Cabecalho` (Container) in `ConfigurarCabecalho()` ÔÇö `Container` has no `Themes` property in VFP9
+2. `cmg_4c_Botoes` (CommandGroup) in `ConfigurarBotoesRelatorio()` ÔÇö `CommandGroup` has no `Themes` property in VFP9
+
+The class-definition `Themes = .F.` (Form level) and `.Themes = .F.` on `Buttons(1..4)` (CommandButton) and `CheckBox` were left intact ÔÇö those controls do support `Themes` in VFP9.

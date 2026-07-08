@@ -1,0 +1,182 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREHPE.SCX
+* Data/Hora: 06/06/2026 00:17:24
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREHPE
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 148
+  Left = 43
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 600
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Resumo de Cheques Pendentes"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  ColorSource = 4
+  Name = "SIGREHPE"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 327
+  btnReport.Top = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREHPE
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReHpe To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+Endwith	
+
+=DoDefault()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcEmp, lcTit
+
+ThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _empr)
+
+lcEmp = Alltrim(crSigCdEmp.Cemps + ' - ' + crSigCdEmp.Razas)
+lcTit = Alltrim('Resumo de Cheques Pendentes')
+
+Create Cursor csCabecalho (Empresa c(80), Titulo c(80))
+Insert Into csCabecalho (Empresa, Titulo) Values (lcEmp, lcTit)
+
+*******************************************************************************************
+Set Talk Window
+Set Talk On
+
+lsSql=[Select a.Umovs, Sum(a.Valors) as Valor ]+;
+      [From SigChe a, SigCdOpt b ]+;
+      [Where a.UMovs = b.Operacaos And ]+;
+ 	  [b.Tipos = 'DB' ]+;
+      [Group By a.Umovs ]	   
+
+ThisForm.podatamgr.SqlExecute(lsSql,"csPendentes")
+
+Set Talk Off
+*******************************************************************************************
+
+Select csPendentes
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReHpe Preview NoConsole
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREHPE
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

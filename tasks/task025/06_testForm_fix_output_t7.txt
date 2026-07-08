@@ -1,0 +1,15 @@
+﻿Ambas as corre├º├Áes est├úo corretas. 
+
+## Resumo do que foi corrigido
+
+**Bug:** `SigReAacBO.PrepararDados()` ÔÇö filtro por Usu├írio com enriquecimento de grupos
+
+**Causa:** `SQLEXEC()` cria cursores **read-only** no VFP9. O c├│digo original fazia `APPEND FROM DBF("cursor_4c_Ins")` diretamente no cursor `cursor_4c_Dados` criado por SQLEXEC, o que causaria o erro VFP9 _"Table is read-only"_ ao tentar enriquecer os dados com registros de grupo associados ao usu├írio.
+
+**Corre├º├úo aplicada em `SigReAacBO.prg`:**
+1. SQLEXEC agora salva para `cursor_4c_DadosTmp` (tempor├írio, read-only)
+2. Em seguida, `SELECT * FROM cursor_4c_DadosTmp INTO CURSOR cursor_4c_Dados READWRITE` cria a c├│pia edit├ível
+3. `cursor_4c_DadosTmp` ├® fechado imediatamente
+4. `Destroy()` inclui cleanup de `cursor_4c_DadosTmp` para o caso de exce├º├úo antes do `USE IN`
+
+**Sobre o timeout em ETAPA 1B:** o `SQLSTRINGCONNECT` est├í bloqueando por 300s (timeout do PowerShell), o que indica o servidor DB inacess├¡vel naquele hor├írio. Isso ├® um problema de infraestrutura ÔÇö a `config.prg` j├í tem `Login Timeout=30` na connection string, mas o driver ODBC nem sempre respeita esse par├ómetro quando a falha ├® no n├¡vel TCP. Esse timeout resolver├í quando o servidor estiver dispon├¡vel.

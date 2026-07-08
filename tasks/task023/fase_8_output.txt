@@ -1,0 +1,20 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi implementado:
+
+**M├®todos adicionados ao FormSIGREVIS.prg:**
+
+| M├®todo | Implementa├º├úo no contexto REPORT |
+|---|---|
+| `CarregarLista()` | Reposiciona foco em `txt_4c_Datai` (sem grid a carregar) |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Rep├Áe todos os filtros (datas, repr, conta, op├º├Áes) a partir das propriedades do BO |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita os 6 controles de filtro + respeita l├│gica dos campos de descri├º├úo |
+| `AjustarBotoesPorModo()` | Garante todos os bot├Áes (Visualizar/Imprimir/Excel/Encerrar) habilitados |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnEncerrarClick()` | Delega para `BtnSairClick()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Limpa filtros e reposiciona foco |
+
+**Integra├º├úo ao menu:**
+- BAR 15 adicionado ao `popRelatorios` com prompt "Visitas"
+- `ON SELECTION BAR 15` vinculado a `AbrirFormSIGREVIS`
+- Procedimento `AbrirFormSIGREVIS()` adicionado ao final de menu.prg (padr├úo correto: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()` ap├│s Show)

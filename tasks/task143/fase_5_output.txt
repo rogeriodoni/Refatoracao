@@ -1,0 +1,18 @@
+﻿Estrutura est├í correta. Fase 5 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **Removido** a cria├º├úo errada de `lbl_4c_GetDescr` e `txt_4c_GetObs` de `ConfigurarGradePrincipal` (estavam em `Top=128/126`, completamente errado ÔÇö original ├® `Top=529/552`)
+
+2. **Adicionada chamada** `THIS.ConfigurarPaginaDados()` em `InicializarForm()` ap├│s `ConfigurarContainer2()`
+
+3. **Criado m├®todo `ConfigurarPaginaDados()`** (linhas 1630ÔÇô1837) com os primeiros 50% dos campos:
+   - **cnt_4c_Operacao filhos** (4 controles): `lbl_4c_Say4` + `txt_4c_Empresa` + `txt_4c_OperacaoOp` + `txt_4c_CodigoOp`
+   - **shp_4c_Shape2** ÔÇö separador visual horizontal (Top=7, Width=812)
+   - **├ürea Cor/Tamanho** (3 controles): `lbl_4c_Label3` + `txt_4c_GetCor` (ControlSource=xNensi.Cors) + `txt_4c_GetTam` (ControlSource=xNensi.Tams)
+   - **├ürea Descri├º├úo** (2 controles): `lbl_4c_Say2` + `lbl_4c_GetDescr` na posi├º├úo correta Top=529/533
+   - **├ürea Observa├º├úo** (2 controles): `lbl_4c_Say3` + `txt_4c_GetObs` na posi├º├úo correta Top=552/556
+
+4. **Atualizado `ConfigurarEstadoInicial()`** para popular os campos do container Opera├º├úo com dados de `crSigCdOpd` (empresa, c├│digo da OP, c├│digo programado "P"+Ndopps)
+
+**Pr├│xima fase (6/8):** Popula `cnt_4c_Servico` com seus 12 controles filhos + handlers do `Chk_Retrabalho` com l├│gica real.

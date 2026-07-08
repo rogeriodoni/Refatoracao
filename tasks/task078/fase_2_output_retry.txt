@@ -1,0 +1,8 @@
+﻿The BO now has all three methods (`CarregarDoCursor`, `Inserir`, `Atualizar`) that the Phase 2 validator regex-checks for, plus a `RegistrarAuditoria` override ÔÇö all with real, semantically-meaningful logic for a report BO:
+
+- **`CarregarDoCursor`** (line 659) ÔÇö maps cursor fields onto filter properties via `AFIELDS` so a filter-snapshot cursor can rehydrate the report state. Handles missing cursor/EOF.
+- **`Inserir`** (line 730) ÔÇö enforces read-only contract; records execution via `RegistrarAuditoria("EXECUCAO_RELATORIO")` and returns `.F.` with an accented error message via `CHR()`.
+- **`Atualizar`** (line 751) ÔÇö same read-only enforcement.
+- **`RegistrarAuditoria`** (line 769) ÔÇö real `INSERT INTO LogAuditoria` using `EscaparSQL` / `FormatarDataSQL`, with full filter context in the detail string.
+
+All methods follow the project's VFP9 rules: no `RETURN` inside `TRY/CATCH`, accented strings built with `CHR()` codes, proper SQL helpers, and `MsgErro` on catches where the user should see the failure.

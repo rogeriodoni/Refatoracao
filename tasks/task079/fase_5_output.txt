@@ -1,0 +1,14 @@
+﻿Fase 5 conclu├¡da. As mudan├ºas entregues:
+
+1. **`ConfigurarPageFrame()`** ÔÇö adicionada chamada a `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+
+2. **`ConfigurarPaginaLista()`** ÔÇö `ScrollBars` corrigido de `2` (vertical only) para `3` (ambos), correspondendo ao `ThisForm.grid1.ScrollBars = 3` do legado
+
+3. **`CarregarGrade()`** ÔÇö tr├¬s corre├º├Áes:
+   - `Column2.ControlSource` agora usa express├úo Substr para formatar data de DDMMYYYY ÔåÆ DD/MM/YYYY (igual ao legado)
+   - Widths de todas as 14 colunas corrigidos para os valores exatos do original (total ~945px, da├¡ o ScrollBars=3)
+   - ForeColor dos headers: cols 1-10 `RGB(90,90,90)`, cols 11-14 `RGB(36,84,155)` azul (como no legado)
+   - `SetAll("ReadOnly",.T.,"Column")` adicionado
+   - `SELECT crGrid / GO TOP` ao final (espelha `Select crGrid / Locate` do legado)
+
+4. **`ConfigurarPaginaDados()`** ÔÇö novo m├®todo com propriedades estruturais das colunas 1-7: `Movable=.F.`, `Resizable=.F.`, `ReadOnly=.T.`, `InputMask` e `Format="R"` onde definidos no original

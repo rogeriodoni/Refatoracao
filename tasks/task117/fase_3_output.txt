@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Arquivo criado em `C:\4c\projeto\app\forms\relatorios\FormSigReIdt.prg` com **Fase 3/8 completa**.
+
+**O que foi implementado:**
+
+- `DEFINE CLASS FormSigReIdt AS FormBase` com dimens├Áes exatas do original (800├ù180), `DataSession=2`, `ControlBox=.F.`, `MaxButton=.F.`, `MinButton=.F.`, `WindowType=1`
+- **Propriedades**: par├ómetros do form (`this_cEmps`, `this_cDopes`, `this_cNumes`, `this_nNumef`, `this_cDiretorio`, `this_cDirFiscais`) e op├º├Áes (`this_nOptTipo=2`, `this_nOptAgrupa=3`)
+- **`Init()`**: recebe os 6 par├ómetros originais (`pForm,pEmp,pDop,pNum,pNumF,pDir`), armazena antes de `DODEFAULT()`, define caption din├ómico com n├║mero do documento
+- **`InicializarForm()`**: instancia `SigReIdtBO`, chama os 3 Configure, registra BINDEVENTs para bot├Áes e `InteractiveChange`, chama `LimparCampos()`
+- **`ConfigurarCabecalho()`**: `cnt_4c_Cabecalho` (100,100,100) com `lbl_4c_Sombra` e `lbl_4c_Titulo`
+- **`ConfigurarBotoes()`**: `cmg_4c_Botoes` (Left=529, padr├úo CLAUDE.md) com 4 bot├Áes: Visualizar/Imprimir/Documento/Encerrar
+- **`ConfigurarFiltros()`**: `lbl_4c_Label1`, `obj_4c_OptTipo` (2 op├º├Áes), `lbl_4c_Agrupa`, `obj_4c_OptAgrupa` (3 op├º├Áes) ÔÇö todos com posi├º├Áes exatas do original
+- **Handlers completos**: `BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick`, `BtnSairClick`, `OptTipoChange`
+- **`Destroy()`**: restaura `go_4c_Sistema.DirFiscais` (equivale ao `Unload` original) e libera o BO

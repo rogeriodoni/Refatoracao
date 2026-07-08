@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `Formsigprdis.prg`:
+
+| Local | Problema | Corre├º├úo |
+|-------|----------|----------|
+| L737 `CarregarEstoque` | `ColumnCount = 3` destru├¡a Column4 antes de `RecordSource` | `ColumnCount = 4` |
+| L2512 `CarregarCabOperas` | `ColumnCount = 3` destru├¡a Column4-8; guard `IF RECCOUNT > 0` impedia bind quando vazio | `ColumnCount = 8`; ControlSources movidos para fora do guard |
+| L2566 `CarregarItnOperas` | `ColumnCount = 3` destru├¡a Column4-9; mesmo guard problem├ítico | `ColumnCount = 9`; ControlSources movidos para fora do guard |

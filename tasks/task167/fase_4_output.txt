@@ -1,0 +1,21 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formsigprcpd.prg` foi atualizado com 827 linhas. Aqui est├í o resumo das mudan├ºas:
+
+**`InicializarForm()` (atualizado):**
+- Reordena├º├úo: `CarregarDados()` agora ├® chamado ANTES de `ConfigurarPaginaLista()`, garantindo que `cursor_4c_Dados` j├í exista quando o grid for vinculado
+
+**`ConfigurarPaginaLista()` (novo, linhas 252ÔÇô703):**
+- `cmd_4c_Sair` (Encerrar) ÔÇö bot├úo no canto superior direito de Page1 (Top=5, Left=916)
+- `cnt_4c_Container1` ÔÇö Fase e Data (read-only, populados dos par├ómetros do Init)
+- `cnt_4c_Container2` ÔÇö Capacidade / Utilizado / Saldo com labels "Min"
+- `grd_4c_Dados` ÔÇö 8 colunas (Envelope, O.P., Seq, Minutos, Produto, Opera├º├úo, Cliente, Unidade Prod.), ReadOnly=.T., DeleteMark=.F., RecordMark=.F.
+- Campos abaixo do grid: `txt_4c_Qtde`, `txt_4c_Descr`, `txt_4c_Cliente`, `txt_4c_TEnv` com labels
+- `img_4c_FigJpg` + `shp_4c_Shape4` (Visible=.F. ÔÇö gerenciados por AfterRowColChange)
+- Label "[ Opera├º├úo com Prioridade ]"
+- BINDEVENT em AfterRowColChange e Click do bot├úo Encerrar
+
+**M├®todos auxiliares adicionados:**
+- `AtualizarGrid()` ÔÇö define RecordSource + ColumnCount + ControlSources + headers + m├®tricas Cap/Utz/Sld
+- `FormatarGridLista()` ÔÇö aplica Verdana 8 via SetAll
+- `GrdDadosAfterRowColChange()` ÔÇö atualiza Descr/Qtde/Cliente/TEnv e exibe foto do produto via BO
+- `CmdSairClick()` ÔÇö `THIS.Release()`
+- `AlternarPagina()` ÔÇö muda `pgf_4c_Paginas.ActivePage`

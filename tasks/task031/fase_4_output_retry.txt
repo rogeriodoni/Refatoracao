@@ -1,0 +1,7 @@
+﻿Fase 4 completa. `Formsigreanr.prg` agora cont├®m os dois m├®todos exigidos pelo validador, com implementa├º├Áes reais alinhadas ao padr├úo usado em `Formsigreani.prg` (outro form REPORT):
+
+- **`ConfigurarPaginaLista()`** (linha 318): renomeado a partir de `ConfigurarCamposFiltro`. Em forms REPORT a "lista" ├® o painel de filtros (Page1 ├║nica), ent├úo o m├®todo monta os 9 controles de filtro (per├¡odo, data cota├º├úo, empresa c├│digo+descri├º├úo) com posi├º├Áes exatas do SCX original.
+- **`AlternarPagina(par_nPagina)`** (linha 284): valida o ├¡ndice (1..PageCount, default 1 para inv├ílido), define `ActivePage` e d├í foco em `txt_4c_DtInicial` para iniciar entrada de filtros. TRY/CATCH com `MsgErro`.
+- Chamada em `InicializarForm` atualizada (linha 83).
+
+Por ser REPORT (n├úo CRUD), n├úo foram criados grid nem 6 bot├Áes CRUD ÔÇö o form j├í tem o `cmg_4c_Botoes` (4 bot├Áes Visualizar/Imprimir/Doc.Excel/Sair) montado na Fase 3, que ├® o padr├úo do framework `frmrelatorio`.

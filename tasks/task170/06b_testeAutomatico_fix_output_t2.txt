@@ -1,0 +1,7 @@
+﻿A corre├º├úo est├í aplicada. O problema era:
+
+- `FormSigPrCtr` tem `DataSession = 2` (datasession privada)
+- Quando `CarregarLista()` criava `cursor_4c_Dados`, ele ficava na datasession 2 do form
+- O `TesteAutomatico` verifica `USED("cursor_4c_Dados")` de datasession 1 ÔÇö onde o cursor n├úo ├® vis├¡vel
+
+**Fix**: no bloco `gb_4c_ValidandoUI`, salva a datasession atual do form (`THIS.DataSessionID`), muda para datasession 1, cria o cursor l├í (vis├¡vel para o teste), e restaura a datasession do form logo em seguida. Isso n├úo afeta o comportamento em produ├º├úo (o bloco s├│ executa durante testes automatizados).

@@ -1,0 +1,1027 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReCmg.SCX
+* Data/Hora: 17/05/26 01:00:47
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECMG
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGRECMG
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGRECMG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGRECMG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntGrf2
+  Parent: SIGRECMG
+  Class: container
+  BaseClass: container
+
+Objeto: cmbChave1
+  Parent: SIGRECMG.cntGrf2
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: lblChave1
+  Parent: SIGRECMG.cntGrf2
+  Class: label
+  BaseClass: label
+
+Objeto: cntGrf1
+  Parent: SIGRECMG
+  Class: container
+  BaseClass: container
+
+Objeto: oleGrafico1
+  Parent: SIGRECMG.cntGrf1
+  Class: oleboundcontrol
+  BaseClass: oleboundcontrol
+
+Objeto: cntAguarde
+  Parent: SIGRECMG
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGRECMG.cntAguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGRECMG.cntAguarde
+  Class: label
+  BaseClass: label
+
+Objeto: cmdGgrafico
+  Parent: SIGRECMG
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: chkGraficos
+  Parent: SIGRECMG
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: NumGraficos
+  Parent: SIGRECMG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGRECMG
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 650
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ""
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 0
+  Themes = .F.
+  Name = "SIGRECMG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntGrf2
+------------------------------------------------------------
+  Top = 94
+  Left = 128
+  Width = 200
+  Height = 35
+  SpecialEffect = 0
+  Visible = .T.
+  TabIndex = 3
+  BackColor = 255,255,255
+  Name = "cntGrf2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntGrf2.cmbChave1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ColumnCount = 1
+  Height = 25
+  Left = 81
+  Style = 2
+  TabIndex = 8
+  Top = 4
+  Width = 86
+  Name = "cmbChave1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntGrf2.lblChave1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cliente :"
+  Height = 15
+  Left = 32
+  Top = 8
+  Width = 42
+  ForeColor = 90,90,90
+  Name = "lblChave1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntGrf1
+------------------------------------------------------------
+  Top = 202
+  Left = 14
+  Width = 770
+  Height = 400
+  BackStyle = 1
+  SpecialEffect = 0
+  TabIndex = 1
+  BackColor = 255,255,255
+  Name = "cntGrf1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntGrf1.oleGrafico1
+------------------------------------------------------------
+  Top = 5
+  Left = 5
+  Height = 390
+  Width = 760
+  TabIndex = 2
+  Name = "oleGrafico1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntAguarde
+------------------------------------------------------------
+  Top = 314
+  Left = 295
+  Width = 207
+  Height = 49
+  SpecialEffect = 0
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "cntAguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntAguarde.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 18
+  Left = 69
+  Top = 7
+  Width = 68
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cntAguarde.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  FontCondense = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Processando Dados..."
+  Height = 18
+  Left = 24
+  Top = 24
+  Width = 141
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.cmdGgrafico
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 491
+  SpecialEffect = 1
+  Top = -2
+  Width = 313
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdGgrafico"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_seta_esq_60.jpg
+  Command1.Caption = "\<Anterior"
+  Command1.TabIndex = 1
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdGrfAnterior"
+  Command2.Top = 5
+  Command2.Left = 81
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\geral_seta_dir_60.jpg
+  Command2.Caption = "\<Próximo"
+  Command2.TabIndex = 2
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdGrfProximo"
+  Command3.Top = 5
+  Command3.Left = 157
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_grafico_pizza_60.jpg
+  Command3.Caption = "\<Gráfico"
+  Command3.TabIndex = 3
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "cmdImprimir"
+  Command4.Top = 5
+  Command4.Left = 233
+  Command4.Height = 75
+  Command4.Width = 75
+  Command4.FontBold = .T.
+  Command4.FontItalic = .T.
+  Command4.FontName = "Comic Sans MS"
+  Command4.FontSize = 8
+  Command4.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command4.Cancel = .T.
+  Command4.Caption = "Encerrar"
+  Command4.TabIndex = 5
+  Command4.ForeColor = 90,90,90
+  Command4.BackColor = 255,255,255
+  Command4.Themes = .F.
+  Command4.Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.chkGraficos
+------------------------------------------------------------
+  Top = 133
+  Left = 146
+  Height = 17
+  Width = 122
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .F.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "\<Todos os Gráficos"
+  SpecialEffect = 0
+  Style = 0
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "chkGraficos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.NumGraficos
+------------------------------------------------------------
+  Alignment = 3
+  Value = 1
+  Height = 23
+  InputMask = "9999"
+  Left = 267
+  MaxLength = 4
+  Top = 157
+  Width = 38
+  Name = "NumGraficos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMG.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "A partir do Gráfico : "
+  Height = 17
+  Left = 166
+  Top = 161
+  Width = 117
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: Dataenvironment
+* Classe: dataenvironment (Base: dataenvironment)
+* Registro: 2
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE BeforeOpenTables
+------------------------------------------------------------
+PROCEDURE BeforeOpenTables
+
+        Create Cursor cGevcl (cChave1s c(70),gGrafico g,cLg1s c(150),cLg2s c(175),cLg3s c(150),cEmpresas c(50))
+        Index On cChave1s Tag cChave1s
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CloseTables
+------------------------------------------------------------
+PROCEDURE CloseTables
+
+        If Used('cGevcl')
+                Use In cGevcl
+        EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMG
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mgeragrafico
+------------------------------------------------------------
+PROCEDURE mgeragrafico
+LParameters lnLinhaCmb1
+Local Array laCorGrafico1(5),laCliente(1),laGrpfat1(1),laGrpprod1(1)
+Local lcEscape,lcChave1,lnTmStr1,lcMacro1, lcQtVal
+
+#Define TAB Chr(9)
+#Define CRLF CHR(13)+CHR(10)
+
+If !Used('CrGrafico1')
+	Create Cursor CrGrafico1 (gGrafico1s g(4),cChave1s c(100),cEmpresas c(128),cTitulo1s c(64),cTitulo2s c(64),;
+								cTitulo3s c(64),cTitulo4s c(64))
+	Index On cChave1s Tag pkchave1
+EndIf
+With ThisForm
+	m.lcEscape   = Set('Escape')
+	m.lcPoint    = Set('Point')
+	m.lcOldPoint = Set('Point')
+	m.lcSepar    = Set('Separator')
+	m.lcOldSepar = Set('Separator')
+
+	Set Escape Off
+
+	GetProStrg('Intl','sDecimal','',@m.lcPoint,254)
+	GetProStrg('Intl','sThousand','',@m.lcSepar,254)
+	      
+	m.lcPoint = Iif(IsEmpty(m.lcPoint),',',m.lcPoint)
+	m.lcSepar = Iif(IsEmpty(m.lcSepar),'.',m.lcSepar)
+
+	Set Point To m.lcPoint
+	Set Separator To m.lcSepar
+
+	.pnNumGrf = 1
+	m.lnLinhaCmb1 = Iif((Type('m.lnLinhaCmb1') = 'N' And m.lnLinhaCmb1 > 0),m.lnLinhaCmb1,1)
+	m.lcQtVal     = Padr(Iif(ThisForm.poForm1.Opt_SelRel.Value = 1,'Valor','Quantidade'),10)
+	m.lnQtVal     = ThisForm.poForm1.Opt_SelRel.Value
+
+	If IsEmpty(.cntGrf2.cmbChave1.ListCount)
+		Declare m.laCliente(1)
+		m.laCliente = .F.
+
+*!*				 Select a.ordem,a.crclis ;
+*!*				   From TmpResult a ;
+*!*			   Group By 1 ;
+*!*			   Order By 1 ;
+*!*			 Into Array laCliente
+
+		Select Distinct Ordem, Crclis ;
+		  From TmpResult ;
+		 Order By Ordem ;
+		  Into Array laCliente
+
+		m.lnTmStr1 = (Len(m.laCliente(1,2))+6)
+
+		*!*	Inicializa combo de chaves dos graficos...
+		With .cntGrf2
+			With .lblChave1
+				.Left = 5
+				.Top  = 10
+			EndWith
+			With .cmbChave1
+				.Clear
+				.Alignment         = 0
+				.ColumnCount       = 0
+				.ColumnLines       = .F.
+				.IncrementalSearch = .T.
+				.FontName          = 'Courier New'
+				.FontSize          = 9
+				.RowSource         = []
+				.RowSourceType     = 0
+				.Style             = 2
+				.ReadOnly          = .T.
+				.Format            = 'K'
+				.Sorted            = .F.
+				.SpecialEffect     = 0
+				.Width             = ((m.lnTmStr1*7+9)+20)
+				.Height            = 25
+				.Top               = 5
+				.Left              = (5 + ThisForm.cntGrf2.lblChave1.Width)
+				.Value             = 1
+
+				For m.lnConta1=1 To Alen(m.laCliente,1)
+					.AddItem(PadR(Str(m.laCliente(m.lnConta1,1),5) + 'º' + m.laCliente(m.lnConta1,2),m.lnTmStr1))
+				EndFor
+			EndWith
+			.Height = (.cmbChave1.Height + 10)
+			.Width  = (.lblChave1.Width + .cmbChave1.Width + 10)
+			.Top    = (ThisForm.cmdgGrafico.Top - .Height)
+			.Left   = (ThisForm.Width - .Width - 5)
+		EndWith
+	EndIf
+	If .cntGrf2.cmbChave1.ListCount > 0
+
+		m.llError = .F.
+		m.lcOnError = On('Error')
+
+		On Error m.llError = .F.
+
+		m.laCorGrafico1(1) = RGB(0,0,0)     && Preto...
+		m.laCorGrafico1(2) = RGB(255,0,0)   && Vermelho...
+		m.laCorGrafico1(3) = RGB(0,0,255)   && Azul...
+		m.laCorGrafico1(4) = RGB(255,0,255) && Magenta...
+		m.laCorGrafico1(5) = RGB(0,128,128) && Ciano-escuro...
+		m.lcStrgeixoY      = 'Operações Ranking   ' + lcQtVal
+		m.lcChave1         = .cntGrf2.cmbChave1.List(m.lnLinhaCmb1)
+
+		Select TmpResult
+		Set Order To ''   && retirar a ordem e desabilita o set key ...
+		Locate For TmpResult.ordem = Val(Left(m.lcChave1,5))
+
+		m.lcTitulo1 = AllTrim(TmpResult.cTitulo1s)
+		m.lcTitulo2 = AllTrim(TmpResult.cTitulo2s)
+		m.lcTitulo3 = AllTrim(TmpResult.cTitulo3s)
+		m.lcTitulo4 = AllTrim(TmpResult.cTitulo4s)
+		m.lcEmpresa = AllTrim(TmpResult.cEmpresas)
+
+		For m.lnConta1 = 1 To 3
+			m.lcStrg1  = ''
+			m.lcStrg1  = (m.lcStrg1 + TAB + Proper(AllTrim(SubStr(m.lcStrgeixoY,(m.lnConta1 * 10 - 9),10))))
+			m.lnVlGrf1 = Evaluate('TmpResult.' + AllTrim(SubStr('ncomprasordem   ' + Iif(m.lnQtVal = 1,'nvalcomp','nqtde   '),(m.lnConta1 * 8 - 7),8)))
+			m.lcStrg2  = ('Geral' + TAB + AllTrim(TransForm(Iif(m.lnConta1 = 2,TmpResult.MaxOrdem - m.lnVlgrf1 + 1,m.lnVlGrf1),'999,999,999,999')) + CRLF)
+			m.lcChave2 = (m.lcChave1 + SubStr(m.lcStrgeixoY,(m.lnConta1 * 10 - 9),10))
+
+			Select CrGrafico1
+			Locate For CrGrafico1.cChave1s = PadR(m.lcChave2,100)
+			
+			If Eof()
+				m.lcStrgeixoX  = TmpResult.cStrAno1s
+				m.lnNgrpcol1   = 1
+				m.lnNlegenda1  = 7
+				For m.lnConta2 = 1 To m.lnNlegenda1
+					If !IsEmpty(SubStr(m.lcStrgeixoX,(m.lnConta2 * 4 - 3),4))
+						m.lcStrg2  = (m.lcStrg2 + Proper(AllTrim(SubStr(m.lcStrgeixoX,(m.lnConta2 * 4 - 3),4))))
+						m.lnVlGrf1 = Evaluate('TmpResult.' + AllTrim(SubStr('ncompra ordem   ' + Iif(m.lnQtVal = 1,'nvalano ','nqtdano '),(m.lnConta1 * 8 - 7),8)) + AllTrim(Str(m.lnConta2,20,0)))
+						m.lcStrg2  = (m.lcStrg2 + TAB + AllTrim(TransForm(Iif(m.lnConta1 = 2,TmpResult.MaxOrdem - m.lnVlgrf1 + 1,m.lnVlGrf1),'999,999,999,999')) + CRLF)
+					EndIf
+				EndFor
+
+				Select CrGrafico1
+				Insert Into CrGrafico1 (cChave1s,cTitulo1s,cTitulo2s,cTitulo3s,cTitulo4s,cEmpresas) ;
+								Values (m.lcChave2,m.lcTitulo1,m.lcTitulo2,m.lcTitulo3,m.lcTitulo4,m.lcEmpresa)
+				Append General gGrafico1s Class 'MSGraph.Chart' Data (m.lcStrg1 + CRLF + m.lcStrg2)
+
+				With .cntGrf1.oleGrafico1
+					.ControlSource   = 'CrGrafico1.gGrafico1s'
+					.AutoActivate    = 0
+					.AutoSize        = .T.
+					.Height          = .Height
+					.Left            = .Left
+					.Sizable         = .T.
+					.Stretch         = 2
+					.Top             = .Top
+					.Width           = .Width
+					.HasLegend       = .T.
+					.HasTitle        = .F.
+					.DisplayBlanksAs = 1
+					.HasAxis(2)      = .T.   &&(!.m.lnConta1 = 2)
+					.Type            = -4100
+					.SubType         = 1
+
+					With .ChartArea
+						.Font.Name        = "Arial"
+						.Font.Size        = 8
+						.Font.Bold        = .T.
+						.Font.Italic      = .F.
+						.Interior.Color   = Rgb(255,255,255)
+						.Border.Color     = Rgb(0,0,0)
+						.Border.LineStyle = 1
+						.Border.Weight    = 2
+						.Shadow           = .T.
+					EndWith
+					With .PlotArea
+						.Interior.Color = Rgb(255,255,255)
+						.Border.Color   = Rgb(0,0,0)
+					EndWith
+					With .Legend
+						.Font.Name   = 'Courier New'
+						.Font.Name   = 'Arial'
+						.Font.Size   = 8
+						.Font.Bold   = .T.
+						.Font.Italic = .F.
+						.Position    = 1
+						.Shadow      = .T.
+					EndWith	
+					With .Axes(1)
+						.HasTitle               = .F.
+						.ReversePlotOrder       = .F.
+						.TickLabels.Orientation = 0
+
+						With .TickLabels.Font
+							.Name          = "Arial"
+							.Bold          = .T.
+							.Size          = 9
+							.Strikethrough = .F.
+							.Superscript   = .F.
+							.Subscript     = .F.
+							.OutlineFont   = .F.
+							.Shadow        = .F.
+						EndWith
+					EndWith
+					With .Axes(2)
+						.HasTitle                = .F.
+						.ReversePlotOrder        = .F.
+						.HasMajorGridLines       = .T.
+						.HasMinorGridlines       = .F.
+						.MinimumScaleIsAuto      = .T.
+						.MaximumScaleIsAuto      = .T.
+						.TickLabels.Orientation  = 0
+						.TickLabels.NumberFormat = "###,###,###,##0.00"
+
+						With .TickLabels.Font
+							.Name          = "Arial"
+							.Bold          = .T.
+							.Size          = 8
+							.Strikethrough = .F.
+							.Superscript   = .F.
+							.Subscript     = .F.
+							.OutlineFont   = .F.
+							.Shadow        = .F.
+						EndWith
+					EndWith
+					With .ChartGroups(1)
+						.HasSeriesLines = .F.
+						.GapWidth       = 10
+						.Overlap        = (.GapWidth / 2 * -1)
+						For m.lnConta2  = 1 To m.lnNlegenda1   && m.lnNgrpcol1
+							If Type('ThisForm.cntGrf1.oleGrafico1.ChartGroups(1).SeriesCollection(m.lnConta2)') = 'O'
+								With .SeriesCollection(m.lnConta2)
+									.ApplyDataLabels = .T.
+									.ApplyDataLabels.Type
+									For m.lnConta3   = 1 To m.lnNgrpcol1   && m.lnNlegenda1
+										If Type('ThisForm.cntGrf1.oleGrafico1.ChartGroups(1).SeriesCollection(m.lnConta2).Points(m.lnConta3).DataLabel')=='O'
+											With .Points(m.lnConta3).DataLabel
+												If m.lnConta2  = 1
+													m.lnVlGrf1 = Evaluate('TmpResult.' + AllTrim(SubStr('ncomprasordem   ' + Iif(m.lnQtVal = 1,'nvalcomp','nqtde   '),(m.lnConta1 * 8 - 7),8)))
+												Else
+													m.lnVlGrf1 = Evaluate('TmpResult.' + AllTrim(SubStr('ncompra ordem   ' + Iif(m.lnQtVal = 1,'nvalano ','nqtdano '),(m.lnConta1 * 8 - 7),8)) + AllTrim(Str(m.lnConta2 - 1,20,0)))
+												EndIf
+												.Top          = (.Top - Iif(m.lnVlGrf1 < 0,-10,10))
+												.Caption      = AllTrim(Str(m.lnVlGrf1,20,2))
+												.NumberFormat = "###,###,###,##0.00"
+												.Font.Name    = 'Arial '
+												.Font.Size    = 8
+												.Font.Bold    = .T.
+										        .Font.Shadow  = .F.
+											EndWith
+										EndIf
+									EndFor
+								EndWith
+							EndIf
+						EndFor
+					EndWith
+					.Refresh
+				EndWith
+			EndIf
+		EndFor
+		On Error &lcOnError.
+
+		m.lcChave1 = .cntGrf2.cmbChave1.List(m.lnLinhaCmb1)
+		m.lcChave2 = (m.lcChave1 + SubStr(m.lcStrgeixoY,(.pnNumGrf*10-9),10))
+
+		Select CrGrafico1
+		Locate For CrGrafico1.cChave1s = PadR(m.lcChave2,100)
+		.cntGrf1.oleGrafico1.Refresh
+	EndIf
+	.cmdgGrafico.cmdGrfAnterior.Enabled = (.pnNumGrf > 1)
+	.cmdgGrafico.cmdGrfProximo.Enabled  = (.pnNumGrf < 3)
+	.cmdgGrafico.cmdGrfAnterior.Refresh
+	.cmdgGrafico.cmdGrfProximo.Refresh
+
+	Set Point To m.lcOldPoint
+	Set Separator To m.lcOldSepar
+	Set Escape &lcEscape.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters loForm1
+Local lnLeftIni1
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.LockScreen = .T.
+	m.loForm1 = Iif(Type('m.loForm1') = 'O',m.loForm1,ThisForm)
+	.SetAll('AutoSize',.T.,'Label')
+	.SetAll('Format','K','TextBox')
+	.SetAll('InputMask','','TextBox')
+	.SetAll('MaxLength',0,'TextBox')
+	.SetAll('BackStyle',1,'TextBox')
+	.SetAll('Alignment',3,'TextBox')
+	.SetAll('FontName','Courier New','TextBox')
+	.SetAll('FontName','Courier New','ComboBox')
+	.SetAll('FontSize',9,'TextBox')
+	.SetAll('FontSize',9,'ComboBox')
+	.FontName            = 'Arial'
+	.FontSize            = 9
+	.Caption             = 'Gráfico dos Clientes que Mais Compram'
+	.poForm1             = m.loForm1
+	.pnNumGrf            = 1
+	.DataSessionId       = .poForm1.DataSessionId
+	.cntAguarde.Visible  = .T.
+	.chkGraficos.Visible = .F.
+	.cntGrf1.Visible     = .F.
+	.cntGrf2.Visible     = .F.
+	.cmdgGrafico.Visible = .F.
+	.Refresh()
+	.Show()
+	.Draw()
+	.LockScreen          = .F.
+	.Refresh()
+	.Show()
+	.Draw()
+	.LockScreen          = .T.
+	.cntGrf2.cmbChave1.Clear
+	.mGeraGrafico()
+	.cntAguarde.Visible  = .F.
+	.cntGrf1.Visible     = .T.
+	.cntGrf2.Visible     = .T.
+	.chkGraficos.Visible = .T.
+	.chkGraficos.Value   = 0
+	.cmdgGrafico.Visible = .T.
+	.cntGrf2.cmbChave1.ListIndex = 1
+	.cntGrf2.cmbChave1.SetFocus
+	.Refresh
+	.LockScreen          = .F.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMG.cntGrf2.cmbChave1
+* Classe: combobox (Base: combobox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+With ThisForm
+	.cntAguarde.Visible = .T.
+	.Refresh
+	.Draw
+	.LockScreen         = .T.
+	.SetAll('Enabled',.F.,'Oleboundcontrol')
+	.mGeraGrafico(.cntGrf2.cmbChave1.ListIndex)
+	.cntGrf2.cmbChave1.SetFocus
+	.cntAguarde.Visible = .F.
+	.Refresh
+	.Draw
+	.LockScreen         = .F.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.SetAll('Enabled',.F.,'OleBoundControl')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMG.cmdGgrafico
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdGrfAnterior.Click
+------------------------------------------------------------
+PROCEDURE cmdGrfAnterior.Click
+Local lcChave1,lcChave2
+
+With ThisForm
+	.LockScreen   = .T.
+	.pnNumGrf     = Max(1,(.pnNumGrf - 1))
+	.cmdgGrafico.cmdGrfAnterior.Enabled = (.pnNumGrf > 1)
+	.cmdgGrafico.cmdGrfProximo.Enabled  = (.pnNumGrf < 3)
+	m.lcQtVal     = PadR(Iif(ThisForm.poForm1.Opt_SelRel.Value = 1,'Valor','Quantidade'),10)
+	m.lnQtVal     = ThisForm.poForm1.Opt_SelRel.Value
+
+	m.lcChave1    = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)
+	m.lcChave2    = (m.lcChave1 + SubStr('Operações Ranking   ' + lcQtVal,(.pnNumGrf * 10 - 9),10))
+
+	Select CrGrafico1
+	Locate For CrGrafico1.cChave1s = PadR(m.lcChave2,100)
+
+	.cntGrf2.cmbChave1.SetFocus
+	.Draw
+	.Refresh
+	.LockScreen   = .F.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdGrfProximo.Click
+------------------------------------------------------------
+PROCEDURE cmdGrfProximo.Click
+Local lcChave1,lcChave2
+
+With ThisForm
+	.LockScreen   = .T.
+	.pnNumGrf     = Max(1,(.pnNumGrf + 1))
+	.cmdgGrafico.cmdGrfAnterior.Enabled = (.pnNumGrf > 1)
+	.cmdgGrafico.cmdGrfProximo.Enabled  = (.pnNumGrf < 3)
+	m.lcQtVal     = Padr(Iif(ThisForm.poForm1.Opt_SelRel.Value = 1,'Valor','Quantidade'),10)
+	m.lnQtVal     = ThisForm.poForm1.Opt_SelRel.Value
+
+	m.lcChave1 = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)
+	m.lcChave2 = (m.lcChave1 + SubStr('Operações Ranking   ' + lcQtVal,(.pnNumGrf * 10 - 9),10))
+
+	Select CrGrafico1
+	Locate For CrGrafico1.cChave1s = PadR(m.lcChave2,100)
+
+	.cntGrf2.cmbChave1.SetFocus
+	.Draw
+	.Refresh
+	.LockScreen = .F.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdImprimir.Click
+------------------------------------------------------------
+PROCEDURE cmdImprimir.Click
+Local lnRecno1,loList1,lnConta1,lcPrnAtual
+
+With ThisForm
+	.cntAguarde.Visible = .T.
+	.Refresh
+	.Draw
+	.LockScreen = .T.
+	m.lnGrafico = .NumGraficos.Value
+	m.lnRecno1  = RecNo('CrGrafico1')
+	m.lcChave1  = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)
+	m.lnPosic   = .cntGrf2.cmbChave1.ListIndex
+	.SetAll('Enabled',.F.,'OleBoundControl')
+
+	If .chkGraficos.Value = 1
+		lcName = GetPrinter()
+		Set Printer To Name (lcName)
+		Set Printer On
+		For m.lnConta1 = m.lnGrafico To .cntGrf2.cmbChave1.ListCount
+			Select CrGrafico1
+			Zap
+			.mGeraGrafico(m.lnConta1)
+			.cntAguarde.Visible = .F.
+			.Draw
+			.LockScreen = .F.
+			.cntAguarde.Refresh
+			.LockScreen = .T.
+
+			Select CrGrafico1
+			Set Order To ''
+			Set Order To pkchave1
+			Locate
+			Report Form SigReCmg To Printer
+		EndFor
+		Set Printer to Default
+	Else
+		.cntAguarde.Visible = .F.
+		.Draw
+		.LockScreen = .F.
+		.cntAguarde.Refresh
+		.LockScreen = .T.
+
+		Select CrGrafico1
+		Set Order To ''
+		Set Order To pkchave1
+		If .chkGraficos.Value = 0
+			Set Key To m.lcChave1
+		EndIf
+		Locate
+
+		Report Form SigReCmg To Printer Prompt NoConsole
+	EndIf
+
+	Select CrGrafico1
+	Set Order To ''
+	If BetWeen(m.lnRecno1,1,RecCount('CrGrafico1'))
+		GoTo m.lnRecno1
+	EndIf
+	.mGeraGrafico(m.lnPosic)
+	.cntGrf2.cmbChave1.SetFocus
+	.Refresh
+	.Draw
+	.LockScreen = .F.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdSair.Click
+------------------------------------------------------------
+PROCEDURE cmdSair.Click
+With ThisForm
+	.LockScreen = .T.
+	.cntGrf1.oleGrafico1.ControlSource = ''
+	If Used('CrGrafico1')
+		Use In CrGrafico1
+	EndIf
+
+	.Release
+	.Refresh
+	.LockScreen = .F.
+
+	If Type('ThisForm.poForm1') = 'O'
+		.poForm1.LockScreen = .T.
+		.poForm1.Enabled    = .T.
+		.poForm1.LockScreen = .F.
+	EndIf	
+EndWith
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECMG
+RESERVED3 (ClassInfo): pnnumgrf
+poform1
+*mgeragrafico 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

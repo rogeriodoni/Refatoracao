@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. A Fase 4/8 foi implementada com sucesso.
+
+**O que foi adicionado ao `Formsigreffi.prg`:**
+
+- **`ConfigurarPaginaFiltros()`** ÔÇö delega para 3 helpers especializados
+- **`ConfigurarGridEmpresas()`** ÔÇö grid `grd_4c_Empresas` (cursor_4c_Emp: ImpEmps/Cemps/Razas) + label + bot├Áes Sel/Des
+- **`ConfigurarGridDisponibilidades()`** ÔÇö grid `grd_4c_Disps` (cursor_4c_Disp: ImpDisps/Grupos/Contas) + label + bot├Áes Sel/Des  
+- **`ConfigurarGridOperacoes()`** ÔÇö grid `grd_4c_Oper` (cursor_4c_Oper: SeleOp/Dopes/Opers) + label + bot├Áes Sel/Des
+- **6 handlers PUBLIC** para os bot├Áes Marcar/Desmarcar (chamam m├®todos do BO e fazem Refresh do grid)
+
+**Decis├Áes t├®cnicas relevantes:**
+- Sequ├¬ncia correta para CheckBox em Grid: `AddObject("Check1")` ÔåÆ `CurrentControl = "Check1"` ÔåÆ `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Header captions` (evita Error 1767)
+- Guard `IF USED("cursor_4c_Oper")` antes de `RecordSource` para toler├óncia a falta de SQL no modo UI validation
+- Toggles individuais (click/teclado) delegados ├á liga├º├úo autom├ítica de `ControlSource` com o cursor LOGICAL; opera├º├Áes em massa via BO (MarcarXxx/DesmarcarXxx + Refresh)

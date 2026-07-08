@@ -1,0 +1,1157 @@
+﻿# CODE REVIEW - PASS VISUAL: Visual Properties (alinhamento, titulos, tipos)
+
+## TAREFA OBRIGATORIA
+Corrigir TODOS os problemas listados abaixo. Este pass foca em: **Visual Properties (alinhamento, titulos, tipos)**.
+
+## PROBLEMAS DETECTADOS (2)
+- [LAYOUT-POSITION] Controle 'Aguarde' (parent: SIGRECGR): Top original=92 vs migrado 'cnt_4c_Aguarde' Top=8 (diff=84px, tolerancia=30px)
+- [LAYOUT-POSITION] Controle 'Aguarde' (parent: SIGRECGR): Left original=296 vs migrado 'cnt_4c_Aguarde' Left=69 (diff=227px, tolerancia=30px)
+
+## INSTRUCOES DE CORRECAO
+### Foco deste pass: CORRECOES VISUAIS
+- [ALINHAMENTO] Botoes cmd_4c_* com Top diferente no mesmo grupo horizontal
+  - Identificar Top mais frequente no grupo, alinhar os desalinhados
+- [ALINHAMENTO-CONTAINER] Botoes no mesmo container cnt_4c_* com Top diferente
+- [TITULO-NAO-PROPAGADO] Caption do form nao propagado para lbl_4c_Sombra/lbl_4c_Titulo
+- [CHECKBOX-TIPO] CheckBox.Value tipo inconsistente (.F. vs 0/1)
+- [FONTNAME-ERRADO] FontName 'Comic Sans MS' encontrado - substituir por 'Tahoma'
+
+## REGRAS OBRIGATORIAS
+- Corrigir APENAS os problemas listados, NAO alterar logica de negocio
+- NAO remover campos, funcionalidades ou lookups
+- **PROIBIDO alterar propriedades visuais** (Width, Height, Top, Left, BackColor, ForeColor, FontName, FontSize) EXCETO se o problema eh especificamente de ALINHAMENTO
+- NUNCA juntar linhas com `;` numa linha unica
+- Usar Write tool para salvar os arquivos corrigidos nos mesmos caminhos
+
+
+## CODIGO ATUAL DOS ARQUIVOS
+
+### FORM (C:\4c\projeto\app\forms\relatorios\Formsigrecgr.prg) - TRECHOS RELEVANTES PARA PASS VISUAL (775 linhas total):
+
+*-- Linhas 98 a 106:
+98:         loc_lSucesso   = .F.
+99:         loc_lContinuar = .T.
+100:         TRY
+101:             THIS.Caption = "Relat" + CHR(243) + "rio de Rastreabilidade"
+102: 
+103:             IF TYPE("gc_4c_CaminhoIcones") = "U"
+104:                 gc_4c_CaminhoIcones = ""
+105:             ENDIF
+106:             THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+*-- Linhas 123 a 132:
+123:             IF loc_lContinuar
+124:                 *-- Cabecalho escuro com titulo (equivalente ao cntSombra do legado)
+125:                 THIS.ConfigurarCabecalho()
+126:                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+127:                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+128: 
+129:                 *-- PageFrame de 1 pagina (host para container Aguarde da Fase 4)
+130:                 THIS.ConfigurarPageFrame()
+131: 
+132:                 *-- Botoes do relatorio (CommandGroup com 4 acoes)
+
+*-- Linhas 166 a 202:
+166:     PROTECTED PROCEDURE ConfigurarCabecalho()
+167:         THIS.AddObject("cnt_4c_Cabecalho", "Container")
+168:         WITH THIS.cnt_4c_Cabecalho
+169:             .Top         = 0
+170:             .Left        = 0
+171:             .Width       = THIS.Width
+172:             .Height      = 80
+173:             .BackStyle   = 1
+174:             .BackColor   = RGB(100, 100, 100)
+175:             .BorderWidth = 0
+176:             .Visible     = .T.
+177: 
+178:             *-- Sombra do titulo (deslocada 2px para efeito de profundidade)
+179:             .AddObject("lbl_4c_Sombra", "Label")
+180:             WITH .lbl_4c_Sombra
+181:                 .Top       = 22
+182:                 .Left      = 22
+183:                 .Width     = THIS.Width
+184:                 .Height    = 30
+185:                 .FontName  = "Tahoma"
+186:                 .FontSize  = 14
+187:                 .FontBold  = .T.
+188:                 .ForeColor = RGB(0, 0, 0)
+189:                 .BackStyle = 0
+190:                 .Visible   = .T.
+191:             ENDWITH
+192: 
+193:             *-- Titulo em branco (sobrepoe a sombra)
+194:             .AddObject("lbl_4c_Titulo", "Label")
+195:             WITH .lbl_4c_Titulo
+196:                 .Top       = 20
+197:                 .Left      = 20
+198:                 .Width     = THIS.Width
+199:                 .Height    = 30
+200:                 .FontName  = "Tahoma"
+201:                 .FontSize  = 14
+202:                 .FontBold  = .T.
+
+*-- Linhas 225 a 250:
+225:         loc_oPgf.PageCount = 2
+226: 
+227:         *-- Posicionamento: logo abaixo do cabecalho (80px) ate o fim do form
+228:         loc_oPgf.Top    = 85
+229:         loc_oPgf.Left   = -1
+230:         loc_oPgf.Width  = THIS.Width + 2
+231:         loc_oPgf.Height = THIS.Height - 85
+232:         loc_oPgf.Tabs   = .F.
+233: 
+234:         *-- Page1: Processamento (Aguarde container sera adicionado na Fase 4)
+235:         loc_oPgf.Page1.Caption   = "Processamento"
+236:         loc_oPgf.Page1.FontName  = "Tahoma"
+237:         loc_oPgf.Page1.FontSize  = 8
+238:         loc_oPgf.Page1.BackColor = RGB(255, 255, 255)
+239:         loc_oPgf.Page1.ForeColor = RGB(90, 90, 90)
+240:         IF TYPE("gc_4c_CaminhoIcones") = "C" AND !EMPTY(gc_4c_CaminhoIcones)
+241:             loc_oPgf.Page1.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+242:         ENDIF
+243: 
+244:         *-- Page2: vazia (compatibilidade com pipeline CRUD - nao usada em REPORT)
+245:         loc_oPgf.Page2.Caption   = ""
+246:         loc_oPgf.Page2.BackColor = RGB(255, 255, 255)
+247: 
+248:         loc_oPgf.Visible    = .T.
+249:         loc_oPgf.ActivePage = 1
+250:     ENDPROC
+
+*-- Linhas 258 a 281:
+258:     PROTECTED PROCEDURE ConfigurarBotoes()
+259:         THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+260:         WITH THIS.cmg_4c_Botoes
+261:             .Top           = 0
+262:             .Left          = 495
+263:             .Width         = 310
+264:             .Height        = 80
+265:             .BackStyle     = 0
+266:             .BorderStyle   = 0
+267:             .SpecialEffect = 1
+268:             .Themes        = .F.
+269:             .ButtonCount   = 4
+270: 
+271:             WITH .Buttons(1)
+272:                 .Top             = 5
+273:                 .Left            = 5
+274:                 .Width           = 75
+275:                 .Height          = 70
+276:                 .Caption         = "Visualizar"
+277:                 .Picture         = gc_4c_CaminhoIcones + "ideo.jpg"
+278:                 .FontBold        = .T.
+279:                 .FontItalic      = .T.
+280:                 .BackColor       = RGB(255,255,255)
+281:                 .ForeColor       = RGB(90,90,90)
+
+*-- Linhas 287 a 299:
+287:             ENDWITH
+288: 
+289:             WITH .Buttons(2)
+290:                 .Top             = 5
+291:                 .Left            = 80
+292:                 .Width           = 75
+293:                 .Height          = 70
+294:                 .Caption         = "Imprimir"
+295:                 .Picture         = gc_4c_CaminhoIcones + "impressora.jpg"
+296:                 .FontName        = "Tahoma"
+297:                 .FontBold        = .T.
+298:                 .FontItalic      = .T.
+299:                 .FontSize        = 8
+
+*-- Linhas 307 a 319:
+307:             ENDWITH
+308: 
+309:             WITH .Buttons(3)
+310:                 .Top             = 5
+311:                 .Left            = 155
+312:                 .Width           = 75
+313:                 .Height          = 70
+314:                 .Caption         = "Doc. Excel"
+315:                 .Picture         = gc_4c_CaminhoIcones + "excel.jpg"
+316:                 .FontName        = "Tahoma"
+317:                 .FontBold        = .T.
+318:                 .FontItalic      = .T.
+319:                 .FontSize        = 8
+
+*-- Linhas 327 a 339:
+327:             ENDWITH
+328: 
+329:             WITH .Buttons(4)
+330:                 .Top             = 5
+331:                 .Left            = 230
+332:                 .Width           = 75
+333:                 .Height          = 70
+334:                 .Caption         = "Sair"
+335:                 .Cancel          = .T.
+336:                 .Picture         = gc_4c_CaminhoIcones + "otao_encerrar.jpg"
+337:                 .FontName        = "Tahoma"
+338:                 .FontBold        = .T.
+339:                 .FontItalic      = .T.
+
+*-- Linhas 366 a 410:
+366:     *--------------------------------------------------------------------------
+367:     PROTECTED PROCEDURE ConfigurarPaginaLista()
+368:         LOCAL loc_oPagina
+369:         loc_oPagina = THIS.pgf_4c_Paginas.Page1
+370: 
+371:         THIS.AddObject("cnt_4c_Aguarde", "Container")
+372:         WITH THIS.cnt_4c_Aguarde
+373:             .Top           = 92
+374:             .Left          = 296
+375:             .Width         = 207
+376:             .Height        = 57
+377:             .SpecialEffect = 0
+378:             .BackStyle     = 1
+379:             .BackColor     = RGB(255,255,255)
+380:             .BorderWidth   = 0
+381:             .Visible       = .F.
+382: 
+383:             .AddObject("lbl_4c_Label1", "Label")
+384:             WITH .lbl_4c_Label1
+385:                 .AutoSize  = .T.
+386:                 .FontBold  = .T.
+387:                 .FontName  = "Tahoma"
+388:                 .FontSize  = 10
+389:                 .BackStyle = 0
+390:                 .Caption   = "Aguarde..."
+391:                 .Top       = 8
+392:                 .Left      = 69
+393:                 .ForeColor = RGB(255,0,0)
+394:                 .Visible   = .T.
+395:             ENDWITH
+396: 
+397:             .AddObject("lbl_4c_Label2", "Label")
+398:             WITH .lbl_4c_Label2
+399:                 .AutoSize  = .T.
+400:                 .FontName  = "Tahoma"
+401:                 .FontSize  = 10
+402:                 .BackStyle = 0
+403:                 .Caption   = "Processando"
+404:                 .Top       = 28
+405:                 .Left      = 62
+406:                 .ForeColor = RGB(90,90,90)
+407:                 .Visible   = .T.
+408:             ENDWITH
+409:         ENDWITH
+410:     ENDPROC
+
+*-- Linhas 428 a 436:
+428:         loc_oPagina = THIS.pgf_4c_Paginas.Page2
+429: 
+430:         *-- Configuracao visual de Page2 (sem controles de entrada de dados)
+431:         loc_oPagina.Caption   = "Dados"
+432:         loc_oPagina.FontName  = "Tahoma"
+433:         loc_oPagina.FontSize  = 8
+434:         loc_oPagina.BackColor = RGB(255, 255, 255)
+435:         loc_oPagina.ForeColor = RGB(90, 90, 90)
+436: 
+
+*-- Linhas 615 a 652:
+615:     * Equivalente a: ThisForm.Aguarde.Visible = .T. + ThisForm.Refresh
+616:     *--------------------------------------------------------------------------
+617:     PROCEDURE ExibirAguarde()
+618:         LOCAL loc_oCnt
+619:         TRY
+620:             loc_oCnt = THIS.cnt_4c_Aguarde
+621:             IF VARTYPE(loc_oCnt) = "O"
+622:                 loc_oCnt.Visible = .T.
+623:                 THIS.Refresh()
+624:             ENDIF
+625:         CATCH TO loc_oErr
+626:             MsgErro(loc_oErr.Message, "Erro")
+627:         ENDTRY
+628:     ENDPROC
+629: 
+630:     *--------------------------------------------------------------------------
+631:     * OcultarAguarde - Oculta container Aguarde apos processamento
+632:     * Equivalente a: ThisForm.Aguarde.Visible = .F. + ThisForm.Refresh
+633:     *--------------------------------------------------------------------------
+634:     PROCEDURE OcultarAguarde()
+635:         LOCAL loc_oCnt
+636:         TRY
+637:             loc_oCnt = THIS.cnt_4c_Aguarde
+638:             IF VARTYPE(loc_oCnt) = "O"
+639:                 loc_oCnt.Visible = .F.
+640:                 THIS.Refresh()
+641:             ENDIF
+642:         CATCH TO loc_oErr
+643:             MsgErro(loc_oErr.Message, "Erro")
+644:         ENDTRY
+645:     ENDPROC
+646: 
+647:     *--------------------------------------------------------------------------
+648:     * AlternarPagina - Compatibilidade com pipeline CRUD
+649:     * REPORT form nao alterna entre paginas Lista/Dados; mant?m Page1 ativa
+650:     *--------------------------------------------------------------------------
+651:     PROCEDURE AlternarPagina(par_nPagina)
+652:         THIS.pgf_4c_Paginas.Visible = .T.
+
+
+### BO (C:\4c\projeto\app\classes\sigrecgrBO.prg):
+*==============================================================================
+* SIGRECGRBO.PRG
+* Business Object - Relatorio de Rastreabilidade (SigReCgr)
+*
+* Herda de RelatorioBase
+* TIPO: REPORT - sem campos de filtro na UI
+*
+* Este BO e chamado a partir de outro form (ParentForm) que passa:
+*   this_nTipo       = 1 (Cod.Barras) | 2 (OP) | 3 (Envelope) | 4 (Operacao)
+*   this_cFiltro     = valor correspondente ao tipo
+*   this_oParentForm = referencia ao form pai (possui poDataMgr para SQL)
+*
+* PrepararDados() monta TmpRastro com todos os niveis de rastreabilidade.
+*==============================================================================
+
+DEFINE CLASS sigrecgrBO AS RelatorioBase
+
+    *-- Tipo de rastreabilidade:
+    *-- 1 = Por Codigo de Barras
+    *-- 2 = Por Ordem de Producao
+    *-- 3 = Por Envelope
+    *-- 4 = Por Operacao (EmpDopNums)
+    this_nTipo          = 0
+
+    *-- Valor do filtro: cod. barras / num. OP / num. envelope / cod. operacao
+    *-- Armazenado como string para suportar todos os 4 tipos
+    this_cFiltro        = ""
+
+    *-- Referencia ao form pai que possui poDataMgr para acesso ao SQL Server
+    this_oParentForm    = .NULL.
+
+    *-- Nome do cursor de saida principal com dados de rastreabilidade
+    this_cCursorSaida   = "TmpRastro"
+
+    *--------------------------------------------------------------------------
+    * Init
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna mensagem do ultimo erro de processamento
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Chave composta dos filtros do relatorio
+    * Usada em LogAuditoria para rastrear qual relatorio foi gerado
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        LOCAL loc_cChave
+        loc_cChave = "TIPO=" + ALLTRIM(STR(THIS.this_nTipo, 1)) + ;
+                     ";FILTRO=" + ALLTRIM(THIS.this_cFiltro)
+        RETURN loc_cChave
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarFiltros - Valida se o BO tem dados suficientes para gerar relatorio
+    * Retorno: .T. se filtros validos; .F. caso contrario (msg em this_cMensagemErro)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarFiltros()
+        LOCAL loc_lOk
+        loc_lOk = .T.
+        IF THIS.this_nTipo < 1 OR THIS.this_nTipo > 4
+            THIS.this_cMensagemErro = "Tipo de rastreabilidade inv" + CHR(225) + "lido " + ;
+                                      "(deve ser 1, 2, 3 ou 4)"
+            loc_lOk = .F.
+        ENDIF
+        IF loc_lOk AND EMPTY(ALLTRIM(THIS.this_cFiltro))
+            THIS.this_cMensagemErro = "Filtro do relat" + CHR(243) + "rio n" + CHR(227) + ;
+                                      "o pode estar vazio"
+            loc_lOk = .F.
+        ENDIF
+        RETURN loc_lOk
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirRelatorio - Executa REPORT FORM com dados preparados
+    * par_nModo: 1=Preview, 2=Print c/ prompt, 3=Print silencioso
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirRelatorio(par_nModo)
+        LOCAL loc_lSucesso, loc_cFrx, loc_nModo
+        loc_lSucesso = .F.
+        loc_nModo = IIF(VARTYPE(par_nModo) = "N", par_nModo, 1)
+        TRY
+            IF !THIS.ValidarFiltros()
+                loc_lSucesso = .F.
+            ELSE
+                IF !THIS.PrepararDados()
+                    loc_lSucesso = .F.
+                ELSE
+                    IF !USED("TmpRastro") OR RECCOUNT("TmpRastro") = 0
+                        MsgAviso("Nenhum dado encontrado para o filtro selecionado.", ;
+                                 "Relat" + CHR(243) + "rio de Rastreabilidade")
+                        loc_lSucesso = .T.
+                    ELSE
+                        loc_cFrx = gc_4c_CaminhoReports + "SigReCgr.frx"
+                        IF !FILE(loc_cFrx)
+                            loc_cFrx = "SigReCgr"
+                        ENDIF
+
+                        DO CASE
+                            CASE loc_nModo = 1
+                                REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
+                            CASE loc_nModo = 2
+                                REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
+                            OTHERWISE
+                                REPORT FORM (loc_cFrx) TO PRINTER NOCONSOLE
+                        ENDCASE
+
+                        loc_lSucesso = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+            MsgErro(loc_oErr.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Restaura filtros (Tipo, Filtro) a partir de cursor preset
+    * Permite reexecucao do relatorio com filtros previamente salvos em cursor
+    * par_cAliasCursor: alias com colunas nTipo (N) e cFiltro (C)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_cAlias
+        loc_lSucesso = .F.
+        TRY
+            loc_cAlias = par_cAliasCursor
+            IF VARTYPE(loc_cAlias) != "C" OR EMPTY(loc_cAlias) OR !USED(loc_cAlias)
+                THIS.this_cMensagemErro = "Cursor de preset n" + CHR(227) + ;
+                                          "o dispon" + CHR(237) + "vel"
+            ELSE
+                SELECT (loc_cAlias)
+                IF EOF()
+                    THIS.this_cMensagemErro = "Cursor de preset vazio: " + loc_cAlias
+                ELSE
+                    SCATTER MEMVAR
+                    IF TYPE("m.nTipo") = "N"
+                        THIS.this_nTipo = m.nTipo
+                    ENDIF
+                    IF TYPE("m.cFiltro") = "C"
+                        THIS.this_cFiltro = ALLTRIM(m.cFiltro)
+                    ENDIF
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+            MsgErro(loc_oErr.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - Gera o relatorio enviando para a impressora (com prompt)
+    * Semantica para BO de relatorio: "inserir" = produzir documento impresso
+    * Delega para ImprimirRelatorio(2) e registra auditoria
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            loc_lSucesso = THIS.ImprimirRelatorio(2)
+            IF loc_lSucesso
+                THIS.RegistrarAuditoria("IMPRESSAO")
+            ENDIF
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+            MsgErro(loc_oErr.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Reprocessa os dados e exibe o relatorio em preview
+    * Semantica para BO de relatorio: "atualizar" = recalcular e visualizar
+    * Delega para ImprimirRelatorio(1) e registra auditoria
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            loc_lSucesso = THIS.ImprimirRelatorio(1)
+            IF loc_lSucesso
+                THIS.RegistrarAuditoria("VISUALIZACAO")
+            ENDIF
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+            MsgErro(loc_oErr.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * RegistrarAuditoria - Registra geracao do relatorio em LogAuditoria
+    * par_cOperacao: tipo de operacao (IMPRESSAO, VISUALIZACAO, IMPRESSAO_DIRETA)
+    *--------------------------------------------------------------------------
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+        LOCAL loc_lSucesso, loc_cSQL, loc_cChave, loc_cUsuario, loc_nResult
+        loc_lSucesso = .F.
+        TRY
+            loc_cUsuario = ""
+            IF TYPE("gc_4c_UsuarioLogado") = "C"
+                loc_cUsuario = ALLTRIM(NVL(gc_4c_UsuarioLogado, ""))
+            ENDIF
+
+            loc_cChave = THIS.ObterChavePrimaria()
+
+            loc_cSQL = "INSERT INTO LogAuditoria " + ;
+                       "(DataHora, Usuario, Tabela, Operacao, ChaveRegistro) " + ;
+                       "VALUES (GETDATE(), " + ;
+                       EscaparSQL(loc_cUsuario) + ", " + ;
+                       EscaparSQL("SigReCgr") + ", " + ;
+                       EscaparSQL(par_cOperacao) + ", " + ;
+                       EscaparSQL(loc_cChave) + ")"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            loc_lSucesso = (loc_nResult > 0)
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConsultarTabela - Substituto do poDataMgr.CursorQuery do legado
+    * Executa SELECT filtrado por par_cCampo = par_uValor no SQL Server
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConsultarTabela(par_cTabela, par_cAlias, par_cCampo, par_uValor, par_cColunas)
+        LOCAL loc_cColunas, loc_cSQL, loc_nResult
+        IF PCOUNT() < 5 OR EMPTY(par_cColunas)
+            loc_cColunas = "*"
+        ELSE
+            loc_cColunas = par_cColunas
+        ENDIF
+        IF VARTYPE(par_uValor) = "N"
+            loc_cSQL = "SELECT " + loc_cColunas + " FROM " + par_cTabela + ;
+                       " WHERE " + par_cCampo + " = " + TRANSFORM(par_uValor)
+        ELSE
+            loc_cSQL = "SELECT " + loc_cColunas + " FROM " + par_cTabela + ;
+                       " WHERE " + par_cCampo + " = " + EscaparSQL(par_uValor)
+        ENDIF
+        IF USED(par_cAlias)
+            USE IN (par_cAlias)
+        ENDIF
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, par_cAlias)
+        IF loc_nResult > 0
+            SELECT (par_cAlias)
+            GO TOP
+        ENDIF
+        RETURN loc_nResult > 0
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Monta cursor TmpRastro com todos os niveis de rastreabilidade
+    * Equivalente ao metodo processamento do form legado SIGRECGR
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lSucesso, loc_nTipo, loc_cFiltro, loc_nCodBars
+        LOCAL loc_nOp, loc_nEnv, loc_cEDN, loc_cQuery, loc_cChave
+        LOCAL loc_lcEmp, loc_cDope, loc_nNume, loc_nNDope, loc_cNume
+        LOCAL loc_lRegCreate, loc_lAcumPeso, loc_cBrancos, loc_cFigura
+        LOCAL loc_cEmpresa, loc_cTitulo, loc_cFoto, loc_oErr
+
+        loc_lSucesso = .F.
+
+        TRY
+            loc_nTipo   = THIS.this_nTipo
+            loc_cFiltro = ALLTRIM(THIS.this_cFiltro)
+
+            *-- Limpar cursores de trabalho anteriores
+            IF USED("TmpRastro")
+                USE IN TmpRastro
+            ENDIF
+            IF USED("TmpBarra")
+                USE IN TmpBarra
+            ENDIF
+            IF USED("TmpNop")
+                USE IN TmpNop
+            ENDIF
+            IF USED("TmpLote")
+                USE IN TmpLote
+            ENDIF
+            IF USED("TmpLote1")
+                USE IN TmpLote1
+            ENDIF
+            IF USED("crBranco")
+                USE IN crBranco
+            ENDIF
+
+            *-- Criar cursor principal de rastreabilidade
+            CREATE CURSOR TmpRastro (;
+                Cbars    n(8),    Cpros    c(14),   Dpros    c(40),   Tipos    c(1), ;
+                ImpCab   l,       Nops     n(10),   cFunds   n(6),    Tubos    n(2), ;
+                Dtfunds  d,       CodMaqfs c(10),   nNumes   c(10),   Numes    n(10), ;
+                DtLotes  d,       Ifors    c(10),   Dfors    c(30),   Codigos  n(6), ;
+                DtRgans  d,       Codtpans n(2),    Descs    c(20),   Resps    c(30), ;
+                Pesoams  n(9,2),  Dtamos   d,       nLotes   n(10),   nfunds   n(6), ;
+                RgNops   n(10),   nLaudos  n(6),    Fases    c(10),   Retrabs  c(37), ;
+                Dtcrts   d,       Setors   c(31),   Docs     c(33),   Datas    d, ;
+                Dopps    c(20),   Numps    n(10),   Grupods  c(10),   Contads  c(10), ;
+                Pesos    n(9,2),  Qtds     n(12,3), Rclis    c(30),   Citens   n(4), ;
+                Obs      m)
+            INDEX ON Tipos + STR(Numes,10) + Cpros + STR(Citens,4) TAG lote
+            INDEX ON Tipos + STR(Codigos,6) TAG Analise
+            INDEX ON Tipos + STR(Nops,10) + STR(Tubos,2) + nNumes + ;
+                     STR(Codigos,6) + DTOS(Dtcrts) TAG Tipos
+
+            CREATE CURSOR TmpBarra (Cbars n(8), Nops n(10))
+            INDEX ON Cbars TAG Cbars
+
+            CREATE CURSOR TmpNop (Nops n(10))
+            INDEX ON Nops TAG Nops
+
+            *-- Buscar referencia cruzada OP/Lote com controle de lote ativo
+            loc_cQuery = "SELECT a.Emps, a.Dopes, a.Numes, a.Datas," + ;
+                         " b.Ndopes, b.OriLotes, a.Contads, a.Vends, a.Contaos, b.Abrevs" + ;
+                         " FROM SigMvCab a, SigCdOpe b" + ;
+                         " WHERE a.Dopes = b.Dopes AND b.CtrlLotes = 1"
+
+            IF SQLEXEC(gnConnHandle, loc_cQuery, "TmpLote1") < 1
+                THROW "Falha na conex" + CHR(227) + "o (TmpLote1)"
+            ENDIF
+
+            *-- Transformar TmpLote1 em TmpLote com nNumes calculado localmente
+            SELECT Emps, Dopes, Numes, Datas, ;
+                   VAL(STR(Ndopes, 4) + TRANSFORM(Numes, "@L 999999")) AS nNumes, ;
+                   IIF(OriLotes=2, Contads, IIF(OriLotes=3, Vends, Contaos)) AS Contaos, ;
+                   Abrevs ;
+              FROM TmpLote1 ;
+              INTO CURSOR TmpLote READWRITE
+            SELECT TmpLote
+            INDEX ON nNumes TAG Numes
+            USE IN TmpLote1
+
+            *-- Imagem em branco como placeholder de produto sem foto
+            loc_cFigura  = "imagem"
+            loc_cBrancos = gc_4c_CaminhoBase + "BrJpg.JPG"
+            IF !FILE(loc_cBrancos)
+                loc_cBrancos = ADDBS(JUSTPATH(ADDBS(JUSTPATH(gc_4c_CaminhoBase)))) + "BrJpg.JPG"
+            ENDIF
+            CREATE CURSOR crBranco (Branco M)
+            SELECT crBranco
+            APPEND BLANK
+            IF FILE(loc_cBrancos)
+                APPEND MEMO Branco FROM (loc_cBrancos) OVERWRITE
+            ENDIF
+
+            *-- Montar cabecalho do relatorio
+            CREATE CURSOR csCabecalho (NomeEmpresa c(80), Titulo c(200), Figura c(10), ;
+                                       Campo1 c(10), Campo2 c(10), Campo3 c(10), ;
+                                       Descr1 c(40), Descr2 c(40), Descr3 c(40))
+            THIS.ConsultarTabela("SigCdEmp", "crSigCdEmp", "Cemps", ;
+                                 go_4c_Sistema.cCodEmpresa, "Razas")
+            loc_cEmpresa = go_4c_Sistema.cCodEmpresa + " - " + ALLTRIM(crSigCdEmp.Razas)
+            loc_cTitulo  = "Relat" + CHR(243) + "rio de Rastreabilidade"
+            INSERT INTO csCabecalho (NomeEmpresa, Titulo, Figura) ;
+                VALUES (loc_cEmpresa, loc_cTitulo, loc_cFigura)
+
+            COPY MEMO crBranco.Branco TO (SYS(2023) + "\" + ALLTRIM(loc_cFigura) + ".jpg")
+
+            *-- Processar por tipo de rastreabilidade
+            DO CASE
+
+                CASE loc_nTipo = 1
+                    *-- TIPO 1: Por Codigo de Barras
+                    loc_nCodBars = VAL(loc_cFiltro)
+
+                    THIS.ConsultarTabela("SigOpEtq", "crSigOpEtq", "CBars", ;
+                                         loc_nCodBars, "CPros, Nops, Emps, Dopes, Numes")
+                    THIS.ConsultarTabela("SigCdPro", "crSigCdPro", "CPros", ;
+                                         ALLTRIM(crSigOpEtq.CPros), "DPros, FigJpgs")
+
+                    CLEAR RESOURCES
+                    IF !EMPTY(crSigCdPro.FigJpgs) AND !ISNULL(crSigCdPro.FigJpgs)
+                        loc_cFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(crSigCdPro.FigJpgs, ;
+                                        "data:image/png;base64,", ""), ;
+                                        "data:image/jpeg;base64,", ""), ;
+                                        "data:image/jpg;base64,", ""), 14)
+                        STRTOFILE(loc_cFoto, SYS(2023) + "\" + ALLTRIM(loc_cFigura) + ".jpg")
+                    ELSE
+                        COPY MEMO crBranco.Branco TO (SYS(2023) + "\" + ALLTRIM(loc_cFigura) + ".jpg")
+                    ENDIF
+
+                    SELECT csCabecalho
+                    REPLACE Campo1 WITH "Barra", ;
+                            Campo2 WITH "Produto", ;
+                            Campo3 WITH "Descri" + CHR(231) + CHR(227) + "o", ;
+                            Descr1 WITH ALLTRIM(STR(loc_nCodBars)), ;
+                            Descr2 WITH ALLTRIM(crSigOpEtq.Cpros), ;
+                            Descr3 WITH ALLTRIM(crSigCdPro.Dpros) IN csCabecalho
+
+                    IF EMPTY(crSigOpEtq.Nops)
+                        *-- Sem OP direta: rastrear por itens de movimento
+                        loc_cChave = ALLTRIM(crSigOpEtq.Emps) + ALLTRIM(crSigOpEtq.Dopes) + ;
+                                     STR(crSigOpEtq.Numes, 6)
+
+                        THIS.ConsultarTabela("SigMvItn", "crSigMvItn", "EmpDopNums", ;
+                                             loc_cChave, "Opers, CodBarras")
+                        SELECT crSigMvItn
+                        SCAN
+                            IF ALLTRIM(crSigMvItn.Opers) = "E"
+                                LOOP
+                            ENDIF
+                            INSERT INTO TmpBarra (Cbars) VALUES (crSigMvItn.CodBarras)
+                        ENDSCAN
+
+                        SELECT TmpBarra
+                        GO TOP
+                        DO WHILE !EOF()
+                            IF !EMPTY(TmpBarra.Nops)
+                                SKIP
+                                LOOP
+                            ENDIF
+
+                            THIS.ConsultarTabela("SigOpEtq", "crSigOpEtq", "CBars", ;
+                                                 TmpBarra.Cbars, "CPros, Nops, Emps, Dopes, Numes")
+                            IF EMPTY(crSigOpEtq.Nops)
+                                DELETE IN TmpBarra
+                                loc_cChave = ALLTRIM(crSigOpEtq.Emps) + ;
+                                             ALLTRIM(crSigOpEtq.Dopes) + ;
+                                             STR(crSigOpEtq.Numes, 6)
+
+                                THIS.ConsultarTabela("SigMvItn", "crSigMvItn", "EmpDopNums", ;
+                                                     loc_cChave, "Opers, CodBarras")
+                                SELECT crSigMvItn
+                                SCAN
+                                    IF ALLTRIM(crSigMvItn.Opers) = "E"
+                                        LOOP
+                                    ENDIF
+                                    INSERT INTO TmpBarra (Cbars) VALUES (crSigMvItn.CodBarras)
+                                ENDSCAN
+                                SELECT TmpBarra
+                                GO TOP
+                            ELSE
+                                REPLACE Nops WITH crSigOpEtq.Nops IN TmpBarra
+                                SELECT TmpBarra
+                                GO TOP
+                            ENDIF
+                        ENDDO
+                    ELSE
+                        INSERT INTO TmpBarra (Cbars, Nops) VALUES (loc_nCodBars, crSigOpEtq.Nops)
+                    ENDIF
+
+                    THIS.ConsultarTabela("SigOpEtq", "crSigOpEtq", "CBars", ;
+                                         loc_nCodBars, "CPros")
+                    THIS.ConsultarTabela("SigCdPro", "crSigCdPro", "CPros", ;
+                                         ALLTRIM(crSigOpEtq.CPros), "DPros")
+
+                    INSERT INTO TmpRastro (Cbars, Cpros, Dpros) ;
+                        VALUES (loc_nCodBars, ALLTRIM(crSigOpEtq.Cpros), ALLTRIM(crSigCdPro.Dpros))
+
+                    SELECT TmpBarra
+                    SCAN
+                        IF !SEEK(TmpBarra.Nops, "TmpNop", "Nops")
+                            INSERT INTO TmpNop (Nops) VALUES (TmpBarra.Nops)
+                        ENDIF
+                    ENDSCAN
+
+                CASE loc_nTipo = 2
+                    *-- TIPO 2: Por Ordem de Producao
+                    loc_nOp = VAL(loc_cFiltro)
+                    REPLACE Campo1 WITH "O.P.", ;
+                            Descr1 WITH ALLTRIM(STR(loc_nOp)) IN csCabecalho
+                    IF !SEEK(loc_nOp, "TmpNop", "Nops")
+                        INSERT INTO TmpNop (Nops) VALUES (loc_nOp)
+                    ENDIF
+
+                CASE loc_nTipo = 3
+                    *-- TIPO 3: Por Envelope
+                    loc_nEnv = VAL(loc_cFiltro)
+                    REPLACE Campo1 WITH "Envelope", ;
+                            Descr1 WITH ALLTRIM(STR(loc_nEnv)) IN csCabecalho
+
+                    loc_cQuery = "SELECT TOP 1 EmpDNps FROM SigPdMvf" + ;
+                                 " WHERE Nenvs = " + TRANSFORM(loc_nEnv) + ;
+                                 " ORDER BY Nenvs DESC, EmpDNps DESC"
+
+                    IF SQLEXEC(gnConnHandle, loc_cQuery, "crTopMfas") < 1
+                        THROW "Falha na conex" + CHR(227) + "o (crTopMfas)"
+                    ENDIF
+                    SELECT crTopMfas
+                    GO TOP
+                    IF !EOF()
+                        loc_cChave = ALLTRIM(crTopMfas.EmpDNps)
+
+                        loc_cQuery = "SELECT Nops FROM SigPdMvf" + ;
+                                     " WHERE EmpDNps = " + EscaparSQL(loc_cChave) + ;
+                                     " ORDER BY Nops"
+
+                        IF SQLEXEC(gnConnHandle, loc_cQuery, "crSigPdMvf") < 1
+                            THROW "Falha na conex" + CHR(227) + "o (crSigPdMvf 2)"
+                        ENDIF
+                        SELECT crSigPdMvf
+                        SCAN
+                            IF !SEEK(crSigPdMvf.Nops, "TmpNop", "Nops")
+                                INSERT INTO TmpNop (Nops) VALUES (crSigPdMvf.Nops)
+                            ENDIF
+                        ENDSCAN
+                    ENDIF
+
+                OTHERWISE
+                    *-- TIPO 4: Por Operacao (EmpDopNums)
+                    loc_cEDN = go_4c_Sistema.cCodEmpresa + loc_cFiltro
+                    REPLACE Campo1 WITH "Opera" + CHR(231) + CHR(227) + "o", ;
+                            Descr1 WITH ALLTRIM(loc_cEDN) IN csCabecalho
+
+                    THIS.ConsultarTabela("SigOpPic", "crSigOpPic", "EmpDopNums", ;
+                                         loc_cEDN, "Nops")
+                    SELECT crSigOpPic
+                    SCAN
+                        IF !SEEK(crSigOpPic.Nops, "TmpNop", "Nops")
+                            INSERT INTO TmpNop (Nops) VALUES (crSigOpPic.Nops)
+                        ENDIF
+                    ENDSCAN
+
+            ENDCASE
+
+            *-- Loop principal: expandir rastreabilidade por OP (hierarquia OP -> OP mae)
+            SELECT TmpNop
+            GO TOP
+            DO WHILE !EOF()
+
+                THIS.ConsultarTabela("SigOpPic", "crSigOpPic", "Nops", TmpNop.Nops, "Nops")
+                THIS.ConsultarTabela("SigCdFud", "crSigCdFud", "Nops", TmpNop.Nops)
+
+                SELECT crSigCdFud
+                SCAN
+                    THIS.ConsultarTabela("SigCdFun", "crSigCdFun", "Codigos", crSigCdFud.Codigos)
+
+                    loc_lcEmp = ALLTRIM(crSigCdFun.Emps)
+
+                    SELECT TmpRastro
+                    APPEND BLANK
+                    REPLACE Nops     WITH crSigCdFud.Nops, ;
+                            cFunds   WITH crSigCdFud.Codigos, ;
+                            Tubos    WITH crSigCdFud.Tubos, ;
+                            Dtfunds  WITH crSigCdFun.Datas, ;
+                            CodMaqfs WITH ALLTRIM(crSigCdFun.codmaqfs), ;
+                            Tipos    WITH "1", ;
+                            ImpCab   WITH .T.
+
+                    loc_lRegCreate = .F.
+
+                    loc_cQuery = "SELECT * FROM SigCdFud" + ;
+                                 " WHERE Codigos = " + TRANSFORM(crSigCdFun.Codigos) + ;
+                                 " AND Tubos = " + TRANSFORM(TmpRastro.Tubos)
+
+                    IF SQLEXEC(gnConnHandle, loc_cQuery, "TmpTubos") < 1
+                        THROW "Falha na conex" + CHR(227) + "o (TmpTubos)"
+                    ENDIF
+
+                    SELECT TmpTubos
+                    SCAN
+                        IF !EMPTY(TmpTubos.nNumes)
+                            SET DECIMALS TO 0
+                            loc_nNDope = VAL(LEFT(STR(TmpTubos.nNumes, 10), 4))
+
+                            THIS.ConsultarTabela("SigCdOpe", "TmpOpe", "NDopes", ;
+                                                 loc_nNDope, "Dopes, Abrevs")
+
+                            loc_cDope = ALLTRIM(TmpOpe.Dopes)
+                            loc_nNume = VAL(RIGHT(STR(TmpTubos.nNumes, 10), 6))
+                            SET DECIMALS TO 2
+                            loc_cNume = ALLTRIM(TmpOpe.Abrevs) + "-" + ;
+                                        TRANSFORM(loc_nNume, "@L 999999")
+
+                            IF loc_lRegCreate
+                                SELECT TmpRastro
+                                APPEND BLANK
+                                REPLACE Nops     WITH TmpTubos.Nops, ;
+                                        cFunds   WITH TmpTubos.Codigos, ;
+                                        Tubos    WITH TmpTubos.Tubos, ;
+                                        Dtfunds  WITH crSigCdFun.Datas, ;
+                                        CodMaqfs WITH ALLTRIM(crSigCdFun.codmaqfs), ;
+                                        Tipos    WITH "1"
+                            ENDIF
+
+                            SELECT TmpRastro
+                            REPLACE nNumes WITH loc_cNume
+                            loc_lRegCreate = .T.
+
+                            THIS.ConsultarTabela("SigMvCab", "crSigMvCab", "EmpDopNums", ;
+                                                 loc_lcEmp + loc_cDope + STR(loc_nNume, 6))
+                            THIS.ConsultarTabela("SigMvItn", "crSigMvItn", "EmpDopNums", ;
+                                                 loc_lcEmp + loc_cDope + STR(loc_nNume, 6))
+
+                            SELECT crSigMvItn
+                            SCAN
+                                IF crSigMvItn.nLotes = 0
+                                    LOOP
+                                ENDIF
+
+                                =SEEK(crSigMvItn.nLotes, "TmpLote", "Numes")
+                                THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                                     ALLTRIM(TmpLote.ContaOs), "RClis")
+
+                                loc_cNume = ALLTRIM(TmpLote.Abrevs) + "-" + ;
+                                            TRANSFORM(TmpLote.Numes, "@L 999999")
+
+                                SELECT TmpRastro
+                                SET ORDER TO lote
+                                IF !SEEK("2" + STR(crSigMvItn.nLotes) + ;
+                                         ALLTRIM(crSigMvItn.Cpros) + ;
+                                         STR(crSigMvItn.Citens, 4))
+                                    APPEND BLANK
+                                    REPLACE Tipos   WITH "2", ;
+                                            Numes   WITH crSigMvItn.nLotes, ;
+                                            DtLotes WITH TmpLote.Datas, ;
+                                            Ifors   WITH ALLTRIM(TmpLote.Contaos), ;
+                                            Dfors   WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                            nNumes  WITH loc_cNume, ;
+                                            Cpros   WITH ALLTRIM(crSigMvItn.Cpros), ;
+                                            Obs     WITH crSigMvItn.Obs, ;
+                                            Citens  WITH crSigMvItn.Citens, ;
+                                            Pesos   WITH crSigMvItn.Qtds
+                                ENDIF
+
+                                THIS.ConsultarTabela("SigInAna", "crSigInAna", ;
+                                                     "NLotes", crSigMvItn.nLotes)
+                                SELECT crSigInAna
+                                IF !EOF("crSigInAna")
+                                    THIS.ConsultarTabela("SigPrTpa", "crSigPrTpa", ;
+                                                         "Codigos", crSigInAna.codTpans)
+                                    THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                                         ALLTRIM(crSigInAna.Resps), "RClis")
+
+                                    SELECT TmpRastro
+                                    SET ORDER TO Analise
+                                    IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                                        APPEND BLANK
+                                        REPLACE Tipos    WITH "4", ;
+                                                Codigos  WITH crSigInAna.Codigos, ;
+                                                DtRgans  WITH crSigInAna.datas, ;
+                                                Codtpans WITH crSigInAna.Codtpans, ;
+                                                Descs    WITH ALLTRIM(crSigPrTpa.Descs), ;
+                                                Resps    WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                                Pesoams  WITH crSigInAna.pesamosts, ;
+                                                dtamos   WITH crSigInAna.dtAmosts, ;
+                                                nLotes   WITH crSigMvItn.Nlotes, ;
+                                                nLaudos  WITH crSigInAna.nlaudos, ;
+                                                nNumes   WITH loc_cNume
+                                    ENDIF
+                                ENDIF
+                            ENDSCAN
+
+                            *-- Analise de materia-prima por fundo
+                            THIS.ConsultarTabela("SigInAna", "crSigInAna", ;
+                                                 "NFunds", crSigCdFun.Codigos)
+                            SELECT crSigInAna
+                            IF !EOF("crSigInAna")
+                                THIS.ConsultarTabela("SigPrTpa", "crSigPrTpa", ;
+                                                     "Codigos", crSigInAna.codTpans)
+                                THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                                     ALLTRIM(crSigInAna.Resps), "RClis")
+
+                                SELECT TmpRastro
+                                SET ORDER TO Analise
+                                IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                                    APPEND BLANK
+                                    REPLACE Tipos    WITH "4", ;
+                                            Codigos  WITH crSigInAna.Codigos, ;
+                                            DtRgans  WITH crSigInAna.datas, ;
+                                            Codtpans WITH crSigInAna.Codtpans, ;
+                                            Descs    WITH ALLTRIM(crSigPrTpa.Descs), ;
+                                            Resps    WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                            Pesoams  WITH crSigInAna.pesamosts, ;
+                                            dtamos   WITH crSigInAna.dtAmosts, ;
+                                            nFunds   WITH crSigCdFun.codigos, ;
+                                            nLaudos  WITH crSigInAna.nlaudos
+                                ENDIF
+                            ENDIF
+
+                        ENDIF
+                    ENDSCAN
+
+                    *-- Analise por OP
+                    THIS.ConsultarTabela("SigInAna", "crSigInAna", "Nops", TmpNop.Nops)
+                    SELECT crSigInAna
+                    IF !EOF("crSigInAna")
+                        THIS.ConsultarTabela("SigPrTpa", "crSigPrTpa", ;
+                                             "Codigos", crSigInAna.codTpans)
+                        THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                             ALLTRIM(crSigInAna.Resps), "RClis")
+
+                        SELECT TmpRastro
+                        SET ORDER TO Analise
+                        IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                            APPEND BLANK
+                            REPLACE Tipos    WITH "4", ;
+                                    Codigos  WITH crSigInAna.Codigos, ;
+                                    DtRgans  WITH crSigInAna.datas, ;
+                                    Codtpans WITH crSigInAna.Codtpans, ;
+                                    Descs    WITH ALLTRIM(crSigPrTpa.Descs), ;
+                                    Resps    WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                    Pesoams  WITH crSigInAna.pesamosts, ;
+                                    dtamos   WITH crSigInAna.dtAmosts, ;
+                                    RgNops   WITH TmpNop.Nops, ;
+                                    Fases    WITH ALLTRIM(crSigInAna.fases), ;
+                                    nLaudos  WITH crSigInAna.nlaudos
+                        ENDIF
+                    ENDIF
+                ENDSCAN
+
+                *-- Processar producao: retrabalhos, sub-itens de necessidade e tipo 6
+                THIS.ConsultarTabela("SigPdMvf", "crSigPdMvf", "Nops", TmpNop.Nops)
+                SELECT crSigPdMvf
+                SCAN
+                    THIS.ConsultarTabela("SigCdOpd", "crSigCdOpd", "Dopps", ;
+                                         ALLTRIM(crSigPdMvf.Dopps))
+                    THIS.ConsultarTabela("SigCdNec", "crSigCdNec", "EmpDNPs", ;
+                                         ALLTRIM(crSigPdMvf.Emps) + ALLTRIM(crSigPdMvf.Dopps) + ;
+                                         STR(crSigPdMvf.Numps, 10))
+                    THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                         ALLTRIM(crSigCdNec.Contaos), "RClis")
+
+                    IF !EMPTY(crSigPdMvf.cRetrabs)
+                        THIS.ConsultarTabela("SigPrCrt", "crSigPrCrt", "Cods", ;
+                                             ALLTRIM(crSigPdMvf.cRetrabs))
+
+                        SELECT TmpRastro
+                        APPEND BLANK
+                        REPLACE Tipos   WITH "5", ;
+                                Retrabs WITH ALLTRIM(crSigPdMvf.cRetrabs) + "-" + ;
+                                            ALLTRIM(crSigPrCrt.Descs), ;
+                                Dtcrts  WITH crSigCdNec.Datas, ;
+                                Setors  WITH ALLTRIM(crSigCdNec.Grupoos) + "-" + ;
+                                            ALLTRIM(crSigCdCli.Rclis), ;
+                                Docs    WITH ALLTRIM(crSigCdNec.Dopps) + "-" + ;
+                                            STR(crSigCdNec.Numps, 10)
+                    ENDIF
+
+                    THIS.ConsultarTabela("SigCdNei", "crSigCdNei", "EmpDNPs", ;
+                                         ALLTRIM(crSigPdMvf.Emps) + ALLTRIM(crSigPdMvf.Dopps) + ;
+                                         STR(crSigPdMvf.Numps, 10))
+                    SELECT crSigCdNei
+                    SCAN
+                        IF crSigCdNei.nLotes = 0
+                            LOOP
+                        ENDIF
+
+                        loc_lAcumPeso = .T.
+                        =SEEK(crSigCdNei.nLotes, "TmpLote", "Numes")
+                        loc_lcEmp = ALLTRIM(TmpLote.Emps)
+
+                        THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                             ALLTRIM(TmpLote.Contaos), "RClis")
+
+                        loc_cNume = ALLTRIM(TmpLote.Abrevs) + "-" + ;
+                                    TRANSFORM(TmpLote.Numes, "@L 999999")
+                        SET DECIMALS TO 0
+
+                        loc_nNDope = VAL(LEFT(STR(crSigCdNei.Nlotes, 10), 4))
+                        THIS.ConsultarTabela("SigCdOpe", "TmpOpe", "NDopes", ;
+                                             loc_nNDope, "Dopes, Abrevs")
+
+                        loc_cDope = ALLTRIM(TmpOpe.Dopes)
+                        loc_nNume = VAL(RIGHT(STR(crSigCdNei.Nlotes, 10), 6))
+                        SET DECIMALS TO 2
+
+                        THIS.ConsultarTabela("SigMvItn", "crSigMvItn", "EmpDopNums", ;
+                                             loc_lcEmp + loc_cDope + STR(loc_nNume, 6))
+                        SELECT crSigMvItn
+                        SCAN
+                            SELECT TmpRastro
+                            SET ORDER TO lote
+                            IF !SEEK("3" + STR(crSigCdNei.nLotes) + ;
+                                     ALLTRIM(crSigMvItn.Cpros) + ;
+                                     STR(crSigMvItn.Citens, 4))
+                                APPEND BLANK
+                                REPLACE Tipos   WITH "3", ;
+                                        Numes   WITH crSigCdNei.nLotes, ;
+                                        DtLotes WITH TmpLote.Datas, ;
+                                        Ifors   WITH ALLTRIM(TmpLote.Contaos), ;
+                                        Dfors   WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                        nNumes  WITH loc_cNume, ;
+                                        Cpros   WITH ALLTRIM(crSigMvItn.Cpros), ;
+                                        Obs     WITH crSigMvItn.Obs, ;
+                                        Citens  WITH crSigMvItn.Citens
+                            ENDIF
+
+                            IF loc_lAcumPeso
+                                SELECT TmpRastro
+                                SET ORDER TO lote
+                                =SEEK("3" + STR(crSigCdNei.nLotes))
+                                REPLACE Pesos WITH Pesos + crSigCdNei.Pesos
+                                loc_lAcumPeso = .F.
+                            ENDIF
+                        ENDSCAN
+
+                        THIS.ConsultarTabela("SigInAna", "crSigInAna", ;
+                                             "NLotes", crSigCdNei.nLotes)
+                        SELECT crSigInAna
+                        IF !EOF("crSigInAna")
+                            THIS.ConsultarTabela("SigPrTpa", "crSigPrTpa", ;
+                                                 "Codigos", crSigInAna.codTpans)
+                            THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                                 ALLTRIM(crSigInAna.Resps), "RClis")
+
+                            SELECT TmpRastro
+                            SET ORDER TO Analise
+                            IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                                APPEND BLANK
+                                REPLACE Tipos    WITH "4", ;
+                                        Codigos  WITH crSigInAna.Codigos, ;
+                                        DtRgans  WITH crSigInAna.Datas, ;
+                                        Codtpans WITH crSigInAna.Codtpans, ;
+                                        Descs    WITH ALLTRIM(crSigPrTpa.Descs), ;
+                                        Resps    WITH ALLTRIM(crSigCdCli.Rclis), ;
+                                        Pesoams  WITH crSigInAna.Pesamosts, ;
+                                        dtamos   WITH crSigInAna.DtAmosts, ;
+                                        nLotes   WITH crSigMvItn.Nlotes, ;
+                                        nLaudos  WITH crSigInAna.Nlaudos, ;
+                                        nNumes   WITH loc_cNume
+                            ENDIF
+                        ENDIF
+                    ENDSCAN
+
+                    *-- Registrar linha SigPdMvf como tipo 6 via Scatter/Gather
+                    SELECT crSigPdMvf
+                    SCATTER MEMVAR
+                    THIS.ConsultarTabela("SigCdCli", "crSigCdCli", "IClis", ;
+                                         ALLTRIM(m.ContaDs), "RClis")
+
+                    m.Rclis = ALLTRIM(crSigCdCli.Rclis)
+                    m.tipos = "6"
+
+                    SELECT TmpRastro
+                    APPEND BLANK
+                    GATHER MEMVAR
+                ENDSCAN
+
+                *-- Subir hierarquia: processar OP mae e marcar OP atual como processada
+                THIS.ConsultarTabela("SigOpPic", "crSigOpPic", "Nops", TmpNop.Nops, "NopMaes")
+                DELETE IN TmpNop
+
+                IF !EMPTY(crSigOpPic.NopMaes)
+                    INSERT INTO TmpNop (Nops) VALUES (crSigOpPic.NopMaes)
+                ENDIF
+                SELECT TmpNop
+                GO TOP
+            ENDDO
+
+            *-- Ordenar resultado por tipo e posicionar no inicio
+            SELECT TmpRastro
+            SET ORDER TO Tipos
+            GO TOP
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErr
+            THIS.this_cMensagemErro = loc_oErr.Message
+            MsgErro(loc_oErr.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+ENDDEFINE
+

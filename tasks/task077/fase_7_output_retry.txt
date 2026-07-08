@@ -1,0 +1,7 @@
+﻿Phase 7 added the 3 missing CRUD-style event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) adapted to the REPORT context ÔÇö `BtnVisualizarClick` was already present from prior phases. Each has real logic:
+
+- **BtnIncluirClick**: clears filters via `LimparCampos()` + focuses Demonstrativo (starts a new report query).
+- **BtnAlterarClick**: re-enables filter fields + focuses Demonstrativo (allows editing criteria).
+- **BtnExcluirClick**: confirms via `MsgConfirma()`, then clears filters (removes applied filter set).
+
+No empty stubs, no TODOs. All four CRUD-named handlers now exist alongside the existing REPORT-native ones (`BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`).

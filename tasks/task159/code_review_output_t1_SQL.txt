@@ -1,0 +1,17 @@
+﻿Corre├º├Áes confirmadas. Sobre os 2 itens SQL-FILTRO-INVENTADO:
+
+- **QTDEQS**: Falso positivo. `CrSigCdMoe.Qtdeqs` aparece apenas dentro de express├Áes `IIF()` VFP para calcular taxas de c├ómbio ÔÇö n├úo ├® condi├º├úo WHERE em nenhuma instru├º├úo SQL. O padr├úo existe igualmente no c├│digo original legado (`_Qtdeqs = Iif(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)`).
+
+- **ICLIS**: Falso positivo. `WHERE Iclis = ...` est├í em uma sub-query separada de lookup de fornecedor (`SELECT Nomes FROM SigCdCli WHERE Iclis = ...`), que ├® a substitui├º├úo correta para o `fAcessoContas()` do framework legado. `Iclis` ├® a PK de `SigCdCli` ÔÇö n├úo ├® filtro inventado.
+
+**Resumo das corre├º├Áes aplicadas em `sigprccpBO.prg`:**
+
+| Linha | Antes | Depois |
+|-------|-------|--------|
+| 341 | `" <= '" + loc_lcFinal + "'"` | `" <= " + EscaparSQL(loc_lcFinal)` |
+| 345 | `" >= '" + loc_lcInicio + "'"` | `" >= " + EscaparSQL(loc_lcInicio)` |
+| 524 | `"...CPros = '" + THIS.this_cPro + "'"` | `"...CPros = " + EscaparSQL(THIS.this_cPro)` |
+| 637 | `"...Cpros = '" + THIS.this_cPro + "'"` | `"...Cpros = " + EscaparSQL(THIS.this_cPro)` |
+| 926 | `"...Cods = '" + loc_lcMarkCus + "'"` | `"...Cods = " + EscaparSQL(loc_lcMarkCus)` |
+| 936 | `"WHERE a.Cods = '" + loc_lcMarkCus + "' " + ;` | `"WHERE a.Cods = " + EscaparSQL(loc_lcMarkCus) + " " + ;` |
+| 985 | `"WHERE a.Cods = '" + loc_lcMarkCus + "' " + ;` | `"WHERE a.Cods = " + EscaparSQL(loc_lcMarkCus) + " " + ;` |

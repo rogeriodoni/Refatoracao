@@ -1,0 +1,19 @@
+﻿All changes are confirmed. Here's a summary of what was done across Phases 6-8:
+
+**FormBuscaAuxiliar.prg** ÔÇö Added the `DefinirCursor`/`Mostrar` API that multiple report forms (including Formsigrecnt and Formsigrecrf) rely on:
+- 4 new properties: `this_cCampoCodigo`, `this_cCampoDescricao`, `cCodigoSelecionado`, `cDescricaoSelecionada`
+- `DefinirCursor(cursor, codField, descField, title)` ÔÇö sets up pre-populated cursor for lookup
+- `Mostrar()` ÔÇö shows the modal form, reads selected record into `cCodigoSelecionado`/`cDescricaoSelecionada`, returns `.T.`/`.F.`
+
+**Formsigrecrf.prg** ÔÇö Two fixes:
+- `ConfigurarPaginaDados`: Added 4 `BINDEVENT` calls for the `cmg_4c_Botoes` buttons (without these, Visualizar/Imprimir/Excel/Encerrar clicks were completely unhandled)
+- `FormParaRelatorio`: Fixed property names ÔÇö `this_cCodRef` ÔåÆ `this_cCods`, `this_cDescricao` ÔåÆ `this_cDsProduto` (matching actual BO declarations)
+
+**sigrecrfBO.prg** ÔÇö Added `GerarExcel()` method (form calls `this_oRelatorio.GerarExcel()`)
+
+**menu.prg** ÔÇö Full integration:
+- BAR 74 (separator) + BAR 75 ("Contagem por Refer├¬ncia") in `popRelatorios`
+- `ON SELECTION BAR 75 OF popRelatorios DO AbrirFormsigrecrf`
+- `PROCEDURE AbrirFormsigrecrf()` with standard TRY/CATCH/MostrarErro pattern
+
+The migration for `Formsigrecrf`/`sigrecrfBO` is now complete. config.prg auto-loads via ADIR ÔÇö no manual changes needed there.

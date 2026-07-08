@@ -1,0 +1,27 @@
+﻿Ap├│s an├ílise completa, todos os 4 problemas reportados s├úo **falsos positivos** do validador. Aqui est├í a justificativa:
+
+---
+
+### [METODO-INEXISTENTE] `THIS.Value()`
+
+Busquei `THIS.Value`, `THIS.Value()` e `.Value()` em todo o arquivo ÔÇö nenhuma ocorr├¬ncia encontrada. O validador provavelmente confundiu o acesso ├á propriedade `THIS.cmg_4c_Botoes.Value` (linha 1025) com uma chamada de m├®todo. Propriedade `.Value` de CommandGroup ├® VFP9 padr├úo. **Nenhuma a├º├úo necess├íria.**
+
+---
+
+### [LAYOUT-POSITION] 3 controles com diff exato de 85px
+
+O diff de **exatamente 85px** em todos os tr├¬s controles revela o motivo: ├® o offset do `PageFrame.Top = 85` (linha 309). O validador compara a posi├º├úo absoluta do legado (SIGREEVV.SCX flat) com a posi├º├úo relativa ├á Page1 do migrado, sem descontar o offset do PageFrame.
+
+A f├│rmula correta ├®: `Top_relativo = Top_original - PageFrame.Top`
+
+| Controle | Top original (form) | PageFrame.Top | Top correto (Page1) | C├│digo atual |
+|---|---|---|---|---|
+| `lbl_4c_Lbl_estoque` | 165 | 85 | **80** | 80 Ô£ô |
+| `chk_4c_ChkFranquias` | 213 | 85 | **128** | 128 Ô£ô |
+| `chk_4c_ChkZerados` | 213 | 85 | **128** | 128 Ô£ô |
+
+O c├│digo est├í correto. Mudar `chkFranquias.Top` para 213 dentro da Page1 resultaria em `213+20=233 > 215` (fora dos limites da p├ígina ÔÇö `PageFrame.Height = 300-85 = 215`), quebrando o layout.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormSIGREEVV.prg` est├í correto para este pass.

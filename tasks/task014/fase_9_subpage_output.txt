@@ -1,0 +1,32 @@
+﻿The file grew from ~11757 lines to ~13128 lines, adding ~1371 lines. Let me do a quick summary of all changes made:
+
+**Summary of FASE 9 implementation:**
+
+**1. `ConfigurarPaginaDados()` (line 694)** ÔÇö Added call to `THIS.ConfigurarPgpgDadosFiscais()` before `TornarControlesVisiveis`
+
+**2. `ConfigurarPgpgDadosFiscais()` (new, ~300 lines)** ÔÇö Adds all missing controls to Page4 (Dados Fiscais):
+- `txt_4c__gruccus` + `txt_4c__dgruccus` + labels (Grupo C.C.)
+- `txt_4c__contaccus` + `txt_4c__dcontaccus` + labels (Conta C.C.)
+- `txt_4c_AliqIPI` + label (Al├¡quota de IPI)
+- `txt_4c_Extipi` + label (Exce├º├úo da TIPI)
+- `txt_4c_Iat` + labels (IAT + description)
+- `txt_4c_IPPTCST` + label (IPPT/CST ÔÇö read-only computed)
+- `grd_4c_Cmv` (3 cols: Per├¡odo/Valor Custo GR/Moe) + cursor placeholder + `lbl_4c_CmvTitulo`
+- `cmd_4c_BtnDescFis` (Gerar Descri├º├úo Fiscal button)
+- BINDEVENTs for ALL existing controls (LostFocus) + new controls
+
+**3. `FormParaBO()` ÔÇö Added 5 missing fiscal fields:** `AliqIPIÔåÆnAliqipis`, `ExtipiÔåÆcExtipi`, `IatÔåÆcIats`, `gruccusÔåÆcGruccus`, `contaccusÔåÆcContaccus`
+
+**4. `BOParaForm()` ÔÇö Added 10 entries:** 3 description fields (Dclfiscal, Dorigmerc, Dsittricms) + 7 new fields including gruccus/contaccus descriptions
+
+**5. `LimparCampos()` ÔÇö Added Tab 4 section** clearing all 20+ fiscal fields + ZAP cursor_4c_Cmv
+
+**6. `OpcaoAbasChange()` ÔÇö Added Aba 4 data loading:** calls `CarregarDadosFiscais()` when navigating to Dados Fiscais tab
+
+**7. 21 new PUBLIC/PROTECTED methods:**
+- 11 field validators (Clfiscal, Dclfiscal, Origmerc, Dorigmerc, Sittricms, Dsittricms, CodServs, Tptribs, Iat, AliqIPI, MoedaEstimada)
+- 2 no-ops (Metal, Teor ÔÇö free codes, no lookup)
+- 4 conta corrente handlers (Gruccus, Dgruccus, Contaccus, Dcontaccus)
+- `TabFiscal_ExtIpiGotFocus` (checks IpiProds='S' to enable Extipi)
+- `BtnDescFisClick` (stub with user message)
+- `CarregarDadosFiscais` (loads grd_4c_Cmv from SigCdCmv)

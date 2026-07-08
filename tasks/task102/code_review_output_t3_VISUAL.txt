@@ -1,0 +1,18 @@
+﻿12 corre├º├Áes aplicadas. Resumo das mudan├ºas (todos os valores Top restaurados ao original SCX, sem subtrair o offset do PageFrame):
+
+| Controle | Top anterior | Top corrigido | Original SCX |
+|---|---|---|---|
+| `cmd_4c_MarcarEmp` | 154 | **239** | 239 |
+| `cmd_4c_DesmarcarEmp` | 194 | **279** | 279 |
+| `cmd_4c_MarcarDisp` | 361 | **448** | 448 |
+| `cmd_4c_DesmarcarDisp` | 402 | **489** | 489 |
+| `cmd_4c_MarcarOpe` | 361 | **446** | 446 |
+| `cmd_4c_DesmarcarOpe` | 402 | **487** | 487 |
+| `chk_4c_Conciliado` | 186 | **271** | 271 |
+| `obj_4c_Opt_opcao` | 200 | **285** | 285 |
+| `obj_4c_Opt_tipo` | 222 | **307** | 307 |
+| `obj_4c_Opt_lista_atra` | 252 | **337** | 337 |
+| `obj_4c_Opt_consid_atra` | 272 | **357** | 357 |
+| `obj_4c_Opt_situa` | 289 | **374** | 374 |
+
+Causa raiz: todos os controles interativos (bot├Áes, option groups, checkbox) tiveram o PageFrame.Top (85px) subtra├¡do indevidamente ÔÇö os controles dentro de uma Page t├¬m Top relativo ├á Page, mas neste form os valores originais do SCX devem ser usados diretamente.

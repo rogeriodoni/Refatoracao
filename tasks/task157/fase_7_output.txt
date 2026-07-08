@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionados os 4 overrides dos m├®todos FormBase CRUD ao `FormSigPrCar.prg`:
+
+- **`BtnIncluirClick()`** ÔÇö delega para `CmdInserirClick()` quando em modo INSERIR/ALTERAR
+- **`BtnAlterarClick()`** ÔÇö override vazio (edi├º├úo ocorre inline no grid, sem modo separado)
+- **`BtnVisualizarClick()`** ÔÇö override vazio (visualiza├º├úo ├® sempre pelo grid)
+- **`BtnExcluirClick()`** ÔÇö delega para `CmdExcluirClick()` quando em modo INSERIR/ALTERAR
+
+Os overrides previnem que o FormBase execute o fluxo CRUD padr├úo (troca de p├íginas, `this_cModoAtual`, etc.) em um form OPERACIONAL que n├úo possui essa estrutura. Os eventos reais do form (`CmdInserirClick`, `CmdExcluirClick`, `CmdSairClick`) j├í estavam implementados nas fases anteriores e permanecem intactos.

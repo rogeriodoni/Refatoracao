@@ -1,0 +1,11 @@
+﻿Three changes applied to `SigReAtmBO.prg`:
+
+1. **cursor_4c_GruposBal**: Added `Agrupas` to the SELECT (`SELECT Codigos, Descrs, Agrupas FROM SigCdGcr WHERE GerBals = 1`)
+
+2. **Agrupas lookup inside SCAN loop** (was `WHERE Codigos = ...` per-row SQLEXEC): Replaced with SEEK on the pre-loaded `cursor_4c_GruposBal`, matching the original's pattern of pre-loading + SEEK instead of per-row SQL
+
+3. **Company name** (`WHERE Cemps = ...`): Replaced the `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` query with `go_4c_Sistema.cEmpresa`, which the system object already provides
+
+**Regarding the 5 remaining items flagged by the validator:**
+- **TAMPS/TAMHS/TAMLS**: Confirmed false positives ÔÇö `TamPs/TamHs/TamLs` appear only in the SQL SELECT (fetched as output columns from SigCdPro) and in VFP9 `IF` conditions; they never appear in any SQL `WHERE` clause
+- **Marca/Descs in cursor_4c_TiposMat**: Confirmed false positives ÔÇö the BO creates this cursor with `SELECT 0 AS Marca, Cods, Descs FROM SigOpOpt`, which explicitly defines both columns; the Form's ControlSources are correct

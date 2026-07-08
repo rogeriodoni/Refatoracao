@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O `SigReEqTBO.prg` foi completado com 8 m├®todos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `PrepararDados()` (PROTECTED) | Valida que os cursors do form pai est├úo dispon├¡veis via DataSession |
+| `DefinirOpcao(par_nOpcao)` | Define 1=Anal├¡tico (csTempoCp/SigReEq1) ou 2=Sint├®tico (csTempoGr/SigReEq2) |
+| `Imprimir()` | Imprime direto para impressora sem di├ílogo (`TO PRINTER NOCONSOLE`) |
+| `ImprimirComPrompt()` | Imprime com di├ílogo de sele├º├úo de impressora (`PROMPT`) |
+| `Visualizar()` | Preview na tela (`PREVIEW NOCONSOLE`) |
+| `ObterExpressaoCor()` | Retorna express├úo `DynamicForeColor` para o grid de grupos (azul=quebra, vermelho=totais) |
+| `ConfigurarFiltroProdutos()` | `SET KEY TO Grupos+Contas+Linhas` no cursor de produtos (equivalente ao Page2.Activate) |
+| `LimparFiltroProdutos()` | `SET KEY TO` sem par├ómetros (equivalente ao Page2.Deactivate) |
+
+Nota importante: como este ├® um REPORT que recebe dados do form pai via `Set DataSession`, n├úo h├í `Inserir`/`Atualizar`/`ObterChavePrimaria` ÔÇö esses n├úo se aplicam ao tipo RelatorioBase.

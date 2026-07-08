@@ -1,0 +1,11 @@
+﻿All three fixes applied correctly in a single edit:
+
+**Fixes applied to `sigtosenBO.prg`:**
+
+1. **[SQL-ASPAS] Line 345** ÔÇö Replaced direct string concatenation with `EscaparSQL()`:
+   - `"'" + loc_cNovaSenha + "'"` ÔåÆ `EscaparSQL(loc_cNovaSenha)`
+   - `"'" + ALLTRIM(par_cUsuario) + "'"` ÔåÆ `EscaparSQL(ALLTRIM(par_cUsuario))`
+
+2. **[TRANSACAO-AVULSA] Lines 349+352** ÔÇö Removed `SQLEXEC(gnConnHandle, "COMMIT")` and `SQLEXEC(gnConnHandle, "ROLLBACK")`. Single UPDATE via ODBC AUTOCOMMIT needs no explicit transaction; simplified to `IF SQLEXEC(...) > 0` ÔåÆ `loc_lSucesso = .T.`
+
+**[SQL-FILTRO-INVENTADO] ÔÇö False positive confirmed:** Searched both `Formsigtosen.prg` and `sigtosenBO.prg` for any SQL string containing `NUMLICENCAS`. It does not exist as a SQL WHERE column anywhere. The occurrences of `goSistema.NumLicencas` are VFP-side property comparisons (`IF goSistema.NumLicencas <> 9999`), not SQL WHERE clauses. Nothing to remove.

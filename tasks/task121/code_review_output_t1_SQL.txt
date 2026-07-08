@@ -1,0 +1,3 @@
+﻿7 corre├º├Áes SQL-ASPAS aplicadas em `SigReIivBO.prg`. Todos os `WHERE X = '` + vari├ível + `'` substitu├¡dos por `WHERE X = " + EscaparSQL(variavel)`.
+
+Os 15 itens SQL-FILTRO-INVENTADO s├úo **falsos positivos** do detector: os campos `CHK*` (chkEndOs, chkFrete, chkTots etc.) s├úo acessos a campos de cursor VFP em condi├º├Áes IF, n├úo filtros WHERE em SQL ÔÇö e os filtros `CEMPS`, `ICLIS`, `ITRAS`, `CODS` s├úo WHERE cl├íusulas leg├¡timas das suas respectivas tabelas (SigCdEmp, SigCdCli, SigPrTrp, SigCdCor), que o detector n├úo conseguiu mapear por n├úo ter visibilidade completa dos WHEREs originais.

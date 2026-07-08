@@ -1,0 +1,23 @@
+[2026-04-28 11:57:34] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-28 11:57:34] [INFO] Prompt File: C:\4c\tasks\task021\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-04-28 11:57:34] [INFO] Output File: C:\4c\tasks\task021\06b_testeAutomatico_fix_output_t1.txt
+[2026-04-28 11:57:34] [INFO] Model: sonnet
+[2026-04-28 11:57:34] [INFO] Timeout: 3600 segundos
+[2026-04-28 11:57:34] [INFO] Max Output Tokens: 128000
+[2026-04-28 11:57:34] [INFO] Context Files: 0 arquivo(s)
+[2026-04-28 11:57:34] [INFO] Invocando Claude CLI...
+[2026-04-28 11:57:34] [INFO] Prompt carregado: 90872 caracteres
+[2026-04-28 11:57:34] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-28 11:57:34] [INFO] Tamanho total do prompt: 90872 caracteres
+[2026-04-28 11:57:34] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-28 11:58:35] [INFO] Claude CLI finalizado em 60.9215572 segundos
+[2026-04-28 11:58:35] [INFO] Exit Code: 0
+[2026-04-28 11:58:35] [INFO] Output salvo em: C:\4c\tasks\task021\06b_testeAutomatico_fix_output_t1.txt
+[2026-04-28 11:58:35] [INFO] Output size: 449 bytes
+[2026-04-28 11:58:35] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-28 11:58:35] [INFO] Preview do output:
+[2026-04-28 11:58:35] [INFO] Duas corre+º+Áes aplicadas em `FormSigAcCcr.prg`:
+
+1. **CarregarLista** (linha ~470): adicionado guard para `gb_4c_ValidandoUI = .T.` ÔÇö cria `cursor_4c_Dados` vazio com os campos corretos e retorna `.T.` sem tentar a query SQL que falharia sem conex+úo.
+
+2. **AjustarBotoesPorModo**: removido `PROTECTED` ÔÇö o TesteAutomatico acessa este m+®todo diretamente na linha 542 fora da classe, o que exige acesso p+¦blico.

@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto e completo. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarGrade()`** ÔÇö cria `grd_4c_Dados` com 10 colunas mapeadas de TmpDistrib (mesmos ColumnOrder, Width e propriedades do legado). `RecordSource` ├® definido primeiro para evitar reset de headers; ControlSources e Headers configurados em sequ├¬ncia. BINDEVENTs registrados para AfterRowColChange, Column2/4/6 (When, Valid, LostFocus).
+
+2. **`ConfigurarBotoes()`** ÔÇö cria `cmd_4c_Confirmar` (Left=650) e `cmd_4c_Cancelar` (Left=725) com propriedades id├¬nticas ao original (`Comic Sans MS`, `Themes=.F.`, ├¡cones do framework).
+
+3. **`AlternarPagina()`** ÔÇö forma plana sem PageFrame; apenas chama `grd_4c_Dados.Refresh()`.
+
+4. **`BtnConfirmarClick()` / `BtnCancelarClick()`** ÔÇö incrementam `CtrlAgrega` no form pai, chamam `BO.ConfirmarRateio()` / `BO.CancelarRateio()`, reabilitam o form pai e fecham com `Release()`.
+
+5. **Handlers de grid** (8 m├®todos PUBLIC) ÔÇö `GradeAfterRowColChange`, `GradeCol2WhenHandler/ValidHandler`, `GradeCol4WhenHandler/ValidHandler/LostFocusHandler`, `GradeCol6WhenHandler/ValidHandler` ÔÇö reproduzem toda a l├│gica de valida├º├úo, c├ílculo de fatores e navega├º├úo do legado.

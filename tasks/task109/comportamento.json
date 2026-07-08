@@ -1,0 +1,328 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 8,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 119,
+      "codigoOriginal": "Private pNot\n\nLocal lcIdTab1\n\nZap In TmpNFis\n\nWait Window 'Aguarde!!! Selecionando Notas Fiscais...' NoWait\n\npNot = .f.\n\nIf ThisForm.poDataMgr.pcDriver=='sql'\n\tpNot = 0\nEndIf \n\nIf Empty(ThisForm.getUsuars.Value)\n\tText To lcQuery NoShow TextMerge PreText 1 + 2 + 4 + 8\n\n\t\tSelect a.*, b.Rclis\n\t\t\tFrom SigMvNfi a\n\t\t\tLeft Join SigCdCli b On b.Iclis = a.CliFors\n\t\t\tWhere a.Emps = '<<_Empr>>' And\n\t\t\t\t\ta.Series = '<<Padr(ThisForm.get_Série.Value, 3)>>' And\n\t\t\t\t\ta.Cancelas = <<pNot>> And\n\t\t\t\t\ta.Impress = 0... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "fSqlTemporario,SqlExecute,CursorQuery",
+        "controlesReferenciados": "get_Série",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 42,
+      "codigoOriginal": "Private llFalse \nllFalse = .f.\n\nSelect * From TmpNFis Where Flag Into Cursor TmpVNFis\nSelect TmpVNFis\nScan \n\tlcEdn = TmpVNFis.Emps + TmpVNFis.Dopes + Str(TmpVNFis.Numes,6)\n\tlcSql = [Select Distinct c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+;\n\t\t\t[Where c.emps = ']+TmpVNFis.Emps+[' And c.series = ']+TmpVNFis.SerieS+[' ]+;\n\t\t\t[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+;\n\t\t\t[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+;\n\t\t\t[Union all ]+;\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "If thisform.notasant\n\tReturn .f.\nEndIf \nSelect TmpNFis\nIf TmpNFis.Flag\n\tCreate Cursor TprMvCab (Emps c(3), Dopes c(20), Numes n(6), ContaOs c(10), ContaDs c(10), ;\n\t\t\t\t\t\t   TpFats c(3), Obses m Null, ValVars n(12,2))\n\n\tpEdn = TmpNFis.Emps + TmpNFis.Dopes + Str(TmpNFis.Numes, 6)\n\n\tlcQuery = [Select Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars ] + ;\n\t\t\t    [From SigMvCab ] + ;\n\t\t\t   [Where EmpDopNums = '] + pEdn + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvCab]) < 1)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "Select TmpNFis\n\nthisform.notasant = .f. \n\n\nlcQuery = [Select Series,Emps,VSeqNota ] + ;\n\t\t    [ From SigCnFn2 ]  + ;\n\t\t    [ Where Series = '] + TmpNFis.Series +  [' And Emps = '] + TmpNFis.Emps + [' And VSeqNota = 1 ]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCnFnfT]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCnFnfT)])\n\tReturn 0\nEndIf\n\nIf !Eof('crSigCnFnfT')\n\tIf !ThisForm.Verificanf()\n\t\tthisform.notasant = .t. \n\tEndIf \nEndIf \n\nSelect TmpNFis\nGo t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Verificanf",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor TmpNFis (Flag l, Emis d, Series c(3), Operas c(1), CFis c(10), NFis c(6), TotNotas n(12,2), ;\n\t\t\t\t\t   Conta c(40), Operacao c(30), Emps c(3), Dopes c(20), Numes n(6))\nIndex On Nfis Tag Nfis\n\nCreate Cursor crClientes (Iclis c(10), RClis c(50))\nIndex On IClis Tag IClis\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.poDataMgr.CursorQuery([SigCdPam], [crSigCdPam], .f., .f., [MascNums])\n\t\tIf Not Used([crSigCdPam])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdPam)])\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\t.poDataMgr.CursorQuery([SigCdSer], [crSigCdSer], .f., .f., [EmpCods, TipoNfs])\n\t\tIf Not Used([crSigCdSer])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Con... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGNF",
+      "evento": "Procedure",
+      "linhas": 55,
+      "codigoOriginal": "If thisform.notasant\n\tReturn .f.\nEndIf \nCreate Cursor TprMvCab (Emps c(3), Dopes c(20), Numes n(6), ContaOs c(10), ContaDs c(10), ;\n\t\t\t\t\t   TpFats c(3), Obses m Null, ValVars n(12,2))\nSelect TmpNFis\nGo Bottom In TmpNFis\nThisForm.grade.Refresh\nGo Top In TmpNFis\n\nSelect TmpNFis\nScan\n\tIf TmpNFis.Flag\n\t\tWait Window 'Imprimindo Nota Fiscal nº ' + TmpNFis.NFis NoWait\n\n\t\tZap In TprMvCab\n\n\t\tpEdn = TmpNFis.Emps + TmpNFis.Dopes + Str(TmpNFis.Numes, 6)\n\n\t\tlcQuery = [Select Emps, Dopes, Numes, ContaOs, Cont... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,SelecionarDados",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGNF.Get_Série",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.Get_Série",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local lcSerie, lnNota, loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFNf', ;\n\t\t\t\t\t\t   'crListaRemota', 'Series', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Series', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Series\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf (Padr(This.Tag, 3) <> Padr(This.Value, 3))\n\tThisForm.btnProcessar.Enabled = .t.\nEndIf\n* Fim **********************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.Get_Série",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 3)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.getUsuars",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.getUsuars",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;\n\t\t\t\t\t\t   [crListaRemota], [Usuarios], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Usuarios], [], [Usuário])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf (Padr(This.Tag, 10) <> Padr(This.Value, 10))\n\tThisForm.btnProcessar.Enabled = .t.\nEndIf\n* Fim *******... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.getUsuars",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 10)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.apaga",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update TmpNFis Set Flag = .f.\nThisForm.Grade.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.btnProcessar",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If ThisForm.SelecionarDados()\n\tThisForm.btnProcessar.Enabled = .f.\nEndIf\nThisForm.Grade.Refresh\nThisForm.Grade.Column1.Check1.SetFocus\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SelecionarDados",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGNF.SelTudo",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update TmpNFis Set Flag = .t.\nThisForm.Grade.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREGNF.Procedure",
+      "queryOriginal": "Select * From TmpNFis Where Flag Into Cursor TmpVNFis",
+      "tabelas": "TmpNFis",
+      "colunas": "Flag,TmpVNFis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGNF.Procedure",
+      "queryOriginal": "\tlcSql = [Select Distinct c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+; \t\t\t[Where c.emps = ']+TmpVNFis.Emps+[' And c.series = ']+TmpVNFis.SerieS+[' ]+; \t\t\t[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+; \t\t\t[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+; \t\t\t[Union all ]+; \t\t... [TRUNCADO]",
+      "tabelas": "SigMvNfi",
+      "colunas": "Nfis,EmpdopNums",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGNF.Procedure",
+      "queryOriginal": "lcQuery = [Select Series,Emps,VSeqNota ] + ; \t\t    [ From SigCnFn2 ]  + ; \t\t    [ Where Series = '] + TmpNFis.Series +  [' And Emps = '] + TmpNFis.Emps + [' And VSeqNota = 1 ]",
+      "tabelas": "SigCnFn2",
+      "colunas": "Series,Emps,VSeqNota",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGNF.apaga.Click",
+      "queryOriginal": "Update TmpNFis Set Flag = .f.",
+      "tabelas": "TmpNFis",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREGNF.SelTudo.Click",
+      "queryOriginal": "Update TmpNFis Set Flag = .t.",
+      "tabelas": "TmpNFis",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpNFis", "SigMvNfi", "SigCnFn2"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

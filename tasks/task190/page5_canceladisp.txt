@@ -1,0 +1,28 @@
+﻿Select TmpFinal
+Set Order To
+_RegFinal = Recno()
+
+Select TmpDisp
+Sum Utilizar to QtdUti
+
+If QtdUti > 0
+
+	Select TmpFinal
+	=Afiel(Tfinal)
+	Create Cursor Temporario From array tfinal
+
+	Select TmpDisp
+	Scan
+		If Utilizar = 0
+			Loop
+		Endif
+		lnQtUtil = Utilizar
+
+		=Seek( TmpDisp.CPros + TmpDisp.CodCors + TmpDisp.CodTams, 'TmpSaldo' )
+
+		Select TmpFinal
+		Scatter to Memvar
+		Select Temporario
+		Append From array memvar
+		Replace Temporario.Saldo With lnQtUtil,;
+				Temporario.codTams With TmpDisp.C... [TRUNCADO]

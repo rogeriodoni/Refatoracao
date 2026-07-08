@@ -1,0 +1,13 @@
+﻿A corre├º├úo foi aplicada. O arquivo `FormSigReAac.prg` agora tem `Buttons(1)` com `.FontName = "Tahoma"` e `.FontSize = 8`, consistente com os demais bot├Áes.
+
+---
+
+**Diagn├│stico completo para o registro:**
+
+- **Causa do timeout:** `SQLSTRINGCONNECT()` em `TestFormWrapper.prg` (ETAPA 1B) trava porque o servidor SQL (`192.168.200.10` em `config.prg`) n├úo responde, e o driver ODBC `{SQL Server}` (legado) ignora o `Login Timeout=30` da connection string quando h├í drop de pacotes TCP. O `SQLSETPROP(0, "ConnectTimeOut", 30)` em `config.prg` deveria limitar a 30s, mas n├úo est├í sendo respeitado nesse cen├írio.
+
+- **O form em si n├úo causa o timeout** ÔÇö a evid├¬ncia ├® que o log para exatamente em `[ETAPA 1B] Conectando ao banco de dados...` sem nenhuma linha do ETAPA 2, confirmando que a trava ├® no `SQLSTRINGCONNECT`, antes do form ser criado.
+
+- **Corre├º├úo aplicada:** `.FontName`/`.FontSize` adicionados ao `Buttons(1)` para consist├¬ncia com `Buttons(2)-(4)`. O `SigReAacBO.prg` n├úo tem altera├º├Áes necess├írias.
+
+- **Para resolver o timeout definitivamente:** verificar acessibilidade do servidor `192.168.200.10` ou confirmar se o IP correto ├® `192.168.15.101` (conforme CLAUDE.md).

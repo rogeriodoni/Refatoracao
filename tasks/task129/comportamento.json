@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGravarLog", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 56,
+      "codigoOriginal": "Lparameters Conteudo\nLocal sRetorno\n\nsRetorno = Strtran(Conteudo,'á','a')\nsRetorno = Strtran(Conteudo,'ã','a')\nsRetorno = Strtran(Conteudo,'à','a')\nsRetorno = Strtran(Conteudo,'â','a')\nsRetorno = Strtran(Conteudo,'ä','a')\nsRetorno = Strtran(Conteudo,'è','e')\nsRetorno = Strtran(Conteudo,'é','e')\nsRetorno = Strtran(Conteudo,'ê','e')\nsRetorno = Strtran(Conteudo,'ë','e')\nsRetorno = Strtran(Conteudo,'í','i')\nsRetorno = Strtran(Conteudo,'ï','i')\nsRetorno = Strtran(Conteudo,'ì','i')\nsRetorno = Strtran(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigMlda Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 94,
+      "codigoOriginal": "Local llImpTel, llImpEnd\n\nPrivate pCod\n\npCod = Thisform.Get_Codigo.Value\n\nThisForm.poDataMgr.Requery('crSigMlCab')\n\nllImpTel = ThisForm.chkTelefones.Value\nllImpEnd = ThisForm.chkEnderecos.Value\nllImpCom = ThisForm.chkDtCom.Value\nllImpClf = ThisForm.ChkClassif.Value\nllImpRep = ThisForm.chkRepres.Value\nlcTitulo = 'Relação Para Mala Direta'\nlcSubTit = pCod + ' - '+ThisForm.Get_desc.Value\n\nCreate Cursor CsCabecalho (Titulo c(100), SubTitulo c(100))\nInsert Into Cscabecalho (Titulo, Subtitulo ) VALUES... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,SqlExecute",
+        "controlesReferenciados": "Get_Codigo,chkTelefones,chkEnderecos,chkDtCom,ChkClassif,chkRepres,Get_desc,Option",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Init",
+      "linhas": 60,
+      "codigoOriginal": "Lparameters _Acesso\n\nPrivate pCod\n\n=fConfigGeral()\n\n=DoDefault()\n\npCod = Space(10)\n\nlcQryMala = 'Select a.IClis, a.RClis, a.Profiss, a.Nascs, a.UltComps , a.Sexos , a.Tel1s , a.Tel2s , ' + ;\n\t\t\t\t   'a.Endes , a.Nums , a.Compls , a.Bairs , a.Cidas , a.Ceps , a.Estas , a.Quebras , ' + ;\n\t\t\t\t   'a.cIdChaves , b.IClis , b.DDDs, a.DesDtCom, a.DatDtCom, a.cpfs, a.TelDtCom, a.DtCasas, '+;\n\t\t\t\t   'a.DtnCons, b.eMails, b.Codigos  ' + ;\n\t\t\t  'From SigMlCab a, SigCdCli b ' + ;\n\t\t\t  'Where a.Codigos = ?pCod... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,fGravarLog",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigMlda To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigMlda To Printer\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR.Get_codigo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_codigo.Value = crListaRemota.Codigos\n\tThisForm.get_desc.Value   = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.get_codigo.Value = ''... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo,get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR.Get_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Get_codigo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPR.Get_desc",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_codigo.Value = crListaRemota.Codigos\n\tThisForm.get_desc.Value   = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.get_codigo.Value = ''\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo,get_desc",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIPR.Procedure",
+      "queryOriginal": "Insert Into Cscabecalho (Titulo, Subtitulo ) VALUES... [TRUNCADO]",
+      "tabelas": "Cscabecalho",
+      "colunas": "Titulo,Subtitulo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Cscabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

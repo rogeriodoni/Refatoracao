@@ -1,0 +1,29 @@
+﻿**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigReCmg.prg` foi criado com 1024 linhas contendo a implementa├º├úo **completa** do form (Fases 3-8 colapsadas, pois o form OPERACIONAL n├úo tem Grid/CRUD que justificaria separa├º├úo).
+
+**Estrutura entregue (21 m├®todos):**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init(par_oFormPai)` | Guarda ref ao form pai, compartilha DataSession, cria BO |
+| `InicializarForm()` | Cria todos os controles, dispara `GerarGrafico(1)` |
+| `ConfigurarCabecalho()` | cntSombra com lblSombra e lblTitulo (RGB 100,100,100) |
+| `ConfigurarContainerAguarde()` | "Aguarde..." inicial, Visible=.F. por padr├úo |
+| `ConfigurarContainerGrafico()` | OleBoundControl para gr├ífico MSGraph |
+| `ConfigurarContainerControles()` | ComboBox de clientes + Label |
+| `ConfigurarCommandGroup()` | 4 bot├Áes (Anterior, Pr├│ximo, Gr├ífico, Encerrar) com BINDEVENT |
+| `ConfigurarControlesAdicionais()` | CheckBox "Todos os Gr├íficos", TextBox NumGraficos, Label |
+| `GerarGrafico(par_nLinhaCmb1)` | Popula combo de TmpResult, gera 3 gr├íficos via BO |
+| `ConfigurarOleGrafico()` | Configura ChartArea, Legend, Axes, DataLabels do OLE |
+| `CmbChave1Click/GotFocus` | Eventos do combo |
+| `BtnAnteriorClick/BtnProximoClick` | Navega entre gr├íficos (sem regerar, s├│ LOCATE) |
+| `BtnImprimirClick` | Impress├úo individual ou lote via REPORT FORM SigReCmg |
+| `BtnEncerrarClick` | Fecha form, limpa cursores OLE, reabilita form pai |
+| `TornarControlesVisiveis()` | Filtra containers flutuantes por nome (INLIST) |
+| `Destroy()` | Limpa BO e cursores |
+
+**Pontos cr├¡ticos implementados:**
+- `THIS.DataSessionId = par_oFormPai.DataSessionId` para acessar `TmpResult` do form pai
+- `TornarControlesVisiveis()` exclui `cnt_4c_Aguarde`, `cnt_4c_Grf1`, `cnt_4c_Grf2`, `obj_4c_CmdGgrafico`, `chk_4c_ChkGraficos` (containers flutuantes)
+- `LOCAL ARRAY loc_aClientes(1)` com sintaxe VFP9 correta
+- CHR() para todos os acentos (sem literais acentuados)
+- CATCH nunca silencioso (exceto Destroy por estar encerrando)

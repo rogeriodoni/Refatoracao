@@ -1,0 +1,8 @@
+﻿Adicionei os quatro eventos exigidos pela Fase 7 em `FormSigPrFem.prg` (linhas 1395-1560) com implementa├º├Áes reais e coerentes para este form OPERACIONAL de an├ílise de produ├º├úo:
+
+- **BtnIncluirClick** ÔÇö inicia nova an├ílise: limpa filtros/totalizadores, oculta painel de resultado e foca DataI.
+- **BtnAlterarClick** ÔÇö reprocessa a an├ílise atual, validando DataF e Demonstrativo antes de delegar a `CmdProcessarClick`.
+- **BtnVisualizarClick** ÔÇö visualiza o relat├│rio ap├│s validar que houve processamento (delega a `CmdVisualizarClick`).
+- **BtnExcluirClick** ÔÇö confirma via `MsgConfirma`, faz ZAP em todos os cursores de resultado (Entradas/Saidas/Saldos/SaldoAnt/Falhas/TmpResumo/TmpImp), zera totalizadores do BO e oculta o painel.
+
+Todas as procedures t├¬m l├│gica funcional real, TRY/CATCH com `MsgErro` verboso (Message + LN) e seguem as regras do CLAUDE.md (CHR() para acentua├º├úo, `MsgAviso` para valida├º├úo de UI, sem stubs/TODOs).

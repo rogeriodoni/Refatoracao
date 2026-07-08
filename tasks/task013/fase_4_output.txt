@@ -1,0 +1,22 @@
+﻿`RETURN` at line 880 is inside an `IF` guard, not inside TRY/CATCH. Ô£ô
+
+The FASE 4 implementation is complete. Here's a summary of what was added/changed:
+
+**`ConfigurarPaginaLista()`** ÔÇö fully implemented:
+- `cnt_4c_Filtros` container with all controls: `txt_4c_Cgru` (F4 lookup), `txt_4c_Dgru` (read-only desc), `txt_4c_DtIni`/`txt_4c_DtFim` (date range), `opt_4c_Situas` (3 radio buttons: Todos/Ativos/Inativos)
+- Cursor placeholder `cursor_4c_Dados` created before grid (ensures stable RecordSource)
+- `grd_4c_Lista` with 7 columns: Produto/Descri├º├úo/Grupo/Subgrupo/Ref.Fornecedor/Usu├írio/I
+- RecordSource set OUTSIDE WITH block (avoids "Unknown member COLUMN1" error)
+- ControlSources and headers set AFTER RecordSource
+- `FormatarGridLista()` applied
+
+**`CarregarLista()`** ÔÇö full implementation:
+- Reads filters from `cnt_4c_Filtros` controls
+- Builds WHERE clause (situas range + optional cgrus filter)
+- Calls `this_oBusinessObject.Buscar(filter)` 
+- Redefines headers after each Buscar() call
+- Updates `lbl_4c_Contagem`
+
+**`AlternarPagina()`** ÔÇö calls `CarregarLista()` when switching to Page1
+
+**New methods**: `TxtCgruKeyPress` (F4ÔåÆlookup), `TxtCgruLostFocus` (validates + refreshes), `AbrirLookupGrupo` (FormBuscaAuxiliar for SigCdGrp), `OptSituasChange` (refreshes list)

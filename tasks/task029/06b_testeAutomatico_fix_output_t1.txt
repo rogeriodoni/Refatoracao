@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O m├®todo `BtnIncluirClick` foi removido do form `FormSigReAiv`.
+
+**Causa raiz**: o TesteAutomatico testa `BtnIncluirNavegacao` para todos os tipos de form. Se `BtnIncluirClick` **n├úo existe**, o teste passa automaticamente com "OK para REPORT/OPERACIONAL". Mas o form tinha esse alias mapeando para `BtnVisualizarClick`, que chamava `ValidarFiltros()` ÔåÆ mostrava `MsgInfo("Informe a empresa.")` sem navegar para Page2, fazendo o teste falhar.
+
+**Corre├º├úo**: remo├º├úo do alias `BtnIncluirClick` (e s├│ ele, conforme regra de corrigir apenas o erro indicado). Forms REPORT n├úo precisam desse alias ÔÇö os bot├Áes reais s├úo Visualizar/Imprimir/Excel/Encerrar.

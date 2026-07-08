@@ -1,0 +1,14 @@
+﻿Fase 1/8 conclu├¡da. `C:\4c\projeto\app\classes\sigrecsmBO.prg` criado com:
+
+**Propriedades declaradas (12 ao total):**
+- `this_dDtInicial` / `this_dDtFinal` ÔÇö filtro de per├¡odo
+- `this_cCemps` / `this_cRazas` ÔÇö empresa (SigCdEmp: cemps, razas)
+- `this_cCdGrEstoque` / `this_cDsGrEstoque` ÔÇö grupo de vendedor
+- `this_cCdEstoque` / `this_cDsEstoque` ÔÇö vendedor/conta
+- `this_cCmoes` / `this_cDmoes` ÔÇö moeda (SigCdMoe: cmoes, dmoes, com sufixo 's' preservado)
+- `this_nOptRel = 1` ÔÇö tipo de relat├│rio (1=Sint├®tico, 2=Anal├¡tico, 3=Cond.Pgto, 4=Dividido)
+- `this_lChkComissao = .F.` ÔÇö n├úo incluir comiss├úo zerada
+
+**Cursores internos:** `cursor_4c_Dados`, `cursor_4c_Cabecalho`, `cursor_4c_Temp`, `cursor_4c_Dados2`
+
+**Init():** Chama `DODEFAULT()`, seta `this_cTabela`/`this_cCampoChave` vazios (n├úo aplic├ível a relat├│rio), e preenche `this_cCaminhoFrx1`/`this_cCaminhoFrx2` com `gc_4c_CaminhoReports + "SigReCs1/2.frx"`. Padr├úo TRY/CATCH com `MsgErro()` e flag `loc_lSucesso` fora do bloco.

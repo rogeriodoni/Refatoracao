@@ -1,0 +1,16 @@
+﻿O arquivo `FormSIGMDETQ.prg` j├í est├í **completo**. Verificando o conte├║do:
+
+O formul├írio SIGMDETQ ├® **OPERACIONAL** (n├úo CRUD), ent├úo os eventos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` e `BtnExcluirClick` **n├úo se aplicam** ÔÇö o original n├úo tem esses bot├Áes.
+
+Os eventos do form original est├úo todos implementados:
+
+| Evento original | Implementado em | Linha |
+|---|---|---|
+| `cntBotoes.Command2.Click` (Processar) | `BtnProcessarClick()` | 265 |
+| `cntBotoes.Command1.Click` (Cancelar) | `BtnCancelarClick()` | 257 |
+| `getBarras.Valid` | `TxtBarrasKeyPress()` (ENTER/TAB) | 578 |
+| `getBarras.InteractiveChange` | `TxtBarrasInteractiveChange()` | 587 |
+| `getCorNew.Valid` (lookup SigCdCor) | `TxtCorNewKeyPress()` + `AbrirBuscaCor()` | 642/598 |
+| `getTamNew.Valid` (lookup SigCdTam) | `TxtTamNewKeyPress()` + `AbrirBuscaTam()` | 695/651 |
+
+A Fase 7 usa um template gen├®rico de CRUD, mas este form operacional j├í tinha todos os eventos implementados nas fases anteriores. **Nenhuma altera├º├úo necess├íria** ÔÇö o arquivo est├í com paridade 100% em rela├º├úo ao legado.

@@ -1,0 +1,13 @@
+﻿As corre├º├Áes est├úo aplicadas. Resumo do diagn├│stico e das corre├º├Áes:
+
+**Causa raiz do TIMEOUT**: O `SQLSTRINGCONNECT` (ETAPA 1B do TestFormWrapper) ficava travado por 300s porque o SQL Server em `192.168.15.101` era inacess├¡vel e o driver ODBC n├úo tinha timeout configurado.
+
+**Corre├º├Áes aplicadas:**
+
+1. **`config.prg`** (esta sess├úo) ÔÇö Adicionado `=SQLSETPROP(0, "ConnectTimeOut", 30)` no corpo principal, executado durante `DO config.prg` na ETAPA 1. Isso define o timeout global de conex├úo VFP9 ANTES do `SQLSTRINGCONNECT` da ETAPA 1B, garantindo que falhas de conex├úo retornem em 30s ao inv├®s de travar.
+
+   > A ETAPA 1B do TestFormWrapper chama `ObterStringConexao()` (que j├í tem `Login Timeout=30` do t1 fix), mas o `SQLSETPROP(0, "ConnectTimeOut", 30)` ├® belt-and-suspenders ÔÇö garante que o VFP9 respeite o timeout mesmo que o driver ODBC ignore o par├ómetro da string de conex├úo.
+
+2. **`FormSIGMDETQ.prg`** ÔÇö Adicionado `THIS.this_cMensagemErro = loc_oErro.Message` no CATCH do `InicializarForm`. Isso permite que o `FormBase.Init` registre detalhes do erro em `vfp_error_details.txt` (via `gc_4c_ArquivoErroTeste`) quando a inicializa├º├úo falha ÔÇö melhoria diagn├│stica para depurar falhas futuras.
+
+3. **`SIGMDETQBO.prg`** ÔÇö Sem altera├º├Áes necess├írias. O BO est├í correto.

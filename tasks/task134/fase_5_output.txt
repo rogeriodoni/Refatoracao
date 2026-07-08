@@ -1,0 +1,13 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormSigPdAco.prg` foi atualizado com:
+
+**O que foi adicionado (propriedades visuais pixel-perfect do original):**
+
+1. **`ShpRp`**: corrigido para `BackStyle = 0` (transparente) e `BorderColor = RGB(136,189,188)` conforme original
+2. **`obj_4c_Arquivos` (ListBox)**: adicionado `RowSourceType = 1` e `Sorted = .T.` conforme original
+3. **`lbl_4c_Label3` e `lbl_4c_Label4`**: adicionado `FontBold = .T.` conforme original
+4. **`ConfigurarGrdDados(par_oGrd)`** ÔÇö novo m├®todo com todas as 10 colunas configuradas:
+   - `BackColor` por coluna (laranja/branco/azul/amarelo/ciano/rosa/p├¬ssego/vermelho/verde)
+   - `ReadOnly = .T.`, `Movable = .F.`, `Resizable = .F.` por coluna
+   - `Text1.BackColor`, `ForeColor`, `BorderStyle = 0`, `Margin = 0` por coluna
+   - `Header1.Alignment = 2` (centralizado) em todas
+   - `SetAll("DynamicForeColor", ...)` ÔÇö linhas com `Flags=.T.` e `Seqs<>'2'` aparecem em vermelho; linhas `Seqs='2'` (unidade por peso) aparecem em azul; demais em preto

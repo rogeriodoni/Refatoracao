@@ -1,0 +1,9 @@
+﻿A Fase 6 est├í completa. As tr├¬s altera├º├Áes adicionadas ao `FormSigPdMp5.prg`:
+
+1. **BINDEVENT Column5.Text1 KeyPress** (linha 731) ÔÇö em `ConfigurarPaginaLista()`, registra o handler para quando o usu├írio pressionar Tab ap├│s editar Tempo/min na coluna edit├ível do grid.
+
+2. **Foco em Column5 ap├│s CarregarGrade** (linhas 952-956) ÔÇö replica o comportamento original `ThisForm.grade.column5.text1.SetFocus` do Init do legado, dentro de um TRY/CATCH para quando a coluna est├í read-only.
+
+3. **M├®todo `GrdColumn5KeyPress`** (linhas 1054-1058) ÔÇö handler PUBLIC (obrigat├│rio para BINDEVENT) que foca o bot├úo Ok quando Tab ├® pressionado, replicando o comportamento do `Column2.Text1.KeyPress` do original que redirecionava o foco ao Ok em Tab.
+
+**Por que n├úo foram adicionados lookups F4/F5:** O formul├írio original n├úo possui nenhum lookup ÔÇö todos os campos dos containers Origem, Destino e Opera├º├úo s├úo somente-leitura via `ControlSource` de cursores do form pai (TmpNens), com `When = Return .F.` em todos os textboxes. A Fase 6 para este OPERACIONAL consiste na implementa├º├úo comportamental das colunas do grid.

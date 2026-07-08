@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O `SigReDifBO.prg` foi atualizado com:
+
+- **17 propriedades** `this_*` mapeando todas as colunas do `crGrid` (AnoFis, Datas, Contas, Debs, Creds, Docto, EmpCont, NumSeq, Nums, Data, Valor, Cecus, Emps, Transacaos, Hists, Deb1s, Cred1s)
+- **PrepararDados()** ÔÇö implementa├º├úo completa: troca de sess├úo para `this_nDataSessionId`, SELECT de `movaux WHERE Transacaos IN (SELECT FROM dif2)`, todos os REPLACE ALL de formata├º├úo (centavosÔåÆmoeda, documento, valores num├®ricos para o FRX)
+- **CarregarDoCursor()** ÔÇö mapeia linha atual do crGrid para propriedades usando `SELECT (par_cAliasCursor)` + `TratarNulo`
+- **ObterChavePrimaria()** ÔÇö retorna `""` (n├úo aplic├ível para relat├│rio)
+- **Visualizar()** / **Imprimir()** / **GerarDocumento()** ÔÇö tr├¬s m├®todos de impress├úo correspondendo aos tr├¬s procedimentos do legado (Preview, To Printer Prompt, To Printer), todos referenciando `RelSigReDif.frx`

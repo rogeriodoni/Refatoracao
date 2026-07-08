@@ -1,0 +1,347 @@
+*====================================================================
+* ComparadorUI.prg
+*
+* Classe para comparar propriedades visuais entre original e migrado
+*
+* Uso:
+*   loc_oComparador = CREATEOBJECT("ComparadorUI")
+*   loc_oComparador.Comparar(loc_aPropsOriginal, loc_oFormMigrado)
+*
+* Retorno:
+*   Armazena diferencas em THIS.aDiferencas e THIS.nDiferencasEncontradas
+*====================================================================
+
+DEFINE CLASS ComparadorUI AS Custom
+
+    *-- Array de diferencas encontradas
+    DIMENSION aDiferencas[1, 7]
+    nDiferencasEncontradas = 0
+
+    *-- Tolerancia para valores numericos (pixels)
+    nTolerancia = 2
+
+    *-- Mapeamento de objetos (original -> migrado)
+    DIMENSION aMapeamento[1, 2]
+    nMapeamentos = 0
+    cArquivoMapeamento = ""  && Caminho do JSON de mapeamento
+
+    *====================================================================
+    * Comparar
+    * Compara propriedades do ExtratorPropriedades com form migrado
+    * par_oExtrator - Objeto ExtratorPropriedades com dados extraidos
+    * par_oFormMigrado - Form migrado a ser comparado
+    *====================================================================
+    PROCEDURE Comparar(par_oExtrator, par_oFormMigrado)
+        LOCAL i, loc_cObjeto, loc_cProp, loc_cValorOriginal
+        LOCAL loc_oObjetoMigrado, loc_vValorMigrado
+        LOCAL loc_lDiferente
+
+        THIS.nDiferencasEncontradas = 0
+        DIMENSION THIS.aDiferencas[1, 7]
+
+        *-- Valida objeto extrator
+        IF ISNULL(par_oExtrator)
+            ? "ERRO ComparadorUI: Extrator eh NULL"
+            RETURN
+        ENDIF
+
+        IF par_oExtrator.nResultados = 0
+            ? "ERRO ComparadorUI: Nenhuma propriedade no extrator"
+            RETURN
+        ENDIF
+
+SET STEP ON 
+        *-- Percorre propriedades do original (direto do objeto)
+        FOR i = 1 TO par_oExtrator.nResultados
+            loc_cObjeto = par_oExtrator.aResultados[i, 1]
+            loc_cProp = par_oExtrator.aResultados[i, 2]
+            loc_cValorOriginal = par_oExtrator.aResultados[i, 3]
+
+            *-- Tenta acessar objeto no form migrado
+            loc_oObjetoMigrado = THIS.ResolverObjeto(par_oFormMigrado, loc_cObjeto)
+
+            IF ISNULL(loc_oObjetoMigrado)
+                *-- Objeto nao encontrado no form migrado
+                THIS.AdicionarDiferenca(loc_cObjeto, loc_cProp, loc_cValorOriginal, ;
+                                        "(objeto n" + CHR(227) + "o encontrado)", ;
+                                        "ERRO", par_oExtrator.aResultados[i, 4], par_oExtrator.aResultados[i, 5])
+                LOOP
+            ENDIF
+
+            *-- Verifica se propriedade existe
+            IF !PEMSTATUS(loc_oObjetoMigrado, loc_cProp, 5)
+                *-- Propriedade nao existe
+                THIS.AdicionarDiferenca(loc_cObjeto, loc_cProp, loc_cValorOriginal, ;
+                                        "(propriedade n" + CHR(227) + "o existe)", ;
+                                        "AVISO", par_oExtrator.aResultados[i, 4], par_oExtrator.aResultados[i, 5])
+                LOOP
+            ENDIF
+
+            *-- Obtem valor atual da propriedade
+            TRY
+                loc_vValorMigrado = EVALUATE("loc_oObjetoMigrado." + loc_cProp)
+            CATCH
+                THIS.AdicionarDiferenca(loc_cObjeto, loc_cProp, loc_cValorOriginal, ;
+                                        "(erro ao acessar)", ;
+                                        "ERRO", par_oExtrator.aResultados[i, 4], par_oExtrator.aResultados[i, 5])
+                LOOP
+            ENDTRY
+
+            *-- Compara valores
+            loc_lDiferente = THIS.ValoresDiferentes(loc_cValorOriginal, loc_vValorMigrado, loc_cProp)
+
+            IF loc_lDiferente
+                THIS.AdicionarDiferenca(loc_cObjeto, loc_cProp, loc_cValorOriginal, ;
+                                        THIS.FormatarValor(loc_vValorMigrado, loc_cProp), ;
+                                        "DIFERENCA", par_oExtrator.aResultados[i, 4], par_oExtrator.aResultados[i, 5])
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *====================================================================
+    * ResolverObjeto
+    * Resolve caminho do objeto no form migrado
+    * Exemplo: "pgf_Principal.Page1" -> par_oForm.pgf_Principal.Page1
+    *====================================================================
+    PROTECTED PROCEDURE ResolverObjeto(par_oForm, par_cCaminho)
+        LOCAL loc_cExpressao, loc_oObjeto
+        LOCAL loc_cCaminhoOriginal
+
+        IF par_cCaminho = "Form"
+            RETURN par_oForm
+        ENDIF
+
+        *-- Guarda caminho original para mapeamento
+        loc_cCaminhoOriginal = par_cCaminho
+
+        *-- Se mapeamento carregado, usa-o para resolver o caminho
+        IF THIS.nMapeamentos > 0
+            par_cCaminho = THIS.ResolverObjetoComMapeamento(par_cCaminho)
+
+            *-- Se mapeou para "Form", retorna o form
+            IF UPPER(par_cCaminho) = "FORM"
+                RETURN par_oForm
+            ENDIF
+        ELSE
+            *-- Sem mapeamento: Remove prefixos comuns do sistema legado (fallback)
+            par_cCaminho = STRTRAN(par_cCaminho, "Sigcdcor.", "")
+            par_cCaminho = STRTRAN(par_cCaminho, "Sigcdcar.", "")
+            par_cCaminho = STRTRAN(par_cCaminho, "Sigcddpt.", "")
+            par_cCaminho = STRTRAN(par_cCaminho, "SigRePLc.", "")
+            par_cCaminho = STRTRAN(par_cCaminho, "Sigcdpro.", "")
+        ENDIF
+
+        *-- Monta expressao para avaliar
+        loc_cExpressao = "par_oForm." + par_cCaminho
+
+        *-- Tenta avaliar (sem TRY/CATCH para evitar RETURN dentro)
+        loc_oObjeto = .NULL.
+
+        TRY
+            loc_oObjeto = EVALUATE(loc_cExpressao)
+        CATCH
+            *-- Ignora erro, retorna NULL
+        ENDTRY
+
+        RETURN loc_oObjeto
+    ENDPROC
+
+    *====================================================================
+    * ValoresDiferentes
+    * Compara dois valores considerando tipo e tolerancia
+    *====================================================================
+    PROTECTED PROCEDURE ValoresDiferentes(par_vOriginal, par_vMigrado, par_cProp)
+        LOCAL loc_cOriginalStr, loc_cMigradoStr
+        LOCAL loc_nOriginal, loc_nMigrado
+
+        *-- Converte valores para string para comparacao
+        loc_cOriginalStr = THIS.FormatarValor(par_vOriginal, par_cProp)
+        loc_cMigradoStr = THIS.FormatarValor(par_vMigrado, par_cProp)
+
+        *-- Se strings sao identicas, nao ha diferenca
+        IF loc_cOriginalStr == loc_cMigradoStr
+            RETURN .F.
+        ENDIF
+
+        *-- Para propriedades numericas (Width, Height, Top, Left), aplica tolerancia
+        IF INLIST(par_cProp, "Width", "Height", "Top", "Left")
+            loc_nOriginal = VAL(loc_cOriginalStr)
+            loc_nMigrado = VAL(loc_cMigradoStr)
+
+            IF ABS(loc_nOriginal - loc_nMigrado) <= THIS.nTolerancia
+                RETURN .F.  && Diferenca dentro da tolerancia
+            ENDIF
+        ENDIF
+
+        *-- Valores diferentes
+        RETURN .T.
+    ENDPROC
+
+    *====================================================================
+    * FormatarValor
+    * Formata valor para string comparavel
+    *====================================================================
+    PROTECTED PROCEDURE FormatarValor(par_vValor, par_cProp)
+        LOCAL loc_cTipo, loc_cRetorno
+
+        loc_cTipo = VARTYPE(par_vValor)
+
+        DO CASE
+        CASE loc_cTipo = "C"
+            *-- String
+            RETURN ALLTRIM(par_vValor)
+
+        CASE loc_cTipo = "N"
+            *-- Numero
+            IF par_cProp = "BackColor" OR par_cProp = "ForeColor"
+                *-- Converte numero para RGB(r,g,b)
+                RETURN THIS.NumeroParaRGB(par_vValor)
+            ELSE
+                RETURN ALLTRIM(STR(par_vValor, 10, 0))
+            ENDIF
+
+        CASE loc_cTipo = "L"
+            *-- Logico
+            RETURN IIF(par_vValor, ".T.", ".F.")
+
+        OTHERWISE
+            RETURN ""
+        ENDCASE
+    ENDPROC
+
+    *====================================================================
+    * NumeroParaRGB
+    * Converte numero de cor para formato RGB(r,g,b)
+    *====================================================================
+    PROTECTED PROCEDURE NumeroParaRGB(par_nCor)
+        LOCAL loc_nR, loc_nG, loc_nB
+
+        IF VARTYPE(par_nCor) != "N"
+            RETURN ALLTRIM(par_nCor)
+        ENDIF
+
+        *-- Extrai componentes RGB
+        loc_nR = BITAND(par_nCor, 0xFF)
+        loc_nG = BITAND(BITRSHIFT(par_nCor, 8), 0xFF)
+        loc_nB = BITAND(BITRSHIFT(par_nCor, 16), 0xFF)
+
+        RETURN "RGB(" + ALLTRIM(STR(loc_nR)) + "," + ;
+                        ALLTRIM(STR(loc_nG)) + "," + ;
+                        ALLTRIM(STR(loc_nB)) + ")"
+    ENDPROC
+
+    *====================================================================
+    * AdicionarDiferenca
+    * Adiciona diferenca ao array de resultados
+    *====================================================================
+    PROTECTED PROCEDURE AdicionarDiferenca(par_cObjeto, par_cProp, par_cValorOriginal, ;
+                                           par_cValorMigrado, par_cTipo, par_nLinha, par_cContexto)
+        THIS.nDiferencasEncontradas = THIS.nDiferencasEncontradas + 1
+
+        IF THIS.nDiferencasEncontradas > ALEN(THIS.aDiferencas, 1)
+            DIMENSION THIS.aDiferencas[THIS.nDiferencasEncontradas + 50, 7]  && Expande em blocos
+        ENDIF
+
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 1] = par_cObjeto
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 2] = par_cProp
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 3] = par_cValorOriginal
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 4] = par_cValorMigrado
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 5] = par_cTipo
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 6] = par_nLinha
+        THIS.aDiferencas[THIS.nDiferencasEncontradas, 7] = par_cContexto
+    ENDPROC
+
+    *====================================================================
+    * CarregarMapeamento
+    * Carrega mapeamento de arquivo JSON
+    *====================================================================
+    PROCEDURE CarregarMapeamento(par_cArquivoJSON)
+        LOCAL loc_nHandle, loc_cJSON, loc_cLinha
+        LOCAL loc_cOriginal, loc_cNovo
+        LOCAL loc_nPos1, loc_nPos2
+
+        THIS.cArquivoMapeamento = par_cArquivoJSON
+        THIS.nMapeamentos = 0
+        DIMENSION THIS.aMapeamento[1, 2]
+
+        *-- Verifica se arquivo existe
+        IF !FILE(par_cArquivoJSON)
+            ? "AVISO ComparadorUI: Arquivo de mapeamento n" + CHR(227) + "o encontrado: " + par_cArquivoJSON
+            RETURN .F.
+        ENDIF
+
+        *-- Le arquivo
+        loc_nHandle = FOPEN(par_cArquivoJSON, 0)
+
+        IF loc_nHandle < 0
+            ? "ERRO ComparadorUI: N" + CHR(227) + "o foi poss" + CHR(237) + "vel abrir arquivo de mapeamento"
+            RETURN .F.
+        ENDIF
+
+        ? "Carregando mapeamento: " + par_cArquivoJSON
+
+        *-- Le linha por linha e extrai mapeamentos
+        DO WHILE !FEOF(loc_nHandle)
+            loc_cLinha = FGETS(loc_nHandle)
+            loc_cLinha = ALLTRIM(loc_cLinha)
+
+            *-- Procura por linhas no formato: "original": "novo"
+            IF CHR(34) $ loc_cLinha AND ":" $ loc_cLinha
+                *-- Extrai parte original
+                loc_nPos1 = AT(CHR(34), loc_cLinha)
+                loc_nPos2 = AT(CHR(34), loc_cLinha, loc_nPos1 + 1)
+
+                IF loc_nPos2 > loc_nPos1
+                    loc_cOriginal = SUBSTR(loc_cLinha, loc_nPos1 + 1, loc_nPos2 - loc_nPos1 - 1)
+
+                    *-- Extrai parte nova (apos os dois pontos)
+                    loc_nPos1 = AT(":", loc_cLinha, loc_nPos2)
+                    loc_nPos1 = AT(CHR(34), loc_cLinha, loc_nPos1)
+                    loc_nPos2 = AT(CHR(34), loc_cLinha, loc_nPos1 + 1)
+
+                    IF loc_nPos2 > loc_nPos1
+                        loc_cNovo = SUBSTR(loc_cLinha, loc_nPos1 + 1, loc_nPos2 - loc_nPos1 - 1)
+
+                        *-- Ignora linhas de metadados (form_original, form_migrado, entidade)
+                        IF !INLIST(loc_cOriginal, "form_original", "form_migrado", "entidade", "mapeamento")
+                            *-- Adiciona ao array
+                            THIS.nMapeamentos = THIS.nMapeamentos + 1
+
+                            IF THIS.nMapeamentos > ALEN(THIS.aMapeamento, 1)
+                                DIMENSION THIS.aMapeamento[THIS.nMapeamentos + 50, 2]
+                            ENDIF
+
+                            THIS.aMapeamento[THIS.nMapeamentos, 1] = loc_cOriginal
+                            THIS.aMapeamento[THIS.nMapeamentos, 2] = loc_cNovo
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+        ENDDO
+
+        FCLOSE(loc_nHandle)
+
+        ? "  - " + ALLTRIM(STR(THIS.nMapeamentos)) + " mapeamentos carregados"
+
+        RETURN .T.
+    ENDPROC
+
+    *====================================================================
+    * ResolverObjetoComMapeamento
+    * Resolve caminho do objeto usando mapeamento
+    *====================================================================
+    PROTECTED PROCEDURE ResolverObjetoComMapeamento(par_cCaminhoOriginal)
+        LOCAL i, loc_cCaminhoNovo
+
+        *-- Procura no mapeamento
+        FOR i = 1 TO THIS.nMapeamentos
+            IF UPPER(THIS.aMapeamento[i, 1]) = UPPER(par_cCaminhoOriginal)
+                RETURN THIS.aMapeamento[i, 2]
+            ENDIF
+        ENDFOR
+
+        *-- Nao encontrou, retorna original
+        RETURN par_cCaminhoOriginal
+    ENDPROC
+
+ENDDEFINE

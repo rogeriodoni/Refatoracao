@@ -1,0 +1,16 @@
+﻿Tudo est├í no lugar. Confirma├º├úo final do estado da Fase 3:
+
+---
+
+**FASE 3/8 CONCLU├ìDA** ÔÇö `FormSIGREEUN.prg` j├í existia com implementa├º├úo completa (todas as 8 fases j├í executadas em pipeline anterior). Corrigi um detalhe: `cmg_4c_Botoes.Buttons(1)` estava sem `FontName = "Comic Sans MS"` e `FontSize = 8`, inconsistente com os demais bot├Áes.
+
+**Estado atual dos artefatos:**
+
+| Arquivo | Status |
+|---------|--------|
+| `projeto/app/classes/sigreeunBO.prg` | Ô£à Completo (Fases 1-2) |
+| `projeto/app/forms/relatorios/FormSIGREEUN.prg` | Ô£à Completo (Fases 3-8) |
+| `menu.prg` BAR 113 + `AbrirFormSIGREEUN()` | Ô£à Configurado |
+| config.prg | Ô£à Autom├ítico (ADIR carrega Form*.prg e *BO.prg) |
+
+O form implementa: 8 filtros (Grupo Estoque, Conta, Unidade, Data, Moeda, Dt.Cota├º├úo, Imp.Cota├º├úo, Fator Venda), lookups bidirecionais para GrEst/SigCdGcr, Estoque/SigCdCli, Unidade/SigCdUni e Moeda/SigCdMoe, 3 a├º├Áes (Visualizar, Imprimir, Excel) e `PrepararDados()` completo no BO com os 2 caminhos (com/sem filtro de unidade).

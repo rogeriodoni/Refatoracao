@@ -1,0 +1,14 @@
+﻿Phase 3 is complete. `C:\4c\projeto\app\forms\relatorios\FormSIGREDES.prg` has been created ÔÇö 2001 lines.
+
+**What was built:**
+
+- **`FormSIGREDES` class** (inherits `FormBase`) ÔÇö dimensions Width=555, Height=499, DataSession=2 (exact from legacy)
+- **`ConfigurarCabecalho()`** ÔÇö dark header container with shadow+title labels
+- **`ConfigurarBotoes()`** ÔÇö CommandGroup at Left=283 with 4 buttons (Visualizar/Imprimir/Excel/Encerrar) adapted for Width=555
+- **`ConfigurarPageFrame()`** ÔÇö single-page PageFrame (PageCount=1, Tabs=.F.) at Top=85
+- **`ConfigurarFiltros()`** ÔÇö all 14 filter textboxes + 7 labels + OptionGroup (Detalhado/Resumido) + 2 checkboxes + grid + Marcar/Desmarcar buttons, all positioned at `Top = original - 85`
+- **Grid** ÔÇö `grd_4c_Forma` bound to `cursor_4c_OpFp` with Column1 (CheckBox for nMarca) and Column2 (fpags text)
+- **6 lookup pairs** ÔÇö empresa (SigCdEmp/cEmps/Razas), grupo (SigCdGcr/codigos/descrs), conta (SigCdCli/IClis/RClis), categoria (SigCdCol/codigos/descrs), cole├º├úo (SigCdPsg/codigos/descricaos), produto (SigCdPro/CPros/DPros)
+- **12 keyboard handlers** (F4=lookup, ENTER/TAB=validate, ESC=clear), **6 validation methods** (PROTECTED), **12 lookup openers** (PUBLIC for BINDEVENT DblClick)
+- **BtnVisualizarClick/BtnImprimirClick** delegate to `this_oRelatorio.Visualizar()`/`Imprimir()`; **BtnExcelClick** calls `PrepararDados()` then `COPY TO TYPE XLS`
+- **CRUD alias methods** (BtnAlterarClick, BtnSalvarClick, etc.) for pipeline compatibility

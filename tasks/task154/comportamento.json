@@ -1,0 +1,38 @@
+{
+  "resumo": {
+    "totalMetodos": 1,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRALE",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "LParameters _BitMap, _Msg1, _msg2, _msg3\n\nIf Type( \"_BitMap\" ) = \"C\"\n\tThisForm.Imagem.Visible   = .T.\n\tThisForm.Imagem.Picture   = Alltrim( _BitMap )\nEndif\n\nIf Type('_Msg1') = 'C' Or Type('_msg2')='C' Or Type('_msg3')='C'\n\tThisForm.mensagem.Caption  = Iif(Type('_msg1')='C',_msg1,'')\n\tThisForm.mensagem2.Caption = Iif(Type('_msg2')='C',_msg2,'')\n\tThisForm.mensagem3.Caption = Iif(Type('_msg3')='C',_msg3,'')\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Picture   = Alltrim,Caption  = Iif,Caption = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

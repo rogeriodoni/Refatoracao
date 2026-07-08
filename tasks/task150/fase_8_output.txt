@@ -1,0 +1,17 @@
+﻿A Fase 8 est├í conclu├¡da. O arquivo `FormSigPdMp9.prg` agora tem 2083 linhas com todos os m├®todos adicionados:
+
+**M├®todos adicionados (linhas 1905ÔÇô2082):**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Reposiciona xPesa no in├¡cio, rebind RecordSource e restaura cabe├ºalhos das 9 colunas |
+| `AjustarBotoesPorModo()` | cmd_4c_Processar e grid habilitados apenas em INSERIR/ALTERAR; cmd_4c_CustoP vis├¡vel com permiss├úo CUSTOP |
+| `FormParaBO()` | Transfere peso m├®dio + todos os campos da linha corrente do xPesa para o BO |
+| `BOParaForm()` | Restaura txt_4c_PesoMedio do BO e faz Refresh no grid |
+| `HabilitarCampos(par_lHabilitar)` | Controla ReadOnly do grid (col4/7 seguem regra LibObss) e do campo de peso m├®dio |
+| `LimparCampos()` | Zera lAlterou, nOldValue, txt_4c_PesoMedio e reposiciona grid no topo |
+| `BtnSalvarClick()` | Delega para `BtnProcessarClick()` |
+| `BtnBuscarClick()` | Delega para `CarregarLista()` |
+| `BtnEncerrarClick()` | Delega para `BtnCancelarClick()` |
+
+Todos os m├®todos t├¬m implementa├º├úo real ÔÇö zero TODOs/stubs. `FormParaBO` cobre todas as propriedades declaradas no BO (this_cCpros, this_cObs, this_cOper, this_nQtds, this_nPeso, this_cTams, this_cCors, this_cCbars, this_nCustoFs, this_nNops, this_nNenvs, this_nPesoFixs, this_lEspecial, this_nPesoMedio, this_cProgAcesso, this_lAlterou, this_nOldValue, this_lLiberaPeso).

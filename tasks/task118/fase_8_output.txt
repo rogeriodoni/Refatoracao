@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. A Fase 8 foi conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado na Fase 8:**
+
+9 m├®todos de compatibilidade inseridos na se├º├úo nova `METODOS DE COMPATIBILIDADE CRUD`:
+
+| M├®todo | A├º├úo em REPORT |
+|--------|----------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` + foco em dt_inicial |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | No-op (sem dados para preencher) |
+| `HabilitarCampos()` | Chama `AtualizarCamposNivel()` |
+| `CarregarLista()` | Retorna `.T.` sem opera├º├úo |
+| `AjustarBotoesPorModo()` | No-op (sem modos CRUD) |
+
+O `FormSigReIfp.prg` est├í agora **completamente funcional**: BO j├í estava na pasta `classes/` e ├® carregado automaticamente pelo `config.prg` via `ADIR(*BO.prg)`; o form ├® carregado via `ADIR(forms/relatorios/Form*.prg)`; o menu j├í tem `AbrirFormSigReIfp()` no `popRelatorios`.

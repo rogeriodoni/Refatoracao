@@ -1,0 +1,322 @@
+*==============================================================================
+* SIGREIMCBO.PRG
+* Business Object para Relatorio de Impressao de Cartas (SIGREIMC)
+* Herda de RelatorioBase
+*
+* Tabela principal: SigNfCor (join SigMvNfi, SigCdCli, SigCcOco)
+* Relatorio FRX: SigReImc.frx
+*
+* Filtros:
+*   - Empresa     (cemps)
+*   - Serie       (cseries)
+*   - Emissao De  (data inicial emissao NF)
+*   - Emissao Ate (data final emissao NF)
+*   - EDNs        (empdopnums de SigMvNfi - opcional)
+*   - Nota Ini    (cnfis inicial)
+*   - Nota Fim    (cnfis final)
+*   - Copias      (numero de vias da carta - default: SigCdPam.viacarta)
+*==============================================================================
+
+DEFINE CLASS sigreimcBO AS RelatorioBase
+
+    *-- Filtro: empresa e serie
+    this_cEmp           = ""
+    this_cSerie         = ""
+
+    *-- Filtro: periodo de emissao da NF
+    this_dEmisDe        = {}
+    this_dEmisAte       = {}
+
+    *-- Filtro: EDN (empdopnums de SigMvNfi)
+    *   Quando preenchido, filtra apenas NFs com esse EDN
+    *   Corresponde a propriedade custom 'edns' do form legado SIGREIMC
+    this_cEDNs          = ""
+
+    *-- Flag derivada de EDNs: .T. = filtrar por EDNs, .F. = sem filtro EDN
+    *   Equivale a variavel pEmpEdns do Init() legado
+    this_lEmpEdns       = .F.
+
+    *-- Filtro: faixa de notas fiscais (cnfis)
+    this_cNotaIni       = ""
+    this_cNotaFim       = ""
+
+    *-- Numero de vias/copias da carta
+    *   Valor padrao carregado de SigCdPam.viacarta em InicializarFiltros()
+    this_nCopias        = 1
+
+    *-- Nome do cursor de saida populado por PrepararDados()
+    *   Estrutura: cemps, cseries, cnfis, noccors, mretifs, clifors, emis,
+    *              correcs, rclis, razaos, endes, cidas, estas, nums, compls,
+    *              cdescrs, numvias
+    this_cCursorDados   = "cursor_4c_XCorNf"
+
+    *--------------------------------------------------------------------------
+    * Init - Configura BO do relatorio de impressao de cartas
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = "SigNfCor"
+        THIS.this_cCampoChave = "cnfis"
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarFiltros - Carrega parametros iniciais (viacarta de SigCdPam).
+    * Chamado pelo form em InicializarForm().
+    * Equivalente ao bloco do Init() legado que faz Requery de CrSigCdPam
+    * e le SigCdPam.viacarta para preencher GetCopias.
+    *--------------------------------------------------------------------------
+    PROCEDURE InicializarFiltros()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
+        loc_lSucesso = .F.
+        TRY
+            loc_cSQL = "SELECT viacarta FROM SigCdPam"
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Pam")
+            IF loc_nResult > 0
+                SELECT cursor_4c_Pam
+                IF !EOF()
+                    THIS.this_nCopias = NVL(viacarta, 1)
+                    IF THIS.this_nCopias < 1
+                        THIS.this_nCopias = 1
+                    ENDIF
+                ENDIF
+                USE IN cursor_4c_Pam
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "InicializarFiltros")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Monta cursor XCorNf com as cartas a imprimir.
+    * Replica a logica do procedure 'processamento' do form legado SIGREIMC:
+    *   1. Executa query em SigNfCor/SigMvNfi/SigCdCli/SigCcOco -> CrSigNfCor
+    *   2. Replica each record this_nCopias vezes com numvias sequencial
+    * Chamado por Imprimir() e Visualizar() do form antes de REPORT FORM.
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lSucesso, loc_cSQL, loc_cWhere, loc_nResult
+        LOCAL loc_dEmisDe, loc_dEmisAte
+        LOCAL loc_cEmpsFmt, loc_cSeriesFmt, loc_cNFisDeF, loc_cNFisAteFmt
+        LOCAL loc_nVia, loc_nCopias
+        loc_lSucesso = .F.
+        TRY
+            *-- Valores dos filtros
+            loc_dEmisDe  = THIS.this_dEmisDe
+            loc_dEmisAte = THIS.this_dEmisAte
+            IF EMPTY(loc_dEmisDe)
+                loc_dEmisDe = CTOD("01/01/1900")
+            ENDIF
+            IF EMPTY(loc_dEmisAte)
+                loc_dEmisAte = DATE()
+            ENDIF
+
+            loc_cEmpsFmt   = EscaparSQL(THIS.this_cEmp)
+            loc_cSeriesFmt = EscaparSQL(THIS.this_cSerie)
+            loc_cNFisDeF   = EscaparSQL(THIS.this_cNotaIni)
+            loc_cNFisAteFmt = EscaparSQL(PADR(THIS.this_cNotaFim, 6, CHR(254)))
+
+            *-- Monta SQL base para NF Cor (espelha lcQryCorNf do Init() legado)
+            loc_cSQL = "SELECT f.cemps, f.cseries, f.cnfis, f.noccors," + ;
+                       " f.mretifs, n.clifors, n.emis, n.correcs," + ;
+                       " c.rclis, c.razaos, c.endes, c.cidas, c.estas," + ;
+                       " c.nums, c.compls, o.cdescrs" + ;
+                       " FROM SigNfCor f, SigMvNfi n, SigCdCli c, SigCcOco o" + ;
+                       " WHERE f.cnfis = n.nfis" + ;
+                       " AND f.cemps = n.emps" + ;
+                       " AND f.cseries = n.series"
+
+            IF THIS.this_lEmpEdns .AND. !EMPTY(THIS.this_cEDNs)
+                loc_cSQL = loc_cSQL + ;
+                    " AND n.empdopnums = " + EscaparSQL(THIS.this_cEDNs)
+            ENDIF
+
+            loc_cSQL = loc_cSQL + ;
+                " AND n.clifors = c.iclis" + ;
+                " AND f.noccors = o.ncodigos" + ;
+                " AND f.cemps = " + loc_cEmpsFmt + ;
+                " AND f.cseries = " + loc_cSeriesFmt + ;
+                " AND f.cnfis BETWEEN " + loc_cNFisDeF + ;
+                " AND " + loc_cNFisAteFmt + ;
+                " AND n.emis BETWEEN " + FormatarDataSQL(loc_dEmisDe) + ;
+                " AND " + FormatarDataSQL(loc_dEmisAte) + ;
+                " ORDER BY cemps, cseries, cnfis, noccors"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NfCorBase")
+            IF loc_nResult < 1
+                THIS.this_cMensagemErro = "Erro ao buscar notas fiscais"
+                loc_lSucesso = .F.
+            ENDIF
+
+            *-- Cria cursor de saida com estrutura identica ao XCorNf do legado
+            IF USED(THIS.this_cCursorDados)
+                USE IN (THIS.this_cCursorDados)
+            ENDIF
+            SET NULL ON
+            CREATE CURSOR cursor_4c_XCorNf ;
+                (cemps C(3), cseries C(3), cnfis C(6), noccors N(3), ;
+                 mretifs M NULL, clifors C(10), emis D, correcs L, ;
+                 rclis C(50), razaos C(50), endes C(60), ;
+                 cidas C(30), estas C(2), nums C(10), compls C(25), ;
+                 cdescrs C(30), numvias N(8))
+            SET NULL OFF
+
+            *-- Replica cada NF o numero de copias solicitado (numvias sequencial)
+            loc_nCopias = THIS.this_nCopias
+            IF loc_nCopias < 1
+                loc_nCopias = 1
+            ENDIF
+
+            SELECT cursor_4c_NfCorBase
+            GO TOP
+            SCAN
+                FOR loc_nVia = 1 TO loc_nCopias
+                    SELECT cursor_4c_NfCorBase
+                    SCATTER MEMVAR MEMO
+                    SELECT cursor_4c_XCorNf
+                    APPEND BLANK
+                    GATHER MEMVAR MEMO
+                    REPLACE numvias WITH loc_nVia
+                ENDFOR
+                SELECT cursor_4c_NfCorBase
+            ENDSCAN
+
+            USE IN cursor_4c_NfCorBase
+
+            *-- Ordena cursor de saida por empresa/serie/nota/via
+            SELECT cursor_4c_XCorNf
+            INDEX ON cemps + cseries + cnfis + STR(numvias, 8) TAG XCorNfIdx
+
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "PrepararDados")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Envia relatorio para impressora
+    *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30)
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+
+        *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_cFrx
+        loc_lSucesso = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lSucesso = .F.
+            ENDIF
+            IF !FILE(loc_cFrx)
+                THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + ;
+                    "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
+                loc_lSucesso = .F.
+            ENDIF
+            SELECT cursor_4c_XCorNf
+            THIS.ExecutarReportForm("SigReImc", "PRINTER_PROMPT", THIS.this_cCursorDados)
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Imprimir")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Exibe relatorio em preview na tela
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_cFrx
+        loc_lSucesso = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lSucesso = .F.
+            ENDIF
+            IF !FILE(loc_cFrx)
+                THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + ;
+                    "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
+                loc_lSucesso = .F.
+            ENDIF
+            SELECT cursor_4c_XCorNf
+            THIS.ExecutarReportForm("SigReImc", "PREVIEW", THIS.this_cCursorDados)
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Visualizar")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna ultima mensagem de erro
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera cursor de saida
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF USED("cursor_4c_XCorNf")
+            USE IN cursor_4c_XCorNf
+        ENDIF
+        IF USED("cursor_4c_NfCorBase")
+            USE IN cursor_4c_NfCorBase
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

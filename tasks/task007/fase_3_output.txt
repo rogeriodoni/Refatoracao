@@ -1,0 +1,25 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\Formcfo.prg` criado com 359 linhas.
+
+## O que foi criado
+
+**Estrutura base do Formcfo:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Apenas `DODEFAULT()` ÔÇö FormBase.Init() chama InicializarForm() |
+| `InicializarForm()` | Cria cfoBO, chama os 3 Configure*, verifica gb_4c_ValidandoUI |
+| `ConfigurarPageFrame()` | PageFrame externo: Top=-29, Tabs=.F., 2 p├íginas, Height=629 |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho, cnt_4c_Botoes (Left=542), cnt_4c_Saida |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao + pgf_4c_PagDados (inner pageframe, 2 sub-p├íginas) |
+| `CarregarLista()` | Stub funcional (chama Buscar, verifica gnConnHandle e gb_4c_ValidandoUI) |
+| `AlternarPagina()` | Alterna ActivePage 1Ôåö2, recarrega lista ao voltar |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages de PageFrames e Controls de Containers |
+| `FormatarGridLista()` | FontName=Tahoma, FontSize=8 |
+| `Destroy()` | Libera BO, DODEFAULT() |
+
+**Coordenadas aplicadas (com compensa├º├úo +29 PageFrame):**
+- `cnt_4c_Cabecalho`: Top=31, Left=0, Width=935
+- `cnt_4c_Botoes`: Top=29, **Left=542** (lado direito ÔÇö conforme framework)
+- `cnt_4c_Saida`: Top=29, Left=935
+- `cnt_4c_BotoesAcao`: Top=33, Left=837
+- `pgf_4c_PagDados`: Top=149 (original 120 + 29), Left=-1, Width=998

@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. A Fase 4 est├í completa. Aqui o resumo do que foi adicionado:
+
+**`ConfigurarGrid()` ÔÇö expandido com:**
+- `Column1` (data): `ControlSource = "cursor_4c_Cotacoes.datas"`, `Width=80`, `Format="K"`, Header "Data"
+- `Column2` (cota├º├úo): `ControlSource = "cursor_4c_Cotacoes.valos"`, `Width=101`, `InputMask="99999.9999999"`, `ColumnOrder=3` (exibida 3┬¬)
+- `Column3` (hora): `ControlSource = "cursor_4c_Cotacoes.horas"`, `Width=55`, `InputMask="99:99"`, `ColumnOrder=2` (exibida 2┬¬)
+- Propriedades de `Text1` para cada coluna (fonte, borda, cores) ÔÇö id├¬nticas ao original
+- `BINDEVENT` para `AfterRowColChange` no grid
+- `BINDEVENT` para `KeyPress` nos `Text1` de data e hora
+
+**Tr├¬s novos handlers:**
+- `GrdAfterRowColChange` ÔÇö controla `ReadOnly` das colunas: apenas a linha rec├®m-inserida (`this_nIncluir`) fica edit├ível; ao mover para outra linha zera o flag e bloqueia edi├º├úo (replica comportamento do legado)
+- `GrdDataKeyPress` ÔÇö valida que a data n├úo est├í vazia ao ENTER/TAB (replica `data.Text1.Valid`)
+- `GrdHoraKeyPress` ÔÇö verifica hora duplicada para a mesma moeda+data e limpa o campo se detectar (replica `hora.Text1.Valid` com SEEK no cursor)

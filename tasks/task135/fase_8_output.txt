@@ -1,0 +1,13 @@
+﻿A Fase 8/8 est├í conclu├¡da. O arquivo `FormSigPdM10.prg` agora tem todos os m├®todos can├┤nicos adicionados:
+
+| M├®todo | Implementa├º├úo real |
+|--------|-------------------|
+| `CarregarLista()` | Recarrega cursores via BO (`CarregarDados`), faz Refresh em todos os 6 grids |
+| `AjustarBotoesPorModo()` | Garante `cmd_4c_Encerrar` vis├¡vel e habilitado (form sem modo CRUD) |
+| `FormParaBO()` | Captura configura├º├Áes de etiquetas (Opt_Tipo, Opt_Preco, Opt_peso, spinners, impressora) e popula BO |
+| `BOParaForm()` | Reaplica visibilidade via `AjustarLayoutVisibilidade` e d├í Refresh nos grids |
+| `HabilitarCampos()` | Controla `cmd_4c_Imprimir.Enabled` conforme par├ómetro |
+| `LimparCampos()` | Restaura sele├º├Áes de etiquetas ao padr├úo (Value=1) |
+| `BtnBuscarClick()` | Delega a `CarregarLista()` (recarga real de dados) |
+| `BtnSalvarClick()` | Delega a `FormParaBO()` (persiste config de etiquetas no BO) |
+| `BtnCancelarClick()` | Reabilita form pai e chama `Release` (id├¬ntico ao `BtnEncerrarClick`) |

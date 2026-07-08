@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- **`ConfigurarFiltros()`** ÔÇö cria todos os controles da ├írea de filtros:
+  - `shp_4c_Shape2` / `shp_4c_Shape1` ÔÇö shapes decorativas (com `ZOrder(1)` para ficar atr├ís dos demais controles)
+  - `txt_4c_CdGrupos` / `txt_4c_DsGrupos` ÔÇö lookup de Grupo (linha 1, esquerda)
+  - `txt_4c_Dt_inicial` / `lbl_4c_Say2` / `txt_4c_Dt_final` ÔÇö filtro de Per├¡odo (linha 1, direita)
+  - `cmd_4c_Command2` ÔÇö bot├úo Processar
+  - `txt_4c_CdContas` / `txt_4c_DsContas` ÔÇö lookup de Conta (linha 2)
+  - `txt_4c_TxtFavorecido` ÔÇö campo read-only do favorecido (rodap├®)
+  - Todas as labels correspondentes
+
+- **`AlternarPagina(par_nVisao)`** ÔÇö controla visibilidade dos containers flutuantes (0=Grade principal, 1=Procurar, 2=Impress├úo Matricial); usa `Visible=.F.` nos bot├Áes icone-only e `PEMSTATUS` para containers ainda n├úo criados (criados nas Fases 5+).
+
+- **`InicializarForm()`** atualizado em ambos os branches para chamar `ConfigurarFiltros()` ap├│s `ConfigurarGrid()`.

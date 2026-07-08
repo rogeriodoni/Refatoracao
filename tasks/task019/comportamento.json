@@ -1,0 +1,408 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 10,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGOPDIV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Podatamgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV",
+      "evento": "Init",
+      "linhas": 133,
+      "codigoOriginal": "Lparameters lcTipo, laNop, lcCnx\nlnNumop = 0\nlcQryNensI = [Select * From SigCdNei]\nlcQryNens  = [Select * From SigCdNec]\nlcQryOpi   = [Select * From SigOpPic Where Nops = ?lnNumOp Order By Nops, Dopes, Numes, CodCors, CodTams ]\nlcQryMFas  = [Select * From SigPdMvf]\nthisform.cEmps = _Empr\nthisform.lAutomatico = Iif(Type([lcCnx])=[C],.t.,.f.)\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('f... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "lAutomatico = Iif,CursorQuery,Value = Alltrim,Valid,Release",
+        "controlesReferenciados": "ChkDests,get_Op",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grupo_Conf",
+      "evento": "Click",
+      "linhas": 82,
+      "codigoOriginal": "Select Temporario\n\nScan\n\n\tlnop = Temporario.Nops\n\tSeq  = Temporario.SeqDivs\n\n\tSelect crSigOpPic\n\tScan \n\t\tIf Nops <> lnOp\n\t\t\tLoop\n\t\tEndif\n\t\tIf Dopes+Str(Numes,6)+Str(Qtds,12,2)+Str(SeqDivs,3) # Temporario.Dopes+Str(Temporario.Numes,6)+Str(Temporario.Qtds,12,2)+Str(Seq,3)\n\t\t\tLoop\n\t\tEndif\n\t\tReplace Obss With Temporario.Obss\n\t\tExit\n\tEndscan\n\nEndScan\nSelect CrSigOpPic\nReplace all CodTgOps With TmpOpi.CodTgOps In CrSigOpPic\n\nllTaOK = .t.\nIf Not ThisForm.poDataMgr.Update('CrSigCdNec')\n\t=MessageBox('Fav... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "Get_Op,Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grupo_Conf",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.RELEASE\nON KEY LABEL ENTER",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grupo_Salva",
+      "evento": "Click",
+      "linhas": 566,
+      "codigoOriginal": "If Empty( Thisform.Get_Op.Value ) \n\tMessagebox( 'OP não informada!!', 32, '' )\n\tThisForm.Get_Op.SetFocus\n\tReturn\nEndIf\n\nlnOp = Val(Thisform.Get_Op.Value)\npNop = lnOp\n\non key label enter\n\nSelect xNensi\nSum Pesos to xPeso\n\nSelect Temp_DivOp\nSum Qtds, QtdDivs, QtdEtiqs to lnQtds, lnQtdDivs, lnQtdEtiqs\n\nIf ThisForm.Operação = 'D'\n\tIf lnQtds == lnQtdDivs &&or lnQtds == ( lnQtdDivs + lnQtdEtiqs )\n\t\tMessagebox( 'A OP não pode ficar com quantidade = 0', 32, '' )\n\t\tThisForm.Grade.Column4.SetFocus\n\t\tGo to... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Requery,Divisaoop + Str,Divisaoop  + Str,cursorquery",
+        "controlesReferenciados": "Get_Op,ChkSubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grupo_Salva",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.RELEASE\nON KEY LABEL ENTER",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade2",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.fwmemo_obs.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.Get_obss.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_obss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*--Para não passar pela classe",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ON KEY LABEL 'ENTER' KEYBOARD '{DNARROW}' \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If This.Parent.Parent.Column2.Text1.Value > 0 And This.value > 0\n\tMessagebox( 'Informe Somente Qtde Divisão ou Qtde de Etiquetas...', 32, '' )\n\tThis.Value = 0\n\tReturn 0\nEndif\nIf This.Value > Temp_DivOp.Qtds\n\tMessagebox( 'Quantidade a dividir não pode ser maior que a quantidade do Pedido...', 32, '' )\n\tThis.Value = 0\n\tReturn 0\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If This.Parent.Parent.Column4.Text1.Value > 0 And This.value > 0\n\tMessagebox( 'Informe Somente Qtde Divisão ou Qtde de Etiquetas...', 32, 'Aviso' )\n\tThis.Value = 0\n\tReturn 0\nEndif\n\nIf this.Value = 1 && Não deixa dividir por 1 pois seria a mesma coisa que manter a OP\n\tMessagebox( 'Informe somente Qtde maior que 1.', 32, 'Aviso' )\n\tThis.Value = 0\n\tReturn 0\t\nEndif\n\nIf This.Value > Temp_DivOp.Qtds\n\tMessagebox( 'Quantidade de Etiquetas não pode ser maior que a quantidade do Pedido...', 32, 'Aviso' )\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ON KEY LABEL 'ENTER'\nReturn ( Temp_DivOp.Qtds > 1 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Get_OP",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Reccount('Temporario')  = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Get_OP",
+      "evento": "Valid",
+      "linhas": 166,
+      "codigoOriginal": "Select Temporario\nDelete All\nSelect Temp_DivOp\nDelete All\nSelect xNensi\nDelete All\n\nIf Empty( This.Value ) Or Val(This.Value) = 0\n\tReturn\nEndif\n\nIf Len( Alltrim( This.Value ) ) > 10\n\tThis.Value = Right( This.Value, 10 )\nEndIf\n\n_citem = 1\nlnOp = Val( This.Value )\npNop = LnOp\nSet Step On \nThisForm.Envelopado = .f.\nThisForm.Envelope   = 0\n\nlcSql = [Select Dopps From SigCdOpd where ChkDests = 1 ]\n=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpOpp')\nSelect TmpOpp\nIf Reccount() > 0\n\tlcbusca = thisform.cEmps... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Dopps + Str,Cursorquery",
+        "controlesReferenciados": "ChkDests,ChkSubn],Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Get_OP",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If !Empty( This.Value ) And !Eof( 'Temp_divOp' )\n\tThisForm.Grade.Column2.Text1.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Get_Produto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.fwmemo_obs",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grade2.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGOPDIV.Get_obss",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grade2.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGOPDIV.Init",
+      "queryOriginal": "lcQryNensI = [Select * From SigCdNei]",
+      "tabelas": "SigCdNei",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDIV.Init",
+      "queryOriginal": "lcQryNens  = [Select * From SigCdNec]",
+      "tabelas": "SigCdNec",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDIV.Init",
+      "queryOriginal": "lcQryOpi   = [Select * From SigOpPic Where Nops = ?lnNumOp Order By Nops, Dopes, Numes, CodCors, CodTams ]",
+      "tabelas": "SigOpPic",
+      "colunas": "Nops,Dopes,Numes,CodCors,CodTams",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDIV.Init",
+      "queryOriginal": "lcQryMFas  = [Select * From SigPdMvf]",
+      "tabelas": "SigPdMvf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGOPDIV.Get_OP.Valid",
+      "queryOriginal": "lcSql = [Select Dopps From SigCdOpd where ChkDests = 1 ]",
+      "tabelas": "SigCdOpd",
+      "colunas": "Dopps,ChkDests",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdNei", "SigCdNec", "SigOpPic", "SigPdMvf", "SigCdOpd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,44 @@
+﻿Verifica├º├úo conclu├¡da. As duas condi├º├Áes WHERE flagadas est├úo em `sigreffiBO.prg` (n├úo no form file), e ap├│s compara├º├úo com o c├│digo legado:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### WHERE CMoes = ... (`sigreffiBO.prg:266`)
+**Contexto**: Fun├º├úo `BuscarCotacaoMoeda(par_cMoeda, par_dData)` ÔÇö consulta `SigCdCot` para obter a cota├º├úo de uma moeda espec├¡fica.
+
+**Original legado** (`sigreffi_form_codigo_fonte.txt:1764`):
+```foxpro
+ThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')
+...
+If Seek(Moedas, 'crSigCdMoe', 'CMoes')  && SEEK por CMoes no cursor de cota├º├Áes
+```
+
+O original carregava TODAS as cota├º├Áes e navegava por SEEK. A migra├º├úo criou a helper `BuscarCotacaoMoeda()` com SQL direto. O `WHERE CMoes = ...` ├® **equivalente sem├óntico** ao SEEK original ÔÇö sem ele, a fun├º├úo retorna a cota├º├úo errada (primeira linha em vez da moeda solicitada).
+
+**Veredicto: N├âO inventado. Condi├º├úo necess├íria e correta.**
+
+---
+
+### WHERE Cemps = ... (`sigreffiBO.prg:332`)
+**Contexto**: Consulta `SigCdEmp` para obter o nome da empresa para o cabe├ºalho do relat├│rio.
+
+**Original legado** (`sigreffi_form_codigo_fonte.txt:1874`):
+```foxpro
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcNmEmpresa = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+```
+
+O `CursorQuery` com `'Cemps', _Empr` **gera internamente** um `WHERE Cemps = _Empr`. A linha 332 da migra├º├úo ├® a tradu├º├úo direta e exata desta chamada para SQL expl├¡cito.
+
+**Veredicto: N├âO inventado. ├ë o equivalente SQL direto do CursorQuery original.**
+
+---
+
+## Conclus├úo
+
+Ambas as condi├º├Áes WHERE s├úo **corretas e necess├írias**. O validador n├úo reconheceu:
+- `CursorQuery(..., 'Cemps', _Empr, ...)` como equivalente a `WHERE Cemps = ...`
+- O padr├úo de SEEK por CMoes como equivalente ao `WHERE CMoes = ...` na helper function
+
+**Nenhuma altera├º├úo ├® necess├íria neste pass.** Os arquivos `Formsigreffi.prg` e `sigreffiBO.prg` est├úo corretos quanto ├ás condi├º├Áes WHERE flagadas.

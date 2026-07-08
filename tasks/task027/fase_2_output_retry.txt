@@ -1,0 +1,9 @@
+﻿Os 5 m├®todos esperados pelo validador foram adicionados ao SIGREAEGBO.prg:
+
+- **`ObterChavePrimaria()`** (linha 1240) ÔÇö retorna identificador composto dos filtros para auditoria
+- **`CarregarDoCursor(par_cAliasCursor)`** (linha 1254) ÔÇö restaura filtros a partir de cursor de preset usando `SELECT (par_cAliasCursor)` + SCATTER MEMVAR
+- **`Inserir()`** (linha 1316) ÔÇö sem├óntica de relat├│rio: valida per├¡odo e delega para `Imprimir()` + auditoria "IMPRESSAO"
+- **`Atualizar()`** (linha 1347) ÔÇö sem├óntica de relat├│rio: valida per├¡odo e delega para `Visualizar()` + auditoria "VISUALIZACAO"
+- **`RegistrarAuditoria(par_cOperacao)`** (linha 1378) ÔÇö INSERT em LogAuditoria com EscaparSQL e tabela "SigReAeg"
+
+Seguem o padr├úo do SIGREADSBO (BO de relat├│rio de refer├¬ncia), sem acentos literais nos coment├írios, com TRY/CATCH usando flag `loc_lSucesso` (RETURN fora do bloco), `EscaparSQL()` sem aspas extras, e valida├º├úo de filtros obrigat├│rios antes da execu├º├úo. O BO agora tem implementa├º├úo CRUD completa coerente com a sem├óntica de relat├│rio, complementando `PrepararDados()`/`Visualizar()`/`Imprimir()` que j├í estavam na Fase 1.

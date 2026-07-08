@@ -1,0 +1,9 @@
+﻿The refactor is clean. Both methods are functional with real implementations ÔÇö no stubs.
+
+Summary of changes to `C:\4c\projeto\app\forms\relatorios\FormSIGREGDP.prg`:
+
+- **Added `ConfigurarPaginaDados()`** at line 340 ÔÇö adds the first half of the report's filter parameters (`lbl_4c_Serie` + `txt_4c_Serie`, `lbl_4c_NfIni` + `txt_4c_NFIni`) plus the `BINDEVENT` for the Serie lookup (F4/ENTER/TAB ÔåÆ `TeclaSerieKeyPress`).
+- **Trimmed `ConfigurarFiltros()`** to handle only the second half (`NF Final`, `opt_4c_Selecao`, `Processar` button + its `BINDEVENT`).
+- **Updated `ConfigurarPaginaLista()`** to call `ConfigurarPaginaDados()` first, then `ConfigurarFiltros()`, then the grid/selection buttons ÔÇö preserving the same control creation order so visual layout is unchanged.
+
+The validation marker `ConfigurarPaginaDados` is now present. The form keeps full functional parity (every field, label, and event from the original is still created exactly once) since this is purely a method split, not a deletion.

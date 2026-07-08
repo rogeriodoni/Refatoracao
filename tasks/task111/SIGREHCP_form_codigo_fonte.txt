@@ -1,0 +1,698 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREHCP.SCX
+* Data/Hora: 05/06/2026 22:53:35
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREHCP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREHCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREHCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREHCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDPros
+  Parent: SIGREHCP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCPros
+  Parent: SIGREHCP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTipImps
+  Parent: SIGREHCP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblEmpresa
+  Parent: SIGREHCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmps
+  Parent: SIGREHCP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDtInicial
+  Parent: SIGREHCP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGREHCP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCEmps
+  Parent: SIGREHCP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say11
+  Parent: SIGREHCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP
+------------------------------------------------------------
+  DataSession = 1
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Histórico de Custo de Produtos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  Name = "SIGREHCP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 13
+  btnReport.ZOrderSet = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 204
+  Top = 149
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "até"
+  Left = 339
+  Top = 149
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto :"
+  Height = 15
+  Left = 202
+  Top = 175
+  Width = 47
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getDPros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 365
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 172
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getDPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getCPros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 254
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 172
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getCPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.optTipImps
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 248
+  SpecialEffect = 0
+  Top = 196
+  Width = 212
+  TabIndex = 12
+  ZOrderSet = 17
+  Name = "optTipImps"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Relação Padrão"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.ToolTipText = "Impressão de Relatório Padrão"
+  Option1.Top = 6
+  Option1.Width = 108
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Modelo 3"
+  Option2.Value = 0
+  Option2.Height = 17
+  Option2.Left = 129
+  Option2.ToolTipText = "Imprimir o Modelo 3 Para Livro Fiscal"
+  Option2.Top = 6
+  Option2.Width = 83
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.lblEmpresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 199
+  Top = 123
+  Width = 50
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "lblEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getDEmps
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 288
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 120
+  Width = 303
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getDEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 254
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 146
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getDtFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 364
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 146
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.getCEmps
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 23
+  InputMask = "XXX"
+  Left = 254
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getCEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHCP.Say11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo de Impressão :"
+  Left = 152
+  Top = 201
+  Width = 97
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREHCP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Set Point To [,]
+Set Separator To [.]
+
+If (ThisForm.optTipImps.Value = 1) && Relação Padrão
+	If (ThisForm.loObj.CalcCustos = 1) && 1-Produto; 2-Empresa + Produto
+		Report Form SigRehc2 To Print Prompt NoConsole
+	Else
+		Report Form SigRehc1 To Print Prompt NoConsole
+	EndIf
+Else
+	Report Form SigRehc3 To Print Prompt NoConsole
+EndIf
+
+Set Point To [.]
+Set Separator To [,]
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.loNegocios = CreateObject([cnSigRehcp], .Name)
+
+	If (.loNegocios.poDataMgr.pnIdconn > 0)
+		.getDtInicial.Value = Date()
+		.getDtFinal.Value   = Date()
+		.getCPros.Value 	= Space(14)
+		.getDPros.Value 	= Space(40)
+		.getCEmps.Value 	= Space(03)
+		.getDEmps.Value 	= Space(40)
+
+		.loObj = CreateObject([Relation])
+
+		.loObj.AddProperty([DataInicial], .getDtInicial.Value)
+		.loObj.AddProperty([DataFinal],   .getDtFinal.Value)
+		.loObj.AddProperty([Produto],     [])
+		.loObj.AddProperty([Empresa],     [])
+		.loObj.AddProperty([CalcCustos],  00)
+		.loObj.AddProperty([TrataErro],   [])
+		.loObj.AddProperty([TipoImps],    00)
+
+		* Validando Campos de Empresa
+		.loNegocios.poDataMgr.CursorQuery([SigCdPaC], [rCustParaC], .f., .f., [CalcCustos])
+		If Used([rCustParaC]) And Not Eof([rCustParaC])
+			.loObj.CalcCustos = rCustParaC.CalcCustos
+			If (.loObj.CalcCustos = 1) && 1-Produto; 2-Empresa + Produto
+				.getCEmps.Visible 	= .f.
+				.getDEmps.Visible 	= .f.
+				.getCEmps.Enabled   = .f.
+				.getDEmps.Enabled 	= .f.
+				.lblEmpresa.Visible = .f.
+			EndIf
+		EndIf
+				
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .F.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Set Procedure To SigRehcp.Prg Additive
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+With ThisForm
+	.loObj.DataInicial	= .getDtInicial.Value
+	.loObj.DataFinal	= .getDtFinal.Value
+	.loObj.Produto		= .getCPros.Value
+	.loObj.Empresa		= .getCEmps.Value
+	.loObj.TipoImps     = .optTipImps.Value
+
+	llRet = .loNegocios.Processamento(.loObj)
+
+	If Not llRet
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Release Procedure SigRehcp
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Set Point To [,]
+Set Separator To [.]
+
+If (ThisForm.optTipImps.Value = 1) && Relação Padrão
+	If (ThisForm.loObj.CalcCustos = 1) && 1-Produto; 2-Empresa + Produto
+		Report Form SigRehc2 Preview NoConsole
+	Else
+		Report Form SigRehc1 Preview NoConsole
+	EndIf
+Else
+	Report Form SigRehc3 Preview NoConsole
+EndIf
+
+Set Point To [.]
+Set Separator To [,]
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	With ThisForm
+		.loObj.DataInicial	= .getDtInicial.Value
+		.loObj.DataFinal	= .getDtFinal.Value
+		.loObj.Produto		= .getCPros.Value
+		.loObj.Empresa		= .getCEmps.Value
+
+		.loNegocios.ValidaBotoes(ThisForm.loObj)	
+		
+		llRet = .loObj.TrataErro
+	EndWith
+
+	Do Case
+		Case llRet = [DataInicial]
+			=Messagebox([Data Inicial Inválida!!!], 0+48, [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+
+		Case llRet = [DataFinal]
+			=Messagebox([Data Final Inválida!!!], 0+48, [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+
+		Case llRet = [Periodo]
+			=Messagebox([Data Final Menor Que a Inicial!!!], 0+48, [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+	EndCase
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHCP.getDPros
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getCPros.Value = ''
+	ThisForm.getDPros.Value = ''
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCPros.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHCP.getCPros
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getCPros.Value = ''
+	ThisForm.getDPros.Value = ''
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHCP.getDEmps
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.loNegocios.poDataMgr)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCEmps.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHCP.getCEmps
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.loNegocios.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREHCP
+RESERVED3 (ClassInfo): lonegocios
+loobj
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

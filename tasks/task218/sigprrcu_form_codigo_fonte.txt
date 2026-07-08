@@ -1,0 +1,473 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprrcu.SCX
+* Data/Hora: 03/07/2026 18:08:46
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRRCU
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRRCU
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRRCU.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRRCU.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRRCU
+  Class: shape
+  BaseClass: shape
+
+Objeto: SAIR
+  Parent: SIGPRRCU
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: OK
+  Parent: SIGPRRCU
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGPRRCU
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 150
+  Width = 580
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Recálculo de Custos de Produto"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGPRRCU"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.Shape1
+------------------------------------------------------------
+  Top = -5
+  Left = 498
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.SAIR
+------------------------------------------------------------
+  Top = 3
+  Left = 505
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 9
+  ToolTipText = "[ESC] Sair"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SAIR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.OK
+------------------------------------------------------------
+  Top = 3
+  Left = 430
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Cancel = .F.
+  Caption = "Processar"
+  TabIndex = 8
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "OK"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRRCU.Label1
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Label1"
+  Height = 16
+  Left = 129
+  Top = 108
+  Width = 321
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRRCU
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If ThisForm.Parametrizado
+	ThisForm.OK.Click()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pParam
+
+ThisForm.Parametrizado = (Type('pParam')='C')
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', 'reccpro',.t.)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		If Not ThisForm.Parametrizado
+			=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Endif
+		Return .f.
+	EndIf
+EndWith
+
+If ThisForm.Parametrizado && Grava o "Log" de Processamento
+	lcArquivo = 'Fortyus.Log'
+	=StrToFile('', lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Iniciando o Processamento : Fortyus.Exe (SigOpClC) - Recalculo de Custos'
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Data : ' + Dtoc(Date()) + ' - Hora : ' + Time()
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRRCU.SAIR
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRRCU.OK
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+Local llOk, lnErro1
+
+This.Enabled = .f.
+
+Set Cursor Off
+
+lnMov = 1
+llErrCnx = .f.
+
+Keyboard '{LEFTARROW}'
+
+Do While .t.
+	ThisForm.Sair.Enabled = .f.
+
+	ThisForm.Label1.Caption = 'Aguardando Produtos Para Processar' + Replicate('.', lnMov)
+	lnMov = Iif(lnMov < 5, lnMov + 1, 1)
+
+	lcSql = [Select 0 as Flag,* From SigOpClC Order by EmpCpros ]
+	llOk  = ( ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigOpClC') > 0 )
+
+	If Not llOk
+		llErrCnx = .t.
+	Else
+
+		Select CrSigOpClC
+
+		Scan
+
+			lcCidChave = CrSigOpClC.CidChaves
+			lcUpdate = [ Update SigOpClC Set Usuars = Usuars Where CidChaves = ']+lcCidChave+[']
+			lnErro1 = ThisForm.poDataMgr.SqlExecute(lcUpdate , '', 1  )
+			llOk = ( lnErro1 > 0 )
+
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				
+				If lnErro1==-3 && queda de conexao com BD...
+					Exit 
+				EndIf 
+
+				Loop
+			EndIf 
+
+			If Used( 'TmpCustPro' )
+				USE in TmpCustPro
+			Endif
+
+			llOk = fRecalculaC(Iif(Empty(CrSigOpClC.Emps),_Empr,CrSigOpClC.Emps), CrSigOpClC.Cpros, CrSigOpClC.Datas)
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			Endif
+
+			llOk  = fRecalculaC(.t., .t., .f., ThisForm.poDataMgr, .t.)
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			EndIf
+			
+			lcCidChave = CrSigOpClC.CidChaves
+			lcDelete = [ Delete From SigOpClC Where CidChaves = ']+lcCidChave+[']
+			llOk = ( ThisForm.poDataMgr.SqlExecute(lcDelete, '', 1 ) > 0 )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			Endif
+
+			llOk = ( ThisForm.PodataMgr.Commit() > 0 )
+			If Not llOk
+				ThisForm.Podatamgr.Rollback()
+				Loop
+			Endif
+
+		EndScan
+
+	EndIf
+	
+	ThisForm.Podatamgr.Rollback()
+
+	ThisForm.Sair.Enabled = .t.
+	
+	lnKey = Inkey(.5, 'M')
+	
+	If Not ThisForm.Parametrizado Or lnKey = 27 Or llErrCnx
+		Exit
+	EndIf
+
+	lcForm = ThisForm.Name
+	If ThisForm.MouseSobreBotaoSair(mCol(lcForm, 3), mRow(lcForm, 3), ThisForm.Sair) And (lnKey=151)
+		ThisForm.Sair.Click()
+		Exit
+	EndIf
+EndDo
+Set Cursor On
+
+ThisForm.Label1.Caption = ''
+
+This.Enabled = .t.
+
+If ThisForm.Parametrizado
+	* Grava o "Log" de Processamento
+	lcArquivo = 'Fortyus.Log'
+	=StrToFile('', lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Concluindo o Processamento : Prod2005.Exe (SigOpClC) - Recalculo de Custos'
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = 'Data : ' + Dtoc(Date()) + ' - Hora : ' + Time()
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	lcGravaMs = Replicate('=', 80)
+	=StrToFile(lcGravaMs + Chr(10), lcArquivo, .t.)
+
+	ThisForm.Release
+	Quit
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRRCU
+RESERVED3 (ClassInfo): parametrizado
+podatamgr
+*mousesobrebotaosair 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

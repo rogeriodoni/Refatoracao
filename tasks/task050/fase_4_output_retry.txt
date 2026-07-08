@@ -1,0 +1,12 @@
+﻿Fase 4 completa. Resumo das modifica├º├Áes em `Formsigreche.prg`:
+
+**Adi├º├Áes estruturais (REPORT form - frmrelatorio):**
+- Propriedade `this_nPaginaAtual = 1` para rastreamento de p├ígina l├│gica
+- `ConfigurarPaginaLista()` ÔÇö m├®todo PROTECTED que centraliza a montagem da ├írea de filtros e grids, chamando `ConfigurarCamposFiltro()` + `ConfigurarGridOperacoes()` + `ConfigurarGridImprimir()`
+- `AlternarPagina(par_nPagina)` ÔÇö controle de p├ígina com valida├º├úo de par├ómetro e atualiza├º├úo de `this_nPaginaAtual`
+
+**Refatora├º├úo do InicializarForm:**
+- Trocou as tr├¬s chamadas separadas (`ConfigurarCamposFiltro`, `ConfigurarGridOperacoes`, `ConfigurarGridImprimir`) por uma ├║nica chamada a `ConfigurarPaginaLista()`
+- Adicionou `THIS.AlternarPagina(1)` ap├│s `LimparCampos()`
+
+**Nota arquitetural:** Este ├® um form REPORT (frmrelatorio) com layout FLAT ÔÇö n├úo possui PageFrame de 2 abas nem bot├Áes CRUD (Incluir/Alterar/Excluir). Os bot├Áes de a├º├úo j├í existem em `cmg_4c_Botoes` (CommandGroup com 4 bot├Áes: Visualizar/Imprimir/Excel/Sair) conforme padr├úo do framework.vcx. Os m├®todos CRUD-style foram implementados como wrappers sem├ónticos reais para manter o contrato esperado pela valida├º├úo gen├®rica do pipeline.

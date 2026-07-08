@@ -1,0 +1,13 @@
+﻿Arquivo correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö cria `grd_4c_Dados` (14 colunas, posi├º├úo/dimens├úo exata do legado: Top=168, Left=72, W=668, H=345), `lbl_4c_Historico` e `txt_4c_Historico` (somente leitura, espelhando Label1/Text1 do SCX). BINDEVENT para `AfterRowColChange` configurado aqui.
+
+2. **`CarregarGrade()`** ÔÇö chama `PrepararDados()` do BO, depois aplica `RecordSource="crGrid"`, ControlSources das 14 colunas, redefine headers (obrigat├│rio ap├│s mudar RecordSource ÔÇö li├º├úo #2 do FORMCOR), larguras e `SetAll` de fonte.
+
+3. **`AlternarPagina()`** ÔÇö stub sem l├│gica (form REPORT n├úo tem PageFrame Lista/Dados).
+
+4. **`GridAposLinhaColChange(par_nColIndex)`** ÔÇö handler p├║blico que exibe `crGrid.Hists` em `txt_4c_Historico`, espelhando o evento original.
+
+5. **`Init()`** ÔÇö ap├│s juntar o `DataSessionId`, chama `CarregarGrade()` e inicializa `txt_4c_Historico` com o hist├│rico do primeiro registro.

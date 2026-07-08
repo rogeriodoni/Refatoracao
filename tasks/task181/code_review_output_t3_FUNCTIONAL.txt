@@ -1,0 +1,7 @@
+﻿Feito. Resumo das corre├º├Áes aplicadas:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis()` linha 194: adicionado `"CNT_4C_CABECALHO"` ao `INLIST`. O container do cabe├ºalho j├í tem `Visible=.T.` via `ConfigurarPageFrame()`, mas sem a exclus├úo o m├®todo poderia interferir com sua gest├úo de visibilidade.
+
+**[OPTIONGROUP-LEFT]** ÔÇö `obj_4c_Opcoa_imp.Buttons(1)` linha ~1042: adicionado `.Themes = .F.` (era o ├║nico Button dentre todos os OptionGroups sem a propriedade expl├¡cita).
+
+**13 [LAYOUT-POSITION] + 6 outros [OPTIONGROUP-LEFT]** ÔÇö Falsos positivos: o checker confundiu `OptionGroup.Buttons(1).Top/Left` (coordenadas internas) com `OptionGroup.Top/Left` (coordenadas absolutas). Todos os OptionGroups est├úo nas posi├º├Áes originais corretas. Nenhuma altera├º├úo de layout foi feita.

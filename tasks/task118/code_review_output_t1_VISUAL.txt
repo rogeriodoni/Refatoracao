@@ -1,0 +1,24 @@
+﻿Os 4 problemas reportados s├úo **falsos positivos do validador**. Veja o racioc├¡nio:
+
+| Controle | Top original (form) | PageFrame.Top | Top correto dentro da Page | Top atual | Status |
+|---|---|---|---|---|---|
+| lbl_4c_Lbl_periodo | 104 | 85 | 104 - 85 = **19** | 19 | Ô£ô CORRETO |
+| lbl_4c_Lbl_periodo_a | 104 | 85 | 104 - 85 = **19** | 19 | Ô£ô CORRETO |
+| lbl_4c_Label3 | 157 | 85 | 157 - 85 = **72** | 72 | Ô£ô CORRETO |
+| lbl_4c_Label2 | 181 | 85 | 181 - 85 = **96** | 96 | Ô£ô CORRETO |
+
+O validador compara a posi├º├úo absoluta original do SCX (ex: 104) contra a posi├º├úo relativa ao Page1 (ex: 19), sem descontar o `PageFrame.Top=85`. Isso gera um delta de exatamente 85px em todos os 4 casos ÔÇö que ├® precisamente o valor de `pgf_4c_Paginas.Top`.
+
+**Por que N├âO alterar:**
+
+1. Todos os outros controles na mesma `Page1` usam a mesma f├│rmula `original - 85`:
+   - `shp_4c_Shp_materia_prima`: 96 - 85 = 11 Ô£ô
+   - `lbl_4c_Label4`: 132 - 85 = 47 Ô£ô
+   - `obj_4c_NivImprs`: 127 - 85 = 42 Ô£ô
+   - etc.
+
+2. Se os 4 controles fossem alterados para Top=104/157/181, a posi├º├úo na tela seria `PageFrame.Top + Top = 85+104 = 189px` ÔÇö 85px mais baixo do que o original. Visual completamente quebrado.
+
+3. `lbl_4c_Label2` com Top=181 dentro de uma Page com Height=169 ficaria **fora da ├írea vis├¡vel** (181 > 169). Invalido em VFP9.
+
+**Conclus├úo:** O c├│digo est├í correto. Os 4 itens s├úo falsos positivos causados por o validador n├úo conhecer o `PageFrame.Top=85`. Nenhuma altera├º├úo deve ser feita no arquivo.

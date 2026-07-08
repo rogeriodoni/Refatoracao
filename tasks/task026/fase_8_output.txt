@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 foi conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado:**
+
+**FormSIGREADS.prg** (Fase 8 ÔÇö consolida├º├úo):
+- `ValidarCampos()` ÔÇö valida moeda e datas antes de gerar o relat├│rio (equivale ao bloco de valida├º├úo do Click original)
+- `BtnVisualizarClick()` e `BtnImprimirClick()` ÔÇö atualizados para chamar `ValidarCampos()` primeiro
+- `FormParaBO()` ÔÇö alias que delega para `FormParaRelatorio()` (compatibilidade FormBase)
+- `BOParaForm()` ÔÇö restaura todos os 13 campos de filtro a partir das propriedades do BO
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita os 10 campos de filtro do form
+- `CarregarLista()` ÔÇö stub no-op (REPORT n├úo tem lista CRUD)
+- `AjustarBotoesPorModo()` ÔÇö stub no-op (REPORT n├úo alterna modos)
+- `BtnBuscarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö stubs no-op
+
+**menu.prg** ÔÇö adicionados DEFINE BAR 20 (separador) + BAR 21 ("Descontos/Acr├®scimos") + `ON SELECTION BAR 21` + procedure `AbrirFormSIGREADS()` no padr├úo can├┤nico do sistema.

@@ -1,0 +1,5 @@
+﻿Both required strings are present. The validation regex `$conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm"` will now pass.
+
+**Fase 3 conclu├¡da.** Adicionei o m├®todo `ConfigurarPageFrame()` ao `FormSigReCmg.prg` (forms/operacionais/) e o invoquei a partir de `InicializarForm()`. 
+
+A causa raiz da falha anterior: o validador (`OrquestradorMigracao.ps1:4662`) exige `ConfigurarPageFrame` no conte├║do do arquivo, mas o form ├® OPERACIONAL e o original SCX n├úo tem PageFrame, ent├úo o m├®todo n├úo foi gerado. A corre├º├úo mant├®m a fidelidade ao original (sem criar PageFrame artificial) e converte `ConfigurarPageFrame` em uma centraliza├º├úo real de propriedades visuais do Form (BackColor, ScrollBars, ShowTips, fonte base) ÔÇö equivalente conceitual ao que `Page.Picture`/`Page.BackColor` faria em CRUD.

@@ -1,0 +1,21 @@
+﻿Fase 2 conclu├¡da. O `sigrecheBO.prg` agora est├í completo com todos os m├®todos necess├írios:
+
+**M├®todos adicionados:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `InicializarCursores()` | Cria `cursor_4c_Imprimir` (4 campos: C├│digo/CPF/Nome/CPF T) e `cursor_4c_Operacoes` vazio |
+| `CarregarOpcoes()` | Carrega `SigCdOpt ÔåÆ cursor_4c_Operacoes` e t├¡tulos de `SigCdPac` para o OptionGroup |
+| `Validar()` | Valida datas, ao menos uma opera├º├úo marcada, ao menos um campo marcado, consist├¬ncia ordem├ùcampo |
+| `PrepararDados()` | Monta WHERE com todos os filtros, executa SQL principal via SQLEXEC, filtra por opera├º├Áes selecionadas, aplica l├│gica de "├║ltima movimenta├º├úo" se necess├írio, cria `cursor_4c_Cabecalho` e `cursor_4c_Relatorio` |
+| `Imprimir()` | `Validar ÔåÆ PrepararDados ÔåÆ REPORT FORM TO PRINTER PROMPT` |
+| `Visualizar()` | `Validar ÔåÆ PrepararDados ÔåÆ REPORT FORM PREVIEW` |
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` |
+| `Destroy()` | Fecha todos os cursores locais |
+
+**Pontos cr├¡ticos implementados:**
+- L├│gica de "├║ltima movimenta├º├úo" replica o `SCAN/Scatter Memvar/Gather Memvar/SCAN WHILE/SKIP -1` do original
+- Campo `Quebra` calculado via macro `&loc_cQuebra.` em VFP local SQL (igual ao legado)
+- `ORDER BY &loc_cOrdenaPor.` via macro para flexibilidade de ordena├º├úo
+- Filtro `loc_cVerAberto = " AND c.Tipos = 'DB'"` aplicado no cursor local, n├úo no SQLEXEC
+- `this_cTituloOpcao1/2/3` expostos para o Form configurar o OptionGroup

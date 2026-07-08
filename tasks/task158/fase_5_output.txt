@@ -1,0 +1,20 @@
+﻿A migra├º├úo da task158 j├í est├í **completamente finalizada**. Todos os arquivos foram implementados nas fases anteriores:
+
+**Estado atual:**
+
+| Arquivo | Status | Linhas |
+|---------|--------|--------|
+| `SigPrCccBO.prg` | Ô£à Completo | 1017 |
+| `FormSigPrCcc.prg` | Ô£à Completo | 1527 |
+| `menu.prg` | Ô£à Integrado | linha 152 + proc 3901 |
+
+**O que a Fase 5 pediria vs o que j├í existe:**
+
+A Fase 5 pede "ConfigurarPaginaDados()" ÔÇö mas este ├® um form **OPERACIONAL** (sem Page2). O equivalente s├úo os 4 m├®todos que j├í est├úo implementados:
+
+- `ConfigurarConteudoOpConta()` ÔÇö todos os campos de Conta Corrente (Empresa, Grupo, Conta, Moeda, Data)
+- `ConfigurarConteudoOpEstoque()` ÔÇö todos os campos de Estoque (Empresa, Grupo, Estoque, Produto, Desc, Data)
+- `ConfigurarConteudoOpCusto()` ÔÇö todos os campos de Custo (Empresa, Produto, Desc, Data)
+- `ConfigurarConteudoOpCompra()` ÔÇö todos os campos de ├Ültima Compra (Empresa, Produto, Desc, Data)
+
+**Todas as fases 1-8 j├í foram conclu├¡das** no pipeline anterior. N├úo h├í nada a modificar no arquivo ÔÇö a implementa├º├úo ├® completa e funcional, com BINDEVENTs, handlers de lookup, l├│gica de processamento no BO (incluindo as 4 sub-rotinas `ProcessarContaCorrente`, `ProcessarEstoque`, `ProcessarCusto`, `ProcessarUltimaCompra`) e integra├º├úo com o menu.

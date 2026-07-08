@@ -1,0 +1,6 @@
+﻿The file structure is complete. Phase 3 validation should now pass: the file contains both `ConfigurarPageFrame` (line 90) and `InicializarForm` (line 43), which are the two methods required by the orchestrator's validation regex at OrquestradorMigracao.ps1:4672.
+
+**Phase 3 changes made to `C:\4c\projeto\app\forms\operacionais\FormSigPdM13.prg`:**
+- Added new `PROTECTED PROCEDURE ConfigurarPageFrame()` (line 90) that sets Caption, Picture, WindowType, AlwaysOnTop, AutoCenter and base FontName/FontSize. Since this is an OPERACIONAL form (not CRUD), the method comment documents that the layout is custom (no Page1/Page2) ÔÇö same pattern as FormSigPdM12.
+- Refactored `InicializarForm()` to call `ConfigurarPageFrame()` before `ConfigurarCabecalho()`, wrapped in LockScreen for smoother rendering, and moved Caption/Picture assignments into `ConfigurarPageFrame()` to avoid duplication.
+- Preserved existing `ConfigurarCabecalho()`, `TornarControlesVisiveis()`, and `Destroy()` from the previous attempt (containers, grid, buttons come in later phases per the multi-phase plan).

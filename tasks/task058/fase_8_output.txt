@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**Formsigrecnt.prg** ÔÇö adicionado `HabilitarCampos(par_lHabilitar)` antes do `Destroy()`: habilita/desabilita os 7 campos de filtro edit├íveis, os 2 OptionGroups e os 3 bot├Áes de a├º├úo (Visualizar/Imprimir/Excel).
+
+**menu.prg** ÔÇö 3 altera├º├Áes:
+- `DEFINE BAR 58` (separador) e `DEFINE BAR 59` ("Contagem por Localiza├º├úo") na se├º├úo de defini├º├Áes do `popRelatorios`
+- `ON SELECTION BAR 59 OF popRelatorios DO AbrirFormsigrecnt`
+- `PROCEDURE AbrirFormsigrecnt()` com o padr├úo can├┤nico: `VARTYPE(loForm) = "O"`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro()` no CATCH
+
+O `config.prg` **n├úo precisou de altera├º├úo** ÔÇö ele j├í usa `ADIR` para carregar automaticamente todos os `*BO.prg` de `classes\` e todos os `Form*.prg` de `forms\relatorios\`.

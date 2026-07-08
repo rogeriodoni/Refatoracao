@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. A estrutura da Fase 3 est├í criada em `C:\4c\projeto\app\forms\relatorios\Formsigreffi.prg` com:
+
+**O que foi criado:**
+- `DEFINE CLASS Formsigreffi AS FormBase` ÔÇö Width=800, Height=560, TitleBar=0, DataSession=2
+- `Init()` ÔåÆ `DODEFAULT()` (FormBase chama InicializarForm automaticamente)
+- `InicializarForm()` ÔÇö cria BO sigreffiBO, chama `CarregarCursoresBase()`, monta cabe├ºalho + bot├Áes + PageFrame + binds
+- `ConfigurarCabecalho()` ÔÇö container escuro 80px com lbl_4c_Sombra/lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö CommandGroup `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), posi├º├Áes exatas do original (Left=529, Buttons em Left=5/71/137/203)
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 1 p├ígina (Filtros), Top=85, sem abas
+- `ConfigurarPaginaFiltros()` ÔÇö shell vazio (controles adicionados nas Fases 4-6)
+- `BtnVisualizarClick/ImprimirClick/ExcelClick/SairClick()` ÔÇö implementa├º├Áes completas delegando ao BO
+- `FormParaRelatorio()` / `LimparCampos()` ÔÇö shells aguardando controles das Fases 5-6
+- `Destroy()` ÔÇö limpa this_oRelatorio com `.NULL.` + DODEFAULT()

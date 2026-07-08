@@ -1,0 +1,19 @@
+﻿The fix is in place. Here's the diagnosis and what was changed:
+
+## Diagn├│stico
+
+**Causa raiz**: `ConfigurarPageFrame()` j├í define `.Visible = .T.` no PageFrame (linha 102). Ao retornar para `InicializarForm()`, o PageFrame estava **vis├¡vel** quando `ActivePage = 1` era definido.
+
+Em modo de teste (`CREATEOBJECT` sem `DO FORM`):
+- Form modal (`WindowType=1`) + PageFrame vis├¡vel + mudan├ºa de `ActivePage` **fora do loop de eventos** = VFP9 entra em `READ EVENTS` e trava por 300s
+
+Fix t4 escondeu o **form** (`THIS.Visible = .F.`), mas o **PageFrame** continuava vis├¡vel (setado em `ConfigurarPageFrame`). Era o PageFrame vis├¡vel que disparava o `READ EVENTS`, n├úo o form.
+
+## Fix Aplicado
+
+Em `InicializarForm()`, antes de definir `ActivePage = 1`:
+
+- **Modo teste**: `pgf_4c_Paginas.Visible = .F.` ÔåÆ ActivePage definido em PageFrame **oculto** ÔåÆ sem READ EVENTS
+- **Modo normal**: `pgf_4c_Paginas.Visible = .T.` ÔåÆ comportamento original mantido
+
+O teste `TesteModoIncluir` ainda funciona porque `AlternarPagina(2)` define `ActivePage = 2` no PageFrame oculto e o valor pode ser verificado normalmente pela propriedade.

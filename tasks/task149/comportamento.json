@@ -1,0 +1,339 @@
+{
+  "resumo": {
+    "totalMetodos": 19,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 7,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SigPdMp9",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9",
+      "evento": "Init",
+      "linhas": 43,
+      "codigoOriginal": "Lparameters pForm, DatSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThis.LockScreen = .t.\n\nSet DataSession To pForm.DataSessionId\n\nThisForm.pcEscolha  = pForm.pcEscolha\nThisForm.ParentForm = pForm\nThisForm.poDataMgr  = pForm.poDataMgr\nThisForm.AntValue   = Space(10)\n\nSelect xMfas\nGo Top\nWith ThisForm.GradeRetrab\n\t.RecordSource = 'xmfas'\n\t.Column2.ControlSource = 'xmfas.nenvs'\n\t.Column1.ControlSource = 'xmfas.nops'\n\t.Column3.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntValue   = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SigPdMp9.cmdgCompo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.cmdgCompo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Insert Into xNensiN (Nops,Qtds) Values (xMfas.Nops,xMfas.Qtds)\nThisForm.Gradeinc.Refresh\nThisForm.Gradeinc.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.cmdgCompo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.cmdgCompo",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select xNensiN\nDelete\nCount to x\nIf x = 0\n\tThisForm.cmdgCompo.CmdSInserir.Click()\nEndIf\nGo Top\nThisForm.Gradeinc.Refresh\nThisForm.GradeInc.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.GradeRetrab",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nLocal lcArquivo\n\nSelect xNensiN\nSet Key To xMfas.Nops\nGo Top\nThisform.Gradeinc.Refresh\n\nSelect xMfas\n\nlcArquivo = Sys(2023) + '\\SigPdMp5.Jpg'\n\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', xMfas.CodPds, 'DPros, FigJpgs')\nWith ThisForm\n\tClear Resources\n\t.FigJpg.Picture = ''\n\t.FigJpg.Visible = .f.\n\n\t* Figura no Campo Memo\n\tIf Not Empty(crSigCdPro.FigJpgs) And Not IsNull(crSigCdPro.FigJpgs)\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(crSigCdPro.FigJpgs,[data:... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.Get_Descs.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value) And This.Value # ThisForm.Antvalue\n\tlcSql = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ]\n\tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdNcf)')\n\t\tReturn .f.\n\tEndIf\n\tSelect CsSelecao\n\tIndex On Cods Tag Cods\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CsSelecao', 'Cods', This.Value, 'Nao Conformidade')\n\t\tloBrowse.AddColuna('Cods',... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value > xMfas.Qtds Or This.Value = 0\n\tMessageBox('Quantidade Invalida!!!',0+48,'')\n\tThis.Value = xmfas.Qtds\n\tThis.Refresh\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And xNensiN.Fixos = 2 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.Gradeinc.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'TmpCli', 'BalCodigo')\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpCli', 'BalCodigo', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('IClis',  '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.AddColuna('RClis',  '', 'Descrição', .t., 'BalNome')\n\t\tloBrowse.AddColuna('Grupos', '', 'Grupo' )\t\t\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(TmpCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tloBrowse.Show\n\tEndIf\n\tThis.Value = Tm... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigPdMp9.ok",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SigPdMp9.cmdgCompo.Click",
+      "queryOriginal": "Insert Into xNensiN (Nops,Qtds) Values (xMfas.Nops,xMfas.Qtds)",
+      "tabelas": "xNensiN",
+      "colunas": "Nops,Qtds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SigPdMp9.Gradeinc.Column1.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ] \tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1",
+      "tabelas": "SigCdNcf",
+      "colunas": "Emps,SqlexecutelcSql,CsSelecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xNensiN", "SigCdNcf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

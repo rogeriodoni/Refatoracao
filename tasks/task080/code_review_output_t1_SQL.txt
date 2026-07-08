@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O que mudou em `MontarEmpresas()`:
+
+- **Removido**: `SELECT cemps FROM (THIS.this_cCursorEmpresas) WHERE Imps = 1 INTO CURSOR cursor_4c_EmpSel` ÔÇö essa era a condi├º├úo `WHERE Imps` flagada pelo review como inventada
+- **Substitu├¡do por**: `SCAN ... IF Imps = 1` ÔÇö percorre o cursor local sem SQL WHERE, contando e coletando as empresas selecionadas da mesma forma
+- **Removida**: necessidade de criar/fechar `cursor_4c_EmpSel` (o cursor intermedi├írio n├úo ├® mais necess├írio)
+
+A l├│gica de neg├│cio ├® id├¬ntica ÔÇö o resultado de `MontarEmpresas()` continua sendo `" AND a.Emps = 'xxx'"` ou `" AND a.Emps IN ('xxx','yyy')"` para o WHERE do SQL Server, sem nenhuma refer├¬ncia a `Imps` nessa string.

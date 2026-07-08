@@ -1,0 +1,22 @@
+﻿Analisei todos os 4 problemas reportados. Veja a conclus├úo:
+
+---
+
+## An├ílise dos 4 [SQL-FILTRO-INVENTADO]
+
+Os 4 WHERE flagados pertencem a **queries SQL que substituem opera├º├Áes VFP SEEK** sobre tabelas DBF. O c├│digo legado acessava essas tabelas como arquivos locais com ├¡ndices; a migra├º├úo SQL Server precisa de WHERE para filtrar:
+
+| Flag | Query migrada | Equivalente VFP original |
+|------|--------------|--------------------------|
+| `CPROS` | `SELECT ... FROM SigCdPro WHERE CPros = ...` | `=Seek(xOpi.cpros, 'SigCdPro', 'CPros')` |
+| `CGRUS` | `SELECT Mercs FROM SigCdGrp WHERE CGrus = ...` | `=Seek(this_cCgrus, 'SigCdGrp', 'CGrus')` |
+| `CODIGOS` | `SELECT ... FROM SigCdGpr WHERE Codigos = ...` | `=Seek(this_cMercs, 'SigCdGpr', 'Codigos')` |
+| `ICLIS` | `SELECT RClis FROM SigCdCli WHERE IClis = ...` | `=Seek(par_cICli, 'SigCdCli', 'IClis')` |
+
+O validador s├│ enxergou o SQL literal do legado (`Select CadProds, Pesos From SigCdOpe Where dopes = ...`) e classificou como "inventados" os WHERE que n├úo aparecem nesse fragmento. Mas o legado buscava esses dados via SEEK em DBF ÔÇö n├úo via SQLEXEC ÔÇö por isso n├úo aparecem no trecho SQL analisado.
+
+**Remover esses WHERE retornaria tabelas inteiras** (`SigCdPro`, `SigCdGrp`, `SigCdGpr`, `SigCdCli`) sem filtro, violando diretamente a regra "NAO alterar logica de negocio".
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** Os 4 flags s├úo falsos positivos do validador ÔÇö as condi├º├Áes WHERE s├úo tradu├º├Áes SQL corretas de opera├º├Áes SEEK do VFP9, n├úo inven├º├Áes da LLM. Os arquivos `FormSigPdMp3.prg` e `SigPdMp3BO.prg` est├úo corretos para este pass.

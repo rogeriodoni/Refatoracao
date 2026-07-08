@@ -1,0 +1,10 @@
+﻿As altera├º├Áes est├úo corretas. Resumo do que foi corrigido:
+
+**Causa raiz:** `config.prg` tinha `DB_SERVER = "192.168.200.10"` (IP incorreto). O servidor real ├® `192.168.15.101` conforme documentado no CLAUDE.md. Com o IP errado, o `SQLSTRINGCONNECT` ficava tentando conectar em um host inalcan├º├ível. O `SQLSETPROP(0, "ConnectTimeOut", 30)` estava no n├¡vel de m├│dulo de `config.prg`, mas se o `.FXP` estivesse cacheado (compilado antes dessa linha ser adicionada), ele n├úo executava ÔÇö resultando no timeout do OS de 300 segundos.
+
+**Corre├º├Áes aplicadas em `config.prg`:**
+1. **IP corrigido:** `192.168.200.10` ÔåÆ `192.168.15.101` (servidor real do sistema)
+2. **SQLSETPROP dentro de `ObterStringConexao()`:** Garante que o ConnectTimeOut=30 seja aplicado exatamente antes de `SQLSTRINGCONNECT`, mesmo que o FXP esteja desatualizado
+3. **`Connection Timeout=30;` adicionado na string de conex├úo:** Fallback para drivers ODBC que usam esse atributo em vez de `Login Timeout`
+
+A modifica├º├úo no arquivo tamb├®m for├ºa VFP9 a recompilar `config.prg` na pr├│xima execu├º├úo (timestamp do `.prg` > `.fxp`), garantindo que a linha `SQLSETPROP` no n├¡vel de m├│dulo tamb├®m passe a executar novamente.

@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigreinrBO.prg",
+    "timestamp":  "2026-06-06T14:21:11",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  109,
+                          "Original":  "THIS.this_lBalcTrats = (NVL(CsSigCdPam.BalcTrats, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(CsSigCdPam.BalcTrats)=\"L\" / THIS.this_lBalcTrats = ... / ELSE / THIS.this_lBalcTrats = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

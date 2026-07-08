@@ -1,0 +1,28 @@
+﻿An├ílise completa. O [SQL-FILTRO-INVENTADO] ├® um **falso positivo**. Nenhuma altera├º├úo ├® necess├íria.
+
+**Evid├¬ncia:**
+
+O c├│digo legado na linha 823 usa:
+```foxpro
+.poDataMgr.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', .Dopes, 'NDopes')
+```
+
+O m├®todo `CursorQuery` do framework legado ├® exatamente equivalente a um `SELECT NDopes FROM SigCdOpe WHERE Dopes = .Dopes`. O c├│digo migrado traduz isso corretamente para SQL direto:
+
+```foxpro
+loc_cSQL = "SELECT ndopes FROM SigCdOpe WHERE dopes = " + EscaparSQL(ALLTRIM(par_cDopes))
+```
+
+**Por que o detector errou:**
+O detector comparou os `WHERE` das cl├íusulas `SQLEXEC` do original (impressoras: `nTpImpres`, `UsuAcess`, `Cimps`, `Usuarios`, `Grupos`) ÔÇö ignorando os acessos via `CursorQuery`, que tamb├®m geram SQL com WHERE mas s├úo chamadas de framework, n├úo chamadas SQLEXEC diretas.
+
+**Colunas no `WHERE` do migrado e sua origem no original:**
+
+| WHERE migrado | Origem no legado |
+|---|---|
+| `WHERE dopes = ...` (SELECT ndopes) | `CursorQuery('SigCdOpe','LocalOpe','Dopes',.Dopes,'NDopes')` ÔÇö linha 823 |
+| `WHERE dopes = ...` (UPDATE ndopes) | Consequence do mesmo CursorQuery ÔÇö contador de batch p├│s-impress├úo |
+| `WHERE UsuAcess = ...` / `Cimps = ...` | SQLEXEC da linha 891-900 ÔÇö direto |
+| `WHERE Usuarios = ...` / `Grupos = ...` | SQLEXEC da linha 891-900 ÔÇö direto |
+
+O arquivo `SigReEtpBO.prg` est├í **correto** e **n├úo deve ser alterado**. O pass SQL n├úo encontrou problemas reais neste arquivo.

@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Set Point To [,]\nSet Separator To [.]\n\nIf (ThisForm.optTipImps.Value = 1) && Relação Padrão\n\tIf (ThisForm.loObj.CalcCustos = 1) && 1-Produto; 2-Empresa + Produto\n\t\tReport Form SigRehc2 To Print Prompt NoConsole\n\tElse\n\t\tReport Form SigRehc1 To Print Prompt NoConsole\n\tEndIf\nElse\n\tReport Form SigRehc3 To Print Prompt NoConsole\nEndIf\n\nSet Point To [.]\nSet Separator To [,]\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipImps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "With ThisForm\n\t.loNegocios = CreateObject([cnSigRehcp], .Name)\n\n\tIf (.loNegocios.poDataMgr.pnIdconn > 0)\n\t\t.getDtInicial.Value = Date()\n\t\t.getDtFinal.Value   = Date()\n\t\t.getCPros.Value \t= Space(14)\n\t\t.getDPros.Value \t= Space(40)\n\t\t.getCEmps.Value \t= Space(03)\n\t\t.getDEmps.Value \t= Space(40)\n\n\t\t.loObj = CreateObject([Relation])\n\n\t\t.loObj.AddProperty([DataInicial], .getDtInicial.Value)\n\t\t.loObj.AddProperty([DataFinal],   .getDtFinal.Value)\n\t\t.loObj.AddProperty([Produto],     [])\n\t\t.loObj.AddPropert... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nSet Procedure To SigRehcp.Prg Additive\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "With ThisForm\n\t.loObj.DataInicial\t= .getDtInicial.Value\n\t.loObj.DataFinal\t= .getDtFinal.Value\n\t.loObj.Produto\t\t= .getCPros.Value\n\t.loObj.Empresa\t\t= .getCEmps.Value\n\t.loObj.TipoImps     = .optTipImps.Value\n\n\tllRet = .loNegocios.Processamento(.loObj)\n\n\tIf Not llRet\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipImps",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Release Procedure SigRehcp\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Set Point To [,]\nSet Separator To [.]\n\nIf (ThisForm.optTipImps.Value = 1) && Relação Padrão\n\tIf (ThisForm.loObj.CalcCustos = 1) && 1-Produto; 2-Empresa + Produto\n\t\tReport Form SigRehc2 Preview NoConsole\n\tElse\n\t\tReport Form SigRehc1 Preview NoConsole\n\tEndIf\nElse\n\tReport Form SigRehc3 Preview NoConsole\nEndIf\n\nSet Point To [.]\nSet Separator To [,]\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipImps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tWith ThisForm\n\t\t.loObj.DataInicial\t= .getDtInicial.Value\n\t\t.loObj.DataFinal\t= .getDtFinal.Value\n\t\t.loObj.Produto\t\t= .getCPros.Value\n\t\t.loObj.Empresa\t\t= .getCEmps.Value\n\n\t\t.loNegocios.ValidaBotoes(ThisForm.loObj)\t\n\t\t\n\t\tllRet = .loObj.TrataErro\n\tEndWith\n\n\tDo Case\n\t\tCase llRet = [DataInicial]\n\t\t\t=Messagebox([Data Inicial Inválida!!!], 0+48, [Atenção!!!])\n\t\t\tThisForm.getDtInicial.SetFocus\n\t\t\tReturn .f.\n\n\t\tCase llRet = [DataFinal]\n\t\t\t=Messagebox([Data F... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getDPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getDPros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCPros.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getCPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.loNegocios.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHCP.getCEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.loNegocios.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,13 @@
+﻿Arquivo criado com sucesso. `C:\4c\projeto\app\forms\relatorios\FormSigReInf.prg` ÔÇö 453 linhas.
+
+**O que foi implementado na Fase 3:**
+
+- **Layout FLAT** (sem PageFrame) ÔÇö form de 130px de altura n├úo comporta pagina├º├úo
+- **Init()** ÔÇö recebe `par_cEmps, par_cDopes, par_nNumes, par_cSerie` e salva nas propriedades ANTES de `DODEFAULT()`, para que `InicializarForm()` j├í os encontre
+- **InicializarForm()** ÔÇö cria `SigReInfBO`, transfere par├ómetros, chama `CarregarConfiguracoes()` (que consulta SigCdPam para decidir se Visualizar ├® habilitado), monta cabecalho + bot├Áes, vincula BINDEVENTs
+- **ConfigurarCabecalho()** ÔÇö container escuro RGB(100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo
+- **ConfigurarBotoes()** ÔÇö `cmg_4c_Botoes` com 4 bot├Áes padr├úo (Visualizar/Imprimir/Excel/Encerrar); Excel sempre desabilitado (`lacexcel=.F.` no original)
+- **AjustarBotoesPorModo()** ÔÇö habilita Visualizar/Imprimir conforme flags do BO (`this_lVisualizarHabilitado`, `this_lImprimirHabilitado`)
+- **BtnImprimirClick()** ÔÇö chama `BO.Imprimir()` e `THIS.Release()` ap├│s sucesso (comportamento id├¬ntico ao original que fazia `ThisForm.Release` ap├│s `SigPrNfs`)
+- **Destroy()** ÔÇö `this_oRelatorio = .NULL.` (nunca `.Release()` em Custom)
+- Todos os `RETURN` est├úo **fora** de blocos TRY/CATCH

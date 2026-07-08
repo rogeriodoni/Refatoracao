@@ -1,0 +1,671 @@
+{
+  "resumo": {
+    "totalMetodos": 38,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 28,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fBuscarCotacao", "fConfigGeral", "fChecaAcesso", "fCustos n", "fwBuscaExt", "fUniqueIds", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 38,
+      "codigoOriginal": "Local lnMoeCF,lnMoedas,lnFator,lnIdeal,lcTmpMoe,lnQtdeQs,MoeIdeal,lnFeitio,lnCustoF\n\nMoeIdeal = CrSigCdPro.Moedas\nlnFator  = CrSigCdPro.Margems\nlnFeitio = CrSigCdPro.PFtios\nlnCustoF = CrSigCdPro.CustoFs\n\nThisForm.poDataMgr.CursorQuery('SigCdMoe','CrMoe','CMoes',CrSigCdPro.MoeCusFs)\nGo Top In crMoe\nIf !Empty(CrMoe.MoeQs)\n\tlcTmpMoe = CrMoe.MoeQs\n\tlnQtdeQs = Iif(CrMoe.QtdeQs = 0,1,CrMoe.QtdeQs)\nElse\n\tlcTmpMoe = CrSigCdPro.MoeCusFs\n\tlnQtdeQs = 1\nEndIf\nlnMoeCF = fBuscarCotacao(lcTmpMoe,DateTime(),Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "LParameters lnNumMax\n\nlnPasso   = 3\nlnCodPre  = 10\nlnFator   = 2\nlnSalto   = 5\n\t\t\t\t\t\nDo While lnCodPre < lnNumMax\n\tlnCodPre = lnCodPre + Iif(lnPasso = 0,4,5) * lnFator\n\tlnPasso  = Mod((lnPasso + 1),5)\nEndDo\n\nReturn(lnCodPre)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 108,
+      "codigoOriginal": "LParameters lnPreco\nLocal lnCusto,lnVenda,lnMoeC,lnMoeV,lnMoeCF,lnMoeFT,lnMoedas,lnFator,lnFPeso,lnIdeal,lnIdealCV,lcTmpMoe,lnQtdeQs\n\nlnCusto  = TmpPro.PCuss\nlnFPeso  = TmpPro.PesoMs * TmpPro.FCustos\nlnFeitio = TmpPro.PFtios\nMoeIdeal = Iif(Empty(ThisForm.Get_moedas.Value),TmpPro.Moedas,ThisForm.Get_Moedas)\nFaTCusto = TmpPro.fCustos\n\nThisForm.poDataMgr.CursorQuery('SigCdMoe','CrMoe','CMoes',TmpPro.MoeCs)\nGo Top In CrMoe\nIf !Empty(CrMoe.MoeQs)\n\tlcTmpMoe = CrMoe.MoeQs\n\tlnQtdeQs = Iif(CrMoe.QtdeQs =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_moedas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crMoe', 'CMoes', crSigCdPro.MoeCusfs)\nGo Top In crMoe\nIf Not Empty(crMoe.Moeqs)\n\tm.Moedas = crMoe.Moeqs\n\t_Qtdeqs = Iif(crMoe.Qtdeqs=0, 1, crMoe.Qtdeqs)\nElse\n\tm.Moedas = crSigCdPro.Moecusfs\n\t_Qtdeqs = 1\nEndIf\nMoecf = fBuscarCotacao(m.Moedas, DateTime(), ThisForm.poDataMgr) * _qtdeqs\n\nThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crMoe', 'CMoes', crSigCdPro.Moevs)\nGo Top In crMoe\nIf Not Empty(crMoe.Moeqs)\n\tm.Moedas = crMoe.Moeqs\n\t_Qtdeqs = Iif(crMoe.Qtdeqs... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 110,
+      "codigoOriginal": "LParameters pnMargems\nLocal lnCusto,lnVenda,lnMoeC,lnMoeV,lnMoeCF,lnMoeFT,lnMoedas,lnFator,lnFPeso,lnIdeal,lnIdealCV,lcTmpMoe,lnQtdeQs\n\nMoeCusto = Iif(Empty(ThisForm.Get_moecusto.Value),TmpPro.MoePcs,ThisForm.Get_MoeCusto.Value)\nFaTCusto = Iif( ThisForm.Get_fator.Value > 0 And Not Empty(MoeCusto) , ThisForm.Get_Fator.Value , TmpPro.fCustos )\nMoeIdeal = Iif(Empty(ThisForm.Get_moedas.Value),TmpPro.Moedas,ThisForm.Get_Moedas.Value)\nlnCusto  = TmpPro.PCuss\nlnFPeso  = TmpPro.PesoMs * FatCusto\nlnFator... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "Value > 0 And Not Empty,CursorQuery",
+        "controlesReferenciados": "Get_moecusto,Get_fator,Get_moedas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR",
+      "evento": "Init",
+      "linhas": 90,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',This.Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdPro' ,'CPros'    ,'CrSigCdPro','','')\n\t\t\t.AddCursor('SigCdPrc' ,'CIdChaves','CrSigCdPrc','','')\n\t\t\t.AddCursor('SigPrCp2' ,'CIdChaves','CrSigPrCp2','','')\n\t\t\t.AddCursor('SigPrPmi' ,'CIdChaves','CrSigPrPmi','','')\n\t\tEndWith\n\t\tThisForm.Refresh\n\tElse\n\t\tMes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fCustos n",
+        "metodosFormChamados": "LibValAtu = fChecaAcesso,SqlExecute",
+        "controlesReferenciados": "Grd_Produto,Opt_Tipo,Get_Cd_Grupo,Get_ate_Grupo,Get_Col,Get_Variacao,Get_Moeda,Get_MarkUp1,Get_MarkUp2,Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Cd_Grupo",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos de Produto',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value = Evaluate('CrGrupos.CGrus')\n\t\tIf Empty(This.Parent.Get_ate_Grupo.Value)\n\t\t\tThis.Parent.Get_ate_Grupo.Value = this.Value\n\t\tEndif\n\tElse\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ate_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Col",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdCol','CrColecoes','Colecoes',This.Value,'Coleções',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Colecoes','XXXXXXXXXX','Código')\n\t\tm.loLista.mAddColuna('Descs','XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrColecoes')\n\t\tThis.Value = Evaluate('CrColecoes.Colecoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Variacao",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Sair.Processa.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.sair",
+      "evento": "Click",
+      "linhas": 102,
+      "codigoOriginal": "Local lcCdGru, lcCdCol, lnVariacao\n\nZap In CrProdutos\n\nlcCdGru    = ThisForm.Get_Cd_Grupo.Value\nlcCdGruf   = ThisForm.Get_Ate_Grupo.Value\nlcCdCol    = ThisForm.Get_Col.Value\nlcCdFor    = ThisForm.Get_Conta.Value\nlnTipo     = ThisForm.Opt_Tipo.Value\nlnVariacao = ThisForm.Get_Variacao.Value\nlcMoeda    = ThisForm.Get_Moeda.Value\nlnMarkUp1  = ThisForm.Get_MarkUp1.Value\nlnMarkUp2  = ThisForm.Get_MarkUp2.Value\n\n*!* Consiste Seleção\nDo Case\n\n\tCase lnTipo = 1\n\t\tIf lnVariacao = 0\n\t\t\tMessageBox('Variação ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "SqlExecute,CalcPreco,Value > 0 And Not Empty",
+        "controlesReferenciados": "Get_Cd_Grupo,Get_Ate_Grupo,Get_Col,Get_Conta,Opt_Tipo,Get_Variacao,Get_Moeda,Get_MarkUp1,Get_MarkUp2,chkIgnorar,Get_MoeCusto,Get_Fator,Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.sair",
+      "evento": "Click",
+      "linhas": 252,
+      "codigoOriginal": "Local lnTipo, lnVariacao, lcMoeda, lnMarkUp1, lnMarkUp2, lnOk, llOk, lnTipo, lcMoeCs, lcMoeCusFs, lcMoedas, lcCFtios, lcMoeVs\n\nlnTipo     = ThisForm.Opt_Tipo.Value\nlnVariacao = ThisForm.Get_Variacao.Value\nlcMoeda    = ThisForm.Get_Moeda.Value\nlnMarkUp1  = ThisForm.Get_MarkUp1.Value\nlnMarkUp2  = ThisForm.Get_MarkUp2.Value\nlcPromo    = ThisForm.Get_Promo.Value\nlcMoeCs    = ThisForm.Get_MoeCs.Value\nlcMoeCusFs = ThisForm.Get_MoeCusFs.Value\nlcMoedas   = ThisForm.Get_Moedas.Value\nlcCFtios   = ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,fBuscarCotacao",
+        "metodosFormChamados": "CalcPreco,Calcmarkpa,SqlExecute",
+        "controlesReferenciados": "Opt_Tipo,Get_Variacao,Get_Moeda,Get_MarkUp1,Get_MarkUp2,Get_Promo,Get_MoeCs,Get_MoeCusFs,Get_Moedas,Get_CFtios,Get_MoeVs,Grd_Produto,chkIncCusts,chkLimpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto",
+      "evento": "Init",
+      "linhas": 1,
+      "codigoOriginal": "this.cOLUMN1.header1.Tag = '1'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArqFig = Sys(2023) + [\\] + Sys(2015) + [.jpg]\n\nSelect CrProdutos\nlcSql = [Select FigJpgs From SigCdPro Where Cpros = ']+CrProdutos.cpros+[']\nIf ThisForm.PodataMgr.Sqlexecute(lcSql,'CsTmpPro') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\nSelect CsTmpPro\nThisForm.FigJpg.Visible = .F.\nThisForm.FigJpg.Picture = ''\nIf Not IsNull(CsTmpPro.FigJpgs) And Not IsEmpty(CsTmpPro.FigJpgs)\n\tClear Resources\n\tlcFoto=Strconv(Strtran(Strtran(S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Picture =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column1.Header1",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "IF this.Tag = '0'\n\tUpdate CrProdutos Set lMarca = 1\n\tthis.Tag = '1'\nELSE\n\tUpdate CrProdutos Set lMarca = 0\n\tthis.Tag = '0'\nENDIF\nThisForm.Grd_Produto.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(CrProdutos.CPros))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Antvalue = This.Value\nReturn(Empty(ThisForm.Get_Col.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Col",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CPros','','Código')\n\t\tm.loLista.mAddColuna('DPros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrProds')\n\t\tThis.Value = Evaluate('CrProds.CPros')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 56,
+      "codigoOriginal": "If !Empty(This.Value) And This.Value <> ThisForm.AntValue\n\tlnTipo     = ThisForm.Opt_Tipo.Value\n\tlnVariacao = ThisForm.Get_Variacao.Value\n\tlnMarkUp2  = ThisForm.Get_MarkUp2.Value\n\tThisForm.poDataMgr.CursorQuery('SigCdPro','','CPros',This.Value)\n\tSelect CqSigCdPro\n\tGo Top\n\tIf !Eof()\n\t\tScatter MemVar Memo\n\t\tInsert Into TmpPro From MemVar\n\t\tSelect TmpPro\n\t\tm.CPros  = TmpPro.CPros\n\t\tm.DPros  = TmpPro.DPros\n\t\tm.ValAnt = TmpPro.PVens\n\t\tDo Case\n\t\tCase lnTipo = 1\n\t\t\tm.ValAtu = TmpPro.PVens + ((TmpPro.PV... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery,CalcPreco",
+        "controlesReferenciados": "Opt_Tipo,Get_Variacao,Get_MarkUp2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column5.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.AntValue = This.Value\nReturn ( ThisForm.LibValAtu And Not Empty(ThisForm.Grd_Produto.Column2.Text1.Value) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LibValAtu And Not Empty",
+        "controlesReferenciados": "Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Grd_Produto.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If This.Value <> ThisForm.AntValue\n\tReplace Manual with 1 in CrProdutos\nEndIf\nIf This.Value <> ThisForm.AntValue Or Lastkey() = 13\n\tSelect CrProdutos\n\tSet Order To\n\tGo Bottom\n\tIf !Empty(CrProdutos.CPros)\n\t\tInsert Into CrProdutos From MemVar\n\tEndIf\n\tSelect CrProdutos\n\tThis.Parent.Parent.Refresh\n\tKeyboard '{DNARROW}'\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntValue Or Lastkey",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Moeda",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Moecs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_MoeCusFs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Opt_Tipo",
+      "evento": "InteractiveChange",
+      "linhas": 74,
+      "codigoOriginal": "With ThisForm\n\tDo Case\n\tCase This.Value = 1\n\t\t.lbl_Variacao.Visible = .T.\n\t\t.chkIncCusts.Visible  = .T.\n\t\t.lbl_Moeda.Visible    = .F.\n\t\t.lbl_MarkUp.Visible   = .F.\n\t\t.Say1.Visible         = .T.\n\t\t.Say4.Visible         = .F.\n\t\t.Say8.Visible         = .f.\n\t\t.get_fator.Visible    = .f.\n\t\t.Get_Variacao.Visible = .T.\n\t\t.Get_Moeda.Visible    = .F.\n\t\t.Get_MarkUp1.Visible  = .F.\n\t\t.Get_MarkUp2.Visible  = .F.\n\t\t.lblMoeda1.Visible    = .F.\n\t\t.lblMoeda2.Visible    = .F.\n\t\t.lblMoeda3.Visible    = .F.\n\t\t.lbl... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkIncCusts,get_fator,Get_Variacao,Get_Moeda,Get_MarkUp1,Get_MarkUp2,Get_MoeCs,Get_MoeCusFs,Get_Moedas,Get_CFtios,Get_MoeVs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_CFtios",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigPrFti','CrFtio','Cods',This.Value,'Feitio',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Cods','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrFtio')\n\t\tThis.Value = Evaluate('CrFtio.Cods')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Conta",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local Grupo\nGrupo = CrSigCdPam.GrPadFors\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,This,ThisForm.Get_DConta)\n\t\tMessagebox('Acesso Negado !!!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_DConta.Value = ''\n\t\tThisForm.Get_DConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_DConta.Value = ''\n\tThisForm.Get_DConta.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_DConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_DConta",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local Grupo\nGrupo = CrSigCdPam.GrPadFors\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.Get_Conta,This)\n\t\tMessagebox('Acesso Negado !!!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Conta.Value = ''\n\t\tThisForm.Get_Conta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_Conta.Value = ''\n\tThisForm.Get_Conta.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Moedas",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_MoeVs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.chkAuditado",
+      "evento": "Click",
+      "linhas": 39,
+      "codigoOriginal": "With ThisForm.Grd_Produto\n\n\tIf This.Value = 1\n\t\tm.lMarca = 0\n\t\tm.CPros  = Space(14)\n\t\tm.DPros  = Space(40)\n\t\tm.ValAtu = 0\n\t\tm.ValAnt = 0\n\t\tInsert Into CrProdutos From MemVar\n\t\tThisForm.Get_Cd_Grupo.Enabled  = .F.\n\t\tThisForm.Get_ate_Grupo.Enabled  = .F.\n\t\tThisForm.Get_Col.Enabled       = .F.\n\t\tThisForm.Get_Moeda.Enabled     = .F.\n\t\tThisForm.Get_MarkUp1.Enabled   = .F.\n\t\tThisForm.Sair.Processa.Enabled = .F.\n\t\tSelect CrProdutos\n\t\tSet Order To\n\t\tGo Top\n\t\t.Column1.Check1.ReadOnly       = .T.\n\t\t.Colum... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Produto,Get_Cd_Grupo,Get_ate_Grupo,Get_Col,Get_Moeda,Get_MarkUp1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_Promo",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigPrPmc','CrPromocoes','Promos',This.Value,'Promoção',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Promos','','Promoção')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrPromocoes')\n\t\tThis.Value = Evaluate('CrPromocoes.Promos')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.get_moeCusto",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRAPR.Get_ate_Grupo",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos de Produto',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value                  = Evaluate('CrGrupos.CGrus')\n\tElse\n\t\tThis.Value                  = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRAPR.Grd_Produto.Procedure",
+      "queryOriginal": "lcSql = [Select FigJpgs From SigCdPro Where Cpros = ']+CrProdutos.cpros+['] If ThisForm.PodataMgr.Sqlexecute(lcSql,'CsTmpPro') < 1",
+      "tabelas": "SigCdPro",
+      "colunas": "FigJpgs,Cpros,cpros+[],SqlexecutelcSql,CsTmpPro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRAPR.Grd_Produto.Column1.Header1.Click",
+      "queryOriginal": "\tUpdate CrProdutos Set lMarca = 1",
+      "tabelas": "CrProdutos",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRAPR.Grd_Produto.Column1.Header1.Click",
+      "queryOriginal": "\tUpdate CrProdutos Set lMarca = 0",
+      "tabelas": "CrProdutos",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRAPR.Grd_Produto.Column2.Text1.LostFocus",
+      "queryOriginal": "\t\tInsert Into TmpPro From MemVar",
+      "tabelas": "TmpPro",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRAPR.Grd_Produto.Column5.Text1.Valid",
+      "queryOriginal": "\t\tInsert Into CrProdutos From MemVar",
+      "tabelas": "CrProdutos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRAPR.chkAuditado.Click",
+      "queryOriginal": "\t\tInsert Into CrProdutos From MemVar",
+      "tabelas": "CrProdutos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPro", "CrProdutos", "TmpPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

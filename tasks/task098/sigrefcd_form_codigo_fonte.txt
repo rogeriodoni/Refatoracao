@@ -1,0 +1,626 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrefcd.SCX
+* Data/Hora: 05/06/2026 05:45:39
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFCD
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREFCD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREFCD
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREFCD
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_empresa
+  Parent: SIGREFCD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREFCD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREFCD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGREFCD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -7
+  Left = 26
+  Width = 792
+  Height = 479
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Informativo de Vendas Diarias"
+  ControlBox = .F.
+  WindowState = 0
+  segunda = .F.
+  Name = "SIGREFCD"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .F.
+  btnReport.Visualiza.AutoSize = .F.
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.AutoSize = .F.
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.AutoSize = .F.
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.ControlSource = ""
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 6
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.lbl_periodo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 229
+  Top = 172
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.get_dt_inicial
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 279
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 169
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.get_dt_final
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 376
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 169
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.get_cd_empresa
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 279
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 144
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.lbl_empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 224
+  Top = 147
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 363
+  Top = 172
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFCD.get_ds_empresa
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 312
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 144
+  Width = 289
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFCD
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReFcD To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Public m.reslanca, m.resforma, m.rescheque, m.rescartao, m.resvende, m.resconta, m.reslanfor, m.resqtdes, m.ResvDets
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+	
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigOpFp ],'CrSigOpFp')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+		Select CrSigOpFp
+		Index On fpags Tag FPags
+		Go Top
+
+		.get_dt_inicial.Value = Date()
+		.get_dt_final.Value   = Date()
+		.get_cd_empresa.Value = _empr
+		
+		lnQueryOk = ThisForm.podataMgr.SqlExecute([Select cemps,razas From SigCdEmp Where Cemps = ']+_empr+[' ],'CrCdEmp')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+
+		Select CrCdEmp
+		ThisForm.get_ds_empresa.Value = CrCdEmp.Razas
+		
+		=DoDefault()
+
+		ThisForm.Refresh
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor csSigCdTom (Marca n(1), Descri c(40), Codigos n(2))
+Index On Codigos Tag Codigos
+
+
+Create Cursor crMovimento( Datas t, Valor N(13,2))
+Index On Datas Tag Datas
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF, lnOpt
+Local lcCbEmp, lcTitulo, lcPeriodo, lcGru, lcVendedor, lcOperacao, ldInicial, ldFinal, lcModa, lnAgru, lnAgru2, lnAgru3, lcFPubl
+Local cheVen, cheTop, cheFP, cheProd, cheCole, cheCate, cheLstOp, cheLstOp1, lcLstOp, lcHInicial, lcHFinal, lcDataIni, lcDataFin, lcEmpAnt
+
+ldInicial   = Thisform.get_dt_inicial.Value
+ldFinal     = Thisform.get_dt_Final.Value
+lcEmp		= Thisform.get_cd_empresa.Value
+lcEmpAnt	= [   ]
+
+Thisform.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', lcEmp)
+
+
+
+**** adiciona titulos ****
+lcCbEmp = lcEmp+[-]+Alltrim(crSigcdEmp.razas)
+lcCbTitulo  = [Fechamento de Venda Diária]
+lcCbPeriodo   = [Periodo : ]+Dtoc(ldInicial)+ [ a ] + Dtoc(ldFinal)
+lcEnd1 = Alltrim(crSigcdEmp.endes) + ' ' + Alltrim(crSigcdEmp.numeros) + ' - ' + Alltrim(crSigcdEmp.bairs)
+lcEnd2 = Alltrim(crSigcdEmp.ceps) + ' ' + Alltrim(crSigcdEmp.cidas) + ' ' + Alltrim(crSigcdEmp.estas)
+lcEnd3 = Alltrim(crSigcdEmp.cgcs)
+
+Create Cursor csCabecalho (empresa c(240), titulo c(240), End1 c(240), End2 c(240), End3 c(240), PERIODO c(80))
+Insert Into csCabecalho (empresa, titulo, End1, End2, End3, Periodo) Values (lcCbEmp, lcCbTitulo, lcEnd1, lcEnd2, lcEnd3, lcCbPeriodo)
+
+pDtI = fDtoSql(ldInicial)
+pDtF = fDtoSql(ldFinal, [23:59:59])
+pDtH = fDtoSql(Date(), [23:59:59])
+
+lcOperacao = Alltrim(crSigcdpam.dopes)
+lcConserto = Alltrim(crSigcdpam.opconsers)
+
+If Empty(lcOperacao)
+	=Messagebox('Não existe movimentação de fechamento configurada!!!', 0+48, '')
+Endif
+
+Wait Window 'Aguarde...' Nowait Noclear
+
+Create Cursor csRelatorio (c0 Char(60), c1 Char(30), c2 Char(30), c3 Char(30), c4 Char(30), c5 Char(30), c6 Char(30), c7 Char(2))
+
+*** mena - considera venda os tipos cujo gergdmis = 1 ***
+*** mena - 25/09/2017 - inclui valor e moeda para totalizar por moeda ***
+*** Mena - 04/11/2019 - inclui 'credito loja' na lista de fpags que não podem entrar***
+*[g.tipoops <> 5 and ] +
+
+lcQuery =	[Select case when g.tipoops = 5 then 'M' else d.Infos end as Infos, c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, d.fparcs, c.moefpgs, ] + ;
+	[case when g.tipoops = 5 then (c.valos*c.cotfpgs) * -1 else (c.valos*c.cotfpgs) end as valos, ] + ;
+	[case when g.tipoops = 5 then c.valos * -1 else c.valos end as valosM, ] +;
+	[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+	[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;
+	[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ]+;
+	[Where c.datas BetWeen ?pDtI And ?pDtF And ] + ;
+	Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+	[g.tipoops = h.codigos and ] +;
+	[h.gergdmis = 1 and ] +;
+	[c.fpags = d.fpags and ] +;
+	[d.infos = e.infos and ] +;
+	[g.relfechas = 1 and ] +;
+	[c.dopes = g.dopes and ] +;
+	[c.fpags not in ('garantia','cortesia','pag efetuado','aberto r','credito loja', 'dev loja') ] +;
+	[order by c.cidchaves]
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosV') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+	Return 0
+Endif
+
+*** Mena - 14/07/2017 seleciona venda só com pagamento Pag Efetuado ***
+lcQuery =	[Select d.Infos, c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, d.fparcs, ] +;
+	[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+	[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;
+	[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ]+;
+	[Where c.datas BetWeen ?pDtI And ?pDtF And ] + ;
+	Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+	[g.tipoops = h.codigos and ] +;
+	[h.gergdmis = 1 and ] +;
+	[g.tipoops <> 5 and ] +;
+	[c.fpags = d.fpags and ] +;
+	[d.infos = e.infos and ] +;
+	[g.opers <> 1 and ] +;
+	[g.relfechas = 1 and ] +;
+	[c.dopes = g.dopes and ] +;
+	[c.fpags in ('pag efetuado','aberto r') ] +;
+	[order by c.cidchaves]
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosP') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+	Return 0
+Endif
+
+lcQuery =	[Select distinct d.infos, c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, d.fparcs, ] +;
+	[c.valos as valosM, c.moefpgs, ] +;
+	[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+	[d.formas, d.valpends, d.trocos, d.bandeira, c.adquirente ] +;
+	[From SigMvccr a, sigmvPar c, sigcdope g, sigcdtom h, sigopfp d, sigprinf e ]+;
+	[Where c.datas BetWeen ?pDtI And ?pDtF And ] + ;
+	Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+	[c.dopes = g.dopes and ] +;
+	[c.dopes = 'RECEBIMENTO' and ] +;
+	[c.nopers = a.nopers and ] +;
+	[g.tipoops = h.codigos and ] +;
+	[g.relfechas = 1 and ] +;
+	[c.fpags = d.fpags and ] +;
+	[d.infos = e.infos ] +;
+	[order by c.cidchaves]
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosR') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+	Return 0
+Endif
+
+Set Step On 
+*** Prepara fechamento ***
+Select chapar, Datas, Max(Emps) As Emps, Max(valos) As valos, Max(fparcs) As fparcs, Max(Info) As Info, Max(formas) As formas, Max(valpends) As valpends, Max(bandeira) As bandeira, ;
+	MAX(adquirente) As adquirente, Max(valosM) As valosM, Max(moefpgs) As moefpgs, Max(Infos) as Infos From csDadosV Group By Datas, chapar Into Cursor Curv
+
+Select chapar, Datas, Max(Emps) As Emps, Max(valos) As valos, Max(fparcs) As fparcs, Max(Info) As Info, Max(formas) As formas, Max(valpends) As valpends, Max(bandeira) As bandeira, ;
+	MAX(adquirente) As adquirente, Max(valosM) As valosM, Max(moefpgs) As moefpgs, Max(Infos) as Infos From csDadosR where 0=1 Group By Datas, chapar Into Cursor Curr
+
+
+Select Infos, Datas, chapar, Emps, Info, formas, bandeira, adquirente, valos As valAv, Cast(0.00 As numeric(11,2))  As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+	from Curv Where fparcs = 1;
+	union ;
+	SELECT Infos, Datas, chapar, Emps, Info, formas, bandeira, adquirente, Cast(0.00 As numeric(11,2)) As valAv, valos As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+	from Curv Where !(fparcs = 1) ;
+	union ;
+	SELECT Infos, Datas, chapar, Emps, Info, formas, bandeira, adquirente, Cast(0.00 As numeric(11,2)) As valAv, Cast(0.00 As numeric(11,2)) As valFin, valos As valRec;
+	from Curr ;
+	into Cursor Curt
+
+Select Infos, Datas, Emps, Sum(valAv) As valAv,Sum(valFin) As valFin,Sum(valRec) As valRec From Curt Group By Datas, Infos, Emps Into Cursor curPag
+Select *, valAv+valFin As valVenda, valAv+valFin+valRec As valTot From curPag Into Cursor curPag
+Select Sum(valAv) As valAv, Sum(valFin) As valFin, Sum(valRec) As valRec, Sum(valVenda) As valVenda, Sum(valTot) As valTot From curPag Into Cursor curPagT
+
+Zap in crMovimento
+
+Set Step On 
+Select curPag
+Go Top
+Scan
+
+	lcQuery = [Select PercEmps From SigEmInf Where Emps = ']+curPag.Emps+[' And Infos = ']+curPag.Infos+[' ]
+	ThisForm.poDataMgr.SqlExecute(lcQuery,[crInfos])
+	
+	lnValor = curPag.valTot
+	
+	Select crInfos
+	If Reccount([crInfos])>0
+		
+		lnValPr = 0
+		Select crInfos
+		Scan
+			lnValPr = lnValPr + ((lnValor / 100) * crInfos.PercEmps)			
+		EndScan
+		
+		lnValor = lnValPr		
+	EndIf 
+	
+	Select crMovimento
+	Append Blank 
+	Replace Datas With curPag.Datas , ; 
+			Valor With lnValor In crMovimento
+	Select crInfos
+		
+	Select curPag
+Endscan
+
+Select crMovimento
+Select datas, Sum(valor) as Valor from crMovimento group by datas into cursor csMovimento readwrite
+
+Select crMovimento
+Zap in crMovimento
+
+Select csMovimento
+Go Top
+Scan
+
+	Select crMovimento
+	Append Blank
+	Replace Datas With csMovimento.Datas , ; 
+			Valor With csMovimento.Valor In crMovimento
+			
+	Select csMovimento		
+EndScan 
+
+Wait Clear
+
+Select crMovimento
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReFcD Preview
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFCD.get_dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Empty(ThisForm.get_dt_final.Value)
+	If This.Value > ThisForm.get_dt_final.Value
+		MessageBox([Data Inicial não pode ser Maior que a Data Final.],0+48,[Aviso])
+		Return .F.
+	EndIf 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFCD.get_dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not Empty(ThisForm.get_dt_inicial.Value)
+	If This.Value < ThisForm.get_dt_inicial.Value
+		MessageBox([Data Final não pode ser menor que a Data Inicial.],0+48,[Aviso])
+		Return .F.
+	EndIf 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFCD.get_cd_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFCD.get_ds_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(ThisForm.get_cd_empresa.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFCD
+RESERVED3 (ClassInfo): maxcols
+podatamgr
+segunda
+*cabecalho 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

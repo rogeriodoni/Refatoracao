@@ -1,0 +1,14 @@
+﻿Ap├│s ler o arquivo real, confirmo: a coluna `PENVELOPE` **n├úo existe** em nenhum WHERE SQL de `SigReHevBO.prg`. A detec├º├úo foi um **falso positivo**.
+
+O que o detector provavelmente confundiu foi o par├ómetro VFP `pEnvelope` do m├®todo `Init(pEnvelope)` no Form ÔÇö que ├® uma vari├ível VFP local, nunca usada em cl├íusula SQL.
+
+Todos os WHEREs no BO atual usam exatamente as colunas do original:
+
+| SQL | Colunas no WHERE |
+|-----|-----------------|
+| SigCdOpe (linha 107-108) | `Servicos`, `Globalizas` Ô£ô |
+| SigPdMvf (linha 136-139) | `Nenvs`, `Dopps`, `Numps` Ô£ô |
+| SigCdCli (linhas 179, 191) | `Iclis` Ô£ô |
+| SigCdCe (linhas 221, 241) | `Iclis` Ô£ô |
+
+**Nenhuma corre├º├úo necess├íria.** Os arquivos est├úo corretos e o problema detectado n├úo existe no c├│digo atual.

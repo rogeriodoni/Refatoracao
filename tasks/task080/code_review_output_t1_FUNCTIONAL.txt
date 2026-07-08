@@ -1,0 +1,14 @@
+﻿Verifica├º├úo conclu├¡da. `THIS.Width()` **com par├¬nteses** n├úo existe em nenhuma linha do arquivo. O checker gerou um falso positivo.
+
+Todas as ocorr├¬ncias encontradas s├úo `THIS.Width` **sem par├¬nteses** ÔÇö acesso ├á **propriedade** padr├úo de formul├írios VFP9, completamente v├ílido:
+
+| Linha | Uso | Tipo |
+|-------|-----|------|
+| 114 | `.Width = THIS.Width` | propriedade (correto) |
+| 126 | `.Width = THIS.Width` | propriedade (correto) |
+| 142 | `.Width = THIS.Width` | propriedade (correto) |
+| 283 | `.Width = THIS.Width + 2` | propriedade (correto) |
+
+`Width` ├® uma propriedade nativa de todos os controles VFP9 (`Form`, `Container`, `PageFrame`, etc.), n├úo um m├®todo customizado. O checker confundiu acesso de propriedade com chamada de m├®todo.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormSIGREDIR.prg` est├í correto ÔÇö este problema foi um falso positivo do pass FUNCTIONAL.

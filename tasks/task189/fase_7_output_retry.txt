@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 handlers CRUD principais em `FormSigPrGlp.prg` (linhas 2662, 2681, 2706, 2725), como aliases funcionais dos handlers operacionais existentes:
+
+- **BtnIncluirClick** ÔåÆ executa `CmdProcessarClick()` (processa a Previa da Globaliza├º├úo, gerando OPs/movimentos/requisi├º├Áes) com guard para bot├úo desabilitado.
+- **BtnAlterarClick** ÔåÆ volta ├á vis├úo principal via `AlternarPagina(1)` e devolve foco ├á coluna Produzir da grade de itens para ajuste manual.
+- **BtnVisualizarClick** ÔåÆ reexibe o painel `cnt_4c_Info` via `AlternarPagina(6)` e atualiza totais/linhas do item corrente.
+- **BtnExcluirClick** ÔåÆ confirma com `MsgConfirma` e chama `CmdCancelarClick()` (rollback + release).
+
+Todos os handlers seguem regras VFP9: TRY/CATCH com `MsgErro`, sem RETURN dentro de TRY para caminho de sucesso, acentos via CHR(), e uso de `PEMSTATUS/USED/RECCOUNT` como guards defensivos. Arquivo passou de 2657 ÔåÆ 2738 linhas.

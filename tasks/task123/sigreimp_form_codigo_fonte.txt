@@ -1,0 +1,1430 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreimp.SCX
+* Data/Hora: 06/06/2026 11:32:13
+* Total de registros: 34
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIMP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGREIMP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGREIMP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIMP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREIMP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdBtnGradeE
+  Parent: SIGREIMP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: lbl_empresa
+  Parent: SIGREIMP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREIMP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGREIMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getConta
+  Parent: SIGREIMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDEmpresa
+  Parent: SIGREIMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getEmpresa
+  Parent: SIGREIMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGREIMP
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnGradeS
+  Parent: SIGREIMP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label2
+  Parent: SIGREIMP
+  Class: label
+  BaseClass: label
+
+Objeto: grdOperacoesS
+  Parent: SIGREIMP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesS.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREIMP.grdOperacoesS.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesS.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIMP.grdOperacoesS.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesS.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIMP.grdOperacoesS.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdOperacoesE
+  Parent: SIGREIMP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesE.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREIMP.grdOperacoesE.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesE.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIMP.grdOperacoesE.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREIMP.grdOperacoesE.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREIMP.grdOperacoesE.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: chkSubTotDat
+  Parent: SIGREIMP
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTipos
+  Parent: SIGREIMP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório Comparativo de Impostos"
+  Name = "SIGREIMP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 99
+  TabIndex = 2
+  Top = 107
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getDtFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 202
+  TabIndex = 4
+  Top = 107
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 49
+  Top = 111
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 187
+  Top = 111
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.cmdBtnGradeE
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 50
+  Left = 305
+  Top = 436
+  Width = 91
+  TabIndex = 16
+  ZOrderSet = 6
+  Name = "cmdBtnGradeE"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\vbmp\a_misc1.bmp
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Selecionar Tudo"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcaTudo"
+  Command2.AutoSize = .F.
+  Command2.Top = 5
+  Command2.Left = 46
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\vbmp\a_misc6.bmp
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Deselecionar Tudo"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 44
+  Top = 137
+  Width = 50
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 56
+  Top = 164
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 181
+  TabIndex = 10
+  Top = 159
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 9
+  Height = 25
+  Left = 99
+  TabIndex = 9
+  Top = 159
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getDEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 132
+  MaxLength = 40
+  TabIndex = 7
+  Top = 132
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getDEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.getEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 25
+  InputMask = "XXX"
+  Left = 99
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 132
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipos de Operações de Entradas"
+  Height = 15
+  Left = 52
+  Top = 233
+  Width = 182
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.cmdBtnGradeS
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 50
+  Left = 685
+  Top = 436
+  Width = 91
+  TabIndex = 19
+  ZOrderSet = 14
+  Name = "cmdBtnGradeS"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\vbmp\a_misc1.bmp
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Selecionar Tudo"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcaTudo"
+  Command2.AutoSize = .F.
+  Command2.Top = 5
+  Command2.Left = 46
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\vbmp\a_misc6.bmp
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Deselecionar Tudo"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipos de Operações de Saídas"
+  Height = 15
+  Left = 433
+  Top = 233
+  Width = 169
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 0
+  Height = 183
+  Left = 433
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 18
+  Top = 251
+  Width = 339
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "grdOperacoesS"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 20
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 280
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Códigos"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesS.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 0
+  Height = 183
+  Left = 52
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 15
+  Top = 251
+  Width = 339
+  GridLineColor = 238,238,238
+  ZOrderSet = 17
+  Name = "grdOperacoesE"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 20
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 280
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Códigos"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.grdOperacoesE.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.chkSubTotDat
+------------------------------------------------------------
+  Top = 111
+  Left = 295
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Totalizar Por Datas"
+  Value = .F.
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "chkSubTotDat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMP.optTipos
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 92
+  Top = 188
+  Width = 156
+  TabIndex = 12
+  ZOrderSet = 20
+  Name = "optTipos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Detalhado"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "Resumido"
+  Option2.Left = 87
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIMP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If (ThisForm.optTipos.Value = 1) && Detalhado
+	Report Form SigReIp1 Preview NoConsole
+Else							 && Resumido
+	Report Form SigReIp2 Preview NoConsole
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private ldDtI, ldDtF, lcEmp, lcEmd, lcDop, lcEmd, lcCep, lcTit, lcSub, lcPer, lcSub
+Private pDtI, pDtF
+
+ldDtI = ThisForm.getDtInicial.Value
+ldDtF = ThisForm.getDtFinal.Value
+lcEmp = ThisForm.getEmpresa.Value
+lcEpD = ThisForm.getDEmpresa.Value
+lcCta = ThisForm.getConta.Value
+lcCtD = ThisForm.getDConta.Value
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, [23:59:59])
+
+lcTep = Iif(Empty(lcEmp), [Global], Alltrim(lcEmp) + [-] + Alltrim(lcEpD)) 
+lcTct = Iif(Empty(lcCta), [Global], Alltrim(lcCta) + [-] + Alltrim(lcCtD)) 
+
+Create Cursor crCabecalho (Titulo c(200), Subtitulo c(200), Periodo c(200), SubTotDia l(1))
+Insert Into crCabecalho (Titulo, Subtitulo, Periodo, SubTotDia) ;
+				 Values ([Relatório Comparativo de Impostos], ;
+				 		 [Empresa: ] + lcTep + [ - Conta: ] + lcTct, ;
+				 		 [Período: ] + Dtoc(ldDtI) + [ a ] + Dtoc(ldDtF), ;
+				 		 ThisForm.chkSubTotDat.Value)
+
+Go Top In crCabecalho
+Go Top In csEntradas
+Go Top In csSaidas
+
+lcWrE = []
+If (Reccount([csEntradas]) > 1)
+	Select csEntradas
+	Scan
+		lcWrE = lcWrE + Iif(Empty(lcWrE), [], [, ]) + Alltrim(Str(csEntradas.Codigos, 2))
+	EndScan
+	lcWrE = [In (] + lcWrE + [)]
+Else
+	lcWrE = [ = ] + Alltrim(Str(csEntradas.Codigos, 2))
+EndIf
+
+lcWrS = []
+If (Reccount([csSaidas]) > 1)
+	Select csSaidas
+	Scan
+		lcWrS = lcWrS + Iif(Empty(lcWrS), [], [, ]) + Alltrim(Str(csSaidas.Codigos, 2))
+	EndScan
+	lcWrS = [In (] + lcWrS + [)]
+Else
+	lcWrS = [ = ] + Alltrim(Str(csSaidas.Codigos, 2))
+EndIf
+
+* Selecionando Dados de Entradas
+lcQuery = [Select ' ' as Baixas, 'E' as Movimento, n.Emis, n.NFis, n.Series, n.CFis, n.CfoSubs, n.Emps, ] + ;
+			 	 [n.TotNotas, n.ValICms, n.ICmsS, n.ValIpis, n.CliFors, c.Razaos, c.Estas, n.EmpDopNums ] + ;
+		    [From SigCdOpe o, SigMvNfi n, SigCdCli c ] + ;
+		   [Where o.TipoOps ] + lcWrE + [ And ] + ;
+		   		 [o.NFiscals In (1, 2) And ] + ;
+		   		 [o.Dopes = n.Dopes And ] + ;
+		   		 [n.Emis BetWeen ?pDtI And ?pDtF And ] + ;
+		   		 Iif(Empty(lcEmp), [], [n.Emps = '] + lcEmp + [' And ]) + ;
+				 [Left(n.CliFors, 10) = c.IClis And ] + ;
+		   		 Iif(Empty(lcCta), [], [c.IClis = '] + lcCta + [' And ]) + ;
+		   		 [n.Cancelas = 0 ] + ;
+		   [Union All ] + ;
+		  [Select ' ' as Baixas, 'S' as Movimento, n.Emis, n.NFis, n.Series, n.CFis, n.CfoSubs, n.Emps, ] + ;
+			 	 [n.TotNotas, n.ValICms, n.ICmsS, n.ValIpis, n.CliFors, c.Razaos, c.Estas, n.EmpDopNums ] + ;
+		    [From SigCdOpe o, SigMvNfi n, SigCdCli c ] + ;
+		   [Where o.TipoOps ] + lcWrS + [ And ] + ;
+		   		 [o.NFiscals In (1, 2) And ] + ;
+		   		 [o.Dopes = n.Dopes And ] + ;
+		   		 [n.Emis BetWeen ?pDtI And ?pDtF And ] + ;
+		   		 Iif(Empty(lcEmp), [], [n.Emps = '] + lcEmp + [' And ]) + ;
+				 [Left(n.CliFors, 10) = c.IClis And ] + ;
+		   		 Iif(Empty(lcCta), [], [c.IClis = '] + lcCta + [' And ]) + ;
+		   		 [n.Cancelas = 0 ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDados1]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDados1)])
+	Return .f.
+EndIf
+
+Select crDados1
+Scan
+	lcQuery = [Select e.EmpDopNums, p.EmpDopNums ] + ;
+				[From SigMvCab e, SigCdOpe o, SigMvPec p, SigCdOpe o2 ] + ;
+			   [Where e.EmpDopNums = '] + crDados1.EmpDopNums + [' And ] + ;
+			   		 [o.Dopes = e.Dopes And ] + ;
+			   		 [(1000000 * o.NDopes) + e.Numes = p.Codigos And ] + ;
+			   		 [p.Dopes = o2.Dopes And ] + ;
+			   		 [o2.CBxSubns = 1]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crBaixas]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crBaixas)])
+		Return .f.
+	EndIf
+	Select crBaixas
+	Go Top In crBaixas
+	If Not Eof([crBaixas])
+		Replace Baixas With [X] In crDados1
+	EndIf
+EndScan
+
+If (ThisForm.optTipos.Value = 1) && Detalhado
+	Select * ;
+	  From crDados1 ;
+	  Into Cursor crDados ;
+	 Order By 2, 3, 4, 5
+Else							 && Resumido
+	Select Movimento, Sum(TotNotas) as TotNotas, Sum(ValICms) as ValICms, Sum(ICmsS) as ICmsS, Sum(ValIpis) as ValIpis ;
+	  From crDados1 ;
+	  Into Cursor crDados ;
+	 Where Empty(Baixas) ;
+	 Group By 1 ;
+	 Order By 1, 2, 3, 4
+EndIf
+
+Select crDados
+Go Top In crDados
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+
+Create Cursor csOperacoesE (SelImp l(1), Codigos n(2), Descrs c(30))
+Index On Codigos Tag Codigos
+
+Create Cursor csOperacoesS (SelImp l(1), Codigos n(2), Descrs c(30))
+Index On Codigos Tag Codigos
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.getDtInicial.Value = Date()
+		.getDtFinal.Value   = Date()
+		.getEmpresa.Value   = _Empr
+		.getDEmpresa.Value  = []
+		
+		.poDataMgr.CursorQuery([SigCdEmp], [LocalEmp], [Cemps], _Empr, [Razas])
+		If Not Used([LocalEmp])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalEmp)])
+			Return .f.
+		EndIf
+		Select LocalEmp
+		If Not Eof([LocalEmp])
+			.getDEmpresa.Value = LocalEmp.Razas
+		EndIf
+
+		.poDataMgr.CursorQuery([SigCdTom], [crSigCdTom], .f., .f., [Codigos, Descrs])
+		If Not Used([crSigCdTom])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdTom)])
+			Return .f.
+		EndIf
+
+		For I = 1 to 2
+			lcGrd = Iif(I=1, [E], [S])
+			
+			With ThisForm.GrdOperacoes&lcGrd.
+				.ColumnCount  		= 3
+				.RecordSource 		= [csOperacoes] + lcGrd
+				.AllowHeaderSizing 	= .f.
+				.AllowRowSizing 	= .f.
+				.DeleteMark 		= .f.
+				.HeaderHeight 		= 0
+				.RecordMark 		= .f.
+				.ScrollBars 		= 2
+
+				.Column1.ControlSource   = [csOperacoes] + lcGrd + [.SelImp]
+				.Column1.Sparse 		 = .f.
+				.Column1.Check1.AutoSize = .t.
+				.Column2.ControlSource 	 = [csOperacoes] + lcGrd + [.Codigos]
+				.Column3.ControlSource 	 = [csOperacoes] + lcGrd + [.Descrs]
+
+				For I2 = 1 To 3
+					lcCol = Alltrim(Str(I2, 2))
+					.Column&lcCol..Movable   = .f.
+					.Column&lcCol..Resizable = .f.
+					.Column&lcCol..ReadOnly  = (I2 <> 1) 
+				Next
+			EndWith 
+
+			Select crSigCdTom
+			Scan
+				Insert Into csOperacoes&lcGrd. (SelImp, Codigos, Descrs) ;
+										Values (.f., crSigCdTom.Codigos, crSigCdTom.Descrs)
+			EndScan
+
+			Select csOperacoes&lcGrd.
+			Go Top
+			.grdOperacoes&lcGrd..Refresh
+		Next
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If (ThisForm.optTipos.Value = 1) && Detalhado
+	Report Form SigReIp1 To Print Prompt NoConsole
+Else							 && Resumido
+	Report Form SigReIp2 To Print Prompt NoConsole
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If (ThisForm.optTipos.Value = 1) && Detalhado
+	Report Form SigReIp1 To Print
+Else							 && Resumido
+	Report Form SigReIp2 To Print
+EndIf
+* Fim **************************************************************************************]
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+Local lcOpera
+If (This.Value <> 3)
+	If Empty(ThisForm.getDtInicial.Value)
+		=Messagebox([Data Inicial Inválida!!!], 0+48, [Filtros Inválidos])
+		ThisForm.getDtInicial.SetFocus
+		Return .f.
+	EndIf
+	
+	If Empty(ThisForm.getDtFinal.Value)
+		=Messagebox([Data Final Inválida!!!], 0+48, [Filtros Inválidos])
+		ThisForm.getDtFinal.SetFocus
+		Return .f.
+	EndIf
+
+	If (ThisForm.getDtFinal.Value < ThisForm.getDtInicial.Value)
+		=Messagebox([Data Final Menor Que a Inicial!!!], 0+48, [Filtros Inválidos])
+		ThisForm.getDtFinal.SetFocus
+		Return .f.
+	EndIf
+
+	Go Bottom In csOperacoesE
+	ThisForm.grdOperacoesE.Refresh 
+	Go Top In csOperacoesE
+
+	Go Bottom In csOperacoesS
+	ThisForm.grdOperacoesS.Refresh 
+	Go Top In csOperacoesS
+
+	Select * From csOperacoesE Where SelImp Into Cursor csEntradas
+	Go Top In csEntradas
+	If Eof([csEntradas])
+		=Messagebox([Nenhum Tipo Operacional de Entrada Foi Selecionado!!!], 0+48, [Filtros Inválidos])
+		ThisForm.grdOperacoesE.Column1.SetFocus
+		Return .f.
+	EndIf
+	
+	Select * From csOperacoesS Where SelImp Into Cursor csSaidas
+	Go Top In csSaidas
+	If Eof([csSaidas])
+		=Messagebox([Nenhum Tipo Operacional de Saída Foi Selecionado!!!], 0+48, [Filtros Inválidos])
+		ThisForm.grdOperacoesS.Column1.SetFocus
+		Return .f.
+	EndIf
+	
+	Select csSaidas
+	Scan
+		Select csEntradas
+		Go Top In csEntradas
+		Locate For Codigos = csSaidas.Codigos
+		If Not Eof([csEntradas])
+			=Messagebox([O Tipo Operacional ] + Alltrim(csSaidas.Descrs) + [ Foi] + ;
+						[Selecionado Como Entrada e Saída. Verifique!!!], 0+48, [Filtros Inválidos])
+			ThisForm.grdOperacoesE.Column1.SetFocus
+			Return .f.
+		EndIf
+	EndScan
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.cmdBtnGradeE
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update csOperacoesE Set SelImp = (This.Value = 1)
+Go Top In csOperacoesE
+ThisForm.grdOperacoesE.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.getDConta
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getConta.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, [], [D], This.Value, ThisForm.getConta, ThisForm.getDConta)
+		=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])
+		ThisForm.getConta.Value  = []
+		ThisForm.getDConta.Value = []
+	EndIf
+Else
+	ThisForm.getConta.Value  = []
+	ThisForm.getDConta.Value = []
+EndIf
+ThisForm.getConta.Refresh
+ThisForm.getDConta.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.getConta
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, [], [C], This.Value, ThisForm.getConta, ThisForm.getDConta)
+		=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])
+		ThisForm.getConta.Value  = []
+		ThisForm.getDConta.Value = []
+	EndIf
+Else
+	ThisForm.getConta.Value  = []
+	ThisForm.getDConta.Value = []
+EndIf
+ThisForm.getConta.Refresh
+ThisForm.getDConta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.getDEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getEmpresa.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.getEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.cmdBtnGradeS
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update csOperacoesS Set SelImp = (This.Value = 1)
+Go Top In csOperacoesS
+ThisForm.grdOperacoesS.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesS.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Replace SelImp With Not SelImp In csOperacoesS
+ThisForm.grdOperacoesS.Refresh
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(nKeyCode, 13, 32)
+	Replace SelImp With Not SelImp In csOperacoesS
+	ThisForm.grdOperacoesS.Refresh
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesS.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesS.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesE.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Replace SelImp With Not SelImp In csOperacoesE
+ThisForm.grdOperacoesE.Refresh
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(nKeyCode, 13, 32)
+	Replace SelImp With Not SelImp In csOperacoesE
+	ThisForm.grdOperacoesE.Refresh
+	NoDefault
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesE.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.grdOperacoesE.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.chkSubTotDat
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.optTipos.Value = 1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMP.optTipos
+* Classe: fwoption (Base: optiongroup)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+If (This.Value = 2)
+	ThisForm.chkSubTotDat.Value = .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIMP
+RESERVED3 (ClassInfo): podatamgr
+podatasql
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 29
+================================================================================

@@ -1,0 +1,13 @@
+﻿All edits are in place and correct. Phase 5 is complete. The file is now 1791 lines.
+
+**Summary of what Phase 5 added:**
+
+- **`ConfigurarAbaDados()`** (lines 578ÔÇô792): creates all controls on `pgf_4c_Abas.Page1` ÔÇö 3 labels, 5 TextBoxes (txt_4c_Grupo, txt_4c_Conta, txt_4c_Cpf, txt_4c_Dconta read-only, txt_4c_Moeda), 2 icon CommandButtons, 1 OptionGroup (Custo/Pre├ºo de Venda), and all BINDEVENTs
+
+- **Handler methods** (lines 794ÔÇô1202): ValidarGrupoAba, TeclaGrupoAba, AbrirBuscaGrupoAba, ValidarContaAba, TeclaContaAba, AbrirBuscaContaAba, ValidarCpfAba, ValidarMoedaAba, TeclaMoedaAba, AbrirBuscaMoedaAba, BtnConsultaAbaClick, BtnCadastrosAbaClick, LimparCampos
+
+- **Updated `BtnIncluirClick()`** ÔÇö calls `LimparCampos()` before `HabilitarCampos()`
+- **Updated `HabilitarCampos()`** ÔÇö enables/disables all Phase 5 fields (icon buttons excluded per memory rule)
+- **Updated `FormParaBO()`** ÔÇö maps txt_4c_ContaÔåÆthis_cContas, txt_4c_MoedaÔåÆthis_cMoedas, opt_4c_CustoÔåÆthis_nPrecific
+- **Updated `BOParaForm()`** ÔÇö populates Phase 5 fields + SQL lookup on SigCdCli for Dconta/Cpf display fields
+- **Updated `Destroy()`** ÔÇö cleans `cursor_4c_BoParaForm`

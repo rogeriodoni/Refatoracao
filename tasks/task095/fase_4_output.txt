@@ -1,0 +1,23 @@
+﻿Arquivo correto e completo. A Fase 4/8 foi executada com sucesso.
+
+**O que foi adicionado ao `FormSIGREEVV.prg`:**
+
+1. **`InicializarForm()`** ÔÇö atualizado para chamar `ConfigurarPaginaFiltros()` e `LimparCampos()` ap├│s `ConfigurarPageFrame()`
+
+2. **`ConfigurarPaginaFiltros()`** ÔÇö adiciona todos os 15 controles de filtro na Page1 com posi├º├Áes exatas (original - PageFrame.Top=85):
+   - `lbl_4c_Label3`, `txt_4c_Tabela`, `txt_4c_DTabela` (Tab. Desconto)
+   - `lbl_4c_Label4`, `txt_4c_Grupo`, `txt_4c_DGrupo` (Grupo)
+   - `lbl_4c_Lbl_estoque`, `txt_4c_Conta`, `txt_4c_DConta` (Conta)
+   - `lbl_4c_Label1`, `txt_4c_ValorIni`, `lbl_4c_Label2`, `txt_4c_ValorFin` (Faixa de Valor)
+   - `chk_4c_ChkFranquias`, `chk_4c_ChkZerados`
+   - `cnt_4c_Mensagem` com `lbl_4c_LblMensagem` (off-screen, Visible=.F.)
+
+3. **Lookups completos** para os 3 campos com busca:
+   - `AbrirBuscaTabela()` / `ValidarTabela()` / `TeclaTabela()` ÔåÆ SigOpTdz (Codigos/Descrs/Descos)
+   - `AbrirBuscaDTabela()` / `TeclaDTabela()` ÔåÆ SigOpTdz por descri├º├úo
+   - `AbrirBuscaGrupo()` / `ValidarGrupo()` / `TeclaGrupo()` ÔåÆ SigCdGcr
+   - `AbrirBuscaConta()` / `ValidarConta()` / `TeclaConta()` ÔåÆ SigReCtb
+
+4. **`LimparCampos()`** ÔÇö reseta todos os filtros para valores padr├úo
+
+5. **`FormParaRelatorio()`** ÔÇö copia os 10 filtros do form para o BO antes de imprimir/visualizar

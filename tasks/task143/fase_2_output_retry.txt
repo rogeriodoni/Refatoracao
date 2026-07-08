@@ -1,0 +1,9 @@
+﻿Fase 2 completa. O arquivo `C:\4c\projeto\app\classes\sigpdmp2BO.prg` (1237 linhas) agora tem todos os m├®todos CRUD exigidos pela Fase 2:
+
+- **ObterChavePrimaria()** (linha 158) ÔÇö chave composta `Nops|Nenvs|CMats`
+- **Inserir()** (linha 170) ÔÇö INSERT INTO xNensi com 36 campos mapeados das propriedades `this_*`, dispara `RegistrarAuditoria("INSERT")`
+- **Atualizar()** (linha 221) ÔÇö SEEK pela chave (NopMatCat) + REPLACE com todos os campos, restaura ORDER, dispara `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** (linha 305) ÔÇö DELETE da linha corrente, dispara `RegistrarAuditoria("DELETE")`
+- **RegistrarAuditoria()** (linha 338) ÔÇö insere em LogAuditoria via SQLEXEC com tabela l├│gica "xNensi"
+
+Form OPERACIONAL: `this_cTabela = ""` mantido ÔÇö a persist├¬ncia SQL final ├® feita pelo form pai; o BO opera no cursor VFP `xNensi` conforme legado.

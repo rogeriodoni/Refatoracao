@@ -1,0 +1,16 @@
+﻿Arquivo correto: 929 linhas, termina com `ENDDEFINE`. Fase 4 conclu├¡da.
+
+**Resumo do que foi adicionado em `Formsigprema.prg`:**
+
+- `ConfigurarPageFrame()` agora chama `ConfigurarPaginaLista()`
+- `AlternarPagina()` ÔÇö stub de compatibilidade para form operacional
+- `ConfigurarPaginaLista()` ÔÇö cria o grid `grd_4c_Dados` com 6 colunas (CheckBox/Conta/Nome/Email/Mensagem/prioridade), bot├Áes `cmd_4c_SelTudo`, `cmd_4c_Apaga`, `cmd_4c_BtnEmail`, e todos os BINDEVENTs
+- Handlers de ordena├º├úo por coluna: `GrdHeader2Click`, `GrdHeader3Click`, `GrdHeader4Click`
+- `ChkSelChange` ÔÇö atualiza cursor ao marcar/desmarcar checkbox
+- `CmdSelTudoClick` / `CmdApagaClick` ÔÇö marca/desmarca todos
+- `CmdBtnEmailClick` ÔÇö l├│gica completa de envio iterando registros marcados
+- `ImprimirDocumento(par_cEdn)` ÔÇö adaptado de `impdocto`: queries em SigMvCab/SigCdOpe/SigOpCdc/SigOpCdi, abre forms `SigPrIdc`/`SigReIfx`/`SigReJob`
+- `EnviarEmail(...)` ÔÇö adaptado de `memail`: CDO.Message com configura├º├úo SMTP completa
+- `GravarLog(par_cEmpDopNums)` ÔÇö INSERT em SigOpLog substituindo `fGravarLog`
+- Propriedades adicionadas: `this_cArqEmail`, `this_cPcEscolha`, `this_cLcEmp`, `this_oPdf`
+- `Destroy()` expandido para fechar todos os cursores auxiliares

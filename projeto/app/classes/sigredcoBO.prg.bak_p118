@@ -1,0 +1,371 @@
+*==============================================================================
+* SIGREDCOBO.PRG
+* Business Object para Impressao de Documento de Ordem (SIGREDCO)
+* Herda de RelatorioBase
+*
+* Responsabilidades:
+* - Receber parametros do form chamador (empresa, operacao, numero)
+* - Armazenar opcoes de impressao (NF, incentivos)
+* - Preparar cursor TmpImpOrc com dados formatados para os FRXs
+* - Selecionar e acionar o FRX correto conforme condicoes
+*   (SigReDco3, SigReDco4, SigReDco5 ou SigReDco6)
+*==============================================================================
+
+DEFINE CLASS sigredcoBO AS RelatorioBase
+
+    *-- Parametros recebidos do form chamador
+    this_nQbols          = 0     && Quantidade de documentos/ordens a imprimir
+    this_cEmps           = ""    && Codigo da empresa (pcEmps)
+    this_cDopes          = ""    && Tipo de operacao (pcDopes)
+    this_nNumes          = 0     && Numero do documento (pcNumes)
+    this_nTpImpressao    = 0     && Tipo de impressao: 0=normal 2=prompt 3/4=direto
+    this_lChkImpDoc      = .F.   && Flag impressao documento (pChkImpDoc)
+    this_lChkImpDocAcess = .F.   && Flag impressao documento acesso (chkimpdocacess)
+    this_cEmail          = ""    && Email para envio (Contaemail)
+    this_cCaption        = ""    && Caption dinamico: "Impressao de Documento (DOP/NUM)"
+
+    *-- Opcoes de impressao controladas pelos checkboxes do form
+    this_lImpNf          = .F.   && Imprimir Totais de NF / Descritivo (chkNf)
+    this_lImpIcen        = .F.   && Imprimir Incentivos / Versao Completa (chkIcentivo)
+
+    *-- Dados da empresa e operacao (carregados no Init/PrepararDados)
+    this_nDivNotas       = 0     && LocalEmp.DIVNOTAS: 1=SRCOM 2=P&G
+    this_nDigItens       = 0     && crSigCdOpe.DigItens: 6 ou 7 = modo especial SigReDco6
+    this_nCasQtds        = 0     && crSigOpCdd.CasQtds: casas decimais de quantidade
+    this_nNcPesos        = 0     && crSigCdOpe.NCPesos: casas decimais de peso
+    this_cMasQ           = ""    && Mascara formatada de quantidade (ex: "999999.99")
+    this_cMasP           = ""    && Mascara formatada de peso/preco
+    this_cFinaliza       = ""    && Texto de margem/contingente/lucro (apenas P&G)
+
+    *--------------------------------------------------------------------------
+    * Init - Construtor
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = ""
+        THIS.this_cCampoChave = ""
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLocalEmp - Carrega DivNotas da empresa via SQL Server
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLocalEmp()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+        TRY
+            IF USED("LocalEmp")
+                SELECT LocalEmp
+                THIS.this_nDivNotas = NVL(DivNotas, 0)
+                loc_lResultado = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Cursor LocalEmp n" + CHR(227) + "o dispon" + CHR(237) + "vel"
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarParametrosOperacao - Le DigItens/CasQtds/NCPesos dos cursors abertos
+    * e monta mascaras de formatacao
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarParametrosOperacao()
+        TRY
+            IF USED("crSigCdOpe")
+                SELECT crSigCdOpe
+                THIS.this_nDigItens = NVL(DigItens, 0)
+                THIS.this_nNcPesos  = NVL(NCPesos,  0)
+            ENDIF
+            IF USED("crSigOpCdd")
+                SELECT crSigOpCdd
+                THIS.this_nCasQtds = NVL(CasQtds, 0)
+            ENDIF
+            THIS.this_cMasQ = "999999" + IIF(THIS.this_nCasQtds > 0, "." + REPL("9", THIS.this_nCasQtds), "")
+            THIS.this_cMasP = "999999" + IIF(THIS.this_nNcPesos  > 0, "." + REPL("9", THIS.this_nNcPesos),  "")
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CalcularFinaliza - Calcula texto de Margem/Contingente/Lucro (somente P&G)
+    * Grava campo Finaliza em TmpRelat para uso no FRX SigReDco4
+    * PUBLIC para permitir pre-calculo no InicializarForm (Init do legado)
+    *--------------------------------------------------------------------------
+    PROCEDURE CalcularFinaliza()
+        TRY
+            IF USED("crSigMvOrc") AND USED("TmpRelat") AND USED("TprMvCab")
+                SELECT IIF(!EMPTY(Tota5s), ((Tota1s + Tota2s) / Tota5s) * 100, 0) AS PMargens ;
+                    FROM crSigMvOrc ;
+                    WHERE Cblocos = "TOTALGERAL" ;
+                    INTO CURSOR TmpMargem
+                IF !EOF("TmpMargem")
+                    SELECT TmpMargem
+                    REPLACE Finaliza WITH ;
+                        "Margem : " + ALLTRIM(STR(TmpMargem.PMargens, 5, 2)) + ;
+                        "% / Contingente : " + ALLTRIM(STR(TprMvCab.PTax2s, 5, 2)) + ;
+                        "% / Lucro Liquido : " + ALLTRIM(STR(TprMvCab.Descs, 5, 2)) + ;
+                        "% / BV Liquido : " + ALLTRIM(STR(TprMvCab.PTax1s, 5, 2)) + ;
+                        "% / Custo de Nota Fiscal : " + ALLTRIM(STR(TprMvCab.Acres, 6, 4)) ;
+                        IN TmpRelat
+                ENDIF
+                IF USED("TmpMargem")
+                    USE IN TmpMargem
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterNomeFRX - Retorna nome do FRX correto conforme condicoes do documento
+    * SigReDco6: DigItens 6 ou 7 (modo especial)
+    * SigReDco4: P&G (DIVNOTAS=2)
+    * SigReDco3: SRCOM com NF ou Incentivos
+    * SigReDco5: SRCOM padrao
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterNomeFRX()
+        LOCAL loc_cFRX
+        IF INLIST(THIS.this_nDigItens, 6, 7)
+            loc_cFRX = "SigReDco6"
+        ELSE
+            IF THIS.this_nDivNotas = 2
+                loc_cFRX = "SigReDco4"
+            ELSE
+                IF THIS.this_lImpIcen OR THIS.this_lImpNf
+                    loc_cFRX = "SigReDco3"
+                ELSE
+                    loc_cFRX = "SigReDco5"
+                ENDIF
+            ENDIF
+        ENDIF
+        RETURN loc_cFRX
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Monta cursor TmpImpOrc a partir de crSigMvOrc
+    * Equivalente ao procedimento 'processamento' do legado
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lResultado, loc_cMasQ, loc_cMasP, loc_lImpNf, loc_lImpIcen, loc_nDigItens
+        loc_lResultado = .F.
+        TRY
+            IF !USED("crSigMvOrc")
+                THIS.this_cMensagemErro = "Cursor crSigMvOrc n" + CHR(227) + "o est" + CHR(225) + " aberto"
+                loc_lResultado = .F.
+            ENDIF
+
+            THIS.CarregarParametrosOperacao()
+
+            *-- Normaliza campos memo/nulos
+            SELECT crSigMvOrc
+            REPLACE ALL Dpro2s WITH NVL(Dpro2s, ""), Obs WITH NVL(Obs, "")
+            GO TOP
+
+            *-- Variaveis locais para uso no SELECT VFP (THIS.prop nao funciona em SQL VFP)
+            loc_cMasQ    = THIS.this_cMasQ
+            loc_cMasP    = THIS.this_cMasP
+            loc_lImpNf   = THIS.this_lImpNf
+            loc_lImpIcen = THIS.this_lImpIcen
+            loc_nDigItens = THIS.this_nDigItens
+
+            *-- Monta TmpImpOrc com colunas formatadas para os FRXs
+            SELECT a.Citens, a.Citem2, a.Citem3, a.Cblocos, ;
+                a.Dpros, a.Dpro2s, a.Obs, ;
+                TRANSFORM(a.Qtds, loc_cMasQ) AS Qtds, ;
+                a.Cunis, TRANSFORM(a.Pesos, loc_cMasP) AS Pesos, a.Cunips, ;
+                TRANSFORM(a.Fators, loc_cMasP) AS Fators, ;
+                a.Units, a.Totas, a.Tota1s, a.Tota2s, a.Tota3s, ;
+                a.Tota4s, a.Tota5s, a.Tota6s, a.DAcabs, a.Dcunis, ;
+                loc_lImpNf   AS ImpNfs, ;
+                loc_lImpIcen AS ImpIcens, ;
+                a.RGBS ;
+            FROM crSigMvOrc a ;
+            WHERE IIF(INLIST(loc_nDigItens, 6, 7), a.Visivels = 1, .T.) ;
+            INTO CURSOR TmpImpOrc READWRITE ;
+            ORDER BY a.Citens
+
+            IF USED("TmpRelat")
+                SELECT TmpRelat
+                GO TOP
+            ENDIF
+            SELECT TmpImpOrc
+            GO TOP
+
+            *-- Calcula Finaliza (margem P&G) somente quando necessario
+            IF THIS.this_nDivNotas = 2
+                THIS.CalcularFinaliza()
+            ENDIF
+
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Preview do relatorio (equivalente a 'visualizacao' do legado)
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lResultado, loc_cFRX, loc_nCnt
+        loc_lResultado = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lResultado = .F.
+            ENDIF
+            loc_cFRX = THIS.ObterNomeFRX()
+            FOR loc_nCnt = 1 TO THIS.this_nQbols
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            ENDFOR
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Imprime o relatorio (equivalente a 'impressao' do legado)
+    * TpImpressao 2 ou 4 = sem dialogo de impressora; outros = com PROMPT
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lResultado, loc_cFRX, loc_nCnt, loc_lPrompt
+        loc_lResultado = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lResultado = .F.
+            ENDIF
+            loc_cFRX   = THIS.ObterNomeFRX()
+            loc_lPrompt = !INLIST(THIS.this_nTpImpressao, 2, 4)
+            FOR loc_nCnt = 1 TO THIS.this_nQbols
+                IF loc_lPrompt
+                    REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+                ELSE
+                    REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+                ENDIF
+            ENDFOR
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirDocumento - Impressao direta sem prompt nem loop de Qbols
+    * Equivalente ao procedimento 'documento' do legado
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirDocumento()
+        LOCAL loc_lResultado, loc_cFRX
+        loc_lResultado = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lResultado = .F.
+            ENDIF
+            loc_cFRX = THIS.ObterNomeFRX()
+            REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega propriedades a partir de um cursor de origem
+    * Para relatorios, mapeia parametros de operacao/empresa/casas decimais
+    * a partir dos cursors abertos pelo form chamador (crSigCdOpe, crSigOpCdd,
+    * cursor_4c_LocalEmp). Usado tambem pelo PrepararDados via
+    * CarregarParametrosOperacao().
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lResultado, loc_cAlias
+        loc_lResultado = .F.
+        TRY
+            IF EMPTY(par_cAliasCursor) OR !USED(par_cAliasCursor)
+                THIS.this_cMensagemErro = "Cursor n" + CHR(227) + "o dispon" + ;
+                    CHR(237) + "vel: " + TRANSFORM(par_cAliasCursor)
+            ELSE
+                SELECT (par_cAliasCursor)
+                loc_cAlias = UPPER(ALLTRIM(par_cAliasCursor))
+                DO CASE
+                    CASE loc_cAlias == "CRSIGCDOPE"
+                        THIS.this_nDigItens = NVL(DigItens, 0)
+                        THIS.this_nNcPesos  = NVL(NCPesos,  0)
+                        THIS.this_cMasP     = "999999" + ;
+                            IIF(THIS.this_nNcPesos > 0, "." + REPL("9", THIS.this_nNcPesos), "")
+                        loc_lResultado = .T.
+                    CASE loc_cAlias == "CRSIGOPCDD"
+                        THIS.this_nCasQtds = NVL(CasQtds, 0)
+                        THIS.this_cMasQ    = "999999" + ;
+                            IIF(THIS.this_nCasQtds > 0, "." + REPL("9", THIS.this_nCasQtds), "")
+                        loc_lResultado = .T.
+                    CASE loc_cAlias == "CURSOR_4C_LOCALEMP"
+                        THIS.this_nDivNotas = NVL(DivNotas, 0)
+                        loc_lResultado = .T.
+                    OTHERWISE
+                        THIS.this_cMensagemErro = "Cursor n" + CHR(227) + "o reconhecido: " + ;
+                            ALLTRIM(par_cAliasCursor)
+                ENDCASE
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - N" + CHR(227) + "o aplicavel a relatorio (sem persistencia)
+    * RelatorioBase nao executa INSERT - operacao bloqueada com mensagem clara
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o INSERIR n" + ;
+            CHR(227) + "o se aplica a relat" + CHR(243) + "rio de impress" + ;
+            CHR(227) + "o de documento"
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - Nao aplicavel a relatorio (sem persistencia)
+    * RelatorioBase nao executa UPDATE - operacao bloqueada com mensagem clara
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + "o ATUALIZAR n" + ;
+            CHR(227) + "o se aplica a relat" + CHR(243) + "rio de impress" + ;
+            CHR(227) + "o de documento"
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Relatorio nao tem chave primaria
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        RETURN ""
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * RegistrarAuditoria - Relatorio nao gera auditoria (operacao read-only)
+    *--------------------------------------------------------------------------
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna ultima mensagem de erro registrada
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+ENDDEFINE

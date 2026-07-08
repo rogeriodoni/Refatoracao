@@ -1,0 +1,18 @@
+﻿Ambos os arquivos ser├úo auto-carregados pelo config.prg via ADIR(). A Fase 3 est├í completa.
+
+**Arquivo criado:** `C:\4c\projeto\app\forms\operacionais\FormSIGMDETQ.prg`
+
+**O que foi implementado nesta fase:**
+
+- `DEFINE CLASS FormSIGMDETQ AS FormBase` com propriedades visuais id├¬nticas ao original (Width=718, Height=204, TitleBar=0, ControlBox=.F., etc.)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (FormBase chama InicializarForm automaticamente)
+- `InicializarForm()` ÔÇö inicializa SIGMDETQBO, verifica conex├úo, chama `CarregarParametros()` (bloqueia abertura se DopCorTam n├úo definido, igual ao legado), cria containers
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Sombra` com `lbl_4c_LblSombra` e `lbl_4c_LblTitulo` (caption "Muda Cor / Tamanho Etiqueta")
+- `ConfigurarBotoes()` ÔÇö `cmd_4c_Processar` (Left=567) e `cmd_4c_Cancelar` (Left=642), posi├º├Áes absolutas derivadas do CommandGroup original (Left=562, Top=-2)
+- `TornarControlesVisiveis()` ÔÇö torna vis├¡veis todos os controles de n├¡vel raiz
+- `ConfigurarBINDEVENTs()` ÔÇö vincula Click dos dois bot├Áes
+- `BtnCancelarClick()` ÔÇö `THIS.Release()`
+- `BtnProcessarClick()` ÔÇö implementa├º├úo completa: valida c├│digo de barras, confirma com usu├írio, seta `this_cCorNew`/`this_cTamNew` no BO, chama `ProcessarAlteracao()`, limpa campos ap├│s sucesso
+- `Destroy()` ÔÇö libera BO e chama `DODEFAULT()`
+
+**Pr├│xima fase (4):** adicionar os controles de entrada ÔÇö Shapes decorativos, label "C├│digo de Barra:", `txt_4c_Barras`, labels "Antigo"/"Novo"/"Cor"/"Tamanho", e os TextBoxes `txt_4c_CorAnt`, `txt_4c_TamAnt`, `txt_4c_CorNew`, `txt_4c_TamNew`.

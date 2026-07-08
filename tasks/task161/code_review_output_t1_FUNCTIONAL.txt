@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**OPTIONGROUP-LEFT (4 ocorr├¬ncias ÔåÆ 2 OptionGroups ├ù 2 Buttons):**
+
+`obj_4c_OptCalculo` e `obj_4c_OptDias` ÔÇö em ambos Buttons(1) e Buttons(2) foram adicionados:
+- `.Height = 21` ÔÇö altura expl├¡cita igual ao OptionGroup pai
+- `.Top = 0` ÔÇö alinhamento vertical dentro do OptionGroup
+- `.AutoSize = .F.` ÔÇö evita redimensionamento autom├ítico que pode sobrepor bot├Áes
+- `.Themes = .F.` ÔÇö padr├úo can├┤nico para Buttons dentro de CommandGroup/OptionGroup
+
+**LAYOUT-POSITION:** As posi├º├Áes `obj_4c_OptCalculo.Left=351` e `obj_4c_OptDias.Left=351` j├í estavam corretas no c├│digo. O validador reportou `Left=0` porque o parser est├ítico confundiu o `Buttons(1).Left = 0` com o Left do OptionGroup pai ÔÇö falso positivo de parsing, n├úo um problema real de runtime.

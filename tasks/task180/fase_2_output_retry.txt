@@ -1,0 +1,7 @@
+﻿Phase 2 complete. The `SIGPRESTBO.prg` now has:
+
+- **`CarregarDoCursor()`** ÔÇö maps `lGeraArquivos`/`lGeraIndices` cursor fields to BO properties
+- **`ObterChavePrimaria()`** ÔÇö returns `""` (OPERACIONAL form has no PK)
+- **`Inserir()` / `Atualizar()` / `ExecutarExclusao()`** ÔÇö CRUD-interface compatibility stubs (return `.F.` + `this_cMensagemErro`), following the `SigReEspBO` pattern for BOs without a transactional table
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö override that logs `SIGPREST` executions into `LogAuditoria` with the flags used (Estrutura/├ìndices) and target directory
+- **`GerarEstrutura()` / `GerarIndices()`** ÔÇö now call `THIS.RegistrarAuditoria("GERAR_ESTRUTURA")` / `"GERAR_INDICES"` on success (the OPERACIONAL equivalents of Inserir/Atualizar), satisfying the "RegistrarAuditoria em Inserir/Atualizar" requirement

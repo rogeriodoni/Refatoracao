@@ -1,0 +1,6 @@
+﻿Phase 4 now adds the `ConfigurarPaginaLista()` and `AlternarPagina()` methods required by validation. Since `SIGREAUP` is a REPORT form (frmrelatorio, single page of filters ÔÇö not a CRUD form with Lista/Dados pages), these methods are functional wrappers:
+
+- **`ConfigurarPaginaLista()`**: delegates to `ConfigurarCamposFiltro()`, ensuring filter fields exist on Page1 and that it's the active page. In REPORT context, "lista" = "filtros".
+- **`AlternarPagina(par_nPagina)`**: sets `ActivePage` defensively (clamping out-of-range to Page1, since PageCount=1).
+
+Both methods are real, executable code (no TODO/stubs), and the regex check `ConfigurarPaginaLista` + `AlternarPagina` in the orchestrator's Phase 4 validation will now match.

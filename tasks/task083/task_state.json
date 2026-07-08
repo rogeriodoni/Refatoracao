@@ -1,0 +1,243 @@
+﻿{
+    "taskId":  "task083",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "PENDING",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-06-04T09:16:29",
+    "atualizadoEm":  "2026-06-04T11:26:55",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-06-04T09:16:29",
+                                            "fim":  "2026-06-04T09:16:29",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task083\\sigredtv.sct",
+                                            "baseName":  "sigredtv",
+                                            "scxFile":  "C:\\4c\\tasks\\task083\\sigredtv.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-06-04T09:16:29",
+                                          "fim":  "2026-06-04T09:16:29",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigredtv",
+                                          "txtFile":  "C:\\4c\\tasks\\task083\\sigredtv_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T09:16:29",
+                                              "fim":  "2026-06-04T09:16:30",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task083\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T09:16:31",
+                                              "fim":  "2026-06-04T09:16:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task083\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task083\\meta_prompt.md",
+                                              "boClass":  "sigredtvBO",
+                                              "formClass":  "Formsigredtv",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task083\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T09:16:31",
+                                              "fim":  "2026-06-04T09:16:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task083\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-04T09:16:31",
+                                               "fim":  "2026-06-04T09:16:32",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task083\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigredtv_esqueleto.prg",
+                                                                "sigredtvBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-04T09:16:32",
+                                       "fim":  "2026-06-04T10:48:24",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigredtv.prg",
+                                                               "C:\\4c\\projeto\\app\\classes\\sigredtvBO.prg"
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigredtvBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  104.17,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigredtv.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  3450
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-06-04T10:48:24",
+                                                  "fim":  "2026-06-04T10:48:35",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  31,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigredtv.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigredtvBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-06-04T10:48:35",
+                                                 "fim":  "2026-06-04T10:49:50",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-04T11:06:30",
+                                       "fim":  "2026-06-04T11:06:37",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "FAILED",
+                                               "inicio":  "2026-06-04T11:06:37",
+                                               "fim":  "2026-06-04T11:26:55",
+                                               "tentativas":  1,
+                                               "total":  0,
+                                               "passou":  0,
+                                               "falhou":  0,
+                                               "percentual":  0,
+                                               "erro":  "Testes automaticos falharam apos 10 tentativa(s): Testes automaticos: 0% \u003c 100%. Falhas: Teste \u0027Instanciacao\u0027: CREATEOBJECT retornou valor nao-objeto",
+                                               "comentario":  "NOVO - Testes CRUD automaticos"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "PENDING",
+                                        "inicio":  null,
+                                        "fim":  null,
+                                        "tentativas":  0,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-06-04T09:16:30",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-06-04T09:16:30",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task083\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-06-04T09:16:30",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-04T09:16:31"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-06-04T10:48:35",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  2,
+                                                    "erro":  null,
+                                                    "fim":  "2026-06-04T10:48:35",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigredtv_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigredtv.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task083\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-06-04T10:49:50",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-06-04T10:49:51",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-06-04T10:49:51",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-06-04T11:04:00",
+                                          "passes":  4,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u00273\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: IMPS, CEMPS, I, NFS, EMPS, BALANCOS, DTEMIS, DATAS, VENCS, DATARCS, CIDCHAVES, ICLIS, TPREGS, PS, LCCLASSES, LNOPERACAO, ANALITICOS, GRUPOS, ORDEMS, CLASSES, CGRUPOS, DS_GRUPOS, LNRECTROCA, BFIRST, PERCPREV, PERCGRP, VALOR, VLRCOMP, 0; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LNVALOR\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: IMPS, CEMPS, I, NFS, EMPS, BALANCOS, DTEMIS, DATAS, VENCS, DATARCS, CIDCHAVES, ICLIS, TPREGS, PS, LCCLASSES, LNOPERACAO, ANALITICOS, GRUPOS, ORDEMS, CLASSES, CGRUPOS, DS_GRUPOS, LNRECTROCA, BFIRST, PERCPREV, PERCGRP, VALOR, VLRCOMP, 0; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027SUBTOT100S\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: IMPS, CEMPS, I, NFS, EMPS, BALANCOS, DTEMIS, DATAS, VENCS, DATARCS, CIDCHAVES, ICLIS, TPREGS, PS, LCCLASSES, LNOPERACAO, ANALITICOS, GRUPOS, ORDEMS, CLASSES, CGRUPOS, DS_GRUPOS, LNRECTROCA, BFIRST, PERCPREV, PERCGRP, VALOR, VLRCOMP, 0; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: IMPS, CEMPS, I, NFS, EMPS, BALANCOS, DTEMIS, DATAS, VENCS, DATARCS, CIDCHAVES, ICLIS, TPREGS, PS, LCCLASSES, LNOPERACAO, ANALITICOS, GRUPOS, ORDEMS, CLASSES, CGRUPOS, DS_GRUPOS, LNRECTROCA, BFIRST, PERCPREV, PERCGRP, VALOR, VLRCOMP, 0; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: IMPS, CEMPS, I, NFS, EMPS, BALANCOS, DTEMIS, DATAS, VENCS, DATARCS, CIDCHAVES, ICLIS, TPREGS, PS, LCCLASSES, LNOPERACAO, ANALITICOS, GRUPOS, ORDEMS, CLASSES, CGRUPOS, DS_GRUPOS, LNRECTROCA, BFIRST, PERCPREV, PERCGRP, VALOR, VLRCOMP, 0",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  5
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-06-04T11:04:00",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-06-04T11:06:30",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigredtvBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigredtv.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

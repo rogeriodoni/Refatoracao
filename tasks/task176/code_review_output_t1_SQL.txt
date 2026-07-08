@@ -1,0 +1,15 @@
+﻿An├ílise completa. Ambos os alertas s├úo **falsos positivos** do validador ÔÇö nenhum dos dois aparece em SQL passado para `SQLEXEC`:
+
+**CURSOR_4C_IMPACESSIVE** ÔåÆ ├® `cursor_4c_ImpAcessiveis`, nome de cursor VFP que aparece apenas em:
+- `USED("cursor_4c_ImpAcessiveis")` ÔÇö gerenciamento de cursor VFP
+- `SCAN FOR cursor_4c_ImpAcessiveis.ntpimpres = 2` ÔÇö loop VFP, n├úo SQL
+- `INTO CURSOR cursor_4c_ImpAcessiveis READWRITE` ÔÇö cria├º├úo de cursor VFP
+
+**CONTROLCOUNT** ÔåÆ ├® `loc_oControl.ControlCount`, propriedade padr├úo de container VFP na linha 163:
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+Nenhum dos dois aparece dentro de string de SQL enviada ao `SQLEXEC`. Os SQLs reais no BO usam apenas colunas leg├¡timas: `ntipos`/`nsituas` (SigCdTpe), `usuacess`/`usuarios` (SigSyImp/SigCdAcG), `impres`/`ntpimpres` (SigCdMp) ÔÇö todos presentes no WHERE original listado.
+
+**Nenhuma altera├º├úo necess├íria.** Os dois arquivos est├úo corretos.

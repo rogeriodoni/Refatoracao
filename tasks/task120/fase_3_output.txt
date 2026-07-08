@@ -1,0 +1,13 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas com sucesso. O arquivo agora tem a estrutura correta.
+
+**O que foi feito na Fase 3:**
+
+O arquivo `Formsigreifx.prg` j├í existia de uma execu├º├úo anterior com implementa├º├úo completa, mas continha um bug cr├¡tico: usava `Container` com `CommandButton` individuais em vez de `CommandGroup` com `Buttons(N)`, violando a regra obrigat├│ria para forms `frmrelatorio`.
+
+**Corre├º├Áes aplicadas:**
+
+1. **`ConfigurarBotoes()`** ÔÇö substitu├¡do `cnt_4c_Botoes` (Container) por `cmg_4c_Botoes` (CommandGroup) com `ButtonCount=4`, `BackStyle=0`, `BorderStyle=0`, `SpecialEffect=1`, `FontName="Comic Sans MS"`, `Width=65`, `Buttons(N).Cancel=.T.` (Sair), ├¡cones corretos: `relatorio_video_26.jpg`, `relatorio_impressora_26.jpg`, `relatorio_excel_26.jpg`, `relatorio_sair_60.jpg`
+
+2. **`VincularEventos()`** ÔÇö atualizado de `THIS.cnt_4c_Botoes.cmd_4c_Xxx` para `THIS.cmg_4c_Botoes.Buttons(N)`
+
+3. **`VerificarHistoricoImpressao()`** ÔÇö refer├¬ncias de habilita├º├úo dos bot├Áes corrigidas de `.cmd_4c_Imprimir/.cmd_4c_DocExcel` para `.Buttons(2)/.Buttons(3)`

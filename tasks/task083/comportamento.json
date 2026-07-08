@@ -1,0 +1,563 @@
+{
+  "resumo": {
+    "totalMetodos": 33,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 13,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 57,
+      "codigoOriginal": "Select csSigCdEmp\nLocate\n\nWith ThisForm.grdOrcs\n\t.RecordSource = []\n\t.Column1.ControlSource = []\n\t.Column2.ControlSource = []\n\t.Column3.ControlSource = []\n\t.Column4.ControlSource = []\n\t.Column5.ControlSource = []\nEndWith\n\nSelect cEmps From csSigCdEmp where Imps = 1 into cursor crQtdEmp\nIf( Reccount('crQtdEmp') = 1 ) Then\n\tlcQuery = [Select 0 as Imps, cEmps,cMes,cAno,cTitulo,Moeda from SigCdMrp where cEmps = ']+crQtdEmp.cEmps+[' group by cEmps,cMes,cAno,cTitulo,Moeda]\nElse\n\tlcQuery = [Select 0 as... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 417,
+      "codigoOriginal": "LParameters pEmp, pMoe, pIni, pFim, pPep, pDem\n\nIf Used([crTmpMccr])\n\tUse In crTmpMccr\nEndIf\n\nWait Window [Aguarde!!! Selecionando Movimentações do Comparativo...] NoWait\n\npDcI = pIni\npDcF = pFim\n\n*!*\tlcDat = Iif(ThisForm.optTpDatas.Value = 1, [Datas], [Vencs])\nlnSna = ThisForm.optSnt.Value\n\n*!*\tlcQuery = [Select Grupos, Contas, ] + lcDat + [ as Datas, Valors, Svalors, Moedas, Smoedas, ] + ;\n*!*\t\t\t\t\t [Cotacaos, Scotacaos, Opers, Emps, Scontas, cIdChaves ] + ;\n*!*\t\t\t\t[From SigMvCcr ] + ;\n*!*\t\t\t  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "optSnt,optTpDatas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "If ThisForm.Previsao\n\tReport Form SigReDt1 To Printer Noconsole\nElse\t\n\tIf ThisForm.Comparativo \n\t\tReport Form SigReDt2 To Printer NoConsole\n\tElse\t\t\n\t\tIf Used('Tempo')\n\t\t\t=Messagebox('Este Relatório Não Emite Documento!!!', 16, '')\n\t\tElse\n\t\t\tIf ThisForm.Contrapartida\n\t\t\t\tReport Form SigReDt3 To Printer Noconsole\n\t\t\tElse\n\t\t\t\tReport Form SigReDt4 To Printer Noconsole\n\t\t\tEndIf\n\t\tEndIf\t\n\tEndif\t\t\nEndif\t\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Select dbRelatorio\n*Replace All Emps With ''\n\nDoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "If ThisForm.Previsao\n\tReport Form SigReDt1 To Printer Prompt Noconsole\nElse\t\n\tIf ThisForm.Comparativo \n\t\tReport Form SigReDt2 To Printer Prompt NoConsole\n\tElse\t\n\t\tIf Used('Tempo')\n\t\t\tSelect Tempo\n\t\t\tDo SigreDtv With 'Emp', ThisForm.Titulo, 'PRINT', 0, ThisForm.Empresa\n\t\t\tUse In Tempo\n\t\tElse\n\t\t\tIf ThisForm.Contrapartida\n\t\t\t\tReport Form SigReDt3 To Printer Prompt Noconsole\n\t\t\tElse\n\t\t\t\tReport Form SigReDt4 To Printer Prompt Noconsole\n\t\t\tEndIf\n\t\tEndIf\t\n\tEndif\t\t\nEndif\t\n* Fim *************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Init",
+      "linhas": 150,
+      "codigoOriginal": "Parameters pTipo\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\n\n\t.Tipo = Iif(Type('pTipo')='N', pTipo, 1)\n\n\tIf (.Tipo = 2)\n\t\tThis.Caption  = [Mapa de Contas]\n\t\tThis.Name     = [SigReDtvM]\n\tElse\n\t\tThis.Caption  = [Demonstrativo]\n\t\tThis.Name \t  = [SigReDtvP]\n\tEndIf\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWait Window 'Aguarde!!! Carregando Cotações...' NoWait\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')\n\t\tSelect crSigCdCot\n\t\tIndex On CMoes + Dtos(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,get_demons",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 1029,
+      "codigoOriginal": "Private pDtI, pDtF\n\nLocal lcMoe, lcEpr, lcDpr, lcPeriodo, lcEmpresa, lcCdGrupo, ;\n\t  lcDsGrupo, lnVlGrupo, lnAnalitico, Valors, Moedas, lnCtRfr, lnCtMvt, lnValor, lnOperacao, lcTalk, ;\n\t  lnDecimals, lcFixed, lcEscape, lcMacro, lnNsegi, lnNsegf, llEof, lnRec1, lcDmr, lcPrevisao,;\n\t  lcOrcamento, lcOrcs, lcMoedaOrc, ldIniComp, ldFinComp\n\nlcMoe = ThisForm.get_cd_moeda.Value\nlnSnt = ThisForm.optSnt.Value\n\npDtI = fDtoSQL(ThisForm.get_dt_inicial.Value)\npDtF = fDtoSQL(ThisForm.get_dt_final.Value, [23:... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "ProcComp,CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_cd_moeda,optSnt,get_dt_inicial,get_dt_final,get_demons,OptCompara,get_ds_moeda,optContras",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "If Used('crSigMvCcr')\n\tUse In crSigMvCcr\nEndIf\n\nThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "If ThisForm.Previsao\n\tReport Form SigReDt1 Preview NoConsole\nElse\n\tIf ThisForm.Comparativo \t\n\t\tReport Form SigReDt2 Preview NoConsole\n\tElse\t\n\t\tIf Used('Tempo')\n\t\t\tSelect Tempo\n\t\t\tDo SigreDtv With 'Emp', ThisForm.Titulo, 'PREVIEW', 0, ThisForm.Empresa\n\t\t\tUse In Tempo\n\t\tElse\n\t\t\tIf ThisForm.ContraPartida\n\t\t\t\tReport Form SigReDt3 Preview NoConsole\n\t\t\tElse\n\t\t\t\tReport Form SigReDt4 Preview NoConsole\n\t\t\tEndIf\n\t\tEndIf\t\n\tEndif\t\t\nEndif\t\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_dt_inicial",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If (This.Value > This.Parent.get_dt_final.Value)\n\tThis.Parent.get_dt_final.Value = This.Value\n\tThis.Parent.Refresh\nEndIf\n\nThisForm.OptCompara.InteractiveChange \n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_final,OptCompara",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_dt_final",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OptCompara.InteractiveChange \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptCompara",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.get_Demons",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tSet Near On\n   \tIf Not Seek(This.Value, 'crSigCdMrr', 'Balancos')\n\t\tm.loBrowse = CreateObject('fwbuscasel', 'crSigCdMrr', 'Balancos', This.Value, 'Demonstrativos')\n\t\tm.loBrowse.AddColuna('Balancos', '', 'Demonstrativo', .t., 'Balancos')\n\t\tm.loBrowse.Show\n\tEndIf\n\tSet Near Off\n\tThis.Value = Evaluate('crSigCdMrr.Balancos')\n\tThis.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 18,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Imps\n\nIf InList(nKeyCode, 13, 32)\n\tm.Imps = Iif( csSigCdEmp.Imps = 0, 1, 0 )\n\n\tSelect csSigCdEmp\n\tGather Memvar Fields Imps\n\tThisForm.grdEmps.Refresh\t\n\n\tThisForm.Disponib_orcs() \n\n\tNoDefault\nEndIf\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Disponib_orcs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Imps\n\nm.Imps = Iif( csSigCdEmp.Imps = 0, 1, 0 )\n\nSelect csSigCdEmp\nGather Memvar Fields Imps\nThisForm.grdEmps.Refresh\n\nThisForm.Disponib_orcs() \n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Disponib_orcs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdEmps.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Imps\n\nIf InList(nKeyCode, 13, 32)\n\tm.Imps = Iif( crSigCdMrp.Imps = 0, 1, 0 )\n\n\tSelect crSigCdMrp\n\tGather Memvar Fields Imps\n\tThisForm.grdOrcs.Refresh\t\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Imps\n\nm.Imps = Iif( crSigCdMrp.Imps = 0, 1, 0 )\n\nSelect crSigCdMrp\nGather Memvar Fields Imps\nThisForm.grdOrcs.Refresh\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDTV.grdOrcs.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDTV.ck_MarcaEmp",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "if( ThisForm.ck_MarcaEmp.Value = 1 ) Then\n\tReplace all Imps with 1 in csSigCdEmp\nElse\n\tReplace all Imps with 0 in csSigCdEmp\nEndif \n\n* Limpa a previsão em função do filtro da empresa\nThisForm.Disponib_orcs() ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Disponib_orcs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.ck_MarcaOrcs",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "if( ThisForm.ck_MarcaOrcs.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigCdMrp\nElse\n\tReplace all Imps with 0 in crSigCdMrp\nEndif \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.OptCompara",
+      "evento": "InteractiveChange",
+      "linhas": 69,
+      "codigoOriginal": "Local lnNMonths1, leExpr99, ldInicial, ldFinal, ldIniComp, ldFinComp\n\nWith ThisForm\n\t.grdOrcs.Enabled = (This.Value = 1)\n\t.ck_MarcaOrcs.Enabled = (This.Value = 1)\n\t.getComp1.Visible = (This.Value > 1)\n\t.getComp2.Visible = (This.Value > 1)\n\t.say5.Visible = (This.Value > 1)\nEndWith \n\nIf (This.Value > 1)\n\tm.lnNMonths1 = .f.\n\n\tldInicial = ThisForm.get_dt_inicial.Value \n\tldFinal   = ThisForm.get_dt_final.Value \n\n\tDo case\n\t\tCase This.Value == 1 && linha do periodo da configuracao\n\t\t\tm.lnNMonths1 = 0\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.getComp2",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDTV.getComp1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREDTV.Procedure",
+      "queryOriginal": "Select cEmps From csSigCdEmp where Imps = 1 into cursor crQtdEmp",
+      "tabelas": "csSigCdEmp",
+      "colunas": "cEmps,Imps,crQtdEmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDTV.Procedure",
+      "queryOriginal": "\tlcQuery = [Select 0 as Imps, cEmps,cMes,cAno,cTitulo,Moeda from SigCdMrp where cEmps = ']+crQtdEmp.cEmps+[' group by cEmps,cMes,cAno,cTitulo,Moeda] Else",
+      "tabelas": "SigCdMrp",
+      "colunas": "cEmps,cMes,cAno,cTitulo,Moeda,cEmps+[,Moeda],Else",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csSigCdEmp", "SigCdMrp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

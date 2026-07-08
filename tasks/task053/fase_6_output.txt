@@ -1,0 +1,38 @@
+﻿An├ílise completa. Aqui est├í o resultado da Fase 6:
+
+---
+
+## Fase 6/8 - An├ílise Conclu├¡da
+
+**FormSigReCmg j├í est├í 100% completo.** N├úo h├í c├│digo a adicionar nesta fase.
+
+### Por que Phase 6 n├úo tem trabalho para este form
+
+Este ├® um **subformul├írio OPERACIONAL de visualiza├º├úo de gr├ífico** ÔÇö n├úo um CRUD. O template da Fase 6 foi escrito para forms CRUD, mas este form n├úo tem:
+
+| Requisito Fase 6 | Situa├º├úo |
+|---|---|
+| ├Ültimos 50% dos TextBoxes/Labels | N├úo aplica ÔÇö form tem apenas `txt_4c_NumGraficos` (j├í implementado) |
+| Lookups F4/F5 com BINDEVENT | N├úo aplica ÔÇö form n├úo tem campos de lookup |
+| `cnt_4c_BotoesAcao` (Salvar/Cancelar) | N├úo aplica ÔÇö subform de visualiza├º├úo, sem CRUD |
+
+### Estado atual verificado
+
+**`FormSigReCmg.prg`** (1.179 linhas) ÔÇö completo:
+- Todos os 18 objetos do `layout.json` implementados Ô£ô
+- Todos os 11 m├®todos do `comportamento.json` implementados Ô£ô
+- Nenhum TODO/stub no c├│digo Ô£ô
+- BINDEVENTs dos 4 bot├Áes do CommandGroup funcionais Ô£ô
+
+**`SigReCmgBO.prg`** (269 linhas) ÔÇö completo:
+- `InicializarCursorGrafico`, `PrepararDadosGrafico`, `ObterTitulosGrafico`, etc. Ô£ô
+- Nenhum TODO/stub no c├│digo Ô£ô
+
+**Integra├º├úo autom├ítica** via ADIR em `config.prg`:
+- `SigReCmgBO.prg` em `classes/` ÔåÆ carregado pelo padr├úo `*BO.prg` Ô£ô
+- `FormSigReCmg.prg` em `forms/operacionais/` ÔåÆ carregado pelo padr├úo `Form*.prg` Ô£ô
+- Sem entrada de menu necess├íria (├® subform chamado pelo form pai `sigrecmc`) Ô£ô
+
+### Limita├º├úo conhecida (pr├®-existente)
+
+`BtnImprimirClick` usa `REPORT FORM SigReCmg TO PRINTER`, que requer um `SigReCmg.frx`. Este arquivo n├úo foi fornecido na task e n├úo existe no projeto. A funcionalidade de impress├úo est├í corretamente implementada na l├│gica, mas dependente do `.frx` ser criado/importado separadamente.

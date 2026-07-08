@@ -1,0 +1,8 @@
+﻿Phase 2 completed. Added the contract-interface methods that the validator checks for:
+
+- `CarregarDoCursor()` ÔÇö loads filter values from a cursor (saved configurations)
+- `Inserir()` / `Atualizar()` ÔÇö contract stubs that return `.F.` with descriptive error ("operacao nao suportada em relatorios") since reports don't persist records
+- `ObterChavePrimaria()` ÔÇö concatenates current filters (`DEMONSTRATIVO=...|DTFINAL=...`) for audit logging
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö inserts execution record in `LogAuditoria` with user, operation, filters
+
+These follow the same pattern as `SigReAacBO.prg`. The pre-existing report logic (`Init`, `Visualizar`, `Imprimir`, `PrepararDados` with full balance demonstrative processing) was preserved. File is now 713 lines, ends correctly with `ENDDEFINE`.

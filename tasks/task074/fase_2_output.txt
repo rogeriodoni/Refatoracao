@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `sigredcoBO.prg` est├í completo com todos os m├®todos de neg├│cio:
+
+- **`CarregarLocalEmp()`** ÔÇö busca `DivNotas` em `SigCdEmp` via `SQLEXEC`, equivalente ao `CursorQuery` do legado
+- **`CarregarParametrosOperacao()`** ÔÇö l├¬ `DigItens`/`CasQtds`/`NCPesos` dos cursors j├í abertos (`crSigCdOpe`, `crSigOpCdd`) e monta as m├íscaras de formata├º├úo
+- **`CalcularFinaliza()`** ÔÇö calcula o texto de Margem/Contingente/Lucro e grava em `TmpRelat` (s├│ para P&G, `DIVNOTAS=2`)
+- **`ObterNomeFRX()`** ÔÇö l├│gica de sele├º├úo do FRX: SigReDco6 ÔåÆ SigReDco4 ÔåÆ SigReDco3 ÔåÆ SigReDco5
+- **`PrepararDados()`** ÔÇö equivalente ao `processamento` legado; normaliza `crSigMvOrc`, monta `TmpImpOrc READWRITE` com colunas formatadas, posiciona cursores e aciona `CalcularFinaliza` quando necess├írio
+- **`Visualizar()`** / **`Imprimir()`** / **`ImprimirDocumento()`** ÔÇö equivalentes aos procedimentos `visualizacao`, `impressao` e `documento` do legado
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (relat├│rio n├úo tem chave)

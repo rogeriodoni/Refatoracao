@@ -1,0 +1,17 @@
+﻿Li o arquivo completo (765 linhas). Vou analisar cada alerta antes de qualquer altera├º├úo.
+
+**An├ílise do FORM (FormSIGPRCOT.prg):**
+- `ControlCount` aparece nas linhas 513 e 519 ÔÇö dentro de `TornarControlesVisiveis`, como propriedade VFP9 de objeto (`par_oContainer.ControlCount`), **n├úo em nenhum WHERE SQL**.
+
+**An├ílise do BO (SIGPRCOTBO.prg):**
+- `cmoes` aparece em `WHERE cmoes = ...` na query de `BuscarCotacoes` ÔÇö ├® o filtro de carregamento por moeda.
+
+**Conclus├úo da verifica├º├úo:**
+
+### Alerta CONTROLCOUNT ÔÇö Falso positivo
+O linter varreu o texto e encontrou `ControlCount` no c├│digo VFP9 (linha 513/519: `par_oContainer.ControlCount`). N├úo existe nenhum `WHERE CONTROLCOUNT` em qualquer query SQL do arquivo. Nenhuma altera├º├úo necess├íria.
+
+### Alerta CMOES ÔÇö Falso positivo contextual
+O c├│digo original faz `Select * From CrSigCdCot Into Cursor TmpCot ReadWrite` (sem WHERE) porque `CrSigCdCot` j├í era um cursor pr├®-carregado pelo DataManager do legado, filtrado pela moeda atual. No c├│digo migrado, a query vai direto ao SQL Server (`FROM SigCdCot`) e o `WHERE cmoes = ...` ├® exatamente o filtro equivalente ÔÇö sem ele carregar├¡amos cota├º├Áes de **todas as moedas** para uma form que trata apenas de uma. O filtro ├® arquiteturalmente correto e necess├írio.
+
+**Resultado: nenhuma altera├º├úo nos arquivos.** Ambos os alertas s├úo falsos positivos do linter est├ítico ÔÇö um confundiu propriedade VFP9 com coluna SQL, o outro n├úo considerou que a query original operava sobre cursor pr├®-filtrado em vez de tabela SQL direta. O c├│digo est├í correto.

@@ -1,0 +1,13 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSIGPRCIC.prg` foi criado com:
+
+- **DEFINE CLASS FormSIGPRCIC AS FormBase** com `DataSession = 1` (compartilha datasession do form pai), dimens├Áes 469├ù496, `TitleBar = 0`, `ControlBox = .F.` ÔÇö propriedades visuais id├¬nticas ao legado
+- **Propriedades**: `this_oBusinessObject`, `this_cIdChaves`, `this_oFormPai`
+- **Init(par_oFormPai, par_cIdChaves)** ÔÇö armazena par├ómetros antes do `DODEFAULT()` para que `InicializarForm()` os encontre
+- **InicializarForm()** ÔÇö cria BO (`SIGPRCICBO`), fundo de tela, controles e chama `CarregarDados()`; sem `RETURN` dentro do TRY
+- **ConfigurarControles()** ÔÇö cria `cnt_4c_Cabecalho` com `lbl_4c_Sombra` e `lbl_4c_Titulo` (CHR(237) para o ├¡ de "├ìcones")
+- **CarregarDados()** ÔÇö posiciona cursor `crSigSyIco1` no ├¡cone atual do programa
+- **TornarControlesVisiveis()** ÔÇö recursiva, `LOCAL loc_nP` declarado no topo
+- **KeyPress()** ÔÇö ESC faz `Release()`
+- **Destroy()** ÔÇö libera BO e chama `DODEFAULT()`
+
+Fases seguintes usar├úo Read + Edit para adicionar o grid, textbox do programa, image preview e eventos.

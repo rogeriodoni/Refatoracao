@@ -1,0 +1,1661 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecom.SCX
+* Data/Hora: 17/05/26 16:04:04
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECOM
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECOM
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECOM
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGRECOM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optOrdem
+  Parent: SIGRECOM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optQuebras
+  Parent: SIGRECOM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_opcao
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_nr_opcao
+  Parent: SIGRECOM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGRECOM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGRECOM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optBase
+  Parent: SIGRECOM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTipo
+  Parent: SIGRECOM
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getVends
+  Parent: SIGRECOM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 30
+  Left = -4
+  Width = 1016
+  Height = 544
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Comissão"
+  ControlBox = .F.
+  Name = "SIGRECOM"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 531
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 348
+  Top = 93
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Periodo :"
+  Left = 215
+  Top = 92
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.get_dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Left = 264
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 88
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.get_dt_final
+------------------------------------------------------------
+  Format = "K"
+  Left = 360
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 88
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Left = 264
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 113
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vendedor :"
+  Left = 205
+  Top = 141
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda :"
+  Left = 219
+  Top = 117
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordens :"
+  Left = 216
+  Top = 257
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Quebra :"
+  Left = 215
+  Top = 215
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.optOrdem
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 6
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 37
+  Left = 260
+  Top = 258
+  Width = 292
+  TabIndex = 15
+  ZOrderSet = 9
+  ToolTipText = "Estas opções definem a ordem de impressão do relatório de Análise de Médias"
+  Name = "optOrdem"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Vendedor"
+  Option1.Height = 15
+  Option1.Left = 4
+  Option1.Top = 1
+  Option1.Width = 64
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Qtde Peças"
+  Option2.Height = 15
+  Option2.Left = 100
+  Option2.Top = 1
+  Option2.Width = 73
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Média Peças"
+  Option3.Height = 15
+  Option3.Left = 196
+  Option3.Top = 1
+  Option3.Width = 77
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Qtde Opers"
+  Option4.Height = 17
+  Option4.Left = 4
+  Option4.Top = 17
+  Option4.Width = 83
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Média Opers"
+  Option5.Height = 17
+  Option5.Left = 100
+  Option5.Top = 17
+  Option5.Width = 83
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+  Option6.FontName = "Tahoma"
+  Option6.FontSize = 8
+  Option6.BackStyle = 0
+  Option6.Caption = "Comissão"
+  Option6.Height = 17
+  Option6.Left = 196
+  Option6.Top = 17
+  Option6.Width = 83
+  Option6.ForeColor = 90,90,90
+  Option6.Name = "Option6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.optQuebras
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 259
+  Top = 211
+  Width = 220
+  TabIndex = 15
+  ZOrderSet = 9
+  Name = "optQuebras"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Datas"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 46
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Datas + Operações"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 4
+  Option2.Width = 112
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.lbl_opcao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Opção :"
+  Left = 220
+  Top = 169
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "lbl_opcao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.opt_nr_opcao
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 259
+  Top = 165
+  Width = 220
+  TabIndex = 11
+  ZOrderSet = 9
+  Name = "opt_nr_opcao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Height = 15
+  Option3.Left = 157
+  Option3.Top = 4
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Left = 297
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 113
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 231
+  Top = 192
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor Base :"
+  Left = 201
+  Top = 237
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.optBase
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 259
+  Top = 233
+  Width = 364
+  TabIndex = 15
+  ZOrderSet = 9
+  Name = "optBase"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Itens"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 43
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Movimentação"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 4
+  Option2.Width = 87
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Movimentação S/ST"
+  Option3.Height = 17
+  Option3.Left = 198
+  Option3.Top = 3
+  Option3.Width = 139
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.optTipo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 259
+  Top = 188
+  Width = 356
+  TabIndex = 14
+  ZOrderSet = 9
+  Name = "optTipo"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Analítico"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 67
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Sintético"
+  Option2.Height = 15
+  Option2.Left = 82
+  Option2.Top = 4
+  Option2.Width = 68
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Verdana"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Resumo"
+  Option3.Height = 15
+  Option3.Left = 157
+  Option3.Top = 4
+  Option3.Width = 65
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Verdana"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Análise Médias"
+  Option4.Height = 15
+  Option4.Left = 234
+  Option4.Top = 3
+  Option4.Width = 103
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOM.getVends
+------------------------------------------------------------
+  Century = 2
+  Alignment = 3
+  InputMask = "!!!!!!!!!!"
+  Left = 264
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 138
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getVends"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECOM
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE calcbase
+------------------------------------------------------------
+PROCEDURE calcbase
+Lparameters pMlt
+
+lcMoe = ThisForm.get_cd_moeda.Value
+lnTip = ThisForm.optTipo.Value 
+
+If (crsigcdope.CComis = 1)
+	lcQuery = [Select a.MoeVs, Sum(a.Totas + a.ValRats) as Valos ] + ;
+			    [From Sigmvitn a, sigcdpro b, sigcdgrp c ] + ;
+	    	   [Where a.EmpDopNums = '] + crSigMvCab.EmpDopNums + [' And ] + ;
+	    	   	     [a.CPros = b.CPros And ] + ;
+	    	   	     [b.CGrus = c.CGrus And ] + ;
+	    	   	     [Not c.Servicos = 1 ] + ;
+	    	   [Group By a.MoeVs ] + ;
+	    	   [Order By a.MoeVs]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalItens]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalItens 1)])
+		Return 0
+	EndIf
+	
+	Select LocalItens
+	Scan
+		If Not Used([crSigcdcli]) Or (Used([crSigcdcli]) And (crSigcdcli.IClis + crSigcdcli.Grupos <> Padr(crSigMvCab.Vends, 10) + PadR(crSigMvCab.Grvends, 10)))
+			lcQuery = [Select Grupos, IClis, RClis, Comis, CCargs ] + ;
+		    		    [From Sigcdcli ] + ;
+		    		   [Where IClis = '] + Padr(crSigMvCab.Vends, 10) + [' And ] + ;
+		    		   		 [Grupos = '] + PadR(crSigMvCab.Grvends, 10) + [' ] + ;
+		    		   [Order By Grupos, IClis, RClis, Comis, CCargs]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigcdcli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigcdcli)')
+				Return 0
+			EndIf
+			Go Top In crSigcdcli
+		EndIf
+
+		m.Nvends = crSigcdcli.Rclis				
+
+		ComFPag  = crSigcdcli.Comis
+		If (crsigcdope.ComCargs = 1)
+			Select crSigCdCrg
+			Seek crSigcdcli.CCargs
+			ComFPag = crSigCdCrg.Comis
+		EndIf
+							
+		Select crAnalitico
+		Set Order To VendDatas
+
+		lcDop = crSigMvCab.Dopes
+
+		Do Case
+			Case (lnTip = 1 or lnTip = 4)
+				Seek crSigMvCab.Vends + Dtos(crSigMvCab.Datas) + crSigMvCab.EmpDopNums
+
+			Case (lnTip = 2)
+				Seek crSigMvCab.Vends
+
+			Otherwise
+				* Apanhando Nota Fiscal do Subnível
+				lcQuery = [Select a.EmpDopNums, a.Codigos, a.Emps, o.Dopes, Right(a.Codigos, 6) as Numes ] + ;
+							[From SigMvPec a, SigMvCab b, SigCdOpe o ] + ;
+						   [Where a.EmpDopNums = b.EmpDopNums And ] + ;
+								 [Left(a.Codigos, 3) = o.NDopes And ] + ;
+								 [a.EmpDopNums = '] + crSigMvCab.EmpDopNums + [' And ] + ;
+								 [Not a.EmpDopNums In (Select n.EmpDopNums From SigMvNfi n ] + ;
+								 [Where n.EmpDopNums = '] + crSigMvCab.EmpDopNums + [')]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSub]) < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSub)')
+					Return 0
+				EndIf								
+				Select LocalSub
+				Go Top In LocalSub
+				If Not Eof([LocalSub])
+					lcEdn = LocalSub.Emps + LocalSub.Dopes + Str(Int(Val(LocalSub.Numes)), 6)
+					
+					lcQuery = [Select b.NFis, b.EmpDopNums ] + ;
+								[From SigMvNfi b ] + ;
+							   [Where b.EmpDopNums = '] + lcEdn + [']
+							
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNF]) < 1)
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNF)')
+						Return 0
+					EndIf
+					Select LocalNF
+					Go Top In LocalNF
+					If Not Eof([LocalNF])
+						lcDop = LocalSub.Dopes
+					EndIf
+				EndIf
+				 
+				Select crAnalitico
+				Seek crSigMvCab.Vends + Dtos(crSigMvCab.Datas) + lcDop
+		EndCase
+			
+		If Eof([crAnalitico])
+			Append Blank
+
+			lcQuery = [Select RClis ] + ;
+			    		[From Sigcdcli ] + ; 
+			    	   [Where IClis = '] + crSigMvCab.ContaDs + [']
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 1)')
+				Return 0
+			EndIf								
+			select Localcli
+			Go Top
+			lcCta = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+
+			Replace Vends  with crSigMvCab.vends,;
+			        Nvends with m.Nvends In crAnalitico
+	        
+	        If (lnTip = 1 or lnTip = 4)
+	        	Replace Datas With crSigMvCab.Datas, ;
+				        EmpDopNums With crSigMvCab.EmpDopNums, ;
+				        Notas With crSigMvCab.Notas, ;
+				        ContaDs With crSigMvCab.ContaDs, ;
+				        RClis With lcCta In crAnalitico
+			EndIf
+			 
+	        If (lnTip = 3)
+	        	Replace Datas With crSigMvCab.Datas, ;
+	        			Dopes With lcDop In crAnalitico
+			EndIf 
+		EndIf
+		
+		lnCot = 1
+		If (crsigcdope.Cmoes <> LocalItens.MoeVs)
+			lnCot = fBuscarCotacao(LocalItens.MoeVs, crSigMvCab.Datas) / fBuscarCotacao(lcMoe, crSigMvCab.Datas)
+		EndIf
+
+		Comi = ((LocalItens.Valos * lnCot) / 100) * Comfpag 
+		Replace Valos With Valos + ((LocalItens.Valos * lnCot) * pMlt), ;
+				Comis With Comis + (Comi * pMlt) In crAnalitico
+	EndScan
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selecionaeest
+------------------------------------------------------------
+PROCEDURE selecionaeest
+lcVend    = ThisForm.getVends.Value 
+lnNrOpcao = ThisForm.opt_nr_opcao.Value
+
+	lcQuery = [Select Emps, Dopes, Datas, Numes, Notas, Valos, GrVends, Vends, EmpDopNums, ContaDs ] + ;
+			    [From SigMvCab ] + ;
+			   [Where EmpDopNums Between '] + _Empr + crSigCdOpe.Dopes + Str(0, 6) + [' And ] + ;
+					   				    ['] + _Empr + crSigCdOpe.Dopes + Str(999999, 6) + [' And ] + ;
+			    	 [Datas Between ?pDtI And ?pDtF ] + ;
+			    	  Iif(Empty(lcVend), [], [And Vends = '] + lcVend + [' ]) + ;
+			   [Order By Emps, Dopes, Datas, Numes, Notas, Valos, GrVends, Vends, EmpDopNums, ContaDs]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCab') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCab)')
+		Return 0
+	EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selecionapar
+------------------------------------------------------------
+PROCEDURE selecionapar
+Lparameters pMlt
+
+lcCdMoeda = ThisForm.get_cd_moeda.Value
+lnTip = ThisForm.optTipo.Value 
+ldDtF = ThisForm.get_dt_final.Value 
+lnBas = thisform.optBase.Value
+lnIcmss=0
+ 
+* pega taxa mensal
+jm = 'JM '
+tm = 0
+tm =fBuscarCambio({},ldDtF,space(03),jm)
+
+* resumo por forma de pagamento 
+*** Mena - 14/03/2014 - quando troco deixar valor negativo ***
+lcQuery = [Select a.cotfpgs, a.Empdopnums, a.dopes, a.fpags, a.moefpgs, ] + ;
+			[Case When b.trocos=1 then -a.valos else a.valos end as valos, a.datas, a.vencs ] + ;
+     		[From SigMvPar a, SigOpFp b ] + ;
+           [Where a.Empdopnums='] + _empr+crSigMvCab.dopes+str(crSigMvCab.numes,6) + [' And ] + ;
+		    	 [a.FPags = b.FPags ] + ;
+           [Order By a.Empdopnums,a.dopes,a.fpags,a.moefpgs,valos,a.datas,a.vencs]
+
+&&				    	 [Not b.Trocos = 1 ] + ;
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvPar') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvPar)')
+	Return 0
+EndIf
+
+
+*** mena - 10/11/2015 pega a substituicao para subtrair do valor ***
+IF lnBas = 3
+	lcQuery = [Select a.icmss from sigmvnfi a Where a.Empdopnums='] + crSigMvCab.empdopnums + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crnfi') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigMvNfi)')
+		Return 0
+	EndIf
+	lnIcmss = IIF(EOF('crNfi'), lnIcmss, crNfi.icmss)
+	lnPar = RECCOUNT('crSigMvPar')
+	lnIcmss = lnIcmss/IIF(lnPar=0,1,lnPar)
+ENDIF
+
+Select crSigMvPar
+Scan
+	select parcela
+	set order to fpags
+	seek crSigMvPar.fpags
+	if eof()
+		append blank
+		replace parcela.fpags with crSigMvPar.fpags
+	endif
+
+	vpar =  crSigMvPar.valos * fBuscarCotacao(crSigMvPar.Moefpgs,Date())/fBuscarCotacao(m.lcCdMoeda,Date()) 
+	=seek(crSigMvPar.dopes,'crSigCdOpe','dopes')
+	if crSigCdOpe.copers = 2
+		vpar = vpar * (-1)
+	endif
+
+	If (pMlt > 0)
+		replace parcela.valos with parcela.valos + vpar
+	Else
+		replace parcela.devols with parcela.devols + vpar
+	EndIf
+	
+	vparav = vpar
+	dt = crSigMvPar.datas-crSigMvPar.vencs
+	if dt < 0
+		td = ((1+tm/100)^(1/30)-1)*100
+		td = int(td*100+.5)/100
+		
+		desconto = (1+td/100)^(-1*dt)
+		porc     = (1-1/desconto)*100
+		porc     = int(porc*100+.5)/100
+		vparav   = (vpar*(1-(porc/100)))
+		vparav   = int(vparav*100+.5)/100
+	endif
+	
+	Select crSigOpFp
+	Seek crSigMvPar.FPags
+	If Not Empty(crSigOpFp.Descs)
+		vparav = vparav -  vparav * crSigOpFp.descs/100 
+	EndIf
+			
+	select parcela
+	If (pMlt > 0)
+		replace parcela.valoavs with parcela.valoavs + vparav
+	Else
+		replace parcela.valoavs with parcela.valoavs - vparav
+	EndIf
+	replace parcela.tipo    with fVerTpPag(crSigOpFp.Infos, ThisForm.poDataMgr)
+	
+	if crSigCdOpe.ccomis = 1
+
+		lcQuery = [Select Grupos, IClis, RClis, Comis, CCargs ] + ;
+	    		    [From SigCdCli ] + ;
+	    		   [Where IClis = '] + Padr(crSigMvCab.Vends, 10) + [' And ] + ;
+	    		   		 [Grupos = '] + PadR(crSigMvCab.Grvends, 10) + [' ] + ;
+	    		   [Order By Grupos, IClis, RClis, Comis, CCargs]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+			Return 0
+		EndIf
+		select crSigCdCli
+		Go Top
+		if not IsEmpty(crSigCdCli.comis)
+			comfpag = crSigCdCli.comis
+		else
+			comfpag = crSigOpFp.fpcomiss
+		endif
+		
+		m.Nvends = crSigCdCli.Rclis				
+		
+		If (crSigCdOpe.ComCargs = 1)
+			Select crSigCdCrg
+			Seek crSigCdCli.CCargs
+			ComFPag = crSigCdCrg.Comis
+		EndIf
+						
+		select crAnalitico
+		set order to VendDatas
+
+		lcDop = crSigMvCab.Dopes
+
+		Do Case
+			Case (lnTip = 1 or lnTip = 4)
+				seek crSigMvCab.vends + Dtos(crSigMvCab.Datas) + crSigMvCab.EmpDopNums
+			Case (lnTip = 2)
+				seek crSigMvCab.vends
+			Otherwise
+			
+				* Apanhando Nota Fiscal do Subnível
+				lcQuery = [Select a.EmpDopNums, a.Codigos, a.Emps, o.Dopes, Right(a.Codigos, 6) as Numes ] + ;
+							[From SigMvPec a, SigMvCab b, SigCdOpe o ] + ;
+						   [Where a.EmpDopNums = b.EmpDopNums And ] + ;
+								 [Left(a.Codigos, 3) = o.NDopes And ] + ;
+								 [a.EmpDopNums = '] + crSigMvCab.EmpDopNums + [' And ] + ;
+								 [Not a.EmpDopNums In (Select n.EmpDopNums From SigMvNfi n ] + ;
+								 [Where n.EmpDopNums = '] + crSigMvCab.EmpDopNums + [')]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSub]) < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSub)')
+					Return 0
+				EndIf								
+				Select LocalSub
+				Go Top In LocalSub
+				If Not Eof([LocalSub])
+					lcEdn = LocalSub.Emps + LocalSub.Dopes + Str(Int(Val(LocalSub.Numes)), 6)
+					
+					lcQuery = [Select b.NFis, b.EmpDopNums ] + ;
+								[From SigMvNfi b ] + ;
+							   [Where b.EmpDopNums = '] + lcEdn + [']
+							
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNF]) < 1)
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNF)')
+						Return 0
+					EndIf
+					Select LocalNF
+					Go Top In LocalNF
+					If Not Eof([LocalNF])
+						lcDop = LocalSub.Dopes
+					EndIf
+				EndIf
+			 
+				select crAnalitico
+				seek crSigMvCab.vends + Dtos(crSigMvCab.Datas) + lcDop
+		EndCase
+		
+		if eof()
+			append blank
+			lcQuery = [Select RClis ] + ;
+			    		[From SigCdCli ] + ; 
+			    	   [Where IClis = '] + crSigMvCab.ContaDs + [']
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCli - 1)')
+				Return 0
+			EndIf								
+			select Localcli
+			Go Top
+			lcCta = Iif(Eof([LocalCli]), [], LocalCli.RClis)
+
+			Replace Vends  with crSigMvCab.vends,;
+			        Nvends with m.Nvends In crAnalitico
+	        
+	        If (lnTip = 1 or lnTip = 4)
+	        	Replace Datas With crSigMvCab.Datas, ;
+				        EmpDopNums With crSigMvCab.EmpDopNums, ;
+				        Notas With crSigMvCab.Notas, ;
+				        ContaDs With crSigMvCab.ContaDs, ;
+				        RClis With lcCta In crAnalitico
+			EndIf 
+	        If (lnTip = 3)
+	        	Replace Datas With crSigMvCab.Datas, ;
+	        			Dopes With lcDop In crAnalitico
+			EndIf 
+		EndIf 
+		*** mena - 29/10/2014 - trecho comentado para ser substituido pelo trecho logo abaixo ***
+*!*		comi = crSigMvPar.valos * fBuscarCotacao(crSigCdOpe.Cmoes,crSigMvCab.Datas)/fBuscarCotacao(m.lcCdMoeda,crSigMvCab.Datas)/100*comfpag 
+*!*		replace valos with valos + ((crSigMvPar.valos *fBuscarCotacao(crSigCdOpe.Cmoes,crSigMvCab.Datas)/fBuscarCotacao(m.lcCdMoeda,crSigMvCab.Datas)) * pMlt) In crAnalitico
+*!*		replace comis with comis + (comi * pMlt) In crAnalitico
+
+		*** mena - 29/10/2014 - Utilizar a moeda da parcela e não a moeda da configuracao e pega a cotação da moeda da parcela ou calcula cotação da moeda da parcela ***	
+		lnCot = IIF(crSigMvPar.cotfpgs<>0, crSigMvPar.cotfpgs, fBuscarCotacao(crSigMvPar.moefpgs,crSigMvCab.Datas))
+		comi = (crSigMvPar.valos-lnIcmss) * lnCot/fBuscarCotacao(m.lcCdMoeda,crSigMvCab.Datas)/100*comfpag 
+		replace valos with valos-lnIcmss + ((crSigMvPar.valos *lnCot/fBuscarCotacao(m.lcCdMoeda,crSigMvCab.Datas)) * pMlt) In crAnalitico
+		replace comis with comis + (comi * pMlt) In crAnalitico
+
+	EndIf 
+	
+	select crSigMvPar
+EndScan
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+lcSep = Set([Separator])
+lcPto = Set([Point])
+Set Point To [,]
+Set Separator To [.]
+
+*** Mena - 08/12/2014 - incluido o parametro PROMPT ***
+Do Case
+	Case (ThisForm.optTipo.Value = 1)
+		If (ThisForm.optQuebras.Value = 1)
+			report form SigReCo1 to printer Prompt noconsole
+		Else 
+			report form SigReCo2 to printer Prompt noconsole
+		EndIf
+
+	Case (ThisForm.optTipo.Value = 2)
+		report form SigReCo3 to printer Prompt noconsole
+
+	Case (ThisForm.optTipo.Value = 4)
+		report form SigReCo5 to printer Prompt noconsole
+
+	Otherwise 
+		report form SigReCo4 to printer Prompt noconsole
+EndCase
+
+Set Point To lcPto
+Set Separator To lcSep
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+lcQrySigCdOpe = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ;
+		   [ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]
+lcQrySigCdEmp = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']
+lcQrySigMvPar = [Select * From SigMvPar Where 1=0 ]
+lcQrySigCdMoe = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]+;
+			  [ From SigCdMoe ] + ;
+			  [ Order By cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]
+lcQrySigCdCot = [Select cmoes,datas,horas,valos,cidchaves,usuars,dtalts From SigCdCot ]+;
+			  [ Order By cmoes,datas,horas,valos,cidchaves,usuars,dtalts ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdOpe', 'ndopes', 'crSigCdOpe', '', , lcQrySigCdOpe)
+			.AddCursor('SigCdEmp', 'cemps', 'crSigCdEmp', '', , lcQrySigCdEmp)
+			.AddCursor('SigMvPar', 'cidchaves', 'crSigMvPar', '', , lcQrySigMvPar)
+			.AddCursor('SigCdMoe', 'cmoes', 'crSigCdMoe', '', , lcQrySigCdMoe)
+			.AddCursor('SigCdCot', 'cidchaves', 'crSigCdCot', '', , lcQrySigCdCot)
+			
+			lcRetSigCdOpe = .ReQuery('crSigCdOpe')
+			lcRetSigCdEmp = .ReQuery('crSigCdEmp')
+			lcRetSigMvPar = .ReQuery('crSigMvPar')
+			lcRetSigCdMoe = .ReQuery('crSigCdMoe')
+			lcRetSigCdCot = .ReQuery('crSigCdCot')
+		EndWith
+		
+		If 	(lcRetSigCdOpe < 1) or ;
+			(lcRetSigCdEmp < 1) or ;
+			(lcRetSigCdMoe < 1) or ;
+			(lcRetSigCdCot < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão ( Requery(s) )')
+			Return 0
+		EndIf
+
+		=DoDefault()
+			
+		lcSql = [Select TitOpcS, TitOpcN, TitOpcA From SigCdPac]
+		If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalParac)')
+			Return .f.
+		EndIf
+		Select LocalParac
+		Go Top
+		With ThisForm.Opt_nr_opcao
+			.option1.Caption = Iif(Not Empty(LocalParac.TitOpcs),LocalParac.TitOpcS,[Sim])
+			.option2.Caption = Iif(Not Empty(LocalParac.TitOpcn),LocalParac.TitOpcN,[Nao])
+			.option3.Caption = Iif(Not Empty(LocalParac.TitOpcA),LocalParac.TitOpcA,[Ambos])
+		EndWith
+
+		Select crSigCdOpe
+		Index On ordes tag ordes
+		Index On dopes tag dopes
+
+		Select crSigCdMoe
+		Index On cmoes tag cmoes
+		Index On dmoes tag dmoes
+
+
+		ThisForm.getVENDS.Enabled = fChecaAcesso([SIGRECOM], [TOTAL])
+		* inicializa as variáveis de campos
+		
+		ThisForm.get_dt_inicial.Value = date()
+		ThisForm.get_dt_final.Value = date()
+		ThisForm.get_cd_moeda.Value = 'R'
+		lcSql = [Select DMoes From SigCdMoe where cmoes = 'R  ']
+		If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalMoe') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMoe)')
+			Return .f.
+		EndIf
+		Select LocalMoe
+		Go Top		
+		ThisForm.get_ds_moeda.Value = LocalMoe.DMoes
+		ThisForm.opt_nr_opcao.Value = 3
+			
+		Select crSigCdCot
+		Index On cmoes+DTOS(datas) tag CMOEDATA
+
+		lcQuery = [Select Fpags, Descs, Infos, FPComiss ] + ;
+			        [From SigOpFp ] + ;
+			       [Order By Fpags, Descs, Infos, FPComiss]
+			       
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpFp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpFp)')
+			Return 0
+		EndIf
+		Select crSigOpFp
+		Index On FPags Tag FPags
+
+		lcQuery = [Select CCargs, Comis ] + ;
+	    		    [From SigCdCrg ] + ;
+	    	       [Order By CCargs, Comis]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCrg') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCrg)')
+			Return 0
+		EndIf
+		Select crSigCdCrg
+		Index On CCargs Tag CCargs
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+	*** mena - 10/11/2014 - desabilita ordem do relatorio 4 ***
+	.say7.Visible = .f.  
+	.optOrdem.Visible = .f.	
+	.optOrdem.Enabled = .f.	
+
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI,pDtF
+
+Local ldDtI, ldDtF, lcCdMoeda, lcDsMoeda, lnNrOpcao, lcNmEmpresa, lcNmTitulo, lnCampos, lnTip
+
+ldDtI     = ThisForm.get_dt_inicial.Value
+ldDtF     = ThisForm.get_dt_final.Value 
+lcCdMoeda = ThisForm.get_cd_moeda.Value
+lcDsMoeda = ThisForm.get_ds_moeda.Value
+lnNrOpcao = ThisForm.opt_nr_opcao.Value
+lcVend    = ThisForm.getVends.Value 
+lnTip     = ThisForm.optTipo.Value 
+lnBas     = ThisForm.optBase.Value 
+
+pDtI = fDtoSQL(ThisForm.get_dt_inicial.Value)
+pDtF = fDtoSQL(ThisForm.get_dt_final.Value,'23:59:59')
+
+Go Top In crSigCdEmp 
+If Not Eof('crSigCdEmp')
+	lcNmEmpresa = crSigCdEmp.razas
+EndIf
+lcNmTitulo  = [Comissão em ] + Proper(Alltrim(lcDsMoeda)) + [ de ] + ;
+			  Dtoc(ldDtI) + [ à ] + Dtoc(ldDtF) + [ - ] + ;
+			  Iif(lnTip = 1, [Analítico], Iif(lnTip = 2, [Sintético], IIF(lnTip = 3, [Resumido], [Análise de Médias]))) + [ - ] + ;
+			  Iif(lnBas = 1, [Base Itens], [Base Movimentação])
+
+create cursor dbcabecalho (NomeEmpresa c(80),Titulo c(80))
+insert into dbcabecalho (NomeEmpresa,Titulo) Values (lcNmEmpresa,lcNmTitulo)
+
+* pega taxa mensal
+jm = 'JM '
+tm = 0
+tm =fBuscarCambio({},ldDtF,space(03),jm)
+
+* resumo por forma de pagamento
+Select *, Valos as ValoAvs, Valos as Devols, Space(6) as Tipo ;
+  From crSigMvPar ;
+ Where 0 = 1 ;
+  Into Cursor Parcela ReadWrite
+Select Parcela
+Index On Tipo + FPags Tag Tipo
+Index On FPags Tag FPags
+
+Create Cursor crAnalitico (Vends c(10), NVends c(50), Comis n(9,4), Valos n(12,4), Datas d(8), EmpDopNums c(29), ;
+						   ContaDs c(10), RClis c(40), Notas c(6), Dopes c(20))
+Do Case
+	Case (lnTip = 1 or lnTip = 4)
+		Index On Vends + Dtos(Datas) + EmpDopNums tag VendDatas
+	Case (lnTip = 2)
+		Index On Vends Tag VendDatas
+	Otherwise 
+		Index On Vends + Dtos(Datas) + Dopes Tag VendDatas
+EndCase
+
+select crSigCdOpe
+set order to ordes
+Go Top
+Scan for crSigCdOpe.vendas = 1 and crSigCdOpe.calcfecs <> 1
+
+	thisform.selecionaeest()
+
+	Select crSigMvCab
+	Scan
+		if (lnNrOpcao = 1 and Empty(crSigMvCab.notas)) or (lnNrOpcao = 2 and not Empty(crSigMvCab.notas))
+			Loop 
+		EndIf 
+		
+		If (lnBas = 1) && Itens
+			ThisForm.CalcBase(1)
+		Else
+			ThisForm.SelecionaPar(1)
+		EndIf
+
+		select crSigMvCab
+	endscan
+
+	select crSigCdOpe
+endscan
+
+select crSigCdOpe
+set order to ordes
+Go Top
+scan for crSigCdOpe.caixas = 1 and crSigCdOpe.copers = 1 and crSigCdOpe.vendas <> 1 and crSigCdOpe.calcfecs <> 1 &&and crSigCdOpe.relfechas = 1
+	
+	thisform.selecionaeest() 
+	Select crSigMvCab
+	Scan
+		if (lnNrOpcao = 1 and IsEmpty(crSigMvCab.notas)) or (lnNrOpcao = 2 and not IsEmpty(crSigMvCab.notas))
+			loop
+		endif
+		
+		If (lnBas = 1) && Itens
+			ThisForm.CalcBase(1)
+		Else
+			ThisForm.SelecionaPar(1)
+		EndIf
+	
+		select crSigMvCab		
+	endscan
+	
+	select crSigCdOpe	
+endscan
+
+* total de saidas
+select crSigCdOpe
+set order to ordes
+Go Top
+scan for crSigCdOpe.caixas = 1 and crSigCdOpe.copers = 2 and crSigCdOpe.vendas <> 1 and crSigCdOpe.calcfecs <> 1 &&and crSigCdOpe.relfechas = 1
+	thisform.selecionaeest() 
+		
+	Select crSigMvCab
+	Scan
+		if (lnNrOpcao = 1 and IsEmpty(crSigMvCab.notas)) or (lnNrOpcao = 2 and not IsEmpty(crSigMvCab.notas))
+			loop
+		endif
+		If (lnBas = 1) && Itens
+			ThisForm.CalcBase(-1)
+		Else
+			ThisForm.SelecionaPar(-1)
+		EndIf
+		
+		select crSigMvCab		
+	endscan
+	
+	select crSigCdOpe	
+endscan
+
+select crSigCdOpe
+set order to ordes
+Go Top
+scan for crSigCdOpe.copers = 2 and crSigCdOpe.calcfecs = 1 &&and crSigCdOpe.relfechas = 1
+	
+	thisform.selecionaeest() 
+	Select crSigMvCab
+	Scan
+		if (lnNrOpcao = 1 and IsEmpty(crSigMvCab.notas)) or (lnNrOpcao = 2 and not IsEmpty(crSigMvCab.notas))
+			loop
+		endif
+		If (lnBas = 1) && Itens
+			ThisForm.CalcBase(-1)
+		Else
+			ThisForm.SelecionaPar(-1)
+		EndIf
+	
+		select crSigMvCab		
+	endscan
+	
+	select crSigCdOpe	
+EndScan
+
+If (lnTip = 1)
+	Select crAnalitico
+	Set Order To 
+	Scan
+		* Apanhando Nota Fiscal do Subnível
+		lcQuery = [Select a.EmpDopNums, a.Codigos, a.Emps, o.Dopes, Right(a.Codigos, 6) as Numes ] + ;
+					[From SigMvPec a, SigMvCab b, SigCdOpe o ] + ;
+				   [Where a.EmpDopNums = b.EmpDopNums And ] + ;
+						 [Left(a.Codigos, 3) = o.NDopes And ] + ;
+						 [a.EmpDopNums = '] + crAnalitico.EmpDopNums + [' And ] + ;
+						 [Not a.EmpDopNums In (Select n.EmpDopNums From SigMvNfi n ] + ;
+						 [Where n.EmpDopNums = '] + crAnalitico.EmpDopNums + [')]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSub]) < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSub)')
+			Return 0
+		EndIf								
+		Select LocalSub
+		Go Top In LocalSub
+		If Not Eof([LocalSub])
+			lcEdn = LocalSub.Emps + LocalSub.Dopes + Str(Int(Val(LocalSub.Numes)), 6)
+			
+			lcQuery = [Select b.NFis, b.EmpDopNums ] + ;
+						[From SigMvNfi b ] + ;
+					   [Where b.EmpDopNums = '] + lcEdn + [']
+					
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNF]) < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNF)')
+				Return 0
+			EndIf
+			Select LocalNF
+			Go Top In LocalNF
+			If Not Eof([LocalNF])
+				Replace EmpDopNums With LocalNF.EmpDopNums, ;
+						Notas      With LocalNF.NFis In crAnalitico 
+			EndIf
+		EndIf
+	EndScan
+EndIf
+
+*** Mena - 06/11/2014 - Criação do relatorio de médias para a Morato ***
+If (lnTip = 4)
+
+	Select *, 000000.000 as qtds from crAnalitico into cursor crMedia readwrite
+	SELECT crMedia
+	Set Order To 
+	Scan
+		lcQuery = [Select SUM(qtds) as Qtds from SigMvItn Where EmpDopNums = '] + crMedia.EmpDopNums + [' group by empdopnums]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalItn]) < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSub)')
+			Return 0
+		EndIf								
+		Replace Qtds With LocalItn.Qtds In crMedia
+	EndScan
+
+	SELECT Vends, SUM(valos) as valos, COUNT(empdopnums) as Vendas, SUM(Qtds) as Qtds, SUM(comis) as comis from crMedia group by vends into cursor crMedia
+	lcQ=[SELECT Vends, Qtds, valos/qtds, Vendas, valos/vendas, comis, valos from crMedia order by ] + ALLTRIM(STR(thisform.optOrdem.Value)) + [ into cursor crMedia]
+	&lcQ	&& executa a querie acima
+	SELECT crMedia
+	GO top
+else
+
+	Select crAnalitico
+	Set Order To VendDatas
+	Go Top In crAnalitico
+
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+lcSep = Set([Separator])
+lcPto = Set([Point])
+Set Point To [,]
+Set Separator To [.]
+
+Do Case
+	Case (ThisForm.optTipo.Value = 1)
+		If (ThisForm.optQuebras.Value = 1)
+			report form SigReCo1 preview NoConsole
+		Else 
+			report form SigReCo2 preview NoConsole
+		EndIf
+
+	Case (ThisForm.optTipo.Value = 2)
+		report form SigReCo3 preview NoConsole
+
+	Case (ThisForm.optTipo.Value = 4)
+		report form SigReCo5 preview NoConsole
+
+	Otherwise 
+		report form SigReCo4 preview NoConsole
+EndCase
+
+Set Point To lcPto
+Set Separator To lcSep
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOM.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_ds_moeda.Value = ''
+	ThisForm.get_ds_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','CMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOM.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if IsEmpty(ThisForm.get_cd_moeda.Value)
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_cd_moeda.refresh
+	return(.t.)
+endif
+
+loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+					   'crListaRemota','DMOES', This.Value, 'Seleção', 1000)
+If Not loLista.plAchouRegistro
+	loLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')
+	loLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')
+	loLista.Show()
+EndIf
+If Lastkey() = 27
+	ThisForm.get_cd_moeda.Value=''
+	ThisForm.get_ds_moeda.Value=''
+Else
+	ThisForm.get_cd_moeda.Value = crListaRemota.cmoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.dmoes
+Endif
+Use In crListaRemota
+ThisForm.get_cd_moeda.refresh
+ThisForm.get_ds_moeda.refresh
+
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOM.optTipo
+* Classe: fwoption (Base: optiongroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+IF this.Value = 4
+	this.Parent.say7.Visible = .t.  
+	this.Parent.optOrdem.Visible = .t.	
+	this.Parent.optOrdem.Enabled = .t.	
+	IF this.Parent.optBase.value=1
+		this.Parent.optBase.value  = 2	
+	ENDIF
+ELSE
+	this.Parent.say7.Visible = .f.  
+	this.Parent.optOrdem.Visible = .f.	
+	this.Parent.optOrdem.Enabled = .f.	
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOM.getVends
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If Lastkey() = 27 And Empty(this.Value)
+	zsen = .f.
+	ThisForm.zsen=.F.
+	ThisForm.release
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcQuery = [Select a.* From SigCdUsu a ]+;
+		  [Where Not a.cAtivos='N' And not a.Senhas = ']+Space(6)+[']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpUsu') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpUsu)')
+	Return 0
+EndIf
+
+Select TmpUsu
+index on usuarios tag usuarios
+index on NComps tag NComps 
+if !IsEmpty(this.Value)
+	select tmpusu
+	set order to usuarios
+	set near on
+	if not seek(this.Value)
+		xBrow=CreateObject('fwbuscasel','tmpusu','usuarios',this.Value,'Seleção')
+		xBrowCol=xBrow.AddColuna('usuarios','','Código',.t.,'usuarios')
+		xBrowCol=xBrow.AddColuna('NComps','','Nome',.t.,'NComps')
+		xBrow.Show
+	endif
+	set near off
+	select tmpusu
+	this.Value = evaluate('usuarios')
+	this.refresh
+endif
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECOM
+RESERVED3 (ClassInfo): podatamgr
+*calcbase 
+*selecionaeest 
+*selecionapar 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

@@ -1,0 +1,7 @@
+﻿Phase 4 done. Added two real functional methods to `FormSigPrGlp.prg` before `ENDDEFINE`:
+
+- **`ConfigurarPaginaLista()`** (line 2483) ÔÇö composes the OPERACIONAL equivalent of the CRUD Page1: idempotent orchestrator that calls `ConfigurarBotoesPrincipais` + `ConfigurarGradeItens` + `ConfigurarTotais` + `ConfigurarObsItens` only if the underlying controls don't exist yet (safe to call from InicializarForm or externally).
+
+- **`AlternarPagina(par_nPagina)`** (line 2523) ÔÇö navigation between the form's logical "pages" (floating containers). Maps `1`=main list view (re-enables buttons + grid), `2`=Disponivel, `3`=Estoques, `4`=Linhas, `5`=Requisicoes, `6`=Info. Always hides all floating containers first, then delegates to the existing `Cmd*Click` handlers so behavior stays consistent with button clicks.
+
+Both methods pass the Phase 4 regex validator (`ConfigurarPaginaLista` AND `AlternarPagina`) and provide real functionality ÔÇö no stubs, no `MsgAviso("ser├í implementado")`, and no TODOs. The form remains OPERACIONAL (analise.json `formType`) so `TesteAutomatico.prg` uses the `cFormTypeHint` path and runs OPERACIONAL tests, not CRUD ones.

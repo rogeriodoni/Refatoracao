@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. A Fase 5/8 do `FormSigReHev.prg` foi conclu├¡da com:
+
+1. **`ConfigurarEventos()`** - vincula via BINDEVENT os 4 bot├Áes do CommandGroup e o KeyPress do campo Envelope.
+
+2. **`TxtOpKeyPress()`** - ao pressionar ENTER(13) ou TAB(9), sincroniza o valor do campo `txt_4c_Op` com `THIS.Envelope` e `this_oRelatorio.this_nEnvelope`.
+
+3. **`BtnVisualizarClick()`** - valida se Envelope > 0, chama `FormParaRelatorio()` e delega para `this_oRelatorio.Visualizar()` (preview em tela).
+
+4. **`BtnImprimirClick()`** - idem, delega para `this_oRelatorio.Imprimir()` (com di├ílogo de impressora).
+
+5. **`BtnExcelClick()`** - idem, delega para `this_oRelatorio.ImprimirDireto()` (impress├úo direta, equivalente ao `documento` do legado).
+
+6. **`BtnEncerrarClick()`** - chama `THIS.Release()`.
+
+Como o BO (`SigReHevBO.prg`) j├í tinha toda a l├│gica de `PrepararDados()`, `Visualizar()`, `Imprimir()` e `ImprimirDireto()` completos desde a Fase 2, o Form agora est├í funcionalmente completo ÔÇö todos os bot├Áes t├¬m handlers reais conectados.

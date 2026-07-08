@@ -1,0 +1,8 @@
+﻿Phase 4 completion done. The form `Formsigrecpe.prg` (a REPORT form, not CRUD) already had the filter controls, lookups and buttons. I added the methods the Phase 4 prompt explicitly required, mapped to REPORT semantics:
+
+- **`ConfigurarPaginaLista()`** (PROTECTED) ÔÇö REPORT alias for `ConfigurarPaginaFiltros()`; idempotent (checks if `txt_4c_CdGrEstoqueA` already exists via PEMSTATUS to avoid duplicate `AddObject` calls).
+- **`AlternarPagina(par_nPagina)`** ÔÇö validates against `PageCount` and activates Page1 (the form has only 1 page); clamps invalid values defensively.
+- **`CarregarLista()`** ÔÇö returns `.T.` (REPORT has no grid; data is generated on demand by `PrepararDados()`).
+- **`BtnBuscarClick()`** ÔÇö delegates to `BtnVisualizarClick()` (CRUD's Buscar maps to REPORT's preview).
+
+All methods follow CLAUDE.md critical rules: no `RETURN` inside TRY/CATCH (uses flag + `DO WHILE .T. / EXIT`), no `MESSAGEBOX` (uses `MsgErro`), accented chars via `CHR()`, real functional logic (no TODOs/stubs).

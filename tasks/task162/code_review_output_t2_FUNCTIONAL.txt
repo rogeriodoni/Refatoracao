@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi analisado e corrigido:
+
+**Problemas j├í resolvidos no c├│digo atual (n├úo precisaram de altera├º├úo):**
+- `[INIT-DUPLICADO]`: Init() j├í cont├®m somente `RETURN DODEFAULT()` (linha 69)
+- `[GRID-WITH]`: RecordSource e ControlSources j├í est├úo fora do bloco WITH (linhas 626-637)
+- `[CONTAINER-VISIVEL]`: TornarControlesVisiveis j├í tem INLIST com CNT_4C_CABECALHO, CNT_4C_JUSTIFICATIVA, CNT_4C_IMPCHMAT, CNT_4C_PROCURAR + recurs├úo antes do LOOP (linhas 692-701)
+- 10 dos 12 `[LAYOUT-POSITION]` eram falsos positivos ÔÇö o review comparou posi├º├Áes escaladas 1.25x com valores originais sem escala
+
+**Corre├º├Áes aplicadas (2 posi├º├Áes com escala errada):**
+- `lbl_4c_Say2` Left: `840` ÔåÆ `858` (686 ├ù 1.25 = 857.5 Ôëê 858)
+- `txt_4c_Dt_final` Left: `858` ÔåÆ `876` (701 ├ù 1.25 = 876.25 Ôëê 876)

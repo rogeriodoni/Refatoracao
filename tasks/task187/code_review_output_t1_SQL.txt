@@ -1,0 +1,43 @@
+﻿An├ílise conclu├¡da. Todos os 5 problemas flagados s├úo **falsos positivos** do validador autom├ítico:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### CONTROLCOUNT (Forma: linhas 385ÔÇô417)
+N├úo ├® SQL. ├ë a propriedade VFP `ControlCount` usada para iterar controles do form (`THIS.ControlCount`, `loc_oCtrl.ControlCount > 0`). O validador confundiu acesso a propriedade VFP com condi├º├úo WHERE SQL.
+
+### CEMPS (BO: linha 274)
+```foxpro
+SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = ...
+```
+Lookup leg├¡timo na tabela `SigCdEmp` pela chave prim├íria. ├ë a busca de empresa por c├│digo ÔÇö se removida, a query n├úo funciona.
+
+### DOPPS (BO: linha 424)
+```foxpro
+SELECT * FROM SigCdOpd WHERE Dopps = ...
+```
+Lookup leg├¡timo na tabela `SigCdOpd` (opera├º├úo padr├úo) pela chave prim├íria `Dopps`. Necess├írio para buscar `GruDests/ConDests` para inser├º├úo em `TmpCabec`.
+
+### CGRUS (BO: linha 615)
+```foxpro
+SELECT GeraTubs FROM SigCdGrp WHERE CGrus = ...
+```
+Lookup leg├¡timo na tabela `SigCdGrp` (grupos de produto) pela chave prim├íria `CGrus`. Necess├írio para verificar flag `GeraTubs`.
+
+### ICLIS (BO: linha 737)
+```foxpro
+SELECT TOP 1 RClis FROM SigCdCli WHERE IClis = ...
+```
+Lookup leg├¡timo na tabela `SigCdCli` (clientes) pela chave prim├íria `IClis`. Necess├írio para popular campo `DConta` (raz├úo social) no `TmpCabec`.
+
+---
+
+## Conclus├úo
+
+Nenhuma corre├º├úo necess├íria. Os 5 itens s├úo falsos positivos:
+
+- **CONTROLCOUNT**: propriedade VFP, n├úo coluna SQL
+- **CEMPS / DOPPS / CGRUS / ICLIS**: condi├º├Áes WHERE corretas em queries auxiliares de lookup por chave prim├íria, em tabelas diferentes da query principal
+
+A instru├º├úo "NAO remover campos, funcionalidades ou lookups" prevalece. Remover qualquer dessas condi├º├Áes quebraria as queries correspondentes.

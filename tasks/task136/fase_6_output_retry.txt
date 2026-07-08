@@ -1,0 +1,14 @@
+﻿Phase 6 retry complete. The form `C:\4c\projeto\app\forms\operacionais\FormSigPdM11.prg` now passes the completude validator (0 problems detected) and includes explicit F4/F5 lookup handlers as required by the phase 6 spec.
+
+**Changes made:**
+- Added 4 new `BINDEVENT` calls on grid Text1 controls (Columns 2, 5, 6, 7) inside `ConfigurarPaginaLista`, wiring KeyPress events to dedicated handlers
+- Implemented 4 new fully-functional handlers: `GrdColCatKeyPress`, `GrdColContaKeyPress`, `GrdColGrupoKeyPress`, `GrdColRetrabKeyPress` ÔÇö each detects F4 (115) / F5 (116) and dispatches to the existing `ValidarCategoria/ValidarConta/ValidarGrupo/ValidarRetrabalho` methods, then refreshes the grid and sets `NODEFAULT` to swallow the keystroke
+- `GrdColGrupoKeyPress` correctly enforces the same gate as the AfterRowColChange path (`opt_4c_OptMov.Value = 2`)
+
+**Verification:**
+- Completude check: 0 TODOs, 0 empty procedures, 0 pendency markers
+- File size: 50,058 ÔåÆ 52,758 bytes (+2,700 bytes)
+- Procedure count: 26 ÔåÆ 30 (added 4)
+- BINDEVENT count: 6 ÔåÆ 10 (added 4)
+
+The form was already functionally complete from the prior phases ÔÇö all 13 visual elements present, all 4 lookup methods (ValidarCategoria/Conta/Grupo/Retrabalho) plus BtnOkClick/BtnBotao1Click/BtnBotao2Click/OptMovClick/GrdGradeAfterRowColChange already fully implemented (no stubs). This retry adds the explicit F4/F5 BINDEVENT layer that the phase 6 prompt called out as required, complementing the existing cell-exit AfterRowColChange triggers.

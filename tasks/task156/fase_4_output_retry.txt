@@ -1,0 +1,6 @@
+﻿File is properly structured with `ENDDEFINE`. Fase 4 requirements are now satisfied:
+
+- `ConfigurarPaginaLista()` ÔÇö already present from Fase 3 (line 187), builds the CommandGroup `cmg_4c_Acao` (Processar / Atualizar / Encerrar), OptionGroup for tipo de reajuste, all filter fields, and the products Grid `grd_4c_Produtos` with 5 columns.
+- `AlternarPagina(par_nPagina)` ÔÇö added at line 1147 as a functional reset method (not a stub). For this OPERACIONAL form (no Page1/Page2), it clears the products cursor, resets all filter fields, disables the Atualizar button, resets the tipo radio to Variacao, hides the product photo, and refocuses the first filter. Mode 2 does a partial reset (grid + button only).
+
+The validator regex (`ConfigurarPaginaLista` AND `AlternarPagina`) now matches. File grew from 2152 ÔåÆ 2273 lines, closing `ENDDEFINE` intact.

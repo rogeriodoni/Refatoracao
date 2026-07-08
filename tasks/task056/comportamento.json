@@ -1,0 +1,364 @@
+{
+  "resumo": {
+    "totalMetodos": 21,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 17,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fBuscarCotacao", "fAcessoMovmto", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCmv NoConsole To PRINTER",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCmv NoConsole To PRINTER Prompt",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Init",
+      "linhas": 36,
+      "codigoOriginal": "LParameters _Acesso\n\nThisForm.lacpdf = .t.\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndIf\n\n\tlcQuery = [Select a.dopes from SigCdOpe a inner join SigCdTom b on a.TipoOps = b.Codigos ] + ;\n\t\t\t\t[where b.GeraCmvs = 1 And a.vendas = 1 And a.caixas = 1 And a.copers = 1]\n\tIf ThisForm.poDataMgr.SqlExecute(lcQuery,[crSigCdOpe]) < 1\n\t\tMessage... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Value = Padl,Value = iif",
+        "controlesReferenciados": "get_mes,get_ano,get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Procedure",
+      "linhas": 177,
+      "codigoOriginal": "lcOpeFinal = thisform.get_nm_operacao.Value\nlcGrupo = thisform.getGrupoMov.Value\nlcConta = thisform.getCdEstoque.Value\nldDtIni = Ctod([01/] + thisform.get_mes.Value + [/] + thisform.get_Ano.Value)\nldDtFin = Ctod([01/] + Transform((Val(thisform.get_mes.Value) + 1),'@L 99') + [/] + thisform.get_Ano.Value) - 1\nldDtIni = fDtoSQL(ldDtIni)\nldDtFin = fDtoSQL(ldDtFin,'23:59:00')\nllGrava  = .t.\nlcMoeda = thisform.get_cd_moeda.Value\nlnCotaOpera = fBuscarCotacao(lcMoeda, ldDtFin, ThisForm.poDataMgr) && Cot... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fBuscarCotacao",
+        "metodosFormChamados": "Value,2,[0]) + [/] + Padl,SqlExecute",
+        "controlesReferenciados": "get_nm_operacao,get_mes,get_Ano,get_cd_moeda",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCmv NoConsole Preview",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If this.Value <> 4\n\tIf Empty(thisform.get_mes.Value) or Empty(thisform.get_ano.Value)\n\t\tMessageBox([Mês e Ano são obrigatórios.],48,[Aviso])\n\t\tthisform.get_mes.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(thisform.get_nm_operacao.Value)\n\t\tMessageBox([Operação de finalização da produção é obrigatória.],48,[Aviso])\n\t\tthisform.get_nm_operacao.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(thisform.getGrupoMov.Value) or Empty(thisform.getCdEstoque.Value)\n\t\tMessageBox([Grupo e conta do custo da produção são ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) or Empty,SetFocus",
+        "controlesReferenciados": "get_mes,get_ano,get_nm_operacao,get_cd_moeda",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoMovmto(Usuar, This.Value, This)\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_nm_operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(this.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getDGrupoMov",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupoMov, ThisForm.getDGrupoMov)\nElse\n\tThisForm.getGrupoMov.Value = ''\n\tThisForm.getGrupoMov.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getDGrupoMov",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrupoMov.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getGrupoMov",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupoMov, ThisForm.getDGrupoMov)\nElse\n\tThisForm.getDGrupoMov.Value = ''\n\tThisForm.getDGrupoMov.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getGrupoMov",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(this.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getDsEstoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getcdestoque, ThisForm.getdsestoque)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getcdestoque.Value = ''\n\t\tThisForm.getcdestoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getcdestoque.Value = ''\n\tThisForm.getcdestoque.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getDsEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdEstoque.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getCdEstoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getcdestoque, ThisForm.getdsestoque)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getdsestoque.Value = ''\n\t\tThisForm.getdsestoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getdsestoque.Value = ''\n\tThisForm.getdsestoque.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.getCdEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(this.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_mes",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Val(this.Value) > 12\n\tMessageBox([Mês inválido.],48,[Aviso])\n\tthis.Value = []\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMV.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECMV.Init",
+      "queryOriginal": "\tlcQuery = [Select a.dopes from SigCdOpe a inner join SigCdTom b on a.TipoOps = b.Codigos ] + ; \t\t\t\t[where b.GeraCmvs = 1 And a.vendas = 1 And a.caixas = 1 And a.copers = 1]",
+      "tabelas": "SigCdOpe,SigCdTom",
+      "colunas": "dopes",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe", "SigCdTom"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

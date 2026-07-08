@@ -1,0 +1,10 @@
+﻿Feito. Resumo das corre├º├Áes:
+
+**[GRID-WITH] corrigido** ÔÇö `loc_oGrid.ColumnCount = 5` e `loc_oGrid.RecordSource = "xMFas"` movidos para fora do bloco `WITH loc_oGrid`, usando refer├¬ncia expl├¡cita. Agora as colunas existem no momento em que `.Column1.ControlSource` etc. s├úo acessados dentro do WITH.
+
+**[LAYOUT-POSITION] ├ù3 ÔÇö falsos positivos** ÔÇö Os containers j├í est├úo nas posi├º├Áes corretas:
+- `cnt_4c_Container1` Top=108 Ô£ô (original=108)
+- `cnt_4c_Origem` Top=185 Ô£ô (original=185)  
+- `cnt_4c_Destino` Top=261 Ô£ô (original=261)
+
+O validador confundiu o `Top=3` dos labels internos (ex: `lbl_4c_TituloOrigem` dentro de `cnt_4c_Origem`) com o Top do container pai ÔÇö n├úo h├í nada a corrigir nestes tr├¬s casos.

@@ -1,0 +1,8 @@
+﻿The FASE 9 implementation is complete and verified. All 4 edits are in place:
+
+1. **Line 2271** ÔÇö `THIS.ConfigurarPgpgComposicao(loc_oPgfInner.Page2)` called in `ConfigurarPaginaDados()` before `TornarControlesVisiveis`
+2. **Lines 4924ÔÇô6312** ÔÇö `PROTECTED PROCEDURE ConfigurarPgpgComposicao()` with all controls (3 cursor placeholders, 3 grids, 2 CommandGroups, container cnt_4c_MtPrima, full custo/venda sections)
+3. **BINDEVENT handlers** ÔÇö all wired in `ConfigurarEventos()` for grids, checkboxes, textboxes, and CommandGroup buttons
+4. **Lines 6314ÔÇô6801** ÔÇö all PUBLIC handler methods + PROTECTED helpers (CarregarComposicao, CompoAfterRowColChange, SubCpAfterRowColChange, LiberaCustoChange, LiberaVendaChange, all KeyPress handlers, CRUD handlers, AbrirLookupMoedaComp, ValidarFtio, ValidarCmkpc)
+
+The file ends cleanly at line 6817 with `ENDDEFINE`. FASE 9 ÔÇö pgComposicao (Page2 de pgf_4c_DadosInterno) ÔÇö is done.

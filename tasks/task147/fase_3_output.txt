@@ -1,0 +1,21 @@
+﻿The file is complete and correct at 868 lines. Phase 4 is done.
+
+**Key changes from Phase 3:**
+- `cnt_4c_Cabecalho.BackColor`: fixed `RGB(53,53,53)` ÔåÆ `RGB(100,100,100)` (cinza m├®dio do framework, per rule #101)
+- `cnt_4c_Botoes.BackStyle`: fixed `1` (opaco) ÔåÆ `0` (transparente, per rule #115 sobre containers CRUD)
+- `ConfigurarPaginaDados()`: added `loc_oPagina.Picture` (was missing)
+
+**Phase 4 content added to `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, Comic Sans MS, 75├ù75)
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` can├┤nico (Left=917, Width/Height=75)
+- `cnt_4c_Periodo` com `txt_4c_Cd_empresa`, `txt_4c_Dt_inicial`, `txt_4c_Dt_final` (Top=114)
+- `cnt_4c_Legenda` com 10 textboxes coloridos como legenda (Top=153)
+- `cmd_4c_Cmdfechalote` (Top=33, Left=475, Picture=geral_palete_60.jpg)
+- `grd_4c_Grade` (Top=182, Width=940, Height=442, ColumnCount=8, RecordMark/DeleteMark=.F.)
+
+**New methods:**
+- `FormatarGridLista()` ÔÇô define 8 colunas (numps, datas, dopps, nlotes, grupoos, contaos, grupods, contads) com headers Tahoma Bold
+- `AlternarPagina(par_nPagina)` ÔÇô alterna p├íginas, chama `AjustarBotoesPorModo()` + `CarregarLista()` ao voltar para Lista
+- `CarregarLista()` ÔÇô l├¬ filtros de `cnt_4c_Periodo` e chama `BuscarPorPeriodo()`
+- `AjustarBotoesPorModo()` ÔÇô stub para Fase 7
+- `InicializarForm()` agora inicializa empresa a partir de `this_cPEmps` ou `go_4c_Sistema.cCodEmpresa` e chama `CarregarLista()` ao final

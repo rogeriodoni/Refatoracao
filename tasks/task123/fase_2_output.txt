@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `sigreimpBO.prg` est├í completo com os seguintes m├®todos adicionados:
+
+| M├®todo | O que faz |
+|--------|-----------|
+| `ObterMensagemErro()` | Getter para mensagem de erro |
+| `CarregarTiposOperacoes()` | Popula `cursor_4c_OperacoesE` e `cursor_4c_OperacoesS` a partir de `SigCdTom` |
+| `ValidarFiltros()` | Replica a valida├º├úo do `btnReport.Click` original: datas, opera├º├Áes selecionadas, conflito entrada├ùsa├¡da |
+| `PrepararDados()` | Replica o `PROCEDURE processamento` completo: monta WHERE com opera├º├Áes selecionadas, executa UNION ALL em `SigCdOpe/SigMvNfi/SigCdCli`, processa baixas via `SigMvCab/SigMvPec`, cria cursor final Detalhado ou Resumido |
+| `Visualizar()` | Chama `PrepararDados()` + `REPORT FORM SigReIp1/2 PREVIEW` |
+| `Imprimir()` | Chama `PrepararDados()` + `REPORT FORM SigReIp1/2 TO PRINT PROMPT` |
+
+Pontos cr├¡ticos respeitados: nenhum RETURN dentro de TRY/CATCH, CHR() para acentos, SELECT expl├¡cito antes de REPLACE dentro do SCAN de baixas, EscaparSQL/FormatarDataSQL para formata├º├úo SQL, MsgErro() em todo CATCH.

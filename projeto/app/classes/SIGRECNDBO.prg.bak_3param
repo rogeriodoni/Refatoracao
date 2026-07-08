@@ -1,0 +1,486 @@
+*==============================================================================
+* SIGRECNDBO.PRG
+* Business Object para Relatorio: Posicao de Lancamentos Nao Conciliados
+*
+* Herda de RelatorioBase
+* Tabela principal: SigMvCcr
+* Relatorio FRX: SigReCnd.frx
+*
+* Filtros:
+*   - Data de Referencia  (getDtInicial)
+*   - Grupo               (getGrupo / getDGrupo  - C(10)/C(20))
+*   - Conta               (getConta / getDConta  - C(10)/C(40))
+*   - Moeda               (getMoeda / getDMoeda  - C(3)/C(15) - SigCdMoe.CMoes/DMoes)
+*==============================================================================
+
+DEFINE CLASS SIGRECNDBO AS RelatorioBase
+
+    *-- Filtro: data de referencia
+    this_dDtInicial     = {}
+
+    *-- Filtro: grupo (Grupos em SigMvCcr, C(10))
+    this_cGrupos        = ""
+    this_cDGrupos       = ""
+
+    *-- Filtro: conta (Contas em SigMvCcr, C(10))
+    this_cContas        = ""
+    this_cDContas       = ""
+
+    *-- Filtro: moeda (Moedas em SigMvCcr, C(3))
+    this_cMoedas        = ""
+    this_cDMoedas       = ""
+
+    *-- Nome do cursor de saida populado por PrepararDados()
+    this_cCursorDados   = "TmpHist"
+
+    *--------------------------------------------------------------------------
+    * Init - Configura BO do relatorio de lancamentos nao conciliados
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = "SigMvCcr"
+        THIS.this_cCampoChave = ""
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Monta cursor TmpHist com lancamentos nao conciliados
+    * Replica logica do PROCEDURE processamento do legado SIGRECND
+    *--------------------------------------------------------------------------
+    PROCEDURE PrepararDados()
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
+        LOCAL loc_cGru, loc_cCon, loc_cMoe
+        LOCAL loc_cCabEmpresa, loc_cTitulo, loc_cSubTitulo
+        LOCAL loc_cCab, loc_nSal, loc_nVal, loc_nCt1, loc_nCt2, loc_lcDes
+        LOCAL loc_oErro
+
+        *-- Validacoes fora do TRY (podem usar RETURN diretamente)
+        IF EMPTY(THIS.this_dDtInicial)
+            THIS.this_cMensagemErro = "Data de Refer" + CHR(234) + "ncia inv" + CHR(225) + "lida"
+            RETURN .F.
+        ENDIF
+        IF EMPTY(THIS.this_cGrupos)
+            THIS.this_cMensagemErro = "Grupo inv" + CHR(225) + "lido"
+            RETURN .F.
+        ENDIF
+        IF EMPTY(THIS.this_cMoedas)
+            THIS.this_cMensagemErro = "Moeda inv" + CHR(225) + "lida"
+            RETURN .F.
+        ENDIF
+
+        *-- Padronizar filtros (igual ao legado com PADR(,10))
+        loc_cGru = PADR(ALLTRIM(THIS.this_cGrupos), 10)
+        loc_cCon = PADR(ALLTRIM(THIS.this_cContas), 10)
+        loc_cMoe = ALLTRIM(THIS.this_cMoedas)
+
+        loc_lSucesso = .F.
+
+        TRY
+            *-- Cabecalho da empresa
+            loc_cCabEmpresa = go_4c_Sistema.cCodEmpresa
+            loc_cSQL = "SELECT TOP 1 Razas FROM SigCdEmp " + ;
+                       "WHERE Cemps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emp")
+            IF loc_nResult > 0
+                SELECT cursor_4c_Emp
+                IF !EOF()
+                    loc_cCabEmpresa = go_4c_Sistema.cCodEmpresa + ;
+                                      " - " + ALLTRIM(Razas)
+                ENDIF
+                USE IN cursor_4c_Emp
+            ENDIF
+
+            *-- Monta subtitulo do relatorio
+            loc_cTitulo    = "Posi" + CHR(231) + CHR(227) + "o de Lan" + CHR(231) + ;
+                             "amentos N" + CHR(227) + "o Conciliados"
+            loc_cSubTitulo = "Data Refer" + CHR(234) + "ncia : " + DTOC(THIS.this_dDtInicial) + ;
+                             " - Grupo : " + ALLTRIM(loc_cGru) + ;
+                             " - Conta : " + IIF(EMPTY(loc_cCon), "Todas", ALLTRIM(loc_cCon))
+
+            *-- Cursor de cabecalho para o relatorio
+            IF USED("dbCabecalho")
+                USE IN dbCabecalho
+            ENDIF
+            CREATE CURSOR dbCabecalho (NomeEmpresa C(80), Titulo C(80), SubTitulo C(80), Moeda1 C(80))
+            INSERT INTO dbCabecalho (NomeEmpresa, Titulo, SubTitulo, Moeda1) ;
+                VALUES (loc_cCabEmpresa, loc_cTitulo, loc_cSubTitulo, loc_cMoe)
+
+            *-- Cursor principal TmpHist (igual estrutura do legado)
+            IF USED("TmpHist")
+                USE IN TmpHist
+            ENDIF
+            CREATE CURSOR TmpHist ;
+                (Audits L(1), Datas D(8), Grupos C(10), Contas C(10), RClis C(40), ;
+                 Saldo1 N(12,2), Opers C(1), Hists C(40), Hist2s C(40), Emps C(3), ;
+                 Debitos N(12,2), Creditos N(12,2), Docus C(10), cIdChaves C(20))
+            INDEX ON Grupos + Contas + cIdChaves TAG ContData
+
+            *-- Query principal em SigMvCcr
+            loc_cSQL = "SELECT Grupos, Contas, cIdChaves, CAST(Datas AS DATE) AS Datas," + ;
+                       " Opers, Valors, Moedas, Docus, Emps, DtAudits, Hists, Hist2s " + ;
+                       " FROM SigMvCcr" + ;
+                       " WHERE Grupos = " + EscaparSQL(loc_cGru) + ;
+                       " AND (DataConcs IS NULL OR DataConcs > " + ;
+                       FormatarDataSQL(THIS.this_dDtInicial) + ")" + ;
+                       " ORDER BY Grupos, Contas, cIdChaves, Datas, Opers, Valors," + ;
+                       " Docus, Emps, DtAudits"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CcrDados")
+            IF loc_nResult > 0
+                *-- Processa registros calculando saldo acumulado e conversao de moeda
+                loc_cCab = ""
+                loc_nSal = 0
+
+                SELECT cursor_4c_CcrDados
+                SCAN
+                    *-- Detecta quebra de grupo/conta para resetar saldo
+                    IF (loc_cCab != cursor_4c_CcrDados.Grupos + cursor_4c_CcrDados.Contas)
+                        loc_cCab = cursor_4c_CcrDados.Grupos + cursor_4c_CcrDados.Contas
+                        loc_nSal = 0
+                    ENDIF
+
+                    *-- Busca descricao do cliente/conta em SigCdCli
+                    loc_lcDes = ""
+                    loc_cSQL = "SELECT TOP 1 RClis FROM SigCdCli " + ;
+                               "WHERE IClis = " + EscaparSQL(ALLTRIM(cursor_4c_CcrDados.Contas))
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CcrCli")
+                    IF loc_nResult > 0
+                        SELECT cursor_4c_CcrCli
+                        IF !EOF()
+                            loc_lcDes = ALLTRIM(RClis)
+                        ENDIF
+                        USE IN cursor_4c_CcrCli
+                    ENDIF
+                    SELECT cursor_4c_CcrDados
+
+                    *-- Converte valor para moeda alvo se necessario
+                    loc_nVal = cursor_4c_CcrDados.Valors
+                    IF ALLTRIM(cursor_4c_CcrDados.Moedas) != ALLTRIM(loc_cMoe)
+                        loc_nCt1 = THIS.BuscarCotacao(ALLTRIM(cursor_4c_CcrDados.Moedas), ;
+                                                       CTOD(DTOC(cursor_4c_CcrDados.Datas)))
+                        loc_nCt2 = THIS.BuscarCotacao(loc_cMoe, ;
+                                                       CTOD(DTOC(cursor_4c_CcrDados.Datas)))
+                        IF loc_nCt2 != 0
+                            loc_nVal = (cursor_4c_CcrDados.Valors * loc_nCt1) / loc_nCt2
+                        ENDIF
+                    ENDIF
+
+                    *-- Acumula saldo: C=credito(+), D=debito(-)
+                    loc_nSal = loc_nSal + ;
+                               (loc_nVal * IIF(ALLTRIM(cursor_4c_CcrDados.Opers) = "C", 1, -1))
+
+                    *-- Insere linha processada no TmpHist
+                    SELECT TmpHist
+                    INSERT INTO TmpHist ;
+                        (Audits, Datas, Grupos, Contas, RClis, Saldo1, Opers, ;
+                         Hists, Hist2s, Emps, Debitos, Creditos, Docus, cIdChaves) ;
+                        VALUES (!EMPTY(cursor_4c_CcrDados.DtAudits), ;
+                                CTOD(DTOC(cursor_4c_CcrDados.Datas)), ;
+                                cursor_4c_CcrDados.Grupos, ;
+                                cursor_4c_CcrDados.Contas, ;
+                                loc_lcDes, ;
+                                loc_nSal, ;
+                                cursor_4c_CcrDados.Opers, ;
+                                ALLTRIM(NVL(cursor_4c_CcrDados.Hists, "")), ;
+                                ALLTRIM(NVL(cursor_4c_CcrDados.Hist2s, "")), ;
+                                cursor_4c_CcrDados.Emps, ;
+                                IIF(ALLTRIM(cursor_4c_CcrDados.Opers) = "D", loc_nVal, 0), ;
+                                IIF(ALLTRIM(cursor_4c_CcrDados.Opers) = "C", loc_nVal, 0), ;
+                                cursor_4c_CcrDados.Docus, ;
+                                cursor_4c_CcrDados.cIdChaves)
+                    SELECT cursor_4c_CcrDados
+                ENDSCAN
+
+                USE IN cursor_4c_CcrDados
+
+                *-- Posiciona TmpHist ordenado pelo indice
+                SELECT TmpHist
+                SET ORDER TO ContData
+                GO TOP
+
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Falha ao buscar dados de SigMvCcr"
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Prepara dados e imprime relatorio direto na impressora
+    *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_cFrx, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF THIS.PrepararDados()
+                THIS.ExecutarReportForm("SigReCnd", "PRINTER")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ImprimirComPrompt - Prepara dados e imprime com dialogo de impressora
+    *--------------------------------------------------------------------------
+    PROCEDURE ImprimirComPrompt()
+        LOCAL loc_lSucesso, loc_cFrx, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF THIS.PrepararDados()
+                loc_cFrx = gc_4c_CaminhoReports + "SigReCnd.frx"
+                REPORT FORM (loc_cFrx) TO PRINT PROMPT NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Prepara dados e exibe preview na tela
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_cFrx, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            IF THIS.PrepararDados()
+                THIS.ExecutarReportForm("SigReCnd", "PREVIEW")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarCotacao - Busca cotacao da moeda para a data especificada
+    * par_cMoeda: codigo da moeda (SigCdCot.cmoes)
+    * par_dData:  data de referencia
+    * Retorna: valor numerico da cotacao (1.0 se nao encontrada)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BuscarCotacao(par_cMoeda, par_dData)
+        LOCAL loc_nCotacao, loc_cSQL, loc_nResult, loc_oErro
+        loc_nCotacao = 1
+
+        IF EMPTY(par_cMoeda) OR VARTYPE(par_dData) != "D" OR EMPTY(par_dData)
+            RETURN 1
+        ENDIF
+
+        TRY
+            loc_cSQL = "SELECT TOP 1 valos FROM SigCdCot " + ;
+                       "WHERE cmoes = " + EscaparSQL(par_cMoeda) + ;
+                       " AND datas <= " + FormatarDataSQL(par_dData) + ;
+                       " ORDER BY datas DESC"
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cotacao")
+            IF loc_nResult > 0
+                SELECT cursor_4c_Cotacao
+                IF !EOF()
+                    loc_nCotacao = NVL(valos, 1)
+                    IF loc_nCotacao = 0
+                        loc_nCotacao = 1
+                    ENDIF
+                ENDIF
+                USE IN cursor_4c_Cotacao
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_nCotacao
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna ultima mensagem de erro
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega valores dos FILTROS do relatorio a partir de
+    * um cursor (util para restaurar "ultimo filtro usado").
+    *
+    * Nao carrega dados de SigMvCcr - reports nao tem registro de entidade.
+    * Cada campo eh aplicado somente se existir no cursor (TYPE() check),
+    * permitindo evolucao do schema do cursor sem quebrar a chamada.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_cAlias, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            DO WHILE .T.
+                IF EMPTY(par_cAliasCursor) OR !USED(par_cAliasCursor)
+                    THIS.this_cMensagemErro = "Cursor de filtros n" + CHR(227) + ;
+                        "o dispon" + CHR(237) + "vel: " + TRANSFORM(par_cAliasCursor)
+                    EXIT
+                ENDIF
+
+                loc_cAlias = ALLTRIM(par_cAliasCursor)
+                SELECT (loc_cAlias)
+                IF EOF()
+                    THIS.this_cMensagemErro = "Cursor de filtros vazio"
+                    EXIT
+                ENDIF
+
+                *-- Data de Referencia
+                IF TYPE(loc_cAlias + ".dt_inicial") = "D"
+                    THIS.this_dDtInicial = EVALUATE(loc_cAlias + ".dt_inicial")
+                ENDIF
+
+                *-- Grupo
+                IF TYPE(loc_cAlias + ".cd_grupo") = "C"
+                    THIS.this_cGrupos = ALLTRIM(EVALUATE(loc_cAlias + ".cd_grupo"))
+                ENDIF
+                IF TYPE(loc_cAlias + ".ds_grupo") = "C"
+                    THIS.this_cDGrupos = ALLTRIM(EVALUATE(loc_cAlias + ".ds_grupo"))
+                ENDIF
+
+                *-- Conta
+                IF TYPE(loc_cAlias + ".cd_conta") = "C"
+                    THIS.this_cContas = ALLTRIM(EVALUATE(loc_cAlias + ".cd_conta"))
+                ENDIF
+                IF TYPE(loc_cAlias + ".ds_conta") = "C"
+                    THIS.this_cDContas = ALLTRIM(EVALUATE(loc_cAlias + ".ds_conta"))
+                ENDIF
+
+                *-- Moeda
+                IF TYPE(loc_cAlias + ".cd_moeda") = "C"
+                    THIS.this_cMoedas = ALLTRIM(EVALUATE(loc_cAlias + ".cd_moeda"))
+                ENDIF
+                IF TYPE(loc_cAlias + ".ds_moeda") = "C"
+                    THIS.this_cDMoedas = ALLTRIM(EVALUATE(loc_cAlias + ".ds_moeda"))
+                ENDIF
+
+                loc_lSucesso = .T.
+                EXIT
+            ENDDO
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - BLOQUEADO: relatorios nao persistem dados.
+    *
+    * Override defensivo: caso o BO seja usado por engano como CRUD, retorna
+    * erro explicito ao inves de corromper o banco. O form legado SIGRECND
+    * nao tinha botao "Incluir" - apenas Imprimir/Visualizar/Cancelar.
+    *--------------------------------------------------------------------------
+    PROCEDURE Inserir()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + ;
+            "o n" + CHR(227) + "o suportada: relat" + CHR(243) + ;
+            "rio de Lan" + CHR(231) + "amentos N" + CHR(227) + ;
+            "o Conciliados n" + CHR(227) + "o grava registros." + CHR(13) + ;
+            "Use PrepararDados() seguido de Imprimir() ou Visualizar()."
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - BLOQUEADO: relatorios nao persistem dados.
+    *
+    * Override defensivo: simetrico a Inserir(). Reports nao modificam SigMvCcr;
+    * apenas extraem dados via SELECT em PrepararDados() para gerar o TmpHist.
+    *--------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+        THIS.this_cMensagemErro = "Opera" + CHR(231) + CHR(227) + ;
+            "o n" + CHR(227) + "o suportada: relat" + CHR(243) + ;
+            "rio de Lan" + CHR(231) + "amentos N" + CHR(227) + ;
+            "o Conciliados n" + CHR(227) + "o altera registros." + CHR(13) + ;
+            "Use PrepararDados() seguido de Imprimir() ou Visualizar()."
+        RETURN .F.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Relatorio nao tem chave primaria de entidade.
+    * Retorna composicao dos filtros usados como "identidade" da execucao.
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+        LOCAL loc_cChave
+        loc_cChave = ""
+
+        IF !EMPTY(THIS.this_dDtInicial)
+            loc_cChave = DTOC(THIS.this_dDtInicial)
+        ENDIF
+        IF !EMPTY(THIS.this_cGrupos)
+            loc_cChave = loc_cChave + "|" + ALLTRIM(THIS.this_cGrupos)
+        ENDIF
+        IF !EMPTY(THIS.this_cContas)
+            loc_cChave = loc_cChave + "|" + ALLTRIM(THIS.this_cContas)
+        ENDIF
+        IF !EMPTY(THIS.this_cMoedas)
+            loc_cChave = loc_cChave + "|" + ALLTRIM(THIS.this_cMoedas)
+        ENDIF
+
+        RETURN loc_cChave
+    ENDPROC
+
+ENDDEFINE

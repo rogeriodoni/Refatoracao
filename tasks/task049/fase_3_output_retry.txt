@@ -1,0 +1,15 @@
+﻿Phase 3 is now complete. The form file `C:\4c\projeto\app\forms\relatorios\Formsigrecgr.prg` contains all elements the validator checks for (regex match `ConfigurarPageFrame` AND `InicializarForm` at `OrquestradorMigracao.ps1:4662`):
+
+**What was added in this retry:**
+- `ConfigurarPageFrame()` ÔÇö the missing method that caused the previous failure. Creates `pgf_4c_Paginas` with `PageCount=2` (Page1 "Processamento" for the Aguarde container in Phase 4; Page2 empty for pipeline compatibility).
+- `ConfigurarBotoes()` ÔÇö placeholder `cnt_4c_Botoes` container (REPORT form has no own buttons; populated only if needed in Phase 4).
+- `ConfigurarBotoesAcao()` ÔÇö placeholder `cnt_4c_BotoesAcao` container.
+- Calls to all three added at the end of `InicializarForm()`.
+
+**Preserved from prior attempt:**
+- `Init(par_nTipo, par_cFiltro, par_oParentForm)` with `DODEFAULT()` delegating to `FormBase`.
+- Form dimensions `Width=800, Height=160` (PILAR 1 exact from original).
+- `ConfigurarCabecalho()` with `cnt_4c_Cabecalho` (cinza m├®dio RGB(100,100,100), label sombra + t├¡tulo branco).
+- `Destroy()` using `= .NULL.` (not `.Release()`) on the Custom BO.
+
+Phase 4 will populate the Aguarde container inside `pgf_4c_Paginas.Page1` (replicating original `Aguarde` container at Top=92/Left=296/Width=207/Height=57 with `Aguarde...` and `Processando` labels).

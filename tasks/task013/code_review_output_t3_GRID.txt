@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormProduto.prg`:
+
+- **Linha 10910** (`grd_4c_Cmv`, 3 colunas): `WITH .Column1/.Column2/.Column3 ... ENDWITH` aninhados convertidos para `.Column1.ControlSource = ...` flat
+- **Linha 11878** (`grd_4c_Designer`, 4 colunas): mesmo padr├úo convertido para flat
+- **Linha 12007** (`grd_4c_Arquivos`, 1 coluna): mesmo padr├úo convertido para flat
+
+O problema era o uso de `WITH .ColumnN ... ENDWITH` aninhado dentro do `WITH loc_oPg.grd_xxx`. VFP9 pode n├úo reconhecer corretamente o `ControlSource` definido nesse estilo. O padr├úo flat (`.Column1.ControlSource = "..."` direto dentro do WITH do grid) ├® consistente com todos os outros grids do arquivo (ex: `grd_4c_Compo` linha 912, `grd_4c_SubCp` linha 1139).

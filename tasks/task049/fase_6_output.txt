@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto e completo. A Fase 6/8 foi implementada com sucesso.
+
+**Resumo do que foi implementado na Fase 6:**
+
+Este form (`SIGRECGR`) ├® um caso especial ÔÇö form de relat├│rio sem campos de entrada (analise.json confirma `campos=[]`), portanto a Fase 6 adaptou-se ao contexto:
+
+1. **`Processar()` PUBLIC** (linhas 484ÔÇô505) ÔÇö equivalente direto do m├®todo `processamento` do legado. Exibe o container Aguarde, chama `this_oRelatorio.PrepararDados()` (que monta o cursor `TmpRastro` com toda a rastreabilidade hier├írquica), oculta Aguarde. Dispon├¡vel publicamente para o form pai que, no legado, chamava `processamento` antes de `Show()`.
+
+2. **`GerarRelatorio(par_nModo)` PROTECTED** (linhas 513ÔÇô560) ÔÇö executa `REPORT FORM SigReCgr.frx` sobre dados j├í preparados por `Processar()`. Se `TmpRastro` n├úo existir, re-processa automaticamente. Usa `loc_lDadosOk` como flag (sem `RETURN` dentro de `TRY/CATCH`).
+
+3. **Handlers atualizados** ÔÇö `BtnVisualizarClick/BtnImprimirClick/BtnDocExcelClick` agora delegam para `GerarRelatorio(modo)`, evitando reprocessamento duplicado dos dados a cada clique.
+
+4. **`InicializarForm()` atualizado** (linha 147) ÔÇö chama `THIS.Processar()` ao final da inicializa├º├úo, preparando `TmpRastro` antes do `Show()`, exatamente como o legado fazia.

@@ -1,0 +1,11 @@
+﻿Phase 2 is complete. The `SigPrAprBO.prg` file now has all required CRUD methods:
+
+**Added in Phase 2:**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps SigPrPmi/SigCdPro columns (CPros, DPros, PVens, CustoFs, MoePcs, MoeCs, MoeCusFs, Moedas, MoeVs, CFtios, Promos, CBars, Pecas, Datas, CIdChaves, PromoPro, DtAlts) using `TYPE()` checks so it works with either cursor.
+- `ValidarDados()` (PROTECTED) ÔÇö validates CPros and Promos before persistence.
+- `Inserir()` (PROTECTED) ÔÇö full `INSERT INTO SigPrPmi` with auto-generated `CIdChaves` via `fUniqueIds()`, calls `RegistrarAuditoria("INSERT")`.
+- `Atualizar()` (PROTECTED) ÔÇö `UPDATE SigPrPmi` + conditional `UPDATE SigCdPro` (PVens/CustoFs), calls `RegistrarAuditoria("UPDATE")`.
+- `ExecutarExclusao()` (PROTECTED) ÔÇö `DELETE FROM SigPrPmi WHERE CIdChaves = ...` with `RegistrarAuditoria("DELETE")`.
+- Fixed `Init()` to point to `this_cTabela = "SigPrPmi"` / `this_cCampoChave = "CIdChaves"` matching the declared entity table.
+- `ObterChavePrimaria()` now returns `ALLTRIM(this_cCIdChaves)` instead of empty string.
+- Added 10 new declared properties for the current-record CRUD state (this_cCPros, this_cDPros, this_nValAnt, this_nValAtu, this_nCustoFs, this_cCBars, this_cPecas, this_dDatas, this_cCIdChaves, this_cPromoPro, this_dDtAlts).

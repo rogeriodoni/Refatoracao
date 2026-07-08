@@ -1,0 +1,29 @@
+﻿O arquivo `Formsigrefcx.prg` j├í tem **2008 linhas** e est├í completamente implementado desde fases anteriores. Veja o que j├í existe:
+
+**`ConfigurarPaginaDados()`** (linha 1285) - j├í existe com todos os BINDEVENTs:
+- 8 handlers de KeyPress (Empresa cd/ds, Moeda cd/ds, DtInicial, DtFinal, Usu├írio, Operador)
+- 6 handlers de DblClick (lookups para todos os campos de c├│digo)
+- 3 handlers de InteractiveChange/Click (OptCol, SelTudo, Apaga)
+
+**Por que est├í "diferente" do esperado pela Fase 5:** Este ├® um formul├írio RELATORIO (layout flat, sem Page2/CRUD). Todos os controles visuais foram corretamente adicionados em `ConfigurarPaginaLista()` (linhas 250-1283), e `ConfigurarPaginaDados()` ├® respons├ível apenas pelos BINDEVENTs - que ├® o padr├úo correto para formul├írios REPORT.
+
+**Controles j├í implementados** (mapeamento completo com o original):
+- Ô£à Empresa (txt_4c_CdEmpresa + txt_4c_DsEmpresa + lookup)
+- Ô£à Per├¡odo (txt_4c_DtInicial + txt_4c_DtFinal)
+- Ô£à Moeda (txt_4c_CdMoeda + txt_4c_DsMoeda + lookup)
+- Ô£à Usu├írio + Operador (com lookup fwbuscaext)
+- Ô£à OptQuebra, optImpNomCli, OpcTipo, OptCol, opt_nr_opcao, OptMov (todos os OptionGroups)
+- Ô£à 9 ComboBoxes de resumo (ResLanca, ResForma, ResCheque, ResCartao, ResVende, ResContac, ResLanFor, ResQtdes, ResDetVen)
+- Ô£à 3 CheckBoxes (CrtDetalhado, ChqDetalhado, ChkDetLan)
+- Ô£à Grid GrdTipo com checkbox (cs_SigCdTom)
+- Ô£à Bot├Áes SelTudo e Apaga
+- Ô£à Separador (shp_4c_Separador)
+
+**M├®todos completos:**
+- Ô£à LimparCampos, FormParaRelatorio, ValidarPeriodo
+- Ô£à BtnVisualizarClick, BtnImprimirClick, BtnExcelClick, BtnSairClick
+- Ô£à OptColMudou, BtnSelTudoClick, BtnApagaClick
+- Ô£à Todos os handlers de teclado e lookup (Empresa, Moeda, Usu├írio, Operador)
+- Ô£à Destroy()
+
+A **Fase 5 j├í foi conclu├¡da nas fases anteriores** ÔÇö as fases de um formul├írio RELATORIO se consolidam de forma diferente de um formul├írio CRUD. O arquivo est├í pronto para Fase 6+.

@@ -1,0 +1,9 @@
+﻿Arquivo criado e verificado com sucesso. `C:\4c\projeto\app\forms\relatorios\FormSigReHev.prg` cont├®m a estrutura base completa da Fase 3/8:
+
+- **`DEFINE CLASS FormSigReHev AS FormBase`** ÔÇö dimens├Áes exatas do original (800├ù300), `DataSession=2`, `TitleBar=0`, propriedades `Envelope` e `this_lAcesso`
+- **`Init(pEnvelope)`** ÔÇö modo autom├ítico: quando chamado com n├║mero de envelope, chama o BO diretamente para gerar o relat├│rio e fecha o form sem exibir (fidelidade ao comportamento original)
+- **`InicializarForm()`** ÔÇö cria BO, cabe├ºalho, bot├Áes, PageFrame; com tratamento de erro completo
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` com `BackColor=RGB(100,100,100)`, labels sombra e t├¡tulo
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), posi├º├Áes e ├¡cones exatos do original; BINDEVENTs ser├úo adicionados na Fase 7
+- **`ConfigurarPageFrame()`** ÔÇö 1 p├ígina (Filtros), `Top=85`, `Tabs=.F.`; campos adicionados nas Fases 5-6
+- **`Destroy()`** ÔÇö libera BO com `.NULL.` (n├úo `.Release()` ÔÇö BO ├® Custom, n├úo Form)

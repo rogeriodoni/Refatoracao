@@ -1,0 +1,16 @@
+﻿Ambos os arquivos j├í est├úo **completamente implementados**. Esta ├® uma situa├º├úo onde o template gen├®rico da Fase 7/8 menciona `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`, mas esses eventos s├úo espec├¡ficos de forms CRUD ÔÇö e este ├® um form **OPERACIONAL**.
+
+**Status do FormSigPrCcc.prg (1547 linhas):**
+- `CmdProcessarClick()` ÔÇö implementado (linhas 1152-1211), passa par├ómetros para `BO.Processar(THIS)`
+- `CmdEncerrarClick()` ÔÇö implementado (linha 1214-1217)
+- `ChkContaClick/ChkEstoqueClick/ChkBtnCustoClick/ChkBtnCompraClick` ÔÇö implementados
+- Todos os handlers de lookup (Empresa/Produto/Moeda) para os 4 containers ÔÇö implementados
+- `TornarControlesVisiveis()` com filtro correto para containers flutuantes ÔÇö implementado
+
+**Status do SigPrCccBO.prg (1016 linhas):**
+- `ProcessarContaCorrente()` ÔÇö completo com fRecalculaS, commit/rollback, progress bar
+- `ProcessarEstoque()` ÔÇö completo com fRecalculaP
+- `ProcessarCusto()` ÔÇö completo com fRecalculaC por empresa/produto
+- `ProcessarUltimaCompra()` ÔÇö completo, reconstr├│i SigOpClU e atualiza SigCdCli/SigCdPro
+
+A Fase 7/8 est├í conclu├¡da ÔÇö os "eventos principais" equivalentes ao CRUD j├í estavam implementados nas fases anteriores. Nenhuma modifica├º├úo ├® necess├íria.

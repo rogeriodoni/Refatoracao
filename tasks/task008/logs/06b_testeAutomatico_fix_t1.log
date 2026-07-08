@@ -1,0 +1,25 @@
+[2026-04-11 03:21:59] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-11 03:21:59] [INFO] Prompt File: C:\4c\tasks\task008\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-04-11 03:21:59] [INFO] Output File: C:\4c\tasks\task008\06b_testeAutomatico_fix_output_t1.txt
+[2026-04-11 03:21:59] [INFO] Model: sonnet
+[2026-04-11 03:21:59] [INFO] Timeout: 3600 segundos
+[2026-04-11 03:21:59] [INFO] Max Output Tokens: 128000
+[2026-04-11 03:21:59] [INFO] Context Files: 0 arquivo(s)
+[2026-04-11 03:21:59] [INFO] Invocando Claude CLI...
+[2026-04-11 03:21:59] [INFO] Prompt carregado: 559935 caracteres
+[2026-04-11 03:21:59] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-11 03:21:59] [INFO] Tamanho total do prompt: 559935 caracteres
+[2026-04-11 03:21:59] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-11 03:24:53] [INFO] Claude CLI finalizado em 174.0784534 segundos
+[2026-04-11 03:24:53] [INFO] Exit Code: 0
+[2026-04-11 03:24:53] [INFO] Output salvo em: C:\4c\tasks\task008\06b_testeAutomatico_fix_output_t1.txt
+[2026-04-11 03:24:53] [INFO] Output size: 555 bytes
+[2026-04-11 03:24:53] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-11 03:24:53] [INFO] Preview do output:
+[2026-04-11 03:24:53] [INFO] Three fixes applied to `FormProduto.prg`:
+
+1. **Line 1133**: `PROTECTED PROCEDURE AjustarBotoesPorModo()` ÔåÆ `PROCEDURE AjustarBotoesPorModo()` ÔÇö fixes "Property AJUSTARBOTOESPORMODO is not found" (primary test failure)
+
+2. **Line 358**: Removed `.BorderStyle = 1` from `cnt_4c_Filtros` container ÔÇö Container has no BorderStyle in VFP9
+
+3. **Line 964**: Removed `.BorderStyle = 0` from `cnt_4c_BotoesAcao` container ÔÇö same issue; fixes cascade failure that caused "Property CMD_4C_CONFIR

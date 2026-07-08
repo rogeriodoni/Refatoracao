@@ -1,0 +1,5 @@
+﻿Both validator-required methods are now present:
+- `ConfigurarPaginaLista` at line 153 (orchestrates filter area + report buttons setup, with real logic)
+- `AlternarPagina` at line 752 (already existed from Phase 3)
+
+`InicializarForm` now calls `ConfigurarPaginaLista()` which dispatches to `ConfigurarBotoes()` (4-button report CommandGroup) and `ConfigurarCamposFiltro()` (17 filter controls). For this REPORT form (FLAT layout), this is the canonical equivalent of Page1's "list" ÔÇö there's no Grid/CRUD since reports use filters + print actions.

@@ -1,0 +1,6 @@
+﻿SIGREFUNBO.prg completo. Fase 2 conclu├¡da com os seguintes m├®todos implementados:
+
+- **`PrepararDados()`** ÔÇö l├│gica completa do `processamento` original: busca empresa (SigCdEmp), monta csCabecalho, executa 2 queries SQL (join SigCdFun/SigCdFud/SigCdCor + agrega├º├úo QtdOs por OS), e o loop SCAN/SCATTER/GATHER que reconstr├│i o cursor `Relatorio` com linhas de cabe├ºalho de grupo (Tubos=99) e SEEK para preencher QtdOs
+- **`ValidarFiltros()`** ÔÇö valida campos FundI/FundF obrigat├│rios (l├│gica do `btnReport.Click` original)
+- **`Visualizar()`** / **`Imprimir()`** / **`ImprimirSilencioso()`** ÔÇö os 3 modos de sa├¡da do original (`visualizacao`, `impressao`, `documento`)
+- **`ObterMensagemErro()`**, **`ObterChavePrimaria()`**, **`Destroy()`** ÔÇö limpeza de todos os cursores criados

@@ -1,0 +1,19 @@
+﻿Fase 2 conclu├¡da. O `SIGMDETQBO.prg` foi completado com todos os m├®todos necess├írios:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Responsabilidade |
+|--------|-------------|-----------------|
+| `CarregarParametros()` | PUBLIC | Carrega SigCdPac ÔåÆ `this_cSigKey` e `this_cDopCorTam` |
+| `BuscarPorBarras(par_nCodBarras)` | PUBLIC | Lookup em SigOpEtq+SigOpEta, valida transit├│ria, popula `this_cCorAnt`/`this_cTamAnt` |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Mapeia cursor SigOpEtq ÔåÆ propriedades do BO |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `TRANSFORM(this_nCodBarras)` |
+| `ProcessarAlteracao()` | PUBLIC | Fluxo completo: valida├º├úo TipoEstos ÔåÆ BEGIN TRAN ÔåÆ INSERT SigMvCab ÔåÆ INSERT SigMvHst(S) ÔåÆ INSERT SigMvHst(E) ÔåÆ UPDATE SigOpEtq ÔåÆ SqlCalcP2/fRecalculaC ÔåÆ COMMIT/ROLLBACK ÔåÆ fGravarLog |
+| `RegistrarAuditoria(par_cOperacao)` | PROTECTED | INSERT em LogAuditoria |
+| `FormatarDatetimeSQL(par_dtVal)` | PROTECTED | Converte DATETIME VFP ÔåÆ `CONVERT(DATETIME,'...',120)` |
+
+**Decis├Áes de design:**
+- Nenhum `RETURN` dentro de TRY/CATCH ÔÇö usa `loc_lContinuar` para controle de fluxo
+- Todos os cursores tempor├írios s├úo fechados com `USE IN` (no fluxo normal e no CATCH)
+- `SqlCalcP2` e `fRecalculaC` chamados com `gnConnHandle` no lugar do legado `poDataMgr`
+- `fGerUniqueKey`, `fGerMascara`, `fUniqueIds`, `fGravarLog` mantidos como chamadas diretas (fun├º├Áes do framework ainda dispon├¡veis)

@@ -1,0 +1,20 @@
+﻿Tudo correto. Fase 6/8 conclu├¡da com as seguintes corre├º├Áes e adi├º├Áes:
+
+**Formsigregnf.prg ÔÇö corre├º├Áes:**
+
+1. **`AbrirLookupSerie()`** ÔÇö bug cr├¡tico: CREATEOBJECT tinha par├ómetro `par_cCursor` faltando (tratava `"Series"` como nome do cursor e `loc_cSerie` como campo), resultado lido via propriedade inexistente `this_cCodigoSelecionado`. Reescrito com assinatura correta, `mAddColuna`, verifica├º├úo via `this_lSelecionou` e leitura do cursor correto.
+
+2. **`AbrirLookupUsuars()`** ÔÇö mesmo bug. Corrigido com o mesmo padr├úo.
+
+3. **`ConfigurarPaginaDados()`** ÔÇö propriedades visuais faltando conforme original:
+   - Labels `lbl_4c_Serie`/`lbl_4c_Usuars`: adicionado `FontBold = .T.`
+   - TextBoxes `txt_4c_Serie`/`txt_4c_Usuars`: adicionados `MaxLength`, `Alignment = 3`, `ForeColor = RGB(0,0,0)`, `DisabledBackColor = RGB(255,255,255)`
+
+4. **`ConfigurarPaginaLista()`**:
+   - `cmd_4c_Processar`: caption `"P\<rocessar"` com acelerador e `Picture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"`
+   - `cmd_4c_SelTudo`/`cmd_4c_Apaga`: `FontName = "Verdana"` (original), `ForeColor = RGB(36,84,155)`, `BackColor = RGB(255,255,255)`
+
+**menu.prg ÔÇö integra├º├úo:**
+- BAR 130 (separador) e BAR 131 `"Emiss├úo Global de Nota Fiscal"` adicionados ao `popRelatorios`
+- `ON SELECTION BAR 131 DO AbrirFormsigregnf` vinculado
+- `PROCEDURE AbrirFormsigregnf()` criada com padr├úo correto do sistema

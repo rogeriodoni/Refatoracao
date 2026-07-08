@@ -1,0 +1,10 @@
+﻿Both menu registration and the 4 button event handlers are complete. The Phase 7/8 implementation is done.
+
+The 4 main CRUD button handlers now have proper TRY/CATCH wrapping following all critical rules:
+
+- **`BtnIncluirClick()`** ÔÇö calls `NovoRegistro()`, `LimparCampos()`, sets `this_cModoAtual = "INCLUIR"` **before** `HabilitarCampos(.T.)`, navigates to Page2
+- **`BtnVisualizarClick()`** ÔÇö guards against empty cursor, reads `cpros` from grid, calls `CarregarPorCodigo()` + `BOParaForm()`, sets VISUALIZAR mode with fields disabled
+- **`BtnAlterarClick()`** ÔÇö same guard, reads `cpros`, calls `CarregarPorCodigo()` + `EditarRegistro()` + `BOParaForm()`, sets ALTERAR mode with fields enabled
+- **`BtnExcluirClick()`** ÔÇö guard + confirm dialog + `CarregarPorCodigo()` + `Excluir()` (public method on BO) + refreshes list
+
+All handlers now use the `loc_lResultado` flag pattern with RETURN outside TRY/CATCH (Rule #1), and all CATCHes call `MsgErro()` (Rule #9). Menu registration in `menu.prg` was already in place.

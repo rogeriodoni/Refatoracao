@@ -1,0 +1,17 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado: `C:\4c\projeto\app\classes\UfsBO.prg`
+
+**O que foi declarado** (34 propriedades cobrindo 100% do schema `SigCdUfs`):
+
+| Grupo | Propriedades |
+|-------|-------------|
+| Identifica├º├úo | `this_cEstados` (PK char 2), `this_cDescrs` (char 40) |
+| Al├¡quotas ICMS | `this_nAicms`, `this_nBicms`, `this_nAreduzidas`, `this_nAliqsbs` |
+| IPI / IBGE / NFCe | `this_cIpis`, `this_nUFIBGEs`, `this_cLayoutnf`, `this_nChkgnre`, `this_nNcotepe52s` |
+| Chaves NF-e | `this_cChaveConsultaHomologacao`, `this_cChaveConsultaProducao`, `this_cHomologacao`, `this_cProducao` |
+| Sintegra flags | `this_nGer50..88ms`, `this_nGerSefaz`, `this_nGerncm`, `this_nCodidents`, `this_nNgersufr1s` (19 flags) |
+
+**Init()** configura:
+- `this_cTabela = "SigCdUfs"`
+- `this_cCampoChave = "estados"`
+
+Campos NUMERIC(1,0) declarados como `this_n` (n├úo `this_l`) conforme regra VFP9 ÔÇö convers├úo para .T./.F. ocorrer├í no Form via `(this_nGer50 = 1)`.

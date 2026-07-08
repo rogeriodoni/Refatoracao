@@ -1,0 +1,10 @@
+﻿Fase 5 conclu├¡da. `ConfigurarPaginaDados()` foi implementado com conte├║do funcional real:
+
+1. **`TornarControlesVisiveis(loc_oPagina)`** ÔÇö garante visibilidade de todos os controles criados via `AddObject` (que nascem com `Visible=.F.`)
+2. **`AjustarBotoesPorModo()`** ÔÇö habilita os 4 bot├Áes do relat├│rio (Visualizar/Imprimir/Excel/Encerrar)
+3. **Estado Enabled inicial dos campos dependentes** ÔÇö implementa o equivalente ao `When=Empty(campo_pai)` do legado:
+   - Descri├º├Áes de GrEstoque/Estoque/GGrupo/Grupo/SubGrupo desabilitadas at├® o c├│digo pai ser preenchido
+   - Campos OP (Opi/Opf) desabilitados at├® `chkImpOp` ser marcado
+   - Checkboxes contextuais (Servi├ºo/Pendentes) desabilitados at├® condi├º├úo satisfeita
+
+O m├®todo est├í encapsulado em TRY/CATCH com `MsgErro` e retorna `.T.` como esperado pelo `InicializarForm()`.

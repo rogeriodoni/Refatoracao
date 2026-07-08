@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A **Fase 8/8** foi conclu├¡da com os seguintes m├®todos adicionados ao `Formsigprema.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Retorna `.F.` (OPERACIONAL sem busca CRUD) |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Retorna `.F.` (OPERACIONAL) |
+| `BtnCancelarClick()` | Retorna `.F.` (OPERACIONAL) |
+| `FormParaBO()` | Retorna `.F.` (sem mapeamento campoÔåÆBO) |
+| `BOParaForm()` | Retorna `.F.` (sem mapeamento BOÔåÆcampo) |
+| `HabilitarCampos()` | `RETURN` (sem controle por modo) |
+| `LimparCampos()` | ZAP em `cursor_4c_Dados` + Refresh do grid |
+| `CarregarLista()` | Delega para `CarregarDados()` |
+| `AjustarBotoesPorModo()` | `RETURN` (sem modos CRUD) |
+
+O form est├í 100% completo (1232 linhas). Como ├® um form OPERACIONAL puro, todos os m├®todos CRUD do FormBase recebem stubs apropriados, enquanto a funcionalidade real est├í nos m├®todos `CarregarDados()`, `CmdBtnEmailClick()`, `ImprimirDocumento()` e `EnviarEmail()`.

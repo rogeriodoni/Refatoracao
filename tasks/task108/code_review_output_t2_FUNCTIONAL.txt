@@ -1,0 +1,15 @@
+﻿The two edits are verified. Here's what I found and fixed:
+
+**Analysis of the 40 listed issues:**
+
+- **[CONTAINER-VISIVEL]**: Already fixed ÔÇö `TornarControlesVisiveis()` at line 1777 already has `INLIST(...)` excluding `CNT_4C_SOMBRA`, `CNT_4C_ETIQUETAS`, `CNT_4C_RELACAO`.
+
+- **[OPTIONGROUP-LEFT] ├ù 17**: Already fixed ÔÇö all OptionGroup buttons in the current code already have `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes` defined.
+
+- **[LAYOUT-POSITION] ├ù 21**: Already fixed or false positives ÔÇö most positions match the originals in the current code; the remaining "issues" are the validator incorrectly mapping container-relative labels (`lbl_4c_Label11` at cnt_4c_Etiquetas-local Top=162) to form-level controls, or confusing `lbl_4c_Label1` with `lbl_4c_Label11`.
+
+**Actual bugs found and fixed** (BO comment confirmed `1=Boleto,2=Laser,3=Allegro,4=Colunas` and `1=Destino,2=Cor,3=Sequencia,4=Referencia`):
+
+1. **`obj_4c_Get_Boleto` buttons** ÔÇö B1.Value was 0 (should be 1), B2.Value was 1 (should be 2), B3 and B4 had no `.Value`. This broke `BoletoInteractiveChange` (checked `Value=2` for Laser but got 1), `LimparCampos` (reset to 1 selected "Laser" instead of "Boleto"), and `BtnVisualizarClick` (checked `Value=3` for Allegro ÔÇö only worked by accident via index fallback).
+
+2. **`obj_4c_Opt_Ordem` buttons** ÔÇö B1.Value=0 and B2.Value=0 were duplicates (Destino and Cor both returned 0, indistinguishable). B3.Value=1 was wrong (should be 3 to match BO's `this_nOptOrdem=3` default). B4 had no `.Value`. Now all four use 1/2/3/4 matching the BO schema.

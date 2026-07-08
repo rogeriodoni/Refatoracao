@@ -1,0 +1,20 @@
+﻿Ap├│s verifica├º├úo completa, n├úo h├í SQL WHERE com CODIGOS nos arquivos. Deixa eu confirmar o estado de todas as condi├º├Áes WHERE SQL nos dois arquivos:
+
+**FormSigReCmp.prg** ÔÇö WHERE SQL encontradas:
+- Linha 1748: `WHERE Dopes =` (SigCdOpe) Ô£ô
+- Linha 2022: `WHERE Cemps =` (SigCdEmp) Ô£ô  
+- Linha 2339: `WHERE CGrus =` (SigCdGrp) Ô£ô
+
+**SigReCmpBO.prg** ÔÇö WHERE SQL encontradas:
+- Linha 267: `WHERE Cemps =` (SigCdEmp) Ô£ô
+- Linha 279: `WHERE Cemps =` (SigCdEmp) Ô£ô
+- Linhas 328ÔÇô392: `loc_cWhere` constru├¡do com `a.Nops`, `b.produc`, `a.Emps`, `a.Dopes`, `a.Numes`, `a.Datas`, `a.PrazoEnts`, `b.TipoOps` Ô£ô
+- Linha 411: `a.CodObs =` (mapeado de CODOBS original) Ô£ô
+- Linha 520/560/579: `a.empdopnums =` / `e.empdopnums =` Ô£ô
+- Linha 604: `a.Nops BETWEEN` Ô£ô
+- Linha 642: `EmpDnPs =` (EMPDNPS original) Ô£ô
+- Linha 738: `Qtds <= 0 AND Pesos <= 0` Ô£ô
+
+**Nenhuma condi├º├úo SQL WHERE usa CODIGOS.** O que o detector encontrou foram as chamadas `LOCATE FOR Codigos = loc_nCod` nas linhas 1848 e 2511 do form ÔÇö que s├úo filtros VFP em cursor local (n├úo SQL), corretamente filtrando pelo campo-chave `Codigos` das tabelas `SigCdObs` e `SigCdPsg`.
+
+**Conclus├úo: falso positivo da detec├º├úo autom├ítica.** Os arquivos est├úo corretos. Nenhuma condi├º├úo WHERE inventada existe para remover ÔÇö o `LOCATE FOR Codigos` ├® o mecanismo correto e necess├írio para valida├º├úo dos campos de c├│digo de observa├º├úo e subgrupo.

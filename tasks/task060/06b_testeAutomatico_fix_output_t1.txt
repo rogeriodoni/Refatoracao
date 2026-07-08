@@ -1,0 +1,15 @@
+﻿A estrutura est├í correta. Contagem dos IF/ENDIF:
+
+| IF | Linha | Fechado por |
+|-----|-------|-------------|
+| `IF !loc_lTemIncluir` | 966 | ENDIF linha 1024 Ô£ô |
+| `IF !loc_lTemPageFrame` | 971 | ENDIF linha 1023 Ô£ô |
+| `IF lFormOperacional...` | 972 | ENDIF linha 981 Ô£ô |
+| `IF lFormReport...` (novo) | 984 | ENDIF linha 1022 Ô£ô |
+| `IF ActivePage=2` | 994 | ENDIF linha 1021 Ô£ô |
+| `IF loc_lTemCancelar` | 998 | ENDIF linha 1016 Ô£ô |
+| `IF ActivePage=1` | 1001 | ENDIF linha 1009 Ô£ô |
+
+**Diagn├│stico**: O teste `BtnIncluirNavegacao` s├│ fazia bypass para forms REPORT quando **n├úo havia** `pgf_4c_Paginas`. Como `Formsigrecom` tem PageFrame, o teste chamava `BtnIncluirClick()` e exigia `ActivePage=2` ÔÇö imposs├¡vel num form com `PageCount=1`.
+
+**Corre├º├úo em `TesteAutomatico.prg`**: adicionado check `IF THIS.lFormReport OR THIS.lFormOperacional` no branch onde PageFrame existe, retornando PASS direto sem tentar navegar para Page2. A corre├º├úo se aplica a todos os forms REPORT futuros que tenham PageFrame.

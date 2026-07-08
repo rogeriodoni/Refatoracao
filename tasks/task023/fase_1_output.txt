@@ -1,0 +1,12 @@
+﻿Fase 1 conclu├¡da. `SIGREVISBO.prg` criado em `C:\4c\projeto\app\classes\` com:
+
+**Propriedades declaradas** (extra├¡das do c├│digo fonte original):
+- `this_dDtInicial` / `this_dDtFinal` ÔÇö per├¡odo (getDatai/getDataf)
+- `this_cCdConta` / `this_cDsConta` ÔÇö conta (getCdConta/getDsConta, MaxLength 10/20)
+- `this_cCdRepr` / `this_cDsRepr` ÔÇö representante (getCdRepr/getDsRepr, MaxLength 10/50)
+- `this_nOpcaoVenda` = 3 / `this_nOpcaoPedido` = 3 ÔÇö espelham os OptionGroups (3=Ambos default)
+- `this_cGrupo` ÔÇö equivalente ao `antgru` do form legado (GrPadVens de SigCdPam)
+- `this_lReprBloqueado` ÔÇö flag do fluxo fChecaAcesso('SIGCDVIS','ALTCONTA')
+- `this_cCursorDados` = "crSigCdVis" ÔÇö cursor de sa├¡da do PrepararDados
+
+**Init()**: seta `this_cTabela = "SigCdVis"`, `this_cCampoChave = ""` e chama `DODEFAULT()`. Fase 2 adicionar├í `PrepararDados()` com a query completa de `SigCdVis JOIN SigCdCli` e os filtros.

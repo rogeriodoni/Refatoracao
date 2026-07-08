@@ -1,0 +1,16 @@
+﻿Todos os 21 checks passaram. O arquivo `FormSigPdMp5.prg` foi criado com **420 linhas** e todas as verifica├º├Áes estruturais OK.
+
+**Fase 3 entregue** ÔÇö o que foi criado:
+
+| Elemento | Detalhe |
+|----------|---------|
+| **Propriedades de classe** | `DataSession=2`, `TitleBar=0`, `ControlBox=.F.`, dimens├Áes 1000├ù600 exatas do original |
+| **ADD OBJECT (DEFINE CLASS)** | `cnt_4c_Sombra`, `shp_4c_Shape4`, `shp_4c_Shape1`, `img_4c_FigJpg` (invisible), `cnt_4c_Container1`, `cnt_4c_Operacao`, `cnt_4c_Origem` (Visible=.F.), `cnt_4c_Destino` (Visible=.F.) |
+| **Init(par_oFormPai, par_nDtS)** | Copia `pcEscolha`, compartilha DataSession via `THIS.DataSessionId = par_oFormPai.DataSessionId` |
+| **InicializarForm** | Cria BO, seta Caption com CHR(), define Picture, chama todos os Configure methods |
+| **ConfigurarCabecalho** | lblSombra + lblTitulo em cnt_4c_Sombra (exato do legado: FontSize=18, Tahoma, posi├º├Áes Top=18/17) |
+| **ConfigurarContainer1** | Label "Movimenta├º├úo" + Line no cnt_4c_Container1 |
+| **ConfigurarContainerOrigem/Destino** | Labels (Grupo/Conta/Nome + t├¡tulo + linha) ÔÇö TextBoxes nas Fases 5-6 |
+| **ConfigurarBotaoSair** | cmd_4c_Ok via THIS.AddObject(), Top=3 Left=925, Comic Sans MS |
+| **TornarControlesVisiveis** | Com filtro LOOP para `CNT_4C_ORIGEM` e `CNT_4C_DESTINO` (containers flutuantes) |
+| **Destroy** | Libera BO e refer├¬ncia ao form pai |

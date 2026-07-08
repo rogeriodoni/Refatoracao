@@ -1,0 +1,610 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrCar.SCX
+* Data/Hora: 01/07/2026 21:39:37
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCAR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCAR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCAR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCAR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGPRCAR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCAR.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCAR.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCAR.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCAR.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGPRCAR
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdExcluir
+  Parent: SIGPRCAR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGPRCAR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGPRCAR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 2
+  Left = 2
+  Width = 577
+  Height = 218
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 540
+  Width = 480
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Características do Produto"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  houveexcl = .F.
+  houveincl = .F.
+  pcescolha = .F.
+  podatamgr = 
+  _memberdata = <VFPData><memberdata name="podatamgr" type="property" display="Podatamgr"/></VFPData>
+  Name = "SIGPRCAR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 411
+  Left = 8
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 103
+  Width = 463
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  AllowCellSelection = .T.
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 150
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 290
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Característica"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.Shape1
+------------------------------------------------------------
+  Top = -3
+  Left = 239
+  Height = 38
+  Width = 250
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 330
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 2
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 405
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 3
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCAR.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 255
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 1
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCAR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set DataSession to poForm.DataSessionId
+
+=DoDefault()
+
+With ThisForm
+	.ParentForm = poForm
+	.pcEscolha = Iif(Type([ThisForm.ParentForm.pcEscolha])=[C], .ParentForm.pcEscolha, [CONSULTAR])
+	.HouveIncl = .f.
+	.HouveExcl = .f.
+
+	llVis = InList(.pcEscolha,'INSERIR','ALTERAR')
+	.cmdInserir.Visible = llVis
+	.cmdInserir.Enabled = llVis
+	.cmdExcluir.Visible = llVis
+	.cmdExcluir.Enabled = llVis
+
+	If Not llVis
+		.Shape1.Width = .cmdSair.Width + 10
+		.Shape1.Left  = .cmdSair.Left - 5
+	EndIf
+EndWith
+
+Select crSigPrCar
+Go Top
+With ThisForm.Grade
+	.RecordSource = [crSigPrCar]
+	.Column1.ControlSource = [crSigPrCar.Codigos]
+	.Column2.ControlSource = [crSigPrCar.Descrs]
+EndWith
+
+ThisForm.Refresh()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCAR.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+If (This.Tag <> This.Value)
+	If Not Empty(This.Value)
+		loLista = CreateObject('fwBuscaExt', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCrRap', ;
+							   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., [CGrus In ('] + crSigCdPro.CGrus + [', Space(3))])
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Codigos', '', 'Código')
+			loLista.mAddColuna('Descrs',  '', 'Descrição')
+			loLista.Show()
+		EndIf
+		
+		If (Lastkey() <> 27)
+			lnReg = Recno('crSigPrCar')
+			
+			Select a.Codigos ;
+			  From crSigPrCar a ;
+			 Where a.Codigos = CrListaRemota.Codigos And ;
+			 	   a.pkChaves <> crSigPrCar.pkChaves ;
+			  Into Cursor crAux
+			Select crAux
+			Go Top In crAux
+			
+			If Not Eof('crAux') 
+				MessageBox('Característica Já Informada Para Este Produto!!!',48,'Atenção')
+				Return .F.
+			Endif
+			Use In crAux
+		
+			Select crSigPrCar
+			Go lnReg
+			
+			Replace Codigos With CrListaRemota.Codigos, ;
+					Descrs  With CrListaRemota.Descrs in crSigPrCar
+		Else
+			Replace Codigos With [], ;
+					Descrs  With [] In crSigPrCar
+		EndIf
+		
+		Use In crListaRemota
+	Else
+		Replace Codigos With [], ;
+				Descrs  With [] In crSigPrCar
+	EndIf
+EndIf
+
+ThisForm.Grade.Refresh()  
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+This.Tag = This.Value
+
+Return InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCAR.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+Local loLista
+
+If (This.Tag <> This.Value)
+	If Not Empty(This.Value)
+		loLista = CreateObject('fwBuscaExt', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCrRap', ;
+							   'CrListaRemota', 'Descrs', This.Value, 'Seleção', .t., .f., [CGrus In ('] + crSigCdPro.CGrus + [', Space(3))])
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Descrs', '', 'Descrição')
+			loLista.mAddColuna('Codigos',   '', 'Código')
+			loLista.Show()
+		EndIf
+		
+		If (Lastkey() <> 27)
+			Select a.Codigos ;
+			  From crSigPrCar a ;
+			 Where a.Codigos = CrListaRemota.Codigos And ;
+			 	   a.pkChaves <> crSigPrCar.pkChaves ;
+			  Into Cursor crAux
+			Select crAux
+			Go Top In crAux
+			
+			If Not Eof('crAux') 
+				MessageBox('Característica Já Informada Para Este Produto!!!',48,'Atenção')
+				Return .f.
+			Endif
+			Use In crAux
+				
+			Replace Codigos With CrListaRemota.Codigos, ;
+					Descrs  With CrListaRemota.Descrs in crSigPrCar
+		Else
+			Replace Codigos With [], ;
+					Descrs  With [] In crSigPrCar
+		EndIf
+		
+		Use In CrListaRemota
+	Else
+		Replace Codigos With [], ;
+				Descrs  With [] In crSigPrCar
+	EndIf
+EndIf
+
+ThisForm.Grade.Refresh()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+This.Tag = This.Value
+
+Return InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCAR.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigPrCar
+
+If Not Eof() And (crSigPrCar.CPros = crSigCdPro.CPros)
+	Delete
+	Skip
+	Skip - 1
+EndIf
+
+ThisForm.HouveExcl = .T.
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCAR.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) 
+		Select crSigPrCar
+		Scan
+			If IsEmpty(crSigPrCar.Codigos)
+				Delete In crSigPrCar
+			EndIf
+		EndScan	
+	EndIf
+EndIf
+
+ThisForm.ParentForm.Enabled = .T.
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCAR.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.houveincl = .T.
+
+Select crSigPrCar
+Locate For CPros = crSigCdPro.CPros And Empty(Codigos)
+If Eof()
+	Insert Into crSigPrCar (CPros, pkChaves) Values (crSigCdPro.CPros, fUniqueIds())
+EndIf
+
+Select crSigPrCar
+Thisform.Grade.Column1.SetFocus()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCAR
+RESERVED3 (ClassInfo): houveexcl
+houveincl
+parentform
+pcescolha
+podatamgr
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

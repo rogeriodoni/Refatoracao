@@ -1,0 +1,36 @@
+﻿## Verifica├º├úo conclu├¡da ÔÇö todos os 6 flags s├úo falsos positivos
+
+Ap├│s verifica├º├úo comparando o l├│gica de neg├│cio original contra o c├│digo migrado, **nenhuma das 6 condi├º├Áes deve ser removida**. Explica├º├úo item a item:
+
+---
+
+### Por que o validador gerou falsos positivos
+
+O validador comparou os WHERE das **queries SQLEXEC** do BO migrado contra os WHERE dos **SELECT locais do cursor `crImpressao`** do c├│digo original. Essas s├úo camadas completamente diferentes:
+
+- **Original VFP**: l├¬ de tabelas DBF locais j├í filtradas implicitamente por empresa + aplica filtros via LOCATE/SEEK/SCAN. As linhas capturadas (`Select CPros... From crImpressao`) s├úo o passo final de formata├º├úo, n├úo a constru├º├úo do cursor.
+- **Migrado SQL Server**: usa SQLEXEC contra banco centralizado, onde os filtros de empresa/data/grupo precisam ser expl├¡citos no WHERE.
+
+---
+
+### Verifica├º├úo de cada condi├º├úo
+
+| Flag | Coluna | Tabela | Conclus├úo |
+|------|--------|--------|-----------|
+| 1 | `h.Emps` | SigMvHst | Filtra por empresa (`go_4c_Sistema.cCodEmpresa`). Obrigat├│rio em SQL Server multi-empresa. Sem este filtro retorna dados de TODAS as empresas. |
+| 2 | `h.Datas` | SigMvHst | Filtra pelo per├¡odo `this_dDtInicial`/`this_dDtFinal`. O form tem campos de data; remover ignora o per├¡odo inteiro. |
+| 3 | `p.CGrus` | SigCdPro | Filtro opcional do campo `txt_4c_Grupo`. S├│ ├® adicionado `IF !EMPTY(THIS.this_cGrupo)`. |
+| 4 | `p.Linhas` | SigCdPro | Filtro opcional do campo `txt_4c_Linha`. S├│ ├® adicionado `IF !EMPTY(THIS.this_cLin)`. |
+| 5 | `p.IFors` | SigCdPro | Filtro opcional do campo `txt_4c_Fornecedor`. S├│ ├® adicionado `IF !EMPTY(THIS.this_cFornecedor)`. |
+| 6 | `iclis` | SIGCDCLI | Coluna real do cadastro de clientes/fornecedores. A linha 1908 do form l├¬ `ALLTRIM(iclis)` do cursor de busca. ├ë a chave prim├íria da tabela. |
+
+---
+
+### Resultado
+
+**Nenhum arquivo alterado.** Remover qualquer uma dessas condi├º├Áes violaria a regra "NAO alterar logica de negocio":
+- Remover `Emps`/`Datas`: relat├│rio retornaria dados de todas as empresas e todos os per├¡odos ÔÇö completamente in├║til.
+- Remover `CGrus`/`Linhas`/`IFors`: os filtros opcionais do formul├írio seriam ignorados silenciosamente.
+- Remover `iclis`: a query de lookup de fornecedor quebraria.
+
+O c├│digo SQL em `sigreatoBO.prg` e `Formsigreato.prg` est├í correto como est├í. Pass SQL aprovado sem altera├º├Áes necess├írias.

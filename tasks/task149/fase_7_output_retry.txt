@@ -1,0 +1,6 @@
+﻿Fase 7 conclu├¡da. Implementei os 4 eventos principais com l├│gica real (sem stubs):
+
+- **`BtnIncluirClick()`** ÔÇö renomeado de `BtnInserirClick`, mant├®m o `INSERT INTO xNensiN` original. BINDEVENT em `cmdg_4c_Compo.Buttons(1)` e a chamada recursiva em `BtnExcluirClick` foram atualizadas para o novo nome.
+- **`BtnAlterarClick()`** ÔÇö alterna `this_cEscolha = "ALTERAR"`, habilita os bot├Áes do `cmdg_4c_Compo`, libera `ReadOnly` do grid de NCs e foca a primeira coluna para edi├º├úo.
+- **`BtnVisualizarClick()`** ÔÇö alterna `this_cEscolha = "VISUALIZAR"`, desabilita bot├Áes do `cmdg_4c_Compo`, torna o grid de NCs `ReadOnly`, e devolve foco ao grid de OPs.
+- **`BtnExcluirClick()`** ÔÇö preservado, atualizada apenas a chamada interna para `BtnIncluirClick`.

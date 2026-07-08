@@ -1,0 +1,20 @@
+﻿Falso positivo confirmado. N├úo h├í nenhuma cl├íusula WHERE usando `cursor_4c_LocalHis` como coluna SQL em `SIGMDETQBO.prg` ou `FormSIGMDETQ.prg`.
+
+**An├ílise da detec├º├úo:**
+
+O validador provavelmente interpretou o padr├úo VFP do Passo 9 (linhas 488ÔÇô498 do BO) como um filtro SQL:
+
+```foxpro
+SELECT cursor_4c_LocalHis   ÔåÉ sele├º├úo de ├írea de trabalho VFP (n├úo SQL)
+GO TOP
+SCAN                         ÔåÉ sem FOR/WHILE = itera todos os registros
+    =SqlCalcP2(cursor_4c_LocalHis.Emps, ...)
+    SELECT cursor_4c_LocalHis   ÔåÉ re-sele├º├úo ap├│s fun├º├Áes que mudam workarea
+ENDSCAN
+```
+
+`cursor_4c_LocalHis` ├® um cursor VFP local criado com `CREATE CURSOR`, n├úo uma coluna de tabela SQL. O `SCAN` sem `FOR`/`WHILE` processa todos os registros sem filtro. O `SELECT cursor_4c_LocalHis` dentro do loop ├® sele├º├úo de ├írea de trabalho VFP.
+
+**Todos os WHERE SQL reais no BO usam exclusivamente:** `CBars`, `cbars_old`, `codbarras`, `cpros` ÔÇö exatamente como o original.
+
+**Nenhuma corre├º├úo necess├íria.** O problema detectado ├® falso positivo ÔÇö o c├│digo migrado est├í correto.

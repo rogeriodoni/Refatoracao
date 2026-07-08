@@ -1,0 +1,23 @@
+﻿Fase 2 conclu├¡da. O arquivo `cfoBO.prg` foi atualizado com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+- **`CarregarDoCursor()`** ÔÇö mapeia todos os 74 campos da tabela `SIGCDCFO` para as propriedades `this_*`, usando `SELECT (par_cAliasCursor)` antes de acessar os campos (padr├úo correto)
+
+- **`Inserir()`** ÔÇö INSERT com todos os 74 campos usando `EscaparSQL()` e `FormatarNumeroSQL()` com quebras de linha `;` para evitar linhas longas
+
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos edit├íveis com `WHERE codigos = ...`
+
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK com auditoria
+
+- **`Buscar()`** ÔÇö SELECT de `codigos, descricaos, situas` para o grid da lista, com prote├º├úo ZAP+APPEND quando cursor j├í est├í vinculado ao grid
+
+- **`CarregarPorCodigo()`** ÔÇö SELECT de todos os 74 campos por PK, reseta `this_lNovoRegistro = .F.`
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigos` para auditoria
+
+- **`Validar()`** ÔÇö valida campos obrigat├│rios (codigos + descricaos)
+
+- **`BuscarCfopPorCodigo()`** ÔÇö lookup de CFOP na mesma tabela (usado nos campos Get_CfoST, Get_CfoST60, Getcfdest)
+
+- **`BuscarIcmPorCodigo()`** ÔÇö lookup de Situa├º├úo Tribut├íria na tabela `SigCdIcm` (usado no campo getSittricm)

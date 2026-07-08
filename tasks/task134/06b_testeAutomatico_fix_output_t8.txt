@@ -1,0 +1,8 @@
+﻿A corre├º├úo est├í aplicada e verificada. Confirmando o estado final:
+
+- **Linha removida**: `.ForeColor = RGB(90, 90, 90)` do WITH block do Grid (`loc_oGrd`) em `ConfigurarPaginaLista()`
+- **`ColumnCount = 10`** continua na linha 423, depois do `ENDWITH` (correto)
+- **`HighlightForeColor`** (linha 415) permanece ÔÇö ├® propriedade nativa do Grid, n├úo causa propaga├º├úo a colunas
+- **Arquivo `.fxp`** removido para for├ºar recompila├º├úo
+
+**Causa raiz**: VFP9 propaga `ForeColor` do Grid para colunas rec├®m-criadas quando `ColumnCount` ├® setado ÔÇö mas somente se `ForeColor` foi **explicitamente modificado** do valor default. Colunas de Grid criadas em runtime n├úo suportam a propriedade est├ítica `ForeColor`, causando o erro. O form `Formsigopind.prg` (que passa os testes) confirma o padr├úo correto: Grid sem `ForeColor` expl├¡cito + `ColumnCount` ap├│s `ENDWITH` = sem erro.

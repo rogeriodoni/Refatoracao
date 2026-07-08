@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `sigreipeBO.prg` foi completado com os seguintes m├®todos:
+
+- **`PrepararDados()`** ÔÇö despacha para mala direta ou opera├º├úo conforme `this_cNmOperacao`
+- **`PrepararDadosMalaDireta()`** ÔÇö busca `SigMlCab + SigCdCli` filtrando por c├│digo de itiner├írio; r├®plica exata da query do `Init` original
+- **`PrepararDadosOperacao()`** ÔÇö busca `SigMvCab` com INNER JOIN em `SigCdCli` duas vezes (origem/destino), respeitando `this_nConta=1` (origem) vs `=2` (destino); r├®plica da l├│gica do `get_dt_final.Valid` original
+- **`PrepararDbImpressao()`** ÔÇö transforma o cursor `Relacao` em `DbImpressao` com colunas extras `cpros/qtds/cbars/Obs`; r├®plica do m├®todo `processamento` original
+- **`ObterChavePrimaria()`** ÔÇö retorna `cIdChaves` do cursor atual
+- **`Destroy()`** ÔÇö libera cursores `Relacao`, `TmpOper` e `DbImpressao`
+
+O BO tem paridade 100% com o comportamento do legado, sem stubs ou TODOs.

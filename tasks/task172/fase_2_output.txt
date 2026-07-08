@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da.
+
+**M├®todos adicionados ao `sigprdisBO.prg`:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `CarregarDoCursor()` | PROTECTED | Mapeia todos os 16 campos do cursor para propriedades |
+| `Buscar(par_cFiltro)` | PUBLIC | Lista lotes distintos (codigos/datas) com filtro WHERE opcional |
+| `BuscarPorData(ini, fim)` | PUBLIC | Filtra lotes por intervalo de data/hora (para Page1 da lista) |
+| `CarregarPorCodigo(codigos)` | PUBLIC | Carrega primeiro item de um lote, seta `this_lNovoRegistro=.F.` |
+| `BuscarItensPorCodigos(cod)` | PUBLIC | Retorna todas as linhas de um lote em `cursor_4c_ItensPrdis` |
+| `Inserir()` | PROTECTED | INSERT com 16 colunas + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE por `cidchaves` + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `codigos` (apaga lote inteiro) + auditoria |
+
+**Pontos cr├¡ticos respeitados:**
+- Nenhum `RETURN` dentro de TRY/CATCH ÔÇö todos usam `loc_lResultado`
+- `SELECT (par_cAliasCursor)` antes de acessar campos no `CarregarDoCursor`
+- `NVL(datas, {})` para campos DATETIME (que v├¬m com NULL do SQL Server)
+- `ExecutarExclusao` deleta por `codigos` (lote inteiro), conforme comportamento original (`Delete From SigPrDis Where Codigos = ?_Codigo`)

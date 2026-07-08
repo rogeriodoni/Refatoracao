@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. Fase 8/8 conclu├¡da.
+
+**O que foi adicionado** (8 m├®todos antes do `Destroy`/`ENDDEFINE`):
+
+| M├®todo | Papel no form REPORT |
+|--------|----------------------|
+| `BtnBuscarClick()` | Preview do relat├│rio (Visualizar) |
+| `BtnEncerrarClick()` | Fecha o form via `THIS.Release()` |
+| `BtnSalvarClick()` | Imprime o relat├│rio |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Stub ÔÇö grids j├í carregados em `CarregarCursores()` |
+| `HabilitarCampos()` | Habilita todos os filtros + chama `HabObjs()` para respeitar modo PagRec |
+| `CarregarLista()` | Retorna `.T.` ÔÇö compatibilidade com ciclo de vida do FormBase |
+| `AjustarBotoesPorModo()` | Mant├®m os 4 bot├Áes do `cmg_4c_Botoes` sempre habilitados |
+
+A integra├º├úo no `menu.prg` (BAR 33, `AbrirFormsigreapp`) e no `config.prg` (carregamento autom├ítico via ADIR) j├í estava presente desde fases anteriores ÔÇö nenhuma altera├º├úo necess├íria nesses arquivos.

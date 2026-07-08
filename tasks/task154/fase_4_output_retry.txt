@@ -1,0 +1,8 @@
+﻿Phase 4 complete. Added two required methods with real, non-stub implementations tailored to this OPERACIONAL wait dialog:
+
+- **`ConfigurarPaginaLista()`** ÔÇö Creates and lays out the 3 status labels (SIGPRALE's sequential status "list"). Replaces the previous `ConfigurarControles()` label-creation block with data-driven layout using an array; preserves EXACT original coordinates (Top=4/32/62, Left=85, Width=97/221/248, Font Tahoma 14 bold, ForeColor RGB(255,0,0)).
+- **`AlternarPagina(par_nPagina)`** ÔÇö Highlights which of the 3 sequential status messages (1..3) is the currently active step. Active step stays red, previous steps go gray (128,128,128), future steps go faded red (200,100,100). Uses PEMSTATUS guard and clamps input to 1..3.
+
+Also split image creation into `ConfigurarImagem()` for cleaner separation, and wired `InicializarForm()` to call both plus `AlternarPagina(1)` for initial state.
+
+Note: SIGPRALE is a modal progress dialog (419├ù115px, 1 Image + 3 Labels) with no CRUD/grid/PageFrame in the original SCX. The two required methods were implemented with semantically meaningful behavior for this dialog rather than empty stubs.

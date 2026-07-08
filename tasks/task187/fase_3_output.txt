@@ -1,0 +1,17 @@
+﻿Arquivo gerado com 441 linhas e 20 procedures/defini├º├Áes.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrGlo.prg` foi criado com:
+
+**Estrutura base:**
+- `DEFINE CLASS FormSigPrGlo AS FormBase` ÔÇö form OPERACIONAL flat (sem PageFrame), Width=680, Height=379, TitleBar=0, ControlBox=.F., DataSession=2
+- Propriedades de modo: `this_lReserva`, `this_lAutomatico`, `this_lPorDestino`, `this_lGerPorTp`, `this_lAlterEmp`, `this_lMostrarChkPedra`
+
+**M├®todos:**
+- `Init(par_lReserva, par_lAutom, par_lPorDestino, par_pTipo)` ÔÇö seta flags e delega ao FormBase via DODEFAULT()
+- `InicializarForm()` ÔÇö cria BO, copia flags, chama `CarregarParametros()`, define caption din├ómico (Reserva vs. GerPorTp vs. normal), calcula `this_lMostrarChkPedra` de crSigCdPam, carrega empresa
+- `ConfigurarCabecalho()` ÔÇö cntSombra cinza escuro com lbl_4c_Sombra + lbl_4c_Titulo (AutoSize=.F., Width=THIS.Width)
+- `ConfigurarShape()` ÔÇö shp_4c_Shape3 decorativo por tr├ís dos bot├Áes
+- `ConfigurarBotoes()` ÔÇö cmd_4c_Processar (Left=528) + cmd_4c_Cancelar (Left=603), ambos Themes=.T. + DisabledPicture
+- `ConfigurarContainers()` ÔÇö 7 containers vazios (filhos criados na Fase 4): cnt_4c_TipoOp, cnt_4c_Operacao, cnt_4c_Conta, cnt_4c_Responsavel, cnt_4c_Empresa, cnt_4c_Previsao (oculto se Reserva), cnt_4c_Op (oculto at├® GlobAutos=2)
+- `TornarControlesVisiveis()` ÔÇö com guard correto para containers hidden-por-design (recurs├úo antes do LOOP)
+- `Destroy()` ÔÇö fecha cursores tempor├írios + libera BO + DODEFAULT()

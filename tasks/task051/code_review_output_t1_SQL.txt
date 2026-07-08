@@ -1,0 +1,22 @@
+﻿An├ílise completa dos 7 problemas flagados. Resultado:
+
+**Todos os 7 s├úo falsos positivos do validador autom├ítico.**
+
+Aqui est├í o diagn├│stico:
+
+| Problema | Coluna | Onde aparece no c├│digo | Tipo de query |
+|----------|--------|----------------------|---------------|
+| CEMPS | `cEmps` | `WHERE cEmps =` linha 1316 | Lookup SigCdEmp (validar empresa) |
+| RAZAS | `Razas` | `WHERE Razas LIKE` linha 1364 | Lookup SigCdEmp (busca por descri├º├úo) |
+| CODIGOS | `Codigos` | `WHERE Codigos =` linhas 1435/1683 | Lookup SigCdGcr (validar grupo) |
+| DESCRS | `Descrs` | `WHERE Descrs LIKE` linhas 1489/1737 | Lookup SigCdGcr (busca por descri├º├úo) |
+| RCL/RCLIS | `rClis` | `WHERE rClis LIKE` linhas 1609/1857 | Lookup SigCdCli (busca por descri├º├úo) |
+| PO | ÔÇö | **N├âO EXISTE** em nenhum dos dois arquivos | Falso positivo puro |
+
+**Por que s├úo falsos positivos?**
+
+O validador comparou *todos* os WHERE do arquivo contra as colunas do WHERE do SQL principal do relat├│rio (`TIPOS, DTENTS, VENCS, EMPS, NOTAS, GRCLIS, ICLIS, GRUPOS, CONTAS, NUMS, UMOVS`). Mas as colunas flagadas pertencem a **queries auxiliares de lookup** em procedures separadas (`ValidarCdEmpresa`, `ValidarDsEmpresa`, `ValidarCdDesGrupo`, etc.), que consultam tabelas diferentes (SigCdEmp, SigCdGcr, SigCdCli) ÔÇö n├úo o SQL principal.
+
+**Remover seria erro:** a pr├│pria instru├º├úo do pass pro├¡be explicitamente ÔÇö *"NAO remover campos, funcionalidades ou lookups"*. Remover `WHERE cEmps =` da query de empresa, ou `WHERE Codigos =` da query de grupo quebraria completamente a valida├º├úo dos campos de filtro.
+
+Nenhuma altera├º├úo nos arquivos ├® necess├íria. Os dois arquivos est├úo corretos para este pass SQL.

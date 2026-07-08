@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. Adicionei os 10 m├®todos faltantes ao `FormSigPdMen.prg`:
+
+- **`BtnBuscarClick` / `BtnEncerrarClick` / `BtnSalvarClick` / `BtnCancelarClick`**: todos chamam `THIS.Release()` ÔÇö dialog somente-leitura sem a├º├Áes CRUD.
+- **`CarregarLista`**: delega para `CarregarMensagem()`, protegido por `gb_4c_ValidandoUI`.
+- **`FormParaBO`**: retorna `.T.` ÔÇö sem campos edit├íveis para transferir.
+- **`BOParaForm`**: delega para `CarregarMensagem()` ÔÇö atualiza exibi├º├úo a partir do BO.
+- **`HabilitarCampos`**: no-op ÔÇö dialog sem campos edit├íveis.
+- **`LimparCampos`**: limpa `lbl_4c_Gettexto.Caption` e `obj_4c_GetMemo.Value` via PEMSTATUS.
+- **`AjustarBotoesPorModo`**: no-op ÔÇö sem bot├Áes CRUD para ajustar.
+
+O arquivo agora est├í em 558 linhas e completo. Como ├® um dialog modal chamado por outros forms via `CREATEOBJECT("FormSigPdMen", cidchave, descr1, descr2)`, n├úo requer entrada no menu ÔÇö o `config.prg` j├í carrega via ADIR automaticamente.

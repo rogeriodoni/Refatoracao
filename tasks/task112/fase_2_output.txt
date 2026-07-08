@@ -1,0 +1,11 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+`SigReHevBO.prg` agora tem implementa├º├úo completa com 5 m├®todos adicionados:
+
+- **`PrepararDados()`** ÔÇö replica fielmente o `processamento` legado: cria `csCabecalho`, l├¬ `DopEnvels` de `SigCdPam`, itera sobre tipos de envelope em `SigCdOpe`, acumula `Pesos`/`Qtds` por chave `Emps+Dopps+Numps` via `SCAN WHILE`/`SKIP -1`/`SCATTER MEMVAR`, resolve nomes de clientes em `SigCdCli`, popula `ObsOps` via `SigCdCe` (todos os registros com acesso, s├│ o ├║ltimo sem acesso).
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+- **`ImprimirDireto()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER NOCONSOLE` (equivalente ao `documento` legado)
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o form tratar erros
+
+Pr├│xima fase: Fase 3 ÔÇö criar `FormSigReHev.prg`.

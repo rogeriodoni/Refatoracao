@@ -1,0 +1,374 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREFUN.SCX
+* Data/Hora: 05/06/2026 13:54:23
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFUN
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetFundi
+  Parent: SIGREFUN
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetFundf
+  Parent: SIGREFUN
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGREFUN
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGREFUN
+  Class: label
+  BaseClass: label
+
+Objeto: ImpObs
+  Parent: SIGREFUN
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN
+------------------------------------------------------------
+  DataSession = 1
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relação tubos fundição"
+  MinButton = .F.
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGREFUN"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 2
+  btnReport.sair.Left = 204
+  btnReport.sair.Name = "sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.TabIndex = 6
+  btnReport.ZOrderSet = 7
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN.GetFundi
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999999"
+  Left = 343
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 144
+  Width = 52
+  ZOrderSet = 2
+  Name = "GetFundi"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN.GetFundf
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999999"
+  Left = 420
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 144
+  Width = 52
+  ZOrderSet = 3
+  Name = "GetFundf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN.Label1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Height = 17
+  Left = 404
+  Top = 148
+  Width = 9
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN.Label2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nº Fundição : "
+  Height = 17
+  Left = 264
+  Top = 147
+  Width = 78
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFUN.ImpObs
+------------------------------------------------------------
+  Top = 172
+  Left = 343
+  Height = 15
+  Width = 153
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir observação do item"
+  Value = .F.
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "ImpObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFUN
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReFun Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pCdI, pCdF
+Wait Window 'Aguarde Processamento!' NoWait
+
+Create Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), Titulo2 c(200), Figura c(10), ImpObs l)
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmpresa = _Empr + ' - ' + Alltrim(crSigCdEmp.Razas)
+lcTitulo  = 'Relação tubos fundição'
+lcTitulo2 = 'Fundição - ' + ThisForm.GetFundI.Value + ' até ' + ThisForm.GetFundF.Value
+
+Insert Into csCabecalho (NomeEmpresa, Titulo, Titulo2, ImpObs) Values (lcEmpresa, lcTitulo, lcTitulo2, ThisForm.ImpObs.Value)
+
+Create Cursor Relatorio (Codigos n(6), Tubos n(2), bCeras n(12,2), Bases n(12,2), Ceras n(12,2), ;
+						 Metals n(12,2), CodCors c(4), Obss m, Datas d, ObsG m, Qtdos n(10,3), MetalNvs n(12,3))
+Index On Str(Codigos, 6) + Str(Tubos, 2) Tag Tubos
+Index On Str(Codigos, 6) + CodCors + Str(Tubos, 2) Tag Impressao
+		
+pCdI = ThisForm.GetFundI.Value
+pCdF = ThisForm.GetFundF.Value
+
+lcQuery = [Select b.*, a.Obss as ObsG, a.Datas, c.Pesos ] + ;
+			[From SigCdFun a, SigCdFud b, SigCdCor c ] + ;
+		   [Where a.Codigos Between ?pCdI And ?pCdF And ] + ;
+		   		 [a.Codigos = b.Codigos And ] + ;
+		   		 [b.Nops = 0 And ] + ;
+		   		 [b.NNumes = 0 And ] + ;
+		   		 [b.CodCors = c.Cods]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crDados') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDados)')
+	Return 0
+EndIf
+
+lcQuery = [Select b.Codigos, b.Tubos, Sum(b.QtdOs) as QtdOs ] + ;
+			[From SigCdFun a, SigCdFud b ] + ;
+		   [Where a.Codigos Between ?pCdI And ?pCdF And ] + ;
+		   		 [a.Codigos = b.Codigos And ] + ;
+		   		 [b.Nops > 0 Group by b.Codigos, b.Tubos ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTubos') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTubos)')
+	Return 0
+EndIf
+
+Select Codigos, Tubos, NNumes, Nops, Qtds, QtdOs, BCeras, Bases, CodCors, ;
+	   Nvl(Obss, Space(100)) as Obss, TempMets, TempAmbs, TempTubs, TempAgus, ;
+	   Nvl(ObsG, Space(100)) as ObsG, Ttod(Nvl(Datas, Ctot(''))) as Datas, Pesos, Metals, MetalNvs ;
+  From crDados ;
+  Into Cursor Selecao
+
+Select Selecao
+Scan
+	Cod = Codigos
+	
+	Select Relatorio
+	Append Blank
+	Replace Codigos With Cod, ;
+			Tubos   With 99, ;
+			CodCors With 'ZZZZ', ;
+			Obsg    With Selecao.ObsG
+	
+	Select Selecao
+	Scan While Codigos = Cod
+		Scatter Memvar Memo
+		m.Ceras   = m.Bceras - m.Bases
+*!*			m.Pmetals = Round(m.Ceras * Iif(m.Pesos=0, 1, m.Pesos), 0)
+
+		Select Relatorio
+		Append Blank
+		Gather Memvar Memo
+	EndScan
+	Skip -1
+EndScan
+
+Select Crtubos
+Scan
+	If Seek(Str(CrTubos.codigos,6) + Str(CrTubos.Tubos,2),'Relatorio','Tubos')
+		Replace Relatorio.QtdOs With CrTubos.QtdOs in Relatorio
+	Endif
+EndScan
+
+Select Relatorio
+Go Top
+Browse normal
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	ENDIF
+EndWith
+
+*!*	Lparameters _Fundicao, _Conexao
+
+*!*	With ThisForm
+*!*		.poDataMgr 		= _Conexao
+*!*		.getFundI.Value = _Fundicao
+*!*		.getFundF.Value = _Fundicao
+*!*		.Refresh
+
+*!*		=DoDefault()
+*!*	EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReFun To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReFun To Print NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If Empty(thisform.getFundi.Value) Or Empty(thisform.getFundf.Value)
+	MessageBox([No. de fundição é obrigatório.],64,[Aviso])
+	thisform.getFundi.SetFocus()
+	Return .f.
+EndIf
+
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFUN
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

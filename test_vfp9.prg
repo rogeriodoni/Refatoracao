@@ -1,0 +1,4 @@
+SET SAFETY OFF
+SET RESOURCE OFF
+STRTOFILE("VFP9_ALIVE", "C:\4c\vfp9_test_result.txt")
+QUIT

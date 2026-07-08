@@ -1,0 +1,23 @@
+﻿Phase 5 is complete. Here's a summary of what was implemented:
+
+**Phase 5 changes to `Formsigprdis.prg` (714 ÔåÆ 1013 lines):**
+
+**`ConfigurarPaginaDados()` expanded:**
+- Added `cmd_4c_Salvar` (Confirmar, `cadastro_salvar_60.jpg`) and `cmd_4c_Cancelar` to `cnt_4c_BotoesAcao` with BINDEVENTs ÔåÆ `BtnSalvarClick`/`BtnCancelarClick`
+- `pgf_4c_Dados.Page2.Enabled = .F.` and `.Page3.Enabled = .F.` initially (enabled after Processar)
+- Calls `THIS.ConfigurarAba1Estoques()` before `TornarControlesVisiveis`
+
+**New `ConfigurarAba1Estoques()` method:**
+- `cmd_4c_Processar` button (`geral_processar_60.jpg`, top=10, left=733) ÔåÆ `BtnProcessarClick`
+- `lbl_4c_EstoquesTit` ("Estoques para distribuir", top=189, left=338)
+- `grd_4c_Estoque` (top=207, left=335, width=271, height=244, 4 columns): Column1 = CheckBox `chk_4c_nMarca`; Columns 2-4 = ReadOnly TextBox for Empresa/Grupo/Conta
+- `cmg_4c_MarcaDesmarca` CommandGroup (top=351, left=617, 2 buttons) ÔåÆ `CmgMarcaDesmarcaClick`
+
+**New methods:**
+- `CarregarEstoque()`: SQL `SELECT 0 AS nMarca, Cemps, CGrus, CCons FROM SigCdCeg WHERE TpCads = 3` ÔåÆ cursor_4c_Estoque
+- `CmgMarcaDesmarcaClick()`: checks `.Value` (1=marcar, 2=desmarcar) then `REPLACE ALL nMarca WITH 1/0`
+- `BtnProcessarClick()`: calls `this_oBusinessObject.ProcessarDistribuicao(...)` and enables Pages 2+3
+- `AlternarPagina()` updated: going to page 2 now sets `pgf_4c_Dados.ActivePage = 1` and calls `CarregarEstoque()`
+- `Destroy()` updated: closes `cursor_4c_Estoque`
+
+**Next: Phase 6** ÔÇö `ConfigurarAba2Distribuicao()`: two grids side-by-side (`grd_4c_Disponivel` 7 cols + `grd_4c_Distribui` 4 cols), product image, group/subgroup filter fields, product info panel at bottom.

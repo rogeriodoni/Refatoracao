@@ -1,0 +1,18 @@
+﻿Ap├│s investiga├º├úo completa dos dois arquivos (`Formccr.prg` e `ccrBO.prg`), os 4 problemas reportados s├úo **falsos positivos** do validador automatizado.
+
+**An├ílise detalhada de cada item:**
+
+| Problema reportado | O que existe no c├│digo | Diagn├│stico |
+|---|---|---|
+| `FINANCEIRO` em WHERE | S├│ em coment├írios: `*-- Separador Financeiro`, caption label | Falso positivo ÔÇö ├® texto de UI, n├úo coluna SQL |
+| `INDUSTRIA` em WHERE | S├│ em coment├írios: `*== Separador Industria ==` | Falso positivo ÔÇö ├® texto de UI, n├úo coluna SQL |
+| `TPCODS` em WHERE | Em `UPDATE SET tpcods = ...` e `ControlSource = "...TpCods"` | Falso positivo ÔÇö est├í em SET/ControlSource, nunca em WHERE |
+| `CMOES` em WHERE | `SELECT cmoes, dmoes FROM SigCdMoe WHERE cmoes = ...` (linha 2926) | Falso positivo ÔÇö `cmoes` ├® a **PK de SigCdMoe**, filtro 100% v├ílido |
+
+**Todos os WHERE reais no c├│digo s├úo corretos:**
+- Linha 2709: `WHERE Classes = ...` ÔåÆ PK de `SigCdCss` Ô£ô
+- Linha 2818: `WHERE Codigos = ...` ÔåÆ PK de `SigCdGcr` Ô£ô  
+- Linha 2926: `WHERE cmoes = ...` ÔåÆ PK de `SigCdMoe` Ô£ô
+- Linha 2998: `WHERE codigos = ...` ÔåÆ PK de `SigCdCst` Ô£ô
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo n├úo cont├®m as condi├º├Áes WHERE inventadas descritas no relat├│rio. O validador fez text-matching em coment├írios e clausulas SET/ControlSource, classificando-os erroneamente como filtros WHERE inventados.

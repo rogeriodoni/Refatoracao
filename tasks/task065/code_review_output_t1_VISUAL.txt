@@ -1,0 +1,21 @@
+﻿Todos os 9 problemas reportados s├úo **falsos positivos**. O validador comparou posi├º├Áes absolutas do SCX original (onde os controles eram filhos diretos do form) com posi├º├Áes relativas do c├│digo migrado (onde os controles est├úo dentro de `cnt_4c_Filtros`).
+
+O container `cnt_4c_Filtros` tem `.Top = 80` e `.Left = 0`. Fazendo a conta para cada controle:
+
+| Controle | SCX absoluto | Container offset | Relativo correto | C├│digo atual |
+|---|---|---|---|---|
+| `txt_4c_DataIni` Top | 167 | ÔêÆ80 | **87** | 87 Ô£ô |
+| `txt_4c_DataFin` Top | 167 | ÔêÆ80 | **87** | 87 Ô£ô |
+| `lbl_4c_Say1` Top | 170 | ÔêÆ80 | **90** | 90 Ô£ô |
+| `lbl_4c_Say2` Top | 171 | ÔêÆ80 | **91** | 91 Ô£ô |
+| `lbl_4c_Say3` Top | 145 | ÔêÆ80 | **65** | 65 Ô£ô |
+| `opt_4c_OptFiltro` Top | 140 | ÔêÆ80 | **60** | 60 Ô£ô |
+| `opt_4c_OptFiltro` Left | 288 | ÔêÆ0 | **288** | 288 Ô£ô |
+| `opt_4c_Opcao` Top | 120 | ÔêÆ80 | **40** | 40 Ô£ô |
+| `opt_4c_Opcao` Left | 288 | ÔêÆ0 | **288** | 288 Ô£ô |
+
+**Todos os 9 controles j├í est├úo nas posi├º├Áes corretas.** O diff de exatamente 80px para 7 dos problemas ├® a prova direta: 80px = `cnt_4c_Filtros.Top`. Os outros 2 (`opt_4c_Opcao`/`opt_4c_OptFiltro` Left=5) provavelmente foram gerados a partir de uma vers├úo anterior do c├│digo que j├í foi corrigida.
+
+Se eu aplicasse as posi├º├Áes absolutas do SCX como posi├º├Áes relativas dentro do container, os controles ficariam deslocados 80px para baixo do correto (ex: `txt_4c_DataIni` ficaria em y=80+167=247 em vez de y=167).
+
+Nenhuma altera├º├úo ├® necess├íria no arquivo `Formsigrecpr.prg`.

@@ -1,0 +1,9 @@
+﻿All 4 fixes are correct. Summary of changes to `Formsigprcpd.prg`:
+
+1. **[CONTAINER-VISIVEL]** `TornarControlesVisiveis` ÔÇö added `CNT_4C_CABECALHO`, `CNT_4C_INFOPROD`, `CNT_4C_DETALHELINHA` to the INLIST skip guard. Children are still recursed so they'll display correctly when the containers are shown by form logic, but `TornarControlesVisiveis` won't force-show them.
+
+2. **[GRID-WITH]** `AtualizarGrid` ÔÇö moved `loc_oGrid.ColumnCount = 8` and `loc_oGrid.RecordSource = "cursor_4c_Dados"` outside the `WITH` block. Columns now exist before the `WITH` tries to access `.Column1`, `.Column2`, etc.
+
+3. **[NAVEGACAO-PAGINA]** `GrdDadosDblClick` ÔÇö added `THIS.GrdDadosAfterRowColChange(0)` before `ActivePage = 2`, consistent with `BtnAlterarClick` and `BtnVisualizarClick`. Page2 now receives populated detail fields before being shown.
+
+4. **[LAYOUT-POSITION]** `cmd_4c_Sair.Left` ÔÇö changed from `916` to `725` to match the original SCX position (diff was 191px, well above the 30px tolerance).

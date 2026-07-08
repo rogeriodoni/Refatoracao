@@ -1,0 +1,22 @@
+﻿Arquivo completo e correto. Fase 6/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+Em `ConfigurarEventos()` ÔÇö 7 novos BINDEVENTs para as c├®lulas edit├íveis do `grd_4c_Inc`:
+- `Column1.Text1`: `When` + `KeyPress` (NCF)
+- `Column2.Text1`: `When` + `KeyPress` (Qtde)
+- `Column3.Text1`: `When` (Descri├º├úo ÔÇö edit├ível s├│ quando Fixos=2)
+- `Column4.Text1`: `When` + `KeyPress` (Funcion├írio)
+
+9 novos m├®todos adicionados:
+| M├®todo | Equivalente Original |
+|---|---|
+| `GrdIncCol1When()` | `Gradeinc.Column1.Text1.When` ÔÇö salva AntValue + retorna modo |
+| `GrdIncCol1KeyPress()` | Dispatcher para Enter/Tab/F4(115) ÔåÆ ValidarNcf |
+| `ValidarNcf()` | `Gradeinc.Column1.Text1.Valid` ÔÇö SQLEXEC SigCdNcf, Seek, FormBuscaAuxiliar se n├úo encontrado, REPLACE Fixos+Descs em xNensiN |
+| `GrdIncCol2When()` | `Gradeinc.Column2.Text1.When` ÔÇö retorna modo |
+| `GrdIncCol2KeyPress()` | `Gradeinc.Column2.Text1.Valid` ÔÇö valida Qtds Ôëñ xMfas.Qtds e Ôëá 0 |
+| `GrdIncCol3When()` | `Gradeinc.Column3.Text1.When` ÔÇö modo AND xNensiN.Fixos=2 |
+| `GrdIncCol4When()` | `Gradeinc.Column4.Text1.When` ÔÇö retorna modo |
+| `GrdIncCol4KeyPress()` | Dispatcher ÔåÆ ValidarFuncionario |
+| `ValidarFuncionario()` | `Gradeinc.Column4.Text1.Valid` ÔÇö SEEK TmpCli por BalCodigo, atualiza IClis ou limpa c├®lula |

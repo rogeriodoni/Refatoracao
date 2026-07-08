@@ -1,0 +1,14 @@
+﻿The false positive was Portuguese "todos" (meaning "all") in a comment ÔÇö not a stub. File complete.
+
+**Phase 8/8 finalized**. Added 10 CRUD-contract methods (BtnBuscarClick, BtnEncerrarClick, BtnSalvarClick, BtnCancelarClick, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, CarregarLista, AjustarBotoesPorModo) to `FormSigPrFem.prg` before ENDDEFINE, adapted for the OPERACIONAL/REPORT context of SIGPRFEM (An├ílise de Produ├º├úo):
+
+- **BtnBuscarClick** ÔåÆ delega para AbrirLookupDemonstrativo
+- **BtnEncerrarClick / BtnSalvarClick / BtnCancelarClick** ÔåÆ delegam para os handlers Cmd* existentes, com valida├º├úo pr├®via via FormParaBO
+- **FormParaBO** ÔåÆ valida Data Final, ordem das datas e Demonstrativo; propaga para `this_oBusinessObject.this_dDatai/dDataf/cDemonstrativo`
+- **BOParaForm** ÔåÆ sincroniza filtros + preenche os 10 TextBoxes do `cnt_4c_Resumo` (SaldoIni, SaldoAnt, Entradas, TEntradas, Saidas, Saldo, SaldoFunc, Pesagem, SaldoT, FalhaFunc)
+- **HabilitarCampos(par_lHabilitar)** ÔåÆ toggla filtros + bot├Áes Processar/Visualizar/Imprimir
+- **LimparCampos** ÔåÆ reseta filtros do form, propriedades do BO e totalizadores do resumo
+- **CarregarLista** ÔåÆ recarrega grades via AtualizarGrades + AtualizarTotalizadores
+- **AjustarBotoesPorModo** ÔåÆ habilita Visualizar/Imprimir s├│ quando `cnt_4c_Resultado.Visible`
+
+Arquivo: 1590 ÔåÆ 1815 linhas. Sem stubs/TODOs. `ENDDEFINE` intacto.

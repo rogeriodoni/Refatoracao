@@ -1,0 +1,335 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 8,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For", "File", "fDelAcesso", "fConfigGeral", "fLogoRelatorio", "fGerPswDiario", "fCriptografar", "fUniqueIds", "fwBuscaInt", "For Lower"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 398,
+      "codigoOriginal": "Lparameters pFoc\nPrivate pcselbarras\n\nLocal Array laFiltro1(1,2)\n\nLocal llRetorno,lcMsg1,llChkUsuario,llChkEmpresa,lnErro1,lcMcrSql1,lnDock,lnTmpChk,;\n\t\tlnTmpApp,lnNbotao1,lcMacro1,lcOpSis1,lcOpSis2,lcTransSis1,loDatamgr1,;\n\t\tlcDirTmp1,lcArqIcone1,lcExtIcone1,lnTamIcone1, ldUltData1, ldUltData2, lnDias, llSaida1\n\nm.llRetorno = .t.\nm.lcMsg1 = ''\nm.lcMacro1 = ''\nm.llSupervis = .f.\nm.lnErro1 = Iif(ThisForm.poDatamgr.pnIdConn>0,1,-1)\nm.lcDirTmp1 = Addbs(Sys(2023))\nm.llSaida1 = .f.\n\nWith Thisform\n\tm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For,File",
+        "metodosFormChamados": "SqlExecute,Click",
+        "controlesReferenciados": "ChkUsuario,ChkEmpresa,get_emp,get_demp,chks",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "lnErro1 = Iif(.poDatamgr.pnIdConn>0,1,-1)\n\nlcMcrSql1 = [Select cemps, razas, tipos From SigCdEmp]\nIf Used('crEmpresa1')\n\tUse In ('crEmpresa1')\nEndIf\nIf (lnErro1>0)\n\tlnErro1 = .poDatamgr.SQLExecute(lcMcrSql1, 'crEmpresa1')\nEndIf\nIf Used('crEmpresa1')\n\tGo Top In crEmpresa1\n\tIf (Reccount([crEmpresa1]) > 1)\n\t\tThisForm.lblEmpresa.Visible = .t.\n\t\tThisForm.get_Emp.Visible  = .t.\n\t\tThisForm.get_Demp.Visible = .t.\n\t\t*ThisForm.Saida.Left = ThisForm.get_Demp.Left + ThisForm.get_Demp.Width + 10\n\tElse\n\t\t*Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Emp,get_Demp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "Local lcMsg\nlcMsg = []\n\nThisform.poDatamgr = Createobject('fSqlConector', Thisform.Name)\nIf Thisform.poDatamgr.pnIdConn > 0\n\n\tlcEmps = Thisform.Get_EMP.Value\n\n\tlcQuery = [select Estas From SigCdEmp Where Cemps = ']+lcEmps+[']\n\tIf (Thisform.poDatamgr.SqlExecute(lcQuery, [csEstEmp]) < 1)\n\t\t=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (csEstEmp)])\n\t\tReturn 0\n\tEndif\n\n\tSelect csEstEmp\n\tIf Alltrim(Upper(csEstEmp.Estas)) <> [SC]\n\t\tReturn .T.\n\tEndif\n\n\tlcQuery = [Select * from S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDatamgr = Createobject,SqlExecute",
+        "controlesReferenciados": "Get_EMP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "If Used('crsigcdusu1')\n\tUse In ('crsigcdusu1')\nEndIf\n\nIf Used('crEmpresa1')\n\tUse In ('crEmpresa1')\nEndIf\n\nIf Used('crParam1')\n\tUse In ('crParam1')\nEndIf\n\nIf Used('crParam2')\n\tUse In ('crParam2')\nEndIf\n\nIf Used('crTmpAcBarra1')\n\tUse In ('crTmpAcBarra1')\nEndIf\n\nIf Used('crAcBarra1')\n\tUse In ('crAcBarra1')\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Init",
+      "linhas": 144,
+      "codigoOriginal": "LParameters llGetUsuario, llPrimeiraVez, llautomatico, lcPrograma\n\nPublic gcUsuar, gcEmpr, _tipoe, usuar, _empr\n\nLocal lcMcrSql1, lnErro1\n\n*!*\tThis.Width  = _Screen.Width\n*!*\tThis.Height = _Screen.Height\n*!*\tThis.Top    = 0\n*!*\tThis.Left   = 0\n\nThisForm.NomePrograma = Iif(Type([lcPrograma])=[C],lcPrograma,'OPERACIONAL')\n\nThis.lblTitF.Caption = goSistema.TituloSistema\nThis.lblTitT.Caption = goSistema.TituloSistema\nThis.lblTitF.Visible = .f.\nThis.lblTitT.Visible = .f.\n\n*!*\tIf (_Screen.Width > 779)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File,fDelAcesso",
+        "metodosFormChamados": "NomePrograma = Iif,SQLExecute",
+        "controlesReferenciados": "chks,get_emp",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If Type('This.poDataMgr')=='O'\n\tThis.poDataMgr.Release\nEndIf\n= DoDefault()\n=fLogoRelatorio()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLogoRelatorio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.SENHA",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Thisform.plGetUsuario)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.SENHA",
+      "evento": "LostFocus",
+      "linhas": 68,
+      "codigoOriginal": "Local lcMsg1, lnErro1, lcMcrSql1\n\nm.lcMsg1 = ''\nm.lnErro1 = 1\nThis.Value = PadR(Strtran(Strtran(This.Value, ['], [ ]), [\"], [ ]),10)\n\nSelect crParam2\nLocate \n\nWith ThisForm\n\t\n\tIf Used('crsigcdusu1')\n\t\tSelect ('crsigcdusu1')\n\t\tSet Order To ('') In ('crsigcdusu1')\n\t\tLocate\n\n\t\tIf .usuario.Value = '4CONTROL' \n\t\t\tlcSenha4c = fGerPswDiario(Val(Sys(1)), Date(), 0) \n\t\t\tIf Not Alltrim(.senha.Value)==Alltrim(lcSenha4c)\n\t\t\t\tm.lcMsg1 = 'Usuário / Senha Inválidos(1).'\n\t\t\t\t.plUsuarioOk = .F.\n\t\t\tElse\n\t\t\t\t.plUs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerPswDiario,fCriptografar",
+        "metodosFormChamados": "SQLExecute,Commit,RollBack,pnBloqueiaSenha =,Confirma",
+        "controlesReferenciados": "get_Emp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.SAIDA",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "With ThisForm\n\t.Enabled = .f.\n\t.Visible = .f.\n\t.Release\n\tDo pEncerrar\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.USUARIO",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If Not This.Value==This.peAntvalue \n\tThisForm.pnBloqueiaSenha = 1\nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.USUARIO",
+      "evento": "Valid",
+      "linhas": 99,
+      "codigoOriginal": "Private pcUsuario1\n\nLocal lcMsg1, lnErro1, lcMcrSql1, lcSupervis\n\nm.lcMsg1 = ''\nThis.Value = PadR(Alltrim(Strtran(Strtran(This.Value, ['], [ ]), [\"], [ ])),10)\nm.gcUsuar = This.Value\nm.usuar = m.gcUsuar\ngoSistema.Usuario = m.gcUsuar\n= fUniqueIds(m.usuar)\n\nIf Not Type('m.gcTipoUsuario')=='C'\n\tPublic gcTipoUsuario\nEndIf \n\nm.gcTipoUsuario = Space(11)\n\nWith ThisForm\n\tm.lnErro1 = Iif(.poDatamgr.pnIdConn>0, 1, -1)\n\tm.pcUsuario1 = Alltrim(.usuario.Value)\n\tm.lcMcrSql1 = [select a.usuarios,a.senhas,a.sup... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.USUARIO",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.plUsuarioOk = .f.\n\nReturn(Thisform.plGetUsuario)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.Get_EMP",
+      "evento": "When",
+      "linhas": 58,
+      "codigoOriginal": "Local lnErro1, lcMcrSql1, llSupervis\n\nm.lnErro1 = Iif(ThisForm.poDatamgr.pnIdConn>0,1,-1)\nm.llSupervis = .f.\n\nIf Type('m.gcTipoUsuario') == 'C'\n\tm.llSupervis = (Left(m.gcTipoUsuario, 1) == 'i')\n\nEndIf\n\nIf m.llSupervis\n\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos, a.Logos from SigCdEmp a order by a.cemps]\n\nElse\n\tm.lcMcrSql1 = [Select b.Cemps, b.Razas, b.Tipos, b.Logos ] + ;\n\t\t\t\t\t[From SigCdAcE a ] + ;\n\t\t\t\t   [Inner Join SigCdEmp b ] + ;\n\t\t\t\t   \t  [On b.Cemps = a.Emps ] + ;\n\t\t\t\t   [Where a.Usuar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "get_emp,get_demp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.Get_EMP",
+      "evento": "Valid",
+      "linhas": 73,
+      "codigoOriginal": "Local llRetorno,lcMcrlSql1,lnErro1,loLista\n\nm.llRetorno = (LastKey()==27.Or.Empty(This.Value))\nm.lnErro1 = 1\nThis.Value = PadR(This.Value,3)\n\nIf .Not.m.llRetorno\n\tIf (.Not.Used('crEmpresa1').Or.;\n\t\tRecCount('crEmpresa1')==0)\n\t\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos,a.logos from SigCdEmp a order by 1]\n\t\tIf Used('crEmpresa1')\n\t\t\tUse In ('crEmpresa1')\n\t\tEndIf\n\t\tIf m.lnErro1>0\n\t\t\tm.lnErro1 = ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crEmpresa1')\n\t\tEndIf\n\tEndIf\n\tIf (Used('crEmpresa1').And.;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaInt,For Lower",
+        "metodosFormChamados": "SQLExecute,Value = Iif,Value = Space,Confirma",
+        "controlesReferenciados": "get_emp,get_demp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.Get_Demp",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.plUsuarioOk.And.Empty(ThisForm.Get_Emp.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Empty",
+        "controlesReferenciados": "Get_Emp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGTOSEN.Get_Demp",
+      "evento": "Valid",
+      "linhas": 46,
+      "codigoOriginal": "Local llRetorno,lcMcrlSql1,lnErro1,loLista\n\nm.llRetorno = (LastKey()==27.Or.Empty(This.Value))\nm.lnErro1 = 1\n\nIf .Not.m.llRetorno\n\tIf (.Not.Used('crEmpresa1').Or.;\n\t\tRecCount('crEmpresa1')==0)\n\t\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos from SigCdEmp a order by 1]\n\t\tIf Used('crEmpresa1')\n\t\t\tUse In ('crEmpresa1')\n\t\tEndIf\n\t\tIf m.lnErro1>0\n\t\t\tm.lnErro1 = ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crEmpresa1')\n\t\tEndIf\n\tEndIf\n\tIf (Used('crEmpresa1').And.;\n\t    RecCount('crEmpresa1')>0)\n\t\tSelect (... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For Lower",
+        "metodosFormChamados": "SQLExecute,Value = Iif,Value = Space,Confirma",
+        "controlesReferenciados": "get_demp,get_emp",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGTOSEN.Procedure",
+      "queryOriginal": "lcMcrSql1 = [Select cemps, razas, tipos From SigCdEmp]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,tipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGTOSEN.Procedure",
+      "queryOriginal": "\tlcQuery = [select Estas From SigCdEmp Where Cemps = ']+lcEmps+['] \tIf (Thisform.poDatamgr.SqlExecute(lcQuery, [csEstEmp]) < 1)",
+      "tabelas": "SigCdEmp",
+      "colunas": "Estas,Cemps,SqlExecutelcQuery",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGTOSEN.Get_EMP.When",
+      "queryOriginal": "\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos, a.Logos from SigCdEmp a order by a.cemps]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,tipos,Logos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGTOSEN.Get_EMP.When",
+      "queryOriginal": "\tm.lcMcrSql1 = [Select b.Cemps, b.Razas, b.Tipos, b.Logos ] + ; \t\t\t\t\t[From SigCdAcE a ] + ; \t\t\t\t   [Inner Join SigCdEmp b ] + ; \t\t\t\t   \t  [On b.Cemps = a.Emps ] + ; \t\t\t\t   [Where a.Usuar... [TRUNCADO]",
+      "tabelas": "SigCdEmp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGTOSEN.Get_EMP.Valid",
+      "queryOriginal": "\t\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos,a.logos from SigCdEmp a order by 1]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,tipos,logos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGTOSEN.Get_Demp.Valid",
+      "queryOriginal": "\t\tm.lcMcrSql1 = [select a.cemps,a.razas,a.tipos from SigCdEmp a order by 1]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas,tipos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

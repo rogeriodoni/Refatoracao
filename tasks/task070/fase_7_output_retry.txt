@@ -1,0 +1,7 @@
+﻿Fase 7 completa. Adicionei os 3 m´┐¢todos faltantes (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) ao `FormSigReCsp.prg` (`BtnVisualizarClick` j´┐¢ existia da Fase 6), adaptados para o contexto de formul´┐¢rio REPORT:
+
+- **BtnIncluirClick** (linha 731): Inicia nova pesquisa ´┐¢ fecha cursor de resultados, reinicializa filtros do BO e do form, navega para Page2.
+- **BtnAlterarClick** (linha 781): Sincroniza campos com BO preservando valores e navega para Page2 para ajuste de filtros.
+- **BtnExcluirClick** (linha 822): Solicita confirma´┐¢´┐¢o via `MsgConfirma`, limpa `RecordSource`, fecha cursor de resultados e volta para Page2.
+
+Todos os m´┐¢todos t´┐¢m implementa´┐¢´┐¢o real (TRY/CATCH com `MsgErro` detalhado, verifica´┐¢´┐¢o de tipos via `VARTYPE`/`TYPE`, sem TODOs/stubs). Arquivo agora tem 1806 linhas e encerra com `ENDDEFINE`.

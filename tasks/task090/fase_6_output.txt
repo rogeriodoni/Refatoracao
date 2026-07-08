@@ -1,0 +1,20 @@
+﻿The file is complete and correct. Phase 6/8 is done. Here's what was added:
+
+**Edit 2 ÔÇö ConfigurarPaginaDados() completion (13 controls + 11 BINDEVENTs):**
+- Row 6: Cidade (txt_4c_Cidade) + UF label + txt_4c_Estado
+- Row 7: cbo_4c_Ordem1 (ComboBox with 6 order options) + txt_4c_CdMoeda + txt_4c_DsMoeda
+- Row 8: obj_4c_OptFiltro (Encerrados/Abertos/Ambos, initial=3/Ambos)
+- Row 9: chk_4c_ChkItens
+- Row 10: obj_4c_OpcImp (Vendedor/Cidade/Data Encerramento, initial disabled ÔÇö enabled only when Filtro=Encerrados)
+- Row 11: obj_4c_OptAnaSin (Anal├¡tico/Sint├®tico, initial=2/Sint├®tico)
+- Row 12: chk_4c_ChkTpope + chk_4c_ChkSemVals (initial disabled)
+- Row 13: chk_4c_ChkIndus
+- 11 BINDEVENTs covering all 9 KeyPress lookups + 2 InteractiveChange handlers
+
+**Edit 3 ÔÇö 22 new methods before ENDDEFINE:**
+- `FormParaRelatorio()` ÔÇö transfers all 22 filter controls to BO + builds TpOpeM/TpOpeE/TpOpeC IN-clauses from crOperacoes cursor
+- `LimparCampos()` ÔÇö resets all filters to defaults
+- `OptFiltroInteractiveChange()` + `ChkTpopeInteractiveChange()`
+- 9 KeyPress handlers (F4/F5 trigger)
+- 2 lookup pairs for TpOpe (SigCdTom), 2 for Estoque/Conta (SigCdCli), 2 for Vendedor (SigCdCli), 1 for Estado (SigCdUfs), 2 for Moeda (SigCdMoe)
+- 4 validate methods (TpOpe, Estoque, Vendedor, Moeda)

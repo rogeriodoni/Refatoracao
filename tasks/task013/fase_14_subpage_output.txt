@@ -1,0 +1,57 @@
+﻿All methods are in place. Let me do a final count summary:
+
+**Controls in `ConfigurarPgPgDesigner()`:**
+1. `cursor_4c_SigPrTar` (CREATE CURSOR)
+2. `cursor_4c_SigPrArq` (CREATE CURSOR)
+3. `shp_4c_ArqFundo` (Shape)
+4. `lbl_4c_ObsTarLabel` (Label)
+5. `grd_4c_Designer` (Grid, 4 cols) + BINDEVENT AfterRowColChange, Col4.Text1 When/Valid/LostFocus
+6. `obj_4c_ObsTarefas` (EditBox, ControlSource=ObsTars, Enabled=.T.) + BINDEVENT When
+7. `cmd_4c_IniTarefa` + BINDEVENT Click + When
+8. `cmd_4c_FimTarefa` + BINDEVENT Click + When
+9. `grd_4c_Arquivos` (Grid, 1 col) + BINDEVENT AfterRowColChange, Col1.Text1 When
+10. `cmd_4c_InsArqs` + BINDEVENT Click + When
+11. `cmd_4c_OpnArqs` + BINDEVENT Click + When
+12. `cmd_4c_ExcArqs` + BINDEVENT Click + When
+13. `img_4c_ArqJpg` (Image, hidden) + BINDEVENT Click
+
+**PUBLIC handler methods:**
+14. `GrdDesignerAfterRowColChange` Ô£ô
+15. `GrdArquivosAfterRowColChange` Ô£ô
+16. `BtnIniTarefaClick` Ô£ô
+17. `BtnFimTarefaClick` Ô£ô
+18. `BtnInsArqsClick` Ô£ô
+19. `BtnOpnArqsClick` Ô£ô
+20. `BtnExcArqsClick` Ô£ô
+21. `ImgArqJpgClick` Ô£ô
+22. `GrdDesignerCol4When` Ô£ô (NEW)
+23. `GrdDesignerCol4Valid` Ô£ô (NEW)
+24. `GrdDesignerCol4LostFocus` Ô£ô (NEW)
+25. `ObsTarefasWhen` Ô£ô (NEW)
+26. `BtnIniTarefaWhen` Ô£ô (NEW)
+27. `BtnFimTarefaWhen` Ô£ô (NEW)
+28. `GrdArquivosCol1When` Ô£ô (NEW)
+29. `BtnInsArqsWhen` Ô£ô (NEW)
+30. `BtnOpnArqsWhen` Ô£ô (NEW)
+31. `BtnExcArqsWhen` Ô£ô (NEW)
+
+FASE 14 is complete. Here's a summary of what was done:
+
+**Changes made to `FormProduto.prg`:**
+
+1. **`obj_4c_ObsTarefas` (EditBox)** ÔÇö Fixed: added `ControlSource = "cursor_4c_SigPrTar.ObsTars"` and changed `Enabled = .F.` ÔåÆ `Enabled = .T.` so the When binding can control accessibility.
+
+2. **`img_4c_ArqJpg` BINDEVENT** ÔÇö Changed `DblClick`/`ImgArqJpgDblClick` ÔåÆ `Click`/`ImgArqJpgClick` to match the original event (`imgArqJpg.Click`).
+
+3. **29 new BINDEVENT calls** added at the end of `ConfigurarPgPgDesigner()` for:
+   - `Column4.Text1` ÔåÆ When / Valid / LostFocus
+   - `obj_4c_ObsTarefas` ÔåÆ When
+   - `cmd_4c_IniTarefa/FimTarefa` ÔåÆ When
+   - `grd_4c_Arquivos.Column1.Text1` ÔåÆ When
+   - `cmd_4c_InsArqs/OpnArqs/ExcArqs` ÔåÆ When
+
+4. **10 new PUBLIC methods** added:
+   - `GrdDesignerCol4When` ÔÇö allows editing only for owner user with unfinished task
+   - `GrdDesignerCol4Valid` ÔÇö validates task code via `FormBuscaAuxiliar` lookup on `sigcdtar`
+   - `GrdDesignerCol4LostFocus` ÔÇö moves focus to ObsTarefas on Enter with non-empty value
+   - `ObsTarefasWhen`, `BtnIniTarefaWhen`, `BtnFimTarefaWhen`, `GrdArquivosCol1When`, `BtnInsArqsWhen`, `BtnOpnArqsWhen`, `BtnExcArqsWhen` ÔÇö all gate on `INLIST(this_cModoAtual, "INCLUIR", "ALTERAR")` per original behavior

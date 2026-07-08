@@ -1,0 +1,342 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 15,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReApr To Print",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReApr To Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "With ThisForm\n\t.loNegocios = CreateObject('cnSigReApr', .Name)\n\n\tIf (.loNegocios.poDataMgr.pnIdconn > 0)\n\t\t.getDtInicial.Value = Date()\n\t\t.getMinVendas.Value = 0\n\t\t.getMinCustos.Value = 0\n\n\t\t.loObj = CreateObject('Relation')\n\n\t\t.loObj.AddProperty('DataInicial', .getDtInicial.Value)\n\t\t.loObj.AddProperty('Grupo',       [])\n\t\t.loObj.AddProperty('Produto',     [])\n\t\t.loObj.AddProperty('Linha',       [])\n\t\t.loObj.AddProperty('Fornecedor',  [])\n\t\t.loObj.AddProperty('MinVenda',    0)\n\t\t.loObj.AddProper... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nSet Procedure To SigReApr.Prg Additive\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "With ThisForm\n\t.loObj.DataInicial = .getDtInicial.Value\n\t.loObj.Grupo       = .getGrupo.Value\n\t.loObj.Produto \t   = .getCPros.Value\n\t.loObj.Linha \t   = .getLin.Value\n\t.loObj.Fornecedor  = .getFornecedor.Value\n\t.loObj.MinVenda    = .getMinVendas.Value\n\t.loObj.MinCusto    = .getMinCustos.Value\n\n\tllRet = .loNegocios.Processamento(.loObj)\n\n\tIf Not llRet\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Release Procedure SigReApr\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReApr Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tWith ThisForm\n\t\t.loObj.DataInicial = .getDtInicial.Value\n\t\t.loObj.Grupo       = .getGrupo.Value\n\t\t.loObj.Produto     = .getCPros.Value\n\t\t.loObj.Linha \t   = .getLin.Value\n\t\t.loObj.Fornecedor  = .getFornecedor.Value\n\t\t.loObj.MinVenda    = .getMinVendas.Value\n\t\t.loObj.MinCusto    = .getMinCustos.Value\n\n\t\t.loNegocios.ValidaBotoes(ThisForm.loObj)\t\n\t\t\n\t\tllRet = .loObj.TrataErro\n\tEndWith\n\n\tDo Case\n\t\tCase llRet = [DataInicial]\n\t\t\t=Messagebox('Data Inicial ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDPros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCPros.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getCPros",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getCPros.Value = crListaRemota.CPros\n\tThisForm.getDPros.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisForm.getCPros.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.GetDLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value  = ''\n\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.GetDLin",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getLin.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.GetLin",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', Padr(This.Value, 10), 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getLin.Value  = crListaRemota.Linhas\n\tThisForm.getDLin.Value = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.getLin.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getFornecedor",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.getDFornecedor)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.getDFornecedor.Value = ''  \n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThisForm.getFornecedor.Value  = ''\n\tThisForm.getDFornecedor.Value = ''\nEndIf\nThisForm.getFornecedor.Refresh\nThisForm.getDFornecedor.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDFornecedor",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.getFornecedor, This)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.getFornecedor.Value = ''  \n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThisForm.getFornecedor.Value  = ''\n\tThisForm.getDFornecedor.Value = ''\nEndIf\nThisForm.getFornecedor.Refresh\nThisForm.getDFornecedor.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDFornecedor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getFornecedor.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDGrupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'DGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.mAddColuna('CGrus', '', 'Cod')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)\n\tThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)\n\tUse In crListaR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPR.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

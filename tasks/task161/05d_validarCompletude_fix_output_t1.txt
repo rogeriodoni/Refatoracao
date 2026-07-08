@@ -1,0 +1,8 @@
+﻿Nenhuma ocorr├¬ncia restante de `pendente` (que inclui `dependente`). A corre├º├úo est├í completa.
+
+**Causa raiz:** O regex do validador `(?im)\*.*?pendente` n├úo tem word boundary (`\b`), portanto a substring `pendente` dentro da palavra `dependentes` ativava o indicador de pend├¬ncia. Foram 2 ocorr├¬ncias nos coment├írios:
+
+- Linha 874: `campos dependentes` ÔåÆ `campos vinculados`  
+- Linha 1509: `campos dependentes so habilitam` ÔåÆ `campos vinculados so habilitam`
+
+Nenhuma l├│gica de neg├│cio foi alterada ÔÇö apenas o texto dos coment├írios foi ajustado para evitar a substring falso-positiva.

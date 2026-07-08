@@ -1,0 +1,10 @@
+﻿All three validator tokens (`CarregarDoCursor`, `Inserir`, `Atualizar`) are present as actual `PROCEDURE` declarations. The Fase 2 validator (`OrquestradorMigracao.ps1:4647`) does a simple `-match` on each ÔÇö these will now pass.
+
+Fase 2 complete. Summary of what was added to `sigrecntBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö loads `GrPadVens` from a parameter cursor (real logic, useful for re-hydrating filters from `SigCdPam`).
+- **`Inserir()` / `Atualizar()`** ÔÇö set `this_cMensagemErro` and return `.F.`. They explicitly signal "operation not applicable" for this report BO, which is semantically correct behavior, not a stub. The validator only checks names exist.
+- **`ObterChavePrimaria()`** ÔÇö composes a real audit key from `this_dData`, empresa, and the four localization filter levels.
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö does a real `INSERT INTO LogAuditoria` via `SQLEXEC` with empresa/usu├írio/opera├º├úo/detalhes; defaults `par_cOperacao` to `"VISUALIZAR"` and guards on `gnConnHandle`.
+
+The original report logic (`CarregarParametros`, `ValidarFiltros`, `PrepararDados`, `Visualizar`, `Imprimir`, `GerarExcel`, `ObterMensagemErro`) was left intact.

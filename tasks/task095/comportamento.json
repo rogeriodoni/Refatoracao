@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 12,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fBuscarCotacao", "fwBuscaExt", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReEvv To Printer\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReEvv To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tThisForm.Percentual = 0\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 162,
+      "codigoOriginal": "Local lcTab, lcGru, lcCon, lcDtb, lnVlI, lnVlF, lnPct, llFra, llZer, lcTit, lcSub, lcCep, lnZer, lnTot\n\nlcTab = Padr(ThisForm.getTabela.Value,  10)\nlcGru = Padr(ThisForm.getGrupo.Value,   10)\nlcCon = Padr(ThisForm.getConta.Value,   10)\nlcDtb = Padr(ThisForm.getDTabela.Value, 30)\nlnVlI = ThisForm.getValorIni.Value\nlnVlF = ThisForm.getValorFin.Value\nlnPct = 1 - (ThisForm.Percentual / 100)\nllFra = (ThisForm.chkFranquias.Value = 1)\nllZer = (ThisForm.chkZerados.Value = 1)\n\nlcTit = ThisForm.Caption\nlc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "chkFranquias,chkZerados",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReEvv Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tIf Empty(ThisForm.getTabela.Value)\n\t\t=Messagebox('Tabela de Desconto Inválida!!!', 0+48, '')\n\t\tThisForm.getTabela.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf (ThisForm.getValorIni.Value < 0)\n\t\t=Messagebox('Faixa Inicial de Valor Inválida!!!', 0+48, '')\n\t\tThisForm.getValorIni.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf (ThisForm.getValorIni.Value > ThisForm.getValorFin.Value)\n\t\t=Messagebox('Faixa Inicial de Valor Maior do Que a Final!!!', 0+48, '')\n\t\tThisForm.getValorIni.S... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getTabela",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(Padr(This.Value, 10))\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', Padr(This.Value, 10), 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Tabela')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Descos',  '9999.99', '%')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getTabela.Value  = crListaRemota.Codigos\n\tThisForm.getDTabela.Value = crListaRemot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDTabela",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos', '', 'Tabela')\n\t\tloLista.mAddColuna('Descos',  '9999.99', '%')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getTabela.Value  = crListaRemota.Codigos\n\tThisForm.getDTabela.Value = crListaRemota.Descrs\n\tThisForm.P... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDTabela",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getTabela.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDConta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getConta, This)\n\t\t=Messagebox('Acesso Negado!!!', 48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getConta.Value = ''\n\t\tThisForm.getConta.Refresh\n\tEndIf\nElse\n\tThisForm.getConta.Value = ''\n\tThisForm.getConta.Refresh\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getGrupo.Value) And Empty(ThisForm.getConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDGrupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)\nElse\n\tThisForm.getGrupo.Value = ''\t\n\tThisForm.getGrupo.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getConta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This, ThisForm.getDConta)\n\t\t=Messagebox('Acesso Negado!!!', 48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getDConta.Value = ''\n\t\tThisForm.getDConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getDConta.Value = ''\n\tThisForm.getDConta.Refresh\n\tReturn .t.\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVV.getGrupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupo, ThisForm.getDGrupo)\nElse\n\tThisForm.getDGrupo.Value = ''\t\n\tThisForm.getDGrupo.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

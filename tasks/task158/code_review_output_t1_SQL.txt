@@ -1,0 +1,10 @@
+﻿Feito. Resumo das corre├º├Áes:
+
+**1 corre├º├úo real aplicada** em `SigPrCccBO.prg` linha 650:
+- `"Where Emps = '" + LocalEmp.Cemps + "' "` ÔåÆ `"Where Emps = " + EscaparSQL(ALLTRIM(LocalEmp.Cemps)) + " "`
+- Mesmo padr├úo corrigido no `IIF` do filtro `Cpros` na mesma express├úo
+
+**3 alertas s├úo falsos positivos** ÔÇö nenhuma altera├º├úo necess├íria:
+- `CIDCHAVES`: WHERE leg├¡timo em CRUD do SigOpClU (chave prim├íria)
+- `SELECAOICL`: alias de cursor VFP `SelecaoIclis`, nunca aparece em cl├íusula WHERE de SQL
+- `CONTROLCOUNT`: propriedade `.ControlCount` do VFP usada em `TornarControlesVisiveis()` para iterar controles, sem rela├º├úo com SQL

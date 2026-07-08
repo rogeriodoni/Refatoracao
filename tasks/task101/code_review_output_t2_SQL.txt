@@ -1,0 +1,21 @@
+﻿Analisei o BO completo. Ambos os filtros flagados s├úo **falsos positivos** do validador. Aqui est├í a an├ílise:
+
+---
+
+**[SQL-FILTRO-INVENTADO] `WHERE CMoes = ...` (linha 266 do sigreffiBO.prg)**
+
+Localiza├º├úo: m├®todo `BuscarCotacaoMoeda`, query em `SigCdCot`.
+
+C├│digo original usava: `If Seek(Moedas, 'crSigCdMoe', 'CMoes')` + `Select crSigCdCot` ÔÇö ou seja, a filtragem era feita via SEEK no cursor local `crSigCdCot`. O filtro `WHERE CMoes = ...` ├® a **tradu├º├úo SQL direta e correta** desse SEEK. `CMoes` ├® a PK de `SigCdCot` (confirmado pela pr├│pria query de popula├º├úo do cursor em linha 180-182: `SELECT c.CMoes, c.Datas, c.Valos FROM SigCdCot`). Remover esse filtro faria o TOP 1 retornar a cota├º├úo de outra moeda aleat├│ria.
+
+**[SQL-FILTRO-INVENTADO] `WHERE Cemps = ...` (linha 332 do sigreffiBO.prg)**
+
+Localiza├º├úo: lookup do nome da empresa, query em `SigCdEmp`.
+
+C├│digo original usava: `If Seek(_Empr, 'CEmp', 'Cemps')` para buscar o nome da empresa corrente. O filtro `WHERE Cemps = go_4c_Sistema.cCodEmpresa` ├® a **tradu├º├úo SQL direta e correta** desse SEEK. `Cemps` ├® a PK de `SigCdEmp` (confirmado pela query de carga em linha 142: `SELECT CAST(0 AS BIT) AS ImpEmps, e.Cemps, e.Razas FROM SigCdEmp`). Remover esse filtro faria retornar a raz├úo social da primeira empresa em vez da empresa corrente.
+
+---
+
+O validador gerou falsos positivos porque comparou os filtros WHERE de **queries auxiliares** contra a lista de colunas das **queries principais** do relat├│rio. `CMoes` (PK de SigCdCot/SigCdMoe) e `Cemps` (PK de SigCdEmp) s├úo tabelas de cadastro, n├úo de movimento ÔÇö por isso n├úo aparecem na lista de colunas das queries de movimento (`MOEDAS`, `EMPS` etc.).
+
+**Nenhuma altera├º├úo necess├íria.** Os dois filtros s├úo corretos e devem permanecer.

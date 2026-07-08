@@ -1,0 +1,21 @@
+﻿O `config.prg` carrega automaticamente via ADIR():
+- `*BO.prg` em `app/classes/` ÔåÆ carrega `sigrecopBO.prg`
+- `Form*.prg` em `app/forms/relatorios/` ÔåÆ carrega `Formsigrecop.prg`
+
+Nenhum registro manual necess├írio. A migra├º├úo da Fase 8/8 est├í completa.
+
+**Resumo do que foi feito:**
+
+- **Formsigrecop.prg** (1615 linhas) ÔÇö j├í estava completo com todos os m├®todos exigidos na Fase 8:
+  - `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö aliases do padr├úo CRUD
+  - `FormParaBO()` / `BOParaForm()` ÔÇö todos os 10 campos mapeados (datas, empresa, grupo, conta, moeda, 4 option groups, checkbox)
+  - `HabilitarCampos()` ÔÇö controla ReadOnly de todos os campos de filtro
+  - `LimparCampos()` ÔÇö inicializa com empresa atual + datas hoje + defaults originais
+  - `CarregarLista()` ÔÇö stub .T. (forms REPORT n├úo t├¬m grid CRUD)
+  - `AjustarBotoesPorModo()` ÔÇö habilita todos os 4 bot├Áes do CommandGroup
+
+- **sigrecopBO.prg** (1383 linhas) ÔÇö completo com `PrepararDados()` reproduzindo a l├│gica de 1018 linhas do original, `Imprimir()`, `Visualizar()`, cursor cleanup no `Destroy()`
+
+- **menu.prg** ÔÇö adicionados BAR 64 (separador), BAR 65 ("Comiss├Áes por Recebimento"), `ON SELECTION BAR 65` e `PROCEDURE AbrirFormsigrecop()`
+
+- **config.prg** ÔÇö carregamento autom├ítico via ADIR(), sem altera├º├úo necess├íria

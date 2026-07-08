@@ -1,0 +1,3 @@
+﻿**Causa raiz:** `.BackStyle = 0` estava inserido dentro da continua├º├úo de linha (`;`) do `IIF(...)` nos 3 bot├Áes do `opt_4c_NrOpcao` (linhas 852-854, 864-866, 876-878). O VFP9 interpretava `.BackStyle = 0` como parte do argumento do IIF, gerando erro de sintaxe na compila├º├úo ÔÇö o que faz CREATEOBJECT retornar valor n├úo-objeto.
+
+**Corre├º├úo:** Movido `.BackStyle = 0` para depois do `)` de fechamento do IIF, tornando-o uma atribui├º├úo de propriedade independente nos 3 bot├Áes.

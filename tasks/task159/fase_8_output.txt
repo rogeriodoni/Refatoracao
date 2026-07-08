@@ -1,0 +1,13 @@
+﻿The Phase 8 fixes are confirmed in place. Both bugs are corrected:
+- `RecordMark = .F.` and `DeleteMark = .F.` at lines 1239ÔÇô1240
+- `Column1.ControlSource` set AFTER `CurrentControl` at line 1262, with no `ControlSource` on the CheckBox itself
+
+The SIGPRCCP migration (task159) is fully complete across all 8 phases. To test:
+
+```foxpro
+DEL /S /Q C:\4c\projeto\app\*.fxp
+CD C:\4c\projeto\app\start
+DO main.prg
+```
+
+Then navigate to **Movimentos ÔåÆ Rec├ílculo de Pre├ºos**.

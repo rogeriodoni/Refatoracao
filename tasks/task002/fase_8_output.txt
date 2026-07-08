@@ -1,0 +1,21 @@
+﻿Config.prg usa `ADIR()` para carregar automaticamente todos os `*BO.prg` e `Form*.prg` ÔÇö portanto `DepartamentoBO.prg` e `FormDepartamento.prg` j├í s├úo carregados automaticamente. O menu.prg j├í tem `AbrirFormDepartamento()` e a op├º├úo no menu.
+
+O arquivo `FormDepartamento.prg` j├í est├í **completamente implementado** com todos os m├®todos da Fase 8:
+
+- `BtnBuscarClick()` Ô£à (linha 841)
+- `BtnEncerrarClick()` Ô£à (linha 848)
+- `BtnSalvarClick()` Ô£à (linha 855) ÔÇö com `ValidarCampos()` fora do TRY
+- `BtnCancelarClick()` Ô£à (linha 872) ÔÇö chama `CarregarLista()`
+- `FormParaBO()` Ô£à (linha 881) ÔÇö todos os 6 campos
+- `BOParaForm()` Ô£à (linha 897) ÔÇö todos os 6 campos
+- `HabilitarCampos()` Ô£à (linha 931)
+- `LimparCampos()` Ô£à (linha 913)
+- `CarregarLista()` Ô£à (linha 658)
+- `AjustarBotoesPorModo()` Ô£à (linha 971)
+
+**Integra├º├úo:**
+- `DepartamentoBO.prg` existe em `app/classes/` ÔÇö carregado pelo ADIR automaticamente
+- `FormDepartamento.prg` em `app/forms/cadastros/` ÔÇö carregado pelo ADIR automaticamente
+- `menu.prg` j├í tem `AbrirFormDepartamento()` e item no `popCadastros` (BAR 3)
+
+A migra├º├úo da Fase 8 j├í estava completa desde a Fase 7. O arquivo FormDepartamento.prg (1102 linhas) est├í finalizado e funcional, sem TODOs ou stubs.

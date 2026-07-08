@@ -1,0 +1,21 @@
+﻿Ap├│s an├ílise exaustiva de ambos os arquivos ÔÇö incluindo cada SQL, cada VFP `SELECT ... FROM`, cada `SCAN` e cada condi├º├úo ÔÇö o problema `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo da ferramenta de detec├º├úo**.
+
+**O que a ferramenta detectou:**  
+O nome do cursor VFP `cursor_4c_TmpNFis` sendo usado como contexto ativo de `SCAN` no m├®todo `VerificarNf` (linhas 332-405 do BO), onde internamente existe `IF !Flag LOOP`. A ferramenta interpretou `cursor_4c_TmpNFis.Flag` como uma coluna inventada em cl├íusula WHERE.
+
+**Por que N├âO ├® um problema real:**
+
+| Original | Migrado |
+|---|---|
+| `Select * From TmpNFis Where Flag Into Cursor TmpVNFis` | `SCAN WHILE !loc_lAbortado` sobre `cursor_4c_TmpNFis` com `IF !Flag LOOP` |
+| Scan faz em `TmpVNFis` (pr├®-filtrado) | Scan faz em `cursor_4c_TmpNFis` pulando `!Flag` |
+
+S├úo implementa├º├Áes funcionalmente equivalentes do mesmo filtro. `Flag` existe no original como condi├º├úo WHERE ÔÇö apenas foi implementada de forma inline no SCAN ao inv├®s de criar um cursor intermedi├írio `TmpVNFis`.
+
+**Evid├¬ncias da busca:**
+- Nenhuma cl├íusula `WHERE cursor_4c_TmpNFis` em SQL pass-through (`SQLEXEC`) em qualquer parte do c├│digo
+- Nenhum VFP SQL `SELECT ... FROM cursor_4c_TmpNFis WHERE ...`
+- O ├║nico VFP SQL com FROM em cursor ├® `SELECT * FROM cursor_4c_TmpFiscal WHERE Nfis < loc_lcNota` ÔÇö que corresponde exatamente ao original `Select * From tmpFiscal Where Nfis < lcNota`
+- Todos os outros WHERE da query do banco (`Emps`, `Series`, `Cancelas`, `Impress`, `Usuars`, `EmpDopNums`, `VSeqNota`) batem com o original
+
+**Conclus├úo:** Nenhuma corre├º├úo ├® necess├íria. Os dois arquivos est├úo corretos. O detector confundiu o nome do cursor VFP (`cursor_4c_TmpNFis`) usado como area de trabalho no SCAN com uma coluna inventada em condi├º├úo SQL.

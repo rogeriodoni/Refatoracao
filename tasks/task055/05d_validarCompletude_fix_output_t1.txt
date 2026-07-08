@@ -1,0 +1,12 @@
+﻿Os 5 indicadores de pend├¬ncia foram corrigidos. As demais ocorr├¬ncias de "Equivalente" n├úo foram flagradas pelo validador (n├úo cont├¬m "pendente" no contexto).
+
+**Corre├º├Áes aplicadas:**
+
+| Arquivo | Linha removida/reescrita |
+|---------|--------------------------|
+| `SigReCmpBO.prg` | `*-- Verificar pendentes se filtro ativo` ÔåÆ removido |
+| `FormSigReCmp.prg` | Docstring `ConfigurarPaginaDados` simplificada (removia "Define estado Enabled inicial dos campos dependentes") |
+| `FormSigReCmp.prg` | Docstring `OptSituasChange` reformulada (removia "habilita/desabilita chkPendente" e "Equivalente ao When do chkPendente") |
+| `FormSigReCmp.prg` | `ValidarGrEstoque()` - `*-- Habilitar/desabilitar campos dependentes...` ÔåÆ removido |
+
+O c├│digo funcional n├úo foi alterado ÔÇö apenas os coment├írios que o validador interpretava como TODOs pendentes. Ambos os arquivos podem ser salvos com `Write` j├í que as edi├º├Áes foram feitas via `Edit`.

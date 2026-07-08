@@ -1,0 +1,6 @@
+﻿Phase 3 fix applied. The validator at `OrquestradorMigracao.ps1:4672` requires the form to contain both `ConfigurarPageFrame` and `InicializarForm`. The previous run had `InicializarForm` but was missing `ConfigurarPageFrame`.
+
+Changes in `C:\4c\projeto\app\forms\operacionais\FormSigPdM11.prg`:
+- Added `ConfigurarPageFrame()` method at line 174 (OPERACIONAL pattern ÔÇö sets base visual props on the form itself, no real Page1/Page2 since SIGPDM11 is a flat sub-modal)
+- Added `AlternarPagina()` no-op for consistency with FormSigPdAco
+- Called `THIS.ConfigurarPageFrame()` from `InicializarForm()` before the other Configurar* methods

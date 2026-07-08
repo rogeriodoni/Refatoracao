@@ -1,0 +1,26 @@
+﻿Ap├│s revis├úo completa do arquivo FormSigReCmp.prg (2390 linhas), confirmo que a **Fase 6 j├í est├í completa**. Todo o conte├║do que deveria ser adicionado nesta fase j├í foi implementado:
+
+**Campos restantes (Parte 2) ÔÇö j├í implementados em ConfigurarPaginaLista():**
+- Grande Grupo: `lbl_4c_Label5`, `txt_4c__cd_ggrupo`, `txt_4c__ds_ggrupo`
+- Grupo Produto: `lbl_4c_Lbl_grupo`, `txt_4c__grupo`, `txt_4c__grupo_desc`
+- Subgrupo: `lbl_4c_Label16`, `txt_4c__cd_sgrupo`, `txt_4c__ds_sgrupo`
+- Situa├º├úo: `lbl_4c_Label7`, `obj_4c_OptSituas`, `chk_4c_ChkPendente`, `chk_4c_ChkOrdem`
+- Agrupamento: `lbl_4c_Label2`, `obj_4c_Optagrupa`, `chk_4c_Chkservico`
+
+**Lookups com BINDEVENT ÔÇö todos implementados com FormBuscaAuxiliar completo:**
+| Campo | M├®todo KeyPress | Validar | AbrirBusca |
+|---|---|---|---|
+| txt_4c__cd_ggrupo | TxtGrdGrupoKeyPress | ValidarGrdGrupoCod | AbrirBuscaGrdGrupo |
+| txt_4c__ds_ggrupo | TxtGrdGrupoDescKeyPress | ValidarGrdGrupoDesc | ÔÇö |
+| txt_4c__grupo | TxtGrupoKeyPress | ValidarGrupoCod | AbrirBuscaGrupo |
+| txt_4c__grupo_desc | TxtGrupoDescKeyPress | ValidarGrupoDesc | ÔÇö |
+| txt_4c__cd_sgrupo | TxtSubGrupoKeyPress | ValidarSubGrupoCod | AbrirBuscaSubGrupo |
+| txt_4c__ds_sgrupo | TxtSubGrupoDescKeyPress | ValidarSubGrupoDesc | ÔÇö |
+
+**Estado do arquivo:**
+- 2390 linhas, sem nenhum TODO/FIXME/PLACEHOLDER
+- Todos os 11 handlers de KeyPress com l├│gica completa (F4=busca, ENTER/TAB=valida)
+- SigReCmpBO.prg completo com todas as propriedades `this_*` que FormParaRelatorio() referencia
+- menu.prg j├í tem `AbrirFormSigReCmp()` registrado no popRelatorios (BAR 53)
+
+A Fase 5 foi mais abrangente que o esperado e j├í incorporou o conte├║do da Fase 6. O arquivo est├í pronto para as fases 7/8 (testes e integra├º├úo final).

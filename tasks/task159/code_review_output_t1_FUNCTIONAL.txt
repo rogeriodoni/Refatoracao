@@ -1,0 +1,13 @@
+﻿Tr├¬s corre├º├Áes aplicadas com sucesso. Resumo do resultado:
+
+---
+
+**[CONTAINER-VISIVEL]** Ô£à Corrigido ÔÇö `TornarControlesVisiveis` agora usa `!INLIST(UPPER(loc_oCtrl.Name), "IMG_4C_FIGJPG", "CNT_4C_SOMBRA", "CNT_4C_SAIDA")` em vez da compara├º├úo simples. Os dois containers ficam protegidos do loop de visibilidade.
+
+**[MADDCOLUNA-PARAMS]** ÔÇö Ap├│s grep completo no arquivo (6 ocorr├¬ncias totais), **todas as chamadas t├¬m 3 par├ómetros corretos**. Falso positivo do revisor: a assinatura `mAddColuna(par_cChave, "", "C├│digo")` j├í estava correta em todos os pontos.
+
+**[METODO-INEXISTENTE]** ÔÇö `THIS.Controls(n)` ├® **propriedade built-in VFP9** de objetos Container (herdada por Form). N├úo precisa de PROCEDURE definida ÔÇö existe na runtime. Verifica├º├úo confirma: correto, sem altera├º├úo necess├íria.
+
+**[GRID-WITH]** Ô£à Corrigido ÔÇö `ColumnCount` e `RecordSource` movidos para **fora do `WITH`** usando refer├¬ncia expl├¡cita (`loc_oGrd.ColumnCount = 9` / `loc_oGrd.RecordSource = "cursor_4c_Dados"`), evitando o erro "Unknown member COLUMN1".
+
+**[GRID-HEADER]** Ô£à Corrigido ÔÇö Caption da Column9 alterado de `"Varia├º├úo Cto (%)"` (inventado) para `"Varia├º├úo (%)"`, id├¬ntico ao header legado.

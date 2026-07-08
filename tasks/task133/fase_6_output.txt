@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. Fase 6 finalizada com sucesso.
+
+**Resumo das mudan├ºas aplicadas em `FormSigReJur.prg`:**
+
+**ConfigurarBINDEVENTs** ÔÇö adicionados 4 `DblClick` bindings (Grupo, Conta, SGRUPO, SCONTA nos dois lados d├®bito/cr├®dito).
+
+**4 KeyPress handlers atualizados** ÔÇö `TxtGrupoKeyPress`, `TxtContaKeyPress`, `TxtSGRUPOKeyPress`, `TxtSCONTAKeyPress` agora detectam F4 (115) e chamam o m├®todo de lookup correspondente, em vez de s├│ retornar.
+
+**8 novos m├®todos adicionados:**
+- `TxtGrupoDblClick`, `TxtContaDblClick`, `TxtSGRUPODblClick`, `TxtSCONTADblClick` ÔÇö delegates para os m├®todos de lookup
+- `AbrirLookupGrupoDebito` ÔÇö `FormBuscaAuxiliar` em `SigCdGcr` (Codigos/Descrs), preenche txt_4c_Grupo + txt_4c_Dgrupo
+- `AbrirLookupContaDebito` ÔÇö `FormBuscaAuxiliar` em `SigCdCli` (IClis/RClis), com filtro por grupo, preenche txt_4c_Conta + txt_4c_Dconta
+- `AbrirLookupGrupoCredito` ÔÇö idem para lado cr├®dito, preenche txt_4c_SGRUPO + txt_4c_Sdgrupo
+- `AbrirLookupContaCredito` ÔÇö idem para lado cr├®dito, preenche txt_4c_SCONTA + txt_4c_SDCONTA
+
+O arquivo passou de 1073 para 1311 linhas. Pr├│xima fase: Fase 7/8.

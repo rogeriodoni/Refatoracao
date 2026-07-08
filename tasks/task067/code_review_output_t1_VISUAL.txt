@@ -1,0 +1,6 @@
+﻿**2 corre├º├Áes aplicadas em `sigrecrpBO.prg`:**
+
+- `cursor_4c_Cabecalho`: adicionado `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR`
+- `cursor_4c_Dados`: idem
+
+**7 LAYOUT-POSITION ignorados (falsos positivos):** O diff de 85px em todos os controles de label/OptionGroup ├® exatamente `PageFrame.Top = 85`. As coordenadas dentro de `Page1` est├úo corretas ÔÇö ex: `lbl_empresa` original Top=244, 244-85=159 = valor migrado. O `obj_4c_Opt_oper` Left=0 reportado pelo validador n├úo corresponde ao c├│digo atual que j├í tem `.Left = 243`.

@@ -1,0 +1,13 @@
+﻿Fase 8 conclu├¡da. As seguintes adi├º├Áes foram feitas em `Formcfo.prg`:
+
+**M├®todos adicionados:**
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita todos os campos edit├íveis nas duas abas de PagDados (Page1: campos ICMS/IPI/NF-e; Page2: integra├º├úo cont├íbil/fiscal). C├│digo ├® sempre somente leitura em ALTERAR.
+- `AjustarBotoesPorModo()` ÔÇö ajusta estado dos bot├Áes: Confirmar habilitado s├│ em INCLUIR/ALTERAR; Visualizar/Alterar/Excluir na Page1 habilitados s├│ quando h├í registro selecionado.
+
+**M├®todos atualizados:**
+- `BtnIncluirClick()` ÔÇö agora chama `HabilitarCampos(.T.)`, `AjustarBotoesPorModo()` e seta foco no campo C├│digo.
+- `BtnAlterarClick()` ÔÇö agora chama `HabilitarCampos(.T.)`, `AjustarBotoesPorModo()` e seta foco na Descri├º├úo.
+- `BtnVisualizarClick()` ÔÇö agora chama `HabilitarCampos(.F.)` e `AjustarBotoesPorModo()`.
+- `AlternarPagina()` ÔÇö ao voltar para Page1 (lista), seta `this_cModoAtual = "LISTA"` e chama `AjustarBotoesPorModo()`.
+
+**Integra├º├úo:** j├í existia via `ADIR` din├ómico no config.prg e `AbrirFormcfo()` no menu.prg.

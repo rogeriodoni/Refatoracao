@@ -1,0 +1,11 @@
+﻿Fase 5 conclu├¡da. Resumo das altera├º├Áes:
+
+**`sigredcoBO.prg`**:
+- `CalcularFinaliza()` mudado de `PROTECTED` para p├║blico ÔÇö necess├írio porque o form precisa cham├í-lo durante a inicializa├º├úo (como o Init original do legado fazia)
+
+**`Formsigredco.prg`**:
+1. `ConfigurarPageFrame()` agora chama `ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+2. `ConfigurarCheckboxes()` corrigido: `ForeColor = RGB(90,90,90)` para coincidir com o original (era branco erroneamente); adicionado `AutoSize = .T.` e `Alignment = 0` conforme original
+3. `ConfigurarPaginaDados()` adicionado ÔÇö implementa os ajustes de UI dependentes do BO:
+   - **DigItens 6/7**: oculta ambos os checkboxes (form usa SigReDco6, op├º├Áes n├úo se aplicam)
+   - **DivNotas=2 (P&G)**: renomeia captions para "Imprimir Descritivo" / "Impress├úo Completa" e pr├®-calcula o campo Finaliza em TmpRelat via `CalcularFinaliza()` (com guard `gb_4c_ValidandoUI` para n├úo executar SQL em modo de valida├º├úo de UI)

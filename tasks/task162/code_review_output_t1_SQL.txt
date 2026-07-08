@@ -1,0 +1,8 @@
+﻿Corre├º├Áes aplicadas com sucesso. Resumo do que foi feito e dos 5 problemas reportados:
+
+**Corrigido:**
+- **GRUPOS** (ex-linhas 1740-1742 e 1755-1757): Removidos os blocos `IF !EMPTY(loc_cCdGrupo)` que adicionavam `AND a.Grupos = ...` e `AND Grupos = ...` ├á query de `SigCqChi`. O original n├úo filtrava por `grupos`.
+
+**Falsos positivos confirmados (sem altera├º├úo necess├íria):**
+- **CGRUS** e **DGRUS**: N├úo existem em `FormSigPrChr.prg`. O code review scanner os detectou em outros arquivos do projeto (`schema.sql`, outros forms).
+- **CODIGOS** e **DESCRS**: S├úo colunas v├ílidas de `SigCdGcr` (confirmado no schema). O padr├úo `SELECT Codigos, Descrs FROM SigCdGcr WHERE Codigos = ...` ├® id├¬ntico ao usado em `Formsigreapp.prg` ÔÇö ├® um padr├úo estabelecido no projeto para valida├º├úo de lookup de grupos, n├úo uma condi├º├úo inventada.

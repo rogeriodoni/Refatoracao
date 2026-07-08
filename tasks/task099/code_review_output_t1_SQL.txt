@@ -1,0 +1,6 @@
+﻿As 3 corre├º├Áes est├úo aplicadas. Sobre os SQL-FILTRO-INVENTADO (CEMPS/RAZAS): as condi├º├Áes `WHERE Cemps = EscaparSQL(...)` e `WHERE Razas LIKE EscaparSQL(...)` (linhas 1692/1720 do Form) s├úo queries de valida├º├úo de lookup do campo Empresa ÔÇö usam EscaparSQL corretamente e s├úo necess├írias para a funcionalidade. O validador flagou porque CEMPS/RAZAS n├úo aparecem no WHERE das queries principais do relat├│rio (SigMvCab/SigMvPar), mas essas s├úo queries separadas de valida├º├úo de campo. Remov├¬-las quebraria o lookup da empresa.
+
+**Resumo das corre├º├Áes em `sigrefcxBO.prg`:**
+- Linha 2286: `"a.moedas = '" + loc_lcCdMoeda + "'"` ÔåÆ `"a.moedas = " + EscaparSQL(loc_lcCdMoeda)`
+- Linha 2432: `"EmpDopNums = '" + loc_lcEdn + "'"` ÔåÆ `"EmpDopNums = " + EscaparSQL(loc_lcEdn)`
+- Linha 2449: `"EmpDopNums = '" + loc_lcEdn + "'"` ÔåÆ `"EmpDopNums = " + EscaparSQL(loc_lcEdn)`

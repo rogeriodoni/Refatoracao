@@ -1,0 +1,17 @@
+﻿Linha 497 est├í correta ÔÇö ├® leitura de campo do cursor, n├úo um WHERE. As corre├º├Áes est├úo completas.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+**`Formsigredtv.prg`:**
+- `AbrirBuscaDemonstrativo()`: removida vari├ível `loc_cFiltro` com `"Mapas = 2"/"NOT Mapas = 2"` e o filtro agora passa `""` para `FormBuscaAuxiliar`
+- `ValidarDemonstrativo()`: removida vari├ível `loc_cFiltro` e simplificado SQL para `WHERE Balancos = ...` (sem `AND Mapas = ...`)
+
+**`sigredtvBO.prg`:**
+- `InicializarDados()`: removido IF/ELSE que filtrava `SigCdMrr WHERE Mapas = 2` / `WHERE Mapas <> 2` ÔåÆ agora carrega `SELECT * FROM SigCdMrr` (sem filtro, espelhando o original)
+- `PrepararDados()`: removido `AND Nivels > 0` do WHERE do cursor `Tempo`, mantendo apenas `WHERE Ps <> "4"` (PS est├í na lista v├ílida do original)
+
+**Issues n├úo alterados (falsos positivos do validador):**
+- `CMOES`/`DMOES`: s├úo filtros essenciais dos lookups de moeda ÔÇö remover quebraria a valida├º├úo
+- `3`: aparece em `ORDER BY 3` e como literal `"3" AS Ps`, n├úo ├® coluna de WHERE
+- `LNVALOR`: memvar `m.lnValor` em opera├º├úo SCATTER/GATHER, n├úo coluna de WHERE
+- `SUBTOT100S`: acesso `crSigCdMri.SubTot100s` em IF, n├úo coluna de WHERE SQL

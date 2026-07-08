@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. As duas labels em `ConfigurarCabecalho()` usavam `THIS.Parent.Caption` ÔÇö `THIS` referencia o form, e quando instanciado standalone (CREATEOBJECT sem parent), `.Parent` n├úo ├® objeto. Trocado para `THIS.Caption` que ├® sempre v├ílido.

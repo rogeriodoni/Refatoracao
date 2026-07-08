@@ -1,0 +1,10 @@
+﻿Phase 2 complete. Added the validator-expected CRUD methods to `SIGRECMVBO.prg`:
+
+- **5 new properties** for `SigCdCmv` columns (`this_cPkChaves`, `this_cCpros`, `this_cDatas`, `this_cMoedas`, `this_nValCuss`)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todas as 5 colunas do cursor para as propriedades, com `SELECT (alias)` correto e `NVL`/`ALLTRIM`
+- **`Inserir()`** ÔÇö INSERT INTO SigCdCmv completo com `EscaparSQL`/`FormatarNumeroSQL`, valida obrigat├│rios, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE SigCdCmv pela `pkchaves`, chama `RegistrarAuditoria("UPDATE")`
+- **`ObterChavePrimaria()`** atualizada para priorizar `this_cPkChaves` quando setada (CRUD direto), com fallback para o cursor do relat├│rio
+- **`RegistrarAuditoria()`** atualizada para usar a chave correta via `ObterChavePrimaria()`
+
+A l├│gica original de relat├│rio (PrepararDados, RegistrarCMV, Imprimir/Visualizar) permanece intacta. Padr├úo `DO WHILE .T. / EXIT` em vez de RETURN em TRY/CATCH, CHR() para acentos, helpers de formata├º├úo SQL.

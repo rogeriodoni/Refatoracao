@@ -1,0 +1,11 @@
+﻿Todas as 4 corre├º├Áes aplicadas corretamente. Resumo do que foi feito em `SigPrGlxBO.prg`:
+
+**[SQL-ASPAS] Linha 643** ÔÇö substitu├¡da concatena├º├úo manual com aspas por `EscaparSQL()` em ambas as colunas `EmpDopNums` e `CPros`.
+
+**[SQL-ASPAS] Linha 705** ÔÇö mesmo padr├úo: `EmpDopNums = '" + loc_pEdn + "'` ÔåÆ `EscaparSQL(loc_pEdn)` (corrigido junto, mesmo bug).
+
+**[SQL-FILTRO-INVENTADO] EMPDOPNOPS (linha 761)** ÔÇö removida condi├º├úo `WHERE EmpDopNops=...` do UPDATE SigOpPic; filtro restante `Cpros=... AND Numes=...` usa colunas do original.
+
+**[SQL-FILTRO-INVENTADO] USUARS + DATARS (linha 1612)** ÔÇö substitu├¡da `WHERE Usuars=par_cUsuar AND Datars >= DATEADD(...)` por `WHERE Emps=par_cEmpr`: remove ambas as colunas inventadas e mant├®m filtro v├ílido (Emps est├í na lista original), evitando um `SELECT * FROM SigMvHst` sem filtro que retornaria toda a tabela.
+
+**VERESTS, CONTROLCOUNT, LINHA** ÔÇö confirmados como falsos positivos da an├ílise est├ítica: aparecem como acesso a campo de cursor VFP (`.verests`) e propriedade de controle (`.ControlCount`), n├úo em cl├íusula WHERE de SQL.

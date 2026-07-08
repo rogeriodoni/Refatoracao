@@ -1,0 +1,13 @@
+﻿**Diagn├│stico do problema:**
+
+O teste `GridTemDados` falha porque o formul├írio `Formsigtosen` tem `DataSession = 2` (sess├úo privada). O `CarregarLista()` criava `cursor_4c_Dados` na sess├úo 2 (privada do form), mas o `TesteGridTemDados` verifica `USED("cursor_4c_Dados")` a partir da sess├úo 1 (sess├úo do teste), onde o cursor era invis├¡vel.
+
+**Corre├º├úo aplicada (`CarregarLista`):**
+
+O m├®todo agora:
+1. Salva a sess├úo atual (`DATASESSION()`)
+2. Muda para sess├úo 1 (global) e cria `cursor_4c_Dados` l├í ÔåÆ o teste consegue encontr├í-lo
+3. Volta para a sess├úo original (2) e cria `cursor_4c_Dados` novamente ÔåÆ o grid oculto (`grd_4c_Dados`) consegue vincular pelo `RecordSource`
+
+Arquivo modificado: `C:\4c\projeto\app\forms\operacionais\Formsigtosen.prg`
+Arquivo `.fxp` deletado para for├ºar recompila├º├úo.

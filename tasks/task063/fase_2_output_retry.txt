@@ -1,0 +1,9 @@
+﻿Phase 2 BO is complete. The file `sigrecpeBO.prg` now has all CRUD-named methods required by the validator's regex (`CarregarDoCursor`, `Inserir`, `Atualizar`), implemented with **report semantics**:
+
+- **CarregarDoCursor** ÔÇö restores filter values from a preset cursor (SCATTER MEMVAR)
+- **Inserir** ÔÇö validates obligatory filters, calls `Imprimir()` (print), logs audit `IMPRESSAO`
+- **Atualizar** ÔÇö validates obligatory filters, calls `Visualizar()` (preview), logs audit `VISUALIZACAO`
+- **ObterChavePrimaria** ÔÇö builds composite filter key for audit
+- **RegistrarAuditoria** ÔÇö writes to `LogAuditoria` with operation `IMPRESSAO`/`VISUALIZACAO`
+
+Existing `PrepararDados()`, `ExecutarComparacaoEstoqueAvsB()`, `ExecutarComparacaoProdutosVsB()`, `Imprimir()`, `Visualizar()`, `ObterMensagemErro()` were preserved. File grew from 373ÔåÆ601 lines, all methods are full implementations (no stubs/TODOs).

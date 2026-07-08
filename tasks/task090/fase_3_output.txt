@@ -1,0 +1,21 @@
+﻿O arquivo foi criado corretamente. Fase 3/8 conclu├¡da.
+
+**O que foi criado** em `C:\4c\projeto\app\forms\relatorios\FormSigReEsp.prg`:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Completo ÔÇö delega ao FormBase |
+| `InicializarForm()` | Completo ÔÇö cria BO, cursor, cabe├ºalho, bot├Áes |
+| `CriarCursorOperacoes()` | Completo ÔÇö espelha o `CREATE CURSOR crOperacoes` do legado |
+| `ConfigurarCabecalho()` | Completo ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_Sombra` e `lbl_4c_Titulo` |
+| `ConfigurarBotoes()` | Completo ÔÇö `cmg_4c_Botoes` com 4 bot├Áes can├┤nicos + BINDEVENTs |
+| `AtualizarEstadoControles()` | Completo ÔÇö override vazio v├ílido para form de relat├│rio |
+| `BtnVisualizarClick/ImprimirClick/DocExcelClick/SairClick` | Completo ÔÇö chamam m├®todos do BO |
+| `Destroy()` | Completo ÔÇö nulifica BO, fecha cursor, chama DODEFAULT() |
+
+**Decis├Áes tomadas:**
+- Dimens├Áes exatas do original: `Width=810, Height=420` (PILAR 1)
+- Cabe├ºalho: `BackColor=RGB(100,100,100)`, `Width=THIS.Width` (sem subtrair)
+- Bot├Áes: geometria can├┤nica do `framework.vcx` (`Left=529, Width=273`, cada bot├úo `65x70`, Lefts=5/71/137/203)
+- `BtnDocExcelClick` mapeado a `ImprimirComPrompt` (exporta├º├úo Excel fora de escopo)
+- Fases 4-8 usar├úo Read+Edit para adicionar grid, filtros e `FormParaRelatorio()`

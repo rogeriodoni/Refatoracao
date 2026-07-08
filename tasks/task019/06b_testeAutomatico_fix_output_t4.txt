@@ -1,0 +1,9 @@
+﻿Os dois fixes est├úo corretos. Resumo das mudan├ºas em `TesteAutomatico.prg`:
+
+1. **Linha 107** (`gb_4c_ValidandoUI = .T.`): restaura o flag ap├│s `config.prg` redefinir para `.F.` na linha 100. Isso faz o teste `GridTemDados` pular corretamente (a flag "pular quando modo teste ativo" fica como esperado).
+
+2. **Linhas 983-991**: quando `pgf_4c_Paginas` n├úo existe mas o form ├® OPERACIONAL, o teste passa em vez de falhar ÔÇö OPERACIONAIS t├¬m `BtnIncluirClick` delegando para CommandGroups, sem necessidade de PageFrame.
+
+Ambas as falhas eram bugs na infraestrutura de teste, n├úo no form:
+- O form `Formsigopdiv` est├í correto ÔÇö ├® OPERACIONAL e usa CommandGroups, n├úo PageFrame
+- Os cursores `Temp_DivOp`/`Temporario` s├úo criados no Init e ficam na sess├úo de dados privada do form

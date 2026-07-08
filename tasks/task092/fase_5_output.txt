@@ -1,0 +1,14 @@
+﻿A estrutura est├í correta. Fase 5 conclu├¡da.
+
+**O que foi feito:**
+
+1. **Adicionado `ConfigurarPaginaDados()`** (linha 329) ÔÇö novo m├®todo com os primeiros 50% dos controles de entrada de dados:
+   - `lbl_4c_Label3` + `txt_4c_Qtde` (Quantidade)
+   - `lbl_4c_Label4` + `cbo_4c_CmbTipos` (Tipo)
+   - `lbl_4c_LblImpressora` + `obj_4c_OptImpressora` com bot├úo padr├úo (Impressora)
+
+2. **Atualizado `InicializarForm()`** para chamar `ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+
+3. **Movido BINDEVENT** do `obj_4c_OptImpressora` para `ConfigurarPaginaDados()` (corre├º├úo cr├¡tica: o objeto ├® criado l├í, ent├úo o bind deve ocorrer ap├│s a cria├º├úo)
+
+4. **`ConfigurarPaginaLista()`** agora cont├®m apenas os controles de ajuste (spinners Densidade/Horizontal/Vertical) + CommandGroup (Imprimir/Encerrar), que s├úo os 50% restantes

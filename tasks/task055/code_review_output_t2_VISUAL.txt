@@ -1,0 +1,36 @@
+﻿Tenho tudo que preciso. Vou agora fazer a an├ílise completa dos 22 problemas reportados.
+
+**An├ílise dos 22 problemas [LAYOUT-POSITION]:**
+
+**Grupo 1 ÔÇö diff exato de 85px no Top (18 ocorr├¬ncias):**
+
+O c├│digo tem o coment├írio expl├¡cito na linha 277: `* Posicoes: Top original - 85 (PageFrame.Top=85)`. Todos os controles dentro da `Page1` t├¬m Top = `original - 85`, que ├® o comportamento CORRETO: posi├º├Áes dentro de uma p├ígina s├úo relativas ├á p├ígina, n├úo ao form. O validador compara posi├º├Áes absolutas do SCX com posi├º├Áes relativas da p├ígina, gerando falso positivo.
+
+Exemplo: `lbl_4c_Lbl_op` Top=66 ÔåÉ 151 - 85 = 66 Ô£ô
+
+**Grupo 2 ÔÇö OptionGroups com diff enorme (3 pares: optagrupa, OptSituas, optData):**
+
+O validador reporta, por exemplo, `obj_4c_Optagrupa` Top=4, Left=2. Por├®m no c├│digo:
+- `obj_4c_Optagrupa.Top = 306`, `.Left = 100` (linhas 1058-1059) ÔåÆ 391 - 85 = 306 Ô£ô, Left=100 Ô£ô
+- Top=4, Left=2 s├úo as posi├º├Áes de `.Buttons(1)` DENTRO do OptionGroup ÔÇö o validador confundiu as propriedades do bot├úo interno com as propriedades do container.
+
+Mesmo an├ílise para `obj_4c_OptSituas` (Top=284 = 369-85 Ô£ô) e `obj_4c_OptData` (Top=33 = 118-85 Ô£ô).
+
+**Grupo 3 ÔÇö Mapeamento errado de nome pelo validador (lbl_periodo, Label1):**
+
+- `lbl_periodo` (original Left=55) foi mapeado pelo validador a `lbl_4c_Lbl_periodo_a` (Left=188), mas o controle correto ├® `lbl_4c_Lbl_periodo` (Left=55) que existe e est├í correto.
+- `Label1` (original Left=511, "Tipo de Movimenta├º├úo") foi mapeado a `lbl_4c_Label1_GrupoContab` (Left=62), mas o controle correto ├® `lbl_4c_Label1` (Top=145=230-85 Ô£ô, Left=511 Ô£ô).
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.**
+
+Todos os 22 problemas s├úo **falsos positivos do validador**, causados por tr├¬s limita├º├Áes do comparador:
+
+1. N├úo desconta o offset do PageFrame (Top=85) ao comparar posi├º├Áes de controles dentro de p├íginas
+2. L├¬ propriedades de `.Buttons(1)` como se fossem propriedades do `OptionGroup` pai
+3. Faz mapeamento por nome inexato e seleciona o controle errado quando h├í dois com prefixo igual (ex: `Label1` vs `Label1_GrupoContab`, `lbl_periodo` vs `lbl_periodo_a`)
+
+O c├│digo est├í **corretamente migrado**. Alterar os Top/Left conforme reportado quebraria o layout visual (controles apareceriam 85px abaixo da posi├º├úo correta, e os OptionGroups ficariam fora da p├ígina). A regra do pass ("PROIBIDO alterar propriedades visuais EXCETO se o problema ├® especificamente de ALINHAMENTO") tamb├®m se aplica aqui ÔÇö nenhum desses casos ├® de alinhamento entre controles do mesmo grupo horizontal ou container.
+
+Nenhum arquivo foi modificado.

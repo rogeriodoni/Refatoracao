@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da. Adicionei os 3 eventos CRUD ausentes (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) em `Formsigrefec.prg` seguindo o padr├úo estabelecido em outros forms REPORT (ex.: `Formsigrefcx.prg`):
+
+- **BtnIncluirClick** e **BtnAlterarClick** ÔåÆ delegam para `BtnVisualizarClick()` (gerar/regerar visualiza├º├úo do relat├│rio)
+- **BtnExcluirClick** ÔåÆ exibe `MsgAviso` informando que a opera├º├úo n├úo se aplica a relat├│rios
+- **BtnVisualizarClick** j├í existia (linha 724) com implementa├º├úo completa de preview
+
+Os m├®todos t├¬m implementa├º├úo real (n├úo s├úo stubs vazios) e refletem corretamente a sem├óntica de forms REPORT: n├úo h├í CRUD, apenas gera├º├úo do relat├│rio.

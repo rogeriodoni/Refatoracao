@@ -1,0 +1,14 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**CODIGOS (linha 1335) e CMOES (linha 1666) ÔÇö CORRIGIDO:**
+
+Os dois m├®todos de valida├º├úo (`ValidarCdGrEstoque` e `ValidarCdMoeda`) usavam `SQLEXEC` com `WHERE codigos = ...` e `WHERE cmoes = ...` inventados ÔÇö a LLM criou consultas SQL avulsas onde o original carregava as tabelas inteiras e usava cursor SEEK (padr├úo id├¬ntico ao `ValidarEmpresa` j├í existente).
+
+Corre├º├úo:
+1. `ConfigurarPaginaLista`: adicionado pr├®-carregamento de `cursor_4c_SigCdGcr` (SigCdGcr completo com INDEX ON codigos) e `cursor_4c_SigCdMoe` (SigCdMoe completo com INDEX ON cmoes), alinhando com o original que fazia `Select * From SigCdMoe`.
+2. `ValidarCdGrEstoque` e `ValidarCdMoeda`: substitu├¡dos por `SEEK(...)` nos cursores pr├®-carregados ÔÇö mesmo padr├úo de `ValidarEmpresa`.
+3. `Destroy`: adicionado fechamento dos dois novos cursores.
+
+**LNORDEM ÔÇö FALSO POSITIVO:**
+
+Pesquisa em ambos os arquivos (`.prg` e BO) n├úo encontrou `lnordem` em nenhuma string SQL ou cl├íusula WHERE. `lnOrdem` ├® vari├ível VFP local usada apenas em `DO CASE` e `IF` ÔÇö o validador detectou o nome da vari├ível fora de contexto SQL. N├úo h├í nada a remover.

@@ -1,0 +1,267 @@
+﻿{
+    "taskId":  "task032",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-05-16T05:17:04",
+    "atualizadoEm":  "2026-05-19T11:28:00",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-05-16T05:17:04",
+                                            "fim":  "2026-05-16T05:17:04",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task032\\sigreapp.sct",
+                                            "baseName":  "sigreapp",
+                                            "scxFile":  "C:\\4c\\tasks\\task032\\sigreapp.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-05-16T05:17:04",
+                                          "fim":  "2026-05-16T05:17:04",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigreapp",
+                                          "txtFile":  "C:\\4c\\tasks\\task032\\sigreapp_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T05:17:04",
+                                              "fim":  "2026-05-16T05:17:05",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task032\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T05:17:06",
+                                              "fim":  "2026-05-16T05:17:06",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task032\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task032\\meta_prompt.md",
+                                              "boClass":  "sigreappBO",
+                                              "formClass":  "Formsigreapp",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task032\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T05:17:06",
+                                              "fim":  "2026-05-16T05:17:06",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task032\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T05:17:06",
+                                               "fim":  "2026-05-16T05:17:07",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task032\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigreapp_esqueleto.prg",
+                                                                "sigreappBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T05:17:07",
+                                       "fim":  "2026-05-16T06:54:31",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreappBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  80.71,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreapp.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2951
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-05-16T06:54:31",
+                                                  "fim":  "2026-05-16T06:54:42",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreapp.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreappBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-05-16T06:54:42",
+                                                 "fim":  "2026-05-16T06:55:37",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T07:21:42",
+                                       "fim":  "2026-05-16T07:22:26",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-05-16T07:22:26",
+                                               "fim":  "2026-05-16T07:26:59",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task032\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-05-16T07:27:00",
+                                        "fim":  "2026-05-16T07:27:01",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 4 erros (limite 4), 23 diferencas visuais (limite 0), 516 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigreapp_20260516072701.html",
+                                        "diferencas":  23,
+                                        "erros":  4,
+                                        "totalProblemas":  543,
+                                        "avisos":  516,
+                                        "recoveredAt":  "2026-05-19T11:28:00",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-05-16T05:17:05",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-05-16T05:17:05",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task032\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-05-16T05:17:05",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T05:17:06"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-05-16T06:54:42",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-05-16T06:54:42",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigreapp_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreapp.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task032\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-05-16T06:55:38",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-05-16T06:56:36",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-05-16T06:56:36",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-05-16T07:21:10",
+                                          "passes":  7,
+                                          "problemas":  "[METODO-INEXISTENTE] Metodo \u0027THIS.CarregarCursores()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027lbl_fator\u0027 (parent: SIGREAPP): Top original=183 vs migrado \u0027lbl_4c_Lbl_fator\u0027 Top=98 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027LblPeriodo\u0027 (parent: SIGREAPP): Top original=129 vs migrado \u0027lbl_4c_LblPeriodo\u0027 Top=44 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optSaldos\u0027 (parent: SIGREAPP): Top original=125 vs migrado \u0027obj_4c_OptSaldos\u0027 Top=6 (diff=119px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optSaldos\u0027 (parent: SIGREAPP): Left original=798 vs migrado \u0027obj_4c_OptSaldos\u0027 Left=5 (diff=793px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_AnaSi\u0027 (parent: SIGREAPP): Top original=98 vs migrado \u0027obj_4c_Opt_AnaSi\u0027 Top=6 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_AnaSi\u0027 (parent: SIGREAPP): Left original=92 vs migrado \u0027obj_4c_Opt_AnaSi\u0027 Left=5 (diff=87px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ck_MarcaEmp\u0027 (parent: SIGREAPP): Top original=283 vs migrado \u0027chk_4c_Ck_MarcaEmp\u0027 Top=198 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_estoque\u0027 (parent: SIGREAPP): Top original=184 vs migrado \u0027lbl_4c_Lbl_estoque\u0027 Top=99 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_Juros\u0027 (parent: SIGREAPP): Top original=153 vs migrado \u0027obj_4c_Opt_Juros\u0027 Top=5 (diff=148px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_Juros\u0027 (parent: SIGREAPP): Left original=646 vs migrado \u0027obj_4c_Opt_Juros\u0027 Left=5 (diff=641px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ck_MarcaOpe\u0027 (parent: SIGREAPP): Top original=283 vs migrado \u0027chk_4c_Ck_MarcaOpe\u0027 Top=198 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ck_Pagamentos\u0027 (parent: SIGREAPP): Top original=159 vs migrado \u0027chk_4c_Ck_Pagamentos\u0027 Top=74 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ck_Recebimentos\u0027 (parent: SIGREAPP): Top original=182 vs migrado \u0027chk_4c_Ck_Recebimentos\u0027 Top=97 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ck_MarcaCla\u0027 (parent: SIGREAPP): Top original=283 vs migrado \u0027chk_4c_Ck_MarcaCla\u0027 Top=198 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optAutorizados\u0027 (parent: SIGREAPP): Top original=230 vs migrado \u0027obj_4c_OptAutorizados\u0027 Top=5 (diff=225px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optAutorizados\u0027 (parent: SIGREAPP): Left original=92 vs migrado \u0027obj_4c_OptAutorizados\u0027 Left=5 (diff=87px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optDatas\u0027 (parent: SIGREAPP): Top original=124 vs migrado \u0027obj_4c_OptDatas\u0027 Top=6 (diff=118px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optDatas\u0027 (parent: SIGREAPP): Left original=287 vs migrado \u0027obj_4c_OptDatas\u0027 Left=5 (diff=282px, tolerancia=30px)",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  19
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-05-16T07:21:10",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-05-16T07:21:42",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreappBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreapp.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-05-16T07:26:59",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T07:27:00",
+                                             "thresholdPx":  5,
+                                             "unmatched":  3,
+                                             "errors":  3,
+                                             "matched":  38,
+                                             "warnings":  46,
+                                             "reportFile":  "C:\\4c\\tasks\\task032\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

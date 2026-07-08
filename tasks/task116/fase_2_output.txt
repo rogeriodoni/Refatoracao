@@ -1,0 +1,15 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao SIGREIDCBO.prg:**
+
+| M├®todo | Equivalente legado | Responsabilidade |
+|--------|-------------------|------------------|
+| `InicializarFiltros()` | Init() do form legado | Carrega `SigCdPam` (logo) e `SigCdGcr` (grupos) via SQLEXEC |
+| `PrepararDados()` | `processamento` procedure | Monta cursor local `cIde` com estrutura exata para o FRX ÔÇö raz├úo social, linhas em branco de offset (Linha/Coluna), dados de contas, logo JPG, fotos blob/memo |
+| `ValidarFiltros()` | `btnReport.Click` validations | Verifica exist├¬ncia de Grupo em SigCdGcr, Conta em SigCdCli, Linha entre 1-5, Coluna entre 1-2 |
+| `LimparArquivosTemporarios()` | Bloco de limpeza do Click | Remove arquivos `.jpg` tempor├írios ap├│s impress├úo |
+| `Inserir()` / `Atualizar()` | ÔÇö | Overrides defensivos (relat├│rio n├úo persiste dados) |
+| `ObterChavePrimaria()` | ÔÇö | Retorna `""` |
+| `Destroy()` | ÔÇö | Fecha todos os cursores abertos |
+
+**Decis├úo de design importante:** o cursor de sa├¡da mant├®m o nome `cIde` (n├úo `cursor_4c_Dados`) pois ├® o nome que o FRX `SigReIdc.frx` l├¬ ÔÇö renomear quebraria o relat├│rio (PILAR 2). O `REPORT FORM` com esse cursor ficar├í no Form (Fase 3), seguindo o padr├úo estabelecido no `FormSIGREVIS.prg`.

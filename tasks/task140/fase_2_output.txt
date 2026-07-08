@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `SigPdMenBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+- **`ValidarDados()`** ÔÇö valida cidchaves, cpros e emps obrigat├│rios
+- **`Inserir()`** ÔÇö INSERT com todos os 12 campos de SigCdMsg + `RegistrarAuditoria("I")`
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos exceto PK + `RegistrarAuditoria("A")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por cidchaves + `RegistrarAuditoria("E")`
+
+Os m├®todos da Fase 1 (`ObterChavePrimaria`, `CarregarDoCursor`, `BuscarMensagem`) foram preservados. Todos os SQLs usam `EscaparSQL()` e `FormatarNumeroSQL()` conforme padr├úo, nenhum literal acentuado no c├│digo.

@@ -1,0 +1,268 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 11,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa", "fAcessoMovmto", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECSP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP",
+      "evento": "Procedure",
+      "linhas": 57,
+      "codigoOriginal": "lcempresa = Thisform.get_Empresa.Value\nlcNmOperacao = Thisform.get_nm_operacao.Value\nlccodigo = Thisform.get_codigo.Value\nlcdoc = Thisform.get_documento.Value\nldDtInicial = Thisform.get_dt_inicial.Value\nldDtFinal = Thisform.get_dt_final.Value\n\nlcObses = ThisForm.get_Obses.Value\nlcConta = ThisForm.getConta.Value\nlcGrupo = ThisForm.getGrupo.Value\nlcOpCta = Iif(ThisForm.OptConta.Value = 1,[ContaOs],[ContaDs])\nlcOpGru = Iif(ThisForm.OptConta.Value = 1,[GrupoOs],[GrupoDs])\n\nlcFiltro = []\nIf Not Empty... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "get_Empresa,get_nm_operacao,get_codigo,get_documento,get_dt_inicial,get_dt_final,get_Obses,OptConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP",
+      "evento": "Init",
+      "linhas": 56,
+      "codigoOriginal": "Lparameters _Acesso\n\nWith Thisform\n\t.poDataMgr = Createobject('fSqlConector', Thisform.Name)\n\t\n\tIf Not .poDataMgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.F.)\n\tEndIf\n\t\n\t.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],_Empr)\n\t.Get_Empresa.Value = _Empr\n\t.Get_DEmpresa.Value = crSigCdEmp.Razas\n\t.get_dt_inicial.Value = Date()\n\t.get_dt_final.Value = Date()\n\t\n*!*\t\tlcempresa = Thisform.Get_Empresa.Value\n*!*\t\tlcNmOperacao = This... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_DEmpresa,get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Empresa, ThisForm.get_DEmpresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa,get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.Get_Dempresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_Empresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.Get_Dempresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Empresa, ThisForm.get_DEmpresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa,get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoMovmto(Usuar, This.Value, This)\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.Dados",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "IF USED('crSigMvCab') AND RECCOUNT('crSigMvCab') > 0\n\tThisForm.Enabled = .f.\n\tthisform.Refresh()\n\tlcSql = [Select Dopes From SigCdOpe Where Dopes = ']+crSigMvCab.Dopes+[']\n\tIf thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0\n\t\tDo Form SigMvExp With crSigMvCab.Dopes, 'C', crSigMvCab.Numes, crSigMvCab.Emps, .t.\n\tENDIF\n\tSELECT crSigMvCab\n\tThisForm.Enabled = .t.\n\tthisform.Refresh()\nENDIF",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.cmdProcessar",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "thisform.processamento()\n\nllRet = Iif(Type([llRet]) = [L], llRet, .t.)\nIf llRet\n\tIf (Used() And Not Eof())\n\t\tthisform.grid1.SetFocus()\n\tElse\n\t\t=Messagebox([Não Existe Movimentação...],0+48, [Geração de Relatório])\n\tEndIf\nElse\n\t=MessageBox([Falha Na Conexão! Favor Reinicializar o Processo!], 0+48, [Erro])\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "processamento,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.getConta,ThisForm.getDConta)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getDConta.Value = ''\n\t\tThisForm.getDConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getDConta.Value = ''\n\tThisForm.getDConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getDConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ThisForm.getGrupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.getConta,ThisForm.getDConta)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.getConta.Value = ''\n\t\tThisForm.getConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.getConta.Value = ''\n\tThisForm.getConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)\nElse\n\tThisForm.getDGrupo.Value = ''\n\tThisForm.getDGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECSP.getDGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t=fAcessoContab(Usuar,'D',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)\nElse\n\tThisForm.getGrupo.Value = ''\n\tThisForm.getGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECSP.Dados.Click",
+      "queryOriginal": "\tlcSql = [Select Dopes From SigCdOpe Where Dopes = ']+crSigMvCab.Dopes+['] \tIf thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,Dopes+[],SqlExecutelcsql,TmpOpe,ReccountTmpOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

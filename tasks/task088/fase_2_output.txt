@@ -1,0 +1,13 @@
+﻿Fase 2/8 conclu├¡da. O arquivo `SIGREEQRBO.prg` foi completado com:
+
+- **`InicializarSelecao()`** ÔÇö carrega o cursor `Selecao` com grupos (`SigCdGcr`) e contas (`SigCdCli`), cria o index `grucon` para o grid interativo do form
+- **`PrepararDados()`** ÔÇö implementa├º├úo completa do `processamento` original:
+  - Cria cursores `dbCabecalho`, `csTempoGr` (com index `Imprimir`) e `CsTempoCp` (com indexes `Imprimir` e `visualizar`)
+  - Bifurca entre estoque atual (`SigMvEst`) e retroativo (`SigMvHst`) com c├ílculo de saldo por movimenta├º├úo E/S
+  - Filtra pelos grupos/contas marcados pelo usu├írio no grid `Selecao`
+  - Loop `SCAN` com `SCATTER/GATHER MEMVAR`, c├ílculo por composi├º├úo (`SigPrCpo`) e convers├úo de moeda via `fBuscarCotacao`
+  - `UNION ALL` para totais por linha (tipo `5`), total geral (tipo `6`) e subtotais por grupo
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (sem CRUD)
+- **`ObterMensagemErro()`** ÔÇö exp├Áe `this_cMensagemErro`
+
+Todos os `RETURN` ficam fora do `TRY/CATCH` (padr├úo `DO WHILE .T. / EXIT`). Pr├│xima fase ser├í a cria├º├úo do `FormSIGREEQR.prg`.

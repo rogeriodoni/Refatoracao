@@ -1,0 +1,18 @@
+﻿Fase 5 conclu├¡da. Aqui est├í o que foi alterado em `FormSigPrAop.prg`:
+
+**3 mudan├ºas aplicadas:**
+
+1. **Background corrigido** (linha 94): `fundo_cad_1003.jpg` ÔåÆ `new_background.jpg` ÔÇö forms OPERACIONAIS usam esse background no legado.
+
+2. **`ConfigurarPaginaLista()` simplificada** (linha 170): removidos os 2 labels e 2 TextBoxes que estavam neste m├®todo.
+
+3. **`ConfigurarPaginaDados()` adicionada** (linhas 498ÔÇô555): novo m├®todo `PROTECTED` com os controles de entrada de dados ÔÇö `lbl_4c_Label1` ("O.P.:"), `txt_4c_OP` (com BINDEVENTs para GotFocus e KeyPress), `lbl_4c_Label2` ("Produto:") e `txt_4c_Produto` (readonly). Chamada em `InicializarForm()` ap├│s `ConfigurarPaginaLista()`.
+
+**Ordem de cria├º├úo dos objetos em runtime:**
+```
+ConfigurarPageFrame()  ÔåÆ cnt_4c_Sombra (header)
+ConfigurarPaginaLista() ÔåÆ grd_4c_Dados, edt_4c_Obss, cmg_4c_Conf
+ConfigurarPaginaDados() ÔåÆ lbl_4c_Label1, txt_4c_OP (com BINDEVENTs), lbl_4c_Label2, txt_4c_Produto
+```
+
+Esta ordem garante que quando os BINDEVENTs do `txt_4c_OP` s├úo ativados em runtime, `grd_4c_Dados` e `cmg_4c_Conf` j├í existem.

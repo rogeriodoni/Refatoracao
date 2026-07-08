@@ -1,0 +1,24 @@
+﻿O arquivo est├í correto e completo. A Fase 2 est├í conclu├¡da.
+
+**Resumo do que foi implementado em `SigReIdtBO.prg`:**
+
+**`PrepararDados()`** ÔÇö l├│gica completa do `PROCEDURE processamento` original:
+1. Carrega empresa (`SigCdEmp` ÔåÆ `cursor_4c_LocalEmp`)
+2. Cria `csCabecalho` (cursor de cabe├ºalho para os FRX)
+3. Cria `crDBImp` com a estrutura exata do original (cursor principal dos FRX)
+4. Carrega opera├º├Áes (`SigOpOpe`) com ├¡ndice em Dopes e SEEK
+5. Carrega par├ómetros de sistema (`SigCdPam`) para GrupoRecs/GrupoPags/ContaRecs/ContaPags
+6. Determina tabela de movimento (`SigMvCcr` ou `SigMvCpv`) com base em `RealPrevs`
+7. Carrega registro principal (`crLocMccr`) com `Tipos = ' '`
+8. Carrega `crTmpMccr` com filtro de tipo conforme `this_nOptTipo`
+9. Se `OptAgrupa` 1 ou 2: carrega recorr├¬ncias via UNION ALL e filtra registros relacionados
+10. SCAN em `crTmpMccr`: para cada registro, busca clientes (4 lookups em `SigCdCli`), detalhes (`SigTtCcd`), determina `GrupoTran/ContaTran`, popula `crDBImp`
+11. Se `OptAgrupa = 2`: monta texto de recorr├¬ncias agrupadas em memo `Recors`
+12. Calcula totais por t├¡tulo (agrupando `Valor`/`Valorc` conforme `Qtdes`)
+13. Aplica `DirFiscais` alternativo se informado
+
+**M├®todos adicionais:**
+- `ObterNomeFrx()` ÔÇö seleciona SigReIdt/SigReIdA/SigReIag conforme `this_nOptTipo` e `this_nOptAgrupa`
+- `Visualizar()` / `Imprimir()` / `Documento()` ÔÇö reproduzem `visualizacao`/`impressao`/`documento` do original
+- `ObterMensagemErro()` ÔÇö acesso ao erro atual
+- `Destroy()` ÔÇö fecha cursores `crDBImp` e `csCabecalho`

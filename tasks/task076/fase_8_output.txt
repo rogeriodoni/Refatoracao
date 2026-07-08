@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. Fase 8/8 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`FormParaRelatorio()`** ÔÇö Sincroniza├º├úo completa de todos os controles do form para o BO (equivalente ao `FormParaBO()` dos forms CRUD). Chamado agora em `BtnVisualizarClick`, `BtnImprimirClick` e `BtnExcelClick` antes de cada opera├º├úo.
+
+2. **`RelatorioParaForm()`** ÔÇö Sincroniza├º├úo reversa do BO para os controles (equivalente ao `BOParaForm()` dos forms CRUD). Inclui visibilidade do `chk_4c_ChkCompo`.
+
+3. **`LimparCampos()`** ÔÇö Restaura todos os controles aos valores iniciais via `ConfigurarPaginaLista()` + `RelatorioParaForm()`.
+
+4. **`HabilitarCampos(par_lHabilitar)`** ÔÇö Habilita/desabilita os 5 checkboxes e o OptionGroup em bloco, ├║til durante processamento.
+
+5. **`AjustarBotoesPorModo()`** ÔÇö Reflete as permiss├Áes `this_lAcImprimir` e `this_lAcExcel` diretamente nos bot├Áes do `cmg_4c_Botoes`.
+
+6. **`CarregarLista()`** ÔÇö Stub compat├¡vel com o pipeline (ValidarUIFidelity espera este m├®todo); para REPORT, recarrega os dados via `PrepararDados()`, com guarda da flag `gb_4c_ValidandoUI`.

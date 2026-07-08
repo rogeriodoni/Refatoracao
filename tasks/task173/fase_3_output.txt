@@ -1,0 +1,19 @@
+﻿Arquivo criado corretamente. Fase 3 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrDsc.prg`** criado com:
+
+| M├®todo | O que faz |
+|--------|-----------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö FormBase chama `InicializarForm()` |
+| `InicializarForm()` | Fix DataSession=2, Caption via CHR(), cria `SigPrDscBO`, carrega dicion├írio, cria cursor placeholder, configura controles |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` (cinza 100,100,100) com `lbl_4c_Sombra` (preta) e `lbl_4c_Titulo` (branca), FontSize=18, Width=THIS.Width |
+| `ConfigurarBotoes()` | `cmd_4c_BtnAtualizar` (Left=850, Enabled=.F., DisabledPicture) e `cmd_4c_BtnSair` (Left=925, Cancel=.T., Caption="Encerrar") |
+| `TornarControlesVisiveis()` | Recursivo com `par_oContainer` opcional ÔÇö itera Controls e sub-containers |
+| `Destroy()` | Zera BO, fecha `cursor_4c_Produtos` e `cursor_4c_Dicionario`, DODEFAULT() |
+
+**Decis├Áes de design:**
+- Posi├º├Áes escaladas de 800px ÔåÆ 1000px (fator 1.25): `btnAtualizar` Left=650ÔåÆ850, `btnSair` Left=725ÔåÆ925 (right edge=1000)
+- `DataSession=2` ÔåÆ `SET DATE TO BRITISH` + `SET CENTURY ON` no in├¡cio do `InicializarForm`
+- `gb_4c_ValidandoUI` guard posicionado ap├│s criar o BO mas antes do SQLEXEC
+- Bot├Áes com `Themes=.T.` + `DisabledPicture` (padr├úo standalone com Picture)
+- Fundo do form via `gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"` (mesmo caminho que outros forms operacionais)

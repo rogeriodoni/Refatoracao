@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. A Fase 2 est├í conclu├¡da.
+
+**O que foi implementado em SIGRECTPBO.prg:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ValidarFiltros()` | Substitui `loNegocios.ValidaBotoes()` do legado ÔÇö valida datas obrigat├│rias, per├¡odo de cota├º├úo e per├¡odo de validade. Retorna `""` (ok) ou o nome do campo com erro (`"DataInicial"`, `"DataFinal"`, `"Periodo"`, `"PeriodoV"`) |
+| `PrepararDados()` | Monta `SELECT DISTINCT` em `SigCtTdc` com JOINs opcionais em `SigCtTct` (filtro produto) e `SigCtTfn` (filtro fornecedor). Usa `EXISTS`/`NOT EXISTS` em `SigCtTps` para o filtro de pedidos. Cria `CsCabecalho` para o FRX. |
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` |
+| `ObterChavePrimaria()` | Chave descritiva baseada em per├¡odo + filtros ativos (para auditoria) |
+| `RegistrarAuditoria()` | Grava em `LogAuditoria` com tabela `RELATORIO_COTACAO_COMPRAS` |
+| `CarregarDoCursor()` | Carrega filtros de cursor externo (tolerante a campos ausentes via `TYPE()`) |
+| `Inserir()` / `Atualizar()` | Bloqueados com mensagem explicativa |
+| `Destroy()` | Fecha `cursor_4c_ReCtp` e `CsCabecalho` antes do `DODEFAULT()` |

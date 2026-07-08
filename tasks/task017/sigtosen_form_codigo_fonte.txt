@@ -1,0 +1,1578 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigtosen.SCX
+* Data/Hora: 15/04/26 09:20:36
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGTOSEN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: lblTitF
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: SENHA
+  Parent: SIGTOSEN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SAIDA
+  Parent: SIGTOSEN
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: USUARIO
+  Parent: SIGTOSEN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_EMP
+  Parent: SIGTOSEN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Demp
+  Parent: SIGTOSEN
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: lblEmpresa
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: lbltitT
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGTOSEN
+  Class: label
+  BaseClass: label
+
+Objeto: ImgFigJpg
+  Parent: SIGTOSEN
+  Class: image
+  BaseClass: image
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 83
+  Left = 24
+  Width = 611
+  Height = 356
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 356
+  Width = 382
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Caption = "Acesso ao Sistema"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  BackColor = 255,255,255
+  plgetusuario = .T.
+  pncolor = 0
+  _memberdata = 
+  nomeprograma = .F.
+  Name = "SIGTOSEN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.lblTitF
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .T.
+  FontSize = 18
+  BackStyle = 0
+  Caption = "4Control"
+  Height = 31
+  Left = 272
+  Top = 253
+  Width = 99
+  ForeColor = 36,84,155
+  ZOrderSet = 28
+  Name = "lblTitF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.SENHA
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 11
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 26
+  Left = 22
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Senha do Usuário"
+  Top = 166
+  Width = 120
+  PasswordChar = "*"
+  ForeColor = 90,90,90
+  DisabledForeColor = 128,128,128
+  BorderColor = 238,238,238
+  Name = "SENHA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.SAIDA
+------------------------------------------------------------
+  ButtonCount = 1
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "OPSENHA"
+  Height = 80
+  Left = 290
+  Top = 116
+  Width = 78
+  TabIndex = 5
+  BackColor = 255,255,255
+  Name = "SAIDA"
+  Command1.Top = 2
+  Command1.Left = 1
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .F.
+  Command1.FontName = "Small Fonts"
+  Command1.FontSize = 7
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = ""
+  Command1.ToolTipText = "[ESC] Sair do Sistema"
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CANCELA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.USUARIO
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 11
+  Century = 0
+  BackStyle = 1
+  Format = "K!"
+  Height = 25
+  Left = 22
+  MaxLength = 10
+  SelectOnEntry = .F.
+  SpecialEffect = 1
+  TabIndex = 1
+  ToolTipText = "Usuário do Sistema"
+  Top = 113
+  Width = 119
+  ForeColor = 90,90,90
+  BorderColor = 238,238,238
+  Name = "USUARIO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.Get_EMP
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 11
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K"
+  Height = 26
+  Left = 22
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 3
+  ToolTipText = "Código da Empresa"
+  Top = 217
+  Width = 45
+  ForeColor = 90,90,90
+  BorderColor = 238,238,238
+  Name = "Get_EMP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.Get_Demp
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 11
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K"
+  Height = 26
+  Left = 74
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Descrição da Empresa"
+  Top = 217
+  Width = 294
+  ForeColor = 90,90,90
+  BorderColor = 238,238,238
+  Name = "Get_Demp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  BackStyle = 0
+  Caption = "Usuário :"
+  Height = 16
+  Left = 22
+  Top = 95
+  Width = 55
+  ForeColor = 128,128,128
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  BackStyle = 0
+  Caption = "Senha :"
+  Height = 16
+  Left = 22
+  Top = 145
+  Width = 48
+  ForeColor = 128,128,128
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.lblEmpresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 16
+  Left = 22
+  Top = 198
+  Width = 61
+  ForeColor = 128,128,128
+  Name = "lblEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.lbltitT
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .T.
+  FontSize = 18
+  BackStyle = 0
+  Caption = "4Control"
+  Height = 31
+  Left = 271
+  Top = 253
+  Width = 99
+  ForeColor = 128,128,128
+  ZOrderSet = 27
+  Name = "lbltitT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "MENU FISCAL INACESSÍVEL NESTA TELA"
+  Height = 15
+  Left = 32
+  Top = 260
+  Visible = .F.
+  Width = 217
+  ForeColor = 128,128,128
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGTOSEN.ImgFigJpg
+------------------------------------------------------------
+  Picture = ..\framework\imagens\4control_logo2.png
+  Stretch = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 72
+  Left = 94
+  Top = 0
+  Width = 191
+  BorderColor = 0,0,128
+  Name = "ImgFigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 1, 11, 7, 21, 17, 48, 4, 0
+  Small Fonts, 1, 7, 6, 11, 9, 10, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGTOSEN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE confirma
+------------------------------------------------------------
+PROCEDURE confirma
+Lparameters pFoc
+Private pcselbarras
+
+Local Array laFiltro1(1,2)
+
+Local llRetorno,lcMsg1,llChkUsuario,llChkEmpresa,lnErro1,lcMcrSql1,lnDock,lnTmpChk,;
+		lnTmpApp,lnNbotao1,lcMacro1,lcOpSis1,lcOpSis2,lcTransSis1,loDatamgr1,;
+		lcDirTmp1,lcArqIcone1,lcExtIcone1,lnTamIcone1, ldUltData1, ldUltData2, lnDias, llSaida1
+
+m.llRetorno = .t.
+m.lcMsg1 = ''
+m.lcMacro1 = ''
+m.llSupervis = .f.
+m.lnErro1 = Iif(ThisForm.poDatamgr.pnIdConn>0,1,-1)
+m.lcDirTmp1 = Addbs(Sys(2023))
+m.llSaida1 = .f.
+
+With Thisform
+	m.llChkUsuario = .plUsuarioOk
+	m.llChkEmpresa = !.get_emp.visible
+	If (Usuar = [4CONTROL]) And Empty(Alltrim(crsigcdusu1.senhas))
+		=MessageBox([Senha Inválida!!!], 0+16, [Violação de Senha])
+		Return .f.
+	EndIf
+
+	If Used('crsigcdusu1')
+		Select ('crsigcdusu1')
+		Set Order To ('') In ('crsigcdusu1')
+		Locate For (crsigcdusu1.usuarios==.usuario.Value)
+		m.llChkUsuario = (m.llChkUsuario.Or.(.Not.Empty(.usuario.Value).And..Not.Eof('crsigcdusu1').And..senha.Value==fCriptografar(crsigcdusu1.senhas)))
+		m.llSupervis = (Usuar = [4CONTROL])
+	EndIf
+
+	If Used('crEmpresa1')
+		Select ('crEmpresa1')
+		Set Order To ('') In ('crEmpresa1')
+		Locate For (crEmpresa1.cemps==.get_emp.Value)
+		m.llChkEmpresa = (m.llChkEmpresa.Or.(.Not.Empty(.get_emp.Value).And..Not.Eof('crEmpresa1')))
+	EndIf
+
+	If (goSistema.NumLicencas <> 9999) And (Usuar <> [4CONTROL])
+		lcQuery = [If Exists(Select 1 From SigSyCtl where LIC_Stat = 'A' and Left(LIC_Usua,10) = '] + Padr(Usuar, 10) + [' and Lic_Maqs = ']+Sys(0)+[') ] + ;
+						[select 1 as LicUsos else ] + ;
+						[Select Count(1) as LicUsos From SigSyCtl Where LIC_Stat = 'A' ]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocClsTmp]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocClsTmp)])
+			Return 0
+		EndIf
+		If Used([LocClsTmp])
+			Go Top In LocClsTmp
+			If Not Eof([LocClsTmp])  
+				goSistema.UsoLicencas = LocClsTmp.LicUsos 
+				Use In LocClsTmp
+			EndIf
+		EndIf
+	EndIf
+	
+	Do Case
+		Case Not m.llChkUsuario
+			m.lcMsg1 = 'Usuário / Senha Inválidos.'
+			.senha.Value = Space(10)
+			.get_emp.Value = Space(3)
+			.get_demp.Value = Space(40)
+			If pFoc
+				.usuario.SetFocus
+			EndIf
+			
+		Case Not m.llChkEmpresa
+			m.lcMsg1 = 'Empresa Inválida.'
+			.get_emp.Value = Space(3)
+			.get_demp.Value = Space(40)
+			If pFoc
+				.get_emp.SetFocus
+			EndIf
+		
+		Case (goSistema.UsoLicencas >= goSistema.NumLicencas) And (Usuar <> [4CONTROL])
+			 =MessageBox([A Quantidade de Licenças de Uso do Sistema Foram Excedidas.] + Chr(13) + ;
+			 			 [Aguarde a Liberação das Licenças em Uso e Tente Novamente.] + Chr(13) + ;
+			 			 [A Quantidade Máxima de Usuários Simultâneos é ] + Alltrim(Str(goSistema.NumLicencas)), 0+64, ;
+			 			 [Checagem de Licenças em Utilização])
+	 		 ThisForm.Saida.Cancela.Click()
+			
+		OtherWise
+			Public _tipoe
+
+			.Enabled = .f.
+			.Visible = .f.
+			m.gcEmpr = .get_emp.Value
+			m.lnDock = 0
+			m.lnTmpChk = .f.
+			m.lnTmpApp = .f.
+			m.lnNbotao1 = 0
+			_tipoe = crEmpresa1.tipos
+			_empr = m.gcEmpr
+
+			If Used('crParam1') And Used('crParam2')
+				Select ('crParam1')
+				Set Order To ('') In ('crParam1')
+				Locate
+
+				Select ('crParam2')
+				Set Order To ('') In ('crParam2')
+				Locate
+
+				m.lnDock = Iif(BetWeen(crParam1.ndocks,0,4),crParam1.ndocks,0)
+				lcArq = Sys(5)+Sys(2003)+'\SetFiscal.Ini'
+				If File(lcArq)
+					m.lnTmpChk = 0
+					m.lnTmpApp = 0
+				Else
+					m.lnTmpChk = crParam1.ntmpchks
+					m.lnTmpApp = crParam1.ntmpapps
+				Endif
+			EndIf
+
+			m.lcMcrSql1 = [Select Distinct a.Dopes, a.Menus, a.SubMenus, a.CCentrals, a.NDopes, a.Ordes, a.EmpLancs, b.Opeinatvs, d.ConfigGers ] + ;
+							[From SigCdOpe a ] + ;
+					   [Left Join SigOpCdc b On a.Dopes = b.Dopes ] + ;
+					   [Left Join SigOpCdd d On a.Dopes = d.Dopes ]
+			
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1, 'crTmpOpe')
+			EndIf
+
+			Select crTmpOpe
+			Index On Str(nDopes, 10, 0) Tag nDopes
+			Update crTmpOpe Set ConfigGers = Nvl(ConfigGers, [])
+
+			m.lnDock = (m.lnDock-1)
+			goSistema.BarraAtalho = CreateObject('fwBarraBtns')
+			goSistema.BarraAtalho.Dock(m.lnDock)
+			m.pcselbarras = .t.
+			m.lcMcrSql1 = ([select a.programas,a.parametros,a.barraforms,b.descricaos,b.barrapict from SigCdAcB a]+;
+			               [ left join sigcdprg b on b.programas+b.parametros=a.programas+a.parametros]+;
+			               [ where a.usuarios=']+m.gcUsuar+[' and a.selbarras=?m.pcselbarras]+;
+			               [ union all select a.programas,a.parametros,a.barraforms,b.descricaos,b.barrapict from SigCdAcB a]+;
+			               [ left join sigcdprg b on b.programas+b.parametros=a.programas+a.parametros]+;
+			               [ where a.selbarras=?m.pcselbarras and a.grupos in (select c.grupos from SigCdAcG c where c.usuarios=']+m.gcUsuar+[')])
+			If Used('crTmpAcBarra1')
+				Use In ('crTmpAcBarra1')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crTmpAcBarra1')
+			EndIf
+			If Used('crTmpAcBarra1')
+				If Used('crAcBarra1')
+					Use In ('crAcBarra1')
+				EndIf
+				Select Distinct a.programas, a.parametros, a.barraforms, ;
+					   PadR(Nvl(a.descricaos,''),100) as descricaos, ;
+					   PadR(Nvl(a.barrapict,''),50) as barrapict;
+				  From crTmpAcBarra1 a ;
+				 Order By 1, 2 ;
+				  Into Cursor crAcBarra1
+			EndIf
+			
+			If Used('crAcBarra1')
+				Select crAcBarra1
+				Set Order To ('') In crAcBarra1
+				Locate
+				
+				Scan While m.lnErro1>0
+					If Not Seek(Str(Val(CrAcBarra1.Programas), 10, 0), 'crTmpOpe', 'ndopes') Or ;
+						Not Nvl(crTmpOpe.Opeinatvs, 0)==1
+
+						m.lcArqIcone1 = ''
+						m.lnTamIcone1 = 0
+						If Left(CrAcBarra1.BarraForms,8)='SIGMVEXP'
+							If Left(CrAcBarra1.programas,2)<>'GE' And ;
+								Seek(Str(Val(CrAcBarra1.Programas), 10, 0), 'crTmpOpe', 'ndopes') And ;
+								Not IsEmpty(crTmpOpe.EmpLancs) And crTmpOpe.EmpLancs <> _Empr
+								Loop
+
+							EndIf
+						Endif
+						If Not IsEmpty(crAcBarra1.barrapict)
+							m.lcExtIcone1 = JustExt(Alltrim(crAcBarra1.barrapict))
+							
+							If Empty(m.lcExtIcone1)
+								m.lcExtIcone1 = 'ico'
+							EndIf 
+							
+							m.lcMcrSql1 = ([select a.marqicones from SigSyIco a where a.carqicones=']+AllTrim(crAcBarra1.barrapict)+['])
+							If m.lnErro1>0
+								m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crTmpIcone1')
+							EndIf
+							Select ('crTmpIcone1')
+							Set Order To ('') In ('crTmpIcone1')
+							Locate 
+
+							If (Not Eof('crTmpIcone1') And Not IsEmpty(crTmpIcone1.marqicones))
+								m.lcArqIcone1 = (m.lcDirTmp1+goSistema.Sys2015Tmp+Sys(2015)+'.'+m.lcExtIcone1)
+								m.lnTamIcone1 = StrToFile(crTmpIcone1.marqicones,m.lcArqIcone1)
+								If m.lnTamIcone1==0
+									m.lcArqIcone1 = ''
+								EndIf 
+							EndIf 
+						EndIf 
+						m.lnNbotao1 = (m.lnNbotao1+1)
+						m.lcMacro1 = 'botao'+AllTrim(Str(m.lnNbotao1,20,0))
+						goSistema.BarraAtalho.AddObject(m.lcMacro1,'botão_da_barra')
+						goSistema.BarraAtalho.&lcMacro1..ToolTiptext = AllTrim(crAcBarra1.descricaos)
+						goSistema.BarraAtalho.&lcMacro1..Picture = m.lcArqIcone1
+						goSistema.BarraAtalho.&lcMacro1..FormExec = AllTrim(crAcBarra1.barraforms)
+						goSistema.BarraAtalho.&lcMacro1..Visible = .t.
+					EndIf 
+				EndScan
+			EndIf
+			
+			goSistema.BarraAtalho.Visible = (m.lnNbotao1>0)
+
+			If .plGetUsuario
+				If .Not.Empty(.pcUsuarioAtual)
+					m.lcOpSis1 = 'S'
+					m.lcOpSis2 = 'USUARIO'
+					m.lcTransSis1 = 'Saida do Sistema'
+				Else
+					.pcUsuarioAtual = m.gcUsuar
+					m.lcOpSis1 = 'E'
+					m.lcOpSis2 = 'USUARIO'
+					m.lcTransSis1 = (Proper(AllTrim(ThisForm.Caption))+' - '+m.gcEmpr)
+				EndIf
+			Else
+				If Empty( .pcUsuarioAtual )
+					.pcUsuarioAtual = m.gcUsuar
+				EndIf
+				m.lcOpSis1 = 'T'
+				m.lcOpSis2 = 'EMPRESA'
+				m.lcTransSis1 = ('Muda Empresa - '+m.gcEmpr)
+			EndIf
+			If Not goSistema.Desenvolvimento
+				= fTempoApp(m.lnTmpChk, m.lnTmpApp)
+			EndIf
+			m.lcMcrSql1 = ([select a.comiss,a.PPLinha1s,a.PPLinha2s,a.nEmps from SigCdEmp a where a.cemps=']+m.gcEmpr+['])
+			If Used('SigCdEmp')
+				Use In ('SigCdEmp')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigCdEmp')
+			EndIf
+			If Used('SigCdEmp')
+				Select ('SigCdEmp')
+				Locate 
+			EndIf 
+			m.lcMcrSql1 = [select a.desmontas,a.habembs,a.habcors,a.habtams,a.habtifs,a.SisTef,a.NumIps from SigCdPam a]
+			If Used('SigCdPam')
+				Use In ('SigCdPam')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigCdPam')
+			EndIf
+			
+			Select a.* From crTmpOpe a;
+				Where Not a.Menus = Space(10);
+				Order By a.Menus, a.SubMenus, a.Ordes, a.EmpLancs;
+				Into Cursor SigCdOpe ReadWrite
+
+			m.lcMcrSql1 = [Select * From SigSyCcb Order By Tits]
+			If Used('SigSyCcb')
+				Use In ('SigSyCcb')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigSyCcb')
+			EndIf
+			
+			m.lcMcrSql1 = [Select Distinct Dopps, Menus, Pccs, Ordes, NDopps, Emplancs ] + ;
+							[From SigCdOpd ] + ;
+						   [Where Menus = 1 ] + ;
+						   [Order By Menus, Ordes]
+
+			If Used('SigCdOpd')
+				Use In ('SigCdOpd')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigCdOpd')
+			EndIf
+
+			m.lcMcrSql1 = [Select Distinct NGopes, DGopes, '   ' as EmpLancs ] + ;
+							[From SigCdGpe ] + ;
+						   [Order By NGopes, DGopes]
+
+			If Used('SigCdGpe')
+				Use In ('SigCdGpe')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigCdGpe')
+			EndIf
+
+			m.lcMcrSql1 = [Select Distinct NDopes, Dopes ] + ;
+							[From SigOpOpe ] + ;
+						   [Order By NDopes, Dopes]
+
+			If Used('SigOpOpe')
+				Use In ('SigOpOpe')
+			EndIf
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'SigOpOpe')
+			EndIf
+			Select ('SigCdOpd')
+			Index On dopps Tag dopps
+			Index On ordes Tag ordes
+			Select ('SigCdOpe')
+			Index On Menus + CCentrals + SubMenus + Str(ordes,3) Tag submenus
+			Select ('SigCdGpe')
+			Index On dgopes Tag dgopes
+			Select ('SigOpOpe')
+			Index On dopes Tag dopes
+			Select ('SigSyCcb')
+			Index On Tits Tag Tits
+			
+			m.ldUltData1 = Ttod(Nvl(crsigcdusu1.tDtSenhas,Ctot('01/01/1900')))
+			m.ldUltData2 = Ttod(.poDatamgr.GetDateTime())
+			m.lnDias = Nvl(crParam2.nDiaSenhas,0)
+			m.Alertas = crParam2.Alertas			
+
+			.Release
+
+			goSistema.EmpresaLogada = _Empr
+			goSistema.UsuarioLogado = goSistema.usuario
+			goSistema.SenhaLogado   = Alltrim(crSigCdUsu1.Senhas)
+				
+			lcCaption        = _Screen.Caption
+			lnPos            = At(' / ',lcCaption,1)
+			_Screen.Caption  = Substr(lcCaption,1,Iif(lnPos <> 0,lnPos - 1,Len(Alltrim(lcCaption)))) + ' / ' + (AllTrim(.get_demp.Value) + ' - ' + AllTrim(m.gcUsuar))
+
+			llNbr = (crSigCdUsu1.ObrigSenhas = 1) And Empty(Alltrim(crSigCdUsu1.Senhas))
+
+			If llNbr Or ((m.lnDias>0 And (m.ldUltData2-m.ldUltData1)>=m.lnDias))
+				DO Form SigMOSen With '2', .f., ThisForm.DataSessionId 
+			Else 
+				Set SysMenu On	
+
+				Do SigMenOpe.prg	
+								
+				If Used('SigCdEmp')
+					Use In ('SigCdEmp')
+				EndIf
+
+				If Used('SigCdPam')
+					Use In ('SigCdPam')
+				EndIf
+
+				If Used('SigCdOpe')
+					Use In ('SigCdOpe')
+				EndIf
+
+				If Used('SigSyCcb')
+					Use In ('SigSyCcb')
+				EndIf
+
+				If Used('SigCdOpd')
+					Use In ('SigCdOpd')
+				EndIf
+
+				If Used('SigCdGpe')
+					Use In ('SigCdGpe')
+				EndIf
+
+				If Used('SigOpOpe')
+					Use In ('SigOpOpe')
+				EndIf
+
+				If Used('crTmpIcone1')
+					USE In ('crTmpIcone1')
+				Endif
+				
+				***Tiago - 19/08/2015 - 4alerta tela de pendências
+				If m.Alertas = 2
+					If( Type('_Screen.oOpPend') == 'U' )
+						_Screen.AddProperty('oOpPend',[])
+					Endif
+					_Screen.oOpPend = CreateObject('ClassOpPen')
+					If Type('_Screen.oOpPend') == 'O'
+						_Screen.oOpPend.Show()
+					Endif
+				Endif				
+			EndIf 
+	EndCase
+EndWith
+
+If Not Empty(m.lcMsg1)
+	=MessageBox(m.lcMsg1,(0+48+0),'')
+Else
+	If Not m.llSaida1 And (Type([_Screen.poTimer]) = [O]) && Richard em 08/06/2015
+		=fGrvAcesso()
+	EndIf
+EndIf
+
+If Not m.llSaida1
+	Thisform.alertapafreducaoz() 
+Else
+	With ThisForm
+		.Enabled = .f.
+		.Visible = .f.
+		.Release
+		Do pEncerrar
+	EndWith
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ajustaemps
+------------------------------------------------------------
+PROCEDURE ajustaemps
+lnErro1 = Iif(.poDatamgr.pnIdConn>0,1,-1)
+
+lcMcrSql1 = [Select cemps, razas, tipos From SigCdEmp]
+If Used('crEmpresa1')
+	Use In ('crEmpresa1')
+EndIf
+If (lnErro1>0)
+	lnErro1 = .poDatamgr.SQLExecute(lcMcrSql1, 'crEmpresa1')
+EndIf
+If Used('crEmpresa1')
+	Go Top In crEmpresa1
+	If (Reccount([crEmpresa1]) > 1)
+		ThisForm.lblEmpresa.Visible = .t.
+		ThisForm.get_Emp.Visible  = .t.
+		ThisForm.get_Demp.Visible = .t.
+		*ThisForm.Saida.Left = ThisForm.get_Demp.Left + ThisForm.get_Demp.Width + 10
+	Else
+		*ThisForm.lblEmpresa.Visible = .f.
+		ThisForm.get_Emp.Value    = crEmpresa1.cemps
+		*ThisForm.get_Emp.Visible  = .f.
+		ThisForm.get_Demp.Value   = crEmpresa1.Razas
+		*ThisForm.get_Demp.Visible = .f.
+		*ThisForm.Saida.Left = ThisForm.Senha.Left + ThisForm.Senha.Width + 10
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE alertapafreducaoz
+------------------------------------------------------------
+PROCEDURE alertapafreducaoz
+Local lcMsg
+lcMsg = []
+
+Thisform.poDatamgr = Createobject('fSqlConector', Thisform.Name)
+If Thisform.poDatamgr.pnIdConn > 0
+
+	lcEmps = Thisform.Get_EMP.Value
+
+	lcQuery = [select Estas From SigCdEmp Where Cemps = ']+lcEmps+[']
+	If (Thisform.poDatamgr.SqlExecute(lcQuery, [csEstEmp]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (csEstEmp)])
+		Return 0
+	Endif
+
+	Select csEstEmp
+	If Alltrim(Upper(csEstEmp.Estas)) <> [SC]
+		Return .T.
+	Endif
+
+	lcQuery = [Select * from Sigfipaf where status <> 'AUT']
+	If (Thisform.poDatamgr.SqlExecute(lcQuery, [crSigfipaf]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigfipaf)])
+		Return 0
+	Endif
+
+	Select crSigfipaf
+	Go Top
+
+	If Reccount()>0
+		Select Count(cidchaves) As Qtde From crSigfipaf Where tipo = 'REDUCAOZ' And Status <> 'AUT' Into Cursor crPaf readwrite
+		
+		If crPaf.Qtde >0
+			lcMsg=[HÁ ]+Alltrim(Str(crPaf.Qtde)) +[ ARQUIVOS COM INFORMAÇÕES DA REDUÇÃO Z DO PAF-ECF PENDENTES DE TRANSMISSÃO AO FISCO. O CONTRIBUINTE PODE TRANSMITIR OS ARQUIVOS PELO MENU FISCAL POR MEIO DO COMANDO 'Envio ao FISCO-REDUÇÃO Z']
+		Endif
+		If crPaf.Qtde >=5 And crPaf.Qtde<=8
+			lcMsg=lcMsg + [ VERIFIQUE COM O FORNECEDOR DO PROGRAMA A SOLUÇÃO DA PENDÊNCIA.]
+		Endif
+		If crPaf.Qtde >=9
+			lcMsg=lcMsg + [A PARTIR DA 10ª TRANSMISSÃO PENDENTE, O SEU PROGRAMA SERÁ BLOQUEADO E SOMENTE SERÁ LIBERADO APÓS TODAS AS TRANSMISSÕES SEREM REALIZADAS. VERIFIQUE URGENTEMENTE COM O FORNECEDOR DO PROGRAMA A SOLUÇÃO DA PENDÊNCIA.]
+		Endif
+
+		If !Empty(lcMsg)
+			Messagebox(lcMsg,64,'Aviso')
+		Endif
+
+		lcMsg = []
+
+		select datager from crSigfipaf where tipo = 'ESTOQUE' AND status <> 'AUT' into cursor crPaf readwrite
+		lnQtDias = DATE()-TTOD(crPaf.datager)
+		IF lnQtDias > 0
+			lcMsg=[HÁ UM ARQUIVO COM INFORMAÇÕES DO ESTOQUE MENSAL DO ESTABELECIMENTO PENDENTE DE TRANSMISSÃO AO FISCO. O CONTRIBUINTE PODE TRANSMITIR O ARQUIVO PELO MENU FISCAL POR MEIO DO COMANDO 'Envio ao FISCO-ESTOQUE'.]
+		ENDIF
+		IF lnQtDias > 9
+			lcMsg=lcMsg + [ VERIFIQUE COM O FORNECEDOR DO PROGRAMA A SOLUÇÃO DA PENDÊNCIA.]
+		ENDIF
+
+		If !Empty(lcMsg)
+			Messagebox(lcMsg,64,'Aviso')
+		Endif
+
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+If Used('crsigcdusu1')
+	Use In ('crsigcdusu1')
+EndIf
+
+If Used('crEmpresa1')
+	Use In ('crEmpresa1')
+EndIf
+
+If Used('crParam1')
+	Use In ('crParam1')
+EndIf
+
+If Used('crParam2')
+	Use In ('crParam2')
+EndIf
+
+If Used('crTmpAcBarra1')
+	Use In ('crTmpAcBarra1')
+EndIf
+
+If Used('crAcBarra1')
+	Use In ('crAcBarra1')
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters llGetUsuario, llPrimeiraVez, llautomatico, lcPrograma
+
+Public gcUsuar, gcEmpr, _tipoe, usuar, _empr
+
+Local lcMcrSql1, lnErro1
+
+*!*	This.Width  = _Screen.Width
+*!*	This.Height = _Screen.Height
+*!*	This.Top    = 0
+*!*	This.Left   = 0
+
+ThisForm.NomePrograma = Iif(Type([lcPrograma])=[C],lcPrograma,'OPERACIONAL')
+
+This.lblTitF.Caption = goSistema.TituloSistema
+This.lblTitT.Caption = goSistema.TituloSistema
+This.lblTitF.Visible = .f.
+This.lblTitT.Visible = .f.
+
+*!*	If (_Screen.Width > 779)
+*!*		This.lblTitF.Visible = .t.
+*!*		This.lblTitT.Visible = .t.
+*!*		This.lblTitF.Left 	 = (This.Width - This.lblTitF.Width) - 10
+*!*		This.lblTitT.Left 	 = This.lblTitF.Left - 2
+*!*	EndIf
+
+m.llGetUsuario = Iif(Type('m.llGetUsuario')=='L',m.llGetUsuario,.f.)
+m.llPrimeiraVez = Iif(Type('m.llPrimeiraVez')=='L',m.llPrimeiraVez,.f.)
+m.gcUsuar = PadR(Iif(Type('m.gcUsuar')=='C',m.gcUsuar,''),10)
+m.gcEmpr = PadR(Iif(Type('m.gcEmpr')=='C',m.gcEmpr,''),3)
+m.usuar = PadR(Iif(Type('usuar')=='C',usuar,''),10)
+m._empr = PadR(Iif(Type('m._empr')=='C',m._empr,''),3)
+
+If Type([lcEmpresaLogada])=[C] and Not Empty(lcEmpresaLogada)
+	m._empr = lcEmpresaLogada
+EndIf 
+
+Declare Integer SetForegroundWindow In user32 Integer
+
+Set SysMenu To
+Set SysMenu Off
+Hide Popup All
+
+If Type([goSistema.BarraAtalho]) = [O]
+	goSistema.BarraAtalho.Release
+EndIf
+
+= DoDefault()
+
+With ThisForm
+	.plGetUsuario = m.llGetUsuario
+	.plUsuarioOk = (Not m.llGetUsuario)
+	.pcUsuarioAtual = PadR(Iif(m.llPrimeiraVez, '', m.gcUsuar), 10)
+	.poDatamgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If .poDatamgr.pnIdConn > 0
+		.LockScreen = .t.
+
+		.usuario.Enabled = (.plGetUsuario)
+		.pnBloqueiaSenha = 1
+
+		If m.llPrimeiraVez
+			.Usuario.Value = m.Usuar
+		Else
+			.usuario.Value = m.Usuar &&m.gcUsuar
+		EndIf 
+
+		.AjustaEmps()
+		
+		.senha.Enabled = (.plGetUsuario)
+		.senha.Value = Iif(.plGetUsuario, Space(10), Replicate('*', 10))
+
+		m.lnErro1 = ThisForm.poDataMgr.pnIdConn
+
+		m.lcArqImage1 = (Addbs(Sys(2023)) + 'SigToSen' + Sys(2015) + '.img')
+		m.lcMcrSql1 = ('select a.logos from SigCdPam a')
+		If m.lnErro1>0 
+			m.lcMcrSql1 = ThisForm.poDataMgr.SQLExecute(m.lcMcrSql1,'crTmpLogo1')
+		EndIf 
+		
+*!*			If Used('crTmpLogo1')
+*!*				Select ('crTmpLogo1')
+*!*				Set Order To ('') In ('crTmpLogo1')
+*!*				Locate
+*!*				
+*!*				If Type('crTmpLogo1.logos')=='M'
+*!*					m.lcStrLogo1 = crTmpLogo1.logos
+*!*					
+*!*					If (Not IsEmpty(m.lcStrLogo1) And;
+*!*						StrToFile(m.lcStrLogo1,m.lcArqImage1)>0)
+*!*						thisform.Picture = m.lcArqImage1
+*!*					EndIf 
+*!*				EndIf 
+*!*			EndIf 
+
+		If File(m.lcArqImage1)
+			Delete File (m.lcArqImage1)
+		EndIf 
+
+		m.lcMcrSql1 = [select a.ndocks,a.ntmpchks,a.ntmpapps from SigCdPam a order by 1]
+
+		If m.lnErro1 > 0
+			m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1, 'crParam1')
+		EndIf
+
+		m.lcMcrSql1 = [select a.ndiasenhas,a.nblosenhas, a.PafEcfs, a.Alertas from SigCdPac a order by 1]
+
+		If m.lnErro1 > 0
+			m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crParam2')
+		EndIf
+
+		*** Rafael - homologacao 2016 ***
+		If (crParam2.pafecfs = 1)
+			ThisForm.Label3.Visible = .t.
+		ENDIF
+
+		If (Type([_Screen.poTimer]) = [O]) && Richard Em 29/06/2015
+			=fDelAcesso()
+		EndIf
+		
+		If .plGetUsuario
+			.usuario.SetFocus
+		Else
+			.usuario.Valid()
+
+			If llAutomatico
+				.get_emp.Value = _Empr
+*!*					.Get_Emp.Valid()
+*!*					ThisForm.SAIDA.OK.Click()
+*!*					Return .f.
+			Endif
+			.get_emp.SetFocus
+		EndIf
+		
+		.Refresh
+		.LockScreen = .f.
+		= SetForegroundWindow(This.Hwnd)		
+	Else
+		= Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Do pEncerrar
+		Return(.f.)
+	EndIf 
+EndWith
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+If Type('This.poDataMgr')=='O'
+	This.poDataMgr.Release
+EndIf
+= DoDefault()
+=fLogoRelatorio()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGTOSEN.SENHA
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Thisform.plGetUsuario)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local lcMsg1, lnErro1, lcMcrSql1
+
+m.lcMsg1 = ''
+m.lnErro1 = 1
+This.Value = PadR(Strtran(Strtran(This.Value, ['], [ ]), ["], [ ]),10)
+
+Select crParam2
+Locate 
+
+With ThisForm
+	
+	If Used('crsigcdusu1')
+		Select ('crsigcdusu1')
+		Set Order To ('') In ('crsigcdusu1')
+		Locate
+
+		If .usuario.Value = '4CONTROL' 
+			lcSenha4c = fGerPswDiario(Val(Sys(1)), Date(), 0) 
+			If Not Alltrim(.senha.Value)==Alltrim(lcSenha4c)
+				m.lcMsg1 = 'Usuário / Senha Inválidos(1).'
+				.plUsuarioOk = .F.
+			Else
+				.plUsuarioOk = .T.
+			EndIf 
+		Else
+			.plUsuarioOk = (Not Empty(.usuario.Value) And Not Eof('crsigcdusu1') And .senha.Value==fCriptografar(crsigcdusu1.senhas))
+		EndIf 
+	EndIf
+
+	If Not .plUsuarioOk
+		If crParam2.nBloSenhas > 0 And;
+			Not Empty(.usuario.Value) And;
+			Not Eof('crsigcdusu1') And;
+			Not .senha.Value==fCriptografar(crsigcdusu1.senhas)
+
+			If ThisForm.pnBloqueiaSenha > crParam2.nBloSenhas
+				m.lcRamSenha = Sys(2015)
+				m.lcMcrSql1 = [update sigcdusu set senhas='] + Sys(2015) + [' where usuarios='] + This.Parent.Usuario.Value + [']
+
+				If m.lnErro1>0 
+					m.lnErro1 = ThisForm.poDataMgr.SQLExecute(m.lcMcrSql1)
+				EndIf 
+				If m.lnErro1>0 
+					m.lnErro1 = ThisForm.poDataMgr.Commit()
+				EndIf 
+				If Not m.lnErro1>0
+					ThisForm.poDataMgr.RollBack()
+				EndIf 
+				m.lcMsg1 = 'Nº Tentativas Ultrapassadas, Senha Bloqueada.' + Chr(10) + 'Contate o Suporte Tecnico.'
+			Else 
+				m.lcMsg1 = 'Senha Incorreta (Permitido Apenas ' + Alltrim(Str(crParam2.nBloSenhas, 20,0)) + ' Tentativas).'
+				ThisForm.pnBloqueiaSenha = (ThisForm.pnBloqueiaSenha + 1)
+			EndIf 
+		Else 
+			m.lcMsg1 = 'Usuário / Senha Inválidos(2).'
+		EndIf 
+		.usuario.SetFocus
+	Else
+		If Not ThisForm.get_Emp.Visible
+			ThisForm.Confirma(.t.)
+		EndIf	
+	EndIf
+EndWith
+
+If .Not.Empty(m.lcMsg1)
+	= MessageBox(m.lcMsg1,(0+48+0),'')
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGTOSEN.SAIDA
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.Click
+------------------------------------------------------------
+PROCEDURE CANCELA.Click
+With ThisForm
+	.Enabled = .f.
+	.Visible = .f.
+	.Release
+	Do pEncerrar
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGTOSEN.USUARIO
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not This.Value==This.peAntvalue 
+	ThisForm.pnBloqueiaSenha = 1
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Private pcUsuario1
+
+Local lcMsg1, lnErro1, lcMcrSql1, lcSupervis
+
+m.lcMsg1 = ''
+This.Value = PadR(Alltrim(Strtran(Strtran(This.Value, ['], [ ]), ["], [ ])),10)
+m.gcUsuar = This.Value
+m.usuar = m.gcUsuar
+goSistema.Usuario = m.gcUsuar
+= fUniqueIds(m.usuar)
+
+If Not Type('m.gcTipoUsuario')=='C'
+	Public gcTipoUsuario
+EndIf 
+
+m.gcTipoUsuario = Space(11)
+
+With ThisForm
+	m.lnErro1 = Iif(.poDatamgr.pnIdConn>0, 1, -1)
+	m.pcUsuario1 = Alltrim(.usuario.Value)
+	m.lcMcrSql1 = [select a.usuarios,a.senhas,a.supervis,a.tdtsenhas,a.ObrigSenhas from sigcdusu a where not a.cativos='N' and a.usuarios=?m.pcUsuario1 order by 1]
+
+	If Used('crsigcdusu1')
+		Use In ('crsigcdusu1')
+
+	EndIf
+	If m.lnErro1>0
+		m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crsigcdusu1')
+	EndIf
+	If Used('crsigcdusu1')
+		Select ('crsigcdusu1')
+		Locate
+
+		If Not Empty(crsigcdusu1.usuarios)
+			m.lcSupervis = Padr(Lower(Alltrim(crsigcdusu1.supervis)), 1)
+
+			Do Case
+				Case InList(Upper(Alltrim(crsigcdusu1.usuarios)), [4CONTROL]) &&[RICHARD], [CLEBER]  - Rafael - Deixei o Usuario 4control com o acesso full
+					m.lcSupervis = 'i'
+
+		* Richard em 29/11/2016 - Eliminando SUPERVIS
+*!*					Case InList(m.lcSupervis, 'i', 's')
+*!*						m.lcSupervis = 's'
+
+				Otherwise
+					m.lcSupervis = 'n'
+
+			EndCase 
+
+			m.gcTipoUsuario = (m.lcSupervis + crsigcdusu1.usuarios)
+
+			Public Array gaAcesso(1,1)
+
+			m.gaAcesso = ''
+			m.lcMcrSql1 = []
+
+			Do Case
+				Case m.lcSupervis == 's'
+					m.lcMcrSql1 = [Select Distinct Programas, Parametros ] + ;
+									[From sigcdprg ] + ;
+								   [Where Not Programas = Space(10) ] + ;
+								   [Order By Programas, Parametros]
+					
+				Case Not InList(m.lcSupervis, 's', 'i')
+
+					Text To m.lcMcrSql1 NoShow TextMerge PreText 1 + 2 + 4 + 8
+
+						Select Distinct a.programas,a.parametros 
+							From SigCdAcU a 
+							Where Not a.programas = '<<Space(15)>>' And a.usuarios = '<<m.gcUsuar>>' 
+							Group By a.programas, a.parametros 
+						Union All
+						Select Distinct a.programas,a.parametros 
+							From SigCdAcU a 
+							Left Outer Join SigCdAcG b On a.grupos = b.grupos 
+							Where Not a.programas = '<<Space(15)>>' And b.usuarios = '<<m.gcUsuar>>' 
+							Group By a.programas, a.parametros 
+						Order by 1, 2
+					EndText
+			EndCase
+
+			If Used('crSigCdAcU1')
+				Use In ('crSigCdAcU1')
+			EndIf
+
+			If Not Empty(m.lcMcrSql1)
+				If m.lnErro1>0
+					m.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crSigCdAcU1')
+				EndIf
+
+				Select Distinct (a.Programas+a.Parametros);
+				  From crSigCdAcU1 a;
+				 Order By 1;
+				  Into Array gaAcesso
+			EndIf
+		EndIf
+	EndIf	
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.plUsuarioOk = .f.
+
+Return(Thisform.plGetUsuario)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGTOSEN.Get_EMP
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Local lnErro1, lcMcrSql1, llSupervis
+
+m.lnErro1 = Iif(ThisForm.poDatamgr.pnIdConn>0,1,-1)
+m.llSupervis = .f.
+
+If Type('m.gcTipoUsuario') == 'C'
+	m.llSupervis = (Left(m.gcTipoUsuario, 1) == 'i')
+
+EndIf
+
+If m.llSupervis
+	m.lcMcrSql1 = [select a.cemps,a.razas,a.tipos, a.Logos from SigCdEmp a order by a.cemps]
+
+Else
+	m.lcMcrSql1 = [Select b.Cemps, b.Razas, b.Tipos, b.Logos ] + ;
+					[From SigCdAcE a ] + ;
+				   [Inner Join SigCdEmp b ] + ;
+				   	  [On b.Cemps = a.Emps ] + ;
+				   [Where a.Usuarios = '] + ThisForm.Usuario.Value + [' And ] + ;
+				   	 [Not b.Ativas = 2 ] + ;
+				   [Order By b.Cemps]
+
+EndIf
+
+If Used('crEmpresa1')
+	Use In ('crEmpresa1')
+
+EndIf
+
+If m.lnErro1>0
+	m.lnErro1 = ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crEmpresa1')
+
+EndIf
+If Used('crEmpresa1')
+	Select ('crEmpresa1')
+	Set Order To ('') In ('crEmpresa1')
+	Locate
+
+	With ThisForm	
+		If RecCount('crEmpresa1')==1
+			With ThisForm
+				.get_emp.Value = crEmpresa1.cemps
+				.get_demp.Value = crEmpresa1.razas
+			EndWith
+		Else
+			With ThisForm
+				.get_emp.Value = Space(3)
+				.get_demp.Value = Space(40)
+			EndWith
+		EndIf
+
+		.get_emp.Refresh
+		.get_demp.Refresh
+	EndWith
+EndIf
+
+Return(ThisForm.plUsuarioOk)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,lcMcrlSql1,lnErro1,loLista
+
+m.llRetorno = (LastKey()==27.Or.Empty(This.Value))
+m.lnErro1 = 1
+This.Value = PadR(This.Value,3)
+
+If .Not.m.llRetorno
+	If (.Not.Used('crEmpresa1').Or.;
+		RecCount('crEmpresa1')==0)
+		m.lcMcrSql1 = [select a.cemps,a.razas,a.tipos,a.logos from SigCdEmp a order by 1]
+		If Used('crEmpresa1')
+			Use In ('crEmpresa1')
+		EndIf
+		If m.lnErro1>0
+			m.lnErro1 = ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crEmpresa1')
+		EndIf
+	EndIf
+	If (Used('crEmpresa1').And.;
+	    RecCount('crEmpresa1')>0)
+		Select ('crEmpresa1')
+		Locate For Lower(AllTrim(crEmpresa1.cEmps))==Lower(AllTrim(ThisForm.get_emp.Value))
+
+		If Eof('crEmpresa1')
+			m.loLista = CreateObject('fwBuscaInt','crEmpresa1','cemps',;
+			                         ThisForm.get_emp.Value,;
+			                         'Empresas',.t.)
+			m.loLista.mAddColuna('cemps',Replicate('x',10),'Código',.T.)
+			m.loLista.mAddColuna('razas',Replicate('x',40),'Nome Empresa',.T.)
+			m.loLista.Show()
+		EndIf
+		ThisForm.get_emp.Value = Iif(LastKey()==27,Space(3),crEmpresa1.cemps)
+		ThisForm.get_demp.Value = Iif(LastKey()==27,Space(40),crEmpresa1.razas)
+
+		Try
+			m.lcArqImage1 = (Addbs(Sys(2023)) + goSistema.Sys2015Tmp + Sys(2015) + '.img')
+			*m.lcStrLogo1 = crEmpresa1.logos
+			
+			lcFoto=Strconv(Strtran(Strtran(Strtran(crEmpresa1.logos,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+			m.lcStrLogo1 = lcFoto
+			
+			If IsEmpty(crEmpresa1.logos)
+				m.lcMcrSql1 = ('select a.logos from SigCdPam a')
+				If m.lnErro1>0 
+					m.lcMcrSql1 =  ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crTmpLogo1')
+				EndIf 
+				*m.lcStrLogo1 = crTmpLogo1.logos
+				lcFoto=Strconv(Strtran(Strtran(Strtran(crTmpLogo1.logos,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+				m.lcStrLogo1 = lcFoto
+			EndIf 
+			
+			If (Not IsEmpty(m.lcStrLogo1) And;
+				StrToFile(m.lcStrLogo1,m.lcArqImage1)>0)
+				_Screen.ImagemLocal.Picture = m.lcArqImage1
+			EndIf 	
+			_Screen.ImagemLocal.Visible = (Not Empty(_Screen.ImagemLocal.Picture))
+		Catch
+		
+		EndTry 
+	Else
+		ThisForm.get_emp.Value = Space(3)
+		ThisForm.get_demp.Value = Space(40)
+	EndIf
+	ThisForm.get_emp.Refresh
+	ThisForm.get_demp.Refresh
+	m.llRetorno = .t.
+EndIf
+
+If llRetorno And Not Empty(This.Value)
+	ThisForm.Confirma(.f.)
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGTOSEN.Get_Demp
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.plUsuarioOk.And.Empty(ThisForm.Get_Emp.Value))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,lcMcrlSql1,lnErro1,loLista
+
+m.llRetorno = (LastKey()==27.Or.Empty(This.Value))
+m.lnErro1 = 1
+
+If .Not.m.llRetorno
+	If (.Not.Used('crEmpresa1').Or.;
+		RecCount('crEmpresa1')==0)
+		m.lcMcrSql1 = [select a.cemps,a.razas,a.tipos from SigCdEmp a order by 1]
+		If Used('crEmpresa1')
+			Use In ('crEmpresa1')
+		EndIf
+		If m.lnErro1>0
+			m.lnErro1 = ThisForm.poDatamgr.SQLExecute(m.lcMcrSql1,'crEmpresa1')
+		EndIf
+	EndIf
+	If (Used('crEmpresa1').And.;
+	    RecCount('crEmpresa1')>0)
+		Select ('crEmpresa1')
+		Locate For Lower(AllTrim(crEmpresa1.razas))==Lower(AllTrim(ThisForm.get_demp.Value))
+
+		If Eof('crEmpresa1')
+			m.loLista = CreateObject('fwBuscaInt','crEmpresa1','razas',;
+			                         ThisForm.get_demp.Value,;
+			                         'Empresas',.t.)
+			m.loLista.mAddColuna('razas',Replicate('x',40),'Nome Empresa')
+			m.loLista.mAddColuna('cemps',Replicate('x',10),'Código')
+			m.loLista.Show()
+		EndIf
+		ThisForm.get_emp.Value = Iif(LastKey()==27,Space(3),crEmpresa1.cemps)
+		ThisForm.get_demp.Value = Iif(LastKey()==27,Space(40),crEmpresa1.razas)
+	Else
+		ThisForm.get_emp.Value = Space(3)
+		ThisForm.get_demp.Value = Space(40)
+	EndIf
+	ThisForm.get_emp.Refresh
+	ThisForm.get_demp.Refresh
+	m.llRetorno = .t.
+EndIf
+
+If llRetorno And Not Empty(This.Value)
+	ThisForm.Confirma(.f.)
+ENDIF
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGTOSEN
+RESERVED3 (ClassInfo): plusuariook
+plgetusuario
+pncolor
+pcusuarioatual
+podatamgr
+pnbloqueiasenha
+_memberdata XML Metadata for customizable properties
+nomeprograma
+*confirma 
+*ajustaemps 
+*alertapafreducaoz 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

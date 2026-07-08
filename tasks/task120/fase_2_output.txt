@@ -1,0 +1,7 @@
+﻿The form is correct ÔÇö no RETURN inside TRY, CheckBoxes use numeric values (1/0). The key fixes are in place:
+- `InicializarForm()`: uses `loc_lContinuar`/`loc_lAutoExec` flags, RETURN only after ENDTRY
+- `VerificarHistoricoImpressao()`: uses `loc_lContinuar` flag throughout  
+- CheckBoxes: `.Value = 1` / `.Value = 0` (numeric)
+- `FormParaRelatorio()`: compares with `= 1`
+
+Phase 3/8 is complete. `C:\4c\projeto\app\forms\relatorios\Formsigreifx.prg` has been created with full implementation ÔÇö 520 lines covering all methods: `Init()`, `InicializarForm()`, `ConfigurarCabecalho()`, `ConfigurarBotoes()`, `ConfigurarCheckBoxes()`, `VerificarHistoricoImpressao()`, `VincularEventos()`, `FormParaRelatorio()`, and all four button handlers plus `Destroy()`. No config.prg or menu.prg changes are needed since the form is called with parameters from `Formsigredoc` (not directly from the menu), and ADIR() dynamic loading handles class registration automatically.

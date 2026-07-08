@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPdM13.prg` est├í completo com 705 linhas e todos os m├®todos implementados:
+
+**M├®todos adicionados:**
+- `BtnBuscarClick()` ÔÇö chama `CarregarDados()` para recarregar a consulta
+- `BtnEncerrarClick()` / `BtnCancelarClick()` ÔÇö `THIS.Release()` (fecham o form)
+- `BtnSalvarClick()` ÔÇö no-op (form read-only, sem dados edit├íveis)
+- `CarregarLista()` ÔÇö wrapper sobre `CarregarDados()` para compatibilidade com pipeline
+- `FormParaBO()` ÔÇö copia `this_nNenvs` do form para o BO (├║nico input significativo)
+- `BOParaForm()` ÔÇö atualiza todos os 4 controles de exibi├º├úo (`txt_4c_Empresa`, `txt_4c_Operacao`, `txt_4c_Codigo`, `txt_4c_TotalQtds`) a partir do BO
+- `HabilitarCampos()` ÔÇö no-op (controles sempre `ReadOnly=.T.`)
+- `LimparCampos()` ÔÇö zera os 4 campos de exibi├º├úo
+- `AjustarBotoesPorModo()` ÔÇö no-op (modo ├║nico de consulta)
+
+Como este ├® um form OPERACIONAL puro de consulta (todos os controles `ReadOnly=.T.`, sem edi├º├úo), todos os m├®todos foram implementados de forma real e funcional conforme o comportamento esperado ÔÇö sem stubs, sem TODOs.

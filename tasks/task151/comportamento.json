@@ -1,0 +1,214 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoMovInd", "fAcessoContab", "fwBuscaExt", "fAcessoContas", "fwBuscaSel", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMPF",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .Container1\n\t\t\t.get_nm_operacao.Value = ''\n\t\t\t.get_dt_inicial.Value  = Date()\n\t\t\t.get_dt_final.Value    = Date()\n\t\t\t.get_Grupo.Value \t   = Space(10)\n\t\t\t.get_Conta.Value \t   = Space(10)\n\t\t\t.get_dConta.Value \t   = Space(10)\n\t\tEndWith\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossív... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao,get_dt_inicial,get_dt_final,get_Grupo,get_Conta,get_dConta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMPF",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoMovInd(Usuar, This.Value, This, ThisForm.poDataMgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovInd",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.Get_grupo",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'GerBals'\n\tlaFiltro(1,2) = 1\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t., .t., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value  = Iif(Lastkey()=27,[],crListaRemota.Codigos)\n\tthisform.cont... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab,fwBuscaExt",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "get_Dgrupo,get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.Get_conta",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'GerBals'\n\tlaFiltro(1,2) = 1\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'IClis', This.Value, 'Seleção', 500, .t., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('IClis',  '', 'Código')\n\t\tloLista.mAddColuna('RClis',  '', 'Descrição')\n\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f.,... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta,get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.Get_dconta",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'GerBals'\n\tlaFiltro(1,2) = 1\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'RClis', This.Value, 'Seleção', 500, .t., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('RClis',  '', 'Descrição')\n\t\tloLista.mAddColuna('IClis',  '', 'Código')\n\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f.,... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta,get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.get_Dgrupo",
+      "evento": "Valid",
+      "linhas": 53,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tDimension laFiltro(1,2)\n\tlaFiltro(1,1) = 'GerBals'\n\tlaFiltro(1,2) = 1\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descrs', This.Value, 'Seleção', .t., .t., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value  = Iif(Lastkey()=27,[],crListaRemota.Descrs)\n\tthisform.contai... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab,fwBuscaExt,fwBuscaSel",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "get_grupo,get_Dgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.Container1.get_Dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.consulta",
+      "evento": "Click",
+      "linhas": 51,
+      "codigoOriginal": "Private pDtI, pDtF\n\nIf (ThisForm.Container1.get_dt_final.Value < ThisForm.Container1.get_dt_inicial.Value)\n\t=Messagebox('Período Inválido!!! Data Final Menor Que a Data Inicial!!!', 16, '')\n\tThisForm.Container1.get_dt_inicial.SetFocus\n\tReturn .f.\nEndIf\n\nldDtInicial\t = ThisForm.Container1.get_dt_inicial.Value\nldDtFinal\t = ThisForm.Container1.get_dt_final.Value\nlcNmOperacao = ThisForm.Container1.get_nm_operacao.Value\nlcEstoqueo\t = ThisForm.Container1.get_grupo.Value\nlcContao     = ThisForm.Contain... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_final,get_dt_inicial,get_nm_operacao,get_grupo,get_conta,optConta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMPF.sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

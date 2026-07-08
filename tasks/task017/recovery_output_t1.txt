@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O bloco de 61 linhas com IFs aninhados id├¬nticos (padr├úo "loop de corre├º├úo") foi substitu├¡do por um ├║nico `IIF` na linha correta.
+
+**Causa raiz:** O auto-corretor havia aplicado o padr├úo BIT/LOGICAL repetidamente, criando 14 n├¡veis de `IF VARTYPE(ObrigSenhas) = "L"` aninhados. O VFP9 falha ao compilar c├│digo com nesting excessivo, o que fazia `CREATEOBJECT("sigtosenBO")` retornar `.F.` (n├úo-objeto), que por sua vez propagava a falha at├® `CREATEOBJECT("Formsigtosen")`.
+
+**Corre├º├úo:** Uma linha simples com `IIF` - se o campo for LOGICAL usa diretamente, caso contr├írio trata como BIT (`NVL(campo, 0) = 1`).

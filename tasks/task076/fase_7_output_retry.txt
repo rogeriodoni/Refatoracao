@@ -1,0 +1,8 @@
+﻿All 4 CRUD methods are now present in `Formsigredcu.prg`:
+
+- **BtnVisualizarClick** (line 507): pre-existing, calls `this_oRelatorio.Atualizar()` for preview
+- **BtnIncluirClick** (line 937): delegates to `BtnImprimirClick` (main report action - print + register + email)
+- **BtnAlterarClick** (line 956): re-applies defaults via `ConfigurarPaginaLista` + `AtualizarOpcoes` to reset options
+- **BtnExcluirClick** (line 982): asks confirmation then delegates to `BtnEncerrarClick` to close the dialog
+
+Each method has real, working logic adapted to the REPORT form context (matching the pattern used in other report forms like `Formsigreche.prg`), with TRY/CATCH and `MsgErro` reporting ÔÇö no stubs or TODOs.

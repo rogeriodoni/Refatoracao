@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fCarregarCambio", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Report Form SigReBal To Printer Noconsole\n\nSelect Consulta\nGo Top\nIf (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)\n\tReport Form SigReAcs To Printer Noconsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Report Form SigReBal To Printer Prompt Noconsole\n\nSelect Consulta\nGo Top\nIf (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)\n\tReport Form SigReAcs To Printer Prompt Noconsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Init",
+      "linhas": 58,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.get_dt_final.Value   = Date()\n\t\t.get_cd_moeda.Value   = ''\n\t\t.get_ds_moeda.Value   = ''\n\t\t.get_cd_empresa.Value = ''\n\t\t.get_ds_empresa.Value = ''\n\t\t.optGcontaz.Value     = 1\n\t\t.optGtprel.Value      = 1\n\t\t.Refresh\n\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'GrPadClis')\n\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')\n\t\tSel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,getDriver,GetDatabase",
+        "controlesReferenciados": "get_dt_final,get_cd_moeda,get_ds_moeda,get_cd_empresa,get_ds_empresa,optGcontaz,optGtprel",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 306,
+      "codigoOriginal": "Private pDat\nLocal ldDtSaldo,lcCdEmp,lcDsEmp,lcCdMoeda,lcDsMoeda,lnContaz,lnOptRel,lcEmpresa,lcTitulo1s,lcTitulo2s,lcEscape,;\n      lnDecimals,lcFixed,laOrd,laStrArea,cEmpresa,cTitulo1s,cTitulo2s,cContas,cDcontas,nSaldos,cOrds,cPs,cIps,;\n      lnSaldos,Grupos,Contas,Moedas,lcClasse2,lnNivels,lnConta1,lnCtRfr,lnCtMvt\n\nm.ldDtSaldo  = ThisForm.get_dt_final.Value\nm.lcCdEmp    = ThisForm.get_cd_empresa.Value\nm.lcDsEmp    = ThisForm.get_ds_empresa.Value\nm.lcCdMoeda  = ThisForm.get_cd_moeda.Value\nm.lcD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fCarregarCambio",
+        "metodosFormChamados": "getDriver,GetDatabase,SqlExecute",
+        "controlesReferenciados": "OptRel,get_dt_final,get_cd_empresa,get_ds_empresa,get_cd_moeda,get_ds_moeda,optGcontaz,optGtprel,OptCli,opt_cli,OptAn,OptCot,optCotacao,OptConc,OptConcilias",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Report Form SigReBal Preview NoConsole\n\nSelect Consulta\nGo Top\nIf (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)\n\tReport Form SigReAcs Preview NoConsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa, ThisForm.poDataMgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_empresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa, ThisForm.poDataMgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBAL.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

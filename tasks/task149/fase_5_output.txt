@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. A Fase 5/8 foi conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarEventos()`** ÔÇö registra todos os BINDEVENTs:
+   - `grd_4c_Retrab.AfterRowColChange` ÔåÆ `GrdRetrabAfterRowColChange`
+   - `grd_4c_Inc.AfterRowColChange` ÔåÆ `GrdIncAfterRowColChange`
+   - `cmdg_4c_Compo.Buttons(1).Click` ÔåÆ `BtnInserirClick`
+   - `cmdg_4c_Compo.Buttons(2).Click` ÔåÆ `BtnExcluirClick`
+   - `cmd_4c_Ok.Click` ÔåÆ `BtnOkClick`
+   - Habilita/desabilita bot├Áes de acordo com `this_cEscolha` (INSERIR/ALTERAR vs. demais)
+
+2. **`GrdRetrabAfterRowColChange`** ÔÇö ao navegar nas OPs: filtra `xNensiN` por `xMfas.Nops` via `SET KEY TO`, atualiza grd_4c_Inc, e carrega imagem do produto via SQLEXEC em `SigCdPro` (equivalente ao `poDataMgr.CursorQuery` do legado)
+
+3. **`GrdIncAfterRowColChange`** ÔÇö ao navegar nas NCs: faz Refresh no `txt_4c_Descricao`
+
+4. **`BtnInserirClick`** ÔÇö `INSERT INTO xNensiN (Nops, Qtds) VALUES (xMfas.Nops, xMfas.Qtds)` com guard de modo
+
+5. **`BtnExcluirClick`** ÔÇö `DELETE` + COUNT; se grade ficar vazia auto-insere chamando `BtnInserirClick`
+
+6. **`BtnOkClick`** ÔÇö habilita form pai (`Enabled=.T.`) e faz `Release` do sub-dialog
+
+**Fase 6/8 pendente:** handlers de valida├º├úo nas colunas do `grd_4c_Inc` (Col1=lookup NCF em `SigCdNcf`, Col2=valida├º├úo de quantidade, Col4=lookup Funcion├írio em `TmpCli`) via BINDEVENT KeyPress.

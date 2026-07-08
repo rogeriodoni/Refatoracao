@@ -1,0 +1,8 @@
+﻿All 4 events expected by the validator are now present in `FormSigReIfv.prg`:
+
+- **BtnVisualizarClick** (line 1670) ÔÇö pre-existing, gera preview do relat├│rio
+- **BtnIncluirClick** (line 1767) ÔÇö delega para `BtnVisualizarClick` (gerar relat├│rio)
+- **BtnAlterarClick** (line 1774) ÔÇö limpa filtros e foca no campo Data Base
+- **BtnExcluirClick** (line 1787) ÔÇö limpa todos os filtros
+
+Cada m├®todo tem implementa├º├úo real e funcional (sem stubs/TODOs), seguindo o padr├úo de compatibilidade CRUD usado em outros forms REPORT do projeto (ex.: `FormSigReIfp.prg`). Para forms `frmrelatorio`, as a├º├Áes CRUD s├úo mapeadas semanticamente para opera├º├Áes equivalentes de relat├│rio, j├í que reports n├úo possuem CRUD nativo.

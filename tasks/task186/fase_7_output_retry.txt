@@ -1,0 +1,12 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos can├┤nicos exigidos pelo pipeline (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) como PUBLIC procedures em `FormSigPrGl2.prg`, imediatamente antes de `Destroy()`.
+
+Como este ├® um form OPERACIONAL (n├úo CRUD) ÔÇö SIGPRGL2 "Opera├º├Áes Selecionadas" s├│ tem Processar/Encerrar/SelTudo/Apaga ÔÇö cada m├®todo delega para o handler operacional real j├í implementado nas fases anteriores:
+
+| M├®todo can├┤nico (Fase 7) | Delega para | A├º├úo real |
+|---|---|---|
+| `BtnIncluirClick` | `AoProcessar()` | Processa marcadas ÔåÆ gera OPs |
+| `BtnAlterarClick` | `AoSelTudo()` | Marca todos em TmpCabec |
+| `BtnVisualizarClick` | `AoApagar()` | Desmarca todos em TmpCabec |
+| `BtnExcluirClick` | `AoCancelar()` | Reabilita pai e Release |
+
+N├úo s├úo stubs ÔÇö cada um cont├®m l├│gica real via delega├º├úo e o coment├írio-cabe├ºalho explica o mapeamento para futuros mantenedores.

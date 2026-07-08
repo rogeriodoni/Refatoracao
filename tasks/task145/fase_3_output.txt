@@ -1,0 +1,15 @@
+﻿O arquivo foi criado corretamente. A Fase 3 est├í completa.
+
+**Resumo do que foi criado** em `C:\4c\projeto\app\forms\operacionais\FormSigPdMp4.prg`:
+
+| Componente | O que faz |
+|---|---|
+| `DEFINE CLASS FormSigPdMp4 AS FormBase` | Propriedades visuais exatas do SCX (TitleBar=0, ControlBox=.F., 1000x600) + custom props (this_oParentForm, this_cEscolha, this_nRecnoAnt, this_oBalanca) |
+| `Init(par_oParentForm)` | Captura refer├¬ncia ao form pai antes de DODEFAULT(), conforme padr├úo do original |
+| `InicializarForm()` | Troca datasession para o pai (`SET DATASESSION TO parent.DataSessionId`), cria BO, salva RECNO do xNensi, inicializa TmpDistrib via `SigPdMp4BO.InicializarTmpDistrib()`, desabilita form pai |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` com `lbl_4c_Sombra` (ForeColor preto, sombra) e `lbl_4c_Titulo` (ForeColor branco) ÔÇö FontSize=18, BackColor=RGB(100,100,100) |
+| `ConfigurarContainerOperacao()` | Container vazio `cnt_4c_Operacao` (104,12 378x40) ÔÇö TextBoxes e label entram na Fase 5 |
+| `ConfigurarContainerIndicador()` | `cnt_4c_Indicador` com label "Desagrega Parcialmente" (fundo amarelo claro RGB(245,251,136)) |
+| `Destroy()` | Fecha TmpDistrib, reabilita form pai, limpa refer├¬ncias |
+
+**Pr├│xima fase** (Fase 4): adicionar `grd_4c_Dados` (11 colunas) + `cmd_4c_Ok` via Read + Edit no arquivo existente.

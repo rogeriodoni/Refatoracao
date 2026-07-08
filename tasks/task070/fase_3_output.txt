@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 3/8 conclu├¡da com sucesso.
+
+**`C:\4c\projeto\app\forms\relatorios\FormSigReCsp.prg`** criado com 629 linhas contendo:
+
+- **`Init()`** ÔåÆ `RETURN DODEFAULT()` (delega├º├úo correta para FormBase)
+- **`InicializarForm()`** ÔåÆ cria SigReCspBO, carrega empresa padr├úo, monta cabe├ºalho + bot├Áes, vincula todos os BINDEVENTs, chama `LimparCampos()`
+- **`ConfigurarCabecalho()`** ÔåÆ `cnt_4c_Cabecalho` cinza (100,100,100) com `lbl_4c_Sombra` + `lbl_4c_Titulo`
+- **`ConfigurarBotoesRelatorio()`** ÔåÆ `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), posi├º├úo EXATA do original `Left=529`
+- **`ConfigurarBotoesAcao()`** ÔåÆ `cmd_4c_Processar` (Left=543) + `cmd_4c_Movimento` (Left=619), posi├º├Áes EXATAS do original
+- **`LimparCampos()`** ÔåÆ usa `TYPE()` para guardar contra controles ainda n├úo existentes (Fases 5-6)
+- **`FormParaRelatorio()`** ÔåÆ transfere campos do form para o BO com guards `TYPE()`
+- **`ProcessarClick()`** ÔåÆ query completa, popula grid com 6 colunas, redefine headers ap├│s RecordSource
+- **`MovimentoClick()`** ÔåÆ verifica SigCdOpe e abre `DO FORM SigMvExp`
+- **`BtnExcelClick()`** ÔåÆ exporta cursor para XLS
+- **`BtnSairClick()`** / **`Destroy()`** ÔåÆ Release e limpeza do BO
+
+Pr├│xima fase (4/8): adicionar `grd_4c_Dados` ao form com 6 colunas configuradas.

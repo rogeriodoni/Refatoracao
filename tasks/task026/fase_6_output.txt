@@ -1,0 +1,20 @@
+﻿Fase 6/8 conclu├¡da. O arquivo `FormSIGREADS.prg` foi atualizado com:
+
+**Controles adicionados em `ConfigurarPaginaDados()`:**
+- **Per├¡odo**: `lbl_4c_Periodo` + `txt_4c_DtInicial` + `lbl_4c_PeriodoA` + `txt_4c_DtFinal` (top ajustado: original-85)
+- **Tipo Varia├º├úo**: `lbl_4c_TipoVars` + `obj_4c_TipoVars` (OptionGroup com 4 bot├Áes: Desconto/Acr├®scimo/Ambos/Geral, padr├úo=3)
+- **Margem**: `lbl_4c_Margem` + `txt_4c_Margem` (InputMask="99.99") + `lbl_4c_MargemPct`
+- **Tipo Impress├úo**: `lbl_4c_TipoRel` + `obj_4c_TipoRel` (OptionGroup com 3 bot├Áes: Sint├®tico/Anal├¡tico/Resumo, padr├úo=2)
+- **Observa├º├Áes**: `lbl_4c_Obs` + `obj_4c_Obs` (OptionGroup com 2 bot├Áes: Sim/N├úo, padr├úo=Sim)
+
+**BINDEVENTs:**
+- `txt_4c_DtInicial` ÔåÆ `LostFocus` ÔåÆ `DtInicialLostFocus` (copia data para txt_4c_DtFinal)
+- 4 bot├Áes do CommandGroup ÔåÆ `Click` ÔåÆ handlers correspondentes
+
+**M├®todos novos:**
+- `DtInicialLostFocus()` ÔÇö copia DtInicial para DtFinal (igual ao legado)
+- `FormParaRelatorio()` ÔÇö transfere todos os 13 campos do form para o BO
+- `BtnVisualizarClick()` ÔÇö chama `BO.Atualizar()` (preview)
+- `BtnImprimirClick()` ÔÇö chama `BO.Inserir()` (impressora)
+- `BtnExcelClick()` ÔÇö prepara dados + `COPY TO XLS`
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`

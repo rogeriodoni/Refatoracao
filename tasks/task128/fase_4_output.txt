@@ -1,0 +1,11 @@
+﻿Arquivo atualizado corretamente. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+- `InicializarForm()` ÔÇö agora chama `THIS.ConfigurarPaginaLista()` ap├│s `ConfigurarPageFrame()`
+- `Destroy()` ÔÇö fecha `cursor_4c_Operacoes` ao encerrar o form
+- `ConfigurarPaginaLista()` ÔÇö cria o cursor placeholder de 8 campos e delega para os helpers
+- `ConfigurarGridOperacoes()` ÔÇö grid `grd_4c_GrdOper` com 6 colunas (top=125, left=17, width=727, height=148); Column1 usa CheckBox com a ordem cr├¡tica obrigat├│ria: `AddObject` ÔåÆ `Check1.Value=0` ÔåÆ `CurrentControl="Check1"` ÔåÆ `ControlSource` (├║ltimo); larguras somam exatamente 727px
+- `ConfigurarBotoesSelecao()` ÔÇö bot├Áes `cmd_4c_SelTudo` (top=138) e `cmd_4c_Apaga` (top=182), ambos com BINDEVENT para seus handlers
+- `CmdSelTudoClick()` / `CmdApagaClick()` ÔÇö handlers que fazem `REPLACE ALL Marcas WITH 1/0` e d├úo Refresh no grid
+- `AlternarPagina()` ÔÇö navega para a p├ígina indicada (form tem PageCount=1)

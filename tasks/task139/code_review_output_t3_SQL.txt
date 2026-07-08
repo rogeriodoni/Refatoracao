@@ -1,0 +1,13 @@
+﻿**Falso positivo confirmado.** Nenhuma altera├º├úo necess├íria.
+
+O scanner detectou `ControlCount` no arquivo e assumiu que era uma coluna em um WHERE SQL, mas analisando o c├│digo:
+
+- **Linhas 552 e 558** de `FormSigPdM14.prg`: ├® a propriedade VFP `.ControlCount` usada no m├®todo `TornarControlesVisiveis()` para iterar sobre controles de um container ÔÇö uso leg├¡timo, sem qualquer rela├º├úo com SQL.
+
+- **├Ünico WHERE SQL** nos dois arquivos est├í em `SigPdM14BO.prg:196`:
+  ```foxpro
+  " FROM SigCdUni WHERE CUnis = " + EscaparSQL(ALLTRIM(par_cCUnis))
+  ```
+  Usa `CUnis`, que est├í exatamente na lista de colunas v├ílidas do original (CUNIS).
+
+N├úo h├í nenhuma condi├º├úo WHERE inventada. O pass SQL est├í limpo ÔÇö nenhuma corre├º├úo necess├íria.

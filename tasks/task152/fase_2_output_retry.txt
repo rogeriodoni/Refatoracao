@@ -1,0 +1,8 @@
+﻿Validator looks for `CarregarDoCursor`, `Inserir`, `Atualizar` (all present). RegistrarAuditoria is called in both Inserir/Atualizar.
+
+FASE 2 complete. Added to `C:\4c\projeto\app\classes\SIGPDPNSBO.prg`:
+- `Inserir()` ÔÇö INSERT em `SigMvCab` com os 10 campos rastreados pelo BO + defaults seguros para colunas NOT NULL, chamando `RegistrarAuditoria("INSERT")`.
+- `Atualizar()` ÔÇö UPDATE em `SigMvCab` filtrado por `emps + dopes + numes` (equivalente a EmpDopNums), chamando `RegistrarAuditoria("UPDATE")`.
+- `MontarChaveEmpDopNum()` ÔÇö helper protegido que monta a chave composta.
+
+`CarregarDoCursor` e `ObterChavePrimaria` j├í existiam da fase anterior e foram preservados.

@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O `sigrecgpBO.prg` agora tem implementa├º├úo completa com:
+
+- **`PrepararDados()`** ÔÇö tradu├º├úo fiel do `processamento` do legado: tipos 1/2 (SQL direto de `SigPrCpo`), tipo 5 (join com `SigMvItN` via `this_cEmpEDN`, acumuladores `AuxCompos/AuxCons/AuxMat/AuxMoe`, vari├ível p├║blica `pcTotais`), enriquecimento por produto via SQL em `SigCdPro`, processamento de imagens F*, totais por grupo e indexa├º├úo final
+- **`PrepararDadosCompEsp1()`** ÔÇö tradu├º├úo do `proccompesp1`: percorre `CrProdutos`, busca composi├º├úo de `SigPrCpo`, m├úo de obra de `SigCdGrp`, imagens de `SigCdPro`, salva JPGs tempor├írios T* e popula cursor `crProCompos`
+- **`Imprimir()`** / **`Visualizar()`** ÔÇö disparam `REPORT FORM` correto por tipo, limpam arquivos F* e chamam `LimparCursores()`
+- **`LimparCursores()`** ÔÇö remove JPGs tempor├írios T* do `crProCompos` e fecha todos os cursores tempor├írios
+- Todas as regras VFP9 respeitadas: sem `RETURN` dentro de `TRY/CATCH`, sem literais acentuados, `EMPTY()` em vez de `ISEMPTY()`, `MsgErro()` em vez de `MESSAGEBOX()`, strings SQL quebradas com `+;`

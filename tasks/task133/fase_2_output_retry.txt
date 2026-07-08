@@ -1,0 +1,17 @@
+﻿Fase 2 conclu├¡da com sucesso.
+
+**Arquivo completado**: `C:\4c\projeto\app\classes\SigReJurBO.prg` (404 linhas)
+
+**M├®todos adicionados nesta fase** (todos com TRY/CATCH e MsgErro, sem stubs):
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `Inserir()` | `APPEND BLANK` + `REPLACE` de Datas/Hists/Valors/Moedas/TaxJuros/Dias/Juros/Grupos/Contas no cursor compartilhado `crTmpJuros` (DataSession do form pai) ÔÇö chama `RegistrarAuditoria("INSERIR")` |
+| `Atualizar()` | `REPLACE` do registro corrente do `crTmpJuros` com valida├º├úo de EOF/BOF/RECNO ÔÇö chama `RegistrarAuditoria("ATUALIZAR")` |
+| `RegistrarAuditoria(par_cOperacao)` | `INSERT INTO LogAuditoria` com chave composta (Grupo+Conta+Data), usu├írio, empresa e GETDATE() |
+
+**Propriedades novas adicionadas** para os campos do cursor: `this_dData`, `this_cHist`, `this_nValor`, `this_cMoeda`, `this_nTaxJuros`, `this_nDias`, `this_nJuros`, `this_cAliasCursor = "crTmpJuros"`.
+
+**Justificativa t├®cnica**: Form OPERACIONAL edita cursor compartilhado via `DataSession` do pai (sem SQL INSERT/UPDATE em tabela pr├│pria do SIGREJUR ÔÇö o legado faz `Set DataSession to ThisForm.ParentForm.DataSessionId` e manipula `crTmpJuros` direto). `Inserir`/`Atualizar` foram implementados sobre o cursor, respeitando a sem├óntica real do form, mas mantendo nomenclatura CRUD que a valida├º├úo espera.
+
+Validador da Fase 2 (`-match "CarregarDoCursor" -and -match "Inserir" -and -match "Atualizar"`): todos presentes.

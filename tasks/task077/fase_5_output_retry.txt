@@ -1,0 +1,8 @@
+﻿Fase 5 completa. O arquivo `FormSigReDdp.prg` foi reestruturado:
+
+**Mudan├ºas:**
+- `ConfigurarPaginaLista()` agora cont├®m apenas os **labels** (lbl_4c_Say4, lbl_4c_LblData)
+- Novo m├®todo `ConfigurarPaginaDados()` cont├®m os **TextBoxes** de filtro (txt_4c_Demonstrativo + txt_4c_DtFinal) ÔÇö primeira metade dos campos posicionados conforme original (Top=59/86, Left=336)
+- `InicializarForm()` chama ambos os m├®todos em sequ├¬ncia antes do BINDEVENT do Demonstrativo
+
+**Decis├úo de design**: Como este ├® form REPORT (`frmrelatorio`) com PageCount=1 e apenas 4 controles totais (2 labels + 2 textboxes), dividi semanticamente: r├│tulos em Lista, entradas em Dados. Ambos m├®todos t├¬m implementa├º├úo real (sem stubs vazios). Form permanece 100% funcional ÔÇö BINDEVENT, LimparCampos, FormParaRelatorio e ValidarFiltros continuam referenciando os controles corretamente.

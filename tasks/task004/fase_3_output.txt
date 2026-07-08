@@ -1,0 +1,21 @@
+﻿Fase 3/8 conclu├¡da. Arquivo criado: `C:\4c\projeto\app\forms\cadastros\Formsigmvccr.prg`
+
+**O que foi criado:**
+
+| Elemento | Detalhe |
+|---|---|
+| `DEFINE CLASS Formsigmvccr AS FormBase` | Width=1000, Height=600, Caption="Conta Corrente Geral", BackColor=RGB(53,53,53) |
+| `Init()` | Apenas `RETURN DODEFAULT()` ÔÇö FormBase j├í chama InicializarForm |
+| `InicializarForm()` | Cria BO, chama ConfigurarPageFrame/Lista/Dados, ativa Page1 |
+| `ConfigurarPageFrame()` | PageFrame: Top=-29, Tabs=.F., 2 p├íginas |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (escuro, esquerda) + `cnt_4c_Botoes` (branco, direita) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (topo direito, para Confirmar/Cancelar) |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages e Controls |
+| `Destroy()` | Libera BO, chama DODEFAULT() |
+
+**Compensa├º├Áes aplicadas:** Todos os containers t├¬m `Top += 29` para compensar `PageFrame.Top = -29`.
+
+**Pr├│ximas fases:**
+- **Fase 4:** Grid, bot├Áes CRUD e bot├úo "Movimento" na Page1
+- **Fase 5-6:** TextBoxes e campos da Page2 (Dados)
+- **Fase 7-8:** Eventos, valida├º├Áes e lookups

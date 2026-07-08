@@ -1,0 +1,1771 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecrt.SCX
+* Data/Hora: 18/05/26 15:14:32
+* Total de registros: 39
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECRT
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTipoDat
+  Parent: SIGRECRT
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGRECRT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getJuros
+  Parent: SIGRECRT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGRECRT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECRT
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECRT
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_opcao
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_nr_opcao
+  Parent: SIGRECRT
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_emi_grupo
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_emi_grupo
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_emi_conta
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_emi_conta
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ordem
+  Parent: SIGRECRT
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Bons
+  Parent: SIGRECRT
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTipoRel
+  Parent: SIGRECRT
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_dep_grupo
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_dep_grupo
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDGrupoO
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCContaO
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_dep_conta
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_dep_conta
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDContaO
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_dep_conta
+  Parent: SIGRECRT
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCGrupoO
+  Parent: SIGRECRT
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 32
+  Left = 145
+  Width = 538
+  Height = 374
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT
+------------------------------------------------------------
+  DataSession = 2
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Cheques Da Carteira"
+  ControlBox = .F.
+  ClipControls = .T.
+  Name = "SIGRECRT"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 531
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.getTipoDat
+------------------------------------------------------------
+  AutoSize = .T.
+  Height = 25
+  Left = 237
+  Top = 104
+  Width = 157
+  TabIndex = 1
+  ToolTipText = "Emissão = a data de inclusão da movimentação"
+  Name = "getTipoDat"
+  Option1.Caption = "Vencimento"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Emissão"
+  Option2.Left = 96
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 183
+  Top = 221
+  Width = 50
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Juros :                  ao mês"
+  Left = 435
+  Top = 135
+  Width = 123
+  TabIndex = 28
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 270
+  MaxLength = 40
+  TabIndex = 8
+  Top = 217
+  Width = 337
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.getJuros
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 0
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = "999.99"
+  Left = 471
+  MaxLength = 0
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 131
+  Width = 45
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getJuros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 237
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 217
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 188
+  Top = 136
+  Width = 45
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 237
+  MaxLength = 10
+  TabIndex = 2
+  Top = 132
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 323
+  Top = 136
+  Width = 8
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Left = 336
+  MaxLength = 10
+  TabIndex = 3
+  Top = 132
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordem :"
+  Left = 192
+  Top = 193
+  Width = 41
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação :"
+  Left = 177
+  Top = 165
+  Width = 56
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_opcao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Opção : "
+  Left = 382
+  Top = 193
+  TabIndex = 29
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lbl_opcao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.opt_nr_opcao
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 23
+  Left = 428
+  Top = 189
+  Width = 192
+  TabIndex = 25
+  ZOrderSet = 15
+  Name = "opt_nr_opcao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 4
+  Option1.TabIndex = 8
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 62
+  Option2.TabIndex = 9
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 122
+  Option3.TabIndex = 10
+  Option3.Top = 4
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_cd_emi_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 9
+  Top = 261
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_cd_emi_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ds_emi_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 10
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 261
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "get_ds_emi_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_cd_emi_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 11
+  Top = 289
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "get_cd_emi_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ds_emi_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 12
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 289
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "get_ds_emi_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ordem
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BoundColumn = 1
+  ColumnCount = 1
+  RowSourceType = 1
+  RowSource = "VALOR,DATA VENCIMENTO,DATA OPERAÇÃO"
+  DisplayValue = 
+  Value = 
+  ControlSource = ""
+  Enabled = .T.
+  Height = 24
+  ColumnLines = .F.
+  Left = 237
+  SelectOnEntry = .F.
+  Style = 2
+  TabIndex = 6
+  Top = 188
+  Width = 134
+  ZOrderSet = 20
+  HideSelection = .F.
+  ForeColor = 0,0,0
+  SelectedForeColor = 255,255,255
+  SelectedItemForeColor = 255,255,255
+  SelectedItemBackColor = 0,0,128
+  BoundTo = .T.
+  IMEMode = 0
+  ReadOnly = .F.
+  Name = "get_ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Opt_Bons
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 378
+  Top = 160
+  Width = 163
+  TabIndex = 25
+  ZOrderSet = 15
+  Name = "Opt_Bons"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Ativos"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.TabIndex = 8
+  Option1.Top = 5
+  Option1.Width = 48
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Todos"
+  Option2.Height = 15
+  Option2.Left = 111
+  Option2.TabIndex = 9
+  Option2.Top = 5
+  Option2.Width = 47
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.GetTipoRel
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BoundColumn = 1
+  ColumnCount = 1
+  RowSourceType = 1
+  RowSource = "ATIVOS,BAIXADOS,NEG.PG,BONS,DEVOLVIDOS"
+  DisplayValue = 
+  Value = 
+  ControlSource = ""
+  Enabled = .T.
+  Height = 24
+  ColumnLines = .F.
+  Left = 237
+  SelectOnEntry = .F.
+  Style = 2
+  TabIndex = 4
+  ToolTipText = "ATIVOS=Entradas  BAIXADOS=Saidas  NEG.PG=Devolvidos BONS=Depositados Sem Devolvidos DEVOLVIDOS=Devolvidos"
+  Top = 160
+  Width = 134
+  ZOrderSet = 20
+  HideSelection = .F.
+  ForeColor = 0,0,0
+  SelectedForeColor = 255,255,255
+  SelectedItemForeColor = 255,255,255
+  SelectedItemBackColor = 0,0,128
+  BoundTo = .T.
+  IMEMode = 0
+  ReadOnly = .F.
+  Name = "GetTipoRel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_cd_dep_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 17
+  Top = 372
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Name = "get_cd_dep_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta Dest :"
+  Left = 170
+  Top = 404
+  Width = 63
+  TabIndex = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ds_dep_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 18
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 372
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 25
+  Name = "get_ds_dep_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.GetDGrupoO
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 14
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 317
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 25
+  Name = "GetDGrupoO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.GetCContaO
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 15
+  Top = 345
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 26
+  Name = "GetCContaO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_cd_dep_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 19
+  Top = 400
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 26
+  Name = "get_cd_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.get_ds_dep_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 20
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 400
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 27
+  Name = "get_ds_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.GetDContaO
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 319
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 16
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 345
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 27
+  Name = "GetDContaO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta/Emissor :"
+  Left = 155
+  Top = 293
+  Width = 78
+  TabIndex = 35
+  ForeColor = 90,90,90
+  ZOrderSet = 29
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo Dest :"
+  Left = 170
+  Top = 376
+  Width = 63
+  TabIndex = 34
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo Orig :"
+  Left = 172
+  Top = 321
+  Width = 61
+  TabIndex = 33
+  ForeColor = 90,90,90
+  ZOrderSet = 30
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo/Emissor :"
+  Left = 155
+  Top = 265
+  Width = 78
+  TabIndex = 32
+  ForeColor = 90,90,90
+  ZOrderSet = 28
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.lbl_dep_conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Conta Orig :"
+  Left = 172
+  Top = 349
+  Width = 61
+  TabIndex = 30
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "lbl_dep_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRT.GetCGrupoO
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 237
+  MaxLength = 10
+  TabIndex = 13
+  Top = 317
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Name = "GetCGrupoO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECRT
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+select CsRelatorio
+
+report form SigReCrt to printer prompt noconsole
+
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')
+	EndWith
+Endwith	
+
+=DoDefault()
+
+lcSql = [Select TitOpcS, TitOpcN, TitOpcA From SigCdPac]
+If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalParac)')
+	Return .f.
+EndIf
+Select LocalParac
+Go Top
+With ThisForm.Opt_nr_opcao
+	.option1.Caption = Iif(Not Empty(LocalParac.TitOpcs),LocalParac.TitOpcS,[Sim])
+	.option2.Caption = Iif(Not Empty(LocalParac.TitOpcn),LocalParac.TitOpcN,[Nao])
+	.option3.Caption = Iif(Not Empty(LocalParac.TitOpcA),LocalParac.TitOpcA,[Ambos])
+Endwith
+
+lcQuery = [Select JuroCarts From SigCdPam]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPam') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPam)')
+	Return 0
+EndIf
+
+Select crSigCdOpt
+index on operacaos Tag operacaos
+Go Top
+
+Select crSigCdPam
+Go Top
+
+
+* inicialização das variáveis de campo
+thisform.getTipoDat.value          = 1
+thisform.getTipoRel.value          = 1
+thisform.get_dt_inicial.value      = date()
+thisform.get_dt_final.value        = date()
+thisform.get_cd_empresa.value      = space(03)
+thisform.get_ds_empresa.value      = space(40)
+thisform.opt_nr_opcao.value        = 3
+thisform.get_cd_emi_grupo.value    = space(10)
+thisform.get_ds_emi_grupo.value    = space(20)
+thisform.get_cd_emi_conta.value    = space(10)
+thisform.get_ds_emi_conta.value    = space(40)
+thisform.get_ordem.listindex       = 1
+ThisForm.Opt_Bons.Visible 		   = .F.
+ThisForm.Opt_Bons.Value 		   = 1
+thisform.refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+* declara as variáveis de cabeçalho
+Private lcNomeEmpresa,lcTitulo,lcPeriodo,lcOperacao,lcEmissor
+* declara as variáveis de campos
+Private lnTipoDat,ldDtInicial,ldDtFinal,lcNmOperacao,lcCdEmpresa,lcDsEmpresa,lnNrOpcao
+Private lcCdEmiGrupo,lcDsEmiGrupo,lcCdEmiConta,lcDsEmiConta
+* declara as variáveis de verificação
+Private lcVerData,lcVerOperacao,lcVerEmpresa,lcVerOpcao
+Private lcVerEmiGrupo,lcVerEmiConta,lcVerAberto
+
+* inicializa variáveis de campos
+lnTipoDat    = Thisform.getTipoDat.Value
+ldDtInicial  = fDtoSQL(Thisform.get_dt_inicial.Value)
+ldDtFinal    = fDtoSQL(Thisform.get_dt_final.Value,"23:59:59")
+lcNmOrdem    = Alltrim(Thisform.get_ordem.Value)
+lcCdEmpresa  = Thisform.get_cd_empresa.Value
+lcDsEmpresa  = Thisform.get_ds_empresa.Value
+lnNrOpcao    = Thisform.opt_nr_opcao.Value
+lcCdEmiGrupo = Thisform.get_cd_emi_grupo.Value
+lcDsEmiGrupo = Thisform.get_ds_emi_grupo.Value
+lcCdEmiConta = Thisform.get_cd_emi_conta.Value
+lcDsEmiConta = Thisform.get_ds_emi_conta.Value
+lcCdOriGrupo = Thisform.GetCGrupoO.Value
+lcDsOriGrupo = Thisform.GetDGrupoO.Value
+lcCdOriConta = Thisform.GetCContaO.Value
+lcDsOriConta = Thisform.GetDContaO.Value
+lcCdDesGrupo = Thisform.get_cd_dep_grupo.Value
+lcDsDesGrupo = Thisform.get_ds_dep_grupo.Value
+lcCdDesConta = Thisform.get_cd_dep_conta.Value
+lcDsDesConta = Thisform.get_ds_dep_conta.Value
+lnTipoRel	 = Thisform.getTipoRel.ListIndex 		&& numero da opção selecionada
+lnJuros		 = Thisform.getJuros.Value
+
+* inicializa variáveis de verificação
+lcVerData     = Iif(lnTipoDat = 2,' and b.datas between ?ldDtInicial and ?ldDtFinal ',' and b.vencs between ?ldDtInicial and ?ldDtFinal ')
+lcVerEmpresa  = Iif(Empty(lcCdEmpresa),'',' and a.emps = ?lcCdEmpresa ')
+lcVerOpcao    = Iif(lnNrOpcao = 1,' and not a.notas = "'+Space(6)+'" ',Iif(lnNrOpcao=2,' and a.notas = "'+Space(6)+'" ',''))
+lcVerEmiGrupo = Iif(Empty(lcCdEmiGrupo),'',' and b.grupoT  = ?lcCdEmiGrupo ')
+lcVerEmiConta = Iif(Empty(lcCdEmiConta),'',' and b.contaT  = ?lcCdEmiConta ')
+lcVerOriGrupo = Iif(Empty(lcCdOriGrupo),'',' and e.grupoOs = ?lcCdOriGrupo ')
+lcVerOriConta = Iif(Empty(lcCdOriConta),'',' and e.contaOs = ?lcCdOriConta ')
+lcVerDesGrupo = Iif(Empty(lcCdDesGrupo),'',' and e.grupoDs = ?lcCdDesGrupo ')
+lcVerDesConta = Iif(Empty(lcCdDesConta),'',' and e.contaDs = ?lcCdDesConta ')
+lcVerOrdem    = Iif(Empty(lcNmOrdem),'', ;
+	iif(Thisform.get_ordem.ListIndex=1,' order by 2', ;
+	iif(Thisform.get_ordem.ListIndex=2,' order by 3',' order by 4')))
+
+*** mena - 06/08/2015 - monta checarem de tipo de operação ***
+Do case 
+Case lnTipoRel=2
+	lcVerTipo = [ and a.umovs in (select operacaos from crSigCdOpt where tipos='CR' and devolvidos = 'N' and opants not in (select operacaos from crSigCdOpt where tipos='DB' and devolvidos = 'S')) ]
+Case lnTipoRel=3
+	lcVerTipo = [ and a.umovs in (select operacaos from crSigCdOpt where tipos='DB' and devolvidos = 'S') ]
+Case lnTipoRel=4
+	lcVerTipo = [ and a.umovs in (select operacaos from crSigCdOpt where devolvidos <> 'S' and ] + Iif(ThisForm.Opt_Bons.Value = 1,[ tipos='DB' And Ordens = 1 ],[ 0 = 0 ])+[ ) ]
+	lcVerTipo = lcVerTipo + [ and a.contat Not in(Select Iclis from crCliCqDev)]	
+Case lnTipoRel=5
+	lcVerTipo = [ and a.umovs in (select operacaos from crSigCdOpt where devolvidos = 'S') ]
+OtherWise
+	lcVerTipo = [ and a.umovs in (select operacaos from crSigCdOpt where tipos='DB' and devolvidos = 'N') ]
+EndCase
+
+* inicializa variáveis de cabeçalho de relatório
+lcTipoD = Iif(lnTipoDat=1, [VENCIMENTO],[EMISSAO])
+lcTitulo = Iif(lnTipoRel=1, [ATIVOS POR ]+lcTipoD, Iif(lnTipoRel=2, [BAIXADOS POR ]+lcTipoD,Iif(lnTipoRel=3, [NEG.PG ],Iif(lnTipoRel=4, [BONS],[DEVOLVIDOS]))))
+Thisform.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _empr)
+lcNomeEmpresa = crSigCdEmp.Razas
+lcPeriodo     = Iif(lnTipoDat=2,'Emissão: ','Vencimento: ')+Dtoc(ldDtInicial)+' à '+Dtoc(ldDtFinal)+' - '+'Empresa: '+Iif(Empty(lcCdEmpresa),'Geral',lcCdEmpresa+' - '+Alltrim(lcDsEmpresa))
+lcEmissor     = 'Grupo/Conta Emissor  : '+Iif(Empty(lcCdEmiGrupo),'Todos',Alltrim(lcCdEmiGrupo)+' - '+Alltrim(lcDsEmiGrupo))+' / '+Iif(Empty(lcCdEmiConta),'Todas',Alltrim(lcCdEmiConta)+' - '+Alltrim(lcDsEmiConta))
+lcDestino     = 'Grupo/Conta Destino  : '+Iif(Empty(lcCdDesGrupo),'Todos',Alltrim(lcCdDesGrupo)+' - '+Alltrim(lcDsDesGrupo))+' / '+Iif(Empty(lcCdDesConta),'Todas',Alltrim(lcCdDesConta)+' - '+Alltrim(lcDsDesConta))
+lcOrigem      = 'Grupo/Conta Origem   : '+Iif(Empty(lcCdOriGrupo),'Todos',Alltrim(lcCdOriGrupo)+' - '+Alltrim(lcDsOriGrupo))+' / '+Iif(Empty(lcCdOriConta),'Todas',Alltrim(lcCdOriConta)+' - '+Alltrim(lcDsOriConta))
+
+* cria/atualiza cursor de cabeçalho
+Create Cursor CsCabecalho (NomeEmpresa c(80),Titulo c(80),Periodo c(80),Operacao c(80),Emissor c(80), Destino c(80), Origem c(80))
+Insert Into CsCabecalho (NomeEmpresa,Titulo,Periodo,Emissor,Destino,Origem) ;
+	values (lcNomeEmpresa,lcTitulo,lcPeriodo,lcEmissor,lcDestino,lcOrigem)
+
+Set Talk Windows
+Set Talk On
+Thisform.MousePointer = 11
+
+vSql= [select distinct contat as iclis from sigche where umovs in (Select operacaos from SigCdOpt where devolvidos = 'S')]
+Thisform.podatamgr.SqlExecute(vSql,"crCliCqDev")
+
+vSql= [select a.nums, b.valors, b.vencs, b.datas as dtBai, b.datas as dtEmi, b.grclis, b.iclis, c.rclis as rclisT, d.rclis as rclisO, ] +;
+	[f.rclis as rclisD, b.bancos, b.agencias, b.ncontas, b.ncheques, a.numlotes, ] +;
+	[b.emps, b.umovs, e.codigos, b.contat, b.grupot, a.valjuros, a.cotas ] +;
+	[from SigCcChm a left join sigcdcli c on a.grupot = c.grupos and a.contat=c.iclis, SigChe b, sigcdcli d, SigCqLcm e, sigcdcli f ] +;
+	[where a.nums = b.nums ] +;
+	[and a.numlotes = e.numlotes ] +;
+	[and b.umovs = e.codigos ] +;
+	[and e.grupoos = d.grupos and e.contaos=d.iclis ] +;
+	[and e.grupods = f.grupos and e.contads=f.iclis ] +;
+	lcVerData+lcVerEmpresa+lcVerOpcao+lcVerEmiGrupo+lcVerEmiConta+;
+	lcVerOriGrupo+lcVerOriConta+lcVerDesGrupo+lcVerDesConta+;
+	[Order by a.nums, a.numlotes, b.datas, b.grclis, b.iclis, ] +;
+	[b.vencs, b.bancos, b.agencias, b.ncontas, b.ncheques, ] +;
+	[b.valors, b.emps, b.umovs ]
+Thisform.podatamgr.SqlExecute(vSql,"SqlTmp0")
+
+
+*!*	[select a.nums, a.numlotes, a.dtents, b.grclis, b.iclis, c.rclis as rclisT, d.rclis ]+;
+*!*		 [b.vencs, b.bancos, b.agencias, b.ncontas, b.ncheques, ]+;
+*!*		 [b.valors, b.emps, b.umovs, a.contat, a.grupot, a.valjuros, a.cotas ]+;
+*!*		 [from SigCcChm a, SigChe b, sigcdcli c, sigcdcli d  ]+;
+*!*		 [where a.nums = b.nums ]+;
+*!*		 [and a.grupot = c.grupos and a.contat=c.iclis ]+;
+*!*		 [and b.grclis = d.grupos and b.iclis=d.iclis ]+;
+*!*		 lcVerData+lcVerEmpresa+lcVerOpcao+lcVerEmiGrupo+lcVerEmiConta+;
+*!*		 lcVerDesGrupo+lcVerDesConta+;
+*!*	     [Order by a.nums, a.numlotes, a.dtents, b.grclis, b.iclis, ]+;
+*!*		 [b.vencs, b.bancos, b.agencias, b.ncontas, b.ncheques, ]+;
+*!*		 [b.valors, b.emps, b.umovs ]
+
+Select *, 0000000.00 As cotasE, 0000000.00 As valsai, 0000000.00 As valent, 0000000.00 As Dif, 0000000.00 As valliq, Space(50) As NomeCF ;
+	from SqlTmp0 a Where 1=1 &lcVerTipo Into Cursor CsRelatorio &lcVerOrdem. Readwrite
+
+
+Select CsRelatorio
+Go Top
+Scan
+	vSql= [select a.cotas, e.codigos from SigCcChm a, SigCqLcm e where a.numlotes = e.numlotes ] +;
+		[and a.bancos   =']+Alltrim(CsRelatorio.bancos)+[' ]+;
+		[and a.agencias =']+Alltrim(CsRelatorio.agencias)+[' ]+;
+		[and a.ncontas  =']+Alltrim(CsRelatorio.ncontas)+[' ]+;
+		[and a.ncheques =']+Alltrim(CsRelatorio.ncheques)+[']
+	Thisform.podatamgr.SqlExecute(vSql,"Cur1")
+	Select cotas From cur1 Where codigos In (Select operacaos From crSigCdOpt Where tipos='DB' And devolvidos = 'N') Into Cursor cur2
+	Select cur2
+	Go Top
+	Select CsRelatorio
+	Replace cotasE With Iif(!Eof('cur2'), cur2.cotas, 1.00) In CsRelatorio
+	Replace rclisT With Iif(Isnull(rclisT),[], rclisT)  In CsRelatorio
+	Replace NomeCF With Iif(Inlist(lnTipoRel,1,3), rclisO, rclisD)  In CsRelatorio
+
+	Do Case
+
+	Case lnTipoRel=1 And lnTipoDat=2	&& ativos por emissão
+		Replace valjuros With 0 In CsRelatorio
+		Replace valsai With 0 In CsRelatorio
+		Replace Dif    With Round(valors/cotas,2) In CsRelatorio
+		Replace valliq With 0 In CsRelatorio
+		Replace dtBai  With Ctod('  /  /  ') In CsRelatorio
+
+	Case lnTipoRel=1 And lnTipoDat=1	&& ativos por vencimento
+		Replace valsai With 0 In CsRelatorio
+		Replace Dif    With Round(valors/cotas,2) In CsRelatorio
+		Replace valliq With 0 In CsRelatorio
+		Replace dtBai  With Ctod('  /  /  ') In CsRelatorio
+
+	Case lnTipoRel=2					&& baixados
+		Replace valsai With Round(valjuros/cotas,2) In CsRelatorio
+		Replace valent With Round(valjuros/cotasE,2) In CsRelatorio
+		Replace Dif    With valsai-valent In CsRelatorio
+		Replace valliq With valsai+Dif In CsRelatorio
+		Replace dtEmi  With Ctod('  /  /  ') In CsRelatorio
+		Replace vencs  With Ctod('  /  /  ') In CsRelatorio
+	
+	Case lnTipoRel=4 and ThisForm.Opt_Bons.Value = 1
+		Replace dtBai  With Ctod('  /  /  ')
+	
+	Case lnTipoRel=4 and ThisForm.Opt_Bons.Value = 2
+	
+		If Seek(CsRelatorio.umovs,[crSigCdOpt],[operacaos])
+			If crSigCdOpt.Ordens = 1
+				Replace dtBai  With Ctod('  /  /  ')
+			EndIf 
+		EndIf 		
+		Select CsRelatorio
+		
+	Case InList(lnTipoRel,3,5)					&& Neg.Pg e Devolvidos
+		Replace vencs  With CsRelatorio.Vencs In CsRelatorio && Iif(lnTipoRel=5,Ttod(CsRelatorio.Vencs),Ctod('  /  /  ')) In CsRelatorio
+		Replace valsai With Round(valjuros/cotas,2) In CsRelatorio
+		Replace Dif    With 0 In CsRelatorio
+		Replace valliq With 0 In CsRelatorio
+
+		If lnJuros > 0 && Tiago - 20/10/2015 - Hold Gold - Calcula o juros negociado no dia 
+			ldVen = Date()
+			ldDat = Ttod(CsRelatorio.Vencs) &&Iif(lnTipoRel=5,Ttod(CsRelatorio.Vencs),Ttod(CsRelatorio.dtBai))
+			lnDias = Iif(ldDat >= ldVen, 0, ldVen-ldDat)
+			lnTxDia = lnJuros / 30
+			If crSigCdPam.JuroCarts = 2 && Juros Compostos
+				lnVJuros = Round(CsRelatorio.valors * (((1+lnTxDia/100)^(lnDias))-1),2)
+			Else && Juros Simples
+				lnVJuros = Round(CsRelatorio.valors * (lnJuros/100) * (lnDias/30),2)
+			Endif
+			Replace ValJuros With lnVJuros In CsRelatorio
+		Endif
+	Endcase
+Endscan
+
+
+*!*	Select a.nums, Space(50) as RClis, Max(a.valors) as valors, Max(a.vencs) as vencs, Max(a.dtents) as dtents, ;
+*!*		   Max(a.grclis) as grclis, Max(a.numlotes) as numlotes, Max(a.iclis) as iclis, Max(a.bancos) as bancos, ;
+*!*		   Max(a.agencias) as agencias, Max(a.ncontas) as ncontas, Max(a.ncheques) as ncheques, Max(a.emps) as emps, ;
+*!*		   Max(a.umovs) as umovs, Max(a.Hists) as Hists;
+*!*	  from SqlTmp0 a
+*!*	 where 1=1 &lcVerTipo;
+*!*	 group by 1, 2 ;
+*!*	 into cursor CsRelatorio &lcVerOrdem. readwrite
+
+
+Select CsRelatorio
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+select CsRelatorio
+
+report form SigReCrt preview NoConsole
+
+use in CsCabecalho
+use in CsRelatorio
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_Cd_Empresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_cd_emi_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_emi_conta.Value = ''
+	ThisForm.get_ds_emi_conta.Value = ''
+	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_ds_emi_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_emi_conta.Value = ''
+	ThisForm.get_ds_emi_conta.Value = ''
+	
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(empty(thisform.get_cd_emi_grupo.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_cd_emi_conta
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Emi_Conta.Value = ''
+	ThisForm.get_Ds_Emi_Conta.Value = ''
+	ThisForm.get_Cd_Emi_Conta.Refresh
+	ThisForm.get_Ds_Emi_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_ds_emi_conta
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Emi_Conta.Value = ''
+	ThisForm.get_Ds_Emi_Conta.Value = ''
+	ThisForm.get_Cd_Emi_Conta.Refresh
+	ThisForm.get_Ds_Emi_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(empty(thisform.get_cd_emi_conta.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.GetTipoRel
+* Classe: fwcombo (Base: combobox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.ListIndex = 4
+	ThisForm.Opt_Bons.Visible = .T.
+Else
+	ThisForm.Opt_Bons.Visible = .F.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_cd_dep_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_dep_conta.Value = ''
+	ThisForm.get_ds_dep_conta.Value = ''
+	
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_ds_dep_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)
+
+If Empty(This.Value)
+
+	ThisForm.get_cd_dep_conta.Value = ''
+	ThisForm.get_ds_dep_conta.Value = ''
+	
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_dep_grupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.GetDGrupoO
+* Classe: fwget (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.Value,ThisForm.getCGrupoO,ThisForm.getDGrupoO)
+
+If Empty(This.Value)
+
+	ThisForm.getCContaO.Value = ''
+	ThisForm.getDcontaO.Value = ''
+	
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.getCGrupoO.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.GetCContaO
+* Classe: fwget (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.getCGrupoO.Value,'C',This.Value,ThisForm.getCContaO,ThisForm.getDContaO))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.getCContaO.Value = ''
+	ThisForm.getDContaO.Value = ''
+	ThisForm.getCContaO.Refresh
+	ThisForm.getDContaO.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_cd_dep_conta
+* Classe: fwget (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Dep_Conta.Value = ''
+	ThisForm.get_Ds_Dep_Conta.Value = ''
+	ThisForm.get_Cd_Dep_Conta.Refresh
+	ThisForm.get_Ds_Dep_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.get_ds_dep_conta
+* Classe: fwget (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Cd_Dep_Conta.Value = ''
+	ThisForm.get_Ds_Dep_Conta.Value = ''
+	ThisForm.get_Cd_Dep_Conta.Refresh
+	ThisForm.get_Ds_Dep_Conta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_dep_conta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.GetDContaO
+* Classe: fwget (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.GetCGrupoO.Value,'D',This.Value,ThisForm.getCContaO,ThisForm.getDContaO))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.getCContaO.Value = ''
+	ThisForm.getDContaO.Value = ''
+	ThisForm.getCContaO.Refresh
+	ThisForm.getDContaO.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.getCcontaO.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRT.GetCGrupoO
+* Classe: fwget (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.Value,ThisForm.getCGrupoO,ThisForm.getDGrupoO)
+
+If Empty(This.Value)
+	ThisForm.getCContaO.Value = ''
+	ThisForm.getDContaO.Value = ''
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECRT
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 27
+================================================================================

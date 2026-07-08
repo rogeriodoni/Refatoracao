@@ -1,0 +1,13 @@
+﻿Todas as 3 inser├º├Áes est├úo corretas. Resumindo o que foi feito nesta Fase 3:
+
+**FormSigReIr1.prg** j├í existia com implementa├º├úo completa (1648 linhas ÔÇö todas as 8 fases foram conclu├¡das anteriormente). O arquivo inclui:
+- Estrutura base do form (Fase 3): `ConfigurarCabecalho`, `ConfigurarBotoes`, `ConfigurarPageFrame`
+- Filtros da Page1 (Fases 4-6): todos os OptionGroups, TextBoxes, CheckBox do layout original
+- Eventos e lookups (Fases 7-8): `TipoRelatorioChange`, `TipoAnaliticoChange`, handlers de teclado, `AbrirBusca*`, `Validar*`
+
+**Integra├º├úo adicionada agora** (faltava no menu.prg):
+- `DEFINE BAR 168-169 OF popRelatorios` com prompt "Balan├ºo de Invent├írio"
+- `ON SELECTION BAR 169` chamando `AbrirFormSigReIr1`
+- `PROCEDURE AbrirFormSigReIr1()` que consulta o balan├ºo mais recente da empresa e abre o form com o n├║mero selecionado (mesmo padr├úo de `AbrirFormsigreinr`)
+
+O config.prg j├í carrega `SigReIr1BO.prg` e `FormSigReIr1.prg` automaticamente via ADIR().

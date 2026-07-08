@@ -1,0 +1,614 @@
+{
+  "resumo": {
+    "totalMetodos": 37,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 21,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fDtoSQL", "fAcessoMovInd", "fwBuscaExt", "fwBuscaSel", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "If ThisForm.Chk_detalhe.Value\n\tIf thisform.chkvalor.Value\t\n\t\tIf ThisForm.chkRelatorio.Value\n\t\t\tSet Point To [,]\n\t\t\tSet Separator To [.]\n\t\t\tReport Form SigReDp7 To Print NoConsole\n\t\t\tSet Point To [.]\n\t\t\tSet Separator To [,]\n\t\tElse\n\t\t\tReport Form SigReDp6 To Print NoConsole\n\t\tEndIf\n\tElse\n\t\tIf ThisForm.chkProdutos.Value \n\t\t\tReport Form SigReDp5 To Print NoConsole\n\t\tElse \n\t\t\tReport Form SigReDp1 To Print NoConsole\n\t\tEndIf \n\tEndIf \nElse\n\tIf ThisForm.Chk_Dopes.Value\n\t\tReport Form SigReDp2 To Print NoC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_detalhe,chkvalor,chkRelatorio,chkProdutos,Chk_Dopes,chkqtdPes,Get_Dopes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "If ThisForm.Chk_detalhe.Value\n\tIf thisform.chkvalor.Value\t\n\t\tIf ThisForm.chkRelatorio.Value\n\t\t\tSet Point To [,]\n\t\t\tSet Separator To [.]\n\t\t\tReport Form SigReDp7 To Print Prompt NoConsole\n\t\t\tSet Point To [.]\n\t\t\tSet Separator To [,]\n\t\tElse\n\t\t\tReport Form SigReDp6 To Print Prompt NoConsole\n\t\tEndIf\n\tElse\n\t\tIf ThisForm.chkProdutos.Value \n\t\t\tReport Form SigReDp5 To Print Prompt NoConsole\n\t\tElse \n\t\t\tReport Form SigReDp1 To Print Prompt NoConsole\n\t\tEndIf \n\tEndIf \nElse\n\tIf ThisForm.Chk_Dopes.Value\n\t\tRepor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_detalhe,chkvalor,chkRelatorio,chkProdutos,Chk_Dopes,chkqtdPes,Get_Dopes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Init",
+      "linhas": 98,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQuery = [Select Codigos, Descrs ] + ;\n\t\t\t\t    [From SigCdGcr ] + ;\n\t\t\t\t   [Where GerBals = 1]\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'CrSigCdGcr') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrSigCdGcr)')\n\t\t\tReturn 0\n\t\tEndIf\n\t\tSelect CrSigCdGcr\n\t\tIndex On Codigos Tag BalCodigo\n\t\tIndex On Descrs  Tag BalDescrs\n\n\t\tlcQuery = [Select Cods, Descs ] + ;\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SqlExecute,Cursorquery",
+        "controlesReferenciados": "Opt',Get_TpGOp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 241,
+      "codigoOriginal": "Private pDtI, pDtF\nLocal lcGrupo, lcConta, lcDConta, ldDatai, ldDataf, lcGruMat, lnTotal, lcCab, lcSub, lcEmp\n\nlcGrupo   = ThisForm.Get_Grupo.Value\nlcConta   = ThisForm.Get_Conta.Value\nlcDConta  = ThisForm.Get_DConta.Value\nlcGruMat  = ThisForm.Get_CGru.Value\nlcGgrp    = ThisForm.Get_Ggrp.Value\nldDatai   = ThisForm.Get_Datai.Value\nldDataf   = ThisForm.Get_Dataf.Value\nlcDopp    = Thisform.Get_Dopes.Value\nlnNum     = Thisform.getNumes.Value\nllImprime = Thisform.ChkTpoOp.Value\nllDestino = ThisForm.C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,Value) And Not Eof",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,Get_CGru,Get_Ggrp,Get_Datai,Get_Dataf,Get_Dopes,ChkTpoOp,ChkDestino,Get_tpOps,Chk_Dopes,Chk_detalhe,Get_Envelope,Get_Nop,get_codcli,get_tpGOp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If Used('CrSigCdCli')\n\tUse In CrSigCdCli\nEndIf\nIf Used('CrSigCdPro')\n\tUse In CrSigCdPro\nEndIf\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "If ThisForm.Chk_detalhe.Value\n\tIf thisform.chkvalor.Value\t\n\t\tIf ThisForm.chkRelatorio.Value\n\t\t\tSet Point To [,]\n\t\t\tSet Separator To [.]\n\t\t\tReport Form SigReDp7 Preview NoConsole \n\t\t\tSet Point To [.]\n\t\t\tSet Separator To [,]\n\t\tElse\n\t\t\tReport Form SigReDp6 Preview NoConsole \n\t\tEndIf\n\tElse\n\t\tIf ThisForm.chkProdutos.Value\n\t\t\tReport Form SigReDp5 Preview NoConsole\n\t\tElse \n\t\t\tReport Form SigReDp1 Preview NoConsole\n\t\tEndIf \n\tEndif\nElse\n\tIf ThisForm.Chk_Dopes.Value\n\t\tReport Form SigReDp2 Preview NoConsol... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_detalhe,chkvalor,chkRelatorio,chkProdutos,Chk_Dopes,chkqtdPes,Get_Dopes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_Dopes",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "=fAcessoMovInd(Usuar, This.Value, This, ThisForm.poDataMgr)\n\nThis.Refresh()\nIf !Empty(This.Value)\n\tThisForm.CntOpe.Visible = .F.\nElse\n\tThisForm.CntOpe.Visible = .T.\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoMovInd",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_CGru",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Código')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Get_CGru.Value = crListaRemota.CGrus\n\tThisForm.Get_DGru.Value = crListaRemota.DGrus\n\tUse In crListaRemota\nElse\n\tThisForm.Get_CGru.Value = ''\n\tThisForm.Get_D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CGru,Get_DGru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_DGru",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'DGrus', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.mAddColuna('CGrus', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Get_CGru.Value = crListaRemota.CGrus\n\tThisForm.Get_DGru.Value = crListaRemota.DGrus\n\tUse In crListaRemota\nElse\n\tThisForm.Get_CGru.Value = ''\n\tThisForm.Get_D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CGru,Get_DGru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_DGru",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.Get_Cgru.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cgru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_Ggrp",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.codigos\n\tThisForm.Get_dGgrp.Value = CrListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.Get_Ggrp.Value = ''\n\tThisForm.Get_DgGrp.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_dGgrp,Get_Ggrp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_dGGrp",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return .f.\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_grupo",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect CrSigCdGcr\n\tSet Order to BalCodigo\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .T., 'BalCodigo' )\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .T., 'BalDescrs' )\n\t\tloBrowse.Show\n\tEndIf\n\tIf Lastkey() <> 27\n\t\tThis.Value = CrSigCdGcr.Codigos\n\t\tthisform.get_dgrupo.Value = crSigCdGcr.Descrs\n\tElse\n\t\tThis.Value = ''\n\t\tthisform.get_dgrupo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dgrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_conta",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect CrSigCdCli\n\tSet Order to BalCodigo\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .T., 'BalCodigo')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .T., 'BalNome')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tloBrowse.Show\n\t\tIf Lastkey() = 27\n\t\t\tThisForm.Get_Conta.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_dconta",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Not Empty( This.Value )\n\tSelect CrSigCdCli\n\tSet Order to BalNome\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .T., 'BalNome')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .T., 'BalCodigo')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tloBrowse.Show\n\t\tIf Lastkey() = 27\n\t\t\tThisForm.Get_Conta.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Get_Grupo.Value) And Empty(ThisForm.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.ChkTpoOp",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "thisform.chkvalor.Value  = .f.\nthisform.chkqtdPes.Value = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkvalor,chkqtdPes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.cntOpe.apaga",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdOpd\nReplace All Marca With 0\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.cntOpe.SelTudo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdOpd\nReplace All Marca With 1\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_TpOps",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect CrSigOpOpt\n\tSet Order to Cods\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigOpOpt', 'Cods', This.Value, 'Cadastro de Tipo de Operação')\n\t\tloBrowse.AddColuna('Cods', '', 'Código',    .T., 'Cods' )\n\t\tloBrowse.AddColuna('Descs',  '', 'Descrição', .T., 'Descs' )\n\t\tloBrowse.Show\n\t\tIf Lastkey() <> 27\n\t\t\tThis.Value = CrSigOpOpt.Cods\n\t\tEndIf\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chk_detalhe",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "If This.Value\n\tThisForm.chkProdutos.Enabled = .t.\nElse\n\tThisForm.chkProdutos.Enabled = .f.\n\tThisForm.chkProdutos.Value = .f.\n\tThisForm.chkFuncs.Enabled = .f. \n\tThisForm.chkFuncs.Value = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkProdutos,chkFuncs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_codcli",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.GET_Codcli, ThisForm.GET_desccli)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThisForm.GET_desccli.Value = ''\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.GET_desccli.Value = ''\nEndIf\n\nIf Not Empty(ThisForm.get_codcli.Value)\n\tThisForm.chk_detalhe.Value = .f.\n\tThisForm.chk_detalhe.Enabled = .f.\n\tThisForm.chkProdutos.Value = .f.\n\tThisForm.chkProdutos.Enabled = .f.\nElse\n\tThisForm.chk_detalhe.En... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_Codcli,GET_desccli,chk_detalhe,chkProdutos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_codcli",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_desccli",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.get_codcli, ThisForm.get_desccli)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThisForm.get_codcli.Value = ''\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.get_codcli.Value = ''\nEndIf\n\nIf Not Empty(ThisForm.get_codcli.Value)\n\tThisForm.chk_detalhe.Value = .f.\n\tThisForm.chk_detalhe.Enabled = .f.\n\tThisForm.chkProdutos.Value = .f.\n\tThisForm.chkProdutos.Enabled = .f.\nElse\n\tThisForm.chk_detalhe.Enab... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codcli,get_desccli,chk_detalhe,chkProdutos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_desccli",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.GET_codcli.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_codcli",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkProdutos",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value\n\tThisForm.chkFuncs.Enabled = .t. \nElse\n\tThisForm.chkFuncs.Enabled = .f. \n\tThisForm.chkFuncs.Value = .f.\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkFuncs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkvalor",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "thisform.chkTpoOp.Value = .f.\nthisform.chkqtdPes.Value = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkTpoOp,chkqtdPes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_dgrupo",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect CrSigCdGcr\n\tSet Order to BalDescrs\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CrSigCdGcr', 'BalDescrs', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .T., 'BalCodigo' )\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .T., 'BalDescrs' )\n\t\tloBrowse.Show\n\tEndIf\n\tIf Lastkey() <> 27\n\t\tThisform.get_grupo.Value = CrSigCdGcr.Codigos \n\t\tthis.Value = crSigCdGcr.Descrs\n\tElse\n\t\tThisform.get_grupo.Value = ''\n\t\tthis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.get_dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_TpGOp",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Seek(This.Value, 'crTmpTpGop', 'Codigos')\n\tloBrowse = CreateObject('fwBuscaSel', 'CrTmpTpGop', 'Codigos', This.Value, 'Tipos de geração de O.P.')\n\tloBrowse.AddColuna('Codigos', 'XXXXXXXXXX', 'Codigo', .t., 'Codigos')\n\tloBrowse.AddColuna('Descs', ' ', 'Descricao')\n\tloBrowse.Show\n\tThis.Value = CrTmpTpGop.Codigos\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.Get_TpGOp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Reccount('CrTmpTpGop') > 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkFuncs",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not This.Value\n\tThisForm.chkRelatorio.Value = .f.\nEndIf\nThisForm.chkRelatorio.Enabled = This.Value\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkRelatorio",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkFuncs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkRelatorio",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.chkFuncs.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkFuncs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDPD.chkQtdPes",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "thisform.chkTpoOp.Value = .f.\nthisform.chkvalor.Value  = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkTpoOp,chkvalor",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

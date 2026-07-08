@@ -1,0 +1,11 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrChrBO.prg` criado com:
+
+- **6 grupos de propriedades** cobrindo todos os campos relevantes:
+  - Filtros ativos (datas, grupo, conta)
+  - Rastreamento de altera├º├Áes (valores anteriores ÔÇö `AntDtIni`, `AntCdGrupo`, etc.)
+  - Permiss├Áes de acesso (`ExcluirDocumento`, `ExcluirCheque`)
+  - Flags de estado (`Inicial`, `plInicio`, `plLeCheque`, `pcChqLido`, `plLeitor`, `ChMatIni`)
+  - Dados da linha atual do grid (todos os campos de `csSigCqChi`)
+  - Campos dos pain├®is flutuantes (`impchmat` e `cntProcurar`)
+
+- **Init()** configura `this_cTabela = ""` e `this_cCampoChave = ""` (OPERACIONAL, sem tabela CRUD), inicializa datas para `DATE()` e chama `DODEFAULT()` sem RETURN dentro do bloco (vari├ível `loc_lResultado`).

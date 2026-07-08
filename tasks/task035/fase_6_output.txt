@@ -1,0 +1,21 @@
+﻿O arquivo j├í est├í completo. Analisando o `Formsigreato.prg` (1949 linhas), a Fase 6 j├í foi implementada integralmente:
+
+**Todos os lookups presentes e funcionais:**
+
+| Campo | M├®todo | Status |
+|-------|--------|--------|
+| txt_4c_Grupo / txt_4c_DGrupo | `AbrirBuscaGrupo()` + `ValidarGrupo()` | Completo (SigCdGrp/CGrus/DGrus) |
+| txt_4c_CPros / txt_4c_DPros | `AbrirBuscaProduto()` + `ValidarProduto()` | Completo (SigCdPro/CPros/DPros) |
+| txt_4c_Linha / txt_4c_DLin | `AbrirBuscaLinha()` + `ValidarLinha()` | Completo (SigCdLin/Linhas/Descs) |
+| txt_4c_Fornecedor / txt_4c_DFornecedor | `AbrirBuscaFornecedor()` + `ValidarFornecedor()` | Completo (SIGCDCLI/iclis/nomes) |
+
+**Infraestrutura completa:**
+- `ConfigurarBINDEVENTs()` (linha 1164): todos os BINDEVENT registrados (F4/F5 + DblClick para todos os campos)
+- 8 handlers KeyPress + 8 handlers DblClick implementados
+- `AtualizarEstadoCampos()`: controla ReadOnly dos campos de descri├º├úo
+- `FormParaRelatorio()`: transfere todos os filtros para o BO
+- `ValidarSelecaoGrades()`: valida├º├úo completa de interse├º├úo E/S
+- Grades + bot├Áes marca/desmarca para OperacoesE, OperacoesS e SigCdCeg
+- `Destroy()` correto (`.this_oRelatorio = .NULL.`, sem `.Release()`)
+
+Nenhum TODO, nenhum stub vazio. **A Fase 6 j├í estava conclu├¡da** ÔÇö provavelmente implementada juntamente com a Fase 5 na sess├úo anterior. O arquivo est├í pronto para a Fase 7/8.

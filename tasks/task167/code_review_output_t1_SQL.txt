@@ -1,0 +1,14 @@
+﻿**O alerta ├® um falso positivo.** N├úo h├í nenhuma condi├º├úo WHERE SQL com `CONTROLCOUNT` no c├│digo.
+
+As 3 ocorr├¬ncias de `ControlCount` no arquivo est├úo todas dentro do m├®todo `TornarControlesVisiveis` (linhas 211, 221, 241) e s├úo acessos ├á **propriedade VFP9 de containers**, n├úo colunas SQL:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          && linha 211
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ...  && linhas 221, 241
+```
+
+Isso ├® c├│digo VFP leg├¡timo para iterar sobre controles de um container (`Controls(i)`/`ControlCount`). A regex do detector confundiu o `AND` do `IF` VFP com um `AND` de cl├íusula SQL WHERE.
+
+Todos os SQLs no BO (`sigprcpdBO.prg`) usam exatamente as colunas do original: `codigos`, `Datas`, `Fases`, `UniPrdts`, `Contas`, `Cpros` ÔÇö sem nenhuma coluna inventada.
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo est├í correto.

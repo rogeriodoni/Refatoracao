@@ -1,0 +1,802 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecog.SCX
+* Data/Hora: 17/05/26 14:50:15
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECOG
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGRECOG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_empresa_desc
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_empresa
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_vendedor
+  Parent: SIGRECOG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_vendedor_desc
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_vendedor
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGRECOG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECOG
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECOG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECOG
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDmoeda
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCmoeda
+  Parent: SIGRECOG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGRECOG
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 64
+  Left = 21
+  Width = 632
+  Height = 391
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Comissão por Grupo de Produto"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .T.
+  Name = "SIGRECOG"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 531
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 201
+  Top = 160
+  Width = 50
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_empresa_desc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 288
+  MaxLength = 40
+  TabIndex = 7
+  Top = 156
+  Width = 290
+  Name = "get_empresa_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 255
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 156
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "get_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.lbl_vendedor
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Vendedor :"
+  Left = 196
+  Top = 187
+  Width = 55
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "lbl_vendedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_vendedor_desc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 337
+  MaxLength = 40
+  TabIndex = 10
+  Top = 183
+  Width = 290
+  Name = "get_vendedor_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_vendedor
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 255
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 9
+  ToolTipText = ""
+  Top = 183
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "get_vendedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 206
+  Top = 133
+  Width = 45
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_dt_inicial
+------------------------------------------------------------
+  Height = 25
+  Left = 255
+  TabIndex = 2
+  Top = 129
+  Width = 80
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 338
+  Top = 136
+  Width = 8
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.get_dt_final
+------------------------------------------------------------
+  Height = 25
+  Left = 349
+  TabIndex = 3
+  Top = 129
+  Width = 80
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.getDmoeda
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K!"
+  Height = 25
+  Left = 288
+  MaxLength = 15
+  TabIndex = 13
+  Top = 210
+  Width = 115
+  Name = "getDmoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.getCmoeda
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 255
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 210
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "getCmoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECOG.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Moeda :"
+  Height = 15
+  Left = 210
+  Top = 214
+  Width = 41
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECOG
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+report form SigReCog to printer noconsole
+use in cabecalho
+use in sumitens
+use in tempo
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+lcQrySigCdOpe   = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ;
+			   		[ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]
+lcQrySigCdEmp   = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']
+lcQrySigCdPam = [Select * From SigCdPam ]
+lcQrySigMvPar   = [Select * From SigMvPar Where 1=0 ]
+lcQrySigCdMoe   = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]+;
+				  	[ From SigCdMoe ] + ;
+				  	[ Order By cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]
+lcQrySigCdCot   = [Select cmoes,datas,horas,valos,cidchaves,usuars,dtalts From SigCdCot ]+;
+				  	[ Order By cmoes,datas,horas,valos,cidchaves,usuars,dtalts ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdOpe', 'ndopes', 'crSigCdOpe', '', , lcQrySigCdOpe)
+			.AddCursor('SigCdEmp', 'cemps', 'crSigCdEmp', '', , lcQrySigCdEmp)
+			.AddCursor('SigMvPar', 'cidchaves', 'crSigMvPar', '', , lcQrySigMvPar)
+			.AddCursor('SigCdPam', 'cidchaves', 'crSigCdPam', '', , lcQrySigCdPam)
+			.AddCursor('SigCdMoe', 'cmoes', 'crSigCdMoe', '', , lcQrySigCdMoe)
+			.AddCursor('SigCdCot', 'cidchaves', 'crSigCdCot', '', , lcQrySigCdCot)
+			
+			lcRetSigCdOpe   = .ReQuery('crSigCdOpe')
+			lcRetSigCdEmp   = .ReQuery('crSigCdEmp')
+			lcRetSigMvPar   = .ReQuery('crSigMvPar')
+			lcRetSigCdPam = .ReQuery('crSigCdPam')
+			lcRetSigCdMoe   = .ReQuery('crSigCdMoe')
+			lcRetSigCdCot   = .ReQuery('crSigCdCot')
+		EndWith
+		
+		If 	(lcRetSigCdOpe   < 1) or ;
+			(lcRetSigCdEmp   < 1) or ;
+			(lcRetSigCdPam < 1) or ;
+			(lcRetSigCdMoe   < 1) or ;
+			(lcRetSigCdCot   < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão ( Requery(s) )')
+			Return 0
+		EndIf
+
+		* inicializa as variáveis de campos
+		thisform.get_dt_inicial.value = date()
+		thisform.get_dt_final.value = date()
+		thisform.get_empresa.value = ''
+		thisform.get_empresa_desc.value = ''
+		thisform.get_vendedor.value = ''
+		thisform.get_vendedor_desc.value = ''
+		thisform.refresh
+		=DoDefault()
+	
+		Select crSigCdOpe
+		Index On ordes tag ordes
+		Index On dopes tag dopes
+
+		Select crSigCdMoe
+		Index On cmoes tag cmoes
+		Index On dmoes tag dmoes
+
+		Select crSigCdCot
+		Index On cmoes+DTOS(datas) tag CMOEDATA
+		
+		Select crSigCdPam
+		Go Top
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private dDataIni1,dDataIni2,dDataFim1,dDataFim2
+local dInicial, dFinal, cEmpresa, cVendedor
+local cNomeEmpresa, cRelTitulo, cPeriodo,lcCmoeda,lcDmoeda
+
+* inicializa variáveis de memória
+dInicial  = thisform.get_dt_inicial.value
+dFinal    = thisform.get_dt_final.value
+
+dDataIni1 = fDtoSQL(dInicial)
+dDataIni2 = fDtoSQL(dInicial,'23:59:59')
+dDataFim1 = fDtoSQL(dFinal)
+dDataFim2 = fDtoSQL(dFinal,'23:59:59')
+
+cEmpresa  = thisform.get_empresa.value
+cVendedor = thisform.get_vendedor.value
+m.lcCmoeda = PadR(ThisForm.getCmoeda.Value,3)
+m.lcDmoeda = PadR(ThisForm.getDmoeda.Value,15)
+
+* inicializa variáveis de cabeçalho de relatorio
+If Eof('crSigCdEmp')
+	cNomeEmpresa = ''
+Else
+	cNomeEmpresa = crSigCdEmp.razas
+EndIf
+cRelTitulo   = 'Relatório de Comissão de Vendedor por Grupo de Produto'
+cPeriodo     = 'Período: '+dtoc(dInicial)+' à '+dtoc(dFinal)
+
+* inicializa macros para o select
+cVerEmpresa  = iif(IsEmpty(cEmpresa),'.t.','a.emps = cEmpresa')
+cVerVendedor = iif(IsEmpty(cVendedor),'.t.','a.vends = cVendedor')
+
+* cria o arquivo temporário para o cabeçalho
+create cursor cabecalho (pNomeEmpresa C(80), pRelTitulo C(80), pPeriodo C(80))
+insert into cabecalho (pNomeEmpresa,pRelTitulo,pPeriodo) values (cNomeEmpresa,cRelTitulo,cPeriodo)
+
+* cursor temporário
+lcQuery = [Select a.empdopnums,a.datas,b.empdopnums as empdopnums2,Sum(b.totas) as totites ] + ;
+		    [ From SigMvCab a, SigMvItn b ] + ;
+		    [ Where a.datas between ?dDataIni1 and ?dDataFim2 ] + ;
+		    [ and b.empdopnums=a.empdopnums ] + ;
+		    [ Order By a.empdopnums,a.datas,b.empdopnums ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'sumitens') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (sumitens)')
+	Return 0
+EndIf
+
+set talk on
+set talk window
+
+lcQuery = [ Select d.empdopnums,d.totas,d.moedas,d.cpros,a.empdopnums,a.dopes,a.vends,a.datas,a.emps,a.valos, ] + ;
+		  [	b.dopes,b.results,b.ccomis,g.cvens,g.cgrus,g.comiss,e.cemps,e.razas,f.rclis As NVens, ] + ;
+		  [ h.cgrus,h.cpros ] + ;
+	[ from SigMvItn d, SigMvCab a, SigCdOpe b, SigCdEmp e, ] + ;
+	[	   SigCdCli f, SigCmGri g, SigCdPro h ] + ;
+	[ where a.datas between ?dDataIni1 and ?dDataFim2 and ] + ;
+	[	d.empdopnums=a.empdopnums and ] + ;
+	[	a.dopes   = b.dopes and ] + ;
+	[	b.results = 1       and ] + ;
+	[	f.iclis   = a.vends and ] + ;
+	[	e.cemps   = a.emps  and ] + ;
+	[	b.ccomis  = 1       and ] + ;
+	[	d.cpros   = h.cpros and ] + ;
+	[	h.cgrus   = g.cgrus and ] + ;
+	[	a.vends   = g.cvens     ] + ;
+	iif(IsEmpty(cEmpresa),[],[ and a.emps = ']+cEmpresa+[']) + ;
+	iif(IsEmpty(cVendedor),[],[ and a.vends = ']+cVendedor+['])
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvItn') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvItn)')
+	Return 0
+EndIf
+
+Select a.Cgrus, a.Comiss, a.Dopes, a.Vends, a.Datas, a.Emps, a.Razas, a.NVens, ;
+	   Sum(Round(a.Totas / c.TotItes * a.Valos * Iif(Empty(a.Moedas) Or a.Moedas==PadR(m.lcCmoeda,3), 1, fBuscarCotacao(a.Moedas, a.Datas) / fBuscarCotacao(m.lcCmoeda, a.Datas)),2)) as Tots ;
+  From crSigMvItn a, SumItens c ;
+ Where a.Datas Between dInicial And dFinal And ;
+	   a.EmpDopNums = c.EmpDopNums ;
+ Group By a.Cgrus, a.Comiss, a.Dopes, a.Vends, a.Datas, a.Emps, a.Razas, a.NVens ;
+ Order By a.Emps, a.Vends, a.Cgrus ;
+  Into Cursor Tempo 
+
+set talk off
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+report form SigReCog preview NoConsole
+use in cabecalho
+use in sumitens
+use in tempo
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.get_empresa_desc
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'D',This.Value,thisform.get_empresa,thisform.get_empresa_desc,Thisform.podatamgr.pnIdConn)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_empresa.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.get_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'C',This.Value,thisform.get_empresa,thisform.get_empresa_desc,Thisform.podatamgr.pnIdConn)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.get_vendedor_desc
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = 'VENDEDOR  '
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,thisform.get_vendedor,this)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		thisform.get_vendedor.Value = ''
+		thisform.get_vendedor.Refresh
+		return 0 
+	Endif
+Else
+	thisform.get_vendedor.Value = ''
+	thisform.get_vendedor.Refresh
+	return(.t.)
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_vendedor.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.get_vendedor
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = 'VENDEDOR  '
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,thisform.get_vendedor_desc)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		thisform.get_vendedor_desc.Value = ''
+		thisform.get_vendedor_desc.Refresh
+		return 0 
+	Endif
+Else
+	thisform.get_vendedor_desc.Value = ''
+	thisform.get_vendedor_desc.Refresh
+	return(.t.)
+endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.getDmoeda
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If .Not.IsEmpty(This.Value)
+
+    Set Near On
+    
+    If .Not.Seek(This.Value,'crSigCdMoe','Dmoes')
+		xBrow=CreateObject('fwbuscasel','crSigCdMoe','DMOES',this.value,'Seleção')
+		xBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')
+		xBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')
+		xBrow.Show	    
+	EndIf
+
+	Set Near Off
+	
+   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')
+   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')
+   This.Parent.getCmoeda.Refresh
+   This.Parent.getDmoeda.Refresh
+Else
+	ThisForm.getCmoeda.Value = ''
+	ThisForm.getCmoeda.Refresh
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getCmoeda.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECOG.getCmoeda
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If .Not.IsEmpty(This.Value)
+
+    Set Near On
+    
+    If .Not.Seek(This.Value,'crSigCdMoe','Cmoes')
+		xBrow=CreateObject('fwbuscasel','crSigCdMoe','CMOES',this.value,'Seleção')
+		xBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')
+		xBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')
+		xBrow.Show	      
+	EndIf
+
+	Set Near Off
+	
+   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')
+   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')
+   This.Parent.getCmoeda.Refresh
+   This.Parent.getDmoeda.Refresh
+	
+Else
+
+	ThisForm.getDmoeda.Value = ''
+	ThisForm.getDmoeda.Refresh
+	
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECOG
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

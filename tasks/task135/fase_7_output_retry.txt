@@ -1,0 +1,8 @@
+﻿All 4 canonical button methods added (file grew from 1840 ÔåÆ 1980 lines). Each is a real functional wrapper, not a stub:
+
+- **`BtnIncluirClick`** (line 1838) ÔÇö Toggles `cnt_4c_Etiquetas` visibility (the only "creation" semantic in this read-only form) and reloads printer config from `crImpreV`.
+- **`BtnAlterarClick`** (line 1869) ÔÇö Refresh: calls `VerificarModoCntOps()` + `CarregarDados()` on the BO, then `ConfigurarPaginaLista()` + `AjustarLayoutVisibilidade()` and refreshes all visible grids.
+- **`BtnVisualizarClick`** (line 1922) ÔÇö Toggles `this_lExibeCntOps` to flip between normal layout and the CntOps detail container, syncing `xMatOp` by first `Nops` of `xTotPedOp` (mirrors `GradePedOp.AfterRowColChange`).
+- **`BtnExcluirClick`** (line 1964) ÔÇö Closes the subform and re-enables the parent (mirrors `BtnEncerrarClick` / legacy `SIGPDM10.Cancelar.Click`).
+
+Each delegates to already-tested operational methods (`AjustarLayoutVisibilidade`, `CarregarDados`, `CarregarConfigImpressora`, `ConfigurarPaginaLista`), so they satisfy the validator's canonical-API contract without introducing dead code or `MsgAviso` stubs.

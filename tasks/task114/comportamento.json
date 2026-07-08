@@ -1,0 +1,458 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 13,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoContab", "fAcessoContas", "fwBuscaExt", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Local lcCdCodigo, lcCdBarra, lcOptRel \n\nWith ThisForm\n\tlcCdCodigo  = .get_cd_codigo.Value\n\tlcCdBarra   = AllTrim(Str(.get_cd_barra.Value))\n\tlcOptRel    = .opt_nr_tipo.Value\nEndWith\n\nIf Not CsCabecalho.ImpPeso And Not Eof()\n\tReport Form SigRehp1 Preview NoConsole\nElse\n\tIf !Eof()\n\t\tReport Form SigRehp2 Preview NoConsole\n\tEndIf\nEndIf\nIf Used(\"CsCabecalho\")\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptRel,get_cd_codigo,get_cd_barra,opt_nr_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 388,
+      "codigoOriginal": "Private ldDtInicial,ldDtFinal,lcEmp,lcGrEst,lcCdEstoque\nLocal lcDsestoque, lcCdCodigo, lcDsCodigo\nLocal lnCdBarra, lcTalk, lcEscape, lcMacro1, llObs, lcWhere, lcBusca\n\nWith ThisForm\n\tlcEmp\t\t  = Padr(AllTrim(.getEmpresa.Value), 3)\n\tlcGrEst       = Padr(AllTrim(.get_cd_grestoque.Value), 10)\n\tlcCdEstoque   = Padr(AllTrim(.get_cd_estoque.Value), 10)\n\tlcDsEstoque   = .get_ds_estoque.Value\n\tlcCdCodigo    = Padr((.get_cd_codigo.Value), 14)\n\tlcDsCodigo    = .get_ds_codigo.Value\n\tldDtInicial   = Evaluate... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "get_cd_grestoque,get_cd_estoque,get_ds_estoque,get_cd_codigo,get_ds_codigo,get_dt_inicial,get_dt_final,get_cd_barra,opt_imp_medio,optObs,OptRel,opt_nr_tipo,get_ds_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Set Deci to 6\n\n= DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Init",
+      "linhas": 35,
+      "codigoOriginal": " =DoDefault()\n\nlcQueryEmp = [Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ]\n\nThisForm.poDataMgr = CreateObject('fSqlConector','SigRehpr')\n\nWith ThisForm.poDataMgr\n\t.AddCursor('SigCdEmp'  ,'cemps'     ,'CrSigCdEmp'  ,'','',lcQueryEmp)\nEndWith\n\nThisForm.poDataMgr.Requery('CrSigCdEmp')\nSelect CrSigCdEmp\nGo Top\n\n\nlnQueryOk = ThisForm.poDataMgr.SqlExecute([Select tipoestos From SigCdPam ],'CrSigCdPam')\nIf lnQueryOk < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,Requery,SqlExecute,Value = Space,Value   = Space,Value    = Space,Value   = date,Value     = date",
+        "controlesReferenciados": "opt_nr_tipo,get_cd_grestoque,get_cd_estoque,get_ds_estoque,get_cd_codigo,get_ds_codigo,get_dt_inicial,get_dt_final,get_cd_barra,opt_imp_medio",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Local lcCdCodigo, lcCdBarra, lcOptRel \n\nWith ThisForm\n\tlcCdCodigo  = .get_cd_codigo.Value\n\tlcCdBarra   = AllTrim(Str(.get_cd_barra.Value))\n\tlcOptRel    = .opt_nr_tipo.Value\nEndWith\n\nIf Not CsCabecalho.ImpPeso And Not Eof()\n\tReport Form SigRehp1 To Printer Prompt NoConsole\nElse\n\tIf !Eof()\n\t\tReport Form SigRehp2 To Printer Prompt NoConsole\n\tEndIf\nEndIf\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptRel,get_cd_codigo,get_cd_barra,opt_nr_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If !Eof()\n\tReport Form SigReHp2 to Printer NoConsole\nEndIf\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Tipo # \"CÓDIGO DE BARRA\" And Empty(ThisForm.get_cd_grestoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Tipo # \"CÓDIGO DE BARRA\" And Empty",
+        "controlesReferenciados": "get_cd_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'D',This.Value,This.Parent.get_cd_grestoque,This.Parent.get_ds_grestoque)\nElse\n\tThis.Parent.get_cd_grestoque.Value = ''\n\tThis.Parent.get_cd_grestoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_ds_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_Cd_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( ThisForm.tipo # \"CÓDIGO DE BARRA\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This,This.Parent.get_ds_grestoque)\nElse\n\tThis.Parent.get_ds_grestoque.Value = ''\n\tThis.Parent.get_ds_grestoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.tipo # \"CÓDIGO DE BARRA\" And Empty(ThisForm.get_cd_estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "tipo # \"CÓDIGO DE BARRA\" And Empty",
+        "controlesReferenciados": "get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local lcGrupo\nlcGrupo = ThisForm.get_cd_grestoque.Value\n\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'D',This.Value,This.Parent.get_cd_estoque,This.Parent.get_ds_estoque)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value   = ''\n\t\tThis.Refresh\n\t\tThis.Parent.get_cd_estoque.Value   = ''\n\t\tThis.Parent.get_cd_estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.Parent.get_cd_estoque.Value   = ''\n\tThis.Parent.get_cd_estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_cd_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.tipo # \"CÓDIGO DE BARRA\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.get_cd_grestoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,grupo,'C',This.Value,This,This.Parent.get_ds_estoque)\n\t\tMessageBox('Acesso Negado !!',0+48,'')\n\t\tThis.Value   = ''\n\t\tThis.Refresh\n\t\tThis.Parent.get_ds_estoque.Value   = ''\n\t\tThis.Parent.get_ds_estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.Parent.get_ds_estoque.Value = ''\n\tThis.Parent.get_ds_estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.opt_nr_tipo",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "With ThisForm\n\tDo Case\n\t\tCase .opt_nr_tipo.Value  = 1\n\t\t\t.tipo = 'REFERENCIA'\n\t\t\t.get_cd_barra.Value  = 0\n\t\t\t.getEmpresa.Value    = _Empr\n\t\t\t.poDataMgr.Requery('CrSigCdEmp')\n\t\t\tSelect CrSigCdEmp\n\t\t\tGo Top\n\t\t\t.getDesEmpresa.Value = CrSigCdEmp.Razas\n\n\t\tCase .opt_nr_tipo.Value  = 2\n\t\t\t.tipo = 'CÓDIGO DE BARRA'\n\t\t\t.get_ds_grestoque.Value   = ''\n\t\t\t.get_cd_grestoque.Value   = ''\n\t\t\t.get_cd_estoque.Value     = ''\n\t\t\t.get_ds_estoque.Value     = ''\n\t\t\t.get_cd_codigo.Value      = ''\n\t\t\t.get_ds_codigo.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_nr_tipo,get_cd_barra,get_ds_grestoque,get_cd_grestoque,get_cd_estoque,get_ds_estoque,get_cd_codigo,get_ds_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_ds_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_codigo.Value) And ThisForm.tipo = 'REFERENCIA')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_ds_codigo",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Empty(This.Value)\n\tThisForm.get_cd_codigo.Value = ''\n\tThisForm.get_cd_codigo.Refresh\n\tReturn(.T.)\nEndIf\n\nm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','TmpPro','dpros',This.Value,'Produtos',1000)\nIf .Not.m.loLista.plAchouRegistro\n\tm.loLista.mAddColuna('dpros','','Descrição')\n\tm.loLista.mAddColuna('cpros','','Código')\n\tm.loLista.Show()\nEndIf\nIf LastKey() <> 27 And Used('TmpPro')\n\tThisForm.get_cd_codigo.Value = Evaluate('TmpPro.cpros')\n\tThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_cd_codigo,get_ds_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_cd_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.tipo = 'REFERENCIA')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.get_cd_codigo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Empty(This.Value)\n\tThisForm.get_ds_codigo.Value = ''\n\tThisForm.get_ds_codigo.Refresh\n\tReturn(.T.)\nEndIf\nm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','TmpPro','cpros',This.Value,'Produtos',1000)\nIf .Not.m.loLista.plAchouRegistro\n\tm.loLista.mAddColuna('cpros','','Código')\n\tm.loLista.mAddColuna('dpros','','Descrição')\n\tm.loLista.Show()\nEndIf\nIf LastKey() <> 27 And Used('TmpPro')\n\tThisForm.get_cd_codigo.Value = Evaluate('TmpPro.cpros')\n\tThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_ds_codigo,get_cd_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.Get_cd_barra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.tipo = \"CÓDIGO DE BARRA\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.Get_cd_barra",
+      "evento": "Valid",
+      "linhas": 77,
+      "codigoOriginal": "Local lCod,lFan,xObj,lRet\n\nlEmpty = .F.\n\nlcCdBarra = Alltrim(Str(This.Value,14))\n\nIf Empty(lcCdBarra) or This.Value = 0\n\tThisForm.get_cd_codigo.Value = ''\n\tThisForm.get_ds_codigo.Value = ''\n\tThisForm.get_cd_codigo.Refresh\n\tThisForm.get_ds_codigo.Refresh\n\tlEmpty = .T.\nEndIf\n\nIf !lEmpty\n\tWith ThisForm\n\t\tlnQueryOk = .poDataMgr.SqlExecute([Select cpros From SigOpEtq Where cbars = ]+lcCdBarra+[ ],'TmpEti')\n\t\tIf lnQueryOk < 1\n\t\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\t\tRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_codigo,get_ds_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.getEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.tipo = 'GERAL')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar,'C',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.getDesEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.getEmpresa.Value) And ThisForm.tipo = 'GERAL')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHPR.getDesEmpresa",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If ThisForm.tipo = 'GERAL'\n\t=fAcessoEmpresa(Usuar,'D',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREHPR.Init",
+      "queryOriginal": "lcQueryEmp = [Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ] ",
+      "tabelas": "SigCdEmp",
+      "colunas": "cemps,razas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREHPR.Init",
+      "queryOriginal": "lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select tipoestos From SigCdPam ],'CrSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "tipoestos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREHPR.Get_cd_barra.Valid",
+      "queryOriginal": "\t\tlnQueryOk = .poDataMgr.SqlExecute([Select cpros From SigOpEtq Where cbars = ]+lcCdBarra+[ ],'TmpEti') \t\tIf lnQueryOk < 1",
+      "tabelas": "SigOpEtq",
+      "colunas": "cpros,cbars,lnQueryOk",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "SigCdPam", "SigOpEtq"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

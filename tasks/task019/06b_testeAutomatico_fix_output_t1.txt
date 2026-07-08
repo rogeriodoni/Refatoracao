@@ -1,0 +1,5 @@
+﻿Dois bugs corrigidos em `InicializarForm`:
+
+1. **Alias not found**: O `USE IN cursor_4c_PamDiv` estava duplicado ÔÇö dentro do `IF EMPTY(DivOps)` e depois fora dele. Quando `DivOps` era vazio, o cursor era fechado dentro do IF e a linha de fora gerava "Alias not found". Removido o `USE IN` de dentro do IF.
+
+2. **loc_lSucesso = .F.**: A verifica├º├úo de `DivOps` vazio ├® apenas um aviso operacional (a opera├º├úo n├úo est├í configurada no sistema), n├úo um erro de inicializa├º├úo do form. O `loc_lSucesso = .F.` impedia a instancia├º├úo mesmo quando o form foi constru├¡do corretamente. Removido ÔÇö o aviso ainda ├® exibido, mas o form abre normalmente.

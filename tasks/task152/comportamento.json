@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDPNS",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "With ThisForm\n\tWith .grdItens\n\t\t.ColumnCount \t   = 8\n\t\t.RecordSource \t   = [crGrade]\n\t\t.DeleteMark \t   = .f.\n\t\t.RecordMark \t   = .f.\n\t\t.ReadOnly \t\t   = .t.\n\t\t.Scrollbars \t   = 2\n\t\t.AllowHeaderSizing = .f.\n\t\t.AllowRowSizing    = .f.\n\n\t\t.Column1.ControlSource  = [crGrade.Emps]\n\t\t.Column2.ControlSource  = [crGrade.Dopes]\n\t\t.Column3.ControlSource  = [crGrade.Numes]\n\t\t.Column3.InputMask \t    = [999999]\n\t\t.Column4.ControlSource  = [crGrade.Datas]\n\t\t.Column5.ControlSource  = [crGrade.GrupoDs]\n\t\t.Column... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Local lcQuery\n\nZap In crGrade\nZap In crRodape\n\nSelect Distinct EmpDopNums, Sum(Qtds) as Qtds ;\n  From crSigMvEstPd ;\n Where Fk_chave = ThisForm.lpKey ;\n Order By EmpDopNums ;\n Group By EmpDopNums ;\n  Into Cursor LocalEstPd\n\nSelect LocalEstPd\nScan\n\tlcQuery = [Select a.Emps, a.EmpDs, a.Dopes, a.Numes, a.GrupoDs, a.ContaDs, b.RClis, a.Usuars, a.Datas, a.PrazoEnts ] + ;\n\t\t\t    [From SigMvCab a, SigCdCli b ] + ;\n\t\t\t   [Where a.EmpDopNums = '] + LocalEstPd.EmpDopNums + [' And ] + ;\n\t\t\t   \t\t [a.ContaDs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS",
+      "evento": "Init",
+      "linhas": 30,
+      "codigoOriginal": "LParameters pKey\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr  = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.LockScreen = .t.\n\n\t\t.lpKey = pKey\n\t\t\n\t\t.MontaGrades\n\n\t\t.SelecionaDados\n\n\t\t.grdItens.Refresh\n\t\t.grdRodape.Refresh\n\t\t.grdItens.Column1.Setfocus\n\n\t\t.LockScreen = .f.\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48,... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDPNS",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crGrade (Emps c(3), Dopes c(20), Numes n(6), GrupoDs c(10), ContaDs c(10), Usuars c(10), ;\n\t\t\t\t\t   Datas d(8), PrazoEnts d(8), Pendentes n(10,3), EmpDs c(3), RClis c(50))\nSelect crGrade\nIndex On Dtos(PrazoEnts) + Dtos(Datas) + Emps + Dopes + Str(Numes, 6) Tag Ordem\n\nCreate Cursor crRodape (Descrs c(100), Usuars c(10), Pendentes n(10,3))\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.ok",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.grdItens",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.grdRodape.Column1.Text1.Value = [Empresa Destino : ] + crGrade.EmpDs\nThisForm.grdRodape.Column2.Text1.Value = crGrade.Usuars\nThisForm.getRClis.Value = crGrade.RClis\n\nThisForm.grdRodape.Column1.Refresh\nThisForm.grdRodape.Column2.Refresh\nThisForm.getRClis.Refresh\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.grdRodape.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grdItens.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.grdRodape.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.grdRodape.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = This.Tag",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDPNS.getRClis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDPNS.Procedure",
+      "queryOriginal": "Select Distinct EmpDopNums, Sum(Qtds) as Qtds ; From crSigMvEstPd ; Where Fk_chave = ThisForm.lpKey ; Order By EmpDopNums ; Group By EmpDopNums ; Into Cursor LocalEstPd",
+      "tabelas": "crSigMvEstPd",
+      "colunas": "Fk_chave,lpKey,EmpDopNums,LocalEstPd",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigMvEstPd"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

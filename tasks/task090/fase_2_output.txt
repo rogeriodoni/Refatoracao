@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto e completo. Fase 2 conclu├¡da.
+
+**SigReEspBO.prg** agora tem 893 linhas com os seguintes m├®todos adicionados:
+
+- **`PrepararDados()`** (~330 linhas) ÔÇö tradu├º├úo completa do `PROCEDURE processamento` do legado: carrega crSigCdOpe/crSigCdEmp/crSigCdPam via SQLEXEC, constr├│i o WHERE din├ómico com todos os filtros (per├¡odo, opera├º├úo, conta, vendedor, cidade, estado, tipo opera├º├úo, PV), processa os loops de Fabricado e csRelatorio com c├ílculos de percentuais, quantidades produzidas, cota├º├Áes de moeda (fBuscarCotacao com fallback=1), movimenta├º├Áes por tipo (lcTpOpeM/E/C), e linha de totais finais.
+- **`Imprimir()`** ÔÇö chama PrepararDados() e faz `REPORT FORM SigReEsp/SigReEs2 TO PRINTER`, selecionando o FRX pelo flag `this_lTpOpe`.
+- **`ImprimirComPrompt()`** ÔÇö equivalente ao bot├úo "Imprimir" original com di├ílogo de sele├º├úo de impressora.
+- **`Visualizar()`** ÔÇö chama PrepararDados() e faz `REPORT FORM ... PREVIEW`.
+
+Pr├│xima fase: **Fase 3/8 ÔÇö cria├º├úo do FormSigReEsp.prg** (form de filtros).

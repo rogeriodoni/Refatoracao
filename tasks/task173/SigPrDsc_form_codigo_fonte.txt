@@ -1,0 +1,887 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrDsc.SCX
+* Data/Hora: 02/07/2026 22:42:40
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRDSC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRDSC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRDSC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRDSC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup3
+  Parent: SIGPRDSC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGPRDSC
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRDSC.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDSC.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDSC.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDSC.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDSC.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDSC.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGPRDSC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCProsI
+  Parent: SIGPRDSC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGPRDSC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCProsF
+  Parent: SIGPRDSC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGPRDSC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCGrus
+  Parent: SIGPRDSC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnSelecionar
+  Parent: SIGPRDSC
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnSair
+  Parent: SIGPRDSC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnAtualizar
+  Parent: SIGPRDSC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 120
+  Left = 27
+  Width = 503
+  Height = 210
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Montagem de Descrição de Produtos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  Name = "SIGPRDSC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Commandgroup3
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 616
+  SpecialEffect = 1
+  Top = 7
+  Width = 173
+  TabIndex = 11
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "Commandgroup3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 343
+  Left = 15
+  RecordSource = "crProdutos"
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 164
+  Width = 769
+  Name = "Grade"
+  Column1.FontSize = 8
+  Column1.ControlSource = "crProdutos.CPros"
+  Column1.Width = 108
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = "crProdutos.Portugues"
+  Column2.Width = 290
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = "crProdutos.Traduzido"
+  Column3.Width = 339
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "csContas.CprosAnt"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Português"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "csContas.CprosNov"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Traduzido"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Grade.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Produtos de :"
+  Left = 155
+  Top = 138
+  Width = 76
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.getCProsI
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Left = 233
+  MaxLength = 14
+  TabIndex = 2
+  Top = 135
+  Width = 108
+  ZOrderSet = 24
+  Name = "getCProsI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "até"
+  Left = 345
+  Top = 138
+  Width = 21
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.getCProsF
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Left = 370
+  MaxLength = 14
+  TabIndex = 4
+  Top = 135
+  Width = 108
+  ZOrderSet = 24
+  Name = "getCProsF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Grupo de Produto :"
+  Left = 505
+  Top = 138
+  Width = 107
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.getCGrus
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Left = 614
+  MaxLength = 3
+  TabIndex = 6
+  Top = 135
+  Width = 31
+  ZOrderSet = 24
+  Name = "getCGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.btnSelecionar
+------------------------------------------------------------
+  Top = 116
+  Left = 744
+  Picture = ..\vbmp\a_arrow6.bmp
+  Caption = ""
+  ToolTipText = "Selecionar"
+  Name = "btnSelecionar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.btnSair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDSC.btnAtualizar
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\geral_relogio_60.jpg
+  Caption = "\<Atualizar"
+  Name = "btnAtualizar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRDSC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE gravacao
+------------------------------------------------------------
+PROCEDURE gravacao
+Local llOks
+
+llOks = .t.	
+
+Select crProdutos
+oProg = CreateObject([fwprogressbar], [Gravando Produtos...], Reccount([crProdutos]))
+oProg.Show
+Go Top In crProdutos
+Scan While llOks
+	lcPro = crProdutos.CPros
+
+	oProg.SubTitulo.Caption = [Produto : ] + lcPro
+	oProg.Update(.t.)
+
+	lcQuery = [Update SigCdPro ] + ;
+				 [Set DscCompras = '] + Alltrim(crProdutos.DscCompras) + [', ] + ;
+				 	 [ObsCompras = '] + Alltrim(crProdutos.ObsCompras) + [', ] + ;
+				 	 [DPros = '] + Padr(Alltrim(crProdutos.Portugues), 40) + [' ] + ;
+			   [Where CPros = '] + lcPro + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Traducao - Update SigCdPro)])
+		llOks = .f.	
+	EndIf
+
+	* Apaga o Produto Enviado do SigPrPrt
+	lcQuery = [Delete From SigPrPrt Where CPros = '] + lcPro + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=fGravarLog([T], Upper(ThisForm.Name), Usuar, [Falha na Conexão (Traducao)])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Traducao - Delete SigPrPrt)], 10000)
+		llOks = .f.	
+	EndIf
+	
+	* Apaga o Produto Enviado do SigPrWeb
+*!*		lcQuery = [Delete From SigPrWeb Where CPros = '] + lcPro + [']
+*!*		If llOks And (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+*!*			=fGravarLog([T], Upper(ThisForm.Name), Usuar, [Falha na Conexão (Traducao)])
+*!*			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Traducao - Delete SigPrWeb)], 10000)
+*!*			llOks = .f.	
+*!*		EndIf
+	
+	If llOks
+		If (ThisForm.poDataMgr.Commit() < 1)
+			llOks = .f.
+		EndIf
+	EndIf
+
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+EndScan
+oProg.Complete
+
+If llOks
+	=MessageBox([Foram Gravados ] + Alltrim(Str(Reccount([crProdutos]), 10)) + [ Produtos!!!], 0+48, ;
+				[Processamento Concluído!!!])
+Else
+	=MessageBox([Ocorreu um Erro Com a Gravação dos Produtos!!!], 0+16, ;
+				[Processamento Cancelado!!!])
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcPro, lcPrI, lcPrF, lcGru
+
+Zap In crProdutos
+
+lcPrI = Padr(ThisForm.getCProsI.Value, 14)
+lcPrF = Padr(ThisForm.getCProsF.Value, 14)
+lcGru = Padr(ThisForm.getCGrus.Value, 3)
+
+lcQuery = [Select CPros ] + ;
+		    [From SigCdPro ] + ;
+		   [Where ] + Iif(Not Empty(lcGru), ;
+		   		 [CGrus = '] + lcGru + [' ], ;
+		   		 [CPros BetWeen '] + lcPrI + [' And '] + lcPrF + [' ]) + ;
+		   [Order By CPros]
+		   		 
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crPrdTraduz]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPrdTraduz)])
+	Return .f.
+EndIf
+
+Select crPrdTraduz
+oProg = CreateObject([fwprogressbar], [Processando Traduções...], Reccount([crPrdTraduz]))
+oProg.Show
+Scan
+	lcPro = crPrdTraduz.CPros
+
+	oProg.SubTitulo.Caption = [Produto : ] + lcPro
+	oProg.Update(.t.)
+
+	If Not Empty(lcPro)
+		lcDes = []
+		lcQuery = [Select a.CPros, a.CGrus, a.CodCors, b.DGrus, b.Mercs, b.MontaGrDs, c.Descs ] + ;
+				    [From SigCdPro a ] + ;
+				    [Left Join SigCdGrp b On b.CGrus = a.CGrus ] + ;
+				    [Left Join SigCdCor c On c.Cods = a.CodCors ] + ;
+				   [Where a.CPros = '] + lcPro + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], 10000)
+			Return .f.
+		EndIf
+		Go Top In LocalPro
+		lcIni = Alltrim(Alltrim(Nvl(LocalPro.DGrus, [])) + [ ] + Alltrim(Nvl(LocalPro.Descs, [])))
+		lnGrD = Nvl(LocalPro.MontaGrDs, 0)
+
+		If Not Empty(lcDes)	
+			lcIng = lcDes
+			
+			Select crSigCdDic
+			Scan
+				lcIng = Strtran(lcIng, Alltrim(crSigCdDic.Expressao), Alltrim(crSigCdDic.Traducao))
+			EndScan
+
+			lcDes = Strtran(Strtran(lcDes, ['], [ ]), ["], [ ])
+			lcIng = Strtran(Strtran(lcIng, ['], [ ]), ["], [ ])
+
+			Insert Into crProdutos (CPros, Portugues, Traduzido, DscCompras, ObsCompras) ;
+							Values (lcPro, lcDes, lcIng, lcIng, lcDes)
+
+			ThisForm.Grade.Refresh
+		EndIf
+	EndIf
+EndScan
+oProg.Complete
+
+Select crProdutos
+Go Top In crProdutos
+If Not Eof([crProdutos])
+	ThisForm.btnAtualizar.Enabled = .t.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crProdutos (CPros c(14), Portugues c(254), Traduzido c(254), DscCompras m(4), ObsCompras m(4))
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select Expressao, Traducao ] + ;
+					[From SigCdDic ] + ;
+				   [Where Idioma = 'INGLES    ' ] + ;
+				   [Order By Len(Expressao) Desc, Expressao]
+
+		If (.poDataMgr.SqlExecute(lcQuery, [crSigCdDic]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdDic)])
+			Return .f.
+		EndIf
+
+		.Grade.ReadOnly = .t.
+		.btnAtualizar.Enabled = .f.
+		
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.getCProsI
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCGrus.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdPro], ;
+						   [crListaRemota], [CPros], This.Value, [Seleção], 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CPros], [], [Código])
+		loLista.mAddColuna([DPros], [], [Descrição])
+		loLista.mAddColuna([CGrus], [], [Grupo])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.CPros
+	If Not Empty(This.Value) And Empty(ThisForm.getCProsF.Value)
+		ThisForm.getCProsF.Value = This.Value
+		ThisForm.getCProsF.Refresh
+		ThisForm.getCGrus.Value = []
+		ThisForm.getCGrus.Refresh
+	EndIf
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.getCProsF
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCGrus.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdPro], ;
+						   [crListaRemota], [CPros], This.Value, [Seleção], 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CPros], [], [Código])
+		loLista.mAddColuna([DPros], [], [Descrição])
+		loLista.mAddColuna([CGrus], [], [Grupo])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.CPros
+	If Not Empty(This.Value) And Empty(ThisForm.getCProsI.Value)
+		ThisForm.getCProsI.Value = This.Value
+		ThisForm.getCProsI.Refresh
+		ThisForm.getCGrus.Value = []
+		ThisForm.getCGrus.Refresh
+	EndIf
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.getCGrus
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCProsI.Value) And Empty(ThisForm.getCProsF.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdGrp], ;
+						   [crListaRemota], [CGrus], This.Value, [Seleção], 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CGrus], [], [Código])
+		loLista.mAddColuna([DGrus], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.CGrus
+	Use In crListaRemota
+	If Not Empty(This.Value)
+		ThisForm.getCProsI.Value = []
+		ThisForm.getCProsI.Refresh
+		ThisForm.getCProsF.Value = []
+		ThisForm.getCProsF.Refresh
+	EndIf
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.btnSelecionar
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.btnAtualizar.Enabled = .f.
+
+If Empty(ThisForm.getCProsI.Value) And Empty(ThisForm.getCProsF.Value) And Empty(ThisForm.getCGrus.Value)
+	=MessageBox([Nenhum Filtro Foi Informado!!!], 0+16, [Atenção!!!])
+	ThisForm.getCProsI.SetFocus
+	Return .f.
+EndIf
+
+If Not Empty(ThisForm.getCProsI.Value) And Empty(ThisForm.getCProsF.Value)
+	ThisForm.getCProsF.Value = ThisForm.getCProsI.Value
+	ThisForm.getCProsF.Refresh
+EndIf
+
+If Empty(ThisForm.getCProsI.Value) And Not Empty(ThisForm.getCProsF.Value)
+	ThisForm.getCProsI.Value = ThisForm.getCProsF.Value
+	ThisForm.getCProsI.Refresh
+EndIf
+
+ThisForm.Processamento
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.btnSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDSC.btnAtualizar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Gravacao
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRDSC
+RESERVED3 (ClassInfo): podatamgr
+*gravacao 
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

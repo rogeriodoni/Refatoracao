@@ -1,0 +1,25 @@
+﻿After thorough verification, I can confirm this is a **false positive** by the automated review tool.
+
+## Resultado da Verificacao
+
+**Problema detectado:** `[SQL-FILTRO-INVENTADO]` com coluna `NUMLICENCAS`
+
+**O que o tool encontrou:**
+- Formsigtosen.prg linhas 896, 902, 909: `goSistema.NumLicencas`
+- sigtosenBO.prg linhas 748, 752, 758: `goSistema.NumLicencas`
+
+**Por que e falso positivo:**
+
+Todas as ocorrencias de `NumLicencas` sao **acesso a propriedade de objeto VFP** (`goSistema.NumLicencas`), dentro de estruturas `IF ... ENDIF` ÔÇö **nao sao colunas em clausulas SQL WHERE**.
+
+O SQL da verificacao de licencas (`VerificarLicencas` no BO, linhas 498-503) usa exatamente as mesmas colunas do original:
+
+| Original | Migrado |
+|---|---|
+| `LIC_Stat = 'A'` | `LIC_Stat = 'A'` |
+| `Left(LIC_Usua,10) = '...'` | `Left(LIC_Usua,10) = '...'` |
+| `Lic_Maqs = '...'` | `Lic_Maqs = '" + SYS(0) + "'"` |
+
+**Nenhuma coluna `NUMLICENCAS` existe em nenhum WHERE SQL do codigo migrado.** O tool confundiu `goSistema.NumLicencas` (propriedade VFP do objeto sistema global ÔÇö herdada do legado) com um nome de coluna SQL.
+
+**Acao necessaria: nenhuma.** Os arquivos estao corretos. O pass SQL nao requer alteracoes neste form/BO.

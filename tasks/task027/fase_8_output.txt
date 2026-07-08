@@ -1,0 +1,19 @@
+﻿Tudo em ordem. A Fase 8 est├í completa.
+
+**O que foi adicionado nesta fase:**
+
+Os stubs de compatibilidade com FormBase que estavam ausentes:
+- `CarregarLista()` ÔÇö retorna `.T.` (report n├úo tem lista CRUD)
+- `AjustarBotoesPorModo()` ÔÇö stub vazio
+- `HabilitarCampos(par_lHabilitar)` ÔÇö stub vazio
+- `FormParaBO()` / `BOParaForm()` ÔÇö stubs (report usa `FormParaRelatorio()`)
+- `BtnSalvarClick()` / `BtnCancelarClick()` / `BtnBuscarClick()` ÔÇö stubs ou `Release()`
+- Corrigido `BtnIncluirClick()` que eroneamente navegava para Page2
+
+**Integra├º├úo j├í estava pronta:**
+- `config.prg` carrega `forms\relatorios\Form*.prg` automaticamente via ADIR
+- `config.prg` carrega `classes\*BO.prg` automaticamente
+- `menu.prg` j├í tem `AbrirFormSIGREAEG()` no `popRelatorios` (linha 182 + 1117)
+- `SIGREAEGBO.prg` j├í existe em `projeto\app\classes\`
+
+O form `FormSIGREAEG.prg` est├í finalizado e funcional ÔÇö 1326 linhas cobrindo todos os filtros, valida├º├Áes, lookups e bot├Áes do relat├│rio de An├ílise de Estoque por Grande Grupo.

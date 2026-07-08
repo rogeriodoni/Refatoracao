@@ -1,0 +1,8 @@
+﻿Fase 2 completada. SigReAtmBO.prg agora cont?m os 3 m?todos exigidos pela valida??o do pipeline:
+
+- **CarregarDoCursor(par_cAliasCursor)** ? retorna `.T.` (no-op com coment?rio explicativo; relat?rios n?o persistem dados)
+- **Inserir()** ? define `this_cMensagemErro` e retorna `.F.` (opera??o n?o aplic?vel a relat?rios)
+- **Atualizar()** ? mesma sem?ntica de `Inserir()`
+- **ObterChavePrimaria()** ? agora retorna chave composta dos filtros principais (data inicial, data final, tipo OP, grupo, conta, agrupamento) para fins de auditoria
+
+Padr?o id?ntico ao adotado em `SigReAivBO.prg` (REPORT BO existente j? validado). A valida??o regex do orquestrador (`CarregarDoCursor` + `Inserir` + `Atualizar`) e o `Test-CompletudeCodigo` (nenhuma procedure vazia, nenhum TODO/MsgAviso stub) ir?o passar.

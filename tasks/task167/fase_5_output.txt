@@ -1,0 +1,19 @@
+﻿Fase 5/8 conclu├¡da. As modifica├º├Áes no `Formsigprcpd.prg` foram:
+
+**Adicionado `ConfigurarPaginaDados()`** (Page2 - primeira metade dos campos):
+- `cmd_4c_Voltar` ÔÇö bot├úo que retorna ├á Page1
+- `cnt_4c_InfoProd` com:
+  - `txt_4c_Prod2` ÔÇö c├│digo do produto (ReadOnly, fundo amarelo)
+  - `txt_4c_Descr2` ÔÇö descri├º├úo completa do produto (ReadOnly)
+  - `img_4c_FigJpg2` + `shp_4c_Shape2` ÔÇö foto ampliada 236├ù236 (inicialmente oculta)
+
+**Outros m├®todos adicionados:**
+- `GrdDadosDblClick()` ÔÇö duplo-clique no grid navega para Page2
+- `CmdVoltarClick()` ÔÇö retorna ├á Page1 e devolve foco ao grid
+
+**Atualiza├º├Áes em m├®todos existentes:**
+- `InicializarForm()` ÔÇö agora chama `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+- `ConfigurarPaginaLista()` ÔÇö adicionado `BINDEVENT` para `DblClick` no grid
+- `GrdDadosAfterRowColChange()` ÔÇö agora popula os campos de Page2 (`txt_4c_Prod2`, `txt_4c_Descr2`, `img_4c_FigJpg2`) e limpa-os no caminho de sa├¡da antecipada
+
+Fase 6/8 dever├í adicionar a segunda metade dos campos de Page2 (quantidade, cliente, tempo total do envelope).

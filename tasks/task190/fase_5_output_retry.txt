@@ -1,0 +1,16 @@
+﻿Phase 5 is complete. Summary:
+
+**File modified**: `C:\4c\projeto\app\forms\operacionais\FormSigPrGlx.prg` (2299 ÔåÆ 2561 lines)
+
+**Changes made**:
+
+1. **`InicializarForm()` (lines 108, 112-116)** ÔÇö Added call to `THIS.ConfigurarPaginaDados()` and set Page2 header captions ("Opera├º├Áes Detalhadas").
+
+2. **New `ConfigurarPaginaDados()` method (lines 1190-1445)** ÔÇö Configures Page2 with:
+   - **`cnt_4c_Cabecalho`** container (header cinza padr├úo RGB(100,100,100), 800├ù80, com `lbl_4c_Sombra` + `lbl_4c_Titulo`, seguindo o mesmo padr├úo do header da Page1).
+   - **`cnt_4c_InfoProd`** container (painel de informa├º├Áes do produto ativo) com os primeiros 50% dos labels/textboxes complementares da Page2:
+     - Linha 1: `lbl_4c_LblProduto`/`txt_4c_DadosCodProd`, `lbl_4c_LblDescricao`/`txt_4c_DadosDescProd`, `lbl_4c_LblCor`/`txt_4c_DadosCodCor`, `lbl_4c_LblTam`/`txt_4c_DadosCodTam`
+     - Linha 2: `lbl_4c_LblQtdSol`/`txt_4c_DadosQtdSol`, `lbl_4c_LblStatus`/`lbl_4c_DadosStatus`
+   - TRY/CATCH com `MsgErro` verboso (linha + procedure).
+
+M├®todo ├® `PROTECTED PROCEDURE`, sem TODOs/stubs, integrado ao fluxo de `InicializarForm`. Estrutura fecha corretamente em `ENDDEFINE` na linha 2561.

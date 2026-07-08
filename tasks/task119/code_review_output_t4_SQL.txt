@@ -1,0 +1,19 @@
+﻿Ap├│s ler o arquivo completo, verifiquei o ├║nico WHERE com DTBASES no c├│digo migrado:
+
+**Linha 129-131 (SigReIfvBO.prg):**
+```foxpro
+loc_nResult = SQLEXEC(gnConnHandle, ;
+    "SELECT DtBases FROM SigCdBal WHERE DtBases IS NOT NULL", ;
+    "cursor_4c_IfvTmpBal")
+```
+
+**Comparando com o original:**
+```
+If ThisForm.poDataMgr.SqlExecute([Select DtBases From SigCdBal Where Not DtBases Is Null ],'TmpBal') < 1
+```
+
+`WHERE DtBases IS NOT NULL` ├® exatamente equivalente a `Where Not DtBases Is Null` ÔÇö apenas sintaxe SQL diferente para a mesma condi├º├úo. A condi├º├úo **existe no original** e foi migrada corretamente.
+
+**Conclus├úo:** O alerta `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo** do scanner automatizado. O scanner comparou a lista de vari├íveis locais VFP do filtro (`LNTIPO`, `LMARCA`, `EMPS`, etc.) em vez dos WHERE reais do SQL, e n├úo reconheceu que `Where Not DtBases Is Null` e `WHERE DtBases IS NOT NULL` s├úo equivalentes.
+
+**Nenhuma altera├º├úo ├® necess├íria** ÔÇö o c├│digo est├í correto e fiel ao original. Remover o `WHERE DtBases IS NOT NULL` seria um erro: carregaria registros nulos desnecessariamente no cursor `TmpBal`/`cursor_4c_IfvTmpBal`, quebrando a montagem do cursor `CsBases`.

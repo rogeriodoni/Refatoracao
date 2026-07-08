@@ -1,0 +1,5 @@
+﻿Both fixes applied:
+
+- **Line 859 (init)**: Added `.Column1.ControlSource` and `.Column2.ControlSource` immediately after `.RecordSource = "cursor_4c_OpFp"` inside the IF block, overriding VFP's auto-bind before execution continues.
+
+- **Line 2045 (CarregarLista)**: Corrected `ColumnCount` from 3ÔåÆ2 (grid has 2 columns ÔÇö the spurious 3 would have created an unbound Column3) and added explicit ControlSource re-definitions for both columns right after RecordSource assignment.

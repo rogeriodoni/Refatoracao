@@ -1,0 +1,692 @@
+{
+  "resumo": {
+    "totalMetodos": 38,
+    "metodosComSQL": 15,
+    "metodosComValidacao": 14,
+    "totalQueries": 9,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoTitulo", "fBuscarCotacao", "Financeiro Analítico [' + Iif", "fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters lcEDN\n\nLocal lcQuery, lnSaldo\nlcQuery = [select a.empdopnums, sum(e.valos) as valos, sum(e.vpags) as vpags from SigMvCab a ] + ;\n\t\t  [inner join SigMvItn b on b.empdopnums = a.empdopnums ] + ;\n\t\t  [inner join SigCdOpe c on c.dopes = b.dopes ] + ;\t\t  \n\t\t  [inner join SigMvPec d on d.codigos = ] + ;\n\t\t  [cast((rtrim(cast(c.ndopes as char(4))) + replace(right(a.empdopnums, 6), ' ', '0')) as numeric(10, 0)) ] + ;\n\t\t  [inner join SigMvPar e on e.empdopnums = d.empdopnums ] + ;\n\t\t  [where ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chksubn",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFfi To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFfi To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Init",
+      "linhas": 146,
+      "codigoOriginal": "Private pIds\nLocal lcEscape,ImpEmps\n\nm.lcEscape = Set('Escape')\nSet Escape Off\nThisForm.LockScreen = .t.\n\npIds = Replicate(Chr(254), 20)\n\nlcQryGTmpD = [Select * From SigTempR Where cIdQuerys = '] + pIds + [']\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigOpOpe', 'TempSigOpOpe', .f., .f., 'Dopes, Opers, RealPrevs,OpeCancs')\n\n\t\tSelect .f. as SeleOp, Dopes, RealPrevs, Opers ;\n\t\t  From TempSigOpOpe Where O... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoTitulo",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,opt_nr_tipo,opt_situa,opt_ordem_impressao,Grd_Oper,OptOpcoes,option1,option2,option3",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 667,
+      "codigoOriginal": "Private pKey, pDop, pRea, pIds, llPrevs\nLocal lcNmEmpresa, lcNmTitulo, lcNmPeriodo, lcCbEmpresa, ldDtInicial, ldDtFinal, lcCdMoeda, lcDsMoeda, lnNrTipo\nLocal lnOrdImp, lnOpcoes, lcVerEmpresa, lcVerMoeda, lcQuebra, lcCond, lnConsAtra, lnListaAtra\n\nldDtInicial = ThisForm.get_dt_inicial.Value\nldDtFinal   = ThisForm.get_dt_final.Value\nlcCdMoeda   = ThisForm.get_cd_moeda.Value\nlcDsMoeda   = ThisForm.get_ds_moeda.Value\nlnNrTipo    = ThisForm.opt_nr_tipo.Value\nlnNrPrev    = ThisForm.optPrev.Value\nlnNrS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao,Financeiro Analítico [' + Iif,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Commit",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,opt_nr_tipo,optPrev,opt_situa,opt_ordem_impressao,optOpcoes,Opt_Data,OptSaldo,Get_MoeConv,Opt_Consid_Atra,Opt_Lista_Atra,Opt_Lista_op",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFfi Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.DesmarcarOpe",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update crSigOpOpe Set SeleOp = .f.\nGo Top In crSigOpOpe\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.MarcarOpe",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update crSigOpOpe Set SeleOp = .t.\nGo Top In crSigOpOpe\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grd_Oper.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grd_Oper.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal SeleOp\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.SeleOp = (Not CrSigOpOpe.seleop)\n\tSelect CrSigOpOpe\n\tGather Memvar Fields seleop\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grd_Oper.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal SeleOp\nThisForm.LockScreen = .t.\nm.SeleOp = (Not CrSigOpOpe.seleop)\nSelect CrSigOpOpe\nGather Memvar Fields SeleOp\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grd_Oper.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grd_Oper.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI.DesmarcarEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update CEmp Set ImpEmps = .f.\nGo Top In cEmp\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.MarcarEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update CEmp Set ImpEmps = .t.\nGo Top In cEmp\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal ImpEmps\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.ImpEmps = (Not cEmp.ImpEmps)\n\tSelect cEmp\n\tGather Memvar Fields ImpEmps\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal ImpEmps\nThisForm.LockScreen = .t.\nm.ImpEmps = (Not cEmp.ImpEmps)\nSelect cEmp\nGather Memvar Fields ImpEmps\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid1.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI.opt_Lista_Atra",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "If( This.Value = 2 ) \n\tThisForm.opt_Consid_Atra.Value = 2 \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_Consid_Atra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.opt_Consid_Atra",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(ThisForm.Opt_Lista_Atra.Value = 1)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Lista_Atra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal ImpDisps\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.ImpDisps = (Not cDisp.ImpDisps)\n\tSelect cDisp\n\tGather Memvar Fields ImpDisps\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal ImpDisps\nThisForm.LockScreen = .t.\nm.ImpDisps = (Not cDisp.ImpDisps)\nSelect cDisp\nGather Memvar Fields ImpDisps\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Grid2.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFI.DesmarcarDisp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cDisp Set ImpDisps = .f.\nGo Top In cDisp\nThisForm.Grid2.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.MarcarDisp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cDisp Set ImpDisps = .t.\nGo Top In cDisp\nThisForm.Grid2.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Get_MoeConv",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_MoeConv.Value  = crListaRemota.CMoes\n\tThis.Parent.get_DMoeConv.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_MoeConv.Value ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_MoeConv,get_DMoeConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Get_DMoeConv",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_MoeConv.Value  = crListaRemota.CMoes\n\tThis.Parent.get_DMoeconv.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_MoeConv.Value ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_MoeConv,get_DMoeconv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFI.Get_DMoeConv",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_MoeConv.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_MoeConv",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFFI.Procedure",
+      "queryOriginal": "lcQuery = [select a.empdopnums, sum(e.valos) as valos, sum(e.vpags) as vpags from SigMvCab a ] + ; \t\t  [inner join SigMvItn b on b.empdopnums = a.empdopnums ] + ; \t\t  [inner join SigCdOpe c on c.dopes = b.dopes ] + ;\t\t",
+      "tabelas": "SigMvCab,SigMvItn,SigCdOpe",
+      "colunas": "empdopnums,valos),vpags)",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.Init",
+      "queryOriginal": "lcQryGTmpD = [Select * From SigTempR Where cIdQuerys = '] + pIds + [']",
+      "tabelas": "SigTempR",
+      "colunas": "cIdQuerys,pIds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.Init",
+      "queryOriginal": "\t\tSelect .f. as SeleOp, Dopes, RealPrevs, Opers ; \t\t  From TempSigOpOpe Where O... [TRUNCADO]",
+      "tabelas": "TempSigOpOpe",
+      "colunas": "Dopes,RealPrevs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.DesmarcarOpe.Click",
+      "queryOriginal": "Update crSigOpOpe Set SeleOp = .f.",
+      "tabelas": "crSigOpOpe",
+      "colunas": "SeleOp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.MarcarOpe.Click",
+      "queryOriginal": "Update crSigOpOpe Set SeleOp = .t.",
+      "tabelas": "crSigOpOpe",
+      "colunas": "SeleOp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.DesmarcarEmp.Click",
+      "queryOriginal": "Update CEmp Set ImpEmps = .f.",
+      "tabelas": "CEmp",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.MarcarEmp.Click",
+      "queryOriginal": "Update CEmp Set ImpEmps = .t.",
+      "tabelas": "CEmp",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.DesmarcarDisp.Click",
+      "queryOriginal": "Update cDisp Set ImpDisps = .f.",
+      "tabelas": "cDisp",
+      "colunas": "ImpDisps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFI.MarcarDisp.Click",
+      "queryOriginal": "Update cDisp Set ImpDisps = .t.",
+      "tabelas": "cDisp",
+      "colunas": "ImpDisps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCab", "SigMvItn", "SigCdOpe", "SigTempR", "TempSigOpOpe", "crSigOpOpe", "CEmp", "cDisp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

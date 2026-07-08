@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAltBar2de5", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.ImpTotal.Value = 1\n\tReport Form SigReDct Preview NoConsole\nElse\n\tReport Form SigReDc3 Preview NoConsole\nEndIf \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 140,
+      "codigoOriginal": "Create Cursor CsRelatorio (cBars n(14), Cpros c(14), Dpros c(40), Nops n(10), cmats c(14), dMats c(40), qtd1s n(12,3),;\n\t\t\tcUni1s c(3), Peso1s n(12,3), cUnip1s c(3), qtd2s n(12,3), cUni2s c(3), Qtds n(6), Quebras n(10), ;\n\t\t\tpeso2s n(12,3), cunip2s c(3), PesoFs n(12,3), Ordem n(10), cestos c(1), GrupoOs c(10), ContaOs c(10), ;\n\t\t\tRclis c(40), Qtdb n(6), ImpCodBar c(20))\nIndex On Str(Nops,10) + cMats Tag NopMat\nIndex On Str(Quebras,10) + Str(Nops,10) + Str(Ordem,10) + Str(Cbars,14) Tag Nops\n\nlcEd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "pcDopes + Str,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Select CsRelatorio\nGo Top\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum, pImp\n\nThisForm.pcEmps  = pEmp\nThisForm.pcDopes = pDop\nThisForm.pcNumes = pNum\nThisForm.Caption = 'Impressão de Documento (' + Alltrim(pDop) + '/' + Alltrim(Str(pNum)) + ')'\nThisForm.Contaemail = ' '\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\t=DoDefault()\n\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption = 'Impressão de Documento",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDCT",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.ImpTotal.Value = 1\n\tReport Form SigReDct To Printer Prompt NoConsole\nElse\n\tReport Form SigReDc3 To Printer Prompt NoConsole\nEndIf \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT.ImpTotal",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.impCodBarra.Value = 0 \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCT.ImpCodBarra",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ImpTotal.Value = 0 \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

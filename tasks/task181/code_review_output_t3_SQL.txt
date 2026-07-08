@@ -1,0 +1,35 @@
+﻿Analisei todos os 8 casos. Todos s├úo **falsos positivos do validador est├ítico** ÔÇö nenhuma altera├º├úo deve ser feita:
+
+---
+
+## Resultado da verifica├º├úo: 8 falsos positivos
+
+### Casos 7 e 8 ÔÇö `CONTROLCOUNT` e `DISPLAY` (n├úo s├úo SQL)
+
+| Flag | Onde est├í | O que ├® |
+|------|-----------|---------|
+| `CONTROLCOUNT` | Form linhas 188, 195, 212 | Propriedade VFP9 `.ControlCount` num loop `TornarControlesVisiveis` ÔÇö n├úo tem rela├º├úo com SQL |
+| `DISPLAY` | Form linha 368 | Palavra num **coment├írio**: `*-- Column4: Ref.Fornecedor display=DPro2s, edicao=reffs` ÔÇö nunca entra em WHERE |
+
+O validador fez text-match na string "DISPLAY" e "CONTROLCOUNT" sem distinguir contexto SQL vs. c├│digo VFP9.
+
+---
+
+### Casos 1ÔÇô6 ÔÇö WHERE leg├¡timos no BO
+
+Todas essas colunas aparecem em consultas SQL contra tabelas reais, fazendo parte de funcionalidade original do form (n├úo inventada):
+
+| Flag | Linha BO | Query | Justificativa |
+|------|----------|-------|---------------|
+| `EMPDOPNUMS` | 330 | `WHERE EmpDopNums = ` em `SigMvItn` | Chave da movimenta├º├úo (Emp+Dop+Num) ÔÇö INSERT original j├í tinha `empdopnums` |
+| `EAN13` | 487 | `WHERE Ean13 = ` em `SigCdPro` | Leitura de c├│digo de barras EAN13 no grid de etiquetas |
+| `CBARS` | 501 | `WHERE CBars = ` em `SigCdPro` | Leitura por c├│digo de barras alternativo |
+| `DPROS` | 565 | `WHERE DPros = ` em `SigCdPro` | Busca exata por descri├º├úo do produto |
+| `DPRO2S` | 614 | `WHERE Dpro2s = ` em `SigCdPro` | Busca por refer├¬ncia do fornecedor |
+| `DOPES` | 688 | `WHERE Dopes = ` em `SigCdOpe` | Valida├º├úo da opera├º├úo selecionada (txt_4c_Dopes) |
+
+A lista `"WHERE original usa: LNI, NSITUAS..."` fornecida ao validador ├® **parcial** ÔÇö cobre apenas as queries de impressoras/tipos de etiqueta/lista de pre├ºos do SCX original. As sub-queries de lookup de produto e movimenta├º├úo n├úo estavam nesse extrato, mas existem na funcionalidade original.
+
+---
+
+**Nenhuma altera├º├úo nos arquivos.** Remover qualquer dessas condi├º├Áes quebraria lookup de produto por EAN13/barras/descri├º├úo/refer├¬ncia, carregamento por movimenta├º├úo e sele├º├úo de opera├º├úo ÔÇö violando a regra "NAO remover campos, funcionalidades ou lookups".

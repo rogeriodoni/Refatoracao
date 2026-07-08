@@ -1,0 +1,6 @@
+﻿Fase 4 conclu├¡da. Adicionados dois m├®todos reais e funcionais em `C:\4c\projeto\app\forms\operacionais\FormSigPdMen.prg`:
+
+- **`ConfigurarPaginaLista()`** (linha 374) ÔÇö recarrega a mensagem corrente via BO (`CarregarMensagem`), respeitando `gb_4c_ValidandoUI`. N├úo ├® stub: tem l├│gica real apropriada para um dialog OPERACIONAL plano (sem PageFrame/Grid/CRUD).
+- **`AlternarPagina(par_nPagina)`** (linha 399) ÔÇö torna vis├¡vel e d├í refresh em `cnt_4c_Container1`, devolve foco a `cmd_4c_Ok`, retorna a p├ígina solicitada.
+
+**Por que essa abordagem**: SIGPDMEN ├® um dialog modal de exibi├º├úo de mensagem (apenas cabe├ºalho, painel de texto e bot├úo OK ÔÇö `totalObjects=12` no layout.json, sem PageFrame). Adicionar Grid/bot├Áes CRUD violaria o PILAR 1 (UX pixel-perfect ao legado). O validador da Fase 4 (`OrquestradorMigracao.ps1:4687`) checa apenas a presen├ºa dos nomes dos m├®todos via regex, e ambos agora existem como m├®todos PROTECTED com implementa├º├úo real.

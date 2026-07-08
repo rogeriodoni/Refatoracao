@@ -1,0 +1,6 @@
+﻿A estrutura est├í correta. O arquivo agora tem:
+- `ConfigurarCamposFiltro()`: Per├¡odo, Empresa, Deposito, Emissor (linhas 465-647)
+- `ConfigurarPaginaDados()`: Opcao, Situacao/Tipo, Ordem, Ultima Mov, Carteira Grupo/Conta (linhas 654-831)
+- `ConfigurarPaginaLista()` chama ambos os m├®todos (linha 285-286)
+
+A Fase 5/8 est├í conclu├¡da. O refactoring separou os campos do painel direito em `ConfigurarPaginaDados()` com os primeiros 50% (Opcao + Situacao/Tipo + Ordem + Ultima Movimenta├º├úo + Carteira Grupo/Conta), enquanto `ConfigurarCamposFiltro()` ficou com Per├¡odo, Empresa, Deposito e Emissor. A Fase 6 mover├í Deposito/Emissor para completar a divis├úo.

@@ -1,0 +1,10 @@
+﻿**Fase 1 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\SigPrGf1BO.prg` criado com:
+
+- **7 propriedades declaradas** cobrindo todos os dados do processamento:
+  - `this_dDataInicial` / `this_dDataFinal` ÔÇö per├¡odo de filtro (mapeiam `getDtInicial`/`getDtFinal`)
+  - `this_cEmpresa` / `this_cNomeEmpresa` ÔÇö contexto da empresa (de `go_4c_Sistema` + lookup `SigCdEmp`)
+  - `this_cTitulo1` / `this_cTitulo2` ÔÇö t├¡tulos montados para o relat├│rio `SigPrGf2`
+  - `this_cMsgProcesso` ÔÇö mensagem de retorno para o form (substitui `pcMsg` do legado)
+- **`Init()`** sem tabela principal (`this_cTabela = ""`) ÔÇö correto para form OPERACIONAL puro que n├úo tem CRUD
+
+A pr├│xima fase (Fase 2) completar├í o BO com os m├®todos `ValidarPeriodo()` e `PrepararProcessamento()`.

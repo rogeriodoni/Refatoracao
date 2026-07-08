@@ -1,0 +1,12 @@
+﻿Fase 2 completa. O arquivo `C:\4c\projeto\app\classes\sigrecorBO.prg` agora tem 747 linhas, com `ENDDEFINE` na linha 747 e cont├®m todos os m├®todos esperados pelo validador:
+
+**M├®todos adicionados nesta fase:**
+- `CarregarDoCursor(par_cAliasCursor)` (linha 86) ÔÇö Restaura filtros do relat├│rio a partir de cursor salvo, mapeando todas as 12 propriedades (datas, moeda, grupo/conta de estoque, op├º├Áes).
+- `Inserir()` (linha 156) ÔÇö Registra execu├º├úo do relat├│rio em LogAuditoria via `RegistrarAuditoria("REPORT_RUN")`.
+- `Atualizar()` (linha 181) ÔÇö Registra reexecu├º├úo em LogAuditoria via `RegistrarAuditoria("REPORT_RERUN")`.
+- `ObterChavePrimaria()` ÔÇö Atualizado para retornar chave l├│gica composta com tabela + filtros (data inicial/final, moeda, grupo, conta, e 4 op├º├Áes).
+
+**M├®todos j├í presentes (mantidos):**
+- `PrepararDados()` ÔÇö L├│gica completa do `processamento` legado: query em `SigCdCmm`, SCAN com sub-queries em `SigMvCab`/`SigCdCli`/`SigCdOpe`, processamento de pendente de pagamento, p├│s-processamento de NFs em `SigMvPec`/`SigMvNfi`, filtros SNA.
+- `Imprimir()` / `Visualizar()` ÔÇö Despacham para `REPORT FORM PRINTER`/`PREVIEW` com sele├º├úo din├ómica do FRX (`SigReCr1`/`SigReCr2`/`SigReCr3`/`SigReCr4`/`SigReCr6`/`SigReCr11`).
+- `BuscarCotacao()` ÔÇö Busca cota├º├úo mais recente em `SigCdCot`.

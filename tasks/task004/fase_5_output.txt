@@ -1,0 +1,25 @@
+﻿Phase 6 is complete. Here's what was added:
+
+**ConfigurarPaginaDados() ÔÇö right movement area (Shape2):**
+- `shp_4c_Shape2` ÔÇö border (top=253, left=504, width=485, height=117)
+- `lbl_4c_MovimentoS` + `lbl_4c_DCS` ÔÇö labels "Movimento :" and "[D/C]"
+- `txt_4c_SOper` (top=260, left=607, width=15) + BINDEVENT SOperKeyPress
+- `lbl_4c_GrupoS` + `txt_4c_SGrupo` + `txt_4c_SDGrupo` (ReadOnly) + BINDEVENT SGrupoKeyPress
+- `lbl_4c_ContaS` + `txt_4c_SConta` + `txt_4c_SDConta` (ReadOnly) + BINDEVENT SContaKeyPress
+- `lbl_4c_ValorS` + `txt_4c_SValor` + BINDEVENT SValorKeyPress
+- `txt_4c_SMoeda` + BINDEVENT SMoedaKeyPress
+- `lbl_4c_CambioS` + `txt_4c_SCotacao` + BINDEVENT SCotacaoKeyPress
+- `cmd_4c_AlterasCotacao` ("$") + BINDEVENT BtnAlterasCotacaoClick
+
+**ConfigurarPaginaDados() ÔÇö hist├│rico area (Shape6):**
+- `shp_4c_Shape6` ÔÇö border (top=379, left=9, width=980, height=39)
+- `lbl_4c_Historico` + `txt_4c_Hist` (width=300) + `txt_4c_Hist2` (left=415, width=300)
+- `lbl_4c_LancarContas` + `opt_4c_LancarContas` (OptionGroup, Sim=1/N├úo=2, default=1)
+
+**BOParaForm():** now populates `opt_4c_LancarContas.Value` from `this_nContaPgs`
+
+**LimparCampos():** now resets `opt_4c_LancarContas.Value = 1`
+
+**New methods:** `SOperKeyPress`, `SGrupoKeyPress`, `SContaKeyPress`, `SValorKeyPress`, `SMoedaKeyPress`, `SCotacaoKeyPress`, `BtnAlterasCotacaoClick`
+
+The PEMSTATUS guards in `FormParaBO`, `BOParaForm`, and `LimparCampos` from Phase 5 now evaluate to `.T.` since all those controls exist ÔÇö no more stub guards needed.

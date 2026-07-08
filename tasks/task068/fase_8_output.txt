@@ -1,0 +1,17 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**Formsigrecrt.prg** ÔÇö j├í estava completo das fases anteriores com todos os m├®todos necess├írios:
+- `FormParaRelatorio()` com **todos** os 20 campos mapeados
+- `LimparCampos()` com **todos** os campos resetados
+- `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnExcelClick()`, `BtnCancelarClick()`
+- `BtnIncluirClick()` (ÔåÆ Visualizar), `BtnAlterarClick()` (ÔåÆ LimparCampos), `BtnExcluirClick()` (ÔåÆ Encerrar)
+- Todos os lookups (`AbrirLookupEmpresa`, `AbrirLookupGrupo`, `AbrirLookupConta`)
+- Todos os handlers `Tecla*` e `DblClick*`
+- `Destroy()`, `AtualizarEstadoControles()`, `AlternarPagina()`
+
+**menu.prg** ÔÇö integra├º├úo adicionada:
+- BAR 78 (separador) e BAR 79 ("Cheques da Carteira") em `popRelatorios`
+- `ON SELECTION BAR 79 OF popRelatorios DO AbrirFormsigrecrt`
+- `PROCEDURE AbrirFormsigrecrt()` no padr├úo can├┤nico do sistema
+
+**config.prg** ÔÇö n├úo precisou de modifica├º├úo: o ADIR() din├ómico j├í carrega automaticamente `sigrecrtBO.prg` (classes/) e `Formsigrecrt.prg` (forms/relatorios/).

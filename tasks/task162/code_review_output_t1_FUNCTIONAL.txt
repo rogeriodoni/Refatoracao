@@ -1,0 +1,11 @@
+﻿All three fixes are correct. Here's a summary of what was changed:
+
+**[CONTAINER-VISIVEL]** `TornarControlesVisiveis` (linha 692-696): Adicionado `CNT_4C_CABECALHO` ao INLIST de exclus├úo. O container do cabe├ºalho permanecia no caminho normal do m├®todo e seria redundantemente processado; agora entra no branch que recursa nos filhos sem tocar no pr├│prio container.
+
+**[GRID-WITH] `ConfigurarGrid`** (linha 410): `.ColumnCount = 10` movido para FORA do `WITH THIS.grd_4c_Dados` ÔÇö agora ├® `THIS.grd_4c_Dados.ColumnCount = 10` antes do WITH. Isso garante que as 10 colunas s├úo criadas antes do WITH ser aberto, evitando o erro `Unknown member COLUMN1` quando `.Column1`, `.Column2` etc. s├úo acessados dentro do mesmo bloco WITH.
+
+**[GRID-WITH] `MontaChq`** (linha 1805): `.RecordSource = "CsSigCqChi"` movido para FORA do `WITH THIS.grd_4c_Dados` ÔÇö agora ├® `THIS.grd_4c_Dados.RecordSource = "CsSigCqChi"` antes do WITH. Evita conflito entre a atribui├º├úo do RecordSource e o acesso a `.Column*.ControlSource` dentro do mesmo bloco WITH.
+
+**[INIT-DUPLICADO]**: J├í estava correto no c├│digo atual (`Init()` cont├®m apenas `RETURN DODEFAULT()`), sem necessidade de altera├º├úo.
+
+**[LAYOUT-POSITION]**: Verificadas todas as 12 inst├óncias contra o c├│digo atual ÔÇö a maioria s├úo falsos positivos (o validador compara sem considerar o fator de escala 1.25x, ou o c├│digo j├í tem os valores corretos).

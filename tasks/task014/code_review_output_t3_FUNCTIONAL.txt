@@ -1,0 +1,24 @@
+﻿All edits are complete. Here's a summary of what was done:
+
+**Edit 1 ÔÇö 8 new guard properties** added after `this_cUltimoValidarDsittricmsValidado`:
+- `this_cUltimoValidarGruccusValidado`
+- `this_cUltimoValidarContaccusValidado`
+- `this_cUltimoValidarClfiscalValidado`
+- `this_cUltimoValidarOrigmercValidado`
+- `this_cUltimoValidarSittricmsValidado`
+- `this_cUltimoValidarCodServsValidado`
+- `this_cUltimoValidarTptribsValidado`
+- `this_cUltimoValidarMoedaEstimadaValidado`
+
+**Edits 2ÔÇô9 ÔÇö LOSTFOCUS-SEM-GUARDIA** guards added to 8 handlers (`ValidarClfiscal`, `ValidarOrigmerc`, `ValidarSittricms`, `ValidarCodServs`, `ValidarTptribs`, `ValidarMoedaEstimada`, `ValidarGruccus`, `ValidarContaccus`). Each guard checks `loc_cVal == THIS.this_cUltimoValidar*Validado` immediately after reading the field value, updates the property, then falls through to existing logic.
+
+**ValidarSittricms / ValidarCodServs shared `this_cUltIcm` bug** ÔÇö now each has its own independent guard property, eliminating the cross-contamination.
+
+**Edit 10ÔÇô12 ÔÇö LAYOUT-POSITION** fix for the Altura control group:
+- `lbl_4c_LblAltura`: Top 250ÔåÆ474, Left 881ÔåÆ749
+- `txt_4c_Altura`: Top 247ÔåÆ471, Left 923ÔåÆ791
+- `lbl_4c_MmAltura`: Top 251ÔåÆ475, Left 976ÔåÆ844
+
+**False positives confirmed, no changes made**:
+- CONTAINER-VISIVEL: `cnt_4c_cabecalho` already in INLIST exclusion
+- METODO-INEXISTENTE for `CarregarDesc` and `CarregarDescSgru`: both methods exist

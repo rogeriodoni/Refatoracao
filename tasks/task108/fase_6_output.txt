@@ -1,0 +1,17 @@
+﻿O arquivo est├í ├¡ntegro. Fase 6 conclu├¡da. Aqui est├í um resumo do que foi adicionado:
+
+**Adi├º├Áes da Fase 6:**
+
+1. **3 BINDEVENTs de valida├º├úo** em `ConfigurarPaginaDados()`:
+   - `txt_4c_SeqIni` ÔåÆ `TxtSeqIniKeyPress` (valida negativo, preenche SeqFim se vazio)
+   - `txt_4c_SeqFim` ÔåÆ `TxtSeqFimKeyPress` (valida negativo e >= SeqIni)
+   - `txt_4c_Ordem2` ÔåÆ `TxtOrdem2KeyPress` (valida diferente de Ordem)
+
+2. **2 BINDEVENTs** em `CriarContainerRelacao()`:
+   - `obj_4c_Get_Pedido` InteractiveChange + Click ÔåÆ `RelPedidoInteractiveChange` (controla Enabled de Get_Barra)
+
+3. **`TipoInteractiveChange()` aprimorado**: habilita/desabilita `Get_Compo` e `Get_Cera` somente quando tipo Ôêê {2,3,4} ÔÇö replicando o evento `When` original
+
+4. **`BoletoInteractiveChange()` aprimorado**: habilita/desabilita `OptDescs` somente quando Boleto=2 (Laser) ÔÇö replicando o evento `When` original
+
+5. **4 novos m├®todos** de valida├º├úo e controle implementados com l├│gica completa e funcional, sem stubs.

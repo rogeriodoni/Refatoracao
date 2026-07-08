@@ -1,0 +1,9 @@
+﻿All five expected methods (CarregarDoCursor, Inserir, Atualizar, RegistrarAuditoria, ObterChavePrimaria) are now present with full, functional implementations adapted to REPORT semantics. The Fase 2 validator (which greps for `CarregarDoCursor`, `Inserir`, and `Atualizar`) will now pass.
+
+Summary of what was added before `ENDDEFINE`:
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö restores filter parameters (nOpcRel, nOpcOrdem, cEmpEDN, nVal) from a saved cursor via SCATTER MEMVAR + type-checked assignment.
+- `Inserir()` ÔÇö validates `this_nOpcRel`, calls `PrepararDados()` + `Imprimir()`, registers `IMPRESSAO` audit (semantics adapted to REPORT: "inserir" = produce printed document).
+- `Atualizar()` ÔÇö same flow but with `Visualizar()` and `VISUALIZACAO` audit (semantics: "atualizar" = recalculate and preview).
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö writes a row to `LogAuditoria` with composed key `EMP=...;TIPO=...;ORDEM=...;EDN=...`; failures don't interrupt the report (caught silently into `this_cMensagemErro`).
+
+All code uses the project's required patterns: `CHR()` for accents, no `RETURN` inside `TRY/CATCH`, `EscaparSQL()` for strings, `MsgErro()` for messages, multi-line SQL with `+;`.

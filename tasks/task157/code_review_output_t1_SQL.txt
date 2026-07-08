@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+**PKCHAVES** (real ÔÇö corrigido): Removido o bloco `IF !EMPTY(par_cPkChavesAtual) ... AND pkchaves <> ...` do SQL em `ValidarCaracteristicaDuplicada`. O WHERE agora usa apenas `CODIGOS` e `CPROS`, alinhado com o original. A assinatura do m├®todo foi mantida para n├úo quebrar os callers no Form (linhas 713 e 804).
+
+**CONTROLCOUNT** (falso positivo ÔÇö sem altera├º├úo): As ocorr├¬ncias de `ControlCount` em FormSigPrCar.prg (linhas 218 e 233) s├úo acessos ├á propriedade VFP OOP `par_oContainer.ControlCount` no m├®todo `TornarControlesVisiveis`, n├úo colunas SQL em cl├íusula WHERE. O c├│digo est├í correto.

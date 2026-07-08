@@ -1,0 +1,15 @@
+﻿Confirmado. Agora tenho clareza total sobre os dois problemas detectados. Vou analisar:
+
+**CEMPS** (linhas 519, 965): `WHERE Cemps = EscaparSQL(...)` ÔÇö query auxiliar de lookup contra `SigCdEmp` para validar o campo empresa do formul├írio.
+
+**RAZAS** (linha 998): `WHERE Razas LIKE EscaparSQL(...)` ÔÇö query auxiliar de lookup por nome da empresa.
+
+Ambas usam **colunas v├ílidas da tabela `SigCdEmp`** ÔÇö confirmado em `SigReAacBO.prg`, `SIGREADSBO.prg` e `SIGREAEGBO.prg` que usam o mesmo padr├úo. S├úo queries de **valida├º├úo de campo UI**, n├úo filtros inventados nas queries principais do relat├│rio.
+
+**Conclus├úo: falso positivo do validador.** O detector compara TODOS os `WHERE` do arquivo migrado contra as colunas do `WHERE` original das queries do relat├│rio ÔÇö mas `CEMPS` e `RAZAS` est├úo em m├®todos auxiliares (`ValidarCdEmpresa`, `ValidarDsEmpresa`, `LimparCampos`) que fazem lookup em `SigCdEmp`, tabela padr├úo do sistema para empresas. Esses lookups:
+
+1. Usam tabela real (`SigCdEmp`) com colunas reais (`cEmps`/`Cemps` + `Razas`)
+2. Existem em pelo menos 3 outros BOs do sistema com o mesmo padr├úo
+3. Servem ao campo `txt_4c_CdEmpresa` / `txt_4c_DsEmpresa` ÔÇö que existe porque o relat├│rio filtra por `emps` nas queries principais
+
+**Nenhuma altera├º├úo necess├íria no arquivo.** As condi├º├Áes `WHERE Cemps = ...` e `WHERE Razas LIKE ...` s├úo corretas e n├úo devem ser removidas. O `Formsigrefc1.prg` est├í correto nestes pontos.

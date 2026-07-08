@@ -1,0 +1,8 @@
+﻿**Nenhuma corre├º├úo necess├íria.**
+
+O problema detectado `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo** do scanner. O `CONTROLCOUNT` encontrado nos arquivos n├úo est├í em nenhuma cl├íusula SQL WHERE ÔÇö aparece em duas linhas do m├®todo `TornarControlesVisiveis()` como a propriedade VFP9 `.ControlCount` de container, usada para iterar controles do form:
+
+- Linha 286: `FOR loc_nI = 1 TO loc_oConteiner.ControlCount`  
+- Linha 292: `IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0`
+
+Ambas s├úo c├│digo VFP9 leg├¡timo, completamente separadas de qualquer SQL. Os arquivos `FormSigPrDsc.prg` e `SigPrDscBO.prg` est├úo corretos e n├úo precisam de altera├º├úo neste pass.

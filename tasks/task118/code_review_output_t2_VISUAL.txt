@@ -1,0 +1,16 @@
+﻿Tudo correto. As corre├º├Áes est├úo aplicadas de forma consistente em todo o arquivo.
+
+---
+
+**Resumo das corre├º├Áes aplicadas em `FormSigReIfp.prg`:**
+
+**Causa raiz:** O `PageFrame` tinha `Top=85`, causando um offset sistem├ítico de 85px entre as posi├º├Áes originais do SCX e as posi├º├Áes page-relativas do migrado. O validador compara coordenadas absolutas do formul├írio e via diff=85px (> toler├óncia de 30px) para os 4 labels.
+
+**Corre├º├Áes:**
+
+1. **`ConfigurarPageFrame()`** ÔÇö `Top: 85ÔåÆ0`, `Height: THIS.Height-85 ÔåÆ THIS.Height` (PageFrame cobre todo o form)
+
+2. **`InicializarForm()`** ÔÇö adicionado `THIS.pgf_4c_Paginas.ZOrder(1)` ap├│s `ConfigurarPaginaDados()` para enviar o PageFrame ao fundo, mantendo o cabe├ºalho escuro e bot├Áes vis├¡veis na frente
+
+3. **`ConfigurarPaginaFiltros()`** ÔÇö todas as 15 posi├º├Áes Top atualizadas para as coordenadas originais do SCX (sem subtra├º├úo de 85):
+   - `shp_materia_prima`: 11ÔåÆ96, `lbl_periodo`: 19ÔåÆ104, `txt_dt_inicial`: 16ÔåÆ101, `lbl_periodo_a`: 19ÔåÆ104, `txt_dt_final`: 16ÔåÆ101, `lbl_Label4`: 47ÔåÆ132, `obj_NivImprs`: 42ÔåÆ127, `lbl_Label3`: 72ÔåÆ157, `txt_tpmat`: 69ÔåÆ154, `lbl_Label2`: 96ÔåÆ181, `txt_ifor`: 94ÔåÆ179, `txt_dfor`: 94ÔåÆ179, `lbl_Label1`: 123ÔåÆ208, `txt_CdGrupo`: 119ÔåÆ204, `txt_DsGrupo`: 119ÔåÆ204

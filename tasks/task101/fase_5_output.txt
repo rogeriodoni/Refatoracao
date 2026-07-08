@@ -1,0 +1,15 @@
+﻿All 4 edits are in place and correct. FASE 6/8 is complete. Here's what was added:
+
+**ConfigurarPaginaDados() extended with 6 new option groups + 6 labels:**
+- `obj_4c_Opt_opcoes` ÔÇö Op├º├Áes NF: Sim/N├úo/Ambos (Value=3), label `lbl_4c_OpcoesSay`
+- `obj_4c_Opt_prev` ÔÇö Previsto: Sim/N├úo/Ambos (Value=3), label `lbl_4c_Previsto`
+- `obj_4c_Opt_lista_atra` ÔÇö Listar Atrasos: Sim/N├úo (Value=1), label `lbl_4c_ListaAtrasos` + BINDEVENT InteractiveChange ÔåÆ `OptListaAtraChange`
+- `obj_4c_Opt_consid_atra` ÔÇö Considerar Atrasos: Sim/N├úo (Value=2), label `lbl_4c_ConsidAtrasos`
+- `obj_4c_Opt_lista_op` ÔÇö Listar C├│d. Opera├º├úo: Sim/N├úo (Value=2), label `lbl_4c_ListaCodOp`
+- `obj_4c_Opt_saldo` ÔÇö Saldo: Anterior/Na Data (Value=1), label `lbl_4c_Saldo`
+
+**LimparCampos()** ÔÇö now resets all 10 Phase 5 fields + 6 Phase 6 fields (including `Enabled=.T.` on `obj_4c_Opt_consid_atra`)
+
+**FormParaRelatorio()** ÔÇö now maps all 15 BO properties: `this_nOpcoes`, `this_nNrPrev`, `this_nListaAtra`, `this_nConsAtra`, `this_nListaCodOp`, `this_nSaldos` added to the existing 9
+
+**OptListaAtraChange()** ÔÇö PUBLIC method (required for BINDEVENT); when Listar Atrasos = N├úo (Value=2): sets `obj_4c_Opt_consid_atra.Enabled=.F.` and `Value=2`; when Sim: re-enables it

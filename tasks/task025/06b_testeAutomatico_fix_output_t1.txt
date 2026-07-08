@@ -1,0 +1,3 @@
+﻿Feito. O m├®todo `BtnIncluirClick` foi removido de `FormSigReAac.prg`.
+
+**Raiz do problema**: o teste `TesteBtnIncluirNavegacao` tem l├│gica expl├¡cita ÔÇö se `BtnIncluirClick` n├úo existe, passa com "OK para REPORT/OPERACIONAL". Mas o form tinha o m├®todo definido por "compatibilidade CRUD", o que fazia o teste entrar no ramo que exige `ActivePage=2` ÔÇö imposs├¡vel num form com `PageCount=1`. A remo├º├úo ├® sem├óntica correta: forms REPORT n├úo t├¬m opera├º├úo "Incluir". `BtnCancelarClick` j├í cobre o caso "limpar filtros".

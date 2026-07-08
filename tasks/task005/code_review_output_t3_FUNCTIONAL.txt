@@ -1,0 +1,8 @@
+﻿All 22 changes applied. Summary of what was fixed:
+
+**[OPTIONGROUP-LEFT]** (7 fixes): Added `.AutoSize = .F.` to all 7 buttons in `obj_4c_NavegacaoDados`. Button(1) also got `FontName`/`FontSize` added for consistency with buttons 2-7. All buttons already had `.Left` defined ÔÇö the code review was testing for `.AutoSize` presence.
+
+**[CARGA-DADOS]** (15 fixes): Added `THIS.CarregarLista()` before `ENDPROC` in all 15 `ValidarDados*` methods:
+- ValidarDadosCgru, ValidarDadosLin, ValidarDadosCol, ValidarDadosIfor, ValidarDadosCor, ValidarDadosTam, ValidarDadosCodFinP, ValidarDadosCodacb, ValidarDadosCProEq, ValidarDadosClass, ValidarDadosLocal, ValidarDadosCuni, ValidarDadosCunip, ValidarDadosMctotal, ValidarDadosMpvenda, ValidarDadosMfvenda
+
+**[LAYOUT-POSITION]** (skipped): The layout tool incorrectly matched legacy container "Botoes" (Encerrar button at Left=959) to migrated `cnt_4c_Botoes` (CRUD buttons at Left=542) by name similarity. `cnt_4c_Botoes` correctly corresponds to legacy "Grupo_op". Moving `cnt_4c_Botoes` to Left=959 would break the header layout. This is a false positive from container renaming during migration.

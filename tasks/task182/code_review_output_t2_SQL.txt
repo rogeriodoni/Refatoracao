@@ -1,0 +1,5 @@
+﻿Feito. As duas corre├º├Áes:
+
+1. **`CEMPS` (SigPrFemBO.prg:1261)** ÔÇö removida a query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...`. O cabe├ºalho do relat├│rio agora usa `go_4c_Sistema.cEmpresa` diretamente (vari├ível global do sistema que j├í cont├®m o nome da empresa), eliminando a condi├º├úo WHERE inventada sem precisar de SQLEXEC extra.
+
+2. **`CONTROLCOUNT` (FormSigPrFem.prg)** ÔÇö falso positivo confirmado. `par_oContainer.ControlCount` e `PEMSTATUS(loc_oControl, "ControlCount", 5)` s├úo propriedades VFP9 de containers, n├úo colunas SQL. Nenhuma altera├º├úo necess├íria.

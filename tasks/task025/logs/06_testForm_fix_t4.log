@@ -1,0 +1,21 @@
+[2026-05-15 20:30:58] [INFO] === CLAUDE CLI INVOKER ===
+[2026-05-15 20:30:58] [INFO] Prompt File: C:\4c\tasks\task025\runtime_fix_prompt_06_testForm_t4.md
+[2026-05-15 20:30:58] [INFO] Output File: C:\4c\tasks\task025\06_testForm_fix_output_t4.txt
+[2026-05-15 20:30:58] [INFO] Model: sonnet
+[2026-05-15 20:30:58] [INFO] Timeout: 3600 segundos
+[2026-05-15 20:30:58] [INFO] Max Output Tokens: 128000
+[2026-05-15 20:30:58] [INFO] Context Files: 0 arquivo(s)
+[2026-05-15 20:30:58] [INFO] Invocando Claude CLI...
+[2026-05-15 20:30:58] [INFO] Prompt carregado: 87496 caracteres
+[2026-05-15 20:30:58] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-05-15 20:30:58] [INFO] Tamanho total do prompt: 87496 caracteres
+[2026-05-15 20:30:58] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-05-15 20:37:49] [INFO] Claude CLI finalizado em 410.7316012 segundos
+[2026-05-15 20:37:49] [INFO] Exit Code: 0
+[2026-05-15 20:37:49] [INFO] Output salvo em: C:\4c\tasks\task025\06_testForm_fix_output_t4.txt
+[2026-05-15 20:37:49] [INFO] Output size: 982 bytes
+[2026-05-15 20:37:49] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-05-15 20:37:49] [INFO] Preview do output:
+[2026-05-15 20:37:49] [INFO] **Fix aplicado.** Resumo:
+
+**Causa:** `InicializarForm()` chamava `THIS.Visible = .T.` no final. Como o form tem `WindowType = 1` (modal), essa linha fazia VFP exibir o form e bloquear aguardando intera+º+úo do usu+írio. O TestFormWrapper (que usa `CREATEOBJECT()` internamente) ficava travado para sempre ÔÇö at+® o PowerShell matar o processo ap+¦s 300s. A +¦ltima mensagem vis+¡vel no log era "[ETAPA 1B] Conectando ao banco de dados..." porque o "OK" da etapa seguinte nunca foi gravado antes d

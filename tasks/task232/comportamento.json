@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "lnOldSele = Select()\n\nThisForm.Grade.RecordSource = []\n\nSelect csGrade\nZap in csGrade\n\nThisForm.Grade.Refresh \n\nThisForm.GetPlanilha.Value = []\nThisForm.GetPlanilha.Refresh\n\nSelect(lnOldSele)\nReturn .T.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "lnOldSele = Select()\n\nThisForm.Grade.RecordSource = []\n\nSelect csGrade\nGo top\nThisForm.Grade.RecordSource = [csGrade]\nThisForm.Grade.Column1.ControlSource = [csGrade.skuid]\nThisForm.Grade.Column2.ControlSource = [csGrade.nomesku]\nThisForm.Grade.Column3.ControlSource = [csGrade.skuativo]\nThisForm.Grade.Column4.ControlSource = [csGrade.refsku]\nThisForm.Grade.Refresh \n\nSelect(lnOldSele)\nReturn .T.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "Local lcArquivo, lnErro1, llImp, llRecno\n\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlcArquivo = ThisForm.GetPlanilha.Value \n\nIf Empty(lcArquivo)\n\tMessageBox([Planilha não Informada.],0+64,[Atenção])\n\tReturn .F.\nEndIf \n\nIf Used([Planilha])\n\tuse in Planilha\nEndIf \n\nSelect csGrade\nZap in csGrade\n\nllRecno = .T.\nIf Not ImpExcelDriver(lcArquivo)\n\tllRecno = .F.\nEndIf \n\nIf Not llRecno \n\tMessageBox([Não Foi Possível Criar o Cursor Temporário.]+Chr(13)+[Verifique Se a Planilha Não Esta Em Uso Por Outro Proce... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "Montagrade",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.poDataMgr.AddCursor('SigPrVtx','cIdChaves','crSigPrVtx')\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\t\nEndWith \n\nThisForm.poDataMgr.SqlExecute([Select * From SigCdPac],[crSigCdPac])\nThisForm.SigKey = CrSigCdP... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "SqlExecute,MontaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "KeyPress",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nIf nKeyCode = 27\n\tthisform.grupo_Botao.cmdsair.Click\nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csGrade (nomesku c(100),refsku c(40),skuativo c(3),skuid c(10))\n\nSelect csGrade\nindex on skuid tag skuid\nGo Top \n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.podatamgr.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nSelect csGrade\nGo Top\n\nIf Reccount([csGrade])=0\n\tMessagebox([Nenhum Registro para Atualização.],0+64,[Atenção])\n\tReturn .F.\nEndif\n\nlnResp=Messagebox([Deseja Atualizar as informações.],4+32,[Atenção])\nIf lnResp<>6\n\tReturn .F.\nEndif\n\nSelect crSigPrVtx\nZap in crSigPrVtx\n\nlcDelete = [Delete From SigPrVtx]\nIf Thisform.poDataMgr.SqlExecute(lcDelete) < 1\n\tMessageBox([Favor reiniciar o Processo.],0+16,[Falha na conexão (Delete - 1)])\n\tReturn .F.\nEndIf \n\nThisForm.poDat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Commit,Update,Rollback,LimpaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.GetPlanilha",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.cmdgetp",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.GetPlanilha.Value = GetFile('xls','Planilha','Importar')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = GetFile",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.cmdProcessar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "=ThisForm.Processamento()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRVTX.cmdLimpar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.LimpaGrade()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LimpaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRVTX.Init",
+      "queryOriginal": "ThisForm.poDataMgr.SqlExecute([Select * From SigCdPac],[crSigCdPac])",
+      "tabelas": "SigCdPac",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRVTX.Grupo_Botao.Click",
+      "queryOriginal": "lcDelete = [Delete From SigPrVtx]",
+      "tabelas": "SigPrVtx",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPac", "SigPrVtx"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

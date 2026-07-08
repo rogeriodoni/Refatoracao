@@ -1,0 +1,27 @@
+﻿Phase 6 is complete. Here's a summary of what was done:
+
+**Phase 6 completed** ÔÇö 3828 lines total (up from 2600):
+
+**FormProduto.prg changes:**
+1. **ConfigurarPgDados()** extended with 77 new controls (form-abs Top 335ÔÇô578 ÔåÆ code Top 418ÔÇô661):
+   - Comprimento (txt_4c_Compriment + labels)
+   - Acabamento (txt_4c__codacb lookup + txt_4c__Dacb readonly + Peso Liquido txt_4c_Pmedio)
+   - Estoque (txt_4c_Estoques + txt_4c_QtdEsts readonly + cmd_4c_CmdEstoque)
+   - Classifica├º├úo (txt_4c_Class lookup + txt_4c_DClass readonly) + Local (txt_4c_Local)
+   - Custo/Venda (txt_4c_Ctotal, txt_4c_Mctotal, txt_4c_Pvenda, txt_4c_Mpvenda, txt_4c_Fvenda, txt_4c_Mfvenda ÔÇö all readonly)
+   - Unidades 1+2 (txt_4c_Cuni/Duni + txt_4c_Cunip/dunip lookups)
+   - Datas inclus├úo/altera├º├úo + usu├írios (all readonly)
+   - Cod.Identidade (txt_4c_CodIdent), Separators (shp_4c_Shape1/3)
+   - EditBoxes: edt_4c_DscCompras, edt_4c_DPro3s, edt_4c_ObsCompras
+   - CheckBoxes: chk_4c_Get_Consig, chk_4c_ChkFabrProprs, chk_4c_ChkEncoms
+   - Dimensions/Volumes: txt_4c_Fwget3/4/5/6 with labels
+   - Images: img_4c_ImgFigJpg, img_4c_ImgFigTec + shapes
+   - Action buttons: cmd_4c_CmdgFigCam, cmd_4c_CmdZoom, cmd_4c_CmdgFigura, cmd_4c_Commandgroup1/2
+2. **TornarControlesVisiveis** ÔÇö added `edt_`, `shp_`, `img_` prefix handling
+3. **BOParaForm/FormParaBO/LimparCampos/HabilitarCampos** ÔÇö all extended with 34 Phase 6 fields
+4. **4 new lookup method pairs**: KeyPressAcabamento/AbrirLookupAcabamento (SigCdAca), KeyPressClassificacao/AbrirLookupClassificacao (SIGCDCLS), KeyPressUnidade/AbrirLookupUnidade (SigCdUni), KeyPressUnidade2/AbrirLookupUnidade2 (SigCdUni)
+
+**ProdutoBO.prg changes:**
+- Header updated (SigPrFtp ÔåÆ SigCdPro, cpros PK)
+- `Init()` now sets `this_cTabela = "SigCdPro"` and `this_cCampoChave = "cpros"`
+- Added 60+ properties covering all pgDados fields (Phases 5+6)

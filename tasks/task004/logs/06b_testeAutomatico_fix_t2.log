@@ -1,0 +1,21 @@
+[2026-04-09 12:49:48] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-09 12:49:48] [INFO] Prompt File: C:\4c\tasks\task004\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-04-09 12:49:48] [INFO] Output File: C:\4c\tasks\task004\06b_testeAutomatico_fix_output_t2.txt
+[2026-04-09 12:49:48] [INFO] Model: sonnet
+[2026-04-09 12:49:48] [INFO] Timeout: 3600 segundos
+[2026-04-09 12:49:48] [INFO] Max Output Tokens: 128000
+[2026-04-09 12:49:48] [INFO] Context Files: 0 arquivo(s)
+[2026-04-09 12:49:48] [INFO] Invocando Claude CLI...
+[2026-04-09 12:49:48] [INFO] Prompt carregado: 152492 caracteres
+[2026-04-09 12:49:48] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-09 12:49:48] [INFO] Tamanho total do prompt: 152492 caracteres
+[2026-04-09 12:49:48] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-09 12:50:53] [INFO] Claude CLI finalizado em 64.5377476 segundos
+[2026-04-09 12:50:53] [INFO] Exit Code: 0
+[2026-04-09 12:50:53] [INFO] Output salvo em: C:\4c\tasks\task004\06b_testeAutomatico_fix_output_t2.txt
+[2026-04-09 12:50:53] [INFO] Output size: 512 bytes
+[2026-04-09 12:50:53] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-09 12:50:53] [INFO] Preview do output:
+[2026-04-09 12:50:53] [INFO] Corrigido. A causa: em modo de valida+º+úo UI (`gb_4c_ValidandoUI = .T.`), o `InicializarForm` faz early-return antes de criar o BO, deixando `this_oBusinessObject = .NULL.`. O `BtnIncluirClick` chamava `.NovoRegistro()` diretamente sem verificar.
+
+A corre+º+úo adiciona `IF VARTYPE(THIS.this_oBusinessObject) = "O"` antes da chamada ao BO ÔÇö comportamento id+¬ntico em runtime (BO sempre existe quando h+í conex+úo), mas o teste de navega+º+úo passa corretamente sem banco.

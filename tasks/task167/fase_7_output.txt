@@ -1,0 +1,22 @@
+﻿Analisando o arquivo, este form **SIGPRCPD ├® somente-leitura** (consulta parametrizada). Confirma├º├Áes do legado:
+
+1. **comportamento.json**: todos os `Get_*` t├¬m `When -> Return .F.` (bloqueados para edi├º├úo)
+2. **layout.json**: ├║nico bot├úo ├® `Sair` (Encerrar)
+3. **Init original**: recebe `pFase, pUnidade, pData, pCodigo` como par├ómetros - ├® chamado de outro form
+
+Os m├®todos `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()` e `BtnExcluirClick()` **n├úo existem no legado** ÔÇö o SIGPRCPD n├úo ├® um CRUD. A Fase 7 usa um template gen├®rico que n├úo se aplica a este form espec├¡fico.
+
+**O form j├í est├í funcionalmente completo** com os eventos corretos para o tipo OPERACIONAL de consulta:
+
+| Evento implementado | Origem no legado |
+|---|---|
+| `CmdSairClick()` | `Sair.Click` ÔåÆ `ThisForm.Release` |
+| `GrdDadosAfterRowColChange()` | `Grade.Procedure` (AfterRowColChange) ÔÇö exibe foto, preenche campos |
+| `GrdDadosDblClick()` | Navega para Page2 (detalhe) |
+| `CmdVoltarClick()` | Retorna para Page1 |
+| `CarregarDados()` | Delegado ao BO via `sigprcpdBO.CarregarDados()` |
+| `AtualizarGrid()` | Vincula cursor e atualiza m├®tricas Cap/Utz/Sld |
+
+Adicionar os 4 m├®todos `Btn*Click` seria criar **stubs in├║teis** (proibido pela regra de funcionalidade completa). O form n├úo tem bot├Áes CRUD porque o legado n├úo os tem.
+
+**Fase 7 est├í conclu├¡da** ÔÇö o form j├í cont├®m todos os eventos principais aplic├íveis a um form OPERACIONAL somente-leitura. Pode prosseguir para a Fase 8 (integra├º├úo: menu.prg + config.prg).

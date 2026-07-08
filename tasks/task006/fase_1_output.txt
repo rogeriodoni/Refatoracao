@@ -1,0 +1,21 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\sigmvccrBO.prg` foi criado com:
+
+- **68 propriedades** mapeadas para colunas reais de `SigMvCcr` (verificadas no schema.sql)
+- Estrutura organizada em grupos: datas, movimento d├®bito, movimento cr├®dito, identifica├º├úo, job, controle interno, concilia├º├úo, saldos, campos adicionais
+- `Init()` configurando `this_cTabela = "SigMvCcr"` e `this_cCampoChave = "Nopers"`
+- `ObterChavePrimaria()` retornando Emps+Nopers para auditoria (chave composta)
+
+**Destaques do mapeamento campoÔåÆcoluna:**
+| Campo Form | Coluna SigMvCcr |
+|---|---|
+| fweditdata_DATA | datas |
+| fweditdata_VENC | vencs |
+| getDtEmis | dtemis |
+| Get_Nota | nfs |
+| Get_DOCU | docus |
+| Get_HIST / Get_Hist2 | hists / hist2s |
+| getJob | jobs |
+| Get_OPER / Get_SOPER | opers / sopers |
+| Get_grupo / Get_conta | grupos / contas |
+| Get_COTACAO / alteracotacao | cotacaos / cotusus |
+| Opcao_conta | contapgs |

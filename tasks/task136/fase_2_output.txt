@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. Fase 2/8 conclu├¡da.
+
+**`SigPdM11BO.prg`** recebeu 6 m├®todos de neg├│cio:
+
+| M├®todo | Acesso | Fun├º├úo |
+|--------|--------|--------|
+| `CarregarDoCursor()` | PUBLIC | Mapeia todas as colunas de `xNensiS` ÔåÆ propriedades BO (trata LOGICAL/NUMERIC em Retrabs/OsRets) |
+| `GravarItens(par_lChkCoef)` | PUBLIC | Equivalente ao `Gravacat()` legado ÔÇö varre `xNensiS`, valida servi├ºo, atualiza Fators/Coefs/Moedas/GrupoFins/cDescs com REPLACE; recalcula Coefs se tem retrabalho |
+| `ValidarServico()` | PROTECTED | SQL em `SigCdSvc` com prioridade (exato ÔåÆ grupo+sem conta ÔåÆ s├│ categoria), replica a l├│gica do `SEEK CaGruCo` com 3 CASEs do legado |
+| `BuscarDescricaoCategoria()` | PROTECTED | SQL em `SigCdCat` para popular `this_cDescsCat` (substituindo `CursorQuery`) |
+| `BuscarFatorRetrabalho()` | PROTECTED | SQL em `SigPrCrt` (filtrado por empresa) retorna `Fators` para o c├ílculo `servico * fator` |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `xNensiS.Nenvs` como string |
+
+**Decis├úo de design:** Como `xNensiS` ├® um cursor VFP gerenciado pelo form pai (n├úo uma tabela SQL desta tela), n├úo h├í `Inserir()`/`Atualizar()` SQL ÔÇö a persist├¬ncia ├® responsabilidade do form pai. As queries SQL v├úo apenas para as tabelas de refer├¬ncia (`SigCdSvc`, `SigCdCat`, `SigPrCrt`).

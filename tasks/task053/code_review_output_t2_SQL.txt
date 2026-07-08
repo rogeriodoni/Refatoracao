@@ -1,0 +1,16 @@
+﻿Ap├│s leitura completa do arquivo, posso confirmar: **os tr├¬s alertas s├úo falsos positivos do validador SQL**.
+
+As "colunas inventadas" s├úo na verdade propriedades VFP9 do objeto, n├úo condi├º├Áes WHERE de SQL:
+
+| Alerta | O que realmente ├® | Onde aparece |
+|--------|-------------------|--------------|
+| `POFORM1` | Propriedade `poForm1` do form | `IF VARTYPE(THIS.poForm1) = "O"` ÔÇö verifica├º├úo de objeto, n├úo SQL |
+| `CONTROLCOUNT` | Propriedade VFP9 `ControlCount` de Container | `par_oContainer.ControlCount` ÔÇö itera├º├úo de controles |
+| `PNNUMGRF` | Propriedade `pnNumGrf` do form | `THIS.pnNumGrf = 1` ÔÇö estado do gr├ífico atual |
+
+As ├║nicas condi├º├Áes LOCATE FOR no arquivo s├úo todas sobre `CrGrafico1.cChave1s`, que ├® uma coluna v├ílida do cursor `CrGrafico1`:
+```foxpro
+LOCATE FOR CrGrafico1.cChave1s = PADR(loc_cChave2, 100)
+```
+
+O validador fez busca case-insensitive por tokens que coincidem com os nomes dessas propriedades e os interpretou erroneamente como filtros SQL inventados. O c├│digo est├í correto e **n├úo requer nenhuma altera├º├úo** neste pass.

@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `DepartamentoBO.prg` agora cont├®m todos os m├®todos CRUD:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional, ordena por `codigos`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (alias)` antes de acessar campos (sem `(var).campo`)
+- **`Inserir()`** ÔÇö INSERT com todos os 6 campos da tabela + auditoria
+- **`Atualizar()`** ÔÇö UPDATE nos 5 campos edit├íveis + auditoria
+- **`ExecutarExclusao()`** ÔÇö verifica depend├¬ncias em `SigCdUsu` antes de deletar + auditoria
+- **`BuscarDiretor()`** ÔÇö busca usu├írios ativos em `SigCdUsu` para o lookup do campo Diretor

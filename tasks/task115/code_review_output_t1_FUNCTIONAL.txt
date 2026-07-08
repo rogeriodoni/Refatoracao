@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes foram aplicadas com sucesso:
+
+1. **[NULL-CURSOR] - sigrehtcBO.prg**: `SET NULL ON` adicionado na linha 138 (antes de `CREATE CURSOR cursor_4c_Resultado`) e `SET NULL OFF` na linha 164 (ap├│s fechar a defini├º├úo do cursor). Isso garante que campos NULL do SQL Server n├úo causem erro "Field does not accept null values" no APPEND/INSERT.
+
+2. **[OPTIONGROUP-LEFT] - Formsigrehtc.prg**: `.Themes = .F.` adicionado em todos os **13 buttons** dos 5 OptionGroups (`obj_4c_OptDatas`, `obj_4c_Op_Emitido`, `obj_4c_Op_Cancelado`, `obj_4c_Op_Ordem`, `obj_4c_Op_Baixados`). Agora cada button tem as 5 propriedades obrigat├│rias: `.Left`, `.Top`, `.AutoSize`, `.ForeColor` e `.Themes`.
+
+Os outros 11 problemas reportados eram falsos positivos:
+- **[METODO-INEXISTENTE] THIS.Width()**: N├úo existe tal chamada ÔÇö o c├│digo usa `THIS.Width` como propriedade (correto)
+- **[LAYOUT-POSITION] x9**: O detector confundiu `Buttons(1).Top=5` e `Buttons(1).Left=5` (coordenadas internas dos radio buttons dentro do grupo) com a posi├º├úo do OptionGroup em si ÔÇö os grupos j├í est├úo nas posi├º├Áes originais corretas (Top=197/Left=248 etc.)

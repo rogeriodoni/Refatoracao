@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - FormSIGREIPS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: FormSIGREIPS | Data: 06/06/2026 18:54:24</p>
+        </div>        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero">28</div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero">4</div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero">24</div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero">0</div>
+            </div>
+        </div><div class="conteudo">
+  <h2>Detalhes das Diferencas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Objeto</th>
+        <th>Propriedade</th>
+        <th>Valor Original</th>
+        <th>Valor Migrado</th>
+        <th>Linha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>220</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>48</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>49</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>520</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>200</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>51</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>cntSombra.Top</strong></td>
+        <td><code>0</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>68</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>cntSombra.Left</strong></td>
+        <td><code>0</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>69</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Visualiza.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>72</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Visualiza.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>73</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Visualiza.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>74</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Visualiza.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>75</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Imprime.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>77</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Imprime.Left</strong></td>
+        <td><code>80</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>78</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Imprime.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>79</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Imprime.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.DocExcel.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>82</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.DocExcel.Left</strong></td>
+        <td><code>155</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>83</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.DocExcel.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>84</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.DocExcel.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>85</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Sair.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>87</td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Sair.Left</strong></td>
+        <td><code>230</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>88</td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Sair.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>89</td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Sair.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>90</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Height</strong></td>
+        <td><code>85</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>92</td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Left</strong></td>
+        <td><code>290</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>93</td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Top</strong></td>
+        <td><code>-2</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>94</td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>btnReport.Width</strong></td>
+        <td><code>310</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>95</td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>REGISTRY1.Top</strong></td>
+        <td><code>96</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>97</td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGREIPS</code></td>
+        <td><strong>REGISTRY1.Left</strong></td>
+        <td><code>516</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>98</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>

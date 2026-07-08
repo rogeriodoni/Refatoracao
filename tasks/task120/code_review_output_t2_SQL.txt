@@ -1,0 +1,40 @@
+﻿An├ílise completa. Vou apresentar minhas conclus├Áes ao usu├írio.
+
+---
+
+## An├ílise dos 9 flags [SQL-FILTRO-INVENTADO]
+
+Ap├│s verifica├º├úo completa de ambos os arquivos (`sigreifxBO.prg` e `Formsigreifx.prg`) e compara├º├úo com o `.pre_review` e os trechos do c├│digo original, **todos os 9 flags s├úo falsos positivos do checker autom├ítico**. Nenhuma corre├º├úo ├® necess├íria.
+
+### Diagn├│stico por flag
+
+#### Flags 1ÔÇô4: WHERE SQL existentes mas n├úo listados pelo checker
+
+| Flag | Linha | Query | Diagn├│stico |
+|------|-------|-------|------------|
+| CEMPS | 237 | `FROM SigCdEmp WHERE Cemps = '` | Consulta padr├úo ├á tabela de empresas. Existia no `.pre_review`. Os dados da empresa (RazSocs, Cgcs, Ies...) que alimentam crCabecalho precisam vir de algum lugar. |
+| ITRAS | 459 | `FROM SigPrTrp WHERE itras = ` | Consulta condicional ├á transportadora (s├│ executa quando `LocalNFis.codtrans` n├úo est├í vazio). Existia no `.pre_review` (sintaxe sem EscaparSQL ÔÇö isso foi CORRIGIDO corretamente). |
+| DOPPS | 808 | `FROM SigCdOpd WHERE Dopps = '` | O c├│digo original **explicitamente** tem `lcQuery = [Select nSeqs FROM SigCdOpd WHERE Dopps = '`. O checker simplesmente n├úo incluiu DOPPS em sua lista de refer├¬ncia. |
+| CODS | 827, 1418 | `FROM SigStats WHERE Cods = '`; `FROM SigCdCor WHERE Cods = '` | O c├│digo original **explicitamente** tem `lcQuery = [Select Descs FROM SigStats WHERE Cods = '`. O checker omitiu CODS de sua lista. |
+
+#### Flags 5ÔÇô9: Colunas que N├âO s├úo WHERE SQL
+
+O checker identificou essas colunas como "filtros WHERE" ÔÇö mas elas **n├úo aparecem em nenhuma cl├íusula WHERE de nenhuma string SQL** no c├│digo migrado. S├úo:
+
+| Flag | Onde aparece | Tipo real |
+|------|-------------|-----------|
+| DCKBARRA | Linha 198: `SELECT DckBarra...`; linha 789: `loc_llBar = (LocalDcOpe.DckBarra = 1)` | Campo SELECT + condi├º├úo VFP |
+| DCKDPRO3S | Linha 174: `SELECT DckDPro3s...`; linha 1187: `IF LocalOpe2.DckDPro3s = 1` | Campo SELECT + condi├º├úo VFP |
+| DCKEQS | Linha 175: `SELECT DckEqs...`; linha 592: `CREATE CURSOR crCabecalho (...DckEqs n(1)...)` | Campo SELECT + campo cursor |
+| VLFRETES | Linha 583: `CREATE CURSOR crCabecalho (...VlFretes n(16,2)...)` | Campo cursor + REPLACE |
+| DOCUS | Linha 159: `SELECT Docus...`; linhas 168, 288, 515, etc.: `IF LocalOpe.Docus = ...` | Campo SELECT + condi├º├Áes VFP |
+
+O checker est├í confundindo condi├º├Áes `IF` do c├│digo VFP (como `IF LocalDcOpe.DckBarra <> 1`) e campos em `SELECT` / `CREATE CURSOR` com cl├íusulas `WHERE` de SQL strings.
+
+---
+
+### Resultado: Nenhuma altera├º├úo necess├íria
+
+Os dois arquivos est├úo corretos. N├úo h├í filtro WHERE inventado pela LLM. O checker gerou falsos positivos por:
+1. **Lista de refer├¬ncia incompleta** ÔÇö omitiu DOPPS e CODS que claramente existem no original
+2. **Detec├º├úo incorreta** ÔÇö identificou condi├º├Áes `IF` do VFP e campos de `SELECT`/`CREATE CURSOR` como cl├íusulas WHERE de SQL strings

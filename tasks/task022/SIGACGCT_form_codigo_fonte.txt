@@ -1,0 +1,949 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGACGCT.SCX
+* Data/Hora: 28/04/26 11:58:54
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGACGCT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGACGCT.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGACGCT.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape2
+  Parent: SIGACGCT.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say1
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Usuario
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DGrConta
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DGrContab
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_GrConta
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_CdConta
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DCONTA
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_GrContab
+  Parent: SIGACGCT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGACGCT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 51
+  Left = 24
+  Width = 422
+  Height = 504
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Acesso  Lançamentos"
+  Name = "SIGACGCT"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.ZOrderSet = 1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 2
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.ForeColor = 90,90,90
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 17
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 18
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Shape3
+------------------------------------------------------------
+  Top = 212
+  Left = 161
+  Height = 2
+  Width = 301
+  BackStyle = 0
+  SpecialEffect = 1
+  BackColor = 36,84,155
+  ZOrderSet = 0
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Shape1
+------------------------------------------------------------
+  Top = 122
+  Left = 159
+  Height = 2
+  Width = 151
+  BackStyle = 0
+  SpecialEffect = 1
+  BackColor = 36,84,155
+  ZOrderSet = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Shape2
+------------------------------------------------------------
+  Top = 282
+  Left = 159
+  Height = 2
+  Width = 513
+  BackStyle = 0
+  SpecialEffect = 1
+  BackColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo : "
+  Left = 175
+  Top = 129
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_Grupo
+------------------------------------------------------------
+  ControlSource = "crSigSyAgc.gracess"
+  Height = 23
+  Left = 223
+  TabIndex = 2
+  Top = 126
+  Width = 80
+  ZOrderSet = 4
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário"
+  Left = 166
+  Top = 105
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_Usuario
+------------------------------------------------------------
+  ControlSource = "crSigSyAgc.usuacess"
+  Height = 23
+  Left = 223
+  TabIndex = 4
+  Top = 150
+  Width = 80
+  ZOrderSet = 6
+  Name = "Get_Usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo : "
+  Left = 175
+  Top = 290
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta : "
+  Left = 176
+  Top = 311
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_DGrConta
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 303
+  MaxLength = 20
+  TabIndex = 12
+  Top = 288
+  Width = 150
+  ZOrderSet = 9
+  Name = "Get_DGrConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_DGrContab
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 303
+  MaxLength = 20
+  TabIndex = 8
+  Top = 216
+  Width = 150
+  ZOrderSet = 9
+  Name = "Get_DGrContab"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_GrConta
+------------------------------------------------------------
+  ControlSource = "crSigSyAgc.grcontas"
+  Height = 23
+  InputMask = ""
+  Left = 223
+  TabIndex = 11
+  Top = 288
+  Width = 79
+  ZOrderSet = 10
+  Name = "Get_GrConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_CdConta
+------------------------------------------------------------
+  Comment = ""
+  ControlSource = "crSigSyAgc.cdcontas"
+  Height = 23
+  InputMask = ""
+  Left = 223
+  TabIndex = 14
+  Top = 312
+  Width = 79
+  ZOrderSet = 11
+  Name = "Get_CdConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_DCONTA
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 303
+  MaxLength = 50
+  ReadOnly = .F.
+  TabIndex = 15
+  ToolTipText = ""
+  Top = 312
+  Width = 360
+  ZOrderSet = 12
+  Name = "Get_DCONTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome : "
+  Left = 177
+  Top = 154
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta Corrente"
+  Left = 166
+  Top = 265
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Get_GrContab
+------------------------------------------------------------
+  ControlSource = "crSigSyAgc.grcontbs"
+  Height = 23
+  InputMask = ""
+  Left = 223
+  TabIndex = 7
+  Top = 216
+  Width = 79
+  ZOrderSet = 15
+  Name = "Get_GrContab"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo Contábil"
+  Left = 166
+  Top = 195
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGACGCT.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo : "
+  Left = 175
+  Top = 219
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGACGCT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS _acesso
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigSyAgc','cIdChaves','crSigSyAgc','Gracess',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('gracess','','','Grupo Acesso',80,.t.)
+		.pfSqlTabela(1).pColuna('usuacess','','','Usuario Acesso',90,.t.)
+		.pfSqlTabela(1).pColuna('grcontbs','','','Grupo Contabil',90,.t.)
+		.pfSqlTabela(1).pColuna('grcontas','','','Grupo Conta',80,.t.)
+		.pfSqlTabela(1).pColuna('cdcontas','','','Conta Corrente',90,.t.)
+	EndWith
+Endwith	
+
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters Opcao
+If !dodefault( OPCAO )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+If ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigSyAgc.grcontbs)
+	ThisForm.Pagina.Dados.Get_DGrContab.Value = crSigCdGcr.Descrs
+Else
+	ThisForm.Pagina.Dados.Get_DGrContab.Value = ''
+Endif
+If ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigSyAgc.grcontas)
+	ThisForm.Pagina.Dados.Get_DGrConta.Value = crSigCdGcr.Descrs
+Else
+	ThisForm.Pagina.Dados.Get_DGrConta.Value = ''
+Endif
+
+DECLARE laClis[2,2]
+laClis[1,1]="Grupos"
+laClis[1,2]=crSigSyAgc.GrContas
+laClis[2,1]="IClis"
+laClis[2,2]=crSigSyAgc.CdContas
+If ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', @laClis)
+	ThisForm.Pagina.Dados.Get_DConta.Value = crSigCdCli.RClis
+Else
+	ThisForm.Pagina.Dados.Get_DConta.Value = ''
+Endif
+If Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' )
+	ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+Else
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local lnrec
+If Inlist(Thisform.pcEscolha,'INSERIR')
+	If IsEmpty(crSigSyAgc.usuacess) and IsEmpty(crSigSyAgc.Gracess)
+		Messagebox('Usuário/Grupo Inválido !!!',0+48,'')
+		Thisform.Pagina.Dados.Get_Grupo.SetFocus	
+		Return .f.
+	Endif
+Endif
+If Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR')
+	If IsEmpty(thisform.pagina.dados.get_grcontab.value)
+		Messagebox('Grupo Contábil Inválido !!',0+48,'')
+		thisform.pagina.dados.get_grcontab.setfocus
+		return 0
+	Endif
+	If IsEmpty(thisform.pagina.dados.get_grcontab.value) and ;
+		IsEmpty(thisform.pagina.dados.get_grconta.value) and ;
+		IsEmpty(thisform.pagina.dados.get_cdconta.value)
+		Messagebox('Grupo Contábil / Conta Corrente Inválidos !!',0+48,'')
+		thisform.pagina.dados.get_grcontab.setfocus
+		return 0
+	ENDIF
+	DECLARE laAgCt[5,2]
+	laAgCt[1,1]='GrAcess'
+	laAgCt[1,2]=crSigSyAgc.gracess
+	laAgCt[2,1]='UsuAcess'
+	laAgCt[2,2]=crSigSyAgc.usuacess
+	laAgCt[3,1]='GrContbs'
+	laAgCt[3,2]=crSigSyAgc.grcontbs
+	laAgCt[4,1]='GrContas'
+	laAgCt[4,2]=crSigSyAgc.grcontas
+	laAgCt[5,1]='CdContas'
+	laAgCt[5,2]=crSigSyAgc.cdcontas
+	If ThisForm.podatamgr.CursorQuery('SigSyAgc','csSigSyAgc', @laAgCt)
+		Messagebox('Acesso já cadastrado !!',0+48,'')
+		thisform.pagina.dados.get_grcontab.setfocus
+		return 0
+	Endif
+ENDIF
+If Inlist(Thisform.pcEscolha,'INSERIR')
+	SELECT crSigSyAgc
+	Replace cIdChaves WITH fUniqueIds()
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdAcG','crGrupo','Grupos',This.Value,'Seleção',.t.,'Grupos')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('grupos', '', 'Código', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crGrupo.GRUPOS'), '' )
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) And IsEmpty( This.Parent.Get_Usuario.Value )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_Usuario
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios',[Not cAtivos='N'])
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Usuarios', '', 'Código', .t.)
+		xBrox.mAddColuna('CCargs', '', 'Cargo', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crSigCdUsu.Usuarios'), '' )
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) And IsEmpty( This.Parent.Get_Grupo.Value )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_DGrConta
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Seleção',.t.,'Descrs')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('DESCRS','','Descrição',.T.)
+		xBrox.mAddColuna('CODIGOS','','Código',.t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Descrs'), '' )
+
+	Thisform.Pagina.Dados.get_GrConta.value = evaluate('crSigCdGcr.Codigos')
+	thisform.Pagina.Dados.get_GrConta.refresh
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') AND EMPTY(This.Parent.Get_GrConta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_DGrContab
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Seleção',.t.,'Descrs')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('DESCRS','','Descrição',.T.)
+		xBrox.mAddColuna('CODIGOS','','Código',.t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Descrs'), '' )
+
+	Thisform.Pagina.Dados.get_GrContab.value = evaluate('crSigCdGcr.Codigos')
+	thisform.Pagina.Dados.get_GrContab.refresh
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') AND EMPTY(This.Parent.Get_GrContab.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_GrConta
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Seleção',.t.,'Codigos')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('CODIGOS','','Código',.t.)
+		xBrox.mAddColuna('DESCRS','','Descrição',.T.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Codigos'), '' )
+
+	Thisform.Pagina.Dados.get_DGrConta.value = evaluate('crSigCdGcr.Descrs')
+	thisform.Pagina.Dados.get_DGrConta.refresh
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_CdConta
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcGrupo = This.Parent.Get_GrConta.Value
+
+If !Empty(This.Value) And !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, This.Parent.Get_DCONTA )
+	Messagebox( 'Acesso Negado...', 32, '' )
+	This.Value = ''
+	This.Parent.Get_dConta.Value = ''
+Endif
+This.Parent.Get_dConta.Refresh
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_DCONTA
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcGrupo = This.Parent.Get_GrConta.Value
+
+If !Empty(This.Value) And !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This, This.Parent.Get_DCONTA )
+	Messagebox( 'Acesso Negado...', 32, '' )
+	This.Value = ''
+	This.Parent.Get_cdConta.Value = ''
+Endif
+This.Parent.Get_cdConta.Refresh
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) AND EMPTY(This.Parent.Get_CdConta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGACGCT.Pagina.Dados.Get_GrContab
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Seleção',.t.,'Codigos')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('CODIGOS','','Código',.t.)
+		xBrox.mAddColuna('DESCRS','','Descrição',.T.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Codigos'), '' )
+
+	Thisform.Pagina.Dados.get_DGrContab.value = evaluate('crSigCdGcr.Descrs')
+	thisform.Pagina.Dados.get_DGrContab.refresh
+
+ENDIF
+
+RETURN(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) 
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

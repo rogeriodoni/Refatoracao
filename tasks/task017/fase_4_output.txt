@@ -1,0 +1,15 @@
+﻿Analisei o arquivo completo `Formsigtosen.prg`. Este formul├írio ├® uma **tela de login/autentica├º├úo** (Acesso ao Sistema), n├úo um formul├írio CRUD padr├úo.
+
+**A Fase 4 n├úo ├® aplic├ível a este formul├írio** porque:
+
+1. **Sem PageFrame** - A tela de login tem layout FLAT (direto no form), sem Page1/Page2
+2. **Sem Grid** - N├úo h├í lista de registros (├® autentica├º├úo, n├úo consulta de dados)
+3. **Sem bot├Áes CRUD** - N├úo h├í Incluir/Alterar/Excluir/Visualizar - apenas o bot├úo Sair (SAIDA)
+
+O formul├írio j├í est├í **100% completo** desde a Fase 3, implementando:
+- Todos os controles do `layout.json`: `img_4c_ImgFigJpg`, `lbl_4c_Label1/2/3`, `lbl_4c_LblEmpresa`, `lbl_4c_LblTitF/T`, `txt_4c_USUARIO`, `txt_4c_SENHA`, `txt_4c_EMP`, `txt_4c_Demp`, `obj_4c_SAIDA`
+- Toda a l├│gica do `comportamento.json`: ValidarUsuario, ValidarSenha, ValidarEmpresa, AbrirLookup, Confirmar, VerificarExpiracaoSenha, AlertaPafReducaoZ
+- Handlers de eventos: KeyPress para ENTER/TAB/F4, LostFocus, BtnSaidaClick
+- Limpeza de cursores no Destroy
+
+A Fase 4/8 usa um template gen├®rico de CRUD que n├úo se aplica a formul├írios OPERACIONAIS do tipo login. O pipeline pode avan├ºar diretamente para a **Fase 5** (que provavelmente trata integra├º├úo com menu/config).

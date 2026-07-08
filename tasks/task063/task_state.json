@@ -1,0 +1,263 @@
+﻿{
+    "taskId":  "task063",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-05-17T19:31:47",
+    "atualizadoEm":  "2026-05-18T10:11:17",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-05-17T19:31:47",
+                                            "fim":  "2026-05-17T19:31:47",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task063\\sigrecpe.sct",
+                                            "baseName":  "sigrecpe",
+                                            "scxFile":  "C:\\4c\\tasks\\task063\\sigrecpe.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-05-17T19:31:47",
+                                          "fim":  "2026-05-17T19:31:48",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigrecpe",
+                                          "txtFile":  "C:\\4c\\tasks\\task063\\sigrecpe_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-17T19:31:48",
+                                              "fim":  "2026-05-17T19:31:48",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task063\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-17T19:31:49",
+                                              "fim":  "2026-05-17T19:31:49",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task063\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task063\\meta_prompt.md",
+                                              "boClass":  "sigrecpeBO",
+                                              "formClass":  "Formsigrecpe",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task063\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-17T19:31:49",
+                                              "fim":  "2026-05-17T19:31:50",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task063\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-17T19:31:50",
+                                               "fim":  "2026-05-17T19:31:50",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task063\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigrecpe_esqueleto.prg",
+                                                                "sigrecpeBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-17T19:31:50",
+                                       "fim":  "2026-05-18T10:01:11",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\classes\\sigrecpeBO.prg"
+                                                           ],
+                                       "faseAtual":  2,
+                                       "comentario":  "Fase 1 concluida: sigrecpeBO.prg criado com propriedades e Init()",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrecpeBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  41.77,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrecpe.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1623
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-05-18T10:01:11",
+                                                  "fim":  "2026-05-18T10:01:22",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrecpe.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrecpeBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-05-18T10:01:22",
+                                                 "fim":  "2026-05-18T10:01:24",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-18T10:09:46",
+                                       "fim":  "2026-05-18T10:10:37",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-18T10:10:37",
+                                               "fim":  "2026-05-18T10:10:43",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task063\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-05-18T10:10:44",
+                                        "fim":  "2026-05-18T10:11:17",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigrecpe_20260518101117.html",
+                                        "diferencas":  1,
+                                        "erros":  4,
+                                        "totalProblemas":  277,
+                                        "avisos":  272
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-18T10:11:17",
+                                              "fim":  "2026-05-18T10:11:17",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task063_sigrecpe.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-05-17T19:31:48",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-05-17T19:31:49",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task063\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-05-17T19:31:49",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-17T19:31:49"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-05-18T10:01:22",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-05-18T10:01:22",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigrecpe_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrecpe.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task063\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-05-18T10:01:24",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-05-18T10:01:25",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-05-18T10:01:25",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-05-18T10:09:28",
+                                          "passes":  4,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CGRUS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CUNIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LINHAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027COLECOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CODIGOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ICLIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CEMPS, EMPS, SQTDS, GRUPOS, ESTOS, CPROS, LNCONTA, SITUAS, CPROEQS, REFFS, REFF2S",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  6
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-05-18T10:09:28",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-05-18T10:09:46",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigrecpeBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigrecpe.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-05-18T10:10:43",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-18T10:10:44",
+                                             "thresholdPx":  5,
+                                             "unmatched":  30,
+                                             "errors":  30,
+                                             "matched":  9,
+                                             "warnings":  9,
+                                             "reportFile":  "C:\\4c\\tasks\\task063\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

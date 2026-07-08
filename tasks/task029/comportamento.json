@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREAIV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReAiv Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "lcQuery = [Select a.*, b.dPros From SigIvTrh a Left Join SigCdPro b on a.cPros = b.cPros ]+;\n                                      [Where Emps = ']+ThisForm.Get_Empresa.Value+[' And not a.cPros = Space(14) And ]+;\n                                      [(codigos = ]+Alltrim(Str(ThisForm.Get_Inv1.Value))+[ Or ]+;\n                                      [codigos = ]+Alltrim(Str(ThisForm.Get_Inv2.Value))+[) Order By a.cPros, a.localis]\n\nThisForm.poDatamgr.SqlExecute(lcQuery,'crSigIvTr')\n\nCreate Cursor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Empresa,Get_Inv1,Get_Inv2,OptTipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "LParameters _Acesso\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV.Get_Dempresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV.Get_Dempresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV.Get_Inv1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\t\n\tDeclare laEmps[1,2]\n\tlaEmps[1,1] = 'Emps'\n\tlaEmps[1,2] = ThisForm.Get_Empresa.Value\n\t\n\txBrox = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdBal','crSigCdBal','Codigos',This.Value,'Inventários',.t.,'Codigos',@laEmps)\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Codigos', '9999999999', 'Código', .t.)\n\t\txBrox.mAddColuna('Grupos', '', 'Grupo', .t.)\n\t\txBrox.mAddColuna('Contas', '', 'Conta', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Caption = Iif",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAIV.Get_Inv2",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\t\n\tDeclare laEmps[1,2]\n\tlaEmps[1,1] = 'Emps'\n\tlaEmps[1,2] = ThisForm.Get_Empresa.Value\n\t\n\txBrox = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdBal','crSigCdBal','Codigos',This.Value,'Inventários',.t.,'Codigos',@laEmps)\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Codigos', '9999999999', 'Código', .t.)\n\t\txBrox.mAddColuna('Grupos', '', 'Grupo', .t.)\n\t\txBrox.mAddColuna('Contas', '', 'Conta', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Caption = Iif",
+        "controlesReferenciados": "Get_Empresa,Get_Inv1",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREAIV.Procedure",
+      "queryOriginal": "lcQuery = [Select a.*, b.dPros From SigIvTrh a Left Join SigCdPro b on a.cPros = b.cPros ]+; [Where Emps = ']+ThisForm.Get_Empresa.Value+[' And not a.cPros = Space(14) And ]+; [(codigos = ]+Alltrim(Str(ThisForm.Get_Inv1.Value))+[ Or ]+; [codigos = ]+Alltrim(Str(ThisForm.Get_Inv2.Value))+[) Order By a.cPros, a.localis] ",
+      "tabelas": "SigIvTrh,SigCdPro",
+      "colunas": "dPros",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigIvTrh", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

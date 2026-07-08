@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. Vou conferir os pontos cr├¡ticos:
+
+**Checklist Fase 3:**
+- Ô£à `RETURN` NUNCA dentro de TRY/CATCH ÔÇö uso de `loc_lSucesso`
+- Ô£à Sem literais acentuados ÔÇö CHR(227)=├ú, CHR(225)=├í
+- Ô£à Sem `PUBLIC PROCEDURE` em DEFINE CLASS
+- Ô£à Sem MESSAGEBOX() ÔÇö uso de `MsgErro()`
+- Ô£à CATCH n├úo silencioso em todos os blocos
+- Ô£à `Container.BorderStyle` n├úo usado ÔÇö apenas `BorderWidth`
+- Ô£à `gb_4c_ValidandoUI` verificado antes de SQL no InicializarForm
+- Ô£à Par├ómetros salvos em propriedades ANTES de `DODEFAULT()` (InicializarForm precisa deles via `THIS.emps` etc.)
+- Ô£à `DODEFAULT()` no Destroy()
+- Ô£à `BackStyle=1` + `BackColor=RGB(100,100,100)` no cnt_4c_Sombra (padr├úo correto do framework)
+- Ô£à `BackStyle=0` no cnt_4c_Cheque (transparente, como o original)
+
+**Decis├Áes de design para este form OPERACIONAL:**
+- **Sem PageFrame** ÔÇö original ├® flat dialog (800├ù315, TitleBar=0). N├úo foi inventada estrutura que n├úo existe
+- **`ConfigurarPageFrame()`** mapeia para o `cntSombra` do original (cabecalho cinza com labels)
+- **`ConfigurarPaginaDados()`** cria apenas o `cnt_4c_Cheque` vazio ÔÇö Fase 5 adiciona os campos internos
+- **`ConfigurarPaginaLista()`** n├úo criada ÔÇö este form n├úo tem lista; bot├Áes (Imprimir/Visualizar/Sair) ser├úo adicionados diretamente ao form na Fase 4
+- **`CarregarDadosCheque()`** chama os 3 m├®todos do BO (CarregarDados, CarregarParcela, CarregarEmpresa) ÔÇö completo e funcional j├í na Fase 3
+
+Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigReEch.prg` (276 linhas). Fase 4 usar├í Read + Edit para adicionar bot├Áes de a├º├úo (Imprimir/Visualizar/Sair) e o OptionGroup diretamente ao form.

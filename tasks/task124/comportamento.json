@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREINF",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "do SigPrNfs With ThisForm.Podatamgr,\"V\", ThisForm.pcemps, ThisForm.pcdopes, ThisForm.pcnumes \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "llFalse = .f.\nlcEdn = ThisForm.pcEmps + ThisForm.pcDopes + Str(ThisForm.pcNumes,6)\nlcSql = [Select c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+;\n\t\t[Where c.emps = ']+ThisForm.pcemps+[' And c.series = ']+Thisform.pcserie+[' ]+;\n\t\t[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+;\n\t\t[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+;\n\t\t[Union all ]+;\n\t\t[Select c.Nfis,c.EmpDopNums From SigMvNfi c, SigCdOpe a, SigCdSer b ]+;\n\t\t[Where c.emps = ']+ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcDopes + Str,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum, pSerie\n\nThisForm.pcEmps      = pEmp\nThisForm.pcDopes     = pDop\nThisForm.pcNumes     = pNum\nThisForm.pcSerie     = pSerie\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\t=DoDefault()\n\n\t\t.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.,[nnfftlns,nnfftcls])\n\n\t\tIf (CrSigCdPam.nnfftlns==999 or CrSigCdPam.Nnfftcls==999)\n\t\t\t.btnReport.Visualiza.Enabled = .t.\n\t\tEndIf\n\n\t\t* Duas linhas colocadas para Barão,pode... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "do SigPrNfs With ThisForm.Podatamgr,\"I\",ThisForm.pcemps, ThisForm.pcdopes, ThisForm.pcnumes \n\nThisForm.Release\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINF",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "*!*\tIf This.Value = 2\n*!*\t\tThisForm.btnReport.Imprime.Enabled = .f.\n*!*\tEndIf\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREINF.Procedure",
+      "queryOriginal": "lcSql = [Select c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+; \t\t[Where c.emps = ']+ThisForm.pcemps+[' And c.series = ']+Thisform.pcserie+[' ]+; \t\t[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+; \t\t[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+; \t\t[Union all ]+; \t\t[Select c.Nfis,c.EmpDopNums From SigMvNfi c, SigCdOpe a, SigCdSer b ]+; \t\t[Where c.emps = ']+ThisFor... [TRUNCADO]",
+      "tabelas": "SigMvNfi",
+      "colunas": "Nfis,EmpdopNums",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvNfi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,26 @@
+﻿Arquivo criado com sucesso. Veja o que foi entregue na Fase 3:
+
+**`C:\4c\projeto\app\forms\relatorios\Formsigreche.prg`**
+
+Estrutura base completa:
+
+| M├®todo | Status | Descri├º├úo |
+|---|---|---|
+| `Init()` | Ô£à | `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à | Cria BO, inicializa cursores, cabecalho, botoes |
+| `ConfigurarCabecalho()` | Ô£à | `cnt_4c_Cabecalho` com `RGB(100,100,100)` + labels sombra/titulo |
+| `ConfigurarBotoes()` | Ô£à | `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (spec can├┤nico do framework) |
+| `AtualizarEstadoControles()` | Ô£à | Override vazio ÔÇö REPORT n├úo usa CRUD |
+| `FormParaRelatorio()` | Ô£à | PEMSTATUS-guarded para todos os 16 filtros (safe sem controles) |
+| `BtnVisualizarClick()` | Ô£à | FormParaRelatorio + BO.Visualizar() |
+| `BtnImprimirClick()` | Ô£à | FormParaRelatorio + BO.Imprimir() |
+| `BtnExcelClick()` | Ô£à | PrepararDados + COPY TO XLS |
+| `BtnCancelarClick()` | Ô£à | `THIS.Release()` |
+| `Destroy()` | Ô£à | `this_oRelatorio = .NULL.` + DODEFAULT() |
+
+**Decis├Áes de design:**
+- `Left=726` para `cmg_4c_Botoes` ÔÇö posi├º├úo do SCX original (PILAR 1)
+- `Height=400` ÔÇö dimens├úo exata do original (n├úo 600 do template gen├®rico)
+- `Picture = gc_4c_CaminhoIcones + "new_background.jpg"` ÔÇö fundo do frmrelatorio legado
+- `FormParaRelatorio()` usa `PEMSTATUS` para cada controle: funciona em Phase 3 sem campos e automaticamente usa os campos quando adicionados nas Fases 5-6
+- Sem literais acentuados ÔÇö todos via `CHR()`

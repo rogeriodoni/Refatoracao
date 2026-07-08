@@ -1,0 +1,10 @@
+﻿Fixed the one real SQL error:
+
+- **`dopoptps` ÔåÆ `dopotps`** in INSERT INTO SigMvCcr (line 344 of `sigmvccrBO.prg`) ÔÇö column name had a typo (`doP**O**ptps` vs `doP**O**tps`)
+
+The remaining 5 flagged items are not actionable:
+- **`CIDCHAVES`**: Legitimate PK lookup in WHERE ÔÇö `cidchaves` is a real column in SigMvCcr used as the primary key in CarregarPorCodigo/Atualizar/ExecutarExclusao
+- **`CMOES`**: Legitimate WHERE condition in SigCdMoe lookup query ÔÇö real column, correct table
+- **`CODIGOS`**: Legitimate WHERE condition in SigCdGcr lookup query ÔÇö real column, correct table
+- **`I`**: False positive ÔÇö validator misread `FOR i = 1 TO par_oContainer.ControlCount` (line 2624) as SQL
+- **`CONTROLCOUNT`**: False positive ÔÇö validator misread `loc_oControl.ControlCount > 0` (line 2634) as SQL

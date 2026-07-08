@@ -1,0 +1,11 @@
+﻿File rewritten with `ConfigurarPageFrame` and `InicializarForm` methods present (10 matches found ÔÇö both validator-required markers are in the file).
+
+Fase 3 completed: `C:\4c\projeto\app\forms\relatorios\Formsigreimp.prg` now contains the REPORT base structure following the canonical frmrelatorio pattern (Formsigreimc.prg reference):
+
+- `DEFINE CLASS Formsigreimp AS FormBase` with `DataSession=2`, `TitleBar=0`, sized 1000x600
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (no duplicate `InicializarForm` call)
+- `InicializarForm()` ÔÇö creates `sigreimpBO`, calls `CarregarTiposOperacoes`, configures cabecalho/botoes/pageframe, propagates Caption
+- `ConfigurarCabecalho()` ÔÇö container cinza RGB(100,100,100) com sombra + titulo branco
+- `ConfigurarBotoes()` ÔÇö CommandGroup canonico (Left=727, Width=273) com 4 botoes Visualizar/Imprimir/Excel/Encerrar (incrementos de 66px)
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 1 Page "Filtros" (controles vem nas fases 4-6)
+- `Destroy()` ÔÇö zera referencia do BO (NAO chama Release no Custom)

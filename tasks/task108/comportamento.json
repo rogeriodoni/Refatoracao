@@ -1,0 +1,614 @@
+{
+  "resumo": {
+    "totalMetodos": 37,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 25,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From", "fAltBar2de5", "fConfigGeral", "for Upper", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 237,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pTru, pIds\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Pedido = (ThisForm.Relação.Get_Pedido.Value = 1)\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_Divid  = (ThisForm.Etiquetas.Get_Divididas.Value = 1)\n_Geral  = (ThisForm.Etiquetas.Get_Imprimir.Value = 1)\n_ImpCmp = (ThisForm.Etiquetas.Get_Compo.Value = 1)\n_llCera = (ThisForm.Etiquetas.Get_Cera.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From,fAltBar2de5",
+        "metodosFormChamados": "GetDatabase,CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_Pedido,Get_SeqIni,Get_SeqFim,Get_Divididas,Get_Imprimir,Get_Compo,Get_Cera",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 348,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pSqi, pSqf\nLocal _Nop, _Seqi, _Seqf, _Seq, _Divid, _Geral, _Lini, _Coli, _Pula, _xPula, _llCera, llboleto\n\nlnOrdem = ThisForm.TpOrdem.Value\n_Nop    = ThisForm.Get_Ordem.Value\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_Divid  = (ThisForm.Etiquetas.Get_Divididas.Value = 1)\n_Geral  = (ThisForm.Etiquetas.Get_Imprimir.Value = 1)\n_Lini   = ThisForm.Etiquetas.Get_Linha.Value\n_Coli   = ThisForm.Etiquetas.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_SeqIni,Get_SeqFim,Get_Divididas,Get_Imprimir,Get_Linha,Get_Coluna,Get_Compo,Get_Cera,Get_Boleto,ChkFunds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 262,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pSqi, pSqf\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Pedido = (ThisForm.Relação.Get_Pedido.Value = 1)\n_Resumo = (ThisForm.Relação.Get_Resumo.Value = 1)\n_Barra  = (ThisForm.Relação.Get_Pedido.Value = 2 And ThisForm.Relação.Get_Barra.Value = 1)\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_llCera = (ThisForm.Etiquetas.Get_Cera.Value = 1 )\n_lcclass =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Value = 2 And Not IsEmpty",
+        "controlesReferenciados": "Get_Ordem,Get_Pedido,Get_Resumo,Get_Barra,Get_SeqIni,Get_SeqFim,Get_Cera,get_Class,optDescs,optImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 203,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pSqi, pSqf\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Nop2   = ThisForm.Get_Ordem2.Value\n_Pedido = (ThisForm.Relação.Get_Pedido.Value = 1)\n_Resumo = (ThisForm.Relação.Get_Resumo.Value = 1)\n_Barra  = (ThisForm.Relação.Get_Pedido.Value = 2 And ThisForm.Relação.Get_Barra.Value = 1)\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_llCera = (ThisForm.Etiqu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Value = 2 And Not IsEmpty",
+        "controlesReferenciados": "Get_Ordem,Get_Ordem2,Get_Pedido,Get_Resumo,Get_Barra,Get_SeqIni,Get_SeqFim,Get_Cera,get_Class",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 238,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pTru, pIds\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Nop2   = ThisForm.Get_Ordem2.Value\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_Divid  = (ThisForm.Etiquetas.Get_Divididas.Value = 1)\n_Geral  = (ThisForm.Etiquetas.Get_Imprimir.Value = 1)\n_ImpCmp = (ThisForm.Etiquetas.Get_Compo.Value = 1)\n_llCera = (ThisForm.Etiquetas.Get_Cera.Value = 1 )\n\nCrea... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_Ordem2,Get_SeqIni,Get_SeqFim,Get_Divididas,Get_Imprimir,Get_Compo,Get_Cera",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 312,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pTru, pIds\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llcera\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Nop2   = ThisForm.Get_Ordem2.Value\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_llCera = (ThisForm.Etiquetas.Get_Cera.Value = 1 )\n_llNome = (thisform.etiquetas.chknome.Value = 1)\n_ImpCmp = (ThisForm.Etiquetas.Get_Compo.Value = 1)\n\nCreate Cursor TmpImp (Ordem n(6), Seqs n(4), Nops n(10), CPros c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From,fAltBar2de5",
+        "metodosFormChamados": "GetDatabase,CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_Ordem2,Get_SeqIni,Get_SeqFim,Get_Cera,chknome,Get_Compo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 466,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pTru, pIds\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera, llInvEnv, _conq, llDp2\n\n_Nop      = ThisForm.Get_Ordem.Value\n_Pedido   = (ThisForm.Relação.Get_Pedido.Value = 1)\n_Seqi     = ThisForm.Get_SeqIni.Value\n_SeqF     = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_Divid    = (ThisForm.Etiquetas.Get_Divididas.Value = 1)\n_Geral    = (ThisForm.Etiquetas.Get_Imprimir.Value = 1)\n_ImpCmp   = (ThisForm.Etiquetas.Get_Compo.Value = 1)\n_llC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From",
+        "metodosFormChamados": "GetDatabase,CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_Pedido,Get_SeqIni,Get_SeqFim,Get_Divididas,Get_Imprimir,Get_Compo,Get_Cera,Get_processo,Get_Complemto,chknome,get_class,Get_Boleto,optDescs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 259,
+      "codigoOriginal": "LParameters _Saida\n\nPrivate pTru, pIds\nLocal _Nop, _Pedido, _cPedido, _Seqi, _Seqf, _Seq, _llCera, _Conq\n\n_Nop    = ThisForm.Get_Ordem.Value\n_Pedido = (ThisForm.Relação.Get_Pedido.Value = 1)\n_Seqi   = ThisForm.Get_SeqIni.Value\n_SeqF   = Iif(ThisForm.Get_SeqFim.Value = 0, 9999, ThisForm.Get_SeqFim.Value)\n_Divid  = (ThisForm.Etiquetas.Get_Divididas.Value = 1)\n_Geral  = (ThisForm.Etiquetas.Get_Imprimir.Value = 1)\n_ImpCmp = (ThisForm.Etiquetas.Get_Compo.Value = 1)\n_llCera = (ThisForm.Etiquetas.Get_C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,Get_Pedido,Get_SeqIni,Get_SeqFim,Get_Divididas,Get_Imprimir,Get_Compo,Get_Cera",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI",
+      "evento": "Init",
+      "linhas": 92,
+      "codigoOriginal": "LParameters _NOp, _ParentForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n=fConfigGeral()\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', 'SigPrGlo')\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f.)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPac', 'crSigCdPac')\n\n\t\tIf (Type('_NOp') = 'N')  And (_Nop <> 0)\n\t\t\tThisForm.Get_Ordem.Value = _Nop\n\t\t\tThisForm.Get_Ordem.ReadOnly =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral,for Upper",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_Ordem,chk2Linhas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.Get_Linha",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\t=Messagebox('A Seqüência Não Pode Ser Um Número Negativo!!!', 32, '')\n\tThis.Value = 0\n\tReturn 0\nEndIf\n\nIf Empty(ThisForm.Get_SeqFim.Value)\n\tThisForm.Get_SeqFim.Value = This.Value \nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SeqFim",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.Get_Coluna",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If (This.Value < 0)\n\t=Messagebox('A Seqüência Não Pode Ser Um Número Negativo!!!', 32, '')\n\tThis.Value = 0\n\tReturn 0\nEndIf\n\nIf (This.Value < ThisForm.Get_SeqIni.Value)\n\t=Messagebox('A Seqüência Final Não Pode Ser Menor Que a Seqüência Inicial!!!', 32, '')\n\tThis.Value = ThisForm.Get_SeqIni.Value\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SeqIni",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.Get_Compo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.Get_Tipo.Value, 2, 3, 4)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.Get_Cera",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.Get_Tipo.Value, 2, 3, 4)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.Get_Boleto",
+      "evento": "InteractiveChange",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value = 4)\n\tThisForm.Etiquetas.chk2Linhas.Enabled =.t.\nElse\n\tThisForm.Etiquetas.chk2Linhas.Value = .f.\n\tThisForm.Etiquetas.chk2Linhas.Enabled =.f.\nEndIf\n\nIf (This.Value <> 2)\n\tThisForm.Etiquetas.optDescs.Value = 1\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk2Linhas,optDescs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Etiquetas.optDescs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Etiquetas.get_Boleto.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Boleto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Ordem",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( ThisForm.Get_Ordem2.Value = 0 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ordem2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_SeqIni",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If (This.Value < 0)\n\t=Messagebox('A Seqüência Não Pode Ser Um Número Negativo!!!', 32, '')\n\tThis.Value = 0\n\tReturn 0\nEndIf\n\nIf Empty(ThisForm.Get_SeqFim.Value)\n\tThisForm.Get_SeqFim.Value = This.Value \nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SeqFim",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_SeqFim",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If (This.Value < 0)\n\t=Messagebox('A Seqüência Não Pode Ser Um Número Negativo!!!', 32, '')\n\tThis.Value = 0\n\tReturn 0\nEndIf\n\nIf (This.Value < ThisForm.Get_SeqIni.Value)\n\t=Messagebox('A Seqüência Final Não Pode Ser Menor Que a Seqüência Inicial!!!', 32, '')\n\tThis.Value = ThisForm.Get_SeqIni.Value\n\tReturn 0\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SeqIni",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Tipo",
+      "evento": "InteractiveChange",
+      "linhas": 36,
+      "codigoOriginal": "=DoDefault()\nThis.Enabled = .t.\n\nIf InList(This.Value,2,4 )\n\tThisform.Etiquetas.Get_Boleto.Visible = .T.\n\tThisForm.Etiquetas.Label9.Visible = .T.\nElse\n\tThisform.Etiquetas.Get_Boleto.Visible = .F.\n\tThisForm.Etiquetas.Label9.Visible = .F.\nEndif\n\nDo Case\n\n\tCase (This.Value = 1) && Relação\n\t\tThisForm.Etiquetas.Visible = .f.\n\t\tThisForm.Relação.Visible = .t.\n\t\tThisForm.Visualizar.Enabled = .t.\n\t\tThisForm.Relação.Get_Pedido.Option1.SetFocus\n\n\tCase (InList(This.Value,3,4 )) And ThisForm.Get_Ordem2.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Boleto,Get_Pedido,Option1,Get_Ordem2,Get_Divididas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Tipo",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "This.InteractiveChange\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Tipo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_Ordem2.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Ordem2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Tipo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_Ordem2.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Ordem2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Ordem2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Get_Ordem.Value > 0 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Ordem2",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If This.Value = ThisForm.get_Ordem.Value\n\tMessageBox('Numero de Op Invalido!!!',0+32,'')\n\tThis.Value = 0\n\tReturn .f.\nEndIf\n\n\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Ordem",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Imprimir",
+      "evento": "Click",
+      "linhas": 33,
+      "codigoOriginal": "Do Case\n\tCase (ThisForm.Get_Tipo.Value = 1)\n\t\tIf ThisForm.Get_Ordem2.Value > 0\n\t\t\tThisForm.ProcRelação2('I')\n\t\tElse\n\t\t\tThisForm.ProcRelação('I')\n\t\tEndif\n\t\t\n\tCase (ThisForm.Get_Tipo.Value = 2)\n\t\tThisForm.ProcEtiquetas('I')\n\t\t\n\tCase (ThisForm.Get_Tipo.Value = 3)\n\t\tIf ThisForm.Get_Ordem2.Value > 0\n\t\t\tThisForm.ProcTiraa('I')\n\t\tElse\n\t\t\tThisForm.ProcTiraf('I') &&ProcTiras\n\t\tEndif\n\t\t\n\tCase (ThisForm.Get_Tipo.Value = 4)\n\t\tIf Thisform.Get_Ordem2.Value > 0\n\t\t\tThisForm.ProcTirad('I')\n\t\tElse\n\t\t\tThisForm.Pro... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ProcRelação2,ProcEtiquetas,ProcTiraa,ProcTiraf,ProcTirad,ProcEtiqf",
+        "controlesReferenciados": "Get_Tipo,Get_Ordem2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Visualizar",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "If (ThisForm.Get_Tipo.Value = 0)\n\t=Messagebox('Selecione Um Tipo de Impressão!!!', 32, '')\n\tThisForm.Get_Tipo.Option1.SetFocus\n\tReturn 0\nEndIf\nSet Step On \nDo Case\n\tCase (ThisForm.Get_Tipo.Value = 1)\n\t\tIf ThisForm.Get_Ordem2.Value > 0\n\t\t\tThisForm.ProcRelação2('V')\n\t\tElse\n\t\t\tThisForm.ProcRelação('V')\n\t\tEndif\n\t\t\n\tCase (ThisForm.Get_Tipo.Value = 2)\n\t\tIf ThisForm.Etiquetas.Get_Boleto.Value = 3\n\t\t\tMessageBox('Impressão de Allegro não tem visualização!!!',0+16,'')\n\t\t\tReturn 0\n\t\tElse\n\t\t\tThisForm.ProcEt... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ProcRelação2,ProcEtiquetas,ProcTiraa,ProcTiraf,ProcTirad,ProcEtiqf",
+        "controlesReferenciados": "Get_Tipo,Option1,Get_Ordem2,Get_Boleto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Saida",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If (Type('ThisForm.ParentForm') <> 'L')\n\tThisForm.ParentForm.Enabled = .t.\nEndIf\n\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Get_Class",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCls', ;\n\t\t\t\t\t\t   'LocalClas', 'cods', This.Value, 'Classificação', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('cods', '', 'Código')\n\t\tloLista.mAddColuna('descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\n\tThis.Value = LocalClas.Cods\n\tUse In LocalClas\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.GetLin",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Linhas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThisform.getLin.Value  = CrListaRemota.Linhas\n\t\tThisform.getDLin.Value = CrListaRemota.Descs\n\tElse\n\t\tThisform.getLin.Value  = ''\n\t\tThisform... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.GetDLin",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.getLin.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.GetDLin",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Descs', Alltrim(This.Value), 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.mAddColuna('Linhas', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThisform.getLin.Value  = CrListaRemota.Linhas\n\t\tThisform.getDLin.Value = CrListaRemota.Descs\n\tElse\n\t\tThisform.getLin.Value  = ''\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.getCor",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCor', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = CrListaRemota.Cods\n\tElse\n\t\tThis.Value = []\n\tEndIf\n\tUse In CrListaRemota\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.getFase",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loBrowse \n\nIf Not Empty(This.Value)\n\tSelect crGruposBal\n\tSet Order to Codigos\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crGruposBal', 'Codigos', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'Codigos')\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'Descrs')\n\t\tloBrowse.Show\n\n\t\tIf (Lastkey() <> 27)\n\t\t\tThis.Value = crGruposBal.Codigos\n\t\t\tthisform.getdfase.Value = crGruposBal.Descrs\n\t\tEndIf\n\tEndIf\nElse\n\tThisform.getFase.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.getDfase",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.getFase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.getDfase",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tSelect crGruposBal\n\tSet Order to Descrs\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crGruposBal', 'Descrs', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'Codigos')\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'Descrs')\n\t\tloBrowse.Show\n\n\t\tIf (Lastkey() <> 27)\n\t\t\tThis.Value = crGruposBal.Descrs\n\t\t\tthisform.getfase.Value = crGruposBal.Codigos\n\t\tEndIf\n\tEndIf\nElse\n\tThisform.getfase.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREGLI.Relação.Get_Barra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (This.Parent.Get_Pedido.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Pedido",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

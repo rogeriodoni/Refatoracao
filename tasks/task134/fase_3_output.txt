@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPdAco.prg` foi criado com 223 linhas contendo:
+
+**O que foi inclu├¡do (Fase 3):**
+- `DEFINE CLASS FormSigPdAco AS FormBase` com todas as propriedades pixel-perfect do legado (`Width=800, Height=600, TitleBar=0, ControlBox=.F., Movable=.F., DataSession=2`, etc.)
+- `Init()` ÔåÆ `DODEFAULT()` simples
+- `InicializarForm()` ÔÇö cria BO (`SigPdAcoBO`), inicializa cursores `csRel`/`csCab` via `CriarCursorRelatorio()`, carrega par├ómetros de SigCdPam (com guarda `gb_4c_ValidandoUI`), cria containers, chama `TornarControlesVisiveis`
+- `ConfigurarCabecalho()` ÔÇö container `cnt_4c_Cabecalho` (cinza RGB 100,100,100) com `lbl_4c_LblSombra` (ForeColor preto, sombra) e `lbl_4c_LblTitulo` (ForeColor branco, t├¡tulo vis├¡vel)
+- `ConfigurarAguarde()` ÔÇö container `cnt_4c_Aguarde` com `Visible=.F.` (flutuante, toggled pelo bot├úo Processar), labels "Aguarde..." (vermelho) e "Processando Dados......" (azul)
+- `TornarControlesVisiveis()` ÔÇö com filtro INLIST para manter ocultos `cnt_4c_Aguarde`, `shp_4c_ShpRp`, `cmd_4c_CmdRpview`, `cmd_4c_CmdRpPrint`
+- `Destroy()` ÔÇö libera BO e cursores `csRel`, `csCab`, `dbCabecalho`
+
+**O que N├âO foi inclu├¡do (pr├│ximas fases):**
+- Grid `grd_4c_Dados` + bot├Áes CRUD (Fase 4)
+- Shape, bot├Áes de relat├│rio, listbox, labels de rodap├® (Fases 5-6)
+- Eventos `Activate`, `BtnProcessarClick`, `BtnRpviewClick`, `ListboxInteractiveChange` (Fases 7-8)

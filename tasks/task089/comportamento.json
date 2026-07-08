@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "If ThisForm.Opt_Key.Value = 1\n\tSelect CsTempoCp\n\tSet Order To Imprimir\n\tGo top\n\tReport Form SigReEq1 To Printer Noconsole\nElse\n\tSelect CsTempoGr\n\tGo Top\n\tReport Form SigReEq2 To Printer Noconsole\nEndIf\nDoDefault()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Key",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "If ThisForm.Opt_Key.Value = 1\n\tSelect CsTempoCp\n\tSet Order To Imprimir\n\tGo Top\n\tReport Form SigReEq1 To Printer Prompt Noconsole\nElse\n\tSelect CsTempoGr\n\tGo Top\n\tReport Form SigReEq2 To Printer Prompt Noconsole\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Key",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "LParameters poForm\n\n=DoDefault()\n\npoForm.Enabled = .F.\nThisform.oParentForm = poForm\nSet DataSession to poForm.DataSessionId\n\nSelect csTempoGr\nGo Top\n\nWith ThisForm.Pageframe1.Page1\n\t.Grid1.RecordSource = 'csTempoGr'\n\t.SetAll(\"DynamicForeColor\",\"Iif(Quebra='1',RGB(0,0,255),Iif(Tipos='6',RGB(255,0,0),RGB(0,0,0) ))\",\"Column\")\n\t.Grid1.Refresh\n\t.Grid1.Column1.setfocus\nEndWith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.Opt_Key.Value = 1\n\tSelect CsTempoCp\n\tSet Order To Imprimir\n\tGo Top\n\tReport Form SigReEq1 Preview NoConsole\nElse\n\tSelect CsTempoGr\n\tGo top\n\tReport Form SigReEq2 preview NoConsole\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Key",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT.Pageframe1",
+      "evento": "Activate",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pageframe1.Page1.Grid1.Column1.setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT.Pageframe1",
+      "evento": "Activate",
+      "linhas": 11,
+      "codigoOriginal": "Select csTempoCp\nSet Order To Visualizar\nSet key to csTempogr.Grupos + csTempogr.Contas + csTempogr.Linhas\ngo top\n\nWith This\n\t.Grid1.recordsource = 'cstempocp'\n\t.Grid1.Refresh\n\t.Grid1.Column1.setfocus\nEndWith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQT.Pageframe1",
+      "evento": "Activate",
+      "linhas": 2,
+      "codigoOriginal": "Select CsTempocp\nSet Key to",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

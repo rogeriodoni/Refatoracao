@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema e a solu├º├úo:
+
+**Causa raiz**: O form tem `DataSession = 2` (datasession privado). Quando o `TesteAutomatico` chama `oForm.CarregarLista()`, o VFP executa o m├®todo no datasession privado (DS2) ÔÇö o `CREATE CURSOR cursor_4c_Dados` cria o cursor l├í. Depois o teste verifica `USED("cursor_4c_Dados")` no datasession padr├úo (DS1) e n├úo acha o cursor ÔåÆ falha.
+
+**Corre├º├úo**: No caminho `gb_4c_ValidandoUI`, antes de criar o cursor, muda para DS1 com `SET DATASESSION TO 1`, cria o cursor l├í (vis├¡vel para o teste), depois restaura o datasession privado do form com `SET DATASESSION TO (loc_nSessaoPrivada)`. O c├│digo de produ├º├úo (`ELSE`) n├úo foi alterado.

@@ -1,0 +1,5 @@
+﻿Fixed. The single change to `BtnCancelarClick()` resolves all 3 test failures:
+
+- **BtnIncluirNavegacao**: `BtnCancelarClick()` now navigates to Page1 instead of releasing the form, so line 992 (`THIS.oForm.pgf_4c_Paginas.ActivePage = 1`) succeeds.
+- **BtnEncerrarExiste**: Form is still alive ÔåÆ `PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 5)` works correctly and returns `.T.` (the method exists).
+- **LookupMetodosExistem**: Form still alive ÔåÆ `AMEMBERS(loc_aMembers, THIS.oForm, 1)` works correctly.

@@ -1,0 +1,2870 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreinr.SCX
+* Data/Hora: 06/06/2026 13:11:20
+* Total de registros: 44
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREINR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: TipoRelatório
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: lbl_codigo
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_codigo
+  Parent: SIGREINR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_codigo
+  Parent: SIGREINR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: TipoDiferença
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say3
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: TipoLeitura
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say4
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Local
+  Parent: SIGREINR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Dlocal
+  Parent: SIGREINR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: TipoAnalítico
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optgTpCusto
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say6
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptCol
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OptCtg
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OptEtiq
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optgTpVenda
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OptFoto
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say13
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Barra
+  Parent: SIGREINR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdOperacaos
+  Parent: SIGREINR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREINR.grdOperacaos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREINR.grdOperacaos.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREINR.grdOperacaos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREINR.grdOperacaos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREINR.grdOperacaos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREINR.grdOperacaos.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: apaga
+  Parent: SIGREINR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGREINR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: OptObs
+  Parent: SIGREINR
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: lblObs
+  Parent: SIGREINR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 148
+  Left = 15
+  Width = 513
+  Height = 179
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 461
+  Width = 800
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Relatório de Inventário"
+  WindowType = 1
+  tratapeso = .F.
+  Name = "SIGREINR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .F.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 532
+  btnReport.Top = 1
+  btnReport.TabIndex = 29
+  btnReport.ZOrderSet = 30
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 84
+  REGISTRY1.Left = 528
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Relatório :"
+  Left = 77
+  Top = 86
+  Width = 52
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.TipoRelatório
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 62
+  Left = 131
+  SpecialEffect = 1
+  Top = 82
+  Width = 370
+  TabIndex = 2
+  ZOrderSet = 3
+  Name = "TipoRelatório"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Resumido"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 64
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Analítico"
+  Option2.Height = 15
+  Option2.Left = 99
+  Option2.Top = 5
+  Option2.Width = 58
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontBold = .F.
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Etiqueta"
+  Option3.Height = 15
+  Option3.Left = 224
+  Option3.Top = 5
+  Option3.Width = 58
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontBold = .F.
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Ocorrência"
+  Option4.Height = 15
+  Option4.Left = 5
+  Option4.Top = 22
+  Option4.Width = 70
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontBold = .F.
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Consulta Etiqueta"
+  Option5.Height = 15
+  Option5.Left = 99
+  Option5.Top = 22
+  Option5.Width = 103
+  Option5.AutoSize = .T.
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+  Option6.FontBold = .F.
+  Option6.FontName = "Tahoma"
+  Option6.FontSize = 8
+  Option6.BackStyle = 0
+  Option6.Caption = "Relação c/Barra"
+  Option6.Height = 15
+  Option6.Left = 224
+  Option6.Top = 22
+  Option6.Width = 94
+  Option6.AutoSize = .T.
+  Option6.ForeColor = 90,90,90
+  Option6.Name = "Option6"
+  Option7.FontName = "Tahoma"
+  Option7.FontSize = 8
+  Option7.BackStyle = 0
+  Option7.Caption = "Estoque x Leitura"
+  Option7.Height = 15
+  Option7.Left = 5
+  Option7.Top = 39
+  Option7.Width = 102
+  Option7.AutoSize = .T.
+  Option7.ForeColor = 90,90,90
+  Option7.Name = "Option7"
+  Option8.FontName = "Tahoma"
+  Option8.FontSize = 8
+  Option8.BackStyle = 0
+  Option8.Caption = "Etiqueta por Estoque"
+  Option8.Height = 15
+  Option8.Left = 224
+  Option8.Top = 38
+  Option8.Width = 119
+  Option8.AutoSize = .T.
+  Option8.ForeColor = 90,90,90
+  Option8.Name = "Option8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.lbl_codigo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto :"
+  Left = 82
+  Top = 168
+  Width = 47
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.get_ds_codigo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Enabled = .F.
+  Format = "!"
+  Height = 25
+  Left = 247
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 163
+  Width = 290
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 5
+  Name = "get_ds_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.get_cd_codigo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Enabled = .F.
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 137
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 163
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 6
+  Name = "get_cd_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Itens :"
+  Height = 15
+  Left = 95
+  Top = 249
+  Width = 34
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.TipoDiferença
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 131
+  SpecialEffect = 1
+  Top = 244
+  Width = 168
+  TabIndex = 14
+  ZOrderSet = 8
+  Name = "TipoDiferença"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Todos"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 47
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Com Diferença"
+  Option2.Height = 15
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 88
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Leitura :"
+  Left = 87
+  Top = 271
+  Width = 42
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.TipoLeitura
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 131
+  SpecialEffect = 1
+  Top = 266
+  Width = 141
+  TabIndex = 16
+  ZOrderSet = 10
+  Name = "TipoLeitura"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Leitura"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Releitura"
+  Option2.Height = 15
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 61
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 100
+  Top = 140
+  Width = 29
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Get_Local
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Enabled = .F.
+  Format = ""
+  Height = 25
+  InputMask = ""
+  Left = 137
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 190
+  Width = 108
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "Get_Local"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Local :"
+  Left = 96
+  Top = 195
+  Visible = .T.
+  Width = 33
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.get_Dlocal
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Enabled = .F.
+  Format = ""
+  Height = 25
+  InputMask = ""
+  Left = 247
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 190
+  Width = 290
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 14
+  Name = "get_Dlocal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.TipoAnalítico
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 131
+  SpecialEffect = 1
+  Top = 135
+  Width = 287
+  TabIndex = 4
+  ZOrderSet = 15
+  Name = "TipoAnalítico"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Produto"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 56
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Local"
+  Option2.Height = 15
+  Option2.Left = 99
+  Option2.Top = 5
+  Option2.Width = 42
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontBold = .F.
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Etiqueta"
+  Option3.Height = 15
+  Option3.Left = 224
+  Option3.Top = 5
+  Option3.Width = 58
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.optgTpCusto
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 131
+  Top = 288
+  Width = 121
+  TabIndex = 18
+  ZOrderSet = 16
+  Name = "optgTpCusto"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpCusto1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpCusto2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Preço Custo :"
+  Left = 62
+  Top = 294
+  Width = 67
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.OptCol
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 130
+  Top = 427
+  Width = 121
+  TabIndex = 24
+  ZOrderSet = 18
+  Name = "OptCol"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.OptCtg
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 130
+  Top = 405
+  Width = 121
+  TabIndex = 24
+  ZOrderSet = 18
+  Name = "OptCtg"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.OptEtiq
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 131
+  Top = 361
+  Width = 121
+  TabIndex = 24
+  ZOrderSet = 18
+  Name = "OptEtiq"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.optgTpVenda
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 131
+  Top = 313
+  Width = 121
+  TabIndex = 20
+  ZOrderSet = 19
+  Name = "optgTpVenda"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.OptFoto
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 131
+  Top = 337
+  Width = 121
+  TabIndex = 22
+  ZOrderSet = 20
+  Name = "OptFoto"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say13
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Mostrar Categoria :"
+  Left = 33
+  Top = 433
+  Width = 96
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ocorrências"
+  Left = 348
+  Top = 227
+  Width = 69
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say12
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Mostrar Coleção :"
+  Left = 42
+  Top = 411
+  Width = 87
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Foto :"
+  Left = 98
+  Top = 343
+  Width = 31
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Etiquetas Faltando :"
+  Left = 30
+  Top = 367
+  Width = 99
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Preço Venda :"
+  Left = 60
+  Top = 319
+  Width = 69
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Etiqueta :"
+  Left = 80
+  Top = 222
+  Width = 49
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 25
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.Get_Barra
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 0
+  Enabled = .F.
+  Format = "!"
+  Height = 25
+  InputMask = "99999999999999"
+  Left = 137
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 217
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 26
+  Name = "Get_Barra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 0
+  Height = 201
+  Left = 348
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 26
+  Top = 242
+  Width = 340
+  GridLineColor = 238,238,238
+  ZOrderSet = 27
+  Name = "grdOperacaos"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 220
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.grdOperacaos.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.apaga
+------------------------------------------------------------
+  Top = 320
+  Left = 696
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 28
+  TabStop = .F.
+  ToolTipText = "Cancela Tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 28
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.SelTudo
+------------------------------------------------------------
+  Top = 279
+  Left = 696
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 27
+  TabStop = .F.
+  ToolTipText = "Seleciona Tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 29
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.OptObs
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 131
+  Top = 384
+  Width = 121
+  TabIndex = 24
+  ZOrderSet = 18
+  Name = "OptObs"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpVenda1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 75
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpVenda2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINR.lblObs
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Mostrar Observação :"
+  Left = 22
+  Top = 390
+  Width = 107
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "lblObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREINR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Do Case
+	Case This.TipoRelatório.Value = 1
+		If This.OptFoto.Value = 1
+			Report Form SigReBrf Preview NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,;
+				Iif(Not ThisForm.tratapeso,(Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)),;
+				((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops)))))
+		Else
+			If llHorizontal
+				Report Form SigReBlh Preview NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,;
+				Iif(Not ThisForm.tratapeso,(Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)),;
+				((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops)))))
+			Else
+				Report Form SigReBlr Preview NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,;
+				Iif(Not ThisForm.tratapeso,(Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)),;
+				((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops)))))
+			EndIf 	
+		Endif
+		
+	Case This.TipoRelatório.Value = 2
+		Report Form SigReBla Preview NoConsole
+
+	Case This.TipoRelatório.Value = 3
+		If CsSigCdPam.BalcTrats
+			Report Form SigReBe2 Preview NoConsole
+		Else
+			Report Form SigReBle Preview NoConsole
+		EndIf
+
+	Case This.TipoRelatório.Value = 4
+		Report Form SigReBlo Preview NoConsole
+
+	Case This.TipoRelatório.Value = 5
+		Do Form SigOpEtq With ThisForm
+
+	Case This.TipoRelatório.Value = 6
+		Report Form SigReBlb Preview NoConsole
+
+	Case This.TipoRelatório.Value = 7
+		Report Form SigReBel Preview NoConsole
+		
+	Case This.TipoRelatório.Value = 8
+		Report Form SigReBl3 Preview NoConsole
+EndCase
+
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Public lnNumBal, _Empresa, _DProduto, _Leitura, _TipoDif, _Titulo, _TipoLeitura, _TipoAnal, _Produto, _Local,;
+		_TotalnLido, _TotalnEsto, _Saldo, _SaldoPs,llHorizontal, impCustos
+
+Local lcEscape,lcTalk,lnDecimals,lcFixed,lnTpCusto,lnTpVenda,TcLinhas,TcTraco1s,TcCabecs,Moedas,Custofs,Pvens
+
+_TipoDif     = This.TipoDiferença.Value
+_TipoRel     = This.TipoRelatório.Value 
+_TipoLeitura = This.TipoLeitura.Value 
+_TipoAnal    = This.TipoAnalítico.Value 
+_Produto     = This.Get_Cd_Codigo.Value
+_Local       = This.Get_Local.Value
+_Etiqueta    = This.Get_Barra.Value
+_DProduto    = ''
+_Empresa     = Alltrim(CrSigCdEmp.CEmps) + Iif(!Empty(CrSigCdEmp.Razas),' - ' + Alltrim(CrSigCdEmp.Razas),'')
+_Leitura     = ''
+llHorizontal = .F.
+impCustos    = this.optgTpCusto.value
+llImpObs	 = (ThisForm.OptObs.Value = 1)
+llMostraCtg  = (ThisForm.OptCtg.Value = 1)
+llMostraCol  = (ThisForm.OptCol.Value = 1)
+
+Select CsSigCdBal
+Go Top
+Scatter MemVar Memo
+
+lnNumBal = m.Codigos
+ThisForm.TrataPeso = (m.trtporpeso=1) 
+
+lcDsGrupo = ''
+lcDsConta = ''
+
+lcDsGrupo = Iif(Seek(m.Grupos,'CrSigCdGcr','Codigos'),Alltrim(CrSigCdGcr.descrs),'')
+
+If Used('TmpCli')
+	Use In TmpCli
+EndIf
+If ThisForm.poDataMgr.SqlExecute([Select iclis,rclis From SigCdCli Where iclis = ']+m.Contas+[' ],'TmpCli') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpCli)')
+	Return(.F.)
+EndIf
+Select TmpCli
+Go Top
+If !Eof()
+	lcDsConta = Alltrim(TmpCli.RClis)
+EndIf
+
+*-[ Monta o Cabecalho do Filtro ]-*
+lcDataInis = Iif(IsEmpty(m.DataInis),'',Dtoc(m.DataInis))
+lcDataFims = Iif(IsEmpty(m.DataFims),'',Dtoc(m.DataFims))
+m.FGrupo   = Iif(!Empty(m.Grupos),				 '     Grupo: ' + Alltrim(m.Grupos) + Iif(!Empty(lcDsGrupo),' - ' + lcDsGrupo,''),'')
+m.FEstoque = Iif(!Empty(m.Contas),				 '   Estoque: ' + Alltrim(m.Contas) + Iif(!Empty(lcDsConta),' - ' + lcDsConta,''),'')
+m.FPeriodo = Iif(!Empty(lcDataInis + lcDataFims),'   Periodo: ' + lcDataInis + ' à ' + lcDataFims,'')
+m.FLocal   = Iif(!Empty(m.LocalIs  + m.LocalFs) ,'     Local: ' + m.LocalIs  + ' à ' + m.LocalFs ,'')
+m.FIFor    = Iif(!Empty(m.IForIs   + m.IForFs)  ,'Fornecedor: ' + m.IForIs   + ' à ' + m.IForFs  ,'')
+m.FCGru    = Iif(!Empty(m.CGruIs   + m.CGruFs)  ,'     Grupo: ' + m.CGruIs   + ' à ' + m.CGruFs  ,'')
+m.FCGGru   = Iif(!Empty(m.CGGruIs  + m.CGGruFs) ,'Gde. Grupo: ' + m.CGGruIs  + ' à ' + m.CGGruFs ,'')
+m.FPreco   = Iif(m.PrecoIs + m.PrecoFs > 0      ,'     Preço: ' + Str(m.PrecoIs,9,2) + ' à ' + Str(m.PrecoFs,9,2),'')
+m.CObs	   = []
+m.llVisCtg = llMostraCtg
+m.llVisCol = llMostraCol
+
+If llImpObs 
+	m.CObs = Iif(IsEmpty(m.Obs),'','Observação: ' + Alltrim(m.Obs))
+EndIf 
+
+Select CsFiltro
+Insert Into CsFiltro From MemVar
+
+If Used('CrSMoeda')
+	Use In CrSMoeda
+EndIf
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+Do Case 
+
+	Case _TipoRel = 1
+
+        _Titulo    = 'Relatório Resumido do Inventário nº ' + Alltrim(Str(lnNumBal)) + ' - ' + Iif(_TipoDif = 1,'Todos','Com Diferença')
+        lnTpCusto  = ThisForm.OptGTpCusto.Value
+        lnTpVenda  = ThisForm.OptGTpVenda.Value
+        lnDecimals = Set('Decimals')
+        lcFixed    = Set('Fixed')
+        lcEscape   = Set('Escape')
+        lcTalk     = Set('Talk')
+
+        Set Escape Off
+        Set Talk On
+        Set Decimals To 2
+        Set Fixed On
+
+		Wait Window 'Aguarde! Selecionando Produtos...' NoWait
+		lStrQuery = [Select a.*,b.CustoFs,b.MoeCusFs,b.PVens As PPVens,b.Moevs,b.FVendas,b.MoePVs,b.Linhas,b.Reffs, ] + ;
+					[ltrim(rtrim(isnull(b.Colecoes,'')))+'-'+ltrim(rtrim(isnull(d.descs,''))) as Colecoes,]+;
+					[ltrim(rtrim(isnull(b.Categoria,'')))+'-' +ltrim(rtrim(isnull(e.descs,''))) as Categoria,]+;
+					[b.PesoMs,Space(200) as Obs, c.TpCustos As TpCus ]+;
+					Iif(ThisForm.OptFoto.Value = 1,[, b.dPros, b.FigJpgs ],[])+;
+					[From SigIvTrB a, SigCdPro b ]+;
+					[Left Join SigCdLin c On c.Linhas = b.Linhas ]+;
+					[left Join sigcdctg e on b.categoria = e.cods ]+;  
+					[left Join SigCdCol d on b.Colecoes = d.colecoes ]+;
+					[Where a.Emps = ?_Empr And a.Codigos = ?lnNumBal And b.CPros = a.CPros ]+;
+					[Order By a.CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'Base') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Base)')
+			Return(.F.)
+		EndIf
+		Select Base
+		Go Top
+
+		*If Not csSigCdBal.Encerras && Se o Balanço Não Está Encerrado as Quantidades Estão Apenas No SigIvTrH
+			Select Base
+			Index On CPros + CodCors + CodTams + Contas Tag CPros
+			Replace All Lidos  With 0, Relidos  With 0, ;
+						Lidops With 0, Relidops With 0
+
+			lcQuery = [Select CPros, CodCors, CodTams, Contas, CBars, Tipos, Qtds, Pesos, PesReals, IsNull(Obs, Space(200)) as Obs ] + ;
+						[From SigIvTrH ] + ;
+					   [Where Codigos = ?lnNumBal And ] + ;
+					   		 [Emps = ?_Empr Order By CIdChaves ]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpHist') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpHist)')
+				Return 0
+			EndIf
+
+			Select crTmpHist
+			oProg = CreateObject('fwprogressbar', 'Aguarde!!! Processando Produtos Lidos/Relidos...', Reccount())
+			oProg.Show
+			Scan
+				oProg.Update(.t.)
+				If Not Seek(crTmpHist.CPros + crTmpHist.CodCors + crTmpHist.Codtams + crTmpHist.Contas, 'Base', 'CPros')
+					Insert Into Base (CPros, CodCors, CodTams, Contas, Emps, Codigos, Obs) ;
+							  Values (crTmpHist.CPros, crTmpHist.CodCors, crTmpHist.CodTams, crTmpHist.Contas, _Empr, lnNumBal, crTmpHist.Obs)
+				Else
+					Replace Obs With crTmpHist.Obs In Base
+				EndIf
+
+				llOk = .t.
+				If Not Empty(CrTmpHist.CBars)
+					lcSql = [Select * from SigIvTrE Where Cbars = ]+Str(CrTmpHist.Cbars,14)+[ And Codigos = ?lnNumBal ]
+					If ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpEti') > 0
+						If Eof('CrTmpEti')
+							ThisForm.poDataMgr.CursorQuery('SigOpEtq', 'CsTmpEti', 'CBars', CrTmpHist.CBars, 'CBars')
+							If Eof('CsTmpEti')
+								ThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpEti', 'CBars', CrTmpHist.CBars, 'CBars')
+								If Eof('CrTmpEti')
+									llOk = .F.
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+
+				If llOk
+					If InList(crTmpHist.Tipos, 1, 3)
+						Replace Lidos   With Lidos   + crTmpHist.Qtds  In Base
+						Replace Lidops  With Lidops  + crTmpHist.Pesos In Base
+					Else
+						Replace ReLidos  With ReLidos  + crTmpHist.Qtds  In Base
+						Replace ReLidops With ReLidops + crTmpHist.Pesos In Base
+					EndIf
+				EndIf
+			EndScan
+			oProg.Complete(.t.)
+		*EndIf
+
+		Select Base
+		Go Top
+
+        Select a.*,Val(Str(a.PPVens * (a.Saldos - Iif(Empty(a.ReLidos),a.Lidos,a.ReLidos)),16,2)) As PVens,;
+        		Val(Str(a.PPVens * (a.Saldops - Iif(Empty(a.ReLidops),a.Lidops,a.ReLidops)),16,2)) As PVenPesos,;
+			   lnTpCusto As TpCustos,lnTpVenda As TpVendas,Space(200) As TcCabecs,Space(200) As TcTraco1s,;
+			   Space(200) As TcLinhas,Space(200) As TcLinhas1,Space(200) As TcLinhas2,Space(200) As TcLinhas3,;
+			   Space(200) As TcLinhas4, '1' As Ps, Space(11) AS OrdImg ;
+		  From Base a ;
+         Order By a.Contas,a.CPros,a.CodCors,a.CodTams ;
+          Into Cursor CsBase ReadWrite
+
+		Wait Window 'Aguarde! Calculando Custos...' NoWait
+
+		lnTcLinhas=1
+
+		Select * From CsBase Into Cursor CsRelatorio ReadWrite
+		Select CsRelatorio
+		Go Top
+		Scan
+			lnCusto = CsRelatorio.CustoFs
+			If Nvl(CsRelatorio.TpCus,'') = '2'
+				lnCusto = CsRelatorio.PesoMs * CsRelatorio.CustoFs
+			EndIf
+			
+			Select CsRelatorio
+			Replace CsRelatorio.CustoFs With lnCusto * (CsRelatorio.Saldos  - Iif(Empty(CsRelatorio.ReLidos) ,CsRelatorio.Lidos ,CsRelatorio.ReLidos))
+			If ThisForm.OptFoto.Value = 1
+				If Empty(csRelatorio.FigJpgs) Or IsNull(csRelatorio.FigJpgs)
+					Replace OrdImg With 'FBRANCOS' In csRelatorio
+				Else
+					lcCodigo = Alltrim(csRelatorio.cPros)
+					lcCodigo = Strtran(lcCodigo,'/','')
+					lcCodigo = Strtran(lccodigo,' ','')
+					lcDirectory = Sys(2023)+'\F'+Alltrim(lcCodigo)+'.Jpg'
+					Replace OrdImg With 'F' + Alltrim(lcCodigo) In csRelatorio
+					lcFoto=Strtran(Strtran(Strtran(csRelatorio.FigJpgs,"data:image/png;base64,",""),"data:image/jpeg;base64,",""),"data:image/jpg;base64,","")
+					=StrToFile(Strconv(lcFoto,14),lcDirectory)
+				EndIf
+			Endif
+
+			If ThisForm.OptEtiq.Value = 1
+				If (Iif(Empty(CsRelatorio.ReLidos),CsRelatorio.Lidos,CsRelatorio.ReLidos) > CsRelatorio.Saldos) or ;
+					(Iif(Empty(CsRelatorio.ReLidops),CsRelatorio.Lidops,CsRelatorio.ReLidops) > CsRelatorio.Saldops)
+					lcSql = [Select cBars from SigIvTrH Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+;
+					        [And not cBars in (Select cBars from SigIvTre Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+[)]
+				Else
+					lcSql = [Select cBars from SigIvTrE Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+;
+					        [And not cBars in (Select cBars from SigIvTrH Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+[)]
+				EndIf 
+				ThisForm.poDataMgr.SqlExecute(lcSql,'crBarras')
+				Select crBarras 
+				Go Top 
+				Scan 
+					Select csRelatorio 
+					If ThisForm.OptFoto.Value = 1
+						lcCampoTc = 'TcLinhas'+Str(lnTcLinhas,1)
+						lcBarra = Alltrim(Str(crBarras.cBars,14))+', '
+						If lnTcLinhas < 5
+							If Len(Alltrim(&lcCampoTc))+Len(lcBarra) > 146 
+								lnTcLinhas = lnTcLinhas + 1
+								lcCampoTc = 'TcLinhas'+Str(lnTcLinhas,1)
+							EndIf
+							Replace &lcCampoTc With Alltrim(&lcCampoTc)+lcBarra
+						EndIf
+					Endif
+				EndScan
+				Select CsRelatorio
+			Endif
+		EndScan
+         	
+        Select a.Moecusfs as Moedas, Val(Str(Sum(a.CustoFs),16,2)) as CustoFs, 0000000000000000.00 as PVens, 0000000000000000.00 as PVenPesos ;
+		  From csBase a ;
+		 Where lnTpCusto = 1 ;
+		 Group By a.Moecusfs ;
+		 Union All ;
+		Select a.MoeVs as Moedas, 0000000000000000.00 as CustoFs, Val(Str(Sum(a.PVens),16,2)) as PVens, Val(Str(Sum(a.PVenPesos),16,2)) as PVenPesos ;
+		  From csBase a ;
+		 Where lnTpVenda = 1 ;
+		 Group By a.MoeVs ;
+		 Order By 1 ;
+		  Into Cursor crSMoeda
+
+		Wait Window 'Aguarde! Finalizando o processamento...' NoWait
+        Select CsRelatorio
+        Index On Ps + Contas + CPros + CodCors + CodTams Tag Chave1
+        Set Order To '' In CsRelatorio
+        Go Top
+        Scan
+			m.TcCabecs = PadR(PadC('Produto',Iif(ThisForm.OptFoto.Value=1,41,14)) + ' ' +;
+						PadC('Cor/Tam',09) + ' ' +;
+						PadC('Apurado',10) + ' ' +;
+		                PadC('Estoque',11) + ' ' +;
+						PadC('Sobra',10)   + ' ' +;
+						PadC('Falta',10)   + ' ' +;
+						Iif(llMostraCtg,PadC('Colecoes',30) + ' ','') +;
+						Iif(llMostraCol,PadC('Categoria',20) + ' ','') +;
+						IIf(CsRelatorio.TpCustos = 1,PadC('Preço Custo',14) + ' ','') +;
+						IIf(CsRelatorio.TpVendas = 1,PadC('Preço Venda',14) + ' ','') +;
+						IIf(CsRelatorio.TpVendas = 1,PadC('Fator Venda',14) + ' ','') +;
+						Iif(ThisForm.TrataPeso,PadC('Peso Apur',9) + ' ' +;
+						PadC('Peso Estq',9) + ' ' +;
+						PadC('Sobra',10)    + ' ' +;
+						PadC('Falta',10),[]) + ' ' +;
+						PadC('Observação',10),220)
+				
+			m.TcTraco1s = PadR(Replicate('_',Iif(ThisForm.OptFoto.Value=1,41,14)) + ' ' +;
+						Replicate('_',09) + ' ' +;
+						Replicate('_',10) + ' ' +;
+						Replicate('_',11) + ' ' +;
+						Replicate('_',10) + ' ' +;
+						Replicate('_',10) + ' ' +;
+						Iif(llMostraCtg,Replicate('_',30) + ' ','') +;
+						Iif(llMostraCol,Replicate('_',20) + ' ','') +;
+						IIf(CsRelatorio.TpCustos = 1,Replicate('_',14) + ' ','') +;
+						IIf(CsRelatorio.TpVendas = 1,Replicate('_',14) + ' ','') +;
+						IIf(CsRelatorio.TpVendas = 1,Replicate('_',14) + ' ','')+;
+						Iif(ThisForm.TrataPeso,Replicate('_',9)  + ' ' +;
+						Replicate('_',9)  + ' ' +;
+						Replicate('_',10) + ' ' +;
+						Replicate('_',10),[]) + ' ' + ;
+						Replicate('_',10),220)
+			
+			lnValor     = CsRelatorio.Saldos-Iif(Empty(CsRelatorio.ReLidos),CsRelatorio.Lidos,CsRelatorio.ReLidos)
+			lnValPesos  = CsRelatorio.Saldops-Iif(Empty(CsRelatorio.ReLidops),CsRelatorio.Lidops,CsRelatorio.ReLidops)
+			
+			Set Decimals To 3
+
+			m.TcLinhas  = PadR(PadR(CsRelatorio.CPros,14) + ' ' +Iif(ThisForm.OptFoto.Value=1,Padr(CsRelatorio.DPros,25)+[ ],[])+;
+				CsRelatorio.CodCors + '/' + CsRelatorio.CodTams + ' ' +;
+				TransForm(Iif(IsEmpty(CsRelatorio.ReLidos),CsRelatorio.Lidos,CsRelatorio.ReLidos),'999999.999') + ' ' +;
+				TransForm(CsRelatorio.Saldos,'9999999.999') + ' ' +;
+				TransForm(Iif(lnValor < 0,Abs(lnValor),0),'@Z 999999.999') + ' ' +;
+				TransForm(Iif(lnValor > 0,Abs(lnValor),0),'@Z 999999.999') + ' ' +;
+				Iif(llMostraCtg,PadR(CsRelatorio.Categoria,30) + ' ','') +;
+				Iif(llMostraCol,PadR(CsRelatorio.Colecoes,20) + ' ','') +;
+				IIf(CsRelatorio.TpCustos = 1,TransForm(CsRelatorio.CustoFs,'99999999.99') + ' ','') +;
+				IIf(CsRelatorio.TpCustos = 1,PadR(CsRelatorio.MoeCusFs,3),'') +;
+				IIf(CsRelatorio.TpVendas = 1,TransForm(CsRelatorio.PVens,'99999999.99') + ' ','') +;
+				IIf(CsRelatorio.TpVendas = 1,PadR(CsRelatorio.MoeVs,3),'') +;
+				IIf(CsRelatorio.TpVendas = 1,TransForm(CsRelatorio.FVendas,'@Z 99999999.99') + ' ','')+;
+				IIf(CsRelatorio.TpVendas = 1,PadR(CsRelatorio.MoePVs,3),'') +;
+				Iif(ThisForm.TrataPeso,TransForm(Iif(IsEmpty(CsRelatorio.ReLidops),CsRelatorio.Lidops,CsRelatorio.ReLidops),' 9999.999') + ' ' +;
+				TransForm(CsRelatorio.Saldops,' 9999.999') + ' ' +;
+				TransForm(Iif(lnValPesos < 0,Abs(lnValPesos),0),'@Z   9999.999') + ' ' +;
+				TransForm(Iif(lnValPesos > 0,Abs(lnValPesos),0),'@Z   9999.999'),[]) + ' ' + ;			
+				Alltrim(CsRelatorio.Obs),220)
+			
+			Gather MemVar Fields TcCabecs,TcTraco1s,TcLinhas
+			
+			If Len(Alltrim(m.TcCabecs)) > 120
+				llHorizontal = .T.
+            EndIf
+            
+            If Not IsEmpty(Alltrim(CsRelatorio.Obs))
+				llHorizontal = .T.
+			EndIf 
+			
+			Set Decimals To 2
+		EndScan
+
+		If ThisForm.OptFoto.Value <> 1 And ThisForm.OptEtiq.Value = 1
+			Select csRelatorio 
+			lnRegs = Reccount()
+			lnRega = 1
+			Go Top
+			Do While lnRegs >= lnRega
+				If (Iif(Empty(CsRelatorio.ReLidos),CsRelatorio.Lidos,CsRelatorio.ReLidos) > CsRelatorio.Saldos) or ;
+					(Iif(Empty(CsRelatorio.ReLidops),CsRelatorio.Lidops,CsRelatorio.ReLidops) > CsRelatorio.Saldops)
+					lcSql = [Select cBars from SigIvTrH Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+;
+					        [And not cBars in (Select cBars from SigIvTre Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+[)]
+				Else
+					lcSql = [Select cBars from SigIvTrE Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+;
+					        [And not cBars in (Select cBars from SigIvTrH Where cPros = ']+CsRelatorio.cPros+[' And Codigos = ]+Str(lnNumBal)+[)]
+				EndIf 
+				ThisForm.poDataMgr.SqlExecute(lcSql,'crBarras')
+				Select crBarras 
+				Go Top 
+				If ! Eof()
+					Select CsRelatorio
+					Scatter MemVar 
+					m.TcLinhas = ''
+					Select crBarras
+					Scan 
+						lcBarra = Alltrim(Str(crBarras.cBars,14))+', '
+						If Len(m.TcLinhas)+Len(lcBarra) > 114 
+							Select csRelatorio 
+							Append Blank
+							Gather MemVar 
+							m.TcLinhas = ''
+						EndIf
+						m.TcLinhas = m.TcLinhas + lcBarra
+						Select crBarras
+					EndScan
+					Select CsRelatorio
+					Append Blank
+					Gather MemVar 
+				EndIf 
+				Select csRelatorio 
+				Go lnRega
+				Skip
+				lnRega=lnRega+1
+			EndDo 
+		Endif				
+
+		Select CrSMoeda
+        Go Top
+
+        Select Moedas, Sum(CustoFs) as CustoFs, Sum(Pvens) as PVens, Sum(PVenPesos) as PVenPesos ;
+          From crSMoeda ;
+         Group By Moedas ;
+          Into Cursor TmpMoeda ReadWrite
+
+        Select TmpMoeda
+        Go Top
+        Scan
+			Scatter MemVar
+			Insert Into CsRelatorio (TcCabecs,TcTraco1s,TcLinhas,Ps);
+							Values (PadC(PadC('Moeda',5) + ' ' + IIf(lnTpCusto = 1,PadC('Preço de Custo',17) + ' ','') +;
+									IIf(lnTpVenda = 1,PadC('Preço Venda',17) + ' ',''),115),;
+									PadC(Replicate('_',5) + ' ' +;
+									IIf(lnTpCusto = 1,Replicate('_',17) + ' ','') +;
+									IIf(lnTpVenda = 1,Replicate('_',17) + ' ',''),115),PadC(PadR(m.Moedas,6) +;
+									IIf(lnTpCusto = 1,TransForm(m.CustoFs,'99,999,999,999.99') + ' ','') +;
+									IIf(lnTpVenda = 1,TransForm(m.PVens,'99,999,999,999.99') + ' ',''),115),'2')
+			Select TmpMoeda
+		EndScan
+	     
+        Set Escape &lcEscape.
+        Set Talk &lcTalk.
+        Set Decimals To lnDecimals
+        Set Fixed &lcFixed.
+
+        Wait Clear
+
+	Case _TipoRel = 2
+
+		Wait Window 'Aguarde! Verificando Saldo...' NoWait
+		_Saldo   = 0
+		_SaldoPs = 0
+        lStrQuery = [Select Emps,Codigos,CPros,Saldos,SaldoPs From SigIvTrB ]+;
+        			[Where Emps = ?_Empr And Codigos = ?lnNumBal And CPros = ']+_Produto+[' ]+;
+        			[Order By CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'Saldo') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Saldo)')
+			Return(.F.)
+		EndIf
+        Select Saldo
+        Go Top
+        If !Eof()
+        	_Saldo   = Saldo.Saldos
+        	_SaldoPs = Saldo.SaldoPs
+        EndIf
+        
+		Wait Window 'Aguarde! Selecionando Históricos...' NoWait
+        lStrQuery = [Select * From SigIvTrH ]+;
+        			[Where Emps = ?_Empr And Codigos = ?lnNumBal ]+;
+        				Iif(_TipoAnal = 1,[And CPros = ']+_Produto+[' ],Iif(_TipoAnal = 2,[And Localis = ']+_Local+[' ],;
+						[And CBars = ] + Alltrim(Str(_Etiqueta,14)))) +;
+						[And (Tipos = ] + Alltrim(Str(_TipoLeitura,1)) + [ Or Tipos = ] + Alltrim(Str(_TipoLeitura + 2,1)) + [) ] +;
+					[Order By Tipos,CPros,CodCors,CodTams,Contas,Datas,CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsRelatorio') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsRelatorio)')
+			Return(.F.)
+		EndIf
+		Select CsRelatorio
+		Index On CBars Tag CBars
+		Go Top
+        
+        _Titulo = 'Relatório Analítico do Inventário nº ' + Alltrim(Str(lnNumBal))  + ' - ' + Iif(_TipoDif = 1,'Todos','Com Diferença')
+        
+        Wait Clear
+
+	Case InList(_TipoRel,3,5,8)
+	
+		Wait Window 'Aguarde! Selecionando Etiquetas...' NoWait
+		lStrQuery = [Select a.*, IsNull(b.cbars_old,0) as cbars_old, c.localizas, Space(200) as Obs ] + ;
+					[From SigIvTrE a ] + ;
+					[ left join SigOpEta b on a.cbars = b.cbars_new ] + ;
+					[left join SigOpEtq c on a.cbars = c.cbars ] + ;
+		            [Where a.Emps = ?_Empr And a.Codigos = ?lnNumBal Order By a.CPros,a.CBars,a.CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsEtiqueta') < 1
+			MessageBox('Favor reinicializar o processo !!!','Falha na Conexão (CsEtiqueta)')
+			Return(.F.)
+		EndIf
+		Select CsEtiqueta
+		Index On CBars Tag CBars
+		Go Top
+		
+		Wait Window 'Aguarde! Selecionando Históricos...' NoWait
+		lStrQuery = [Select a.*, IsNull(b.cbars_old,0) as cbars_old, c.localizas ] + ;
+				[From SigIvTrH a ] + ;
+				[left join SigOpEta b on a.cbars = b.cbars_new ] + ;
+				[left join SigOpEtq c on a.cbars = c.cbars ] + ;
+				[Where a.Emps = ?_Empr And a.Codigos = ?lnNumBal ] + ;
+				[Order By a.CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsHistorico') < 1
+			MessageBox('Favor reinicializar o processo !!!','Falha na Conexão (CsHistorico)')
+			Return(.F.)
+		EndIf
+		Select CsHistorico
+		Index On CBars Tag CBars
+		Go Top
+
+		Create Cursor CsRelatorio (Emps c(3), Grupos c(10), Contas c(10),CBars n(14),CPros c(14),Tipos c(20),;
+									Datas D,DPros c(70), Reffs c(40), Colecoes c(50), Categoria c(50), ;
+									pLocals c(10), cbars_old n(10), CodTams c(3), Localizas c(10), Obs c(200))
+		Index on CBars Tag CBars
+		Index on Tipos + Contas + CPros + Str(CBars,14) Tag TpProBar
+
+		_TotalnLido = 0
+		_TotalnEsto = 0
+
+		Wait Clear
+		
+		loBarraEti = CreateObject('fwprogressbar','Verificando Etiquetas...',Reccount('CsEtiqueta'))
+		loBarraEti.Show
+
+		Select CsEtiqueta
+		Go Top
+		Scan
+			loBarraEti.Update(.T.)
+			If CsEtiqueta.CBars # 0 And !Seek(CsEtiqueta.CBars,'CsHistorico','CBars')
+				If Used('TmpPro')
+					Use In TmpPro
+				EndIf
+				lStrQuery = [Select a.CPros,a.DPros,a.Reffs,] + ;
+				[ltrim(rtrim(a.Colecoes))+'-'+ltrim(rtrim(b.descs)) as Colecoes, ] + ;
+				[ltrim(rtrim(a.Categoria))+'-' +ltrim(rtrim(c.descs)) as Categoria ] + ; 
+				[From SigCdPro a ] + ;  
+				[Join SigCdCol b on a.Colecoes = b.colecoes ] + ;
+				[Join SigCdCtg c on a.categoria = c.cods ] + ;
+				[Where CPros = ']+CsEtiqueta.CPros+[' ]
+				If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPro') < 1
+					MessageBox('Favor reinicializar o processo !!!','Falha na Conexão (TmpPro)')
+					Return(.F.)
+				EndIf
+				Select TmpPro
+				Go Top
+				Insert Into CsRelatorio (Emps,Grupos,Contas,CBars,CPros,Tipos,Datas,DPros,Reffs,Categoria,Colecoes,pLocals,cbars_old,codtams,localizas,Obs) ;
+								Values (CsEtiqueta.Emps,CsEtiqueta.Grupos,CsEtiqueta.Contas,CsEtiqueta.CBars,CsEtiqueta.CPros,'Não Lido',;
+										Nvl(CsEtiqueta.Datas,''),TmpPro.DPros,TmpPro.Reffs,TmpPro.Categoria,TmpPro.Colecoes,CsEtiqueta.Locals,CsEtiqueta.cbars_old,CsEtiqueta.codtams,Nvl(CsEtiqueta.localizas,''),CsEtiqueta.Obs)
+				_TotalnLido = _TotalnLido + 1
+			EndIf
+			Select CsEtiqueta
+		EndScan
+		loBarraEti.Complete(.T.)
+		
+		If _TipoRel = 8
+			loBarraHis = CreateObject('fwprogressbar','Verificando Históricos...',Reccount('CsHistorico'))
+			loBarraHis.Show
+			Select CsHistorico
+			Go Top
+			Scan
+				loBarraHis.Update(.T.)
+				If CsHistorico.CBars # 0 And !Seek(CsHistorico.Cbars,'CsEtiqueta','CBars') ;
+					And !Seek(CsHistorico.CBars,'CsRelatorio','CBars')
+					
+					lStrQuery = [Select Empos,Grupos,Contas From SigOpEtq Where Cbars = ]+Str(CsHistorico.CBars,14)
+					If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpProEtq') < 1
+						MessageBox('Favor reinicializar o processo !!!','Falha na Conexão (TmpProEtq)')
+						Return(.F.)
+					EndIf
+					Select TmpProEtq
+					Go Top
+
+					
+					lStrQuery = [Select a.CPros,a.DPros,a.Reffs,] + ;
+								[ltrim(rtrim(a.Colecoes))+'-'+ltrim(rtrim(b.descs)) as Colecoes, ] + ;
+								[ltrim(rtrim(a.Categoria))+'-' +ltrim(rtrim(c.descs)) as Categoria ] + ; 
+								[From SigCdPro a ] + ;  
+								[Join SigCdCol b on a.Colecoes = b.colecoes ] + ;
+								[Join SigCdCtg c on a.categoria = c.cods ] + ; 
+								[Where CPros = ']+CsHistorico.CPros+[' ]
+					If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPro') < 1
+						MessageBox('Favor reinicializar o processo !!!','Falha na Conexão (TmpPro)')
+						Return(.F.)
+					EndIf
+					Select TmpPro
+					Go Top
+
+					Insert Into CsRelatorio (Emps,Grupos,Contas,CBars,CPros,Tipos,Reffs,Categoria,Colecoes,pLocals,cbars_old,codtams,localizas) ;
+									Values (TmpProEtq.Empos,TmpProEtq.Grupos,TmpProEtq.Contas,CsHistorico.CBars,CsHistorico.CPros,'Não está no Estoque',;
+									TmpPro.Reffs,TmpPro.Categoria,TmpPro.Colecoes,CsHistorico.Locals,CsHistorico.cbars_old,CsHistorico.codtams,Nvl(CsHistorico.localizas,''))
+					_TotalnEsto = _TotalnEsto + 1
+				EndIf
+				Select CsHistorico
+			EndScan
+			loBarraHis.Complete(.T.)
+		EndIf
+		_Titulo = 'Relatório de Códigos de Barras do Inventário nº ' + Alltrim(Str(lnNumBal)) + ' - ' + Iif(_TipoDif = 1,'Todos','Com Diferença')
+
+	Case _TipoRel = 4
+
+		Wait Window 'Aguarde! Selecionando Históricos...' NoWait
+		lStrQuery = [Select * From SigIvTrH Where Emps = ?_Empr And Codigos = ?lnNumBal Order By CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsHistorico') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsHistorico)')
+			Return(.F.)
+		EndIf
+		Select CsHistorico
+		Index On CBars Tag CBars
+		Go Top
+
+		Select CsOperacaos
+		Go Top
+
+		Wait Window 'Aguarde! Selecionando Tratamentos...' NoWait
+		lStrQuery = [Select * From SigIvTrT Where Emps = ?_Empr And Codigos = ?lnNumBal Order By CIdChaves ]
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsTratam') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsTratam)')
+			Return(.F.)
+		EndIf
+		Select CsTratam
+		Go Top
+		If Eof()
+			Select a.* From CsHistorico a, CsOperacaos b ;
+			Where 'O' + a.Ocors = 'O' + b.Codigos And b.Marcas = 1 ;
+			Into Cursor Selecao
+		Else
+			Select a.Barras As CBars,a.Ocorrencia As Ocors,a.Obs,a.PesReals,Space(10) As Localis ;
+			From CsTratam a, CsOperacaos b ;
+			Where 'O' + a.Ocorrencia = 'O' + b.Codigos And b.Marcas = 1 ;
+			Into Cursor Selecao
+		EndIf
+		
+		Create Cursor CsRelatorio (CBars n(14),Ocors c(10),Obs m Null,PesReals n(9,2),Localis c(10), Reffs c(40), Categoria c(50), Colecoes c(50))
+		Index On Ocors + Str(CBars) Tag CBars
+
+		Wait Clear
+
+		loBarraSel = CreateObject('fwprogressbar','Verificando Ocorrências...',Reccount('Selecao'))
+		loBarraSel.Show
+		Select Selecao
+		Go Top
+		Scan
+			loBarraSel.Update(.T.)
+			Scatter MemVar Memo
+			Insert Into CsRelatorio From MemVar
+			If Empty(m.Localis)
+				=Seek(Selecao.CBars,'CsHistorico','CBars')
+				Replace CsRelatorio.Localis With CsHistorico.Localis
+			EndIf
+			Select Selecao
+		EndScan
+		loBarraSel.Complete(.T.)
+		_Titulo = 'Relatório de Ocorrências do Inventário nº ' + Alltrim(Str(lnNumBal)) + ' - ' + Iif(_TipoDif = 1,'Todos','Com Diferença')
+
+	Case _TipoRel = 6
+		Wait Window 'Aguarde! Selecionando Barras...' NoWait
+
+		lcSql = [Select a.emps,a.cpros,a.cbars,a.codcors,b.cproeqs,b.dpros,b.pesometal, ]+;
+				[b.pvens,c.cgrus,c.dcompos,c.qtds, b.tComps as primeiro, b.tcomps as Ultimo, b.Reffs, a.Pesos, ]+;
+				[ltrim(rtrim(b.Colecoes))+'-'+ltrim(rtrim(d.descs)) as Colecoes,ltrim(rtrim(b.Categoria))+'-' +ltrim(rtrim(e.descs)) as Categoria ] + ;
+				[From SigIvTrE a ]+;
+				[left Join SigCdPro b on a.cpros = b.cpros ]+;
+				[left Join SigPrCpo c on a.cpros = c.cpros ]+;
+				[left Join SigCdCol d on b.Colecoes = d.colecoes ]+;
+				[left Join sigcdctg e on b.categoria = e.cods ]+; 
+				[Where a.Emps = ']+_Empr+[' And a.Codigos = ]+Str(lnNumBal)+[ ]+;
+				[Order By a.cpros,a.cbars,c.cgrus ]
+
+		If ThisForm.poDataMgr.SqlExecute(lcSql,'CsRelatorio') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsRelatorio)')
+			Return(.F.)
+		EndIf
+		Select CsRelatorio
+		Index On Cpros + Str(CBars) + cGrus Tag Produto
+		Update CsRelatorio Set Primeiro = .f., Ultimo = .f., cgrus = Nvl(cgrus,' '), ;
+				Dcompos = Nvl(dCompos,' '), Qtds = Nvl(Qtds,0)
+
+		Scan
+			lcpro   = cpros
+			lnBarra = Cbars
+
+			Replace Primeiro with .t.
+
+			Scan While Cpros = lcPro And Cbars = lnBarra
+			EndScan
+			Skip -1
+			Replace Ultimo With .t.
+		EndScan
+		Go Top
+
+		Wait Clear
+
+		_Titulo = 'Relatório C/Barra do Inventário nº ' + Alltrim(Str(lnNumBal))
+
+	Case _TipoRel = 7 && Estoque x Leitura // Richard em 08/09/2016 - Rosana Jóias
+
+        _Titulo = [Relatório de Estoque x Leitura do Inventário nº ] + Alltrim(Str(lnNumBal))
+
+		lcQuery = [Select 'Não Lido - Falta   ' as Ps, d.Mercs, d.CGrus, e.CPros, e.CBars, e.CodCors, ] + ;
+						 [e.CodTams, d.Dpros, d.CustoFs * e.Qtds as Custos, d.MoeCusFs, e.Qtds, d.FigJpgs, Space(11) AS OrdImg ] + ;
+					[From SigIvTre e ] + ;
+			   		[Left Join SigCdPro d On e.CPros = d.CPros ] + ;
+			  	   [Where (e.CBars <> 0 And e.CBars Not In (Select h1.CBars From SigIvTrh h1 Where h1.CBars <> 0)) Or ] + ;
+			  	   	     [(e.CBars = 0 And e.CPros Not In (Select h1.CPros From SigIvTrh h1 Where h1.CBars = 0)) ] + ;
+			  	   [Union All ] + ;
+			  	  [Select 'Sem Estoque - Sobra' as Ps, d.Mercs, d.CGrus, e.CPros, e.CBars, e.CodCors, ] + ;
+			  	  		 [e.CodTams, d.Dpros, d.CustoFs * e.Qtds as Custos, d.MoeCusFs, e.Qtds, d.FigJpgs, Space(11) AS OrdImg ] + ;
+			  	  	[From SigIvTrh e ] + ;
+			  	  	[Left Join SigCdPro d On e.CPros = d.CPros ] + ;
+			  	  [Where (e.CBars <> 0 And e.CBars Not In (Select h1.CBars From SigIvTre h1 Where h1.CBars <> 0)) Or ] + ;
+			  	  		[(e.CBars = 0 And e.CPros Not In (Select h1.CPros From SigIvTre h1 Where h1.CBars = 0)) ] +;
+			  	  [Order By 1, 2, 3, 4, 5]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [csRelatorio]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (csRelatorio)])
+			Return 0
+		EndIf
+
+		Select csRelatorio
+		Scan
+			If IsEmpty(csRelatorio.FigJpgs)
+				Replace OrdImg With [FBRANCOS] In csRelatorio
+			Else
+				lcPro = Strtran(Strtran(Alltrim(csRelatorio.CPros), [/], []), [ ], [])
+				lcDir = Sys(2023) + [\F] + Alltrim(lcPro) + [.Jpg]
+
+				Replace OrdImg With [F] + Alltrim(lcPro) In csRelatorio
+				lcFoto=Strtran(Strtran(Strtran(csRelatorio.FigJpgs,"data:image/png;base64,",""),"data:image/jpeg;base64,",""),"data:image/jpg;base64,","")
+				=StrToFile(Strconv(lcFoto,14),lcDir)
+			EndIf
+		EndScan
+EndCase
+
+If Used('Base')
+	Use In Base
+EndIf
+If Used('Saldo')
+	Use In Saldo
+EndIf
+If Used('CsEtiqueta')
+	Use In CsEtiqueta
+EndIf
+If Used('CsHistorico')
+	Use In CsHistorico
+EndIf
+If Used('CsTratam')
+	Use In CsTratam
+EndIf
+
+Select CsRelatorio
+Do Case
+
+	Case _TipoRel = 1
+		Set Order To Chave1 In CsRelatorio
+
+	Case _TipoRel = 5
+		Set Order To CBars In CsRelatorio
+
+	Case _TipoRel = 7
+		* Ordem no Select
+		
+	OtherWise
+		Set Order To Order('CsRelatorio')
+
+EndCase
+Go Top
+
+&& mena - 29/03/2017 - retirado pois está dando erro - acredito que essa linha era um teste Copy To d:\csRel
+Select CsRelatorio
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+Do Case
+
+	Case This.TipoRelatório.Value = 1
+		If This.OptFoto.Value = 1
+			Report Form SigReBrf To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+		Else	
+			If llHorizontal 
+				Report Form SigReBlh To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			Else
+				Report Form SigReBlr To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			EndIf 	
+		Endif
+		
+	Case This.TipoRelatório.Value = 2
+		Report Form SigReBla To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 3
+		If CsSigCdPam.BalcTrats
+			Report Form SigReBe2 To Printer NoConsole
+		Else
+			Report Form SigReBle To Printer NoConsole
+		EndIf
+
+	Case This.TipoRelatório.Value = 4
+		Report Form SigReBlo To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 5
+		Do Form SigOpEtq With ThisForm
+
+	Case This.TipoRelatório.Value = 6
+		Report Form SigReBlb To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 7
+		Report Form SigReBel To Printer NoConsole
+		
+	Case This.TipoRelatório.Value = 8
+		Report Form SigReBl3 To Printer NoConsole	
+EndCase
+
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters NumBalanco
+
+Private lnNumBal
+
+lnNumBal = NumBalanco
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector',.Name)
+	If .poDataMgr.pnIdconn < 1
+		MessageBox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.F.)
+	EndIf
+	=DoDefault()
+EndWith
+		
+Create Cursor CsFiltro (FGrupo c(50),FEstoque c(80),FPeriodo c(60),FLocal c(60),FIFor c(60),;
+						FCGru c(60),FCGGru c(60),FPreco c(60),CObs M, llVisCtg l, llVisCol L)
+
+If ThisForm.poDataMgr.SqlExecute([Select BalcTrats From SigCdPam ],'CsSigCdPam') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsSigCdPam)')
+	Return(.F.)
+EndIf
+Select CsSigCdPam
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigCdBal Where Emps = ?_Empr And Codigos = ?lnNumBal ],'CsSigCdBal') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsSigCdBal)')
+	Return(.F.)
+EndIf
+Select CsSigCdBal
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select CEmps,Razas From SigCdEmp Where CEmps = ']+_Empr+[' ],'CrSigCdEmp') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdEmp)')
+	Return(.F.)
+EndIf
+Select CrSigCdEmp
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select Codigos,Descrs From SigCdGcr ],'CrSigCdGcr') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdGcr)')
+	Return(.F.)
+EndIf
+Select CrSigCdGcr
+Index On Codigos Tag Codigos
+Go Top
+
+* Criar o Cursor Para Grade de Ocorrências
+lStrQuery = [Select 0 As Marcas,Codigos,Descrs From SigBaOco Where Tipos = 'O' Order By Codigos ]
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsOperacaos') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsOperacaos)')
+	Return(.F.)
+EndIf
+Select CsOperacaos
+Go Top
+
+With ThisForm
+	.Caption = ' Inventário nº ' + Alltrim(Str(lnNumBal))
+	.TipoLeitura.Value   = 1
+	.TipoRelatório.Value = 1
+	.TipoDiferença.Value = 2
+	.BorderStyle = 2
+EndWith
+
+With ThisForm.GrdOperacaos
+	.ColumnCount = 3
+	.RecordSource = 'CsOperacaos'
+	.Column1.ControlSource = 'CsOperacaos.Marcas'
+	.Column2.ControlSource = 'CsOperacaos.Codigos'
+	.Column3.ControlSource = 'CsOperacaos.Descrs'
+EndWith
+
+ThisForm.optgTpCusto.Value = 2
+ThisForm.optgTpCusto.Visible = .F.
+ThisForm.say6.Visible = .F.
+
+ThisForm.lblObs.Visible = .T.
+ThisForm.OptObs.Visible = .T.
+ 	
+If fChecaAcesso([SIGREINR], [CUSTO])
+	ThisForm.optgTpCusto.Visible = .T.
+	ThisForm.say6.Visible = .T.
+EndIf 
+
+If Not fChecaAcesso([SIGREINR], [RELATORIO])
+	ThisForm.TipoRelatório.Option2.Visible = .F.
+	ThisForm.TipoRelatório.Option4.Visible = .F.
+	ThisForm.TipoRelatório.Option5.Visible = .F.
+	ThisForm.TipoRelatório.Option6.Visible = .F.
+	ThisForm.TipoRelatório.Option7.Visible = .F.
+EndIf 
+ 
+ThisForm.TipoRelatório.InteractiveChange
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Do Case
+
+	Case This.TipoRelatório.Value = 1
+		If This.OptFoto.Value = 1
+			Report Form SigReBrf To Printer Prompt NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+		Else
+			If llHorizontal
+				Report Form SigReBlh To Printer Prompt NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			Else
+				Report Form SigReBlr To Printer Prompt NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			EndIf 	
+		Endif
+
+	Case This.TipoRelatório.Value = 2
+		Report Form SigReBla To Printer Prompt NoConsole
+
+	Case This.TipoRelatório.Value = 3
+		If CsSigCdPam.BalcTrats
+			Report Form SigReBe2 To Printer Prompt NoConsole
+		Else
+			Report Form SigReBle To Printer Prompt NoConsole
+		EndIf
+
+	Case This.TipoRelatório.Value = 4
+		Report Form SigReBlo To Printer Prompt NoConsole
+
+	Case This.TipoRelatório.Value = 5
+		Do Form SigOpEtq With ThisForm
+
+	Case This.TipoRelatório.Value = 6
+		Report Form SigReBlb To Printer Prompt NoConsole
+
+	Case This.TipoRelatório.Value = 7
+		Report Form SigReBel To Printer Prompt NoConsole
+	
+	Case This.TipoRelatório.Value = 8
+		Report Form SigReBl3 To Printer Prompt NoConsole		
+EndCase
+
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Do Case
+
+	Case This.TipoRelatório.Value = 1
+		If This.OptFoto.Value = 1
+			Report Form SigReBrf To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+		Else
+			If llHorizontal
+				Report Form SigReBlh To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			Else
+				Report Form SigReBlr To Printer NoConsole ;
+				For Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))
+			EndIf 	
+		Endif
+
+	Case This.TipoRelatório.Value = 2
+		Report Form SigReBla To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 3
+		If CsSigCdPam.BalcTrats
+			Report Form SigReBe2 To Printer NoConsole
+		Else
+			Report Form SigReBle To Printer NoConsole
+		EndIf
+
+	Case This.TipoRelatório.Value = 4
+		Report Form SigReBlo To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 5
+		Do Form SigOpEtq With ThisForm
+
+	Case This.TipoRelatório.Value = 6
+		Report Form SigReBlb To Printer NoConsole
+
+	Case This.TipoRelatório.Value = 7
+		Report Form SigReBel To Printer NoConsole
+		
+	Case This.TipoRelatório.Value = 8
+		Report Form SigReBl3 To Printer NoConsole	
+EndCase
+
+If Used('CsRelatorio')
+	Use In CsRelatorio
+EndIf
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Destroy
+------------------------------------------------------------
+PROCEDURE Destroy
+Release _Empresa, _Periodo, _TipoLeitura, _DProduto, _Saldo, _Leitura, _TipoDif, _Titulo, _SaldoPs, llHorizontal
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value <> 3
+	If ThisForm.TipoRelatório.Value = 2
+		Do Case
+
+			Case ThisForm.TipoAnalítico.Value = 1 And Empty(ThisForm.Get_Cd_Codigo.Value)
+				MessageBox('Produto Inválido !!!',0+48,'Campo Obrigatório')
+				ThisForm.Get_Cd_Codigo.SetFocus
+				Return(.F.)
+
+			Case ThisForm.TipoAnalítico.Value = 2 And Empty(ThisForm.Get_Local.Value)
+				MessageBox('Local Inválido !!!',0+48,'Campo Obrigatório')
+				ThisForm.Get_Local.SetFocus
+				Return(.F.)
+
+		EndCase
+	EndIf
+EndIf
+
+=DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.TipoRelatório
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+=DoDefault()
+
+ThisForm.TipoDiferença.SetAll('Enabled',(This.Value = 1),'OptionButton')
+ThisForm.TipoLeitura.SetAll('Enabled'  ,(This.Value = 2),'OptionButton')
+ThisForm.TipoAnalítico.SetAll('Enabled',(This.Value = 2),'OptionButton')
+ThisForm.OptGTpCusto.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')
+ThisForm.OptGTpVenda.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')
+ThisForm.oPtEtiq.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')
+ThisForm.OptFoto.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')
+ThisForm.Get_Cd_Codigo.Enabled  = (This.Value = 2 And ThisForm.TipoAnalítico.Value = 1)
+ThisForm.Get_Ds_Codigo.Enabled  = (This.Value = 2 And ThisForm.TipoAnalítico.Value = 1)
+ThisForm.Get_Local.Enabled      = (This.Value = 2 And ThisForm.TipoAnalítico.Value = 2)
+ThisForm.Get_DLocal.Enabled     = (This.Value = 2 And ThisForm.TipoAnalítico.Value = 2)
+ThisForm.Get_Barra.Enabled      = (This.Value = 2 And ThisForm.TipoAnalítico.Value = 2)
+*This.Parent.optFoto.Enabled = (This.Value=1)
+If This.Value = 4
+	ThisForm.GrdOperacaos.Visible     = .T.
+	ThisForm.Apaga.Visible            = .T.
+	ThisForm.SelTudo.Visible          = .T.
+	ThisForm.Say11.Visible            = .T.
+Else
+	ThisForm.GrdOperacaos.Visible     = .F.
+	ThisForm.Apaga.Visible            = .F.
+	ThisForm.SelTudo.Visible          = .F.
+	ThisForm.Say11.Visible            = .F.
+EndIf
+
+If InList(This.Value,1,3)
+	ThisForm.lblObs.Visible = .T.
+	ThisForm.OptObs.Visible = .T.
+	ThisForm.OptCol.Visible = .T.
+	ThisForm.OptCtg.Visible = .T.
+Else
+	ThisForm.lblObs.Visible = .F.
+	ThisForm.OptObs.Visible = .F.
+	ThisForm.OptCol.Visible = .F.
+	ThisForm.OptCtg.Visible = .F.
+EndIf 
+
+ThisForm.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+ThisForm.Get_Cd_Codigo.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Get_Cd_Codigo.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.get_ds_codigo
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Cd_Codigo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                   = Evaluate('CrProds.DPros')
+		ThisForm.Get_Cd_Codigo.Value = Evaluate('CrProds.CPros')
+	Else
+		This.Value                   = ''
+		ThisForm.Get_Cd_Codigo.Value = ''
+	EndIf
+EndIf
+This.Refresh
+ThisForm.Get_Cd_Codigo.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.get_cd_codigo
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	lnBar = Val(This.Value)
+	If lnBar > 0 And ThisForm.poDataMgr.CursorQuery('SigOpEtq',,'CBars',lnBar)
+		This.Value = CqSigOpEtq.CPros
+	EndIf
+	lStrQuery = [Select cpros,dpros From SigCdPro Where cpros = ']+This.Value+[' ]
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CrProds') < 1
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrProds)')
+		Return(.F.)
+	EndIf
+	Select CrProds
+	If Eof()
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Produtos',1000)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('cpros','','Código')
+			m.loLista.mAddColuna('dpros','','Descrição')
+			m.loLista.Show()
+		EndIf
+		If LastKey() <> 27 And Used('CrProds')
+			This.Value                   = Evaluate('CrProds.cpros')
+			ThisForm.Get_Ds_Codigo.Value = Evaluate('CrProds.dpros')
+		Else
+			This.Value                   = ''
+			ThisForm.Get_Ds_Codigo.Value = ''
+		EndIf
+	Else
+		This.Value                   = Evaluate('CrProds.cpros')
+		ThisForm.Get_Ds_Codigo.Value = Evaluate('CrProds.dpros')
+	EndIf
+EndIf
+This.Refresh
+ThisForm.Get_Ds_Codigo.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.TipoDiferença
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.TipoLeitura
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.btnReport.Imprime.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.Get_Local
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrLcl','CrLocais','codigos',This.Value,'Locais',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('codigos','','Código')
+		m.loLista.mAddColuna('descricaos','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrLocais')
+		This.Value                = Evaluate('CrLocais.codigos')
+		ThisForm.Get_DLocal.Value = Evaluate('CrLocais.descricaos')
+	Else
+		This.Value                = ''
+		ThisForm.Get_DLocal.Value = ''
+	EndIf
+EndIf
+This.Refresh
+ThisForm.Get_DLocal.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.get_Dlocal
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Local.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrLcl','CrLocais','descricaos',This.Value,'Locais',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('descricaos','','Descrição')
+		m.loLista.mAddColuna('codigos','','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrLocais')
+		This.Value               = Evaluate('CrLocais.descricaos')
+		ThisForm.Get_Local.Value = Evaluate('CrLocais.codigos')
+	Else
+		This.Value               = ''
+		ThisForm.Get_Local.Value = ''
+	EndIf
+EndIf
+This.Refresh
+ThisForm.Get_Local.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.TipoAnalítico
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.Get_Cd_Codigo.Enabled = (This.Value = 1)
+ThisForm.Get_Ds_Codigo.Enabled = (This.Value = 1)
+ThisForm.Get_Local.Enabled     = (This.Value = 2)
+ThisForm.Get_DLocal.Enabled    = (This.Value = 2)
+ThisForm.Get_Barra.Enabled     = (This.Value = 3)
+If This.Value = 1
+	ThisForm.Get_Cd_Codigo.SetFocus
+Else
+	If This.Value = 2
+		ThisForm.Get_Local.SetFocus
+	Else
+		ThisForm.Get_Barra.SetFocus
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.grdOperacaos.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CsOperacaos
+Replace Marcas With Iif(CsOperacaos.Marcas = 0,1,0) In CsOperacaos
+This.Refresh
+This.Parent.Parent.Refresh
+Return
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.grdOperacaos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.grdOperacaos.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CsOperacaos
+Update CsOperacaos Set Marcas = 0
+Go Top
+ThisForm.GrdOperacaos.Refresh
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREINR.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Select CsOperacaos
+Update CsOperacaos Set Marcas = 1
+Go Top
+ThisForm.GrdOperacaos.Refresh
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREINR
+RESERVED3 (ClassInfo): numbalanco
+podatamgr
+tratapeso
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 29
+================================================================================

@@ -1,0 +1,14 @@
+﻿O arquivo tem 1059 linhas e termina corretamente com `ENDDEFINE`. A Fase 4 est├í completa.
+
+**O que foi adicionado em `FormSIGREVIS.prg`:**
+
+- **`ConfigurarCamposFiltro()`** ÔÇö cria todos os controles de filtro em Page1: labels, TextBoxes de datas, campos de c├│digo/descri├º├úo para Representante e Conta, OptionGroups Venda e Pedido (3 bot├Áes cada), com posi├º├Áes exatas do original SIGREVIS (offset -85px do PageFrame)
+- **`LimparCampos()`** ÔÇö inicializa datas com `DATE()`, campos em branco, op├º├Áes = Todos (valor 3)
+- **`FormParaRelatorio()`** ÔÇö copia todos os campos do form para as propriedades do BO (`this_dDtInicial`, `this_cCdConta`, `this_nOpcaoVenda`, etc.)
+- **`ValidarPeriodo()`** ÔÇö valida data final ÔëÑ inicial (equivalente ao `btnReport.Click` legado)
+- **`BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnSairClick()`** ÔÇö handlers dos 4 bot├Áes, chamando `PrepararDados()` + `REPORT FORM`
+- **`TeclaCdRepr/TeclaDsRepr/TeclaCdConta/TeclaDsConta()`** ÔÇö KeyPress handlers: F4=115 abre lookup, ENTER=13/TAB=9 valida
+- **`AbrirBuscaCdRepr/AbrirBuscaDsRepr/AbrirBuscaCdConta/AbrirBuscaDsConta()`** ÔÇö lookups via `FormBuscaAuxiliar` com filtro de grupo para representante
+- **`ValidarCdRepr/ValidarDsRepr/ValidarCdConta/ValidarDsConta()`** ÔÇö valida├º├úo por SQLEXEC ao digitar manualmente
+
+`InicializarForm()` atualizado para chamar `ConfigurarCamposFiltro()`, vincular os BINDEVENTs dos bot├Áes e inicializar com `LimparCampos()`.

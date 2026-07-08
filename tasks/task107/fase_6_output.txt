@@ -1,0 +1,12 @@
+﻿A Fase 6 est├í conclu├¡da. O arquivo foi de 617 para 738 linhas com as seguintes adi├º├Áes:
+
+**Mudan├ºas feitas:**
+1. `cnt_4c_BotoesAcao.Height` corrigido de 45 ÔåÆ 85 para acomodar bot├Áes de 75px
+2. Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` adicionados em `ConfigurarPaginaDados()` com propriedades can├┤nicas (Comic Sans MS, 75├ù75, imagens padr├úo)
+3. BINDEVENTs para `BtnSalvarClick` e `BtnCancelarClick` registrados
+4. `BtnIncluirClick` atualizado: chama `NovoRegistro()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.T.)`
+5. `BtnVisualizarClick` atualizado: chama `CarregarDoCursor()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)`
+6. `BtnAlterarClick` atualizado: chama `CarregarDoCursor()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.T.)`
+7. M├®todos novos adicionados: `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+
+**Nota:** Como o SCX original ├® praticamente vazio (Form1 sem controles, sem m├®todos), `FormParaBO` e `BOParaForm` s├úo implementa├º├Áes vazias ÔÇö correto para este form operacional sem campos CRUD. N├úo h├í lookups no original, portanto nenhum BINDEVENT de lookup foi necess├írio.

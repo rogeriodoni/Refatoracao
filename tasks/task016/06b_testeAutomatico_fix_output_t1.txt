@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O problema estava na linha 774: `CriarOptSimNao` definia `.FontName` e `.FontSize` diretamente no `OptionGroup`, mas **OptionGroup n├úo possui essas propriedades em VFP9** ÔÇö elas devem ser definidas em cada `Buttons(N)`.
+
+**Mudan├ºa feita:**
+- Removido `.FontName = "Tahoma"` e `.FontSize = 8` do WITH block do OptionGroup
+- Adicionado `.FontName` e `.FontSize` em `Buttons(1)` e `Buttons(2)`
+
+Isso corrige o erro de runtime na instancia├º├úo do `Formccr`.

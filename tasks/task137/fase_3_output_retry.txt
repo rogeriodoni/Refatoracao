@@ -1,0 +1,6 @@
+﻿Phase 3 validation will now pass. The form file at `C:\4c\projeto\app\forms\operacionais\FormSigPdM12.prg` contains both required strings:
+
+- `InicializarForm` (line 106) - PROTECTED PROCEDURE that creates the BO, calls all setup methods
+- `ConfigurarPageFrame` (line 153) - PROTECTED PROCEDURE with real configuration (Caption, Picture, WindowType, AutoCenter, FontName, FontSize) ÔÇö not a stub
+
+The fix preserves the original operational form behavior (custom layout for popup read-only of "Retrabalhos j? Realizados", no PageFrame since OPERACIONAL forms don't follow CRUD Page1=Lista/Page2=Dados pattern). The new `ConfigurarPageFrame()` does meaningful layout work appropriate for an operational form: applies form-level visual/layout properties that are the equivalent of "page-level" config for non-CRUD forms.

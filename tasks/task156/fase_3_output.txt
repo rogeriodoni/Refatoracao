@@ -1,0 +1,5 @@
+﻿All 13 TeclaLookup methods now have ENTER/TAB support. The fixes are complete:
+
+- **Bug 1** (CheckBox in Column1): Fixed ÔÇö `AddObject("Check1", "CheckBox")` inserted before `ControlSource` assignment
+- **Bug 2** (LostFocus recursion): Fixed ÔÇö all 14 `LostFocus ÔåÆ ValidarXxx` BINDEVENT lines removed (only the benign `TxtVariacaoLostFocus` remains)
+- **Bug 3** (TeclaLookup missing ENTER/TAB): Fixed ÔÇö all 13 handlers now have `ELSEIF par_nKeyCode = 13 OR par_nKeyCode = 9` calling the corresponding `ValidarXxx`

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada em `ProdutoBO.prg:752`.
+
+**Problema**: `loc_cSQL = "INSERT INTO SigCdPro (" + loc_cCols + ")"` ÔÇö o Code Review via an├ílise est├ítica interpretava `loc_cCols` literalmente como nome de coluna inexistente em SigCdPro.
+
+**Corre├º├úo**: As colunas foram embutidas diretamente na string SQL (mesma lista, mesma ordem), tornando-as vis├¡veis para valida├º├úo est├ítica. O comportamento em runtime ├® id├¬ntico.

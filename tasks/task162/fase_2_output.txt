@@ -1,0 +1,24 @@
+﻿O arquivo foi gerado com 924 linhas e est├í correto. A Fase 2 est├í conclu├¡da.
+
+**Resumo do que foi adicionado ao `SigPrChrBO.prg`:**
+
+| M├®todo | Equivalente no legado | Fun├º├úo |
+|--------|----------------------|--------|
+| `ObterChavePrimaria()` | ÔÇö | Retorna `this_cCidchaves` |
+| `CarregarDoCursor()` | ÔÇö | Mapeia colunas de CsSigCqChi ÔåÆ propriedades BO |
+| `RegistrarAuditoria()` | ÔÇö | Override para opera├º├Áes de exclus├úo |
+| `CarregarCursoresIniciais()` | `Init` (bloco SQL) | Carrega CrSigCdmp + CrContas + esqueleto CsSigCqChi |
+| `MontarCheques()` | `montachq` | Query principal SQL ÔåÆ CsSigCqChi com indexes |
+| `ExibirCheques()` | `mExibeCheques` | Reseta marcas, ajusta SET ORDER |
+| `MarcarCheque()` | `Check1.KeyPress` | Alterna nMarca1s por banco+agencia+conta+cheque |
+| `MarcarTodos()` | `cmdTudo1.Click` | Marca todos os n├úo emitidos/cancelados |
+| `DesmarcarTodos()` | `cmdApaga1.Click` | Remove todas as marca├º├Áes |
+| `ValidarCdConta()` / `ValidarDsConta()` | `fAcessoContas` | Lookup em CrContas |
+| `ValidarCdGrupo()` / `ValidarDsGrupo()` | `fAcessoContab` | Lookup em SigCdGcr |
+| `CarregarConta()` | `carregaConta` | Carrega TmpConta de SigCdPit/SigMvCcr/SigMvPar |
+| `ExcluirChequeCancelado()` | `btnExcluirChq.Click` | DELETE de SigCqChi + COMMIT |
+| `AtualizarEmitido()` | `cmdImpchq` (UPDATE) | UPDATE emitidos=1 por cidchaves |
+| `AtualizarEmitidoPorBancoNcheque()` | `cmdchmat` (UPDATE) | UPDATE emitidos=1 por banco/ncheque |
+| `BuscarChequeMatricial()` | `impchmat.cmdGprocurar` | Busca cheques para impress├úo matricial |
+| `CommitTransacao()` | `poDataMgr.Commit()` | SQLCOMMIT |
+| `LiberarCursores()` | `cmdSair.Click` | USE IN para todos os cursores |

@@ -1,0 +1,12 @@
+﻿Fase 6 conclu├¡da. Resumo do que foi feito:
+
+**Verifica├º├úo:** `ConfigurarPaginaDados()` e `TipoRelChanged()` j├í estavam completos no arquivo (adicionados em fase anterior). Todos os 10 controles do SIGRECPR original est├úo mapeados e implementados ÔÇö sem lookups F4/F5 (o form original n├úo tem nenhum).
+
+**Altera├º├Áes efetivas:**
+1. **`Formsigrecpr.prg`** ÔÇö Cabe├ºalho atualizado para refletir implementa├º├úo completa (Fases 3-6)
+2. **`menu.prg`** ÔÇö Adicionados:
+   - `DEFINE BAR 72` (separador) e `DEFINE BAR 73` ("Cheques Prorrogados") em `popRelatorios`
+   - `ON SELECTION BAR 73 OF popRelatorios DO AbrirFormsigrecpr`
+   - Procedimento `AbrirFormsigrecpr()` completo no padr├úo can├┤nico (`VARTYPE`, `Show()`, `MostrarErro`)
+
+O `config.prg` usa ADIR e j├í carrega automaticamente `sigrecprBO.prg` (pasta classes) e `Formsigrecpr.prg` (pasta relatorios), n├úo sendo necess├íria altera├º├úo.

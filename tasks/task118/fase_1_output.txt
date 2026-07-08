@@ -1,0 +1,12 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SigReIfpBO.prg` criado com:
+
+- **8 propriedades** extra├¡das do c├│digo fonte original:
+  - `this_dDtInicial` / `this_dDtFinal` ÔÇö filtro de per├¡odo
+  - `this_nNivImprs` ÔÇö tipo de relat├│rio (spinner 1-7, mapeia SigReIfA..SigReIfF)
+  - `this_cTpMat` ÔÇö tipo de material (filtro n├¡vel 7, lookup SigOpOpt)
+  - `this_cIfor` / `this_cDfor` ÔÇö c├│digo/descri├º├úo da recuperadora (filtro n├¡vel 7)
+  - `this_cCdGrupo` / `this_cDsGrupo` ÔÇö c├│digo/descri├º├úo do grupo (filtro n├¡vel 7)
+  - `this_cCursorDados` ÔÇö nome do cursor de sa├¡da do PrepararDados
+- **Init()** configura `this_cTabela = ""` e `this_cCampoChave = ""` (relat├│rio n├úo tem tabela CRUD) e chama `DODEFAULT()`
+
+Pr├│xima fase: **Fase 2/8 ÔÇö BO: PrepararDados()** com toda a l├│gica do `processamento` original (CREATE CURSOR TmpRelat + SQLEXEC + processamento por n├¡vel 1-7).
