@@ -604,7 +604,8 @@ DEFINE CLASS FormSIGREIPS AS FormBase
             IF VARTYPE(THIS.this_oRelatorio) != "O"
                 RETURN
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
+            IF !THIS.this_oRelatorio.PrepararDados() ;
+               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
                 RETURN
             ENDIF

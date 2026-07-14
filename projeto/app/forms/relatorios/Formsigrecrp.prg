@@ -26,7 +26,7 @@
 *   * ConfigurarPaginaDados() - BINDEVENTs para todos os campos
 * FASE 7/8 - Form - Eventos principais
 *   * BtnVisualizarClick() - preview em tela (REPORT FORM ... PREVIEW)
-*   * BtnImprimirClick()   - impressora com dialogo (REPORT FORM ... TO PRINT)
+*   * BtnImprimirClick()   - impressora com dialogo (REPORT FORM ... TO PRINTER)
 *   * BtnExcelClick()      - exportar para Excel
 *   * BtnEncerrarClick()   - fechar formulario
 *   * BtnIncluirClick / BtnAlterarClick / BtnExcluirClick - stubs (REPORT sem CRUD)

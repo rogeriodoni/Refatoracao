@@ -777,6 +777,63 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * Visualizar - Pre-visualizacao do relatorio na tela
     *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117 / #123)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- par_cCursorDados: opcional. Se informado e cursor estiver vazio,
+    *--   mostra MsgAviso e retorna .F. sem abrir preview vazio.
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30)
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
     PROCEDURE Visualizar()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
@@ -801,9 +858,9 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
                     GO TOP
                     IF !EOF()
                         IF !CsCabecalho.ImpPeso
-                            REPORT FORM (gc_4c_CaminhoReports + "SigRehp1") PREVIEW NOCONSOLE
+                            THIS.ExecutarReportForm("SigRehp1", "PREVIEW")
                         ELSE
-                            REPORT FORM (gc_4c_CaminhoReports + "SigRehp2") PREVIEW NOCONSOLE
+                            THIS.ExecutarReportForm("SigRehp2", "PREVIEW")
                         ENDIF
                     ENDIF
                     USE IN CsCabecalho

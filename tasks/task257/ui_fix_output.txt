@@ -1,0 +1,11 @@
+﻿Tudo correto. As 5 diferen├ºas visuais foram corrigidas:
+
+| # | Objeto | Propriedade | Antes | Depois |
+|---|--------|-------------|-------|--------|
+| 5 | `lbl_4c_Mensagem` | Width | 314 | **97** |
+| 6 | `lbl_4c_Mensagem2` | Caption | `""` | **"Finalizando Reducao Z."** |
+| 7 | `lbl_4c_Mensagem2` | Width | 314 | **221** |
+| 8 | `lbl_4c_Mensagem3` | Caption | `""` | **"Por Favor. N"+CHR(227)+"o Desligue..."** |
+| 9 | `lbl_4c_Mensagem3` | Width | 314 | **248** |
+
+Os Captions foram resolvidos assim: `mensagem2` virou default literal na declara├º├úo de propriedade; `mensagem3` (tem `├ú` = CHR(227)) foi setado no in├¡cio do `Init()`. Os ELSE que zeravam msg2/msg3 quando outros par├ómetros eram passados foram removidos para n├úo sobrescrever os defaults do legado.

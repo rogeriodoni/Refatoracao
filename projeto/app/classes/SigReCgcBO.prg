@@ -203,7 +203,7 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ENDIF
-            REPORT FORM (THIS.this_cArquivoFRX) TO PRINT PROMPT NOCONSOLE
+            REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

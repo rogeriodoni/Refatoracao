@@ -363,7 +363,27 @@ DEFINE CLASS sigmvccrBO AS BusinessBase
                                                                                                     IF VARTYPE(autos) = "L"
                                                                                                         THIS.this_lAutos = autos
                                                                                                     ELSE
-                                                                                                        THIS.this_lAutos = (NVL(autos, 0) = 1)
+                                                                                                        IF VARTYPE(autos) = "L"
+                                                                                                            THIS.this_lAutos = autos
+                                                                                                        ELSE
+                                                                                                            IF VARTYPE(autos) = "L"
+                                                                                                                THIS.this_lAutos = autos
+                                                                                                            ELSE
+                                                                                                                IF VARTYPE(autos) = "L"
+                                                                                                                    THIS.this_lAutos = autos
+                                                                                                                ELSE
+                                                                                                                    IF VARTYPE(autos) = "L"
+                                                                                                                        THIS.this_lAutos = autos
+                                                                                                                    ELSE
+                                                                                                                        IF VARTYPE(autos) = "L"
+                                                                                                                            THIS.this_lAutos = autos
+                                                                                                                        ELSE
+                                                                                                                            THIS.this_lAutos = (NVL(autos, 0) = 1)
+                                                                                                                        ENDIF
+                                                                                                                    ENDIF
+                                                                                                                ENDIF
+                                                                                                            ENDIF
+                                                                                                        ENDIF
                                                                                                     ENDIF
                                                                                                 ENDIF
                                                                                             ENDIF
@@ -452,7 +472,27 @@ DEFINE CLASS sigmvccrBO AS BusinessBase
                                                                                                     IF VARTYPE(concs) = "L"
                                                                                                         THIS.this_lConcs = concs
                                                                                                     ELSE
-                                                                                                        THIS.this_lConcs = (NVL(concs, 0) = 1)
+                                                                                                        IF VARTYPE(concs) = "L"
+                                                                                                            THIS.this_lConcs = concs
+                                                                                                        ELSE
+                                                                                                            IF VARTYPE(concs) = "L"
+                                                                                                                THIS.this_lConcs = concs
+                                                                                                            ELSE
+                                                                                                                IF VARTYPE(concs) = "L"
+                                                                                                                    THIS.this_lConcs = concs
+                                                                                                                ELSE
+                                                                                                                    IF VARTYPE(concs) = "L"
+                                                                                                                        THIS.this_lConcs = concs
+                                                                                                                    ELSE
+                                                                                                                        IF VARTYPE(concs) = "L"
+                                                                                                                            THIS.this_lConcs = concs
+                                                                                                                        ELSE
+                                                                                                                            THIS.this_lConcs = (NVL(concs, 0) = 1)
+                                                                                                                        ENDIF
+                                                                                                                    ENDIF
+                                                                                                                ENDIF
+                                                                                                            ENDIF
+                                                                                                        ENDIF
                                                                                                     ENDIF
                                                                                                 ENDIF
                                                                                             ENDIF

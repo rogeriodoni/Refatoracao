@@ -207,7 +207,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINT PROMPT NOCONSOLE
+                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINTER PROMPT NOCONSOLE
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -225,7 +225,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINT NOCONSOLE
+                REPORT FORM (THIS.this_cNomeRelatorio) TO PRINTER NOCONSOLE
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

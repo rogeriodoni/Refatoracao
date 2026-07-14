@@ -2806,7 +2806,7 @@ DEFINE CLASS sigrefcxBO AS RelatorioBase
             ELSE
                 *-- 80 colunas: dialogo de impressao
                 loc_cFrx = gc_4c_CaminhoReports + THIS.this_cArquivoFRX2
-                REPORT FORM (loc_cFrx) TO PRINT PROMPT NOCONSOLE
+                REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
             ENDIF
 
             IF USED("dbRelatorio")

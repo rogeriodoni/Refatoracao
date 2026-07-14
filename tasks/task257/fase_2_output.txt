@@ -1,0 +1,6 @@
+﻿Fase 2 conclu├¡da. `SIGPRALEBO.prg` agora cont├®m:
+
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` + `TYPE()` defensivo para cada par├ómetro de exibi├º├úo (`cBitmap`, `cMensagem1/2/3`). Como o form n├úo tem tabela persistida, n├úo h├í mapeamento de colunas de banco ÔÇö s├│ os par├ómetros que o Init original aceita.
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (sem PK, form n├úo-persistente).
+
+`Inserir()`, `Atualizar()` e `ExecutarExclusao()` n├úo foram adicionados porque `this_cTabela = ""` ÔÇö n├úo h├í tabela destino no SQL Server para este di├ílogo de progresso.

@@ -1241,7 +1241,27 @@ DEFINE CLASS sigtosenBO AS BusinessBase
                                                                                                                                                                         IF VARTYPE(crParam2.PafEcfs) = "L"
                                                                                                                                                                             loc_lAtivo = crParam2.PafEcfs
                                                                                                                                                                         ELSE
-                                                                                                                                                                            loc_lAtivo = (NVL(crParam2.PafEcfs, 0) = 1)
+                                                                                                                                                                            IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                            ELSE
+                                                                                                                                                                                IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                    loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                                ELSE
+                                                                                                                                                                                    IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                        loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                                    ELSE
+                                                                                                                                                                                        IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                            loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                                        ELSE
+                                                                                                                                                                                            IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                                loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                                            ELSE
+                                                                                                                                                                                                loc_lAtivo = (NVL(crParam2.PafEcfs, 0) = 1)
+                                                                                                                                                                                            ENDIF
+                                                                                                                                                                                        ENDIF
+                                                                                                                                                                                    ENDIF
+                                                                                                                                                                                ENDIF
+                                                                                                                                                                            ENDIF
                                                                                                                                                                         ENDIF
                                                                                                                                                                     ENDIF
                                                                                                                                                                 ENDIF

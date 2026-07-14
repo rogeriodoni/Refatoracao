@@ -438,11 +438,15 @@ DEFINE CLASS FormSIGREADS AS FormBase
 
         *-- Column1: CheckBox para Marca (sele" + CHR(231) + CHR(227) + "o do tipo) - SCX: Width=15
         *-- REGRA: AddObject ANTES de CurrentControl; ControlSource DEPOIS de CurrentControl
+        *-- Sparse=.F. OBRIGATORIO: sem isso, CheckBox aparece SO na linha corrente e outras
+        *-- linhas viram texto plano (0/1) ? user nao consegue clicar checkboxes das demais linhas
         WITH loc_oGrid.Column1
-            .Width = 15
+            .Width     = 15
+            .Alignment = 0
+            .Enabled   = .T.
+            .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
-            .Check1.Value   = 0
             .CurrentControl = "Check1"
             .ControlSource  = loc_cCursor + ".Marca"
             .Header1.Caption = ""
@@ -542,11 +546,15 @@ DEFINE CLASS FormSIGREADS AS FormBase
         ENDWITH
 
         *-- Column1: CheckBox para Marca (sele" + CHR(231) + CHR(227) + "o do grupo) - SCX: Width=15
+        *-- Sparse=.F. OBRIGATORIO: sem isso, CheckBox aparece SO na linha corrente e outras
+        *-- linhas viram texto plano (0/1) ? user nao consegue clicar checkboxes das demais linhas
         WITH loc_oGridGrp.Column1
-            .Width = 15
+            .Width     = 15
+            .Alignment = 0
+            .Enabled   = .T.
+            .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
-            .Check1.Value   = 0
             .CurrentControl = "Check1"
             .ControlSource  = loc_cCursorGrp + ".Marca"
             .Header1.Caption = ""
@@ -1732,7 +1740,10 @@ DEFINE CLASS FormSIGREADS AS FormBase
                 RETURN
             ENDIF
             THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.Atualizar()
+            *-- Guard: MsgErro apenas se ha mensagem ? ExecutarReportForm ja exibe
+            *-- MsgAviso propria quando cursor esta vazio ou FRX ausente (cMensagemErro fica "")
+            IF !THIS.this_oRelatorio.Atualizar() ;
+               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
             ENDIF
@@ -1751,7 +1762,8 @@ DEFINE CLASS FormSIGREADS AS FormBase
                 RETURN
             ENDIF
             THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.Inserir()
+            IF !THIS.this_oRelatorio.Inserir() ;
+               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
             ENDIF
@@ -1768,7 +1780,8 @@ DEFINE CLASS FormSIGREADS AS FormBase
     PROCEDURE BtnExcelClick()
         TRY
             THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.PrepararDados()
+            IF !THIS.this_oRelatorio.PrepararDados() ;
+               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
                 RETURN

@@ -29,7 +29,7 @@
 *   * Todos os handlers: Vendedor, GrEstoque, Estoque, Produto
 * FASE 7/8 - Form - Eventos principais
 *   * BtnVisualizarClick() - preview em tela (REPORT FORM ... PREVIEW)
-*   * BtnImprimirClick()   - impressora com dialogo (REPORT FORM ... TO PRINT PROMPT)
+*   * BtnImprimirClick()   - impressora com dialogo (REPORT FORM ... TO PRINTER PROMPT)
 *   * BtnExcelClick()      - exportar para Excel (RelatorioBase.GerarExcel)
 *   * BtnEncerrarClick()   - fechar formulario
 * FASE 8/8 - Form - Eventos auxiliares e consolidacao final
@@ -876,7 +876,7 @@ DEFINE CLASS Formsigrecrf AS FormBase
     *--------------------------------------------------------------------------
     * BtnImprimirClick - Imprime relatorio com dialogo de impressora
     *   Botao 2 do cmg_4c_Botoes.
-    *   Equivalente a: REPORT FORM SigReCrf TO PRINT PROMPT NOCONSOLE
+    *   Equivalente a: REPORT FORM SigReCrf TO PRINTER PROMPT NOCONSOLE
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
         IF !THIS.ValidarDataParaRelatorio()

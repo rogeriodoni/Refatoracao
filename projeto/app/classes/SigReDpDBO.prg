@@ -1050,20 +1050,20 @@ DEFINE CLASS SigReDpDBO AS RelatorioBase
                     SET SEPARATOR TO "."
                     IF loc_lDialogo
                         REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINT PROMPT NOCONSOLE
+                            TO PRINTER PROMPT NOCONSOLE
                     ELSE
                         REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINT NOCONSOLE
+                            TO PRINTER NOCONSOLE
                     ENDIF
                     SET POINT TO "."
                     SET SEPARATOR TO ","
                 ELSE
                     IF loc_lDialogo
                         REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINT PROMPT NOCONSOLE
+                            TO PRINTER PROMPT NOCONSOLE
                     ELSE
                         REPORT FORM (gc_4c_CaminhoReports + loc_cFRX) ;
-                            TO PRINT NOCONSOLE
+                            TO PRINTER NOCONSOLE
                     ENDIF
                 ENDIF
 

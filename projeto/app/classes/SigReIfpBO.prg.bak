@@ -618,7 +618,7 @@ DEFINE CLASS SigReIfpBO AS RelatorioBase
                          "lido (0 ou > 7).", "Aten" + CHR(231) + CHR(227) + "o")
                 loc_lSucesso = .F.
             ENDIF
-            REPORT FORM (loc_cFrx) TO PRINT PROMPT NOCONSOLE
+            REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

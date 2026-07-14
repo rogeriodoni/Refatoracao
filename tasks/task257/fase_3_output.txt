@@ -1,0 +1,18 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSIGPRALE.prg` criado com:
+
+**Estrutura do form:**
+- Herda de `FormBase`, dimens├Áes id├¬nticas ao legado (419├ù115)
+- Propriedades do legado preservadas: `TitleBar=0`, `ControlBox=.F.`, `Closable=.F.`, `AlwaysOnTop=.T.`, `DataSession=2`
+- Fundo `new_background.jpg` (existe em vbmp/)
+
+**Init com par├ómetros** ÔÇö armazena `par_cBitmap/Msg1/Msg2/Msg3` nas `this_*` props *antes* de chamar `DODEFAULT()`, para que `InicializarForm()` j├í tenha os valores ao criar os controles.
+
+**Controles criados em `InicializarForm()`:**
+- `img_4c_Imagem` ÔÇö s├│ aparece se bitmap v├ílido for passado
+- `lbl_4c_Mensagem/2/3` ÔÇö Tahoma 14 bold, vermelho, sem fundo, WordWrap, dimens├Áes fixas (sem AutoSize para evitar label sobrepondo outros controles)
+
+**M├®todos p├║blicos adicionais:**
+- `AtualizarMensagens(msg1, msg2, msg3)` ÔÇö o chamador pode atualizar as mensagens durante processamento
+- `AtualizarBitmap(cBitmap)` ÔÇö troca o ├¡cone em tempo de execu├º├úo
+
+Todas as regras VFP9 respeitadas: sem RETURN dentro de TRY, CATCHes com MsgErro, sem `PUBLIC` em DEFINE CLASS.

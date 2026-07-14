@@ -1171,7 +1171,27 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                                                                                                                             IF VARTYPE(obrigs) = "L"
                                                                                                                                 loc_lObrigs = obrigs
                                                                                                                             ELSE
-                                                                                                                                loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                                IF VARTYPE(obrigs) = "L"
+                                                                                                                                    loc_lObrigs = obrigs
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(obrigs) = "L"
+                                                                                                                                        loc_lObrigs = obrigs
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(obrigs) = "L"
+                                                                                                                                            loc_lObrigs = obrigs
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(obrigs) = "L"
+                                                                                                                                                loc_lObrigs = obrigs
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(obrigs) = "L"
+                                                                                                                                                    loc_lObrigs = obrigs
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF
@@ -1280,7 +1300,27 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                                                                                                                             IF VARTYPE(indiv) = "L"
                                                                                                                                 loc_lIndiv = indiv
                                                                                                                             ELSE
-                                                                                                                                loc_lIndiv = (NVL(indiv, 0) = 1)
+                                                                                                                                IF VARTYPE(indiv) = "L"
+                                                                                                                                    loc_lIndiv = indiv
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(indiv) = "L"
+                                                                                                                                        loc_lIndiv = indiv
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(indiv) = "L"
+                                                                                                                                            loc_lIndiv = indiv
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(indiv) = "L"
+                                                                                                                                                loc_lIndiv = indiv
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(indiv) = "L"
+                                                                                                                                                    loc_lIndiv = indiv
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lIndiv = (NVL(indiv, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF
@@ -1485,7 +1525,27 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                                                                                                                         IF VARTYPE(obrigs) = "L"
                                                                                                                             loc_lObrigs = obrigs
                                                                                                                         ELSE
-                                                                                                                            loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                            IF VARTYPE(obrigs) = "L"
+                                                                                                                                loc_lObrigs = obrigs
+                                                                                                                            ELSE
+                                                                                                                                IF VARTYPE(obrigs) = "L"
+                                                                                                                                    loc_lObrigs = obrigs
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(obrigs) = "L"
+                                                                                                                                        loc_lObrigs = obrigs
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(obrigs) = "L"
+                                                                                                                                            loc_lObrigs = obrigs
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(obrigs) = "L"
+                                                                                                                                                loc_lObrigs = obrigs
+                                                                                                                                            ELSE
+                                                                                                                                                loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
+                                                                                                                            ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF
                                                                                                                 ENDIF
@@ -1664,7 +1724,27 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                                                                                                                         IF VARTYPE(obrigs) = "L"
                                                                                                                             loc_lObrigs = obrigs
                                                                                                                         ELSE
-                                                                                                                            loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                            IF VARTYPE(obrigs) = "L"
+                                                                                                                                loc_lObrigs = obrigs
+                                                                                                                            ELSE
+                                                                                                                                IF VARTYPE(obrigs) = "L"
+                                                                                                                                    loc_lObrigs = obrigs
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(obrigs) = "L"
+                                                                                                                                        loc_lObrigs = obrigs
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(obrigs) = "L"
+                                                                                                                                            loc_lObrigs = obrigs
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(obrigs) = "L"
+                                                                                                                                                loc_lObrigs = obrigs
+                                                                                                                                            ELSE
+                                                                                                                                                loc_lObrigs = (NVL(obrigs, 0) = 1)
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
+                                                                                                                            ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF
                                                                                                                 ENDIF
@@ -1773,7 +1853,27 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                                                                                                                         IF VARTYPE(indiv) = "L"
                                                                                                                             loc_lIndiv = indiv
                                                                                                                         ELSE
-                                                                                                                            loc_lIndiv = (NVL(indiv, 0) = 1)
+                                                                                                                            IF VARTYPE(indiv) = "L"
+                                                                                                                                loc_lIndiv = indiv
+                                                                                                                            ELSE
+                                                                                                                                IF VARTYPE(indiv) = "L"
+                                                                                                                                    loc_lIndiv = indiv
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(indiv) = "L"
+                                                                                                                                        loc_lIndiv = indiv
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(indiv) = "L"
+                                                                                                                                            loc_lIndiv = indiv
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(indiv) = "L"
+                                                                                                                                                loc_lIndiv = indiv
+                                                                                                                                            ELSE
+                                                                                                                                                loc_lIndiv = (NVL(indiv, 0) = 1)
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
+                                                                                                                            ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF
                                                                                                                 ENDIF

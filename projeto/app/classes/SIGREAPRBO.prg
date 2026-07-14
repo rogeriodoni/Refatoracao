@@ -131,7 +131,7 @@ DEFINE CLASS SIGREAPRBO AS RelatorioBase
         loc_lResultado = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cArquivoFRX) TO PRINT NOCONSOLE
+                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
                 THIS.RegistrarAuditoria("IMPRIMIR")
                 loc_lResultado = .T.
             ENDIF

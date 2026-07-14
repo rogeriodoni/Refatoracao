@@ -760,12 +760,11 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
                 SELECT Selecao
                 GO TOP
             ELSE
-                loc_cFRX = gc_4c_CaminhoReports + "SigReAto"
                 SELECT crImpressao
                 GO TOP
             ENDIF
 
-            REPORT FORM (loc_cFRX) TO PRINT PROMPT NOCONSOLE
+            THIS.ExecutarReportForm("SigReAto", "PRINTER_PROMPT")
             loc_lSucesso = .T.
 
         CATCH TO loc_oErro

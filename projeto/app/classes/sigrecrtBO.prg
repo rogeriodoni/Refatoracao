@@ -302,8 +302,8 @@ DEFINE CLASS sigrecrtBO AS RelatorioBase
                 ENDIF
                 SELECT *, 0000000.00 AS cotasE, 0000000.00 AS valsai, 0000000.00 AS valent, ;
                        0000000.00 AS Dif, 0000000.00 AS valliq, SPACE(50) AS NomeCF ;
-                    FROM cursor_4c_SqlTmp0 a WHERE 1=1 &m.loc_cVerTipo ;
-                    INTO CURSOR CsRelatorio &m.loc_cVerOrdem. READWRITE
+                    FROM cursor_4c_SqlTmp0 a WHERE 1=1 &loc_cVerTipo ;
+                    INTO CURSOR CsRelatorio &loc_cVerOrdem. READWRITE
 
                 *-- Buscar nome da empresa para o cabecalho
                 loc_cNomeEmpresa = ALLTRIM(go_4c_Sistema.cEmpresa)

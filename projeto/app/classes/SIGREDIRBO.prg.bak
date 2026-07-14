@@ -238,7 +238,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ENDIF
-            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINT NOCONSOLE
+            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -257,7 +257,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ENDIF
-            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINT PROMPT NOCONSOLE
+            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

@@ -294,7 +294,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
             loc_cRelatorio = gc_4c_CaminhoReports + ;
                              IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
 
-            REPORT FORM (loc_cRelatorio) TO PRINT NOCONSOLE
+            REPORT FORM (loc_cRelatorio) TO PRINTER NOCONSOLE
             THIS.RegistrarAuditoria("DOCUMENTO")
             loc_lSucesso = .T.
 

@@ -513,7 +513,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 loc_cFRX = THIS.SelecionarFRX()
-                REPORT FORM (loc_cFRX) TO PRINT PROMPT NOCONSOLE
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
                 THIS.RegistrarAuditoria("IMPRIMIR")
                 loc_lSucesso = .T.
             ENDIF
@@ -553,7 +553,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 loc_cFRX = THIS.SelecionarFRX()
-                REPORT FORM (loc_cFRX) TO PRINT NOCONSOLE
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
                 THIS.RegistrarAuditoria("DOCUMENTO")
                 loc_lSucesso = .T.
             ENDIF

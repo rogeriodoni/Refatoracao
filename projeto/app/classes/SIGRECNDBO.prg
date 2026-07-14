@@ -295,8 +295,7 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                loc_cFrx = gc_4c_CaminhoReports + "SigReCnd.frx"
-                REPORT FORM (loc_cFrx) TO PRINT PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReCnd", "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

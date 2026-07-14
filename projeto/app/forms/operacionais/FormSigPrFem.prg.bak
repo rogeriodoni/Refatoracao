@@ -1284,7 +1284,7 @@ DEFINE CLASS FormSigPrFem AS FormBase
                 IF !EOF()
                     loc_cRelatorio = gc_4c_CaminhoBase + "reports\RelSigPrFem.frx"
                     IF FILE(loc_cRelatorio)
-                        REPORT FORM (loc_cRelatorio) TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM (loc_cRelatorio) TO PRINTER PROMPT NOCONSOLE
                     ELSE
                         MsgAviso("Relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado." + CHR(13) + loc_cRelatorio)
                     ENDIF

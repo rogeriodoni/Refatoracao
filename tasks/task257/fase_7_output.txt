@@ -1,0 +1,21 @@
+﻿O FormSIGPRALE.prg est├í **completo** nas fases anteriores. Este formul├írio ├® um di├ílogo de progresso simples (419├ù115) sem bot├Áes CRUD ÔÇö a Fase 7 gerou uma instru├º├úo gen├®rica que n├úo se aplica a este caso.
+
+**Por que n├úo h├í BtnIncluirClick/Alterar/Visualizar/Excluir:**
+
+- O SIGPRALE ├® um di├ílogo modal de progresso/aguarde exibido durante o processamento da Redu├º├úo Z
+- Cont├®m apenas: `Imagem` + `mensagem` + `mensagem2` + `mensagem3` (conforme `layout.json`)
+- O legado original tem apenas o evento `Init` (conforme `comportamento.json`)
+- Nenhum bot├úo CRUD existe neste formul├írio
+
+**O que j├í est├í implementado e correto:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `Init(par_cBitmap, par_cMsg1/2/3)` | Aceita par├ómetros e chama `DODEFAULT()` |
+| `InicializarForm()` | Cria `img_4c_Imagem` + 3 `lbl_4c_Mensagem*` |
+| `FormKeyPress()` | ESC sinaliza cancelamento via `this_lCancelou` |
+| `AtualizarMensagens()` | Atualiza textos em runtime + `DOEVENTS` |
+| `AtualizarBitmap()` | Troca imagem com guard `FILE()` |
+| `Destroy()` | `UNBINDEVENTS` + limpa BO + `DODEFAULT()` |
+
+**Fase 7/8 est├í conclu├¡da.** O arquivo `FormSIGPRALE.prg` j├í tem paridade funcional 100% com o legado ÔÇö n├úo h├í eventos adicionais a implementar para este di├ílogo de progresso.

@@ -1,180 +1,226 @@
-*============================================================================
-* FormSigPrAop.prg - Alteracao de Quantidade da O.P.
-* Tipo: OPERACIONAL - Altera quantidades de divisoes de Ordens de Producao
-* Tabelas: SigOpPic, SigCdNec, SigPdMvf, SigCdPam
-*============================================================================
+*==============================================================================
+* FormSigPrAop.prg - Formulario OPERACIONAL: Alteracao de Quantidade da O.P.
+* Equivalente ao SIGPRAOP.SCX do legado
+* Herda de FormBase
+*==============================================================================
+
 DEFINE CLASS FormSigPrAop AS FormBase
 
-    *-- Layout (pixel-perfect do legado, escalado de 702x436 para 1000x600)
-    Width       = 1000
-    Height      = 600
-    AutoCenter  = .T.
-    BorderStyle = 2
-    TitleBar    = 0
-    ControlBox  = .F.
-    Closable    = .F.
-    MaxButton   = .F.
-    MinButton   = .F.
-    WindowType  = 1
-    DataSession = 2
-    Themes      = .F.
-    ShowWindow  = 1
+    *-- Dimensoes (proporcional ao original 702x436 escalado para 1000x600)
+    Width         = 1000
+    Height        = 600
 
-    *-- Propriedades de negocio
-    this_oBusinessObject = .NULL.
-    this_cMensagemErro   = ""
+    *-- Aparencia (reproduz propriedades visuais do SCX legado)
+    Caption       = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
+    TitleBar      = 0
+    ControlBox    = .F.
+    Closable      = .F.
+    MaxButton     = .F.
+    MinButton     = .F.
+    AutoCenter    = .T.
+    BorderStyle   = 2
+    Themes        = .F.
 
-    *==========================================================================
-    * Init - Apenas delega para FormBase que chama InicializarForm
-    *==========================================================================
+    *-- Sessao privada (DataSession=2 no original - fix de locale em FormBase.Init)
+    DataSession   = 2
+
+    *-- Nome do cursor de trabalho (espelho do Temp_DivOp do legado)
+    this_cCursorDivOp = "cursor_4c_DivOp"
+
+    *---------------------------------------------------------------------------
     PROCEDURE Init()
+    *-- FormBase.Init() faz SET DATE BRITISH/CENTURY ON e chama InicializarForm()
+    *---------------------------------------------------------------------------
         RETURN DODEFAULT()
     ENDPROC
 
-    *==========================================================================
-    * InicializarForm - Construcao completa do form operacional
-    *==========================================================================
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+    *-- Para form OPERACIONAL plano (sem PageFrame): define aparencia base do form
+    *---------------------------------------------------------------------------
+        THIS.Picture    = gc_4c_CaminhoIcones + "new_background.jpg"
+        THIS.ScrollBars = 0
+        THIS.ShowTips   = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
     PROTECTED PROCEDURE InicializarForm()
+    *---------------------------------------------------------------------------
         LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
-
         TRY
-            *-- Criar Business Object
-            THIS.this_oBusinessObject = CREATEOBJECT("SigPrAopBO")
-            IF VARTYPE(THIS.this_oBusinessObject) # "O"
-                MsgErro("Erro ao criar objeto de neg" + CHR(243) + "cio SigPrAop.", "Erro")
-            ELSE
-                *-- Carregar parametros do sistema (DoppPads, MascNums de SigCdPam)
-                IF gnConnHandle > 0
-                    THIS.this_oBusinessObject.CarregarParametros()
-                ENDIF
+            *-- Aparencia base do form
+            THIS.ConfigurarPageFrame()
 
-                *-- Criar cursor de trabalho das divisoes da O.P.
-                *-- Estrutura identica ao Temp_DivOp do legado (evento Load)
+            *-- Inicializar Business Object
+            THIS.this_oBusinessObject = CREATEOBJECT("SigPrAopBO")
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                *-- Carregar parametros do sistema (SigCdPam: DoppPads, MascNums)
+                THIS.this_oBusinessObject.CarregarParametros()
+
+                *-- Criar cursor de trabalho (estrutura identica ao Temp_DivOp do legado)
+                IF USED(THIS.this_cCursorDivOp)
+                    USE IN (THIS.this_cCursorDivOp)
+                ENDIF
                 SET NULL ON
                 CREATE CURSOR cursor_4c_DivOp ;
-                    (Qtds    N(12,3) NULL, QtdDivs N(12,3) NULL, ;
-                     Dopes   C(20),        Numes   N(6,0)  NULL, ;
-                     Dataes  D      NULL,  Obss    M       NULL, ;
-                     Nops    N(10,0)NULL,  SeqDivs N(3,0)  NULL, ;
-                     Cpros   C(10),        CodCors C(4),          ;
-                     CodTams C(4),         cItens  N(10,0) NULL)
+                    (Dopes    C(20)    NULL, ;
+                     Numes    N(6,0)   NULL, ;
+                     Qtds     N(12,3)  NULL, ;
+                     QtdDivs  N(12,3)  NULL, ;
+                     Dataes   D        NULL, ;
+                     Obss     M        NULL, ;
+                     SeqDivs  N(3,0)   NULL, ;
+                     Cpros    C(10)    NULL, ;
+                     CodCors  C(4)     NULL, ;
+                     CodTams  C(4)     NULL, ;
+                     Citens   N(10,0)  NULL, ;
+                     cIdChaves C(50)   NULL, ;
+                     Nops     N(10,0)  NULL)
                 SET NULL OFF
 
-                *-- Construir controles visuais do form
-                THIS.ConfigurarPageFrame()
-                THIS.Caption = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
-                THIS.ConfigurarPaginaLista()
+                *-- Criar componentes visuais
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarBotoesConf()
                 THIS.ConfigurarPaginaDados()
+                THIS.ConfigurarPaginaLista()
 
-                *-- Propagar Caption correto para labels do cabecalho
-                THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption
-                THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption
+                *-- Vincular eventos dos botoes Confirmar/Encerrar do CommandGroup
+                BINDEVENT(THIS.cmg_4c_BotoesConf.Buttons(1), "Click", THIS, "BtnConfirmarClick")
+                BINDEVENT(THIS.cmg_4c_BotoesConf.Buttons(2), "Click", THIS, "BtnEncerrarClick")
 
-                *-- Tornar controles visiveis (AddObject cria com Visible=.F.)
+                *-- Tornar todos os controles visiveis (AddObject cria com Visible=.F.)
                 THIS.TornarControlesVisiveis(THIS)
 
+                *-- Foco inicial no campo O.P.
+                IF PEMSTATUS(THIS, "txt_4c_OP", 5) AND VARTYPE(THIS.txt_4c_OP) = "O"
+                    THIS.txt_4c_OP.SetFocus()
+                ENDIF
+
                 loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao criar SigPrAopBO.", "Erro")
             ENDIF
-
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em InicializarForm")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, ;
+                    "Erro ao inicializar FormSigPrAop")
         ENDTRY
-
         RETURN loc_lSucesso
     ENDPROC
 
-    *==========================================================================
-    * ConfigurarPageFrame - Imagem de fundo + container cabecalho (cnt_4c_Sombra)
-    * Forms OPERACIONAIS nao usam PageFrame CRUD; este metodo cria apenas
-    * o background e o cabecalho cinza superior com labels de titulo.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        *-- Imagem de fundo (forms OPERACIONAIS usam new_background.jpg)
-        THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
-
-        *-- Container cabecalho: fundo cinza + labels sombra e titulo
-        THIS.AddObject("cnt_4c_Sombra", "Container")
-        WITH THIS.cnt_4c_Sombra
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+    *-- Container escuro no topo com labels sombra+titulo (equivale ao cntSombra)
+    *---------------------------------------------------------------------------
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
             .Top         = 0
             .Left        = 0
             .Width       = THIS.Width
             .Height      = 80
-            .BackColor   = RGB(100, 100, 100)
             .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
 
             .AddObject("lbl_4c_Sombra", "Label")
             WITH .lbl_4c_Sombra
-                .Top       = 18
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 40
-                .AutoSize  = .F.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
+                .Top      = 18
+                .Left     = 10
+                .Width    = THIS.Width
+                .Height   = 40
+                .AutoSize = .F.
+                .FontName = "Tahoma"
+                .FontSize = 18
+                .FontBold = .T.
                 .BackStyle = 0
                 .ForeColor = RGB(0, 0, 0)
-                .WordWrap  = .T.
-                .Caption   = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
+                .Caption  = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
             ENDWITH
 
             .AddObject("lbl_4c_Titulo", "Label")
             WITH .lbl_4c_Titulo
-                .Top       = 17
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 46
-                .AutoSize  = .F.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
+                .Top      = 17
+                .Left     = 10
+                .Width    = THIS.Width
+                .Height   = 46
+                .AutoSize = .F.
+                .FontName = "Tahoma"
+                .FontSize = 18
+                .FontBold = .T.
                 .BackStyle = 0
                 .ForeColor = RGB(255, 255, 255)
-                .WordWrap  = .T.
-                .Caption   = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
+                .Caption  = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
             ENDWITH
         ENDWITH
     ENDPROC
 
-    *==========================================================================
-    * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
-    *==========================================================================
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_nI, loc_oObjeto
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoesConf()
+    *-- CommandGroup com botoes Confirmar e Encerrar (equivale ao Grupo_Conf)
+    *-- Posicionado no canto superior direito
+    *---------------------------------------------------------------------------
+        THIS.AddObject("cmg_4c_BotoesConf", "CommandGroup")
+        WITH THIS.cmg_4c_BotoesConf
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .SpecialEffect = 1
+            .AutoSize      = .T.
+            .Themes        = .F.
+            .Top           = 0
+            .Left          = 840
+            .Width         = 160
+            .Height        = 85
 
-        IF VARTYPE(par_oContainer) # "O"
-            RETURN
-        ENDIF
+            WITH .Buttons(1)
+                .Top        = 5
+                .Left       = 5
+                .Width      = 75
+                .Height     = 75
+                .FontBold   = .T.
+                .FontItalic = .T.
+                .FontName   = "Comic Sans MS"
+                .FontSize   = 8
+                .Caption    = "\<Confirmar"
+                .ForeColor  = RGB(90, 90, 90)
+                .BackColor  = RGB(255, 255, 255)
+                .Themes     = .F.
+                .Picture    = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+                .Enabled    = .F.
+            ENDWITH
 
-        FOR loc_nI = 1 TO par_oContainer.ControlCount
-            loc_oObjeto = par_oContainer.Controls(loc_nI)
-            IF VARTYPE(loc_oObjeto) = "O"
-                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
-                    loc_oObjeto.Visible = .T.
-                ENDIF
-                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oObjeto)
-                ENDIF
-            ENDIF
-        ENDFOR
+            WITH .Buttons(2)
+                .Top        = 5
+                .Left       = 80
+                .Width      = 75
+                .Height     = 75
+                .FontBold   = .T.
+                .FontItalic = .T.
+                .FontName   = "Comic Sans MS"
+                .FontSize   = 8
+                .Caption    = "Encerrar"
+                .ForeColor  = RGB(90, 90, 90)
+                .BackColor  = RGB(255, 255, 255)
+                .Themes     = .F.
+                .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .Cancel     = .T.
+            ENDWITH
+        ENDWITH
     ENDPROC
 
-    *==========================================================================
-    * ConfigurarPaginaLista - Grid (5 colunas), EditBox e CommandGroup.
-    * Chamado antes de ConfigurarPaginaDados pois os handlers de txt_4c_OP
-    * referenciam grd_4c_Dados e cmg_4c_Conf criados aqui.
-    * Escala: original 702x436 -> novo 1000x600 (ScaleX=1.424, ScaleY=1.376)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        *-- Grid de divisoes da O.P. com 5 colunas (Pedido, Cor, Tam, Qtd.Atual, Quantidade)
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarGrade()
+    *-- Grid principal com divisoes da O.P. (equivale ao Grade do legado)
+    *-- 5 colunas: Pedido (expr), Cor, Tam, Quantidade (RO), Qtd.Atual (editavel)
+    *---------------------------------------------------------------------------
         THIS.AddObject("grd_4c_Dados", "Grid")
         WITH THIS.grd_4c_Dados
             .Top           = 195
-            .Left          = 71
-            .Width         = 629
+            .Left          = 50
+            .Width         = 700
             .Height        = 285
+            .ColumnCount   = 5
             .FontName      = "Arial"
             .FontSize      = 8
             .DeleteMark    = .F.
@@ -184,643 +230,390 @@ DEFINE CLASS FormSigPrAop AS FormBase
             .HeaderHeight  = 17
             .RowHeight     = 17
             .ScrollBars    = 2
-            .ColumnCount   = 5
+            .RecordSource  = THIS.this_cCursorDivOp
 
-            *-- Column1: Pedido (Dopes + Numes - equivale a fGerMascara(Numes) do legado)
+            *-- Coluna 1: Pedido (expressao Dopes + Numes, ReadOnly)
             WITH .Column1
-                .Width             = 256
-                .Alignment         = 0
-                .ControlSource     = "ALLTRIM(cursor_4c_DivOp.Dopes) + ' ' + TRANSFORM(cursor_4c_DivOp.Numes)"
-                .ReadOnly          = .T.
-                .Movable           = .F.
-                .Resizable         = .F.
-                .FontName          = "Arial"
-                .FontSize          = 8
-                .ForeColor         = RGB(0, 0, 0)
+                .ControlSource = "RTRIM(cursor_4c_DivOp.Dopes) + ' ' + LTRIM(STR(cursor_4c_DivOp.Numes, 6))"
+                .Width         = 280
+                .FontName      = "Arial"
+                .FontSize      = 8
+                .Alignment     = 0
+                .ForeColor     = RGB(0, 0, 0)
+                .Movable       = .F.
+                .Resizable     = .F.
+                .ReadOnly      = .T.
                 .Header1.Caption   = "Pedido"
                 .Header1.FontName  = "Arial"
                 .Header1.FontSize  = 8
+                .Header1.FontBold  = .F.
                 .Header1.Alignment = 2
             ENDWITH
 
-            *-- Column2: Cor (CodCors)
+            *-- Coluna 2: Cor (CodCors, ReadOnly)
             WITH .Column2
-                .Width             = 54
-                .Alignment         = 0
-                .ControlSource     = "cursor_4c_DivOp.CodCors"
-                .ReadOnly          = .T.
-                .Movable           = .F.
-                .Resizable         = .F.
-                .FontName          = "Arial"
-                .FontSize          = 8
+                .ControlSource = "cursor_4c_DivOp.CodCors"
+                .Width         = 60
+                .FontName      = "Arial"
+                .FontSize      = 8
+                .Movable       = .F.
+                .Resizable     = .F.
+                .ReadOnly      = .T.
                 .Header1.Caption   = "Cor"
-                .Header1.FontSize  = 8
-                .Header1.Alignment = 2
-            ENDWITH
-
-            *-- Column3: Tam (CodTams)
-            WITH .Column3
-                .Width             = 54
-                .Alignment         = 0
-                .ControlSource     = "cursor_4c_DivOp.CodTams"
-                .ReadOnly          = .T.
-                .Movable           = .F.
-                .Resizable         = .F.
-                .FontName          = "Arial"
-                .FontSize          = 8
-                .Header1.Caption   = "Tam"
-                .Header1.FontSize  = 8
-                .Header1.Alignment = 2
-            ENDWITH
-
-            *-- Column4: Qtd.Atual (Qtds - quantidade original, readonly)
-            WITH .Column4
-                .Width             = 114
-                .Alignment         = 1
-                .ControlSource     = "cursor_4c_DivOp.Qtds"
-                .ReadOnly          = .T.
-                .Movable           = .F.
-                .Resizable         = .F.
-                .FontName          = "Arial"
-                .FontSize          = 8
-                .InputMask         = "999,999.999"
-                .Header1.Caption   = "Qtd.Atual"
                 .Header1.FontName  = "Arial"
                 .Header1.FontSize  = 8
+                .Header1.FontBold  = .F.
                 .Header1.Alignment = 2
             ENDWITH
 
-            *-- Column5: Quantidade nova (QtdDivs - editavel pelo usuario, Format=K limpa zeros)
-            WITH .Column5
-                .Width             = 114
-                .Alignment         = 1
-                .ControlSource     = "cursor_4c_DivOp.QtdDivs"
-                .ReadOnly          = .F.
-                .Format            = "K"
-                .Movable           = .F.
-                .Resizable         = .F.
-                .FontName          = "Arial"
-                .FontSize          = 8
+            *-- Coluna 3: Tam (CodTams, ReadOnly)
+            WITH .Column3
+                .ControlSource = "cursor_4c_DivOp.CodTams"
+                .Width         = 60
+                .FontName      = "Arial"
+                .FontSize      = 8
+                .Movable       = .F.
+                .Resizable     = .F.
+                .ReadOnly      = .T.
+                .Header1.Caption   = "Tam"
+                .Header1.FontName  = "Arial"
+                .Header1.FontSize  = 8
+                .Header1.FontBold  = .F.
+                .Header1.Alignment = 2
+            ENDWITH
+
+            *-- Coluna 4: Quantidade planejada (Qtds, ReadOnly)
+            WITH .Column4
+                .ControlSource = "cursor_4c_DivOp.Qtds"
+                .Width         = 130
+                .FontName      = "Arial"
+                .FontSize      = 8
+                .Alignment     = 1
+                .InputMask     = "999,999.999"
+                .Movable       = .F.
+                .Resizable     = .F.
+                .ReadOnly      = .T.
                 .Header1.Caption   = "Quantidade"
                 .Header1.FontName  = "Arial"
                 .Header1.FontSize  = 8
+                .Header1.FontBold  = .F.
+                .Header1.Alignment = 2
+            ENDWITH
+
+            *-- Coluna 5: Qtd.Atual (QtdDivs, editavel — Format K preserva valor atual)
+            WITH .Column5
+                .ControlSource = "cursor_4c_DivOp.QtdDivs"
+                .Width         = 130
+                .FontName      = "Arial"
+                .FontSize      = 8
+                .Alignment     = 1
+                .Format        = "K"
+                .Movable       = .F.
+                .Resizable     = .F.
+                .Header1.Caption   = "Qtd.Atual"
+                .Header1.FontName  = "Arial"
+                .Header1.FontSize  = 8
+                .Header1.FontBold  = .F.
                 .Header1.Alignment = 2
             ENDWITH
         ENDWITH
-        *-- RecordSource FORA do WITH: evita auto-bind sobrescrever ControlSources acima
-        THIS.grd_4c_Dados.ColumnCount = 5
-        THIS.grd_4c_Dados.RecordSource = "cursor_4c_DivOp"
-        *-- Re-definir ControlSources apos auto-bind do RecordSource (VFP9 mapeia por ordem de campo)
-        THIS.grd_4c_Dados.Column1.ControlSource = "ALLTRIM(cursor_4c_DivOp.Dopes) + ' ' + TRANSFORM(cursor_4c_DivOp.Numes)"
-        THIS.grd_4c_Dados.Column2.ControlSource = "cursor_4c_DivOp.CodCors"
-        THIS.grd_4c_Dados.Column3.ControlSource = "cursor_4c_DivOp.CodTams"
-        THIS.grd_4c_Dados.Column4.ControlSource = "cursor_4c_DivOp.Qtds"
-        THIS.grd_4c_Dados.Column5.ControlSource = "cursor_4c_DivOp.QtdDivs"
+
         BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GrdDadosAfterRowColChange")
-        THIS.FormatarGridLista(THIS.grd_4c_Dados)
-
-        *-- EditBox de observacoes da divisao selecionada (readonly, vinculada ao cursor)
-        THIS.AddObject("edt_4c_Obss", "EditBox")
-        WITH THIS.edt_4c_Obss
-            .Top               = 490
-            .Left              = 68
-            .Width             = 632
-            .Height            = 96
-            .ReadOnly          = .T.
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-            .ControlSource     = "cursor_4c_DivOp.Obss"
-            .DisabledBackColor = RGB(255, 255, 255)
-        ENDWITH
-
-        *-- CommandGroup: Confirmar (inicia desabilitado) + Encerrar
-        THIS.AddObject("cmg_4c_Conf", "CommandGroup")
-        WITH THIS.cmg_4c_Conf
-            .Top           = 0
-            .Left          = 775
-            .Width         = 160
-            .Height        = 85
-            .BackStyle     = 0
-            .BorderStyle   = 0
-            .SpecialEffect = 1
-            .ButtonCount   = 2
-            .Themes        = .F.
-            .AutoSize      = .F.
-
-            WITH .Buttons(1)
-                .Top             = 5
-                .Left            = 5
-                .Width           = 75
-                .Height          = 75
-                .Caption         = "Confirmar"
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .WordWrap        = .T.
-                .AutoSize        = .F.
-                .MousePointer    = 15
-                .Enabled         = .F.
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-            ENDWITH
-
-            WITH .Buttons(2)
-                .Top             = 5
-                .Left            = 80
-                .Width           = 75
-                .Height          = 75
-                .Caption         = "Encerrar"
-                .FontName        = "Tahoma"
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontSize        = 8
-                .ForeColor       = RGB(90, 90, 90)
-                .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
-                .SpecialEffect   = 0
-                .PicturePosition = 13
-                .WordWrap        = .T.
-                .AutoSize        = .F.
-                .MousePointer    = 15
-                .Cancel          = .T.
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            ENDWITH
-        ENDWITH
-        BINDEVENT(THIS.cmg_4c_Conf.Buttons(1), "Click", THIS, "BtnConfirmarClick")
-        BINDEVENT(THIS.cmg_4c_Conf.Buttons(2), "Click", THIS, "BtnEncerrarClick")
     ENDPROC
 
-    *==========================================================================
-    * FormatarGridLista - Formata visual do grid (fonte e tamanho por coluna)
-    *==========================================================================
-    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
-        WITH par_oGrid
-            .FontName = "Arial"
-            .FontSize = 8
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * AlternarPagina - Reseta o formulario operacional ao estado inicial.
-    * Forms OPERACIONAIS nao tem PageFrame CRUD (Lista/Dados); esta rotina
-    * limpa os inputs, zera o cursor de trabalho, desabilita Confirmar e
-    * devolve o foco ao campo O.P. Usada apos Confirmar/Encerrar e para reset
-    * manual do fluxo entre alteracoes de diferentes O.P.s.
-    *==========================================================================
-    PROCEDURE AlternarPagina(par_nPagina)
-        IF USED("cursor_4c_DivOp")
-            SELECT cursor_4c_DivOp
-            ZAP
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_OP) = "O"
-            THIS.txt_4c_OP.Value = ""
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_Produto) = "O"
-            THIS.txt_4c_Produto.Value = ""
-        ENDIF
-
-        IF VARTYPE(THIS.cmg_4c_Conf) = "O"
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = .F.
-        ENDIF
-
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh
-        ENDIF
-
-        IF VARTYPE(THIS.edt_4c_Obss) = "O"
-            THIS.edt_4c_Obss.Refresh
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_OP) = "O"
-            THIS.txt_4c_OP.SetFocus
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * TxtOPGotFocus - Desabilita Confirmar ao entrar no campo O.P.
-    * Equivalente ao Get_OP.When do legado: impede confirmar com OP anterior
-    *==========================================================================
-    PROCEDURE TxtOPGotFocus()
-        IF VARTYPE(THIS.cmg_4c_Conf) = "O"
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = .F.
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * TxtOPKeyPress - Carrega divisoes da O.P. ao pressionar ENTER/TAB/F4
-    * Equivalente ao Get_OP.Valid do legado
-    *==========================================================================
-    PROCEDURE TxtOPKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_nNops
-
-        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
-            RETURN
-        ENDIF
-
-        IF EMPTY(ALLTRIM(THIS.txt_4c_OP.Value))
-            IF USED("cursor_4c_DivOp")
-                SELECT cursor_4c_DivOp
-                ZAP
-            ENDIF
-            THIS.txt_4c_Produto.Value = ""
-            THIS.grd_4c_Dados.Refresh
-            RETURN
-        ENDIF
-
-        loc_nNops = VAL(ALLTRIM(THIS.txt_4c_OP.Value))
-        IF loc_nNops = 0
-            RETURN
-        ENDIF
-
-        IF THIS.this_oBusinessObject.CarregarOP(loc_nNops)
-            THIS.txt_4c_Produto.Value               = THIS.this_oBusinessObject.this_cCodPds
-            THIS.cmg_4c_Conf.Buttons(1).Enabled     = .T.
-
-            IF USED("cursor_4c_DivOp") AND !EOF("cursor_4c_DivOp")
-                *-- Foca Column5 (Quantidade editavel) equivalente ao Grade.Column2.Text1.SetFocus do legado
-                THIS.grd_4c_Dados.ActiveColumn = 5
-                THIS.grd_4c_Dados.SetFocus
-            ENDIF
-        ELSE
-            THIS.txt_4c_OP.Value      = ""
-            THIS.txt_4c_Produto.Value = ""
-        ENDIF
-
-        THIS.grd_4c_Dados.Refresh
-    ENDPROC
-
-    *==========================================================================
-    * GrdDadosAfterRowColChange - Atualiza EditBox de Observacoes ao navegar
-    * Equivalente ao Grade.AfterRowColChange do legado
-    *==========================================================================
+    *---------------------------------------------------------------------------
     PROCEDURE GrdDadosAfterRowColChange(par_nColIndex)
-        IF VARTYPE(THIS.edt_4c_Obss) = "O"
-            THIS.edt_4c_Obss.Refresh
+    *-- Atualiza EditBox de observacoes ao mudar de linha no grid (equivale
+    *-- ao AfterRowColChange do Grade legado: ThisForm.Get_obss.Refresh)
+    *---------------------------------------------------------------------------
+        IF PEMSTATUS(THIS, "edt_4c_Obss", 5) AND VARTYPE(THIS.edt_4c_Obss) = "O"
+            THIS.edt_4c_Obss.Refresh()
         ENDIF
     ENDPROC
 
-    *==========================================================================
-    * BtnConfirmarClick - Grava quantidades alteradas no servidor SQL
-    * Equivalente ao Grupo_Conf.Salva.Click do legado
-    *==========================================================================
-    PROCEDURE BtnConfirmarClick()
-        LOCAL loc_nNops, loc_lSucesso
-
-        loc_nNops    = VAL(ALLTRIM(THIS.txt_4c_OP.Value))
-        loc_lSucesso = .F.
-
-        IF loc_nNops = 0
-            RETURN
-        ENDIF
-
-        THIS.this_oBusinessObject.this_nNops    = loc_nNops
-        THIS.this_oBusinessObject.this_cEmpDNps = THIS.this_oBusinessObject.this_cEmps + ;
-                                                  THIS.this_oBusinessObject.this_cDoppPads + ;
-                                                  STR(loc_nNops, 10)
-
-        loc_lSucesso = THIS.this_oBusinessObject.SalvarAlteracoes(loc_nNops)
-
-        IF loc_lSucesso
-            THIS.AlternarPagina(1)
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * BtnEncerrarClick - Fecha o formulario
-    * Equivalente ao Grupo_Conf.Conf_Sair.Click do legado
-    *==========================================================================
-    PROCEDURE BtnEncerrarClick()
-        THIS.Release()
-    ENDPROC
-
-    *==========================================================================
-    * BtnIncluirClick - Inicia nova operacao de alteracao de O.P.
-    * Form operacional: "Incluir" = resetar estado para digitar nova O.P.
-    *==========================================================================
-    PROCEDURE BtnIncluirClick()
-        THIS.AlternarPagina(1)
-    ENDPROC
-
-    *==========================================================================
-    * BtnAlterarClick - Grava as quantidades alteradas (acao principal do form).
-    * Form operacional: "Alterar" = confirmar mudancas no grid (delega ao Confirmar).
-    *==========================================================================
-    PROCEDURE BtnAlterarClick()
-        THIS.BtnConfirmarClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnVisualizarClick - Recarrega dados da O.P. digitada para visualizacao.
-    * Equivale a executar novamente Get_OP.Valid do legado atualizando o grid.
-    *==========================================================================
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_nNops
-
-        IF EMPTY(ALLTRIM(THIS.txt_4c_OP.Value))
-            MsgAviso("Informe o n" + CHR(250) + "mero da O.P. para visualizar.", "Aviso")
-            THIS.txt_4c_OP.SetFocus
-            RETURN
-        ENDIF
-
-        loc_nNops = VAL(ALLTRIM(THIS.txt_4c_OP.Value))
-        IF loc_nNops = 0
-            MsgAviso("N" + CHR(250) + "mero de O.P. inv" + CHR(225) + "lido.", "Aviso")
-            THIS.txt_4c_OP.SetFocus
-            RETURN
-        ENDIF
-
-        IF THIS.this_oBusinessObject.CarregarOP(loc_nNops)
-            THIS.txt_4c_Produto.Value           = THIS.this_oBusinessObject.this_cCodPds
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = .T.
-            THIS.grd_4c_Dados.Refresh
-            THIS.edt_4c_Obss.Refresh
-        ELSE
-            THIS.txt_4c_Produto.Value = ""
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * BtnExcluirClick - Descarta alteracoes locais recarregando dados do servidor.
-    * Form operacional: "Excluir" = cancelar mudancas no grid antes de confirmar.
-    * Se nao houver O.P. carregada, apenas reseta o formulario.
-    *==========================================================================
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_nNops, loc_lConfirma
-
-        IF EMPTY(ALLTRIM(THIS.txt_4c_OP.Value))
-            THIS.AlternarPagina(1)
-            RETURN
-        ENDIF
-
-        loc_nNops = VAL(ALLTRIM(THIS.txt_4c_OP.Value))
-        IF loc_nNops = 0
-            THIS.AlternarPagina(1)
-            RETURN
-        ENDIF
-
-        loc_lConfirma = MsgConfirma("Descartar as altera" + CHR(231) + CHR(245) + "es e recarregar dados originais da O.P.?", "Confirma" + CHR(231) + CHR(227) + "o")
-        IF !loc_lConfirma
-            RETURN
-        ENDIF
-
-        IF THIS.this_oBusinessObject.CarregarOP(loc_nNops)
-            THIS.grd_4c_Dados.Refresh
-            THIS.edt_4c_Obss.Refresh
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarPaginaDados - Controles de entrada de dados:
-    * Labels identificadores e TextBoxes para O.P. e Produto.
-    * Chamado apos ConfigurarPaginaLista pois os handlers de BINDEVENT
-    * referenciam grd_4c_Dados (criado naquele metodo).
-    *==========================================================================
+    *---------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaDados()
-        *-- Label "O.P.:"
-        THIS.AddObject("lbl_4c_Label1", "Label")
-        WITH THIS.lbl_4c_Label1
-            .Top       = 128
-            .Left      = 100
-            .Width     = 44
+    *-- Area de entrada de dados do form OPERACIONAL: rotulos e textboxes de
+    *-- identificacao (O.P. e Produto). Equivale semanticamente ao "Page2 -
+    *-- Dados" dos CRUDs, adaptado para o layout plano de SIGPRAOP.
+    *-- Nao contem PageFrame: os controles sao filhos diretos do form.
+    *---------------------------------------------------------------------------
+        *-- Label "O.P. :"
+        THIS.AddObject("lbl_4c_OP", "Label")
+        WITH THIS.lbl_4c_OP
+            .Top       = 108
+            .Left      = 70
+            .Width     = 45
             .Height    = 18
-            .Caption   = "O.P. :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
+            .AutoSize  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
+            .Caption   = "O.P. :"
         ENDWITH
 
-        *-- TextBox numero da O.P. (entrada principal do usuario)
+        *-- TextBox Get_OP (numero da ordem de producao)
         THIS.AddObject("txt_4c_OP", "TextBox")
         WITH THIS.txt_4c_OP
-            .Top       = 124
-            .Left      = 152
-            .Width     = 137
-            .Height    = 23
-            .InputMask = "999999999999"
-            .MaxLength = 12
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
+            .Top        = 105
+            .Left       = 120
+            .Width      = 120
+            .Height     = 23
+            .FontName   = "Tahoma"
+            .FontSize   = 9
+            .Alignment  = 1
+            .Format     = "K"
+            .InputMask  = "999999"
+            .MaxLength  = 10
+            .Value      = 0
+            .ToolTipText = "Informe o n" + CHR(250) + "mero da Ordem de Produ" + CHR(231) + CHR(227) + "o e pressione ENTER"
         ENDWITH
-        BINDEVENT(THIS.txt_4c_OP, "GotFocus", THIS, "TxtOPGotFocus")
-        BINDEVENT(THIS.txt_4c_OP, "KeyPress", THIS, "TxtOPKeyPress")
 
-        *-- Label "Produto:"
-        THIS.AddObject("lbl_4c_Label2", "Label")
-        WITH THIS.lbl_4c_Label2
-            .Top       = 161
-            .Left      = 71
-            .Width     = 67
+        *-- Label "Produto :"
+        THIS.AddObject("lbl_4c_Produto", "Label")
+        WITH THIS.lbl_4c_Produto
+            .Top       = 138
+            .Left      = 50
+            .Width     = 65
             .Height    = 18
-            .Caption   = "Produto :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
+            .AutoSize  = .F.
             .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
+            .FontName  = "Tahoma"
+            .FontSize  = 9
+            .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
+            .Caption   = "Produto :"
         ENDWITH
 
-        *-- TextBox codigo do produto (preenchido ao carregar OP, readonly)
+        *-- TextBox Get_Produto (codigo do produto - somente leitura, preenchido apos validar OP)
         THIS.AddObject("txt_4c_Produto", "TextBox")
         WITH THIS.txt_4c_Produto
-            .Top      = 157
-            .Left     = 152
-            .Width    = 137
-            .Height   = 23
-            .FontName = "Tahoma"
-            .FontSize = 8
-            .ReadOnly = .T.
-            .Value    = ""
+            .Top        = 135
+            .Left       = 120
+            .Width      = 120
+            .Height     = 23
+            .FontName   = "Tahoma"
+            .FontSize   = 9
+            .Alignment  = 0
+            .MaxLength  = 10
+            .ReadOnly   = .T.
+            .Enabled    = .F.
+            .BackColor  = RGB(240, 240, 240)
+            .Value      = ""
+            .ToolTipText = "C" + CHR(243) + "digo do produto da O.P. (preenchido automaticamente)"
+        ENDWITH
+
+        *-- Vincular eventos do TextBox de O.P.
+        BINDEVENT(THIS.txt_4c_OP, "GotFocus",  THIS, "TxtOPGotFocus")
+        BINDEVENT(THIS.txt_4c_OP, "KeyPress",  THIS, "TxtOPKeyPress")
+        BINDEVENT(THIS.txt_4c_OP, "LostFocus", THIS, "TxtOPLostFocus")
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+    *-- Area de visualizacao/lista do form OPERACIONAL: Grid de divisoes da
+    *-- O.P. (5 colunas) e EditBox de observacoes da linha selecionada.
+    *-- Equivale semanticamente ao "Page1 - Lista" dos CRUDs.
+    *---------------------------------------------------------------------------
+        *-- Grid de divisoes (5 colunas)
+        THIS.ConfigurarGrade()
+
+        *-- EditBox de observacoes (Get_obss) - abaixo do grid (ReadOnly, so exibe)
+        THIS.AddObject("edt_4c_Obss", "EditBox")
+        WITH THIS.edt_4c_Obss
+            .Top              = 490
+            .Left             = 50
+            .Width            = 700
+            .Height           = 90
+            .FontName         = "Tahoma"
+            .FontSize         = 9
+            .BackColor        = RGB(255, 255, 255)
+            .ForeColor        = RGB(0, 0, 0)
+            .ScrollBars       = 2
+            .ReadOnly         = .T.
+            .ControlSource    = "cursor_4c_DivOp.Obss"
+            .ToolTipText      = "Observa" + CHR(231) + CHR(245) + "es do item selecionado no grid"
         ENDWITH
     ENDPROC
 
-    *==========================================================================
-    * CarregarLista - Form OPERACIONAL nao tem lista inicial para carregar.
-    * Reseta o estado do form para entrada de nova O.P.
-    *==========================================================================
-    PROCEDURE CarregarLista()
-        THIS.LimparCampos()
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    *-- Form OPERACIONAL nao possui PageFrame (layout plano). Metodo mantido por
+    *-- compatibilidade com padrao dos forms CRUD e para uso futuro caso o form
+    *-- evolua para multi-pagina. Devolve foco ao campo O.P. quando invocado.
+    *---------------------------------------------------------------------------
+        LOCAL loc_nPagina
+        loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
+
+        DO CASE
+            CASE loc_nPagina = 1
+                IF PEMSTATUS(THIS, "txt_4c_OP", 5) AND VARTYPE(THIS.txt_4c_OP) = "O"
+                    IF THIS.txt_4c_OP.Enabled
+                        THIS.txt_4c_OP.SetFocus()
+                    ENDIF
+                ENDIF
+            OTHERWISE
+                *-- Reservado para expansao futura
+        ENDCASE
+
         RETURN .T.
     ENDPROC
 
-    *==========================================================================
-    * FormParaBO - Popula propriedades do BO com valores da tela
-    *==========================================================================
-    PROCEDURE FormParaBO()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            THIS.this_oBusinessObject.this_nNops  = ALLTRIM(THIS.txt_4c_OP.Value)
-            THIS.this_oBusinessObject.this_cCodPds = ALLTRIM(THIS.txt_4c_Produto.Value)
+    *---------------------------------------------------------------------------
+    PROCEDURE TxtOPGotFocus()
+    *-- Ao ganhar foco, desabilita Confirmar ate que nova O.P. seja validada
+    *-- (equivale ao When do Get_OP no legado: Grupo_Conf.Salva.Enabled = .F.)
+    *---------------------------------------------------------------------------
+        THIS.cmg_4c_BotoesConf.Buttons(1).Enabled = .F.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE TxtOPKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    *-- ENTER(13) ou TAB(9) sobre o campo O.P. dispara a carga do cursor de
+    *-- divisoes (equivale ao Valid do Get_OP no legado).
+    *---------------------------------------------------------------------------
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.CarregarDivisoesOP()
         ENDIF
     ENDPROC
 
-    *==========================================================================
-    * BOParaForm - Popula campos da tela com valores do BO
-    *==========================================================================
-    PROCEDURE BOParaForm()
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            THIS.txt_4c_Produto.Value = THIS.this_oBusinessObject.this_cCodPds
-            IF THIS.this_oBusinessObject.this_nNops > 0
-                THIS.txt_4c_OP.Value = TRANSFORM(THIS.this_oBusinessObject.this_nNops)
+    *---------------------------------------------------------------------------
+    PROCEDURE TxtOPLostFocus()
+    *-- Ao sair do campo O.P., se ha divisoes carregadas transfere foco para o
+    *-- grid (equivale ao LostFocus do Get_OP no legado).
+    *---------------------------------------------------------------------------
+        IF USED(THIS.this_cCursorDivOp) AND RECCOUNT(THIS.this_cCursorDivOp) > 0
+            IF PEMSTATUS(THIS, "grd_4c_Dados", 5) AND VARTYPE(THIS.grd_4c_Dados) = "O"
+                THIS.grd_4c_Dados.SetFocus()
             ENDIF
         ENDIF
     ENDPROC
 
-    *==========================================================================
-    * HabilitarCampos - Controla estado dos controles conforme situacao corrente
-    *==========================================================================
-    PROCEDURE HabilitarCampos()
-        LOCAL loc_lOpCarregada
+    *---------------------------------------------------------------------------
+    PROCEDURE CarregarDivisoesOP()
+    *-- Valida O.P. digitada e carrega divisoes (SigOpPic) no cursor de trabalho.
+    *---------------------------------------------------------------------------
+        LOCAL loc_nOP, loc_lSucesso
+        loc_lSucesso = .F.
 
-        loc_lOpCarregada = (VARTYPE(THIS.this_oBusinessObject) = "O") AND ;
-                           (THIS.this_oBusinessObject.this_nNops > 0)
-
-        IF VARTYPE(THIS.txt_4c_OP) = "O"
-            THIS.txt_4c_OP.Enabled = .T.
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_Produto) = "O"
-            THIS.txt_4c_Produto.ReadOnly = .T.
-        ENDIF
-
-        IF VARTYPE(THIS.cmg_4c_Conf) = "O"
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = loc_lOpCarregada
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * LimparCampos - Zera todos os controles e cursor de trabalho
-    *==========================================================================
-    PROCEDURE LimparCampos()
-        IF USED("cursor_4c_DivOp")
-            SELECT cursor_4c_DivOp
+        *-- Zerar cursor de trabalho antes de qualquer carga
+        IF USED(THIS.this_cCursorDivOp)
+            SELECT (THIS.this_cCursorDivOp)
             ZAP
         ENDIF
 
-        IF VARTYPE(THIS.txt_4c_OP) = "O"
-            THIS.txt_4c_OP.Value = ""
-        ENDIF
+        *-- Desabilitar botao Confirmar enquanto O.P. nao for validada
+        THIS.cmg_4c_BotoesConf.Buttons(1).Enabled = .F.
+        THIS.txt_4c_Produto.Value = ""
 
-        IF VARTYPE(THIS.txt_4c_Produto) = "O"
-            THIS.txt_4c_Produto.Value = ""
-        ENDIF
-
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            THIS.this_oBusinessObject.this_nNops  = 0
-            THIS.this_oBusinessObject.this_cCodPds = ""
-            THIS.this_oBusinessObject.this_cEmpDNps = ""
-        ENDIF
-
-        THIS.AjustarBotoesPorModo()
-
-        IF VARTYPE(THIS.grd_4c_Dados) = "O"
-            THIS.grd_4c_Dados.Refresh
-        ENDIF
-
-        IF VARTYPE(THIS.edt_4c_Obss) = "O"
-            THIS.edt_4c_Obss.Refresh
-        ENDIF
-
-        IF VARTYPE(THIS.txt_4c_OP) = "O"
-            THIS.txt_4c_OP.SetFocus
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme O.P. carregada
-    *==========================================================================
-    PROCEDURE AjustarBotoesPorModo()
-        LOCAL loc_lOpCarregada
-
-        loc_lOpCarregada = (VARTYPE(THIS.this_oBusinessObject) = "O") AND ;
-                           (THIS.this_oBusinessObject.this_nNops > 0)
-
-        IF VARTYPE(THIS.cmg_4c_Conf) = "O"
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = loc_lOpCarregada
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * BtnBuscarClick - Carrega a O.P. digitada no campo txt_4c_OP.
-    * Form OPERACIONAL: "Buscar" = carregar divisoes da O.P. informada.
-    *==========================================================================
-    PROCEDURE BtnBuscarClick()
-        LOCAL loc_nNops
-
-        IF EMPTY(ALLTRIM(THIS.txt_4c_OP.Value))
-            MsgAviso("Informe o n" + CHR(250) + "mero da O.P.", "Aviso")
-            THIS.txt_4c_OP.SetFocus
+        loc_nOP = INT(NVL(THIS.txt_4c_OP.Value, 0))
+        IF loc_nOP <= 0
+            THIS.grd_4c_Dados.Refresh()
             RETURN
         ENDIF
 
-        loc_nNops = VAL(ALLTRIM(THIS.txt_4c_OP.Value))
-        IF loc_nNops = 0
-            MsgAviso("N" + CHR(250) + "mero de O.P. inv" + CHR(225) + "lido.", "Aviso")
-            THIS.txt_4c_OP.SetFocus
+        IF VARTYPE(THIS.this_oBusinessObject) != "O"
+            MsgErro("Business Object n" + CHR(227) + "o inicializado.", "Erro")
             RETURN
         ENDIF
 
-        IF THIS.this_oBusinessObject.CarregarOP(loc_nNops)
-            THIS.txt_4c_Produto.Value           = THIS.this_oBusinessObject.this_cCodPds
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = .T.
-            IF !EOF("cursor_4c_DivOp")
-                THIS.grd_4c_Dados.ActiveColumn = 5
-                THIS.grd_4c_Dados.SetFocus
+        loc_lSucesso = THIS.this_oBusinessObject.CarregarDivOp(loc_nOP, THIS.this_cCursorDivOp)
+
+        IF loc_lSucesso
+            THIS.txt_4c_Produto.Value = THIS.this_oBusinessObject.this_cCodPds
+            THIS.cmg_4c_BotoesConf.Buttons(1).Enabled = .T.
+            THIS.grd_4c_Dados.Refresh()
+            IF PEMSTATUS(THIS, "edt_4c_Obss", 5) AND VARTYPE(THIS.edt_4c_Obss) = "O"
+                THIS.edt_4c_Obss.Refresh()
             ENDIF
         ELSE
-            THIS.txt_4c_OP.Value      = ""
-            THIS.txt_4c_Produto.Value = ""
-            THIS.cmg_4c_Conf.Buttons(1).Enabled = .F.
+            THIS.grd_4c_Dados.Refresh()
+            THIS.txt_4c_OP.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE BtnConfirmarClick()
+    *-- Grava alteracoes das divisoes (equivale ao Grupo_Conf.Salva.Click do legado).
+    *-- A logica SQL completa esta em SigPrAopBO.Inserir().
+    *---------------------------------------------------------------------------
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) != "O"
+            MsgErro("Business Object n" + CHR(227) + "o inicializado.", "Erro")
+            RETURN
         ENDIF
 
-        THIS.grd_4c_Dados.Refresh
+        IF INT(NVL(THIS.txt_4c_OP.Value, 0)) <= 0
+            MsgAviso("Informe uma O.P. v" + CHR(225) + "lida antes de confirmar.", "Aviso")
+            THIS.txt_4c_OP.SetFocus()
+            RETURN
+        ENDIF
+
+        IF !USED(THIS.this_cCursorDivOp) OR RECCOUNT(THIS.this_cCursorDivOp) = 0
+            MsgAviso("Nenhuma divis" + CHR(227) + "o carregada para gravar.", "Aviso")
+            RETURN
+        ENDIF
+
+        IF !MsgConfirma("Confirma a altera" + CHR(231) + CHR(227) + ;
+                        "o das quantidades desta O.P.?", "Confirma" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        loc_lSucesso = THIS.this_oBusinessObject.Inserir()
+
+        IF loc_lSucesso
+            MsgInfo("Altera" + CHR(231) + CHR(245) + "es gravadas com sucesso.", ;
+                    "Sucesso")
+            *-- Reset para nova operacao
+            IF USED(THIS.this_cCursorDivOp)
+                SELECT (THIS.this_cCursorDivOp)
+                ZAP
+            ENDIF
+            THIS.txt_4c_OP.Value      = 0
+            THIS.txt_4c_Produto.Value = ""
+            THIS.cmg_4c_BotoesConf.Buttons(1).Enabled = .F.
+            THIS.grd_4c_Dados.Refresh()
+            THIS.txt_4c_OP.SetFocus()
+        ENDIF
     ENDPROC
 
-    *==========================================================================
-    * BtnSalvarClick - Alias de BtnConfirmarClick para compatibilidade FormBase
-    *==========================================================================
-    PROCEDURE BtnSalvarClick()
-        THIS.BtnConfirmarClick()
+    *---------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+    *-- Encerra o formulario (equivale ao Grupo_Conf.Sair.Click do legado).
+    *---------------------------------------------------------------------------
+        THIS.Release()
     ENDPROC
 
-    *==========================================================================
-    * BtnCancelarClick - Cancela operacao corrente e reseta o form
-    *==========================================================================
-    PROCEDURE BtnCancelarClick()
-        THIS.LimparCampos()
-    ENDPROC
-
-    *==========================================================================
-    * Destroy - Libera cursores e recursos ao fechar o form
-    *==========================================================================
-    PROCEDURE Destroy()
-        LOCAL loc_aAliases[11], loc_i
-        loc_aAliases[1]  = "cursor_4c_DivOp"
-        loc_aAliases[2]  = "cursor_4c_Nec"
-        loc_aAliases[3]  = "cursor_4c_Mvf"
-        loc_aAliases[4]  = "cursor_4c_Pam"
-        loc_aAliases[5]  = "cursor_4c_OpPicTemp"
-        loc_aAliases[6]  = "cursor_4c_OpPicSave"
-        loc_aAliases[7]  = "cursor_4c_Upd0"
-        loc_aAliases[8]  = "cursor_4c_Upd1"
-        loc_aAliases[9]  = "cursor_4c_Upd2"
-        loc_aAliases[10] = "cursor_4c_MvfSave"
-        loc_aAliases[11] = "cursor_4c_Soma"
-
-        FOR loc_i = 1 TO ALEN(loc_aAliases)
-            IF USED(loc_aAliases[loc_i])
-                USE IN (loc_aAliases[loc_i])
+    *---------------------------------------------------------------------------
+    PROCEDURE TornarControlesVisiveis(par_oContainer)
+    *-- Torna Visible=.T. recursivamente (AddObject cria controles ocultos)
+    *---------------------------------------------------------------------------
+        LOCAL loc_i, loc_oControl
+        FOR loc_i = 1 TO par_oContainer.ControlCount
+            loc_oControl = par_oContainer.Controls(loc_i)
+            IF VARTYPE(loc_oControl) = "O"
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
+                ENDIF
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
+                   loc_oControl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oControl)
+                ENDIF
             ENDIF
         ENDFOR
+    ENDPROC
 
-        IF VARTYPE(THIS.this_oBusinessObject) = "O"
-            THIS.this_oBusinessObject = .NULL.
+    *---------------------------------------------------------------------------
+    PROCEDURE Destroy()
+    *---------------------------------------------------------------------------
+        IF USED(THIS.this_cCursorDivOp)
+            USE IN (THIS.this_cCursorDivOp)
         ENDIF
-
+        THIS.this_oBusinessObject = .NULL.
         DODEFAULT()
     ENDPROC
 

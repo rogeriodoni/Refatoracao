@@ -7927,6 +7927,433 @@ function Corrigir-FormatarDataSQLDatetime {
     return $saida
 }
 
+#==============================================================================
+# Pattern #120: Corrigir-MacroMPrefixQuebrado
+# Detecta o anti-pattern `&m.<var>.` gerado por Pattern #118 aplicando `m.`
+# indiscriminadamente. Dentro do macro operator `&`, o `.` termina o nome —
+# `&m.loc_cWhere.` tenta expandir a variavel `m` (nao existe) → VFP9 erro 10
+# "Syntax error." aborta o SELECT/REPORT. A regra `m.` do Pattern #118 vale
+# APENAS para refs normais (SELECT list, WHERE column ops, function args,
+# GROUP BY), NUNCA dentro de macro `&`.
+# Substituicao: `&m.` -> `&` (safe global replace — `&m.` NUNCA eh construcao
+# valida em VFP9; o unico "m." legitimo eh prefixo de escopo memvar em refs
+# normais, e essa forma nao aparece com `&` na frente).
+# Idempotente. Complementa Pattern #118 excluindo macros do escopo do fix.
+# Origem: Erro37 (2026-07-14) — SIGREADSBO.PrepararDados linha 492
+# (WHERE &m.loc_cWhere1.). Varredura global: 13 ocorrencias em 8 arquivos.
+#==============================================================================
+function Corrigir-MacroMPrefixQuebrado {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # &m. sempre indica macro quebrada em VFP9. Padrao: & (literal), m (literal), . (literal)
+    # Nao pode aparecer em codigo VFP valido.
+    $regex = '&m\.'
+
+    $resultado = New-Object System.Collections.ArrayList
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match $regex) {
+            $novaLinha = [regex]::Replace($linha, $regex, '&')
+            Add-Correcao -Tipo "MACRO-M-PREFIX-QUEBRADO" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern #120: `&m.<var>.` eh macro quebrada — VFP9 le o nome do macro ate o primeiro `.`, entao `&m.` tenta expandir variavel `m` (nao existe) e estoura Erro 10 'Syntax error.'. A regra `m.` do Pattern #118 vale APENAS para refs normais dentro de SELECT VFP local, NUNCA dentro de macro `&`. Substituido por `&<var>.` (sem prefixo m.). Origem Erro37 (2026-07-14, SIGREADSBO)."
+            $linha = $novaLinha
+        }
+        [void]$resultado.Add($linha)
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #121: Corrigir-GridColumnCheckboxSparse
+# Detecta blocos WITH ... Column1 (ou Column2, etc) que contem
+# `CurrentControl = "Check1"` mas NAO contem `Sparse = .F.` — injeta a linha.
+# Default VFP9 eh Sparse=.T., que renderiza o CurrentControl (CheckBox)
+# APENAS na linha corrente do grid — outras linhas mostram valor bruto (0/1)
+# como texto plano, quebrando UX de checkbox column.
+# Padrao canonico: Formsigrepes.prg:3095-3104.
+# Origem: Erro41 (2026-07-14) — FormSIGREADS grd_4c_TipoOps + grd_4c_Grupos.
+# Idempotente: nao afeta blocos que ja tem Sparse (=.F. ou =.T.).
+#==============================================================================
+function Corrigir-GridColumnCheckboxSparse {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $resultado = New-Object System.Collections.ArrayList
+    $i = 0
+    while ($i -lt $Linhas.Count) {
+        $linha = $Linhas[$i]
+
+        # Detecta inicio de bloco WITH ... .ColumnN (case-insensitive)
+        if ($linha -match '^\s*WITH\s+.+\.Column\d+\s*$') {
+            # Coletar bloco ate ENDWITH
+            $blocoLinhas = New-Object System.Collections.ArrayList
+            [void]$blocoLinhas.Add($linha)
+            $j = $i + 1
+            $temCurrentControlCheck1 = $false
+            $temSparse = $false
+            $temAddObjectCheck1 = $false
+            $idxAddObjectCheck1 = -1
+            $indentBloco = ''
+            if ($linha -match '^(\s+)') { $indentBloco = $Matches[1] }
+
+            while ($j -lt $Linhas.Count) {
+                $l = $Linhas[$j]
+                [void]$blocoLinhas.Add($l)
+                if ($l -match '^\s*ENDWITH\s*$') { break }
+                if ($l -match '(?i)CurrentControl\s*=\s*[''"]Check1[''"]') { $temCurrentControlCheck1 = $true }
+                if ($l -match '(?i)\.Sparse\s*=\s*') { $temSparse = $true }
+                if ($l -match '(?i)\.AddObject\s*\(\s*[''"]Check1[''"]\s*,\s*[''"]CheckBox[''"]\s*\)') {
+                    $temAddObjectCheck1 = $true
+                    $idxAddObjectCheck1 = $blocoLinhas.Count - 1
+                }
+                $j++
+            }
+
+            # Se e bloco Column CheckBox sem Sparse: injetar
+            if ($temCurrentControlCheck1 -and -not $temSparse -and $temAddObjectCheck1) {
+                # Determinar indent interno (linha apos WITH)
+                $indentInterno = $indentBloco + '    '
+                if ($blocoLinhas.Count -ge 2) {
+                    $linha1 = $blocoLinhas[1]
+                    if ($linha1 -match '^(\s+)') { $indentInterno = $Matches[1] }
+                }
+                # Inserir Sparse=.F. ANTES do AddObject("Check1", ...)
+                $linhaNova = $indentInterno + '.Sparse    = .F.'
+                $blocoLinhas.Insert($idxAddObjectCheck1, $linhaNova)
+
+                Add-Correcao -Tipo "GRID-CHECKBOX-SPARSE" -Linha ($i + 1) `
+                    -Original "Column CheckBox sem .Sparse = .F." `
+                    -Corrigido ".Sparse = .F. injetado antes de AddObject Check1" `
+                    -Descricao "Pattern 121: Grid Column com CurrentControl=Check1 sem .Sparse=.F. renderiza CheckBox APENAS na linha corrente (default VFP9 Sparse=.T.); outras linhas mostram valor bruto (0/1) como texto plano. Usuario NAO consegue clicar checkboxes das demais linhas. Injetado .Sparse=.F. antes de AddObject Check1. Padrao canonico Formsigrepes.prg linhas 3095-3104. Origem Erro41 (2026-07-14 FormSIGREADS)."
+            }
+
+            # Emitir bloco (modificado ou nao)
+            foreach ($bl in $blocoLinhas) { [void]$resultado.Add($bl) }
+            $i = $j + 1
+        } else {
+            [void]$resultado.Add($linha)
+            $i++
+        }
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #122: Corrigir-BtnReportGuardEmptyMsgErro
+# Detecta em forms REPORT o padrao:
+#   IF !THIS.this_oRelatorio.<method>()
+#       MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)
+#   ENDIF
+# Onde <method> in (Atualizar, Inserir, ImprimirRelatorio, PrepararDados).
+# Injeta guard `AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)` na
+# condicao. Motivo: o helper canonico ExecutarReportForm (Pattern #117) exibe
+# seu proprio MsgAviso quando cursor vazio ou FRX ausente e retorna .F. sem
+# setar this_cMensagemErro — sem guard, MsgErro("") mostra modal com titulo
+# "Relatorio" e corpo VAZIO em sequencia (Erro40, 2026-07-14, FormSIGREADS).
+# Idempotente: nao afeta IF que ja tem !EMPTY na condicao.
+#==============================================================================
+function Corrigir-BtnReportGuardEmptyMsgErro {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $metodosRelatorio = 'Atualizar|Inserir|ImprimirRelatorio|PrepararDados'
+    $regexIf = '(?i)^(\s*)IF\s+!\s*THIS\.this_oRelatorio\.(' + $metodosRelatorio + ')\s*\(\s*\)\s*$'
+
+    $resultado = New-Object System.Collections.ArrayList
+    $i = 0
+    while ($i -lt $Linhas.Count) {
+        $linha = $Linhas[$i]
+
+        if ($linha -match $regexIf) {
+            $indent = $Matches[1]
+            $metodo = $Matches[2]
+
+            # Verificar se proxima linha (dentro do IF) chama MsgErro com this_cMensagemErro
+            $j = $i + 1
+            $achouMsgErroMsg = $false
+            $fimJ = $j
+            while ($j -lt $Linhas.Count -and $j -le $i + 4) {
+                $lookahead = $Linhas[$j]
+                if ($lookahead -match '(?i)MsgErro\s*\(\s*THIS\.this_oRelatorio\.this_cMensagemErro') {
+                    $achouMsgErroMsg = $true
+                    $fimJ = $j
+                    break
+                }
+                if ($lookahead -match '^\s*ENDIF\s*$') { break }
+                $j++
+            }
+
+            if ($achouMsgErroMsg) {
+                # Injetar guard AND !EMPTY na condicao IF
+                $linhaNova = $indent + 'IF !THIS.this_oRelatorio.' + $metodo + '() ;'
+                $linhaGuard = $indent + '   AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)'
+                [void]$resultado.Add($linhaNova)
+                [void]$resultado.Add($linhaGuard)
+
+                Add-Correcao -Tipo "BTN-REPORT-EMPTY-MSGERRO-GUARD" -Linha ($i + 1) `
+                    -Original $linha.Trim() `
+                    -Corrigido ("IF !THIS.this_oRelatorio." + $metodo + "() AND !EMPTY(this_cMensagemErro)") `
+                    -Descricao "Pattern 122: BtnVisualizar/Imprimir Click chama MsgErro(this_cMensagemErro,...) apos !Atualizar()/!Inserir() sem checar EMPTY; helper ExecutarReportForm (Pattern 117) mostra MsgAviso proprio quando cursor vazio/FRX ausente e retorna .F. sem cMensagemErro, causando SEGUNDO modal com titulo Relatorio e corpo VAZIO. Guard AND !EMPTY(...) injetado. Origem Erro40 (2026-07-14 FormSIGREADS)."
+                $i++
+                continue
+            }
+        }
+
+        [void]$resultado.Add($linha)
+        $i++
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #124: Corrigir-ReportFormToPrintTypo
+# Corrige o typo `TO PRINT` -> `TO PRINTER` em REPORT FORM. `TO PRINT` NAO eh
+# sintaxe valida do VFP9 (correto eh `TO PRINTER [PROMPT]`). Deve rodar ANTES
+# dos Patterns #117 e #123 para normalizar a sintaxe antes das transformacoes
+# via helper. Idempotente (nao afeta `TO PRINTER` ja correto).
+# Origem: sweep 2026-07-14 detectou 48 linhas com o typo.
+#==============================================================================
+function Corrigir-ReportFormToPrintTypo {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Regex 1: REPORT FORM ... TO PRINT [PROMPT] [NOCONSOLE] (mesma linha)
+    # Case-insensitive. \b garante word boundary (evita match em PRINTER ja correto).
+    $rx = '(?i)(REPORT\s+FORM\s+.+?\s+TO\s+)PRINT(\b(?!ER))'
+    # Regex 2: linha de continuacao (REPORT FORM ... ;\n    TO PRINT ...)
+    # Match apenas quando linha comeca (whitespace) + TO PRINT — evita false positive
+    # em strings literais que contem "TO PRINT" (nao comecam na linha).
+    $rxCont = '(?i)^(\s*TO\s+)PRINT(\b(?!ER))'
+
+    $resultado = New-Object System.Collections.ArrayList
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match $rx) {
+            $novaLinha = [regex]::Replace($linha, $rx, '${1}PRINTER${2}')
+            Add-Correcao -Tipo "REPORT-FORM-TO-PRINT-TYPO" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern 124: REPORT FORM ... TO PRINT nao eh sintaxe valida do VFP9; correto eh TO PRINTER [PROMPT]. Typo comum em BOs migrados. Substituido TO PRINT -> TO PRINTER preservando PROMPT/NOCONSOLE. Idempotente."
+            $linha = $novaLinha
+        }
+        elseif ($linha -match $rxCont) {
+            # Continuacao de linha; verificar se linha anterior tem REPORT FORM com `;`
+            $ehContReport = $false
+            if ($resultado.Count -gt 0) {
+                $lnAnt = [string]$resultado[$resultado.Count - 1]
+                if ($lnAnt -match '(?i)REPORT\s+FORM\s+.+;\s*$') {
+                    $ehContReport = $true
+                }
+            }
+            if ($ehContReport) {
+                $novaLinha = [regex]::Replace($linha, $rxCont, '${1}PRINTER${2}')
+                Add-Correcao -Tipo "REPORT-FORM-TO-PRINT-TYPO" -Linha ($i + 1) `
+                    -Original $linha.Trim() `
+                    -Corrigido $novaLinha.Trim() `
+                    -Descricao "Pattern 124 (continuacao): TO PRINT em linha de continuacao apos REPORT FORM ... ;. Corrigido para TO PRINTER preservando PROMPT/NOCONSOLE."
+                $linha = $novaLinha
+            }
+        }
+        [void]$resultado.Add($linha)
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #123: Corrigir-ReportFormConcatInline
+# Estende o Pattern #117 para a forma inline concat:
+#   REPORT FORM (gc_4c_CaminhoReports + "BASE") PREVIEW NOCONSOLE
+#   REPORT FORM (gc_4c_CaminhoReports + "BASE.frx") TO PRINTER PROMPT NOCONSOLE
+# Pattern #117 nao pega essa variacao porque so aceita `(<var>)` ou `&<var>.`
+# (variavel simples). Como 90+ BOs REPORT migrados usam a forma inline concat,
+# vale um pattern dedicado que injeta o helper ExecutarReportForm quando ausente
+# e substitui cada chamada por `THIS.ExecutarReportForm("BASE", "MODO")`.
+# Idempotente. Helper canonico eh identico ao Pattern #117.
+# Origem: sweep de 2026-07-14 apos Erro38 (SIGREADS FRX ausente) mostrou 90 BOs
+# com essa forma nao coberta.
+#==============================================================================
+function Corrigir-ReportFormConcatInline {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Regex captura:
+    #   Grupo 1: indent
+    #   Grupo 2: BASE (com ou sem .frx)
+    #   Grupo 3: SUFIXO (PREVIEW | TO PRINTER PROMPT | TO PRINTER)
+    # NOCONSOLE eh opcional; strip .frx eh feito depois.
+    $rx = '^(\s*)REPORT\s+FORM\s+\(\s*gc_4c_CaminhoReports\s*\+\s*"([^"]+)"\s*\)\s+(PREVIEW|TO\s+PRINTER\s+PROMPT|TO\s+PRINTER)(?:\s+NOCONSOLE)?\s*$'
+
+    $substituicoes = @{}
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -notmatch $rx) { continue }
+
+        $indent  = $Matches[1]
+        $baseRaw = $Matches[2]
+        $sufixo  = $Matches[3].Trim().ToUpper()
+
+        $baseNome = $baseRaw -replace '(?i)\.frx$', ''
+
+        $modo = $null
+        if     ($sufixo -match '^PREVIEW$')                { $modo = 'PREVIEW' }
+        elseif ($sufixo -match '^TO\s+PRINTER\s+PROMPT$')  { $modo = 'PRINTER_PROMPT' }
+        elseif ($sufixo -match '^TO\s+PRINTER$')           { $modo = 'PRINTER' }
+        if ($null -eq $modo) { continue }
+
+        $substituicoes[$i] = [PSCustomObject]@{
+            Indent    = $indent
+            Base      = $baseNome
+            Modo      = $modo
+            LinhaOrig = $linha
+        }
+    }
+
+    if ($substituicoes.Count -eq 0) { return $Linhas }
+
+    # Verificar se helper ja existe
+    $helperExiste = $false
+    foreach ($ln in $Linhas) {
+        if ($ln -match '(?i)^\s*(PROTECTED\s+)?PROCEDURE\s+ExecutarReportForm\b') {
+            $helperExiste = $true
+            break
+        }
+    }
+
+    # Ponto de injecao: primeira PROCEDURE que emite REPORT FORM
+    $helperInsertIdx = -1
+    if (-not $helperExiste) {
+        $primeiroReportIdx = ($substituicoes.Keys | Sort-Object)[0]
+        for ($k = $primeiroReportIdx; $k -ge 0; $k--) {
+            if ($Linhas[$k] -match '(?i)^\s*PROCEDURE\s+\w+') {
+                $helperInsertIdx = $k
+                break
+            }
+        }
+        if ($helperInsertIdx -lt 0) { return $Linhas }
+    }
+
+    # Bloco helper canonico (identico ao Pattern #117)
+    $helperBloco = @(
+        '    *-- ============================================================',
+        '    *-- PROCEDURE ExecutarReportForm (Pattern #117 / #123)',
+        '    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,',
+        '    *-- exibe MostrarErro descritivo com o path faltante.',
+        '    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM',
+        '    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com',
+        '    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede',
+        '    *-- fontes em runtime e mostra asteriscos em campos numericos.',
+        '    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"',
+        '    *-- par_cCursorDados: opcional. Se informado e cursor estiver vazio,',
+        '    *--   mostra MsgAviso e retorna .F. sem abrir preview vazio.',
+        '    *-- ============================================================',
+        '    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)',
+        '        LOCAL loc_cFRX',
+        '        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")',
+        '',
+        '        IF NOT FILE(loc_cFRX)',
+        '            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;',
+        '                loc_cFRX + CHR(13) + CHR(13) + ;',
+        '                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")',
+        '            RETURN .F.',
+        '        ENDIF',
+        '',
+        '        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30)',
+        '        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)',
+        '            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0',
+        '                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;',
+        '                    "Aten" + CHR(231) + CHR(227) + "o")',
+        '                RETURN .F.',
+        '            ENDIF',
+        '        ENDIF',
+        '',
+        '        *-- Isolamento de locale + modo de renderizacao (Erro28)',
+        '        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig',
+        '        loc_cPointOrig    = SET("POINT")',
+        '        loc_cSepOrig      = SET("SEPARATOR")',
+        '        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")',
+        '        SET POINT TO "."',
+        '        SET SEPARATOR TO ","',
+        '        SET REPORTBEHAVIOR 80',
+        '',
+        '        DO CASE',
+        '            CASE par_cModo == "PREVIEW"',
+        '                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE',
+        '            CASE par_cModo == "PRINTER_PROMPT"',
+        '                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE',
+        '            CASE par_cModo == "PRINTER"',
+        '                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE',
+        '        ENDCASE',
+        '',
+        '        SET POINT TO (loc_cPointOrig)',
+        '        SET SEPARATOR TO (loc_cSepOrig)',
+        '        SET REPORTBEHAVIOR (loc_nBehaviorOrig)',
+        '',
+        '        RETURN .T.',
+        '    ENDPROC',
+        ''
+    )
+
+    # Mapa idxLinha -> nova linha (chamada helper)
+    $substituicoesPorIdx = @{}
+    foreach ($idx in $substituicoes.Keys) {
+        $info = $substituicoes[$idx]
+        $substituicoesPorIdx[[int]$idx] = "$($info.Indent)THIS.ExecutarReportForm(""$($info.Base)"", ""$($info.Modo)"")"
+    }
+
+    # Reconstruir array de linhas
+    $resultado = New-Object System.Collections.ArrayList
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if (-not $helperExiste -and $i -eq $helperInsertIdx) {
+            foreach ($hl in $helperBloco) { [void]$resultado.Add($hl) }
+        }
+        if ($substituicoesPorIdx.ContainsKey($i)) {
+            [void]$resultado.Add($substituicoesPorIdx[$i])
+            continue
+        }
+        [void]$resultado.Add($Linhas[$i])
+    }
+
+    # Registrar correcoes
+    foreach ($idx in $substituicoes.Keys) {
+        $info = $substituicoes[$idx]
+        Add-Correcao -Tipo "REPORT-FORM-CONCAT-INLINE" -Linha ($idx + 1) `
+            -Original $info.LinhaOrig.Trim() `
+            -Corrigido ("THIS.ExecutarReportForm(""" + $info.Base + """, """ + $info.Modo + """)") `
+            -Descricao "Pattern 123: REPORT FORM (gc_4c_CaminhoReports + BASE) inline substituido por helper canonico THIS.ExecutarReportForm. Sem helper, FRX ausente estoura runtime File does not exist sem indicar arquivo; FRXs legados renderizam asteriscos em campos numericos no VFP9 default (REPORTBEHAVIOR 90 + POINT BR); cursor vazio abre preview em branco. Origem sweep 2026-07-14 (extensao do Pattern 117 para forma inline concat)."
+    }
+    if (-not $helperExiste) {
+        Add-Correcao -Tipo "REPORT-FORM-HELPER-INJETADO" -Linha ($helperInsertIdx + 1) `
+            -Original "(helper ExecutarReportForm ausente)" `
+            -Corrigido "PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)" `
+            -Descricao "Pattern 123: helper ExecutarReportForm injetado antes da primeira procedure que emite REPORT FORM (forma inline concat)."
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -8083,9 +8510,14 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-CmgReportButtonsOverflow -Linhas $linhas
     $linhas = Corrigir-MsgAvisoAntesDoPicker -Linhas $linhas
     $linhas = Corrigir-SigCdGcrDescrsColuna -Linhas $linhas
+    $linhas = Corrigir-ReportFormToPrintTypo -Linhas $linhas
     $linhas = Corrigir-ReportFormSemGuard -Linhas $linhas
     $linhas = Corrigir-SelectLocalVarSemMPrefix -Linhas $linhas
     $linhas = Corrigir-FormatarDataSQLDatetime -Linhas $linhas
+    $linhas = Corrigir-MacroMPrefixQuebrado -Linhas $linhas
+    $linhas = Corrigir-GridColumnCheckboxSparse -Linhas $linhas
+    $linhas = Corrigir-BtnReportGuardEmptyMsgErro -Linhas $linhas
+    $linhas = Corrigir-ReportFormConcatInline -Linhas $linhas
 
     # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
     $conteudoFinal = $linhas -join "`r`n"
