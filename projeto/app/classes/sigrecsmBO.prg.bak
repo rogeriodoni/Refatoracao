@@ -351,7 +351,7 @@ DEFINE CLASS sigrecsmBO AS RelatorioBase
                        SUM(a.valos / b.qtdv * a.cotfpgs / ;
                            CarregarCambioCSM(m.loc_cCmoes, a.datas)) AS tots ;
                 FROM cursor_4c_CsmTemp a, cursor_4c_CsmCdCmm b ;
-                WHERE a.empdopnums = b.empdopnums &m.loc_cVerVendedor ;
+                WHERE a.empdopnums = b.empdopnums &loc_cVerVendedor ;
                 GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ;
                 ORDER BY 4, 2, 3, 1, 5, 7 ;
                 INTO CURSOR tempo READWRITE

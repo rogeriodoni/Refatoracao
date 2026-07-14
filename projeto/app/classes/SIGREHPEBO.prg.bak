@@ -147,7 +147,7 @@ DEFINE CLASS SIGREHPEBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * Imprimir - Prepara dados e imprime relatorio na impressora
     * Equivalente ao PROCEDURE impressao do legado:
-    *   Report Form SigReHpe To Print Prompt NoConsole
+    *   Report Form SigReHpe To PRINTER Prompt NoConsole
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
         LOCAL loc_lSucesso

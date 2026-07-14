@@ -478,7 +478,7 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
                    000000.00 as Qtds, 00000.000000 as Units, ;
                    000000000.00 as Totas, 000000000.00 as DifVal, Usuars ;
                    FROM TmpCsRelat ;
-                   WHERE &m.loc_cWhere1. ;
+                   WHERE &loc_cWhere1. ;
                    UNION ALL ;
             SELECT Emps, Dopes, Numes, MascNum, Vends, Rclis, ValInis, Valos, CodObs, ;
                    Tp, Soma, ;
@@ -487,7 +487,7 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
                    000000.00 as Qtds, 00000.000000 as Units, ;
                    000000000.00 as Totas, 000000000.00 as DifVal, Usuars ;
                    FROM TmpCsRela2 ;
-                   WHERE &m.loc_cWhere2. ;
+                   WHERE &loc_cWhere2. ;
                    INTO CURSOR csRelatorio1 ;
                    ORDER BY 1, 5, 2, 3, 11
 
@@ -549,10 +549,10 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
                                TRANSFORM(csRelatorio.Numes) + ", " + ;
                                EscaparSQL(csRelatorio.MascNum) + ", " + ;
                                EscaparSQL(csRelatorio.Vends) + ", " + ;
-                               EscaparSQL(csRelatorio.RClis) + ", " + ;
+                               EscaparSQL(LEFT(csRelatorio.RClis, 40)) + ", " + ;
                                FormatarNumeroSQL(csRelatorio.Valos) + ", " + ;
                                FormatarNumeroSQL(csRelatorio.ValInis) + ", " + ;
-                               EscaparSQL(csRelatorio.CodObs) + ", " + ;
+                               FormatarNumeroSQL(csRelatorio.CodObs, 0) + ", " + ;
                                EscaparSQL(csRelatorio.Obses) + ", " + ;
                                EscaparSQL(loc_cEmpDopNums) + ", " + ;
                                EscaparSQL(loc_cIdQuery) + ", " + ;
@@ -775,38 +775,69 @@ DEFINE CLASS SIGREADSBO AS RelatorioBase
     * par_lVisualizar: .T. = visualizar na tela, .F. = imprimir direto
     *--------------------------------------------------------------------------
     PROCEDURE ImprimirRelatorio(par_lVisualizar)
-        LOCAL loc_lSucesso, loc_cFrx
+        LOCAL loc_lSucesso, loc_cFrx, loc_cModo
         loc_lSucesso = .F.
         TRY
             IF !THIS.PrepararDados()
                 THIS.this_cMensagemErro = "Erro ao preparar dados para o relat" + CHR(243) + "rio"
                 loc_lSucesso = .F.
-            ENDIF
-
-            IF !USED("csRelatorio") OR RECCOUNT("csRelatorio") = 0
-                MsgAviso("Nenhum dado encontrado para os filtros selecionados.", ;
-                         "Relat" + CHR(243) + "rio")
-                loc_lSucesso = .T.
-            ENDIF
-
-            IF THIS.this_nTipoRel = 3
-                loc_cFrx = "SigReAd2"
             ELSE
-                loc_cFrx = "SigReAd1"
+                loc_cFrx = IIF(THIS.this_nTipoRel = 3, "SigReAd2", "SigReAd1")
+                loc_cModo = IIF(par_lVisualizar, "PREVIEW", "PRINTER_PROMPT")
+                loc_lSucesso = THIS.ExecutarReportForm(loc_cFrx, loc_cModo, "csRelatorio")
             ENDIF
-
-            IF par_lVisualizar
-                REPORT FORM (loc_cFrx) PREVIEW NOCONSOLE
-            ELSE
-                REPORT FORM (loc_cFrx) TO PRINTER PROMPT NOCONSOLE
-            ENDIF
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
         RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarReportForm (Pattern #117)
+    *   Guard FILE(FRX) + guard cursor vazio + isolamento locale/REPORTBEHAVIOR
+    *   par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX, loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------

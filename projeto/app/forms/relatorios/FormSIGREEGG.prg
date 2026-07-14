@@ -1282,7 +1282,8 @@ DEFINE CLASS FormSIGREEGG AS FormBase
                 RETURN
             ENDIF
             THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.PrepararDados()
+            IF !THIS.this_oRelatorio.PrepararDados() ;
+               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
                 RETURN

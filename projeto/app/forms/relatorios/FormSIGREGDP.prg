@@ -841,7 +841,8 @@ DEFINE CLASS FormSIGREGDP AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
         THIS.FormParaRelatorio()
-        IF !THIS.this_oRelatorio.PrepararDados()
+        IF !THIS.this_oRelatorio.PrepararDados() ;
+           AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
             MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Processar")
         ELSE
             loc_oPagina.grd_4c_Dados.Refresh()

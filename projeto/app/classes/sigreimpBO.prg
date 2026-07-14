@@ -553,9 +553,8 @@ DEFINE CLASS sigreimpBO AS RelatorioBase
                 IF THIS.this_nTipos = 1
                     loc_cRelatorio = gc_4c_CaminhoReports + "SigReIp1.frx"
                 ELSE
-                    loc_cRelatorio = gc_4c_CaminhoReports + "SigReIp2.frx"
                 ENDIF
-                REPORT FORM (loc_cRelatorio) TO PRINT PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReIp2", "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

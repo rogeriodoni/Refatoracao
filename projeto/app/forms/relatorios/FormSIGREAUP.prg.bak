@@ -424,7 +424,7 @@ DEFINE CLASS FormSIGREAUP AS FormBase
 
     *--------------------------------------------------------------------------
     * BtnDocumentoClick - Envia direto para impressora padrao (sem dialogo)
-    *   Original: PROCEDURE documento (Report Form ... to Print NoConsole)
+    *   Original: PROCEDURE documento (Report Form ... to PRINTER NoConsole)
     *--------------------------------------------------------------------------
     PROCEDURE BtnDocumentoClick()
         IF VARTYPE(THIS.this_oRelatorio) != "O"

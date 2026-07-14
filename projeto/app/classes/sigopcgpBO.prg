@@ -873,7 +873,7 @@ DEFINE CLASS sigopcgpBO AS BusinessBase
               FROM crSigOpEtq1 a ;
              WHERE a.empos = m.loc_cEstEmp AND ;
                    a.grupos = m.loc_cEstGru AND ;
-                   a.contas = m.loc_cEstCta AND &m.loc_cFil. ;
+                   a.contas = m.loc_cEstCta AND &loc_cFil. ;
               INTO CURSOR CsEtiqueta READWRITE
 
             SELECT CsEtiqueta

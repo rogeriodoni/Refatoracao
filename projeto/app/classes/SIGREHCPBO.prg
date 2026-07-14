@@ -168,7 +168,7 @@ DEFINE CLASS SIGREHCPBO AS RelatorioBase
             loc_cArquivo = THIS.ObterCaminhoRelatorio()
             SET POINT TO [,]
             SET SEPARATOR TO [.]
-            REPORT FORM (loc_cArquivo) TO PRINT PROMPT NOCONSOLE
+            REPORT FORM (loc_cArquivo) TO PRINTER PROMPT NOCONSOLE
             SET POINT TO [.]
             SET SEPARATOR TO [,]
             loc_lResultado = .T.

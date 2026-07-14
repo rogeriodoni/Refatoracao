@@ -4739,3 +4739,204 @@ PROCEDURE RegistrarAuditoria(par_cOperacao)
 
 **Bug**: SigReAacBO/SIGREDESBO/SigReDdpBO/sigredocBO tinham `FormatarDataSQL(DATETIME())` em `RegistrarAuditoria` (Erro35, 2026-07-08, "Relatorio Log de Acessos"). Fix substituiu por `GETDATE()`. Melhoria sistemica em `FormatarDataSQL` aceita T agora.
 
+## 133. `&m.<var>.` eh macro quebrada em VFP9 — usar `&<var>.` sem prefixo `m.` (SIGREADSBO 2026-07-14, Erro37)
+
+**Problema**: Reports migrados com Pattern #118 (prefixar `m.` em refs de var LOCAL dentro de SELECT VFP local) tiveram a regra aplicada indiscriminadamente, inclusive dentro de macros `&…`. Resultado: `WHERE &m.loc_cWhere1.` — VFP9 estoura `Error 10: Syntax error.` no primeiro `PrepararDados()`, sem indicar linha nem contexto. O erro aparece como modal simples "Syntax error." que aborta o relatorio antes do REPORT FORM.
+
+**Causa raiz**: Em VFP9 o macro operator `&` le o nome do macro ATE o primeiro `.` (o `.` termina o nome). Assim:
+- `&loc_cWhere.` → expande `loc_cWhere` (correto)
+- `&m.loc_cWhere.` → tenta expandir a variavel chamada `m` (que nao existe), sobra `loc_cWhere.` como lixo depois → parser erra
+
+O prefixo `m.` de escopo memvar existe APENAS em contextos de expressao normal (SELECT list, WHERE column ops, function args, GROUP BY, ORDER BY). Nao existe DENTRO de macro `&…` — la o parser trata caractere por caractere ate o `.` terminador.
+
+**Codigo ERRADO** (gerado por Pattern #118 v1 indiscriminado):
+```foxpro
+loc_cWhere1 = IIF(loc_nTipoVars=1, "ValInis > Valos", "0=0")
+
+SELECT Emps, Dopes, ... FROM TmpCsRelat ;
+    WHERE &m.loc_cWhere1. ;             && ERRO 10: "Syntax error."
+    UNION ALL ;
+SELECT Emps, Dopes, ... FROM TmpCsRela2 ;
+    WHERE &m.loc_cWhere2. ;             && idem
+    INTO CURSOR csRelatorio1
+```
+
+**Codigo CORRETO** (mimetiza o legado — sempre `&<var>.` sem `m.`):
+```foxpro
+SELECT Emps, Dopes, ... FROM TmpCsRelat ;
+    WHERE &loc_cWhere1. ;
+    UNION ALL ;
+SELECT Emps, Dopes, ... FROM TmpCsRela2 ;
+    WHERE &loc_cWhere2. ;
+    INTO CURSOR csRelatorio1
+```
+
+**Regra distintiva**: se a var LOCAL aparece **dentro de `&<var>.`**, NAO usar `m.`. Se aparece em qualquer outro contexto dentro do SELECT (SELECT list, WHERE column ops, function args, GROUP BY, ORDER BY, IIF/SUM inner refs), Pattern #118 continua valendo (prefixar `m.`).
+
+**Auto-fix**: CorretorAutomatico Pattern #120 (`Corrigir-MacroMPrefixQuebrado`). Regex `&m\.` -> `&` — safe global replace, ja que `&m.` NUNCA eh construcao valida em VFP9 (o unico "m." legitimo eh prefixo de escopo memvar em ref normal, e nunca aparece com `&` na frente). Idempotente.
+
+**Complementa Pattern #118**: a Fase 2 do Corrigir-SelectLocalVarSemMPrefix (prefixa `m.` em refs de var local dentro de SELECT-INTO-CURSOR) precisa excluir tokens dentro de macros `&…`. Pattern #120 remedia depois; recomendacao futura eh Fase 2 de #118 pular ocorrencias dentro de `&\w+\.`.
+
+**Bug**: SIGREADSBO.PrepararDados linha 492 (WHERE &m.loc_cWhere1. UNION WHERE &m.loc_cWhere2.) — reproduzido em diagnostico end-to-end (Erro37, 2026-07-14, FormSIGREADS "Relatorio de Apuracao de Descontos/Acrescimos"). Varredura global apos fix: 13 ocorrencias em 8 arquivos migrados: SIGREADSBO (2), sigopcgpBO (1), sigrecheBO (6), sigrecpeBO (1), sigrecrtBO (2), sigrecsmBO (1), SigReIr1BO (1), Formsigrepes (1). Todos corrigidos por replace_all `&m.` → `&`. Fix validado por compilacao dos 8 arquivos + PrepararDados end-to-end no SIGREADSBO.
+
+## 134. INSERT em SQL Server: helpers por TIPO destino + LEFT() por TAMANHO destino (SIGREADSBO SigTempR 2026-07-14, Erro39)
+
+**Problema**: BOs REPORT que geram cursores analiticos frequentemente inserem os dados em tabela temporaria SQL Server (`SigTempR` mais comum) para JOIN posterior com movimentacao detalhada (`SigMvItn`). O INSERT falha silenciosamente quando (a) valor origem excede tamanho da coluna destino, OU (b) helper usado nao bate com o tipo da coluna destino. SQLEXEC retorna <0 sem MsgErro claro; o CATCH ate captura, mas a mensagem eh generica ("String or binary data would be truncated" / "Cannot convert varchar to numeric").
+
+**Causa raiz**:
+- **Tamanho**: `SigCdCli.Rclis` eh `char(50)` mas `SigTempR.Razas` eh `char(40)`. Passar `EscaparSQL(csRelatorio.RClis)` insere valor de ate 50 chars em coluna char(40) — SQL Server 8152 "String or binary data would be truncated" aborta o INSERT.
+- **Tipo**: `SigTempR.CodObs` eh `numeric(3,0)`. `EscaparSQL(csRelatorio.CodObs)` (numeric) retorna `''` (string vazia — a funcao filtra `VARTYPE != "C"`). SQL Server rejeita conversao `'' -> numeric(3,0)` com erro de conversao.
+
+**Codigo ERRADO**:
+```foxpro
+loc_cSQL = "INSERT INTO SigTempR (Emps, Razas, CodObs, ...) VALUES (" + ;
+           EscaparSQL(csRelatorio.Emps) + ", " + ;
+           EscaparSQL(csRelatorio.RClis) + ", " + ;             && RClis char(50) > Razas char(40) — trunca
+           EscaparSQL(csRelatorio.CodObs) + ", " + ;            && CodObs numeric, EscaparSQL retorna ''
+           ...
+```
+
+**Codigo CORRETO**:
+```foxpro
+loc_cSQL = "INSERT INTO SigTempR (Emps, Razas, CodObs, ...) VALUES (" + ;
+           EscaparSQL(csRelatorio.Emps) + ", " + ;
+           EscaparSQL(LEFT(csRelatorio.RClis, 40)) + ", " + ;    && LEFT trunca antes de EscaparSQL
+           FormatarNumeroSQL(csRelatorio.CodObs, 0) + ", " + ;   && FormatarNumeroSQL para coluna numeric
+           ...
+```
+
+**Regra**:
+1. Antes de escrever INSERT, consultar `docs/schema.sql` para cada coluna DESTINO: tipo + tamanho + NULL/NOT NULL.
+2. Escolher helper por TIPO destino (nao tipo origem):
+   - CHAR/VARCHAR/TEXT → `EscaparSQL(...)` — retorna WITH aspas + escape de `'`
+   - NUMERIC/INT → `FormatarNumeroSQL(campo, decimais)` — retorna sem aspas, ponto decimal
+   - DATE → `FormatarDataSQL(campo)` — retorna WITH aspas, formato ISO 'YYYY-MM-DD'
+   - DATETIME → `FormatarDataSQL(campo)` (aceita T) ou literal `GETDATE()` para "agora" (preferencial)
+   - BIT → `IIF(campo, 1, 0)` — retorna 0/1 sem aspas
+3. Se origem CHAR(M) > destino CHAR(N), aplicar `LEFT(campo, N)` ANTES do helper.
+4. Se origem NUMERIC pode exceder precisao/escala destino (raro), ROUND ou validar antes.
+
+**Tabelas criticas**: `SigTempR` (compartilhada por muitos relatorios analiticos), `LogAuditoria` (auditoria), `SigMv*` (movimentacao). Cada relatorio analitico que insere em SigTempR deve verificar as ~34 colunas contra o cursor de origem.
+
+**Auto-fix**: NAO automavel univoco. Requer:
+1. Parsear `docs/schema.sql` extraindo tabela → coluna → tipo + tamanho.
+2. Correlacionar cada `INSERT INTO Tabela (col1, col2, ...) VALUES (...)` com sua tabela+coluna destino.
+3. Ler o `csRelatorio.CampoOrigem` e correlacionar com cursor origem (via SELECT anterior no BO ou via cursor legado documentado).
+4. Comparar tipos/tamanhos e sugerir/aplicar helper adequado.
+
+Pattern parcial (detectar SIM, corrigir NAO) possivel — mas o fix universal exige info que so o schema.sql tem em conjunto com o SELECT origem. Manual por relatorio.
+
+**Bug**: SIGREADSBO.PrepararDados INSERT INTO SigTempR (Erro39, 2026-07-14, FormSIGREADS "Descontos/Acrescimos" modo Analitico). Fix per-callsite: linha 552 `EscaparSQL(LEFT(csRelatorio.RClis, 40))`; linha 555 `FormatarNumeroSQL(csRelatorio.CodObs, 0)`. Outras colunas foram validadas contra schema: Emps char(3)=char(3), Dopes char(20)=char(20), MascNum char(10)=char(10), Vends char(10) em CPros char(14) OK, Obses TEXT em Obss TEXT OK, EmpDopNums 29 chars exatos, CIdQuerys+CIdChaves via SYS(2015) 10 chars, Usuars char(10)=char(10) Contas.
+
+## 135. Grid Column CheckBox EXIGE `.Sparse = .F.` — sem isso, selecao individual quebra (FormSIGREADS 2026-07-14, Erro41)
+
+**Problema**: Forms com Grid onde `Column1.CurrentControl = "Check1"` (checkbox de selecao por linha) tem comportamento estranho: apenas 1 linha do grid mostra o CheckBox como controle clickavel; as demais linhas mostram o valor bruto do campo (0/1) renderizado como TEXTO PLANO. Usuario NAO consegue clicar nas checkboxes das demais linhas — apenas na linha corrente.
+
+**Sintomas visuais**:
+- 1 unica linha com CheckBox visivel (a linha selecionada)
+- Demais linhas mostrando "0" ou "1" em texto (parece "grid quebrado")
+- Se `.HeaderHeight = 0`, os "0"/"1" ficam bem visiveis como valores brutos
+
+**Sintomas comportamentais**:
+- Botoes "Selecionar Todos" (`REPLACE ALL Marca WITH 1`) e "Desmarcar Todos" (`REPLACE ALL Marca WITH 0`) FUNCIONAM (agem no cursor diretamente)
+- Selecao INDIVIDUAL por click no CheckBox NAO funciona nas linhas nao-correntes
+- Formularios que dependem de selecao multipla via checkboxes ficam praticamente inutilizaveis
+
+**Causa raiz**: Default VFP9 eh `Column.Sparse = .T.`, que instrui o Grid a renderizar o `CurrentControl` (CheckBox/ComboBox/Spinner/etc) **APENAS** na linha atualmente selecionada — as demais linhas mostram o dado como texto plano. Isso serve para performance em grids muito grandes (evita instanciar N controles), mas quebra completamente a UX de CheckBox column.
+
+**Codigo ERRADO** (default Sparse=.T. — CheckBox so aparece em 1 linha):
+```foxpro
+WITH loc_oGrid.Column1
+    .Width = 15
+    .AddObject("Check1", "CheckBox")
+    .Check1.Caption = ""
+    .Check1.Value   = 0
+    .CurrentControl = "Check1"
+    .ControlSource  = loc_cCursor + ".Marca"
+ENDWITH
+```
+
+**Codigo CORRETO** (Sparse=.F. — CheckBox aparece em TODAS as linhas):
+```foxpro
+WITH loc_oGrid.Column1
+    .Width     = 15
+    .Alignment = 0
+    .Enabled   = .T.
+    .Sparse    = .F.                    && OBRIGATORIO
+    .AddObject("Check1", "CheckBox")
+    .Check1.Caption = ""
+    .CurrentControl = "Check1"
+    .ControlSource  = loc_cCursor + ".Marca"
+ENDWITH
+```
+
+**Nota**: nao setar `.Check1.Value = 0` explicito — o binding via `Column1.ControlSource` cuida disso e o valor manual compete com o binding em algumas situacoes.
+
+**Auto-fix**: CorretorAutomatico Pattern #121 (`Corrigir-GridColumnCheckboxSparse`). Detecta bloco `WITH ...Column1` (ou `WITH par_oGrd.Column1`, `WITH loc_oGridXxx.Column1`, etc) que contem `CurrentControl = "Check1"` mas NAO contem `.Sparse = .F.` — injeta a linha `.Sparse = .F.` antes de `.AddObject("Check1", ...)`. Idempotente (nao afeta blocos que ja tem `Sparse`).
+
+**Padrao canonico**: `Formsigrepes.prg:3095-3104` (grid checkbox column proven em producao).
+
+**Bug**: FormSIGREADS.prg linhas 441-451 (`grd_4c_TipoOps` — Tipo de Operacao) + linhas 545-555 (`grd_4c_Grupos` — Grupo de Produto) — 2026-07-14, Erro41. Usuario nao conseguia marcar tipos de operacao nem grupos de produto individualmente, apenas via botoes SelTudo/Apaga. Fix aplicado: adicionado `.Sparse = .F.` + `.Alignment = 0` + `.Enabled = .T.` + removido `.Check1.Value = 0` que competia com ControlSource. Padrao canonico verificado contra `Formsigrepes.prg`.
+
+## 136. REPORT BtnVisualizarClick/BtnImprimirClick DEVEM guard `!EMPTY(cMensagemErro)` antes de MsgErro (FormSIGREADS 2026-07-14, Erro40)
+
+**Problema**: Apos migrar `ImprimirRelatorio` para o helper canonico `ExecutarReportForm` (Pattern #117), os handlers `BtnVisualizarClick`/`BtnImprimirClick` do form REPORT comecam a exibir um modal com titulo "Relatorio" e corpo VAZIO (apenas icone X vermelho) quando o cursor de dados esta vazio. O helper ja mostrou seu proprio MsgAviso "Nenhum registro encontrado...", entao o usuario ve DOIS modais em sequencia — o segundo em branco.
+
+**Causa raiz**: O helper `ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)` gerencia dois casos que retornam `.F.` SEM setar `this_cMensagemErro`:
+1. FRX ausente → chama `MostrarErro("Arquivo de relatorio nao encontrado...")` proprio + retorna `.F.`
+2. Cursor vazio → chama `MsgAviso("Nenhum registro encontrado com os filtros informados.")` proprio + retorna `.F.`
+
+Em ambos, o helper JA notificou o usuario. Mas os handlers legados fazem:
+```foxpro
+IF !THIS.this_oRelatorio.Atualizar()
+    MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Relat" + CHR(243) + "rio")
+ENDIF
+```
+
+Sem checar se `cMensagemErro` esta vazio → `MsgErro("", "Relatorio")` mostra modal vazio.
+
+**Codigo ERRADO** (modal duplicado — o segundo em branco):
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    TRY
+        THIS.FormParaRelatorio()
+        IF !THIS.this_oRelatorio.Atualizar()
+            MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Relat" + CHR(243) + "rio")
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro")
+    ENDTRY
+ENDPROC
+```
+
+**Codigo CORRETO** (guard cMensagemErro):
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    TRY
+        THIS.FormParaRelatorio()
+        IF !THIS.this_oRelatorio.Atualizar() ;
+           AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
+            MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Relat" + CHR(243) + "rio")
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro")
+    ENDTRY
+ENDPROC
+```
+
+**Regra**: sempre que uma chamada retorna `.F.` mas pode ter mostrado sua propria mensagem (helper com MsgAviso proprio), o caller deve verificar `!EMPTY(cMensagemErro)` antes de exibir seu proprio MsgErro. Alternativa arquitetural: convencionar que TODA rota que retorna `.F.` DEVE preencher `cMensagemErro` (mais explicit) — o helper Pattern #117 poderia setar `THIS.this_cMensagemErro = ""` no retorno .F. para deixar claro que "ja mostrei mensagem".
+
+**Auto-fix**: CorretorAutomatico Pattern #122 (`Corrigir-BtnReportGuardEmptyMsgErro`). Detecta o padrao:
+```
+IF !THIS.this_oRelatorio.<method>()
+    MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)
+ENDIF
+```
+Onde `<method>` esta em `("Atualizar"|"Inserir"|"ImprimirRelatorio"|"PrepararDados")`. Injeta guard `AND !EMPTY(...)` na condicao do IF. Idempotente. Preserva indentacao e handles com `TRY/CATCH` circundante.
+
+**Padrao canonico**: FormSIGREADS.BtnVisualizarClick/BtnImprimirClick pos-fix (2026-07-14).
+
+**Bug**: FormSIGREADS.prg BtnVisualizarClick (linhas 1729-1743) e BtnImprimirClick (linhas 1748-1761) — 2026-07-14, Erro40. Cursor de dados vazio (filtros nao retornaram nada) disparava MsgAviso "Nenhum registro encontrado" do helper + MsgErro vazio do handler em sequencia. Fix per-callsite aplicado.
+
+
+

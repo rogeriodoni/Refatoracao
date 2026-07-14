@@ -5650,7 +5650,7 @@ DEFINE CLASS Formsigrepes AS FormBase
                 CUnis AS Unidade_Saldo, PesoMs AS Peso_Medio, SPesos AS Peso_total ;
                 FROM CsTemporario ;
                 WHERE Ps = 1 AND Ps2 = 1 ;
-                ORDER BY &m.loc_cOrd. ;
+                ORDER BY &loc_cOrd. ;
                 INTO CURSOR crExcel READWRITE
 
             SELECT crExcel

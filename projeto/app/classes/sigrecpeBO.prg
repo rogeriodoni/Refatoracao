@@ -481,7 +481,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
         SELECT Cpros, cproEqs, Reffs, cgrus, dpros, ;
                "    " AS CodCors, "  " AS CodTams, 0 AS Sqtds ;
             FROM cursor_4c_LocalPro ;
-            WHERE &m.loc_cWhere. ;
+            WHERE &loc_cWhere. ;
             INTO CURSOR cursor_4c_TmpPro2 READWRITE
 
         *-- Criar cursor TmpPro indexado por Cpros para SEEK de equivalentes

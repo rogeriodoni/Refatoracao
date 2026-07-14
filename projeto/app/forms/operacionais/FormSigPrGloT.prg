@@ -304,7 +304,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             WITH .cmd_4c_Encerrar
                 .Top             = 5
                 .Left            = 917
-                .Width           = 75
+                .Width           = 90
                 .Height          = 75
                 .Caption         = "Encerrar"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
@@ -483,7 +483,7 @@ DEFINE CLASS FormSigPrGloT AS FormBase
             WITH .cmd_4c_Encerrar
                 .Top             = 5
                 .Left            = 917
-                .Width           = 75
+                .Width           = 90
                 .Height          = 75
                 .Caption         = "Encerrar"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"

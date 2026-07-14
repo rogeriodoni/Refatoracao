@@ -452,7 +452,7 @@ DEFINE CLASS Formsigrecgr AS FormBase
 
     *--------------------------------------------------------------------------
     * BtnImprimirClick - Imprimir com prompt (modo 2)
-    * Equivalente ao metodo impressao do legado: Report Form SigReCgr to Print Prompt NoConsole
+    * Equivalente ao metodo impressao do legado: Report Form SigReCgr to PRINTER Prompt NoConsole
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
         THIS.GerarRelatorio(2)
@@ -460,7 +460,7 @@ DEFINE CLASS Formsigrecgr AS FormBase
 
     *--------------------------------------------------------------------------
     * BtnDocExcelClick - Imprimir direto sem prompt (modo 3)
-    * Equivalente ao metodo documento do legado: Report Form SigReCgr to Print NoConsole
+    * Equivalente ao metodo documento do legado: Report Form SigReCgr to PRINTER NoConsole
     *--------------------------------------------------------------------------
     PROCEDURE BtnDocExcelClick()
         THIS.GerarRelatorio(3)

@@ -457,6 +457,7 @@ DEFINE CLASS FormSigReEsp AS FormBase
         *-- REGRA: AddObject ANTES de CurrentControl; ControlSource DEPOIS
         WITH loc_oGrid.Column1
             .Width = 22
+            .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
             .Check1.Value   = 0
@@ -482,6 +483,7 @@ DEFINE CLASS FormSigReEsp AS FormBase
         *-- Coluna 4: CheckBox para SelImp2 (Header "E")
         WITH loc_oGrid.Column4
             .Width = 37
+            .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
             .Check1.Value   = 0
@@ -493,6 +495,7 @@ DEFINE CLASS FormSigReEsp AS FormBase
         *-- Coluna 5: CheckBox para SelImp3 (Header "C")
         WITH loc_oGrid.Column5
             .Width = 35
+            .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
             .Check1.Value   = 0

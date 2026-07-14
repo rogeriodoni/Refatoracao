@@ -816,19 +816,19 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
             loc_nTpRel = THIS.this_nOpcRel
 
             IF loc_nTpRel = 1
-                REPORT FORM SigReCgp TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReCgp TO PRINTER PROMPT NOCONSOLE
             ENDIF
             IF INLIST(loc_nTpRel, 2)
-                REPORT FORM SigReCg1 TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReCg1 TO PRINTER PROMPT NOCONSOLE
             ENDIF
             IF INLIST(loc_nTpRel, 5)
-                REPORT FORM SigReCg2 TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReCg2 TO PRINTER PROMPT NOCONSOLE
             ENDIF
             IF loc_nTpRel = 3
-                REPORT FORM SigPrCpr TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigPrCpr TO PRINTER PROMPT NOCONSOLE
             ENDIF
             IF loc_nTpRel = 4
-                REPORT FORM SigPrCp2 TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigPrCp2 TO PRINTER PROMPT NOCONSOLE
             ENDIF
 
             loc_lcApagar = SYS(2023) + "\F*.Jpg"

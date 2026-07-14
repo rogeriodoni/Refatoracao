@@ -683,7 +683,7 @@ DEFINE CLASS sigopindBO AS BusinessBase
             loc_cArqRel = gc_4c_CaminhoReports + "RelSigOpIndSaldo.frx"
             DO CASE
                 CASE par_cTipo = "I"
-                    loc_cSaida = "TO PRINT PROMPT NOCONSOLE"
+                    loc_cSaida = "TO PRINTER PROMPT NOCONSOLE"
                 CASE par_cTipo = "E"
                     loc_cSaida = "TO FILE " + gc_4c_CaminhoBase + "RelSaldo.xls TYPE XL5 PROMPT NOCONSOLE"
                 OTHERWISE
@@ -825,7 +825,7 @@ DEFINE CLASS sigopindBO AS BusinessBase
             loc_cArqRel = gc_4c_CaminhoReports + "RelSigOpIndHist.frx"
             DO CASE
                 CASE par_cTipo = "I"
-                    loc_cSaida = "TO PRINT PROMPT NOCONSOLE"
+                    loc_cSaida = "TO PRINTER PROMPT NOCONSOLE"
                 CASE par_cTipo = "E"
                     loc_cSaida = "TO FILE " + gc_4c_CaminhoBase + "RelHistorico.xls TYPE XL5 PROMPT NOCONSOLE"
                 OTHERWISE

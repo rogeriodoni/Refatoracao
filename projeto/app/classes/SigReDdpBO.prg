@@ -140,8 +140,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
         TRY
             THIS.this_cMensagemErro = ""
             IF THIS.PrepararDados()
-                loc_cArquivo = gc_4c_CaminhoReports + "SigReDdp.frx"
-                REPORT FORM (loc_cArquivo) TO PRINT PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReDdp", "PRINTER_PROMPT")
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

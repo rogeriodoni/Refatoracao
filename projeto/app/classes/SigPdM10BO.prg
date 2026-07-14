@@ -183,7 +183,27 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                                                                                                     IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
                                                                                                                         THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
                                                                                                                     ELSE
-                                                                                                                        THIS.this_lExibeCntOps = (NVL(cursor_4c_TmpOpd.ResumoPOp, 0) = 1)
+                                                                                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                        ELSE
+                                                                                                                            IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                                THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                            ELSE
+                                                                                                                                IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                                    THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                                        THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp) = "L"
+                                                                                                                                            THIS.this_lExibeCntOps = cursor_4c_TmpOpd.ResumoPOp
+                                                                                                                                        ELSE
+                                                                                                                                            THIS.this_lExibeCntOps = (NVL(cursor_4c_TmpOpd.ResumoPOp, 0) = 1)
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
+                                                                                                                            ENDIF
+                                                                                                                        ENDIF
                                                                                                                     ENDIF
                                                                                                                 ENDIF
                                                                                                             ENDIF
@@ -1202,7 +1222,27 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                                                                                                             IF VARTYPE(globalizas) = "L"
                                                                                                                                 loc_lGlobaliza = globalizas
                                                                                                                             ELSE
-                                                                                                                                loc_lGlobaliza = (NVL(globalizas, 0) = 1)
+                                                                                                                                IF VARTYPE(globalizas) = "L"
+                                                                                                                                    loc_lGlobaliza = globalizas
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(globalizas) = "L"
+                                                                                                                                        loc_lGlobaliza = globalizas
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(globalizas) = "L"
+                                                                                                                                            loc_lGlobaliza = globalizas
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(globalizas) = "L"
+                                                                                                                                                loc_lGlobaliza = globalizas
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(globalizas) = "L"
+                                                                                                                                                    loc_lGlobaliza = globalizas
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lGlobaliza = (NVL(globalizas, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF

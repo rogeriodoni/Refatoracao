@@ -474,9 +474,9 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                        a.Contas, a.Grclis, a.Iclis, a.Dtsis, ;
                        a.Vencs, a.Valors, a.Emps, a.Cheques, ;
                        a.Operacaos, a.Cpfs, a.Rclis, a.cpfsT, ;
-                       &m.loc_cQuebra. AS Quebra, a.hists ;
+                       &loc_cQuebra. AS Quebra, a.hists ;
                        FROM cursor_4c_Relatorio0 a, cursor_4c_Operacoes c ;
-                       WHERE c.Marcas AND a.Operacaos = c.Operacaos &m.loc_cVerAberto. ;
+                       WHERE c.Marcas AND a.Operacaos = c.Operacaos &loc_cVerAberto. ;
                        INTO CURSOR cursor_4c_Selecao ;
                        ORDER BY a.Nums, a.Dtsis DESCENDING
 
@@ -496,7 +496,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                 ENDSCAN
 
                 SELECT a.* FROM cursor_4c_Resultado a ;
-                    ORDER BY &m.loc_cOrdenaPor. ;
+                    ORDER BY &loc_cOrdenaPor. ;
                     INTO CURSOR cursor_4c_Relatorio
 
                 IF USED("cursor_4c_Resultado")
@@ -510,10 +510,10 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                 SELECT a.Nums, a.NumLotes, a.Dtents, a.GruCarts, a.ConCarts, a.Grupos, ;
                        a.Contas, a.Grclis, a.Iclis, a.Dtsis, ;
                        a.Vencs, a.Valors, a.Emps, a.Cheques, ;
-                       a.Operacaos, a.Cpfs, a.Rclis, &m.loc_cQuebra. AS Quebra, a.hists, a.cpfsT ;
+                       a.Operacaos, a.Cpfs, a.Rclis, &loc_cQuebra. AS Quebra, a.hists, a.cpfsT ;
                        FROM cursor_4c_Relatorio0 a, cursor_4c_Operacoes c ;
-                       WHERE c.Marcas AND a.Operacaos = c.Operacaos &m.loc_cVerAberto. ;
-                       ORDER BY &m.loc_cOrdenaPor. ;
+                       WHERE c.Marcas AND a.Operacaos = c.Operacaos &loc_cVerAberto. ;
+                       ORDER BY &loc_cOrdenaPor. ;
                        INTO CURSOR cursor_4c_Relatorio
             ENDIF
 

@@ -526,9 +526,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
                     ENDIF
                 ELSE
                     IF loc_Barra
-                        REPORT FORM SigReGlb TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGlb TO PRINTER PROMPT NOCONSOLE
                     ELSE
-                        REPORT FORM SigReGlr TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGlr TO PRINTER PROMPT NOCONSOLE
                     ENDIF
                 ENDIF
 
@@ -538,7 +538,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
                     IF par_cSaida = 'V'
                         REPORT FORM SigPrGlp PREVIEW NOCONSOLE
                     ELSE
-                        REPORT FORM SigPrGlp TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigPrGlp TO PRINTER PROMPT NOCONSOLE
                     ENDIF
                 ENDIF
             ENDIF
@@ -752,9 +752,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
                 ENDIF
             ELSE
                 IF loc_Barra
-                    REPORT FORM SigReGlb TO PRINT PROMPT NOCONSOLE
+                    REPORT FORM SigReGlb TO PRINTER PROMPT NOCONSOLE
                 ELSE
-                    REPORT FORM SigReGlr TO PRINT PROMPT NOCONSOLE
+                    REPORT FORM SigReGlr TO PRINTER PROMPT NOCONSOLE
                 ENDIF
             ENDIF
 
@@ -764,7 +764,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
                 IF par_cSaida = 'V'
                     REPORT FORM SigPrGlp PREVIEW NOCONSOLE
                 ELSE
-                    REPORT FORM SigPrGlp TO PRINT PROMPT NOCONSOLE
+                    REPORT FORM SigPrGlp TO PRINTER PROMPT NOCONSOLE
                 ENDIF
             ENDIF
         ENDIF
@@ -1021,16 +1021,16 @@ DEFINE CLASS sigregliBO AS BusinessBase
             ELSE
                 IF THIS.this_nBoleto = 1
                     IF EMPTY(THIS.this_cPcPrinterBol)
-                        REPORT FORM SigReGlg TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGlg TO PRINTER PROMPT NOCONSOLE
                     ELSE
                         loc_lcPrinterBol = THIS.this_cPcPrinterBol
                         SET PRINTER TO NAME (loc_lcPrinterBol)
-                        REPORT FORM SigReGlg TO PRINT NOCONSOLE
+                        REPORT FORM SigReGlg TO PRINTER NOCONSOLE
                         SET PRINTER TO
                     ENDIF
                 ELSE
                     IF THIS.this_nBoleto = 2
-                    REPORT FORM SigReGle TO PRINT PROMPT NOCONSOLE
+                    REPORT FORM SigReGle TO PRINTER PROMPT NOCONSOLE
                 ELSE
                     IF THIS.this_nBoleto = 3
                     SELECT DbImpressao
@@ -1534,17 +1534,17 @@ DEFINE CLASS sigregliBO AS BusinessBase
                 DO CASE
                     CASE THIS.this_nBoleto = 1
                         IF EMPTY(THIS.this_cPcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINT PROMPT NOCONSOLE
+                            REPORT FORM SigReGlh TO PRINTER PROMPT NOCONSOLE
                         ELSE
                             loc_lcPrinterBol = THIS.this_cPcPrinterBol
                             SET PRINTER TO NAME (loc_lcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINT NOCONSOLE
+                            REPORT FORM SigReGlh TO PRINTER NOCONSOLE
                             SET PRINTER TO
                         ENDIF
                     CASE THIS.this_nBoleto = 4
-                        REPORT FORM SigReGln TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGln TO PRINTER PROMPT NOCONSOLE
                     OTHERWISE
-                        REPORT FORM SigReGlu TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
                 ENDCASE
             ENDIF
         ENDIF
@@ -1818,7 +1818,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
             IF par_cSaida = 'V'
                 REPORT FORM SigReGla PREVIEW NOCONSOLE
             ELSE
-                REPORT FORM SigReGla TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReGla TO PRINTER PROMPT NOCONSOLE
             ENDIF
         ENDIF
 
@@ -2150,17 +2150,17 @@ DEFINE CLASS sigregliBO AS BusinessBase
                 DO CASE
                     CASE THIS.this_nBoleto = 1
                         IF EMPTY(THIS.this_cPcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINT PROMPT NOCONSOLE
+                            REPORT FORM SigReGlh TO PRINTER PROMPT NOCONSOLE
                         ELSE
                             loc_lcPrinterBol = THIS.this_cPcPrinterBol
                             SET PRINTER TO NAME (loc_lcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINT NOCONSOLE
+                            REPORT FORM SigReGlh TO PRINTER NOCONSOLE
                             SET PRINTER TO
                         ENDIF
                     CASE THIS.this_nBoleto = 4
-                        REPORT FORM SigReGln TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGln TO PRINTER PROMPT NOCONSOLE
                     OTHERWISE
-                        REPORT FORM SigReGlu TO PRINT PROMPT NOCONSOLE
+                        REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
                 ENDCASE
             ENDIF
         ENDIF
@@ -2428,7 +2428,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
             IF par_cSaida = 'V'
                 REPORT FORM SigReGlL PREVIEW NOCONSOLE
             ELSE
-                REPORT FORM SigReGlL TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReGlL TO PRINTER PROMPT NOCONSOLE
             ENDIF
         ENDIF
 
@@ -2679,7 +2679,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
             IF par_cSaida = 'V'
                 REPORT FORM SigReGlu PREVIEW NOCONSOLE
             ELSE
-                REPORT FORM SigReGlu TO PRINT PROMPT NOCONSOLE
+                REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
             ENDIF
         ENDIF
 

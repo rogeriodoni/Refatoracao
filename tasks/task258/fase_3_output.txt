@@ -1,0 +1,14 @@
+﻿Arquivo criado com sucesso em `C:\4c\projeto\app\forms\operacionais\FormSigPrAop.prg`.
+
+**Fase 3 entregue ÔÇö o que foi criado:**
+
+- **`DEFINE CLASS FormSigPrAop AS FormBase`** com todas as propriedades visuais do SCX (Width=1000, Height=600, TitleBar=0, ControlBox=.F., Closable=.F., DataSession=2)
+- **`Init()`** ÔåÆ apenas `RETURN DODEFAULT()` (FormBase.Init() cuida do SET DATE BRITISH/CENTURY ON)
+- **`ConfigurarPageFrame()`** ÔåÆ define fundo do form OPERACIONAL plano (`new_background.jpg`, ScrollBars=0) sem criar PageFrame
+- **`InicializarForm()`** ÔåÆ cria BO, cursor `cursor_4c_DivOp` (13 campos NULL, estrutura id├¬ntica ao `Temp_DivOp` do legado), e chama os configuradores; sem RETURN dentro de TRY/CATCH
+- **`ConfigurarCabecalho()`** ÔåÆ `cnt_4c_Cabecalho` (RGB 100,100,100) + `lbl_4c_Sombra` (preto) + `lbl_4c_Titulo` (branco), AutoSize=.F. + Width=THIS.Width (regra do cabe├ºalho)
+- **`ConfigurarBotoesConf()`** ÔåÆ `cmg_4c_BotoesConf` CommandGroup com `Buttons(1)=Confirmar` (Enabled=.F. inicial) + `Buttons(2)=Encerrar` (Cancel=.T.), Themes=.F. can├┤nico dentro de CommandGroup
+- **`TornarControlesVisiveis()`** ÔåÆ recursivo simples (sem filtros ÔÇö nenhum container flutuante neste form)
+- **`Destroy()`** ÔåÆ fecha cursor + nulifica BO + DODEFAULT()
+
+**Pr├│ximas fases:** Fase 4 adicionar├í o grid `grd_4c_DivOp` e os labels/TextBoxes de entrada (Get_OP, Get_Produto) e o EditBox de observa├º├Áes.

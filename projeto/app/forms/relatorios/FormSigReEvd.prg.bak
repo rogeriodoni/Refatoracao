@@ -930,7 +930,7 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *--------------------------------------------------------------------------
     * BtnImprimirClick - Envia para impressora com dialogo de selecao.
     *   Equivalente ao metodo 'impressao' do legado SIGREEVD:
-    *   Report Form SigReEvd to Print Prompt Noconsole
+    *   Report Form SigReEvd to PRINTER Prompt Noconsole
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
         LOCAL loc_cFrx
@@ -946,9 +946,8 @@ DEFINE CLASS FormSigReEvd AS FormBase
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("IMPRESSAO")
         ENDIF
-        loc_cFrx = gc_4c_CaminhoReports + "SigReEvd.frx"
         IF FILE(loc_cFrx)
-            REPORT FORM (loc_cFrx) TO PRINT PROMPT NOCONSOLE
+            THIS.ExecutarReportForm("SigReEvd", "PRINTER_PROMPT")
         ELSE
             MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + ;
                 "o encontrado: " + loc_cFrx, "Relat" + CHR(243) + "rio")
@@ -958,7 +957,7 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *--------------------------------------------------------------------------
     * BtnExcelClick - Exporta para arquivo XLS.
     *   Equivalente ao metodo 'documento' do legado SIGREEVD:
-    *   Report Form SigReEvd to Print Noconsole
+    *   Report Form SigReEvd to PRINTER Noconsole
     *   No novo sistema, exporta para XLS em vez de impressora direta.
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()

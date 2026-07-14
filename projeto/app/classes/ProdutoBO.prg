@@ -571,7 +571,27 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                                                                                                                                                     IF VARTYPE(flagctabs) = "L"
                                                                                                                                                         THIS.this_lFlagctabs = flagctabs
                                                                                                                                                     ELSE
-                                                                                                                                                        THIS.this_lFlagctabs = (NVL(flagctabs, 0) = 1)
+                                                                                                                                                        IF VARTYPE(flagctabs) = "L"
+                                                                                                                                                            THIS.this_lFlagctabs = flagctabs
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(flagctabs) = "L"
+                                                                                                                                                                THIS.this_lFlagctabs = flagctabs
+                                                                                                                                                            ELSE
+                                                                                                                                                                IF VARTYPE(flagctabs) = "L"
+                                                                                                                                                                    THIS.this_lFlagctabs = flagctabs
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(flagctabs) = "L"
+                                                                                                                                                                        THIS.this_lFlagctabs = flagctabs
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(flagctabs) = "L"
+                                                                                                                                                                            THIS.this_lFlagctabs = flagctabs
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lFlagctabs = (NVL(flagctabs, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
                                                                                                                                                     ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
@@ -708,7 +728,27 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                                                                                                                                                     IF VARTYPE(tcomps) = "L"
                                                                                                                                                         THIS.this_lTcomps = tcomps
                                                                                                                                                     ELSE
-                                                                                                                                                        THIS.this_lTcomps = (NVL(tcomps, 0) = 1)
+                                                                                                                                                        IF VARTYPE(tcomps) = "L"
+                                                                                                                                                            THIS.this_lTcomps = tcomps
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(tcomps) = "L"
+                                                                                                                                                                THIS.this_lTcomps = tcomps
+                                                                                                                                                            ELSE
+                                                                                                                                                                IF VARTYPE(tcomps) = "L"
+                                                                                                                                                                    THIS.this_lTcomps = tcomps
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(tcomps) = "L"
+                                                                                                                                                                        THIS.this_lTcomps = tcomps
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(tcomps) = "L"
+                                                                                                                                                                            THIS.this_lTcomps = tcomps
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lTcomps = (NVL(tcomps, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
                                                                                                                                                     ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
@@ -845,7 +885,27 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                                                                                                                                                     IF VARTYPE(transps) = "L"
                                                                                                                                                         THIS.this_lTransps = transps
                                                                                                                                                     ELSE
-                                                                                                                                                        THIS.this_lTransps = (NVL(transps, 0) = 1)
+                                                                                                                                                        IF VARTYPE(transps) = "L"
+                                                                                                                                                            THIS.this_lTransps = transps
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(transps) = "L"
+                                                                                                                                                                THIS.this_lTransps = transps
+                                                                                                                                                            ELSE
+                                                                                                                                                                IF VARTYPE(transps) = "L"
+                                                                                                                                                                    THIS.this_lTransps = transps
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(transps) = "L"
+                                                                                                                                                                        THIS.this_lTransps = transps
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(transps) = "L"
+                                                                                                                                                                            THIS.this_lTransps = transps
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lTransps = (NVL(transps, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
                                                                                                                                                     ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
@@ -982,7 +1042,27 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                                                                                                                                                     IF VARTYPE(impetiqs) = "L"
                                                                                                                                                         THIS.this_lImpetiqs = impetiqs
                                                                                                                                                     ELSE
-                                                                                                                                                        THIS.this_lImpetiqs = (NVL(impetiqs, 0) = 1)
+                                                                                                                                                        IF VARTYPE(impetiqs) = "L"
+                                                                                                                                                            THIS.this_lImpetiqs = impetiqs
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(impetiqs) = "L"
+                                                                                                                                                                THIS.this_lImpetiqs = impetiqs
+                                                                                                                                                            ELSE
+                                                                                                                                                                IF VARTYPE(impetiqs) = "L"
+                                                                                                                                                                    THIS.this_lImpetiqs = impetiqs
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(impetiqs) = "L"
+                                                                                                                                                                        THIS.this_lImpetiqs = impetiqs
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(impetiqs) = "L"
+                                                                                                                                                                            THIS.this_lImpetiqs = impetiqs
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lImpetiqs = (NVL(impetiqs, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
                                                                                                                                                     ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
@@ -1119,7 +1199,27 @@ DEFINE CLASS ProdutoBO AS BusinessBase
                                                                                                                                                     IF VARTYPE(chkfunds) = "L"
                                                                                                                                                         THIS.this_lChkfunds = chkfunds
                                                                                                                                                     ELSE
-                                                                                                                                                        THIS.this_lChkfunds = (NVL(chkfunds, 0) = 1)
+                                                                                                                                                        IF VARTYPE(chkfunds) = "L"
+                                                                                                                                                            THIS.this_lChkfunds = chkfunds
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(chkfunds) = "L"
+                                                                                                                                                                THIS.this_lChkfunds = chkfunds
+                                                                                                                                                            ELSE
+                                                                                                                                                                IF VARTYPE(chkfunds) = "L"
+                                                                                                                                                                    THIS.this_lChkfunds = chkfunds
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(chkfunds) = "L"
+                                                                                                                                                                        THIS.this_lChkfunds = chkfunds
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(chkfunds) = "L"
+                                                                                                                                                                            THIS.this_lChkfunds = chkfunds
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lChkfunds = (NVL(chkfunds, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
                                                                                                                                                     ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
