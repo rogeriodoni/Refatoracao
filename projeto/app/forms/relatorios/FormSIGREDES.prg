@@ -1357,7 +1357,7 @@ DEFINE CLASS FormSIGREDES AS FormBase
             loc_oPg.txt_4c_DesEmpresa.Value = ""
             RETURN
         ENDIF
-        loc_cSQL = "SELECT TOP 1 Emps, Razas FROM SigCdEmp WHERE Emps = " + ;
+        loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = " + ;
                    EscaparSQL(loc_cCodigo)
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
         IF loc_nResult > 0

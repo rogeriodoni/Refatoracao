@@ -1,12 +1,12 @@
 # CorretorAutomatico.ps1 - Patterns Reference
 
-This document is the complete reference for all 124 total auto-fix patterns in `CorretorAutomatico.ps1` and the full Common Errors Reference table for VFP9 migration.
+This document is the complete reference for all 125 total auto-fix patterns in `CorretorAutomatico.ps1` and the full Common Errors Reference table for VFP9 migration.
 
 The CorretorAutomatico runs automatically during the migration pipeline (Etapa 5.5) and fixes known anti-patterns that cause compilation or runtime errors in VFP9.
 
 ---
 
-## Auto-Fix Patterns (124 total)
+## Auto-Fix Patterns (125 total)
 
 | # | Description | Before (WRONG) | After (CORRECT) |
 |---|-------------|-----------------|------------------|
@@ -198,3 +198,4 @@ The CorretorAutomatico runs automatically during the migration pipeline (Etapa 5
 | 91 | SQLEXEC em cursor de grid sem fechar antes ("uncommitted changes") | `SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")` em BO.Buscar quando form usa `cursor_4c_Dados` como `grd.RecordSource` | Injeta antes do SQLEXEC: `IF USED("cursor_4c_Dados") / TABLEREVERT(.T., "cursor_4c_Dados") / USE IN cursor_4c_Dados / ENDIF`. Sem isso, segundo SQLEXEC falha com "Table buffer for alias CURSOR_4C_DADOS contains uncommitted changes" porque buffer do grid pode ter edicoes pendentes. So aplica em BOs (arquivo tem `FUNCTION Buscar` ou `FUNCTION CarregarPorCodigo`). |
 | 92 | REPORT: `.PicturePosition = 1` em CommandButton/Buttons() com `relatorio_*.jpg` icon | `.Picture = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"` + linha posterior `.PicturePosition = 1` | `.PicturePosition = 13` (icon ACIMA do caption, centralizado). SCOPE LIMITADO: so substitui se houver `relatorio_*` ou `geral_email` em janela de +/-4 linhas em torno do PicturePosition. VFP9 `1` = picture-LEFT-of-caption (causa truncamento de caption em buttons Width=65-67); `13` = picture-CENTERED-ABOVE-caption. Bug task023/task024 (2026-05-15). |
 | 93 | cnt_4c_Cabecalho/Sombra com BackColor cinza-errado (quase-preto) | `.BackColor = RGB(53, 53, 53)` em janela de +/-10 linhas de uma referencia a cnt_4c_Cabecalho ou cnt_4c_Sombra | `.BackColor = RGB(100, 100, 100)` (cinza medio do framework cntSombra). framework.vcx cntSombra tem BackColor=100,100,100 - migracao gerava 53,53,53 (quase preto) por engano. Mudanca system-wide em 2026-05-15. SCOPE LIMITADO via janela de contexto para evitar afetar outros containers. |
+| 125 | SigCdEmp com colunas inventadas `Emps`/`emps`/`NComps`/`nemp` | `SELECT Emps, NComps FROM SigCdEmP WHERE Emps = ...` / `"SigCdEmp","cursor_X","emps"` em FormBuscaAuxiliar / `mAddColuna("emps",...)` / `cursor.emps`/`cursor.nemp` | Substitui por `Cemps` (char(3), PK) e `Razas` (char(40), razao social). Preserva case: `emps`->`cemps`, `Emps`->`Cemps`, `EMPS`->`CEMPS`; `nemp`/`NComps`->`razas`/`Razas`. Fase 1 identifica cursores populados de SigCdEmp (SQLEXEC `FROM SigCdEmp` + destino nas 3 linhas seguintes, OU CREATEOBJECT("FormBuscaAuxiliar",...,"SigCdEmp",<cursor>,...)). Fase 2 corrige (a) linhas com SigCdEmp + token quebrado, (b) mAddColuna+CREATEOBJECT filter col dentro de bloco AbrirBusca* de SigCdEmp, (c) refs `<cursor>.emps`/`.nemp`/`.NComps` para cursores identificados. **CUIDADO**: `SigCdBal.emps` e `SigIvTrh.emps` EXISTEM legitimamente — regra NAO aplica (Fase 2(a) exige `SigCdEmp` na mesma linha). Origem: Erro44 (2026-07-16, FormSigReAiv/FormSIGREHCP). |

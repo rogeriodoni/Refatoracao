@@ -214,7 +214,7 @@ DEFINE CLASS sigtosenBO AS BusinessBase
             ELSE
                 loc_cSQL = "Select b.Cemps, b.Razas, b.Tipos, b.Logos" + ;
                            " From SigCdAcE a" + ;
-                           " Inner Join SigCdEmp b On b.Cemps = a.Emps" + ;
+                           " Inner Join SigCdEmp b On b.Cemps = a.Cemps" + ;
                            " Where a.Usuarios = '" + ALLTRIM(par_cUsuario) + "'" + ;
                            " And Not b.Ativas = 2" + ;
                            " Order By b.Cemps"
@@ -1256,7 +1256,11 @@ DEFINE CLASS sigtosenBO AS BusinessBase
                                                                                                                                                                                             IF VARTYPE(crParam2.PafEcfs) = "L"
                                                                                                                                                                                                 loc_lAtivo = crParam2.PafEcfs
                                                                                                                                                                                             ELSE
-                                                                                                                                                                                                loc_lAtivo = (NVL(crParam2.PafEcfs, 0) = 1)
+                                                                                                                                                                                                IF VARTYPE(crParam2.PafEcfs) = "L"
+                                                                                                                                                                                                    loc_lAtivo = crParam2.PafEcfs
+                                                                                                                                                                                                ELSE
+                                                                                                                                                                                                    loc_lAtivo = (NVL(crParam2.PafEcfs, 0) = 1)
+                                                                                                                                                                                                ENDIF
                                                                                                                                                                                             ENDIF
                                                                                                                                                                                         ENDIF
                                                                                                                                                                                     ENDIF

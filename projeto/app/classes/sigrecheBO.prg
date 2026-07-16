@@ -346,7 +346,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
 
             *-- 5. Nome da empresa corrente
             loc_cNomeEmpresa = ""
-            loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Emps = " + ;
+            loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Cemps = " + ;
                        EscaparSQL(go_4c_Sistema.cCodEmpresa)
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpEmp")
             IF loc_nResult > 0 AND USED("cursor_4c_TmpEmp")

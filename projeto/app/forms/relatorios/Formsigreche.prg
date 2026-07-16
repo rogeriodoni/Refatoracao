@@ -1483,7 +1483,7 @@ DEFINE CLASS Formsigreche AS FormBase
             THIS.txt_4c_DsEmpresa.Value = ""
             RETURN
         ENDIF
-        loc_cSQL    = "SELECT Emps, Razas FROM SigCdEmp WHERE Emps = " + EscaparSQL(loc_cCodigo)
+        loc_cSQL    = "SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cCodigo)
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
         IF loc_nResult > 0 AND USED("cursor_4c_EmpVal")
             SELECT cursor_4c_EmpVal

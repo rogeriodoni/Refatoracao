@@ -4939,4 +4939,95 @@ Onde `<method>` esta em `("Atualizar"|"Inserir"|"ImprimirRelatorio"|"PrepararDad
 **Bug**: FormSIGREADS.prg BtnVisualizarClick (linhas 1729-1743) e BtnImprimirClick (linhas 1748-1761) — 2026-07-14, Erro40. Cursor de dados vazio (filtros nao retornaram nada) disparava MsgAviso "Nenhum registro encontrado" do helper + MsgErro vazio do handler em sequencia. Fix per-callsite aplicado.
 
 
+## 137. SigCdEmp — colunas canonicas sao `Cemps`/`Razas`, NUNCA `Emps`/`emps`/`NComps`/`nemp` (FormSigReAiv + FormSIGREHCP 2026-07-16, Erro44)
+
+**Problema**: Ao digitar o codigo da empresa no campo `txt_4c_Empresa` (ou equivalente) de um form REPORT/OPERACIONAL, o VFP9 exibe modal `Microsoft Visual FoxPro / Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna 'Emps' invalido.`. O TextBox nunca resolve para valor valido; lookup FormBuscaAuxiliar tambem falha silenciosamente.
+
+**Causa raiz**: A tabela `SigCdEmp` (SIGCDEMP) tem **PK** `Cemps` (char(3), codigo empresa) e **descricao** `Razas` (char(40), razao social). As colunas `Emps`/`emps` e `NComps`/`nemp` **NAO EXISTEM** na tabela. Bug introduzido pela migracao porque:
+
+1. **Framework legado usa `fAcessoEmpresa(Usuar, cModo, cValor, oGetX, oGetDX)`** — funcao que abstrai o nome da coluna internamente (query hardcoded na Framework). Codigo legado nunca menciona a coluna diretamente.
+2. **fAcessoEmpresa NAO foi portada** (ver `feedback_facessoempresa_nao_portada.md`) — gerador cai em fallback SQL direto.
+3. **O gerador inventa nomes de coluna** por analogia:
+   - `SigCdBal.Emps` (INVENTARIOS) e `SigIvTrh.Emps` (TRANSACOES DE INVENTARIO) sao tabelas relacionadas que **realmente tem** `emps` (char(3), identifica empresa origem dos dados). Gerador projeta `Emps` para `SigCdEmp` por analogia.
+   - Nomes de TextBox no SCX legado (`Get_Empresa`/`getDEmps`/`GetCemps`/`GetDEmps`) sugerem "emps" como token de coluna.
+
+**Codigo ERRADO** (SELECT inventado — FormSigReAiv.prg pre-Erro44):
+```foxpro
+loc_cSQL = "SELECT Emps, NComps FROM SigCdEmP WHERE Emps = " + EscaparSQL(loc_cCodigo)
+loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
+IF !EOF()
+    loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(Emps)       && Runtime: Variable 'EMPS' is not found
+    loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(NComps)     && Runtime: Variable 'NCOMPS' is not found
+ENDIF
+```
+
+**Codigo ERRADO** (FormBuscaAuxiliar filter col — FormSIGREHCP.prg pre-Erro44):
+```foxpro
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+    "SigCdEmp", "cursor_4c_BuscaCEmps", "emps", loc_cValor, ;
+    "Sele" + CHR(231) + CHR(227) + "o de Empresa", .F., .T., "")
+loc_oBusca.mAddColuna("emps", "", "C" + CHR(243) + "digo")   && filtro por coluna inexistente
+loc_oBusca.mAddColuna("nemp", "", "Empresa")                 && idem
+```
+
+**Codigo CORRETO**:
+```foxpro
+loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cCodigo)
+loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
+IF !EOF()
+    loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(Cemps)
+    loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(Razas)
+ENDIF
+
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+    "SigCdEmp", "cursor_4c_BuscaCEmps", "cemps", loc_cValor, ;
+    "Sele" + CHR(231) + CHR(227) + "o de Empresa", .F., .T., "")
+loc_oBusca.mAddColuna("cemps", "XXX", "C" + CHR(243) + "digo")   && mask 3 X (char(3))
+loc_oBusca.mAddColuna("razas", "",    "Empresa")
+```
+
+**Regra IMPORTANTE — nao aplicar em outras tabelas**:
+- `SigCdBal.emps` (SigCdBal char(3)) — coluna EXISTE. `SELECT Codigos, Grupos FROM SigCdBal WHERE Emps = <empresa>` esta CORRETO.
+- `SigIvTrh.emps` (SigIvTrh char(3)) — coluna EXISTE. `SELECT a.*, b.dPros FROM SigIvTrh a WHERE Emps = <empresa>` esta CORRETO.
+- Muitas outras tabelas `Sig*Mv*`/`Sig*Iv*` que rastreiam movimentacoes por empresa tem `emps` legitimo.
+
+A regra so se aplica quando o `FROM` (ou 2o arg de `FormBuscaAuxiliar`) eh **`SigCdEmp`** (cadastro de empresa).
+
+**Padrao canonico** (varios forms REPORT ja implementam corretamente):
+- `Formsigrevto.prg` linhas 1167/1233 — `SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps/Razas LIKE`
+- `Formsigreimp.prg` linhas 1060/1387 — `SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = ...`
+- `Formsigrehpr.prg` linhas 834/1366
+- `Formsigrehbr.prg` linha 2239
+- `Formsigrefcd.prg` linhas 463/803
+- `Formsigrepes.prg` linha 4327 — `SELECT Cemps FROM SigCdEmp WHERE Ativas = 1`
+
+**Auto-fix**: CorretorAutomatico Pattern #125 (`Corrigir-SigCdEmpColunasInvalidas`).
+
+Fase 1 — **identificar cursores populados de SigCdEmp**:
+- SQLEXEC: `FROM SigCdEmp` + cursor destino nas proximas 3 linhas
+- FormBuscaAuxiliar: `CREATEOBJECT("FormBuscaAuxiliar", ..., "SigCdEmp", <cursor>, ...)` — cursor pode ser string literal OU variavel `loc_c*` (backward search por atribuicao)
+
+Fase 2 — **corrigir contextos SigCdEmp** (preservando case):
+- (a) Linhas com `SigCdEmp` E token `emps`/`Emps`/`EMPS`/`nemp`/`Nemp`/`NComps`/`ncomps`/`NCOMPS` → substituir por `cemps`/`Cemps`/`CEMPS`/`razas`/`Razas`/`Razas`/`razas`/`RAZAS`. Aplica em SELECT list, WHERE clause, JOIN condicoes.
+- (b) Dentro de bloco `AbrirBusca*` que abre `SigCdEmp` (detectado por proximidade de `CREATEOBJECT("FormBuscaAuxiliar")` com `"SigCdEmp"`): substituir 3o argumento (filter col) do CREATEOBJECT e `mAddColuna("emps"|...)` → forma correta.
+- (c) Referencias `<cursor>.emps`/`<cursor>.nemp`/`<cursor>.NComps` para cursores identificados na Fase 1 → substituir.
+
+Preservacao de case por token:
+- `emps` → `cemps`, `Emps` → `Cemps`, `EMPS` → `CEMPS`
+- `nemp` → `razas`, `Nemp` → `Razas`, `NEMP` → `RAZAS`
+- `NComps` → `Razas`, `ncomps` → `razas`, `NCOMPS` → `RAZAS`
+
+Idempotente (segundo run nao altera nada). Safety: `SigCdBal.emps`/`SigIvTrh.emps` NUNCA sao tocados porque o predicado da Fase 2(a) exige `SigCdEmp` na mesma linha.
+
+**Bug**: 
+- `FormSigReAiv.prg` (Analise Entre Inventarios) linhas 662-766 — 6 refs no Form (ValidarEmpresa + AbrirBuscaEmpresa). BO OK (usava `SigIvTrh.Emps` legitimo).
+- `FormSIGREHCP.prg` (Historico Custo Produto) linhas 957-1060 — 15 refs no Form (2 SELECT + 4 FormBuscaAuxiliar/mAddColuna blocks). BO sem refs.
+
+Ambos 2026-07-16, Erro44 reportado via screenshot em `origem/correcoes/Erro44.PNG`. Fix per-callsite aplicado antes de escrever este Pattern; Pattern #125 protege proximas migracoes.
+
+**Referencias correlatas**:
+- `feedback_facessoempresa_nao_portada.md` — causa raiz upstream (Framework fAcessoEmpresa nao portada)
+- `feedback_sigcdgcr_descrs_col.md` — mesmo tipo de bug (coluna inventada por analogia)
+- Pattern #105 (SigCdOpe.descrs) — mesma familia de bugs
+- Pattern #115 (SigCdGcr.descrs) — mesma familia de bugs
 
