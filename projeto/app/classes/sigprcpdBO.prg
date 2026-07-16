@@ -1,383 +1,417 @@
 *==============================================================================
-* sigprcpdBO.prg - Business Object para Capacidade Produtiva
-* Form OPERACIONAL (consulta somente leitura - sem CRUD)
-* Tabelas: SigCdPcz, SigCdPcP, SigCdPcg, SigCdPco, SigCdCli, SigCdPro
+* sigprcpdBO.prg - Business Object: Capacidade Produtiva
+* Herda de BusinessBase
 *==============================================================================
 DEFINE CLASS sigprcpdBO AS BusinessBase
 
-    *-- Parametros de consulta (recebidos do chamador via Form.Init)
-    this_nCodigo    = 0
-    this_cFase      = ""
-    this_cUnidade   = ""
-    this_dData      = {}
+    *-- Colunas da tabela SigCdPcz (mapeadas 1:1 com o schema)
+    this_nCodigo    = 0    && codigos numeric(10,0) NOT NULL - PK
+    this_cContas    = ""   && contas char(10) NOT NULL
+    this_cCvens     = ""   && cvens char(10) NOT NULL
+    this_dData      = {}   && datas datetime NULL
+    this_cDopes     = ""   && dopes char(20) NOT NULL
+    this_dDtLancs   = {}   && dtlancs datetime NULL
+    this_dEmissaoF  = {}   && emissaof datetime NULL
+    this_dEmissaoI  = {}   && emissaoi datetime NULL
+    this_cEmps      = ""   && emps char(3) NOT NULL
+    this_nNumeFs    = 0    && numefs numeric(6,0) NOT NULL
+    this_nNumeIs    = 0    && numeis numeric(6,0) NOT NULL
+    this_dPrevFs    = {}   && prevfs datetime NULL
+    this_dPrevIs    = {}   && previs datetime NULL
+    this_cTitulos   = ""   && titulos char(50) NOT NULL
 
-    *-- Resumo de capacidade (vindos de SigCdPcP agrupado)
-    this_nCapacidade  = 0
-    this_nUtilizado   = 0
-    this_nSaldo       = 0
+    *-- Parametros de contexto recebidos pelo form chamador
+    this_cSetor     = ""   && Fase/Setor (contexto do form)
+    this_cUnidade   = ""   && Unidade de producao (vazio = todas)
 
-    *-- Detalhe do produto selecionado no grid (SigCdPro)
-    this_cDescricaoProduto = ""
-    this_cFotoBase64       = ""
-    this_cCaminhoFoto      = ""
+    *-- Dados de capacidade agregados (SigCdPcP por data/fase/unidade)
+    this_nCapacidade  = 0  && Capacidade total em minutos
+    this_nUtilizado   = 0  && Minutos utilizados (minutos - saldos)
+    this_nSaldo       = 0  && Saldo de minutos
 
-    *-- Detalhe do envelope/linha selecionada no grid (cursor_4c_Dados)
-    this_nQuantidade    = 0
-    this_cCliente       = ""
-    this_nTempoEnvelope = 0
-    this_cProduto       = ""
+    *-- Dados do produto da linha selecionada no grid
+    this_cDescricaoProduto = ""   && Dpros de SigCdPro
+    this_cFotoArquivo      = ""   && Caminho temporario do JPEG decodificado
+
+    *-- Dados exibidos abaixo do grid (linha corrente de zTmpPcpOp)
+    this_nQtde          = 0   && Qtds da ordem
+    this_cClienteNome   = ""  && Rclis do cliente
+    this_nTempoEnvelope = 0   && TempU (tempo total do envelope em minutos)
 
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        this_cTabela     = "SigCdPcz"
-        this_cCampoChave = "codigos"
+        THIS.this_cTabela     = "SigCdPcz"
+        THIS.this_cCampoChave = "codigos"
         DODEFAULT()
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna chave primaria do registro atual
+    * ObterChavePrimaria - Retorna chave primaria (SigCdPcz.codigos)
     *--------------------------------------------------------------------------
-    PROCEDURE ObterChavePrimaria()
-        RETURN TRANSFORM(THIS.this_nCodigo)
+    FUNCTION ObterChavePrimaria()
+        RETURN ALLTRIM(TRANSFORM(THIS.this_nCodigo))
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Mapeia TODAS as colunas de SigCdPcz para as
+    * propriedades do BO. Recebe o alias do cursor aberto.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+
+            THIS.this_nCodigo   = NVL(codigos, 0)
+            THIS.this_cContas   = NVL(contas, "")
+            THIS.this_cCvens    = NVL(cvens, "")
+            THIS.this_dData     = NVL(datas, {})
+            THIS.this_cDopes    = NVL(dopes, "")
+            THIS.this_dDtLancs  = NVL(dtlancs, {})
+            THIS.this_dEmissaoF = NVL(emissaof, {})
+            THIS.this_dEmissaoI = NVL(emissaoi, {})
+            THIS.this_cEmps     = NVL(emps, "")
+            THIS.this_nNumeFs   = NVL(numefs, 0)
+            THIS.this_nNumeIs   = NVL(numeis, 0)
+            THIS.this_dPrevFs   = NVL(prevfs, {})
+            THIS.this_dPrevIs   = NVL(previs, {})
+            THIS.this_cTitulos  = NVL(titulos, "")
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDados - Carrega todos os cursores de capacidade produtiva
-    *   par_nCodigo  - Codigo do processo (SigCdPcz.codigos)
-    *   par_cFase    - Fase/setor de producao
-    *   par_cUnidade - Unidade produtiva (vazio = todas as unidades)
-    *   par_dData    - Data de consulta
-    * Retorna .T. se sucesso, .F. se falha
+    * Inserir - Insere um novo registro de processo em SigCdPcz.
+    * Retorna .T. se sucesso, .F. em falha.
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarDados(par_nCodigo, par_cFase, par_cUnidade, par_dData)
-        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_cFiltroUnid
-
-        loc_lSucesso    = .F.
-        loc_cFiltroUnid = IIF(EMPTY(par_cUnidade), "", " And UniPrdts = " + EscaparSQL(par_cUnidade))
-
-        THIS.this_nCodigo  = par_nCodigo
-        THIS.this_cFase    = par_cFase
-        THIS.this_cUnidade = par_cUnidade
-        THIS.this_dData    = par_dData
+    PROCEDURE Inserir()
+        LOCAL loc_lSucesso, loc_oErro, loc_cSQL, loc_cEmpresa
+        loc_lSucesso = .F.
 
         TRY
-            *-- 1. Dados basicos do processo (SigCdPcz)
-            IF USED("cursor_4c_Pcp")
-                USE IN cursor_4c_Pcp
-            ENDIF
-
-            loc_cSQL = "Select * From SigCdPcz Where codigos = " + TRANSFORM(par_nCodigo)
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Pcp")
-            IF loc_nRet < 1
-                MsgErro("Falha ao carregar dados do processo (SigCdPcz).", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- 2. Resumo de capacidade (SigCdPcP agrupado)
-            IF USED("cursor_4c_Capacidade")
-                USE IN cursor_4c_Capacidade
-            ENDIF
-
-            loc_cSQL = "Select Codigos, Sum(minutos) as Minutos, " + ;
-                       "sum(minutos-Saldos) as UtilizadoS, Sum(saldos) as Saldos " + ;
-                       "From SigCdPcP " + ;
-                       "Where Codigos = " + TRANSFORM(par_nCodigo) + ;
-                       " And Datas = " + FormatarDataSQL(par_dData) + ;
-                       " And Fases = " + EscaparSQL(par_cFase) + ;
-                       loc_cFiltroUnid + ;
-                       " Group by Codigos"
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Capacidade")
-            IF loc_nRet < 1
-                MsgErro("Falha ao carregar capacidade (SigCdPcP).", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            IF RECCOUNT("cursor_4c_Capacidade") > 0
-                SELECT cursor_4c_Capacidade
-                GO TOP
-                THIS.this_nCapacidade = NVL(cursor_4c_Capacidade.Minutos,    0)
-                THIS.this_nUtilizado  = NVL(cursor_4c_Capacidade.UtilizadoS, 0)
-                THIS.this_nSaldo      = NVL(cursor_4c_Capacidade.Saldos,     0)
+            IF gnConnHandle <= 0
+                MsgErro("Sem conex" + CHR(227) + "o com o banco de dados.", ;
+                        "Erro sigprcpdBO.Inserir")
             ELSE
-                THIS.this_nCapacidade = 0
-                THIS.this_nUtilizado  = 0
-                THIS.this_nSaldo      = 0
+                loc_cEmpresa = ALLTRIM(NVL(go_4c_Sistema.cCodEmpresa, ""))
+                IF EMPTY(loc_cEmpresa)
+                    loc_cEmpresa = ALLTRIM(THIS.this_cEmps)
+                ENDIF
+
+                loc_cSQL = "INSERT INTO SigCdPcz (" + ;
+                    "codigos, contas, cvens, datas, dopes, dtlancs, " + ;
+                    "emissaof, emissaoi, emps, numefs, numeis, " + ;
+                    "prevfs, previs, titulos" + ;
+                    ") VALUES (" + ;
+                    FormatarNumeroSQL(THIS.this_nCodigo, 0) + ", " + ;
+                    EscaparSQL(LEFT(THIS.this_cContas, 10)) + ", " + ;
+                    EscaparSQL(LEFT(THIS.this_cCvens, 10)) + ", " + ;
+                    FormatarDataSQL(THIS.this_dData) + ", " + ;
+                    EscaparSQL(LEFT(THIS.this_cDopes, 20)) + ", " + ;
+                    FormatarDataSQL(THIS.this_dDtLancs) + ", " + ;
+                    FormatarDataSQL(THIS.this_dEmissaoF) + ", " + ;
+                    FormatarDataSQL(THIS.this_dEmissaoI) + ", " + ;
+                    EscaparSQL(LEFT(loc_cEmpresa, 3)) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nNumeFs, 0) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nNumeIs, 0) + ", " + ;
+                    FormatarDataSQL(THIS.this_dPrevFs) + ", " + ;
+                    FormatarDataSQL(THIS.this_dPrevIs) + ", " + ;
+                    EscaparSQL(LEFT(THIS.this_cTitulos, 50)) + ")"
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
+                    MsgErro("Falha ao inserir processo em SigCdPcz.", ;
+                            "Erro sigprcpdBO.Inserir")
+                ELSE
+                    THIS.RegistrarAuditoria("INSERT")
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF
-
-            *-- 3. Itens individuais de programacao por item (SigCdPcg)
-            IF USED("cursor_4c_PcpPp")
-                USE IN cursor_4c_PcpPp
-            ENDIF
-
-            loc_cSQL = "Select * from SigCdPcg " + ;
-                       "Where datas = " + FormatarDataSQL(par_dData) + ;
-                       " And Fases = " + EscaparSQL(par_cFase) + ;
-                       " And Codigos = " + TRANSFORM(par_nCodigo) + ;
-                       loc_cFiltroUnid + ;
-                       " Order by Cidchaves"
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PcpPp")
-            IF loc_nRet < 1
-                MsgErro("Falha ao carregar programa" + CHR(231) + CHR(227) + "o (SigCdPcg).", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- 4. Ordens de producao com clientes (SigCdPco + SigCdCli)
-            IF USED("cursor_4c_PcpOp2")
-                USE IN cursor_4c_PcpOp2
-            ENDIF
-
-            loc_cSQL = "Select a.*, " + ;
-                       "a.dopes+'-'+RTRIM(STR(a.numes,6)) as Pedido, " + ;
-                       "a.contas+'-'+b.rclis as cliente, b.Rclis " + ;
-                       "From SigCdPco a, SigCdCli b " + ;
-                       "Where a.Codigos = " + TRANSFORM(par_nCodigo) + ;
-                       " And a.Fases = " + EscaparSQL(par_cFase) + ;
-                       STRTRAN(loc_cFiltroUnid, " UniPrdts", " a.UniPrdts") + ;
-                       " And a.Contas = b.Iclis " + ;
-                       "Order by a.UniPrdts, a.Seqs, a.Nenvs"
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PcpOp2")
-            IF loc_nRet < 1
-                MsgErro("Falha ao carregar ordens de produ" + CHR(231) + CHR(227) + "o (SigCdPco).", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- 5. Agrega minutos por (Fases, UniPrdts, Nenvs, Seqs) via VFP SELECT local
-            IF USED("cursor_4c_PcpOp3")
-                USE IN cursor_4c_PcpOp3
-            ENDIF
-
-            SELECT a.Fases, a.UniPrdts, a.Nenvs, a.Seqs, ;
-                   SUM(a.Minutos) AS Minutos ;
-            FROM cursor_4c_PcpOp2 a, cursor_4c_PcpPp b ;
-            WHERE a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
-                  b.Fases + b.UniPrdts + STR(b.Nenvs,10) + STR(b.Seqs,2) ;
-            INTO CURSOR cursor_4c_PcpOp3 READWRITE ;
-            GROUP BY a.Fases, a.UniPrdts, a.Nenvs, a.Seqs
-
-            *-- 6. Cursor final para o grid: combina dados com proporcionalidade de tempo
-            IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
-                USE IN cursor_4c_Dados
-            ENDIF
-
-            SET NULL ON
-            SELECT a.*, b.Minutos AS TempU, c.Minutos AS TempoO, ;
-                   fStoM((a.Minutos*60)/(c.Minutos*60)*(b.Minutos*60)) AS TempoReal ;
-            FROM cursor_4c_PcpOp2 a, cursor_4c_PcpPp b, cursor_4c_PcpOp3 c ;
-            WHERE a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
-                  b.Fases + b.UniPrdts + STR(b.Nenvs,10) + STR(b.Seqs,2) ;
-            AND   a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
-                  c.Fases + c.UniPrdts + STR(c.Nenvs,10) + STR(c.Seqs,2) ;
-            INTO CURSOR cursor_4c_Dados READWRITE ;
-            ORDER BY b.Ordems, a.UniPrdts, a.Seqs, a.Nenvs
-            SET NULL OFF
-
-            IF RECCOUNT("cursor_4c_Dados") > 0
-                SELECT cursor_4c_Dados
-                GO TOP
-            ENDIF
-
-            loc_lSucesso = .T.
-
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro sigprcpdBO.Inserir")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega dados da linha atual do cursor_4c_Dados para
-    * as propriedades da BO. Chamado pelo form em AfterRowColChange do grid,
-    * antes de atualizar os labels de descricao, quantidade, cliente e tempo.
-    *   par_cAliasCursor - Alias do cursor (normalmente "cursor_4c_Dados")
-    * Retorna .T. se carregou, .F. se cursor nao existe ou esta vazio.
+    * Atualizar - Atualiza o registro corrente em SigCdPcz (chave: codigos).
     *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_cAlias
-
-        loc_cAlias = IIF(EMPTY(par_cAliasCursor), "cursor_4c_Dados", par_cAliasCursor)
-
-        IF !USED(loc_cAlias)
-            RETURN .F.
-        ENDIF
-
-        SELECT (loc_cAlias)
-
-        IF EOF() OR BOF() OR RECCOUNT() = 0
-            RETURN .F.
-        ENDIF
-
-        *-- Chave do envelope/linha selecionada
-        IF TYPE(loc_cAlias + ".Nenvs")    != "U"
-            THIS.this_nCodigo = NVL(EVALUATE(loc_cAlias + ".Nenvs"), 0)
-        ENDIF
-
-        *-- Produto (para lookup em ObterDetalheProduto)
-        IF TYPE(loc_cAlias + ".Cpros") != "U"
-            THIS.this_cProduto = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Cpros"), ""))
-        ENDIF
-
-        *-- Quantidade (Qtds da OP)
-        IF TYPE(loc_cAlias + ".Qtds") != "U"
-            THIS.this_nQuantidade = NVL(EVALUATE(loc_cAlias + ".Qtds"), 0)
-        ENDIF
-
-        *-- Cliente (Rclis - razao social)
-        IF TYPE(loc_cAlias + ".Rclis") != "U"
-            THIS.this_cCliente = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Rclis"), ""))
-        ENDIF
-
-        *-- Tempo do envelope (TempU calculado em CarregarDados)
-        IF TYPE(loc_cAlias + ".TempU") != "U"
-            THIS.this_nTempoEnvelope = NVL(EVALUATE(loc_cAlias + ".TempU"), 0)
-        ENDIF
-
-        *-- Unidade produtiva (UniPrdts)
-        IF TYPE(loc_cAlias + ".UniPrdts") != "U"
-            THIS.this_cUnidade = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".UniPrdts"), ""))
-        ENDIF
-
-        *-- Fase (Fases)
-        IF TYPE(loc_cAlias + ".Fases") != "U"
-            THIS.this_cFase = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Fases"), ""))
-        ENDIF
-
-        RETURN .T.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Override BusinessBase.
-    * Form SIGPRCPD e OPERACIONAL de consulta somente leitura: a tela apenas
-    * exibe capacidade produtiva vinda de SigCdPcz/SigCdPcP/SigCdPcg/SigCdPco.
-    * Nao ha INSERT em nenhuma tabela no codigo legado. Sobrescrever para
-    * bloquear qualquer chamada acidental via BusinessBase.Salvar() e informar
-    * o motivo de forma explicita.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        THIS.this_cMensagemErro = "Capacidade Produtiva " + CHR(233) + ;
-            " uma tela de consulta somente leitura. " + ;
-            "Opera" + CHR(231) + CHR(227) + "o de inclus" + CHR(227) + "o n" + ;
-            CHR(227) + "o " + CHR(233) + " suportada por este processo."
-        MsgAviso(THIS.this_cMensagemErro, "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o permitida")
-        RETURN .F.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - Override BusinessBase.
-    * Mesmo motivo de Inserir(): SIGPRCPD nao altera dados persistidos. Todas
-    * as tabelas envolvidas sao apenas lidas (Select * From SigCdPcz, etc.).
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        THIS.this_cMensagemErro = "Capacidade Produtiva " + CHR(233) + ;
-            " uma tela de consulta somente leitura. " + ;
-            "Opera" + CHR(231) + CHR(227) + "o de altera" + CHR(231) + CHR(227) + "o n" + ;
-            CHR(227) + "o " + CHR(233) + " suportada por este processo."
-        MsgAviso(THIS.this_cMensagemErro, "Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o permitida")
-        RETURN .F.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Override para log de consulta.
-    * Como o form eh read-only, registramos apenas a operacao "CONSULTA"
-    * para rastrear quem acessou a capacidade produtiva de qual processo.
-    *   par_cOperacao - Descartado (sempre gravamos "CONSULTA")
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_cChave, loc_cUsuario
-
-        loc_cChave = THIS.ObterChavePrimaria()
-
-        IF EMPTY(loc_cChave)
-            RETURN .F.
-        ENDIF
-
-        loc_cUsuario = IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")
-
-        loc_cSQL = "INSERT INTO LogAuditoria (Tabela, Operacao, ChaveRegistro, Usuario, DataHora) " + ;
-                   "VALUES (" + ;
-                   EscaparSQL(THIS.this_cTabela)                     + ", " + ;
-                   EscaparSQL("CONSULTA")                            + ", " + ;
-                   EscaparSQL(loc_cChave)                            + ", " + ;
-                   EscaparSQL(loc_cUsuario)                          + ", " + ;
-                   "GETDATE())"
-
-        SQLEXEC(gnConnHandle, loc_cSQL)
-        RETURN .T.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ObterDetalheProduto - Carrega foto e descricao do produto da linha atual
-    *   par_cCpros    - Codigo do produto (SigCdPro.Cpros)
-    * Retorna .T. se produto encontrado com foto valida
-    *--------------------------------------------------------------------------
-    PROCEDURE ObterDetalheProduto(par_cCpros)
-        LOCAL loc_lTemFoto, loc_cSQL, loc_nRet
-        LOCAL loc_cFotoBase64, loc_cArquivo
-
-        loc_lTemFoto = .F.
+    PROCEDURE Atualizar()
+        LOCAL loc_lSucesso, loc_oErro, loc_cSQL
+        loc_lSucesso = .F.
 
         TRY
+            IF gnConnHandle <= 0
+                MsgErro("Sem conex" + CHR(227) + "o com o banco de dados.", ;
+                        "Erro sigprcpdBO.Atualizar")
+            ELSE
+                IF THIS.this_nCodigo <= 0
+                    MsgAviso("Processo sem c" + CHR(243) + "digo: use Inserir para gravar novo registro.", ;
+                             "Aten" + CHR(231) + CHR(227) + "o")
+                ELSE
+                    loc_cSQL = "UPDATE SigCdPcz SET " + ;
+                        "contas = "   + EscaparSQL(LEFT(THIS.this_cContas, 10)) + ", " + ;
+                        "cvens = "    + EscaparSQL(LEFT(THIS.this_cCvens, 10)) + ", " + ;
+                        "datas = "    + FormatarDataSQL(THIS.this_dData) + ", " + ;
+                        "dopes = "    + EscaparSQL(LEFT(THIS.this_cDopes, 20)) + ", " + ;
+                        "dtlancs = "  + FormatarDataSQL(THIS.this_dDtLancs) + ", " + ;
+                        "emissaof = " + FormatarDataSQL(THIS.this_dEmissaoF) + ", " + ;
+                        "emissaoi = " + FormatarDataSQL(THIS.this_dEmissaoI) + ", " + ;
+                        "numefs = "   + FormatarNumeroSQL(THIS.this_nNumeFs, 0) + ", " + ;
+                        "numeis = "   + FormatarNumeroSQL(THIS.this_nNumeIs, 0) + ", " + ;
+                        "prevfs = "   + FormatarDataSQL(THIS.this_dPrevFs) + ", " + ;
+                        "previs = "   + FormatarDataSQL(THIS.this_dPrevIs) + ", " + ;
+                        "titulos = "  + EscaparSQL(LEFT(THIS.this_cTitulos, 50)) + " " + ;
+                        "WHERE codigos = " + FormatarNumeroSQL(THIS.this_nCodigo, 0)
+
+                    IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
+                        MsgErro("Falha ao atualizar processo em SigCdPcz.", ;
+                                "Erro sigprcpdBO.Atualizar")
+                    ELSE
+                        THIS.RegistrarAuditoria("UPDATE")
+                        loc_lSucesso = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro sigprcpdBO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * RegistrarAuditoria - Registra operacao em LogAuditoria.
+    *--------------------------------------------------------------------------
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+        LOCAL loc_oErro, loc_cSQL, loc_cUsuario, loc_cChave
+
+        TRY
+            IF gnConnHandle > 0
+                loc_cUsuario = ALLTRIM(NVL(gc_4c_UsuarioLogado, ""))
+                loc_cChave   = THIS.ObterChavePrimaria()
+
+                loc_cSQL = "INSERT INTO LogAuditoria " + ;
+                    "(DataHora, Usuario, Tabela, Operacao, ChaveRegistro) " + ;
+                    "VALUES (GETDATE(), " + ;
+                    EscaparSQL(loc_cUsuario) + ", " + ;
+                    EscaparSQL("SigCdPcz") + ", " + ;
+                    EscaparSQL(par_cOperacao) + ", " + ;
+                    EscaparSQL(loc_cChave) + ")"
+
+                =SQLEXEC(gnConnHandle, loc_cSQL)
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Auditoria nao deve interromper fluxo principal
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDados - Carrega todos os cursores de capacidade produtiva
+    * Par?metros: par_nCodigo (SigCdPcz.codigos), par_cFase, par_cUnidade, par_dData
+    * Retorna: .T. se sucesso, .F. se falha
+    *--------------------------------------------------------------------------
+    FUNCTION CarregarDados(par_nCodigo, par_cFase, par_cUnidade, par_dData)
+        LOCAL loc_lSucesso, loc_lCont, loc_cSQL, loc_cFiltro, loc_cFiltroA
+        loc_lSucesso = .F.
+        loc_lCont    = .T.
+        loc_cFiltro  = ""
+        loc_cFiltroA = ""
+
+        TRY
+            THIS.this_nCodigo  = par_nCodigo
+            THIS.this_cSetor   = par_cFase
+            THIS.this_cUnidade = par_cUnidade
+            THIS.this_dData    = par_dData
+
+            IF !EMPTY(par_cUnidade)
+                loc_cFiltro  = " AND UniPrdts = " + EscaparSQL(par_cUnidade)
+                loc_cFiltroA = " AND a.UniPrdts = " + EscaparSQL(par_cUnidade)
+            ENDIF
+
+            *-- 1. Processo (SigCdPcz)
+            IF loc_lCont
+                loc_cSQL = "SELECT * FROM SigCdPcz WHERE codigos = " + ;
+                           FormatarNumeroSQL(par_nCodigo, 0)
+
+                IF USED("cursor_4c_Processo")
+                    USE IN cursor_4c_Processo
+                ENDIF
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Processo") < 1
+                    MsgErro("Falha ao carregar processo (SigCdPcz).", "Erro")
+                    loc_lCont = .F.
+                ENDIF
+            ENDIF
+
+            *-- 2. Capacidade agregada (SigCdPcP): minutos, utilizados, saldos
+            IF loc_lCont
+                loc_cSQL = "SELECT Codigos, " + ;
+                           "SUM(minutos) AS Minutos, " + ;
+                           "SUM(minutos - Saldos) AS Utilizados, " + ;
+                           "SUM(saldos) AS Saldos " + ;
+                           "FROM SigCdPcP " + ;
+                           "WHERE Codigos = " + FormatarNumeroSQL(par_nCodigo, 0) + ;
+                           " AND Datas = " + FormatarDataSQL(par_dData) + ;
+                           " AND Fases = " + EscaparSQL(par_cFase) + ;
+                           loc_cFiltro + ;
+                           " GROUP BY Codigos"
+
+                IF USED("cursor_4c_Capacidade")
+                    USE IN cursor_4c_Capacidade
+                ENDIF
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Capacidade") < 1
+                    MsgErro("Falha ao carregar capacidade (SigCdPcP).", "Erro")
+                    loc_lCont = .F.
+                ELSE
+                    SELECT cursor_4c_Capacidade
+                    GO TOP
+                    IF !EOF()
+                        THIS.this_nCapacidade = NVL(Minutos, 0)
+                        THIS.this_nUtilizado  = NVL(Utilizados, 0)
+                        THIS.this_nSaldo      = NVL(Saldos, 0)
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            *-- 3. Grade de sequ" + CHR(234) + "ncias (SigCdPcg)
+            IF loc_lCont
+                loc_cSQL = "SELECT * FROM SigCdPcg " + ;
+                           "WHERE datas = " + FormatarDataSQL(par_dData) + ;
+                           " AND Fases = " + EscaparSQL(par_cFase) + ;
+                           " AND Codigos = " + FormatarNumeroSQL(par_nCodigo, 0) + ;
+                           loc_cFiltro + ;
+                           " ORDER BY Cidchaves"
+
+                IF USED("cursor_4c_Grade")
+                    USE IN cursor_4c_Grade
+                ENDIF
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Grade") < 1
+                    MsgErro("Falha ao carregar grade (SigCdPcg).", "Erro")
+                    loc_lCont = .F.
+                ENDIF
+            ENDIF
+
+            *-- 4. Ordens com cliente (SigCdPco JOIN SigCdCli)
+            IF loc_lCont
+                loc_cSQL = "SELECT a.*, " + ;
+                           "a.dopes + '-' + STR(a.numes, 6) AS Pedido, " + ;
+                           "a.contas + '-' + b.rclis AS cliente, " + ;
+                           "b.Rclis " + ;
+                           "FROM SigCdPco a, SigCdCli b " + ;
+                           "WHERE a.Codigos = " + FormatarNumeroSQL(par_nCodigo, 0) + ;
+                           " AND a.Fases = " + EscaparSQL(par_cFase) + ;
+                           loc_cFiltroA + ;
+                           " AND a.Contas = b.Iclis " + ;
+                           "ORDER BY a.UniPrdts, a.Seqs, a.Nenvs"
+
+                IF USED("cursor_4c_OrdensTemp")
+                    USE IN cursor_4c_OrdensTemp
+                ENDIF
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OrdensTemp") < 1
+                    MsgErro("Falha ao carregar ordens (SigCdPco).", "Erro")
+                    loc_lCont = .F.
+                ENDIF
+            ENDIF
+
+            *-- 5. Agrupamento por envelope/seq (SELECT VFP local)
+            IF loc_lCont
+                IF USED("cursor_4c_GrupoOp")
+                    USE IN cursor_4c_GrupoOp
+                ENDIF
+
+                SELECT a.Fases, a.UniPrdts, a.Nenvs, a.Seqs, ;
+                       SUM(a.Minutos) AS Minutos ;
+                FROM cursor_4c_OrdensTemp a, cursor_4c_Grade b ;
+                WHERE a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
+                      b.Fases + b.UniPrdts + STR(b.Nenvs,10) + STR(b.Seqs,2) ;
+                GROUP BY a.Fases, a.UniPrdts, a.Nenvs, a.Seqs ;
+                INTO CURSOR cursor_4c_GrupoOp READWRITE
+            ENDIF
+
+            *-- 6. Cursor final do grid com TempoReal proporcional (SELECT VFP local)
+            IF loc_lCont
+                IF USED("cursor_4c_Dados")
+                    USE IN cursor_4c_Dados
+                ENDIF
+
+                SELECT a.*, b.Minutos AS TempU, c.Minutos AS TempoO, ;
+                       IIF(c.Minutos = 0, 0, ;
+                           (a.minutos * 60) / (c.Minutos * 60) * (b.Minutos * 60)) AS TempoReal ;
+                FROM cursor_4c_OrdensTemp a, cursor_4c_Grade b, cursor_4c_GrupoOp c ;
+                WHERE a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
+                      b.Fases + b.UniPrdts + STR(b.Nenvs,10) + STR(b.Seqs,2) ;
+                AND   a.Fases + a.UniPrdts + STR(a.Nenvs,10) + STR(a.Seqs,2) = ;
+                      c.Fases + c.UniPrdts + STR(c.Nenvs,10) + STR(c.Seqs,2) ;
+                ORDER BY b.Ordems, a.UniPrdts, a.Seqs, a.Nenvs ;
+                INTO CURSOR cursor_4c_Dados READWRITE
+
+                SELECT cursor_4c_Dados
+                GO TOP
+
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro ao carregar dados")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    * CarregarFotoProduto - Carrega foto e descri" + CHR(231) + CHR(227) + "o do produto selecionado no grid
+    * Par?metro: par_cCpros - c?digo do produto (SigCdPro.Cpros)
+    * Retorna: .T. se sucesso
+    * Efeitos: popula this_cDescricaoProduto e this_cFotoArquivo
+    *--------------------------------------------------------------------------
+    FUNCTION CarregarFotoProduto(par_cCpros)
+        LOCAL loc_lSucesso, loc_cSQL, loc_cArqTemp, loc_cFotoBase64
+        loc_lSucesso = .F.
+        THIS.this_cDescricaoProduto = ""
+        THIS.this_cFotoArquivo      = ""
+
+        TRY
+            loc_cSQL = "SELECT FigJpgs, Dpros FROM SigCdPro WHERE Cpros = " + ;
+                       EscaparSQL(ALLTRIM(par_cCpros))
+
             IF USED("cursor_4c_Produto")
                 USE IN cursor_4c_Produto
             ENDIF
 
-            loc_cSQL = "Select FigJpgs, Dpros From SigCdPro " + ;
-                       "Where Cpros = " + EscaparSQL(ALLTRIM(par_cCpros))
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Produto")
-
-            IF loc_nRet >= 1 AND RECCOUNT("cursor_4c_Produto") > 0
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Produto") >= 1
                 SELECT cursor_4c_Produto
                 GO TOP
 
-                THIS.this_cDescricaoProduto = NVL(cursor_4c_Produto.Dpros,   "")
-                THIS.this_cFotoBase64       = NVL(cursor_4c_Produto.FigJpgs, "")
+                IF !EOF()
+                    THIS.this_cDescricaoProduto = NVL(Dpros, "")
 
-                IF !EMPTY(THIS.this_cFotoBase64)
-                    loc_cFotoBase64 = THIS.this_cFotoBase64
-                    loc_cFotoBase64 = STRTRAN(loc_cFotoBase64, "data:image/png;base64,",  "")
-                    loc_cFotoBase64 = STRTRAN(loc_cFotoBase64, "data:image/jpeg;base64,", "")
-                    loc_cFotoBase64 = STRTRAN(loc_cFotoBase64, "data:image/jpg;base64,",  "")
+                    IF !EMPTY(FigJpgs) AND !ISNULL(FigJpgs)
+                        loc_cArqTemp    = SYS(2023) + "\sigprcpd.jpg"
+                        loc_cFotoBase64 = STRCONV(;
+                            STRTRAN(;
+                                STRTRAN(;
+                                    STRTRAN(FigJpgs, "data:image/png;base64,", ""), ;
+                                "data:image/jpeg;base64,", ""), ;
+                            "data:image/jpg;base64,", ""), 14)
 
-                    loc_cArquivo    = SYS(2023) + "\sigprcpd.jpg"
-                    loc_cFotoBase64 = STRCONV(loc_cFotoBase64, 14)
-
-                    IF STRTOFILE(loc_cFotoBase64, loc_cArquivo) > 0
-                        THIS.this_cCaminhoFoto = loc_cArquivo
-                        loc_lTemFoto           = .T.
-                    ELSE
-                        THIS.this_cCaminhoFoto = ""
+                        IF STRTOFILE(loc_cFotoBase64, loc_cArqTemp) > 0
+                            THIS.this_cFotoArquivo = loc_cArqTemp
+                        ENDIF
                     ENDIF
-                ELSE
-                    THIS.this_cCaminhoFoto = ""
                 ENDIF
-            ELSE
-                THIS.this_cDescricaoProduto = ""
-                THIS.this_cFotoBase64       = ""
-                THIS.this_cCaminhoFoto      = ""
+
+                loc_lSucesso = .T.
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message, "Erro ao carregar foto do produto")
         ENDTRY
 
-        RETURN loc_lTemFoto
-    ENDPROC
+        RETURN loc_lSucesso
+    ENDFUNC
 
 ENDDEFINE
-
-*==============================================================================
-* fStoM - Converte segundos em minutos (replica funcao fStoM do framework legado)
-* Usada nos VFP SELECTs locais dentro de CarregarDados
-*==============================================================================
-FUNCTION fStoM(par_nSegundos)
-    IF VARTYPE(par_nSegundos) != "N" OR par_nSegundos = 0
-        RETURN 0
-    ENDIF
-    RETURN INT(par_nSegundos / 60)
-ENDFUNC
