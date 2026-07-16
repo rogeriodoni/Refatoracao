@@ -1,594 +1,705 @@
-*-- sigprccpBO.prg
-*-- BO para Recalculo de Precos (SIGPRCCP)
-*-- Fase 1/8: BO - Propriedades e Init
-*-- Tabela principal: SigPrCpo | Chave: cIdChaves
-
+*------------------------------------------------------------------------------
+* sigprccpBO.prg - Business Object: Recalculo de Precos
+* Entidade  : sigprccp
+* Tabela    : SigPrCpo (composicao de preco / producao)
+* Tipo      : OPERACIONAL
+* Task 262  - Migracao SIGPRCCP
+* Fase 1/8  - Propriedades e Init
+*------------------------------------------------------------------------------
 DEFINE CLASS sigprccpBO AS BusinessBase
 
-    *-- ===================================================================
-    *-- IDENTIFICACAO DA ENTIDADE
-    *-- ===================================================================
-    this_cTabela      = "SigPrCpo"
-    this_cCampoChave  = "cIdChaves"
+    *-- Configuracao base
+    this_cTabela            = "SigPrCpo"
+    this_cCampoChave        = "cIdChaves"
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE GRANDE GRUPO (SigCdGpr)
-    *-- ===================================================================
-    this_cMercI    = ""     && Grande Grupo inicial (getMercI, MaxLen=3)
-    this_cMercF    = ""     && Grande Grupo final   (getMercF, MaxLen=3)
+    *-- Controle de execucao
+    this_lAutomatico        = .F.
+    this_cEmpresa           = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE GRUPO (SigCdGrp)
-    *-- ===================================================================
-    this_cGruI     = ""     && Grupo inicial (getCgrui, CGrus, MaxLen=3)
-    this_cGruF     = ""     && Grupo final   (getCgruf, CGrus, MaxLen=3)
+    *-- Cursor principal do grid de produtos
+    *-- CREATE CURSOR cursor_4c_Produtos (lMarca N(1), CPros C(14), DPros C(40),
+    *--   ValAnt N(14,2), ValAtu N(14,2), CustoAfs N(12,4), CustoFs N(12,4),
+    *--   PVarias N(8,2), CVarias N(8,2))
+    this_cCursorProdutos    = "cursor_4c_Produtos"
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE SUBGRUPO (SigCdPsg)
-    *-- ===================================================================
-    this_cSGruI    = ""     && Subgrupo inicial (getSgruI, Codigos, MaxLen=6)
-    this_cSGruF    = ""     && Subgrupo final   (getSgruF, Codigos, MaxLen=6)
+    *-- =========================================================
+    *-- FILTROS - Fornecedor (SigCdCli.IClis / RClis)
+    *-- =========================================================
+    this_cCFornecs          = ""
+    this_cDFornecs          = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE UNIDADE (SigCdUni)
-    *-- ===================================================================
-    this_cCuniI    = ""     && Unidade inicial (getCunii, CUnis, MaxLen=3)
-    this_cCuniF    = ""     && Unidade final   (getCunif, CUnis, MaxLen=3)
+    *-- =========================================================
+    *-- FILTROS - Grande Grupo (ini/fim) -> SigCdGpr.Codigos / SigCdPro.Mercs
+    *-- =========================================================
+    this_cMercI             = ""
+    this_cMercF             = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE LINHA (SigCdLin)
-    *-- ===================================================================
-    this_cLinI     = ""     && Linha inicial (GetLini, Linhas, MaxLen=10)
-    this_cLinF     = ""     && Linha final   (GetLinf, Linhas, MaxLen=10)
+    *-- =========================================================
+    *-- FILTROS - Grupo (ini/fim) -> SigCdGrp.CGrus
+    *-- =========================================================
+    this_cCGrui             = ""
+    this_cCGruf             = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE COLECAO (SigCdCol)
-    *-- ===================================================================
-    this_cColI     = ""     && Colecao inicial (GetColi, Colecoes, MaxLen=10)
-    this_cColF     = ""     && Colecao final   (GetColf, Colecoes, MaxLen=10)
+    *-- =========================================================
+    *-- FILTROS - Subgrupo (ini/fim) -> SigCdPsg.Codigos (MaxLength=6)
+    *-- =========================================================
+    this_cSGruI             = ""
+    this_cSGruF             = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE MOEDA (SigCdMoe)
-    *-- ===================================================================
-    this_cMoeI     = ""     && Moeda inicial (GetMoedai, CMoes, MaxLen=3)
-    this_cMoeF     = ""     && Moeda final   (GetMoedaf, CMoes, MaxLen=3)
+    *-- =========================================================
+    *-- FILTROS - Unidade (ini/fim) -> SigCdUni.CUnis (MaxLength=3)
+    *-- =========================================================
+    this_cCUniI             = ""
+    this_cCUnif             = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FAIXA DE MARKUP E ENCARGO (NUMERICOS)
-    *-- ===================================================================
-    this_nMrkI     = 0      && Markup inicial  (GetMrki)
-    this_nMrkF     = 0      && Markup final    (GetMrkf)
-    this_nEncI     = 0      && Encargo inicial (Get_EncI)
-    this_nEncF     = 0      && Encargo final   (Get_Encf)
+    *-- =========================================================
+    *-- FILTROS - Linha (ini/fim) -> SigCdLin.Linhas
+    *-- =========================================================
+    this_cLini              = ""
+    this_cLinf              = ""
 
-    *-- ===================================================================
-    *-- FILTROS - FORNECEDOR (fAcessoContas)
-    *-- ===================================================================
-    this_cFornecs  = ""     && Fornecedor codigo      (getCFornecs, Ifors, MaxLen=10)
-    this_cDFornecs = ""     && Fornecedor descricao   (getDFornecs, somente leitura, MaxLen=40)
+    *-- =========================================================
+    *-- FILTROS - Colecao (ini/fim) -> SigCdCol.Colecoes
+    *-- =========================================================
+    this_cColi              = ""
+    this_cColf              = ""
 
-    *-- ===================================================================
-    *-- PARAMETROS DE PROCESSAMENTO - RECALCULO
-    *-- ===================================================================
-    this_nReajuste = 0      && Percentual de reajuste aplicado ao preco (Get_Reajuste)
-    this_nNMrk     = 0      && Novo Markup                              (GetnMrk)
-    this_nVariacao = 0      && Percentual de variacao para filtro pos-processamento (Get_Variacao)
-    this_nEncargo  = 0      && Novo Encargo percentual                  (get_Encargo)
-    this_cFeitio   = ""     && Codigo MKP atual (Get_Feitio, SigPrFti.Cods, MaxLen=2)
-    this_cNewMkp   = ""     && Novo codigo MKP  (getNewMkp, SigPrFti.Cods, MaxLen=2)
+    *-- =========================================================
+    *-- FILTROS - Moeda (ini/fim) -> SigCdMoe.CMoes (MaxLength=3)
+    *-- =========================================================
+    this_cMoedai            = ""
+    this_cMoedaf            = ""
 
-    *-- ===================================================================
-    *-- OPCOES DE PROCESSAMENTO (OPTIONGROUPS)
-    *-- ===================================================================
+    *-- =========================================================
+    *-- FILTROS - Markup numerico (ini/fim) -> SigCdPro.Margems
+    *-- =========================================================
+    this_nMrki              = 0
+    this_nMrkf              = 0
 
-    && Opc_situacao: 1=Ativos, 2=Inativos, 3=Todos (default VFP=1, nao definido no SCX)
-    this_nSituacao = 1
+    *-- =========================================================
+    *-- FILTROS - Encargo percentual (ini/fim) -> SigCdPro.Encargos
+    *-- =========================================================
+    this_nEnci              = 0
+    this_nEncf              = 0
 
-    && Opc_pven: 1=Sim, 2=Nao  (default SCX Value=2 = Nao)
-    this_nPven     = 2
+    *-- =========================================================
+    *-- FILTROS - Variacao minima exibida no grid (%)
+    *-- Produtos com PVarias < nVariacao sao excluidos do resultado
+    *-- =========================================================
+    this_nVariacao          = 0
 
-    && Opc_Recalc: 1=Composicao, 2=CustoVenda, 3=Ambos, 4=PesoComp,
-    &&             5=Cambio, 6=CambioInteiros, 7=MarkupCusto, 8=MarkupVenda
-    this_nRecalc   = 1
+    *-- =========================================================
+    *-- FILTROS - Feitio/MKP base -> SigPrFti.Cods (MaxLength=2)
+    *-- =========================================================
+    this_cFeitio            = ""
 
-    && Opc_Compra: 1=Comprar, 2=NaoComprar, 3=Todos  (default SCX Value=3)
-    this_nCompra   = 3
+    *-- =========================================================
+    *-- FILTROS - Situacao do produto (1=Todos, 2=Ativos, 3=Inativos)
+    *-- Mapeia Opc_situacao.Value -> SigCdPro.Situas
+    *-- =========================================================
+    this_nOpcSituacao       = 1
 
-    && fwoption1: 1=Ideal, 2=Venda  (default SCX Value=1)
-    this_nFoption1 = 1
+    *-- =========================================================
+    *-- FILTROS - Tipo de moeda para calculo (1=Ideal/Moedas, 2=Venda/Moevs)
+    *-- Mapeia fwoption1.Value
+    *-- =========================================================
+    this_nOpcMoedaTp        = 1
 
-    *-- ===================================================================
-    *-- PARAMETROS DO SISTEMA (carregados de SigCdPam e SigCdPaC)
-    *-- ===================================================================
-    this_nArreds      = 0   && Arredondamento de precos (SigCdPam.Arreds)
-    this_nCalcCusts   = 0   && Metodo de calculo de custo (SigCdPaC.Calccusts)
-    this_nNChkSubGrs  = 0   && Flag subgrupo por faixa de preco (SigCdPaC.NCHKSUBGRS)
+    *-- =========================================================
+    *-- FILTROS - Compra (1=Comprar, 2=Nao Comprar, 3=Todos)
+    *-- Mapeia Opc_Compra.Value -> SigCdPro.ForaLinha
+    *-- =========================================================
+    this_nOpcCompra         = 3
 
-    *-- ===================================================================
-    *-- PROPRIEDADES DE REGISTRO SigPrCpo (composicao de produto)
-    *-- Usadas para operacoes CRUD individuais em registros de composicao
-    *-- ===================================================================
-    this_cIdChaves   = ""    && Chave primaria (cidchaves C(20))
-    this_cCats       = ""    && Categoria composicao (cats C(6))
-    this_cCgrus      = ""    && Grupo do produto principal (cgrus C(3))
-    this_cCpros      = ""    && Codigo do produto principal (cpros C(14))
-    this_dDatatrans  = {}    && Data de transferencia (datatrans DATETIME NULL)
-    this_cDcompos    = ""    && Descricao da composicao (dcompos C(40))
-    this_cDscgrp     = ""    && Descricao do subgrupo (dscgrp C(20))
-    this_cEtiqs      = ""    && Etiqueta (etiqs C(1))
-    this_cGrupos     = ""    && Grupo (grupos C(10))
-    this_cMats       = ""    && Codigo do material/componente (mats C(14))
-    this_cMoeds      = ""    && Moeda (moeds C(3))
-    this_cObscompos  = ""    && Observacao da composicao (obscompos C(10))
-    this_nOrdems     = 0     && Ordem sequencial (ordems N(2,0))
-    this_nPcompos    = 0     && Percentual composicao (pcompos N(11,3))
-    this_nQtds       = 0     && Quantidade (qtds N(8,3))
-    this_nQtscons    = 0     && Quantidade consumo (qtscons N(8,3))
-    this_cUnicompos  = ""    && Unidade composicao (unicompos C(3))
-    this_cCompos     = ""    && Composicao (compos C(10))
-    this_nOrdcompos  = 0     && Ordem composicao (ordcompos N(2,0))
-    this_nQtdcvs     = 0     && Quantidade custo venda (qtdcvs N(11,3))
-    this_nVlrcvs     = 0     && Valor custo venda (vlrcvs N(11,2))
-    this_dDtmovs     = {}    && Data movimento (dtmovs DATETIME NULL)
-    this_cCunips     = ""    && Unidade preco (cunips C(3))
-    this_nMarkcvs    = 0     && Markup custo venda (markcvs N(9,6))
-    this_nPesos      = 0     && Peso (pesos N(8,3))
-    this_nTotas      = 0     && Total (totas N(11,3))
-    this_nTpalts     = 0     && Tipo alteracao (tpalts N(1,0))
-    this_nVlrpvs     = 0     && Valor preco venda (vlrpvs N(11,2))
-    this_nOrdts      = 0     && Ordem (ordts N(2,0))
-    this_cTipos      = ""    && Tipo (tipos C(20))
-    this_cMatriz     = ""    && Matriz (matriz C(14))
-    this_cObsofs     = ""    && Observacao oficina (obsofs C(120))
-    this_nPedraPrincipal = 0 && Pedra principal flag (PedraPrincipal N(1,0))
+    *-- =========================================================
+    *-- PARAMETROS DE PROCESSAMENTO
+    *-- =========================================================
 
-    *-- ===================================================================
-    *-- ESTADO DE PROCESSAMENTO
-    *-- ===================================================================
-    this_lAutomatico  = .F. && Modo automatico (parametro pAuto do Init legado)
-    this_cPro         = ""  && Produto atual sendo processado (PRIVATE pPro no legado)
-    this_lProcessado  = .F. && Indica se Processar() foi executado com sucesso
+    *-- Tipo de recalculo (1-8):
+    *-- 1=Composicao, 2=Custo Venda, 3=Ambos, 4=Peso Componentes,
+    *-- 5=Cambio, 6=Cambio (Inteiros), 7=Markup Custo, 8=Markup Venda
+    *-- Mapeia Opc_Recalc.Value -> SigCdCcp.opcrecalc
+    this_nOpcRecalc         = 1
 
-    *-- ===================================================================
-    *-- METODOS
-    *-- ===================================================================
+    *-- Reajuste percentual aplicado ao preco (%) -> Get_Reajuste
+    *-- SigCdCcp.reajuste
+    this_nReajuste          = 0
 
+    *-- Novo encargo percentual -> get_Encargo
+    *-- SigCdCcp.encargo
+    this_nEncargo           = 0
+
+    *-- Novo markup percentual -> GetnMrk
+    *-- SigCdCcp.nmrk
+    this_nNMrk              = 0
+
+    *-- Atualiza valor de venda (1=Sim, 2=Nao) -> Opc_pven (default=2=Nao)
+    *-- SigCdCcp.opcpven
+    this_nOpcPven           = 2
+
+    *-- Novo codigo de feitio/MKP (MaxLength=2) -> getNewMkp
+    *-- SigCdCcp.newmkp | Obrigatorio quando nOpcRecalc IN (7,8)
+    this_cNewMkp            = ""
+
+    *-- Chave primaria da configuracao carregada em SigCdCcp.cIdChaves
+    *-- Preenchida por CarregarDoCursor / Inserir. Vazia quando a configuracao
+    *-- ainda nao foi persistida (recalculo pontual sem salvar).
+    this_cIdChaves          = ""
+
+    *--------------------------------------------------------------------------
     PROCEDURE Init()
+    *--------------------------------------------------------------------------
         LOCAL loc_lSucesso
-
         loc_lSucesso = .F.
 
         TRY
-            DODEFAULT()
+            loc_lSucesso = DODEFAULT()
 
-            THIS.this_cTabela     = "SigPrCpo"
-            THIS.this_cCampoChave = "cIdChaves"
-
-            loc_lSucesso = .T.
+            IF loc_lSucesso
+                THIS.this_cTabela     = "SigPrCpo"
+                THIS.this_cCampoChave = "cIdChaves"
+                THIS.this_cEmpresa    = go_4c_Sistema.cCodEmpresa
+            ENDIF
         CATCH TO loc_oErro
-            MsgErro("Erro ao inicializar sigprccpBO: " + loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    PROTECTED PROCEDURE ObterChavePrimaria()
+    *--------------------------------------------------------------------------
+    FUNCTION ObterChavePrimaria()
+    *-- Retorna cIdChaves da configuracao SigCdCcp corrente ou string vazia.
+    *--------------------------------------------------------------------------
         RETURN ALLTRIM(THIS.this_cIdChaves)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDadosAuxiliares - Carrega cursores auxiliares para processamento
-    * Chamado pelo Form no InicializarForm() antes de qualquer Processar()
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDadosAuxiliares()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
-        loc_lSucesso = .F.
-        TRY
-            *-- Parametros SigCdPam (arredondamento de preco)
-            loc_cSQL = "SELECT TOP 1 Arreds FROM SigCdPam"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AuxPam")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_AuxPam")
-                SELECT cursor_4c_AuxPam
-                THIS.this_nArreds = NVL(cursor_4c_AuxPam.Arreds, 0)
-                THIS.this_nArreds = IIF(THIS.this_nArreds = 0, 1, THIS.this_nArreds)
-            ENDIF
-            IF USED("cursor_4c_AuxPam")
-                USE IN cursor_4c_AuxPam
-            ENDIF
-
-            *-- Parametros SigCdPaC (metodo calculo custo e flag subgrupo)
-            loc_cSQL = "SELECT TOP 1 Calccusts, NCHKSUBGRS FROM SigCdPaC"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AuxPaC")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_AuxPaC")
-                SELECT cursor_4c_AuxPaC
-                THIS.this_nCalcCusts  = NVL(cursor_4c_AuxPaC.CalcCusts, 0)
-                THIS.this_nNChkSubGrs = NVL(cursor_4c_AuxPaC.NCHKSUBGRS, 0)
-            ENDIF
-            IF USED("cursor_4c_AuxPaC")
-                USE IN cursor_4c_AuxPaC
-            ENDIF
-
-            *-- Moedas (SigCdMoe)
-            IF USED("CrSigCdMoe")
-                USE IN CrSigCdMoe
-            ENDIF
-            loc_cSQL = "SELECT * FROM SigCdMoe"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigCdMoe")
-            IF loc_nResult > 0
-                SELECT CrSigCdMoe
-                INDEX ON Cmoes TAG Cmoes
-                INDEX ON Dmoes TAG Dmoes
-            ENDIF
-
-            *-- Cotacoes de cambio (SigCdCot)
-            IF USED("CrSigCdCot")
-                USE IN CrSigCdCot
-            ENDIF
-            loc_cSQL = "SELECT * FROM SigCdCot"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigCdCot")
-            IF loc_nResult > 0
-                SELECT CrSigCdCot
-                INDEX ON cmoes+DTOS(datas)+horas TAG Cotacaos
-                INDEX ON cmoes+DTOS(datas) TAG cMoeData
-            ENDIF
-
-            *-- Grupos de produto (SigCdGrp)
-            IF USED("CrSigCdGrp")
-                USE IN CrSigCdGrp
-            ENDIF
-            loc_cSQL = "SELECT * FROM SigCdGrp"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigCdGrp")
-            IF loc_nResult > 0
-                SELECT CrSigCdGrp
-                INDEX ON Cgrus TAG Cgrus
-            ENDIF
-
-            *-- Unidades de medida (SigCdUni)
-            IF USED("CrSigCdUni")
-                USE IN CrSigCdUni
-            ENDIF
-            loc_cSQL = "SELECT * FROM SigCdUni"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigCdUni")
-            IF loc_nResult > 0
-                SELECT CrSigCdUni
-                INDEX ON CUnis TAG cUnis
-            ENDIF
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro("Erro ao carregar dados auxiliares: " + loc_oErro.Message, "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CriarCursorDados - Cria cursor_4c_Dados para exibicao no grid de produtos
-    * Estrutura espelha o cursor CrProdutos do legado
-    *--------------------------------------------------------------------------
-    PROCEDURE CriarCursorDados()
-        IF USED("cursor_4c_Dados")
-            USE IN cursor_4c_Dados
-        ENDIF
-        SET NULL ON
-        CREATE CURSOR cursor_4c_Dados ( ;
-            lMarca   N(1)     NULL, ;
-            CPros    C(14)    NULL, ;
-            DPros    C(40)    NULL, ;
-            ValAnt   N(14,2)  NULL, ;
-            ValAtu   N(14,2)  NULL, ;
-            CustoAfs N(12,4)  NULL, ;
-            CustoFs  N(12,4)  NULL, ;
-            PVarias  N(8,2)   NULL, ;
-            CVarias  N(8,2)   NULL  ;
-        )
-        SET NULL OFF
-        SELECT cursor_4c_Dados
-        INDEX ON CPros TAG CPros
-        SET ORDER TO
-        GO TOP
-        RETURN .T.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConstruirWhereClause - Constroi clausula WHERE a partir das propriedades de filtro
-    * Retorna: string com condicoes (sem a palavra WHERE)
-    *--------------------------------------------------------------------------
-    FUNCTION ConstruirWhereClause()
-        LOCAL loc_nConta, loc_lcWhere, loc_lcInicio, loc_lcFinal
-        LOCAL loc_laCampo(7), loc_laVarI(7), loc_laVarF(7)
-
-        loc_laCampo(1) = "CGrus"
-        loc_laCampo(2) = "Cunis"
-        loc_laCampo(3) = "Linhas"
-        loc_laCampo(4) = "Colecoes"
-        IF THIS.this_nFoption1 = 2
-            loc_laCampo(5) = "Moevs"
-        ELSE
-            loc_laCampo(5) = "Moedas"
-        ENDIF
-        loc_laCampo(6) = "SGrus"
-        loc_laCampo(7) = "Mercs"
-
-        loc_laVarI(1) = ALLTRIM(THIS.this_cGruI)
-        loc_laVarI(2) = ALLTRIM(THIS.this_cCuniI)
-        loc_laVarI(3) = ALLTRIM(THIS.this_cLinI)
-        loc_laVarI(4) = ALLTRIM(THIS.this_cColI)
-        loc_laVarI(5) = ALLTRIM(THIS.this_cMoeI)
-        loc_laVarI(6) = ALLTRIM(THIS.this_cSGruI)
-        loc_laVarI(7) = ALLTRIM(THIS.this_cMercI)
-
-        loc_laVarF(1) = ALLTRIM(THIS.this_cGruF)
-        loc_laVarF(2) = ALLTRIM(THIS.this_cCuniF)
-        loc_laVarF(3) = ALLTRIM(THIS.this_cLinF)
-        loc_laVarF(4) = ALLTRIM(THIS.this_cColF)
-        loc_laVarF(5) = ALLTRIM(THIS.this_cMoeF)
-        loc_laVarF(6) = ALLTRIM(THIS.this_cSGruF)
-        loc_laVarF(7) = ALLTRIM(THIS.this_cMercF)
-
-        loc_lcWhere = " "
-        FOR loc_nConta = 1 TO 7
-            loc_lcInicio = loc_laVarI(loc_nConta)
-            loc_lcFinal  = loc_laVarF(loc_nConta)
-
-            IF (loc_nConta > 1) AND ;
-               (!EMPTY(loc_lcInicio) OR !EMPTY(loc_lcFinal)) AND ;
-               !EMPTY(ALLTRIM(loc_lcWhere))
-                loc_lcWhere = loc_lcWhere + " AND "
-            ENDIF
-
-            IF EMPTY(loc_lcInicio)
-                IF !EMPTY(loc_lcFinal)
-                    loc_lcWhere = loc_lcWhere + loc_laCampo(loc_nConta) + " <= " + EscaparSQL(loc_lcFinal)
-                ENDIF
-            ELSE
-                IF EMPTY(loc_lcFinal)
-                    loc_lcWhere = loc_lcWhere + loc_laCampo(loc_nConta) + " >= " + EscaparSQL(loc_lcInicio)
-                ELSE
-                    loc_lcWhere = loc_lcWhere + loc_laCampo(loc_nConta) + ;
-                                  " BETWEEN '" + loc_lcInicio + "' AND '" + loc_lcFinal + "'"
-                ENDIF
-            ENDIF
-        ENDFOR
-
-        loc_lcWhere = ALLTRIM(loc_lcWhere)
-        IF EMPTY(loc_lcWhere)
-            loc_lcWhere = "1=1"
-        ENDIF
-
-        *-- Filtro situacao (Ativos=1, Inativos=2, Todos=3)
-        IF THIS.this_nSituacao = 1 OR THIS.this_nSituacao = 2
-            loc_lcWhere = loc_lcWhere + " AND Situas = " + TRANSFORM(THIS.this_nSituacao)
-        ENDIF
-
-        *-- Filtro fornecedor
-        IF !EMPTY(ALLTRIM(THIS.this_cFornecs))
-            loc_lcWhere = loc_lcWhere + " AND Ifors = '" + ALLTRIM(THIS.this_cFornecs) + "'"
-        ENDIF
-
-        *-- Filtro compra/ForaLinha (1=Comprar, 2=NaoComprar, 3=Todos)
-        IF THIS.this_nCompra = 1
-            loc_lcWhere = loc_lcWhere + " AND ForaLinha = 0"
-        ENDIF
-        IF THIS.this_nCompra = 2
-            loc_lcWhere = loc_lcWhere + " AND ForaLinha = 1"
-        ENDIF
-
-        RETURN loc_lcWhere
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * Processar - Recalcula precos dos produtos conforme parametros definidos
-    * nas propriedades this_* do BO.
-    * Retorna .T. se processamento bem-sucedido, .F. se erro.
-    * Apos Processar(): cursor_4c_Dados e CrSigCdPro ficam prontos para AtualizarPrecos()
+    PROTECTED FUNCTION AgregarFiltroRange(par_cWhere, par_cCampo, par_cInicio, par_cFinal)
     *--------------------------------------------------------------------------
-    PROCEDURE Processar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
-        LOCAL loc_lnMrki, loc_lnMrkf, loc_lnEncI, loc_lnEncF
-        LOCAL loc_lcWhere, loc_lcQuery
-        LOCAL loc_lnArred, loc_lnPvenda, loc_lnReajuste, loc_lnMarkup, loc_lnEncarg
-        LOCAL loc_lnTpRecal, loc_lcFeitio, loc_lnOpcaoM
-        LOCAL loc_lcFtiNew
+        LOCAL loc_cResultado
+        loc_cResultado = par_cWhere
 
+        IF !EMPTY(par_cInicio) OR !EMPTY(par_cFinal)
+            IF !EMPTY(ALLTRIM(loc_cResultado))
+                loc_cResultado = loc_cResultado + " And "
+            ENDIF
+            IF EMPTY(par_cInicio)
+                loc_cResultado = loc_cResultado + par_cCampo + " <= '" + par_cFinal + "'"
+            ELSE
+                IF EMPTY(par_cFinal)
+                    loc_cResultado = loc_cResultado + par_cCampo + " >= '" + par_cInicio + "'"
+                ELSE
+                    loc_cResultado = loc_cResultado + par_cCampo + ;
+                        " Between '" + par_cInicio + "' And '" + par_cFinal + "'"
+                ENDIF
+            ENDIF
+        ENDIF
+
+        RETURN loc_cResultado
+    ENDFUNC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE InicializarCursores()
+    *-- Carrega lookups e cria cursores de trabalho. Chamado pelo Form.Init().
+    *--------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
-        loc_lnMrki     = THIS.this_nMrkI
-        loc_lnMrkf     = THIS.this_nMrkF
-        loc_lnEncI     = THIS.this_nEncI
-        loc_lnEncF     = THIS.this_nEncF
-        loc_lnArred    = IIF(THIS.this_nArreds = 0, 1, THIS.this_nArreds)
-        loc_lnPvenda   = THIS.this_nPven
-        loc_lnReajuste = 1 + (THIS.this_nReajuste / 100)
-        loc_lnMarkup   = THIS.this_nNMrk
-        loc_lnEncarg   = THIS.this_nEncargo
-        loc_lnTpRecal  = THIS.this_nRecalc
-        loc_lcFeitio   = ALLTRIM(THIS.this_cFeitio)
-        loc_lnOpcaoM   = THIS.this_nFoption1
-        loc_lcFtiNew   = ALLTRIM(THIS.this_cNewMkp)
+        TRY
+            IF gnConnHandle <= 0
+                MsgErro("Sem conex" + CHR(227) + "o com o banco de dados.", "Erro sigprccpBO")
+                IF USED(THIS.this_cCursorProdutos)
+                    USE IN (THIS.this_cCursorProdutos)
+                ENDIF
+                SET NULL ON
+                CREATE CURSOR cursor_4c_Produtos ;
+                    (lMarca N(1) NULL, CPros C(14) NULL, DPros C(40) NULL, ;
+                    ValAnt N(14,2) NULL, ValAtu N(14,2) NULL, ;
+                    CustoAfs N(12,4) NULL, CustoFs N(12,4) NULL, ;
+                    PVarias N(8,2) NULL, CVarias N(8,2) NULL)
+                SET NULL OFF
+                INDEX ON CPros TAG CPros
+                SELECT cursor_4c_Produtos
+                GO TOP
+                loc_lSucesso = .T.
+            ELSE
+                loc_lSucesso = .T.
 
-        IF INLIST(loc_lnTpRecal, 7, 8) AND EMPTY(loc_lcFtiNew)
-            IF !THIS.this_lAutomatico
-                MsgAviso("Favor Informar o Novo C" + CHR(243) + "digo do MKP!!!", ;
-                         "Aten" + CHR(231) + CHR(227) + "o")
+                IF USED("crSigCdMoe")
+                    USE IN crSigCdMoe
+                ENDIF
+                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdMoe", "crSigCdMoe") < 1
+                    MsgErro("Falha ao carregar SigCdMoe.", "Erro sigprccpBO.InicializarCursores")
+                    loc_lSucesso = .F.
+                ELSE
+                    SELECT crSigCdMoe
+                    INDEX ON CMoes TAG CMoes
+                    INDEX ON DMoes TAG DMoes
+                    GO TOP
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("crSigCdCot")
+                        USE IN crSigCdCot
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdCot", "crSigCdCot") < 1
+                        MsgErro("Falha ao carregar SigCdCot.", "Erro sigprccpBO.InicializarCursores")
+                        loc_lSucesso = .F.
+                    ELSE
+                        SELECT crSigCdCot
+                        INDEX ON CMoes + DTOS(Datas) + Horas TAG Cotacaos
+                        INDEX ON CMoes + DTOS(Datas) TAG CMoeData
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("crSigCdGrp")
+                        USE IN crSigCdGrp
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdGrp", "crSigCdGrp") < 1
+                        MsgErro("Falha ao carregar SigCdGrp.", "Erro sigprccpBO.InicializarCursores")
+                        loc_lSucesso = .F.
+                    ELSE
+                        SELECT crSigCdGrp
+                        INDEX ON CGrus TAG CGrus
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("crSigCdUni")
+                        USE IN crSigCdUni
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdUni", "crSigCdUni") < 1
+                        MsgErro("Falha ao carregar SigCdUni.", "Erro sigprccpBO.InicializarCursores")
+                        loc_lSucesso = .F.
+                    ELSE
+                        SELECT crSigCdUni
+                        INDEX ON CUnis TAG CUnis
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("crSigCdPam")
+                        USE IN crSigCdPam
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Arreds FROM SigCdPam", ;
+                        "crSigCdPam") < 1
+                        MsgErro("Falha ao carregar SigCdPam.", "Erro sigprccpBO.InicializarCursores")
+                        loc_lSucesso = .F.
+                    ELSE
+                        SELECT crSigCdPam
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("crSigCdPaC")
+                        USE IN crSigCdPaC
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, ;
+                        "SELECT TOP 1 CalcCusts, nChkSubGrs FROM SigCdPaC", ;
+                        "crSigCdPaC") < 1
+                        MsgErro("Falha ao carregar SigCdPaC.", "Erro sigprccpBO.InicializarCursores")
+                        loc_lSucesso = .F.
+                    ELSE
+                        SELECT crSigCdPaC
+                        GO TOP
+                    ENDIF
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED(THIS.this_cCursorProdutos)
+                        USE IN (THIS.this_cCursorProdutos)
+                    ENDIF
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_Produtos ;
+                        (lMarca N(1) NULL, CPros C(14) NULL, DPros C(40) NULL, ;
+                        ValAnt N(14,2) NULL, ValAtu N(14,2) NULL, ;
+                        CustoAfs N(12,4) NULL, CustoFs N(12,4) NULL, ;
+                        PVarias N(8,2) NULL, CVarias N(8,2) NULL)
+                    SET NULL OFF
+                    INDEX ON CPros TAG CPros
+                    SELECT cursor_4c_Produtos
+                    SET ORDER TO
+                    GO TOP
+                ENDIF
+
+                IF loc_lSucesso
+                    IF USED("loc_TmpPrCpoSQL")
+                        USE IN loc_TmpPrCpoSQL
+                    ENDIF
+                    IF USED("TmpPrCpo")
+                        USE IN TmpPrCpo
+                    ENDIF
+                    IF SQLEXEC(gnConnHandle, "SELECT * FROM SigPrCpo WHERE 1=0", ;
+                        "loc_TmpPrCpoSQL") > 0
+                        SELECT * FROM loc_TmpPrCpoSQL ;
+                            INTO CURSOR TmpPrCpo READWRITE NOFILTER
+                        USE IN loc_TmpPrCpoSQL
+                        SELECT TmpPrCpo
+                        INDEX ON CPros TAG CPros
+                        GO TOP
+                    ENDIF
+                ENDIF
             ENDIF
-            RETURN .F.
-        ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro sigprccpBO.InicializarCursores")
+        ENDTRY
 
-        *-- Construir clausula WHERE e carregar produtos
-        loc_lcWhere = THIS.ConstruirWhereClause()
+        RETURN loc_lSucesso
+    ENDPROC
 
-        loc_lcQuery = "SELECT * FROM SigCdPro " + ;
-                      "WHERE " + loc_lcWhere + ;
-                      IIF(loc_lnMrki > 0, " AND Margems BETWEEN " + ;
-                          FormatarNumeroSQL(loc_lnMrki) + " AND " + ;
-                          FormatarNumeroSQL(loc_lnMrkf), "") + ;
-                      IIF(loc_lnEncI > 0, " AND Encargos BETWEEN " + ;
-                          FormatarNumeroSQL(loc_lnEncI) + " AND " + ;
-                          FormatarNumeroSQL(loc_lnEncF), "") + ;
-                      IIF(!EMPTY(loc_lcFeitio), " AND ( cFtios = '" + loc_lcFeitio + ;
-                          "' OR cFtioCs = '" + loc_lcFeitio + "' )", "")
-
-        IF USED("CrSigCdPro")
-            USE IN CrSigCdPro
-        ENDIF
-        loc_nResult = SQLEXEC(gnConnHandle, loc_lcQuery, "CrSigCdPro")
-        IF loc_nResult < 1
-            IF !THIS.this_lAutomatico
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + CHR(227) + "o (CrSigCdPro)")
-            ENDIF
-            RETURN .F.
-        ENDIF
-        SELECT CrSigCdPro
-        INDEX ON CPros TAG CPros
-
-        *-- Estrutura de composicao vazia para acumular calculos de todos produtos
-        loc_lcQuery = "SELECT * FROM SigPrCpo WHERE 1=0"
-        IF USED("TmpPrCpo")
-            USE IN TmpPrCpo
-        ENDIF
-        loc_nResult = SQLEXEC(gnConnHandle, loc_lcQuery, "TmpPrCpo")
-        IF loc_nResult < 1
-            IF !THIS.this_lAutomatico
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha (TmpPrCpo)")
-            ENDIF
-            RETURN .F.
-        ENDIF
-        SELECT TmpPrCpo
-        INDEX ON CPros TAG CPros
-
-        *-- Feitios de markup (SigPrFti)
-        IF USED("CrSigPrFti")
-            USE IN CrSigPrFti
-        ENDIF
-        loc_nResult = SQLEXEC(gnConnHandle, "SELECT * FROM SigPrFti", "CrSigPrFti")
-        IF loc_nResult < 1
-            IF !THIS.this_lAutomatico
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFti)")
-            ENDIF
-            RETURN .F.
-        ENDIF
-        SELECT CrSigPrFti
-        INDEX ON Cods TAG Cods
-
-        *-- Feitios por grupo (SigPrFto + SigCdGrp)
-        IF USED("CrSigPrFtiG")
-            USE IN CrSigPrFtiG
-        ENDIF
-        loc_cSQL = "SELECT a.*, b.Dgrus FROM SigPrFto a, SigCdGrp b " + ;
-                   "WHERE a.Cgrus = b.Cgrus AND a.Cgrus <> ' '"
-        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigPrFtiG")
-        IF loc_nResult < 1
-            IF !THIS.this_lAutomatico
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFtiG)")
-            ENDIF
-            RETURN .F.
-        ENDIF
-        SELECT CrSigPrFtiG
-        INDEX ON Cods TAG Cods
-
-        *-- Feitios por produto (SigPrFto + SigCdPro)
-        IF USED("CrSigPrFtiP")
-            USE IN CrSigPrFtiP
-        ENDIF
-        loc_cSQL = "SELECT a.*, b.Dpros FROM SigPrFto a, SigCdPro b " + ;
-                   "WHERE a.Cpros = b.Cpros AND a.CGrus = ' '"
-        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigPrFtiP")
-        IF loc_nResult < 1
-            IF !THIS.this_lAutomatico
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFtiP)")
-            ENDIF
-            RETURN .F.
-        ENDIF
-        SELECT CrSigPrFtiP
-        INDEX ON Cods TAG Cods
-
-        *-- Cursor acumulador de totais por grupo/produto/moeda (para calculo de feitio de venda)
-        IF USED("TotGrupo")
-            USE IN TotGrupo
-        ENDIF
-        CREATE CURSOR TotGrupo (Grupo C(3), Cpros C(14), ValGrupo N(12,3), Moeda C(3))
-        INDEX ON Grupo+Cpros+Moeda TAG GruMoe
-
-        *-- Preparar cursor_4c_Dados (grid de resultados)
-        THIS.CriarCursorDados()
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+    *-- Mapeia campos de SigCdCcp (linha corrente) para propriedades this_*
+    *--------------------------------------------------------------------------
+        LOCAL loc_oErro
 
         TRY
-            IF loc_lnTpRecal = 4
-                *------------------------------------------------------------------
-                *-- CASO 4: Recalculo de Pesos dos Componentes
-                *------------------------------------------------------------------
-                SELECT CrSigCdPro
+            SELECT (par_cAliasCursor)
+            IF TYPE(par_cAliasCursor + ".cIdChaves") != "U"
+                THIS.this_cIdChaves = NVL(ALLTRIM(cIdChaves), "")
+            ENDIF
+            THIS.this_cCFornecs    = NVL(ALLTRIM(cfornecs),  "")
+            THIS.this_cMercI       = NVL(ALLTRIM(merci),     "")
+            THIS.this_cMercF       = NVL(ALLTRIM(mercf),     "")
+            THIS.this_cCGrui       = NVL(ALLTRIM(cgrui),     "")
+            THIS.this_cCGruf       = NVL(ALLTRIM(cgruf),     "")
+            THIS.this_cSGruI       = NVL(ALLTRIM(sgrui),     "")
+            THIS.this_cSGruF       = NVL(ALLTRIM(sgruf),     "")
+            THIS.this_cCUniI       = NVL(ALLTRIM(cunii),     "")
+            THIS.this_cCUnif       = NVL(ALLTRIM(cunif),     "")
+            THIS.this_cLini        = NVL(ALLTRIM(lini),      "")
+            THIS.this_cLinf        = NVL(ALLTRIM(linf),      "")
+            THIS.this_cColi        = NVL(ALLTRIM(coli),      "")
+            THIS.this_cColf        = NVL(ALLTRIM(colf),      "")
+            THIS.this_cMoedai      = NVL(ALLTRIM(moedai),    "")
+            THIS.this_cMoedaf      = NVL(ALLTRIM(moedaf),    "")
+            THIS.this_nOpcMoedaTp  = NVL(opcmoedatp,         1)
+            THIS.this_nMrki        = NVL(mrki,                0)
+            THIS.this_nMrkf        = NVL(mrkf,                0)
+            THIS.this_nEnci        = NVL(enci,                0)
+            THIS.this_nEncf        = NVL(encf,                0)
+            THIS.this_nVariacao    = NVL(variacao,            0)
+            THIS.this_cFeitio      = NVL(ALLTRIM(feitio),    "")
+            THIS.this_nOpcSituacao = NVL(opcsit,              1)
+            THIS.this_nOpcRecalc   = NVL(opcrecalc,           1)
+            THIS.this_nReajuste    = NVL(reajuste,            0)
+            THIS.this_nEncargo     = NVL(encargo,             0)
+            THIS.this_nNMrk        = NVL(nmrk,                0)
+            THIS.this_nOpcPven     = NVL(opcpven,             2)
+            THIS.this_cNewMkp      = NVL(ALLTRIM(newmkp),    "")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro sigprccpBO.CarregarDoCursor")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE Processar()
+    *-- Recalcula precos conforme this_nOpcRecalc e filtros. Popula cursor_4c_Produtos.
+    *--------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro, loc_llOk
+        LOCAL loc_lcMercI, loc_lcMercF, loc_lcGrui, loc_lcGruf
+        LOCAL loc_lcSGruI, loc_lcSGruF, loc_lcCunii, loc_lcCUnif
+        LOCAL loc_lcLini, loc_lcLinf, loc_lcColi, loc_lcColf
+        LOCAL loc_lcMoedai, loc_lcMoedaf
+        LOCAL loc_lnMrki, loc_lnMrkf, loc_lnEncI, loc_lnEncF
+        LOCAL loc_lnArred, loc_lnPvenda, loc_lnReajuste, loc_lnMarkup
+        LOCAL loc_lnEncarg, loc_lnTpRecal, loc_lcFeitio, loc_lnOpcaoM
+        LOCAL loc_lnOpcComp, loc_lcIfors, loc_lcFtiNew
+        LOCAL loc_lcWhere, loc_lcQuery, loc_lcSql
+        LOCAL loc_loBarra, loc_pPro, loc_llAtu, loc_lnMtl, loc_lnVal
+        LOCAL loc_cMoedas, loc_nQtdeqs
+        LOCAL loc_Moec, loc_Moep, loc_Moepc, loc_Moecf, loc_Moedac
+        LOCAL loc_Moem, loc_Moeft, loc_Moev, loc_MoecF, loc_MoepF, loc_MoepV
+        LOCAL loc_lnTQtde, loc_lnTotal, loc_lnTFtio
+        LOCAL loc_lnTotCv, loc_lnTotpCv, loc_lnTotEstM
+        LOCAL loc_MarkCus, loc_MarkVen, loc_cFtioV, loc_Valgr
+        LOCAL loc_llOkMat, loc_lnCotId, loc_lnCotVd, loc_lnPven, loc_lnVlVen
+        LOCAL loc_Custo, loc_fPeso, loc_Fator, loc_Feitio, loc_FeitioC
+        LOCAL loc_Ideal, loc_IdealCv, loc_Custof, loc_MarkCv, loc_MarkUpa
+        LOCAL loc_vacm, loc_vFt, loc_vcoef, loc_vadic, loc_Coef, loc_lnCnt
+        LOCAL loc_FatArred, loc_Soma, loc_CotMcf, loc_CotMpv, loc_cUniPeso, loc_lnFator
+
+        loc_lSucesso = .F.
+        loc_llOk     = .T.
+
+        TRY
+            loc_lcMercI    = ALLTRIM(THIS.this_cMercI)
+            loc_lcMercF    = ALLTRIM(THIS.this_cMercF)
+            loc_lcGrui     = ALLTRIM(THIS.this_cCGrui)
+            loc_lcGruf     = ALLTRIM(THIS.this_cCGruf)
+            loc_lcSGruI    = ALLTRIM(THIS.this_cSGruI)
+            loc_lcSGruF    = ALLTRIM(THIS.this_cSGruF)
+            loc_lcCunii    = ALLTRIM(THIS.this_cCUniI)
+            loc_lcCUnif    = ALLTRIM(THIS.this_cCUnif)
+            loc_lcLini     = ALLTRIM(THIS.this_cLini)
+            loc_lcLinf     = ALLTRIM(THIS.this_cLinf)
+            loc_lcColi     = ALLTRIM(THIS.this_cColi)
+            loc_lcColf     = ALLTRIM(THIS.this_cColf)
+            loc_lcMoedai   = ALLTRIM(THIS.this_cMoedai)
+            loc_lcMoedaf   = ALLTRIM(THIS.this_cMoedaf)
+            loc_lnMrki     = THIS.this_nMrki
+            loc_lnMrkf     = THIS.this_nMrkf
+            loc_lnEncI     = THIS.this_nEnci
+            loc_lnEncF     = THIS.this_nEncf
+            loc_lnPvenda   = THIS.this_nOpcPven
+            loc_lnReajuste = 1 + (THIS.this_nReajuste / 100)
+            loc_lnMarkup   = THIS.this_nNMrk
+            loc_lnEncarg   = THIS.this_nEncargo
+            loc_lnTpRecal  = THIS.this_nOpcRecalc
+            loc_lcFeitio   = ALLTRIM(THIS.this_cFeitio)
+            loc_lnOpcaoM   = THIS.this_nOpcMoedaTp
+            loc_lnOpcComp  = THIS.this_nOpcCompra
+            loc_lcIfors    = ALLTRIM(THIS.this_cCFornecs)
+            loc_lcFtiNew   = ALLTRIM(THIS.this_cNewMkp)
+
+            loc_lnArred = 1
+            IF USED("crSigCdPam")
+                SELECT crSigCdPam
                 GO TOP
+                IF !EOF("crSigCdPam")
+                    loc_lnArred = IIF(crSigCdPam.Arreds = 0, 1, crSigCdPam.Arreds)
+                ENDIF
+            ENDIF
+
+            IF INLIST(loc_lnTpRecal, 7, 8) AND EMPTY(loc_lcFtiNew)
+                IF !THIS.this_lAutomatico
+                    MsgAviso("Favor Informar o Novo C" + CHR(243) + "digo do MKP!!!", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                ENDIF
+                loc_llOk = .F.
+            ENDIF
+
+            IF loc_llOk
+                *-- Montar WHERE para SigCdPro
+                loc_lcWhere = " "
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "CGrus",    loc_lcGrui,  loc_lcGruf)
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Cunis",    loc_lcCunii, loc_lcCUnif)
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Linhas",   loc_lcLini,  loc_lcLinf)
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Colecoes", loc_lcColi,  loc_lcColf)
+                IF loc_lnOpcaoM = 2
+                    loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Moevs",  loc_lcMoedai, loc_lcMoedaf)
+                ELSE
+                    loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Moedas", loc_lcMoedai, loc_lcMoedaf)
+                ENDIF
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "SGrus", loc_lcSGruI, loc_lcSGruF)
+                loc_lcWhere = THIS.AgregarFiltroRange(loc_lcWhere, "Mercs", loc_lcMercI, loc_lcMercF)
+
+                loc_lcWhere = ALLTRIM(loc_lcWhere)
+                IF EMPTY(loc_lcWhere)
+                    loc_lcWhere = " 1=1 "
+                ENDIF
+
+                DO CASE
+                CASE THIS.this_nOpcSituacao = 1
+                    loc_lcWhere = loc_lcWhere + " And Situas = 1"
+                CASE THIS.this_nOpcSituacao = 2
+                    loc_lcWhere = loc_lcWhere + " And Situas = 2"
+                ENDCASE
+
+                IF !EMPTY(loc_lcIfors)
+                    loc_lcWhere = loc_lcWhere + " And Ifors = " + EscaparSQL(loc_lcIfors)
+                ENDIF
+
+                IF INLIST(loc_lnOpcComp, 1, 2)
+                    loc_lcWhere = loc_lcWhere + ;
+                        " And ForaLinha = " + IIF(loc_lnOpcComp = 1, "0", "1")
+                ENDIF
+
+                loc_lcQuery = "Select * From SigCdPro Where " + loc_lcWhere
+                IF loc_lnMrki > 0
+                    loc_lcQuery = loc_lcQuery + ;
+                        " And Margems Between " + FormatarNumeroSQL(loc_lnMrki) + ;
+                        " And " + FormatarNumeroSQL(loc_lnMrkf)
+                ENDIF
+                IF loc_lnEncI > 0
+                    loc_lcQuery = loc_lcQuery + ;
+                        " And Encargos Between " + FormatarNumeroSQL(loc_lnEncI) + ;
+                        " And " + FormatarNumeroSQL(loc_lnEncF)
+                ENDIF
+                IF !EMPTY(loc_lcFeitio)
+                    loc_lcQuery = loc_lcQuery + ;
+                        " And ( cFtios = '" + loc_lcFeitio + ;
+                        "' Or cFtioCs = '" + loc_lcFeitio + "' )"
+                ENDIF
+
+                IF USED("crSigCdProSQL")
+                    USE IN crSigCdProSQL
+                ENDIF
+                IF USED("crSigCdPro")
+                    USE IN crSigCdPro
+                ENDIF
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdProSQL") < 1
+                    IF !THIS.this_lAutomatico
+                        MsgErro("Favor Reinicializar o Processo!!!", ;
+                            "Falha na Conex" + CHR(227) + "o (SigCdPro)")
+                    ENDIF
+                    loc_llOk = .F.
+                ELSE
+                    SELECT * FROM crSigCdProSQL INTO CURSOR crSigCdPro READWRITE NOFILTER
+                    USE IN crSigCdProSQL
+                    SELECT crSigCdPro
+                    INDEX ON CPros TAG CPros
+                ENDIF
+            ENDIF
+
+            IF loc_llOk
+                IF USED("TmpPrCpo")
+                    ZAP IN TmpPrCpo
+                ENDIF
+
+                IF USED("CrSigPrFti")
+                    USE IN CrSigPrFti
+                ENDIF
+                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigPrFti", "CrSigPrFti") < 1
+                    IF !THIS.this_lAutomatico
+                        MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFti)")
+                    ENDIF
+                    loc_llOk = .F.
+                ELSE
+                    SELECT CrSigPrFti
+                    INDEX ON Cods TAG Cods
+                ENDIF
+            ENDIF
+
+            IF loc_llOk
+                IF USED("CrSigPrFtiG")
+                    USE IN CrSigPrFtiG
+                ENDIF
+                loc_lcQuery = "Select a.*, b.Dgrus From SigPrFto a, SigCdGrp b " + ;
+                    "Where a.Cgrus = b.Cgrus And a.Cgrus <> ' '"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrSigPrFtiG") < 1
+                    IF !THIS.this_lAutomatico
+                        MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFtiG)")
+                    ENDIF
+                    loc_llOk = .F.
+                ELSE
+                    SELECT CrSigPrFtiG
+                    INDEX ON Cods TAG Cods
+                ENDIF
+            ENDIF
+
+            IF loc_llOk
+                IF USED("CrSigPrFtiP")
+                    USE IN CrSigPrFtiP
+                ENDIF
+                loc_lcQuery = "Select a.*, b.Dpros From SigPrFto a, SigCdPro b " + ;
+                    "Where a.Cpros = b.Cpros And a.CGrus = ' '"
+                IF SQLEXEC(gnConnHandle, loc_lcQuery, "CrSigPrFtiP") < 1
+                    IF !THIS.this_lAutomatico
+                        MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrFtiP)")
+                    ENDIF
+                    loc_llOk = .F.
+                ELSE
+                    SELECT CrSigPrFtiP
+                    INDEX ON Cods TAG Cods
+                ENDIF
+            ENDIF
+
+            IF loc_llOk
+                IF USED("TotGrupo")
+                    USE IN TotGrupo
+                ENDIF
+                CREATE CURSOR TotGrupo (Grupo C(3), Cpros C(14), ValGrupo N(12,3), Moeda C(3))
+                INDEX ON Grupo + Cpros + Moeda TAG GruMoe
+
+                IF USED("cursor_4c_Produtos")
+                    ZAP IN cursor_4c_Produtos
+                ENDIF
+            ENDIF
+
+            *-- === BRANCH 1: Recalculo de Pesos de Componentes (opcao 4) ===
+            IF loc_llOk AND loc_lnTpRecal = 4
+                SELECT crSigCdPro
+                loc_loBarra = CREATEOBJECT("fwProgressBar", ;
+                    "Recalculando Pesos de Componentes...", RECCOUNT("crSigCdPro"))
+                loc_loBarra.Show
+
                 SCAN
-                    THIS.this_cPro = ALLTRIM(CrSigCdPro.CPros)
-                    loc_cSQL = "SELECT * FROM SigPrCpo WHERE CPros = " + EscaparSQL(THIS.this_cPro)
+                    loc_loBarra.Update(.T.)
+                    loc_pPro = ALLTRIM(crSigCdPro.CPros)
+
                     IF USED("TmpCompo")
                         USE IN TmpCompo
                     ENDIF
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "TmpCompo")
-                    IF loc_nResult < 1
+                    loc_lcQuery = "SELECT * FROM SigPrCpo WHERE CPros = " + EscaparSQL(loc_pPro)
+                    IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpCompo") < 1
                         IF !THIS.this_lAutomatico
                             MsgErro("Favor Reinicializar o Processo!!!", "Falha (TmpCompo)")
                         ENDIF
-                        loc_lSucesso = .F.
+                        loc_llOk = .F.
+                        EXIT
                     ENDIF
 
-                    LOCAL loc_llAtu
                     loc_llAtu = .F.
 
                     SELECT TmpCompo
                     SCAN
-                        LOCAL loc_lnMtlP, loc_lnValP
-                        loc_lnMtlP = 1
+                        loc_lnMtl = 1
                         IF !EMPTY(ALLTRIM(TmpCompo.Mats))
-                            loc_cSQL = "SELECT a.PesoMs, b.CfgGerGprs " + ;
-                                       "FROM SigCdPro a, SigCdGrp b " + ;
-                                       "WHERE a.CPros = '" + ALLTRIM(TmpCompo.Mats) + "' " + ;
-                                       "AND a.CGrus = b.CGrus"
                             IF USED("LocalProCp")
                                 USE IN LocalProCp
                             ENDIF
-                            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "LocalProCp")
-                            IF loc_nResult < 1
+                            loc_lcQuery = "Select a.PesoMs, b.CfgGerGprs " + ;
+                                "From SigCdPro a, SigCdGrp b " + ;
+                                "Where a.CPros = '" + ALLTRIM(TmpCompo.Mats) + ;
+                                "' And a.CGrus = b.CGrus"
+                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalProCp") < 1
                                 IF !THIS.this_lAutomatico
                                     MsgErro("Favor Reinicializar o Processo!!!", "Falha (LocalProCp)")
                                 ENDIF
-                                loc_lSucesso = .F.
+                                loc_llOk = .F.
+                                EXIT
                             ENDIF
                             GO TOP IN LocalProCp
                             IF !EOF("LocalProCp") AND (LocalProCp.PesoMs > 0) AND ;
-                               (INT(VAL(SUBSTR(ALLTRIM(LocalProCp.CfgGerGprs), 9, 1))) > 1)
-                                IF INT(VAL(SUBSTR(ALLTRIM(LocalProCp.CfgGerGprs), 9, 1))) = 2
+                                (INT(VAL(SUBSTR(LocalProCp.CfgGerGprs, 9, 1))) > 1)
+
+                                IF INT(VAL(SUBSTR(LocalProCp.CfgGerGprs, 9, 1))) = 2
                                     IF !EMPTY(ALLTRIM(TmpCompo.UniCompos))
                                         IF !EMPTY(ALLTRIM(TmpCompo.CUniPs)) AND (TmpCompo.Pesos > 0)
-                                            loc_lnMtlP = TmpCompo.Pesos
+                                            loc_lnMtl = TmpCompo.Pesos
                                         ENDIF
-                                        loc_lnValP = LocalProCp.PesoMs * loc_lnMtlP
-                                        loc_cSQL = "UPDATE SigPrCpo SET Qtds = " + ;
-                                                   FormatarNumeroSQL(loc_lnValP) + ;
-                                                   " WHERE cIdChaves = '" + ALLTRIM(TmpCompo.cIdChaves) + "'"
-                                        IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
+                                        loc_lnVal = LocalProCp.PesoMs * loc_lnMtl
+                                        loc_lcSql = "Update SigPrCpo Set Qtds = " + ;
+                                            FormatarNumeroSQL(loc_lnVal) + ;
+                                            " Where cIdChaves = '" + ;
+                                            ALLTRIM(TmpCompo.cIdChaves) + "'"
+                                        IF SQLEXEC(gnConnHandle, loc_lcSql) < 1
                                             IF !THIS.this_lAutomatico
-                                                MsgAviso("Os Pesos N" + CHR(227) + "o Foram Calculados!", "Aten" + CHR(231) + CHR(227) + "o!!!")
+                                                MsgErro("Falha ao atualizar Qtds em SigPrCpo.", ;
+                                                    "Erro sigprccpBO.Processar")
                                             ENDIF
-                                            loc_lSucesso = .F.
+                                            loc_llOk = .F.
+                                            EXIT
                                         ENDIF
                                         loc_llAtu = .T.
                                     ENDIF
                                 ELSE
                                     IF !EMPTY(ALLTRIM(TmpCompo.CUniPs))
                                         IF !EMPTY(ALLTRIM(TmpCompo.UniCompos)) AND (TmpCompo.Qtds > 0)
-                                            loc_lnMtlP = TmpCompo.Qtds
+                                            loc_lnMtl = TmpCompo.Qtds
                                         ENDIF
-                                        loc_lnValP = LocalProCp.PesoMs * loc_lnMtlP
-                                        loc_cSQL = "UPDATE SigPrCpo SET Pesos = " + ;
-                                                   FormatarNumeroSQL(loc_lnValP) + ;
-                                                   " WHERE cIdChaves = '" + ALLTRIM(TmpCompo.cIdChaves) + "'"
-                                        IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
+                                        loc_lnVal = LocalProCp.PesoMs * loc_lnMtl
+                                        loc_lcSql = "Update SigPrCpo Set Pesos = " + ;
+                                            FormatarNumeroSQL(loc_lnVal) + ;
+                                            " Where cIdChaves = '" + ;
+                                            ALLTRIM(TmpCompo.cIdChaves) + "'"
+                                        IF SQLEXEC(gnConnHandle, loc_lcSql) < 1
                                             IF !THIS.this_lAutomatico
-                                                MsgAviso("Os Pesos N" + CHR(227) + "o Foram Calculados!", "Aten" + CHR(231) + CHR(227) + "o!!!")
+                                                MsgErro("Falha ao atualizar Pesos em SigPrCpo.", ;
+                                                    "Erro sigprccpBO.Processar")
                                             ENDIF
-                                            loc_lSucesso = .F.
+                                            loc_llOk = .F.
+                                            EXIT
                                         ENDIF
                                         loc_llAtu = .T.
                                     ENDIF
@@ -598,1069 +709,1136 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                 ENDIF
                             ENDIF
                         ENDIF
+                        IF !loc_llOk
+                            EXIT
+                        ENDIF
                     ENDSCAN
 
-                    IF loc_llAtu
-                        SELECT cursor_4c_Dados
-                        INSERT INTO cursor_4c_Dados (lMarca, CPros, DPros) ;
-                            VALUES (0, CrSigCdPro.CPros, CrSigCdPro.DPros)
+                    IF !loc_llOk
+                        EXIT
                     ENDIF
 
+                    IF loc_llAtu
+                        INSERT INTO cursor_4c_Produtos (CPros, DPros) ;
+                            VALUES (crSigCdPro.CPros, crSigCdPro.DPros)
+                    ENDIF
                     IF USED("TmpCompo")
                         USE IN TmpCompo
                     ENDIF
-                    SELECT CrSigCdPro
+                    SELECT crSigCdPro
                 ENDSCAN
 
-            ELSE
-                *------------------------------------------------------------------
-                *-- CASO GERAL: Recalculo de precos (todos os outros lnTpRecal)
-                *------------------------------------------------------------------
-                SELECT CrSigCdPro
-                GO TOP
+                loc_loBarra.Complete(.T.)
+            ENDIF
+
+            *-- === BRANCH 2: Recalculo Composicao/Preco (opcoes 1,2,3,5,6,7,8) ===
+            IF loc_llOk AND loc_lnTpRecal <> 4
+                SELECT crSigCdPro
+                loc_loBarra = CREATEOBJECT("fwprogressbar", ;
+                    "Recalculando Produtos...", RECCOUNT("crSigCdPro"))
+                loc_loBarra.Show
+
                 SCAN
-                    LOCAL loc_lnTQtde, loc_lnTotal, loc_lnTotCv, loc_lnTotpCv, loc_lnTotEstM
-                    LOCAL loc_lnMoec, loc_lnMoecf, loc_lnMoedac, loc_lnMoeft
-                    LOCAL loc_lnMoep, loc_lnMoev
-                    LOCAL loc_lnCusto, loc_lnfPeso, loc_lnFator, loc_lnFeitio, loc_lnFeitioC
-                    LOCAL loc_lnIdeal, loc_lnIdealCv, loc_lnMarkUpa, loc_lnCustof
-                    LOCAL loc_lcMarkCus, loc_lcMarkVen, loc_lcFtioV
-                    LOCAL loc_lcMoeAlias, loc_lnQtdeqs
+                    loc_pPro = ALLTRIM(crSigCdPro.CPros)
 
-                    THIS.this_cPro = ALLTRIM(CrSigCdPro.CPros)
-
-                    IF EMPTY(ALLTRIM(CrSigCdPro.Moedas))
-                        REPLACE Moedas WITH CrSigCdPro.Moecs IN CrSigCdPro
+                    IF EMPTY(ALLTRIM(crSigCdPro.Moedas))
+                        REPLACE Moedas WITH crSigCdPro.Moecs IN crSigCdPro
                     ENDIF
 
-                    *-- Carregar composicao do produto via SQL
-                    loc_cSQL = "SELECT * FROM SigPrCpo WHERE Cpros = " + EscaparSQL(THIS.this_cPro)
-                    IF USED("CrSigPrCpo")
-                        USE IN CrSigPrCpo
+                    IF USED("crSigPrCpoSQL")
+                        USE IN crSigPrCpoSQL
                     ENDIF
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrSigPrCpo")
-                    IF loc_nResult < 1
+                    IF USED("crSigPrCpo")
+                        USE IN crSigPrCpo
+                    ENDIF
+                    loc_lcSql = "SELECT * FROM SigPrCpo WHERE Cpros = " + EscaparSQL(loc_pPro)
+                    IF SQLEXEC(gnConnHandle, loc_lcSql, "crSigPrCpoSQL") < 1
                         IF !THIS.this_lAutomatico
                             MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrSigPrCpo)")
                         ENDIF
-                        loc_lSucesso = .F.
+                        loc_llOk = .F.
+                        EXIT
                     ENDIF
-                    SELECT CrSigPrCpo
+                    SELECT * FROM crSigPrCpoSQL INTO CURSOR crSigPrCpo READWRITE NOFILTER
+                    USE IN crSigPrCpoSQL
+                    SELECT crSigPrCpo
                     INDEX ON CPros TAG CPros
+                    GO TOP
 
-                    *-- Registrar no grid: codigo, descricao, valor anterior, custo anterior
-                    SELECT cursor_4c_Dados
-                    INSERT INTO cursor_4c_Dados (lMarca, CPros, DPros, ValAnt, CustoAfs) ;
-                        VALUES (0, CrSigCdPro.CPros, CrSigCdPro.DPros, ;
-                                CrSigCdPro.Pvens, CrSigCdPro.CustoFs)
+                    INSERT INTO cursor_4c_Produtos (CPros, DPros, ValAnt, CustoAfs) ;
+                        VALUES (crSigCdPro.CPros, crSigCdPro.DPros, ;
+                            crSigCdPro.Pvens, crSigCdPro.CustoFs)
 
-                    STORE 0 TO loc_lnTQtde, loc_lnTotal, loc_lnTotCv, loc_lnTotpCv, loc_lnTotEstM
+                    SELECT crSigCdPro
 
-                    *-- Limpar TotGrupo para este produto
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moecs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moec = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moepcs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moepc = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moedas)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moedac = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+
+                    =SEEK(crSigCdPro.CGrus, "crSigCdGrp", "CGrus")
+                    STORE 0 TO loc_lnTQtde, loc_lnTotal, loc_lnTFtio
+                    STORE 0 TO loc_lnTotCv, loc_lnTotpCv, loc_lnTotEstM
                     SELECT TotGrupo
                     ZAP
 
-                    *-- Calcular taxa cambio moeda custo (Moecs)
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moecs)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoec = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    *-- Taxa cambio moeda principal (Moedas) para acumulo do SCAN
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moedas)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoedac = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
-
-                    =SEEK(ALLTRIM(CrSigCdPro.Cgrus), "CrSigCdGrp", "Cgrus")
-
-                    *--------------------------------------------------------------
-                    *-- SCAN componentes da composicao
-                    *--------------------------------------------------------------
-                    SELECT CrSigPrCpo
-                    =SEEK(THIS.this_cPro, "CrSigPrCpo", "CPros")
-                    SCAN WHILE ALLTRIM(CPros) = THIS.this_cPro
-                        LOCAL loc_llOk, loc_lnMoem, loc_lnMoevC
-                        loc_lnMoem = 1
-                        loc_lnMoevC = 1
-
-                        IF EMPTY(ALLTRIM(CrSigPrCpo.Mats))
+                    *-- Processar componentes de composicao
+                    SELECT crSigPrCpo
+                    =SEEK(loc_pPro)
+                    SCAN WHILE ALLTRIM(crSigPrCpo.CPros) = loc_pPro
+                        IF EMPTY(ALLTRIM(crSigPrCpo.Mats))
                             LOOP
                         ENDIF
 
-                        loc_llOk = .T.
-
-                        *-- Verificar material principal (excluir da composicao)
-                        loc_cSQL = "SELECT DISTINCT MatPrincs FROM SigCdPro " + ;
-                                   "WHERE MatPrincs <> Space(14) AND MatPrincs = '" + ;
-                                   ALLTRIM(CrSigPrCpo.Mats) + "'"
+                        loc_llOkMat = .T.
                         IF USED("crMatPrinc")
                             USE IN crMatPrinc
                         ENDIF
-                        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crMatPrinc")
-                        IF loc_nResult >= 1 AND RECCOUNT("crMatPrinc") >= 1
+                        loc_lcQuery = "Select Distinct Matprincs From SigCdPro " + ;
+                            "Where MatPrincs <> Space(14) and MatPrincs = '" + ;
+                            ALLTRIM(crSigPrCpo.Mats) + "'"
+                        IF SQLEXEC(gnConnHandle, loc_lcQuery, "crMatPrinc") < 1
+                            IF !THIS.this_lAutomatico
+                                MsgErro("Favor Reinicializar o Processo!!!", "Falha (crMatPrinc)")
+                            ENDIF
                             loc_llOk = .F.
+                            EXIT
                         ENDIF
+                        SELECT crMatPrinc
+                        IF RECCOUNT("crMatPrinc") >= 1
+                            loc_llOkMat = .F.
+                        ENDIF
+                        USE IN crMatPrinc
 
-                        IF loc_llOk
-                            loc_cSQL = "SELECT Custofs, MoeCusfs, Cunis, Cgrus, Moevs, cUniPs, pVens " + ;
-                                       "FROM SigCdPro WHERE Cpros = '" + ALLTRIM(CrSigPrCpo.Mats) + "'"
+                        IF loc_llOkMat
                             IF USED("CrCompoPro")
                                 USE IN CrCompoPro
                             ENDIF
-                            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "CrCompoPro")
-                            IF loc_nResult < 1
+                            loc_lcSql = "Select Custofs, MoeCusfs, Cunis, Cgrus, " + ;
+                                "Moevs, cUniPs, pVens From SigCdPro Where Cpros = '" + ;
+                                ALLTRIM(crSigPrCpo.Mats) + "'"
+                            IF SQLEXEC(gnConnHandle, loc_lcSql, "CrCompoPro") < 1
                                 IF !THIS.this_lAutomatico
                                     MsgErro("Favor Reinicializar o Processo!!!", "Falha (CrCompoPro)")
                                 ENDIF
-                                loc_lSucesso = .F.
+                                loc_llOk = .F.
+                                EXIT
                             ENDIF
 
-                            =SEEK(ALLTRIM(CrSigPrCpo.Cgrus), "CrSigCdGrp", "Cgrus")
+                            =SEEK(crSigPrCpo.CGrus, "crSigCdGrp", "CGrus")
 
                             IF !EOF("CrCompoPro") AND (loc_lnTpRecal <> 2)
-                                IF CrSigCdGrp.pvCompos = 2
+                                IF crSigCdGrp.pvCompos = 2
                                     REPLACE PCompos WITH CrCompoPro.Pvens, ;
-                                            Moeds   WITH CrCompoPro.Moevs ;
-                                            IN CrSigPrCpo
+                                        Moeds   WITH CrCompoPro.Moevs IN crSigPrCpo
                                 ELSE
                                     REPLACE PCompos WITH CrCompoPro.CustoFs, ;
-                                            Moeds   WITH CrCompoPro.MoeCusfs ;
-                                            IN CrSigPrCpo
+                                        Moeds   WITH CrCompoPro.MoeCusfs IN crSigPrCpo
                                 ENDIF
                                 REPLACE UniCompos WITH CrCompoPro.Cunis, ;
-                                        CUniPs    WITH CrCompoPro.CUniPs, ;
-                                        Cgrus     WITH CrCompoPro.Cgrus, ;
-                                        DtMovs    WITH DATETIME() ;
-                                        IN CrSigPrCpo
+                                    CUniPs    WITH CrCompoPro.CUniPs, ;
+                                    Cgrus     WITH CrCompoPro.Cgrus, ;
+                                    DtMovs    WITH DATETIME() IN crSigPrCpo
                             ENDIF
 
-                            LOCAL loc_lnValgr
-                            loc_lnValgr = CrSigPrCpo.PCompos * ;
-                                          IIF(CrSigCdGrp.chkInstalas = 2, CrSigPrCpo.Pesos, CrSigPrCpo.Qtds)
+                            loc_Valgr = crSigPrCpo.PCompos * ;
+                                IIF(crSigCdGrp.chkInstalas = 2, crSigPrCpo.Pesos, crSigPrCpo.Qtds)
 
                             SELECT TotGrupo
                             SET ORDER TO GruMoe
-                            IF !SEEK(ALLTRIM(CrSigPrCpo.Cgrus)+ALLTRIM(CrSigPrCpo.CPros)+ALLTRIM(CrSigPrCpo.Moeds))
+                            IF !SEEK(ALLTRIM(crSigPrCpo.CGrus) + ALLTRIM(crSigPrCpo.CPros) + ;
+                                ALLTRIM(crSigPrCpo.Moeds))
                                 INSERT INTO TotGrupo (Grupo, Cpros, Moeda) ;
-                                    VALUES (CrSigPrCpo.Cgrus, CrSigPrCpo.Mats, CrSigPrCpo.Moeds)
+                                    VALUES (crSigPrCpo.CGrus, crSigPrCpo.Mats, crSigPrCpo.Moeds)
                             ENDIF
-                            REPLACE ValGrupo WITH ValGrupo + loc_lnValgr IN TotGrupo
+                            REPLACE ValGrupo WITH ValGrupo + loc_Valgr IN TotGrupo
 
-                            *-- Taxa cambio moeda do componente
-                            loc_lcMoeAlias = ALLTRIM(CrSigPrCpo.Moeds)
-                            IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                            ELSE
-                                loc_lnQtdeqs = 1
+                            loc_cMoedas = ALLTRIM(crSigPrCpo.Moeds)
+                            loc_nQtdeqs = 1
+                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_lnMoem = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
+                            loc_Moem = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
-                            *-- Taxa cambio moeda venda do componente
-                            loc_lcMoeAlias = ALLTRIM(CrCompoPro.Moevs)
-                            IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                            ELSE
-                                loc_lnQtdeqs = 1
+                            loc_cMoedas = ALLTRIM(CrCompoPro.Moevs)
+                            loc_nQtdeqs = 1
+                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_lnMoevC = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
+                            loc_Moev = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
-                            IF EMPTY(ALLTRIM(CrSigPrCpo.Moeds))
-                                IF USED("CrCompoPro")
-                                    USE IN CrCompoPro
-                                ENDIF
-                                SELECT CrSigPrCpo
+                            IF EMPTY(ALLTRIM(crSigPrCpo.Moeds))
+                                SELECT crSigPrCpo
                                 LOOP
                             ENDIF
 
                             IF loc_lnTpRecal <> 1
-                                =SEEK(ALLTRIM(CrSigPrCpo.UniCompos), "CrSigCdUni", "cUnis")
-                                =SEEK(ALLTRIM(CrSigPrCpo.Cgrus), "CrSigCdGrp", "Cgrus")
+                                =SEEK(ALLTRIM(crSigPrCpo.UniCompos), "crSigCdUni", "CUnis")
+                                =SEEK(crSigPrCpo.CGrus, "crSigCdGrp", "CGrus")
 
-                                LOCAL loc_lnVlrCvs, loc_lnQtdCvs, loc_lnMarkCv2
-                                LOCAL loc_lnCotMcf, loc_lnCotMpv
-                                IF CrSigCdGrp.PCustVens <> 0
-                                    loc_lnVlrCvs = ROUND(CrSigPrCpo.PCompos * (1 + CrSigCdGrp.PCustVens/100), 3)
+                                IF crSigCdGrp.PCustVens <> 0
+                                    REPLACE VlrCvs WITH ;
+                                        ROUND(crSigPrCpo.PCompos * (1 + (crSigCdGrp.PCustVens / 100)), 3) ;
+                                        IN crSigPrCpo
                                 ELSE
-                                    loc_lnVlrCvs = CrSigPrCpo.PCompos
-                                ENDIF
-                                IF CrSigCdUni.PCustVens <> 0
-                                    loc_lnQtdCvs = ROUND(CrSigPrCpo.Qtds * (1 + CrSigCdUni.PCustVens/100), 3)
-                                ELSE
-                                    loc_lnQtdCvs = CrSigPrCpo.Qtds
+                                    REPLACE VlrCvs WITH crSigPrCpo.PCompos IN crSigPrCpo
                                 ENDIF
 
-                                IF ALLTRIM(CrSigPrCpo.Moeds) <> ALLTRIM(CrCompoPro.Moevs)
-                                    loc_lcMoeAlias = ALLTRIM(CrSigPrCpo.Moeds)
-                                    IF SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                                    ELSE
-                                        loc_lnQtdeqs = 1
+                                IF crSigCdUni.PCustVens <> 0
+                                    REPLACE QtdCvs WITH ;
+                                        ROUND(crSigPrCpo.Qtds * (1 + (crSigCdUni.PCustVens / 100)), 3) ;
+                                        IN crSigPrCpo
+                                ELSE
+                                    REPLACE QtdCvs WITH crSigPrCpo.Qtds IN crSigPrCpo
+                                ENDIF
+
+                                IF ALLTRIM(crSigPrCpo.Moeds) <> ALLTRIM(CrCompoPro.Moevs)
+                                    loc_cMoedas = ALLTRIM(crSigPrCpo.Moeds)
+                                    loc_nQtdeqs = 1
+                                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                                     ENDIF
-                                    loc_lnCotMcf = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
+                                    loc_CotMcf = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
-                                    loc_lcMoeAlias = ALLTRIM(CrCompoPro.Moevs)
-                                    IF SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                                    ELSE
-                                        loc_lnQtdeqs = 1
+                                    loc_cMoedas = ALLTRIM(CrCompoPro.Moevs)
+                                    loc_nQtdeqs = 1
+                                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                                     ENDIF
-                                    loc_lnCotMpv = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
-
-                                    loc_lnMarkCv2 = ROUND(IIF(loc_lnVlrCvs = 0, 0, ;
-                                                    (CrCompoPro.Pvens * loc_lnCotMpv / IIF(loc_lnCotMcf=0,1,loc_lnCotMcf)) / loc_lnVlrCvs), 6)
+                                    loc_CotMpv = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                                    loc_MarkCv = ROUND(IIF(crSigPrCpo.VlrCvs = 0, 0, ;
+                                        (CrCompoPro.Pvens * loc_CotMpv / loc_CotMcf) / ;
+                                        crSigPrCpo.VlrCvs), 6)
                                 ELSE
-                                    loc_lnMarkCv2 = ROUND(IIF(loc_lnVlrCvs = 0, 0, CrCompoPro.Pvens / loc_lnVlrCvs), 6)
+                                    loc_MarkCv = ROUND(IIF(crSigPrCpo.VlrCvs = 0, 0, ;
+                                        CrCompoPro.Pvens / crSigPrCpo.VlrCvs), 6)
                                 ENDIF
 
-                                REPLACE VlrCvs  WITH loc_lnVlrCvs, ;
-                                        QtdCvs  WITH loc_lnQtdCvs, ;
-                                        MarkCvs WITH loc_lnMarkCv2, ;
-                                        DtMovs  WITH DATETIME(), ;
-                                        VlrPvs  WITH CrCompoPro.Pvens ;
-                                        IN CrSigPrCpo
+                                REPLACE MarkCvs WITH loc_MarkCv, ;
+                                    DtMovs  WITH DATETIME(), ;
+                                    VlrPvs  WITH CrCompoPro.Pvens IN crSigPrCpo
 
-                                loc_lnTotCv  = loc_lnTotCv  + ((CrSigPrCpo.VlrCvs * CrSigPrCpo.QtdCvs) * loc_lnMoem / IIF(loc_lnMoec=0,1,loc_lnMoec))
-                                loc_lnTotpCv = loc_lnTotpCv + ((CrSigPrCpo.VlrPvs * CrSigPrCpo.QtdCvs) * loc_lnMoevC / IIF(loc_lnMoedac=0,1,loc_lnMoedac))
-                            ENDIF
-
-                            IF USED("CrCompoPro")
-                                USE IN CrCompoPro
+                                loc_lnTotCv  = loc_lnTotCv  + ;
+                                    ((crSigPrCpo.VlrCvs * crSigPrCpo.QtdCvs) * loc_Moem / loc_Moec)
+                                loc_lnTotpCv = loc_lnTotpCv + ;
+                                    ((crSigPrCpo.VlrPvs * crSigPrCpo.QtdCvs) * loc_Moev / loc_Moedac)
                             ENDIF
                         ELSE
-                            *-- Material principal: calcular apenas cambio do componente
-                            loc_lcMoeAlias = ALLTRIM(CrSigPrCpo.Moeds)
-                            IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                            ELSE
-                                loc_lnQtdeqs = 1
+                            loc_cMoedas = ALLTRIM(crSigPrCpo.Moeds)
+                            loc_nQtdeqs = 1
+                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_lnMoem = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
+                            loc_Moem = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
                         ENDIF
 
                         IF loc_lnTpRecal <> 2
-                            =SEEK(ALLTRIM(CrSigPrCpo.Cgrus), "CrSigCdGrp", "Cgrus")
-                            IF INLIST(CrSigCdGrp.BPesos, 1, 3)
-                                LOCAL loc_lcUniPeso, loc_lnFatorU
-                                loc_lcUniPeso = IIF(CrSigCdGrp.BPesos = 1, ;
-                                                    ALLTRIM(CrSigPrCpo.UniCompos), ALLTRIM(CrSigPrCpo.CUniPs))
-                                IF SEEK(loc_lcUniPeso, "CrSigCdUni", "cUnis")
-                                    loc_lnFatorU = IIF(CrSigCdUni.Fators = 0, 1, CrSigCdUni.Fators)
-                                    SELECT CrSigPrCpo
-                                    loc_lnTQtde = loc_lnTQtde + ;
-                                                  (IIF(CrSigCdGrp.BPesos = 1, CrSigPrCpo.Qtds, CrSigPrCpo.Pesos) * loc_lnFatorU)
+                            =SEEK(crSigPrCpo.CGrus, "crSigCdGrp", "CGrus")
+                            IF INLIST(crSigCdGrp.BPesos, 1, 3)
+                                loc_cUniPeso = ""
+                                IF USED("CrCompoPro")
+                                    loc_cUniPeso = IIF(crSigCdGrp.BPesos = 1, ;
+                                        ALLTRIM(CrCompoPro.Cunis), ALLTRIM(CrCompoPro.CUniPs))
                                 ENDIF
+                                =SEEK(loc_cUniPeso, "crSigCdUni", "CUnis")
+                                loc_lnFator = IIF(crSigCdUni.Fators = 0, 1, crSigCdUni.Fators)
+                                SELECT crSigPrCpo
+                                loc_lnTQtde = loc_lnTQtde + ;
+                                    (IIF(crSigCdGrp.BPesos = 1, crSigPrCpo.Qtds, crSigPrCpo.Pesos) * ;
+                                    loc_lnFator)
                             ENDIF
-                            IF CrSigCdGrp.AtuComps <> 2
+                            IF crSigCdGrp.AtuComps <> 2
                                 loc_lnTotal = loc_lnTotal + ;
-                                              (CrSigPrCpo.PCompos * ;
-                                               IIF(CrSigCdGrp.chkInstalas = 2, CrSigPrCpo.Pesos, CrSigPrCpo.Qtds)) * ;
-                                              loc_lnMoem / IIF(loc_lnMoec=0,1,loc_lnMoec)
+                                    (crSigPrCpo.PCompos * ;
+                                    IIF(crSigCdGrp.chkInstalas = 2, crSigPrCpo.Pesos, crSigPrCpo.Qtds)) * ;
+                                    loc_Moem / loc_Moec
                             ENDIF
                         ENDIF
 
-                        IF CrSigCdGrp.cvestims = 1
+                        IF crSigCdGrp.cvestims = 1
                             loc_lnTotEstM = loc_lnTotEstM + ;
-                                            (CrSigPrCpo.PCompos * CrSigPrCpo.Qtds) * ;
-                                            loc_lnMoem / IIF(loc_lnMoedac=0,1,loc_lnMoedac)
+                                (crSigPrCpo.PCompos * crSigPrCpo.Qtds) * loc_Moem / loc_Moedac
                         ENDIF
-                        SELECT CrSigPrCpo
+
+                        IF !loc_llOk
+                            EXIT
+                        ENDIF
+                        SELECT crSigPrCpo
                     ENDSCAN
 
-                    *-- Atualizar codigo de feitio se opcao 7 ou 8
-                    SELECT CrSigCdPro
-                    loc_lcMarkCus = ALLTRIM(CrSigCdPro.cftiocs)
-                    loc_lcMarkVen = ALLTRIM(CrSigCdPro.cftios)
-                    IF INLIST(loc_lnTpRecal, 7, 8)
-                        IF loc_lnTpRecal = 7 AND !EMPTY(loc_lcFtiNew)
-                            loc_lcMarkCus = loc_lcFtiNew
-                        ENDIF
-                        IF loc_lnTpRecal = 8 AND !EMPTY(loc_lcFtiNew)
-                            loc_lcMarkVen = loc_lcFtiNew
-                        ENDIF
-                        REPLACE cftiocs WITH loc_lcMarkCus, ;
-                                cftios  WITH loc_lcMarkVen ;
-                                IN CrSigCdPro
+                    IF !loc_llOk
+                        EXIT
                     ENDIF
 
-                    *-- Acumular composicao calculada em TmpPrCpo
-                    SELECT CrSigPrCpo
+                    SELECT crSigCdPro
+                    loc_MarkCus = ALLTRIM(crSigCdPro.cftiocs)
+                    loc_MarkVen = ALLTRIM(crSigCdPro.cftios)
+
+                    IF INLIST(loc_lnTpRecal, 7, 8)
+                        IF loc_lnTpRecal = 7 AND !EMPTY(loc_lcFtiNew)
+                            loc_MarkCus = loc_lcFtiNew
+                        ENDIF
+                        IF loc_lnTpRecal = 8 AND !EMPTY(loc_lcFtiNew)
+                            loc_MarkVen = loc_lcFtiNew
+                        ENDIF
+                        REPLACE cftiocs WITH loc_MarkCus, cftios WITH loc_MarkVen IN crSigCdPro
+                    ENDIF
+
+                    SELECT crSigPrCpo
                     GO TOP
                     SCAN
-                        SCATTER MEMO MEMVAR
+                        SCATTER MEMVAR MEMO
                         SELECT TmpPrCpo
                         APPEND BLANK
-                        GATHER MEMVAR
-                        SELECT CrSigPrCpo
+                        GATHER MEMVAR MEMO
+                        SELECT crSigPrCpo
                     ENDSCAN
 
-                    *-- Criar LocalTGrupo a partir de CrSigPrCpo (para calculo feitio custo)
                     IF USED("LocalTGrupo")
                         USE IN LocalTGrupo
                     ENDIF
-                    SELECT Cgrus AS Grupo, Mats AS Cpros, dCompos AS Dgrus, ;
-                           Moeds AS Moeda, Pesos, Qtds, PCompos, ;
-                           0.000 AS ValGrupo, OrdTs ;
-                    FROM CrSigPrCpo ;
-                    ORDER BY 1, 2, 3 ;
-                    INTO CURSOR LocalTGrupo READWRITE
-                    =SEEK(ALLTRIM(CrSigCdPro.Cgrus), "CrSigCdGrp", "Cgrus")
+                    SELECT CGrus AS Grupo, Mats AS CPros, dCompos AS Dgrus, Moeds AS Moeda, ;
+                        Pesos, Qtds, PCompos, 0000000000.000 AS ValGrupo, OrdTs ;
+                        FROM crSigPrCpo ;
+                        ORDER BY 1, 2, 3 ;
+                        INTO CURSOR LocalTGrupo READWRITE
                     UPDATE LocalTGrupo SET ValGrupo = ;
-                        IIF(CrSigCdGrp.chkInstalas = 2, Pesos, Qtds) * PCompos
+                        IIF(crSigCdGrp.chkInstalas = 2, Pesos, Qtds) * PCompos
 
-                    *-- Calcular pftiocs (feitio de custo) se aplicavel
-                    IF !EMPTY(loc_lcMarkCus)
-                        loc_cSQL = "SELECT * FROM SigPrFti WHERE Cods = " + EscaparSQL(loc_lcMarkCus)
+                    *-- Feitio de custo (MarkCus)
+                    IF !EMPTY(loc_MarkCus)
                         IF USED("TmpFtio")
                             USE IN TmpFtio
                         ENDIF
-                        SQLEXEC(gnConnHandle, loc_cSQL, "TmpFtio")
+                        SQLEXEC(gnConnHandle, ;
+                            "Select * From SigPrFti Where Cods = " + EscaparSQL(loc_MarkCus), "TmpFtio")
                         SELECT TmpFtio
-                        IF RECCOUNT() > 0 AND TmpFtio.Acrescs = 0 AND ;
-                           TmpFtio.Valors = 0 AND loc_lnTpRecal <> 2
-                            loc_cSQL = "SELECT a.*, IsNull(b.Dgrus,'') AS Dgrus " + ;
-                                       "FROM SigPrFto a LEFT JOIN SigCdGrp b ON a.Cgrus = b.Cgrus " + ;
-                                       "WHERE a.Cods = " + EscaparSQL(loc_lcMarkCus) + " " + ;
-                                       "AND (a.Cgrus <> ' ' OR a.Ordem <> 0) ORDER BY a.Cods"
+                        IF RECCOUNT() > 0 AND TmpFtio.Acrescs = 0 AND TmpFtio.Valors = 0 AND ;
+                            loc_lnTpRecal <> 2
+
                             IF USED("TmpFtioC")
                                 USE IN TmpFtioC
                             ENDIF
-                            SQLEXEC(gnConnHandle, loc_cSQL, "TmpFtioC")
+                            loc_lcSql = "Select a.*, IsNull(b.Dgrus,'') as Dgrus " + ;
+                                "From SigPrFto a Left Join SigCdGrp b on a.Cgrus = b.Cgrus " + ;
+                                "Where a.Cods = '" + loc_MarkCus + ;
+                                "' And (a.Cgrus <> ' ' OR a.Ordem <> 0) Order by a.Cods"
+                            SQLEXEC(gnConnHandle, loc_lcSql, "TmpFtioC")
 
-                            LOCAL loc_lnVacm, loc_lnVFt, loc_lnVcoef, loc_lnVadic
+                            loc_lnCnt = 1
+                            loc_vacm  = 0
+                            loc_vFt   = 0
 
                             IF TmpFtio.AplsCus <> 1
-                                loc_lnVacm = 0
-                                loc_lnVFt  = 0
                                 SELECT LocalTGrupo
-                                GO TOP
                                 SCAN
                                     SELECT TmpFtioC
-                                    LOCATE FOR ALLTRIM(Cgrus) = ALLTRIM(LocalTGrupo.Grupo) AND ;
-                                              ALLTRIM(Cpros) = ALLTRIM(LocalTGrupo.Cpros)
+                                    LOCATE FOR ALLTRIM(CGrus) = ALLTRIM(LocalTGrupo.Grupo) AND ;
+                                        ALLTRIM(CPros) = ALLTRIM(LocalTGrupo.CPros)
                                     IF EOF("TmpFtioC")
-                                        LOCATE FOR ALLTRIM(Cgrus) = ALLTRIM(LocalTGrupo.Grupo) AND EMPTY(Cpros)
+                                        LOCATE FOR ALLTRIM(CGrus) = ALLTRIM(LocalTGrupo.Grupo) AND EMPTY(CPros)
                                     ENDIF
                                     IF EOF("TmpFtioC")
-                                        LOCATE FOR Ordem = LocalTGrupo.OrdTs AND EMPTY(Cpros)
+                                        LOCATE FOR Ordem = LocalTGrupo.OrdTs AND EMPTY(CPros)
                                     ENDIF
                                     IF !EOF("TmpFtioC")
-                                        LOCAL loc_lnCoefC, loc_lnMoeFtiC, loc_lnMoeGrpC
-                                        loc_lnCoefC   = IIF(EOF("TmpFtioC"), 1, TmpFtioC.Coefs)
-                                        loc_lnMoeFtiC = 1
-                                        loc_lnMoeGrpC = 1
-                                        IF !EMPTY(ALLTRIM(TmpFtio.Moedas)) AND ;
-                                           ALLTRIM(TmpFtio.Moedas) <> ALLTRIM(LocalTGrupo.Moeda)
-                                            loc_lnMoeFtiC = fBuscarCotacao(ALLTRIM(TmpFtio.Moedas), DATETIME())
-                                            loc_lnMoeGrpC = fBuscarCotacao(ALLTRIM(LocalTGrupo.Moeda), DATETIME())
+                                        loc_Coef = TmpFtioC.Coefs
+                                        IF EOF()
+                                            loc_Coef = 1
                                         ENDIF
-                                        loc_lnVcoef = ROUND(LocalTGrupo.ValGrupo * ;
-                                                      loc_lnMoeGrpC / IIF(loc_lnMoeFtiC=0,1,loc_lnMoeFtiC), 3)
-                                        loc_lnVadic = ROUND(loc_lnVcoef * loc_lnCoefC - loc_lnVcoef, 3)
-                                        loc_lnVacm  = loc_lnVacm + loc_lnVcoef + loc_lnVadic
-                                        loc_lnVFt   = loc_lnVFt + loc_lnVadic
+                                        loc_MoecF = 1
+                                        loc_MoepF = 1
+                                        IF ALLTRIM(TmpFtio.Moedas) <> ALLTRIM(LocalTGrupo.Moeda)
+                                            loc_cMoedas = ALLTRIM(TmpFtio.Moedas)
+                                            loc_nQtdeqs = 1
+                                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND ;
+                                                !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                                            ENDIF
+                                            loc_MoecF = fBuscarCotacao(loc_cMoedas, DATETIME(), gnConnHandle) * loc_nQtdeqs
+
+                                            loc_cMoedas = ALLTRIM(LocalTGrupo.Moeda)
+                                            loc_nQtdeqs = 1
+                                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND ;
+                                                !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                                            ENDIF
+                                            loc_MoepF = fBuscarCotacao(loc_cMoedas, DATETIME(), gnConnHandle) * loc_nQtdeqs
+                                        ENDIF
+                                        loc_vcoef = ROUND(LocalTGrupo.ValGrupo * loc_MoepF / loc_MoecF, 3)
+                                        loc_vadic = ROUND((loc_vcoef * loc_Coef) - loc_vcoef, 3)
+                                        loc_vacm  = loc_vacm + loc_vcoef + loc_vadic
+                                        loc_vFt   = loc_vFt  + loc_vadic
+                                        loc_lnCnt = loc_lnCnt + 1
                                     ENDIF
                                     SELECT LocalTGrupo
                                 ENDSCAN
                             ELSE
-                                loc_lnVacm = CrSigCdPro.PCuss
-                                loc_lnVFt  = 0
+                                SELECT crSigCdPro
+                                loc_vacm  = crSigCdPro.PCuss
+                                loc_lnCnt = loc_lnCnt + 1
                             ENDIF
 
-                            *-- Componentes individuais de produto (ordem=0, cgrus=' ')
-                            loc_cSQL = "SELECT a.*, b.Dpros FROM SigPrFto a, SigCdPro b " + ;
-                                       "WHERE a.Cods = " + EscaparSQL(loc_lcMarkCus) + " " + ;
-                                       "AND a.Cpros = b.Cpros AND a.Cgrus = Space(3) AND a.Ordem = 0 " + ;
-                                       "ORDER BY a.Seqs"
                             IF USED("TmpFtioC")
                                 USE IN TmpFtioC
                             ENDIF
-                            SQLEXEC(gnConnHandle, loc_cSQL, "TmpFtioC")
+                            loc_lcSql = "Select a.*, b.Dpros From SigPrFto a, SigCdPro b " + ;
+                                "Where a.Cods = '" + loc_MarkCus + ;
+                                "' And a.Cpros = b.Cpros And a.Cgrus = Space(3) " + ;
+                                "And a.Ordem = 0 Order by a.Seqs"
+                            SQLEXEC(gnConnHandle, loc_lcSql, "TmpFtioC")
+
                             SELECT TmpFtioC
                             SCAN
-                                loc_lnVcoef = loc_lnVacm
+                                loc_vcoef = loc_vacm
                                 IF TmpFtio.DivMults = 1
-                                    loc_lnVadic = ROUND(loc_lnVcoef * TmpFtioC.Coefs - loc_lnVcoef, 3)
+                                    loc_vadic = ROUND((loc_vcoef * TmpFtioC.Coefs) - loc_vcoef, 3)
                                 ELSE
-                                    loc_lnVadic = ROUND(loc_lnVcoef / (1 - TmpFtioC.Coefs/100) - loc_lnVcoef, 3)
+                                    loc_vadic = ROUND((loc_vcoef / (1 - (TmpFtioC.Coefs / 100))) - loc_vcoef, 3)
                                 ENDIF
-                                loc_lnVacm = loc_lnVacm + loc_lnVadic
-                                loc_lnVFt  = loc_lnVFt + loc_lnVadic
+                                loc_vacm  = loc_vacm + loc_vadic
+                                loc_vFt   = loc_vFt  + loc_vadic
+                                loc_lnCnt = loc_lnCnt + 1
                             ENDSCAN
-                            REPLACE pftiocs WITH loc_lnVFt IN CrSigCdPro
+
+                            SELECT crSigCdPro
+                            REPLACE pftiocs WITH loc_vFt IN crSigCdPro
+
+                            IF USED("TmpFtioC")
+                                USE IN TmpFtioC
+                            ENDIF
+                        ENDIF
+                        IF USED("TmpFtio")
+                            USE IN TmpFtio
                         ENDIF
                     ENDIF
 
-                    *-- Calcular pftios (feitio de markup de venda) usando TotGrupo
-                    loc_lcFtioV = ALLTRIM(loc_lcMarkVen)
-                    =SEEK(loc_lcFtioV, "CrSigPrFti", "Cods")
-                    IF !EOF("CrSigPrFti") AND loc_lnTpRecal <> 2
+                    *-- Feitio de venda (MarkVen)
+                    loc_MarkVen = ALLTRIM(crSigCdPro.cftios)
+                    =SEEK(loc_MarkVen, "CrSigPrFti", "Cods")
+
+                    IF !EOF("CrSigPrFti") AND (loc_lnTpRecal <> 2)
                         IF CrSigPrFti.Acrescs = 0 AND CrSigPrFti.Valors = 0
-                            loc_lcMoeAlias = ALLTRIM(CrSigPrFti.Moedas)
-                            IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                                loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                                loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                            ELSE
-                                loc_lnQtdeqs = 1
+                            loc_cMoedas = ALLTRIM(CrSigPrFti.Moedas)
+                            loc_nQtdeqs = 1
+                            IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            LOCAL loc_lnMoeCftiV
-                            loc_lnMoeCftiV = fBuscarCotacao(loc_lcMoeAlias, DATETIME()) * loc_lnQtdeqs
+                            loc_Moec = fBuscarCotacao(loc_cMoedas, DATETIME(), gnConnHandle) * loc_nQtdeqs
 
                             SELECT CrSigPrFtiG
                             SET ORDER TO Cods
-                            SET KEY TO loc_lcFtioV
+                            SET KEY TO loc_MarkVen
 
-                            LOCAL loc_lnVacmV, loc_lnVFtV
-                            loc_lnVacmV = 0
-                            loc_lnVFtV  = 0
+                            loc_vacm = 0
+                            loc_vFt  = 0
 
                             SELECT TotGrupo
                             SCAN
                                 SELECT CrSigPrFtiG
-                                LOCATE FOR ALLTRIM(Cgrus) = ALLTRIM(TotGrupo.Grupo) AND ;
-                                          ALLTRIM(Cpros) = ALLTRIM(TotGrupo.Cpros)
+                                LOCATE FOR ALLTRIM(CGrus) = ALLTRIM(TotGrupo.Grupo) AND ;
+                                    ALLTRIM(CPros) = ALLTRIM(TotGrupo.CPros)
                                 IF EOF("CrSigPrFtiG")
-                                    LOCATE FOR ALLTRIM(Cgrus) = ALLTRIM(TotGrupo.Grupo)
+                                    LOCATE FOR ALLTRIM(CGrus) = ALLTRIM(TotGrupo.Grupo)
                                 ENDIF
-
-                                LOCAL loc_lnCoefV, loc_lnMoeGrpV
-                                loc_lnCoefV  = IIF(EOF("CrSigPrFtiG"), 1, CrSigPrFtiG.Coefs)
-                                loc_lnMoeGrpV = 1
-                                IF !EMPTY(ALLTRIM(CrSigPrFti.Moedas)) AND ;
-                                   ALLTRIM(CrSigPrFti.Moedas) <> ALLTRIM(TotGrupo.Moeda)
-                                    loc_lnMoeGrpV = fBuscarCotacao(ALLTRIM(TotGrupo.Moeda), DATETIME())
-                                    loc_lnVcoef = ROUND(TotGrupo.ValGrupo * ;
-                                                  loc_lnMoeGrpV / IIF(loc_lnMoeCftiV=0,1,loc_lnMoeCftiV), 3)
+                                loc_Coef = CrSigPrFtiG.Coefs
+                                IF EOF()
+                                    loc_Coef = 1
+                                ENDIF
+                                loc_MoepV = 1
+                                IF ALLTRIM(CrSigPrFti.Moedas) <> ALLTRIM(TotGrupo.Moeda)
+                                    loc_cMoedas = ALLTRIM(TotGrupo.Moeda)
+                                    loc_nQtdeqs = 1
+                                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND ;
+                                        !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                                    ENDIF
+                                    loc_MoepV = fBuscarCotacao(loc_cMoedas, DATETIME(), gnConnHandle) * loc_nQtdeqs
+                                    loc_vcoef = ROUND(TotGrupo.ValGrupo * loc_MoepV / loc_Moec, 3)
                                 ELSE
-                                    loc_lnVcoef = TotGrupo.ValGrupo
+                                    loc_vcoef = TotGrupo.ValGrupo
                                 ENDIF
-                                loc_lnVadic  = ROUND(loc_lnVcoef * loc_lnCoefV - loc_lnVcoef, 3)
-                                loc_lnVacmV  = loc_lnVacmV + loc_lnVcoef + loc_lnVadic
-                                loc_lnVFtV   = loc_lnVFtV + loc_lnVadic
+                                loc_vadic = ROUND((loc_vcoef * loc_Coef) - loc_vcoef, 3)
+                                loc_vacm  = loc_vacm + loc_vcoef + loc_vadic
+                                loc_vFt   = loc_vFt  + loc_vadic
                                 SELECT TotGrupo
                             ENDSCAN
 
                             SELECT CrSigPrFtiP
                             SET ORDER TO Cods
-                            SET KEY TO loc_lcFtioV
-                            SELECT CrSigPrFtiP
+                            SET KEY TO loc_MarkVen
                             SCAN
-                                loc_lnVcoef = loc_lnVacmV
+                                loc_vcoef = loc_vacm
                                 IF CrSigPrFti.DivMults = 1
-                                    loc_lnVadic = ROUND(loc_lnVcoef * CrSigPrFtiP.Coefs - loc_lnVcoef, 3)
+                                    loc_vadic = ROUND((loc_vcoef * CrSigPrFtiP.Coefs) - loc_vcoef, 3)
                                 ELSE
-                                    loc_lnVadic = ROUND(loc_lnVcoef / (1 - CrSigPrFtiP.Coefs/100) - loc_lnVcoef, 3)
+                                    loc_vadic = ROUND((loc_vcoef / (1 - (CrSigPrFtiP.Coefs / 100))) - loc_vcoef, 3)
                                 ENDIF
-                                loc_lnVacmV = loc_lnVacmV + loc_lnVadic
-                                loc_lnVFtV  = loc_lnVFtV + loc_lnVadic
+                                loc_vacm = loc_vacm + loc_vadic
+                                loc_vFt  = loc_vFt  + loc_vadic
                             ENDSCAN
-                            REPLACE pftios WITH loc_lnVFtV, ;
-                                    mFtios WITH CrSigPrFti.Moedas, ;
-                                    Moedas WITH IIF(EMPTY(ALLTRIM(CrSigCdPro.Moedas)), ;
-                                                    CrSigPrFti.Moedas, CrSigCdPro.Moedas) ;
-                                    IN CrSigCdPro
+
+                            SELECT crSigCdPro
+                            REPLACE pftios  WITH loc_vFt, ;
+                                mFtios  WITH CrSigPrFti.Moedas, ;
+                                Moedas  WITH IIF(EMPTY(ALLTRIM(crSigCdPro.Moedas)), ;
+                                    CrSigPrFti.Moedas, crSigCdPro.Moedas) IN crSigCdPro
+
+                            SET KEY TO IN CrSigPrFtiG
+                            SET KEY TO IN CrSigPrFtiP
                         ELSE
+                            loc_lnTFtio = CrSigPrFti.Valors * crSigCdPro.PesoMs
                             REPLACE mFtios WITH CrSigPrFti.Moedas, ;
-                                    pftios WITH CrSigPrFti.Valors * CrSigCdPro.PesoMs ;
-                                    IN CrSigCdPro
+                                pftios WITH loc_lnTFtio IN crSigCdPro
                         ENDIF
                     ENDIF
 
-                    *-- Acumular peso e custo totais
                     IF loc_lnTQtde <> 0
-                        REPLACE PesoMs WITH loc_lnTQtde IN CrSigCdPro
+                        SELECT crSigCdPro
+                        REPLACE PesoMs WITH loc_lnTQtde IN crSigCdPro
                     ENDIF
                     IF loc_lnTotal <> 0
-                        REPLACE PCuss WITH loc_lnTotal IN CrSigCdPro
+                        SELECT crSigCdPro
+                        REPLACE PCuss WITH loc_lnTotal IN crSigCdPro
                     ENDIF
 
-                    *-- Aplicar reajuste de markup e encargo
                     IF loc_lnTpRecal <> 2
+                        SELECT crSigCdPro
                         IF loc_lnMarkup > 0
-                            REPLACE Margems WITH loc_lnMarkup IN CrSigCdPro
+                            REPLACE Margems WITH loc_lnMarkup IN crSigCdPro
                         ELSE
-                            REPLACE Margems WITH CrSigCdPro.Margems * loc_lnReajuste IN CrSigCdPro
+                            REPLACE Margems WITH Margems * loc_lnReajuste IN crSigCdPro
                         ENDIF
                         IF loc_lnEncarg <> 0
-                            REPLACE Encargos WITH loc_lnEncarg IN CrSigCdPro
+                            REPLACE Encargos WITH loc_lnEncarg IN crSigCdPro
                         ENDIF
                     ENDIF
 
-                    *-- Calcular preco ideal
-                    loc_lnCusto   = CrSigCdPro.PCuss
-                    loc_lnfPeso   = CrSigCdPro.PesoMs * CrSigCdPro.Fcustos
-                    loc_lnFator   = CrSigCdPro.Margems
-                    loc_lnFeitio  = CrSigCdPro.pftios
-                    loc_lnFeitioC = CrSigCdPro.pftiocs
+                    SELECT crSigCdPro
+                    loc_Custo   = crSigCdPro.PCuss
+                    loc_fPeso   = crSigCdPro.PesoMs * crSigCdPro.Fcustos
+                    loc_Fator   = crSigCdPro.Margems
+                    loc_Feitio  = crSigCdPro.pftios
+                    loc_FeitioC = crSigCdPro.pftiocs
+                    loc_cFtioV  = ALLTRIM(crSigCdPro.cftios)
 
-                    *-- Taxas de cambio finais para calculo de preco
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moecs)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
+                    =SEEK(crSigCdPro.CGrus, "crSigCdGrp", "CGrus")
+
+                    IF USED("CrFtio")
+                        USE IN CrFtio
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT * FROM SigPrFti WHERE Cods = '" + ;
+                        loc_cFtioV + "'", "CrFtio")
+                    GO TOP IN CrFtio
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moecs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moec = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moepcs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moep = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moevs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moev = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.MoeCusfs)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moecf = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.Moedas)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moedac = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_cMoedas = ALLTRIM(crSigCdPro.mFtios)
+                    loc_nQtdeqs = 1
+                    IF SEEK(loc_cMoedas, "crSigCdMoe", "CMoes") AND !EMPTY(ALLTRIM(crSigCdMoe.Moeqs))
+                        loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
+                        loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
+                    ENDIF
+                    loc_Moeft = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+
+                    loc_MarkCv = ROUND(IIF(loc_lnTotCv = 0, 0, loc_lnTotpCv / loc_lnTotCv), 6)
+
+                    IF ALLTRIM(crSigCdPro.mFtios) <> ALLTRIM(crSigCdPro.MoeCusfs)
+                        loc_Feitio = loc_Feitio * loc_Moeft / loc_Moecf
+                    ENDIF
+                    IF ALLTRIM(crSigCdPro.Moepcs) <> ALLTRIM(crSigCdPro.MoeCusfs)
+                        loc_FeitioC = loc_FeitioC * loc_Moep / loc_Moecf
+                    ENDIF
+                    IF ALLTRIM(crSigCdPro.Moecs) <> ALLTRIM(crSigCdPro.MoeCusfs)
+                        loc_Custof = loc_Custo * loc_Moec / loc_Moecf
                     ELSE
-                        loc_lnQtdeqs = 1
+                        loc_Custof = loc_Custo
                     ENDIF
-                    loc_lnMoec = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
+                    loc_Custof = loc_Custof + loc_FeitioC
 
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moepcs)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoep = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moevs)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoev = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.MoeCusfs)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoecf = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.Moedas)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoedac = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    loc_lcMoeAlias = ALLTRIM(CrSigCdPro.mFtios)
-                    IF !EMPTY(loc_lcMoeAlias) AND SEEK(loc_lcMoeAlias, "CrSigCdMoe", "Cmoes")
-                        loc_lnQtdeqs  = IIF(EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)) OR CrSigCdMoe.Qtdeqs = 0, 1, CrSigCdMoe.Qtdeqs)
-                        loc_lcMoeAlias = IIF(!EMPTY(ALLTRIM(CrSigCdMoe.Moeqs)), ALLTRIM(CrSigCdMoe.Moeqs), loc_lcMoeAlias)
-                    ELSE
-                        loc_lnQtdeqs = 1
-                    ENDIF
-                    loc_lnMoeft = fBuscarCotacao(loc_lcMoeAlias, DATE()) * loc_lnQtdeqs
-
-                    *-- Ajuste de moedas do feitio
-                    IF ALLTRIM(CrSigCdPro.mFtios) <> ALLTRIM(CrSigCdPro.MoeCusfs)
-                        loc_lnFeitio = loc_lnFeitio * loc_lnMoeft / IIF(loc_lnMoecf=0,1,loc_lnMoecf)
-                    ENDIF
-                    IF ALLTRIM(CrSigCdPro.Moepcs) <> ALLTRIM(CrSigCdPro.MoeCusfs)
-                        loc_lnFeitioC = loc_lnFeitioC * loc_lnMoep / IIF(loc_lnMoecf=0,1,loc_lnMoecf)
-                    ENDIF
-                    IF ALLTRIM(CrSigCdPro.Moecs) <> ALLTRIM(CrSigCdPro.MoeCusfs)
-                        loc_lnCustof = loc_lnCusto * loc_lnMoec / IIF(loc_lnMoecf=0,1,loc_lnMoecf)
-                    ELSE
-                        loc_lnCustof = loc_lnCusto
-                    ENDIF
-                    loc_lnCustof = loc_lnCustof + loc_lnFeitioC
-
-                    *-- Aplicar peso ou fator de custo
-                    IF THIS.this_nCalcCusts = 2
-                        IF ALLTRIM(CrSigCdPro.Moepcs) <> ALLTRIM(CrSigCdPro.MoeCusfs)
-                            loc_lnCustof = loc_lnCustof * IIF(CrSigCdPro.Fcustos = 0, 1, ;
-                                           CrSigCdPro.Fcustos * loc_lnMoep / IIF(loc_lnMoecf=0,1,loc_lnMoecf))
+                    SELECT crSigCdPaC
+                    GO TOP
+                    IF crSigCdPaC.CalcCusts = 2
+                        IF ALLTRIM(crSigCdPro.Moepcs) <> ALLTRIM(crSigCdPro.MoeCusfs)
+                            loc_Custof = loc_Custof * ;
+                                IIF(crSigCdPro.Fcustos = 0, 1, crSigCdPro.Fcustos * loc_Moep / loc_Moecf)
                         ELSE
-                            loc_lnCustof = loc_lnCustof * IIF(CrSigCdPro.Fcustos = 0, 1, CrSigCdPro.Fcustos)
+                            loc_Custof = loc_Custof * IIF(crSigCdPro.Fcustos = 0, 1, crSigCdPro.Fcustos)
                         ENDIF
                     ELSE
-                        IF ALLTRIM(CrSigCdPro.Moepcs) <> ALLTRIM(CrSigCdPro.MoeCusfs)
-                            loc_lnCustof = loc_lnCustof + (loc_lnfPeso * loc_lnMoep / IIF(loc_lnMoecf=0,1,loc_lnMoecf))
+                        IF ALLTRIM(crSigCdPro.Moepcs) <> ALLTRIM(crSigCdPro.MoeCusfs)
+                            loc_Custof = loc_Custof + (loc_fPeso * loc_Moep / loc_Moecf)
                         ELSE
-                            loc_lnCustof = loc_lnCustof + loc_lnfPeso
+                            loc_Custof = loc_Custof + loc_fPeso
                         ENDIF
                     ENDIF
 
-                    *-- Se feitio de venda sem acrescimo, zerar fator (markup)
-                    LOCAL loc_lnFtioAcrescs, loc_lnFtioValors
-                    loc_lnFtioAcrescs = 0
-                    loc_lnFtioValors  = 0
-                    loc_lcFtioV = ALLTRIM(CrSigCdPro.cftios)
-                    IF !EMPTY(loc_lcFtioV) AND SEEK(loc_lcFtioV, "CrSigPrFti", "Cods")
-                        loc_lnFtioAcrescs = CrSigPrFti.Acrescs
-                        loc_lnFtioValors  = CrSigPrFti.Valors
-                    ENDIF
-                    IF !EMPTY(loc_lcFtioV) AND loc_lnFtioAcrescs = 0 AND loc_lnFtioValors = 0
-                        loc_lnFator = 0
+                    IF !EMPTY(loc_cFtioV) AND !EOF("CrFtio") AND ;
+                        CrFtio.Acrescs = 0 AND CrFtio.Valors = 0
+                        loc_Fator = 0
                     ENDIF
 
-                    *-- Preco ideal
-                    IF ALLTRIM(CrSigCdPro.MoeCusfs) <> ALLTRIM(CrSigCdPro.Moedas)
-                        loc_lnIdeal = (loc_lnCustof + loc_lnFeitio) * ;
-                                      loc_lnMoecf / IIF(loc_lnMoedac=0,1,loc_lnMoedac) * ;
-                                      IIF(loc_lnFator=0,1,loc_lnFator)
+                    IF ALLTRIM(crSigCdPro.MoeCusfs) <> ALLTRIM(crSigCdPro.Moedas)
+                        loc_Ideal = (loc_Custof + loc_Feitio) * loc_Moecf / loc_Moedac * ;
+                            IIF(loc_Fator = 0, 1, loc_Fator)
                     ELSE
-                        loc_lnIdeal = (loc_lnCustof + loc_lnFeitio) * IIF(loc_lnFator=0,1,loc_lnFator)
+                        loc_Ideal = (loc_Custof + loc_Feitio) * IIF(loc_Fator = 0, 1, loc_Fator)
                     ENDIF
 
-                    IF !EMPTY(loc_lcFtioV) AND loc_lnFtioAcrescs = 0 AND loc_lnFtioValors = 0
-                        REPLACE Margems WITH IIF(loc_lnCustof = 0, 0, ;
-                                               ROUND(loc_lnIdeal / loc_lnCustof, 6)) ;
-                                IN CrSigCdPro
+                    =SEEK(loc_cFtioV, "CrSigPrFti", "Cods")
+                    IF !EMPTY(loc_cFtioV) AND !EOF("CrSigPrFti") AND ;
+                        CrSigPrFti.Acrescs = 0 AND CrSigPrFti.Valors = 0
+                        SELECT crSigCdPro
+                        REPLACE Margems WITH ;
+                            IIF(loc_Custof = 0, 0, ROUND(loc_Ideal / loc_Custof, 6)) IN crSigCdPro
                     ENDIF
 
-                    *-- IdealCv (valor ideal pelo cambio/grupo)
-                    =SEEK(ALLTRIM(CrSigCdPro.Cgrus), "CrSigCdGrp", "Cgrus")
-                    IF CrSigCdGrp.TpCalcPs = 4
-                        loc_lnIdealCv = loc_lnCusto * CrSigCdPro.MarkupA
+                    SELECT crSigCdGrp
+                    IF crSigCdGrp.TpCalcPs = 4
+                        SELECT crSigCdPro
+                        loc_IdealCv = crSigCdPro.MarkupA * loc_Custo
                     ELSE
-                        loc_lnIdealCv = loc_lnIdeal
+                        loc_IdealCv = loc_Ideal
                     ENDIF
 
-                    *-- Arredondamento por faixa de grupo
-                    IF !EOF("CrSigCdGrp") AND CrSigCdGrp.Arredcs <> 0 AND CrSigCdGrp.TpCalcPs <> 2
-                        LOCAL loc_lnFatArred, loc_lnSoma
-                        loc_lnFatArred = CrSigCdGrp.Arredcs
-                        loc_lnSoma = loc_lnFatArred
-                        DO WHILE loc_lnSoma < loc_lnIdealCv
-                            loc_lnSoma = loc_lnSoma + loc_lnFatArred
+                    SELECT crSigCdGrp
+                    IF !EOF("crSigCdGrp") AND crSigCdGrp.Arredcs <> 0 AND crSigCdGrp.TpCalcPs <> 2
+                        loc_FatArred = crSigCdGrp.Arredcs
+                        loc_Soma = loc_FatArred
+                        DO WHILE loc_Soma < loc_IdealCv
+                            loc_Soma = loc_Soma + loc_FatArred
                         ENDDO
-                        loc_lnIdealCv = loc_lnSoma
-                        loc_lnIdeal = loc_lnIdealCv
+                        loc_IdealCv = loc_Soma
+                        loc_IdealCv = fArredondamento(loc_IdealCv, gnConnHandle)
+                        loc_Ideal   = IIF(!EMPTY(loc_IdealCv), loc_IdealCv, loc_Ideal)
                     ENDIF
 
-                    *-- Recalculo por cambio (opcoes 5 e 6)
-                    IF INLIST(loc_lnTpRecal, 5, 6)
-                        LOCAL loc_lnCotId, loc_lnCotVd, loc_lnPvenCamb, loc_lnVlVen
-                        loc_lnCotId   = fBuscarCotacao(ALLTRIM(CrSigCdPro.Moedas), DATETIME())
-                        loc_lnCotVd   = fBuscarCotacao(ALLTRIM(CrSigCdPro.Moevs), DATETIME())
-                        loc_lnPvenCamb = CrSigCdPro.Pvideals * loc_lnCotId / IIF(loc_lnCotVd=0,1,loc_lnCotVd)
-                        loc_lnVlVen   = loc_lnPvenCamb / IIF(CrSigCdPro.Encargos<>0, CrSigCdPro.Encargos, 1)
-                        IF loc_lnTpRecal = 6
-                            loc_lnPvenCamb = INT(CrSigCdPro.Pvideals * loc_lnCotId / IIF(loc_lnCotVd=0,1,loc_lnCotVd))
-                            loc_lnVlVen = INT(loc_lnPvenCamb / IIF(CrSigCdPro.Encargos<>0, CrSigCdPro.Encargos, 1))
-                        ENDIF
-                        SELECT CrSigCdPro
-                        REPLACE Pvens WITH loc_lnVlVen
-                    ENDIF
-
-                    *-- Atualizar campos de preco em CrSigCdPro
+                    SELECT crSigCdPro
                     IF loc_lnTpRecal <> 2
-                        REPLACE CustoFs  WITH loc_lnCustof IN CrSigCdPro
-                        REPLACE Pvideals WITH loc_lnIdeal  IN CrSigCdPro
-                        REPLACE Pvens    WITH IIF(loc_lnPvenda = 1, ;
-                                               loc_lnIdeal / IIF(CrSigCdPro.Encargos<>0, CrSigCdPro.Encargos, 1), ;
-                                               CrSigCdPro.Pvens) ;
-                                           IN CrSigCdPro
+                        REPLACE CustoFs  WITH loc_Custof, ;
+                            Pvideals WITH loc_Ideal, ;
+                            Pvens    WITH IIF(loc_lnPvenda = 1, ;
+                                loc_Ideal / IIF(Encargos <> 0, Encargos, 1), Pvens) IN crSigCdPro
                         IF loc_lnTotEstM > 0
-                            REPLACE Valors WITH loc_lnTotEstM IN CrSigCdPro
+                            REPLACE Valors WITH loc_lnTotEstM IN crSigCdPro
                         ENDIF
                     ENDIF
 
-                    loc_lnMarkUpa = IIF(CrSigCdPro.CustoFs = 0, 0, ;
-                                        ROUND((CrSigCdPro.Pvens * loc_lnMoev) / ;
-                                              (CrSigCdPro.CustoFs * IIF(loc_lnMoecf=0,1,loc_lnMoecf)), 3))
-                    REPLACE MarkupA WITH loc_lnMarkUpa IN CrSigCdPro
+                    loc_MarkUpa = IIF(crSigCdPro.CustoFs = 0, 0, ;
+                        ROUND((crSigCdPro.Pvens * loc_Moev) / (crSigCdPro.CustoFs * loc_Moecf), 3))
+                    REPLACE MarkupA WITH loc_MarkUpa IN crSigCdPro
 
-                    *-- Atualizar grid com valores calculados
-                    SELECT cursor_4c_Dados
-                    IF SEEK(ALLTRIM(CrSigCdPro.CPros), "cursor_4c_Dados", "CPros")
-                        REPLACE ValAtu  WITH CrSigCdPro.Pvens, ;
-                                CustoFs WITH CrSigCdPro.CustoFs ;
-                                IN cursor_4c_Dados
-                        REPLACE PVarias WITH IIF(cursor_4c_Dados.ValAnt = 0, 0, ;
-                                              ((cursor_4c_Dados.ValAtu/cursor_4c_Dados.ValAnt - 1)*100)) ;
-                                IN cursor_4c_Dados
-                        REPLACE CVarias WITH IIF(cursor_4c_Dados.CustoAfs = 0, 0, ;
-                                              ((cursor_4c_Dados.CustoFs/cursor_4c_Dados.CustoAfs - 1)*100)) ;
-                                IN cursor_4c_Dados
+                    IF INLIST(loc_lnTpRecal, 5, 6)
+                        loc_lnCotId = fBuscarCotacao(ALLTRIM(crSigCdPro.Moedas), DATETIME(), gnConnHandle)
+                        loc_lnCotVd = fBuscarCotacao(ALLTRIM(crSigCdPro.Moevs),  DATETIME(), gnConnHandle)
+                        loc_lnPven  = crSigCdPro.Pvideals * loc_lnCotId / ;
+                            IIF(loc_lnCotVd = 0, 1, loc_lnCotVd)
+                        loc_lnVlVen = loc_lnPven / ;
+                            IIF(crSigCdPro.Encargos <> 0, crSigCdPro.Encargos, 1)
+                        IF loc_lnTpRecal = 6
+                            loc_lnPven  = INT(crSigCdPro.Pvideals * loc_lnCotId / ;
+                                IIF(loc_lnCotVd = 0, 1, loc_lnCotVd))
+                            loc_lnVlVen = INT(loc_lnPven / ;
+                                IIF(crSigCdPro.Encargos <> 0, crSigCdPro.Encargos, 1))
+                        ENDIF
+                        SELECT crSigCdPro
+                        REPLACE Pvens WITH loc_lnVlVen IN crSigCdPro
                     ENDIF
-                    SELECT CrSigCdPro
+
+                    SELECT cursor_4c_Produtos
+                    REPLACE ValAtu  WITH crSigCdPro.Pvens, ;
+                        CustoFs WITH crSigCdPro.CustoFs IN cursor_4c_Produtos
+                    REPLACE PVarias WITH IIF(cursor_4c_Produtos.ValAnt = 0, 0, ;
+                        (((cursor_4c_Produtos.ValAtu / cursor_4c_Produtos.ValAnt) - 1) * 100)) ;
+                        IN cursor_4c_Produtos
+                    REPLACE CVarias WITH IIF(cursor_4c_Produtos.CustoAfs = 0, 0, ;
+                        (((cursor_4c_Produtos.CustoFs / cursor_4c_Produtos.CustoAfs) - 1) * 100)) ;
+                        IN cursor_4c_Produtos
+
+                    IF USED("CrFtio")
+                        USE IN CrFtio
+                    ENDIF
+                    IF USED("LocalTGrupo")
+                        USE IN LocalTGrupo
+                    ENDIF
+
+                    loc_loBarra.Update(.T.)
+
+                    IF !loc_llOk
+                        EXIT
+                    ENDIF
+                    SELECT crSigCdPro
                 ENDSCAN
+
+                loc_loBarra.Complete(.T.)
             ENDIF
 
-            loc_lSucesso = .T.
-            THIS.this_lProcessado = .T.
+            IF loc_llOk
+                SELECT cursor_4c_Produtos
+                SET ORDER TO CPros
+                GO TOP
+                loc_lSucesso = .T.
+            ENDIF
+
         CATCH TO loc_oErro
-            MsgErro("Erro no processamento: " + loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                " PROC=" + loc_oErro.Procedure, "Erro sigprccpBO.Processar")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AtualizarPrecos - Persiste precos calculados por Processar() no banco
-    * par_lAutomatico: .T. = modo automatico (sem confirmacoes)
-    * Retorna .T. se atualizacao bem-sucedida
-    * PRE-REQUISITO: Processar() deve ter sido chamado antes
+    PROCEDURE AtualizarPrecos(par_lImpEtiq)
+    *-- Grava recalculo no SQL Server (transacao). par_lImpEtiq: .T. = marcar etiquetas.
     *--------------------------------------------------------------------------
-    PROCEDURE AtualizarPrecos(par_lAutomatico)
-        LOCAL loc_lSucesso, loc_llReturn, loc_cSQL
-        LOCAL loc_lcCPros, loc_lcHora, loc_lcOrigem, loc_lcIdChaves
-        LOCAL loc_lnResult, loc_llImpEtiq
+        LOCAL loc_lSucesso, loc_oErro, loc_llOk, loc_lTransacaoAtiva
+        LOCAL loc_lcCPros, loc_lcHora, loc_lcIdChaves, loc_lcOrigem
+        LOCAL loc_cSQL, loc_lnResult, loc_cSetClauses
 
-        loc_lSucesso = .F.
-        loc_llReturn = .T.
+        loc_lSucesso       = .F.
+        loc_llOk           = .T.
+        loc_lTransacaoAtiva = .F.
 
-        IF VARTYPE(par_lAutomatico) <> "L"
-            par_lAutomatico = THIS.this_lAutomatico
-        ENDIF
-
-        *-- Confirmar atualizacao
-        IF !par_lAutomatico
-            IF !MsgConfirma("Atualiza ???", "Altera" + CHR(231) + CHR(227) + "o de Pre" + CHR(231) + "os")
-                RETURN .F.
-            ENDIF
-            loc_llImpEtiq = MsgConfirma("Confirma a Impress" + CHR(227) + "o das Etiquetas?", "")
-        ELSE
-            loc_llImpEtiq = .F.
-        ENDIF
-
-        *-- Selecionar apenas produtos marcados (lMarca=1)
-        IF USED("CsProdutos")
-            USE IN CsProdutos
-        ENDIF
-        SELECT * FROM cursor_4c_Dados WHERE lMarca = 1 ORDER BY CPros ;
-            INTO CURSOR CsProdutos READWRITE
-        SELECT CsProdutos
-        GO TOP
-        IF EOF()
-            IF !par_lAutomatico
-                MsgAviso("Nenhum Produto Selecionado !!!", "Sele" + CHR(231) + CHR(227) + "o Obrigat" + CHR(243) + "ria")
-            ENDIF
-            RETURN .F.
+        IF EMPTY(par_lImpEtiq)
+            par_lImpEtiq = .F.
         ENDIF
 
         TRY
-            SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")
-
-            SELECT CsProdutos
-            GO TOP
-            SCAN
-                loc_lcCPros = ALLTRIM(CsProdutos.CPros)
-
-                *-- Verificar se produto existe em CrSigCdPro (calculado por Processar)
-                IF !SEEK(loc_lcCPros, "CrSigCdPro", "CPros")
-                    SELECT CsProdutos
-                    LOOP
+            IF !THIS.this_lAutomatico
+                IF !MsgConfirma("Atualiza ???", "Altera" + CHR(231) + CHR(227) + "o de Pre" + CHR(231) + "os")
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_llOk = .T.
                 ENDIF
+            ENDIF
 
-                *-- Registrar historico de precos em SigCdPrc (antes da atualizacao)
-                loc_lcHora   = SUBSTR(TTOC(DATETIME()), 12, 8)
-                loc_lcOrigem = TTOC(DATETIME()) + " SigPrCcp"
-                loc_lcIdChaves = fUniqueIds()
+            IF loc_llOk
+                IF USED("cursor_4c_CsProdutos")
+                    USE IN cursor_4c_CsProdutos
+                ENDIF
+                SELECT * FROM cursor_4c_Produtos WHERE lMarca = 1 ORDER BY CPros ;
+                    INTO CURSOR cursor_4c_CsProdutos READWRITE NOFILTER
 
-                loc_cSQL = "INSERT INTO SigCdPrc (" + ;
-                           "cidchaves, dataalts, horaalts, usuaalts, origem, " + ;
-                           "matprincs, dtcomps, cbars, cgrus, clfiscals, colecoes, comis, " + ;
-                           "cpros, cunis, custofs, cvens, datas, datatrans, dpros, dtfilms, " + ;
-                           "fcustos, flagctabs, fvendas, icms, ifors, linhas, locals, margems, " + ;
-                           "moecs, moecusfs, moedas, moepcs, moepvs, moevs, notas, obspeds, " + ;
-                           "obspes, origmercs, pcuss, pesoms, pvens, pvideals, qmins, reffs, " + ;
-                           "sittricms, tcomps, tipos, transps, valors, varias, situas, dtincs, " + ;
-                           "sgrus, metals, teors, cftios, codservs, mftios, pftios, codcors, " + ;
-                           "codtams, compos, montadescs, digimaxs, ordcompos, ean13, cproeqs, " + ;
-                           "qtdcpnts, impetiqs, chkfunds, casas, mercs, pesobs, tamhs, tamls, " + ;
-                           "tamps, tptribs, volumes, ipis, dpro2s, encoms, codacbs, cravcers, " + ;
-                           "cunips, obsetqs, ultcomps, vultcomps, multcomps, markupa, tinsts, " + ;
-                           "cclass, nivelqs, cftiocs, pftiocs, usuincs, diasinas, idecpros, " + ;
-                           "fabrproprs, qtminfabs, tents, codfinp, codmatp, consigs, ltminsv, " + ;
-                           "status, aliqipis, codgarras, descecfs, encargos, idpro, nidentfixa, " + ;
-                           "pesobris, pesometal, pesopdrs, extipi, iats, dtsituas, conjunts)" + ;
-                           " SELECT " + ;
-                           EscaparSQL(loc_lcIdChaves) + ", GETDATE(), " + ;
-                           EscaparSQL(loc_lcHora) + ", " + ;
-                           EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ", " + ;
-                           EscaparSQL(loc_lcOrigem) + ", " + ;
-                           "matprincs, dtcomps, cbars, cgrus, clfiscals, colecoes, comis, " + ;
-                           "cpros, cunis, custofs, cvens, datas, datatrans, dpros, dtfilms, " + ;
-                           "fcustos, flagctabs, fvendas, icms, ifors, linhas, locals, margems, " + ;
-                           "moecs, moecusfs, moedas, moepcs, moepvs, moevs, notas, obspeds, " + ;
-                           "obspes, origmercs, pcuss, pesoms, pvens, pvideals, qmins, reffs, " + ;
-                           "sittricms, tcomps, tipos, transps, valors, varias, situas, dtincs, " + ;
-                           "sgrus, metals, teors, cftios, codservs, mftios, pftios, codcors, " + ;
-                           "codtams, compos, montadescs, digimaxs, ordcompos, ean13, cproeqs, " + ;
-                           "qtdcpnts, impetiqs, chkfunds, casas, mercs, pesobs, tamhs, tamls, " + ;
-                           "tamps, tptribs, volumes, ipis, dpro2s, encoms, codacbs, cravcers, " + ;
-                           "cunips, obsetqs, ultcomps, vultcomps, multcomps, markupa, tinsts, " + ;
-                           "cclass, nivelqs, cftiocs, pftiocs, usuincs, diasinas, idecpros, " + ;
-                           "fabrproprs, qtminfabs, tents, codfinp, codmatp, consigs, ltminsv, " + ;
-                           "status, aliqipis, codgarras, descecfs, encargos, idpro, nidentfixa, " + ;
-                           "pesobris, pesometal, pesopdrs, extipi, iats, dtsituas, conjunts " + ;
-                           "FROM SigCdPro WHERE cpros = " + EscaparSQL(loc_lcCPros)
-                loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                IF loc_lnResult < 1
-                    IF !par_lAutomatico
-                        MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (SigCdPrc)")
+                SELECT cursor_4c_CsProdutos
+                GO TOP
+                IF EOF("cursor_4c_CsProdutos")
+                    IF !THIS.this_lAutomatico
+                        MsgAviso("Nenhum Produto Selecionado !!!", ;
+                            "Sele" + CHR(231) + CHR(227) + "o Obrigat" + CHR(243) + "ria")
                     ENDIF
-                    loc_llReturn = .F.
-                    EXIT
+                    USE IN cursor_4c_CsProdutos
+                    loc_llOk = .F.
                 ENDIF
+            ENDIF
 
-                *-- Historico de composicao em SigPrCp2
-                SELECT TmpPrCpo
-                SET ORDER TO CPros
-                =SEEK(loc_lcCPros, "TmpPrCpo", "CPros")
-                SCAN WHILE ALLTRIM(CPros) = loc_lcCPros
-                    loc_lcIdChaves = fUniqueIds()
-                    loc_lcHora     = SUBSTR(TTOC(DATETIME()), 12, 8)
-                    loc_cSQL = "INSERT INTO SIGPRCP2 (" + ;
-                               "cidchaves, dataalts, horaalts, usuaalts, " + ;
-                               "cats, cgrus, cpros, datatrans, dcompos, dscgrp, etiqs, " + ;
-                               "grupos, mats, moeds, obscompos, ordems, pcompos, qtds, " + ;
-                               "qtscons, unicompos, compos, ordcompos, qtdcvs, vlrcvs, " + ;
-                               "dtmovs, cunips, markcvs, pesos, totas, tpalts, vlrpvs, " + ;
-                               "ordts, tipos, matriz, obsofs) VALUES (" + ;
-                               EscaparSQL(loc_lcIdChaves) + ", GETDATE(), " + ;
-                               EscaparSQL(loc_lcHora) + ", " + ;
-                               EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.cats))      + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.cgrus))     + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.cpros))     + ", " + ;
-                               "NULL, " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.dcompos))   + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.dscgrp))    + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.etiqs))     + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.grupos))    + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.mats))      + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.moeds))     + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.obscompos)) + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.ordems)   + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.pcompos)  + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.qtds)     + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.qtscons)  + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.unicompos)) + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.compos))   + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.ordcompos) + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.qtdcvs)   + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.vlrcvs)   + ", " + ;
-                               "GETDATE(), " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.cunips))    + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.markcvs)  + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.pesos)    + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.totas)    + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.tpalts)   + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.vlrpvs)   + ", " + ;
-                               FormatarNumeroSQL(TmpPrCpo.ordts)    + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.tipos))    + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.matriz))   + ", " + ;
-                               EscaparSQL(ALLTRIM(TmpPrCpo.obsofs))   + ")"
-                    loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                    IF loc_lnResult < 1
-                        IF !par_lAutomatico
-                            MsgErro("Favor Reinicializar o Processo!!!", "Falha (SigPrCp2)")
-                        ENDIF
-                        loc_llReturn = .F.
-                        EXIT
-                    ENDIF
-                    SELECT TmpPrCpo
-                ENDSCAN
-
-                IF !loc_llReturn
-                    EXIT
+            IF loc_llOk
+                IF SQLEXEC(gnConnHandle, "BEGIN TRANSACTION") < 1
+                    MsgErro("Falha ao iniciar transa" + CHR(231) + CHR(227) + "o.", ;
+                        "Erro sigprccpBO.AtualizarPrecos")
+                    loc_llOk = .F.
+                ELSE
+                    loc_lTransacaoAtiva = .T.
                 ENDIF
+            ENDIF
 
-                *-- Deletar SigPrPrt para este produto
-                SQLEXEC(gnConnHandle, ;
-                    "DELETE FROM SigPrPrt WHERE CPros = " + EscaparSQL(loc_lcCPros))
+            IF loc_llOk
+                LOCAL loc_loBarra
+                loc_loBarra = CREATEOBJECT("fwprogressbar", ;
+                    "Atualizando os Pre" + CHR(231) + "os...", RECCOUNT("cursor_4c_CsProdutos"))
+                loc_loBarra.Show
 
-                *-- Atualizar preco principal em SigCdPro
-                SELECT CrSigCdPro
-                IF SEEK(loc_lcCPros, "CrSigCdPro", "CPros")
-                    loc_cSQL = "UPDATE SigCdPro SET " + ;
-                               "CustoFs  = " + FormatarNumeroSQL(CrSigCdPro.CustoFs)  + ", " + ;
-                               "Pvideals = " + FormatarNumeroSQL(CrSigCdPro.Pvideals) + ", " + ;
-                               "Pvens    = " + FormatarNumeroSQL(CrSigCdPro.Pvens)    + ", " + ;
-                               "Margems  = " + FormatarNumeroSQL(CrSigCdPro.Margems)  + ", " + ;
-                               "Encargos = " + FormatarNumeroSQL(CrSigCdPro.Encargos) + ", " + ;
-                               "PesoMs   = " + FormatarNumeroSQL(CrSigCdPro.PesoMs)   + ", " + ;
-                               "PCuss    = " + FormatarNumeroSQL(CrSigCdPro.PCuss)    + ", " + ;
-                               "MarkupA  = " + FormatarNumeroSQL(CrSigCdPro.MarkupA)  + ", " + ;
-                               "pftios   = " + FormatarNumeroSQL(CrSigCdPro.pftios)   + ", " + ;
-                               "mFtios   = " + EscaparSQL(ALLTRIM(CrSigCdPro.mFtios)) + ", " + ;
-                               "Moedas   = " + EscaparSQL(ALLTRIM(CrSigCdPro.Moedas)) + ", " + ;
-                               "pftiocs  = " + FormatarNumeroSQL(CrSigCdPro.pftiocs)  + ", " + ;
-                               "cftios   = " + EscaparSQL(ALLTRIM(CrSigCdPro.cftios)) + ", " + ;
-                               "cftiocs  = " + EscaparSQL(ALLTRIM(CrSigCdPro.cftiocs))+ ", " + ;
-                               "Valors   = " + FormatarNumeroSQL(CrSigCdPro.Valors)   + ", " + ;
-                               "ImpEtiqs = " + IIF(loc_llImpEtiq, "1", "0") + " " + ;
-                               "WHERE cpros = " + EscaparSQL(loc_lcCPros)
-                    loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
-                    IF loc_lnResult < 1
-                        IF !par_lAutomatico
-                            MsgErro("Favor Reinicializar o Processo!!!", "Falha UPDATE SigCdPro")
-                        ENDIF
-                        loc_llReturn = .F.
-                        EXIT
-                    ENDIF
-                ENDIF
-
-                *-- Atualizar composicao em SigPrCpo com valores calculados
-                SELECT TmpPrCpo
-                SET ORDER TO CPros
-                =SEEK(loc_lcCPros, "TmpPrCpo", "CPros")
-                SCAN WHILE ALLTRIM(CPros) = loc_lcCPros
-                    loc_cSQL = "UPDATE SigPrCpo SET " + ;
-                               "PCompos   = " + FormatarNumeroSQL(TmpPrCpo.PCompos)   + ", " + ;
-                               "Moeds     = " + EscaparSQL(ALLTRIM(TmpPrCpo.Moeds))   + ", " + ;
-                               "UniCompos = " + EscaparSQL(ALLTRIM(TmpPrCpo.UniCompos))+ ", " + ;
-                               "CUniPs    = " + EscaparSQL(ALLTRIM(TmpPrCpo.CUniPs))  + ", " + ;
-                               "Cgrus     = " + EscaparSQL(ALLTRIM(TmpPrCpo.Cgrus))   + ", " + ;
-                               "DtMovs    = GETDATE(), " + ;
-                               "VlrCvs    = " + FormatarNumeroSQL(TmpPrCpo.VlrCvs)   + ", " + ;
-                               "QtdCvs    = " + FormatarNumeroSQL(TmpPrCpo.QtdCvs)   + ", " + ;
-                               "MarkCvs   = " + FormatarNumeroSQL(TmpPrCpo.MarkCvs)  + ", " + ;
-                               "VlrPvs    = " + FormatarNumeroSQL(TmpPrCpo.VlrPvs)   + " " + ;
-                               "WHERE cIdChaves = " + EscaparSQL(ALLTRIM(TmpPrCpo.cIdChaves))
-                    SQLEXEC(gnConnHandle, loc_cSQL)
-                    SELECT TmpPrCpo
-                ENDSCAN
-
-                SELECT CsProdutos
-            ENDSCAN
-
-            *-- Atualizar subgrupo por faixa de preco (se configurado)
-            IF loc_llReturn AND THIS.this_nNChkSubGrs = 1
-                SELECT CrSigCdPro
+                SELECT cursor_4c_CsProdutos
                 GO TOP
                 SCAN
-                    IF !SEEK(ALLTRIM(CrSigCdPro.CPros), "cursor_4c_Dados", "CPros")
-                        SELECT CrSigCdPro
+                    loc_loBarra.Update(.T., "Produto: " + ALLTRIM(cursor_4c_CsProdutos.CPros))
+                    loc_lcCPros = ALLTRIM(cursor_4c_CsProdutos.CPros)
+
+                    IF !SEEK(loc_lcCPros, "crSigCdPro", "CPros")
+                        SELECT cursor_4c_CsProdutos
                         LOOP
                     ENDIF
-                    IF cursor_4c_Dados.lMarca <> 1
-                        SELECT CrSigCdPro
-                        LOOP
+
+                    *-- Arquivar historico em SigCdPrc (INSERT SELECT FROM SigCdPro)
+                    loc_lcIdChaves = LEFT(fUniqueIds(), 20)
+                    loc_lcHora     = SUBSTR(TTOC(DATETIME()), 12, 8)
+                    loc_lcOrigem   = LEFT(TTOC(DATETIME()) + " SigPrCcp", 30)
+
+                    loc_cSQL = "INSERT INTO SigCdPrc (" + ;
+                        "cidchaves, dataalts, horaalts, usuaalts, origem, " + ;
+                        "matprincs, dtcomps, cbars, cgrus, clfiscals, colecoes, comis, " + ;
+                        "cpros, cunis, custofs, cvens, datas, datatrans, dpros, dtfilms, " + ;
+                        "fcustos, flagctabs, fvendas, icms, ifors, linhas, locals, margems, " + ;
+                        "moecs, moecusfs, moedas, moepcs, moepvs, moevs, notas, obspeds, " + ;
+                        "obspes, origmercs, pcuss, pesoms, pvens, pvideals, qmins, reffs, " + ;
+                        "sittricms, tcomps, tipos, transps, valors, varias, situas, dtincs, " + ;
+                        "sgrus, metals, teors, cftios, codservs, mftios, pftios, codcors, " + ;
+                        "codtams, compos, montadescs, digimaxs, ordcompos, ean13, cproeqs, " + ;
+                        "qtdcpnts, impetiqs, chkfunds, casas, mercs, pesobs, tamhs, tamls, " + ;
+                        "tamps, tptribs, volumes, ipis, dpro2s, encoms, codacbs, cravcers, " + ;
+                        "cunips, obsetqs, ultcomps, vultcomps, multcomps, markupa, tinsts, " + ;
+                        "cclass, nivelqs, cftiocs, pftiocs, usuincs, diasinas, idecpros, " + ;
+                        "fabrproprs, qtminfabs, tents, codfinp, codmatp, consigs, ltminsv, " + ;
+                        "status, aliqipis, codgarras, descecfs, encargos, idpro, nidentfixa, " + ;
+                        "pesobris, pesometal, pesopdrs, extipi, iats, dtsituas, conjunts) " + ;
+                        "SELECT " + ;
+                        EscaparSQL(loc_lcIdChaves) + ", GETDATE(), " + ;
+                        EscaparSQL(loc_lcHora) + ", " + ;
+                        EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ", " + ;
+                        EscaparSQL(loc_lcOrigem) + ", " + ;
+                        "matprincs, dtcomps, cbars, cgrus, clfiscals, colecoes, comis, " + ;
+                        "cpros, cunis, custofs, cvens, datas, datatrans, dpros, dtfilms, " + ;
+                        "fcustos, flagctabs, fvendas, icms, ifors, linhas, locals, margems, " + ;
+                        "moecs, moecusfs, moedas, moepcs, moepvs, moevs, notas, obspeds, " + ;
+                        "obspes, origmercs, pcuss, pesoms, pvens, pvideals, qmins, reffs, " + ;
+                        "sittricms, tcomps, tipos, transps, valors, varias, situas, dtincs, " + ;
+                        "sgrus, metals, teors, cftios, codservs, mftios, pftios, codcors, " + ;
+                        "codtams, compos, montadescs, digimaxs, ordcompos, ean13, cproeqs, " + ;
+                        "qtdcpnts, impetiqs, chkfunds, casas, mercs, pesobs, tamhs, tamls, " + ;
+                        "tamps, tptribs, volumes, ipis, dpro2s, encoms, codacbs, cravcers, " + ;
+                        "cunips, obsetqs, ultcomps, vultcomps, multcomps, markupa, tinsts, " + ;
+                        "cclass, nivelqs, cftiocs, pftiocs, usuincs, diasinas, idecpros, " + ;
+                        "fabrproprs, qtminfabs, tents, codfinp, codmatp, consigs, ltminsv, " + ;
+                        "status, aliqipis, codgarras, descecfs, encargos, idpro, nidentfixa, " + ;
+                        "pesobris, pesometal, pesopdrs, extipi, iats, dtsituas, conjunts " + ;
+                        "FROM SigCdPro WHERE cpros = " + EscaparSQL(loc_lcCPros)
+                    loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                    IF loc_lnResult < 1
+                        MsgErro("Falha ao arquivar hist" + CHR(243) + "rico em SigCdPrc: " + loc_lcCPros, ;
+                            "Erro sigprccpBO.AtualizarPrecos")
+                        SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                        loc_lTransacaoAtiva = .F.
+                        loc_llOk = .F.
                     ENDIF
-                    loc_cSQL = "SELECT * FROM SigCdPsg WHERE CGrus = '" + ALLTRIM(CrSigCdPro.cGrus) + ;
-                               "' ORDER BY nFaixaFins"
-                    IF USED("csSigCdPsg")
-                        USE IN csSigCdPsg
-                    ENDIF
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "csSigCdPsg")
-                    IF loc_nResult < 1
-                        IF !par_lAutomatico
-                            MsgErro("Favor reinicializar o processo !!!", "Falha (csSigCdPsg)")
+
+                    *-- Arquivar composicao em SigPrCp2
+                    IF loc_llOk
+                        IF USED("cursor_4c_TmpCompo")
+                            USE IN cursor_4c_TmpCompo
                         ENDIF
-                        loc_llReturn = .F.
+                        loc_cSQL = "SELECT * FROM SigPrCpo WHERE CPros = " + EscaparSQL(loc_lcCPros)
+                        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCompo") > 0
+                            SELECT cursor_4c_TmpCompo
+                            GO TOP
+                            SCAN
+                                loc_lcIdChaves = LEFT(fUniqueIds(), 20)
+                                loc_lcHora     = SUBSTR(TTOC(DATETIME()), 12, 8)
+                                loc_cSQL = "INSERT INTO SigPrCp2 (" + ;
+                                    "cidchaves, dataalts, horaalts, usuaalts, " + ;
+                                    "cats, cgrus, cpros, datatrans, dcompos, dscgrp, etiqs, " + ;
+                                    "grupos, mats, moeds, obscompos, ordems, pcompos, qtds, " + ;
+                                    "qtscons, unicompos, compos, ordcompos, qtdcvs, vlrcvs, " + ;
+                                    "dtmovs, cunips, markcvs, pesos, totas, tpalts, vlrpvs, " + ;
+                                    "ordts, tipos, matriz, obsofs) VALUES (" + ;
+                                    EscaparSQL(loc_lcIdChaves) + ", GETDATE(), " + ;
+                                    EscaparSQL(loc_lcHora) + ", " + ;
+                                    EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.cats))      + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.cgrus))     + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.cpros))     + ", " + ;
+                                    "NULL, " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.dcompos))   + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.dscgrp))    + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.etiqs))     + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.grupos))    + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.mats))      + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.moeds))     + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.obscompos)) + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.ordems)    + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.pcompos)   + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.qtds)      + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.qtscons)   + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.unicompos)) + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.compos))   + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.ordcompos) + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.qtdcvs)    + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.vlrcvs)    + ", " + ;
+                                    "GETDATE(), " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.cunips))    + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.markcvs)   + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.pesos)     + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.totas)     + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.tpalts)    + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.vlrpvs)    + ", " + ;
+                                    FormatarNumeroSQL(cursor_4c_TmpCompo.ordts)     + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.tipos))    + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.matriz))   + ", " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_TmpCompo.obsofs))   + ")"
+                                loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                                IF loc_lnResult < 1
+                                    MsgErro("Falha ao arquivar SigPrCp2: " + loc_lcCPros, ;
+                                        "Erro sigprccpBO.AtualizarPrecos")
+                                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                                    loc_lTransacaoAtiva = .F.
+                                    loc_llOk = .F.
+                                    EXIT
+                                ENDIF
+                                SELECT cursor_4c_TmpCompo
+                            ENDSCAN
+                            USE IN cursor_4c_TmpCompo
+                        ENDIF
+                    ENDIF
+
+                    *-- Remover tabela de reticencia de precos
+                    IF loc_llOk
+                        SQLEXEC(gnConnHandle, ;
+                            "DELETE FROM SigPrPrt WHERE CPros = " + EscaparSQL(loc_lcCPros))
+                    ENDIF
+
+                    *-- Subgrupo por faixa de preco (se configurado)
+                    IF loc_llOk AND USED("crSigCdPaC") AND !EOF("crSigCdPaC") AND ;
+                        crSigCdPaC.nChkSubGrs = 1
+                        IF USED("cursor_4c_SigCdPsg")
+                            USE IN cursor_4c_SigCdPsg
+                        ENDIF
+                        loc_cSQL = "SELECT * FROM SigCdPsg WHERE CGrus = " + ;
+                            EscaparSQL(ALLTRIM(crSigCdPro.cGrus)) + ;
+                            " ORDER BY nFaixaFins"
+                        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigCdPsg") > 0
+                            LOCAL loc_lnPVens
+                            loc_lnPVens = IIF(crSigCdPro.Pvens = 0, crSigCdPro.pvideals, crSigCdPro.Pvens)
+                            SELECT cursor_4c_SigCdPsg
+                            LOCATE FOR nFaixaFins >= loc_lnPVens
+                            IF !EOF("cursor_4c_SigCdPsg")
+                                SQLEXEC(gnConnHandle, ;
+                                    "UPDATE SigCdPro SET sGrus = " + ;
+                                    EscaparSQL(ALLTRIM(cursor_4c_SigCdPsg.Codigos)) + ;
+                                    " WHERE cpros = " + EscaparSQL(loc_lcCPros))
+                            ENDIF
+                            USE IN cursor_4c_SigCdPsg
+                        ENDIF
+                    ENDIF
+
+                    *-- Atualizar SigCdPro com precos recalculados
+                    IF loc_llOk AND SEEK(loc_lcCPros, "crSigCdPro", "CPros")
+                        loc_lcHora = SUBSTR(TTOC(DATETIME()), 12, 8)
+                        loc_cSetClauses = ;
+                            "CustoFs   = " + FormatarNumeroSQL(crSigCdPro.CustoFs)    + ", " + ;
+                            "Pvideals  = " + FormatarNumeroSQL(crSigCdPro.Pvideals)   + ", " + ;
+                            "Pvens     = " + FormatarNumeroSQL(crSigCdPro.Pvens)      + ", " + ;
+                            "Margems   = " + FormatarNumeroSQL(crSigCdPro.Margems)    + ", " + ;
+                            "Encargos  = " + FormatarNumeroSQL(crSigCdPro.Encargos)   + ", " + ;
+                            "PesoMs    = " + FormatarNumeroSQL(crSigCdPro.PesoMs)     + ", " + ;
+                            "PCuss     = " + FormatarNumeroSQL(crSigCdPro.PCuss)      + ", " + ;
+                            "pftios    = " + FormatarNumeroSQL(crSigCdPro.pftios)     + ", " + ;
+                            "mFtios    = " + EscaparSQL(ALLTRIM(crSigCdPro.mFtios))   + ", " + ;
+                            "Moedas    = " + EscaparSQL(ALLTRIM(crSigCdPro.Moedas))   + ", " + ;
+                            "pftiocs   = " + FormatarNumeroSQL(crSigCdPro.pftiocs)    + ", " + ;
+                            "cftiocs   = " + EscaparSQL(ALLTRIM(crSigCdPro.cftiocs))  + ", " + ;
+                            "cftios    = " + EscaparSQL(ALLTRIM(crSigCdPro.cftios))   + ", " + ;
+                            "MarkupA   = " + FormatarNumeroSQL(crSigCdPro.MarkupA)    + ", " + ;
+                            "Valors    = " + FormatarNumeroSQL(crSigCdPro.Valors)     + ", " + ;
+                            "ImpEtiqs  = " + IIF(par_lImpEtiq, "1", "0")              + ", " + ;
+                            "DataAlts  = GETDATE(), " + ;
+                            "HoraAlts  = " + EscaparSQL(loc_lcHora) + ", " + ;
+                            "UsuaAlts  = " + EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10))
+
+                        loc_cSQL = "UPDATE SigCdPro SET " + loc_cSetClauses + ;
+                            " WHERE CPros = " + EscaparSQL(loc_lcCPros)
+                        loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                        IF loc_lnResult < 1
+                            MsgErro("Falha ao atualizar SigCdPro: " + loc_lcCPros, ;
+                                "Erro sigprccpBO.AtualizarPrecos")
+                            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                            loc_lTransacaoAtiva = .F.
+                            loc_llOk = .F.
+                        ENDIF
+                    ENDIF
+
+                    *-- Atualizar composicao em SigPrCpo (TmpPrCpo -> UPDATE)
+                    IF loc_llOk AND USED("TmpPrCpo") AND SEEK(loc_lcCPros, "TmpPrCpo", "CPros")
+                        SCAN WHILE ALLTRIM(TmpPrCpo.CPros) = loc_lcCPros
+                            loc_cSQL = "UPDATE SigPrCpo SET " + ;
+                                "PCompos   = " + FormatarNumeroSQL(TmpPrCpo.PCompos)  + ", " + ;
+                                "Moeds     = " + EscaparSQL(ALLTRIM(TmpPrCpo.Moeds))  + ", " + ;
+                                "UniCompos = " + EscaparSQL(ALLTRIM(TmpPrCpo.UniCompos)) + ", " + ;
+                                "CUniPs    = " + EscaparSQL(ALLTRIM(TmpPrCpo.CUniPs)) + ", " + ;
+                                "Cgrus     = " + EscaparSQL(ALLTRIM(TmpPrCpo.Cgrus))  + ", " + ;
+                                "DtMovs    = GETDATE(), " + ;
+                                "VlrCvs    = " + FormatarNumeroSQL(TmpPrCpo.VlrCvs)   + ", " + ;
+                                "QtdCvs    = " + FormatarNumeroSQL(TmpPrCpo.QtdCvs)   + ", " + ;
+                                "MarkCvs   = " + FormatarNumeroSQL(TmpPrCpo.MarkCvs)  + ", " + ;
+                                "VlrPvs    = " + FormatarNumeroSQL(TmpPrCpo.VlrPvs)   + ;
+                                " WHERE cIdChaves = " + EscaparSQL(ALLTRIM(TmpPrCpo.cIdChaves))
+                            loc_lnResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                            IF loc_lnResult < 1
+                                MsgErro("Falha ao atualizar SigPrCpo: " + loc_lcCPros, ;
+                                    "Erro sigprccpBO.AtualizarPrecos")
+                                SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                                loc_lTransacaoAtiva = .F.
+                                loc_llOk = .F.
+                                EXIT
+                            ENDIF
+                        ENDSCAN
+                    ENDIF
+
+                    IF !loc_llOk
                         EXIT
                     ENDIF
-                    LOCAL loc_lnPVens
-                    loc_lnPVens = IIF(CrSigCdPro.pVens = 0, CrSigCdPro.pvideals, CrSigCdPro.pVens)
-                    SELECT csSigCdPsg
-                    LOCATE FOR nFaixaFins >= loc_lnPVens
-                    IF !EOF("csSigCdPsg")
-                        loc_cSQL = "UPDATE SigCdPro SET sGrus = " + ;
-                                   EscaparSQL(ALLTRIM(csSigCdPsg.Codigos)) + ;
-                                   " WHERE cpros = " + EscaparSQL(ALLTRIM(CrSigCdPro.CPros))
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDIF
-                    IF USED("csSigCdPsg")
-                        USE IN csSigCdPsg
-                    ENDIF
-                    SELECT CrSigCdPro
+                    SELECT cursor_4c_CsProdutos
                 ENDSCAN
+
+                loc_loBarra.Complete(.T.)
             ENDIF
 
-            IF loc_llReturn
-                SQLEXEC(gnConnHandle, "COMMIT TRANSACTION")
-                IF !par_lAutomatico
-                    MsgInfo("Processamento Finalizado com Sucesso !!!", "")
+            IF loc_llOk
+                IF SQLEXEC(gnConnHandle, "COMMIT TRANSACTION") >= 0
+                    loc_lTransacaoAtiva = .F.
+                    IF !THIS.this_lAutomatico
+                        MsgInfo("Processamento Finalizado com Sucesso !!!")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                    loc_lTransacaoAtiva = .F.
+                    MsgErro("Falha ao confirmar transa" + CHR(231) + CHR(227) + "o.", ;
+                        "Erro sigprccpBO.AtualizarPrecos")
                 ENDIF
-                loc_lSucesso = .T.
             ELSE
-                SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-                IF !par_lAutomatico
-                    MsgErro("Falha na Atualiza" + CHR(231) + CHR(227) + "o. Reinicie o Processo !!!", "Arquivo")
+                IF loc_lTransacaoAtiva
+                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                    loc_lTransacaoAtiva = .F.
                 ENDIF
+                IF !THIS.this_lAutomatico
+                    MsgErro("Falha na atualiza" + CHR(231) + CHR(227) + "o. Reinicie o Processo !!!", ;
+                        "Arquivo com falha")
+                ENDIF
+            ENDIF
+
+            IF USED("cursor_4c_CsProdutos")
+                USE IN cursor_4c_CsProdutos
+            ENDIF
+
+            IF USED("cursor_4c_Produtos")
+                ZAP IN cursor_4c_Produtos
             ENDIF
 
         CATCH TO loc_oErro
-            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
-            MsgErro("Erro ao atualizar precos: " + loc_oErro.Message, "Erro")
+            IF loc_lTransacaoAtiva
+                SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+            ENDIF
+            IF USED("cursor_4c_CsProdutos")
+                USE IN cursor_4c_CsProdutos
+            ENDIF
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                " PROC=" + loc_oErro.Procedure, "Erro sigprccpBO.AtualizarPrecos")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ProcessaAutomatico - Processa configuracoes de recalculo de SigCdCcp
-    * automaticamente, sem interacao com usuario
-    *--------------------------------------------------------------------------
     PROCEDURE ProcessaAutomatico()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
-        LOCAL loc_lnOldSel, loc_lnVaria
+    *-- Executa recalculo automatico para cada config ativa em SigCdCcp
+    *--------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro, loc_lcQuery, loc_lnVaria
 
         loc_lSucesso = .F.
-        loc_lnOldSel = SELECT()
 
         TRY
-            loc_cSQL = "SELECT * FROM SigCdCcp WHERE Inativas <> 1"
+            THIS.this_lAutomatico = .T.
+
+            IF USED("cursor_4c_Produtos")
+                ZAP IN cursor_4c_Produtos
+            ENDIF
+
+            loc_lcQuery = "SELECT * FROM SigCdCcp WHERE Inativas <> 1"
             IF USED("crSigCdCcp")
                 USE IN crSigCdCcp
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdCcp")
-            IF loc_nResult < 1
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha (SigCdCcp)")
+            IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdCcp") < 1
+                MsgErro("Favor Reinicializar o Processo!!!", ;
+                    "Falha na Conex" + CHR(227) + "o (crSigCdCcp)")
             ELSE
                 SELECT crSigCdCcp
                 GO TOP
                 SCAN
-                    THIS.CriarCursorDados()
+                    IF USED("cursor_4c_Produtos")
+                        ZAP IN cursor_4c_Produtos
+                    ENDIF
 
-                    THIS.this_cFornecs  = ALLTRIM(crSigCdCcp.cfornecs)
-                    THIS.this_cMercI    = ALLTRIM(crSigCdCcp.merci)
-                    THIS.this_cMercF    = ALLTRIM(crSigCdCcp.mercf)
-                    THIS.this_cGruI     = ALLTRIM(crSigCdCcp.cgrui)
-                    THIS.this_cGruF     = ALLTRIM(crSigCdCcp.cgruf)
-                    THIS.this_cSGruI    = ALLTRIM(crSigCdCcp.sgrui)
-                    THIS.this_cSGruF    = ALLTRIM(crSigCdCcp.sgruf)
-                    THIS.this_cCuniI    = ALLTRIM(crSigCdCcp.cunii)
-                    THIS.this_cCuniF    = ALLTRIM(crSigCdCcp.cunif)
-                    THIS.this_cLinI     = ALLTRIM(crSigCdCcp.lini)
-                    THIS.this_cLinF     = ALLTRIM(crSigCdCcp.linf)
-                    THIS.this_cColI     = ALLTRIM(crSigCdCcp.coli)
-                    THIS.this_cColF     = ALLTRIM(crSigCdCcp.colf)
-                    THIS.this_cMoeI     = ALLTRIM(crSigCdCcp.moedai)
-                    THIS.this_cMoeF     = ALLTRIM(crSigCdCcp.moedaf)
-                    THIS.this_nFoption1 = NVL(crSigCdCcp.opcmoedatp, 1)
-                    THIS.this_nMrkI     = NVL(crSigCdCcp.mrki, 0)
-                    THIS.this_nMrkF     = NVL(crSigCdCcp.mrkf, 0)
-                    THIS.this_nEncI     = NVL(crSigCdCcp.enci, 0)
-                    THIS.this_nEncF     = NVL(crSigCdCcp.encf, 0)
-                    THIS.this_nVariacao = NVL(crSigCdCcp.variacao, 0)
-                    THIS.this_cFeitio   = ALLTRIM(crSigCdCcp.feitio)
-                    THIS.this_nSituacao = NVL(crSigCdCcp.opcsit, 3)
-                    THIS.this_nRecalc   = NVL(crSigCdCcp.opcrecalc, 1)
-                    THIS.this_nReajuste = NVL(crSigCdCcp.reajuste, 0)
-                    THIS.this_nEncargo  = NVL(crSigCdCcp.encargo, 0)
-                    THIS.this_nNMrk     = NVL(crSigCdCcp.nmrk, 0)
-                    THIS.this_nPven     = NVL(crSigCdCcp.opcpven, 2)
-                    THIS.this_cNewMkp   = ALLTRIM(crSigCdCcp.newmkp)
+                    SELECT crSigCdCcp
+                    THIS.CarregarDoCursor("crSigCdCcp")
 
                     IF THIS.Processar()
-                        *-- Filtrar por variacao
+                        SELECT cursor_4c_Produtos
                         loc_lnVaria = THIS.this_nVariacao
                         IF loc_lnVaria > 0
-                            DELETE FROM cursor_4c_Dados WHERE PVarias < loc_lnVaria
+                            DELETE FOR PVarias < loc_lnVaria
                         ENDIF
                         IF loc_lnVaria < 0
-                            DELETE FROM cursor_4c_Dados WHERE PVarias > loc_lnVaria
+                            DELETE FOR PVarias > loc_lnVaria
                         ENDIF
-                        *-- Marcar todos como selecionados para atualizacao
-                        UPDATE cursor_4c_Dados SET lMarca = 1
+                        SET ORDER TO CPros
+                        GO TOP
 
-                        IF !THIS.AtualizarPrecos(.T.)
+                        IF !THIS.AtualizarPrecos(.F.)
                             EXIT
                         ENDIF
                     ENDIF
@@ -1668,268 +1846,196 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                     SELECT crSigCdCcp
                 ENDSCAN
 
+                USE IN crSigCdCcp
                 loc_lSucesso = .T.
             ENDIF
+
         CATCH TO loc_oErro
-            MsgErro("Erro no processamento automatico: " + loc_oErro.Message, "Erro")
-        ENDTRY
-
-        SELECT (loc_lnOldSel)
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega TODAS as colunas do cursor SigPrCpo nas
-    * propriedades this_* do BO. Usado para operacoes CRUD individuais em
-    * registros de composicao de produto.
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-
-        IF !USED(par_cAliasCursor)
-            THIS.this_cMensagemErro = "Cursor n" + CHR(227) + "o est" + CHR(225) + " aberto: " + par_cAliasCursor
-            RETURN .F.
-        ENDIF
-
-        TRY
-            SELECT (par_cAliasCursor)
-
-            *-- Chave primaria e identificacao
-            THIS.this_cIdChaves  = ALLTRIM(NVL(cidchaves, ""))
-            THIS.this_cCats      = ALLTRIM(NVL(cats,      ""))
-            THIS.this_cCgrus     = ALLTRIM(NVL(cgrus,     ""))
-            THIS.this_cCpros     = ALLTRIM(NVL(cpros,     ""))
-            THIS.this_cPro       = THIS.this_cCpros
-
-            *-- Datas
-            IF TYPE(par_cAliasCursor + ".datatrans") != "U"
-                THIS.this_dDatatrans = IIF(ISNULL(datatrans), {}, datatrans)
-            ENDIF
-            IF TYPE(par_cAliasCursor + ".dtmovs") != "U"
-                THIS.this_dDtmovs = IIF(ISNULL(dtmovs), {}, dtmovs)
-            ENDIF
-
-            *-- Descricoes e textos
-            THIS.this_cDcompos   = ALLTRIM(NVL(dcompos,   ""))
-            THIS.this_cDscgrp    = ALLTRIM(NVL(dscgrp,    ""))
-            THIS.this_cEtiqs     = ALLTRIM(NVL(etiqs,     ""))
-            THIS.this_cGrupos    = ALLTRIM(NVL(grupos,    ""))
-            THIS.this_cMats      = ALLTRIM(NVL(mats,      ""))
-            THIS.this_cMoeds     = ALLTRIM(NVL(moeds,     ""))
-            THIS.this_cObscompos = ALLTRIM(NVL(obscompos, ""))
-            THIS.this_cUnicompos = ALLTRIM(NVL(unicompos, ""))
-            THIS.this_cCompos    = ALLTRIM(NVL(compos,    ""))
-            THIS.this_cCunips    = ALLTRIM(NVL(cunips,    ""))
-            THIS.this_cTipos     = ALLTRIM(NVL(tipos,     ""))
-            THIS.this_cMatriz    = ALLTRIM(NVL(matriz,    ""))
-            THIS.this_cObsofs    = ALLTRIM(NVL(obsofs,    ""))
-
-            *-- Valores numericos
-            THIS.this_nOrdems    = NVL(ordems,    0)
-            THIS.this_nPcompos   = NVL(pcompos,   0)
-            THIS.this_nQtds      = NVL(qtds,      0)
-            THIS.this_nQtscons   = NVL(qtscons,   0)
-            THIS.this_nOrdcompos = NVL(ordcompos, 0)
-            THIS.this_nQtdcvs    = NVL(qtdcvs,    0)
-            THIS.this_nVlrcvs    = NVL(vlrcvs,    0)
-            THIS.this_nMarkcvs   = NVL(markcvs,   0)
-            THIS.this_nPesos     = NVL(pesos,     0)
-            THIS.this_nTotas     = NVL(totas,     0)
-            THIS.this_nTpalts    = NVL(tpalts,    0)
-            THIS.this_nVlrpvs    = NVL(vlrpvs,    0)
-            THIS.this_nOrdts     = NVL(ordts,     0)
-
-            *-- PedraPrincipal (coluna case-sensitive no SQL Server, mas VFP e case-insensitive)
-            IF TYPE(par_cAliasCursor + ".PedraPrincipal") != "U"
-                THIS.this_nPedraPrincipal = NVL(PedraPrincipal, 0)
-            ENDIF
-
-            THIS.this_lNovoRegistro   = .F.
-            THIS.this_lDadosAlterados = .F.
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao carregar do cursor: " + loc_oErro.Message
-            MsgErro("Erro ao carregar dados de composi" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                " PROC=" + loc_oErro.Procedure, "Erro sigprccpBO.ProcessaAutomatico")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - Insere novo registro em SigPrCpo (composicao de produto)
-    * Chamado por BusinessBase.Salvar() quando this_lNovoRegistro = .T.
-    * Registra auditoria apos INSERT bem-sucedido.
+    PROCEDURE Inserir()
+    *-- Persiste a configuracao corrente em SigCdCcp (modo automatico).
+    *-- Gera cIdChaves via fUniqueIds() quando ainda nao ha chave carregada.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
+        LOCAL loc_lSucesso, loc_oErro, loc_cSQL, loc_cChave, loc_cEmpresa
         loc_lSucesso = .F.
 
         TRY
-            *-- Gerar chave primaria se vazia (padrao: cpros + ordems)
-            IF EMPTY(ALLTRIM(THIS.this_cIdChaves))
-                THIS.this_cIdChaves = LEFT(ALLTRIM(THIS.this_cCpros) + PADL(TRANSFORM(THIS.this_nOrdems), 6, "0"), 20)
-            ENDIF
-
-            loc_cSQL = "INSERT INTO SigPrCpo (" + ;
-                       "cats, cgrus, cpros, datatrans, dcompos, dscgrp, etiqs, " + ;
-                       "grupos, mats, moeds, obscompos, ordems, pcompos, qtds, " + ;
-                       "qtscons, unicompos, compos, ordcompos, cidchaves, qtdcvs, " + ;
-                       "vlrcvs, dtmovs, cunips, markcvs, pesos, totas, tpalts, " + ;
-                       "vlrpvs, ordts, tipos, matriz, obsofs, PedraPrincipal" + ;
-                       ") VALUES (" + ;
-                       EscaparSQL(THIS.this_cCats)      + ", " + ;
-                       EscaparSQL(THIS.this_cCgrus)     + ", " + ;
-                       EscaparSQL(THIS.this_cCpros)     + ", " + ;
-                       IIF(EMPTY(THIS.this_dDatatrans), "NULL", FormatarDataSQL(THIS.this_dDatatrans)) + ", " + ;
-                       EscaparSQL(THIS.this_cDcompos)   + ", " + ;
-                       EscaparSQL(THIS.this_cDscgrp)    + ", " + ;
-                       EscaparSQL(THIS.this_cEtiqs)     + ", " + ;
-                       EscaparSQL(THIS.this_cGrupos)    + ", " + ;
-                       EscaparSQL(THIS.this_cMats)      + ", " + ;
-                       EscaparSQL(THIS.this_cMoeds)     + ", " + ;
-                       EscaparSQL(THIS.this_cObscompos) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nOrdems)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nPcompos)   + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nQtds)      + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nQtscons)   + ", " + ;
-                       EscaparSQL(THIS.this_cUnicompos) + ", " + ;
-                       EscaparSQL(THIS.this_cCompos)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nOrdcompos) + ", " + ;
-                       EscaparSQL(THIS.this_cIdChaves)  + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nQtdcvs)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nVlrcvs)    + ", " + ;
-                       IIF(EMPTY(THIS.this_dDtmovs), "NULL", FormatarDataSQL(THIS.this_dDtmovs)) + ", " + ;
-                       EscaparSQL(THIS.this_cCunips)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nMarkcvs)   + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nPesos)     + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nTotas)     + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nTpalts)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nVlrpvs)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nOrdts)     + ", " + ;
-                       EscaparSQL(THIS.this_cTipos)     + ", " + ;
-                       EscaparSQL(THIS.this_cMatriz)    + ", " + ;
-                       EscaparSQL(THIS.this_cObsofs)    + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nPedraPrincipal) + ;
-                       ")"
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-
-            IF loc_nResult >= 0
-                *-- Registrar auditoria
-                THIS.RegistrarAuditoria("INSERT")
-                loc_lSucesso = .T.
+            IF gnConnHandle <= 0
+                MsgErro("Sem conex" + CHR(227) + "o com o banco de dados.", ;
+                    "Erro sigprccpBO.Inserir")
             ELSE
-                THIS.this_cMensagemErro = "Falha ao inserir registro em SigPrCpo"
-            ENDIF
+                IF EMPTY(THIS.this_cIdChaves)
+                    IF TYPE("fUniqueIds") = "U"
+                        loc_cChave = SYS(2015)
+                    ELSE
+                        loc_cChave = fUniqueIds()
+                    ENDIF
+                    THIS.this_cIdChaves = LEFT(ALLTRIM(loc_cChave), 20)
+                ENDIF
 
+                loc_cEmpresa = ALLTRIM(NVL(go_4c_Sistema.cCodEmpresa, ""))
+                IF EMPTY(loc_cEmpresa)
+                    loc_cEmpresa = ALLTRIM(THIS.this_cEmpresa)
+                ENDIF
+
+                loc_cSQL = "INSERT INTO SigCdCcp (" + ;
+                    "cIdChaves, codigo, Inativas, " + ;
+                    "cfornecs, merci, mercf, cgrui, cgruf, sgrui, sgruf, " + ;
+                    "cunii, cunif, lini, linf, coli, colf, " + ;
+                    "moedai, moedaf, opcmoedatp, " + ;
+                    "mrki, mrkf, enci, encf, variacao, feitio, " + ;
+                    "opcsit, opcrecalc, reajuste, encargo, nmrk, opcpven, newmkp" + ;
+                    ") VALUES (" + ;
+                    EscaparSQL(THIS.this_cIdChaves) + ", " + ;
+                    EscaparSQL(loc_cEmpresa) + ", " + ;
+                    "0, " + ;
+                    EscaparSQL(THIS.this_cCFornecs) + ", " + ;
+                    EscaparSQL(THIS.this_cMercI) + ", " + ;
+                    EscaparSQL(THIS.this_cMercF) + ", " + ;
+                    EscaparSQL(THIS.this_cCGrui) + ", " + ;
+                    EscaparSQL(THIS.this_cCGruf) + ", " + ;
+                    EscaparSQL(THIS.this_cSGruI) + ", " + ;
+                    EscaparSQL(THIS.this_cSGruF) + ", " + ;
+                    EscaparSQL(THIS.this_cCUniI) + ", " + ;
+                    EscaparSQL(THIS.this_cCUnif) + ", " + ;
+                    EscaparSQL(THIS.this_cLini) + ", " + ;
+                    EscaparSQL(THIS.this_cLinf) + ", " + ;
+                    EscaparSQL(THIS.this_cColi) + ", " + ;
+                    EscaparSQL(THIS.this_cColf) + ", " + ;
+                    EscaparSQL(THIS.this_cMoedai) + ", " + ;
+                    EscaparSQL(THIS.this_cMoedaf) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nOpcMoedaTp, 0) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nMrki, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nMrkf, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nEnci, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nEncf, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nVariacao, 2) + ", " + ;
+                    EscaparSQL(THIS.this_cFeitio) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nOpcSituacao, 0) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nOpcRecalc, 0) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nReajuste, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nEncargo, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nNMrk, 2) + ", " + ;
+                    FormatarNumeroSQL(THIS.this_nOpcPven, 0) + ", " + ;
+                    EscaparSQL(THIS.this_cNewMkp) + ")"
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
+                    MsgErro("Falha ao inserir configura" + CHR(231) + CHR(227) + ;
+                        "o em SigCdCcp.", "Erro sigprccpBO.Inserir")
+                ELSE
+                    THIS.RegistrarAuditoria("INSERT")
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao inserir composi" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro sigprccpBO.Inserir")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Atualizar - Atualiza registro existente em SigPrCpo
-    * Chamado por BusinessBase.Salvar() quando this_lNovoRegistro = .F.
-    * Registra auditoria apos UPDATE bem-sucedido.
+    PROCEDURE Atualizar()
+    *-- Atualiza a configuracao SigCdCcp identificada por this_cIdChaves.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
+        LOCAL loc_lSucesso, loc_oErro, loc_cSQL
         loc_lSucesso = .F.
 
-        IF EMPTY(ALLTRIM(THIS.this_cIdChaves))
-            THIS.this_cMensagemErro = "Chave prim" + CHR(225) + "ria vazia - n" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + "vel atualizar"
-            RETURN .F.
-        ENDIF
-
         TRY
-            loc_cSQL = "UPDATE SigPrCpo SET " + ;
-                       "cats = "      + EscaparSQL(THIS.this_cCats)      + ", " + ;
-                       "cgrus = "     + EscaparSQL(THIS.this_cCgrus)     + ", " + ;
-                       "cpros = "     + EscaparSQL(THIS.this_cCpros)     + ", " + ;
-                       "datatrans = " + IIF(EMPTY(THIS.this_dDatatrans), "NULL", FormatarDataSQL(THIS.this_dDatatrans)) + ", " + ;
-                       "dcompos = "   + EscaparSQL(THIS.this_cDcompos)   + ", " + ;
-                       "dscgrp = "    + EscaparSQL(THIS.this_cDscgrp)    + ", " + ;
-                       "etiqs = "     + EscaparSQL(THIS.this_cEtiqs)     + ", " + ;
-                       "grupos = "    + EscaparSQL(THIS.this_cGrupos)    + ", " + ;
-                       "mats = "      + EscaparSQL(THIS.this_cMats)      + ", " + ;
-                       "moeds = "     + EscaparSQL(THIS.this_cMoeds)     + ", " + ;
-                       "obscompos = " + EscaparSQL(THIS.this_cObscompos) + ", " + ;
-                       "ordems = "    + FormatarNumeroSQL(THIS.this_nOrdems)    + ", " + ;
-                       "pcompos = "   + FormatarNumeroSQL(THIS.this_nPcompos)   + ", " + ;
-                       "qtds = "      + FormatarNumeroSQL(THIS.this_nQtds)      + ", " + ;
-                       "qtscons = "   + FormatarNumeroSQL(THIS.this_nQtscons)   + ", " + ;
-                       "unicompos = " + EscaparSQL(THIS.this_cUnicompos) + ", " + ;
-                       "compos = "    + EscaparSQL(THIS.this_cCompos)    + ", " + ;
-                       "ordcompos = " + FormatarNumeroSQL(THIS.this_nOrdcompos) + ", " + ;
-                       "qtdcvs = "    + FormatarNumeroSQL(THIS.this_nQtdcvs)    + ", " + ;
-                       "vlrcvs = "    + FormatarNumeroSQL(THIS.this_nVlrcvs)    + ", " + ;
-                       "dtmovs = "    + IIF(EMPTY(THIS.this_dDtmovs), "NULL", FormatarDataSQL(THIS.this_dDtmovs)) + ", " + ;
-                       "cunips = "    + EscaparSQL(THIS.this_cCunips)    + ", " + ;
-                       "markcvs = "   + FormatarNumeroSQL(THIS.this_nMarkcvs)   + ", " + ;
-                       "pesos = "     + FormatarNumeroSQL(THIS.this_nPesos)     + ", " + ;
-                       "totas = "     + FormatarNumeroSQL(THIS.this_nTotas)     + ", " + ;
-                       "tpalts = "    + FormatarNumeroSQL(THIS.this_nTpalts)    + ", " + ;
-                       "vlrpvs = "    + FormatarNumeroSQL(THIS.this_nVlrpvs)    + ", " + ;
-                       "ordts = "     + FormatarNumeroSQL(THIS.this_nOrdts)     + ", " + ;
-                       "tipos = "     + EscaparSQL(THIS.this_cTipos)     + ", " + ;
-                       "matriz = "    + EscaparSQL(THIS.this_cMatriz)    + ", " + ;
-                       "obsofs = "    + EscaparSQL(THIS.this_cObsofs)    + ", " + ;
-                       "PedraPrincipal = " + FormatarNumeroSQL(THIS.this_nPedraPrincipal) + ;
-                       " WHERE cidchaves = " + EscaparSQL(THIS.this_cIdChaves)
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-
-            IF loc_nResult >= 0
-                *-- Registrar auditoria
-                THIS.RegistrarAuditoria("UPDATE")
-                loc_lSucesso = .T.
+            IF gnConnHandle <= 0
+                MsgErro("Sem conex" + CHR(227) + "o com o banco de dados.", ;
+                    "Erro sigprccpBO.Atualizar")
             ELSE
-                THIS.this_cMensagemErro = "Falha ao atualizar registro em SigPrCpo"
-            ENDIF
+                IF EMPTY(THIS.this_cIdChaves)
+                    MsgAviso("Configura" + CHR(231) + CHR(227) + ;
+                        "o sem chave: use Inserir para gravar uma nova.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                ELSE
+                    loc_cSQL = "UPDATE SigCdCcp SET " + ;
+                        "cfornecs = "   + EscaparSQL(THIS.this_cCFornecs) + ", " + ;
+                        "merci = "      + EscaparSQL(THIS.this_cMercI) + ", " + ;
+                        "mercf = "      + EscaparSQL(THIS.this_cMercF) + ", " + ;
+                        "cgrui = "      + EscaparSQL(THIS.this_cCGrui) + ", " + ;
+                        "cgruf = "      + EscaparSQL(THIS.this_cCGruf) + ", " + ;
+                        "sgrui = "      + EscaparSQL(THIS.this_cSGruI) + ", " + ;
+                        "sgruf = "      + EscaparSQL(THIS.this_cSGruF) + ", " + ;
+                        "cunii = "      + EscaparSQL(THIS.this_cCUniI) + ", " + ;
+                        "cunif = "      + EscaparSQL(THIS.this_cCUnif) + ", " + ;
+                        "lini = "       + EscaparSQL(THIS.this_cLini) + ", " + ;
+                        "linf = "       + EscaparSQL(THIS.this_cLinf) + ", " + ;
+                        "coli = "       + EscaparSQL(THIS.this_cColi) + ", " + ;
+                        "colf = "       + EscaparSQL(THIS.this_cColf) + ", " + ;
+                        "moedai = "     + EscaparSQL(THIS.this_cMoedai) + ", " + ;
+                        "moedaf = "     + EscaparSQL(THIS.this_cMoedaf) + ", " + ;
+                        "opcmoedatp = " + FormatarNumeroSQL(THIS.this_nOpcMoedaTp, 0) + ", " + ;
+                        "mrki = "       + FormatarNumeroSQL(THIS.this_nMrki, 2) + ", " + ;
+                        "mrkf = "       + FormatarNumeroSQL(THIS.this_nMrkf, 2) + ", " + ;
+                        "enci = "       + FormatarNumeroSQL(THIS.this_nEnci, 2) + ", " + ;
+                        "encf = "       + FormatarNumeroSQL(THIS.this_nEncf, 2) + ", " + ;
+                        "variacao = "   + FormatarNumeroSQL(THIS.this_nVariacao, 2) + ", " + ;
+                        "feitio = "     + EscaparSQL(THIS.this_cFeitio) + ", " + ;
+                        "opcsit = "     + FormatarNumeroSQL(THIS.this_nOpcSituacao, 0) + ", " + ;
+                        "opcrecalc = "  + FormatarNumeroSQL(THIS.this_nOpcRecalc, 0) + ", " + ;
+                        "reajuste = "   + FormatarNumeroSQL(THIS.this_nReajuste, 2) + ", " + ;
+                        "encargo = "    + FormatarNumeroSQL(THIS.this_nEncargo, 2) + ", " + ;
+                        "nmrk = "       + FormatarNumeroSQL(THIS.this_nNMrk, 2) + ", " + ;
+                        "opcpven = "    + FormatarNumeroSQL(THIS.this_nOpcPven, 0) + ", " + ;
+                        "newmkp = "     + EscaparSQL(THIS.this_cNewMkp) + " " + ;
+                        "WHERE cIdChaves = " + EscaparSQL(THIS.this_cIdChaves)
 
+                    IF SQLEXEC(gnConnHandle, loc_cSQL) < 0
+                        MsgErro("Falha ao atualizar configura" + CHR(231) + ;
+                            CHR(227) + "o em SigCdCcp.", "Erro sigprccpBO.Atualizar")
+                    ELSE
+                        THIS.RegistrarAuditoria("UPDATE")
+                        loc_lSucesso = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao atualizar composi" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro sigprccpBO.Atualizar")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ExecutarExclusao - Exclui registro atual de SigPrCpo pela chave primaria
-    * Chamado por BusinessBase.Excluir() apos passar por AntesDeExcluir().
-    * Registra auditoria apos DELETE bem-sucedido.
+    PROCEDURE RegistrarAuditoria(par_cOperacao)
+    *-- Registra a operacao em LogAuditoria (INSERT/UPDATE/DELETE/PROCESS).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
-        loc_lSucesso = .F.
-
-        IF EMPTY(ALLTRIM(THIS.this_cIdChaves))
-            THIS.this_cMensagemErro = "Chave prim" + CHR(225) + "ria vazia - n" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + "vel excluir"
-            RETURN .F.
-        ENDIF
+        LOCAL loc_oErro, loc_cSQL, loc_cUsuario, loc_cEmpresa, loc_cChave
 
         TRY
-            *-- Registrar auditoria ANTES do DELETE (chave ainda existe)
-            THIS.RegistrarAuditoria("DELETE")
+            IF gnConnHandle > 0
+                loc_cUsuario = ALLTRIM(NVL(gc_4c_UsuarioLogado, ""))
+                loc_cEmpresa = ALLTRIM(NVL(go_4c_Sistema.cCodEmpresa, ""))
+                IF EMPTY(loc_cEmpresa)
+                    loc_cEmpresa = ALLTRIM(THIS.this_cEmpresa)
+                ENDIF
+                loc_cChave = THIS.ObterChavePrimaria()
 
-            loc_cSQL = "DELETE FROM SigPrCpo WHERE cidchaves = " + EscaparSQL(THIS.this_cIdChaves)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                loc_cSQL = "INSERT INTO LogAuditoria " + ;
+                    "(DataHora, Usuario, Tabela, Operacao, ChaveRegistro) " + ;
+                    "VALUES (GETDATE(), " + ;
+                    EscaparSQL(loc_cUsuario) + ", " + ;
+                    EscaparSQL("SigCdCcp") + ", " + ;
+                    EscaparSQL(par_cOperacao) + ", " + ;
+                    EscaparSQL(loc_cChave) + ")"
 
-            IF loc_nResult >= 0
-                loc_lSucesso = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Falha ao excluir registro de SigPrCpo"
+                =SQLEXEC(gnConnHandle, loc_cSQL)
             ENDIF
-
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao excluir composi" + CHR(231) + CHR(227) + "o: " + loc_oErro.Message
+            *-- Auditoria nao deve interromper fluxo principal
         ENDTRY
-
-        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE
