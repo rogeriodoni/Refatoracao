@@ -546,6 +546,7 @@ DEFINE CLASS Formsigreimp AS FormBase
             .ForeColor = RGB(90, 90, 90)
             .Value     = ""
             .Visible   = .T.
+            .MaxLength   = 3
         ENDWITH
 
         par_oPagina.AddObject("txt_4c_DEmpresa", "TextBox")

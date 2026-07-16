@@ -8515,6 +8515,93 @@ function Corrigir-SigCdEmpColunasInvalidas {
     return $saida
 }
 
+#==============================================================================
+# Pattern #126: Corrigir-SigCdEmpTextBoxMaxLength
+# Bug: TextBox de codigo empresa (txt_4c_Empresa/CEmps/Emps) mapeia para
+# SigCdEmp.Cemps (char(3)), mas o gerador omite MaxLength (default VFP9=0
+# unlimited) ou estima por Width=33px (~2 chars) gerando MaxLength=2.
+# User digita menos que 3 chars, SQL Server pad-completa e ValidarEmpresa
+# retorna descricao — mas relatorio filtra SigCdBal.emps que nao acha
+# registros (nomes de empresa geralmente sao 3 chars).
+# Screenshot Erro45: "Empresa: [00] MARCELLA BAHIA" — user digitou "00".
+#
+# Deteccao: bloco WITH ... .txt_4c_(Empresa|C?Emps|CEmp) ate ENDWITH.
+# Acao:
+#   (a) .MaxLength = N com N != 3 -> altera para 3
+#   (b) .MaxLength ausente -> injeta .MaxLength = 3 antes do ENDWITH
+# Idempotente. Escopo estrito ao WITH do TextBox alvo.
+#
+# Origem: Erro45 (2026-07-16, FormSigReAiv screenshot + sweep 15 forms).
+# Complementa Pattern #125 (mesma tabela SigCdEmp, dominio UI).
+#==============================================================================
+function Corrigir-SigCdEmpTextBoxMaxLength {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $resultado = [System.Collections.ArrayList]::new()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) { [void]$resultado.Add($Linhas[$i]) }
+
+    $i = 0
+    while ($i -lt $resultado.Count) {
+        $linha = $resultado[$i]
+        # Detecta abertura de bloco WITH ...txt_4c_(Empresa|C?Emps|CEmp)
+        if ($linha -match '(?i)^\s*WITH\s+.+\.txt_4c_(Empresa|C?Emps|CEmp)\s*$') {
+            # Coletar bloco ate ENDWITH
+            $idxMaxLen = -1
+            $curVal = $null
+            $idxEndWith = -1
+            $indentInterno = ''
+            $end = [Math]::Min($i + 60, $resultado.Count - 1)
+            for ($j = $i + 1; $j -le $end; $j++) {
+                $lj = $resultado[$j]
+                if ($lj -match '(?i)^\s*ENDWITH\s*$') { $idxEndWith = $j; break }
+                if ($lj -match '(?i)^(\s*)\.MaxLength\s*=\s*(\d+)') {
+                    $idxMaxLen = $j
+                    $curVal = [int]$Matches[2]
+                }
+                # Detecta indent do primeiro .Xxx=
+                if ($indentInterno -eq '' -and $lj -match '^(\s*)\.\w+\s*=') {
+                    $indentInterno = $Matches[1]
+                }
+            }
+
+            if ($idxEndWith -lt 0) { $i++; continue }
+
+            if ($idxMaxLen -ge 0) {
+                # Caso (a): .MaxLength presente
+                if ($curVal -ne 3) {
+                    $original = $resultado[$idxMaxLen]
+                    # Preserva indentacao + alinhamento original, so troca o valor
+                    $novaLinha = $original -replace '(?i)(\.MaxLength\s*=\s*)\d+', ('${1}' + '3')
+                    $resultado[$idxMaxLen] = $novaLinha
+                    Add-Correcao -Tipo "SIGCDEMP-TEXTBOX-MAXLENGTH" -Linha ($idxMaxLen + 1) `
+                        -Original $original.Trim() `
+                        -Corrigido $novaLinha.Trim() `
+                        -Descricao "Pattern #126: TextBox de codigo empresa (mapeia para SigCdEmp.Cemps char(3)) DEVE ter .MaxLength = 3. Valor $curVal estava permitindo entrada incorreta (2 chars aceita quando codigo real tem 3). Origem Erro45 (2026-07-16, FormSigReAiv)."
+                }
+            } else {
+                # Caso (b): .MaxLength ausente - injetar
+                if ($indentInterno -eq '') { $indentInterno = '            ' }
+                $novaLinha = "$indentInterno.MaxLength   = 3"
+                $resultado.Insert($idxEndWith, $novaLinha)
+                Add-Correcao -Tipo "SIGCDEMP-TEXTBOX-MAXLENGTH" -Linha ($idxEndWith + 1) `
+                    -Original "(.MaxLength ausente no WITH txt_4c_$($Matches[1]))" `
+                    -Corrigido ".MaxLength = 3 injetado antes de ENDWITH" `
+                    -Descricao "Pattern #126: TextBox de codigo empresa (mapeia para SigCdEmp.Cemps char(3)) sem .MaxLength - default VFP9 eh 0 (unlimited). Injetado .MaxLength = 3 antes do ENDWITH. Origem Erro45 (2026-07-16, FormSigReAiv)."
+                # Reposiciona: pula o bloco (agora tem 1 linha a mais)
+                $i = $idxEndWith + 1
+                continue
+            }
+        }
+        $i++
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -8680,6 +8767,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-BtnReportGuardEmptyMsgErro -Linhas $linhas
     $linhas = Corrigir-ReportFormConcatInline -Linhas $linhas
     $linhas = Corrigir-SigCdEmpColunasInvalidas -Linhas $linhas
+    $linhas = Corrigir-SigCdEmpTextBoxMaxLength -Linhas $linhas
 
     # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
     $conteudoFinal = $linhas -join "`r`n"

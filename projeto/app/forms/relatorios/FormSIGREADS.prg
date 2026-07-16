@@ -748,6 +748,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .BackColor = RGB(255, 255, 255)
             .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
+            .MaxLength   = 3
         ENDWITH
 
         loc_oPagina.AddObject("txt_4c_Dempresa", "TextBox")

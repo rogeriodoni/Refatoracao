@@ -965,6 +965,7 @@ DEFINE CLASS FormSigPdMp4 AS FormBase
                 .ControlSource = "tmpnens.emps"
             ENDIF
             .Visible           = .T.
+            .MaxLength   = 3
         ENDWITH
 
         *-- GetOperacao: descricao da operacao, Left=135, Top=8, Width=156 (ReadOnly)

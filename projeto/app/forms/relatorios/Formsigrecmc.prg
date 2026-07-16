@@ -353,7 +353,7 @@ DEFINE CLASS Formsigrecmc AS FormBase
             .Left          = 96
             .Top           = 56
             .Width         = 33
-            .MaxLength     = 10
+            .MaxLength     = 3
             .Format        = "K"
             .SpecialEffect = 1
             .ForeColor     = RGB(0, 0, 0)

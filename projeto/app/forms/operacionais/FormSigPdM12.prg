@@ -262,6 +262,7 @@ DEFINE CLASS FormSigPdM12 AS FormBase
             .ReadOnly          = .T.
             .ForeColor         = RGB(0, 0, 0)
             .DisabledBackColor = RGB(255, 255, 255)
+            .MaxLength   = 3
         ENDWITH
 
         *-- Descricao da operacao (tmpnens.dopps)

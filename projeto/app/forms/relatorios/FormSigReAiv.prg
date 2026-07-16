@@ -321,7 +321,7 @@ DEFINE CLASS FormSigReAiv AS FormBase
             .Left        = 167
             .Width       = 33
             .Height      = 23
-            .MaxLength   = 2
+            .MaxLength   = 3
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8

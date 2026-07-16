@@ -2104,6 +2104,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                 .BorderStyle = 1
                 .Value       = ""
                 .Visible     = .T.
+                .MaxLength   = 3
             ENDWITH
 
             *-- GetOperacao: descricao/numero da OP - preenchido em ConfigurarEstadoInicial

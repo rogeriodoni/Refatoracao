@@ -457,6 +457,7 @@ DEFINE CLASS FormSigReIfv AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
+            .MaxLength   = 3
         ENDWITH
 
         *-- Campo descri" + CHR(231) + CHR(227) + "o da Empresa (Get_Dempresa: Top=135, Left=197, Width=205)
