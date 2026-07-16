@@ -207,7 +207,7 @@ DEFINE CLASS sigrecogBO AS RelatorioBase
                            "FROM SigMvItn d " + ;
                            "INNER JOIN SigMvCab a ON d.empdopnums = a.empdopnums " + ;
                            "INNER JOIN SigCdOpe b ON a.dopes = b.dopes " + ;
-                           "INNER JOIN SigCdEmp e ON e.cemps = a.emps " + ;
+                           "INNER JOIN SigCdEmp e ON e.cemps = a.cemps " + ;
                            "INNER JOIN SigCdCli f ON f.iclis = a.vends " + ;
                            "INNER JOIN SigCdPro h ON d.cpros = h.cpros " + ;
                            "INNER JOIN SigCmGri g ON g.cgrus = h.cgrus " + ;

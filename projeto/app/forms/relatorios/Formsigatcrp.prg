@@ -1888,7 +1888,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
                         USE IN cursor_4c_Emp_Det
                     ENDIF
                     loc_nResult = SQLEXEC(gnConnHandle, ;
-                        "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(ALLTRIM(crSigCdSOs.Emps)), ;
+                        "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(ALLTRIM(crSigCdSOs.Cemps)), ;
                         "cursor_4c_Emp_Det")
                     IF loc_nResult > 0 AND RECCOUNT("cursor_4c_Emp_Det") > 0
                         SELECT cursor_4c_Emp_Det

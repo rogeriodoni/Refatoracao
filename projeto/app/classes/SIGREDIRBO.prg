@@ -169,7 +169,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
             *-- Clausulas reutilizaveis
             loc_cJoins = " LEFT JOIN SigCdSrv b WITH (NOLOCK) ON a.codservs = b.codservs" + ;
                          " LEFT JOIN SigCdCli c ON c.iclis = a.clifors" + ;
-                         " LEFT JOIN SigCdEmp d ON a.emps = d.cemps"
+                         " LEFT JOIN SigCdEmp d ON a.cemps = d.cemps"
 
             loc_cWhere = " WHERE a.emis BETWEEN " + loc_cDtIni + " AND " + loc_cDtFin + ;
                          " AND (a.vpis <> 0 OR a.vcofins <> 0 OR a.vcsll <> 0)" + ;

@@ -647,7 +647,7 @@ DEFINE CLASS FormSigReAiv AS FormBase
     *==========================================================================
 
     *--------------------------------------------------------------------------
-    * ValidarEmpresa - Busca empresa pelo c[o]digo digitado (SigCdEmP.Emps)
+    * ValidarEmpresa - Busca empresa pelo c[o]digo digitado (SigCdEmP.Cemps)
     *   Replica Get_Empresa.Valid do original: fAcessoEmpresa modo 'C'
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ValidarEmpresa()
@@ -659,13 +659,13 @@ DEFINE CLASS FormSigReAiv AS FormBase
             THIS.AtualizarEstadoCampos()
             RETURN
         ENDIF
-        loc_cSQL = "SELECT Emps, NComps FROM SigCdEmP WHERE Emps = " + EscaparSQL(loc_cCodigo)
+        loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmP WHERE Cemps = " + EscaparSQL(loc_cCodigo)
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
         IF loc_nResult > 0
             SELECT cursor_4c_EmpVal
             IF !EOF()
-                loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(Emps)
-                loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(NComps)
+                loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(Cemps)
+                loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(Razas)
             ELSE
                 THIS.AbrirBuscaEmpresa()
             ENDIF
@@ -741,7 +741,7 @@ DEFINE CLASS FormSigReAiv AS FormBase
     *==========================================================================
 
     *--------------------------------------------------------------------------
-    * AbrirBuscaEmpresa - Lookup de empresa pelo c[o]digo (SigCdEmP.Emps)
+    * AbrirBuscaEmpresa - Lookup de empresa pelo c[o]digo (SigCdEmP.Cemps)
     *   Replica Get_Empresa.Valid do original: fAcessoEmpresa modo 'C'
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaEmpresa()
@@ -749,21 +749,21 @@ DEFINE CLASS FormSigReAiv AS FormBase
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_Empresa.Value)
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdEmP", "cursor_4c_BuscaEmp", "Emps", loc_cValor, ;
+            "SigCdEmP", "cursor_4c_BuscaEmp", "Cemps", loc_cValor, ;
             "Sele" + CHR(231) + CHR(227) + "o de Empresa", ;
             .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
-                loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_BuscaEmp.Emps)
-                loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_BuscaEmp.NComps)
+                loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
+                loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
             ELSE
                 IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("Emps", "XX", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("NComps", "", "Nome")
+                    loc_oBusca.mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Razas", "", "Nome")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
-                        loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_BuscaEmp.Emps)
-                        loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_BuscaEmp.NComps)
+                        loc_oPg.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
+                        loc_oPg.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
                     ELSE
                         loc_oPg.txt_4c_Empresa.Value  = ""
                         loc_oPg.txt_4c_Dempresa.Value = ""

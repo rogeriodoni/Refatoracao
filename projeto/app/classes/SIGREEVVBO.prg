@@ -199,7 +199,7 @@ DEFINE CLASS SIGREEVVBO AS RelatorioBase
                 SET DELETED ON
                 SELECT crSigCdEmpExcl
                 SCAN
-                    DELETE FROM crSigMvEst WHERE emps = crSigCdEmpExcl.cemps
+                    DELETE FROM crSigMvEst WHERE cemps = crSigCdEmpExcl.cemps
                 ENDSCAN
                 USE IN crSigCdEmpExcl
             ENDIF

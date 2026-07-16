@@ -204,7 +204,7 @@ DEFINE CLASS sigrecsmBO AS RelatorioBase
                        " AND b.ccomis = 1" + ;
                        " INNER JOIN SigOpFp c ON d.fpags = c.fpags" + ;
                        " AND c.bxcomis = 1" + ;
-                       " INNER JOIN SigCdEmp e ON a.emps = e.cemps" + ;
+                       " INNER JOIN SigCdEmp e ON a.cemps = e.cemps" + ;
                        " LEFT JOIN SigCdCli h ON a.Resps = h.Iclis" + ;
                        " LEFT JOIN SigCdCli f ON a.Vends = f.iclis" + ;
                        " LEFT JOIN SigCdCrg g ON f.ccargs = g.ccargs" + ;

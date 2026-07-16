@@ -8354,6 +8354,167 @@ function Corrigir-ReportFormConcatInline {
     return $saida
 }
 
+#==============================================================================
+# Pattern #125: Corrigir-SigCdEmpColunasInvalidas
+# Bug: SigCdEmp tem colunas `Cemps` (char(3), codigo empresa) e `Razas` (char(40),
+# razao social). Migracao inventa `Emps`/`emps` e `NComps`/`nemp` (nao existem)
+# por analogia com SigCdBal.Emps ou com nomes de TextBox (`Get_Empresa`).
+# Runtime: `[SQL Server]Nome de coluna 'Emps' invalido` ao digitar codigo empresa.
+#
+# CUIDADO: `SigCdBal.emps` e `SigIvTrh.emps` EXISTEM legitimamente.
+# Regra so aplica quando FROM/2o arg de FormBuscaAuxiliar eh `SigCdEmp`.
+#
+# Fase 1: identificar cursores populados de SigCdEmp
+#   (SELECT ... FROM SigCdEmp + destino nas 3 linhas seguintes,
+#    ou CREATEOBJECT("FormBuscaAuxiliar", ..., "SigCdEmp", <cursor>, ...))
+# Fase 2: substituir tokens Emps/NComps/emps/nemp por Cemps/Razas/cemps/razas
+#   preservando case:
+#   (a) linhas com SigCdEmp E token quebrado (SELECT/WHERE/JOIN)
+#   (b) mAddColuna/CREATEOBJECT filter col dentro de bloco AbrirBusca* SigCdEmp
+#   (c) refs <cursor>.emps/.nemp/.NComps para cursores identificados na Fase 1
+#
+# Origem: Erro44 (2026-07-16, FormSigReAiv.prg + FormSIGREHCP.prg).
+# Idempotente.
+#==============================================================================
+function Corrigir-SigCdEmpColunasInvalidas {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Fase 1: identificar cursores derivados de SigCdEmp
+    $cursoresEmp = @{}  # cursorName (case-insensitive) -> $true
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        # SQLEXEC: SELECT ... FROM SigCdEmp ... "cursor_X"
+        if ($linha -match '(?i)FROM\s+SigCdEmp\b') {
+            for ($j = $i; $j -lt [Math]::Min($i + 4, $Linhas.Count); $j++) {
+                if ($Linhas[$j] -match '(?i)"(cursor_\w+)"\s*\)') {
+                    $cursoresEmp[$Matches[1].ToLower()] = $true
+                    break
+                }
+            }
+        }
+        # FormBuscaAuxiliar: CREATEOBJECT("FormBuscaAuxiliar", ..., "SigCdEmp", <cursor>, ...)
+        if ($linha -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"') {
+            for ($j = $i; $j -lt [Math]::Min($i + 4, $Linhas.Count); $j++) {
+                if ($Linhas[$j] -match '(?i)"SigCdEmp"\s*,\s*"(cursor_\w+)"') {
+                    $cursoresEmp[$Matches[1].ToLower()] = $true
+                    break
+                }
+                if ($Linhas[$j] -match '(?i)"SigCdEmp"\s*,\s*(\w+)') {
+                    $cursorArg = $Matches[1]
+                    if ($cursorArg -match '(?i)^loc_') {
+                        # Var: buscar atribuicao anterior na PROCEDURE
+                        for ($k = $j; $k -ge [Math]::Max(0, $j - 30); $k--) {
+                            if ($Linhas[$k] -match "(?i)$cursorArg\s*=\s*`"(cursor_\w+)`"") {
+                                $cursoresEmp[$Matches[1].ToLower()] = $true
+                                break
+                            }
+                        }
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    # ScriptBlock helper de substituicao case-preserving (inline para evitar scope)
+    $substituirTokens = {
+        param([string]$Texto)
+        # Order: NComps/ncomps antes de nemp para evitar sobreposicao acidental
+        $r = $Texto
+        $r = $r -creplace '\bNCOMPS\b', 'RAZAS'
+        $r = $r -creplace '\bNComps\b', 'Razas'
+        $r = $r -creplace '\bncomps\b', 'razas'
+        $r = $r -creplace '\bNEMP\b',   'RAZAS'
+        $r = $r -creplace '\bNemp\b',   'Razas'
+        $r = $r -creplace '\bnemp\b',   'razas'
+        $r = $r -creplace '\bEMPS\b',   'CEMPS'
+        $r = $r -creplace '\bEmps\b',   'Cemps'
+        $r = $r -creplace '\bemps\b',   'cemps'
+        return $r
+    }
+
+    # Fase 2: corrigir linhas
+    $resultado = [System.Collections.ArrayList]::new()
+    $inSigCdEmpBusca = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $original = $linha
+
+        # Rastreio de bloco AbrirBusca sobre SigCdEmp
+        if ($linha -match '(?i)^\s*PROCEDURE\s+\w+' -or $linha -match '(?i)^\s*ENDPROC\b') {
+            $inSigCdEmpBusca = $false
+        }
+        if ($linha -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"') {
+            # Olhar frente por "SigCdEmp" nas proximas 4 linhas
+            for ($j = $i; $j -lt [Math]::Min($i + 4, $Linhas.Count); $j++) {
+                if ($Linhas[$j] -match '(?i)"SigCdEmp"') {
+                    $inSigCdEmpBusca = $true
+                    break
+                }
+            }
+        }
+        if ($linha -match '(?i)^\s*loc_oBusca\.Release\s*\(') {
+            $inSigCdEmpBusca = $false
+        }
+
+        # (a) Linha contem SigCdEmp E algum token quebrado (mesma linha)
+        if ($linha -match '(?i)SigCdEmp' -and $linha -match '(?i)\b(emps|nemp|ncomps|NComps)\b') {
+            $linha = & $substituirTokens $linha
+        }
+
+        # (b) Dentro de bloco AbrirBusca* de SigCdEmp: mAddColuna E argumentos do CREATEOBJECT
+        if ($inSigCdEmpBusca) {
+            # mAddColuna("emps"|...) -> mAddColuna("cemps"|...) preservando case
+            if ($linha -match '(?i)mAddColuna\s*\(\s*"(emps|nemp|ncomps|Emps|Nemp|NComps|EMPS|NEMP|NCOMPS)"') {
+                $linha = & $substituirTokens $linha
+            }
+            # 3o arg do CREATEOBJECT (filter col) — linha com "SigCdEmp"
+            if ($linha -match '(?i)"SigCdEmp"\s*,\s*"[^"]+"\s*,\s*"(emps|nemp|ncomps|Emps|Nemp|NComps|EMPS|NEMP|NCOMPS)"') {
+                $linha = & $substituirTokens $linha
+            }
+        }
+
+        # (c) Referencias <cursor>.emps/.nemp/.NComps para cursores identificados
+        foreach ($cursor in $cursoresEmp.Keys) {
+            # Case-insensitive match do nome do cursor, case-preserving do campo
+            $rxCursor = [regex]::Escape($cursor)
+            if ($linha -imatch "$rxCursor\.\s*(emps|nemp|ncomps|NComps|Emps|Nemp|EMPS|NEMP|NCOMPS)\b") {
+                $linha = [regex]::Replace($linha, "(?i)($rxCursor)(\.\s*)(EMPS|Emps|emps|NCOMPS|NComps|ncomps|NEMP|Nemp|nemp)\b", {
+                    param($m)
+                    $prefixo = $m.Groups[1].Value + $m.Groups[2].Value
+                    $token   = $m.Groups[3].Value
+                    switch -CaseSensitive ($token) {
+                        'EMPS'   { return $prefixo + 'CEMPS' }
+                        'Emps'   { return $prefixo + 'Cemps' }
+                        'emps'   { return $prefixo + 'cemps' }
+                        'NCOMPS' { return $prefixo + 'RAZAS' }
+                        'NComps' { return $prefixo + 'Razas' }
+                        'ncomps' { return $prefixo + 'razas' }
+                        'NEMP'   { return $prefixo + 'RAZAS' }
+                        'Nemp'   { return $prefixo + 'Razas' }
+                        'nemp'   { return $prefixo + 'razas' }
+                        default  { return $m.Value }
+                    }
+                })
+            }
+        }
+
+        if ($linha -ne $original) {
+            Add-Correcao -Tipo "SIGCDEMP-COLUNAS-CANONICAS" -Linha ($i + 1) `
+                -Original $original.Trim() `
+                -Corrigido $linha.Trim() `
+                -Descricao "Pattern #125: SigCdEmp tem colunas 'Cemps' (char(3), PK) e 'Razas' (char(40), razao social), NAO 'Emps'/'NComps'/'emps'/'nemp'. Runtime tipico: SQL Server 'Nome de coluna Emps invalido' ao digitar codigo empresa. Cuidado: SigCdBal.emps e SigIvTrh.emps EXISTEM - regra so aplica quando FROM/lookup eh SigCdEmp. Origem Erro44 (2026-07-16, FormSigReAiv + FormSIGREHCP)."
+        }
+        [void]$resultado.Add($linha)
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -8518,6 +8679,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-GridColumnCheckboxSparse -Linhas $linhas
     $linhas = Corrigir-BtnReportGuardEmptyMsgErro -Linhas $linhas
     $linhas = Corrigir-ReportFormConcatInline -Linhas $linhas
+    $linhas = Corrigir-SigCdEmpColunasInvalidas -Linhas $linhas
 
     # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
     $conteudoFinal = $linhas -join "`r`n"

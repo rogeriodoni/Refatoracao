@@ -96,7 +96,7 @@ DEFINE CLASS SIGREDESBO AS RelatorioBase
             *-- Buscar descricao da empresa para popular UI sem abrir lookup modal
             IF !EMPTY(THIS.this_cEmpresa)
                 LOCAL loc_cSqlEmp, loc_nResEmp
-                loc_cSqlEmp = "SELECT TOP 1 Razas FROM SigCdEmp WHERE Emps = " + ;
+                loc_cSqlEmp = "SELECT TOP 1 Razas FROM SigCdEmp WHERE Cemps = " + ;
                               EscaparSQL(THIS.this_cEmpresa)
                 loc_nResEmp = SQLEXEC(gnConnHandle, loc_cSqlEmp, "cursor_4c_EmpDesIni")
                 IF loc_nResEmp >= 1

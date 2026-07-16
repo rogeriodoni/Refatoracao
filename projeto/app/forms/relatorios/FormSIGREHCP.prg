@@ -944,7 +944,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     ENDPROC
 
     *==========================================================================
-    * LOOKUP - EMPRESA (SigCdEmp: emps/nemp)
+    * LOOKUP - EMPRESA (SigCdEmp: cemps/razas)
     *   Equivalente ao fAcessoEmpresa(modo 'C') e fAcessoEmpresa(modo 'D')
     *   do form legado SIGREHCP
     *==========================================================================
@@ -954,21 +954,21 @@ DEFINE CLASS FormSIGREHCP AS FormBase
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_CEmps.Value)
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdEmp", "cursor_4c_BuscaCEmps", "emps", loc_cValor, ;
+            "SigCdEmp", "cursor_4c_BuscaCEmps", "cemps", loc_cValor, ;
             "Sele" + CHR(231) + CHR(227) + "o de Empresa", ;
             .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
-                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.emps)
-                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.nemp)
+                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.cemps)
+                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.razas)
             ELSE
                 IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("emps", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("nemp", "", "Empresa")
+                    loc_oBusca.mAddColuna("cemps", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("razas", "", "Empresa")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCEmps")
-                        loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.emps)
-                        loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.nemp)
+                        loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.cemps)
+                        loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaCEmps.razas)
                     ENDIF
                 ENDIF
             ENDIF
@@ -985,21 +985,21 @@ DEFINE CLASS FormSIGREHCP AS FormBase
         loc_oPg    = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg.txt_4c_DEmps.Value)
         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdEmp", "cursor_4c_BuscaDEmps", "nemp", loc_cValor, ;
+            "SigCdEmp", "cursor_4c_BuscaDEmps", "razas", loc_cValor, ;
             "Sele" + CHR(231) + CHR(227) + "o de Empresa", ;
             .F., .T., "")
         IF VARTYPE(loc_oBusca) = "O"
             IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
-                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.nemp)
-                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.emps)
+                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.razas)
+                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.cemps)
             ELSE
                 IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("nemp", "", "Empresa")
-                    loc_oBusca.mAddColuna("emps", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("razas", "", "Empresa")
+                    loc_oBusca.mAddColuna("cemps", "", "C" + CHR(243) + "digo")
                     loc_oBusca.Show()
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaDEmps")
-                        loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.nemp)
-                        loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.emps)
+                        loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.razas)
+                        loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_BuscaDEmps.cemps)
                     ENDIF
                 ENDIF
             ENDIF
@@ -1020,13 +1020,13 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             THIS.AtualizarEstadoCamposDescricao()
             RETURN
         ENDIF
-        loc_cSQL = "SELECT emps, nemp FROM SigCdEmp" + ;
-            " WHERE emps = " + EscaparSQL(loc_cValor)
+        loc_cSQL = "SELECT cemps, razas FROM SigCdEmp" + ;
+            " WHERE cemps = " + EscaparSQL(loc_cValor)
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpsVal")
         IF loc_nResult > 0
             SELECT cursor_4c_EmpsVal
             IF !EOF()
-                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_EmpsVal.nemp)
+                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_EmpsVal.razas)
             ELSE
                 loc_oPg.txt_4c_DEmps.Value = ""
                 THIS.AbrirBuscaCEmps()
@@ -1050,14 +1050,14 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             THIS.AtualizarEstadoCamposDescricao()
             RETURN
         ENDIF
-        loc_cSQL = "SELECT emps, nemp FROM SigCdEmp" + ;
-            " WHERE nemp LIKE " + EscaparSQL(loc_cValor + "%")
+        loc_cSQL = "SELECT cemps, razas FROM SigCdEmp" + ;
+            " WHERE razas LIKE " + EscaparSQL(loc_cValor + "%")
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpsVal2")
         IF loc_nResult > 0
             SELECT cursor_4c_EmpsVal2
             IF !EOF()
-                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_EmpsVal2.emps)
-                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_EmpsVal2.nemp)
+                loc_oPg.txt_4c_CEmps.Value = ALLTRIM(cursor_4c_EmpsVal2.cemps)
+                loc_oPg.txt_4c_DEmps.Value = ALLTRIM(cursor_4c_EmpsVal2.razas)
             ELSE
                 THIS.AbrirBuscaDEmps()
             ENDIF
