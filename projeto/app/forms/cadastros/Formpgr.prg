@@ -4612,7 +4612,7 @@ DEFINE CLASS Formpgr AS FormBase
 
         loc_lOk = .F.
         TRY
-            loc_cSQL = "SELECT cemps, demps FROM SigCdEmp " + ;
+            loc_cSQL = "SELECT cemps, razas FROM SigCdEmp " + ;
                        "WHERE cemps = " + EscaparSQL(loc_cFilial)
             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_FilEmpLookup") > 0
                 IF !EOF("cursor_4c_FilEmpLookup") AND RECCOUNT("cursor_4c_FilEmpLookup") > 0
@@ -4650,8 +4650,8 @@ DEFINE CLASS Formpgr AS FormBase
                 "SigCdEmp", "cursor_4c_BuscaFilEmp", "cemps", "", ;
                 "Buscar Empresa/Filial")
 
-            loc_oBusca.mAddColuna("cemps",  "", "C" + CHR(243) + "digo")
-            loc_oBusca.mAddColuna("demps",  "", "Empresa")
+            loc_oBusca.mAddColuna("cemps",  "XXX", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("razas",  "", "Empresa")
 
             loc_oBusca.Show()
 
