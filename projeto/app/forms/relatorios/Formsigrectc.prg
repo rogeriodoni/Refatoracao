@@ -569,6 +569,7 @@ DEFINE CLASS Formsigrectc AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .Visible       = .T.
+            .MaxLength   = 3
         ENDWITH
 
         loc_oPag.AddObject("txt_4c_Razas", "TextBox")

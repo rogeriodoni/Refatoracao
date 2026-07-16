@@ -285,6 +285,7 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
             .ForeColor         = RGB(0,0,0)
             .DisabledBackColor = RGB(255,255,255)
             .BorderColor       = RGB(100,100,100)
+                .MaxLength   = 3
         ENDWITH
 
         *-- txt_4c_Operacao: descricao da operacao (original GetOperacao, tmpnens.dopps)

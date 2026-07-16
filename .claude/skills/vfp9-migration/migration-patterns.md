@@ -5031,3 +5031,79 @@ Ambos 2026-07-16, Erro44 reportado via screenshot em `origem/correcoes/Erro44.PN
 - Pattern #105 (SigCdOpe.descrs) — mesma familia de bugs
 - Pattern #115 (SigCdGcr.descrs) — mesma familia de bugs
 
+
+## 138. SigCdEmp TextBox de codigo (`txt_4c_Empresa`/`txt_4c_CEmps`/`txt_4c_Emps`) — `.MaxLength = 3` OBRIGATORIO (Erro45, 2026-07-16)
+
+**Problema**: Usuario digita 2 caracteres no campo Empresa e o Valid aceita — descricao aparece preenchida (`MARCELLA BAHIA`), mas ao gerar o relatorio nenhum dado eh retornado. Screenshot Erro45.PNG mostra `Empresa: [00] MARCELLA BAHIA` — codigo real da empresa tem 3 chars, faltou 1 digito.
+
+**Causa raiz**: SCX legado NAO especifica `MaxLength` no `Get_Empresa` porque a classe base `fwtxtbox` do framework legado ja aplica `MaxLength=3` para campos de empresa. Ao migrar, o gerador:
+1. **Omite `.MaxLength`**: default VFP9 eh `0` = unlimited. User digita qualquer numero de chars.
+2. **Estima `.MaxLength` por Width**: `Width=33` px em Tahoma 8pt → cabe ~2 chars → gera `.MaxLength = 2`. Bug direto do Erro45.
+3. **Copia valor arbitrario**: `MaxLength=10` em `Formsigrecmc.prg` — provavelmente residuo de outro campo copy-paste.
+
+**Comportamento observado quando MaxLength esta errado**:
+1. User digita `00` (achando que o codigo eh 2 chars).
+2. `ValidarEmpresa` roda `SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = '00'`.
+3. SQL Server padding automatico de `'00'` para `'00 '` (char(3)) → **encontra registro** (SQL Server usa comparacao com trailing-space-padding por default para tipo char).
+4. Descricao "MARCELLA BAHIA" aparece → user acha que ok.
+5. User clica "Visualizar" → relatorio filtra `WHERE Emps = '00'` em `SigCdBal` — SQL Server pad-completa novamente → funciona.
+6. Mas se o codigo real fosse `001` (nao `00`) e o user digitou so `00`, o filtro `WHERE Emps = '00'` (pad-completado para `'00 '`) NAO encontra `Emps = '001'` — relatorio vazio.
+7. User confuso: descricao apareceu OK mas relatorio esta vazio.
+
+**Codigo ERRADO** (FormSigReAiv.prg pre-Erro45):
+```foxpro
+loc_oPg.AddObject("txt_4c_Empresa", "TextBox")
+WITH loc_oPg.txt_4c_Empresa
+    .Top       = 2
+    .Left      = 167
+    .Width     = 33
+    .Height    = 23
+    .MaxLength = 2   && ERRADO: SigCdEmp.Cemps eh char(3)
+    ...
+ENDWITH
+```
+
+**Codigo CORRETO**:
+```foxpro
+loc_oPg.AddObject("txt_4c_Empresa", "TextBox")
+WITH loc_oPg.txt_4c_Empresa
+    .Top       = 2
+    .Left      = 167
+    .Width     = 33
+    .Height    = 23
+    .MaxLength = 3   && SigCdEmp.Cemps char(3)
+    ...
+ENDWITH
+```
+
+**Regra**: Todo TextBox que recebe codigo empresa (mapeia para `SigCdEmp.Cemps`) DEVE ter `.MaxLength = 3`. Nomes padronizados desses TextBoxes:
+- `txt_4c_Empresa` (mais comum, ex: FormSigReAiv, FormSIGREADS)
+- `txt_4c_CEmps` (padrao do FormSIGREHCP — C=Codigo)
+- `txt_4c_Emps` (variante curta, ex: FormSigPrCtr, Formsigrefec)
+- `txt_4c_Cemps` (variante case, ex: Formsigrectc)
+
+**Complemento**:
+- `mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")` no FormBuscaAuxiliar tambem DEVE usar mask `"XXX"` (3 X) — mesma justificativa char(3).
+
+**Auto-fix**: CorretorAutomatico Pattern #126 (`Corrigir-SigCdEmpTextBoxMaxLength`).
+
+Deteccao: bloco `WITH .+\.txt_4c_(Empresa|C?Emps|CEmp)` ate ENDWITH.
+Acao:
+- (a) Se `.MaxLength = N` presente com `N != 3` → alterar para 3.
+- (b) Se `.MaxLength` ausente → injetar `.MaxLength = 3` antes do ENDWITH, preservando indentacao.
+
+Idempotente (segundo run nao altera nada). Safety: escopo estrito ao WITH do TextBox alvo — nao afeta `MaxLength` de outros TextBoxes.
+
+**Padrao canonico**: FormSigReAiv.prg linhas 318-332 (pos-fix), Formsigreimp.prg, Formsigrehpr.prg.
+
+**Bug**: 15 forms afetados (Erro45 sweep 2026-07-16):
+1. `FormSigReAiv.prg` linha 324 — MaxLength=2 (direto do Erro45)
+2. `Formsigrecmc.prg` linha 356 — MaxLength=10 (valor arbitrario)
+3-15. Sem MaxLength (default 0): FormSigPrCtr, FormSigPdM12/13/14, Formsigpdmp2, FormSigPdMp4/8, FormSIGREADS, FormSIGRECPM, Formsigrectc, Formsigrefec, FormSigReIfv, Formsigreimp.
+
+**Referencias correlatas**:
+- `feedback_sigcdemp_cemps_razas.md` — Pattern #125 sobre nomes de coluna (mesma tabela SigCdEmp)
+- Pattern #125 (SigCdEmp colunas) — este Pattern #126 eh o complemento UI
+- `feedback_facessoempresa_nao_portada.md` — causa raiz upstream (fAcessoEmpresa nao portada, framework nao aplica MaxLength defaults)
+
+

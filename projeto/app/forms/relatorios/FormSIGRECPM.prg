@@ -386,6 +386,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
                 .BackColor     = RGB(255, 255, 255)
                 .ForeColor     = RGB(0, 0, 128)
                 .Visible       = .T.
+                .MaxLength   = 3
             ENDWITH
 
             loc_oPag.AddObject("txt_4c_DEmpresa", "TextBox")

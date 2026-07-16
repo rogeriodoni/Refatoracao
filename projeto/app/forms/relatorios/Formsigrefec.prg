@@ -349,6 +349,7 @@ DEFINE CLASS Formsigrefec AS FormBase
             .FontSize    = 8
             .ToolTipText = "C" + CHR(243) + "digo da Empresa (F4=Buscar)"
             .Visible     = .T.
+            .MaxLength   = 3
         ENDWITH
 
         loc_oPg1.AddObject("txt_4c_DEmps", "TextBox")
