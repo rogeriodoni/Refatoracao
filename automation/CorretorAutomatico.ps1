@@ -8421,7 +8421,7 @@ function Corrigir-SigCdEmpColunasInvalidas {
     # ScriptBlock helper de substituicao case-preserving (inline para evitar scope)
     $substituirTokens = {
         param([string]$Texto)
-        # Order: NComps/ncomps antes de nemp para evitar sobreposicao acidental
+        # Order: NComps/ncomps/DEmps antes de nemp/Emps para evitar sobreposicao acidental
         $r = $Texto
         $r = $r -creplace '\bNCOMPS\b', 'RAZAS'
         $r = $r -creplace '\bNComps\b', 'Razas'
@@ -8429,6 +8429,9 @@ function Corrigir-SigCdEmpColunasInvalidas {
         $r = $r -creplace '\bNEMP\b',   'RAZAS'
         $r = $r -creplace '\bNemp\b',   'Razas'
         $r = $r -creplace '\bnemp\b',   'razas'
+        $r = $r -creplace '\bDEMPS\b',  'RAZAS'
+        $r = $r -creplace '\bDEmps\b',  'Razas'
+        $r = $r -creplace '\bdemps\b',  'razas'
         $r = $r -creplace '\bEMPS\b',   'CEMPS'
         $r = $r -creplace '\bEmps\b',   'Cemps'
         $r = $r -creplace '\bemps\b',   'cemps'
@@ -8460,28 +8463,28 @@ function Corrigir-SigCdEmpColunasInvalidas {
         }
 
         # (a) Linha contem SigCdEmp E algum token quebrado (mesma linha)
-        if ($linha -match '(?i)SigCdEmp' -and $linha -match '(?i)\b(emps|nemp|ncomps|NComps)\b') {
+        if ($linha -match '(?i)SigCdEmp' -and $linha -match '(?i)\b(emps|nemp|ncomps|NComps|demps|DEmps)\b') {
             $linha = & $substituirTokens $linha
         }
 
         # (b) Dentro de bloco AbrirBusca* de SigCdEmp: mAddColuna E argumentos do CREATEOBJECT
         if ($inSigCdEmpBusca) {
             # mAddColuna("emps"|...) -> mAddColuna("cemps"|...) preservando case
-            if ($linha -match '(?i)mAddColuna\s*\(\s*"(emps|nemp|ncomps|Emps|Nemp|NComps|EMPS|NEMP|NCOMPS)"') {
+            if ($linha -match '(?i)mAddColuna\s*\(\s*"(emps|nemp|ncomps|demps|Emps|Nemp|NComps|DEmps|EMPS|NEMP|NCOMPS|DEMPS)"') {
                 $linha = & $substituirTokens $linha
             }
             # 3o arg do CREATEOBJECT (filter col) — linha com "SigCdEmp"
-            if ($linha -match '(?i)"SigCdEmp"\s*,\s*"[^"]+"\s*,\s*"(emps|nemp|ncomps|Emps|Nemp|NComps|EMPS|NEMP|NCOMPS)"') {
+            if ($linha -match '(?i)"SigCdEmp"\s*,\s*"[^"]+"\s*,\s*"(emps|nemp|ncomps|demps|Emps|Nemp|NComps|DEmps|EMPS|NEMP|NCOMPS|DEMPS)"') {
                 $linha = & $substituirTokens $linha
             }
         }
 
-        # (c) Referencias <cursor>.emps/.nemp/.NComps para cursores identificados
+        # (c) Referencias <cursor>.emps/.nemp/.NComps/.DEmps para cursores identificados
         foreach ($cursor in $cursoresEmp.Keys) {
             # Case-insensitive match do nome do cursor, case-preserving do campo
             $rxCursor = [regex]::Escape($cursor)
-            if ($linha -imatch "$rxCursor\.\s*(emps|nemp|ncomps|NComps|Emps|Nemp|EMPS|NEMP|NCOMPS)\b") {
-                $linha = [regex]::Replace($linha, "(?i)($rxCursor)(\.\s*)(EMPS|Emps|emps|NCOMPS|NComps|ncomps|NEMP|Nemp|nemp)\b", {
+            if ($linha -imatch "$rxCursor\.\s*(emps|nemp|ncomps|demps|NComps|DEmps|Emps|Nemp|EMPS|NEMP|NCOMPS|DEMPS)\b") {
+                $linha = [regex]::Replace($linha, "(?i)($rxCursor)(\.\s*)(EMPS|Emps|emps|NCOMPS|NComps|ncomps|NEMP|Nemp|nemp|DEMPS|DEmps|demps)\b", {
                     param($m)
                     $prefixo = $m.Groups[1].Value + $m.Groups[2].Value
                     $token   = $m.Groups[3].Value
@@ -8495,6 +8498,9 @@ function Corrigir-SigCdEmpColunasInvalidas {
                         'NEMP'   { return $prefixo + 'RAZAS' }
                         'Nemp'   { return $prefixo + 'Razas' }
                         'nemp'   { return $prefixo + 'razas' }
+                        'DEMPS'  { return $prefixo + 'RAZAS' }
+                        'DEmps'  { return $prefixo + 'Razas' }
+                        'demps'  { return $prefixo + 'razas' }
                         default  { return $m.Value }
                     }
                 })
