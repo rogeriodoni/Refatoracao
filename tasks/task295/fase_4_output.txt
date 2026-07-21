@@ -1,0 +1,9 @@
+﻿Tudo correto. A Fase 4 do `FormSigPrGst.prg` est├í completa com as seguintes adi├º├Áes:
+
+**O que foi adicionado:**
+1. **`CarregarDados()`** ÔÇö navega cursores herdados do pai (`GO TOP` em `csCabec`, `SET KEY TO csCabec.EmpDopNums` em `csItens`) e faz Refresh nas duas grades. Equivale ao bloco de navega├º├úo do `Init()` original do SIGPRGST.
+2. **`ProcessaPeriodo(par_P1, par_P2, par_P3)`** ÔÇö stub que retorna `.T.` sem l├│gica, exatamente como no original (`"Rotina Criada Apenas Para N├úo Gerar Erro Nas Chamadas do SigMvCab"`). Necess├írio porque `DO FORM SigMvCab WITH ... THIS ...` passa este form como pai, e SigMvCab pode chamar `par_oFormPai.ProcessaPeriodo(...)`.
+3. **Chamada a `THIS.CarregarDados()`** inserida em `InicializarForm` ap├│s `ConfigurarBINDEVENTs()`.
+4. **Header** atualizado para `Fase 4/8`.
+
+**Por que n├úo foram adicionados `ConfigurarPaginaLista` e `AlternarPagina`:** Este ├® um form OPERACIONAL flat (sem PageFrame), e os grids j├í estavam completamente implementados na Fase 3. O template da Fase 4 ├® gen├®rico para CRUD ÔÇö o equivalente OPERACIONAL ├® o `CarregarDados()`.

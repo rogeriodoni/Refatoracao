@@ -1,0 +1,17 @@
+﻿A edi├º├úo est├í correta. Resumo do que foi feito:
+
+**GRID-SQL (5 problemas) ÔÇö corrigido:**
+
+O `cursor_4c_Copia` era criado diretamente via `SQLEXEC` (que produz cursor **read-only**). Isso causava dois problemas:
+1. O checker GRID-SQL n├úo encontrava um `CREATE CURSOR` com os campos definidos
+2. Em runtime, `REPLACE ALL marcas WITH 1 IN cursor_4c_Copia` e `REPLACE ALL marcas WITH 0 IN cursor_4c_Copia` falhariam silenciosamente sobre o cursor read-only
+
+Fix em `sigprcomBO.prg:CarregarCopiaParaCursor()`: agora usa `cursor_4c_CopiaTemp` para o SQLEXEC, depois cria `cursor_4c_Copia` via `CREATE CURSOR` (edit├ível) com os 8 campos expl├¡citos (`cpros, emps, qmaxs, codtams, codcores, deptos, existes, marcas`) e faz `APPEND FROM DBF` ÔÇö padr├úo id├¬ntico ao `cursor_4c_Max`.
+
+**SQL-FILTRO-INVENTADO (4 problemas) ÔÇö falsos positivos, sem altera├º├úo necess├íria:**
+
+Ap├│s verifica├º├úo em ambos os arquivos:
+- `CIDCHAVES` aparece apenas em `WHERE` de DML (`UPDATE SET ... WHERE cidchaves=` e `DELETE FROM ... WHERE cidchaves=`) ÔÇö correto por design (opera├º├Áes por PK)
+- `CODTAMS`, `CODCORES`, `DEPTOS` aparecem na cl├íusula `ON` do `LEFT JOIN` dentro de `CarregarCopiaParaCursor`, n├úo em filtros `WHERE`
+
+Nenhuma condi├º├úo foi inventada pela LLM nesses casos.

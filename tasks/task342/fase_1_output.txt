@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\acgBO.prg` criado com:
+
+- **Tabela principal**: `sigcdgra` (PK: `Grupos`, campo: `NComps` char(30))
+- **Propriedades declaradas**:
+  - `this_cGrupos` ÔÇö c├│digo do grupo (PK, char 10)
+  - `this_cNComps` ÔÇö nome do grupo (char 30, conforme schema.sql)
+- **Init()** configurando `this_cTabela = "sigcdgra"` e `this_cCampoChave = "Grupos"`
+- **ObterChavePrimaria()** retornando `this_cGrupos` para o sistema de auditoria
+
+Nota: A tabela apontada no `analise.json` (`SigAcTel`) estava incorreta ÔÇö a entidade prim├íria do form SIGCDACG ├® `sigcdgra` (grupos), confirmado pelo c├│digo legado e pelo `AcessoGrupoBO.prg` j├í existente. A Fase 2 adicionar├í `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()` e os m├®todos para gerenciar as tabelas relacionadas.

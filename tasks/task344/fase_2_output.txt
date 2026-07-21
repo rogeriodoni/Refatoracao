@@ -1,0 +1,27 @@
+﻿O arquivo est├í completo com 845 linhas. A Fase 2 foi conclu├¡da com sucesso.
+
+**Fase 2 conclu├¡da: `acuBO.prg` com m├®todos CRUD completos**
+
+M├®todos adicionados:
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `CarregarDoCursor()` | ÔÇö | Mapeia todas as colunas de sigcdusu |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro por usuario ou nome |
+| `CarregarPorCodigo(par_cUsuarios)` | PUBLIC | Carrega usu├írio pelo PK + reseta `this_lNovoRegistro=.F.` |
+| `Inserir()` | PROTECTED | INSERT em sigcdusu |
+| `Atualizar()` | PROTECTED | UPDATE em sigcdusu |
+| `ExecutarExclusao()` | PROTECTED | DELETE em cascata: sigcdacu ÔåÆ sigcdacg ÔåÆ sigcdace ÔåÆ sigcdacb ÔåÆ sigcdusu |
+| `BuscarGrupos()` | PUBLIC | SELECT sigcdgra |
+| `BuscarProgramas()` | PUBLIC | SELECT sigcdprg com campo `marcas=0` |
+| `CarregarAcessosPorUsuario()` | PUBLIC | SELECT sigcdacu por usuario |
+| `CarregarGruposPorUsuario()` | PUBLIC | SELECT sigcdacg por usuario |
+| `CarregarEmpresasPorUsuario()` | PUBLIC | SELECT sigcdace + JOIN sigcdemp |
+| `CarregarBarraPorUsuario()` | PUBLIC | SELECT sigcdacb ordenado por barraordem |
+| `SalvarAcessos()` | PUBLIC | DELETE + INSERT sigcdacu (programas marcados) |
+| `SalvarGrupos()` | PUBLIC | DELETE + INSERT sigcdacg (grupos marcados) |
+| `SalvarEmpresas()` | PUBLIC | DELETE + INSERT sigcdace (empresas marcadas) |
+| `SalvarBarra()` | PUBLIC | DELETE + INSERT sigcdacb (barra selecionada) |
+| `LimparSenha()` | PUBLIC | UPDATE sigcdusu SET senhas='' |
+| `VerificarUsuarioExistente()` | PUBLIC | SELECT TOP 1 para verificar duplicidade |
+| `CopiarAcessos()` | PUBLIC | Copia acu+acg+ace+acb de um usu├írio para outro |

@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O `SIGPRPROBO.prg` foi completado com:
+
+- **`BuscarDadosProduto(par_cCPros)`** ÔÇö faz `SELECT dpros FROM SigCdPro WHERE cpros = ...`, equivalente ao `SqlExecute(lcQuery, 'LocalPro')` do legado. Carrega `this_cDPros`.
+
+- **`BuscarCaracteristicas(par_cCPros)`** ÔÇö faz `SELECT cidchaves, caracteris, compls, infos FROM SigPrCrr WHERE cpros = ... ORDER BY cidchaves`, equivalente ao `CursorQuery('SigPrCrr', 'LocalCrPro', 'CPros', pPro)` do legado. Usa o padr├úo canonico: SQLEXEC ÔåÆ cursor temp ÔåÆ ZAP ÔåÆ APPEND FROM DBF no `cursor_4c_Carac`.
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todas as colunas de SigPrCrr para as propriedades do BO usando `SELECT (par_cAliasCursor)`.
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidChaves`.
+
+Como ├® um form de visualiza├º├úo pura, n├úo h├í `Inserir`/`Atualizar`/`ExecutarExclusao` ÔÇö a Fase 3 criar├í o Form que chamar├í esses m├®todos do BO passando o `par_cCPros` recebido do form pai.

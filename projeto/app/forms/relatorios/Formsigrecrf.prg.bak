@@ -102,7 +102,9 @@ DEFINE CLASS Formsigrecrf AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF EMPTY(THIS.this_oRelatorio.this_cGrPadVens)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF

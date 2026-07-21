@@ -1,0 +1,15 @@
+﻿Tanto o `FormSIGPRCCR.prg` quanto o `SIGPRCCRBO.prg` j├í est├úo **completos**. Este ├® um formul├írio REPORT com layout flat ÔÇö a Fase 4 do template gen├®rico (Grid + bot├Áes CRUD de Page1) **n├úo se aplica** a forms REPORT.
+
+**Estado atual:**
+
+O `FormSIGPRCCR.prg` j├í tem tudo que um REPORT form precisa:
+- `ConfigurarCabecalho()` ÔÇö faixa cinza com t├¡tulo (equivalente ao "Page1" de CRUD forms)
+- `ConfigurarBotoes()` ÔÇö CommandGroup com 4 bot├Áes can├┤nicos (Visualizar, Imprimir, Arquivos Email, Encerrar)
+- BINDEVENTs para todos os 4 bot├Áes
+- `ExecutarReportForm()` com Pattern #117 (isolamento locale + guard FILE() + guard cursor vazio)
+- `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick` todos implementados com guard `!EMPTY(this_cMensagemErro)` (Pattern #122)
+- `Destroy()` limpando o BO
+
+O `SIGPRCCRBO.prg` tamb├®m est├í completo com `PrepararDados()` que verifica `CrProdutos`, busca empresa via `SQLEXEC`, monta `CsCabecalho` e `CsRelatorio` (aliases legados para o FRX).
+
+**Fase 4 conclu├¡da** ÔÇö n├úo h├í modifica├º├Áes necess├írias. Podemos avan├ºar para a Fase 5/6 (integra├º├úo de menu, c├│pia do FRX, compila├º├úo).

@@ -1902,11 +1902,19 @@ function Corrigir-MsgAvisoAntesDoPicker {
     while ($i -lt $Linhas.Count) {
         $linha = $Linhas[$i]
 
-        # Detecta MsgAviso("...encontrad...", "...") ou similar
+        # Detecta MsgAviso("...encontrad...", "...") ou similar (single OU multi-linha)
         if ($linha -match '(?i)^\s*MsgAviso\s*\(\s*["\[].*encontrad') {
-            # Olhar ate 5 linhas a frente por THIS.AbrirBusca<X>()
+            # v2 (2026-07-21): detecta fim de MsgAviso multi-linha (continuation `;`)
+            # Linha inicial "MsgAviso(...)" pode ter ; no fim; segue continuando ate
+            # encontrar linha SEM `;` no fim, que eh a ultima do statement MsgAviso.
+            $idxMsgAvisoEnd = $i
+            while ($idxMsgAvisoEnd -lt ($Linhas.Count - 1) -and $Linhas[$idxMsgAvisoEnd] -match ';\s*$') {
+                $idxMsgAvisoEnd++
+            }
+
+            # Olhar ate 5 linhas apos o fim do MsgAviso por THIS.AbrirBusca<X>()
             $achouAbrirBusca = -1
-            for ($j = $i + 1; $j -lt [Math]::Min($i + 6, $Linhas.Count); $j++) {
+            for ($j = $idxMsgAvisoEnd + 1; $j -lt [Math]::Min($idxMsgAvisoEnd + 6, $Linhas.Count); $j++) {
                 if ($Linhas[$j] -match '(?i)^\s*THIS\.AbrirBusca\w+\s*\(') {
                     $achouAbrirBusca = $j
                     break
@@ -1919,23 +1927,24 @@ function Corrigir-MsgAvisoAntesDoPicker {
                 if ($Linhas[$j].Trim() -eq "") {
                     continue
                 }
-                # Qualquer outra coisa entre = nao qualifica (nao eh o anti-padrao)
+                # Qualquer outra coisa nao qualifica (nao eh o anti-padrao)
                 break
             }
 
             if ($achouAbrirBusca -gt 0) {
                 # Registra correcao
+                $multiLinha = if ($idxMsgAvisoEnd -gt $i) { " (multi-linha $($idxMsgAvisoEnd - $i + 1)L)" } else { "" }
                 Add-Correcao -Tipo "MSGAVISO-ANTES-PICKER" -Linha ($i + 1) `
                     -Original $linha.Trim() `
-                    -Corrigido "(linha removida + clear-field removidos)" `
-                    -Descricao "MsgAviso redundante antes de THIS.AbrirBusca handler - Pattern #114"
+                    -Corrigido "(MsgAviso$multiLinha + clear-field removidos)" `
+                    -Descricao "MsgAviso redundante antes de THIS.AbrirBusca handler - Pattern #114 v2 (suporte multi-linha via continuation `;`)"
 
                 # Detectar indent da linha MsgAviso para adicionar comentario
                 $indent = ""
                 if ($linha -match '^(\s+)') { $indent = $Matches[1] }
                 [void]$resultado.Add("${indent}*-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix")
 
-                # Pula MsgAviso e clear-field ate chegar no AbrirBusca (mantido)
+                # Pula MsgAviso (todas as linhas do statement multi-linha) e clear-field ate chegar no AbrirBusca (mantido)
                 $i = $achouAbrirBusca
                 continue
             }
@@ -6201,11 +6210,20 @@ function Corrigir-Buttons3RelatorioEmail {
             $dentroButtons3 = $false
         }
         elseif ($dentroButtons3) {
-            # 1. Caption "Excel" -> "\<Arquivos Email"
-            if ($linha -match '(?i)^(\s*\.Caption\s*=\s*)"Excel"(\s*(?:&&.*)?)$') {
+            # 1. Caption variantes de Excel/DocExcel -> "\<Arquivos Email"
+            #    Cobre: "Excel", "Doc. Excel", "Doc.Excel", "DocExcel", "Doc Excel"
+            #    (o Name interno legado eh "DocExcel" — induz gerador ao erro;
+            #     Caption canonico do framework eh "\<Arquivos Email" com hotkey A)
+            if ($linha -match '(?i)^(\s*\.Caption\s*=\s*)"(Excel|Doc\.? ?Excel|DocExcel)"(\s*(?:&&.*)?)$') {
+                $antes = $linha
+                $linha = $Matches[1] + '"\<Arquivos Email"' + $Matches[3]
+                Add-Correcao -Tipo "REPORT-BTN3-CAPTION" -Linha ($i + 1) -Original $antes.Trim() -Corrigido $linha.Trim() -Descricao "Buttons(3) REPORT: Caption variante Excel/DocExcel -> '\<Arquivos Email' (framework btnReport.Command3 - Pattern #100 v2, Erro50 2026-07-17)"
+            }
+            # 1b. Caption sem barra invertida (hotkey perdido em sed anterior)
+            elseif ($linha -match '(?i)^(\s*\.Caption\s*=\s*)"<Arquivos Email"(\s*(?:&&.*)?)$') {
                 $antes = $linha
                 $linha = $Matches[1] + '"\<Arquivos Email"' + $Matches[2]
-                Add-Correcao -Tipo "REPORT-BTN3-CAPTION" -Linha ($i + 1) -Original $antes.Trim() -Corrigido $linha.Trim() -Descricao "Buttons(3) REPORT: Caption 'Excel' -> '\<Arquivos Email' (framework btnReport.Command3 - Pattern #100)"
+                Add-Correcao -Tipo "REPORT-BTN3-HOTKEY" -Linha ($i + 1) -Original $antes.Trim() -Corrigido $linha.Trim() -Descricao "Buttons(3) REPORT: Caption '<Arquivos Email' -> '\<Arquivos Email' (restore hotkey A, Pattern #100 v2)"
             }
             # 2. Picture relatorio_excel_26.jpg -> geral_envelope_32.jpg
             elseif ($linha -match '(?i)^(\s*\.Picture\s*=\s*[^"]*")relatorio_excel_26\.jpg("(\s*(?:&&.*)?)?)$') {
@@ -8052,63 +8070,88 @@ function Corrigir-GridColumnCheckboxSparse {
 #==============================================================================
 # Pattern #122: Corrigir-BtnReportGuardEmptyMsgErro
 # Detecta em forms REPORT o padrao:
-#   IF !THIS.this_oRelatorio.<method>()
-#       MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)
-#   ENDIF
-# Onde <method> in (Atualizar, Inserir, ImprimirRelatorio, PrepararDados).
-# Injeta guard `AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)` na
-# condicao. Motivo: o helper canonico ExecutarReportForm (Pattern #117) exibe
-# seu proprio MsgAviso quando cursor vazio ou FRX ausente e retorna .F. sem
-# setar this_cMensagemErro — sem guard, MsgErro("") mostra modal com titulo
-# "Relatorio" e corpo VAZIO em sequencia (Erro40, 2026-07-14, FormSIGREADS).
-# Idempotente: nao afeta IF que ja tem !EMPTY na condicao.
+#   MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)      <- property variant
+#   MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ...)     <- method variant
+# Wrap com guard `IF !EMPTY(<expr>) / MsgErro / ENDIF` (nested-IF style).
+# Motivo: o helper canonico ExecutarReportForm (Pattern #117) exibe seu proprio
+# MsgAviso quando cursor vazio ou FRX ausente e retorna .F. sem setar
+# cMensagemErro — sem guard, MsgErro("") mostra modal com titulo "Relatorio" e
+# corpo VAZIO em sequencia (Erro40, 2026-07-14 FormSIGREADS + Erro48, 2026-07-17
+# FormSigReAni). Nested-IF eh SEGURO com ELSE branches (RegistrarAuditoria em
+# sucesso) — a variante antiga `AND !EMPTY(...)` na condicao do IF externo
+# quebrava semantica quando havia ELSE.
+# Idempotente: skip se linha imediatamente anterior a MsgErro ja tem IF !EMPTY
+# com mesma expressao, OU se IF externo ja tem AND !EMPTY (retrocompat).
 #==============================================================================
 function Corrigir-BtnReportGuardEmptyMsgErro {
     param([string[]]$Linhas)
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
 
-    $metodosRelatorio = 'Atualizar|Inserir|ImprimirRelatorio|PrepararDados'
-    $regexIf = '(?i)^(\s*)IF\s+!\s*THIS\.this_oRelatorio\.(' + $metodosRelatorio + ')\s*\(\s*\)\s*$'
+    # Regex para detectar MsgErro(THIS.this_oRelatorio.<msg-source>, ...)
+    # Captura: (1) indent, (2) fonte da mensagem (this_cMensagemErro OR ObterMensagemErro())
+    $rxMsgErro = '(?i)^(\s*)MsgErro\s*\(\s*THIS\.this_oRelatorio\.(this_cMensagemErro|ObterMensagemErro\(\))'
 
     $resultado = New-Object System.Collections.ArrayList
     $i = 0
+
     while ($i -lt $Linhas.Count) {
         $linha = $Linhas[$i]
 
-        if ($linha -match $regexIf) {
+        if ($linha -match $rxMsgErro) {
             $indent = $Matches[1]
-            $metodo = $Matches[2]
+            $exprMsg = 'THIS.this_oRelatorio.' + $Matches[2]
 
-            # Verificar se proxima linha (dentro do IF) chama MsgErro com this_cMensagemErro
-            $j = $i + 1
-            $achouMsgErroMsg = $false
-            $fimJ = $j
-            while ($j -lt $Linhas.Count -and $j -le $i + 4) {
-                $lookahead = $Linhas[$j]
-                if ($lookahead -match '(?i)MsgErro\s*\(\s*THIS\.this_oRelatorio\.this_cMensagemErro') {
-                    $achouMsgErroMsg = $true
-                    $fimJ = $j
-                    break
+            # Idempotencia: linha anterior ja tem IF !EMPTY com a mesma expr?
+            $jaGuardado = $false
+            if ($resultado.Count -gt 0) {
+                $lnAnt = [string]$resultado[$resultado.Count - 1]
+                $exprEscape = [regex]::Escape($exprMsg)
+                if ($lnAnt -match ('(?i)IF\s+!\s*EMPTY\s*\(\s*' + $exprEscape + '\s*\)')) {
+                    $jaGuardado = $true
                 }
-                if ($lookahead -match '^\s*ENDIF\s*$') { break }
-                $j++
             }
 
-            if ($achouMsgErroMsg) {
-                # Injetar guard AND !EMPTY na condicao IF
-                $linhaNova = $indent + 'IF !THIS.this_oRelatorio.' + $metodo + '() ;'
-                $linhaGuard = $indent + '   AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)'
-                [void]$resultado.Add($linhaNova)
-                [void]$resultado.Add($linhaGuard)
+            # Idempotencia retrocompat: IF externo (walk back) ja tem AND !EMPTY?
+            if (-not $jaGuardado) {
+                $k = $resultado.Count - 1
+                while ($k -ge 0 -and $k -ge $resultado.Count - 6) {
+                    $lnBack = [string]$resultado[$k]
+                    if ($lnBack -match '(?i)AND\s+!\s*EMPTY\s*\(\s*THIS\.this_oRelatorio\.(this_cMensagemErro|ObterMensagemErro\(\))') {
+                        $jaGuardado = $true
+                        break
+                    }
+                    if ($lnBack -match '(?i)^\s*IF\s+') { break }
+                    $k--
+                }
+            }
 
-                Add-Correcao -Tipo "BTN-REPORT-EMPTY-MSGERRO-GUARD" -Linha ($i + 1) `
-                    -Original $linha.Trim() `
-                    -Corrigido ("IF !THIS.this_oRelatorio." + $metodo + "() AND !EMPTY(this_cMensagemErro)") `
-                    -Descricao "Pattern 122: BtnVisualizar/Imprimir Click chama MsgErro(this_cMensagemErro,...) apos !Atualizar()/!Inserir() sem checar EMPTY; helper ExecutarReportForm (Pattern 117) mostra MsgAviso proprio quando cursor vazio/FRX ausente e retorna .F. sem cMensagemErro, causando SEGUNDO modal com titulo Relatorio e corpo VAZIO. Guard AND !EMPTY(...) injetado. Origem Erro40 (2026-07-14 FormSIGREADS)."
+            if ($jaGuardado) {
+                [void]$resultado.Add($linha)
                 $i++
                 continue
             }
+
+            # Descobrir extensao do bloco MsgErro (single-line ou continuation com ;)
+            $blocoMsgErro = @($linha)
+            $j = $i
+            while ($j -lt $Linhas.Count - 1 -and $Linhas[$j] -match ';\s*$') {
+                $j++
+                $blocoMsgErro += $Linhas[$j]
+            }
+
+            # Injetar guard nested-IF (mais seguro que AND !EMPTY — funciona com ELSE)
+            [void]$resultado.Add($indent + 'IF !EMPTY(' + $exprMsg + ')')
+            foreach ($ln in $blocoMsgErro) { [void]$resultado.Add($ln) }
+            [void]$resultado.Add($indent + 'ENDIF')
+
+            Add-Correcao -Tipo "BTN-REPORT-EMPTY-MSGERRO-GUARD" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido ("IF !EMPTY(" + $exprMsg + ") / MsgErro / ENDIF") `
+                -Descricao "Pattern 122 (v2): MsgErro(<msg-source>, ...) em BtnVisualizarClick/BtnImprimirClick sem guard EMPTY. Helper ExecutarReportForm (Pattern 117) mostra MsgAviso proprio quando cursor vazio/FRX ausente e retorna .F. sem cMensagemErro, causando SEGUNDO modal com titulo Relatorio e corpo VAZIO. Wrap com nested IF !EMPTY (seguro com ELSE branches). Cobre variantes this_cMensagemErro (property) e ObterMensagemErro() (method). Origens: Erro40 (2026-07-14 FormSIGREADS) + Erro48 (2026-07-17 FormSigReAni)."
+
+            $i = $j + 1
+            continue
         }
 
         [void]$resultado.Add($linha)
@@ -8608,6 +8651,409 @@ function Corrigir-SigCdEmpTextBoxMaxLength {
     return $saida
 }
 
+function Corrigir-ReportBOCursorDadosDeclarada {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Filtro rapido: sem THIS.this_cCursorDados no arquivo, skip
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)THIS\.this_cCursorDados') { return $Linhas }
+
+    # Se ja tem declaracao (linha `this_cCursorDados = ...`), skip - idempotente
+    if ($conteudo -match '(?im)^\s*this_cCursorDados\s*=') { return $Linhas }
+
+    # Localiza DEFINE CLASS XxxBO AS RelatorioBase (case-insensitive)
+    $idxDefineClass = -1
+    $idxEndDefine = -1
+    $classBase = ''
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($idxDefineClass -lt 0 -and $Linhas[$i] -match '(?i)^\s*DEFINE\s+CLASS\s+(\w+)\s+AS\s+RelatorioBase\b') {
+            $idxDefineClass = $i
+            $classBase = $Matches[1]
+        }
+        elseif ($idxDefineClass -ge 0 -and $Linhas[$i] -match '(?i)^\s*ENDDEFINE\b') {
+            $idxEndDefine = $i
+            break
+        }
+    }
+
+    if ($idxDefineClass -lt 0) { return $Linhas }
+    if ($idxEndDefine -lt 0) { $idxEndDefine = $Linhas.Count - 1 }
+
+    # Localiza a ultima property `this_XXX =` no bloco (para antes do primeiro PROCEDURE/FUNCTION)
+    $idxUltimaProperty = -1
+    $indentProperty = ''
+    for ($i = $idxDefineClass + 1; $i -le $idxEndDefine; $i++) {
+        # Para no primeiro PROCEDURE/FUNCTION (fim do bloco de props)
+        if ($Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\b') {
+            break
+        }
+        # Match property padrao 'this_<name> = <value>'
+        if ($Linhas[$i] -match '^(\s*)this_\w+\s*=') {
+            $idxUltimaProperty = $i
+            $indentProperty = $Matches[1]
+        }
+    }
+
+    if ($idxUltimaProperty -lt 0) { return $Linhas }
+
+    # Injetar apos a ultima property
+    $resultado = [System.Collections.ArrayList]::new()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) { [void]$resultado.Add($Linhas[$i]) }
+
+    $novaLinha1 = ''
+    $novaLinha2 = $indentProperty + '*-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX'
+    $novaLinha3 = $indentProperty + 'this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51'
+
+    $resultado.Insert($idxUltimaProperty + 1, $novaLinha3)
+    $resultado.Insert($idxUltimaProperty + 1, $novaLinha2)
+    $resultado.Insert($idxUltimaProperty + 1, $novaLinha1)
+
+    Add-Correcao -Tipo "REPORTBO-CURSORDADOS-DECLARADA" -Linha ($idxUltimaProperty + 2) `
+        -Original "(this_cCursorDados NAO declarada em DEFINE CLASS $classBase AS RelatorioBase)" `
+        -Corrigido "this_cCursorDados = `"`" injetado apos ultima property (linha $($idxUltimaProperty + 1))" `
+        -Descricao "Pattern #142: BO REPORT $classBase chama THIS.ExecutarReportForm(base, modo, THIS.this_cCursorDados) mas nao declara a property - runtime crash 'Property THIS_CCURSORDADOS is not found'. Injetado default '' (vazio) para nao crashar (Pattern #117 guard 'VARTYPE==C AND !EMPTY' skip o cursor-vazio). REVISAR e substituir pelo alias do cursor binding do FRX legado (consultar PROCEDURE visualizacao em tasks/task<NNN>/<base>_form_codigo_fonte.txt - buscar cursor do ultimo SELECT/GO TOP antes do REPORT FORM). Origem Erro51 (2026-07-21, FormSIGREAEG)."
+
+    Write-Host "[Pattern #142] $classBase - this_cCursorDados injetado VAZIO - REVISAR e substituir pelo alias do FRX legado" -ForegroundColor Yellow
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #143: Corrigir-IndexOnCollateGeneralWarning
+# WARNING-only: sinaliza INDEX ON com chave composta grande em BOs REPORT.
+# Sob SET COLLATE TO "GENERAL" (config.prg:182) o limite maximo de chave CDX
+# cai de 240 para ~120 bytes. Chaves grandes estouram: "Invalid key length.".
+# Correcao manual sugerida: usar ORDER BY no SELECT-SQL (sort in-memory nao
+# tem esse limite; ordem de registros eh o que REPORT FORM precisa para
+# grupos FRX). Alternativa: SET COLLATE TO "MACHINE" antes do INDEX ON e
+# restaurar depois.
+# Origem: Erro53 (2026-07-21, FormSIGREAUP, SIGREAUPBO linha 210):
+#   INDEX ON Quebra1 + Quebra2 + DTOS(Datas) + STR(Nenvs, 10) TAG Ordem
+#   com Quebra1/Quebra2 max=72 chars → total 162 → 324 bytes sob GENERAL.
+# NAO auto-refactor porque:
+#   (a) INDEX ON usado para SEEK precisa continuar como INDEX (nao vira ORDER BY).
+#   (b) Detectar se INDEX eh usado apenas para REPORT FORM eh AST-level.
+#   (c) SUBSTR-truncar componentes altera semantica de ordenacao.
+# WARNING amarelo permite dev decidir per-case.
+#==============================================================================
+function Corrigir-IndexOnCollateGeneralWarning {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Filtro: aplica apenas em BOs REPORT (herdam RelatorioBase)
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+RelatorioBase\b') {
+        return $Linhas
+    }
+
+    # INDEX ON <expr>+<expr>+... TAG <tag>
+    # Heuristica: 3+ concatenacoes (2+ operadores "+") indicam chave composta grande
+    $rx = '^(\s*)INDEX\s+ON\s+(.+?)\s+TAG\s+(\w+)\s*$'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -notmatch $rx) { continue }
+
+        $expr = $Matches[2]
+        $tag  = $Matches[3]
+
+        # Contar operadores "+" (separadores de campos concatenados)
+        $plusCount = ([regex]::Matches($expr, '\+')).Count
+        if ($plusCount -lt 2) { continue }  # 3+ componentes = risco
+
+        Add-Correcao -Tipo "WARN-INDEX-ON-COLLATE-GENERAL" -Linha ($i + 1) `
+            -Original $linha.Trim() `
+            -Corrigido "(REVISAR MANUAL) SELECT-SQL com ORDER BY em vez de INDEX ON" `
+            -Descricao "Pattern #143 WARNING: INDEX ON com $($plusCount + 1) componentes concatenados (TAG $tag). Sob SET COLLATE TO GENERAL (config.prg) limite CDX cai de 240 para ~120 bytes. Se chave > ~60 chars, runtime crash 'Invalid key length.'. Fix recomendado: substituir por ORDER BY no SELECT-SQL que criou o cursor. Alternativa: SET COLLATE TO MACHINE antes do INDEX e restaurar depois. Origem: Erro53 (2026-07-21, SIGREAUPBO)."
+
+        Write-Host "[Pattern #143] Linha $($i + 1): INDEX ON com $($plusCount + 1) componentes (TAG $tag) - REVISAR (risco Invalid key length sob COLLATE GENERAL)" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+#==============================================================================
+# Pattern #144: Corrigir-ReportFormLocVarIIFWarning
+# WARNING-only: sinaliza `REPORT FORM (loc_c<Var>) <MODO>` fora do helper
+# ExecutarReportForm em BOs REPORT. Cobre o blind spot dos Patterns #117 e
+# #123 quando a variavel eh atribuida em multi-linha ou com IIF:
+#   loc_cRelatorio = gc_4c_CaminhoReports + ;
+#                    IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+#   REPORT FORM (loc_cRelatorio) PREVIEW NOCONSOLE
+# Pattern #117 exige atribuicao single-line com string literal simples;
+# Pattern #123 exige forma inline `REPORT FORM (gc_4c_CaminhoReports + "X")`.
+# Nenhum pega o padrao IIF-assigned ou multi-linha.
+# Fix manual: refatorar para chamar THIS.ExecutarReportForm(<expr>, "MODO", cursor)
+# onde <expr> pode ser a propria IIF, mantendo semantica; injetar helper se
+# ausente (template canonico em SIGREAEGBO.prg:1192-1235).
+# NAO auto-refactor porque:
+#   (a) Decidir cursor correto como 3o param exige leitura de PrepararDados.
+#   (b) Multi-linha com `;` requer parser AST, nao regex confiavel.
+#   (c) Erro na substituicao quebra REPORT FORM silenciosamente.
+# Origem: Erro54 (2026-07-21, FormSIGREAUP/SIGREAUPBO): sem helper, "File
+# does not exist" nao indicava qual FRX faltava; sem isolamento de locale,
+# FRXs Fortyus renderizavam asteriscos em numericos; sem guard cursor
+# vazio, preview em branco.
+#==============================================================================
+function Corrigir-ReportFormLocVarIIFWarning {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Filtro: aplica apenas em BOs REPORT (herdam RelatorioBase)
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+RelatorioBase\b') {
+        return $Linhas
+    }
+
+    # Localiza range da PROCEDURE ExecutarReportForm (se existir) para excluir
+    # chamadas REPORT FORM legitimas dentro do helper canonico.
+    $helperStart = -1
+    $helperEnd = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($helperStart -lt 0 -and $Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+ExecutarReportForm\b') {
+            $helperStart = $i
+        }
+        elseif ($helperStart -ge 0 -and $Linhas[$i] -match '(?i)^\s*ENDPROC\b') {
+            $helperEnd = $i
+            break
+        }
+    }
+
+    # REPORT FORM (<var>) <MODO>  - var comeca com loc_c (variavel local)
+    $rx = '^(\s*)REPORT\s+FORM\s+\(\s*(loc_c\w+)\s*\)\s+(PREVIEW|TO\s+PRINTER\s+PROMPT|TO\s+PRINTER)(?:\s+NOCONSOLE)?\s*$'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        # Skip: dentro do helper canonico
+        if ($helperStart -ge 0 -and $i -ge $helperStart -and ($helperEnd -lt 0 -or $i -le $helperEnd)) {
+            continue
+        }
+
+        $linha = $Linhas[$i]
+        if ($linha -notmatch $rx) { continue }
+
+        $varName = $Matches[2]
+        $modo    = $Matches[3].Trim()
+
+        Add-Correcao -Tipo "WARN-REPORT-FORM-LOCVAR-IIF" -Linha ($i + 1) `
+            -Original $linha.Trim() `
+            -Corrigido "(REVISAR MANUAL) THIS.ExecutarReportForm(<expr>, `"$($modo -replace '\s+','_' -replace 'TO_PRINTER_PROMPT','PRINTER_PROMPT' -replace 'TO_PRINTER','PRINTER')`", `"<cursor>`")" `
+            -Descricao "Pattern #144 WARNING: REPORT FORM ($varName) fora do helper canonico ExecutarReportForm. Var $varName possivelmente atribuida via IIF ou multi-linha (blind spot dos Patterns #117/#123). Fix manual: refatorar Visualizar/Imprimir/Documento para chamar THIS.ExecutarReportForm(<expr>, `"PREVIEW|PRINTER_PROMPT|PRINTER`", <cursor>); injetar helper se ausente (template SIGREAEGBO.prg:1192-1235). Sem helper: FRX ausente estoura 'File does not exist' generico; FRXs Fortyus renderizam asteriscos em numericos; cursor vazio abre preview em branco. Origem: Erro54 (2026-07-21, SIGREAUPBO)."
+
+        Write-Host "[Pattern #144] Linha $($i + 1): REPORT FORM ($varName) fora do helper canonico - REVISAR e refatorar para THIS.ExecutarReportForm" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+#==============================================================================
+# Pattern #145: Corrigir-DestroySemDodefault
+# Detecta forms que sobrescrevem PROCEDURE Destroy sem chamar DODEFAULT() no
+# final. Isso quebra o FIX menu-shrinks aplicado em FormBase.Destroy (Erro58),
+# porque a lógica de RELEASE POPUP + CriarMenuPrincipal nao roda.
+#
+# ANTES:
+#   PROCEDURE Destroy()
+#       IF USED("cursor_X")
+#           USE IN cursor_X
+#       ENDIF
+#   ENDPROC
+#
+# DEPOIS:
+#   PROCEDURE Destroy()
+#       IF USED("cursor_X")
+#           USE IN cursor_X
+#       ENDIF
+#       DODEFAULT()   && Injetado - chama FormBase.Destroy (menu-shrinks fix)
+#   ENDPROC
+#
+# Auto-fix seguro: injeta DODEFAULT() como ultima linha antes de ENDPROC.
+# So aplica se o form herda de FormBase (checa DEFINE CLASS ... AS FormBase).
+# Origem: Erro58 (2026-07-21) — 233 forms tinham Destroy override, 1 sem DODEFAULT.
+# Sem esse pattern, novos forms migrados podem ficar sem DODEFAULT e perder o
+# menu-shrinks fix silenciosamente.
+#==============================================================================
+function Corrigir-DestroySemDodefault {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Filtro: aplica apenas em forms que herdam de FormBase
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+FormBase\b') {
+        return $Linhas
+    }
+
+    # Localiza bloco PROCEDURE Destroy ... ENDPROC
+    $procStart = -1
+    $procEnd = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($procStart -lt 0 -and $Linhas[$i] -match '(?i)^\s*PROCEDURE\s+Destroy\s*\(') {
+            $procStart = $i
+        }
+        elseif ($procStart -ge 0 -and $Linhas[$i] -match '(?i)^\s*ENDPROC\b') {
+            $procEnd = $i
+            break
+        }
+    }
+
+    if ($procStart -lt 0 -or $procEnd -lt 0) { return $Linhas }
+
+    # Verifica se ja tem DODEFAULT no bloco
+    $temDodefault = $false
+    for ($i = $procStart; $i -le $procEnd; $i++) {
+        if ($Linhas[$i] -match '(?i)DODEFAULT\s*\(\s*\)') {
+            $temDodefault = $true
+            break
+        }
+    }
+
+    if ($temDodefault) { return $Linhas }  # Ja OK, skip
+
+    # Injetar DODEFAULT() antes de ENDPROC, respeitando indentacao
+    $indent = ""
+    # Pega indent da linha anterior a ENDPROC (ou do PROCEDURE + 4 espacos)
+    for ($i = $procEnd - 1; $i -gt $procStart; $i--) {
+        if ($Linhas[$i] -match '^(\s+)\S') {
+            $indent = $Matches[1]
+            break
+        }
+    }
+    if ([string]::IsNullOrEmpty($indent)) {
+        # Fallback: usar indent do PROCEDURE + 4 espacos
+        if ($Linhas[$procStart] -match '^(\s*)PROCEDURE') {
+            $indent = $Matches[1] + "    "
+        } else {
+            $indent = "        "
+        }
+    }
+
+    $resultado = [System.Collections.ArrayList]::new()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($i -eq $procEnd) {
+            [void]$resultado.Add($indent + "DODEFAULT()   && FIX menu-shrinks: chama FormBase.Destroy (RELEASE POPUP + CriarMenuPrincipal)")
+        }
+        [void]$resultado.Add($Linhas[$i])
+    }
+
+    Add-Correcao -Tipo "DESTROY-SEM-DODEFAULT" -Linha ($procEnd + 1) `
+        -Original "PROCEDURE Destroy sem DODEFAULT" `
+        -Corrigido "DODEFAULT injetado antes de ENDPROC" `
+        -Descricao "Pattern 145: Form sobrescrevia PROCEDURE Destroy sem chamar DODEFAULT - isso quebrava o fix menu-shrinks em FormBase.Destroy Erro58. Injetado DODEFAULT como ultima linha do bloco para restaurar a cadeia de heranca. Sem esse fix, popups do MSYSMENU Cadastros Movimentos Relatorios renderizam truncados apos este form fechar cache visual stale do VFP9. Origem Erro58 2026-07-21."
+
+    Write-Host "[Pattern #145] PROCEDURE Destroy sem DODEFAULT() - INJETADO" -ForegroundColor Yellow
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
+#==============================================================================
+# Pattern #146: Corrigir-GridCheckboxPropsExplicitas
+# Detecta AddObject Check1 CheckBox em WITH Column1 e injeta propriedades
+# explicitas ReadOnly, Visible, Alignment, Top, Left, Height, Width se ausentes.
+#
+# ANTES:
+#   WITH loc_oGrd.Column1
+#       .Width = 15
+#       .Sparse = .F.
+#       .AddObject Check1 CheckBox
+#       .Check1.Caption = ""
+#       .CurrentControl = Check1
+#       .ControlSource = cursor.SelImp
+#   ENDWITH
+#
+# DEPOIS: Injeta apos .Check1.Caption:
+#       .Check1.Alignment = 0
+#       .Check1.ReadOnly = .F.
+#       .Check1.Visible = .T.
+#       .Check1.Top = 9
+#       .Check1.Left = 2
+#       .Check1.Height = 17
+#       .Check1.Width = 22
+#
+# Motivo: Sem essas props explicitas, CheckBox em Grid Column pode renderizar
+# como retangulo pequeno ou nao responder a cliques (VFP9 assume defaults que
+# nao funcionam bem em contexto Grid). Origem: Erro59 (2026-07-21, Formsigreato)
+# — cliques em checkbox nao mudavam estado. Legacy sempre define essas props.
+# Complementa Pattern #121 Sparse=.F.
+# Idempotente: se qualquer prop ja existe no bloco, skip da mesma prop.
+#==============================================================================
+function Corrigir-GridCheckboxPropsExplicitas {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)\.AddObject\s*\(\s*"Check1"\s*,\s*"CheckBox"') {
+        return $Linhas
+    }
+
+    $resultado = [System.Collections.ArrayList]::new()
+    $i = 0
+    $totalInjecoes = 0
+
+    while ($i -lt $Linhas.Count) {
+        $linha = $Linhas[$i]
+        [void]$resultado.Add($linha)
+
+        # Detectar linha com .Check1.Caption dentro de WITH Column1 (padrao canonico)
+        if ($linha -match '(?i)^(\s*)\.Check1\.Caption\s*=\s*""') {
+            $indent = $Matches[1]
+
+            # Verificar se as props ja estao presentes nas proximas ~15 linhas ate ENDWITH
+            $j = $i + 1
+            $temAlignment = $false; $temReadOnly = $false; $temVisible = $false
+            $temTop = $false; $temLeft = $false; $temHeight = $false; $temWidth = $false
+            $endWithIdx = -1
+            while ($j -lt $Linhas.Count -and ($j - $i) -lt 20) {
+                if ($Linhas[$j] -match '(?i)^\s*ENDWITH\s*$') { $endWithIdx = $j; break }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Alignment\s*=') { $temAlignment = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.ReadOnly\s*=')  { $temReadOnly = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Visible\s*=')   { $temVisible = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Top\s*=')       { $temTop = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Left\s*=')      { $temLeft = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Height\s*=')    { $temHeight = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Check1\.Width\s*=')     { $temWidth = $true }
+                $j++
+            }
+
+            # Injetar as ausentes apos .Check1.Caption
+            $injetou = $false
+            if (-not $temAlignment) { [void]$resultado.Add($indent + '.Check1.Alignment = 0'); $injetou = $true }
+            if (-not $temReadOnly)  { [void]$resultado.Add($indent + '.Check1.ReadOnly  = .F.'); $injetou = $true }
+            if (-not $temVisible)   { [void]$resultado.Add($indent + '.Check1.Visible   = .T.'); $injetou = $true }
+            if (-not $temTop)       { [void]$resultado.Add($indent + '.Check1.Top       = 9'); $injetou = $true }
+            if (-not $temLeft)      { [void]$resultado.Add($indent + '.Check1.Left      = 2'); $injetou = $true }
+            if (-not $temHeight)    { [void]$resultado.Add($indent + '.Check1.Height    = 17'); $injetou = $true }
+            if (-not $temWidth)     { [void]$resultado.Add($indent + '.Check1.Width     = 22'); $injetou = $true }
+
+            if ($injetou) {
+                $totalInjecoes++
+                Add-Correcao -Tipo "GRID-CHECKBOX-PROPS-EXPLICITAS" -Linha ($i + 2) `
+                    -Original ".Check1 sem props explicitas ReadOnly/Visible/Alignment/Top/Left/Height/Width" `
+                    -Corrigido "Injetadas props explicitas apos .Check1.Caption" `
+                    -Descricao "Pattern 146: CheckBox em Grid Column sem props explicitas nao responde a cliques em runtime. Sem ReadOnly=.F. o VFP9 pode assumir readonly em contexto Grid; sem Top/Left/Height/Width a area clicavel eh menor que o retangulo visual. Injetadas as 7 props canonicas do legado. Origem Erro59 2026-07-21 Formsigreato."
+            }
+        }
+
+        $i++
+    }
+
+    if ($totalInjecoes -gt 0) {
+        Write-Host "[Pattern #146] $totalInjecoes bloco(s) Check1 com props explicitas injetadas" -ForegroundColor Yellow
+    }
+
+    $saida = New-Object string[] $resultado.Count
+    for ($k = 0; $k -lt $resultado.Count; $k++) { $saida[$k] = [string]$resultado[$k] }
+    return $saida
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -8774,6 +9220,11 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ReportFormConcatInline -Linhas $linhas
     $linhas = Corrigir-SigCdEmpColunasInvalidas -Linhas $linhas
     $linhas = Corrigir-SigCdEmpTextBoxMaxLength -Linhas $linhas
+    $linhas = Corrigir-ReportBOCursorDadosDeclarada -Linhas $linhas
+    $linhas = Corrigir-IndexOnCollateGeneralWarning -Linhas $linhas
+    $linhas = Corrigir-ReportFormLocVarIIFWarning -Linhas $linhas
+    $linhas = Corrigir-DestroySemDodefault -Linhas $linhas
+    $linhas = Corrigir-GridCheckboxPropsExplicitas -Linhas $linhas
 
     # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
     $conteudoFinal = $linhas -join "`r`n"

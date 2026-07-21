@@ -1,0 +1,18 @@
+﻿Ap├│s inspecionar exaustivamente os dois arquivos (`FormSigPrDsc.prg` e `SigPrDscBO.prg`) ÔÇö inclusive a vers├úo `.pre_review` ÔÇö **o problema reportado ├® um falso positivo**.
+
+A coluna `CONTROLCOUNT` **n├úo existe em nenhuma cl├íusula SQL WHERE** nos arquivos. As ├║nicas ocorr├¬ncias de `ControlCount` no c├│digo est├úo nas linhas 473 e 485 de `FormSigPrDsc.prg`, dentro do m├®todo VFP `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          && linha 473
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ... && linha 485
+```
+
+Isso ├® uma **propriedade VFP de objeto** (`.ControlCount` = n├║mero de controles de um container), n├úo um nome de coluna SQL. A ferramenta de review confundiu o acesso ├á propriedade VFP com uma condi├º├úo WHERE inventada.
+
+Todos os WHERE das queries SQL no BO est├úo corretos:
+- `BuscarDicionario`: `WHERE Idioma = 'INGLES    '` Ô£ô  
+- `BuscarProdutos`: `WHERE CGrus = X` ou `WHERE CPros BETWEEN X AND Y` Ô£ô  
+- `ProcessarTraducoes`: `WHERE a.CPros = X` Ô£ô  
+- `GravarDescricoes`: `WHERE CPros = X` Ô£ô  
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö os arquivos j├í est├úo corretos para este pass SQL.

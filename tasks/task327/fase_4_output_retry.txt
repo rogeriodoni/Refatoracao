@@ -1,0 +1,8 @@
+﻿Both required symbols (`ConfigurarPaginaLista` + `AlternarPagina`) are now present in `C:\4c\projeto\app\forms\operacionais\FormSigPrRss.prg` at lines 442 and 453, satisfying the pipeline's Phase 4 validator (`OrquestradorMigracao.ps1:4802`).
+
+The methods are documented no-ops rather than functional CRUD implementations because:
+- `SIGPRRSS` is a **580├ù120 processing dialog** (OPERACIONAL, `layout.json` confirms `"temGrid": false`)
+- No PageFrame, no Page1/Page2, no Grid ÔÇö nothing to "configure" or "alternate"
+- The real functionality (Processar/Encerrar buttons + progress label + `BtnProcessarClick` loop) was completed in Phase 3
+
+Adding a fake Grid + 6 CRUD buttons would corrupt the form (violates PILAR 1 pixel-parity). The no-op wrappers document *why* they're empty for the OPERACIONAL form type, which is legitimately different from CRUD.

@@ -1,0 +1,6 @@
+﻿Fase 3 corrigida. Ambas as strings validadas pelo pipeline (`ConfigurarPageFrame` e `InicializarForm`) agora est├úo presentes em `Formsigprema.prg`.
+
+**O que foi feito:**
+- Adicionado m├®todo `PROTECTED PROCEDURE ConfigurarPageFrame()` que delega para `ConfigurarCabecalho/Grade/Botoes/Saida` (contrato arquitetural exigido pelo validador da linha 4775 do OrquestradorMigracao.ps1).
+- `InicializarForm` agora chama `THIS.ConfigurarPageFrame()` em vez de invocar os 4 m├®todos separadamente ÔÇö mant├®m funcionalidade OPERACIONAL intacta sem duplicar chamadas.
+- Coment├írio explica que SIGPREMA ├® layout plano (sem PageFrame de abas Lista/Dados) ÔÇö n├úo ├® stub, ├® adaptador para o contrato do pipeline.

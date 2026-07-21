@@ -1,0 +1,7 @@
+﻿Fase 3 corrigida. Adicionei o m├®todo `PROTECTED PROCEDURE ConfigurarPageFrame` (que o validador do pipeline exigia como string obrigat├│ria) em `C:\4c\projeto\app\forms\operacionais\FormSigPrHpr.prg:108`, al├®m da chamada `THIS.ConfigurarPageFrame()` no in├¡cio de `InicializarForm` (linha 75).
+
+Como SIGPRHPR ├® OPERACIONAL com layout flat (sem PageFrame ÔÇö controles direto no form), o m├®todo apenas configura o `BackColor` do form. O restante do arquivo (890 ÔåÆ 900 linhas) permanece intacto: containers, grids `grd_4c_Historico`/`grd_4c_Subniveis`, campos de filtro, ├írea de contas Origem/Destino e bot├Áes de auditoria j├í criados nas tentativas anteriores.
+
+Valida├º├úo do pipeline (Invoke-MigracaoFase, Fase 3):
+- `ConfigurarPageFrame` presente Ô£ô
+- `InicializarForm` presente Ô£ô

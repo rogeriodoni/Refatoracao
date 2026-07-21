@@ -89,7 +89,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarCursorSelecao( ;
                         THIS.this_cCodProd, THIS.this_cNomProd)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -327,7 +329,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -337,7 +341,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -347,7 +353,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnDocumentoClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Documento()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -367,7 +375,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnIncluirClick()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.MarcarTodos()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
         ENDIF
@@ -410,7 +420,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnExcluirClick()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.DesmarcarTodos()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
         ENDIF
@@ -462,6 +474,13 @@ DEFINE CLASS FormSigReFtp AS FormBase
                     .Resizable      = .F.
                     .AddObject("Check1", "CheckBox")
                     .Check1.Caption = ""
+                    .Check1.Alignment = 0
+                    .Check1.ReadOnly  = .F.
+                    .Check1.Visible   = .T.
+                    .Check1.Top       = 9
+                    .Check1.Left      = 2
+                    .Check1.Height    = 17
+                    .Check1.Width     = 22
                     .Check1.Value   = 0
                     .CurrentControl = "Check1"
                     .ControlSource  = "cursor_4c_SelSigReFtp.lMarca"
@@ -808,7 +827,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnSelTodosClick()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.MarcarTodos()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         ENDIF
         IF PEMSTATUS(THIS.cnt_4c_Corpo, "grd_4c_Dados", 5)
@@ -824,7 +845,9 @@ DEFINE CLASS FormSigReFtp AS FormBase
     PROCEDURE BtnLimparSelClick()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.DesmarcarTodos()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         ENDIF
         IF PEMSTATUS(THIS.cnt_4c_Corpo, "grd_4c_Dados", 5)

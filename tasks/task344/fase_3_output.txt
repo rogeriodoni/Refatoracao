@@ -1,0 +1,19 @@
+﻿Arquivo completo e v├ílido. Fase 3 conclu├¡da com sucesso.
+
+**O que foi criado em `Formacu.prg`:**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à | Cria `acuBO`, configura PageFrames, chama `CarregarLista` |
+| `ConfigurarPageFrame()` | Ô£à | PageFrame externo com `Top=-29, Tabs=.F.`, Page1+Page2 |
+| `ConfigurarPaginaLista()` | Ô£à | `cnt_4c_Cabecalho` (labels Sombra+Titulo) + `cnt_4c_Botoes` (vazio) + `cnt_4c_Saida` (cmd_4c_Encerrar) |
+| `ConfigurarPaginaDados()` | Ô£à | `cnt_4c_BotoesAcao` (Confirmar+Cancelar) + `pgf_4c_Abas` (5 abas: Acesso, Cabe├ºalho, Cadastro, Empresa, Campos) |
+| `CarregarLista()` | Ô£à | Guard `gb_4c_ValidandoUI` + `acuBO.Buscar()` (sem grid ÔÇö Fase 4) |
+| `AlternarPagina()` | Ô£à | Navega├º├úo entre Page1/Page2 |
+| `BtnEncerrarClick()` | Ô£à | `THIS.Release()` |
+| `TornarControlesVisiveis()` | Ô£à | Recursivo, percorre Pages e Controls |
+| `FormatarGridLista()` | Ô£à | Verdana 8pt nas colunas |
+| `Destroy()` | Ô£à | Fecha todos os cursores + `DODEFAULT()` |
+
+**Nota estrutural:** O `pgf_4c_Abas` (inner PageFrame) tem `Tabs=.T.` com 5 p├íginas vis├¡veis ÔÇö diferente do externo que usa `Tabs=.F.`. A posi├º├úo compensada ├® `Top=150` (121+29). Config.prg carrega automaticamente via ADIR wildcard ÔÇö sem necessidade de `SET PROCEDURE` manual.

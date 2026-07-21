@@ -1,0 +1,18 @@
+﻿Analisei todos os WHEREs SQL em ambos os arquivos:
+
+**BO (`sigprenvBO.prg`):**
+- Linha 113: `WHERE nSituas = 1 AND nTipos = 6` ÔÇö usa NSITUAS, NTIPOS Ô£ô (presentes na lista original)
+- Linha 148: `WHERE a.UsuAcess = ...` ÔÇö usa USUACESS Ô£ô
+- Linha 153: `WHERE a.Usuarios = ...` ÔÇö usa USUARIOS Ô£ô
+
+**Form (`Formsigprenv.prg`):**
+- Linha 850: `WHERE UPPER(RTRIM(Impres)) = ...` ÔÇö usa Impres (coluna real de SigCdMp) Ô£ô
+
+**Resultado:** `CONTROLCOUNT` **n├úo aparece em nenhuma cl├íusula SQL WHERE** nos dois arquivos. As ocorr├¬ncias encontradas (linhas 898 e 906 do form) s├úo acessos ├á **propriedade VFP9** `par_oContainer.ControlCount` dentro de um loop `FOR` e de um `PEMSTATUS()` ÔÇö c├│digo VFP leg├¡timo, n├úo condi├º├úo SQL:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount          && <-- propriedade VFP9
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND ...   && <-- propriedade VFP9
+```
+
+O detector do code review confundiu o acesso ├á propriedade VFP9 `.ControlCount` com uma coluna SQL em cl├íusula WHERE. Trata-se de um **falso positivo** ÔÇö nenhuma altera├º├úo ├® necess├íria nos arquivos.

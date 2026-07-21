@@ -1,0 +1,23 @@
+[2026-07-17 15:51:11] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-17 15:51:11] [INFO] Prompt File: C:\4c\tasks\task308\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-17 15:51:11] [INFO] Output File: C:\4c\tasks\task308\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-17 15:51:11] [INFO] Model: sonnet
+[2026-07-17 15:51:11] [INFO] Timeout: 3600 segundos
+[2026-07-17 15:51:11] [INFO] Max Output Tokens: 128000
+[2026-07-17 15:51:11] [INFO] Context Files: 0 arquivo(s)
+[2026-07-17 15:51:11] [INFO] Invocando Claude CLI...
+[2026-07-17 15:51:11] [INFO] Prompt carregado: 90820 caracteres
+[2026-07-17 15:51:11] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-17 15:51:11] [INFO] Tamanho total do prompt: 90820 caracteres
+[2026-07-17 15:51:11] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-17 16:04:24] [INFO] Claude CLI finalizado em 792.5574219 segundos
+[2026-07-17 16:04:24] [INFO] Exit Code: 0
+[2026-07-17 16:04:24] [INFO] Output salvo em: C:\4c\tasks\task308\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-17 16:04:24] [INFO] Output size: 1160 bytes
+[2026-07-17 16:04:24] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-17 16:04:24] [INFO] Preview do output:
+[2026-07-17 16:04:24] [INFO] Todos os outros pontos SQL est+úo guardados. A corre+º+úo est+í completa.
+
+**Causa raiz identificada:** `TesteAutomatico.prg` (linha 728-800) chama `CarregarLista()` externamente durante o teste `TesteCarregarDadosReais`. Isso disparava `CarregarItens()` ÔåÆ `BuscarItens()` ÔåÆ `SQLEXEC(0, ...)` com `gnConnHandle=0`, causando que o VFP9 tentasse conectar ao SQL Server via TCP ÔÇö bloqueando por 300s (timeout do SO).
+
+O coment+írio no TesteAutomatico (linha 115) documenta exatamente isso: *"F

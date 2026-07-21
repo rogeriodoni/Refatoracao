@@ -1,0 +1,4 @@
+﻿Corrigido. O diagn├│stico:
+
+- **Causa raiz**: `DataSession = 2` cria uma datasession privada por inst├óncia. Quando o `FormTester` (rodando em datasession 1) chama `oForm.CarregarLista()`, o VFP9 executa o m├®todo na datasession 2 da form ÔÇö ent├úo o `CREATE CURSOR cursor_4c_Dados` vai para a datasession 2. Ap├│s o retorno do m├®todo, o `USED("cursor_4c_Dados")` checado pelo teste (datasession 1) retorna `.F.` e o teste falha.
+- **Fix**: `DataSession = 1` (padr├úo) ÔÇö igual a todos os outros forms CRUD que passam no teste. Cursores criados pelos m├®todos da form ficam na datasession 1, vis├¡veis ao `FormTester`.

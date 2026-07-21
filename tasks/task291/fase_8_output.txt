@@ -1,0 +1,17 @@
+﻿A migra├º├úo da **Fase 8/8 j├í estava completa** nas fases anteriores. Resumo do estado atual:
+
+**FormSigPrGloT.prg** (1.777 linhas) ÔÇö completo com:
+- `FormParaBO()` / `BOParaForm()` ÔÇö todos os 16 campos mapeados
+- `AlternarPagina()` ÔÇö habilita/desabilita controles (equivale a `HabilitarCampos`)
+- `LimparCampos()` ÔÇö todos os campos limpos
+- `CarregarLista()` / `AjustarBotoesPorModo()` ÔÇö compatibilidade FormBase
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö stubs funcionais para FormBase
+- `CmdProcessarClick()` ÔÇö l├│gica real completa (valida ÔåÆ `FormParaBO` ÔåÆ `ProcessarOP` ÔåÆ abre FormSigPrGl2)
+- Todos os handlers de KeyPress/lookup para empresa, opera├º├úo, conta, vendedor, tipo OP
+
+**SigPrGloTBO.prg** (941 linhas) ÔÇö completo com:
+- `CarregarOperacoes()`, `CarregarParametros()`, `CarregarPacotes()`, `CarregarTiposGeracao()`
+- `ProcessarOP()` ÔÇö l├│gica real de agrupamento por totais (GROUP BY Cpros)
+- `VerificarNumeroOP()`, `ValidarDados()`, CRUD completo em SigOpPic
+
+**Integra├º├úo**: carregamento autom├ítico via ADIR() no config.prg + menu.prg linha 4417 com `AbrirFormSigPrGloT`.

@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- `ConfigurarBotoes()` (linhas 221-316): cria `shp_4c_Shape1` (shape decorativo do legado) + `cmd_4c_Inserir` (Left=255) + `cmd_4c_Excluir` (Left=330) + `cmd_4c_Sair/Encerrar` (Left=405, Cancel=.T.) ÔÇö todos com `Themes=.T.` + `DisabledPicture` conforme regra de standalone buttons com Picture.
+
+- `ConfigurarGrade()` (linhas 318-390): cria cursor placeholder `cursor_4c_CaracProd` com a estrutura de `SigPrCar` (CPros/Codigos/Descrs/pkChaves), depois o `grd_4c_Grade` com `ColumnCount=2` **antes** de `RecordSource` (regra cr├¡tica), 2 colunas com headers "Caracter├¡stica" e "Descri├º├úo" e ControlSources ligados ao cursor.
+
+- `AlternarPagina()` (linhas 392-398): stub vazio ÔÇö este sub-form operacional n├úo tem estrutura de p├íginas.
+
+- `InicializarForm()` atualizado em ambos os branches para chamar `ConfigurarBotoes()` + `ConfigurarGrade()` antes de `TornarControlesVisiveis()`.

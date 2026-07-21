@@ -1,0 +1,16 @@
+﻿Ambos os arquivos est├úo **completamente implementados** desde as fases anteriores.
+
+O `Formsigprpdf` ├® um **di├ílogo flat** (sem PageFrame/Pages), ent├úo:
+
+- `ConfigurarPaginaDados()` j├í existe corretamente como stub `RETURN` ÔÇö n├úo h├í Page2
+- Todos os controles foram criados nas fases 3/4 via m├®todos dedicados:
+  - `ConfigurarCabecalho()` ÔÇö container escuro com t├¡tulo
+  - `ConfigurarOpcaoArquivo()` ÔÇö OptionGroup PDF/Excel
+  - `ConfigurarAreaArquivo()` ÔÇö label, TextBox nome arquivo, bot├Áes `. . .` e pasta
+  - `ConfigurarBotoesAcao()` ÔÇö CheckBox Email, cmd Gravar, cmd Encerrar
+  - `ConfigurarSecaoEmail()` ÔÇö container com 9 controles de email (Visible=.F.)
+- `InicializarValores()` popula os campos iniciais (PDF/XLS via registry, assunto, email De)
+- `TornarControlesVisiveis()` implementado com filtro correto para o container de email
+- Todos os handlers implementados: `CmdGetFileClick`, `ChkEmailClick`, `OptArquivoClick`, `CmdGerarPDFClick`, `CmdSairClick`, `BtnPastasAClick`
+
+O template de 8 fases ├® gen├®rico para forms CRUD com Page1/Page2. Para este di├ílogo flat, as fases 3+4 j├í cobriram tudo. **Nenhuma modifica├º├úo necess├íria na Fase 5** ÔÇö o arquivo j├í est├í correto e completo com 884 linhas.

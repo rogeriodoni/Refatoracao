@@ -171,7 +171,7 @@ DEFINE CLASS SigReJobBO AS RelatorioBase
                     ALLTRIM(STR(TprMvCab.Numes, 10)) + " - " + ;
                     DTOC(TTOD(TprMvCab.Datas))
 
-        IF !THIS.CursorQueryStr("SigCdEmp", "cursor_4c_LocalEmps", "Cemps", TprMvCab.Emps, "DivNotas")
+        IF !THIS.CursorQueryStr("SigCdEmp", "cursor_4c_LocalEmps", "Cemps", TprMvCab.Cemps, "DivNotas")
             MsgErro("Favor Reinicializar o Processo!!!", ;
                     "Falha na Conex" + CHR(227) + "o (SigReJob - LocalEmps)")
             RETURN .F.

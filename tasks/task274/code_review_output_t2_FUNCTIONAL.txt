@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi encontrado e corrigido:
+
+**Problemas listados (7):** Todos j├í estavam corretamente implementados no c├│digo atual ÔÇö posi├º├Áes de `cnt_4c_Container1` (Top=298, Left=54), `lbl_4c_Label1` (Top=14, Left=18) e `obj_4c_Optiongroup1` (Top=200, Left=222) j├í correspondiam aos originais; `Buttons(2)` j├í tinha `.Left=73` definido.
+
+**Bugs funcionais corrigidos (2 linhas):**
+
+| Linha | Antes | Depois | Impacto |
+|-------|-------|--------|---------|
+| 506 | `"KeyPress", "TxtText1LostFocus"` | `"LostFocus", "TxtText1LostFocus"` | Cr├¡tico: `txt_4c_Text1.Enabled = .F.` disparava no primeiro keypress, impedindo qualquer digita├º├úo |
+| 546 | `"KeyPress", "TxtDatasLostFocus"` | `"LostFocus", "TxtDatasLostFocus"` | `SET CONFIRM ON` disparava desnecessariamente em cada tecla |

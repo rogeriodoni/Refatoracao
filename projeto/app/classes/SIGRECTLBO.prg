@@ -376,8 +376,18 @@ DEFINE CLASS SIGRECTLBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cFRXPath) NOCONSOLE TO PRINTER PROMPT
-                loc_lSucesso = .T.
+                IF FILE(THIS.this_cFRXPath)
+                    IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                        MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                 "Relat" + CHR(243) + "rio")
+                    ELSE
+                        REPORT FORM (THIS.this_cFRXPath) NOCONSOLE TO PRINTER PROMPT
+                        loc_lSucesso = .T.
+                    ENDIF
+                ELSE
+                    THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
+                                              CHR(227) + "o encontrado: " + THIS.this_cFRXPath
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -394,8 +404,18 @@ DEFINE CLASS SIGRECTLBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                REPORT FORM (THIS.this_cFRXPath) NOCONSOLE PREVIEW
-                loc_lSucesso = .T.
+                IF FILE(THIS.this_cFRXPath)
+                    IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                        MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                 "Relat" + CHR(243) + "rio")
+                    ELSE
+                        REPORT FORM (THIS.this_cFRXPath) NOCONSOLE PREVIEW
+                        loc_lSucesso = .T.
+                    ENDIF
+                ELSE
+                    THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
+                                              CHR(227) + "o encontrado: " + THIS.this_cFRXPath
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

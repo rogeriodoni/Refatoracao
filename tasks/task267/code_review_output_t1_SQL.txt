@@ -1,0 +1,39 @@
+﻿An├ílise completa conclu├¡da. Aqui est├í o resultado da verifica├º├úo de cada um dos 13 problemas:
+
+---
+
+## Resultado: Todos os 13 problemas s├úo falsos positivos
+
+O validador automatizado cometeu dois tipos de erro:
+
+### GRID-SQL (6 problemas) ÔÇö Falsos positivos
+
+O validador escaneou apenas o arquivo do **Form** procurando o SELECT que cria `cursor_4c_Filtro`, mas esse cursor ├® criado pelo **BO** via `SQLEXEC` no m├®todo `BuscarTitulos` (SIGPRCNBBO.prg:260-316). Todos os campos est├úo presentes:
+
+| Campo reportado | Onde est├í no SELECT | Linha no BO |
+|---|---|---|
+| `numes` | `SigMvPar.numes` | 288 |
+| `rclis` | `SigCdCli.rclis` | 292 |
+| `vencs` | `SigMvPar.vencs` | 288 |
+| `fpags` | `SigMvPar.fpags` | 289 |
+| `valos` | `SigMvPar.valos` | 288 |
+| `titulos` | `SigMvCcr.titulos` | 290 |
+
+### SQL-FILTRO-INVENTADO (7 problemas) ÔÇö Falsos positivos
+
+| Coluna reportada | Uso real no c├│digo | Problema? |
+|---|---|---|
+| `CIDCHAVES` | `WHERE cidchaves = ...` em UPDATE/DELETE (PK da SigPcOol) | N├úo ÔÇö opera├º├úo padr├úo por PK |
+| `DOPES` | `WHERE SigMvPar.dopes IN (...)` em BuscarTitulos ÔÇö filtra pelas opera├º├Áes selecionadas no grid | N├úo ÔÇö equivalente funcional do original |
+| `CEMPS` | `WHERE Cemps = ...` em ValidarCdEmpresa ÔÇö lookup de empresa | N├úo ÔÇö lookup leg├¡timo |
+| `ICLIS` | `WHERE IClis = ...` em ValidarCdConta ÔÇö lookup de conta | N├úo ÔÇö lookup leg├¡timo |
+| `RAZSOCS` | `WHERE RazSocs LIKE ...` em ValidarDsEmpresa ÔÇö lookup por nome | N├úo ÔÇö lookup leg├¡timo |
+| `RCLIS` | `WHERE RClis LIKE ...` em ValidarDsConta ÔÇö lookup por nome | N├úo ÔÇö lookup leg├¡timo |
+| `COLUMNCOUNT` | **N├úo existe em nenhum WHERE SQL** ÔÇö ├® uma atribui├º├úo de propriedade VFP (`.ColumnCount = 2`) | N├úo ÔÇö confus├úo do validador entre propriedade VFP e SQL |
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo est├í correto. Fazer as "corre├º├Áes" pedidas pelo validador resultaria em:
+- Remover campos do SELECT ÔåÆ `cursor_4c_Filtro` ficaria sem colunas que o grid precisa
+- Remover condi├º├Áes WHERE de lookup ÔåÆ quebra valida├º├Áes de empresa e conta
+- Remover `WHERE cidchaves = ...` de UPDATE/DELETE ÔåÆ atualizaria/excluiria todos os registros da tabela

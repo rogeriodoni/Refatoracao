@@ -1,0 +1,32 @@
+﻿Depois de verificar o schema e as refer├¬ncias no projeto, posso confirmar que **todos os 7 flags s├úo falsos positivos**. Aqui est├í o diagn├│stico completo:
+
+---
+
+## Diagn├│stico: 7 False Positives
+
+O validador confundiu **queries de lookup de valida├º├úo de campo** com as condi├º├Áes WHERE da query principal de processamento. S├úo queries completamente diferentes em tabelas diferentes.
+
+### CONTROLCOUNT (flag 1)
+N├úo ├® SQL. ├ë a propriedade VFP9 `.ControlCount` em c├│digo de varredura de controles (linha 1555):
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+### ICLIS, CODIGOS, CUNIS, LINHAS, COLECOES, CMOES (flags 2-7)
+Todos s├úo colunas **PK leg├¡timas** nas suas respectivas tabelas auxiliares, confirmadas por refer├¬ncias no projeto:
+
+| Coluna flaggada | Tabela | Confirma├º├úo |
+|---|---|---|
+| `IClis` | `SigCdCli` | `PlanoContasBO.prg:65` ÔÇö `SELECT Grupos, IClis, RClis FROM SigCdCli` |
+| `Codigos` | `SigCdGpr` | `sigprccpBO.prg:32` (coment├írio), `SigPrGlpBO.prg:785` ÔÇö `CursorQuery('SigCdGpr', ..., 'Codigos', ...)` |
+| `CUnis` | `SigCdUni` | Original: `=Seek(...,'CrSigCdUni','Cunis')` |
+| `Linhas` | `SigCdLin` | `sigprccpBO.prg:56` ÔÇö coment├írio `SigCdLin.Linhas`, `SIGREAPRBO.prg:17` |
+| `Colecoes` | `SigCdCol` | `ColBO.prg:122/192/220/245` ÔÇö `WHERE colecoes = ...` |
+| `CMoes` | `SigCdMoe` | Original: `=Seek(CrSigCdPro.Moecs, 'crSigCdMoe', 'CMoes')` |
+
+### Causa raiz do erro do validador
+O validador listou as colunas do WHERE da query de processamento principal (`SigCdCcp` / main business logic). As queries flaggadas s├úo valida├º├Áes de KeyPress em **tabelas de cadastro auxiliar** (SigCdCli, SigCdGpr, SigCdUni, SigCdLin, SigCdCol, SigCdMoe) ÔÇö queries completamente independentes com WHEREs corretos.
+
+---
+
+**Nenhuma altera├º├úo foi feita** no arquivo `Formsigprccp.prg`. Modificar essas queries quebraria a valida├º├úo de input dos campos de filtro (Fornecedor, Grande Grupo, Grupo, Subgrupo, Unidade, Linha, Cole├º├úo, Moeda). O c├│digo est├í correto.

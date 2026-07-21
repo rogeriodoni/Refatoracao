@@ -379,7 +379,9 @@ DEFINE CLASS FormSigReIpc AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -403,7 +405,9 @@ DEFINE CLASS FormSigReIpc AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC

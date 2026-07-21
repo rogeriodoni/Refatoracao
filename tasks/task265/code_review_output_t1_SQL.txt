@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**TRANSACAO-AVULSA (3 ocorr├¬ncias)** ÔÇö Removidos `SQLEXEC(gnConnHandle, "COMMIT")` e ambos os `SQLEXEC(gnConnHandle, "ROLLBACK")`. Como a conex├úo ODBC usa AUTOCOMMIT, o DELETE ├║nico n├úo precisa de transa├º├úo expl├¡cita. A l├│gica ficou: se SQLEXEC > 0, registra auditoria; sen├úo, mostra MsgErro.
+
+**SQL-FILTRO-INVENTADO '1' (2 ocorr├¬ncias)** ÔÇö `WHERE 1=1` removido das duas branches do `AbrirLookupContas`. Quando `par_cVal` est├í vazio, a query agora n├úo tem WHERE. O filtro de grupo (`RTRIM(Grupos) = ...`) passou a usar `WHERE` (primeira condi├º├úo) ou `AND` (quando j├í existe um LIKE no WHERE), conforme o contexto.
+
+**SQL-FILTRO-INVENTADO 'CODIGOS'** ÔÇö Ap├│s verificar no schema.sql (linha 3728: `[codigos] [char](10)`), confirmado que `codigos` ├® coluna v├ílida de SigCdGcr. Nenhuma mudan├ºa necess├íria.
+
+**SQL-FILTRO-INVENTADO 'EMITIDOS' e 'CONTROLCOUNT'** ÔÇö N├úo encontrados como condi├º├Áes WHERE em SQL passado ao SQL Server no arquivo atual. Falsos positivos do review (provavelmente gerado em vers├úo anterior). Nenhuma mudan├ºa necess├íria.

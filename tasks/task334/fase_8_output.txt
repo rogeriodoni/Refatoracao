@@ -1,0 +1,17 @@
+﻿Config.prg j├í carrega automaticamente todos os `Form*.prg` de `operacionais\` via ADIR (linha 316) e todos os `*BO.prg` de `classes\` (linha 276). Nenhuma altera├º├úo manual necess├íria.
+
+O FormSIGPRSTF ├® um di├ílogo utilit├írio de senha de supervisor chamado por outros forms ÔÇö n├úo precisa de entrada direta no menu.prg.
+
+**Fase 8 conclu├¡da.** O arquivo `FormSIGPRSTF.prg` agora tem 498 linhas com todos os m├®todos adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `FormParaBO()` | Copia `txt_4c_Senha.Value` e `this_lCancelado` para o BO |
+| `BOParaForm()` | Restaura `txt_4c_Senha.Value` a partir do BO |
+| `HabilitarCampos(par_l)` | Habilita/desabilita `txt_4c_Senha` |
+| `LimparCampos()` | Limpa campo, `this_cSenhaRetorno`, reseta estado |
+| `CarregarLista()` | Retorna `.T.` (n├úo aplic├ível - di├ílogo sem grid) |
+| `AjustarBotoesPorModo()` | Vazio (sem modos CRUD) |
+| `BtnBuscarClick()` | Vazio (sem busca) |
+| `BtnEncerrarClick()` | Delega para `BtnCancelarClick()` |
+| `BtnSalvarClick()` | Valida campo vazio ÔåÆ `FormParaBO()` ÔåÆ seta retorno ÔåÆ `Hide()` |

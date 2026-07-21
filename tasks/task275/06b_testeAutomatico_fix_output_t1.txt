@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. O problema era que `NOFILTER` em `SELECT ... INTO CURSOR` **sem FROM clause** faz o VFP9 interpretar que uma cl├íusula FROM ├® obrigat├│ria (o NOFILTER suprime filtros de tabela-fonte, logo o parser espera uma fonte). Sem FROM, ele lan├ºa "Command is missing required clause" na linha 75.
+
+As 4 ocorr├¬ncias foram corrigidas removendo `NOFILTER`:
+- `cursor_4c_Estoques READWRITE NOFILTER` ÔåÆ `READWRITE`
+- `cursor_4c_Disponivel READWRITE NOFILTER` ÔåÆ `READWRITE`
+- `cursor_4c_CabOpera READWRITE NOFILTER` ÔåÆ `READWRITE`
+- `cursor_4c_ItensOper READWRITE NOFILTER` ÔåÆ `READWRITE`
+
+O `READWRITE` permanece pois os cursores placeholder precisam ser grav├íveis para receber dados mais tarde. O pipeline pode ser reexecutado a partir da etapa `06b_testeAutomatico`.

@@ -1,0 +1,15 @@
+﻿The WITH/ENDWITH count balances at 27 each. Phase 6 is complete. Here's a summary of what was added:
+
+**ConfigurarPaginaDados() additions:**
+- `cmd_4c_InserirOco` ÔÇö Top=364 (335+29), Left=629, 40├ù40, `geral_selecionar_26.jpg`, `Themes=.T.` (standalone button rule), bound to `BtnInserirOcoClick`
+- `cmd_4c_ExcluirOco` ÔÇö Top=404 (375+29), Left=629, 40├ù40, `cadastro_excluir_26.jpg`, bound to `BtnExcluirOcoClick`
+- `grd_4c_Ocorrencias` ÔÇö Top=210 (181+29), Left=300, 324├ù403, RecordSource=`cursor_4c_OcoLocal`, Column1=Cocos (70px), Column2=descs (220px, ReadOnly), bound to `GradeAfterRowColChange`
+
+**HabilitarCampos() extension:**
+- Grid ReadOnly/Enabled controlled by mode (editable in INSERIR/ALTERAR, readonly+disabled in PROCURAR)
+- `cmd_4c_InserirOco`/`cmd_4c_ExcluirOco` Visible only in INSERIR/ALTERAR (avoids icon-loss on Enabled=.F.)
+
+**New methods:**
+- `GradeAfterRowColChange` (PUBLIC) ÔÇö fires on grid navigation, looks up `SigCcCco.Cods`/`Descs` when Cocos has value but descs is still empty; opens FormBuscaAuxiliar picker if not found; duplicate check via `SEEK PADR(cocos, 2)` on the Cocos TAG
+- `BtnInserirOcoClick` (PUBLIC) ÔÇö APPEND BLANK + pre-fills Grupos/Contas; focus Column1
+- `BtnExcluirOcoClick` (PUBLIC) ÔÇö DELETE current row; re-inserts blank row if cursor becomes empty (legacy pattern)

@@ -29,10 +29,10 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     this_cTituloRelatorio = "RELAT" + CHR(211) + "RIO GEN" + CHR(201) + "RICO DE COMPRAS"
 
     *-- Cursores utilizados pelo relatorio
-    this_cCursorDados     = "cursor_4c_TmpRel"
-    this_cCursorCabecalho = "cursor_4c_CsCabecalho"
-    this_cCursorMoedas    = "cursor_4c_TmpMoe"
-    this_cCursorTotal     = "cursor_4c_CsTotal"
+    this_cCursorDados     = "TmpRel"
+    this_cCursorCabecalho = "CsCabecalho"
+    this_cCursorMoedas    = "TmpMoe"
+    this_cCursorTotal     = "CsTotal"
 
     *-- Estado interno
     this_lDadosCarregados = .F.
@@ -70,10 +70,10 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     * PrepararDados - Monta cursores para o relatorio (equivale a processamento)
     * 1. Obtem empresa (SigCdEmp)
     * 2. Obtem descricao da conta (SigCdCli.rclis)
-    * 3. Cria cursor_4c_CsCabecalho com titulo/subtitulo/empresa/periodo
+    * 3. Cria CsCabecalho com titulo/subtitulo/empresa/periodo
     * 4. SQLEXEC SigMvCpv filtrado por Datas ou Vencs
-    * 5. GROUP BY moedas -> cursor_4c_TmpMoe com soma por moeda
-    * 6. Formata total acumulado em cursor_4c_CsTotal (memo)
+    * 5. GROUP BY moedas -> TmpMoe com soma por moeda
+    * 6. Formata total acumulado em CsTotal (memo)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_cSQL, loc_nResult
@@ -261,7 +261,7 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * CarregarDoCursor - NAO APLICAVEL a Relatorios
     * Stub para compatibilidade com pipeline de validacao (Fase 2).
-    * BOs de Relatorio populam dados via PrepararDados() -> cursor_4c_TmpRel,
+    * BOs de Relatorio populam dados via PrepararDados() -> TmpRel,
     * nao precisam carregar registro individual do cursor.
     *--------------------------------------------------------------------------
     PROCEDURE CarregarDoCursor(par_cAliasCursor)

@@ -1,0 +1,17 @@
+﻿Tudo correto. A Fase 8/8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado:**
+
+**FormSigPrIbb.prg** ÔÇö 10 m├®todos adicionados antes do `ENDDEFINE` (731ÔåÆ946 linhas):
+- `BtnEncerrarClick()` ÔÇö delega para `CmdEncerrarClick()`
+- `BtnBuscarClick()` ÔÇö delega para `CarregarLista()`
+- `BtnSalvarClick()` ÔÇö chama `this_oBusinessObject.Atualizar()` para salvar edi├º├Áes de CLocals/CTxtCds em SigCnFBl sem imprimir
+- `BtnCancelarClick()` ÔÇö recarrega dados do BD descartando edi├º├Áes
+- `CarregarLista()` ÔÇö delega para `SelecionarDadosForm()`
+- `FormParaBO()` ÔÇö sincroniza propriedades de identidade (this_cEmpDopNum/Emps/Dopes/Numes) para o BO
+- `BOParaForm()` ÔÇö atualiza txt_4c_Total, campos de identifica├º├úo e grid/editboxes
+- `HabilitarCampos()` ÔÇö campos de exibi├º├úo sempre desabilitados; editboxes habilitados apenas quando h├í parcelas
+- `LimparCampos()` ÔÇö zera txt_4c_Total e limpa editboxes
+- `AjustarBotoesPorModo()` ÔÇö stub de conven├º├úo para OPERACIONAL sem modos CRUD
+
+**menu.prg** ÔÇö barra 65 em `popMovimentos` + `PROCEDURE AbrirFormSigPrIbb()` no final

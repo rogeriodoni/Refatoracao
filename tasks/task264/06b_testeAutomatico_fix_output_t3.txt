@@ -1,0 +1,8 @@
+﻿Corre├º├Áes aplicadas corretamente. O arquivo do BO n├úo tem esse problema, apenas o Form. O arquivo est├í corrigido e pronto para o pr├│ximo ciclo de teste.
+
+**Causa do erro:** VFP9 n├úo suporta `WITH objeto.Metodo(indice)` quando `Metodo(n)` retorna um objeto ÔÇö o WITH interpreta a express├úo e falha com "BUTTONS is not an object". O fix ├® capturar a refer├¬ncia em `loc_oBtn` antes do WITH.
+
+**Corre├º├Áes feitas em `FormSigPrCfn.prg`:**
+- Adicionado `loc_oBtn` ao LOCAL na linha 491
+- Linhas 702/712: `WITH loc_oPag.obj_4c_OptCalculo.Buttons(N)` ÔåÆ `loc_oBtn = ...; WITH loc_oBtn`
+- Linhas 747/757: mesmo padr├úo para `obj_4c_OptDias.Buttons(N)`

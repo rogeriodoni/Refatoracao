@@ -1,0 +1,1 @@
+﻿Corrigido. `CarregarLista` era `PROTECTED`, mas o `TesteAutomatico.prg` chama esse m├®todo diretamente no objeto do form ÔÇö VFP9 reporta "Property not found" para m├®todos protegidos acessados externamente. Remover `PROTECTED` torna o m├®todo p├║blico (padr├úo em `DEFINE CLASS`), resolvendo o teste `CarregarDadosReais`.

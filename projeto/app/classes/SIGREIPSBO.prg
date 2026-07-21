@@ -14,7 +14,7 @@ DEFINE CLASS SIGREIPSBO AS RelatorioBase
     this_cDescs         = ""   && Descricao do item (SigMlItn.Descs)
 
     *-- Cursor de dados do relatorio
-    this_cCursorDados   = "cursor_4c_Relacao"
+    this_cCursorDados   = "Relacao"
 
     *-- Identificacao
     this_cTabela        = "SigMlCab"
@@ -143,7 +143,7 @@ DEFINE CLASS SIGREIPSBO AS RelatorioBase
                 ENDIF
             ENDIF
 
-            THIS.ExecutarReportForm("SigReIp3", "PRINTER")
+            THIS.ExecutarReportForm("SigReIp3", "PRINTER", THIS.this_cCursorDados)
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -171,7 +171,7 @@ DEFINE CLASS SIGREIPSBO AS RelatorioBase
                 ENDIF
             ENDIF
 
-            THIS.ExecutarReportForm("SigReIp3", "PREVIEW")
+            THIS.ExecutarReportForm("SigReIp3", "PREVIEW", THIS.this_cCursorDados)
             loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

@@ -213,7 +213,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             ENDWITH
         ENDWITH
 
-        *-- Label "Operacoes :" (Label1 - caption com hotkey para optProcessados)
+        *-- Label "Operacoes :"
         loc_oP1.AddObject("lbl_4c_LblOper", "Label")
         WITH loc_oP1.lbl_4c_LblOper
             .AutoSize   = .T.
@@ -542,7 +542,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             .Column2.Movable   = .F.
             .Column2.Resizable = .F.
             .Column2.ReadOnly  = .T.
-            .RecordMark   = .F.
+            .RecordMark        = .F.
         ENDWITH
 
         *-- CommandGroup Marcar/Desmarcar operacoes SigCdOpe (Commandgroup2)
@@ -633,13 +633,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         *-- Label "Protestar apos :"
         loc_oP2.AddObject("lbl_4c_Protestar", "Label")
         WITH loc_oP2.lbl_4c_Protestar
-            .Caption  = "Protestar ap" + CHR(243) + "s :"
-            .Enabled  = .F.
-            .Height   = 15
-            .Left     = 370
-            .Top      = 103
-            .Width    = 80
-            .TabIndex = 5
+            .Caption   = "Protestar ap" + CHR(243) + "s :"
+            .Enabled   = .F.
+            .Height    = 15
+            .Left      = 370
+            .Top       = 103
+            .Width     = 80
+            .TabIndex  = 5
             .BackStyle = 0
             .ForeColor = RGB(90,90,90)
         ENDWITH
@@ -666,13 +666,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         *-- Label "dias"
         loc_oP2.AddObject("lbl_4c_Dias", "Label")
         WITH loc_oP2.lbl_4c_Dias
-            .Caption  = "dias"
-            .Enabled  = .F.
-            .Height   = 15
-            .Left     = 501
-            .Top      = 103
-            .Width    = 21
-            .TabIndex = 6
+            .Caption   = "dias"
+            .Enabled   = .F.
+            .Height    = 15
+            .Left      = 501
+            .Top       = 103
+            .Width     = 21
+            .TabIndex  = 6
             .BackStyle = 0
             .ForeColor = RGB(90,90,90)
         ENDWITH
@@ -789,53 +789,53 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             .BackColor     = RGB(240,240,240)
             .Themes        = .F.
             WITH .Command1
-                .Top      = 5
-                .Left     = 5
-                .Height   = 75
-                .Width    = 75
-                .FontBold = .T.
+                .Top       = 5
+                .Left      = 5
+                .Height    = 75
+                .Width     = 75
+                .FontBold  = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Picture  = gc_4c_CaminhoIcones + "geral_disco2_60.jpg"
-                .Caption  = "Gerar CNAB"
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Picture   = gc_4c_CaminhoIcones + "geral_disco2_60.jpg"
+                .Caption   = "Gerar CNAB"
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
-                .Themes   = .F.
-                .Name     = "btncnab"
+                .Themes    = .F.
+                .Name      = "btncnab"
             ENDWITH
             WITH .Command2
-                .Top      = 5
-                .Left     = 80
-                .Height   = 75
-                .Width    = 75
-                .FontBold = .T.
+                .Top       = 5
+                .Left      = 80
+                .Height    = 75
+                .Width     = 75
+                .FontBold  = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Picture  = gc_4c_CaminhoIcones + "geral_video_60.jpg"
-                .Caption  = "Relat" + CHR(243) + "rio"
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Picture   = gc_4c_CaminhoIcones + "geral_video_60.jpg"
+                .Caption   = "Relat" + CHR(243) + "rio"
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
-                .Themes   = .F.
-                .Name     = "btnrelatorio"
+                .Themes    = .F.
+                .Name      = "btnrelatorio"
             ENDWITH
             WITH .Command3
-                .Top      = 5
-                .Left     = 155
-                .Height   = 75
-                .Width    = 75
-                .FontBold = .T.
+                .Top       = 5
+                .Left      = 155
+                .Height    = 75
+                .Width     = 75
+                .FontBold  = .T.
                 .FontItalic = .T.
-                .FontName = "Tahoma"
-                .FontSize = 8
-                .Picture  = gc_4c_CaminhoIcones + "geral_impressora_60.jpg"
-                .Caption  = "Boleto"
-                .Enabled  = .F.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .Picture   = gc_4c_CaminhoIcones + "geral_impressora_60.jpg"
+                .Caption   = "Boleto"
+                .Enabled   = .F.
                 .ForeColor = RGB(90,90,90)
                 .BackColor = RGB(255,255,255)
-                .Themes   = .F.
-                .Name     = "btnBoleto"
+                .Themes    = .F.
+                .Name      = "btnBoleto"
             ENDWITH
         ENDWITH
 
@@ -856,32 +856,32 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             .BackColor     = RGB(240,240,240)
             .Themes        = .F.
             WITH .Command1
-                .Top     = 5
-                .Left    = 7
-                .Height  = 40
-                .Width   = 40
-                .Picture  = gc_4c_CaminhoIcones + "geral_adicao_26.jpg"
-                .Caption  = ""
+                .Top         = 5
+                .Left        = 7
+                .Height      = 40
+                .Width       = 40
+                .Picture     = gc_4c_CaminhoIcones + "geral_adicao_26.jpg"
+                .Caption     = ""
                 .ToolTipText = "Marcar tudo"
-                .ForeColor = RGB(36,84,155)
-                .BackColor = RGB(255,255,255)
-                .Themes   = .F.
-                .Name     = "btnmarca"
+                .ForeColor   = RGB(36,84,155)
+                .BackColor   = RGB(255,255,255)
+                .Themes      = .F.
+                .Name        = "btnmarca"
             ENDWITH
             WITH .Command2
-                .Top     = 5
-                .Left    = 47
-                .Height  = 40
-                .Width   = 40
-                .FontName = "Verdana"
-                .FontSize = 8
-                .Picture  = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Caption  = ""
+                .Top         = 5
+                .Left        = 47
+                .Height      = 40
+                .Width       = 40
+                .FontName    = "Verdana"
+                .FontSize    = 8
+                .Picture     = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .Caption     = ""
                 .ToolTipText = "Desmarcar tudo"
-                .ForeColor = RGB(36,84,155)
-                .BackColor = RGB(255,255,255)
-                .Themes   = .F.
-                .Name     = "btndesmarca"
+                .ForeColor   = RGB(36,84,155)
+                .BackColor   = RGB(255,255,255)
+                .Themes      = .F.
+                .Name        = "btndesmarca"
             ENDWITH
         ENDWITH
     ENDPROC
@@ -896,39 +896,39 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         loc_oPgf.Visible = .T.
 
         loc_oP1 = loc_oPgf.Page1
-        loc_oP1.cnt_4c_Sombra.Visible              = .T.
+        loc_oP1.cnt_4c_Sombra.Visible               = .T.
         loc_oP1.cnt_4c_Sombra.lbl_4c_Sombra.Visible = .T.
         loc_oP1.cnt_4c_Sombra.lbl_4c_Titulo.Visible = .T.
-        loc_oP1.cgp_4c_Filtro.Visible              = .T.
-        loc_oP1.lbl_4c_LblOper.Visible             = .T.
-        loc_oP1.opt_4c_Processados.Visible          = .T.
-        loc_oP1.lbl_4c_LblEmpresa.Visible           = .T.
-        loc_oP1.txt_4c_CdEmpresa.Visible            = .T.
-        loc_oP1.txt_4c_DsEmpresa.Visible            = .T.
-        loc_oP1.lbl_4c_LblPeriodo.Visible           = .T.
-        loc_oP1.txt_4c_Datai.Visible                = .T.
-        loc_oP1.lbl_4c_LblAte.Visible               = .T.
-        loc_oP1.txt_4c_Dataf.Visible                = .T.
-        loc_oP1.opt_4c_Periodo.Visible              = .T.
-        loc_oP1.lbl_4c_LblBanco.Visible             = .T.
-        loc_oP1.txt_4c_CdConta.Visible              = .T.
-        loc_oP1.txt_4c_DsConta.Visible              = .T.
-        loc_oP1.lbl_4c_LblTitBan.Visible            = .T.
-        loc_oP1.txt_4c_TitBan.Visible               = .T.
-        loc_oP1.lbl_4c_LblOperGrid.Visible          = .T.
-        loc_oP1.grd_4c_Operacoes.Visible            = .T.
-        loc_oP1.cgp_4c_MarcaOpe.Visible             = .T.
+        loc_oP1.cgp_4c_Filtro.Visible               = .T.
+        loc_oP1.lbl_4c_LblOper.Visible              = .T.
+        loc_oP1.opt_4c_Processados.Visible           = .T.
+        loc_oP1.lbl_4c_LblEmpresa.Visible            = .T.
+        loc_oP1.txt_4c_CdEmpresa.Visible             = .T.
+        loc_oP1.txt_4c_DsEmpresa.Visible             = .T.
+        loc_oP1.lbl_4c_LblPeriodo.Visible            = .T.
+        loc_oP1.txt_4c_Datai.Visible                 = .T.
+        loc_oP1.lbl_4c_LblAte.Visible                = .T.
+        loc_oP1.txt_4c_Dataf.Visible                 = .T.
+        loc_oP1.opt_4c_Periodo.Visible               = .T.
+        loc_oP1.lbl_4c_LblBanco.Visible              = .T.
+        loc_oP1.txt_4c_CdConta.Visible               = .T.
+        loc_oP1.txt_4c_DsConta.Visible               = .T.
+        loc_oP1.lbl_4c_LblTitBan.Visible             = .T.
+        loc_oP1.txt_4c_TitBan.Visible                = .T.
+        loc_oP1.lbl_4c_LblOperGrid.Visible           = .T.
+        loc_oP1.grd_4c_Operacoes.Visible             = .T.
+        loc_oP1.cgp_4c_MarcaOpe.Visible              = .T.
 
         loc_oP2 = loc_oPgf.Page2
-        loc_oP2.txt_4c_EndErroInd.Visible           = .T.
-        loc_oP2.lbl_4c_EndErroInfo.Visible          = .T.
-        loc_oP2.lbl_4c_Protestar.Visible            = .T.
-        loc_oP2.spn_4c_Dias.Visible                 = .T.
-        loc_oP2.lbl_4c_Dias.Visible                 = .T.
-        loc_oP2.grd_4c_Dados.Visible                = .T.
-        loc_oP2.cgp_4c_Encerrar.Visible             = .T.
-        loc_oP2.cgp_4c_Acoes.Visible                = .T.
-        loc_oP2.cgp_4c_MarcaDados.Visible           = .T.
+        loc_oP2.txt_4c_EndErroInd.Visible            = .T.
+        loc_oP2.lbl_4c_EndErroInfo.Visible           = .T.
+        loc_oP2.lbl_4c_Protestar.Visible             = .T.
+        loc_oP2.spn_4c_Dias.Visible                  = .T.
+        loc_oP2.lbl_4c_Dias.Visible                  = .T.
+        loc_oP2.grd_4c_Dados.Visible                 = .T.
+        loc_oP2.cgp_4c_Encerrar.Visible              = .T.
+        loc_oP2.cgp_4c_Acoes.Visible                 = .T.
+        loc_oP2.cgp_4c_MarcaDados.Visible            = .T.
     ENDPROC
 
     *==========================================================================
@@ -976,21 +976,25 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
     PROTECTED PROCEDURE InicializarValores()
         LOCAL loc_oGrd
 
-        *-- Carrega operacoes de cobranca (SigCdOpe) no grid da pagina de filtro
-        IF THIS.this_oBusinessObject.BuscarOperacoes()
+        IF THIS.this_oBusinessObject.CarregarOperacoes()
             loc_oGrd = THIS.pgf_4c_Principal.Page1.grd_4c_Operacoes
-            loc_oGrd.ColumnCount = 2
-            loc_oGrd.RecordSource          = "cursor_4c_Operacoes"
-            loc_oGrd.Column1.ControlSource = "cursor_4c_Operacoes.marca"
-            loc_oGrd.Column2.ControlSource = "cursor_4c_Operacoes.Dopes"
+            loc_oGrd.ColumnCount            = 2
+            loc_oGrd.RecordSource           = "cursor_4c_Operacoes"
+            loc_oGrd.Column1.ControlSource  = "cursor_4c_Operacoes.marca"
+            loc_oGrd.Column2.ControlSource  = "cursor_4c_Operacoes.Dopes"
             loc_oGrd.Column1.Header1.Caption = ""
             loc_oGrd.Column2.Header1.Caption = "Opera" + CHR(231) + CHR(227) + "o"
             loc_oGrd.Column2.Header1.Alignment = 2
             loc_oGrd.Refresh()
         ENDIF
 
-        *-- Pre-carrega formas de pagamento para lookup do Titulo Banco
-        THIS.this_oBusinessObject.BuscarFormaPagamento()
+        IF THIS.this_oBusinessObject.CarregarFormasPagto()
+            IF USED("cursor_4c_FormaPagto")
+                SELECT cursor_4c_FormaPagto
+                INDEX ON fpags TAG FpagSgru
+                SET NEAR ON
+            ENDIF
+        ENDIF
 
         THIS.pgf_4c_Principal.Page1.txt_4c_CdEmpresa.SetFocus()
     ENDPROC
@@ -1047,7 +1051,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
     ENDPROC
 
     PROCEDURE ValidarCdConta()
-        LOCAL loc_cCod, loc_cGrupo, loc_llRet
+        LOCAL loc_cCod, loc_cSQL
         loc_cCod = ALLTRIM(THIS.pgf_4c_Principal.Page1.txt_4c_CdConta.Value)
         IF EMPTY(loc_cCod)
             THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value = ""
@@ -1056,19 +1060,23 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
-        loc_cGrupo = ""
-        loc_llRet = fAcessoContas(gc_4c_UsuarioLogado, loc_cGrupo, "C", loc_cCod, ;
-                    THIS.pgf_4c_Principal.Page1.txt_4c_CdConta, ;
-                    THIS.pgf_4c_Principal.Page1.txt_4c_DsConta)
-        IF !loc_llRet
-            MsgAviso("Conta inv" + CHR(225) + "lida, acesso negado.")
+        loc_cSQL = "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + EscaparSQL(loc_cCod)
+        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaTmpV") >= 1 AND RECCOUNT("cursor_4c_ContaTmpV") > 0
+            SELECT cursor_4c_ContaTmpV
+            THIS.pgf_4c_Principal.Page1.txt_4c_CdConta.Value = ALLTRIM(cursor_4c_ContaTmpV.IClis)
+            THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value = ALLTRIM(cursor_4c_ContaTmpV.RClis)
+        ELSE
             THIS.pgf_4c_Principal.Page1.txt_4c_CdConta.Value = ""
             THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value = ""
+            MsgAviso("Conta inv" + CHR(225) + "lida.")
+        ENDIF
+        IF USED("cursor_4c_ContaTmpV")
+            USE IN cursor_4c_ContaTmpV
         ENDIF
     ENDPROC
 
     PROCEDURE ValidarDsConta()
-        LOCAL loc_cDs, loc_cGrupo, loc_llRet
+        LOCAL loc_cDs, loc_cSQL
         loc_cDs = ALLTRIM(THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value)
         IF EMPTY(loc_cDs)
             RETURN
@@ -1076,13 +1084,17 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
-        loc_cGrupo = ""
-        loc_llRet = fAcessoContas(gc_4c_UsuarioLogado, loc_cGrupo, "D", loc_cDs, ;
-                    THIS.pgf_4c_Principal.Page1.txt_4c_CdConta, ;
-                    THIS.pgf_4c_Principal.Page1.txt_4c_DsConta)
-        IF !loc_llRet
+        loc_cSQL = "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE RClis LIKE " + EscaparSQL(loc_cDs + "%")
+        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaTmpV") >= 1 AND RECCOUNT("cursor_4c_ContaTmpV") > 0
+            SELECT cursor_4c_ContaTmpV
+            THIS.pgf_4c_Principal.Page1.txt_4c_CdConta.Value = ALLTRIM(cursor_4c_ContaTmpV.IClis)
+            THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value = ALLTRIM(cursor_4c_ContaTmpV.RClis)
+        ELSE
             THIS.pgf_4c_Principal.Page1.txt_4c_CdConta.Value = ""
             THIS.pgf_4c_Principal.Page1.txt_4c_DsConta.Value = ""
+        ENDIF
+        IF USED("cursor_4c_ContaTmpV")
+            USE IN cursor_4c_ContaTmpV
         ENDIF
     ENDPROC
 
@@ -1360,25 +1372,30 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         loc_lNaoProc = (loc_oP1.opt_4c_Processados.Value = 1)
         loc_nPeriodo = loc_oP1.opt_4c_Periodo.Value
 
-        *-- Monta clausula IN das operacoes marcadas
-        loc_cOpeIN = "("
+        *-- Monta clausula IN das operacoes marcadas (sem parenteses externos - BO os adiciona)
+        loc_cOpeIN = ""
         IF USED("cursor_4c_Operacoes")
             SELECT cursor_4c_Operacoes
             SCAN
                 IF cursor_4c_Operacoes.marca
-                    loc_cOpeIN = loc_cOpeIN + IIF(loc_cOpeIN == "(", "", ",") + ;
+                    loc_cOpeIN = loc_cOpeIN + IIF(EMPTY(loc_cOpeIN), "", ",") + ;
                                  "'" + ALLTRIM(cursor_4c_Operacoes.Dopes) + "'"
                 ENDIF
             ENDSCAN
         ENDIF
-        loc_cOpeIN = loc_cOpeIN + ")"
 
         *-- Limpa grid
         loc_oGrd.RecordSource = ""
         loc_oGrd.Refresh()
 
-        IF !loc_oBO.BuscarTitulos(loc_cCdEmp, loc_dDati, loc_dDatf, ;
-                IIF(loc_lNaoProc, 1, 2), loc_nPeriodo, loc_cOpeIN)
+        *-- Seta propriedades de filtro do BO antes de chamar BuscarTitulos
+        loc_oBO.this_cEmps           = loc_cCdEmp
+        loc_oBO.this_dDatIni         = loc_dDati
+        loc_oBO.this_dDatFim         = loc_dDatf
+        loc_oBO.this_lNaoProcessadas = loc_lNaoProc
+        loc_oBO.this_nPeriodo        = loc_nPeriodo
+
+        IF !loc_oBO.BuscarTitulos(loc_cOpeIN)
             RETURN
         ENDIF
 
@@ -1388,16 +1405,16 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         ENDIF
 
         *-- Liga grid ao cursor
-        loc_oGrd.ColumnCount = 8
-        loc_oGrd.RecordSource          = "cursor_4c_Filtro"
-        loc_oGrd.Column1.ControlSource = "cursor_4c_Filtro.marca"
-        loc_oGrd.Column2.ControlSource = "cursor_4c_Filtro.dopes"
-        loc_oGrd.Column3.ControlSource = "cursor_4c_Filtro.numes"
-        loc_oGrd.Column4.ControlSource = "cursor_4c_Filtro.rclis"
-        loc_oGrd.Column5.ControlSource = "cursor_4c_Filtro.vencs"
-        loc_oGrd.Column6.ControlSource = "cursor_4c_Filtro.fpags"
-        loc_oGrd.Column7.ControlSource = "cursor_4c_Filtro.valos"
-        loc_oGrd.Column8.ControlSource = "cursor_4c_Filtro.titulos"
+        loc_oGrd.ColumnCount            = 8
+        loc_oGrd.RecordSource           = "cursor_4c_Filtro"
+        loc_oGrd.Column1.ControlSource  = "cursor_4c_Filtro.marca"
+        loc_oGrd.Column2.ControlSource  = "cursor_4c_Filtro.dopes"
+        loc_oGrd.Column3.ControlSource  = "cursor_4c_Filtro.numes"
+        loc_oGrd.Column4.ControlSource  = "cursor_4c_Filtro.rclis"
+        loc_oGrd.Column5.ControlSource  = "cursor_4c_Filtro.vencs"
+        loc_oGrd.Column6.ControlSource  = "cursor_4c_Filtro.fpags"
+        loc_oGrd.Column7.ControlSource  = "cursor_4c_Filtro.valos"
+        loc_oGrd.Column8.ControlSource  = "cursor_4c_Filtro.titulos"
         loc_oGrd.Column1.Header1.Caption = ""
         loc_oGrd.Column2.Header1.Caption = "Opera" + CHR(231) + CHR(227) + "o"
         loc_oGrd.Column3.Header1.Caption = "C" + CHR(243) + "digo"
@@ -1414,8 +1431,8 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
         *-- Ativa protestar dias
         loc_oP2.lbl_4c_Protestar.Enabled = .T.
-        loc_oP2.spn_4c_Dias.Enabled = .T.
-        loc_oP2.lbl_4c_Dias.Enabled = .T.
+        loc_oP2.spn_4c_Dias.Enabled      = .T.
+        loc_oP2.lbl_4c_Dias.Enabled      = .T.
 
         *-- Muda para page2
         loc_oP1.Enabled = .F.
@@ -1437,10 +1454,30 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             loc_oP2.Enabled = .F.
             THIS.pgf_4c_Principal.ActivePage = 1
         ELSE
-            loc_oP1.Enabled = .F.
-            loc_oP2.Enabled = .T.
-            THIS.pgf_4c_Principal.ActivePage = 2
+            THIS.Processamento()
         ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * CarregarConvenioLocal - Auxilia GerarCNAB: busca cliente e convenio bancario
+    * Retorna .T. se convenio encontrado; popula cursor_4c_Convenio
+    * par_cCdConta: IClis da conta bancaria selecionada
+    * par_cGrupo: retornado por referencia (grupos do cliente)
+    *==========================================================================
+    PROTECTED PROCEDURE CarregarConvenioLocal(par_cCdConta, par_cGrupo)
+        LOCAL loc_oBO, loc_lResultado
+        loc_oBO       = THIS.this_oBusinessObject
+        loc_lResultado = .F.
+
+        IF loc_oBO.BuscarClientePorConta(par_cCdConta)
+            IF USED("cursor_4c_ClienteConta") AND RECCOUNT("cursor_4c_ClienteConta") > 0
+                SELECT cursor_4c_ClienteConta
+                par_cGrupo = ALLTRIM(cursor_4c_ClienteConta.grupos)
+                loc_lResultado = loc_oBO.BuscarConvenio(par_cGrupo, par_cCdConta)
+            ENDIF
+        ENDIF
+
+        RETURN loc_lResultado
     ENDPROC
 
     *==========================================================================
@@ -1451,24 +1488,32 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL loc_oBO, loc_oP1, loc_oP2
         LOCAL loc_cCdEmp, loc_cCdConta, loc_cTitBan
         LOCAL loc_dDati, loc_dDatf, loc_nCont
+        LOCAL loc_cGrupo, loc_cBancoNr, loc_nDiasProt
 
-        loc_oBO     = THIS.this_oBusinessObject
-        loc_oP1     = THIS.pgf_4c_Principal.Page1
-        loc_oP2     = THIS.pgf_4c_Principal.Page2
-        loc_cCdEmp  = ALLTRIM(loc_oP1.txt_4c_CdEmpresa.Value)
-        loc_cCdConta= ALLTRIM(loc_oP1.txt_4c_CdConta.Value)
-        loc_cTitBan = loc_oP1.txt_4c_TitBan.Value
-        loc_dDati   = loc_oP1.txt_4c_Datai.Value
-        loc_dDatf   = loc_oP1.txt_4c_Dataf.Value
+        loc_oBO      = THIS.this_oBusinessObject
+        loc_oP1      = THIS.pgf_4c_Principal.Page1
+        loc_oP2      = THIS.pgf_4c_Principal.Page2
+        loc_cCdEmp   = ALLTRIM(loc_oP1.txt_4c_CdEmpresa.Value)
+        loc_cCdConta = ALLTRIM(loc_oP1.txt_4c_CdConta.Value)
+        loc_cTitBan  = loc_oP1.txt_4c_TitBan.Value
+        loc_dDati    = loc_oP1.txt_4c_Datai.Value
+        loc_dDatf    = loc_oP1.txt_4c_Dataf.Value
+        loc_cGrupo   = ""
 
-        *-- Carrega empresa
-        IF !loc_oBO.CarregarEmpresa(loc_cCdEmp)
+        *-- Carrega empresa (BuscarEmpresa popula cursor_4c_Empresa)
+        IF !loc_oBO.BuscarEmpresa(loc_cCdEmp)
             MsgAviso("N" + CHR(227) + "o foi encontrada a Raz" + CHR(227) + "o Social e/ou o " + ;
                      "CNPJ da Empresa [" + loc_cCdEmp + "]. " + ;
                      "Complete os dados no Cadastro de Empresas.")
             RETURN
         ENDIF
-        IF EMPTY(ALLTRIM(loc_oBO.this_cRazSocs)) OR EMPTY(ALLTRIM(loc_oBO.this_cCgcs))
+        IF RECCOUNT("cursor_4c_Empresa") = 0
+            MsgAviso("N" + CHR(227) + "o foi encontrada a Raz" + CHR(227) + "o Social e/ou o " + ;
+                     "CNPJ da Empresa [" + loc_cCdEmp + "].")
+            RETURN
+        ENDIF
+        SELECT cursor_4c_Empresa
+        IF EMPTY(ALLTRIM(cursor_4c_Empresa.razsocs)) OR EMPTY(ALLTRIM(cursor_4c_Empresa.cgcs))
             MsgAviso("N" + CHR(227) + "o foi encontrada a Raz" + CHR(227) + "o Social e/ou o " + ;
                      "CNPJ da Empresa [" + loc_cCdEmp + "].")
             RETURN
@@ -1496,14 +1541,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                     RETURN
                 ENDIF
             ELSE
-                IF !MsgConfirma("O campo " + CHR(34) + "T" + CHR(237) + "tulo Banco" + CHR(34) + ;
-                                " n" + CHR(227) + "o foi preenchido. Continuar?")
+                IF !MsgConfirma("T" + CHR(237) + "tulo Banco n" + CHR(227) + "o foi preenchido. Continuar?")
                     RETURN
                 ENDIF
             ENDIF
 
-            *-- Carrega convenio
-            IF !loc_oBO.CarregarConvenio(loc_cCdConta)
+            *-- Carrega convenio (BuscarConvenio popula cursor_4c_Convenio)
+            IF !THIS.CarregarConvenioLocal(loc_cCdConta, loc_cGrupo)
                 MsgAviso("N" + CHR(227) + "o foi encontrado o N" + CHR(250) + "mero da Ag" + CHR(234) + ;
                          "ncia e/ou o C" + CHR(243) + "digo do Conv" + CHR(234) + "nio para o Banco [" + ;
                          loc_cCdConta + "]. Complete os Dados no Cadastro de Contas.")
@@ -1512,42 +1556,45 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             ENDIF
 
             *-- Atualiza spinner dias do convenio
-            IF loc_oBO.this_nDiasProtConvenio > 0
-                loc_oP2.spn_4c_Dias.Value = loc_oBO.this_nDiasProtConvenio
+            SELECT cursor_4c_Convenio
+            IF cursor_4c_Convenio.diasprots > 0
+                loc_oP2.spn_4c_Dias.Value = cursor_4c_Convenio.diasprots
             ELSE
                 loc_oP2.spn_4c_Dias.Value = 5
             ENDIF
 
             SET SAFETY OFF
 
+            loc_cBancoNr = ALLTRIM(cursor_4c_Convenio.nbancos)
+
             *-- Despacha por banco
             DO CASE
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "001"
+                CASE loc_cBancoNr = "001"
                     THIS.CnabBrasil()
 
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "341"
+                CASE loc_cBancoNr = "341"
                     THIS.this_cArqCNAB = GETFILE("txt", "Arquivo", "OK", 0, "Arquivo CNAB")
                     IF EMPTY(THIS.this_cArqCNAB)
                         RETURN
                     ENDIF
                     THIS.CnabItau()
 
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "237"
+                CASE loc_cBancoNr = "237"
                     THIS.CnabBradesco()
 
-                CASE INLIST(ALLTRIM(loc_oBO.this_cBancoNr), "033", "353")
+                CASE INLIST(loc_cBancoNr, "033", "353")
                     THIS.CnabSantander240()
                     *-- Habilita boleto apos Santander
                     loc_oP2.cgp_4c_Acoes.Command3.Enabled = .T.
 
                 OTHERWISE
-                    MsgAviso("Banco " + CHR(34) + ALLTRIM(loc_oBO.this_cBancoNr) + CHR(34) + ;
+                    MsgAviso("Banco " + CHR(34) + loc_cBancoNr + CHR(34) + ;
                              " n" + CHR(227) + "o suportado para gera" + CHR(231) + CHR(227) + "o CNAB.")
             ENDCASE
 
         ELSE
             *-- "V" ou "I": carrega convenio e cria cursor_4c_Filtro2 para relatorio/boleto
-            IF !loc_oBO.CarregarConvenio(loc_cCdConta)
+            IF !THIS.CarregarConvenioLocal(loc_cCdConta, loc_cGrupo)
                 MsgAviso("Conv" + CHR(234) + "nio n" + CHR(227) + "o encontrado para a conta [" + ;
                          loc_cCdConta + "].")
                 RETURN
@@ -1564,7 +1611,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             GO TOP
 
             IF par_cTipo = "V"
-                REPORT FORM sigrecnb PREVIEW
+                THIS.ExecutarReportForm("sigrecnb", "PREVIEW", "cursor_4c_Filtro2")
             ENDIF
         ENDIF
     ENDPROC
@@ -1579,30 +1626,36 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL lcStrg, lnSeq, lcSeq, lcSeqNum, lcVenc, lcValor, lnMora, lcMora
         LOCAL lccgccli, lctpcgccli, lcnome, lcende, lcbair, lccep, lccida, lcesta, lcnumtit
         LOCAL lnCont, lok, llAtu, lcTitBanAtual, loc_oErro
+        LOCAL lcArqCnabs, loc_cCidChave
 
         loc_oBO = THIS.this_oBusinessObject
         loc_oP2 = THIS.pgf_4c_Principal.Page2
 
+        SELECT cursor_4c_Convenio
+        SELECT cursor_4c_Empresa
+
+        lcArqCnabs = ALLTRIM(cursor_4c_Convenio.arqcnabs)
+
         lcTit     = PADR(THIS.pgf_4c_Principal.Page1.txt_4c_TitBan.Value, 12)
-        lcBanco   = PADL(ALLTRIM(loc_oBO.this_cBancoNr), 3, "0")
-        lcCnv     = PADL(ALLTRIM(loc_oBO.this_cConvenio), 3, "0")
-        lcAge     = PADL(ALLTRIM(loc_oBO.this_cAgencia), 5, "0")
-        lcbco     = PADL(ALLTRIM(CHRTRAN(ALLTRIM(loc_oBO.this_cContaConv) + ;
-                          PADL(loc_oBO.this_cDigitoAgencia, 1, "0"), ".-", "")), 9, "0")
-        lcRaz     = PADR(ALLTRIM(loc_oBO.this_cRazSocs), 30)
-        lcCgc     = PADL(STRTRAN(STRTRAN(STRTRAN(loc_oBO.this_cCgcs, "/", ""), ".", ""), "-", ""), 14, "0")
-        lctpcgc   = IIF(LEN(ALLTRIM(CHRTRAN(loc_oBO.this_cCgcs, "/.-", ""))) = 11, "01", "02")
-        lcrazbco  = PADR(ALLTRIM(loc_oBO.this_cBancos), 15)
+        lcBanco   = PADL(ALLTRIM(cursor_4c_Convenio.nbancos), 3, "0")
+        lcCnv     = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 3, "0")
+        lcAge     = PADL(ALLTRIM(cursor_4c_Convenio.nagencias), 5, "0")
+        lcbco     = PADL(ALLTRIM(CHRTRAN(ALLTRIM(cursor_4c_Convenio.contas) + ;
+                          PADL(cursor_4c_Convenio.digiagen, 1, "0"), ".-", "")), 9, "0")
+        lcRaz     = PADR(ALLTRIM(cursor_4c_Empresa.razsocs), 30)
+        lcCgc     = PADL(STRTRAN(STRTRAN(STRTRAN(cursor_4c_Empresa.cgcs, "/", ""), ".", ""), "-", ""), 14, "0")
+        lctpcgc   = IIF(LEN(ALLTRIM(CHRTRAN(cursor_4c_Empresa.cgcs, "/.-", ""))) = 11, "01", "02")
+        lcrazbco  = PADR(ALLTRIM(cursor_4c_Convenio.bancos), 15)
         lcDat     = SUBSTR(DTOC(DATE()), 1, 2) + SUBSTR(DTOC(DATE()), 4, 2) + SUBSTR(DTOC(DATE()), 9, 2)
-        lnMor     = IIF(EMPTY(loc_oBO.this_nMoras), 0.23, loc_oBO.this_nMoras)
-        lcPri     = PADL(IIF(EMPTY(ALLTRIM(loc_oBO.this_cInstrus)), "00", loc_oBO.this_cInstrus), 2, "0")
+        lnMor     = IIF(EMPTY(cursor_4c_Convenio.moras), 0.23, cursor_4c_Convenio.moras)
+        lcPri     = PADL(IIF(EMPTY(ALLTRIM(cursor_4c_Convenio.instrus)), "00", cursor_4c_Convenio.instrus), 2, "0")
         lcprot    = IIF(loc_oP2.spn_4c_Dias.Value = 0, 5, loc_oP2.spn_4c_Dias.Value)
         lcprot    = IIF(lcPri = "00", "00", PADL(ALLTRIM(STR(lcprot)), 2, "0"))
-        lcCdC     = PADL(ALLTRIM(loc_oBO.this_cConvenio), 7, "0")
-        lcTpCtArq = ALLTRIM(loc_oBO.this_cTpCtArq)
-        lcTpCtBol = ALLTRIM(loc_oBO.this_cTpCtBol)
+        lcCdC     = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 7, "0")
+        lcTpCtArq = ALLTRIM(cursor_4c_Convenio.tpctarqs)
+        lcTpCtBol = ALLTRIM(cursor_4c_Convenio.tpctbols)
         lcEnv     = PADL(fGerUniqueKey("BRASILENV"), 7, "0")
-        lcArq     = ALLTRIM(loc_oBO.this_cArqCnabs) + lcEnv + ".REM"
+        lcArq     = lcArqCnabs + lcEnv + ".REM"
 
         *-- Header
         lcStrg = "0" + "1" + "REMESSA" + "01" + "COBRANCA" + "       " + ;
@@ -1668,9 +1721,11 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
             REPLACE SeqNums WITH PADL(lcSeqNum, 5, "0") IN cursor_4c_Filtro2
 
-            loc_oBO.InserirLinhaCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
+            loc_cCidChave = LEFT(SYS(2015) + SYS(2015), 20)
+            loc_oBO.InserirRegistroCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
                 cursor_4c_Filtro2.dopes, cursor_4c_Filtro2.numes, ;
-                lcStrg, cursor_4c_Filtro2.titulos, VAL(lcSeqNum))
+                gc_4c_UsuarioLogado, loc_cCidChave, ;
+                cursor_4c_Filtro2.titulos, VAL(lcSeqNum), "CNAB", lcStrg)
 
             lnSeq = lnSeq + 1
         ENDSCAN
@@ -1682,8 +1737,8 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
         IF FILE(lcArq)
             lok = .T.
-            IF !loc_oBO.ConfirmarTransacao()
-                loc_oBO.CancelarTransacao()
+            IF !loc_oBO.CommitAlteracoes()
+                loc_oBO.RollbackAlteracoes()
                 lok = .F.
             ENDIF
 
@@ -1691,13 +1746,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 SELECT cursor_4c_Filtro2
                 SCAN
                     llAtu = .T.
-                    lcTitBanAtual = loc_oBO.VerificarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
+                    lcTitBanAtual = THIS.ObterTituloBancoAtual(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
                     IF !EMPTY(ALLTRIM(lcTitBanAtual))
                         llAtu = MsgConfirma("T" + CHR(237) + "tulo " + CHR(34) + lcTitBanAtual + CHR(34) + ;
                                             " j" + CHR(225) + " possui T" + CHR(237) + "tulo do Banco preenchido. Sobrescrever?")
                     ENDIF
                     IF llAtu
-                        loc_oBO.AtualizarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
+                        loc_oBO.MarcarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
                     ENDIF
                 ENDSCAN
             ENDIF
@@ -1723,20 +1778,23 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL lcVenc, lcValor, lccgccli, lctpcgcCli, lcnome
         LOCAL lcende, lcbair, lccep, lccida, lcesta, lcnumtit
         LOCAL lok, llAtu, lcTitBanAtual, loc_oErro
-        LOCAL lcarq
+        LOCAL lcarq, loc_cCidChave
 
         loc_oBO = THIS.this_oBusinessObject
         loc_oP2 = THIS.pgf_4c_Principal.Page2
         lcarq   = THIS.this_cArqCNAB
 
+        SELECT cursor_4c_Convenio
+        SELECT cursor_4c_Empresa
+
         lcTit    = PADR(THIS.pgf_4c_Principal.Page1.txt_4c_TitBan.Value, 12)
-        lcCnv    = PADL(ALLTRIM(loc_oBO.this_cConvenio), 8, "0")
-        lcAge    = PADL(ALLTRIM(loc_oBO.this_cAgencia), 4, "0")
-        lcbco    = PADL(ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", "")), 5, "0") + loc_oBO.this_cDigitoAgencia
-        lcRaz    = PADR(ALLTRIM(loc_oBO.this_cRazSocs), 30)
-        lcCgc    = PADL(STRTRAN(STRTRAN(STRTRAN(loc_oBO.this_cCgcs, "/", ""), ".", ""), "-", ""), 14, "0")
-        lctpcgc  = IIF(LEN(ALLTRIM(CHRTRAN(loc_oBO.this_cCgcs, "/.-", ""))) = 11, "01", "02")
-        lcrazbco = PADR(ALLTRIM(loc_oBO.this_cBancos), 15)
+        lcCnv    = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 8, "0")
+        lcAge    = PADL(ALLTRIM(cursor_4c_Convenio.nagencias), 4, "0")
+        lcbco    = PADL(ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", "")), 5, "0") + cursor_4c_Convenio.digiagen
+        lcRaz    = PADR(ALLTRIM(cursor_4c_Empresa.razsocs), 30)
+        lcCgc    = PADL(STRTRAN(STRTRAN(STRTRAN(cursor_4c_Empresa.cgcs, "/", ""), ".", ""), "-", ""), 14, "0")
+        lctpcgc  = IIF(LEN(ALLTRIM(CHRTRAN(cursor_4c_Empresa.cgcs, "/.-", ""))) = 11, "01", "02")
+        lcrazbco = PADR(ALLTRIM(cursor_4c_Convenio.bancos), 15)
         lcDat    = SUBSTR(DTOC(DATE()), 1, 2) + SUBSTR(DTOC(DATE()), 4, 2) + SUBSTR(DTOC(DATE()), 9, 2)
         lcprot   = IIF(loc_oP2.spn_4c_Dias.Value = 0, 5, loc_oP2.spn_4c_Dias.Value)
         lcprot   = PADL(ALLTRIM(STR(lcprot)), 2, "0")
@@ -1796,10 +1854,11 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             lcStrg = fLimpaTexto(lcStrg)
             STRTOFILE(lcStrg, lcarq, 1)
 
-            *-- Itau nao usa numeds (par_nNumeDs=0)
-            loc_oBO.InserirLinhaCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
+            loc_cCidChave = LEFT(SYS(2015) + SYS(2015), 20)
+            loc_oBO.InserirRegistroCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
                 cursor_4c_Filtro2.dopes, cursor_4c_Filtro2.numes, ;
-                lcStrg, cursor_4c_Filtro2.titulos, 0)
+                gc_4c_UsuarioLogado, loc_cCidChave, ;
+                cursor_4c_Filtro2.titulos, 0, "CNAB", lcStrg)
 
             lnSeq = lnSeq + 1
         ENDSCAN
@@ -1811,8 +1870,8 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
         IF FILE(lcarq)
             lok = .T.
-            IF !loc_oBO.ConfirmarTransacao()
-                loc_oBO.CancelarTransacao()
+            IF !loc_oBO.CommitAlteracoes()
+                loc_oBO.RollbackAlteracoes()
                 lok = .F.
             ENDIF
 
@@ -1820,13 +1879,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 SELECT cursor_4c_Filtro2
                 SCAN
                     llAtu = .T.
-                    lcTitBanAtual = loc_oBO.VerificarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
+                    lcTitBanAtual = THIS.ObterTituloBancoAtual(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
                     IF !EMPTY(ALLTRIM(lcTitBanAtual))
                         llAtu = MsgConfirma("T" + CHR(237) + "tulo " + CHR(34) + lcTitBanAtual + CHR(34) + ;
                                             " j" + CHR(225) + " possui T" + CHR(237) + "tulo do Banco. Sobrescrever?")
                     ENDIF
                     IF llAtu
-                        loc_oBO.AtualizarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
+                        loc_oBO.MarcarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
                     ENDIF
                 ENDSCAN
             ENDIF
@@ -1846,34 +1905,37 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL lcDat, lcEnv, lnMor, lcPri, lcPrt, lcCdC, lcDig, lcArq, lcCar, lcBol
         LOCAL lcStrg, lnSeq, lcSeq, lcSeqNum, lcVenc, lcVal, lcMor
         LOCAL lcCpf, lcNom, lcEnd, lcCep, lcNtt, lcNossoNum, lcDV
-        LOCAL lok, llAtu, lcTitBanAtual
+        LOCAL lok, llAtu, lcTitBanAtual, loc_cCidChave
 
         loc_oBO = THIS.this_oBusinessObject
         loc_oP2 = THIS.pgf_4c_Principal.Page2
 
+        SELECT cursor_4c_Convenio
+        SELECT cursor_4c_Empresa
+
         lcTit  = PADR(THIS.pgf_4c_Principal.Page1.txt_4c_TitBan.Value, 12)
-        lcBcn  = PADL(ALLTRIM(loc_oBO.this_cBancoNr), 3, "0")
+        lcBcn  = PADL(ALLTRIM(cursor_4c_Convenio.nbancos), 3, "0")
         lcCnv  = "009"
-        lcAge  = PADL(ALLTRIM(loc_oBO.this_cAgencia), 5, "0")
-        lcBco  = PADL(ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", "")), 7, "0") + ;
-                 PADL(loc_oBO.this_cDigitoAgencia, 1, "0")
-        lcRaz  = PADR(ALLTRIM(loc_oBO.this_cRazSocs), 30)
-        lcCgc  = PADL(STRTRAN(STRTRAN(STRTRAN(loc_oBO.this_cCgcs, "/", ""), ".", ""), "-", ""), 14, "0")
-        lcTpC  = IIF(LEN(ALLTRIM(CHRTRAN(loc_oBO.this_cCgcs, "/.-", ""))) = 11, "01", "02")
-        lcRbc  = PADR(ALLTRIM(loc_oBO.this_cBancos), 15)
+        lcAge  = PADL(ALLTRIM(cursor_4c_Convenio.nagencias), 5, "0")
+        lcBco  = PADL(ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", "")), 7, "0") + ;
+                 PADL(cursor_4c_Convenio.digiagen, 1, "0")
+        lcRaz  = PADR(ALLTRIM(cursor_4c_Empresa.razsocs), 30)
+        lcCgc  = PADL(STRTRAN(STRTRAN(STRTRAN(cursor_4c_Empresa.cgcs, "/", ""), ".", ""), "-", ""), 14, "0")
+        lcTpC  = IIF(LEN(ALLTRIM(CHRTRAN(cursor_4c_Empresa.cgcs, "/.-", ""))) = 11, "01", "02")
+        lcRbc  = PADR(ALLTRIM(cursor_4c_Convenio.bancos), 15)
         lcDat  = SUBSTR(DTOC(DATE()), 1, 2) + SUBSTR(DTOC(DATE()), 4, 2) + SUBSTR(DTOC(DATE()), 9, 2)
         lcEnv  = PADL(fGerUniqueKey("BRADESCOENV"), 7, "0")
-        lnMor  = IIF(EMPTY(loc_oBO.this_nMoras), 0.17, loc_oBO.this_nMoras)
-        lcPri  = PADL(IIF(EMPTY(ALLTRIM(loc_oBO.this_cInstrus)), "00", loc_oBO.this_cInstrus), 2, "0")
+        lnMor  = IIF(EMPTY(cursor_4c_Convenio.moras), 0.17, cursor_4c_Convenio.moras)
+        lcPri  = PADL(IIF(EMPTY(ALLTRIM(cursor_4c_Convenio.instrus)), "00", cursor_4c_Convenio.instrus), 2, "0")
         lcPrt  = IIF(loc_oP2.spn_4c_Dias.Value = 0, 5, loc_oP2.spn_4c_Dias.Value)
         lcPrt  = IIF(lcPri = "00", "00", PADL(ALLTRIM(STR(lcPrt)), 2, "0"))
-        lcCdC  = PADL(ALLTRIM(loc_oBO.this_cConvenio), 20, "0")
+        lcCdC  = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 20, "0")
         lcDig  = IIF(VAL(SUBSTR(lcEnv, 6, 2)) = 0, ;
                      TRANSFORM(VAL(SUBSTR(lcEnv, 6, 2)) + 1, "@L 99"), ;
                      TRANSFORM(VAL(SUBSTR(lcEnv, 6, 2)), "@L 99"))
         lcArq  = "CB" + SUBSTR(DTOC(DATE()), 1, 2) + SUBSTR(DTOC(DATE()), 4, 2) + lcDig + ".REM"
-        lcCar  = PADL(ALLTRIM(loc_oBO.this_cTpCtBol), 2, "0")
-        lcBol  = IIF(loc_oBO.this_nBcoImprime = 1, "1", "2")
+        lcCar  = PADL(ALLTRIM(cursor_4c_Convenio.tpctbols), 2, "0")
+        lcBol  = IIF(cursor_4c_Convenio.bcoimprime = 1, "1", "2")
 
         *-- Header
         lcStrg = "0" + "1" + "REMESSA" + "01" + "COBRANCA       " + lcCdC + ;
@@ -1936,9 +1998,11 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             lcStrg = fLimpaTexto(lcStrg)
             STRTOFILE(lcStrg, lcArq, 1)
 
-            loc_oBO.InserirLinhaCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
+            loc_cCidChave = LEFT(SYS(2015) + SYS(2015), 20)
+            loc_oBO.InserirRegistroCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
                 cursor_4c_Filtro2.dopes, cursor_4c_Filtro2.numes, ;
-                lcStrg, cursor_4c_Filtro2.titulos, VAL(lcSeqNum))
+                gc_4c_UsuarioLogado, loc_cCidChave, ;
+                cursor_4c_Filtro2.titulos, VAL(lcSeqNum), "CNAB", lcStrg)
 
             lnSeq = lnSeq + 1
         ENDSCAN
@@ -1950,8 +2014,8 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
         IF FILE(lcArq)
             lok = .T.
-            IF !loc_oBO.ConfirmarTransacao()
-                loc_oBO.CancelarTransacao()
+            IF !loc_oBO.CommitAlteracoes()
+                loc_oBO.RollbackAlteracoes()
                 lok = .F.
             ENDIF
 
@@ -1959,13 +2023,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 SELECT cursor_4c_Filtro2
                 SCAN
                     llAtu = .T.
-                    lcTitBanAtual = loc_oBO.VerificarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
+                    lcTitBanAtual = THIS.ObterTituloBancoAtual(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
                     IF !EMPTY(ALLTRIM(lcTitBanAtual))
                         llAtu = MsgConfirma("T" + CHR(237) + "tulo " + CHR(34) + lcTitBanAtual + CHR(34) + ;
                                             " j" + CHR(225) + " possui T" + CHR(237) + "tulo do Banco. Sobrescrever?")
                     ENDIF
                     IF llAtu
-                        loc_oBO.AtualizarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
+                        loc_oBO.MarcarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
                     ENDIF
                 ENDSCAN
             ENDIF
@@ -1988,30 +2052,32 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL lcnumes, lcVenc, lcValor, lnMora, lcMora, lccgccli, lctpcgcCli
         LOCAL lcnome, lcende, lcbair, lccep, lccida, lcesta, lcnumtit, lcChave
         LOCAL lnTotTit
-        LOCAL lok, llAtu, lcTitBanAtual
+        LOCAL lok, llAtu, lcTitBanAtual, loc_cCidChave
 
         loc_oBO = THIS.this_oBusinessObject
         loc_oP2 = THIS.pgf_4c_Principal.Page2
 
+        SELECT cursor_4c_Convenio
+        SELECT cursor_4c_Empresa
+
         lcTit    = PADR(THIS.pgf_4c_Principal.Page1.txt_4c_TitBan.Value, 13)
-        lcCnv    = PADL(ALLTRIM(loc_oBO.this_cConvenio), 11, "0")
-        lcAge    = PADL(ALLTRIM(loc_oBO.this_cAgencia), 4, "0")
-        lcDigA   = ALLTRIM(loc_oBO.this_cDigitoAgencia)
-        lcCtaC   = ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", ""))
+        lcCnv    = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 11, "0")
+        lcAge    = PADL(ALLTRIM(cursor_4c_Convenio.nagencias), 4, "0")
+        lcDigA   = ALLTRIM(cursor_4c_Convenio.digiagen)
+        lcCtaC   = ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", ""))
         lcDigC   = RIGHT(lcCtaC, 1)
         lcCta    = PADL(LEFT(lcCtaC, LEN(lcCtaC) - 1), 9, "0")
-        lcRaz    = PADR(ALLTRIM(loc_oBO.this_cRazSocs), 30)
-        lcCgc    = PADL(ALLTRIM(STRTRAN(STRTRAN(STRTRAN(loc_oBO.this_cCgcs, "/", ""), ".", ""), "-", "")), 15, "0")
-        lctpcgc  = IIF(LEN(ALLTRIM(CHRTRAN(loc_oBO.this_cCgcs, "/.-", ""))) = 11, "1", "2")
-        lcrazbco = PADR(ALLTRIM(loc_oBO.this_cBancos), 30)
+        lcRaz    = PADR(ALLTRIM(cursor_4c_Empresa.razsocs), 30)
+        lcCgc    = PADL(ALLTRIM(STRTRAN(STRTRAN(STRTRAN(cursor_4c_Empresa.cgcs, "/", ""), ".", ""), "-", "")), 15, "0")
+        lctpcgc  = IIF(LEN(ALLTRIM(CHRTRAN(cursor_4c_Empresa.cgcs, "/.-", ""))) = 11, "1", "2")
+        lcrazbco = PADR(ALLTRIM(cursor_4c_Convenio.bancos), 30)
         lcDat    = SUBSTR(DTOC(DATE()), 1, 2) + SUBSTR(DTOC(DATE()), 4, 2) + SUBSTR(DTOC(DATE()), 7, 4)
         lcprot   = IIF(loc_oP2.spn_4c_Dias.Value = 0, 5, loc_oP2.spn_4c_Dias.Value)
         lcprot   = PADL(ALLTRIM(STR(lcprot)), 2, "0")
         lcEnv    = PADL(fGerUniqueKey("SANTANDERENV"), 8, "0")
-        lcArq    = ALLTRIM(loc_oBO.this_cDrive) + IIF(EMPTY(ALLTRIM(loc_oBO.this_cDrive)), "", "\")
-        lcArq    = STRTRAN(lcArq + ALLTRIM(loc_oBO.this_cArqCnabs) + lcEnv + ".REM", "\\", "\")
-        lcTpCtArq = ALLTRIM(loc_oBO.this_cTpCtArq)
-        lcTpCtBol = ALLTRIM(loc_oBO.this_cTpCtBol)
+        lcArq    = lcEnv + ".REM"
+        lcTpCtArq = ALLTRIM(cursor_4c_Convenio.tpctarqs)
+        lcTpCtBol = ALLTRIM(cursor_4c_Convenio.tpctbols)
 
         lnLot = 0
         lcLot = TRANSFORM(lnLot, "@L 9999")
@@ -2056,7 +2122,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             lccgccli   = PADL(ALLTRIM(CHRTRAN(cursor_4c_Filtro2.cpfs, "/.-,", "")), 15, "0")
             lctpcgcCli = IIF(LEN(ALLTRIM(CHRTRAN(cursor_4c_Filtro2.cpfs, "/.-", ""))) = 11, "1", "2")
             lcnome     = PADR(IIF(EMPTY(cursor_4c_Filtro2.Razaos), cursor_4c_Filtro2.rclis, cursor_4c_Filtro2.Razaos), 40)
-            lnMora     = IIF(loc_oBO.this_nMoras = 0, 0.33, loc_oBO.this_nMoras)
+            lnMora     = IIF(cursor_4c_Convenio.moras = 0, 0.33, cursor_4c_Convenio.moras)
             lnMora     = ROUND((cursor_4c_Filtro2.valos * lnMora) / 100, 2)
             lcMora     = PADL(ALLTRIM(CHRTRAN(STR(lnMora, 11, 2), ",.", "")), 15, "0")
             IF EMPTY(cursor_4c_Filtro2.endcobs) OR EMPTY(cursor_4c_Filtro2.cepcobs) OR ;
@@ -2079,7 +2145,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             lcChave  = PADR(ALLTRIM(STRTRAN(cursor_4c_Filtro2.titulos, "/", "")), 15) + lcnumes
 
             lcSeqNum   = fGerUniqueKey("STNOSSONUM")
-            lcDV       = fCalcMod11BB(PADL(lcSeqNum, 7, "0"), loc_oBO.this_cBancoNr)
+            lcDV       = fCalcMod11BB(PADL(lcSeqNum, 7, "0"), cursor_4c_Convenio.nbancos)
             lcNossoNum = PADL(lcSeqNum, 12, "0") + lcDV
 
             *-- Detalhe P
@@ -2115,9 +2181,11 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
             REPLACE SeqNums WITH PADL(lcSeqNum, 5, "0") IN cursor_4c_Filtro2
 
-            loc_oBO.InserirLinhaCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
+            loc_cCidChave = LEFT(SYS(2015) + SYS(2015), 20)
+            loc_oBO.InserirRegistroCNAB(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.emps, ;
                 cursor_4c_Filtro2.dopes, cursor_4c_Filtro2.numes, ;
-                lcStrg, cursor_4c_Filtro2.titulos, VAL(lcSeqNum))
+                gc_4c_UsuarioLogado, loc_cCidChave, ;
+                cursor_4c_Filtro2.titulos, VAL(lcSeqNum), "CNAB", lcStrg)
         ENDSCAN
 
         *-- Trailer do lote
@@ -2137,8 +2205,8 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
 
         IF FILE(lcArq)
             lok = .T.
-            IF !loc_oBO.ConfirmarTransacao()
-                loc_oBO.CancelarTransacao()
+            IF !loc_oBO.CommitAlteracoes()
+                loc_oBO.RollbackAlteracoes()
                 lok = .F.
             ENDIF
 
@@ -2146,13 +2214,13 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 SELECT cursor_4c_Filtro2
                 SCAN
                     llAtu = .T.
-                    lcTitBanAtual = loc_oBO.VerificarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
+                    lcTitBanAtual = THIS.ObterTituloBancoAtual(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers)
                     IF !EMPTY(ALLTRIM(lcTitBanAtual))
                         llAtu = MsgConfirma("T" + CHR(237) + "tulo " + CHR(34) + lcTitBanAtual + CHR(34) + ;
                                             " j" + CHR(225) + " possui T" + CHR(237) + "tulo do Banco. Sobrescrever?")
                     ENDIF
                     IF llAtu
-                        loc_oBO.AtualizarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
+                        loc_oBO.MarcarTituloBanco(cursor_4c_Filtro2.empdopnums, cursor_4c_Filtro2.nopers, lcTit)
                     ENDIF
                 ENDSCAN
             ENDIF
@@ -2161,6 +2229,25 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 MsgInfo("Arquivo " + CHR(34) + ALLTRIM(lcArq) + CHR(34) + " gerado com sucesso!")
             ENDIF
         ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * ObterTituloBancoAtual - Retorna titbans atual via BuscarTituloBanco do BO
+    * Substitui o antigo VerificarTituloBanco (que nao existe no novo BO)
+    *==========================================================================
+    PROTECTED PROCEDURE ObterTituloBancoAtual(par_cEmpDopNums, par_nNopers)
+        LOCAL loc_oBO, loc_cTitBan
+        loc_oBO    = THIS.this_oBusinessObject
+        loc_cTitBan = ""
+
+        IF loc_oBO.BuscarTituloBanco(par_cEmpDopNums, par_nNopers)
+            IF USED("cursor_4c_TitBan") AND RECCOUNT("cursor_4c_TitBan") > 0
+                SELECT cursor_4c_TitBan
+                loc_cTitBan = ALLTRIM(NVL(cursor_4c_TitBan.titbans, ""))
+            ENDIF
+        ENDIF
+
+        RETURN loc_cTitBan
     ENDPROC
 
     *==========================================================================
@@ -2175,6 +2262,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL lcAg, lcCar, lcCta, lcDig, lcLivre
         LOCAL lcPri, lcprot, lnMor, lcMora, lcInt1, lcInt2, lcInt7
         LOCAL loc_nNumeDs, loc_cRaz, loc_cTpCtBol, loc_cTpCtArq
+        LOCAL loc_cBancoNr, loc_cSQL
         loc_lSucesso = .F.
 
         TRY
@@ -2182,20 +2270,25 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para impress" + CHR(227) + "o de boleto")
             ELSE
 
-            loc_oBO     = THIS.this_oBusinessObject
-            lcRaz       = PADR(ALLTRIM(loc_oBO.this_cRazSocs), 30)
-            lcAge       = LEFT(ALLTRIM(loc_oBO.this_cAgencia), 4)
-            lcbco       = PADL(ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", "")), 8, "0")
-            lcCdC       = PADL(ALLTRIM(loc_oBO.this_cConvenio), 7, "0")
-            lcTpCtArq   = ALLTRIM(loc_oBO.this_cTpCtArq)
-            lcTpCtBol   = ALLTRIM(loc_oBO.this_cTpCtBol)
+            loc_oBO = THIS.this_oBusinessObject
+
+            SELECT cursor_4c_Convenio
+            SELECT cursor_4c_Empresa
+
+            loc_cBancoNr = ALLTRIM(cursor_4c_Convenio.nbancos)
+            lcRaz       = PADR(ALLTRIM(cursor_4c_Empresa.razsocs), 30)
+            lcAge       = LEFT(ALLTRIM(cursor_4c_Convenio.nagencias), 4)
+            lcbco       = PADL(ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", "")), 8, "0")
+            lcCdC       = PADL(ALLTRIM(cursor_4c_Convenio.convenios), 7, "0")
+            lcTpCtArq   = ALLTRIM(cursor_4c_Convenio.tpctarqs)
+            lcTpCtBol   = ALLTRIM(cursor_4c_Convenio.tpctbols)
             loc_cRaz     = lcRaz
             loc_cTpCtBol = lcTpCtBol
             loc_cTpCtArq = lcTpCtArq
 
             *-- Cria cursor extendido com campos de boleto
             SELECT a.*, SPACE(44) AS nBarras, SPACE(30) AS ImgBarra, ;
-                    loc_cRaz AS loc_cRaz, SPACE(50) AS NomeCli, ;
+                    loc_cRaz AS Cedente, SPACE(50) AS NomeCli, ;
                     SPACE(50) AS Instr1, SPACE(50) AS Instr2, SPACE(50) AS Instr3, ;
                     SPACE(50) AS Instr4, SPACE(50) AS Instr5, SPACE(50) AS Instr6, ;
                     SPACE(70) AS Instr7, SPACE(50) AS NrDigit, SPACE(17) AS NossoNum, ;
@@ -2203,7 +2296,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                     b.Ceps AS CepEmp, b.Endes AS EndEmp, b.Numeros AS NumEmp, ;
                     b.Bairs AS BaiEmp, b.Cidas AS CidEmp, b.Estas AS EstaEmp, ;
                     b.Cgcs AS CpfEmp, b.compls AS compEmp, ;
-                    loc_cTpCtBol AS loc_cTpCtBol, loc_cTpCtArq AS loc_cTpCtArq, ;
+                    loc_cTpCtBol AS TpCtBols, loc_cTpCtArq AS TpCtArqs, ;
                     SPACE(2) AS carteira ;
                 FROM cursor_4c_Filtro2 a, cursor_4c_Empresa b ;
                 INTO CURSOR cursor_4c_Filtro2 READWRITE
@@ -2211,25 +2304,38 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             SELECT cursor_4c_Filtro2
             GO TOP
 
-            lcPri  = PADL(IIF(EMPTY(ALLTRIM(loc_oBO.this_cInstrus)), "00", loc_oBO.this_cInstrus), 2, "0")
+            lcPri  = PADL(IIF(EMPTY(ALLTRIM(cursor_4c_Convenio.instrus)), "00", cursor_4c_Convenio.instrus), 2, "0")
             lcprot = IIF(THIS.pgf_4c_Principal.Page2.spn_4c_Dias.Value = 0, 5, ;
                          THIS.pgf_4c_Principal.Page2.spn_4c_Dias.Value)
             lcprot = IIF(lcPri = "00", "00", PADL(ALLTRIM(STR(lcprot)), 2, "0"))
-            lnMor  = IIF(EMPTY(loc_oBO.this_nMoras), 0.23, loc_oBO.this_nMoras)
+            lnMor  = IIF(EMPTY(cursor_4c_Convenio.moras), 0.23, cursor_4c_Convenio.moras)
 
             SCAN
                 loc_nNumeDs = 0
                 IF par_lReimp
-                    loc_nNumeDs = loc_oBO.BuscarUltimoNumeDs(ALLTRIM(cursor_4c_Filtro2.titulos))
+                    *-- Busca numeds atual do SigPcOoL para reimpressao
+                    loc_cSQL = "SELECT TOP 1 numeds FROM SigPcOoL " + ;
+                               "WHERE processos = 'CNAB' " + ;
+                               "AND dopeds = " + EscaparSQL(ALLTRIM(cursor_4c_Filtro2.titulos)) + ;
+                               " ORDER BY datas DESC"
+                    IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NumeDs") > 0 AND ;
+                       USED("cursor_4c_NumeDs") AND RECCOUNT("cursor_4c_NumeDs") > 0
+                        SELECT cursor_4c_NumeDs
+                        loc_nNumeDs = NVL(cursor_4c_NumeDs.numeds, 0)
+                        IF USED("cursor_4c_NumeDs")
+                            USE IN cursor_4c_NumeDs
+                        ENDIF
+                    ENDIF
+                    SELECT cursor_4c_Filtro2
                     REPLACE SeqNums WITH PADL(ALLTRIM(STR(loc_nNumeDs)), 5, "0") IN cursor_4c_Filtro2
                 ENDIF
 
-                IF ALLTRIM(loc_oBO.this_cBancoNr) = "001"
+                IF loc_cBancoNr = "001"
                     lcNossoNum = lcCdC + PADL(cursor_4c_Filtro2.SeqNums, 10, "0")
                     lcFator    = PADL(ALLTRIM(STR(1000 + (TTOD(cursor_4c_Filtro2.vencs) - CTOD("03/07/2000")))), 4, "0")
                     lcValor    = PADL(ALLTRIM(CHRTRAN(STR(cursor_4c_Filtro2.valos, 8, 2), ",.", "")), 10, "0")
                     lcBarra    = "0019" + lcFator + lcValor + "000000" + lcNossoNum + "17"
-                    lcDV       = fCalcMod11BB(lcBarra, loc_oBO.this_cBancoNr)
+                    lcDV       = fCalcMod11BB(lcBarra, loc_cBancoNr)
 
                     lcNossoNum = lcCdC + PADL(cursor_4c_Filtro2.SeqNums, 10, "0")
                     lcBarra    = "0019" + lcDV + lcFator + lcValor + "000000" + lcNossoNum + "17"
@@ -2247,26 +2353,26 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                     lcDv3     = fCalcMod10(lcCampo3)
                     lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
                     REPLACE NrDigit WITH lcNrDigit IN cursor_4c_Filtro2
-                    REPLACE AgCodCed WITH LEFT(ALLTRIM(loc_oBO.this_cAgencia), 4) + "-" + ;
-                            RIGHT(ALLTRIM(loc_oBO.this_cAgencia), 1) + "/" + ;
-                            ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", "")) + "-" + ;
-                            PADL(loc_oBO.this_cDigitoAgencia, 1, "0") IN cursor_4c_Filtro2
+                    REPLACE AgCodCed WITH LEFT(ALLTRIM(cursor_4c_Convenio.nagencias), 4) + "-" + ;
+                            RIGHT(ALLTRIM(cursor_4c_Convenio.nagencias), 1) + "/" + ;
+                            ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", "")) + "-" + ;
+                            PADL(cursor_4c_Convenio.digiagen, 1, "0") IN cursor_4c_Filtro2
 
-                    IF TYPE("loc_oBO.this_nMsgMulta") = "N" AND loc_oBO.this_nMsgMulta = 1
+                    IF cursor_4c_Convenio.bcoimprime = 1
                         REPLACE Instr3 WITH "COBRAR MULTA DE 2% AO M" + CHR(202) + "S AP" + CHR(211) + ;
                                 "S 1 DIA DE VENCIMENTO " IN cursor_4c_Filtro2
                     ENDIF
                 ENDIF
 
-                IF ALLTRIM(loc_oBO.this_cBancoNr) = "033"
+                IF loc_cBancoNr = "033"
                     lcNossoNum = PADL(cursor_4c_Filtro2.SeqNums, 12, "0")
-                    lcDV       = fCalcMod11BB(lcNossoNum, loc_oBO.this_cBancoNr)
+                    lcDV       = fCalcMod11BB(lcNossoNum, loc_cBancoNr)
                     lcNossoNum = lcNossoNum + lcDV
 
                     lcFator = PADL(ALLTRIM(STR((TTOD(cursor_4c_Filtro2.vencs) - CTOD("07/10/1997")))), 4, "0")
                     lcValor = PADL(ALLTRIM(CHRTRAN(STR(cursor_4c_Filtro2.valos, 8, 2), ",.", "")), 10, "0")
                     lcBarra = "0339" + lcFator + lcValor + "9" + lcCdC + lcNossoNum + "0" + "101"
-                    lcDV    = fCalcMod11BB(lcBarra, loc_oBO.this_cBancoNr, "DVB")
+                    lcDV    = fCalcMod11BB(lcBarra, loc_cBancoNr, "DVB")
 
                     lcBarra = "0339" + lcDV + lcFator + lcValor + "9" + lcCdC + lcNossoNum + "0" + "101"
                     REPLACE nBarras WITH lcBarra IN cursor_4c_Filtro2
@@ -2283,29 +2389,29 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                     lcDv3     = fCalcMod10(lcCampo3)
                     lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
                     REPLACE NrDigit WITH ALLTRIM(lcNrDigit) IN cursor_4c_Filtro2
-                    REPLACE AgCodCed WITH ALLTRIM(loc_oBO.this_cAgencia) + "/" + lcCdC IN cursor_4c_Filtro2
+                    REPLACE AgCodCed WITH ALLTRIM(cursor_4c_Convenio.nagencias) + "/" + lcCdC IN cursor_4c_Filtro2
                     REPLACE Instr3 WITH "COBRAR 1% DE MULTA A PARTIR DE " + ;
                             DTOC(TTOD(cursor_4c_Filtro2.vencs) + 6) IN cursor_4c_Filtro2
                 ENDIF
 
-                IF ALLTRIM(loc_oBO.this_cBancoNr) = "237"
+                IF loc_cBancoNr = "237"
                     IF par_lReimp
                         REPLACE SeqNums WITH PADL(ALLTRIM(TRANSFORM(loc_nNumeDs, "@R 99999999999")), 11, "0") ;
                             IN cursor_4c_Filtro2
                     ENDIF
                     lcFator = PADL(ALLTRIM(STR((TTOD(cursor_4c_Filtro2.vencs) - CTOD("07/10/1997")))), 4, "0")
                     lcValor = PADL(ALLTRIM(CHRTRAN(STR(cursor_4c_Filtro2.valos, 8, 2), ",.", "")), 10, "0")
-                    lcAg    = PADL(LEFT(ALLTRIM(loc_oBO.this_cAgencia), 4), 4, "0")
-                    lcCar   = PADL(ALLTRIM(loc_oBO.this_cTpCtBol), 2, "0")
-                    lcCta   = PADL(ALLTRIM(CHRTRAN(loc_oBO.this_cContaConv, ".-", "")), 7, "0")
-                    lcDig   = ALLTRIM(loc_oBO.this_cDigitoAgencia)
+                    lcAg    = PADL(LEFT(ALLTRIM(cursor_4c_Convenio.nagencias), 4), 4, "0")
+                    lcCar   = PADL(ALLTRIM(cursor_4c_Convenio.tpctbols), 2, "0")
+                    lcCta   = PADL(ALLTRIM(CHRTRAN(cursor_4c_Convenio.contas, ".-", "")), 7, "0")
+                    lcDig   = ALLTRIM(cursor_4c_Convenio.digiagen)
                     lcNossoNum = PADL(cursor_4c_Filtro2.SeqNums, 11, "0")
                     lcDV       = fCalcMod11B7(lcCar + lcNossoNum)
                     lcNossoNum = lcNossoNum + lcDV
 
                     lcLivre = lcAg + lcCar + SUBSTR(lcNossoNum, 1, 11) + lcCta + "0"
                     lcBarra = "2379" + lcFator + lcValor + lcLivre
-                    lcDV    = fCalcMod11BB(lcBarra, loc_oBO.this_cBancoNr, "DVB")
+                    lcDV    = fCalcMod11BB(lcBarra, loc_cBancoNr, "DVB")
 
                     lcBarra = "2379" + lcDV + lcFator + lcValor + lcLivre
                     REPLACE nBarras WITH lcBarra IN cursor_4c_Filtro2
@@ -2322,7 +2428,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                     lcDv3     = fCalcMod10(lcCampo3)
                     lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
                     REPLACE NrDigit WITH lcNrDigit IN cursor_4c_Filtro2
-                    REPLACE AgCodCed WITH ALLTRIM(loc_oBO.this_cAgencia) + "/" + lcCta + "-" + lcDig ;
+                    REPLACE AgCodCed WITH ALLTRIM(cursor_4c_Convenio.nagencias) + "/" + lcCta + "-" + lcDig ;
                         IN cursor_4c_Filtro2
                     REPLACE carteira WITH lcCar IN cursor_4c_Filtro2
                 ENDIF
@@ -2334,11 +2440,11 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
                 lcMora = STR(ROUND((cursor_4c_Filtro2.valos * lnMor) / 100, 2), 8, 2)
                 lcInt1 = "AP" + CHR(211) + "S VENCIMENTO, COBRAR JUROS DE R$" + ALLTRIM(lcMora) + " AO DIA."
                 lcInt2 = "PROTESTAR NO " + lcprot + CHR(186) + " DIA " + CHR(218) + "TIL AP" + CHR(211) + "S O VENCIMENTO."
-                lcInt7 = IIF(ALLTRIM(loc_oBO.this_cBancoNr) = "237", ;
+                lcInt7 = IIF(loc_cBancoNr = "237", ;
                              "Pag" + CHR(225) + "vel preferencialmente na Rede Bradesco ou Bradesco Expresso", ;
                              "PAG" + CHR(193) + "VEL EM QUALQUER BANCO AT" + CHR(201) + " O VENCIMENTO")
 
-                IF TYPE("loc_oBO.this_nMsgMulta") = "N" AND loc_oBO.this_nMsgMulta = 1
+                IF cursor_4c_Convenio.bcoimprime = 1
                     lcInt2 = ""
                 ENDIF
 
@@ -2366,14 +2472,14 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
             GO TOP
 
             DO CASE
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "001"
-                    REPORT FORM BloquetoBB2 PREVIEW
+                CASE loc_cBancoNr = "001"
+                    THIS.ExecutarReportForm("BloquetoBB2", "PREVIEW", "cursor_4c_Filtro2")
 
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "033"
-                    REPORT FORM BloquetoSt PREVIEW
+                CASE loc_cBancoNr = "033"
+                    THIS.ExecutarReportForm("BloquetoSt", "PREVIEW", "cursor_4c_Filtro2")
 
-                CASE ALLTRIM(loc_oBO.this_cBancoNr) = "237"
-                    REPORT FORM BloquetoBra PREVIEW
+                CASE loc_cBancoNr = "237"
+                    THIS.ExecutarReportForm("BloquetoBra", "PREVIEW", "cursor_4c_Filtro2")
             ENDCASE
 
             *-- Limpa imagens de barra geradas
@@ -2457,7 +2563,7 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
     * CarregarLista - Carrega dados iniciais (operacoes SigCdOpe)
     *==========================================================================
     PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
@@ -2478,16 +2584,16 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         loc_oBO = THIS.this_oBusinessObject
         loc_oP1 = THIS.pgf_4c_Principal.Page1
 
-        loc_oBO.this_cCdEmpresa   = ALLTRIM(loc_oP1.txt_4c_CdEmpresa.Value)
-        loc_oBO.this_cDsEmpresa   = ALLTRIM(loc_oP1.txt_4c_DsEmpresa.Value)
-        loc_oBO.this_dDatai       = loc_oP1.txt_4c_Datai.Value
-        loc_oBO.this_dDataf       = loc_oP1.txt_4c_Dataf.Value
-        loc_oBO.this_nProcessados = loc_oP1.opt_4c_Processados.Value
-        loc_oBO.this_nPeriodo     = loc_oP1.opt_4c_Periodo.Value
-        loc_oBO.this_cCdConta     = ALLTRIM(loc_oP1.txt_4c_CdConta.Value)
-        loc_oBO.this_cDsConta     = ALLTRIM(loc_oP1.txt_4c_DsConta.Value)
-        loc_oBO.this_cTitBan      = loc_oP1.txt_4c_TitBan.Value
-        loc_oBO.this_nDiasProt    = THIS.pgf_4c_Principal.Page2.spn_4c_Dias.Value
+        loc_oBO.this_cEmps           = ALLTRIM(loc_oP1.txt_4c_CdEmpresa.Value)
+        loc_oBO.this_cDsEmpresa      = ALLTRIM(loc_oP1.txt_4c_DsEmpresa.Value)
+        loc_oBO.this_dDatIni         = loc_oP1.txt_4c_Datai.Value
+        loc_oBO.this_dDatFim         = loc_oP1.txt_4c_Dataf.Value
+        loc_oBO.this_lNaoProcessadas = (loc_oP1.opt_4c_Processados.Value = 1)
+        loc_oBO.this_nPeriodo        = loc_oP1.opt_4c_Periodo.Value
+        loc_oBO.this_cCdCarConta     = ALLTRIM(loc_oP1.txt_4c_CdConta.Value)
+        loc_oBO.this_cDsCarConta     = ALLTRIM(loc_oP1.txt_4c_DsConta.Value)
+        loc_oBO.this_cTitBan         = loc_oP1.txt_4c_TitBan.Value
+        loc_oBO.this_nDiasProt       = THIS.pgf_4c_Principal.Page2.spn_4c_Dias.Value
     ENDPROC
 
     *==========================================================================
@@ -2498,14 +2604,14 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         loc_oBO = THIS.this_oBusinessObject
         loc_oP1 = THIS.pgf_4c_Principal.Page1
 
-        loc_oP1.txt_4c_CdEmpresa.Value   = loc_oBO.this_cCdEmpresa
+        loc_oP1.txt_4c_CdEmpresa.Value   = loc_oBO.this_cEmps
         loc_oP1.txt_4c_DsEmpresa.Value   = loc_oBO.this_cDsEmpresa
-        loc_oP1.txt_4c_Datai.Value        = loc_oBO.this_dDatai
-        loc_oP1.txt_4c_Dataf.Value        = loc_oBO.this_dDataf
-        loc_oP1.opt_4c_Processados.Value  = loc_oBO.this_nProcessados
+        loc_oP1.txt_4c_Datai.Value        = loc_oBO.this_dDatIni
+        loc_oP1.txt_4c_Dataf.Value        = loc_oBO.this_dDatFim
+        loc_oP1.opt_4c_Processados.Value  = IIF(loc_oBO.this_lNaoProcessadas, 1, 2)
         loc_oP1.opt_4c_Periodo.Value      = loc_oBO.this_nPeriodo
-        loc_oP1.txt_4c_CdConta.Value      = loc_oBO.this_cCdConta
-        loc_oP1.txt_4c_DsConta.Value      = loc_oBO.this_cDsConta
+        loc_oP1.txt_4c_CdConta.Value      = loc_oBO.this_cCdCarConta
+        loc_oP1.txt_4c_DsConta.Value      = loc_oBO.this_cDsCarConta
         loc_oP1.txt_4c_TitBan.Value       = loc_oBO.this_cTitBan
         THIS.pgf_4c_Principal.Page2.spn_4c_Dias.Value = loc_oBO.this_nDiasProt
     ENDPROC
@@ -2517,16 +2623,16 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         LOCAL loc_oP1
         loc_oP1 = THIS.pgf_4c_Principal.Page1
 
-        loc_oP1.txt_4c_CdEmpresa.Enabled  = par_lHabilitar
-        loc_oP1.txt_4c_DsEmpresa.Enabled  = par_lHabilitar
-        loc_oP1.txt_4c_Datai.Enabled      = par_lHabilitar
-        loc_oP1.txt_4c_Dataf.Enabled      = par_lHabilitar
+        loc_oP1.txt_4c_CdEmpresa.Enabled   = par_lHabilitar
+        loc_oP1.txt_4c_DsEmpresa.Enabled   = par_lHabilitar
+        loc_oP1.txt_4c_Datai.Enabled       = par_lHabilitar
+        loc_oP1.txt_4c_Dataf.Enabled       = par_lHabilitar
         loc_oP1.opt_4c_Processados.Enabled = par_lHabilitar
-        loc_oP1.opt_4c_Periodo.Enabled    = par_lHabilitar
-        loc_oP1.txt_4c_CdConta.Enabled    = par_lHabilitar
-        loc_oP1.txt_4c_DsConta.Enabled    = par_lHabilitar
-        loc_oP1.txt_4c_TitBan.Enabled     = par_lHabilitar
-        loc_oP1.grd_4c_Operacoes.Enabled  = par_lHabilitar
+        loc_oP1.opt_4c_Periodo.Enabled     = par_lHabilitar
+        loc_oP1.txt_4c_CdConta.Enabled     = par_lHabilitar
+        loc_oP1.txt_4c_DsConta.Enabled     = par_lHabilitar
+        loc_oP1.txt_4c_TitBan.Enabled      = par_lHabilitar
+        loc_oP1.grd_4c_Operacoes.Enabled   = par_lHabilitar
     ENDPROC
 
     *==========================================================================
@@ -2626,6 +2732,54 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
     ENDPROC
 
     *==========================================================================
+    * ExecutarReportForm - Helper canonico REPORT FORM com guard FILE()
+    * e isolamento SET POINT/SEPARATOR/REPORTBEHAVIOR 80
+    *==========================================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cArqFrx, loc_cOldPoint, loc_cOldSep, loc_oErro
+
+        par_cRelatorioBase = STRTRAN(UPPER(par_cRelatorioBase), ".FRX", "")
+        loc_cArqFrx = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF !FILE(loc_cArqFrx)
+            MsgErro("Relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                    loc_cArqFrx, "Relat" + CHR(243) + "rio")
+            RETURN
+        ENDIF
+
+        IF !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum dado para exibir.")
+                RETURN
+            ENDIF
+        ENDIF
+
+        loc_cOldPoint = SET("POINT")
+        loc_cOldSep   = SET("SEPARATOR")
+
+        TRY
+            SET POINT TO "."
+            SET SEPARATOR TO ","
+            SET REPORTBEHAVIOR 80
+            DO CASE
+                CASE par_cModo = "PREVIEW"
+                    REPORT FORM (loc_cArqFrx) PREVIEW
+                CASE par_cModo = "PRINTER_PROMPT"
+                    REPORT FORM (loc_cArqFrx) TO PRINTER PROMPT
+                CASE par_cModo = "PRINTER"
+                    REPORT FORM (loc_cArqFrx) TO PRINTER
+                OTHERWISE
+                    REPORT FORM (loc_cArqFrx) PREVIEW
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro("Erro relat" + CHR(243) + "rio: " + loc_oErro.Message, "Relat" + CHR(243) + "rio")
+        ENDTRY
+
+        SET POINT TO (loc_cOldPoint)
+        SET SEPARATOR TO (loc_cOldSep)
+    ENDPROC
+
+    *==========================================================================
     PROCEDURE Destroy()
     *==========================================================================
         IF USED("cursor_4c_Operacoes")
@@ -2645,6 +2799,12 @@ DEFINE CLASS FormSIGPRCNB AS FormBase
         ENDIF
         IF USED("cursor_4c_Convenio")
             USE IN cursor_4c_Convenio
+        ENDIF
+        IF USED("cursor_4c_ClienteConta")
+            USE IN cursor_4c_ClienteConta
+        ENDIF
+        IF USED("cursor_4c_TitBan")
+            USE IN cursor_4c_TitBan
         ENDIF
         THIS.this_oBusinessObject = .NULL.
         DODEFAULT()

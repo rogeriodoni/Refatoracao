@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDALI",
+      "evento": "Init",
+      "linhas": 17,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdAli','codigos','crSigCdAli','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Codigos','','','Código',50,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descrs','','','Descriçãos',290,.t.)\n\t\t.pfSqlTabela(1).pColuna('Opautos','','','Oper. Autom. Cheque',115,.t.)\n\t\t.pfSqlTabela(1).pColuna('Fpagsautos','','','Cond. Pag. Autom.',94,.t.)\n\t\t.AddCursor('SigCdOpt','Operacaos','crSigCdOpt','','')\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.getcodigos.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdAli','codigos',ThisForm.Pagina.Dados.getcodigos.Value)\nElse\t\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.getdescrs.Value)\n\t\tThisForm.poDataMgr.LocateCursor('CrSigCdAli','descrs',ThisForm.Pagina.Dados.getdescrs.Value)\n\tEndIf\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect CrSigCdAli\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )\n\t\tThisForm.Pagina.Dados.getCodigos.Setfocus\t\n\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.getDescrs.Setfocus\t\n\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndcase\n\nSelect CrSigCdAli\nThisForm.Pagina.Dados.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n   If IsEmpty(ThisForm.Pagina.Dados.getCodigos.Value)\n\t  MessageBox( 'Obrigatório Informar o Código.', 48, '' )\n\t  ThisForm.Pagina.Dados.getCodigos.SetFocus\n\t  Return\n   Endif\n\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdAli','Codigos',ThisForm.Pagina.Dados.GetCodigos.Value)\n\t  MessageBox( 'Código Já Cadastrado...', 48, '' )\n\t  ThisForm.Pagina.Dados.getCodigos.SetFocus\n\t  Return\n   Endif\nEndif\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdAli'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.GetFPagSAutos",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigOpFp','crSigOpFp','Fpags',This.Value,'Condição de Pagamento',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Fpags','','Condição de Pagamento')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = lcod\n\tthis.parent.getFpagsAutos.value = Iif(LastKey()==27,Space(15),crSigOpFp.fpags)\n\tThis.Refresh\n\tm.llRetorno = (.Not.IsEmpt... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.GetFPagSAutos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.GetOpSaidas",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdOpt','crSigCdOpt','Operacaos',This.Value,'Operações de Cheques',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Operacaos','','Operações de Cheques')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = lcod\n\tthis.parent.getOpsaidas.value = Iif(LastKey()==27,Space(15),crSigCdOpt.Operacaos)\n\tThis.Refresh\n\tm.llRetorno = (... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.GetOpSaidas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "If Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' )\n   Return(.F.)\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.getDescrs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.getOpAutos",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdOpt','crSigCdOpt','Operacaos',This.Value,'Operações de Cheques',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Operacaos','','Operações de Cheques')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = lcod\n\tthis.parent.getOpautos.value = Iif(LastKey()==27,Space(15),crSigCdOpt.Operacaos)\n\tThis.Refresh\n\tm.llRetorno = (.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALI.Pagina.Dados.getOpAutos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

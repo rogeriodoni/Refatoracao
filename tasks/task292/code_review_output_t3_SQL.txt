@@ -1,0 +1,30 @@
+﻿A an├ílise est├í completa. Verificando os tr├¬s problemas reportados contra o c├│digo original.
+
+## Resultado da Verifica├º├úo: 3 Falsos Positivos
+
+Ap├│s verifica├º├úo detalhada comparando o c├│digo migrado com o original (`tasks/task292/SigPrGlp_form_codigo_fonte.txt`):
+
+### 1. ESTOQUE ÔÇö Existe no original, N├âO ├® condi├º├úo inventada
+
+O original (linha 3803) tem literalmente:
+```foxpro
+If ThisForm.Reserva  And (TmpFinal.Estoque = 0)
+```
+
+O migrado (`FormSigPrGlp.prg:2133`) tem:
+```foxpro
+IF THIS.this_lReserva AND TmpFinal.Estoque = 0
+```
+Migra├º├úo correta. Tamb├®m existe na linha 2292 (`loc_nQtdUtil > TmpFinal.Saldo - TmpFinal.Estoque`), espelho do original na linha 3165.
+
+### 2. CONTROLCOUNT ÔÇö Propriedade VFP, n├úo coluna SQL
+
+`THIS.ControlCount` e `loc_oCtrl.ControlCount` nas linhas 1592ÔÇô1624 s├úo propriedades nativas do VFP9 para iterar controles do form. O validador detectou a palavra em condi├º├Áes VFP (`FOR ... TO THIS.ControlCount`, `IF ... AND loc_oCtrl.ControlCount > 0`) e confundiu com colunas SQL.
+
+### 3. CAMPO ÔÇö Par├ómetro de m├®todo utilit├írio, n├úo coluna SQL
+
+`par_cCampo` no `CursorQuery` (BO linha 334) ├® um par├ómetro que constr├│i WHERE dinamicamente ÔÇö exatamente como o original usava `ThisForm.poDataMgr.CursorQuery('SigCdPro', 'TempPro', 'CPros', ...)`. O validador viu `par_cCampo + " = " + EscaparSQL(...)` e tratou "CAMPO" como coluna SQL inventada.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os tr├¬s alertas s├úo falsos positivos do validador ÔÇö pattern matching textual sem distin├º├úo entre: (a) condi├º├Áes IF/FOR em VFP vs. WHERE em SQL, (b) propriedades de objeto VFP vs. colunas de cursor, (c) par├ómetros de m├®todo vs. colunas SQL. O c├│digo de `FormSigPrGlp.prg` e `SigPrGlpBO.prg` est├í correto.

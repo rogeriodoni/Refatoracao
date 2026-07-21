@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "form1",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "PARAMETERS pcCab, pcTipo, pcTitulo, pcMaximo, pcMinimo, pcDado\n\nPUBLIC Resposta\n\nThisForm.Caption = pcTitulo\nIF pcTipo = \"M\"\n\tlnRep=Occurs(\";\",pcCab)\n\tPUBLIC laOpcoes[lnRep]\n\tFOR a = 1 TO lnRep\n\t\tlaOpcoes[a] = SUBSTR(pcCab,IIF(a=1,1,AT(';',pcCab,a-1)+1),AT(';',pcCab,a)-IIF(a=1,0,AT(';',pcCab,a-1))-1)\n\tNEXT\n\tThisform.text1.Visible=.f.\nELSE\n\tThisform.combo1.Visible=.f.\n\tIF pcDado = \"D\"\n\t\tThisForm.Text1.Value=CTOD('')\n\tELSE\n\t\tIF pcDado = \"V\"\n\t\t\tThisForm.Text1.InputMask=\"999,999.99\"\n\t\t\tThisForm.Text... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value=CTOD,MaxLength=IIF",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "form1",
+      "evento": "KeyPress",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF nkeycode = 27\n\tRELEASE WINDOWS\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "form1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return(Resposta)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "form1.Text1",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF nKeyCode = 13\n\tResposta=ThisForm.Text1.Value\n\tRELEASE WINDOWS\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "form1.Combo1",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF nKeyCode = 13\n\tResposta=SUBSTR(ThisForm.Combo1.Value,1,1)\n\tRELEASE WINDOWS\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

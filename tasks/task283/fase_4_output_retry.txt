@@ -1,0 +1,11 @@
+﻿Arquivo verificado ÔÇö 480 linhas, 9 procedures, sem TODOs/stubs/placeholders.
+
+**Fase 4 completa** para FormSIGPREST.prg (form OPERACIONAL - di├ílogo utilit├írio "Gerar Estrutura"):
+
+- `ConfigurarPaginaLista()` ÔÇö cria os 6 controles do di├ílogo (Shape decorativo, cmd_4c_OK "Gerar", cmd_4c_Cancela "Encerrar", chk_4c_GeraArquivos, chk_4c_GeraIndices, lbl_4c_Mensagem1) com BINDEVENTs
+- `BtnOKClick()` ÔÇö implementa a l├│gica completa do legado (CREATE TABLE ArqDBF/ArqInd via AFIELDS + KEY/TAG loop, fwProgressBar em ambos os processamentos, guard "estrutura antes de ├¡ndices", tratamento de interrup├º├úo)
+- `BtnCancelaClick()` ÔÇö carrega csLogoTipo se ausente e libera o form
+
+**Ajuste aplicado nesta retry**: as duas queries de `csLogoTipo` agora preservam o alias `AS gnLogos` do SELECT legado (linhas 449 e 472), garantindo compatibilidade com outros pontos do sistema que referenciam `csLogoTipo.gnLogos`.
+
+Este form ├® OPERACIONAL ÔÇö n├úo possui Grid, PageFrame, bot├Áes CRUD ou `AlternarPagina()` (elementos aplic├íveis apenas a forms CRUD). A estrutura implementada ├® fiel ao layout SIGPREST.SCX original.

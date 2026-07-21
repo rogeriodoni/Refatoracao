@@ -1,0 +1,10 @@
+﻿As tr├¬s altera├º├Áes foram aplicadas corretamente. Resumo do que foi corrigido:
+
+**[CONTAINER-VISIVEL]** ÔÇö 3 mudan├ºas:
+1. `cnt_4c_Cabecalho`: adicionado `.Visible = .T.` expl├¡cito em `ConfigurarCabecalho` (linha 174) ÔÇö container agora nasce vis├¡vel, n├úo depende de `TornarControlesVisiveis`.
+2. `cnt_4c_Container3`: adicionado `.Visible = .T.` expl├¡cito em `ConfigurarLayout` (linha 614) ÔÇö mesmo tratamento.
+3. `TornarControlesVisiveis`: removido o segundo bloco `INLIST("cnt_4c_Cabecalho", "cnt_4c_Container3")` que era redundante; adicionado `UPPER()` no INLIST dos overlays ocultos (Container1/2/4/5) para robustez de compara├º├úo case-insensitive.
+
+**[METODO-INEXISTENTE] `THIS.Controls()`** ÔÇö sem altera├º├úo: `Controls` ├® propriedade built-in de Form no VFP9, n├úo um m├®todo inventado pela LLM.
+
+**[LAYOUT-POSITION]** ÔÇö sem altera├º├úo: as posi├º├Áes dos containers no c├│digo est├úo corretas (Container1/2/4/5 em Top=125 Left=12, Container3 em Top=373 Left=12); o validador estava lendo as posi├º├Áes dos labels filhos (`lbl_4c_Label1`) como se fossem do container pai. Os `txt_4c_Tot_Qtd/Est/Prz` a n├¡vel de form (Top=349) existem propositalmente para totais globais, enquanto os de Container3 (Top=173) mostram totais por item.

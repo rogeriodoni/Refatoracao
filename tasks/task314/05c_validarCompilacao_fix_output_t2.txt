@@ -1,0 +1,5 @@
+﻿Todas as tr├¬s corre├º├Áes est├úo aplicadas corretamente. 
+
+**Causa do erro**: VFP9 tem um bug com strings contendo m├║ltiplos pares `""` (aspas escapadas dentro de strings com aspas duplas) combinadas com continua├º├úo `;` em linhas longas. As tr├¬s constru├º├Áes XML `loc_cXmlPed`, `loc_cXmlCan` e `loc_cXmlInu` usavam esse padr├úo e falhavam no compilador com "Syntax error" na ├║ltima linha de continua├º├úo.
+
+**Corre├º├úo aplicada em `sigprnfeBO.prg`**: Substituiu as strings com `""` (aspas duplas escapadas) por strings com aspas simples `'...'`, que permitem incluir `"` literalmente sem escaping. O XML gerado ├® id├¬ntico ÔÇö atributos com aspas duplas padr├úo ÔÇö mas sem o padr├úo que confunde o compilador VFP9.

@@ -1,0 +1,22 @@
+﻿Arquivo criado com sucesso em `C:/4c/projeto/app/forms/operacionais/FormSigPrRsa.prg`. Aqui est├í o resumo do que foi gerado na Fase 3:
+
+---
+
+**FormSigPrRsa.prg ÔÇö Fase 3 conclu├¡da**
+
+Form OPERACIONAL **flat** (sem PageFrame), 580├ù200px, modal com `TitleBar=0`. Estrutura completa incluindo:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `Init(par_cParam, par_nPrior)` | Armazena params + seta Caption com CHR(225) antes de DODEFAULT |
+| `Activate()` | Dispara BtnProcessarClick() em modo parametrizado (batch) |
+| `ConfigurarPageFrame()` | Background `new_background.jpg` + BackColor cinza |
+| `InicializarForm()` | Cria SigPrRsaBO + chama todos os ConfigurarXxx + inicializa log se batch |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` com lbl_4c_Sombra/Titulo ÔÇö AddObject FORA de WITH (anti-ghost) |
+| `ConfigurarBotoes()` | cmd_4c_Processar + cmd_4c_Encerrar com Themes=.T.+DisabledPicture (standalone+Picture) |
+| `ConfigurarLabelProgresso()` | `lbl_4c_Progresso` fundo amarelo (Label1 do legado) |
+| `ConfigurarCampoPrioridade()` | Label + `txt_4c_Prioridade` com ReadOnly em batch + BINDEVENT KeyPress |
+| `BtnProcessarClick()` | Loop completo: BuscarFila ÔåÆ SCAN ÔåÆ lock otimista ÔåÆ ProcessarItem ÔåÆ Commit ÔåÆ VerificarMovimento ÔåÆ Excluir |
+| `BtnEncerrarClick()` | Seta `this_lParar`; Release imediato se n├úo estiver no loop |
+| `TxtPrioridadeKeyPress()` | LPARAMETERS + guard ENTER/TAB + valida├º├úo 0 ou 1 |
+| `Destroy()` | SET CURSOR ON + BO = .NULL. + DODEFAULT() |

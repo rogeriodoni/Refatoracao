@@ -1,0 +1,14 @@
+﻿Phase 3/8 is complete. Here's what was delivered:
+
+**FormSIGPRIMP.prg** (`C:\4c\projeto\app\forms\operacionais\FormSIGPRIMP.prg`) ÔÇö 500 lines, complete OPERACIONAL form with:
+- `Init()` ÔÇö creates `SIGPRIMPBO` instance
+- `InicializarForm()` ÔÇö orchestrates setup (background, header, buttons, fields, data load)
+- `ConfigurarCabecalho()` ÔÇö gray header with shadow/white title labels ("Importa├º├úo de dados")
+- `ConfigurarBotoes()` ÔÇö `cmd_4c_BtnMovEst` ("Processar", `geral_empilha_60.jpg`, Left=835) + `cmd_4c_BtnSair` ("Encerrar", `cadastro_sair_60.jpg`, Left=917)
+- `ConfigurarCampos()` ÔÇö label, read-only `txt_4c_Arquivo`, `obj_4c_Arquivos` ListBox (RowSourceType=6 bound to `cursor_4c_Arquivos`), hidden Visualizar/Imprimir buttons
+- `CarregarArquivos()` ÔÇö calls BO's `CarregarParametros()` + `BuscarArquivos()`, binds ListBox
+- `BtnMovEstClick()` ÔÇö disables buttons, iterates all TXT files, calls `ProcessarArquivo()`, moves processed files to `OK\` subfolder, re-enables and refreshes
+- `TornarControlesVisiveis()` + `TornarSubControlesVisiveis()` ÔÇö clean recursive implementation without the LOOP bug
+- `Destroy()` ÔÇö cleans up cursor and nullifies BO
+
+**menu.prg** ÔÇö BAR 74 (separator) + BAR 75 ("Importa├º├úo de Movimenta├º├úo de Estoque") + `AbrirFormSIGPRIMP()` procedure added at the end of `popMovimentos`.

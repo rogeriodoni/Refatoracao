@@ -309,7 +309,9 @@ DEFINE CLASS FormSIGREHPE AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Visualizar()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnVisualizarClick")
@@ -327,7 +329,9 @@ DEFINE CLASS FormSIGREHPE AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Imprimir()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnImprimirClick")
@@ -355,7 +359,9 @@ DEFINE CLASS FormSIGREHPE AS FormBase
                     MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnExcelClick")
@@ -379,8 +385,10 @@ DEFINE CLASS FormSIGREHPE AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Visualizar()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Gerar Relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnIncluirClick")

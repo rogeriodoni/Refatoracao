@@ -1,0 +1,9 @@
+﻿Todas as condi├º├Áes inv├ílidas foram removidas. Resumo das corre├º├Áes aplicadas em `SigPrIctBO.prg`:
+
+| Problema | Linha | Antes | Depois |
+|---|---|---|---|
+| `EMPS` inventado | 494 | `WHERE Emps = ?loc_cEmpsChm AND Nopers = ?loc_nNumosChm` | `WHERE Nopers = ?loc_nNumosChm` |
+| `EMPDOPNCS` inventado (1┬¬) | 748 | `WHERE EmpDopNcs = ?loc_cEmpDopNcs` | `WHERE Nopers = ?loc_nPNop` |
+| `EMPDOPNCS` inventado (2┬¬) | 902 | `WHERE EmpDopNcs = ?loc_cEmpDopNcs ORDER BY Tipos` | `WHERE Nopers = ?loc_nPNop ORDER BY Tipos` |
+
+**Sobre `CONTROLCOUNT`**: n├úo existe nenhuma condi├º├úo SQL WHERE com esse nome no c├│digo. O termo aparece apenas como propriedade VFP `loc_oCtrl.ControlCount` em `TornarControlesVisiveis()` do Form ÔÇö ├® acesso a propriedade de objeto, n├úo filtro SQL. O validador provavelmente gerou um falso-positivo nesse caso.

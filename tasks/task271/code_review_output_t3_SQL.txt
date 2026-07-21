@@ -1,0 +1,7 @@
+﻿Ambos os alertas s├úo **falsos positivos** do scanner. Nenhuma corre├º├úo necess├íria:
+
+**CAMPO** ÔÇö O scanner detectou `par_cCampo` na linha 841 do BO (`" WHERE " + par_cCampo + " = "`) e extraiu "CAMPO" como se fosse um nome de coluna SQL. Na realidade, `par_cCampo` ├® um **par├ómetro VFP9** do helper `CursorQuery` que recebe nomes reais de colunas em tempo de execu├º├úo (`"EmpDopNums"`, `"CBars"`, `"CPros"`, etc.) ÔÇö todos presentes na lista v├ílida do original.
+
+**CONTROLCOUNT** ÔÇö O scanner detectou `.ControlCount` nas linhas 515/528/539 do Form e interpretou como condi├º├úo SQL. ├ë uma **propriedade de objeto VFP9** usada para iterar controles UI (`PEMSTATUS(loc_oControl, "ControlCount", 5)`), completamente desconectada de qualquer SQL.
+
+Os arquivos `FormSIGPRCPR.prg` e `SIGPRCPRBO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria para este pass.

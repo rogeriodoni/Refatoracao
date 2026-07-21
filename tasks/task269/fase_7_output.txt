@@ -1,0 +1,17 @@
+﻿O Form e o BO est├úo completos. Ambos os arquivos j├í cont├¬m implementa├º├úo integral de todos os eventos principais para este form OPERACIONAL:
+
+**FormSIGPRCOT.prg** j├í possui:
+- `CmdInserirClick()` (linha 447) ÔÇö equivalente ao `BtnIncluirClick` do CRUD, insere nova cota├º├úo com verifica├º├úo de duplicidade
+- `CmdExcluirClick()` (linha 464) ÔÇö equivalente ao `BtnExcluirClick`, exclui com confirma├º├úo
+- `CmdEncerrarClick()` (linha 491) ÔÇö salva altera├º├Áes do cursor e fecha o form
+- Handlers de grid: `GrdCotacoesAfterRowColChange`, `GrdDataText1KeyPress`, `GrdHoraText1KeyPress`, `GrdCotacaoText1KeyPress`
+
+**SIGPRCOTBO.prg** j├í possui:
+- `CarregarCotacoes()` ÔÇö carga inicial do cursor
+- `InserirNovaCotacao()` ÔÇö INSERT em SigCdCot + APPEND ao cursor
+- `ExcluirCotacaoAtual()` ÔÇö DELETE do SQL + remo├º├úo do cursor
+- `SalvarAlteracoesCursor()` ÔÇö replica o `sair.Click` do legado: limpa registros incompletos e UPDATE linha a linha
+
+A Fase 7 foi completada nas fases anteriores. Este form OPERACIONAL n├úo usa BtnAlterarClick/BtnVisualizarClick ÔÇö a edi├º├úo ├® inline no grid (cada c├®lula ├® edit├ível diretamente quando ├® a linha nova), que replicou exatamente o comportamento do `fwgrade_Cotacao` com os eventos `When`/`Valid` do legado.
+
+Nenhuma modifica├º├úo necess├íria ÔÇö migra├º├úo da Fase 7/8 est├í conclu├¡da.

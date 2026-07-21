@@ -1,0 +1,11 @@
+﻿Arquivo criado corretamente. **Fase 1/8 conclu├¡da.**
+
+`C:\4c\projeto\app\classes\SigPrHprBO.prg` gerado com:
+
+- **28 propriedades declaradas** cobrindo todos os dados de `SigMvHst` usados pelo form (filtros, registro corrente, campos cont├íbeis com descri├º├Áes)
+- **`Init`**: chama `DODEFAULT()`, seta `this_cTabela="SigMvHst"` / `this_cCampoChave="cidchaves"` / `this_cCodEmpresa`, e cria os dois cursores placeholder com estrutura exata do schema real:
+  - `cursor_4c_Historico` ÔÇö 19 campos correspondentes ao `SQLEXEC` do legado (incl. `T` para `datas`/`dtaudits` datetime, `N(15,3)` para pesos conforme schema)
+  - `cursor_4c_Subniveis` ÔÇö 3 campos espelhando `crSubniveis`
+- **`ObterChavePrimaria`** ÔÇö retorna `this_cCidChaves` (char(20), PK de SigMvHst)
+
+Pr├│xima fase adicionar├í os m├®todos de carga de dados (`CarregarHistorico`, `CarregarSubniveis`, `BuscarContabilidade`, `BuscarDescricoes`, `MarcarAuditoria`, `DesmarcarAuditoria`).

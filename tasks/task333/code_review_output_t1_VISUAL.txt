@@ -1,0 +1,14 @@
+﻿**Nenhuma corre├º├úo necess├íria. Falso positivo do code review.**
+
+O `cnt_4c_Saida.Left = 917` (linha 166) j├í est├í **correto** conforme o Padr├úo Can├┤nico definido em CLAUDE.md Regra #10:
+
+| Objeto | Propriedade | Valor can├┤nico |
+|--------|-------------|----------------|
+| `cnt_4c_Saida` | Left | **917** |
+
+A regra ├® expl├¡cita:
+> *"Se o SCX legado tem `Grupo_Saida.Left=935`, ... **IGNORAR e usar o can├┤nico**. Esta regra tem preced├¬ncia sobre o PILAR 1 (pixel-perfect legado)."*
+
+O SCX original SIGPRSND era um form de ~500px com `Saida.Left=425`. O form migrado ├® de ~1007px e o can├┤nico manda `Left=917`. O diff de 492px apontado pelo review ├® **intencional** ÔÇö ├® exatamente a diferen├ºa esperada entre a posi├º├úo legada em form 500px e o can├┤nico em form 1000px.
+
+**Arquivo `FormSigPrSnd.prg` n├úo requer altera├º├Áes.** O c├│digo j├í est├í conforme o padr├úo.

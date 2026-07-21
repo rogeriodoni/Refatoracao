@@ -1,0 +1,30 @@
+﻿A Fase 7 para este form espec├¡fico **j├í est├í completa desde a Fase anterior**. Vou explicar por qu├¬:
+
+## Situa├º├úo atual
+
+`FormSIGPRTRF.prg` ├® um **form OPERACIONAL de di├ílogo** (seletor de produtos para ECF), n├úo um CRUD. Ele **n├úo possui** os bot├Áes Incluir/Alterar/Visualizar/Excluir. Os eventos equivalentes j├í foram implementados:
+
+| Evento CRUD (template) | Equivalente OPERACIONAL | Status |
+|---|---|---|
+| `BtnIncluirClick()` | ÔÇö (n├úo aplic├ível) | N/A |
+| `BtnAlterarClick()` | `CmdOkClick()` ÔÇö confirma lista e aguarda ECF | Ô£ô linha 550 |
+| `BtnVisualizarClick()` | ÔÇö (n├úo aplic├ível) | N/A |
+| `BtnExcluirClick()` | ÔÇö (n├úo aplic├ível) | N/A |
+
+## Todos os eventos do SCX original j├í implementados
+
+| Evento original | Implementado como | Linha |
+|---|---|---|
+| `sigprtrf.Init` | `InicializarForm()` | 49 |
+| `sigprtrf.altera.Click` | `CmdOkClick()` | 550 |
+| `sigprtrf.sair.Click` | `CmdCancelarClick()` | 611 |
+| `Column1.Text1.When` | `TxtCodProdGotFocus()` | 436 |
+| `Column1.Text1.Valid + LostFocus` | `TxtCodProdKeyPress()` (Enter/Tab/F4) | 444 |
+| `sigprtrf.Unload` | `Unload()` ÔåÆ `THIS.this_cRetorno` | 318 |
+| `sigprtrf.Destroy` | `Destroy()` ÔåÆ `DODEFAULT()` | 326 |
+| `cnt_4c_Mensagem.Visible` toggle | `CmdOkClick()` linha 562 | ÔÇö |
+| Anima├º├úo 13 barras coloridas | `CmdOkClick()` DO WHILE loop | 567ÔÇô601 |
+
+O arquivo n├úo precisa de modifica├º├úo. O template de Fase 7 (`BtnIncluirClick` etc.) aplica-se a forms CRUD ÔÇö para este form OPERACIONAL, a Fase 7 ├® um no-op pois todos os eventos principais j├í foram gerados nas fases 5 e 6.
+
+**Pr├│ximo passo**: Fase 8/8 (integra├º├úo no menu + config.prg) se ainda n├úo foi feita.

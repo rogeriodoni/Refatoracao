@@ -1,0 +1,17 @@
+﻿Both edits are correct. The migration of `FormSigPrCtr` is now complete across all 8 phases:
+
+**Summary of what was done this session:**
+
+1. **BtnSalvarClick (Form)** ÔÇö Replaced the skeleton with the full save logic:
+   - Reads `Conta`, `Arquivo`, `Moeda`, `Opt_Custo` from `pgf_4c_Dados.Page1`
+   - Validates cursors exist before proceeding (RETURN guards outside TRY)
+   - Inside TRY: JOINs `cursor_4c_Movimentos` ├ù `cursor_4c_Distribui` on `Cpros` where `Qtds > 0 AND Saldo > 0`
+   - Builds `cursor_4c_Linhas` with `QtdOs = MIN(QtdXml, Qtds)` per row (matching legacy `Salva.Click` line 3007)
+   - Calls `this_oBusinessObject.Salvar()` after `FormParaBO()`
+   - `AlternarPagina(1)` only after confirmed success (flag pattern, no RETURN inside TRY)
+
+2. **SalvarLote() (BO)** ÔÇö Added `SigMvItn.qtReservas += QtdOs` UPDATE after each successful INSERT, mirroring the legacy `Update SigMvItn set qtReservas = (qtReservas + ?lnQtd)` in `Salva.Click`
+
+3. **Destroy (Form)** ÔÇö Added `cursor_4c_TmpJoin` cleanup
+
+Integration was already complete: `config.prg` auto-loads all `Form*.prg` via `ADIR()`, and `menu.prg` already had the BAR 38 entry + `AbrirFormSigPrCtr()` procedure at line 4195.

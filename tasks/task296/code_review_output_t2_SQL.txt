@@ -1,0 +1,23 @@
+﻿Analisei os dois arquivos completamente. O problema `[SQL-FILTRO-INVENTADO]` de `CURSOR_4C_SUBNIVE` ├® um **falso positivo** do detector.
+
+**An├ílise:**
+
+O detector identificou o comando VFP `SELECT cursor_4c_Subniveis` (linha 564 do BO) como se fosse uma condi├º├úo WHERE de SQL Server. Na realidade, esse `SELECT` ├® um comando VFP para ativar a ├írea de trabalho do cursor local ÔÇö equivalente ao legado `Select crSubniveis` que o detector reconhece como `CRSUBNIVE` na lista original.
+
+- `Select crSubniveis` (legado VFP) ÔåÆ detector v├¬ `CRSUBNIVE` ÔåÉ presente na lista original Ô£ô  
+- `SELECT cursor_4c_Subniveis` (migrado VFP) ÔåÆ detector v├¬ `CURSOR_4C_SUBNIVE` ÔåÉ n├úo reconhece como mesmo conceito
+
+Nenhum dos dois ├® uma condi├º├úo WHERE de SQL Server. Ambos s├úo sele├º├Áes de ├írea de trabalho VFP seguidas de `ZAP`.
+
+**Todos os WHERE reais do SQL migrado foram verificados:**
+
+| Procedure | WHERE columns | Status |
+|---|---|---|
+| `CarregarHistorico` | `empgruests`, `cpros`, `datas` | Ô£ô na lista original |
+| `CarregarDadosProduto` | `cpros` (SigCdPro), `cunis` (SigCdUni) | Ô£ô original |
+| `CarregarDocumento` | `empdopnums` (SigMvCab), `empdnps` (SigCdNec) | Ô£ô original |
+| `CarregarDescricoesContabil` | `codigos` (SigCdGcr), `iclis` (SigCdCli) | Ô£ô original |
+| `CarregarSubniveis` | `EmpDopNums` (SigMvPec) | Ô£ô original |
+| `AuditarRegistro` / `DesauditarRegistro` | `cidchaves` (SigMvHst) | Ô£ô original |
+
+Nenhuma condi├º├úo WHERE inventada foi encontrada. O c├│digo est├í correto ÔÇö os arquivos **n├úo precisam de altera├º├úo** neste pass.

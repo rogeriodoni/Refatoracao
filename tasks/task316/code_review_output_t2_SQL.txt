@@ -1,0 +1,5 @@
+﻿Confirmado: as duas ocorr├¬ncias de `ControlCount` s├úo uso leg├¡timo da propriedade VFP9 padr├úo no m├®todo `TornarControlesVisiveis` ÔÇö itera├º├úo de controles num container. N├úo h├í nenhuma condi├º├úo `WHERE CONTROLCOUNT` em SQL em nenhum dos dois arquivos.
+
+O problema reportado pelo pass SQL-FILTRO-INVENTADO foi um **falso positivo**: o scanner detectou a string "CONTROLCOUNT" no arquivo, mas ela ocorre apenas como propriedade VFP9 (`par_oContainer.ControlCount`), jamais num WHERE de SQL.
+
+Nenhuma corre├º├úo ├® necess├íria ÔÇö os arquivos est├úo corretos.

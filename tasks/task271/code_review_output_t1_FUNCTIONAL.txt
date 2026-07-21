@@ -1,0 +1,9 @@
+﻿4 corre├º├Áes aplicadas:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `CNT_4C_CABECALHO` adicionado ao INLIST em `TornarControlesVisiveis()`. O m├®todo agora pula a atribui├º├úo `Visible=.T.` neste container (j├í gerenciado por `ConfigurarCabecalho()`), mas ainda recursa nos filhos antes do LOOP.
+
+2. **[NULL-CURSOR]** ÔÇö `SET NULL ON` adicionado antes de `CREATE CURSOR cursor_4c_xGrava` e `SET NULL OFF` logo ap├│s, no BO `ConfirmarConferencia()`.
+
+3. **[GRID-WITH] InicializarValores()** ÔÇö `.ColumnCount` e `.RecordSource` movidos para fora do `WITH THIS.grd_4c_Dados`, usando refer├¬ncia expl├¡cita antes do bloco, evitando "Unknown member COLUMN1".
+
+4. **[GRID-WITH] CarregarLista()** ÔÇö Mesmo padr├úo: `.ColumnCount` e `.RecordSource` extra├¡dos do `WITH` para refer├¬ncia direta.

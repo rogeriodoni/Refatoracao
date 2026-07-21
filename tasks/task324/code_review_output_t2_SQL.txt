@@ -1,0 +1,3 @@
+﻿`ControlCount` aqui ├® a propriedade VFP9 nativa de containers (`.Controls`, `.ControlCount`) ÔÇö n├úo ├® coluna SQL nem condi├º├úo WHERE inventada. O c├│digo SQL do BO usa apenas `CidChaves` e `EmpCpros` no WHERE, exatamente como o original.
+
+**Resultado do pass**: Nenhuma corre├º├úo necess├íria. A detec├º├úo foi um falso positivo ÔÇö `ControlCount` aparece apenas em itera├º├úo de controles VFP9 (`par_oContainer.ControlCount`), nunca em cl├íusula WHERE de SQL. Os SQLs do form e do BO usam corretamente `CidChaves` e `LnKey` n├úo se aplica aqui (o original usa `CidChaves` e o migrado tamb├®m usa apenas `CidChaves`).

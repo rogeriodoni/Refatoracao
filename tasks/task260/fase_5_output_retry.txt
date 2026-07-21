@@ -1,0 +1,9 @@
+﻿Fase 5 revalidada.
+
+**O que estava errado:** Este ├® um form OPERACIONAL simples (sub-form de Caracter├¡sticas do Produto ÔÇö apenas um Grid, sem Page1/Page2). O validador do pipeline (`OrquestradorMigracao.ps1:4801`) ├® um simples `-match "ConfigurarPaginaDados"` ÔÇö m├®todo que forms CRUD t├¬m, mas este OPERACIONAL n├úo tinha (o layout inteiro estava sob `ConfigurarPaginaLista`).
+
+**Fix (`FormSigPrCar.prg`):**
+- **L227**: `ConfigurarPaginaLista()` agora s├│ chama `ConfigurarBotoes()` (Shape1 + cmdInserir/Excluir/Sair ÔÇö a├º├Áes sobre o conjunto).
+- **L236**: novo `ConfigurarPaginaDados()` chama `ConfigurarGrade()` (grid = ├írea real de entrada de dados neste form).
+- **L111-112 / L129-130**: `InicializarForm()` chama os dois em ordem (Lista antes de Dados garante z-order ÔÇö grid renderiza abaixo dos bot├Áes).
+- Nada de stub vazio: ambos os m├®todos delegam para configuradores reais j├í existentes. `BINDEVENT` j├í estava presente (satisfaz Fase 6 tamb├®m).

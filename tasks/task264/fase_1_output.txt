@@ -1,0 +1,11 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrCfnBO.prg` criado com:
+
+- **26 propriedades** declaradas em 3 grupos:
+  - **Entradas** (8): `this_nValorBase`, `this_nTipoCalculo`, `this_nJurosMes`, `this_nJurosDia`, `this_dDataBase`, `this_dDataFinal`, `this_nDias`, `this_nTipoDias`
+  - **Vencimentos** (10): `this_dVenc1` ÔÇª `this_dVenc10`
+  - **Resultados** (3): `this_nValorJuros`, `this_nValorTotal`, `this_nValorParcela`
+- `this_cTabela = ""` e `this_cCampoChave = ""` ÔÇö form de c├ílculo puro, sem tabela BD
+- `Init()` configura tabela vazia + chama `DODEFAULT()` + `LimparPropriedades()`
+- `LimparPropriedades()` reseta todo o estado (ser├í usado pelo Form na pr├│xima fase)
+
+**Nota sobre `fChkFeriado`:** essa fun├º├úo legada n├úo existe na nova arquitetura e n├úo h├í tabela de feriados no `schema.sql`. A implementa├º├úo de `VerificarFeriado()` na Fase 2 usar├í apenas verifica├º├úo de fim-de-semana via `DOW()` (s├íbado=7, domingo=1), que cobre o caso `llSab=.T. / llDom=.T.` do legado.

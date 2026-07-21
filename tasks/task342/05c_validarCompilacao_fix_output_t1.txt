@@ -1,0 +1,5 @@
+﻿Zero padr├Áes inline restantes nos dois arquivos. Corre├º├úo conclu├¡da.
+
+**Causa raiz:** VFP9 n├úo aceita `IF USED("alias") : USE IN alias : ENDIF` na forma composta com `:` ÔÇö o parser falha com "Command contains unrecognized phrase/keyword", deixando blocos `TRY/CATCH/ENDTRY` e `IF/ENDIF` subsequentes com erros de nesting em cascata.
+
+**Fix aplicado:** 18 ocorr├¬ncias no `acgBO.prg` + 5 no `Formacg.prg` convertidas para forma multi-linha `IF USED(...) / USE IN / ENDIF`, que ├® a sintaxe v├ílida no VFP9.

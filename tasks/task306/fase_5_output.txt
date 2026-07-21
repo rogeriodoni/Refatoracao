@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+1. **`cmd_4c_Confirmar`** e **`cmd_4c_Cancelar`** dentro do `cnt_4c_BotoesAcao` ÔÇö que estava criado mas vazio desde a fase anterior. ├ìcones corretos: `cadastro_salvar_60.jpg` e `cadastro_cancelar_60.jpg`.
+
+2. **`lbl_4c_Codigo`** + **`txt_4c_Codigo`** ÔÇö mapeados de `Say8` + `getCods` do legado. Posi├º├Áes com compensa├º├úo +29 (Top=191/188), `MaxLength=10`, `Format="!"` para uppercase, desabilitado por padr├úo (s├│ ativo no modo INCLUIR).
+
+3. **`lbl_4c_Descricao`** + **`txt_4c_Descricao`** ÔÇö mapeados de `Say1` + `getDescrs`. Posi├º├Áes Top=216/213, `MaxLength=76`, `Format="!"`.
+
+4. **BINDEVENTs** para os dois bot├Áes de a├º├úo.
+
+5. **`BtnSalvarClick()`** ÔÇö com as 3 valida├º├Áes do legado (c├│digo, descri├º├úo, mensagem obrigat├│rios), verifica├º├úo de c├│digo duplicado no INSERT via `COUNT(*)` no SQL Server, e chamada a `Salvar()` sem par├ómetro.
+
+6. **`BtnCancelarClick()`** ÔÇö retorna para lista e recarrega.
+
+**Fase 6** deve adicionar a segunda metade dos campos: `txt_4c_Mensagem` (getMensas ÔÇö EditBox) + `opt_4c_Tipo` (optTipo ÔÇö OptionGroup com 3 bot├Áes: Cheque, T├¡tulo, Follow Up) + seus labels.

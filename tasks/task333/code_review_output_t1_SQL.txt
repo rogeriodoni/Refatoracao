@@ -1,0 +1,20 @@
+﻿Ap├│s leitura completa do form (748 linhas) e do BO fornecido, o problema reportado ├® um **falso positivo** do validador.
+
+**O que o validador detectou:** `ControlCount` na linha 708 do form:
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+Isso ├® uma **propriedade VFP9 de objeto** (`loc_oControl.ControlCount`) dentro do m├®todo `TornarControlesVisiveis`, n├úo uma coluna SQL em cl├íusula WHERE.
+
+**Verifica├º├úo dos WHERE SQL no c├│digo migrado:**
+- `SigPrSndBO.Buscar`: `WHERE cidchaves = ...` Ô£ô
+- `SigPrSndBO.BuscarSemVinculo`: `WHERE EmpDopNums = ''` Ô£ô  
+- `SigPrSndBO.ExecutarExclusao`: `WHERE cidchaves = ...` Ô£ô
+- `SigPrSndBO.Atualizar`: `WHERE cidchaves = ...` Ô£ô
+- `SigPrSndBO.SenhaExisteSQL`: `WHERE SenhaDs = ...` Ô£ô
+- `SigPrSndBO.GerarSenhas`: `WHERE cidchaves IN (...)` Ô£ô
+
+Nenhum dos WHEREs SQL usa `CONTROLCOUNT`. Todos os filtros correspondem ├ás colunas reais da tabela `SigPrSnd` e ao padr├úo do c├│digo original (`cidchaves`, `EmpDopNums`, `senhads`).
+
+**Nenhuma corre├º├úo necess├íria.** O pass SQL-FILTRO-INVENTADO foi um falso positivo ÔÇö o scanner confundiu a propriedade de objeto VFP9 `.ControlCount` com uma coluna SQL inventada em WHERE.

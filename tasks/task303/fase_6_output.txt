@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. A Fase 6 est├í conclu├¡da.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+1. **`Formsigprima.prg` linha 113** ÔÇö `this_cMensagemErro` corrigido para `THIS.this_cMensagemErro` (sem `THIS.` VFP9 criava vari├ível local em vez de setar a propriedade do form)
+
+2. **`Formsigprima.prg` `ConfigurarPaginaDados()`** ÔÇö adicionado `.BorderColor = RGB(136,189,188)` ao `obj_4c_Commandgroup3` (cor teal da borda que estava no SCX original mas foi omitida)
+
+3. **`sigprimaBO.prg` `Exportar()`** ÔÇö adicionado `SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")` antes do UPDATE; sem isso, o `COMMIT TRANSACTION` subsequente causaria erro SQL Server "Transaction count mismatch"
+
+**N├úo h├í lookups para implementar** ÔÇö o formul├írio SIGPRIMA ├® uma utilidade de importa├º├úo de imagens sem nenhum campo de lookup (sem F4/F5/sigacess no c├│digo original). O form e o BO j├í estavam completos desde as fases anteriores; a Fase 6 serviu para corre├º├Áes de bugs residuais.

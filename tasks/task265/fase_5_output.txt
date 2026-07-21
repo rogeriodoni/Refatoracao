@@ -1,0 +1,7 @@
+﻿Tudo correto. Resumo das altera├º├Áes da Fase 5/8:
+
+1. **Header** atualizado para "Fase 5/8"
+2. **`ConfigurarPaginaDados`** adicionado (linha 767) ÔÇö no-op documentado, conforme mapeamento `ConfigurarPaginaDados=ConfigurarFiltros` para forms OPERACIONAIS
+3. **`AbrirLookupContas`** adicionado (linha 2445) ÔÇö corrige o bug do FormBuscaAuxiliar com API manual quebrada; usa SQLEXEC com `LIKE '%'` primeiro, depois passa o cursor pr├®-populado ao Init do FormBuscaAuxiliar com par├ómetros can├┤nicos
+4. **`TxtCdContasKeyPress`** e **`TxtDsContasKeyPress`** simplificados para chamar `AbrirLookupContas(loc_cVal, "C"/"D")`
+5. **`Destroy`** inclui cleanup de `cursor_4c_ContasLookup`

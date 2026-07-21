@@ -1,0 +1,13 @@
+﻿Both fixes look good. Fase 6 is complete. Here's a summary of what was done:
+
+**Fixes applied to `FormSigPrApr.prg`:**
+
+1. **`chk_4c_Auditado`** ÔÇö Upgraded from plain CheckBox to graphical icon-style button matching the original SCX:
+   - `FontName` ÔåÆ `"Comic Sans MS"`, `FontBold=.T.`, `FontItalic=.T.`
+   - `Style=1` (graphical mode), `Themes=.F.`
+   - `Picture = gc_4c_CaminhoIcones + "geral_produtos_60.jpg"`
+   - `ForeColor=RGB(90,90,90)`, `BackColor=RGB(255,255,255)`
+
+2. **CommandGroup buttons** (Processar / Atualizar / Encerrar) ÔÇö Changed `FontName` from `"Tahoma"` to `"Comic Sans MS"` to match original `sair` CommandGroup font style.
+
+**Status:** The form and BO were already fully implemented after the previous migration phases. These were the remaining UX-fidelity gaps between the migrated form and the original SCX. Next step in the pipeline: `05c_validarCompilacao` (compilation validation, currently PENDING).

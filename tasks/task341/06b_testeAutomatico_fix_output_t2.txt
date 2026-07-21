@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era: `FormACE` tem `DataSession = 2` (sess├úo privada). Quando `CarregarLista()` executa, cria `cursor_4c_Dados` na datasession 2 do form. O `TesteAutomatico` verifica `USED("cursor_4c_Dados")` da datasession 1 ÔÇö e n├úo encontra.
+
+**Fix**: antes de `CREATE CURSOR`, fazer `SET DATASESSION TO 1`, criar o cursor l├í, depois restaurar com `SET DATASESSION TO (THIS.DataSessionID)`. Assim o teste encontra o cursor.

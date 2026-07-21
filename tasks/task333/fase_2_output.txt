@@ -1,0 +1,22 @@
+﻿Fase 2/8 conclu├¡da. O `SigPrSndBO.prg` est├í completo com todos os m├®todos necess├írios:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar()` | PUBLIC | Inicializa cursor `crSigPrSnd` vazio (estruturado) |
+| `CarregarDoCursor()` | PUBLIC | Mapeia todos os 15 campos do cursor para propriedades |
+| `Inserir()` | PROTECTED | INSERT completo com todas colunas NOT NULL + LEFT() por tamanho |
+| `Atualizar()` | PROTECTED | UPDATE completo com FormatarDataSQL/NumeroSQL/EscaparSQL |
+| `ExecutarExclusao()` | PROTECTED | DELETE por cidchaves |
+| `BuscarPendentes()` | PUBLIC | SELECT onde EmpDopNums = '' (recarrega crSigPrSnd) |
+| `GerarSenhas(n)` | PUBLIC | L├│gica principal: gera N senhas ├║nicas com transa├º├úo SQL Server |
+| `SenhaExisteSQL()` | PROTECTED | Verifica duplicidade via COUNT(*) no SQL Server |
+| `GerarSenhaAleatoria()` | PROTECTED | Substitui `fKeyGen()` ÔÇö n├║mero 100000-999999 |
+| `GerarIdUnico()` | PROTECTED | Substitui `fUniqueIds()` ÔÇö 20 chars via SYS(2015) |
+
+**Destaques da implementa├º├úo:**
+- `GerarSenhas()` usa `BEGIN TRANSACTION / COMMIT / ROLLBACK` para atomicidade
+- Cursor `crSigPrSnd` mant├®m o nome original (grid do form fica vinculado a este nome)
+- `SenhaExisteSQL()` ├® chamada **dentro** da transa├º├úo, portanto v├¬ INSERTs da mesma batch ÔÇö previne duplicatas no lote
+- Todas as colunas NOT NULL recebem valores expl├¡citos no INSERT de `GerarSenhas`

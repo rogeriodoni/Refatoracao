@@ -1,0 +1,28 @@
+﻿Ap├│s verifica├º├úo direta dos arquivos, todos os 5 problemas reportados s├úo **falsos positivos**:
+
+**Problemas 1-4 (GRID-SQL ÔÇö campos de cursor_4c_Programas):**
+
+`acgBO.prg:303-310` mostra que `CarregarProgramas()` executa exatamente:
+```
+SELECT a.Descricaos, a.Programas, a.Parametros, a.BarraForms,
+       CASE WHEN b.pkchaves IS NOT NULL THEN 1 ELSE 0 END AS Marcas
+FROM sigcdprg a LEFT JOIN sigcdacu b ...
+INTO cursor "cursor_4c_Programas"
+```
+
+Todos os quatro campos usados nos ControlSources (`Descricaos`, `Programas`, `Marcas`, `Parametros`) est├úo presentes no SELECT do BO. O validador provavelmente n├úo alcan├ºou o BO ao fazer a an├ílise est├ítica.
+
+**Problema 5 (SQL-FILTRO-INVENTADO ÔÇö CONTROLCOUNT):**
+
+`Formacg.prg:1685-1695` mostra que `ControlCount` aparece em `TornarControlesVisiveis()`:
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+Isso ├® **propriedade VFP9 de objeto** (contagem de controles filhos num container), n├úo coluna SQL em cl├íusula WHERE. O validador confundiu `.ControlCount` (propriedade de objeto) com um campo SQL inventado.
+
+---
+
+**Nenhuma corre├º├úo necess├íria.** Os arquivos `Formacg.prg` e `acgBO.prg` est├úo corretos para este pass SQL. O SQL do BO est├í alinhado com os ControlSources do form, e o `ControlCount` ├® VFP9 puro.

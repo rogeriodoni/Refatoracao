@@ -283,6 +283,7 @@ DEFINE CLASS FormSigPdM14 AS FormBase
             .BackColor       = RGB(255,255,255)
             .BorderColor     = RGB(100,100,100)
             .Visible         = .T.
+            .MaxLength   = 3
         ENDWITH
 
         *-- Descricao da operacao (GetOperacao: Left=46, Top=27, Width=156, ReadOnly)

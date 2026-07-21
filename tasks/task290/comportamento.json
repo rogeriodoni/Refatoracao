@@ -1,0 +1,426 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 17,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fAcessoContab", "fAcessoContas", "fDtoSQL", "fwBuscaSel", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRGLO",
+      "evento": "Init",
+      "linhas": 143,
+      "codigoOriginal": "LParameters _Reserva, _Autom, _PorDestino, lcNomeFrm1, pTipo\n\nPrivate pIds\n\n=fConfigGeral()\n\nlcNomeFrm1 = Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,ThisForm.Name)\nThisForm.Name = lcNomeFrm1\nThisForm.Reserva = _Reserva\nThisForm.automatico = _Autom\nThisForm.Pordestino = _PorDestino\nThisForm.GerPorTp   = pTipo\n\nIf ThisForm.Reserva\n\tThisForm.Caption = 'Processar Reserva Automática'\n*!*\t\tThisForm.Label_Titulo.Caption = ' Parâmetros para Processamento da Reserva Automática'\n\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fConfigGeral",
+        "metodosFormChamados": "SqlExecute,CursorQuery,GerPorTp And Reccount",
+        "controlesReferenciados": "chkObs,opTrfCps,Get_TpGOp",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGLO",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Conta.Get_grupo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, This, '', This.Parent.Get_conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Conta.Get_conta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta)\n\t=Messagebox('Acesso Negado...', 32, '')\n\tThis.Parent.Get_Conta.Value  = ''\n\tThis.Parent.Get_dConta.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_dConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Conta.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t. &&Not Empty(This.Parent.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Conta.Get_dconta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'D', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta)\n\t=Messagebox('Acesso Negado...', 32, '')\n\tThis.Parent.Get_Conta.Value  = ''\n\tThis.Parent.Get_dConta.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_dConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Conta.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Conta.Value) &&Not Empty(This.Parent.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Responsavel.Get_grupo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, This ,'', This.Parent.Get_conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Responsavel.Get_conta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta)\n\t=Messagebox('Acesso Negado...', 48, '')\n\tThis.Parent.Get_Conta.Value  = ''\n\tThis.Parent.Get_dConta.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_dConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Responsavel.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Responsavel.Get_dconta",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'D', This.Value, This.Parent.Get_Conta, This.Parent.Get_dConta)\n\t=Messagebox('Acesso Negado...', 48, '')\n\tThis.Parent.Get_Conta.Value  = ''\n\tThis.Parent.Get_dConta.Value = ''\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_dConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Responsavel.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Processar",
+      "evento": "Click",
+      "linhas": 319,
+      "codigoOriginal": "Private pDei, pDef, pDpi, pDpf, pEdI, pEdF, pItn\nLocal _Dataei, _Dataef, _Datapi, _Datapf, _Grupo, _Conta, _Grupov, _Contav, _Processa\nLocal _Operacao, _Operacaoi, _Operacaof, _Conde, _Condp, _Saldo, _Peso, _TPeso, _lcEmp\n\nIf Empty(ThisForm.Cnt_Previsao.GetPrevisão.Value)\n\t=Messagebox('A Data de Previsão Deve Ser Preenchida!!!', 32, '')\n\tThisForm.Cnt_Previsao.GetPrevisão.SetFocus\n\tReturn 0\nEndIf\nIf Empty(ThisForm.Cnt_Previsao.GetGeracao.Value)\n\t=Messagebox('A Data de Geração Deve Ser Preenchida!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "GerPorTp And Empty,CursorQuery",
+        "controlesReferenciados": "Get_TpGOp,Get_Operação,Get_Operaçãoi,Get_Operaçãof,Get_Grupo,Get_Conta,Get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Cancelar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Operação.Get_Operação",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.Operação.get_Operaçãoi.Value = 0\n\tThisForm.Operação.get_Operaçãof.Value = 0\nEndIf\nIf ThisForm.Gerportp\n\tlcCodigo = ThisForm.Container1.Get_TpGOp.Value\n\tSelect * From TmpOper Where CodTgOps = lcCodigo Into Cursor xTmpOper ReadWrite\nElse\n\tSelect * From TmpOper Into Cursor xTmpOper ReadWrite\nEndIf\nSelect xTmpOper\nIndex on Dopes Tag Dopes\n\nIf Not Empty(This.Value) And Not Seek(This.Value, 'xTmpOper', 'Dopes')\n\tloBrowse = CreateObject('fwBuscaSel', 'xTmpOper', 'Dopes', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Operaçãoi,get_Operaçãof,Get_TpGOp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Operação.Get_Operaçãoi",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value) And Empty(This.Parent.Get_Operaçãof.Value)\n\tThis.Parent.Get_Operaçãof.Value = This.Value\n\tThis.Parent.Get_Operaçãof.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Operaçãof",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Operação.Get_Operaçãoi",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Operação.get_Operação.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Operação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Operação.Get_Operaçãof",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Operação.get_Operação.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Operação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Empresa.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "Return fAcessoEmpresa(Usuar, 'D', This.Value, This.parent.Get_Cd_Empresa, This.parent.Get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Empresa.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.AlterEmp And Empty(This.parent.Get_Cd_empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AlterEmp And Empty",
+        "controlesReferenciados": "Get_Cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Empresa.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "Return fAcessoEmpresa(Usuar, 'C', This.Value, This.Parent.Get_Cd_Empresa, This.Parent.Get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Empresa.get_cd_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.AlterEmp",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Cnt_Op.GetNop",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If This.Value > 0\n\tlcSql = [Select Numps From SigOpPic Where Numps = ]+Str(This.Value)\n\tIf (ThisForm.poDataMgr.SqlExecute(lcSql, 'TmpOpi') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpi)')\n\t\tReturn 0\n\tEndIf\n\tIf Reccount('TmpOpi') > 0\n\t\tMessageBox('Número de Op já existe. Favor Corrigir!!!',0+48,'')\n\t\tReturn 0\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGLO.Container1.Get_TpGOp",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Seek(This.Value, 'crTmpTpGop', 'Codigos')\n\tloBrowse = CreateObject('fwBuscaSel', 'CrTmpTpGop', 'Codigos', This.Value, 'Tipos de Geracao de OP')\n\tloBrowse.AddColuna('Codigos', 'XXXXXXXXXX', 'Codigo', .t., 'Codigos')\n\tloBrowse.AddColuna('Descs', ' ', 'Descricao')\n\tloBrowse.Show\n\tThis.Value = CrTmpTpGop.Codigos\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRGLO.Operação.Get_Operação.Valid",
+      "queryOriginal": "\tSelect * From TmpOper Where CodTgOps = lcCodigo Into Cursor xTmpOper ReadWrite",
+      "tabelas": "TmpOper",
+      "colunas": "CodTgOps,lcCodigo,xTmpOper,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRGLO.Operação.Get_Operação.Valid",
+      "queryOriginal": "\tSelect * From TmpOper Into Cursor xTmpOper ReadWrite",
+      "tabelas": "TmpOper",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRGLO.Cnt_Op.GetNop.Valid",
+      "queryOriginal": "\tlcSql = [Select Numps From SigOpPic Where Numps = ]+Str(This.Value) \tIf (ThisForm.poDataMgr.SqlExecute(lcSql, 'TmpOpi') < 1)",
+      "tabelas": "SigOpPic",
+      "colunas": "Numps,Value,SqlExecutelcSql,TmpOpi",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpOper", "SigOpPic"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

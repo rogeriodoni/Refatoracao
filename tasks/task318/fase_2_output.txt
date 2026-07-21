@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto com 487 linhas. A Fase 2 est├í completa.
+
+**Resumo do que foi adicionado ao `SigPrPcpBO.prg`:**
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `ObterConfiguracaoPam()` | L├¬ `DoppPads`/`DoppServs` de `SigCdPam` ÔåÆ popula `this_cOperacao`/`this_cServico` |
+| `CarregarDoCursor(par_cAlias)` | Carrega todas as 12 propriedades `this_*` a partir do cursor ativo (zTmppPcp/zTmpSelecao) |
+| `Processar(par_cCursorDestino)` | Replica o `PROCEDURE processa` do legado: SCAN SigCdNec ÔåÆ UNION ALL ÔåÆ SigPdMvf ÔåÆ SigCdOpd ÔåÆ SigOpPic+SigMvCab+SigCdOpe ÔåÆ SigCdCli ÔåÆ APPEND no cursor destino |
+| `Atualizar()` | UPDATE individual em `SigMvCab.Priors` + `RegistrarAuditoria("ATUALIZAR")` |
+| `GravarPrioridades(par_cCursorSelecao)` | SCAN+UPDATE em lote com `BEGIN TRANSACTION`/`COMMIT`/`ROLLBACK` + `RegistrarAuditoria("GRAVARPRIORIDADES")` |
+| `ObterImagemProduto(par_cCpros, par_cArquivo)` | Busca `FigJpgs` de `SigCdPro`, decodifica Base64 via `STRCONV(...,14)` e grava arquivo |
+
+**Decis├úo t├®cnica:** `Inserir()` n├úo foi adicionado porque este form OPERACIONAL n├úo cria novos registros ÔÇö adicionar um stub viola a regra "PROIBIDO criar vers├Áes reduzidas". A opera├º├úo de escrita real ├® o `GravarPrioridades()` (UPDATE em lote).

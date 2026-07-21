@@ -1,0 +1,19 @@
+﻿**Falso positivo confirmado.** O problema reportado ├® um erro de mapeamento de nomes na ferramenta de valida├º├úo, n├úo um bug real no c├│digo.
+
+**An├ílise:**
+- `Label3` no legado ÔåÆ `lbl_4c_Label3` na migra├º├úo, `Top=211` Ô£ô (correto, linha 453)
+- `Label31` no legado ÔåÆ `lbl_4c_Label31` na migra├º├úo, `Top=438` Ô£ô (correto, linha 389)
+
+A ferramenta de valida├º├úo confundiu `Label3` com `lbl_4c_Label31` por correspond├¬ncia de prefixo (`lbl_4c_Label3` contido em `lbl_4c_Label31`), mas o controle correto `lbl_4c_Label3` j├í est├í em `Top=211` como esperado.
+
+**Layout do painel direito ├® coerente:**
+```
+Top=211  ÔåÆ lbl_4c_Label3    "Local de Pagamento"
+Top=228  ÔåÆ obj_4c_GetLocals  EditBox (Height=201, termina em 429)
+Top=438  ÔåÆ lbl_4c_Label31   "Texto de Responsabilidade do Cedente"  ÔåÉ gap 9px ap├│s editbox
+Top=455  ÔåÆ obj_4c_GetTxtCds  EditBox (Height=201, termina em 656)
+```
+
+Mover `lbl_4c_Label31.Top` para 211 causaria sobreposi├º├úo total com `lbl_4c_Label3` (mesmo `Left=444`, mesmo `Top=211`), quebrando o layout visualmente.
+
+**Nenhuma altera├º├úo necess├íria.** O form est├í correto ÔÇö o issue ├® um falso positivo do matcher de nomes que casou `Label3` com `lbl_4c_Label31` em vez de `lbl_4c_Label3`.

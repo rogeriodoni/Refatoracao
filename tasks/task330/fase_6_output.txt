@@ -1,0 +1,14 @@
+﻿Fase 6 conclu├¡da. Este form operacional (`sigprsen`) ├® extremamente simples ÔÇö apenas 2 bot├Áes sem campos ou lookups ÔÇö ent├úo as fases 1-5 j├í haviam implementado 100% do c├│digo funcional. A Fase 6 completou a integra├º├úo:
+
+**Altera├º├Áes realizadas:**
+
+1. **`Formsigprsen.prg`** ÔÇö Adicionado `ClipControls = .F.` (propriedade presente no SCX original que estava faltando)
+
+2. **`menu.prg` ÔÇö popFerramentas** ÔÇö Adicionadas as linhas:
+   - `DEFINE BAR 9` (separador)  
+   - `DEFINE BAR 10` ÔÇö "Gerar Senha do Dia"  
+   - `ON SELECTION BAR 10 OF popFerramentas DO AbrirFormsigprsen`
+
+3. **`menu.prg` ÔÇö fim do arquivo** ÔÇö Adicionado `PROCEDURE AbrirFormsigprsen()` com padr├úo can├┤nico (`VARTYPE` check, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro()` no CATCH com linha + procedure)
+
+A fun├º├úo `fGerPswDiario` no BO est├í correta ÔÇö ├® o nome usado consistentemente no novo sistema (os outros BOs `SigPrSddBO`, `sigtosenBO` usam o mesmo nome sem o sufixo `MC` do legado).

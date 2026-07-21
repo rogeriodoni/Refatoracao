@@ -1,0 +1,401 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 13,
+    "metodosComValidacao": 12,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "File", "From Alltrim", "Formato :'+Chr", "fDtoSQL", "for !Deleted", "fGerUniqueKey", "fChecaAcesso", "fBuscarCotacao"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 140,
+      "codigoOriginal": "Local lnTipo, lcArq, lcNomArq\nlnTipo = ThisForm.cntplanilha.OptTipo.Value \nlcArq = ThisForm.cntplanilha.GetPlanilha.Value\nlcNomArq = Alltrim(JustFname(lcArq))\n\nSelect TmpPlanilha\nGo Top \n\nloBarraLista = Createobject('fwprogressbar','Importando Lista...',Reccount('TmpPlanilha'))\nloBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1\nloBarraLista.Titulo.FontBold = .T.\nloBarraLista.Show\n\nScan\n\n\tIf IsEmpty(TmpPlanilha.Referencia)\n\t\tSelect TmpPlanilha\t\n\t\tLoop \n\tEndIf \n\t\n\tloBarraLista.Up... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Update",
+        "controlesReferenciados": "OptTipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Select ComboTipo\nThisForm.Cntplanilha.List1.RowSource = Alltrim(ComboTipo.ColunaLi)\n\n*-- Rafael - 05/12/2016 - Informa a Chave do Campo Produto\nIf InList(Upper(Alltrim(ComboTipo.Titulo)),'TRANSFERENCIA','PRECIFICACAO','PEDIDO TERCEIRO','PEDIDO CONSIGNADO','PEDIDO FABRICA','PEDIDO ACESSORIO')\n\tThisForm.cntplanilha.Say5.Visible = .T.\n\tThisForm.cntplanilha.OptTipo.Visible = .T.\nElse\n\tThisForm.cntplanilha.Say5.Visible = .F.\n\tThisForm.cntplanilha.OptTipo.Visible = .F.\nEndIf \n\nIf InList(Upper(Alltrim(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RowSource = Alltrim",
+        "controlesReferenciados": "OptTipo,OptPreco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "If Empty(Thisform.Cntplanilha.CmbTipos.Value)\n\tMessageBox('Tipo Inválido',16,'')\n\tThisForm.Cntplanilha.CmbTipos.SetFocus\n\tReturn .f.\nEndIf \n\nIf Empty(Thisform.Cntplanilha.getPlanilha.Value)\n\tMessageBox('Arquivo Inválido',16,'')\n\tThisForm.Cntplanilha.cmdgetp.SetFocus\n\tReturn .f.\nEndIf \n\nIf Used([TmpPlanilha])\n\tUse in TmpPlanilha\nEndIf \n\nlcFile = Addbs(Sys(5)+Sys(2003))\nIf File(lcFile+'TmpPlanilha.dbf')\t\n\tDelete File lcFile+'TmpPlanilha.dbf'\nEndIf \n\nlcCursor = 'Create Table TmpPlanilha ('\n\nFOR nCn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File,From Alltrim,Formato :'+Chr",
+        "metodosFormChamados": "List",
+        "controlesReferenciados": "ChkCabecalho",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 406,
+      "codigoOriginal": "&& Rotina da Importação da Planilha de transferencias\nPrivate pDt\npDt = fDtoSQL(Datetime())\n\nIf Used([csPrNAOCad])\n\tuse in csPrNAOCad\nEndIf \n\nIf Used([csPrSemCT])\n\tuse in csPrSemCT\nEndIf \n\nCreate Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade n(12,2),Grupo c(10),Barra n(14,0), Cor c(4),Tamanho c(4))\n\nCreate Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))\n\nLocal lnErro1\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlnTipo  = ThisForm.c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,for !Deleted",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OptTipo,OptPreco,opTrfPed",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 352,
+      "codigoOriginal": "&& Rotina da Importação da Planilha de transferencias\nPrivate pDt\npDt = fDtoSQL(Datetime())\n\nIf Used([csPrNAOCad])\n\tUse In csPrNAOCad\nEndif\n\nIf Used([csPrSemCT])\n\tuse in csPrSemCT\nEndIf \n\nCreate Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))\n\nCreate Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))\n\nLocal lnErro1\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlnTipo = Thisform.cnt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,For !Deleted",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OptTipo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 106,
+      "codigoOriginal": "&& Rotina da Importação da Lista de Preço\n\nPrivate plPrecos,plCodLista,pPro, plEmps\nplPrecos   = Replicate (Chr(254),30)\t\nplCodLista = Replicate (Chr(254),30)\npPro\t   = Replicate (Chr(254),10)\nplEmps\t   = Replicate (Chr(254),3)\n\nSelect Distinct NomeLista, Emps From TmpPlanilha Into Cursor crNomeLista\nSelect crNomeLista && Se tiver mais de 1 lista por planilha\n\nloBarraLista = CreateObject('fwprogressbar','Importando Lista...',Reccount('crNomeLista'))\nloBarraLista.Top = loBarraLista.Top - Int(loBa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Requery,Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 403,
+      "codigoOriginal": "&& Rotina da Importação da Planilha de transferencias\nPrivate pDt\npDt = fDtoSQL(Datetime())\n\nIf Used([csPrNAOCad])\n\tUse In csPrNAOCad\nEndif\n\nIf Used([csPrSemCT])\n\tUse In csPrSemCT\nEndif\n\nCreate Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))\n\nCreate Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))\n\nLocal lnErro1\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlnTipo = Thisform.cntp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,For !Deleted",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "OptTipo,OptPreco",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 68,
+      "codigoOriginal": "Create Cursor ComboTipo (Titulo c(20), Rotina c(20), ColunaLi m)\nDimension aComboTipo [7,3]\n\n&&Coluna 1 = Titulo da Combo\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n&&Coluna 2 = Nome da Metodo / Acesso (Maximo 10 char)                                       \n&&Coluna 3 = Campos que Aparecem na List (Campo da lista,Campo pra criar o Cursor\t(| = ,))\n\naComboTipo [1,1] = 'Lista de Preço'\naComboTipo [1,2] = 'ListaPreco'\naComboTipo [1,3] = 'Empresa,Emps c(3), Nome da Lista,NomeLista c(20),Código Produto,cPros c(14),Valor ,Valor ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTipo,OptPreco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "If ThisForm.CriaPlanilha()\n\tIf ThisForm.ValidaCols(ThisForm, Alltrim(ComboTipo.Rotina))\t\n\t\tIf MessageBox('Atenção, a ordem das colunas é muito importante. Certifique-se que elas estão corretas.'+Chr(13)+;\n\t\t\t\t  \t  'Ordem incorreta resultará em uma importação incorreta, e este processo é irreversível.'+Chr(13)+;\n\t\t\t\t  \t  'Tem certeza que deseja continuar a importação com a ordem selecionada',4+64+256,'') = 6\n\n\t\t  \tlcRotina = 'ThisForm.'+Alltrim(ComboTipo.Rotina)+[()]\n\t\t\t&lcRotina \n\t\tEndIf \n\tElse\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriaPlanilha,ValidaCols,'+Alltrim",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters pFrm, pPar\nReturn (Vartype(pFrm.ReadMethod(pPar))=[C])\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 388,
+      "codigoOriginal": "Lparameters _Grupo, _Conta, _GrupoEm, _ContaEm, _Tipo\nLocal _Limite, _CotLim, _Saldo, _CotSal, _CotPar, _FatConv, _ValorAnt, _ValorMov, _pData, _Matriz, _pAno, _pMes, _Campo, _CmpUp\n\n=Thisform.poDataMgr.CursorQuery('SigCdGcr', 'crSigCdGcr2', 'Codigos', _Grupo)\n\n_Grupo = Iif(Not Empty(CrSigCdGcr2.GrupoLms),CrSigCdGcr2.GrupoLms,_Grupo)\n\n_pData = CrSigMvCab.DataS &&crSigMvCcr.vencs\n_pAno  = Str(Year(_pData),4)\n_pMes  = Padl(Month(_pData),2,'0')\n_Valor = CrSigMvCab.Valos &&crSigMvCcr.Valors\n\n_Campo ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "chkvalida",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 367,
+      "codigoOriginal": "&& Rotina da Importação da Planilha de transferencias\nPrivate pDt\npDt = fDtoSQL(Datetime())\n\nIf Used([csPrNAOCad])\n\tUse In csPrNAOCad\nEndif\n\nIf Used([csPrSemCT])\n\tuse in csPrSemCT\nEndIf \n\nCreate Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))\n\nCreate Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))\n\nLocal lnErro1\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlnTipo = Thisform.cnt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SQLExecute,CursorQuery",
+        "controlesReferenciados": "OptTipo,OptPreco,ChkEsc,ChkEsc]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 406,
+      "codigoOriginal": "&& Rotina da Importação da Planilha de transferencias\nPrivate pDt\npDt = fDtoSQL(Datetime())\n\nIf Used([csPrNAOCad])\n\tuse in csPrNAOCad\nEndIf \n\nIf Used([csPrSemCT])\n\tuse in csPrSemCT\nEndIf \n\nCreate Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade n(12,2),Grupo c(10),Barra n(14,0), Cor c(4),Tamanho c(4))\n\nCreate Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))\n\nLocal lnErro1\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nlnTipo  = ThisForm.c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,for !Deleted",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OptTipo,OptPreco",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "LParameters _xMoeda, _xData\nLocal _xCotacao, lcAlias\n\nlcAlias   = Alias()\n_xCotacao = 1\n_xData    = Iif(Type('_xData') = 'D', _xData, CrSigMvCab.Datas)\n\nIf Not IsEmpty( _xMoeda ) \n\tlcSql = [Select Cotas From SigCdMoe where Cmoes = ']+_xMoeda+[']\n\tIf ThisForm.poDataMgr.Sqlexecute(lcsql,'LocalMoe') < 1\n\t\tMessageBox([Favor reiniciar o Processo.],0+16,[Falha de conexão (LocalMoe)])\n\t\tReturn .F.\n\tEndIf \n\tIf LocalMoe.Cotas\n\t\tIf !Seek( _xMoeda, \"TmpCot\" )\n\t\t\t_xCotacao = fBuscarCotacao(_xMoeda,_xData,Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCotacao",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "*thisform.podatamgr.release ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "KeyPress",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nIf nKeyCode = 27\n\tthisform.grupo_Botao.cmdsair.Click\nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA",
+      "evento": "Init",
+      "linhas": 72,
+      "codigoOriginal": "Private plPrecos,plCodLista,pPro\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nplPrecos   = Replicate (Chr(254),30)\nplEmps\t   = Replicate (Chr(254),3)\nplCodLista = Replicate (Chr(254),30)\t\npPro\t   = Replicate (Chr(254),14)\n\nlcQryListaPreco  = 'Select * from SigCdLpc  Where lPrecos = ?plCodLista And Emps = ?plEmps'\nlcQryListaPrecoi = 'Select * from SigCdLpi Where lPrecos = ?plPrecos '\nlcQryPro\t\t = 'Select cGrus, cPros, dPros, Moe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Preenchetipo",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRILA.cntplanilha.cmdgetp",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.getPlanilha.Value = GetFile('xls','Planilha','Importar')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA.cntplanilha.cmbTipos",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Completalista()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Completalista",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA.cntplanilha.GetPlanilha",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If Thisform.Planilha\n\tThisForm.ChecaPlanilha()\nElse\n\tThisForm.Processamento()\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChecaPlanilha,Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRILA.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRILA.Procedure",
+      "queryOriginal": "Select Distinct NomeLista, Emps From TmpPlanilha Into Cursor crNomeLista",
+      "tabelas": "TmpPlanilha",
+      "colunas": "Emps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRILA.Procedure",
+      "queryOriginal": "\tlcSql = [Select Cotas From SigCdMoe where Cmoes = ']+_xMoeda+['] \tIf ThisForm.poDataMgr.Sqlexecute(lcsql,'LocalMoe') < 1",
+      "tabelas": "SigCdMoe",
+      "colunas": "Cotas,Cmoes,Sqlexecutelcsql,LocalMoe",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRILA.Init",
+      "queryOriginal": "lcQryListaPreco  = 'Select * from SigCdLpc  Where lPrecos = ?plCodLista And Emps = ?plEmps'",
+      "tabelas": "SigCdLpc",
+      "colunas": "lPrecos,Emps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRILA.Init",
+      "queryOriginal": "lcQryListaPrecoi = 'Select * from SigCdLpi Where lPrecos = ?plPrecos '",
+      "tabelas": "SigCdLpi",
+      "colunas": "lPrecos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpPlanilha", "SigCdMoe", "SigCdLpc", "SigCdLpi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

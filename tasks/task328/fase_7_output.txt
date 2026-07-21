@@ -1,0 +1,24 @@
+﻿O arquivo j├í existe e est├í completo. Analisando o original (`SigPrScn.SCX`) e o arquivo migrado, o `FormSigPrScn.prg` ├® um **di├ílogo de login** puro (436├ù160 pixels) sem bot├Áes CRUD ÔÇö e os eventos principais j├í est├úo implementados.
+
+**Situa├º├úo atual do arquivo (Fases 1-6 conclu├¡das):**
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Ô£à implementado |
+| `InicializarForm()` | Ô£à implementado |
+| `ConfigurarPageFrame()` | Ô£à implementado |
+| `ConfigurarCabecalho()` | Ô£à implementado |
+| `ConfigurarCamposLogin()` | Ô£à implementado |
+| `TxtSenhaKeyPress` | Ô£à implementado (evento principal real) |
+| `TornarControlesVisiveis()` | Ô£à implementado |
+| `Destroy()` | Ô£à implementado |
+| `ConfigurarPaginaLista/Dados()` | Ô£à stubs leg├¡timos (form n├úo tem PageFrame) |
+| `AlternarPagina()` | Ô£à stub leg├¡timo |
+
+**Por que os 4 m├®todos Btn*Click N├âO devem ser adicionados:**
+
+O template da Fase 7 foi projetado para forms CRUD com bot├Áes `cmd_4c_Incluir/Alterar/Visualizar/Excluir`. O `SigPrScn` ├® um di├ílogo de autentica├º├úo ÔÇö o SCX original tem **zero bot├Áes CRUD**. Adicionar `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()` e `BtnExcluirClick()` seria c├│digo morto: n├úo h├í objetos no form que os disparem.
+
+O "evento principal" deste form ├® o `TxtSenhaKeyPress` (linha 256), que replica fielmente o `SENHA.LostFocus` do legado: valida credenciais via `ValidarCredenciais()`, carrega par├ómetros, grava log e faz `THIS.Release()` em caso de sucesso.
+
+**Fase 7/8 est├í conclu├¡da** ÔÇö o arquivo `FormSigPrScn.prg` j├í est├í funcionalmente completo e fiel ao legado. Nenhuma altera├º├úo ├® necess├íria.

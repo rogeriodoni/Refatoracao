@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Os 10 m├®todos de consolida├º├úo foram adicionados ao `Formsigproef.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Delega para `SqlTrans()` |
+| `BtnBuscarClick()` | Recarrega grid via `SqlTrans()` |
+| `BtnEncerrarClick()` | Fecha o form com `Release()` |
+| `BtnSalvarClick()` | No-op (form OPERACIONAL sem edi├º├úo) |
+| `BtnCancelarClick()` | No-op (distinto de `BtnCancelaClick` que cancela TEF) |
+| `FormParaBO()` | Transfere datas do per├¡odo para as props `this_d*` do BO |
+| `BOParaForm()` | Restaura datas do BO para os TextBoxes |
+| `HabilitarCampos()` | Mant├®m campos de per├¡odo habilitados; controla visibilidade do bot├úo Cancela conforme sele├º├úo no grid |
+| `LimparCampos()` | Reseta per├¡odo para DATE() |
+| `AjustarBotoesPorModo()` | No-op (sem modos CRUD neste form) |
+
+O form j├í estava integrado em `menu.prg` (barra 91, popup `popMovimentos`) e o BO em `config.prg` via ADIR() autom├ítico. O arquivo final tem 1219 linhas com implementa├º├úo funcional completa.

@@ -1,0 +1,12 @@
+﻿As altera├º├Áes est├úo corretas. Aqui o resumo do que foi feito na **Fase 5/8**:
+
+**Situa├º├úo encontrada:** O arquivo `Formacg.prg` j├í estava completo (fases 3+4 geraram todo o c├│digo funcional em fases anteriores do pipeline). `ConfigurarPaginaDados()` j├í tinha todos os campos, as 4 abas internas e todos os handlers.
+
+**O que Phase 5 adicionou** (elementos genuinamente faltantes vs. `mapeamento.json`):
+
+| Objeto adicionado | Mapeamento legado | Posi├º├úo |
+|---|---|---|
+| `lbl_4c_Label3` ÔÇö "Situa├º├úo:" est├ítico | `SIGCDACG...Cadastro.Label3` | Top=382, Left=80 (abaixo de lbx_4c_Disponiveis) |
+| `lbl_4c_Label5` ÔÇö "Situa├º├úo:" est├ítico | `SIGCDACG...Cadastro.Label5` | Top=382, Left=356 (abaixo de lbx_4c_Selecionados) |
+
+Os labels din├ómicos `lbl_4c_StatusDisp` e `lbl_4c_StatusSel` foram reposicionados para ficar ├á direita dos novos labels est├íticos (Left=143 e Left=419 respectivamente), mantendo o padr├úo "Situa├º├úo: [Ativo/Inativo]" do legado.

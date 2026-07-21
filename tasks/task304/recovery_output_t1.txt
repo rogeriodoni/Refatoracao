@@ -1,0 +1,3 @@
+﻿**Causa raiz**: `ConfigurarCampos()` tentava atribuir `.BorderColor` e `.SpecialEffect` ao ListBox `obj_4c_Arquivos`. Essas propriedades n├úo existem no VFP9 ListBox (apenas TextBox tem `BorderColor`/`SpecialEffect`). A atribui├º├úo lan├ºava "Property BORDERCOLOR is not found", capturado pelo `CATCH` de `InicializarForm()`, que retornava `.F.` ÔåÆ `FormBase.Init()` retornava `.F.` ÔåÆ `CREATEOBJECT("FormSIGPRIMP")` retornava n├úo-objeto.
+
+**Corre├º├úo**: Removidas as linhas `.BorderColor = RGB(100, 100, 100)` e `.SpecialEffect = 0` do bloco `WITH` do ListBox. Os outros forms do projeto com ListBox confirmam esse padr├úo ÔÇö nenhum deles usa essas propriedades.

@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. As 4 corre├º├Áes foram aplicadas com sucesso:
+
+1. **`DataSession = 2` removido** ÔÇö o original n├úo tem; cursors criados pelo BO ficam no datasession global acess├¡vel pela grade.
+
+2. **`SET DATE TO BRITISH` / `SET CENTURY ON` removidos** ÔÇö executavam na datasession do *chamador* (efeito nulo); o FormBase.Init() j├í faz isso na datasession correta do form.
+
+3. **`@THIS.this_laOpeBaixa`** ÔÇö sem `@`, VFP9 passava apenas o primeiro elemento como string, impedindo que o BO processasse o array de baixas.
+
+4. **Column1 ControlSource ap├│s AddObject + CurrentControl** ÔÇö viola Erro 1767; novo c├│digo segue a ordem obrigat├│ria: `AddObject ÔåÆ CurrentControl ÔåÆ Sparse ÔåÆ ControlSource`.
+
+O arquivo `FormSigPrEml.prg` j├í tinha todas as 8 fases implementadas de uma vez em execu├º├úo anterior. A Fase 3 foi executada como revis├úo e corre├º├úo dos bugs encontrados.

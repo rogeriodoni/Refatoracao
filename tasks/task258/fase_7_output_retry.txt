@@ -1,0 +1,8 @@
+﻿All 4 methods are now in the file. Fase 7 complete.
+
+**Summary**: Added the 4 CRUD-compatible event handlers to `C:\4c\projeto\app\forms\operacionais\FormSigPrAop.prg` (lines 592, 634, 670, 710). Since SIGPRAOP is OPERACIONAL (single-purpose "Alteracao de Quantidade da OP"), each method delegates to real operational actions instead of being a `MsgAviso` stub:
+
+- **BtnIncluirClick** ÔÇö Inicia novo lote: zera cursor, limpa OP/Produto, reabilita coluna Qtd.Atual, foca no textbox OP
+- **BtnAlterarClick** ÔÇö Valida OP informada, chama `CarregarDivisoesOP()` em modo editavel, transfere foco para o grid
+- **BtnVisualizarClick** ÔÇö Carrega divisoes em modo somente leitura (Column5.ReadOnly=.T., Confirmar desabilitado)
+- **BtnExcluirClick** ÔÇö Descarta alteracoes pendentes com confirmacao (TABLEREVERT + ZAP no cursor), sem tocar em SigOpPic

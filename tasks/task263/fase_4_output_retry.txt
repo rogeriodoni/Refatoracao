@@ -1,0 +1,7 @@
+﻿Fase 4 completa. Adicionei em `C:\4c\projeto\app\forms\relatorios\FormSIGPRCCR.prg`:
+
+- **`ConfigurarPaginaLista()`** (linha 107) ÔÇö equivalente sem├óntico de Page1 para REPORT form: delega para `ConfigurarCabecalho()` + `ConfigurarBotoes()` na ordem correta de z-order.
+- **`AlternarPagina(par_nPagina)`** (linha 120) ÔÇö contrato do FormBase; para REPORT (layout ├║nico/flat) valida `par_nPagina = 1` e retorna .T.
+- **`ConfigurarPageFrame()`** refatorado para delegar a `ConfigurarPaginaLista()` (mant├®m compatibilidade).
+
+N├úo h├í Grid nem bot├Áes CRUD (Incluir/Alterar/Excluir/Buscar) porque este ├® um form REPORT (frmrelatorio, 800├ù130) ÔÇö a UI can├┤nica s├úo os 4 bot├Áes j├í implementados no `cmg_4c_Botoes` (Visualizar/Imprimir/Arquivos Email/Encerrar), configurados via `ConfigurarBotoes()`. Todos os handlers, BINDEVENTs e `ExecutarReportForm()` j├í estavam presentes desde as fases anteriores.

@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto e completo. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `SigPrRetBO.prg`:**
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `""` ÔÇö form operacional sem tabela prim├íria |
+| `CarregarDoCursor(par_cAliasCursor)` | Mapeia todos os 33 campos `this_*` a partir de um cursor de par├ómetros |
+| `InicializarCursores()` | Carrega `SigCdOpd` com `INDEX ON dopps TAG dopps` para SEEK de opera├º├Áes (l├│gica do `Init` original) |
+| `ValidarEtiqueta(par_nCBars)` | Resolve `CBars` via `SigOpEtq LEFT JOIN SigOpEta` (etiquetas renomeadas) ÔÇö l├│gica dos `Get_Etii.Valid` / `Get_Etif.Valid` originais |
+| `VerificarEtiquetaCadastrada(par_nCBars)` | Confirma exist├¬ncia de `CBars` em `SigOpEtq` ÔÇö substitui `CursorQuery('SigOpEtq', ...)` do legado |
+
+Todos os m├®todos seguem o padr├úo: TRY/CATCH com `MsgErro` (nunca silencioso), `RETURN` fora do TRY, cursores tempor├írios fechados antes de SQLEXEC.

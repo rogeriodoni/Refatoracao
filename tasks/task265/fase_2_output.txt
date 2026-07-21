@@ -1,0 +1,20 @@
+﻿**Fase 2/8 conclu├¡da.** O arquivo `SigPrChrBO.prg` foi completado com 1078 linhas, adicionando todos os m├®todos CRUD e de neg├│cio:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `InicializarPermissoes()` | Carrega flags `lExcluirDocumento`/`lExcluirCheque` |
+| `InicializarCursores()` | Cria `cursor_4c_Modelos`, `cursor_4c_Contas`, `cursor_4c_Cheques` com ├¡ndices |
+| `IndexarCursorCheques()` | Cria os 12 ├¡ndices do cursor de cheques (NCopias, Emissao, Valor, Cheque, etc.) |
+| `MontarCheques(lPosiciona)` | Equivalente ao `montachq` do legado ÔÇö SQLEXEC + SELECT local + reindexa├º├úo |
+| `ExibirCheques(lSeek)` | Equivalente ao `mExibeCheques` ÔÇö reordena/filtra por conta |
+| `MarcarTodos()` / `DesmarcarTodos()` | Bot├Áes cmdTudo1 / cmdApaga1 |
+| `AlternarMarcaCheque(cChave)` | Check1.KeyPress ÔÇö toggle individual |
+| `ObterSituacaoCheque()` / `ObterCorCheque()` | Express├Áes do ControlSource/DynamicForeColor da coluna Situacao |
+| `CarregarConta()` | Equivalente ao `CarregaConta` ÔÇö popula `cursor_4c_TmpConta` com parcelas |
+| `ExcluirDocumento()` / `ExcluirCheque()` | Bot├Áes cmdExcluiDoc / btnExcluirChq |
+| `CancelarCheque(cJustificativa)` | Bot├úo cmConfirmar do cntjustificativa |
+| `BuscarChequePor*(...)` | Busca por c├│digo/data/valor para o cntProcurar |
+| `PrepararImpressaoMatricial()` | Container impchmat |
+| `PrepararImpressaoChequesMarcados()` | Valida├º├úo de banco ├║nico + cursor de impress├úo |
+| `ValidarGrupo()` / `ValidarConta()` | Valid dos campos getCdGrupos/getCdContas |
+| `LimparCursores()` | Destroy ÔÇö libera todos os cursores |

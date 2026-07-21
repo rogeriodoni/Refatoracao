@@ -1,0 +1,3 @@
+﻿**Corre├º├úo aplicada:** O cursor `csInutil` era referenciado como `ControlSource` de 6 colunas do `grd_4c_Inu` durante `ConfigurarCntInu()`, mas s├│ era criado em runtime por `CmdInuClick()`. VFP9 valida o alias na hora da atribui├º├úo e lan├ºa `Alias 'CSINUTIL' is not found`.
+
+A corre├º├úo cria um cursor `csInutil` vazio (com a estrutura correta) antes de configurar as colunas do grid, e adiciona o `USE IN csInutil` no `Destroy()` para cleanup adequado.

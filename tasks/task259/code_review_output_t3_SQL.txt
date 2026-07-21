@@ -1,0 +1,22 @@
+﻿An├ílise completa. Todos os 4 itens s├úo **falsos positivos** do validador SQL. Aqui est├í o diagn├│stico:
+
+---
+
+## Resultado da Verifica├º├úo ÔÇö PASS SQL: SQL Validation
+
+### Diagn├│stico: todos os 4 itens s├úo falsos positivos
+
+O validador comparou TODOS os `WHERE` do c├│digo migrado contra a lista de condi├º├Áes do query principal de `SigCdPro` (`LNPASSO, CGRUS, COLECOES, MOEVS, CPROS, LMARCA, PROMOS`, etc). Mas os 4 itens flagados v├¬m de **queries de lookup em tabelas auxiliares**, n├úo do query principal.
+
+| Item flagado | Local | O que realmente ├® |
+|---|---|---|
+| `CONTROLCOUNT` | `FormSigPrApr.prg:1970,1975` | **N├âO ├® SQL.** ├ë `par_oContainer.ControlCount` e `PEMSTATUS(loc_oControl, "ControlCount", 5)` ÔÇö propriedade VFP9 de container. Zero rela├º├úo com SQL. |
+| `CMOES` | `SigPrAprBO.prg:1070` | Lookup leg├¡timo: `SELECT TOP 1 MoeQs, QtdeQs FROM SigCdMoe WHERE CMoes = ...` ÔÇö PK da tabela `SigCdMoe`. |
+| `ICLIS` | `FormSigPrApr.prg:1670` | Lookup leg├¡timo: `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = ...` ÔÇö PK da tabela `SigCdCli`. |
+| `CODS` | `FormSigPrApr.prg:1926` | Lookup leg├¡timo: `SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = ...` ÔÇö PK da tabela `SigPrFti`. |
+
+### Nenhuma corre├º├úo necess├íria
+
+Remover qualquer dessas condi├º├Áes quebraria os lookups de moeda (`txt_4c_Moeda`), fornecedor (`txt_4c_Conta`) e feitio (`txt_4c_CFtios`). O c├│digo est├í correto.
+
+**Causa raiz do falso positivo**: o detector `SQL-FILTRO-INVENTADO` varreu todos os `WHERE` do arquivo e comparou contra a lista de colunas do query de carga de `SigCdPro`. Queries de lookup em outras tabelas (`SigCdMoe`, `SigCdCli`, `SigPrFti`) t├¬m suas pr├│prias PKs como filtro, o que ├® esperado e correto.

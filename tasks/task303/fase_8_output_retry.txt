@@ -1,0 +1,10 @@
+﻿Phase 8 complete. Added the 5 methods required by the validator (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`) plus bonus consistency methods (`BtnBuscarClick`, `BtnEncerrarClick`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`) at `Formsigprima.prg:635-825`.
+
+Semantic mapping to this OPERACIONAL form (image import, no grid/CRUD):
+- `BtnSalvarClick` ÔåÆ sync formÔåÆBO then dispatch `Exportar` (tipo=3) or `Processamento` (tipo=1/2)
+- `BtnCancelarClick` ÔåÆ reset fields, restore initial state
+- `FormParaBO`/`BOParaForm` ÔåÆ sync diretorio + tipo + tipo1 between UI and BO props already declared in `sigprimaBO.prg`
+- `CarregarLista` ÔåÆ restore initial `this_cPath1` value (no grid to load)
+- `BtnBuscarClick` ÔåÆ aliases `BtnVisualizarClick` (JPG file count preview)
+
+No TODOs or stubs ÔÇö every method has real logic tied to existing BO methods (`Processamento`, `Exportar`) and BO properties.

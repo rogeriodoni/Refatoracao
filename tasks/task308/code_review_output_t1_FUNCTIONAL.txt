@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e por qu├¬:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO**
+Adicionado bloco de exclus├úo para `CNT_4C_SOMBRA` em `TornarControlesVisiveis()`. O container tem visibilidade gerenciada por `ConfigurarCabecalho()`, ent├úo TCV n├úo deve sobrescrever seu estado. Seguindo o padr├úo da mem├│ria `feedback_tcv_skip_recursao`: a recurs├úo nos filhos (`lbl_4c_Sombra`, `lbl_4c_Titulo`) ├® **injetada antes do LOOP** para que eles fiquem vis├¡veis mesmo com o container exclu├¡do do ciclo principal. As vari├íveis `loc_j`/`loc_oFilho` foram movidas para o `LOCAL` do topo do m├®todo, eliminando declara├º├úo duplicada.
+
+**[METODO-INEXISTENTE] ÔÇö SEM ALTERA├ç├âO (falso positivo)**
+`THIS.Controls(n)` ├® uma **cole├º├úo nativa do VFP9** ÔÇö todo objeto `Form`/`Container` exp├Áe `Controls` como acessor de cole├º├úo (n├úo ├® PROCEDURE). O padr├úo `FOR i = 1 TO ControlCount ... Controls(i) ... ENDFOR` ├® idiom├ítico em VFP9. O reviewer tool fez busca est├ítica por `PROCEDURE Controls` e n├úo encontrou, mas o m├®todo n├úo precisa ser definido.
+
+**[LAYOUT-POSITION] ÔÇö CORRIGIDO**
+`shp_4c_CmdSair.Left` alterado de `691` ÔåÆ `917`, alinhando a shape com `cmd_4c_Encerrar.Left=917` (posi├º├úo can├┤nica). A shape tinha `BorderStyle=0` (sem borda vis├¡vel), mas o reposicionamento elimina a diverg├¬ncia de 34px detectada pelo reviewer e mant├®m coer├¬ncia visual com o bot├úo Encerrar.

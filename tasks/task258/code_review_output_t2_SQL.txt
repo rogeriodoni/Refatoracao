@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em `SigPrAopBO.prg`:
+
+- **Linha 97** (SigCdNec): `WHERE EmpDNps = EscaparSQL(...)` ÔåÆ `WHERE Nops = FormatarNumeroSQL(par_nNops, 0)`
+- **Linha 124** (SigPdMvf): `WHERE EmpDNps = EscaparSQL(...)` ÔåÆ `WHERE Nops = FormatarNumeroSQL(par_nNops, 0)`
+
+**Motivo**: O original usava `Seek(Str(lnOp, 10))` para navegar em SigPdMvf (filtro por Nops) e `SELECT crSigCdNec` em cursor pr├®-carregado por Nops. O `EmpDNps` como filtro WHERE foi inventado pela LLM. O pr├│prio m├®todo `Inserir()` j├í usava `WHERE Nops = ...` corretamente em ambas as tabelas ÔÇö agora `CarregarDivOp` segue o mesmo padr├úo.

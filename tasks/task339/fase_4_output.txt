@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSIGPRTRF.prg` foi atualizado com:
+
+**Adicionado:**
+- `ConfigurarPaginaLista()` ÔÇö cria `grd_4c_Dados` dentro de `cnt_4c_Referencia` com 2 colunas (Cpros/Dpros), propriedades exatas do SCX (Arial 8, Courier New, Format "K!"), RecordSource `CrProduto`, redefini├º├úo de cabe├ºalhos ap├│s RecordSource, e BINDEVENTs para GotFocus/KeyPress em Column1.Text1
+- `AlternarPagina()` ÔÇö no-op (form flat sem PageFrame)
+- `TxtCodProdGotFocus()` ÔÇö salva valor antes da edi├º├úo (equivalente ao `When` do SCX)
+- `TxtCodProdKeyPress()` ÔÇö Enter/Tab/F4 disparam lookup exato em `SigCdPro` via SQLEXEC; se n├úo encontrado abre `FormBuscaAuxiliar`; ap├│s confirma├º├úo preenche coluna 2 e navega para pr├│xima linha com `KEYBOARD '{DNARROW}'`
+- `CmdOkClick()` ÔÇö valida que h├í produtos, mostra `cnt_4c_Mensagem`, executa o loop de anima├º├úo ECF (barras vermelhoÔåÆamareloÔåÆverde por `this_nClockEcfs` segundos), seta `this_cRetorno = "Ok"` e libera
+- `CmdCancelarClick()` ÔÇö seta `this_cRetorno = " "` e libera
+- BINDEVENTs de `Click` em `cmd_4c_Ok` e `cmd_4c_Cancelar` ao final de `ConfigurarBotoes()`
+- Chamada a `ConfigurarPaginaLista()` e SetFocus no grid em `InicializarForm()`

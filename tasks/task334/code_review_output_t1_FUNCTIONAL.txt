@@ -1,0 +1,17 @@
+﻿**Diagn├│stico: Falso positivo do code reviewer.**
+
+`Controls` na linha 397 e 404 **n├úo ├® um m├®todo inventado** ÔÇö ├® a propriedade de cole├º├úo built-in do VFP9, presente em todos os objetos `Form` e `Container`. O padr├úo `THIS.ControlCount` + `THIS.Controls(n)` ├® a forma can├┤nica de iterar controles em VFP9 (equivalente ao `Buttons(n)` em CommandGroup).
+
+O code reviewer confundiu a sintaxe de indexa├º├úo de array `Controls(n)` com uma chamada de m├®todo `Controls()`. N├úo h├í nenhum problema real aqui.
+
+**Verifica├º├úo dos fatos:**
+- `THIS.Controls(loc_i)` ÔÇö indexa├º├úo da cole├º├úo built-in (linha 397)
+- `loc_oControl.Controls(loc_j)` ÔÇö idem, em sub-container (linha 404)
+- `THIS.ControlCount` ÔÇö propriedade built-in associada (linha 396)
+- Nenhum `PROCEDURE Controls` precisa ser definido porque n├úo ├® um m├®todo custom
+
+O c├│digo est├í correto. Nenhuma altera├º├úo necess├íria em `FormSIGPRSTF.prg` nem em `SIGPRSTFBO.prg`.
+
+---
+
+**Pass FUNCTIONAL conclu├¡do:** 1 problema detectado, 1 confirmado como falso positivo (Controls ├® array built-in VFP9). Nenhuma corre├º├úo aplicada ÔÇö o arquivo est├í correto como est├í.

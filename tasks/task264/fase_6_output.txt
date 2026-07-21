@@ -1,0 +1,9 @@
+﻿Os resultados est├úo corretos. As refer├¬ncias restantes a `this_nParXxx` s├úo todas no contexto da **forma em si** (propriedades declaradas no Form + captura no Init + passagem para o BO em `InicializarComParametros`), n├úo tentativas de l├¬-las do BO. N├úo h├í mais `fChkFeriado`, `ConfigurarBotoesAcao` ou `cnt_4c_BotoesAcao`.
+
+**Fase 6 conclu├¡da.** Tr├¬s corre├º├Áes aplicadas:
+
+1. **`PopularCamposIniciais()`** ÔÇö substitu├¡das 6 refer├¬ncias a propriedades inexistentes do BO (`this_nParVal/Tip/JMe/JDi/dDtB/dDtF`) pelas propriedades reais (`this_nValorBase`, `this_nTipoCalculo`, `this_nJurosMes`, `this_nJurosDia`, `this_dDataBase`, `this_dDataFinal`). Tamb├®m simplificado: o BO j├í calcula JurosDiaÔåöJurosMes em `InicializarComParametros`, ent├úo basta ler ambos diretamente.
+
+2. **`fChkFeriado` removido** dos 3 handlers (`TxtDataFinalKeyPress`, `TxtDiasKeyPress`, `OptDiasChange`) ÔÇö substitu├¡do por `this_oBusinessObject.AjustarDiasUteis()`, que j├í foi implementado no BO e verifica fins de semana + feriados da tabela `SigCdFer`.
+
+3. **`ConfigurarBotoesAcao()`** removido ÔÇö era dead code (nunca chamado em `InicializarForm`) que criaria um container em Top=271 fora da ├írea vis├¡vel do form (PageFrame ocupa 80..300).

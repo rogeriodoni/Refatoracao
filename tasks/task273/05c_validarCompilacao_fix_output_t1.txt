@@ -1,0 +1,3 @@
+﻿Zero ocorr├¬ncias do padr├úo ` : .` restantes no arquivo. Todas as 284 linhas problem├íticas foram corrigidas.
+
+**Causa raiz:** No VFP9, dentro de blocos `WITH...ENDWITH`, o separador `:` combinado com nota├º├úo `.Propriedade` causa **Syntax error** ÔÇö cada atribui├º├úo de propriedade deve estar em sua pr├│pria linha. O script expandiu automaticamente todos os 284 casos, separando cada `.Prop = val : .Prop2 = val2` em linhas individuais, sem afetar c├│digo fora de blocos WITH.

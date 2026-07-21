@@ -1,0 +1,16 @@
+﻿All three components of the migration are in place. Summary of what was delivered across this session:
+
+**Phase 2/8 (previous session)** ÔÇö `sigpremaBO.prg` (~420 lines): Complete business object with `CarregarDados`, `ObterConfigSMTP`, `ImprimirDocumento`, `GerarPDF`, `ImprimirParaPDF`, `EnviarEmailCDO`, `ProcessarEnvioEmails`, `RegistrarLogEmail`, and `FormatarDatetimeSQL`.
+
+**Phase 3/8** ÔÇö `Formsigprema.prg` (new): Flat OPERACIONAL form (no PageFrame) with:
+- `DataSession=1` so the `crLocalTotal` cursor created by the BO is visible to the grid
+- 5-column grid: Checks (checkbox, `Sparse=.F.`), Conta, Nome, Email (editable), EmpDopNums (EditBox)
+- Buttons: Enviar Email, Marcar Todos, Desmarcar Todos (canonical icons), Encerrar (canonical `cnt_4c_Saida` at Left=917)
+- Column header click ÔåÆ sort by TAG; checkbox InteractiveChange ÔåÆ REPLACE Checks field
+- Automatic mode: processes emails without showing UI (returns `.F.` from Init to abort display)
+
+**Phase 4/8** ÔÇö `menu.prg`: Bars 54ÔÇô55 added to `popMovimentos` + `AbrirFormsigprema()` procedure.
+
+**Phase 5-8** ÔÇö No manual config.prg changes needed; ADIR() auto-loads both files.
+
+Before testing, delete `.fxp` files: `del /s /q C:\4c\projeto\app\*.fxp`

@@ -1,0 +1,5 @@
+﻿Fase 6 conclu├¡da. Duas corre├º├Áes aplicadas em `FormSIGPRIBL.prg`:
+
+1. **`TxtFPagsKeyPress`** ÔÇö removido `RETURN` dentro do TRY/CATCH; substitu├¡do pelo padr├úo can├┤nico com flag `loc_lProcessar = .F.` + `IF loc_lProcessar` envolvendo o bloco condicional.
+
+2. **`AbrirLookupFPags`** ÔÇö corrigido o `CREATEOBJECT("FormBuscaAuxiliar")` sem params + propriedade inexistente `this_cCursorOrigem`. Agora usa o padr├úo can├┤nico `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCnFBl", "cursor_4c_BuscaFPags", "FPags", loc_cVal, "Sele├º├úo")` que dispara o SELECT internamente, e adiciona `loc_oLookup.Release()` ap├│s o Show.

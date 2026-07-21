@@ -1,0 +1,16 @@
+﻿A estrutura est├í completa. Resumo do que foi feito na Fase 8:
+
+**Adicionado:**
+- `AjustarBotoesPorModo()` (linha 1178) ÔÇö habilita/desabilita bot├Áes CRUD da Page1 conforme `this_cModoAtual`
+- Chamadas a `AjustarBotoesPorModo()` em: `InicializarForm()` (ap├│s init), `BtnSalvarClick()` (ap├│s salvar e voltar), `BtnCancelarClick()` (ao cancelar)
+
+**J├í estava presente das fases anteriores:**
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()` com todos os campos
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`
+
+**Integra├º├úo (j├í existia):**
+- `menu.prg`: `DEFINE BAR 14` "Acesso de Grupos" + `ON SELECTION` + `PROCEDURE AbrirFormacg()`
+- `config.prg`: usa `ADIR(*BO.prg)` e `ADIR(Form*.prg)` ÔÇö carrega automaticamente `acgBO.prg` e `Formacg.prg`
+
+A migra├º├úo do SIGCDACG (`Formacg.prg` + `acgBO.prg`) est├í 100% conclu├¡da com todas as 8 fases implementadas.

@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬ cada problema foi tratado:
+
+| # | Problema | A├º├úo |
+|---|----------|------|
+| **OPTIONGROUP-LEFT** | Buttons(1) faltava `.FontName`/`.FontSize`; todos os 3 faltavam `.Themes` | **Corrigido** ÔÇö adicionados `.FontName="Tahoma"`, `.FontSize=8`, `.FontUnderline=.F.` e `.Themes=.F.` a cada Button |
+| **METODO-INEXISTENTE** | `THIS.Controls(n)` | **Mantido** ÔÇö `Controls` ├® propriedade built-in do VFP9 (array de controles do form/container); acesso `Controls(n)` ├® sintaxe padr├úo VFP9, n├úo m├®todo inventado |
+| **LAYOUT-POSITION Top** | obj_4c_OptTipo Top=5 vs original 129 | **Sem altera├º├úo** ÔÇö o c├│digo j├í tem `.Top = 129` (linha 427); o reviewer confundiu o `Buttons(1).Top = 5` (coordenada relativa dentro do grupo) com a posi├º├úo absoluta do OptionGroup |
+| **LAYOUT-POSITION Left** | obj_4c_OptTipo Left=5 vs original 216 | **Sem altera├º├úo** ÔÇö o c├│digo j├í tem `.Left = 216` (linha 426); mesmo caso acima |

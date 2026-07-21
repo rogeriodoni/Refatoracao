@@ -1,0 +1,5 @@
+﻿Fase 2 conclu├¡da. Adicionei ao `sigproefBO.prg`:
+
+1. **Declara├º├úo `this_cCodEstabs = ""`** ÔÇö campo `codestabs` de SigOpFp usado pelos bot├Áes Gerencial/Ultimo/Reimprime via `csSigOpFp.CodEstabs`
+
+2. **M├®todo `CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia os campos-chave de SigOpFp (`Fpags`, `CodEstabs`) para as propriedades `this_*`. Este BO n├úo implementa `Inserir()`/`Atualizar()` porque ├® form OPERACIONAL: SigOpFp ├® uma tabela de configura├º├úo de formas de pagamento n├úo modificada diretamente por este form (as ├║nicas escritas s├úo `UPDATE SigFiTef` e `UPDATE SigMvPar` em `CancelarTransacao`, j├í implementado na Fase 1). O `ObterChavePrimaria()` j├í existia da Fase 1.

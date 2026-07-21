@@ -1,0 +1,7 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are now defined and wired into `InicializarForm`. Phase 4 validator should pass.
+
+**What was added to** `C:\4c\projeto\app\forms\operacionais\FormSigPrSer.prg`:
+
+- `ConfigurarPaginaLista()` ÔÇö aggregates the three operational-area configurators (`ConfigurarGrade` + `ConfigurarLabelsCabecalhoGrade` + `ConfigurarRodape`) into the popup's single visual page. Replaces the three individual calls in `InicializarForm`.
+- `AlternarPagina(par_nPagina)` ÔÇö DO CASE with real logic: `1` (EXIBICAO) rebinds `TmpDistrib` to the grid via `ConfigurarRecordSourceGrade`, runs `Acumular` for totals, refreshes and focuses the grid when it has rows; `2` (TOTAIS) re-executes only `Acumular` for external updates to `TmpDistrib` by the parent form. Sets `this_cModoAtual` accordingly.
+- `InicializarForm` now calls `ConfigurarPaginaLista()` and `AlternarPagina(1)` after `CarregarDados()`.

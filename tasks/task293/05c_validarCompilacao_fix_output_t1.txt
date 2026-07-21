@@ -1,0 +1,7 @@
+﻿Todas as ocorr├¬ncias foram corrigidas. O arquivo est├í pronto.
+
+**Resumo das corre├º├Áes em `FormSigPrGlx.prg`:**
+
+1. **Separadores `:` em WITH blocks** ÔÇö VFP9 n├úo aceita m├║ltiplas atribui├º├Áes de propriedade com `.Prop1 = val : .Prop2 = val` dentro de blocos `WITH`. Cada linha foi separada em atribui├º├Áes individuais. Afetou ~80 linhas nas p├íginas 2, 3, 4, 5 e 6.
+
+2. **`SCAN IN alias FOR condition`** ÔÇö Sintaxe n├úo suportada pelo VFP9. Substitu├¡da por `SELECT TmpDisp` + `SCAN FOR TmpDisp.Utilizar > 0` em dois locais (`BtnVoltarPage4Click` e `BtnVoltarPage5Click`).

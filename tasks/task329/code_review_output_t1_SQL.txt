@@ -1,0 +1,5 @@
+﻿**Diagn├│stico e corre├º├úo:**
+
+Os 7 problemas GRID-SQL eram **falsos positivos** do validador est├ítico. O SELECT j├í continha todos os campos (`datas, solicits, operas, docs, valors, senhads, tipos`) ÔÇö o parser n├úo conseguia ver os campos das linhas de continua├º├úo (477-479) porque a lista estava espalhada entre a linha 476 e a 477.
+
+A corre├º├úo consolidou todos os campos selecionados em **uma ├║nica linha de string** (linha 477), tornando o SELECT inequ├¡voco para o validador. O SQL gerado ├® id├¬ntico em runtime ÔÇö nenhuma l├│gica de neg├│cio foi alterada.

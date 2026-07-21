@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+- **[LAYOUT-POSITION]**: `lbl_4c_Label31.Top` corrigido de `151` para `251`. O valor `151` coincidia com o `lbl_4c_Label3` (Local de Pagamento), causando sobreposi├º├úo. Com Top=251, o label fica corretamente posicionado entre o `txt_4c_Locals` (que termina em Top=237) e o `obj_4c_GetTxtCds` (que come├ºa em Top=268).
+
+- **[CONTAINER-VISIVEL]**: N├úo exigiu mudan├ºa ÔÇö o filtro `INLIST(UPPER(loc_oControl.Name), "CNT_4C_CABECALHO")` com recurs├úo antes do `LOOP` j├í estava implementado corretamente nas linhas 1035-1039, mantendo o container oculto e tornando seus filhos vis├¡veis.

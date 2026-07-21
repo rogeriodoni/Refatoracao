@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Aqui o resumo do que foi implementado:
+
+**FormSigPrPcp.prg** ÔÇö 9 m├®todos adicionados antes de `Destroy()`:
+- `CarregarLista()` ÔÇö wrapper p├║blico de `CarregarGrades()`
+- `FormParaBO()` ÔÇö carrega linha corrente do `cursor_4c_Selecao` no BO via `CarregarDoCursor`
+- `BOParaForm()` ÔÇö atualiza `txt_4c_Info` e `txt_4c_Cliente` a partir das props do BO
+- `HabilitarCampos()` ÔÇö habilita/desabilita controles com base em `RECCOUNT("cursor_4c_Selecao") > 0`
+- `LimparCampos()` ÔÇö zera campos de exibi├º├úo e oculta imagem do produto
+- `AjustarBotoesPorModo()` ÔÇö habilita `cmd_4c_Confirmar` apenas quando h├í dados
+- `BtnBuscarClick()` ÔÇö posiciona no topo da grade principal
+- `BtnSalvarClick()` ÔÇö delega para `BtnConfirmarClick()`
+- `BtnEncerrarClick()` ÔÇö delega para `BtnCancelarClick()`
+
+**menu.prg** ÔÇö Barras 92-93 adicionadas ao `popMovimentos` + `PROCEDURE AbrirFormSigPrPcp()` no final do arquivo.

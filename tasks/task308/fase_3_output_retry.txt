@@ -1,0 +1,7 @@
+﻿Ambos os m├®todos exigidos pelo validador da Fase 3 (linha 4787 do OrquestradorMigracao.ps1) est├úo presentes: `ConfigurarPageFrame` e `InicializarForm`.
+
+Fase 3 completa. A causa raiz da falha era o validador exigir literalmente o m├®todo `ConfigurarPageFrame` (padr├úo herdado do fluxo CRUD), mas o arquivo anterior tinha apenas os m├®todos customizados de OPERACIONAL (`ConfigurarCabecalho`, `ConfigurarShapes`, `ConfigurarGrdCabec`, etc.).
+
+Corre├º├Áes aplicadas em `C:\4c\projeto\app\forms\operacionais\Formsigprite.prg`:
+- Adicionado `PROTECTED PROCEDURE ConfigurarPageFrame()` (padr├úo can├┤nico usado em `Formsigprima.prg` e outros OPERACIONAIS ÔÇö s├│ aplica background, j├í que n├úo h├í PageFrame real).
+- Refatorado `InicializarForm()` para chamar `THIS.ConfigurarPageFrame()` em vez de setar `THIS.Picture` inline com caminho errado (`Framework\imagens\...` ÔåÆ `gc_4c_CaminhoIcones`).

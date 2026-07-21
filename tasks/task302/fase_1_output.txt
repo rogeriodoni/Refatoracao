@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\sigprilaBO.prg` foi criado com:
+
+**Propriedades declaradas:**
+- `this_cTabela = "SigPrTam"` + `this_cCampoChave = "CIdChaves"` ÔÇö identifica├º├úo de tabela exigida pelo BusinessBase
+- `this_cSigKey`, `this_cDopImpPlan`, `this_cDopTrfPed`, `this_cDopPedCon` ÔÇö par├ómetros de SigCdPac (Dops de cada tipo de importa├º├úo e SigKeys da empresa)
+- `this_cMoedaPadrao`, `this_cMoeLimes`, `this_nTpPrecos`, `this_lChqlCreds` ÔÇö par├ómetros de SigCdPam (moeda padr├úo, moeda limite, tipo pre├ºo, flag cheque)
+- `this_cSigKeyEmp`, `this_nValorAcumulado` ÔÇö estado de processamento (equivalente ├ás props `sigkey` e `valoracumulado` do form legado)
+- `this_nTipoImport`, `this_nTipoPreco` ÔÇö par├ómetros de processamento recebidos da UI (OptTipo: 1=C├│digo/2=Descritivo/3=RefForn; OptPreco: 1=Venda/2=Custo)
+
+**M├®todos:**
+- `Init()` ÔÇö define this_cTabela/this_cCampoChave e chama DODEFAULT()
+- `ObterChavePrimaria()` ÔÇö retorna a chave para auditoria

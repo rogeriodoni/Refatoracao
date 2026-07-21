@@ -43,7 +43,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
     this_nOpBaixas      = 1
 
     *-- Nome do cursor de resultado gerado por PrepararDados()
-    this_cCursorDados   = "cursor_4c_Resultado"
+    this_cCursorDados   = "Resultado"
 
     *--------------------------------------------------------------------------
     * Init - Configura tabela principal e chave primaria
@@ -131,12 +131,12 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
 
             IF loc_nResult >= 0
                 *-- Recria cursor de resultado com estrutura identica ao original
-                IF USED("cursor_4c_Resultado")
-                    USE IN cursor_4c_Resultado
+                IF USED("Resultado")
+                    USE IN Resultado
                 ENDIF
 
                 SET NULL ON
-                CREATE CURSOR cursor_4c_Resultado ( ;
+                CREATE CURSOR Resultado ( ;
                     NCopias   N(6,0),  ;
                     Favos     C(40),   ;
                     Valors    N(12,2), ;
@@ -196,7 +196,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
 
                     IF cursor_4c_SigCqChi.Cancelas
                         *-- Cancelado: insere sem busca de historico
-                        INSERT INTO cursor_4c_Resultado ;
+                        INSERT INTO Resultado ;
                             (NCopias, Favos, Valors, Vencs, Datas, ;
                              Emps, Dopes, MascNum, Cheques, Cancelas, ;
                              Periodos, cEmpresas, Grupos, Contas, ;
@@ -287,7 +287,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
                                     ENDIF
                                 ENDIF
 
-                                INSERT INTO cursor_4c_Resultado ;
+                                INSERT INTO Resultado ;
                                     (NCopias, Favos, Valors, Vencs, Datas, ;
                                      Hists, Moedas, Emps, Dopes, MascNum, ;
                                      Cheques, Valos, Cancelas, Periodos, ;
@@ -333,7 +333,7 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
                 ENDSCAN
 
                 *-- Calculo TotCon para ordem por Conta
-                SELECT cursor_4c_Resultado
+                SELECT Resultado
                 GO TOP
 
                 IF THIS.this_nOpOrdem = 3
@@ -521,8 +521,8 @@ DEFINE CLASS sigrehtcBO AS RelatorioBase
     * Destroy - Libera todos os cursores abertos pelo BO
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_Resultado")
-            USE IN cursor_4c_Resultado
+        IF USED("Resultado")
+            USE IN Resultado
         ENDIF
         IF USED("cursor_4c_SigCqChi")
             USE IN cursor_4c_SigCqChi

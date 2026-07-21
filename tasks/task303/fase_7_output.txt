@@ -1,0 +1,15 @@
+﻿O arquivo `Formsigprima.prg` j├í est├í **completamente implementado**. Analisando os dois arquivos:
+
+**Form (Formsigprima.prg)** - todos os eventos j├í implementados:
+- `CmdBtnArquivoClick()` ÔÇö abre `GETDIR()` para selecionar diret├│rio (linha 483)
+- `CmdBtnProcessarClick()` ÔÇö despacha para `Exportar()` ou `Processamento()` conforme tipo selecionado (linha 498)
+- `CmdBtnSairClick()` ÔÇö `THIS.Release()` (linha 519)
+- `TxtArquivoKeyPress()` ÔÇö valida diret├│rio em Enter/Tab (linha 526)
+
+**BO (sigprimaBO.prg)** ÔÇö todos os m├®todos j├í implementados:
+- `Processamento()` ÔÇö importa imagens JPG para produtos (SigCdPro) ou registros auxiliares (sigscjim), com transa├º├Áes, subpasta OK, barra de progresso (linha 133)
+- `Exportar()` ÔÇö exporta FigJpgs para .jpg + converte para base64 em FigJpgs64 (linha 483)
+
+A Fase 7/8 usa um template gen├®rico que lista `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö esses s├úo eventos de forms CRUD e **n├úo se aplicam a este formul├írio OPERACIONAL**. Os eventos equivalentes (`CmdBtnProcessarClick`, `CmdBtnSairClick`, `CmdBtnArquivoClick`) foram gerados nas fases anteriores com funcionalidade completa.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö a migra├º├úo do Formsigprima est├í conclu├¡da.

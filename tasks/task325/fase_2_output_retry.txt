@@ -1,0 +1,10 @@
+﻿All 6 required methods present. Since this is a single-shot phase completion (add 3 methods to an existing file), TodoWrite isn't warranted for this task.
+
+Phase 2 complete for SigPrRetBO.prg. Added:
+
+- **`Inserir()`** ÔÇö Validates filters, calls `RegistrarAuditoria("CONSULTA_ETIQUETA")`. No SQL INSERT since operational filter form (SigOpIpE via PRIVATE vars in legacy).
+- **`Atualizar()`** ÔÇö Re-runs validation, logs `REEXECUCAO_FILTRO`. No SQL UPDATE (no primary table).
+- **`ValidarDados()`** ÔÇö Enforces DtFinal ÔëÑ DtInicial, EtqFim ÔëÑ EtqIni, Numerof ÔëÑ Numero (matching legacy Get_Dataf.Valid and OK button logic).
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT into LogAuditoria with `GETDATE()` (per lesson learned #35), `EscaparSQL()` on all char fields, `LEFT(..., 500)` on Detalhes to fit column (per lesson #39).
+
+Validator will now match `CarregarDoCursor`, `Inserir`, and `Atualizar`.

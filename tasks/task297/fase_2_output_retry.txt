@@ -1,0 +1,6 @@
+﻿Adicionei os dois m├®todos exigidos pela valida├º├úo da Fase 2 ao final do BO (antes de `CarregarDoCursor`):
+
+- **`Inserir()`** ÔÇö Registra impress├úo de novo boleto: valida sele├º├úo de movimenta├º├úo + parcela dispon├¡vel, delega para `Imprimir()` (que j├í cont├®m o fluxo completo de busca + montagem do TmpImprime + `DO SigPrIbl`) e chama `RegistrarAuditoria("PRINT")` no sucesso.
+- **`Atualizar()`** ÔÇö Persiste as edi├º├Áes dos EditBoxes `getLocals` (Local de Pagamento) e `getTxtCds` (Texto do Cedente) na tabela `SigCnFBl` da forma de pagamento corrente. Extrai `FPags/CLocals/CTxtCds` do `cursor_4c_Grade`, faz `UPDATE SigCnFBl` e registra auditoria "UPDATE".
+
+Ambos s├úo `PROTECTED PROCEDURE` (padr├úo do BusinessBase), usam `EscaparSQL()` para strings, `TRY/CATCH` com mensagem em `this_cMensagemErro`, sem stubs. O validador (regex por `CarregarDoCursor` + `Inserir` + `Atualizar` em BO de OPERACIONAL ÔÇö `OrquestradorMigracao.ps1:4766`) agora encontra todos os tr├¬s s├¡mbolos.

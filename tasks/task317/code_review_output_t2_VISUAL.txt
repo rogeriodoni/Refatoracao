@@ -1,0 +1,21 @@
+﻿Os 3 problemas detectados s├úo **falsos positivos**. O validador compara coordenadas absolutas do SCX com coordenadas relativas do controle migrado, sem considerar o offset do container pai.
+
+**An├ílise:**
+
+| Controle | Top original (absoluto) | `cnt_4c_Area.Top` | Top relativo correto | Top no c├│digo |
+|----------|------------------------|-------------------|----------------------|---------------|
+| `txt_4c_GetSenha` | 103 | 82 | 103 ÔêÆ 82 = **21** | **21** Ô£ô |
+| `lbl_4c_Label3` | 108 | 82 | 108 ÔêÆ 82 = **26** | **26** Ô£ô |
+
+A diferen├ºa de 82px em todos os casos ├® exatamente igual a `cnt_4c_Area.Top = 82`. Os controles est├úo dentro de `cnt_4c_Area`, ent├úo a posi├º├úo absoluta resultante ├®:
+
+- `txt_4c_GetSenha`: 82 + 21 = **103** Ô£ô
+- `lbl_4c_Label3`: 82 + 26 = **108** Ô£ô
+
+**N├úo h├í corre├º├úo necess├íria.** Os coment├írios no pr├│prio c├│digo j├í documentam isso corretamente:
+- Linha 220: `*-- Label "Senha do Supervisor :" (Label3: Top=108 -> rel=26)`
+- Linha 236: `*-- TextBox GetSenha para leitura de cartao (Top=103 -> rel=21)`
+
+Se as posi├º├Áes fossem corrigidas para os valores absolutos do SCX (103/108), os controles ficariam na posi├º├úo absoluta 82+103=185 e 82+108=190, quebrando completamente o layout visual.
+
+**Conclus├úo:** O validador de UI fidelity n├úo est├í descontando o offset do container pai ao comparar `Top`. Os 3 alertas s├úo falsos positivos ÔÇö nenhuma altera├º├úo deve ser feita no arquivo.

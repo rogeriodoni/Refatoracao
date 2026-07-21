@@ -1,0 +1,17 @@
+﻿Arquivo criado corretamente. **Fase 1/8 conclu├¡da.**
+
+`C:\4c\projeto\app\classes\sigprccpBO.prg` criado com:
+
+- **28 propriedades** cobrindo todos os campos do form:
+  - Filtros (Fornecedor, Grande Grupo, Grupo, Subgrupo, Unidade, Linha, Cole├º├úo, Moeda, Markup, Encargo, Varia├º├úo, Feitio, Situa├º├úo, TipoMoeda, Compra)
+  - Par├ómetros de processamento (OpcRecalc com 8 op├º├Áes, Reajuste, Encargo, NMrk, OpcPven, NewMkp)
+  - Controle (Automatico, Empresa, CursorProdutos)
+
+- **Init()** que:
+  - Chama `DODEFAULT()` (respeita BusinessBase)
+  - Seta `this_cTabela = "SigPrCpo"` e `this_cCampoChave = "cIdChaves"` (tabela principal via `AddCursor` no legado)
+  - Captura `go_4c_Sistema.cCodEmpresa`
+  - CATCH com `MsgErro()` (n├úo silencioso)
+  - RETURN fora do TRY/CATCH
+
+- Coment├írio na linha 20-22 documenta a estrutura do `CREATE CURSOR cursor_4c_Produtos` (vinda da linha 3547 do fonte original) para refer├¬ncia nas pr├│ximas fases.

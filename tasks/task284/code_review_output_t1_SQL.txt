@@ -1,0 +1,30 @@
+﻿Verifica├º├úo completa. Tenho a an├ílise completa dos 9 itens flagados.
+
+## Resultado da Verifica├º├úo
+
+Ap├│s comparar cuidadosamente cada condi├º├úo flagada:
+
+### Falsos positivos (n├úo s├úo SQL WHERE)
+
+| Flag | Localiza├º├úo | O que ├® realmente |
+|------|-------------|-------------------|
+| `CONTROLCOUNT` | Form linha 211, 223 | `par_oContainer.ControlCount` ÔÇö propriedade VFP de container, n├úo cl├íusula SQL WHERE |
+| `'6'` | Form linha 1851 | `.ButtonCount = 6` ÔÇö propriedade VFP de OptionGroup, n├úo SQL |
+
+### Condi├º├Áes WHERE leg├¡timas (n├úo devem ser removidas)
+
+| Flag | Localiza├º├úo | Contexto |
+|------|-------------|----------|
+| `DPROS` | Form linha 787 | `TxtDprosKeyPress` ÔÇö lookup produto por descri├º├úo em SigCdPro |
+| `EAN13` | Form linha 757 | `TxtCprosKeyPress` ÔÇö busca por c├│digo de barras EAN13 |
+| `CBARS` | Form linha 758 | `TxtCprosKeyPress` ÔÇö busca por CBars |
+| `DOPES` | Form linha 716 / BO linha 553 | `TxtDopesKeyPress` lookup SigCdOpe + `BuscarNumeracaoOperacao` |
+| `CUNIS` | BO linha 356 | `ValidarUnidadeProduto` ÔÇö valida Etiqs/EtiqDups em SigCdUni |
+| `EMPDOPNUMS` | BO linha 491 | `CarregarItensDaOperacao` ÔÇö filtra SigMvItn pela chave composta |
+| `NUMES` | Form linha 1140 | `CmdBtnCarregarClick` ÔÇö filtra SigMvItn por n├║mero da opera├º├úo; `txt_4c_Numes` est├í definido no form (linha 329) |
+
+**Conclus├úo:** Nenhuma das 9 ocorr├¬ncias representa uma condi├º├úo WHERE inventada. O checker analisou um subconjunto das WHEREsdo SCX original (opera├º├Áes em `dbImpressao` local + queries de impressoras) e incorretamente flagou como "inventadas" todas as outras cl├íusulas WHERE que s├úo parte do padr├úo de lookup do sistema novo (FormBuscaAuxiliar, SQLEXEC para valida├º├úo de campos, etc.).
+
+**Remover qualquer uma dessas condi├º├Áes quebraria a funcionalidade do form** ÔÇö o produto n├úo seria encontrado por EAN/c├│digo de barras, o lookup de opera├º├úo n├úo validaria, etc.
+
+Nenhuma altera├º├úo nos arquivos ├® necess├íria para este pass.

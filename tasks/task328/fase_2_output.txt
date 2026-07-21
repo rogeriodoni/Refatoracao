@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `SigPrScnBO.prg` agora tem todos os m├®todos operacionais:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cUsuario` (chave `usuarios`)
+- **`CarregarDoCursor()`** ÔÇö carrega `usuarios` e `senhas` do cursor via `SELECT (alias)`
+- **`ValidarCredenciais()`** ÔÇö l├│gica completa do `SENHA.LostFocus` original: PADR a 10 chars, SQLEXEC em cursor tempor├írio, compara├º├úo com `fCriptografar()`, popula `this_lAutenticado`
+- **`CarregarParametros()`** ÔÇö carrega `nTmpChks`/`nTmpApps` de `SigCdPam` e chama `fTempoApp()` (equivalente ao bloco `IF NOT File(SetFiscal.Ini)` do original)
+- **`GravarLog()`** ÔÇö encapsula `fGravarLog()` com TRY/CATCH
+
+N├úo foram criados `Inserir()`/`Atualizar()` porque este ├® um form de autentica├º├úo ÔÇö n├úo faz CRUD em `SigCdUsu`. Adicionar stubs violaria a regra de paridade funcional. A pr├│xima fase (3/8) criar├í o `FormSigPrScn.prg`.

@@ -1,0 +1,8 @@
+﻿Fase 2 is complete. The BO now has all required CRUD infrastructure:
+
+- **`this_cIdChaves`** property (line 148) ÔÇö holds the SigCdCcp primary key
+- **`ObterChavePrimaria()`** (line 172) ÔÇö returns `ALLTRIM(this_cIdChaves)`
+- **`CarregarDoCursor()`** (line 345) ÔÇö maps all 30 SigCdCcp columns including `cIdChaves` (guarded by TYPE check so it stays compatible with legacy callers that pass cursors without the PK)
+- **`Inserir()`** (line 1848) ÔÇö INSERTs into SigCdCcp with `EscaparSQL()`/`FormatarNumeroSQL()`, auto-generates `cIdChaves` via `fUniqueIds()` when empty, calls `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** (line 1932) ÔÇö UPDATEs SigCdCcp filtered by `cIdChaves`, calls `RegistrarAuditoria("UPDATE")`
+- **`RegistrarAuditoria(par_cOperacao)`** (line 1998) ÔÇö INSERTs into LogAuditoria with `GETDATE()` (per Erro35 rule), silent CATCH so auditoria never breaks main flow

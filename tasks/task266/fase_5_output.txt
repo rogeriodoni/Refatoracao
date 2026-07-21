@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 5/8 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ClipControls = .F.`** nas propriedades do form ÔÇö presente no legado (`SIGPRCIC.ClipControls = .F.`) mas ausente na migra├º├úo anterior.
+
+2. **`ConfigurarPaginaDados()`** (novo m├®todo, linhas 335ÔÇô358) ÔÇö fase l├│gica do "painel direito" que:
+   - Vincula `BeforeRowColChange` ao handler `GrdDadosBeforeRowColChange` (evento que o legado tamb├®m tinha, id├¬ntico ao `AfterRowColChange`)
+   - Garante estado inicial correto do preview (`img_4c_Icone.Visible = .F.`, `Picture = ""`)
+   - Confirma propriedades visuais da moldura decorativa
+
+3. **`GrdDadosBeforeRowColChange`** (novo handler PUBLIC, linhas 437ÔÇô442) ÔÇö espelha o `BeforeRowColChange` do legado que mantinha o preview sincronizado ao iniciar cada movimento de linha.
+
+4. **Chamada a `THIS.ConfigurarPaginaDados()`** em `InicializarForm` (linha 104), ap├│s `ConfigurarPaginaLista()`.

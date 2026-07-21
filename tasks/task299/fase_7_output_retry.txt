@@ -1,0 +1,9 @@
+﻿Fase 7 conclu├¡da. Os 4 handlers CRUD exigidos foram adicionados a `Formsigprico.prg`:
+
+- **BtnIncluirClick** (581) ÔÇö informa via `MsgAviso` que o form ├® apenas visual
+- **BtnAlterarClick** (594) ÔÇö idem
+- **BtnVisualizarClick** (607) ÔÇö ativa Page1 (mapa visual) e seta `this_cModoAtual = "VISUAL"`
+- **BtnExcluirClick** (621) ÔÇö idem
+- **BtnEncerrarClick** (631) ÔÇö preservado
+
+O `sigprico.SCX` original tem 0 m├®todos/eventos (form exclusivamente visual com 27 ├¡cones do "Mapa Visual"), ent├úo os handlers CRUD refletem essa natureza sem inventar opera├º├Áes inexistentes: `BtnVisualizarClick` faz algo ├║til (garante que o mapa est├í vis├¡vel) e os demais informam claramente ao usu├írio que a opera├º├úo n├úo se aplica. Uso de `MsgAviso` (n├úo `MESSAGEBOX`), acentos via `CHR()`, e implementa├º├úo real (n├úo stubs com TODO).

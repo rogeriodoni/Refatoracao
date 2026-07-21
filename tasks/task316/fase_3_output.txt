@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Estrutura de 199 linhas, sem RETURN dentro de TRY e sem CATCH silencioso.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\Formsigproef.prg` criado com:
+
+- `DEFINE CLASS Formsigproef AS FormBase` com propriedades visuais pixel-perfect do legado (580├ù334, ControlBox=.F., AutoCenter=.T., WindowType=1, KeyPreview=.T.)
+- `Init()` ÔåÆ `DODEFAULT()` (correto)
+- `InicializarForm()` com flag `loc_lSucesso` (nunca RETURN dentro de TRY), cria `sigproefBO`, chama `CarregarConfiguracao()` e `ConfigurarPrincipal()`
+- `ConfigurarPrincipal()` ÔåÆ cria `cnt_4c_Transa` (container principal, cobre o form)
+- `ConfigurarCabecalho()` ÔåÆ `lbl_4c_Titulo` ("Transa├º├Áes Efetuadas", azul, bold italic 12pt) + `lin_4c_Separador` (linha azul)
+- `ObterNsuRetorno()` ÔåÆ equivalente ao `Unload` legado
+- `Destroy()` ÔåÆ fecha todos os cursores TEF, CATCH verboso
+
+Pr├│ximas fases adicionar├úo via `Edit`: grid com 7 colunas (Fase 4), container de per├¡odo + TextBoxes de data (Fase 5), bot├Áes de a├º├úo (Fase 4), eventos KeyPress/BuscarTransacoes/Click handlers (Fases 7-8).

@@ -1,0 +1,13 @@
+﻿Fase 5 conclu├¡da. O arquivo `Formsigprpre.prg` foi atualizado com:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` no container `cnt_4c_BotoesAcao` (com icones, fontes e BINDEVENT corretos)
+- **Campo 1/5** ÔÇö `lbl_4c_CPros` + `txt_4c_CPros` (c├│digo produto, com lookup via `ValidarCPros`) + `txt_4c_DPros` (descri├º├úo, readonly)
+- **Campo 2/5** ÔÇö `lbl_4c_Datas` + `txt_4c_Datas` (data)
+- **Campo 3/5** ÔÇö `lbl_4c_Moevs` + `txt_4c_Moevs` (moeda atual, com lookup via `ValidarMoeda`) + `lbl_4c_MoevsAnt` + `txt_4c_MoevsAnt` (moeda anterior, readonly)
+
+**Novos m├®todos adicionados:**
+- `ValidarCPros()` ÔÇö lookup em `SigCdPro` ao sair do campo produto (Page2), preenche tamb├®m `txt_4c_DPros`
+- `ValidarMoeda()` ÔÇö lookup em `SigCdMoe` ao sair do campo moeda (Page2)
+
+A Fase 6/8 dever├í adicionar os campos restantes: `PVens`, `PVensAnt`, `Usuals` e `chk_4c_CKAtuSite`.

@@ -1,0 +1,7 @@
+﻿Fase 2 completada. `SigPrDscBO.prg` agora cont├®m os tr├¬s m├®todos exigidos pela valida├º├úo da Fase 2:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö j├í existia, mapeia `CPros`/`CGrus` do cursor.
+- **`Atualizar()`** ÔÇö adicionado. Delega para `GravarDescricoes()` (UPDATE em lote de `SigCdPro.DscCompras/ObsCompras/DPros` + `DELETE FROM SigPrPrt`), que j├í chama `RegistrarAuditoria("ATUALIZAR")` ao final do lote bem-sucedido.
+- **`Inserir()`** ÔÇö adicionado. Form ├® OPERACIONAL e n├úo cria produtos novos; delega para `Atualizar()` para manter o contrato de `BusinessBase` e evitar insert acidental via `Salvar()` padr├úo.
+
+O validador do OrquestradorMigracao.ps1 (`4760`) exige presen├ºa dos tr├¬s nomes; agora encontra os tr├¬s.

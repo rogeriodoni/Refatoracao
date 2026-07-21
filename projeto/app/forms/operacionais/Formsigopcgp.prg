@@ -4700,7 +4700,9 @@ DEFINE CLASS Formsigopcgp AS FormBase
           loc_oCab.txt_4c_MoeFatorR.ReadOnly  = .T.
           THIS.AjustarBotoesPorModo()
         ELSE
+          IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
           MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Salvar")
+          ENDIF
         ENDIF
       ELSE
         IF USED("cursor_4c_TmpSalvar")

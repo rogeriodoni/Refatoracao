@@ -1,0 +1,6 @@
+﻿Duas corre├º├Áes aplicadas em `sigprimaBO.prg`:
+
+- **Linha 211**: `"SET Imagem = ? "` ÔåÆ `"SET Imagem = ?loc_cImagem "` e `SQLEXEC(..., "cursor_4c_Upd", @loc_cImagem)` ÔåÆ `SQLEXEC(gnConnHandle, loc_cSQL)`
+- **Linha 324**: `"FigJpgs = ?, "` ÔåÆ `"FigJpgs = ?loc_cImagem2, "` e `SQLEXEC(..., "cursor_4c_UpdPro", @loc_cImagem2)` ÔåÆ `SQLEXEC(gnConnHandle, loc_cSQL)`
+
+**Causa raiz**: `SQLEXEC()` no VFP9 aceita apenas 3 par├ómetros `(nConn, cSQL, cCursor)` ÔÇö passar `@variavel` como 4┬║ argumento ├® inv├ílido e causa "Missing operand". O padr├úo correto para queries parametrizadas com dados bin├írios (BLOB/imagem) ├® embutir `?nomevar` diretamente na string SQL; o VFP9 resolve o valor da vari├ível do escopo local em tempo de execu├º├úo.

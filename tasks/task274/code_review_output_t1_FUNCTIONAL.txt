@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**[OPTIONGROUP-LEFT]** ÔÇö Adicionado `.AutoSize = .F.` e `.Themes = .F.` em ambos os `Buttons(1)` e `Buttons(2)` do `obj_4c_Optiongroup1`. Sem essas propriedades o VFP9 pode renderizar os radio buttons de forma incorreta (AutoSize redimensiona o bot├úo sem controle; Themes sem `Caption` pode sumir o icone do radio).
+
+**[LAYOUT-POSITION] x5 ÔÇö Falsos positivos confirmados**: o c├│digo atual j├í tem os valores corretos do SCX original (`cnt_4c_Container1.Top=298, Left=54`; `obj_4c_Optiongroup1.Top=200, Left=222`; `lbl_4c_Label1` dentro do container com `Top=14, Left=18`). O review foi gerado contra uma vers├úo anterior do arquivo. O `lbl_4c_Label11` (Top=268, Left=98) ├® um label distinto ÔÇö o r├│tulo "1┬¬ PARCELA/VENCTO" ÔÇö n├úo o Label1 interno ao Container1, o que causou a confus├úo de mapeamento no review autom├ítico.

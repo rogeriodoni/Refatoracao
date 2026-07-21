@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormSigPrGloT.prg`:
+
+1. **[METODO-INEXISTENTE]** ÔÇö `THIS.Controls(loc_i)` e `par_oContainer.Controls(loc_i)` alterados para sintaxe de acesso a array `Controls[loc_i]`, eliminando a ambiguidade com chamada de m├®todo.
+
+2. **[CONTAINER-VISIVEL]** ÔÇö `loc_lSkip` passou de compara├º├úo simples `= "CNT_4C_OP"` para `INLIST(..., "CNT_4C_OP", "CNT_4C_CABECALHO")`, garantindo que o header n├úo tenha seu `Visible` sobrescrito pelo loop gen├®rico (sua visibilidade j├í ├® gerenciada por `ConfigurarCabecalho()`); os filhos do container continuam recebendo `Visible=.T.` via `TornarSubControlesVisiveis`.

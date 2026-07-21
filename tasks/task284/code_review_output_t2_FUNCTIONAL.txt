@@ -1,0 +1,14 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e por qu├¬ cada item foi tratado:
+
+**Corre├º├Áes aplicadas (2):**
+- `grd_4c_Etiquetas.Columns(1).Header1.Caption`: `"C├│digo"` ÔåÆ `"Produto"` ÔÇö legado tinha "Produto" (confirmado em `SigPrEtq_form_codigo_fonte.txt`: `Name = "hdr_cpros"`, `Caption = "Produto"`)
+- `grd_4c_Etiquetas.Columns(3).Header1.Caption`: `"Qtde"` ÔåÆ `"Quantidade"` ÔÇö legado tinha "Quantidade" (confirmado: `Name = "hdr_qtds"`, `Caption = "Quantidade"`)
+
+**Itens j├í corretos / falsos positivos:**
+
+| Problema | Diagn├│stico |
+|---|---|
+| [CONTAINER-VISIVEL] CNT_4C_CABECALHO | J├í est├í no INLIST da linha 219 ÔÇö nenhuma mudan├ºa necess├íria |
+| [GRID-HEADER] 'Descri├º├úo' | `"Descri" + CHR(231) + CHR(227) + "o"` produz "Descri├º├úo" id├¬ntico ao legado; validador n├úo encontrou porque busca literal no .prg |
+| [LAYOUT-POSITION] 5 issues | Todos falsos positivos: validador confundiu `Buttons(1).Top` relativo ao grupo (10/52/4/5) com o `Top` absoluto do OptionGroup na form (431/589/562). Os grupos est├úo em Top=431/589/562/601 que batem exatamente com o legado. |
+| [LAYOUT-POSITION] lblTituloGrd Top=375 | `lbl_4c_LblTituloGrd` (t├¡tulo da se├º├úo grid) e `lblTitulo` dentro de `cntSombra` s├úo controles diferentes ÔÇö o validador os casou errado |

@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Adicionados 10 m├®todos ao `FormSigPrEop.prg` (linhas 697ÔÇô841):
+
+| M├®todo | Comportamento no popup operacional |
+|---|---|
+| `CarregarLista()` | Vai ao topo do cursor e refresca grid + textboxes |
+| `BtnBuscarClick()` | Chama `CarregarLista()` e foca o grid |
+| `BtnSalvarClick()` | Delega para `CmdConfirmarClick()` (popula crFilOper e fecha) |
+| `BtnCancelarClick()` | Reabilita form pai e fecha **sem** processar sele├º├úo |
+| `BtnEncerrarClick()` | Idem ao Cancelar (popup n├úo tem distin├º├úo Encerrar/Cancelar) |
+| `FormParaBO()` | Chama `CarregarDoCursor("cursor_4c_Operacoes")` na linha corrente |
+| `BOParaForm()` | Refresca os dois textboxes de status e o grid |
+| `HabilitarCampos(par_l)` | Habilita/desabilita chk_4c_Ck_Marca, grid e bot├úo OK |
+| `LimparCampos()` | Chama `MarcarDesmarcarTodos(0)` + reseta chk + refresca grid |
+| `AjustarBotoesPorModo()` | Habilita bot├úo OK s├│ se h├í opera├º├Áes carregadas |
+
+O arquivo est├í completo e funcional ÔÇö 861 linhas, sem TODOs nem stubs.

@@ -1,0 +1,31 @@
+﻿Ap├│s leitura completa de ambos os arquivos, an├ílise detalhada da fase e verifica├º├úo da integra├º├úo, constato que **Phase 6 j├í est├í completa**. O pipeline das fases anteriores (especialmente Fase 5) implementou toda a funcionalidade. Vou registrar a verifica├º├úo formal:
+
+---
+
+## Verifica├º├úo da Fase 6/8 ÔÇö Formsigprmdp
+
+**Status: COMPLETO** ÔÇö nenhuma altera├º├úo necess├íria.
+
+### O que foi verificado
+
+| Item | Status |
+|------|--------|
+| `ConfigurarPainelResultado()` com todos os controles de `cnt_4c_Result` | Ô£à Completo |
+| Lookup Column1 (TxtCprosAntKeyPress + AbrirBuscaProduto) | Ô£à Completo |
+| BINDEVENT com guard `LPARAMETERS` + guard ENTER/TAB/F4 | Ô£à Correto |
+| `FormBuscaAuxiliar` com mAddColuna + this_lSelecionou + USE IN + Release | Ô£à Can├┤nico |
+| `BtnProcessarClick` com l├│gica completa de processamento | Ô£à 1044 linhas |
+| `BtnIncluirClick`, `BtnExcluirClick`, `BtnExportaClick`, `BtnSairClick` | Ô£à Todos implementados |
+| Integra├º├úo `menu.prg` ÔÇö BAR 81 + AbrirFormsigprmdp() | Ô£à Feito |
+| BO sigprmdpBO ÔÇö InicializarCursorContas, BuscarCalcCustos, ValidarParesNoGrid, ImportarXLS | Ô£à Completo |
+| Sem RETURN dentro de TRY/CATCH | Ô£à Correto |
+| Sem MsgAviso antes de AbrirBuscaProduto | Ô£à Anti-pattern ausente |
+| Column2 (Novo C├│digo) sem lookup ÔÇö id├¬ntico ao legado | Ô£à Correto |
+| DataSession=2 + DODEFAULT() para SET DATE/CENTURY | Ô£à Via FormBase |
+| Transa├º├Áes BEGIN/COMMIT/ROLLBACK por par de produto | Ô£à Correto |
+
+### Detalhes t├®cnicos confirmados
+
+O form OPERACIONAL n├úo tem Page2/cnt_4c_BotoesAcao (itens do template CRUD) ÔÇö correto para este tipo. O ├║nico lookup no legado era `Grade.Column1.Text1.Valid` (fwBuscaExt ÔåÆ SigCdPro), migrado como `TxtCprosAntKeyPress` + `AbrirBuscaProduto`. Column2 n├úo tinha eventos no SCX original e permanece sem BINDEVENT.
+
+**Arquivo: `C:\4c\projeto\app\forms\operacionais\Formsigprmdp.prg`** ÔÇö 1139 linhas, todas as fases 3-6 implementadas. Fase 6 conclu├¡da.

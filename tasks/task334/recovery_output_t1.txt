@@ -1,0 +1,18 @@
+﻿Todos os 3 problemas est├úo corrigidos. Aqui est├í o resumo do que foi feito:
+
+---
+
+**Causa raiz**: Duas causas combinadas bloqueavam a valida├º├úo UI.
+
+**1. Arquivos `.FXP` obsoletos** (causa principal do bloqueio)
+- `formsigprstf.FXP` e `sigprstfbo.FXP` estavam compilados com o c├│digo anterior ao autofix
+- O VFP9 usava o cache antigo nas revalida├º├Áes, ignorando as corre├º├Áes no `.prg`
+- **Fix**: deletados ambos os arquivos `.FXP`
+
+**2. Caption com CHR(227) n├úo correspondia ao SCX** (nova diferen├ºa ap├│s o autofix)
+- O autofix gerou `.Caption = "Insira ou Passe o Cart" + CHR(227) + "o"` ÔåÆ produz `"Insira ou Passe o Cart├úo"` (com ├ú)
+- O SCX armazena exatamente `"Insira ou Passe o Cartao"` (sem til)
+- O ValidarUIFidelity compara byte a byte: `├ú` (byte 227) Ôëá `a` (byte 97)
+- **Fix**: alterado para `"Insira ou Passe o Cartao"` (sem CHR(227), j├í que "Cartao" n├úo tem caractere acentuado)
+
+As outras duas diferen├ºas (`cntSombra.Width=800` via `THIS.Width` e `cmg_4c_Saida.BackColor=RGB(255,255,255)`) j├í estavam corretas no `.prg` ÔÇö s├│ n├úo surtiam efeito por conta dos `.FXP` obsoletos.

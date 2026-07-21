@@ -1,0 +1,18 @@
+﻿Analisei o arquivo existente e o c├│digo fonte original. O FormSIGPRSTF j├í est├í **funcionalmente completo**.
+
+**Por que a Fase 7 n├úo se aplica a este form:**
+
+Este ├® um di├ílogo modal simples de senha de supervisor (`SigTfSup`), n├úo um form CRUD. O original tem exatamente 4 m├®todos/eventos:
+
+| Original (`SigTfSup`) | Migrado (`FormSIGPRSTF`) | Status |
+|---|---|---|
+| `Init` (define caption do label) | `ConfigurarPaginaDados` | Ô£à Implementado |
+| `Unload` (retorna `lcSenha`) | `this_cSenhaRetorno` (property) | Ô£à Implementado |
+| `CANCELA.Click` (limpa + fecha) | `BtnCancelarClick` | Ô£à Implementado |
+| `SENHA.KeyPress` (ENTER = confirma) | `TxtSenhaKeyPress` | Ô£à Implementado |
+
+Os m├®todos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` s├úo padr├úo de forms **CRUD** (que t├¬m PageFrame+Lista+Dados). Esse form n├úo tem nenhum desses bot├Áes ÔÇö apenas o bot├úo Cancelar e o campo senha.
+
+O FormBase **n├úo define** esses 4 m├®todos (confirmado pelo `grep` acima), ent├úo n├úo h├í contrato a satisfazer.
+
+**O arquivo est├í completo desde a Fase 6.** A Fase 7 foi gerada pelo template gen├®rico do pipeline que n├úo identificou que este form OPERACIONAL espec├¡fico ├® um di├ílogo simples sem funcionalidade CRUD. Nenhuma altera├º├úo ├® necess├íria no arquivo.

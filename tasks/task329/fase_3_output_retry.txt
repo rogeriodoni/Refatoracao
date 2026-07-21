@@ -1,0 +1,11 @@
+﻿Phase 3 complete. `FormSigPrSdd.prg` (208 lines) now contains:
+
+- `DEFINE CLASS FormSigPrSdd AS FormBase` with `this_oBusinessObject`, `this_cModoAtual`, `this_lProducao`
+- `Init(par_lProducao)` capturing production flag before `DODEFAULT()`
+- `InicializarForm()` ÔÇö creates BO, calls `ConfigurarPageFrame()`, sets ActivePage=2
+- `ConfigurarPageFrame()` ÔÇö PageFrame `pgf_4c_Paginas` (Tabs=.F., Top=-29, Height=Form.Height+29, 2 pages with `fundo_cad_1003.jpg`)
+- Empty containers on Page2: `cnt_4c_Cabecalho`, `cnt_4c_Botoes`, `cnt_4c_Saida`, `cnt_4c_BotoesAcao`
+- `TornarControlesVisiveis()` recursive helper
+- `Destroy()` releasing BO reference
+
+The previous version was missing `ConfigurarPageFrame` (validator regex: `$conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm"`), which is now present. Containers are structural placeholders ÔÇö grid/CRUD buttons come in Fase 4, TextBoxes in Fases 5-6, event handlers in Fases 7-8.

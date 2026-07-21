@@ -1,0 +1,8 @@
+﻿Fase 7 completa. Adicionei os 4 eventos principais em `FormSIGPRNSE.prg` (linhas 1118ÔÇô1244), roteando-os para a funcionalidade real deste form OPERACIONAL de exporta&#231;&#227;o NFS-e Municipal (padr&#227;o herdado do `Formsigprnfe.prg`, form irm&#227;o):
+
+- **BtnIncluirClick** (1118): valida Empresa/Per&#237;odo/Munic&#237;pio e delega para `BtnSelecionarClick()` (popula `csOperacoes`).
+- **BtnAlterarClick** (1154): abre `SigMvExp` para editar dados fiscais da nota corrente (mesmo fluxo do bot&#227;o "Documento" do grid).
+- **BtnVisualizarClick** (1185): mostra Empresa/Opera&#231;&#227;o/N&#250;mero/Data/Valor/Documento/Usu&#225;rio/Origem/Destino/Tipo da linha corrente + erros se houver.
+- **BtnExcluirClick** (1228): confirma&#231;&#227;o + `ZAP` em `csOperacoes` + volta ao modo entrada (n&#227;o toca no banco).
+
+Arquivo passou de 1139 para 1272 linhas, zero TODOs/stubs/placeholders.

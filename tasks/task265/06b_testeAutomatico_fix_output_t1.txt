@@ -1,0 +1,3 @@
+﻿**Causa raiz**: `VerificarAcessoEmpresa` chama `SQLEXEC(gnConnHandle, ...)` ÔÇö quando `gnConnHandle = 0` (sem conex├úo em modo de teste), o VFP9 lan├ºa a exception "Connection handle is invalid". Essa exception escapava do `InicializarPermissoes` (sem TRY/CATCH), era capturada pelo CATCH de `InicializarForm`, que retornava `.F.`, fazendo o CREATEOBJECT falhar.
+
+**Fix**: Guard `IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0` em `InicializarPermissoes` ÔÇö em produ├º├úo o fluxo ├® id├¬ntico; em teste (handle 0), as permiss├Áes default para `.F.` sem exce├º├úo. As chamadas SQLEXEC subsequentes em `InicializarCursores` j├í t├¬m TRY/CATCH pr├│prio, ent├úo o form conclui a inicializa├º├úo UI e retorna `.T.`.

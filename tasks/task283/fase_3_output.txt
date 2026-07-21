@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 3/8 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormSIGPREST.prg` criado com:
+
+- `DEFINE CLASS FormSIGPREST AS FormBase` com propriedades visuais exatas do legado (600├ù191, TitleBar=0, ControlBox=.F., DataSession=2)
+- `Init()` retornando apenas `DODEFAULT()` (padr├úo can├┤nico ÔÇö FormBase chama InicializarForm automaticamente)
+- `ConfigurarPageFrame()` configura fundo `new_background.jpg` e fontes base
+- `InicializarForm()` cria o BO `SIGPRESTBO`, chama ConfigurarPageFrame + ConfigurarCabecalho + TornarControlesVisiveis, com CATCH verboso
+- `ConfigurarCabecalho()` cria `cnt_4c_Cabecalho` com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco), caption "Gerar Estrutura", sem AutoSize (regra do memory)
+- `TornarControlesVisiveis()` recursivo sem filtros (n├úo h├í containers flutuantes neste form)
+- `Destroy()` libera BO e chama DODEFAULT()
+
+**Pr├│xima fase (4/8)**: adicionar os controles funcionais ÔÇö CheckBoxes (`chk_4c_GeraArquivos`, `chk_4c_GeraIndices`), bot├Áes OK/Cancela, label de mensagem e Shape decorativo.

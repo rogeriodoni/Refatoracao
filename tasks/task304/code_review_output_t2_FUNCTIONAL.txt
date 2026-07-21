@@ -1,0 +1,4 @@
+﻿Corre├º├Áes aplicadas em `FormSIGPRIMP.prg:615-618`:
+
+- **`[CONTAINER-VISIVEL]`** ÔÇö substitu├¡da a refer├¬ncia ├á vari├ível inexistente `loc_oControl` por `loc_oObjeto`; o LOOP agora ├® precedido por itera├º├úo inline dos filhos do container exclu├¡do, tornando-os vis├¡veis antes de pular o pai. `cnt_4c_Sombra` continua oculto (`Visible=.F.`), mas seus labels ficam prontos caso o container seja revelado futuramente.
+- **`[METODO-INEXISTENTE]`** ÔÇö removida a chamada `THIS.TornarControlesVisiveis(loc_oControl)` com par├ómetro inv├ílido; `Controls(n)` nas linhas 607/626 ├® acesso nativo VFP9 ÔÇö n├úo requer implementa├º├úo.

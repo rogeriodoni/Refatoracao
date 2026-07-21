@@ -1,2202 +1,1865 @@
-*==============================================================================
-* SIGPRFEMBO.PRG
-* Business Object: An" + CHR(225) + "lise de Produ" + CHR(231) + CHR(227) + "o
-* Tipo: OPERACIONAL (sem tabela CRUD principal)
-* Cursores de trabalho: Entradas, Saidas, Saldos, SaldoAnt, Falhas, TmpResumo
-*==============================================================================
+*====================================================================
+* SigPrFemBO.prg
+*
+* Business Object para Analise de Producao (SIGPRFEM)
+* Form OPERACIONAL - processamento analitico sem CRUD
+*====================================================================
 
 DEFINE CLASS SigPrFemBO AS BusinessBase
 
-    *--------------------------------------------------------------------------
-    * Identificacao da entidade (OPERACIONAL - sem CRUD direto)
-    *--------------------------------------------------------------------------
-    this_cTabela      = ""
-    this_cCampoChave  = ""
-
-    *--------------------------------------------------------------------------
-    * Parametros de entrada fornecidos pelo Form
-    *--------------------------------------------------------------------------
-    this_dDatai           = {}
-    this_dDataf           = {}
-    this_cDemonstrativo   = ""
-
-    *--------------------------------------------------------------------------
-    * Contexto de processamento (carregados em CarregarCursoresReferencia)
-    *--------------------------------------------------------------------------
-    this_cEmpresa     = ""
-    this_cCodMat      = ""
-    this_cDopeBals    = ""
-    this_nNdFechas    = 0
-
-    *--------------------------------------------------------------------------
-    * Chave do demonstrativo selecionado
-    *--------------------------------------------------------------------------
-    this_cGruposDmo   = ""
-    this_cContasDmo   = ""
-
-    *--------------------------------------------------------------------------
-    * Totalizadores: preenchidos por ProcessarAnalise() e lidos pelo Form
-    *--------------------------------------------------------------------------
-    this_nSaldoIni    = 0
-    this_nSaldoaFun   = 0
-    this_nTotalEntra  = 0
-    this_nTotalSaida  = 0
-    this_nPesagem     = 0
-    this_nSaldoFunc   = 0
-    this_nFalhaFunc   = 0
-
-    *==========================================================================
-    * INIT
-    *==========================================================================
-    PROCEDURE Init()
-        LOCAL loc_lResultado
-        THIS.this_cTabela     = ""
-        THIS.this_cCampoChave = ""
-        loc_lResultado = DODEFAULT("")
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * ObterChavePrimaria
-    *==========================================================================
-    PROCEDURE ObterChavePrimaria()
-        RETURN THIS.this_cDemonstrativo
-    ENDPROC
-
-    *==========================================================================
-    * LimparDados
-    *==========================================================================
-    PROCEDURE LimparDados()
-        THIS.this_dDatai           = {}
-        THIS.this_dDataf           = {}
-        THIS.this_cDemonstrativo   = ""
-        THIS.this_cEmpresa         = ""
-        THIS.this_cCodMat          = ""
-        THIS.this_cDopeBals        = ""
-        THIS.this_nNdFechas        = 0
-        THIS.this_cGruposDmo       = ""
-        THIS.this_cContasDmo       = ""
-        THIS.this_nSaldoIni        = 0
-        THIS.this_nSaldoaFun       = 0
-        THIS.this_nTotalEntra      = 0
-        THIS.this_nTotalSaida      = 0
-        THIS.this_nPesagem         = 0
-        THIS.this_nSaldoFunc       = 0
-        THIS.this_nFalhaFunc       = 0
-    ENDPROC
-
-    *==========================================================================
-    * CarregarCursoresReferencia - Carrega tabelas de referencia do SQL Server
-    * Equivalente ao PROCEDURE Init do legado (CursorQuery calls)
-    *==========================================================================
-    PROCEDURE CarregarCursoresReferencia()
-        LOCAL loc_lResultado, loc_oErro, loc_lOk
-        loc_lResultado = .F.
-
-        TRY
-            loc_lOk = .T.
-
-            * SigCdPam - Parametros do sistema (Ouros, DopeBals)
-            IF USED("crSigCdPam")
-                USE IN crSigCdPam
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT Ouros, DopeBals FROM SigCdPam", "crSigCdPam") < 1
-                    MsgErro("Falha ao carregar SigCdPam", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdPam
-                    GO TOP
-                    THIS.this_cCodMat   = ALLTRIM(crSigCdPam.Ouros)
-                    THIS.this_cDopeBals = ALLTRIM(crSigCdPam.DopeBals)
-                ENDIF
-            ENDIF
-
-            * SigCdPac - Parametros de conta (ndFechas)
-            IF USED("crSigCdPac")
-                USE IN crSigCdPac
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT ndFechas FROM SigCdPac", "crSigCdPac") < 1
-                    MsgErro("Falha ao carregar SigCdPac", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdPac
-                    GO TOP
-                    THIS.this_nNdFechas = crSigCdPac.ndFechas
-                ENDIF
-            ENDIF
-
-            * SigCdOpe - Operacoes de estoque
-            IF USED("crSigCdOpe")
-                USE IN crSigCdOpe
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT Dopes, Origems, EstOrigs, Destinos, EstDests, Opers FROM SigCdOpe", "crSigCdOpe") < 1
-                    MsgErro("Falha ao carregar SigCdOpe", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdOpe
-                    INDEX ON Dopes TAG Dopes
-                ENDIF
-            ENDIF
-
-            * SigCdOpd - Operacoes de producao
-            IF USED("crSigCdOpd")
-                USE IN crSigCdOpd
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT Dopps, Origems, EstOrigs, Destinos, EstDests FROM SigCdOpd", "crSigCdOpd") < 1
-                    MsgErro("Falha ao carregar SigCdOpd", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdOpd
-                    INDEX ON Dopps TAG Dopps
-                ENDIF
-            ENDIF
-
-            * SigCdGcr - Grupos de controle de rastreamento
-            IF USED("crSigCdGcr")
-                USE IN crSigCdGcr
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT Codigos, UnifBals, GerBals FROM SigCdGcr", "crSigCdGcr") < 1
-                    MsgErro("Falha ao carregar SigCdGcr", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdGcr
-                    INDEX ON Codigos TAG Codigos
-                ENDIF
-            ENDIF
-
-            * SigCdUni - Unidades de medida
-            IF USED("crSigCdUni")
-                USE IN crSigCdUni
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdUni", "crSigCdUni") < 1
-                    MsgErro("Falha ao carregar SigCdUni", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT crSigCdUni
-                    INDEX ON CUnis TAG CUnis
-                ENDIF
-            ENDIF
-
-            * SigCdGrp - Grupos de produto (LocalGru)
-            IF USED("LocalGru")
-                USE IN LocalGru
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdGrp", "LocalGru") < 1
-                    MsgErro("Falha ao carregar SigCdGrp", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT LocalGru
-                    INDEX ON Cgrus TAG Cgrus
-                ENDIF
-            ENDIF
-
-            * SigCdGpr - Grupos de produto raiz (LocalGgrp)
-            IF USED("LocalGgrp")
-                USE IN LocalGgrp
-            ENDIF
-            IF loc_lOk
-                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdGpr", "LocalGgrp") < 1
-                    MsgErro("Falha ao carregar SigCdGpr", "Erro de Conex" + CHR(227) + "o")
-                    loc_lOk = .F.
-                ELSE
-                    SELECT LocalGgrp
-                    INDEX ON codigos TAG codigos
-                ENDIF
-            ENDIF
-
-            IF loc_lOk
-                loc_lResultado = .T.
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em CarregarCursoresReferencia")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * CriarCursoresTrabalho - Cria cursores de trabalho para processamento
-    * Equivalente ao PROCEDURE Load do legado
-    *==========================================================================
-    PROCEDURE CriarCursoresTrabalho()
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-
-        TRY
-            SET NULL ON
-
-            IF USED("Entradas")
-                USE IN Entradas
-            ENDIF
-            CREATE CURSOR Entradas (Emps C(3), TpOps C(15), Qtde N(12,3))
-            INDEX ON Emps + TpOps TAG TpOps
-
-            IF USED("Saidas")
-                USE IN Saidas
-            ENDIF
-            CREATE CURSOR Saidas (Emps C(3), TpOps C(15), Qtde N(12,3))
-            INDEX ON Emps + TpOps TAG TpOps
-
-            IF USED("Saldos")
-                USE IN Saldos
-            ENDIF
-            CREATE CURSOR Saldos (Grupos C(10), Contas C(10), Qtde N(12,3), Emps C(3))
-            INDEX ON Grupos TAG Grupos
-            INDEX ON Grupos + Contas TAG GruConta
-
-            IF USED("SaldoAnt")
-                USE IN SaldoAnt
-            ENDIF
-            CREATE CURSOR SaldoAnt (Grupos C(10), Contas C(10), Qtde N(12,3), Emps C(3))
-            INDEX ON Grupos TAG Grupos
-            INDEX ON Grupos + Contas TAG GruConta
-
-            IF USED("Falhas")
-                USE IN Falhas
-            ENDIF
-            CREATE CURSOR Falhas (Grupos C(10), Contas C(10), Qtde N(12,3), ;
-                                  Entra N(12,3), Saida N(12,3), Emps C(3))
-            INDEX ON Grupos TAG Grupos
-            INDEX ON Grupos + Contas TAG GruConta
-
-            IF USED("TmpResumo")
-                USE IN TmpResumo
-            ENDIF
-            CREATE CURSOR TmpResumo (Flag L, Flag2 L, Grupo C(10), Conta C(10), CMats C(14), CUnis C(3), ;
-                PesoEnts N(12,3), QtdeEnts N(12,3), PesoSais N(12,3), QtdeSais N(12,3), ;
-                Saldoi N(12,3), Pesagem N(12,3), FReal N(12,3), FAdmin N(12,3), Saldof N(12,3), ;
-                PesoPEnts N(12,3), PesoPSais N(12,3), PfTrabs N(9,2), Flag3 L, Varias N(1), ;
-                PesoFabre N(12,3), PesoFabrs N(12,3), cUniPs C(3), CodCors C(4), CodTams C(4), ;
-                Visivel L, Agregas N(1))
-            INDEX ON CMats + CodCors + CodTams TAG cpros
-            INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMat FOR Visivel
-
-            SET NULL OFF
-            loc_lResultado = .T.
-
-        CATCH TO loc_oErro
-            SET NULL OFF
-            MsgErro(loc_oErro.Message, "Erro em CriarCursoresTrabalho")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * BuscarDemonstrativo - Lookup/validacao para o campo Demonstrativo
-    * Retorna .T. se encontrou registro, .F. caso contrario
-    *==========================================================================
-    PROCEDURE BuscarDemonstrativo(par_cValor)
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-
-        TRY
-            IF NOT EMPTY(par_cValor)
-                IF USED("crSigPrDmoLkp")
-                    USE IN crSigPrDmoLkp
-                ENDIF
-                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Nome FROM SigPrDmo WHERE Nome = " + EscaparSQL(ALLTRIM(par_cValor)), "crSigPrDmoLkp") >= 1
-                    SELECT crSigPrDmoLkp
-                    GO TOP
-                    IF NOT EOF()
-                        loc_lResultado = .T.
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em BuscarDemonstrativo")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * ProcessarAnalise - Processamento principal da Analise de Producao
-    * Equivalente ao PROCEDURE Click do botao Processar no legado
-    * Popula: this_n* totalizadores + cursores TmpImp/Cabecalho para impressao
-    *==========================================================================
-    PROCEDURE ProcessarAnalise()
-        LOCAL loc_lResultado, loc_oErro, loc_lOk
-        LOCAL loc_lcEmp, loc_lcCodMat, loc_lcConfig, loc_lcChave, loc_lcQuery
-        LOCAL loc_lnSaldoIni, loc_lnPesagem, loc_lnSaldoFunc, loc_lnSaldoaFun, loc_lnFalhaFunc
-        LOCAL loc_lnTotalEntra, loc_lnTotalSaida
-        LOCAL loc_loBarra
-        PRIVATE pDat, pDtI, pDtF, pDatI
-
-        loc_lResultado = .F.
-
-        TRY
-            loc_lcEmp    = go_4c_Sistema.cCodEmpresa
-            loc_lcConfig = THIS.this_cDemonstrativo
-
-            SELECT crSigCdPam
-            GO TOP
-            loc_lcCodMat = ALLTRIM(crSigCdPam.Ouros)
-
-            * Validacoes
-            IF EMPTY(THIS.this_dDataf)
-                MsgAviso("A Data Final Deve Ser Informada!!!", "Valida" + CHR(231) + CHR(227) + "o")
-            ELSE
-                IF THIS.this_dDatai > THIS.this_dDataf
-                    MsgAviso("A Data Final Deve Ser Maior Que a Data Inicial!!!", "Valida" + CHR(231) + CHR(227) + "o")
-                ELSE
-                    IF EMPTY(loc_lcConfig)
-                        MsgAviso("A Configura" + CHR(231) + CHR(227) + "o Deve Ser Informada!!!", "Valida" + CHR(231) + CHR(227) + "o")
-                    ELSE
-                        * Limpa cursores de trabalho
-                        ZAP IN Saldos
-                        ZAP IN SaldoAnt
-                        ZAP IN Falhas
-                        ZAP IN Entradas
-                        ZAP IN Saidas
-
-                        loc_lOk = .T.
-
-                        * Carrega configuracao do demonstrativo
-                        IF USED("crSigPrDmo")
-                            USE IN crSigPrDmo
-                        ENDIF
-                        IF loc_lOk
-                            IF SQLEXEC(gnConnHandle, "SELECT Grupos, Contas FROM SigPrDmo WHERE Nome = " + EscaparSQL(loc_lcConfig), "crSigPrDmo") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (SigPrDmo)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT crSigPrDmo
-                                GO TOP
-                                THIS.this_cGruposDmo = ALLTRIM(crSigPrDmo.Grupos)
-                                THIS.this_cContasDmo = ALLTRIM(crSigPrDmo.Contas)
-                            ENDIF
-                        ENDIF
-
-                        loc_lcChave = loc_lcEmp + THIS.this_cGruposDmo + THIS.this_cContasDmo
-
-                        * Saldo Inicial (historico ate dia anterior)
-                        pDat = THIS.this_dDatai - 1
-                        loc_lnSaldoIni = 0
-
-                        IF loc_lOk
-                            IF USED("crSigMvHst")
-                                USE IN crSigMvHst
-                            ENDIF
-                            loc_lcQuery = "SELECT TOP 1 Sqtds FROM SigMvHst " + ;
-                                          "WHERE EmpGruEsts = " + EscaparSQL(loc_lcChave) + " AND " + ;
-                                          "CPros = " + EscaparSQL(loc_lcCodMat) + " AND " + ;
-                                          "Datas <= ?pDat ORDER BY cIdChaves DESC"
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigMvHst") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crSigMvHst)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT crSigMvHst
-                                GO TOP
-                                IF NOT EOF()
-                                    loc_lnSaldoIni = crSigMvHst.SQtds
-                                ENDIF
-                            ENDIF
-                        ENDIF
-
-                        * TmpPesag - configuracao de pesagem (Operas='P')
-                        IF USED("TmpPesag")
-                            USE IN TmpPesag
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
-                                          "WHERE Operas = 'P' AND Nome = " + EscaparSQL(loc_lcConfig)
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpPesag") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpPesag)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpPesag
-                                INDEX ON Grupos + Contas TAG GruConta
-                            ENDIF
-                        ENDIF
-
-                        * TmpSaldo - configuracao de saldo c/funcionario (Operas='H')
-                        IF USED("TmpSaldo")
-                            USE IN TmpSaldo
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
-                                          "WHERE Operas = 'H' AND Nome = " + EscaparSQL(loc_lcConfig)
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpSaldo") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpSaldo)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpSaldo
-                                INDEX ON Grupos + Contas TAG GruConta
-                            ENDIF
-                        ENDIF
-
-                        * TmpEntra - configuracao de entradas (Operas='E')
-                        IF USED("TmpEntra")
-                            USE IN TmpEntra
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
-                                          "WHERE Operas = 'E' AND Nome = " + EscaparSQL(loc_lcConfig)
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpEntra") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpEntra)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpEntra
-                                INDEX ON Grupos + Contas + TpOps TAG GruConTp
-                            ENDIF
-                        ENDIF
-
-                        * TmpSaida - configuracao de saidas (Operas='S')
-                        IF USED("TmpSaida")
-                            USE IN TmpSaida
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
-                                          "WHERE Operas = 'S' AND Nome = " + EscaparSQL(loc_lcConfig)
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpSaida") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpSaida)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpSaida
-                                INDEX ON Grupos + Contas + TpOps TAG GruConTp
-                            ENDIF
-                        ENDIF
-
-                        pDtI = THIS.this_dDatai
-                        pDtF = CTOT(DTOC(THIS.this_dDataf) + " 23:59:59")
-
-                        * TmpPro - todos os produtos
-                        IF USED("TmpPro")
-                            USE IN TmpPro
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT CPros, DPros, CUnis, CGrus, Varias, Custofs, MoeCusfs, MatPrincs, cUniPs " + ;
-                                          "FROM SigCdPro"
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "TmpPro") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpPro)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpPro
-                                INDEX ON CPros TAG CPros
-                            ENDIF
-                        ENDIF
-
-                        * crProducao - movimentos de producao no periodo
-                        IF USED("crProducao")
-                            USE IN crProducao
-                        ENDIF
-                        IF loc_lOk
-                            loc_lcQuery = "SELECT a.Datas, a.Emps, a.Dopps, a.Numps, a.GrupoOs, a.ContaOs, " + ;
-                                          "a.GrupoDs, a.ContaDs, a.cIdChaves, b.EmpDnps, b.Servicos, " + ;
-                                          "b.CMats, b.TpOps, b.Qtds, b.Pesos, b.cIdChaves as ChaveB, b.Nops " + ;
-                                          "FROM SigCdNec a, SigCdNei b " + ;
-                                          "WHERE a.Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                          "a.Datas BETWEEN ?pDtI AND ?pDtF AND " + ;
-                                          "a.EmpDNPs = b.EmpDNPs " + ;
-                                          "ORDER BY b.cIdChaves"
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "crProducao") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crProducao)")
-                                loc_lOk = .F.
-                            ENDIF
-                        ENDIF
-
-                        * TmpOpi - itens de ordem de producao
-                        IF USED("TmpOpi")
-                            USE IN TmpOpi
-                        ENDIF
-                        IF loc_lOk
-                            IF SQLEXEC(gnConnHandle, "SELECT CPros, Nops FROM SigOpPic", "TmpOpi") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (TmpOpi)")
-                                loc_lOk = .F.
-                            ELSE
-                                SELECT TmpOpi
-                                INDEX ON Nops TAG Nops
-                            ENDIF
-                        ENDIF
-
-                        * crSigCdNei - itens de producao (Distinct, sem servicos)
-                        IF loc_lOk
-                            IF USED("crSigCdNei")
-                                USE IN crSigCdNei
-                            ENDIF
-                            SELECT DISTINCT EmpDnps, Servicos, CMats, Pesos, ChaveB, TpOps, Qtds, Nops ;
-                                   FROM crProducao ;
-                                   WHERE NOT Servicos ;
-                                   INTO CURSOR crSigCdNei READWRITE
-                            SELECT crSigCdNei
-                            INDEX ON EmpDnps TAG EmpDnps
-                            SET ORDER TO EmpDnps
-                        ENDIF
-
-                        * crSigCdNec - cabecalhos de producao (Distinct)
-                        IF loc_lOk
-                            IF USED("crSigCdNec")
-                                USE IN crSigCdNec
-                            ENDIF
-                            SELECT DISTINCT Datas, Emps, Dopps, Numps, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
-                                   FROM crProducao ;
-                                   ORDER BY Datas, Emps, Dopps, Numps, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
-                                   INTO CURSOR crSigCdNec
-                        ENDIF
-
-                        * Processa movimentos de producao -> Entradas/Saidas
-                        IF loc_lOk
-                            LOCAL loc_llEOrigem, loc_llEDestino, loc_llSOrigem, loc_llSDestino
-                            LOCAL loc_lcEdn, loc_lcMaterial, loc_lcChave1, loc_lcChave2
-                            LOCAL loc_lOk2, loc_lcTemp, loc_lcAlias
-
-                            SELECT crSigCdNec
-                            loc_loBarra = CREATEOBJECT("fwprogressbar", "Processando Mov. Produ" + CHR(231) + CHR(227) + "o", RECCOUNT())
-                            loc_loBarra.Show
-                            SCAN
-                                loc_loBarra.UpDate(.T.)
-
-                                =SEEK(crSigCdNec.Dopps, "crSigCdOpd", "Dopps")
-
-                                loc_llEOrigem  = .F.
-                                loc_llEDestino = .F.
-                                loc_llSOrigem  = .F.
-                                loc_llSDestino = .F.
-
-                                IF (crSigCdOpd.Origems = 1)
-                                    IF (SEEK(crSigCdNec.GrupoOs + crSigCdNec.ContaOs, "TmpEntra") OR ;
-                                        SEEK(crSigCdNec.GrupoOs + SPACE(10), "TmpEntra")) AND (crSigCdOpd.EstOrigs = 1)
-                                        loc_llEOrigem = .T.
-                                    ENDIF
-                                    IF (SEEK(crSigCdNec.GrupoOs + crSigCdNec.ContaOs, "TmpSaida") OR ;
-                                        SEEK(crSigCdNec.GrupoOs + SPACE(10), "TmpSaida")) AND (crSigCdOpd.EstOrigs = 2)
-                                        loc_llSOrigem = .T.
-                                    ENDIF
-                                ENDIF
-
-                                IF (crSigCdOpd.Destinos = 1)
-                                    IF (SEEK(crSigCdNec.GrupoDs + crSigCdNec.ContaDs, "TmpEntra") OR ;
-                                        SEEK(crSigCdNec.GrupoDs + SPACE(10), "TmpEntra")) AND (crSigCdOpd.EstDests = 1)
-                                        loc_llEDestino = .T.
-                                    ENDIF
-                                    IF (SEEK(crSigCdNec.GrupoDs + crSigCdNec.ContaDs, "TmpSaida") OR ;
-                                        SEEK(crSigCdNec.GrupoDs + SPACE(10), "TmpSaida")) AND (crSigCdOpd.EstDests = 2)
-                                        loc_llSDestino = .T.
-                                    ENDIF
-                                ENDIF
-
-                                IF NOT loc_llEOrigem AND NOT loc_llEDestino AND NOT loc_llSOrigem AND NOT loc_llSDestino
-                                    LOOP
-                                ENDIF
-
-                                loc_lcEdn      = crSigCdNec.Emps + crSigCdNec.Dopps + STR(crSigCdNec.Numps, 10)
-                                loc_lcMaterial = SPACE(14)
-
-                                SELECT crSigCdNei
-                                =SEEK(loc_lcEdn)
-                                SCAN WHILE EmpDnps = loc_lcEdn
-                                    loc_lcChave1 = crSigCdNec.GrupoOs + crSigCdNec.ContaOs + crSigCdNei.TpOps
-                                    loc_lcChave2 = crSigCdNec.GrupoOs + SPACE(10) + crSigCdNei.TpOps
-
-                                    =SEEK(crSigCdNec.GrupoOs, "crSigCdGcr", "Codigos")
-
-                                    IF CrSigCdGcr.UnifBals = 4
-                                        IF CrSigCdNei.Nops = 0
-                                            loc_lcMaterial = CrSigCdNei.CMats
-                                        ELSE
-                                            =SEEK(CrSigCdNei.Nops, "TmpOpi", "Nops")
-                                            =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                            loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                        ENDIF
-                                        IF CrSigCdNei.CMats <> loc_lcMaterial
-                                            LOOP
-                                        ENDIF
-                                    ELSE
-                                        IF CrSigCdGcr.UnifBals = 3
-                                            =SEEK(CrSigCdNei.Nops, "TmpOpi", "Nops")
-                                            IF CrSigCdNei.Nops = 0
-                                                loc_lcMaterial = CrSigCdNei.CMats
-                                            ELSE
-                                                =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                                loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                            ENDIF
-                                        ELSE
-                                            loc_lcMaterial = IIF(CrSigCdGcr.UnifBals = 1, crSigCdPam.Ouros, CrSigCdNei.CMats)
-                                        ENDIF
-                                    ENDIF
-
-                                    loc_lOk2 = (loc_lcMaterial = loc_lcCodMat)
-
-                                    IF (loc_llEOrigem OR loc_llSOrigem) AND loc_lOk2
-                                        IF loc_llEOrigem
-                                            loc_lcTemp  = "TmpEntra"
-                                            loc_lcAlias = "Entradas"
-                                        ELSE
-                                            loc_lcTemp  = "TmpSaida"
-                                            loc_lcAlias = "Saidas"
-                                        ENDIF
-
-                                        IF SEEK(loc_lcChave1, loc_lcTemp) OR SEEK(loc_lcChave2, loc_lcTemp)
-                                            IF NOT SEEK(loc_lcEmp + &loc_lcTemp..TpOps, loc_lcAlias)
-                                                INSERT INTO &loc_lcAlias. (TpOps) VALUES (&loc_lcTemp..TpOps)
-                                            ENDIF
-                                            IF (crSigCdNei.CMats = loc_lcCodMat AND crSigCdGcr.UnifBals = 1)
-                                                REPLACE &loc_lcAlias..Qtde WITH &loc_lcAlias..Qtde + crSigCdNei.Qtds
-                                            ELSE
-                                                REPLACE &loc_lcAlias..Qtde WITH &loc_lcAlias..Qtde + crSigCdNei.Pesos
-                                            ENDIF
-                                            REPLACE &loc_lcAlias..Emps WITH loc_lcEmp
-                                        ENDIF
-                                    ENDIF
-
-                                    loc_lcChave1 = crSigCdNec.GrupoDs + crSigCdNec.ContaDs + crSigCdNei.TpOps
-                                    loc_lcChave2 = crSigCdNec.GrupoDs + SPACE(10) + crSigCdNei.TpOps
-
-                                    =SEEK(crSigCdNec.GrupoDs, "crSigCdGcr", "Codigos")
-
-                                    IF CrSigCdGcr.UnifBals = 4
-                                        IF CrSigCdNei.Nops = 0
-                                            loc_lcMaterial = CrSigCdNei.CMats
-                                        ELSE
-                                            =SEEK(CrSigCdNei.Nops, "TmpOpi", "Nops")
-                                            =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                            loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                        ENDIF
-                                        IF CrSigCdNei.CMats <> loc_lcMaterial
-                                            LOOP
-                                        ENDIF
-                                    ELSE
-                                        IF CrSigCdGcr.UnifBals = 3
-                                            =SEEK(CrSigCdNei.Nops, "TmpOpi", "Nops")
-                                            IF CrSigCdNei.Nops = 0
-                                                loc_lcMaterial = CrSigCdNei.CMats
-                                            ELSE
-                                                =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                                loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                            ENDIF
-                                        ELSE
-                                            loc_lcMaterial = IIF(CrSigCdGcr.UnifBals = 1, crSigCdPam.Ouros, CrSigCdNei.CMats)
-                                        ENDIF
-                                    ENDIF
-
-                                    loc_lOk2 = (loc_lcMaterial = loc_lcCodMat)
-
-                                    IF (loc_llEDestino OR loc_llSDestino) AND loc_lOk2
-                                        IF loc_llEDestino
-                                            loc_lcTemp  = "TmpEntra"
-                                            loc_lcAlias = "Entradas"
-                                        ELSE
-                                            loc_lcTemp  = "TmpSaida"
-                                            loc_lcAlias = "Saidas"
-                                        ENDIF
-
-                                        IF SEEK(loc_lcChave1, loc_lcTemp) OR SEEK(loc_lcChave2, loc_lcTemp)
-                                            IF NOT SEEK(loc_lcEmp + &loc_lcTemp..TpOps, loc_lcAlias)
-                                                INSERT INTO &loc_lcAlias. (TpOps) VALUES (&loc_lcTemp..TpOps)
-                                            ENDIF
-                                            IF (crSigCdNei.CMats = loc_lcCodMat AND crSigCdGcr.UnifBals = 1)
-                                                REPLACE &loc_lcAlias..Qtde WITH &loc_lcAlias..Qtde + crSigCdNei.Qtds
-                                            ELSE
-                                                REPLACE &loc_lcAlias..Qtde WITH &loc_lcAlias..Qtde + crSigCdNei.Pesos
-                                            ENDIF
-                                            REPLACE &loc_lcAlias..Emps WITH loc_lcEmp
-                                        ENDIF
-                                    ENDIF
-                                ENDSCAN
-                            ENDSCAN
-                            loc_loBarra.Complete
-                        ENDIF
-
-                        * Movimentos de estoque (SigMvCab/SigMvItn) -> Entradas/Saidas
-                        IF loc_lOk
-                            IF USED("crEstoque")
-                                USE IN crEstoque
-                            ENDIF
-                            loc_lcQuery = "SELECT a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, " + ;
-                                          "a.GrupoOs, a.ContaOs, a.GrupoDs, a.ContaDs, a.cIdChaves, " + ;
-                                          "b.EmpDopNums, b.CPros, b.Opers, b.Qtds, b.cIdChaves as ChaveB " + ;
-                                          "FROM SigMvCab a, SigMvItn b " + ;
-                                          "WHERE a.Datas BETWEEN ?pDtI AND ?pDtF AND " + ;
-                                          "( a.Emps = " + EscaparSQL(loc_lcEmp) + " OR a.EmpDs = " + EscaparSQL(loc_lcEmp) + " ) AND " + ;
-                                          "NOT a.Dopes = " + EscaparSQL(THIS.this_cDopeBals) + " AND " + ;
-                                          "a.EmpDopNums = b.EmpDopNums " + ;
-                                          "ORDER BY a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, " + ;
-                                          "a.GrupoOs, a.ContaOs, a.GrupoDs, a.ContaDs, a.cIdChaves, " + ;
-                                          "b.EmpDopNums, b.CPros, b.Opers, b.Qtds, b.cIdChaves"
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "crEstoque") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crEstoque)")
-                                loc_lOk = .F.
-                            ENDIF
-                        ENDIF
-
-                        IF loc_lOk
-                            IF USED("crSigMvItn")
-                                USE IN crSigMvItn
-                            ENDIF
-                            SELECT DISTINCT EmpDopNums, CPros, Opers, Qtds, ChaveB ;
-                                   FROM crEstoque ;
-                                   ORDER BY EmpDopNums, CPros, Opers, Qtds, ChaveB ;
-                                   INTO CURSOR crSigMvItn READWRITE
-                            SELECT crSigMvItn
-                            INDEX ON EmpDopNums TAG EmpDopNums
-                            SET ORDER TO EmpDopNums
-
-                            IF USED("crSigMvCab")
-                                USE IN crSigMvCab
-                            ENDIF
-                            SELECT DISTINCT Datas, Emps, EmpDs, Dopes, Numes, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
-                                   FROM crEstoque ;
-                                   ORDER BY Datas, Emps, EmpDs, Dopes, Numes, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
-                                   INTO CURSOR crSigMvCab
-                        ENDIF
-
-                        * Processa movimentos de estoque -> Entradas/Saidas
-                        IF loc_lOk
-                            LOCAL loc_lOriDes, loc_lcEdnS, loc_lGrupoo, loc_lContao
-                            LOCAL loc_lGrupod, loc_lContad, loc_llSOrigem2, loc_llEDestino2
-                            LOCAL loc_lcChave1S, loc_lcChave2S, loc_lcTpOp
-                            LOCAL loc_lcAliasS, loc_lcTempS, loc_lcEmpS
-
-                            SELECT crSigMvCab
-                            loc_loBarra = CREATEOBJECT("fwprogressbar", "Processando Mov. de Estoque...", RECCOUNT())
-                            loc_loBarra.Show
-                            SCAN
-                                loc_loBarra.Update(.T.)
-
-                                =SEEK(crSigMvCab.Dopes, "crSigCdOpe", "Dopes")
-                                loc_lOriDes = .F.
-
-                                IF crSigMvCab.EmpDs = loc_lcEmp
-                                    IF SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra")
-                                        loc_lOriDes = .T.
-                                    ENDIF
-                                ELSE
-                                    IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra") OR ;
-                                        SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida") OR ;
-                                        SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra") OR ;
-                                        SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida")) OR ;
-                                       (SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra") OR ;
-                                        SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida") OR ;
-                                        SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra") OR ;
-                                        SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida"))
-                                        loc_lOriDes = .T.
-                                    ENDIF
-                                ENDIF
-
-                                IF NOT loc_lOriDes
-                                    LOOP
-                                ENDIF
-
-                                loc_lcEdnS = crSigMvCab.Emps + crSigMvCab.Dopes + STR(crSigMvCab.Numes, 6)
-
-                                SELECT crSigMvItn
-                                SEEK loc_lcEdnS
-                                SCAN WHILE EmpDopNums = loc_lcEdnS
-                                    loc_lGrupoo = SPACE(10)
-                                    loc_lContao = SPACE(10)
-                                    loc_lGrupod = SPACE(10)
-                                    loc_lContad = SPACE(10)
-                                    loc_llSOrigem2  = .F.
-                                    loc_llEDestino2 = .F.
-
-                                    IF (crSigCdOpe.EstOrigs = 4)
-                                        IF (crSigMvItn.Opers = "S") AND (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida"))
-                                            loc_llSOrigem2 = .T.
-                                            loc_lGrupoo    = crSigMvCab.GrupoOs
-                                            loc_lContao    = crSigMvCab.ContaOs
-                                        ELSE
-                                            IF (crSigMvItn.Opers = "E") AND (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra") OR SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra"))
-                                                loc_llEDestino2 = .T.
-                                                loc_lGrupod     = crSigMvCab.GrupoDs
-                                                loc_lContad     = crSigMvCab.ContaDs
-                                            ENDIF
-                                        ENDIF
-                                    ELSE
-                                        IF (crSigCdOpe.Opers = 3)
-                                            IF (crSigCdOpe.Origems = 1)
-                                                IF (crSigMvItn.Opers = "S") AND (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida"))
-                                                    loc_llSOrigem2 = .T.
-                                                    loc_lGrupoo    = crSigMvCab.GrupoOs
-                                                    loc_lContao    = crSigMvCab.ContaOs
-                                                ELSE
-                                                    IF (crSigMvItn.Opers = "E") AND (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra"))
-                                                        loc_llEDestino2 = .T.
-                                                        loc_lGrupod     = crSigMvCab.GrupoOs
-                                                        loc_lContad     = crSigMvCab.ContaOs
-                                                    ENDIF
-                                                ENDIF
-                                            ELSE
-                                                IF (crSigCdOpe.Destinos = 1)
-                                                    IF (crSigMvItn.Opers = "S") AND (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida") OR SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida"))
-                                                        loc_llSOrigem2 = .T.
-                                                        loc_lGrupoo    = crSigMvCab.GrupoDs
-                                                        loc_lContao    = crSigMvCab.ContaDs
-                                                    ELSE
-                                                        IF (crSigMvItn.Opers = "E") AND (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra"))
-                                                            loc_llEDestino2 = .T.
-                                                            loc_lGrupod     = crSigMvCab.GrupoDs
-                                                            loc_lContad     = crSigMvCab.ContaDs
-                                                        ENDIF
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ELSE
-                                            IF (crSigCdOpe.Origems = 1)
-                                                IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida")) AND (crSigCdOpe.EstOrigs = 2)
-                                                    loc_llSOrigem2 = .T.
-                                                    loc_lGrupoo    = crSigMvCab.GrupoOs
-                                                    loc_lContao    = crSigMvCab.ContaOs
-                                                ELSE
-                                                    IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra") OR SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra")) AND (crSigCdOpe.EstOrigs = 1)
-                                                        loc_llEDestino2 = .T.
-                                                        loc_lGrupod     = crSigMvCab.GrupoOs
-                                                        loc_lContad     = crSigMvCab.ContaOs
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-
-                                            IF (crSigCdOpe.Destinos = 1)
-                                                IF (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida") OR SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida")) AND (crSigCdOpe.EstDests = 2)
-                                                    loc_llSOrigem2 = .T.
-                                                    loc_lGrupoo    = crSigMvCab.GrupoDs
-                                                    loc_lContao    = crSigMvCab.ContaDs
-                                                ELSE
-                                                    IF (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra") OR SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra")) AND (crSigCdOpe.EstDests = 1)
-                                                        loc_llEDestino2 = .T.
-                                                        loc_lGrupod     = crSigMvCab.GrupoDs
-                                                        loc_lContad     = crSigMvCab.ContaDs
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-
-                                    loc_lcChave1S = loc_lGrupoo + loc_lContao + SPACE(15)
-                                    loc_lcChave2S = loc_lGrupoo + SPACE(10)  + SPACE(15)
-                                    loc_lcTpOp    = PADR(LEFT(crSigMvCab.Dopes, 10), 15)
-
-                                    =SEEK(loc_lGrupoo, "crSigCdGcr", "Codigos")
-                                    =SEEK(crSigMvItn.Cpros, "TmpPro", "Cpros")
-
-                                    IF INLIST(CrSigCdGcr.UnifBals, 3, 4)
-                                        loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                    ELSE
-                                        =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-                                        loc_lcMaterial = IIF(crSigCdGcr.UnifBals = 1 AND LocalGru.nAgMts <> 1, crSigCdPam.Ouros, crSigMvItn.Cpros)
-                                    ENDIF
-
-                                    IF crSigCdGcr.UnifBals = 4 AND crSigMvItn.Cpros <> loc_lcMaterial
-                                        loc_lcMaterial = crSigMvItn.Cpros
-                                    ENDIF
-
-                                    loc_lOk2 = (loc_lcMaterial = loc_lcCodMat)
-
-                                    IF loc_llSOrigem2 AND loc_lOk2
-                                        loc_lcTempS  = "TmpSaida"
-                                        loc_lcAliasS = "Saidas"
-                                        loc_lcEmpS   = IIF(EMPTY(crSigMvCab.EmpDs), crSigMvCab.Emps, crSigMvCab.EmpDs)
-
-                                        IF SEEK(loc_lcChave1S, loc_lcTempS) OR SEEK(loc_lcChave2S, loc_lcTempS)
-                                            IF NOT SEEK(loc_lcEmpS + loc_lcTpOp, loc_lcAliasS)
-                                                SELECT (loc_lcAliasS)
-                                                APPEND BLANK
-                                                REPLACE TpOps WITH loc_lcTpOp, ;
-                                                        Emps  WITH loc_lcEmpS
-                                            ENDIF
-                                            REPLACE &loc_lcAliasS..Qtde WITH &loc_lcAliasS..Qtde + crSigMvItn.Qtds
-                                        ENDIF
-                                    ENDIF
-
-                                    loc_lcChave1S = loc_lGrupod + loc_lContad + SPACE(15)
-                                    loc_lcChave2S = loc_lGrupod + SPACE(10)  + SPACE(15)
-
-                                    =SEEK(loc_lGrupod, "crSigCdGcr", "Codigos")
-                                    =SEEK(crSigMvItn.Cpros, "TmpPro", "Cpros")
-
-                                    IF INLIST(CrSigCdGcr.UnifBals, 3, 4)
-                                        loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                    ELSE
-                                        =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-                                        loc_lcMaterial = IIF(crSigCdGcr.UnifBals = 1 AND LocalGru.nAgMts <> 1, crSigCdPam.Ouros, crSigMvItn.Cpros)
-                                    ENDIF
-
-                                    IF crSigCdGcr.UnifBals = 4 AND crSigMvItn.Cpros <> loc_lcMaterial
-                                        loc_lcMaterial = crSigMvItn.Cpros
-                                    ENDIF
-
-                                    loc_lOk2 = (loc_lcMaterial = loc_lcCodMat)
-
-                                    IF loc_llEDestino2 AND loc_lOk2
-                                        LOCAL loc_lcAliasE, loc_lcTempE, loc_lcEmpE
-                                        loc_lcTempE  = "TmpEntra"
-                                        loc_lcAliasE = "Entradas"
-                                        loc_lcEmpE   = crSigMvCab.Emps
-
-                                        IF SEEK(loc_lcChave1S, loc_lcTempE) OR SEEK(loc_lcChave2S, loc_lcTempE)
-                                            IF NOT SEEK(loc_lcEmpE + loc_lcTpOp, loc_lcAliasE)
-                                                SELECT (loc_lcAliasE)
-                                                APPEND BLANK
-                                                REPLACE TpOps WITH loc_lcTpOp, ;
-                                                        Emps  WITH loc_lcEmpE
-                                            ENDIF
-                                            REPLACE &loc_lcAliasE..Qtde WITH &loc_lcAliasE..Qtde + crSigMvItn.Qtds
-                                        ENDIF
-                                    ENDIF
-                                ENDSCAN
-                            ENDSCAN
-                            loc_loBarra.Complete
-                        ENDIF
-
-                        * Pesagens fisicas -> lnPesagem
-                        loc_lnPesagem = 0
-                        IF loc_lOk
-                            SELECT TmpPesag
-                            loc_loBarra = CREATEOBJECT("fwprogressbar", "Processando Pesagens", RECCOUNT())
-                            loc_loBarra.Show
-                            SCAN
-                                IF NOT loc_lOk
-                                    EXIT
-                                ENDIF
-                                loc_loBarra.UpDate(.T.)
-
-                                pDatI = THIS.this_dDatai
-                                pDat  = CTOT(DTOC(THIS.this_dDataf) + " 23:59:59")
-
-                                IF USED("crSigCdPsc")
-                                    USE IN crSigCdPsc
-                                ENDIF
-                                loc_lcQuery = "SELECT Datas, Codigos FROM SigCdPsc " + ;
-                                              "WHERE Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                              "Grupos = " + EscaparSQL(ALLTRIM(TmpPesag.Grupos)) + " AND " + ;
-                                              "Contas = " + EscaparSQL(ALLTRIM(TmpPesag.Contas)) + " AND " + ;
-                                              "Datas >= ?pDatI AND Datas <= ?pDat " + ;
-                                              "ORDER BY Datas DESC, Codigos DESC"
-                                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdPsc") < 1
-                                    MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crSigCdPsc)")
-                                    loc_lOk = .F.
-                                ELSE
-                                    SELECT crSigCdPsc
-                                    GO TOP
-
-                                    IF USED("crSigCdPsi")
-                                        USE IN crSigCdPsi
-                                    ENDIF
-                                    loc_lcQuery = "SELECT CPros, Qtds FROM SigCdPsi " + ;
-                                                  "WHERE Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                                  "Codigos = " + STR(crSigCdPsc.Codigos, 6) + " AND " + ;
-                                                  "CPros = " + EscaparSQL(loc_lcCodMat) + " " + ;
-                                                  "ORDER BY CPros, Qtds"
-                                    IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdPsi") >= 1
-                                        SELECT crSigCdPsi
-                                        SCAN
-                                            loc_lnPesagem = loc_lnPesagem + crSigCdPsi.Qtds
-                                        ENDSCAN
-                                    ENDIF
-                                ENDIF
-                            ENDSCAN
-                            loc_loBarra.Complete
-                        ENDIF
-
-                        * Saldo c/funcionario via PosBalanco -> Saldos/SaldoAnt
-                        loc_lnSaldoFunc = 0
-                        loc_lnSaldoaFun = 0
-                        IF loc_lOk
-                            SELECT TmpSaldo
-                            loc_loBarra = CREATEOBJECT("fwprogressbar", "Processando Saldo c/funcion" + CHR(225) + "rio", RECCOUNT())
-                            loc_loBarra.Show
-                            SCAN
-                                IF NOT loc_lOk
-                                    EXIT
-                                ENDIF
-                                loc_loBarra.UpDate(.T.)
-
-                                IF USED("crSigMvEst")
-                                    USE IN crSigMvEst
-                                ENDIF
-                                loc_lcQuery = "SELECT Emps, Grupos, Estos, CPros FROM SigMvEst WHERE " + ;
-                                              IIF(EMPTY(ALLTRIM(TmpSaldo.Contas)), ;
-                                                  "Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                                  "Grupos = " + EscaparSQL(ALLTRIM(TmpSaldo.Grupos)) + " ", ;
-                                                  "EmpGruEsts = " + EscaparSQL(loc_lcEmp + ALLTRIM(TmpSaldo.Grupos) + ALLTRIM(TmpSaldo.Contas)) + " ") + ;
-                                              "AND CPros = " + EscaparSQL(loc_lcCodMat)
-                                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigMvEst") < 1
-                                    MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crSigMvEst)")
-                                    loc_lOk = .F.
-                                ELSE
-                                    SELECT crSigMvEst
-                                    SCAN
-                                        =SEEK(crSigMvEst.Grupos, "crSigCdGcr", "Codigos")
-                                        IF (crSigMvEst.Cpros = loc_lcCodMat OR crSigCdGcr.UnifBals = 1)
-                                            THIS.PosBalanco()
-                                        ENDIF
-                                    ENDSCAN
-                                ENDIF
-                            ENDSCAN
-                            loc_loBarra.Complete
-                        ENDIF
-
-                        IF loc_lOk
-                            IF USED("CsSelecao")
-                                USE IN CsSelecao
-                            ENDIF
-                            SELECT [ ] AS Agrupar, SUM(qtde) AS Qtde FROM Saldos INTO CURSOR CsSelecao GROUP BY 1
-                            loc_lnSaldoFunc = CsSelecao.Qtde
-
-                            IF USED("CsSelecao")
-                                USE IN CsSelecao
-                            ENDIF
-                            SELECT [ ] AS Agrupar, SUM(qtde) AS Qtde FROM SaldoAnt INTO CURSOR CsSelecao GROUP BY 1
-                            loc_lnSaldoaFun = CsSelecao.Qtde
-                        ENDIF
-
-                        * Falhas dos funcionarios -> lnFalhaFunc + Falhas cursor
-                        loc_lnFalhaFunc = 0
-                        IF loc_lOk
-                            SELECT TmpSaldo
-                            loc_loBarra = CREATEOBJECT("fwprogressbar", "Processando Falha dos Funcion" + CHR(225) + "rios", RECCOUNT())
-                            loc_loBarra.Show
-                            SCAN
-                                IF NOT loc_lOk
-                                    EXIT
-                                ENDIF
-                                loc_loBarra.UpDate(.T.)
-
-                                IF USED("crSigCdFcx")
-                                    USE IN crSigCdFcx
-                                ENDIF
-                                loc_lcQuery = "SELECT b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems " + ;
-                                              "FROM SigCdFcx a, SigOpCfe b " + ;
-                                              "WHERE a.Datas BETWEEN ?pDtI AND ?pDtF AND " + ;
-                                              "a.Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                              "a.Grupos = " + EscaparSQL(ALLTRIM(TmpSaldo.Grupos)) + " " + ;
-                                              IIF(ALLTRIM(TmpSaldo.Contas) = " " OR EMPTY(ALLTRIM(TmpSaldo.Contas)), "", ;
-                                                  "AND a.Contas = " + EscaparSQL(ALLTRIM(TmpSaldo.Contas)) + " ") + ;
-                                              "AND a.Emps = b.Emps AND " + ;
-                                              "a.Codigos = b.Codigos AND " + ;
-                                              "b.CPros = " + EscaparSQL(loc_lcCodMat) + " " + ;
-                                              "ORDER BY b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems"
-                                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdFcx") < 1
-                                    MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crSigCdFcx)")
-                                    loc_lOk = .F.
-                                ELSE
-                                    SELECT crSigCdFcx
-                                    SCAN
-                                        loc_lnFalhaFunc = loc_lnFalhaFunc + crSigCdFcx.FReals
-                                        IF NOT SEEK(ALLTRIM(TmpSaldo.Grupos), "Falhas")
-                                            INSERT INTO Falhas (Grupos, Contas, Emps) ;
-                                                   VALUES (TmpSaldo.Grupos, TmpSaldo.Contas, loc_lcEmp)
-                                        ENDIF
-                                        REPLACE Qtde  WITH Falhas.Qtde  + crSigCdFcx.FReals, ;
-                                                Entra WITH Falhas.Entra + crSigCdFcx.Entradas + crSigCdFcx.Saldos, ;
-                                                Saida WITH Falhas.Saida + crSigCdFcx.Saidas   + crSigCdFcx.Pesagems IN Falhas
-                                    ENDSCAN
-                                ENDIF
-                            ENDSCAN
-                            loc_loBarra.Complete
-                        ENDIF
-
-                        * Calcula totalizadores
-                        loc_lnTotalEntra = 0
-                        loc_lnTotalSaida = 0
-                        IF loc_lOk
-                            SELECT Entradas
-                            SUM Qtde TO loc_lnTotalEntra
-
-                            SELECT Saidas
-                            SUM Qtde TO loc_lnTotalSaida
-
-                            * Armazena em propriedades do BO
-                            THIS.this_nSaldoIni   = loc_lnSaldoIni
-                            THIS.this_nSaldoaFun  = loc_lnSaldoaFun
-                            THIS.this_nTotalEntra = loc_lnTotalEntra
-                            THIS.this_nTotalSaida = loc_lnTotalSaida
-                            THIS.this_nPesagem    = loc_lnPesagem
-                            THIS.this_nSaldoFunc  = loc_lnSaldoFunc
-                            THIS.this_nFalhaFunc  = loc_lnFalhaFunc
-                            THIS.this_cEmpresa    = loc_lcEmp
-                        ENDIF
-
-                        * Cria cursores para impressao
-                        IF loc_lOk
-                            IF USED("TmpImprime2")
-                                USE IN TmpImprime2
-                            ENDIF
-                            IF USED("TmpImprime")
-                                USE IN TmpImprime
-                            ENDIF
-
-                            CREATE CURSOR TmpImprime2 (Linha2 N(3), Cabec2 L, Titulo2 C(40), Valor2 N(12,3), Traco2 L, Emps C(3))
-                            CREATE CURSOR TmpImprime  (Linha N(3), Cabec L, Titulo C(80), Valor N(12,3), ;
-                                                       Valor1 N(11,3), Traco L, Entrada N(12,3), Saida N(12,3), Falha L)
-
-                            LOCAL loc_lnLinha, loc_lnLinha2, loc_lnX
-                            loc_lnLinha = 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Saldo Inicial : ", loc_lnSaldoIni)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Saldo Ant c/Funcion" + CHR(225) + "rio : ", loc_lnSaldoaFun)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Entradas : ", loc_lnTotalEntra)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Total de Entradas : ", loc_lnSaldoIni + loc_lnTotalEntra + loc_lnSaldoaFun)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Sa" + CHR(237) + "das : ", loc_lnTotalSaida)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Saldo : ", loc_lnSaldoIni + loc_lnTotalEntra - loc_lnTotalSaida + loc_lnSaldoaFun)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Saldo com Funcion" + CHR(225) + "rios : ", loc_lnSaldoFunc)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Pesagem : ", loc_lnPesagem)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) VALUES (loc_lnLinha, .F., "Total : ", loc_lnPesagem + loc_lnSaldoFunc)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Traco) VALUES (loc_lnLinha, .F., "Falha dos Funcion" + CHR(225) + "rios : ", loc_lnFalhaFunc, .T.)
-                            loc_lnLinha = loc_lnLinha + 1
-                            INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Traco) VALUES (loc_lnLinha, .F., "Diferenca : ", ;
-                                loc_lnSaldoIni + loc_lnTotalEntra - loc_lnTotalSaida + loc_lnSaldoaFun - loc_lnPesagem - loc_lnSaldoFunc - loc_lnFalhaFunc, .T.)
-
-                            loc_lnLinha2 = 0
-                            SELECT Entradas
-                            GO TOP
-                            IF NOT EOF()
-                                loc_lnLinha2 = loc_lnLinha2 + 1
-                                INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) VALUES (loc_lnLinha2, .T., "Resumo de Entradas")
-                                SELECT Entradas
-                                SCAN
-                                    loc_lnLinha2 = loc_lnLinha2 + 1
-                                    INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2, Emps) ;
-                                                 VALUES (loc_lnLinha2, .F., Entradas.TpOps, Entradas.Qtde, Entradas.Emps)
-                                ENDSCAN
-                                SELECT TmpImprime2
-                                REPLACE Traco2 WITH .T. IN TmpImprime2
-                            ENDIF
-
-                            loc_lnLinha2 = loc_lnLinha2 + 1
-                            INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) VALUES (loc_lnLinha2, .F., " ", loc_lnTotalEntra)
-
-                            SELECT Saidas
-                            GO TOP
-                            IF NOT EOF()
-                                loc_lnLinha2 = loc_lnLinha2 + 1
-                                INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) VALUES (loc_lnLinha2, .T., "Resumo de Saidas")
-                                SELECT Saidas
-                                SCAN
-                                    loc_lnLinha2 = loc_lnLinha2 + 1
-                                    INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2, Emps) ;
-                                                 VALUES (loc_lnLinha2, .F., IIF(EMPTY(Saidas.TpOps), "PRODUZIDO", Saidas.TpOps), Saidas.Qtde, Saidas.Emps)
-                                ENDSCAN
-                                SELECT TmpImprime2
-                                REPLACE Traco2 WITH .T. IN TmpImprime2
-                            ENDIF
-
-                            loc_lnLinha2 = loc_lnLinha2 + 1
-                            INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) VALUES (loc_lnLinha2, .F., " ", loc_lnTotalSaida)
-
-                            SELECT Saldos
-                            GO TOP
-                            IF NOT EOF()
-                                loc_lnLinha2 = loc_lnLinha2 + 1
-                                INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) VALUES (loc_lnLinha2, .T., " ")
-                                loc_lnLinha2 = loc_lnLinha2 + 1
-                                INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) VALUES (loc_lnLinha2, .T., "Saldos das Fases")
-                                SELECT Saldos
-                                SCAN
-                                    loc_lnLinha2 = loc_lnLinha2 + 1
-                                    INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) VALUES (loc_lnLinha2, .F., Saldos.Grupos, Saldos.Qtde)
-                                ENDSCAN
-                                SELECT TmpImprime2
-                                REPLACE Traco2 WITH .T. IN TmpImprime2
-                            ENDIF
-
-                            loc_lnLinha2 = loc_lnLinha2 + 1
-                            INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) VALUES (loc_lnLinha2, .F., " ", loc_lnSaldoFunc)
-
-                            SELECT Falhas
-                            GO TOP
-                            IF NOT EOF()
-                                loc_lnLinha = loc_lnLinha + 1
-                                INSERT INTO TmpImprime (Linha, Cabec, Titulo) VALUES (loc_lnLinha, .T., PADC("Falhas das Fases", 70))
-                                loc_lnLinha = loc_lnLinha + 1
-                                INSERT INTO TmpImprime (Linha, Cabec, Titulo) VALUES (loc_lnLinha, .T., "Setor           Entrada      Saida      Falha Gr         %")
-
-                                SELECT Falhas
-                                SCAN
-                                    loc_lnLinha = loc_lnLinha + 1
-                                    loc_lnX = (Falhas.Qtde / IIF(Falhas.Saida = 0, 1, Falhas.Saida) * 100)
-                                    INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Valor1, Entrada, Saida, Falha) ;
-                                                 VALUES (loc_lnLinha, .F., Falhas.Grupos, Falhas.Qtde, loc_lnX, Falhas.Entra, Falhas.Saida, .T.)
-                                ENDSCAN
-
-                                LOCAL loc_lnQEnt, loc_lnQSai, loc_lnQFalha
-                                SELECT Falhas
-                                SUM Entra, Saida, Qtde TO loc_lnQEnt, loc_lnQSai, loc_lnQFalha
-                                loc_lnX = (loc_lnQFalha / IIF(loc_lnQSai = 0, 1, loc_lnQSai) * 100)
-
-                                SELECT TmpImprime
-                                REPLACE Traco WITH .T. IN TmpImprime
-                                loc_lnLinha = loc_lnLinha + 1
-                                INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Valor1, Entrada, Saida, Falha) ;
-                                             VALUES (loc_lnLinha, .F., " ", loc_lnQFalha, loc_lnX, loc_lnQEnt, loc_lnQSai, .T.)
-                            ENDIF
-
-                            * Mescla TmpImprime + TmpImprime2 em TmpImp para impressao
-                            IF USED("TmpImp")
-                                USE IN TmpImp
-                            ENDIF
-                            LOCAL loc_lcOrder
-                            loc_lcOrder = "t1.Linha"
-                            IF (loc_lnLinha2 > loc_lnLinha)
-                                loc_lcOrder = "t2.Linha2"
-                            ENDIF
-
-                            SELECT T1.*, T2.* ;
-                                   FROM TmpImprime T1 ;
-                                   FULL JOIN TmpImprime2 T2 ;
-                                   ON T1.Linha = T2.Linha2 ;
-                                   INTO CURSOR TmpImp ;
-                                   ORDER BY &loc_lcOrder.
-
-                            * Cabecalho para o relatorio
-                            IF USED("Cabecalho")
-                                USE IN Cabecalho
-                            ENDIF
-                            CREATE CURSOR Cabecalho (pNomeEmpresa C(60), pRelTitulo C(60), pPeriodo C(60))
-                            INSERT INTO Cabecalho (pNomeEmpresa, pRelTitulo, pPeriodo) ;
-                                         VALUES (go_4c_Sistema.cEmpresa, ;
-                                                 "An" + CHR(225) + "lise de Produ" + CHR(231) + CHR(227) + "o", ;
-                                                 "Per" + CHR(237) + "odo : " + DTOC(THIS.this_dDatai) + " at" + CHR(233) + " " + DTOC(THIS.this_dDataf))
-
-                            loc_lResultado = .T.
-                        ENDIF  && loc_lOk (impressao)
-                    ENDIF  && not empty config
-                ENDIF  && dates OK
-            ENDIF  && not empty dataf
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em ProcessarAnalise")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * PosBalanco - Calcula saldo de funcionario para conta/grupo atual
-    * Chamado de ProcessarAnalise dentro de SCAN de crSigMvEst
-    * Equivalente ao PROCEDURE posbalanco do legado
-    *==========================================================================
-    PROCEDURE PosBalanco()
-        PRIVATE pDat, pNot
-        LOCAL loc_Origem, loc_Destino, loc_Grupo, loc_Conta, loc_DatauBal
-        LOCAL loc_Saldoi, loc_Saidas, loc_FalhaAdmitida
-        LOCAL loc_ldDatai, loc_ldDataf, loc_lcEmp, loc_lcCodMat
-        LOCAL loc_lnTrabalhado, loc_ldPrimBal, loc_lnCt, loc_lResultado
-        LOCAL loc_lcSql, loc_lcQuery, loc_lcEdn, loc_oErro
-
-        loc_lResultado = .F.
-
-        TRY
-            loc_ldDatai     = THIS.this_dDatai
-            loc_ldDataf     = THIS.this_dDataf
-            loc_lcEmp       = go_4c_Sistema.cCodEmpresa
-            loc_lnTrabalhado = 0
-            loc_ldPrimBal   = DATE()
-
-            SELECT crSigCdPam
-            GO TOP
-            loc_lcCodMat = ALLTRIM(crSigCdPam.Ouros)
-
-            * Verifica se cliente gera balancos
-            loc_lcSql = "SELECT Rclis, GerBals, PagFals, RecFals FROM SigCdCli " + ;
-                        "WHERE Iclis = " + EscaparSQL(ALLTRIM(crSigMvEst.Estos))
-            IF USED("CrSigCdCli")
-                USE IN CrSigCdCli
-            ENDIF
-            IF SQLEXEC(gnConnHandle, loc_lcSql, "CrSigCdCli") < 1
-                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (crsjcli)")
-            ELSE
-                =SEEK(crSigMvEst.Grupos, "crSigCdGcr", "Codigos")
-
-                IF NOT (CrSigCdCli.GerBals <> 1 OR CrSigCdGcr.GerBals <> 1)
-
-                    loc_lcSql = "SELECT Datas, codigos FROM SigCdFcx " + ;
-                                "WHERE Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                "Grupos = " + EscaparSQL(ALLTRIM(crSigMvEst.Grupos)) + " AND " + ;
-                                "Contas = " + EscaparSQL(ALLTRIM(crSigMvEst.Estos))
-                    IF USED("LocalFecha")
-                        USE IN LocalFecha
-                    ENDIF
-                    IF SQLEXEC(gnConnHandle, loc_lcSql, "LocalFecha") < 1
-                        MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalFecha)")
-                    ELSE
-                        LOCAL loc_ldDataB, loc_ldDataL, loc_llFalse, loc_llTrue
-                        LOCAL loc_lGrupo, loc_lConta, loc_lcCodCor, loc_lcCodTam
-                        LOCAL loc_lcMat, loc_lcMaterial, loc_lcMatResFa
-
-                        loc_llFalse = .F.
-                        loc_llTrue  = .T.
-                        loc_lGrupo  = crSigMvEst.Grupos
-                        loc_lConta  = crSigMvEst.Estos
-                        loc_lResultado = .T.
-
-                        FOR loc_lnCt = 1 TO 2
-                            SELECT TmpResumo
-                            SET ORDER TO
-                            ZAP
-                            SET ORDER TO GrConMat
-
-                            loc_ldDataB = IIF(loc_lnCt = 1, loc_ldDatai - 1, loc_ldDataf)
-                            loc_ldDataL = IIF(loc_lnCt = 1, loc_ldDatai - 1, loc_ldDataf)
-
-                            SELECT LocalFecha
-                            INDEX ON DTOS(Datas) TAG Datas
-                            SET ORDER TO Datas DESCENDING
-                            SET NEAR ON
-                            =SEEK(DTOS(loc_ldDataB))
-                            SET NEAR OFF
-                            IF Datas > loc_ldDataB
-                                pDat = CTOD("01/01/1900")
-                                LOCATE FOR .F.
-                            ELSE
-                                pDat = TTOD(LocalFecha.Datas) + CrSigCdPac.ndFechas
-                            ENDIF
-                            pNot        = .F.
-                            loc_lGrupo  = crSigMvEst.Grupos
-                            loc_lConta  = crSigMvEst.Estos
-                            loc_lnTrabalhado   = 0
-                            LOCAL loc_llTipoQ, loc_llGrvPrz
-                            loc_llTipoQ  = .F.
-                            loc_llGrvPrz = .F.
-                            loc_lFalhaAdmitida = 0
-
-                            * Movimentos de producao (SigCdNec/SigCdNei)
-                            loc_lcQuery = "SELECT Datas, Dopps, GrupoOs, ContaOs, GrupoDs, ContaDs, " + ;
-                                          "Emps, Numps, Obss, cIdChaves, EmpDnPs " + ;
-                                          "FROM SigCdNec " + ;
-                                          "WHERE Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                          "Datas >= ?pDat AND " + ;
-                                          "((GrupoDs = " + EscaparSQL(loc_lGrupo) + " AND ContaDs = " + EscaparSQL(loc_lConta) + " " + ;
-                                          "AND (ProcdBal = ?loc_llFalse OR NumBalds<>" + STR(LocalFecha.codigos) + ")) " + ;
-                                          "OR (GrupoOs = " + EscaparSQL(loc_lGrupo) + " AND ContaOs = " + EscaparSQL(loc_lConta) + " " + ;
-                                          "AND (ProcBals = ?loc_llFalse OR NumBals<>" + STR(LocalFecha.Codigos) + "))) " + ;
-                                          "ORDER BY Datas, Dopps, GrupoOs, ContaOs, GrupoDs, ContaDs, Emps, Numps, cIdChaves"
-                            IF USED("LocalNens")
-                                USE IN LocalNens
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalNens") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalNens)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-
-                            loc_lcQuery = "SELECT b.EmpDNPs, b.CMats, b.CUnis, b.Nenvs, b.Pesos, b.Qtds, " + ;
-                                          "b.TpOps, b.cIdChaves, b.Nops, b.Peso2s, b.CodCors, b.CodTams " + ;
-                                          "FROM SigCdNec a, SigCdNei b " + ;
-                                          "WHERE a.Emps = " + EscaparSQL(loc_lcEmp) + " AND " + ;
-                                          "a.Datas >= ?pDat AND (a.GrupoDs = " + EscaparSQL(loc_lGrupo) + " OR a.GrupoOs = " + EscaparSQL(loc_lGrupo) + ") " + ;
-                                          "AND (a.ContaDs = " + EscaparSQL(loc_lConta) + " OR a.ContaOs = " + EscaparSQL(loc_lConta) + ") AND " + ;
-                                          "a.EmpDNPs = b.EmpDNPs AND " + ;
-                                          "b.Servicos = ?pNot " + ;
-                                          "ORDER BY b.EmpDNPs, b.CMats, b.CUnis, b.Nenvs, b.Pesos, b.Qtds, b.TpOps, b.cIdChaves, b.Nops"
-                            IF USED("LocalNensI")
-                                USE IN LocalNensI
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalNensI") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalNensI)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-                            SELECT LocalNensI
-                            INDEX ON EmpDNPs TAG EmpDNPs
-                            SET ORDER TO EmpDNPs
-
-                            LOCAL loc_loBarra6
-                            SELECT LocalNens
-                            loc_loBarra6 = CREATEOBJECT("fwprogressbar", "Processando Mov. de Produ" + CHR(231) + CHR(227) + "o...", RECCOUNT())
-                            loc_loBarra6.Top = loc_loBarra6.Top + INT(loc_loBarra6.Height / 2)
-                            loc_loBarra6.Show
-                            SCAN
-                                loc_loBarra6.UpDate(.T.)
-
-                                IF DTOS(Datas) > DTOS(loc_ldDataL)
-                                    LOOP
-                                ENDIF
-
-                                loc_lcEdn = LocalNens.Emps + LocalNens.Dopps + STR(LocalNens.Numps, 10)
-
-                                =SEEK(LocalNens.Dopps, "crSigCdOpd", "Dopps")
-
-                                loc_Origem   = .F.
-                                loc_Destino  = .F.
-                                LOCAL loc_lcMatPb
-                                loc_lcMatPb  = SPACE(14)
-                                loc_lcMatResFa = SPACE(14)
-
-                                IF (crSigCdOpd.Origems = 1) AND (LocalNens.GrupoOs = loc_lGrupo) AND (LocalNens.ContaOs = loc_lConta) AND INLIST(crSigCdOpd.EstOrigs, 1, 2)
-                                    loc_Origem = .T.
-                                ENDIF
-
-                                IF (crSigCdOpd.Destinos = 1) AND (LocalNens.GrupoDs = loc_lGrupo) AND (LocalNens.ContaDs = loc_lConta) AND INLIST(crSigCdOpd.EstDests, 1, 2)
-                                    loc_Destino = .T.
-                                ENDIF
-
-                                IF NOT loc_Origem AND NOT loc_Destino
-                                    LOOP
-                                ENDIF
-
-                                SELECT LocalNensI
-                                SEEK loc_lcEdn
-                                SCAN WHILE EmpDNPs = loc_lcEdn
-                                    =SEEK(LocalNens.GrupoOs, "crSigCdGcr", "Codigos")
-
-                                    IF CrSigCdGcr.UnifBals = 4
-                                        IF LocalNensI.Nops = 0
-                                            loc_lcMatPb = LocalNensI.CMats
-                                        ELSE
-                                            =SEEK(LocalNensI.Nops, "TmpOpi", "Nops")
-                                            =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                            loc_lcMatPb = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                        ENDIF
-                                        IF LocalNensI.CMats <> loc_lcMatPb
-                                            LOOP
-                                        ENDIF
-                                    ELSE
-                                        IF CrSigCdGcr.UnifBals = 3
-                                            =SEEK(LocalNensI.Nops, "TmpOpi", "Nops")
-                                            IF LocalNensI.Nops = 0
-                                                loc_lcMatPb = LocalNensI.CMats
-                                            ELSE
-                                                =SEEK(TmpOpi.Cpros, "TmpPro", "Cpros")
-                                                loc_lcMatPb = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                            ENDIF
-                                        ELSE
-                                            loc_lcMatPb = IIF(CrSigCdGcr.UnifBals = 1, crSigCdPam.Ouros, LocalNensI.CMats)
-                                        ENDIF
-                                    ENDIF
-                                    loc_lcMatResFa = loc_lcMatPb
-
-                                    =SEEK(LocalNensI.CMats, "TmpPro", "CPros")
-                                    =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-                                    =SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
-
-                                    loc_lcCodCor = PADR(IIF(INLIST(LocalGru.TipoEstos, 2, 4), LocalNensI.CodCors, " "), 4)
-                                    loc_lcCodTam = PADR(IIF(INLIST(LocalGru.TipoEstos, 3, 4), LocalNensI.CodTams, " "), 4)
-
-                                    IF loc_Origem
-                                        IF NOT SEEK(LocalNens.GrupoOs + LocalNens.ContaOs + LocalNensI.CMats + loc_lcCodCor + loc_lcCodTam, "TmpResumo")
-                                            INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
-                                                         VALUES (LocalNens.GrupoOs, LocalNens.ContaOs, ;
-                                                                 LocalNensI.CMats, TmpPro.CUnis, TmpPro.Varias, LocalGru.nAgMts, ;
-                                                                 .T., loc_lcCodCor, loc_lcCodTam)
-                                        ENDIF
-
-                                        SELECT TmpResumo
-                                        IF (crSigCdOpd.EstOrigs = 1)
-                                            REPLACE PesoEnts  WITH PesoEnts  + LocalNensI.Pesos, ;
-                                                    QtdeEnts  WITH QtdeEnts  + LocalNensI.Qtds, ;
-                                                    PesoFabre WITH PesoFabre + LocalNensI.Peso2s
-                                        ELSE
-                                            REPLACE PesoSais WITH PesoSais + LocalNensI.Pesos, ;
-                                                    QtdeSais WITH QtdeSais + LocalNensI.Qtds, ;
-                                                    PesoFabrs WITH PesoFabrs + LocalNensI.Peso2s
-                                        ENDIF
-                                    ENDIF
-
-                                    IF loc_Destino
-                                        IF NOT SEEK(LocalNens.GrupoDs + LocalNens.ContaDs + LocalNensI.CMats + loc_lcCodCor + loc_lcCodTam, "TmpResumo")
-                                            INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
-                                                         VALUES (LocalNens.GrupoDs, LocalNens.ContaDs, LocalNensI.CMats, ;
-                                                                 TmpPro.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T., loc_lcCodCor, loc_lcCodTam)
-                                        ENDIF
-
-                                        SELECT TmpResumo
-                                        IF (crSigCdOpd.EstDests = 1)
-                                            REPLACE PesoEnts  WITH PesoEnts  + LocalNensI.Pesos, ;
-                                                    QtdeEnts  WITH QtdeEnts  + LocalNensI.Qtds, ;
-                                                    PesoFabre WITH PesoFabre + LocalNensI.Peso2s
-                                        ELSE
-                                            REPLACE PesoSais WITH PesoSais + LocalNensI.Pesos, ;
-                                                    QtdeSais WITH QtdeSais + LocalNensI.Qtds, ;
-                                                    PesoFabrs WITH PesoFabrs + LocalNensI.Peso2s
-                                        ENDIF
-                                    ENDIF
-
-                                    =SEEK(TmpResumo.CMats, "TmpPro", "CPros")
-                                    =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-                                    =SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
-
-                                    IF CrSigCdGcr.UnifBals = 3 AND LocalNensI.CMats <> loc_lcMatPb ;
-                                        AND LocalGru.GruEstPs <> crSigMvEst.Grupos AND LocalGru.ConEstPs <> crSigMvEst.Estos
-                                        =SEEK(loc_lcMatPb, "TmpPro", "CPros")
-                                        =SEEK(TmpPro.Cgrus, "LocalGru", "CGrus")
-                                        =SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
-                                        IF loc_Origem
-                                            IF NOT SEEK(LocalNens.GrupoOs + LocalNens.ContaOs + loc_lcMatPb, "TmpResumo")
-                                                INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Visivel) ;
-                                                             VALUES (LocalNens.GrupoOs, LocalNens.ContaOs, ;
-                                                                     loc_lcMatPb, TmpPro.CUnis, TmpPro.Varias, .T.)
-                                            ENDIF
-                                            SELECT TmpResumo
-                                            IF (crSigCdOpd.EstOrigs = 1)
-                                                REPLACE PesoEnts WITH PesoEnts + LocalNensI.Pesos, ;
-                                                        QtdeEnts WITH QtdeEnts + LocalNensI.Pesos
-                                            ELSE
-                                                REPLACE PesoSais WITH PesoSais + LocalNensI.Pesos, ;
-                                                        QtdeSais WITH QtdeSais + LocalNensI.Pesos
-                                            ENDIF
-                                        ENDIF
-
-                                        IF loc_Destino
-                                            IF NOT SEEK(LocalNens.GrupoDs + LocalNens.ContaDs + loc_lcMatPb, "TmpResumo")
-                                                INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Visivel) ;
-                                                             VALUES (LocalNens.GrupoDs, LocalNens.ContaDs, loc_lcMatPb, TmpPro.CUnis, TmpPro.Varias, .T.)
-                                            ENDIF
-                                            SELECT TmpResumo
-                                            IF (crSigCdOpd.EstDests = 1)
-                                                REPLACE PesoEnts WITH PesoEnts + LocalNensI.Pesos, ;
-                                                        QtdeEnts WITH QtdeEnts + LocalNensI.Pesos
-                                            ELSE
-                                                REPLACE PesoSais WITH PesoSais + LocalNensI.Pesos, ;
-                                                        QtdeSais WITH QtdeSais + LocalNensI.Pesos
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ENDSCAN
-                            ENDSCAN
-                            loc_loBarra6.Complete
-
-                            IF NOT loc_lResultado
-                                EXIT
-                            ENDIF
-
-                            * Movimentos de estoque (SigMvCab/SigMvItn/SigMvIts)
-                            loc_lcQuery = "SELECT Datas, GrupoOs, ContaOs, GrupoDs, ContaDs, Emps, Dopes, Numes, Obses, CidChaves, EmpDs " + ;
-                                          "FROM SigMvCab " + ;
-                                          "WHERE (Emps = " + EscaparSQL(loc_lcEmp) + " OR EmpDs = " + EscaparSQL(loc_lcEmp) + ") AND " + ;
-                                          "Datas >= ?pDat AND " + ;
-                                          "( (GrupoDs = " + EscaparSQL(loc_lGrupo) + " AND ContaDs = " + EscaparSQL(loc_lConta) + " AND " + ;
-                                          "(ProcdBal = ?loc_llFalse OR NumBalds<>" + STR(LocalFecha.codigos) + ")) " + ;
-                                          "OR (GrupoOs = " + EscaparSQL(loc_lGrupo) + " AND ContaOs = " + EscaparSQL(loc_lConta) + " AND " + ;
-                                          "(ProcBals = ?loc_llFalse OR NumBals<>" + STR(LocalFecha.Codigos) + ")) ) " + ;
-                                          "ORDER BY Datas"
-                            IF USED("LocalEest")
-                                USE IN LocalEest
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEest") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalEest)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-
-                            loc_lcQuery = "SELECT b.EmpDopNums, b.Opers, b.CPros, b.CUnis, b.Qtds, b.Pesos, b.cItens " + ;
-                                          "FROM SigMvCab a, SigMvItn b " + ;
-                                          "WHERE (a.Emps = " + EscaparSQL(loc_lcEmp) + " OR a.Empds = " + EscaparSQL(loc_lcEmp) + ") AND " + ;
-                                          "Datas >= ?pDat AND (GrupoDs = " + EscaparSQL(loc_lGrupo) + " Or GrupoOs = " + EscaparSQL(loc_lGrupo) + ") " + ;
-                                          "AND (ContaDs = " + EscaparSQL(loc_lConta) + " Or ContaOs = " + EscaparSQL(loc_lConta) + ") AND " + ;
-                                          "a.EmpDopNums = b.EmpDopNums " + ;
-                                          "ORDER BY b.EmpDopNums, b.Opers, b.CPros, b.CUnis, b.Qtds, b.TpOps, b.cIdChaves, b.Nops"
-                            IF USED("LocalEestI")
-                                USE IN LocalEestI
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEestI") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalEestI)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-                            SELECT LocalEestI
-                            INDEX ON EmpDopNums TAG EmpDopNums
-                            SET ORDER TO EmpDopNums
-
-                            loc_lcQuery = "SELECT b.EmpDopNums, b.CPros, b.Qtds, b.Pesos, b.CodCors, b.CodTams, b.Citens " + ;
-                                          "FROM SigMvCab a, SigMvIts b " + ;
-                                          "WHERE (a.Emps = " + EscaparSQL(loc_lcEmp) + " Or a.EmpDs = " + EscaparSQL(loc_lcEmp) + ") AND " + ;
-                                          "Datas >= ?pDat AND (GrupoDs = " + EscaparSQL(loc_lGrupo) + " Or GrupoOs = " + EscaparSQL(loc_lGrupo) + ") " + ;
-                                          "AND (ContaDs = " + EscaparSQL(loc_lConta) + " Or ContaOs = " + EscaparSQL(loc_lConta) + ") AND " + ;
-                                          "a.EmpDopNums = b.EmpDopNums " + ;
-                                          "ORDER BY b.EmpDopNums, b.CPros, b.codcors, b.codtams, b.citens"
-                            IF USED("LocalEsti2")
-                                USE IN LocalEsti2
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEsti2") < 1
-                                MsgErro("Favor Reinicializar o Processo!!!", "Falha na Conex" + CHR(227) + "o (LocalEsti2)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-                            SELECT LocalEsti2
-                            INDEX ON EmpDopNums + Cpros + STR(Citens, 4) TAG EmpDopNums
-                            SET ORDER TO EmpDopNums
-
-                            SELECT LocalEest
-                            loc_loBarra6 = CREATEOBJECT("fwprogressbar", "Processando Mov. de Estoque", RECCOUNT("LocalEest"))
-                            loc_loBarra6.Top = loc_loBarra6.Top + INT(loc_loBarra6.Height / 2)
-                            loc_loBarra6.Show
-                            SCAN
-                                loc_loBarra6.Update(.T.)
-
-                                IF DTOS(Datas) > DTOS(loc_ldDataL)
-                                    LOOP
-                                ENDIF
-
-                                loc_lcEdn = LocalEest.Emps + LocalEest.Dopes + STR(LocalEest.Numes, 6)
-
-                                =SEEK(LocalEest.Dopes, "crSigCdOpe", "Dopes")
-
-                                LOCAL loc_lOrigem2, loc_lDestino2, loc_lChkOper
-                                LOCAL loc_lGrupod2, loc_lContad2, loc_lOperacao
-                                loc_lOrigem2  = .F.
-                                loc_lDestino2 = .F.
-                                loc_lChkOper  = .F.
-
-                                IF LocalEest.Emps = loc_lcEmp
-                                    IF (crSigCdOpe.EstOrigs = 4) OR (crSigCdOpe.Opers = 3)
-                                        IF (crSigCdOpe.Origems = 1) AND (LocalEest.GrupoOs = loc_lGrupo) AND (LocalEest.ContaOs = loc_lConta)
-                                            loc_lOrigem2 = .T.
-                                        ELSE
-                                            IF (crSigCdOpe.Destinos = 1) AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                                loc_lDestino2 = .T.
-                                            ENDIF
-                                        ENDIF
-                                    ELSE
-                                        IF (crSigCdOpe.Origems = 1) AND (LocalEest.GrupoOs = loc_lGrupo) AND (LocalEest.ContaOs = loc_lConta)
-                                            IF INLIST(crSigCdOpe.EstOrigs, 1, 2)
-                                                loc_lOrigem2 = .T.
-                                            ENDIF
-                                        ENDIF
-                                        IF (crSigCdOpe.Destinos = 1) AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                            IF INLIST(crSigCdOpe.EstDests, 1, 2)
-                                                loc_lDestino2 = .T.
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ELSE
-                                    IF LocalEest.EmpDs = loc_lcEmp
-                                        IF (crSigCdOpe.Destinos = 1) AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                            IF INLIST(crSigCdOpe.EstDests, 1, 2)
-                                                loc_lDestino2 = .T.
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ENDIF
-
-                                IF NOT loc_lOrigem2 AND NOT loc_lDestino2
-                                    LOOP
-                                ENDIF
-
-                                SELECT LocalEestI
-                                SEEK loc_lcEdn
-                                SCAN WHILE EmpDopNums = loc_lcEdn
-                                    =SEEK(LocalEesti.Cpros, "TmpPro", "CPros")
-                                    =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-                                    =SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
-
-                                    loc_lGrupod2   = SPACE(10)
-                                    loc_lContad2   = SPACE(10)
-                                    loc_lOperacao  = " "
-
-                                    IF (crSigCdOpe.EstOrigs = 4)
-                                        loc_lOrigem2  = .F.
-                                        loc_lDestino2 = .F.
-
-                                        IF (LocalEestI.Opers = "S") AND (LocalEest.GrupoOs = loc_lGrupo) AND (LocalEest.ContaOs = loc_lConta)
-                                            loc_lOrigem2  = .T.
-                                            loc_lOperacao = "S"
-                                            loc_lGrupod2  = LocalEest.GrupoDs
-                                            loc_lContad2  = LocalEest.ContaDs
-                                        ELSE
-                                            IF (LocalEestI.Opers = "E") AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                                loc_lDestino2 = .T.
-                                                loc_lOperacao = "E"
-                                                loc_lGrupod2  = LocalEest.GrupoOs
-                                                loc_lContad2  = LocalEest.ContaOs
-                                            ENDIF
-                                        ENDIF
-                                    ELSE
-                                        IF (crSigCdOpe.Opers = 3)
-                                            IF (crSigCdOpe.Origems = 1)
-                                                IF (LocalEestI.Opers = "S") AND (LocalEest.GrupoOs = loc_lGrupo) AND (LocalEest.ContaOs = loc_lConta)
-                                                    loc_lOrigem2  = .T.
-                                                    loc_lDestino2 = .F.
-                                                    loc_lOperacao = "S"
-                                                    loc_lGrupod2  = LocalEest.GrupoOs
-                                                    loc_lContad2  = LocalEest.ContaOs
-                                                ELSE
-                                                    IF (LocalEestI.Opers = "E") AND (LocalEest.GrupoOs = loc_lGrupo) AND (LocalEest.ContaOs = loc_lConta)
-                                                        loc_lOrigem2  = .F.
-                                                        loc_lDestino2 = .T.
-                                                        loc_lOperacao = "E"
-                                                        loc_lGrupod2  = LocalEest.GrupoOs
-                                                        loc_lContad2  = LocalEest.ContaOs
-                                                    ENDIF
-                                                ENDIF
-                                            ELSE
-                                                IF (crSigCdOpe.Destinos = 1)
-                                                    IF (LocalEestI.Opers = "S") AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                                        loc_lOrigem2  = .T.
-                                                        loc_lOperacao = "S"
-                                                        loc_lGrupod2  = LocalEest.GrupoDs
-                                                        loc_lContad2  = LocalEest.ContaDs
-                                                    ELSE
-                                                        IF (LocalEestI.Opers = "E") AND (LocalEest.GrupoDs = loc_lGrupo) AND (LocalEest.ContaDs = loc_lConta)
-                                                            loc_lDestino2 = .T.
-                                                            loc_lOperacao = "E"
-                                                            loc_lGrupod2  = LocalEest.GrupoDs
-                                                            loc_lContad2  = LocalEest.ContaDs
-                                                        ENDIF
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ELSE
-                                            IF loc_lOrigem2 AND (crSigCdOpe.EstOrigs = 1)
-                                                loc_lOperacao = "E"
-                                                IF (crSigCdOpe.Destinos = 1) AND (crSigCdOpe.EstDests = 2)
-                                                    loc_lGrupod2 = LocalEest.GrupoDs
-                                                    loc_lContad2 = LocalEest.ContaDs
-                                                ENDIF
-                                            ELSE
-                                                IF loc_lOrigem2 AND (crSigCdOpe.EstOrigs = 2)
-                                                    loc_lOperacao = "S"
-                                                    IF (crSigCdOpe.Destinos = 1) AND (crSigCdOpe.EstDests = 1)
-                                                        loc_lGrupod2 = LocalEest.GrupoDs
-                                                        loc_lContad2 = LocalEest.ContaDs
-                                                    ENDIF
-                                                ELSE
-                                                    IF loc_lDestino2 AND (crSigCdOpe.EstDests = 1)
-                                                        loc_lOperacao = "E"
-                                                        IF (crSigCdOpe.Origems = 1) AND (crSigCdOpe.EstOrigs = 2)
-                                                            loc_lGrupod2 = LocalEest.GrupoOs
-                                                            loc_lContad2 = LocalEest.ContaOs
-                                                        ENDIF
-                                                    ELSE
-                                                        IF loc_lDestino2 AND (crSigCdOpe.EstDests = 2)
-                                                            loc_lOperacao = "S"
-                                                            IF (crSigCdOpe.Origems = 1) AND (crSigCdOpe.EstOrigs = 1)
-                                                                loc_lGrupod2 = LocalEest.GrupoOs
-                                                                loc_lContad2 = LocalEest.ContaOs
-                                                            ENDIF
-                                                        ENDIF
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-
-                                    IF INLIST(CrSigCdGcr.UnifBals, 3, 4)
-                                        loc_lcMaterial = IIF(EMPTY(TmpPro.MatPrincs), crSigCdPam.Ouros, TmpPro.MatPrincs)
-                                    ELSE
-                                        loc_lcMaterial = IIF(CrSigCdGcr.UnifBals = 1, crSigCdPam.Ouros, LocalEesti.Cpros)
-                                    ENDIF
-
-                                    IF CrSigCdGcr.UnifBals = 4 AND LocalEestI.Cpros <> loc_lcMaterial
-                                        LOOP
-                                    ENDIF
-
-                                    loc_lcMatResFa = loc_lcMaterial
-
-                                    SELECT LocalEsti2
-                                    SET ORDER TO EmpDopNums
-                                    IF SEEK(LocalEesti.EmpDopNums + LocalEesti.Cpros + STR(LocalEesti.Citens, 4))
-                                        LOCAL loc_lnQtde, loc_lnPeso2
-                                        SCAN WHILE EmpDopNums + Cpros + STR(Citens, 4) = LocalEesti.EmpDopNums + LocalEesti.Cpros + STR(LocalEesti.Citens, 4)
-                                            loc_lnQtde = LocalEsti2.Qtds
-                                            loc_lnPeso2 = LocalEsti2.Pesos
-
-                                            loc_lcCodCor = PADR(IIF(INLIST(LocalGru.TipoEstos, 2, 4), LocalEsti2.CodCors, " "), 4)
-                                            loc_lcCodTam = PADR(IIF(INLIST(LocalGru.TipoEstos, 3, 4), LocalEsti2.CodTams, " "), 4)
-
-                                            IF loc_lOrigem2
-                                                IF NOT SEEK(loc_lGrupo + loc_lConta + LocalEsti2.CPros + loc_lcCodCor + loc_lcCodTam, "TmpResumo")
-                                                    INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
-                                                                 VALUES (loc_lGrupo, loc_lConta, LocalEestI.CPros, LocalEestI.CUnis, TmpPro.Varias, ;
-                                                                         LocalGru.nAgMts, .T., loc_lcCodCor, loc_lcCodTam)
-                                                ENDIF
-                                                SELECT TmpResumo
-                                                IF (loc_lOperacao = "E")
-                                                    REPLACE QtdeEnts  WITH QtdeEnts  + LocalEsti2.Qtds, ;
-                                                            PesoEnts  WITH PesoEnts  + loc_lnQtde, ;
-                                                            PesoFabre WITH PesoFabre + loc_lnQtde
-                                                ELSE
-                                                    REPLACE QtdeSais  WITH QtdeSais  + LocalEsti2.Qtds, ;
-                                                            PesoSais  WITH PesoSais  + loc_lnQtde, ;
-                                                            PesoFabrs WITH PesoFabrs + loc_lnQtde
-                                                ENDIF
-                                            ENDIF
-
-                                            IF loc_lDestino2
-                                                IF NOT SEEK(loc_lGrupo + loc_lConta + LocalEsti2.CPros + loc_lcCodCor + loc_lcCodTam, "TmpResumo")
-                                                    INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
-                                                                 VALUES (loc_lGrupo, loc_lConta, LocalEestI.CPros, TmpPro.CUnis, TmpPro.Varias, ;
-                                                                         LocalGru.nAgMts, .T., loc_lcCodCor, loc_lcCodTam)
-                                                ENDIF
-                                                SELECT TmpResumo
-                                                IF (loc_lOperacao = "E")
-                                                    REPLACE QtdeEnts  WITH QtdeEnts  + LocalEsti2.Qtds, ;
-                                                            PesoEnts  WITH PesoEnts  + loc_lnQtde, ;
-                                                            PesoFabre WITH PesoFabre + loc_lnQtde
-                                                ELSE
-                                                    REPLACE QtdeSais  WITH QtdeSais  + LocalEsti2.Qtds, ;
-                                                            PesoSais  WITH PesoSais  + loc_lnQtde, ;
-                                                            PesoFabrs WITH PesoFabrs + loc_lnQtde
-                                                ENDIF
-                                            ENDIF
-                                        ENDSCAN
-                                    ELSE
-                                        loc_lnQtde  = LocalEesti.Qtds
-                                        loc_lnPeso2 = LocalEesti.Pesos
-
-                                        IF loc_lOrigem2
-                                            IF NOT SEEK(loc_lGrupo + loc_lConta + LocalEestI.CPros, "TmpResumo")
-                                                INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel) ;
-                                                             VALUES (loc_lGrupo, loc_lConta, LocalEestI.CPros, LocalEestI.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T.)
-                                            ENDIF
-                                            SELECT TmpResumo
-                                            IF (loc_lOperacao = "E")
-                                                REPLACE QtdeEnts  WITH QtdeEnts  + LocalEesti.Qtds, ;
-                                                        PesoEnts  WITH PesoEnts  + loc_lnQtde, ;
-                                                        PesoFabre WITH PesoFabre + loc_lnQtde
-                                            ELSE
-                                                REPLACE QtdeSais  WITH QtdeSais  + LocalEesti.Qtds, ;
-                                                        PesoSais  WITH PesoSais  + loc_lnQtde, ;
-                                                        PesoFabrs WITH PesoFabrs + loc_lnQtde
-                                            ENDIF
-                                        ENDIF
-
-                                        IF loc_lDestino2
-                                            IF NOT SEEK(loc_lGrupo + loc_lConta + LocalEestI.CPros, "TmpResumo")
-                                                INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel) ;
-                                                             VALUES (loc_lGrupo, loc_lConta, LocalEestI.CPros, TmpPro.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T.)
-                                            ENDIF
-                                            SELECT TmpResumo
-                                            IF (loc_lOperacao = "E")
-                                                REPLACE QtdeEnts  WITH QtdeEnts  + LocalEesti.Qtds, ;
-                                                        PesoEnts  WITH PesoEnts  + loc_lnQtde, ;
-                                                        PesoFabre WITH PesoFabre + loc_lnQtde
-                                            ELSE
-                                                REPLACE QtdeSais  WITH QtdeSais  + LocalEesti.Qtds, ;
-                                                        PesoSais  WITH PesoSais  + loc_lnQtde, ;
-                                                        PesoFabrs WITH PesoFabrs + loc_lnQtde
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ENDSCAN
-                            ENDSCAN
-                            loc_loBarra6.Complete
-
-                            * Marca registros processados do TmpResumo
-                            SELECT TmpResumo
-                            REPLACE Flag3 WITH .T. FOR Grupo + Conta = loc_lGrupo + loc_lConta
-
-                            IF (CrSigCdGcr.UnifBals = 1)
-                                loc_lcMat = crSigCdPam.Ouros
-                                SELECT TmpResumo
-                                IF NOT SEEK(loc_lGrupo + loc_lConta + loc_lcMat)
-                                    APPEND BLANK
-                                    REPLACE CMats   WITH loc_lcMat, ;
-                                            Grupo   WITH loc_lGrupo, ;
-                                            Conta   WITH loc_lConta, ;
-                                            Visivel WITH .T.
-                                ENDIF
-
-                                SELECT [ ] AS Agrupar, SUM(PesoEnts) AS pEnts, SUM(PesoSais) AS pSais ;
-                                       FROM TmpResumo ;
-                                       WHERE Grupo + Conta = loc_lGrupo + loc_lConta AND Cmats <> loc_lcMat ;
-                                             AND Varias <> 1 AND Agregas <> 1 ;
-                                       INTO CURSOR csTotal GROUP BY 1
-                                GO TOP IN csTotal
-
-                                SELECT TmpResumo
-                                =SEEK(loc_lGrupo + loc_lConta)
-                                SCAN WHILE Grupo + Conta = loc_lGrupo + loc_lConta
-                                    IF (CMats = loc_lcMat)
-                                        REPLACE PesoEnts WITH PesoEnts + csTotal.pEnts
-                                        REPLACE PesoSais WITH PesoSais + csTotal.pSais
-                                        REPLACE QtdeEnts WITH QtdeEnts + csTotal.pEnts
-                                        REPLACE QtdeSais WITH QtdeSais + csTotal.pSais
-                                    ELSE
-                                        IF Agregas <> 1
-                                            REPLACE Visivel WITH .F., ;
-                                                    Flag3   WITH .F.
-                                        ENDIF
-                                    ENDIF
-                                ENDSCAN
-                            ENDIF
-
-                            * Busca saldo anterior (SigOpCfe)
-                            loc_lcSql = "SELECT * FROM SigOpCfe WHERE Codigos = " + STR(LocalFecha.Codigos, 6) + ;
-                                        " AND Emps = " + EscaparSQL(loc_lcEmp) + " ORDER BY Codigos, cpros"
-                            IF USED("CrSaldoI")
-                                USE IN CrSaldoI
-                            ENDIF
-                            IF SQLEXEC(gnConnHandle, loc_lcSql, "CrSaldoI") < 1
-                                MsgErro("Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o (CrSaldoI)")
-                                loc_lResultado = .F.
-                                EXIT
-                            ENDIF
-
-                            SELECT CrSaldoI
-                            INDEX ON Cpros TAG Cpros
-
-                            LOCAL loc_lnSaldoiPb, loc_lnSaidasPb, loc_lnPesagemPb, loc_lcCMatPb
-                            loc_lcCMatPb = SPACE(14)
-
-                            SELECT TmpResumo
-                            SET ORDER TO GrConMat
-                            =SEEK(loc_lGrupo + loc_lConta)
-                            SCAN WHILE Grupo + Conta = loc_lGrupo + loc_lConta
-                                STORE 0 TO loc_lnSaldoiPb, loc_lnSaidasPb, loc_lnPesagemPb
-
-                                =SEEK(TmpResumo.CMats, "TmpPro", "CPros")
-                                IF NOT loc_llTipoQ AND TmpResumo.CMats <> loc_lcCMatPb
-                                    STORE 0 TO loc_lFalhaAdmitida
-                                    loc_lcCMatPb = TmpResumo.CMats
-                                ENDIF
-
-                                SELECT CrSaldoI
-                                =SEEK(TmpResumo.CMats)
-                                loc_lnSaldoiPb = CrSaldoI.Pesagems
-
-                                SELECT TmpResumo
-                                REPLACE Saldoi  WITH loc_lnSaldoiPb, ;
-                                        FReal   WITH loc_lnSaldoiPb + TmpResumo.QtdeEnts - TmpResumo.QtdeSais - TmpResumo.Pesagem, ;
-                                        FAdmin  WITH loc_lFalhaAdmitida, ;
-                                        Saldof  WITH loc_lnSaldoiPb + TmpResumo.QtdeEnts - TmpResumo.QtdeSais - TmpResumo.Pesagem - loc_lFalhaAdmitida, ;
-                                        PfTrabs WITH IIF(loc_lnTrabalhado <> 0, (Saldof / loc_lnTrabalhado * 100), 0)
-
-                                IF (TmpResumo.Saldof <> 0) AND (CrSigCdCli.PagFals = 1 OR CrSigCdCli.RecFals = 1)
-                                    REPLACE Flag  WITH .T., ;
-                                            Flag2 WITH (CrSigCdCli.PagFals = 1 OR CrSigCdCli.RecFals = 1) IN TmpResumo
-                                ENDIF
-                            ENDSCAN
-
-                            SELECT CrSaldoI
-                            loc_lcCMatPb = SPACE(14)
-                            SCAN
-                                IF CrSaldoI.Pesagems = 0
-                                    LOOP
-                                ENDIF
-                                =SEEK(CrSaldoI.Cpros, "TmpPro", "CPros")
-                                =SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
-
-                                loc_lnSaldoiPb = CrSaldoI.Pesagems
-
-                                SELECT TmpResumo
-                                LOCATE FOR Grupo + Conta + CMats = loc_lGrupo + loc_lConta + CrSaldoI.Cpros
-                                IF EOF()
-                                    INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel) ;
-                                                 VALUES (loc_lGrupo, loc_lConta, CrSaldoI.Cpros, ;
-                                                         TmpPro.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T.)
-                                    SELECT TmpResumo
-                                    REPLACE Saldoi  WITH loc_lnSaldoiPb, ;
-                                            FReal   WITH loc_lnSaldoiPb + TmpResumo.QtdeEnts - TmpResumo.QtdeSais - TmpResumo.Pesagem, ;
-                                            FAdmin  WITH 0, ;
-                                            Saldof  WITH loc_lnSaldoiPb + TmpResumo.QtdeEnts - TmpResumo.QtdeSais - TmpResumo.Pesagem - 0, ;
-                                            PfTrabs WITH 0
-                                ENDIF
-                            ENDSCAN
-
-                            * Insere em Saldos (lnCt=2) ou SaldoAnt (lnCt=1)
-                            SELECT TmpResumo
-                            =SEEK(loc_lGrupo + loc_lConta + loc_lcCodMat)
-                            SCAN WHILE Grupo + Conta + CMats = (loc_lGrupo + loc_lConta + loc_lcCodMat)
-                                IF loc_lnCt = 2
-                                    IF NOT SEEK(loc_lGrupo, "Saldos")
-                                        INSERT INTO Saldos (Grupos, Contas, Emps) VALUES (loc_lGrupo, loc_lConta, loc_lcEmp)
-                                    ENDIF
-                                    REPLACE Qtde WITH Qtde + TmpResumo.SaldoF IN Saldos
-                                ELSE
-                                    IF NOT SEEK(loc_lGrupo, "SaldoAnt")
-                                        INSERT INTO SaldoAnt (Grupos, Contas, Emps) VALUES (loc_lGrupo, loc_lConta, loc_lcEmp)
-                                    ENDIF
-                                    REPLACE Qtde WITH Qtde + TmpResumo.SaldoF IN SaldoAnt
-                                ENDIF
-                            ENDSCAN
-                        NEXT  && lnCt
-
-                    ENDIF  && GerBals OK
-                ENDIF  && CrSigCdCli loaded OK
-            ENDIF  && CrSigCdCli loaded
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em PosBalanco")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * CarregarDoCursor - Carrega parametros do cursor (OPERACIONAL)
-    * Diferente dos forms CRUD, aqui o cursor eh de PARAMETROS de execucao
-    * (data inicial, data final, demonstrativo selecionado).
-    *==========================================================================
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(par_cAliasCursor) OR !USED(par_cAliasCursor)
-                THIS.this_cMensagemErro = "Cursor n" + CHR(227) + "o dispon" + CHR(237) + "vel: " + par_cAliasCursor
-                loc_lResultado = .F.
-            ELSE
-                SELECT (par_cAliasCursor)
-
-                IF TYPE(par_cAliasCursor + ".Datai") != "U"
-                    THIS.this_dDatai = IIF(VARTYPE(EVALUATE(par_cAliasCursor + ".Datai")) = "D", ;
-                                           EVALUATE(par_cAliasCursor + ".Datai"), {})
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".Dataf") != "U"
-                    THIS.this_dDataf = IIF(VARTYPE(EVALUATE(par_cAliasCursor + ".Dataf")) = "D", ;
-                                           EVALUATE(par_cAliasCursor + ".Dataf"), {})
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".Demonstrativo") != "U"
-                    THIS.this_cDemonstrativo = TratarNulo(EVALUATE(par_cAliasCursor + ".Demonstrativo"), "C")
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".Empresa") != "U"
-                    THIS.this_cEmpresa = TratarNulo(EVALUATE(par_cAliasCursor + ".Empresa"), "C")
-                ELSE
-                    THIS.this_cEmpresa = go_4c_Sistema.cCodEmpresa
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".CodMat") != "U"
-                    THIS.this_cCodMat = TratarNulo(EVALUATE(par_cAliasCursor + ".CodMat"), "C")
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".DopeBals") != "U"
-                    THIS.this_cDopeBals = TratarNulo(EVALUATE(par_cAliasCursor + ".DopeBals"), "C")
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".NdFechas") != "U"
-                    THIS.this_nNdFechas = TratarNulo(EVALUATE(par_cAliasCursor + ".NdFechas"), "N")
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".GruposDmo") != "U"
-                    THIS.this_cGruposDmo = TratarNulo(EVALUATE(par_cAliasCursor + ".GruposDmo"), "C")
-                ENDIF
-
-                IF TYPE(par_cAliasCursor + ".ContasDmo") != "U"
-                    THIS.this_cContasDmo = TratarNulo(EVALUATE(par_cAliasCursor + ".ContasDmo"), "C")
-                ENDIF
-
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro ao carregar do cursor: " + loc_oErro.Message
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * Inserir - OPERACIONAL nao possui INSERT direto (form de analise)
-    * A "insercao" equivale a executar a analise e registrar auditoria.
-    *==========================================================================
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(THIS.this_cDemonstrativo)
-                THIS.this_cMensagemErro = "Demonstrativo n" + CHR(227) + "o informado."
-                loc_lResultado = .F.
-            ELSE
-                IF EMPTY(THIS.this_dDataf)
-                    THIS.this_cMensagemErro = "Data final n" + CHR(227) + "o informada."
-                    loc_lResultado = .F.
-                ELSE
-                    IF !EMPTY(THIS.this_dDatai) AND THIS.this_dDatai > THIS.this_dDataf
-                        THIS.this_cMensagemErro = "Data final deve ser maior que a data inicial."
-                        loc_lResultado = .F.
-                    ELSE
-                        loc_lResultado = THIS.ProcessarAnalise()
-
-                        IF loc_lResultado
-                            THIS.RegistrarAuditoria("EXECUCAO ANALISE PRODUCAO")
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro em Inserir: " + loc_oErro.Message
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * Atualizar - OPERACIONAL nao possui UPDATE direto (form de analise)
-    * "Atualizacao" equivale a reprocessar a analise com novos parametros.
-    *==========================================================================
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(THIS.this_cDemonstrativo)
-                THIS.this_cMensagemErro = "Demonstrativo n" + CHR(227) + "o informado."
-                loc_lResultado = .F.
-            ELSE
-                IF EMPTY(THIS.this_dDataf)
-                    THIS.this_cMensagemErro = "Data final n" + CHR(227) + "o informada."
-                    loc_lResultado = .F.
-                ELSE
-                    IF !EMPTY(THIS.this_dDatai) AND THIS.this_dDatai > THIS.this_dDataf
-                        THIS.this_cMensagemErro = "Data final deve ser maior que a data inicial."
-                        loc_lResultado = .F.
-                    ELSE
-                        loc_lResultado = THIS.ProcessarAnalise()
-
-                        IF loc_lResultado
-                            THIS.RegistrarAuditoria("REPROCESSAMENTO ANALISE PRODUCAO")
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = "Erro em Atualizar: " + loc_oErro.Message
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *==========================================================================
-    * RegistrarAuditoria - Override para OPERACIONAL
-    * Registra execucao da analise em LogAuditoria (sem tabela CRUD principal).
-    *==========================================================================
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_cChave, loc_cDetalhe, loc_oErro
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            IF gnConnHandle > 0
-                loc_cChave = THIS.ObterChavePrimaria()
-
-                loc_cDetalhe = "Demonstrativo=" + ALLTRIM(THIS.this_cDemonstrativo) + ;
-                               " Datai=" + DTOC(THIS.this_dDatai) + ;
-                               " Dataf=" + DTOC(THIS.this_dDataf) + ;
-                               " Emp=" + ALLTRIM(THIS.this_cEmpresa)
-
-                loc_cSQL = "INSERT INTO LogAuditoria " + ;
-                           "(Usuario, DataHora, Operacao, Tabela, ChaveRegistro, DadosNovos) " + ;
-                           "VALUES (" + ;
-                           EscaparSQL(gc_4c_UsuarioLogado) + ", " + ;
-                           "GETDATE(), " + ;
-                           EscaparSQL(par_cOperacao) + ", " + ;
-                           EscaparSQL("SIGPRFEM") + ", " + ;
-                           EscaparSQL(loc_cChave) + ", " + ;
-                           EscaparSQL(loc_cDetalhe) + ")"
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL) >= 0
-                    loc_lResultado = .T.
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            * Falha em auditoria nao deve interromper a operacao
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
+	*-- Parametros de consulta (filtros do form)
+	this_dDataInicio    = {}
+	this_dDataFinal     = {}
+	this_cDemonstrativo = ""
+	this_cEmpresa       = ""
+	this_cGrupos        = ""
+	this_cContas        = ""
+
+	*-- Material principal e operacao de balanco (SigCdPam)
+	this_cCodMat    = ""
+	this_cDopeBals  = ""
+
+	*-- Tempo de fechamento em segundos (SigCdPac.ndFechas)
+	this_nNdFechas  = 0
+
+	*-- Totalizadores do painel Resumo
+	this_nSaldoIni  = 0
+	this_nSaldoAnt  = 0
+	this_nEntradas  = 0
+	this_nTEntradas = 0
+	this_nSaidas    = 0
+	this_nSaldo     = 0
+	this_nSaldoFunc = 0
+	this_nPesagem   = 0
+	this_nSaldoT    = 0
+	this_nFalhaFunc = 0
+
+	*====================================================================
+	* Init
+	*====================================================================
+	PROCEDURE Init()
+		LOCAL loc_lResultado
+		loc_lResultado = .F.
+
+		TRY
+			DODEFAULT()
+
+			THIS.this_cTabela     = ""
+			THIS.this_cCampoChave = ""
+
+			THIS.this_dDataInicio    = {}
+			THIS.this_dDataFinal     = {}
+			THIS.this_cDemonstrativo = ""
+			THIS.this_cEmpresa       = go_4c_Sistema.cCodEmpresa
+			THIS.this_cGrupos        = ""
+			THIS.this_cContas        = ""
+			THIS.this_cCodMat        = ""
+			THIS.this_cDopeBals      = ""
+			THIS.this_nNdFechas      = 0
+			THIS.this_nSaldoIni      = 0
+			THIS.this_nSaldoAnt      = 0
+			THIS.this_nEntradas      = 0
+			THIS.this_nTEntradas     = 0
+			THIS.this_nSaidas        = 0
+			THIS.this_nSaldo         = 0
+			THIS.this_nSaldoFunc     = 0
+			THIS.this_nPesagem       = 0
+			THIS.this_nSaldoT        = 0
+			THIS.this_nFalhaFunc     = 0
+
+			loc_lResultado = .T.
+
+		CATCH TO loc_oErro
+			MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+				" PROC=" + loc_oErro.Procedure, "Erro SigPrFemBO.Init")
+			loc_lResultado = .F.
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* ObterChavePrimaria - OPERACIONAL, sem chave primaria
+	*====================================================================
+	PROCEDURE ObterChavePrimaria()
+		RETURN ""
+	ENDPROC
+
+	*====================================================================
+	* CarregarDoCursor - OPERACIONAL, sem CRUD
+	*====================================================================
+	PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+		RETURN .T.
+	ENDPROC
+
+	*====================================================================
+	* ValidarDados - valida filtros do form antes de processar
+	*====================================================================
+	PROTECTED PROCEDURE ValidarDados()
+		THIS.this_cMensagemErro = ""
+
+		IF EMPTY(THIS.this_dDataFinal)
+			THIS.this_cMensagemErro = "A Data Final Deve Ser Informada!!!"
+			RETURN .F.
+		ENDIF
+
+		IF !EMPTY(THIS.this_dDataInicio) AND THIS.this_dDataInicio > THIS.this_dDataFinal
+			THIS.this_cMensagemErro = "A Data Final Deve Ser Maior Que a Data Inicial!!!"
+			RETURN .F.
+		ENDIF
+
+		IF EMPTY(THIS.this_cDemonstrativo)
+			THIS.this_cMensagemErro = "A Configura" + CHR(231) + CHR(227) + "o Deve Ser Informada!!!"
+			RETURN .F.
+		ENDIF
+
+		RETURN .T.
+	ENDPROC
+
+	*====================================================================
+	* PrepararCursoresBase - carrega tabelas de lookup do SQL Server
+	* Chamado pelo Form.InicializarForm() uma vez ao abrir o form
+	*====================================================================
+	PROCEDURE PrepararCursoresBase()
+		LOCAL loc_lResultado, loc_oErro
+		loc_lResultado = .F.
+
+		TRY
+			*-- SigCdPam: material principal e operacao de balanco
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Ouros, DopeBals FROM SigCdPam", ;
+				"crSigCdPam") > 0
+				SELECT crSigCdPam
+				GO TOP
+				IF !EOF()
+					THIS.this_cCodMat   = NVL(crSigCdPam.Ouros, "")
+					THIS.this_cDopeBals = NVL(crSigCdPam.DopeBals, "")
+				ENDIF
+			ENDIF
+
+			*-- SigCdPac: tempo de fechamento
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT ndFechas FROM SigCdPac", ;
+				"crSigCdPac") > 0
+				SELECT crSigCdPac
+				GO TOP
+				IF !EOF()
+					THIS.this_nNdFechas = NVL(crSigCdPac.ndFechas, 0)
+				ENDIF
+			ENDIF
+
+			*-- SigCdOpe: operacoes de estoque
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Dopes, Origems, EstOrigs, Destinos, EstDests, Opers FROM SigCdOpe", ;
+				"crSigCdOpe") > 0
+				SELECT crSigCdOpe
+				INDEX ON Dopes TAG Dopes
+				SET ORDER TO Dopes
+			ENDIF
+
+			*-- SigCdOpd: operacoes de producao
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Dopps, Origems, EstOrigs, Destinos, EstDests FROM SigCdOpd", ;
+				"crSigCdOpd") > 0
+				SELECT crSigCdOpd
+				INDEX ON Dopps TAG Dopps
+				SET ORDER TO Dopps
+			ENDIF
+
+			*-- SigCdGcr: grupos de controle de recursos
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Codigos, UnifBals, GerBals FROM SigCdGcr", ;
+				"crSigCdGcr") > 0
+				SELECT crSigCdGcr
+				INDEX ON Codigos TAG Codigos
+				SET ORDER TO Codigos
+			ENDIF
+
+			*-- SigCdGrp: grupos de produtos (LocalGru)
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Cgrus, Mercs, TipoEstos, nAgMts, GruEstPs, ConEstPs FROM SigCdGrp", ;
+				"LocalGru") > 0
+				SELECT LocalGru
+				INDEX ON Cgrus TAG Cgrus
+				SET ORDER TO Cgrus
+			ENDIF
+
+			*-- SigCdGpr: super-grupos (LocalGgrp)
+			IF SQLEXEC(gnConnHandle, ;
+				"SELECT Codigos, UnifBals FROM SigCdGpr", ;
+				"LocalGgrp") > 0
+				SELECT LocalGgrp
+				INDEX ON Codigos TAG Codigos
+				SET ORDER TO Codigos
+			ENDIF
+
+			loc_lResultado = .T.
+
+		CATCH TO loc_oErro
+			MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+				" PROC=" + loc_oErro.Procedure, "Erro SigPrFemBO.PrepararCursoresBase")
+			loc_lResultado = .F.
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* PrepararCursoresTrabalho - cria cursores acumuladores
+	* Equivalente ao PROCEDURE Load do form original
+	* Chamado pelo Form.InicializarForm()
+	*====================================================================
+	PROCEDURE PrepararCursoresTrabalho()
+		LOCAL loc_lResultado, loc_oErro
+		loc_lResultado = .F.
+
+		TRY
+			SET NULL ON
+
+			IF USED("Entradas")
+				USE IN Entradas
+			ENDIF
+			CREATE CURSOR Entradas (Emps C(3) NULL, TpOps C(15) NULL, Qtde N(12,3) NULL)
+			INDEX ON Emps + TpOps TAG TpOps
+			SET ORDER TO TpOps
+
+			IF USED("Saidas")
+				USE IN Saidas
+			ENDIF
+			CREATE CURSOR Saidas (Emps C(3) NULL, TpOps C(15) NULL, Qtde N(12,3) NULL)
+			INDEX ON Emps + TpOps TAG TpOps
+			SET ORDER TO TpOps
+
+			IF USED("Saldos")
+				USE IN Saldos
+			ENDIF
+			CREATE CURSOR Saldos (Grupos C(10) NULL, Contas C(10) NULL, Qtde N(12,3) NULL, Emps C(3) NULL)
+			INDEX ON Grupos TAG GruConta
+			SET ORDER TO GruConta
+
+			IF USED("SaldoAnt")
+				USE IN SaldoAnt
+			ENDIF
+			CREATE CURSOR SaldoAnt (Grupos C(10) NULL, Contas C(10) NULL, Qtde N(12,3) NULL, Emps C(3) NULL)
+			INDEX ON Grupos TAG GruConta
+			SET ORDER TO GruConta
+
+			IF USED("Falhas")
+				USE IN Falhas
+			ENDIF
+			CREATE CURSOR Falhas (Grupos C(10) NULL, Contas C(10) NULL, Qtde N(12,3) NULL, ;
+				Entra N(12,3) NULL, Saida N(12,3) NULL, Emps C(3) NULL)
+			INDEX ON Grupos TAG GruConta
+			SET ORDER TO GruConta
+
+			IF USED("TmpResumo")
+				USE IN TmpResumo
+			ENDIF
+			CREATE CURSOR TmpResumo (;
+				Flag     L    NULL, ;
+				Flag2    L    NULL, ;
+				Grupo    C(10) NULL, ;
+				Conta    C(10) NULL, ;
+				CMats    C(14) NULL, ;
+				CUnis    C(3)  NULL, ;
+				PesoEnts N(12,3) NULL, ;
+				QtdeEnts N(12,3) NULL, ;
+				PesoSais N(12,3) NULL, ;
+				QtdeSais N(12,3) NULL, ;
+				Saldoi   N(12,3) NULL, ;
+				Pesagem  N(12,3) NULL, ;
+				FReal    N(12,3) NULL, ;
+				FAdmin   N(12,3) NULL, ;
+				Saldof   N(12,3) NULL, ;
+				PesoPEnts N(12,3) NULL, ;
+				PesoPSais N(12,3) NULL, ;
+				PfTrabs  N(9,2)  NULL, ;
+				Flag3    L    NULL, ;
+				Varias   N(1)  NULL, ;
+				PesoFabre N(12,3) NULL, ;
+				PesoFabrs N(12,3) NULL, ;
+				cUniPs   C(3)  NULL, ;
+				CodCors  C(4)  NULL, ;
+				CodTams  C(4)  NULL, ;
+				Visivel  L    NULL, ;
+				Agregas  N(1)  NULL)
+			INDEX ON CMats + CodCors + CodTams TAG Cpros
+			INDEX ON Grupo + Conta + CMats + CodCors + CodTams TAG GrConMat FOR Visivel
+			INDEX ON Grupo + Conta TAG GruCon
+			INDEX ON Grupo + Conta + CMats TAG GruConMat
+			SET ORDER TO GrConMat
+
+			SET NULL OFF
+
+			loc_lResultado = .T.
+
+		CATCH TO loc_oErro
+			SET NULL OFF
+			MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+				" PROC=" + loc_oErro.Procedure, "Erro SigPrFemBO.PrepararCursoresTrabalho")
+			loc_lResultado = .F.
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* ProcessarAnalise - logica principal do botao Processar
+	* Retorna .T. em sucesso; erros ficam em this_cMensagemErro
+	*====================================================================
+	PROCEDURE ProcessarAnalise()
+		LOCAL loc_lResultado, loc_oErro
+		LOCAL lcEmp, lcCodMat, lcChave, lcConfig, lcQuery, lcSql
+		LOCAL loc_pDatBefore, loc_pDtI, loc_pDtF
+		LOCAL lnSaldoIni, lnPesagem, lnSaldoFunc, lnSaldoaFun
+		LOCAL lnFalhaFunc, lnTotalEntra, lnTotalSaida, lnLinha, lnLinha2
+		LOCAL loc_oBarra, loc_oBarrap
+		LOCAL lcAlias, lcTemp, lcEdn, lcChave1, lcChave2, lcTpOp
+		LOCAL llEOrigem, llEDestino, llSOrigem, llSDestino, llFalse, llTrue, loc_pNot
+		LOCAL _Grupoo, _Contao, _Grupod, _Contad, _Operacao, _Material, Ok, _OriDes
+		LOCAL loc_x, loc_QEnt, loc_QSai, loc_QFalha, loc_nRec, loc_nRecTemp
+		LOCAL loc_pPescI, loc_pPescF
+
+		loc_lResultado = .F.
+
+		TRY
+			*-- Validar filtros
+			IF !THIS.ValidarDados()
+				MsgAviso(THIS.this_cMensagemErro, "")
+				loc_lResultado = .F.
+			ENDIF
+
+			*-- Variaveis de trabalho
+			lcEmp    = THIS.this_cEmpresa
+			lcCodMat = THIS.this_cCodMat
+			lcConfig = THIS.this_cDemonstrativo
+
+			*-- Timestamps para queries parametrizadas
+			loc_pDatBefore = TTOD(THIS.this_dDataInicio - 1)
+			loc_pDtI       = TTOD(THIS.this_dDataInicio)
+			loc_pDtF       = DATETIME(YEAR(THIS.this_dDataFinal), MONTH(THIS.this_dDataFinal), ;
+				DAY(THIS.this_dDataFinal), 23, 59, 59)
+			loc_pPescI     = loc_pDtI
+			loc_pPescF     = loc_pDtF
+
+			*-- Zerar cursores acumuladores
+			ZAP IN Saldos
+			ZAP IN SaldoAnt
+			ZAP IN Falhas
+			ZAP IN Entradas
+			ZAP IN Saidas
+
+			*-- Carregar configuracao do demonstrativo (SigPrDmo)
+			lcSql = "SELECT Grupos, Contas FROM SigPrDmo WHERE Nome = " + ;
+				EscaparSQL(lcConfig)
+			IF SQLEXEC(gnConnHandle, lcSql, "crSigPrDmo") <= 0
+				MsgErro("Falha ao carregar configuracao do demonstrativo.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT crSigPrDmo
+			GO TOP
+			IF EOF()
+				MsgAviso("Configura" + CHR(231) + CHR(227) + "o '" + lcConfig + "' n" + ;
+					CHR(227) + "o encontrada em SigPrDmo.", "")
+				loc_lResultado = .F.
+			ENDIF
+			lcChave            = lcEmp + crSigPrDmo.Grupos + crSigPrDmo.Contas
+			THIS.this_cGrupos  = crSigPrDmo.Grupos
+			THIS.this_cContas  = crSigPrDmo.Contas
+			USE IN crSigPrDmo
+
+			*-- Saldo Inicial (ultimo historico antes do periodo)
+			lnSaldoIni = 0
+			lcSql = "SELECT TOP 1 Sqtds FROM SigMvHst " + ;
+				"WHERE EmpGruEsts = '" + lcChave + "' AND " + ;
+				"CPros = '" + ALLTRIM(lcCodMat) + "' AND " + ;
+				"Datas <= ?loc_pDatBefore " + ;
+				"ORDER BY cIdChaves DESC"
+			IF SQLEXEC(gnConnHandle, lcSql, "crSigMvHst") > 0
+				SELECT crSigMvHst
+				GO TOP
+				IF !EOF()
+					lnSaldoIni = NVL(crSigMvHst.Sqtds, 0)
+				ENDIF
+				USE IN crSigMvHst
+			ENDIF
+
+			*-- Config pesagem (SigCdDpr Operas='P')
+			lcSql = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
+				"WHERE Operas = 'P' AND Nome = " + EscaparSQL(lcConfig)
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpPesag") <= 0
+				MsgErro("Falha ao carregar TmpPesag.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpPesag
+			INDEX ON Grupos + Contas TAG GruConta
+			SET ORDER TO GruConta
+
+			*-- Config saldo c/funcionario (SigCdDpr Operas='H')
+			lcSql = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
+				"WHERE Operas = 'H' AND Nome = " + EscaparSQL(lcConfig)
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpSaldo") <= 0
+				MsgErro("Falha ao carregar TmpSaldo.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpSaldo
+			INDEX ON Grupos + Contas TAG GruConta
+			SET ORDER TO GruConta
+
+			*-- Config entradas (SigCdDpr Operas='E')
+			lcSql = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
+				"WHERE Operas = 'E' AND Nome = " + EscaparSQL(lcConfig)
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpEntra") <= 0
+				MsgErro("Falha ao carregar TmpEntra.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpEntra
+			INDEX ON Grupos + Contas + TpOps TAG GruConTp
+			INDEX ON Grupos + Contas TAG GruCon
+			SET ORDER TO GruConTp
+
+			*-- Config saidas (SigCdDpr Operas='S')
+			lcSql = "SELECT Grupos, Contas, TpOps FROM SigCdDpr " + ;
+				"WHERE Operas = 'S' AND Nome = " + EscaparSQL(lcConfig)
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpSaida") <= 0
+				MsgErro("Falha ao carregar TmpSaida.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpSaida
+			INDEX ON Grupos + Contas + TpOps TAG GruConTp
+			INDEX ON Grupos + Contas TAG GruCon
+			SET ORDER TO GruConTp
+
+			*-- Produtos (TmpPro)
+			lcSql = "SELECT CPros, DPros, CUnis, CGrus, Varias, Custofs, MoeCusfs, MatPrincs, cUniPs " + ;
+				"FROM SigCdPro"
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpPro") <= 0
+				MsgErro("Falha ao carregar TmpPro.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpPro
+			INDEX ON CPros TAG CPros
+			SET ORDER TO CPros
+
+			*==============================================================
+			* PROCESSAR MOV. DE PRODUCAO (SigCdNec + SigCdNei)
+			*==============================================================
+			lcSql = "SELECT a.Datas, a.Emps, a.Dopps, a.Numps, a.GrupoOs, a.ContaOs, " + ;
+				"a.GrupoDs, a.ContaDs, a.cIdChaves, b.EmpDnps, b.Servicos, " + ;
+				"b.CMats, b.TpOps, b.Qtds, b.Pesos, b.cIdChaves as ChaveB, b.Nops " + ;
+				"FROM SigCdNec a, SigCdNei b " + ;
+				"WHERE a.Emps = '" + lcEmp + "' AND " + ;
+				"a.Datas BETWEEN ?loc_pDtI AND ?loc_pDtF AND " + ;
+				"a.EmpDNPs = b.EmpDNPs " + ;
+				"ORDER BY b.cIdChaves"
+			IF SQLEXEC(gnConnHandle, lcSql, "crProducao") <= 0
+				MsgErro("Falha ao carregar crProducao.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+
+			*-- SigOpPic (TmpOpi)
+			lcSql = "SELECT CPros, Nops FROM SigOpPic"
+			IF SQLEXEC(gnConnHandle, lcSql, "TmpOpi") <= 0
+				MsgErro("Falha ao carregar TmpOpi.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+			SELECT TmpOpi
+			INDEX ON Nops TAG Nops
+			SET ORDER TO Nops
+
+			*-- Subsets distintos de crProducao
+			SELECT DISTINCT EmpDnps, Servicos, CMats, Pesos, ChaveB, TpOps, Qtds, Nops ;
+				FROM crProducao ;
+				WHERE !Servicos ;
+				INTO CURSOR crSigCdNei READWRITE
+			SELECT crSigCdNei
+			INDEX ON EmpDnps TAG EmpDnps
+			SET ORDER TO EmpDnps
+
+			SELECT DISTINCT Datas, Emps, Dopps, Numps, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
+				FROM crProducao ;
+				ORDER BY Datas, Emps, Dopps, Numps, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
+				INTO CURSOR crSigCdNec
+
+			IF USED("crProducao")
+				USE IN crProducao
+			ENDIF
+
+			SELECT crSigCdNec
+			loc_nRec = RECCOUNT("crSigCdNec")
+			loc_oBarra = CREATEOBJECT("fwprogressbar", ;
+				"Processando Mov. Produ" + CHR(231) + CHR(227) + "o", loc_nRec)
+			loc_oBarra.Show()
+
+			SCAN
+				loc_oBarra.Update(.T.)
+
+				=SEEK(crSigCdNec.Dopps, "crSigCdOpd", "Dopps")
+
+				llEOrigem  = .F.
+				llEDestino = .F.
+				llSOrigem  = .F.
+				llSDestino = .F.
+
+				IF crSigCdOpd.Origems = 1
+					IF (SEEK(crSigCdNec.GrupoOs + crSigCdNec.ContaOs, "TmpEntra", "GruCon") OR ;
+						SEEK(crSigCdNec.GrupoOs + SPACE(10), "TmpEntra", "GruCon")) AND ;
+						crSigCdOpd.EstOrigs = 1
+						llEOrigem = .T.
+					ENDIF
+					IF (SEEK(crSigCdNec.GrupoOs + crSigCdNec.ContaOs, "TmpSaida", "GruCon") OR ;
+						SEEK(crSigCdNec.GrupoOs + SPACE(10), "TmpSaida", "GruCon")) AND ;
+						crSigCdOpd.EstOrigs = 2
+						llSOrigem = .T.
+					ENDIF
+				ENDIF
+
+				IF crSigCdOpd.Destinos = 1
+					IF (SEEK(crSigCdNec.GrupoDs + crSigCdNec.ContaDs, "TmpEntra", "GruCon") OR ;
+						SEEK(crSigCdNec.GrupoDs + SPACE(10), "TmpEntra", "GruCon")) AND ;
+						crSigCdOpd.EstDests = 1
+						llEDestino = .T.
+					ENDIF
+					IF (SEEK(crSigCdNec.GrupoDs + crSigCdNec.ContaDs, "TmpSaida", "GruCon") OR ;
+						SEEK(crSigCdNec.GrupoDs + SPACE(10), "TmpSaida", "GruCon")) AND ;
+						crSigCdOpd.EstDests = 2
+						llSDestino = .T.
+					ENDIF
+				ENDIF
+
+				IF !llEOrigem AND !llEDestino AND !llSOrigem AND !llSDestino
+					LOOP
+				ENDIF
+
+				lcEdn = crSigCdNec.Emps + crSigCdNec.Dopps + STR(crSigCdNec.Numps, 10)
+				_Material = SPACE(14)
+
+				SELECT crSigCdNei
+				=SEEK(lcEdn)
+				SCAN WHILE EmpDnps = lcEdn
+					lcChave1 = crSigCdNec.GrupoOs + crSigCdNec.ContaOs + crSigCdNei.TpOps
+					lcChave2 = crSigCdNec.GrupoOs + SPACE(10) + crSigCdNei.TpOps
+
+					=SEEK(crSigCdNec.GrupoOs, "crSigCdGcr", "Codigos")
+
+					IF crSigCdGcr.UnifBals = 4
+						IF crSigCdNei.Nops = 0
+							_Material = crSigCdNei.CMats
+						ELSE
+							=SEEK(crSigCdNei.Nops, "TmpOpi", "Nops")
+							=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+							_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+						ENDIF
+						IF crSigCdNei.CMats <> _Material
+							LOOP
+						ENDIF
+					ELSE
+						IF crSigCdGcr.UnifBals = 3
+							=SEEK(crSigCdNei.Nops, "TmpOpi", "Nops")
+							IF crSigCdNei.Nops = 0
+								_Material = crSigCdNei.CMats
+							ELSE
+								=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+								_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+							ENDIF
+						ELSE
+							_Material = IIF(crSigCdGcr.UnifBals = 1, lcCodMat, crSigCdNei.CMats)
+						ENDIF
+					ENDIF
+
+					Ok = (_Material = lcCodMat)
+
+					IF (llEOrigem OR llSOrigem) AND Ok
+						IF llEOrigem
+							lcTemp  = "TmpEntra"
+							lcAlias = "Entradas"
+						ELSE
+							lcTemp  = "TmpSaida"
+							lcAlias = "Saidas"
+						ENDIF
+
+						IF SEEK(lcChave1, lcTemp, "GruConTp") OR SEEK(lcChave2, lcTemp, "GruConTp")
+							IF !SEEK(lcEmp + &lcTemp..TpOps, lcAlias)
+								INSERT INTO (lcAlias) (TpOps) VALUES (&lcTemp..TpOps)
+							ENDIF
+							IF crSigCdNei.CMats = lcCodMat AND crSigCdGcr.UnifBals = 1
+								REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigCdNei.Qtds
+							ELSE
+								REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigCdNei.Pesos
+							ENDIF
+							REPLACE &lcAlias..Emps WITH lcEmp
+						ENDIF
+					ENDIF
+
+					lcChave1 = crSigCdNec.GrupoDs + crSigCdNec.ContaDs + crSigCdNei.TpOps
+					lcChave2 = crSigCdNec.GrupoDs + SPACE(10) + crSigCdNei.TpOps
+
+					=SEEK(crSigCdNec.GrupoDs, "crSigCdGcr", "Codigos")
+
+					IF crSigCdGcr.UnifBals = 4
+						IF crSigCdNei.Nops = 0
+							_Material = crSigCdNei.CMats
+						ELSE
+							=SEEK(crSigCdNei.Nops, "TmpOpi", "Nops")
+							=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+							_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+						ENDIF
+						IF crSigCdNei.CMats <> _Material
+							LOOP
+						ENDIF
+					ELSE
+						IF crSigCdGcr.UnifBals = 3
+							=SEEK(crSigCdNei.Nops, "TmpOpi", "Nops")
+							IF crSigCdNei.Nops = 0
+								_Material = crSigCdNei.CMats
+							ELSE
+								=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+								_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+							ENDIF
+						ELSE
+							_Material = IIF(crSigCdGcr.UnifBals = 1, lcCodMat, crSigCdNei.CMats)
+						ENDIF
+					ENDIF
+
+					Ok = (_Material = lcCodMat)
+
+					IF (llEDestino OR llSDestino) AND Ok
+						IF llEDestino
+							lcTemp  = "TmpEntra"
+							lcAlias = "Entradas"
+						ELSE
+							lcTemp  = "TmpSaida"
+							lcAlias = "Saidas"
+						ENDIF
+
+						IF SEEK(lcChave1, lcTemp, "GruConTp") OR SEEK(lcChave2, lcTemp, "GruConTp")
+							IF !SEEK(lcEmp + &lcTemp..TpOps, lcAlias)
+								INSERT INTO (lcAlias) (TpOps) VALUES (&lcTemp..TpOps)
+							ENDIF
+							IF crSigCdNei.CMats = lcCodMat AND crSigCdGcr.UnifBals = 1
+								REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigCdNei.Qtds
+							ELSE
+								REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigCdNei.Pesos
+							ENDIF
+							REPLACE &lcAlias..Emps WITH lcEmp
+						ENDIF
+					ENDIF
+				ENDSCAN
+			ENDSCAN
+			loc_oBarra.Complete()
+
+			IF USED("crSigCdNei")
+				USE IN crSigCdNei
+			ENDIF
+			IF USED("crSigCdNec")
+				USE IN crSigCdNec
+			ENDIF
+
+			*==============================================================
+			* PROCESSAR MOV. DE ESTOQUE (SigMvCab + SigMvItn)
+			*==============================================================
+			lcSql = "SELECT a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, a.GrupoOs, a.ContaOs, " + ;
+				"a.GrupoDs, a.ContaDs, a.cIdChaves, b.EmpDopNums, b.CPros, b.Opers, b.Qtds, " + ;
+				"b.cIdChaves as ChaveB " + ;
+				"FROM SigMvCab a, SigMvItn b " + ;
+				"WHERE a.Datas BETWEEN ?loc_pDtI AND ?loc_pDtF AND " + ;
+				"(a.Emps = '" + lcEmp + "' OR a.EmpDs = '" + lcEmp + "') AND " + ;
+				"NOT a.Dopes = '" + ALLTRIM(THIS.this_cDopeBals) + "' AND " + ;
+				"a.EmpDopNums = b.EmpDopNums " + ;
+				"ORDER BY a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, a.GrupoOs, " + ;
+				"a.ContaOs, a.GrupoDs, a.ContaDs, a.cIdChaves, " + ;
+				"b.EmpDopNums, b.CPros, b.Opers, b.Qtds, b.cIdChaves"
+			IF SQLEXEC(gnConnHandle, lcSql, "crEstoque") <= 0
+				MsgErro("Falha ao carregar crEstoque.", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+
+			SELECT DISTINCT EmpDopNums, CPros, Opers, Qtds, ChaveB ;
+				FROM crEstoque ;
+				ORDER BY EmpDopNums, CPros, Opers, Qtds, ChaveB ;
+				INTO CURSOR crSigMvItn READWRITE
+			SELECT crSigMvItn
+			INDEX ON EmpDopNums TAG EmpDopNums
+			SET ORDER TO EmpDopNums
+
+			SELECT DISTINCT Datas, Emps, EmpDs, Dopes, Numes, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
+				FROM crEstoque ;
+				ORDER BY Datas, Emps, EmpDs, Dopes, Numes, GrupoOs, ContaOs, GrupoDs, ContaDs, cIdChaves ;
+				INTO CURSOR crSigMvCab
+
+			IF USED("crEstoque")
+				USE IN crEstoque
+			ENDIF
+
+			SELECT crSigMvCab
+			loc_nRec = RECCOUNT("crSigMvCab")
+			loc_oBarra = CREATEOBJECT("fwprogressbar", "Processando Mov. de Estoque...", loc_nRec)
+			loc_oBarra.Show()
+
+			SCAN
+				loc_oBarra.Update(.T.)
+
+				=SEEK(crSigMvCab.Dopes, "crSigCdOpe", "Dopes")
+				_OriDes = .F.
+
+				IF crSigMvCab.EmpDs = lcEmp
+					IF SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra", "GruCon")
+						_OriDes = .T.
+					ENDIF
+				ELSE
+					IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida", "GruCon")) OR ;
+						(SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra", "GruCon") OR ;
+						SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida", "GruCon"))
+						_OriDes = .T.
+					ENDIF
+				ENDIF
+
+				IF !_OriDes
+					LOOP
+				ENDIF
+
+				lcEdn = crSigMvCab.Emps + crSigMvCab.Dopes + STR(crSigMvCab.Numes, 6)
+
+				SELECT crSigMvItn
+				SEEK lcEdn
+				SCAN WHILE EmpDopNums = lcEdn
+					_Grupoo   = SPACE(10)
+					_Contao   = SPACE(10)
+					_Grupod   = SPACE(10)
+					_Contad   = SPACE(10)
+					llSOrigem  = .F.
+					llEDestino = .F.
+
+					IF crSigCdOpe.EstOrigs = 4
+						IF crSigMvItn.Opers = 'S' AND ;
+							(SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida", "GruCon") OR ;
+							SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida", "GruCon"))
+							llSOrigem = .T.
+							_Grupoo   = crSigMvCab.GrupoOs
+							_Contao   = crSigMvCab.ContaOs
+						ELSE
+							IF crSigMvItn.Opers = 'E' AND ;
+								(SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra", "GruCon") OR ;
+								SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra", "GruCon"))
+								llEDestino = .T.
+								_Grupod    = crSigMvCab.GrupoDs
+								_Contad    = crSigMvCab.ContaDs
+							ENDIF
+						ENDIF
+					ELSE
+						IF crSigCdOpe.Opers = 3
+							IF crSigCdOpe.Origems = 1
+								IF crSigMvItn.Opers = 'S' AND ;
+									(SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida", "GruCon") OR ;
+									SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida", "GruCon"))
+									llSOrigem = .T.
+									_Grupoo   = crSigMvCab.GrupoOs
+									_Contao   = crSigMvCab.ContaOs
+								ELSE
+									IF crSigMvItn.Opers = 'E' AND ;
+										(SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra", "GruCon") OR ;
+										SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra", "GruCon"))
+										llEDestino = .T.
+										_Grupod    = crSigMvCab.GrupoOs
+										_Contad    = crSigMvCab.ContaOs
+									ENDIF
+								ENDIF
+							ELSE
+								IF crSigCdOpe.Destinos = 1
+									IF crSigMvItn.Opers = 'S' AND ;
+										(SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida", "GruCon") OR ;
+										SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida", "GruCon"))
+										llSOrigem = .T.
+										_Grupoo   = crSigMvCab.GrupoDs
+										_Contao   = crSigMvCab.ContaDs
+									ELSE
+										IF crSigMvItn.Opers = 'E' AND ;
+											(SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra", "GruCon") OR ;
+											SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra", "GruCon"))
+											llEDestino = .T.
+											_Grupod    = crSigMvCab.GrupoDs
+											_Contad    = crSigMvCab.ContaDs
+										ENDIF
+									ENDIF
+								ENDIF
+							ENDIF
+						ELSE
+							IF crSigCdOpe.Origems = 1
+								IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpSaida", "GruCon") OR ;
+									SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpSaida", "GruCon")) AND ;
+									crSigCdOpe.EstOrigs = 2
+									llSOrigem = .T.
+									_Grupoo   = crSigMvCab.GrupoOs
+									_Contao   = crSigMvCab.ContaOs
+								ELSE
+									IF (SEEK(crSigMvCab.GrupoOs + crSigMvCab.ContaOs, "TmpEntra", "GruCon") OR ;
+										SEEK(crSigMvCab.GrupoOs + SPACE(10), "TmpEntra", "GruCon")) AND ;
+										crSigCdOpe.EstOrigs = 1
+										llEDestino = .T.
+										_Grupod    = crSigMvCab.GrupoOs
+										_Contad    = crSigMvCab.ContaOs
+									ENDIF
+								ENDIF
+							ENDIF
+
+							IF crSigCdOpe.Destinos = 1
+								IF (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpSaida", "GruCon") OR ;
+									SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpSaida", "GruCon")) AND ;
+									crSigCdOpe.EstDests = 2
+									llSOrigem = .T.
+									_Grupoo   = crSigMvCab.GrupoDs
+									_Contao   = crSigMvCab.ContaDs
+								ELSE
+									IF (SEEK(crSigMvCab.GrupoDs + crSigMvCab.ContaDs, "TmpEntra", "GruCon") OR ;
+										SEEK(crSigMvCab.GrupoDs + SPACE(10), "TmpEntra", "GruCon")) AND ;
+										crSigCdOpe.EstDests = 1
+										llEDestino = .T.
+										_Grupod    = crSigMvCab.GrupoDs
+										_Contad    = crSigMvCab.ContaDs
+									ENDIF
+								ENDIF
+							ENDIF
+						ENDIF
+					ENDIF
+
+					lcChave1 = _Grupoo + _Contao + SPACE(15)
+					lcChave2 = _Grupoo + SPACE(10) + SPACE(15)
+					lcTpOp   = PADR(LEFT(crSigMvCab.Dopes, 10), 15)
+
+					=SEEK(_Grupoo, "crSigCdGcr", "Codigos")
+					=SEEK(crSigMvItn.CPros, "TmpPro", "CPros")
+
+					IF INLIST(crSigCdGcr.UnifBals, 3, 4)
+						_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+					ELSE
+						=SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
+						_Material = IIF(crSigCdGcr.UnifBals = 1 AND LocalGru.nAgMts <> 1, ;
+							lcCodMat, crSigMvItn.CPros)
+					ENDIF
+
+					IF crSigCdGcr.UnifBals = 4 AND crSigMvItn.CPros <> _Material
+						_Material = crSigMvItn.CPros
+					ENDIF
+
+					Ok = (_Material = lcCodMat)
+
+					IF llSOrigem AND Ok
+						lcTemp  = "TmpSaida"
+						lcAlias = "Saidas"
+						lcEmp   = IIF(EMPTY(crSigMvCab.EmpDs), crSigMvCab.Emps, crSigMvCab.EmpDs)
+
+						IF SEEK(lcChave1, lcTemp, "GruConTp") OR SEEK(lcChave2, lcTemp, "GruConTp")
+							IF !SEEK(lcEmp + lcTpOp, lcAlias)
+								SELECT (lcAlias)
+								APPEND BLANK
+								REPLACE TpOps WITH lcTpOp, Emps WITH lcEmp
+							ENDIF
+							REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigMvItn.Qtds
+						ENDIF
+					ENDIF
+
+					lcChave1 = _Grupod + _Contad + SPACE(15)
+					lcChave2 = _Grupod + SPACE(10) + SPACE(15)
+
+					=SEEK(_Grupod, "crSigCdGcr", "Codigos")
+					=SEEK(crSigMvItn.CPros, "TmpPro", "CPros")
+
+					IF INLIST(crSigCdGcr.UnifBals, 3, 4)
+						_Material = IIF(EMPTY(TmpPro.MatPrincs), lcCodMat, TmpPro.MatPrincs)
+					ELSE
+						=SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
+						_Material = IIF(crSigCdGcr.UnifBals = 1 AND LocalGru.nAgMts <> 1, ;
+							lcCodMat, crSigMvItn.CPros)
+					ENDIF
+
+					IF crSigCdGcr.UnifBals = 4 AND crSigMvItn.CPros <> _Material
+						_Material = crSigMvItn.CPros
+					ENDIF
+
+					Ok = (_Material = lcCodMat)
+
+					IF llEDestino AND Ok
+						lcTemp  = "TmpEntra"
+						lcAlias = "Entradas"
+						lcEmp   = crSigMvCab.Emps
+
+						IF SEEK(lcChave1, lcTemp, "GruConTp") OR SEEK(lcChave2, lcTemp, "GruConTp")
+							IF !SEEK(lcEmp + lcTpOp, lcAlias)
+								SELECT (lcAlias)
+								APPEND BLANK
+								REPLACE TpOps WITH lcTpOp, Emps WITH lcEmp
+							ENDIF
+							REPLACE &lcAlias..Qtde WITH &lcAlias..Qtde + crSigMvItn.Qtds
+						ENDIF
+					ENDIF
+				ENDSCAN
+			ENDSCAN
+			loc_oBarra.Complete()
+
+			*-- Restaurar lcEmp (pode ter sido alterado no loop de estoque)
+			lcEmp = THIS.this_cEmpresa
+
+			IF USED("crSigMvItn")
+				USE IN crSigMvItn
+			ENDIF
+			IF USED("crSigMvCab")
+				USE IN crSigMvCab
+			ENDIF
+
+			*==============================================================
+			* PROCESSAR PESAGEM
+			*==============================================================
+			lnPesagem = 0
+
+			SELECT TmpPesag
+			loc_nRec = RECCOUNT("TmpPesag")
+			loc_oBarra = CREATEOBJECT("fwprogressbar", "Processando Pesagens", loc_nRec)
+			loc_oBarra.Show()
+
+			SCAN
+				loc_oBarra.Update(.T.)
+
+				lcSql = "SELECT Datas, Codigos FROM SigCdPsc " + ;
+					"WHERE Emps = '" + lcEmp + "' AND " + ;
+					"Grupos = '" + ALLTRIM(TmpPesag.Grupos) + "' AND " + ;
+					"Contas = '" + ALLTRIM(TmpPesag.Contas) + "' AND " + ;
+					"Datas >= ?loc_pPescI AND Datas <= ?loc_pPescF " + ;
+					"ORDER BY Datas DESC, Codigos DESC"
+				IF SQLEXEC(gnConnHandle, lcSql, "crSigCdPsc") <= 0
+					MsgErro("Falha ao carregar crSigCdPsc.", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT crSigCdPsc
+				GO TOP
+
+				lcSql = "SELECT CPros, Qtds FROM SigCdPsi " + ;
+					"WHERE Emps = '" + lcEmp + "' AND " + ;
+					"Codigos = " + FormatarNumeroSQL(crSigCdPsc.Codigos, 0) + " AND " + ;
+					"CPros = '" + ALLTRIM(lcCodMat) + "' " + ;
+					"ORDER BY CPros, Qtds"
+				IF SQLEXEC(gnConnHandle, lcSql, "crSigCdPsi") <= 0
+					MsgErro("Falha ao carregar crSigCdPsi.", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT crSigCdPsi
+				SCAN
+					lnPesagem = lnPesagem + NVL(crSigCdPsi.Qtds, 0)
+				ENDSCAN
+
+				IF USED("crSigCdPsc")
+					USE IN crSigCdPsc
+				ENDIF
+				IF USED("crSigCdPsi")
+					USE IN crSigCdPsi
+				ENDIF
+			ENDSCAN
+			loc_oBarra.Complete()
+
+			*==============================================================
+			* PROCESSAR SALDO COM FUNCIONARIOS ? PosBalanco()
+			*==============================================================
+			lnSaldoFunc = 0
+			lnSaldoaFun = 0
+
+			SELECT TmpSaldo
+			loc_nRec = RECCOUNT("TmpSaldo")
+			loc_oBarra = CREATEOBJECT("fwprogressbar", ;
+				"Processando Saldo c/funcion" + CHR(225) + "rio", loc_nRec)
+			loc_oBarra.Show()
+
+			SCAN
+				loc_oBarra.Update(.T.)
+
+				IF EMPTY(TmpSaldo.Contas)
+					lcSql = "SELECT Emps, Grupos, Estos, CPros FROM SigMvEst " + ;
+						"WHERE Emps = '" + lcEmp + "' AND " + ;
+						"Grupos = '" + ALLTRIM(TmpSaldo.Grupos) + "' AND " + ;
+						"CPros = '" + ALLTRIM(lcCodMat) + "'"
+				ELSE
+					lcSql = "SELECT Emps, Grupos, Estos, CPros FROM SigMvEst " + ;
+						"WHERE EmpGruEsts = '" + lcEmp + ALLTRIM(TmpSaldo.Grupos) + ALLTRIM(TmpSaldo.Contas) + "' AND " + ;
+						"CPros = '" + ALLTRIM(lcCodMat) + "'"
+				ENDIF
+
+				IF SQLEXEC(gnConnHandle, lcSql, "crSigMvEst") <= 0
+					MsgErro("Falha ao carregar crSigMvEst.", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+
+				SELECT crSigMvEst
+				SCAN
+					=SEEK(crSigMvEst.Grupos, "crSigCdGcr", "Codigos")
+					Ok = (crSigMvEst.CPros = lcCodMat OR crSigCdGcr.UnifBals = 1)
+					IF !Ok
+						LOOP
+					ENDIF
+
+					THIS.PosBalanco()
+				ENDSCAN
+
+				IF USED("crSigMvEst")
+					USE IN crSigMvEst
+				ENDIF
+			ENDSCAN
+			loc_oBarra.Complete()
+
+			SELECT [  ] AS Agrupar, SUM(Qtde) AS Qtde FROM Saldos INTO CURSOR CsSelecao GROUP BY 1
+			lnSaldoFunc = NVL(CsSelecao.Qtde, 0)
+			USE IN CsSelecao
+
+			SELECT [  ] AS Agrupar, SUM(Qtde) AS Qtde FROM SaldoAnt INTO CURSOR CsSelecao GROUP BY 1
+			lnSaldoaFun = NVL(CsSelecao.Qtde, 0)
+			USE IN CsSelecao
+
+			*==============================================================
+			* PROCESSAR FALHAS
+			*==============================================================
+			lnFalhaFunc = 0
+
+			SELECT TmpSaldo
+			loc_nRec = RECCOUNT("TmpSaldo")
+			loc_oBarra = CREATEOBJECT("fwprogressbar", ;
+				"Processando Falha dos Funcion" + CHR(225) + "rios", loc_nRec)
+			loc_oBarra.Show()
+
+			SCAN
+				loc_oBarra.Update(.T.)
+
+				IF TmpSaldo.Contas = SPACE(10)
+					lcSql = "SELECT b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems " + ;
+						"FROM SigCdFcx a, SigOpCfe b " + ;
+						"WHERE a.Datas BETWEEN ?loc_pDtI AND ?loc_pDtF AND " + ;
+						"a.Emps = '" + lcEmp + "' AND " + ;
+						"a.Grupos = '" + ALLTRIM(TmpSaldo.Grupos) + "' AND " + ;
+						"a.Emps = b.Emps AND a.Codigos = b.Codigos AND " + ;
+						"b.CPros = '" + ALLTRIM(lcCodMat) + "' " + ;
+						"ORDER BY b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems"
+				ELSE
+					lcSql = "SELECT b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems " + ;
+						"FROM SigCdFcx a, SigOpCfe b " + ;
+						"WHERE a.Datas BETWEEN ?loc_pDtI AND ?loc_pDtF AND " + ;
+						"a.Emps = '" + lcEmp + "' AND " + ;
+						"a.Grupos = '" + ALLTRIM(TmpSaldo.Grupos) + "' AND " + ;
+						"a.Contas = '" + ALLTRIM(TmpSaldo.Contas) + "' AND " + ;
+						"a.Emps = b.Emps AND a.Codigos = b.Codigos AND " + ;
+						"b.CPros = '" + ALLTRIM(lcCodMat) + "' " + ;
+						"ORDER BY b.cIdChaves, b.FReals, b.Entradas, b.Saldos, b.Saidas, b.Pesagems"
+				ENDIF
+
+				IF SQLEXEC(gnConnHandle, lcSql, "crSigCdFcx") <= 0
+					MsgErro("Falha ao carregar crSigCdFcx.", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+
+				SELECT crSigCdFcx
+				SCAN
+					lnFalhaFunc = lnFalhaFunc + NVL(crSigCdFcx.FReals, 0)
+					IF !SEEK(TmpSaldo.Grupos, "Falhas", "GruConta")
+						INSERT INTO Falhas (Grupos, Contas, Emps) ;
+							VALUES (TmpSaldo.Grupos, TmpSaldo.Contas, lcEmp)
+					ENDIF
+					REPLACE Qtde  WITH Falhas.Qtde  + NVL(crSigCdFcx.FReals, 0), ;
+							Entra WITH Falhas.Entra + NVL(crSigCdFcx.Entradas, 0) + NVL(crSigCdFcx.Saldos, 0), ;
+							Saida WITH Falhas.Saida + NVL(crSigCdFcx.Saidas, 0) + NVL(crSigCdFcx.Pesagems, 0) IN Falhas
+				ENDSCAN
+
+				IF USED("crSigCdFcx")
+					USE IN crSigCdFcx
+				ENDIF
+			ENDSCAN
+			loc_oBarra.Complete()
+
+			*==============================================================
+			* TOTAIS FINAIS
+			*==============================================================
+			SELECT Entradas
+			SUM Qtde TO lnTotalEntra
+
+			SELECT Saidas
+			SUM Qtde TO lnTotalSaida
+
+			*-- Armazenar em propriedades do BO
+			THIS.this_nSaldoIni  = lnSaldoIni
+			THIS.this_nSaldoAnt  = lnSaldoaFun
+			THIS.this_nEntradas  = lnTotalEntra
+			THIS.this_nTEntradas = lnSaldoIni + lnTotalEntra + lnSaldoaFun
+			THIS.this_nSaidas    = lnTotalSaida
+			THIS.this_nPesagem   = lnPesagem
+			THIS.this_nSaldo     = lnSaldoIni + lnTotalEntra - lnTotalSaida + lnSaldoaFun
+			THIS.this_nSaldoFunc = lnSaldoFunc
+			THIS.this_nFalhaFunc = lnFalhaFunc
+			THIS.this_nSaldoT    = lnPesagem + lnSaldoFunc
+
+			*==============================================================
+			* CRIAR CURSORES PARA RELATORIO (TmpImp)
+			*==============================================================
+			IF USED("TmpImprime2")
+				USE IN TmpImprime2
+			ENDIF
+			CREATE CURSOR TmpImprime2 (;
+				Linha2  N(3)   NULL, ;
+				Cabec2  L      NULL, ;
+				Titulo2 C(40)  NULL, ;
+				Valor2  N(12,3) NULL, ;
+				Traco2  L      NULL, ;
+				Emps    C(3)   NULL)
+
+			IF USED("TmpImprime")
+				USE IN TmpImprime
+			ENDIF
+			CREATE CURSOR TmpImprime (;
+				Linha   N(3)   NULL, ;
+				Cabec   L      NULL, ;
+				Titulo  C(80)  NULL, ;
+				Valor   N(12,3) NULL, ;
+				Valor1  N(11,3) NULL, ;
+				Traco   L      NULL, ;
+				Entrada N(12,3) NULL, ;
+				Saida   N(12,3) NULL, ;
+				Falha   L      NULL)
+
+			lnLinha = 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Saldo Inicial : ", lnSaldoIni)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Saldo Ant c/Funcion" + CHR(225) + "rio : ", lnSaldoaFun)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Entradas : ", lnTotalEntra)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Total de Entradas : ", lnSaldoIni + lnTotalEntra + lnSaldoaFun)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Sa" + CHR(237) + "das : ", lnTotalSaida)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Saldo : ", lnSaldoIni + lnTotalEntra - lnTotalSaida + lnSaldoaFun)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Saldo com Funcion" + CHR(225) + "rios : ", lnSaldoFunc)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Pesagem : ", lnPesagem)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor) ;
+				VALUES (lnLinha, .F., "Total : ", lnPesagem + lnSaldoFunc)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Traco) ;
+				VALUES (lnLinha, .F., "Falha dos Funcion" + CHR(225) + "rios : ", lnFalhaFunc, .T.)
+			lnLinha = lnLinha + 1
+			INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Traco) ;
+				VALUES (lnLinha, .F., "Diferen" + CHR(231) + "a : ", ;
+				lnSaldoIni + lnTotalEntra - lnTotalSaida + lnSaldoaFun - ;
+				lnPesagem - lnSaldoFunc - lnFalhaFunc, .T.)
+
+			*-- Detalhe de Entradas
+			lnLinha2 = 0
+			SELECT Entradas
+			GO TOP
+			IF !EOF()
+				lnLinha2 = lnLinha2 + 1
+				INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) ;
+					VALUES (lnLinha2, .T., "Resumo de Entradas")
+
+				SELECT Entradas
+				SCAN
+					lnLinha2 = lnLinha2 + 1
+					INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2, Emps) ;
+						VALUES (lnLinha2, .F., Entradas.TpOps, Entradas.Qtde, Entradas.Emps)
+				ENDSCAN
+				SELECT TmpImprime2
+				REPLACE Traco2 WITH .T. IN TmpImprime2
+			ENDIF
+
+			lnLinha2 = lnLinha2 + 1
+			INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) ;
+				VALUES (lnLinha2, .F., " ", lnTotalEntra)
+
+			*-- Detalhe de Saidas
+			SELECT Saidas
+			GO TOP
+			IF !EOF()
+				lnLinha2 = lnLinha2 + 1
+				INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) ;
+					VALUES (lnLinha2, .T., "Resumo de Sa" + CHR(237) + "das")
+
+				SELECT Saidas
+				SCAN
+					lnLinha2 = lnLinha2 + 1
+					INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2, Emps) ;
+						VALUES (lnLinha2, .F., ;
+						IIF(EMPTY(Saidas.TpOps), "PRODUZIDO", Saidas.TpOps), ;
+						Saidas.Qtde, Saidas.Emps)
+				ENDSCAN
+				SELECT TmpImprime2
+				REPLACE Traco2 WITH .T. IN TmpImprime2
+			ENDIF
+
+			lnLinha2 = lnLinha2 + 1
+			INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) ;
+				VALUES (lnLinha2, .F., " ", lnTotalSaida)
+
+			*-- Detalhe de Saldos das Fases
+			SELECT Saldos
+			GO TOP
+			IF !EOF()
+				lnLinha2 = lnLinha2 + 1
+				INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) ;
+					VALUES (lnLinha2, .T., " ")
+				lnLinha2 = lnLinha2 + 1
+				INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2) ;
+					VALUES (lnLinha2, .T., "Saldos das Fases")
+
+				SELECT Saldos
+				SCAN
+					lnLinha2 = lnLinha2 + 1
+					INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) ;
+						VALUES (lnLinha2, .F., Saldos.Grupos, Saldos.Qtde)
+				ENDSCAN
+				SELECT TmpImprime2
+				REPLACE Traco2 WITH .T. IN TmpImprime2
+			ENDIF
+
+			lnLinha2 = lnLinha2 + 1
+			INSERT INTO TmpImprime2 (Linha2, Cabec2, Titulo2, Valor2) ;
+				VALUES (lnLinha2, .F., " ", lnSaldoFunc)
+
+			*-- Detalhe de Falhas das Fases
+			SELECT Falhas
+			GO TOP
+			IF !EOF()
+				lnLinha = lnLinha + 1
+				INSERT INTO TmpImprime (Linha, Cabec, Titulo) ;
+					VALUES (lnLinha, .T., PADC("Falhas das Fases", 70))
+				lnLinha = lnLinha + 1
+				INSERT INTO TmpImprime (Linha, Cabec, Titulo) ;
+					VALUES (lnLinha, .T., "Setor           Entrada      Saida      Falha Gr         %")
+
+				SELECT Falhas
+				SCAN
+					lnLinha = lnLinha + 1
+					loc_x = IIF(NVL(Falhas.Saida, 0) <> 0, (Falhas.Qtde / Falhas.Saida * 100), 0)
+					INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Valor1, Entrada, Saida, Falha) ;
+						VALUES (lnLinha, .F., Falhas.Grupos, Falhas.Qtde, loc_x, ;
+						Falhas.Entra, Falhas.Saida, .T.)
+				ENDSCAN
+
+				SELECT Falhas
+				SUM Entra, Saida, Qtde TO loc_QEnt, loc_QSai, loc_QFalha
+				loc_x = IIF(loc_QSai <> 0, (loc_QFalha / loc_QSai * 100), 0)
+
+				SELECT TmpImprime
+				REPLACE Traco WITH .T. IN TmpImprime
+				lnLinha = lnLinha + 1
+				INSERT INTO TmpImprime (Linha, Cabec, Titulo, Valor, Valor1, Entrada, Saida, Falha) ;
+					VALUES (lnLinha, .F., " ", loc_QFalha, loc_x, loc_QEnt, loc_QSai, .T.)
+			ENDIF
+
+			*-- JOIN final para relatorio
+			LOCAL loc_cOrder
+			IF lnLinha2 > lnLinha
+				loc_cOrder = "t2.Linha2"
+			ELSE
+				loc_cOrder = "t1.Linha"
+			ENDIF
+
+			IF USED("TmpImp")
+				USE IN TmpImp
+			ENDIF
+			SELECT T1.*, T2.* ;
+				FROM TmpImprime T1 ;
+				FULL JOIN TmpImprime2 T2 ;
+				ON T1.Linha = T2.Linha2 ;
+				INTO CURSOR TmpImp ;
+				ORDER BY &loc_cOrder.
+
+			*-- Cabecalho para o relatorio
+			lcSql = "SELECT Razas FROM SigCdEmp WHERE Cemps = '" + lcEmp + "'"
+			IF SQLEXEC(gnConnHandle, lcSql, "crSigCdEmp") > 0
+				SELECT crSigCdEmp
+				GO TOP
+			ENDIF
+
+			IF USED("Cabecalho")
+				USE IN Cabecalho
+			ENDIF
+			CREATE CURSOR Cabecalho (pNomeEmpresa C(60), pRelTitulo C(60), pPeriodo C(60))
+			INSERT INTO Cabecalho (pNomeEmpresa, pRelTitulo, pPeriodo) ;
+				VALUES (IIF(USED("crSigCdEmp") AND !EOF("crSigCdEmp"), ;
+					NVL(crSigCdEmp.Razas, ""), ""), ;
+				"An" + CHR(225) + "lise de Produ" + CHR(231) + CHR(227) + "o", ;
+				"Per" + CHR(237) + "odo : " + DTOC(THIS.this_dDataInicio) + ;
+				" at" + CHR(233) + " " + DTOC(THIS.this_dDataFinal))
+
+			IF USED("crSigCdEmp")
+				USE IN crSigCdEmp
+			ENDIF
+
+			loc_lResultado = .T.
+
+		CATCH TO loc_oErro
+			MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+				" PROC=" + loc_oErro.Procedure, "Erro SigPrFemBO.ProcessarAnalise")
+			loc_lResultado = .F.
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* PosBalanco - calcula balanco por funcionario/conta
+	* Equivalente ao PROCEDURE posbalanco do form original
+	* Chamado internamente por ProcessarAnalise()
+	* Contexto: crSigMvEst posicionado no registro corrente (SCAN)
+	*====================================================================
+	PROTECTED PROCEDURE PosBalanco()
+		LOCAL loc_lResultado, loc_oErro
+		LOCAL loc_pDat, loc_pNot, loc_llFalse, loc_llTrue
+		LOCAL loc_lcEdn, loc_lcQuery, loc_lcSql
+		LOCAL loc_nCt, loc_oBarra
+		LOCAL loc_ldDataB, loc_ldDataL
+		LOCAL loc_lcCodCor, loc_lcCodTam
+		LOCAL loc_Origem, loc_Destino, loc_Material, loc_MatResFa
+		LOCAL loc_FalhaAdmitida, loc_Trabalhado
+		LOCAL loc_lcGrupo, loc_lcConta
+		LOCAL loc_lcMat, loc_Saldoi, loc_nQtde, loc_nPeso
+
+		loc_lResultado = .F.
+
+		TRY
+			*-- Inicializar variaveis de contexto
+			loc_ldDatai  = THIS.this_dDataInicio
+			loc_ldDataf  = THIS.this_dDataFinal
+			loc_lcEmp    = THIS.this_cEmpresa
+			loc_lcCodMat = THIS.this_cCodMat
+			loc_Trabalhado = 0
+
+			*-- Verificar gerador de balanco do cliente
+			loc_lcSql = "SELECT Rclis, GerBals, PagFals, RecFals FROM SigCdCli " + ;
+				"WHERE Iclis = '" + ALLTRIM(crSigMvEst.Estos) + "'"
+			IF SQLEXEC(gnConnHandle, loc_lcSql, "CrSigCdCli") <= 0
+				MsgErro("Falha na conex" + CHR(227) + "o (crSigCdCli).", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+
+			=SEEK(crSigMvEst.Grupos, "CrSigCdGcr", "Codigos")
+
+			IF CrSigCdCli.GerBals <> 1 OR crSigCdGcr.GerBals <> 1
+				USE IN CrSigCdCli
+				loc_lResultado = .T.
+			ENDIF
+
+			*-- Datas de fechamento
+			loc_lcQuery = "SELECT Datas, Codigos FROM SigCdFcx " + ;
+				"WHERE Emps = '" + loc_lcEmp + "' AND " + ;
+				"Grupos = '" + ALLTRIM(crSigMvEst.Grupos) + "' AND " + ;
+				"Contas = '" + ALLTRIM(crSigMvEst.Estos) + "'"
+			IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalFecha") <= 0
+				MsgErro("Falha na conex" + CHR(227) + "o (LocalFecha).", "Erro")
+				loc_lResultado = .F.
+			ENDIF
+
+			*-- Guardar Grupo e Conta correntes
+			loc_lcGrupo = crSigMvEst.Grupos
+			loc_lcConta = crSigMvEst.Estos
+
+			FOR loc_nCt = 1 TO 2
+				SELECT TmpResumo
+				SET ORDER TO 0
+				ZAP
+				SET ORDER TO GrConMat
+
+				loc_ldDataB = IIF(loc_nCt = 1, loc_ldDatai - 1, loc_ldDataf)
+				loc_ldDataL = IIF(loc_nCt = 1, loc_ldDatai - 1, loc_ldDataf)
+
+				*-- Encontrar data de fechamento mais recente
+				SELECT LocalFecha
+				INDEX ON DTOS(Datas) TAG Datas
+				SET ORDER TO Datas DESCENDING
+				SET NEAR ON
+				=SEEK(DTOS(loc_ldDataB))
+				SET NEAR OFF
+
+				IF LocalFecha.Datas > loc_ldDataB
+					loc_pDat = CTOT("01/01/1900")
+					LOCATE FOR .F.
+				ELSE
+					loc_pDat = TTOD(LocalFecha.Datas) + THIS.this_nNdFechas
+				ENDIF
+				loc_pNot    = .F.
+				loc_llFalse = .F.
+				loc_llTrue  = .T.
+				loc_FalhaAdmitida = 0
+
+				*-- Movimentos de producao (SigCdNec + SigCdNei)
+				loc_lcQuery = "SELECT Datas, Dopps, GrupoOs, ContaOs, GrupoDs, ContaDs, " + ;
+					"Emps, Numps, Obss, cIdChaves, EmpDnPs " + ;
+					"FROM SigCdNec " + ;
+					"WHERE Emps = '" + loc_lcEmp + "' AND " + ;
+					"Datas >= ?loc_pDat AND " + ;
+					"((GrupoDs = '" + ALLTRIM(loc_lcGrupo) + "' AND " + ;
+					"ContaDs = '" + ALLTRIM(loc_lcConta) + "') OR " + ;
+					"(GrupoOs = '" + ALLTRIM(loc_lcGrupo) + "' AND " + ;
+					"ContaOs = '" + ALLTRIM(loc_lcConta) + "')) " + ;
+					"ORDER BY Datas, Dopps, GrupoOs, ContaOs, GrupoDs, ContaDs, Emps, Numps, cIdChaves"
+				IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalNens") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (LocalNens).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+
+				loc_lcQuery = "SELECT b.EmpDnPs, b.CMats, b.CUnis, b.Nenvs, b.Pesos, b.Qtds, " + ;
+					"b.TpOps, b.cIdChaves, b.Nops, b.Peso2s, b.CodCors, b.CodTams " + ;
+					"FROM SigCdNec a, SigCdNei b " + ;
+					"WHERE a.Emps = '" + loc_lcEmp + "' AND " + ;
+					"a.Datas >= ?loc_pDat AND " + ;
+					"(a.GrupoDs = '" + ALLTRIM(loc_lcGrupo) + "' OR " + ;
+					"a.GrupoOs = '" + ALLTRIM(loc_lcGrupo) + "') AND " + ;
+					"(a.ContaDs = '" + ALLTRIM(loc_lcConta) + "' OR " + ;
+					"a.ContaOs = '" + ALLTRIM(loc_lcConta) + "') AND " + ;
+					"a.EmpDNPs = b.EmpDNPs AND b.Servicos = ?loc_pNot " + ;
+					"ORDER BY b.EmpDNPs, b.CMats, b.CUnis, b.Nenvs, b.Pesos, b.Qtds, " + ;
+					"b.TpOps, b.cIdChaves, b.Nops"
+				IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalNensI") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (LocalNensI).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT LocalNensI
+				INDEX ON EmpDNPs TAG EmpDNPs
+				SET ORDER TO EmpDNPs
+
+				SELECT LocalNens
+				loc_oBarra = CREATEOBJECT("fwprogressbar", ;
+					"Processando Mov. de Produ" + CHR(231) + CHR(227) + "o...", ;
+					RECCOUNT("LocalNens"))
+				loc_oBarra.Show()
+
+				SCAN
+					loc_oBarra.Update(.T.)
+
+					IF DTOS(Datas) > DTOS(loc_ldDataL)
+						LOOP
+					ENDIF
+
+					loc_lcEdn = LocalNens.Emps + LocalNens.Dopps + STR(LocalNens.Numps, 10)
+
+					=SEEK(LocalNens.Dopps, "crSigCdOpd", "Dopps")
+
+					loc_Origem   = .F.
+					loc_Destino  = .F.
+					loc_Material = SPACE(14)
+
+					IF crSigCdOpd.Origems = 1 AND LocalNens.GrupoOs = loc_lcGrupo AND ;
+						LocalNens.ContaOs = loc_lcConta AND INLIST(crSigCdOpd.EstOrigs, 1, 2)
+						loc_Origem = .T.
+					ENDIF
+
+					IF crSigCdOpd.Destinos = 1 AND LocalNens.GrupoDs = loc_lcGrupo AND ;
+						LocalNens.ContaDs = loc_lcConta AND INLIST(crSigCdOpd.EstDests, 1, 2)
+						loc_Destino = .T.
+					ENDIF
+
+					IF !loc_Origem AND !loc_Destino
+						LOOP
+					ENDIF
+
+					SELECT LocalNensI
+					SEEK loc_lcEdn
+					SCAN WHILE EmpDNPs = loc_lcEdn
+						IF crSigCdGcr.UnifBals = 4
+							IF LocalNensI.Nops = 0
+								loc_Material = LocalNensI.CMats
+							ELSE
+								=SEEK(LocalNensI.Nops, "TmpOpi", "Nops")
+								=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+								loc_Material = IIF(EMPTY(TmpPro.MatPrincs), loc_lcCodMat, TmpPro.MatPrincs)
+							ENDIF
+							IF LocalNensI.CMats <> loc_Material
+								LOOP
+							ENDIF
+						ELSE
+							IF crSigCdGcr.UnifBals = 3
+								=SEEK(LocalNensI.Nops, "TmpOpi", "Nops")
+								IF LocalNensI.Nops = 0
+									loc_Material = LocalNensI.CMats
+								ELSE
+									=SEEK(TmpOpi.CPros, "TmpPro", "CPros")
+									loc_Material = IIF(EMPTY(TmpPro.MatPrincs), loc_lcCodMat, TmpPro.MatPrincs)
+								ENDIF
+							ELSE
+								loc_Material = IIF(crSigCdGcr.UnifBals = 1, loc_lcCodMat, LocalNensI.CMats)
+							ENDIF
+						ENDIF
+						loc_MatResFa = loc_Material
+
+						=SEEK(LocalNensI.CMats, "TmpPro", "CPros")
+						=SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
+						=SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
+
+						loc_lcCodCor = PADR(IIF(INLIST(LocalGru.TipoEstos, 2, 4), LocalNensI.CodCors, " "), 4)
+						loc_lcCodTam = PADR(IIF(INLIST(LocalGru.TipoEstos, 3, 4), LocalNensI.CodTams, " "), 4)
+
+						IF loc_Origem
+							IF !SEEK(LocalNens.GrupoOs + LocalNens.ContaOs + LocalNensI.CMats + ;
+								loc_lcCodCor + loc_lcCodTam, "TmpResumo", "GrConMat")
+								INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
+									VALUES (LocalNens.GrupoOs, LocalNens.ContaOs, ;
+									LocalNensI.CMats, TmpPro.CUnis, TmpPro.Varias, ;
+									LocalGru.nAgMts, .T., loc_lcCodCor, loc_lcCodTam)
+							ENDIF
+
+							SELECT TmpResumo
+							IF crSigCdOpd.EstOrigs = 1
+								REPLACE PesoEnts  WITH PesoEnts  + NVL(LocalNensI.Pesos, 0), ;
+										QtdeEnts  WITH QtdeEnts  + NVL(LocalNensI.Qtds, 0), ;
+										PesoFabre WITH PesoFabre + NVL(LocalNensI.Peso2s, 0)
+							ELSE
+								REPLACE PesoSais WITH PesoSais + NVL(LocalNensI.Pesos, 0), ;
+										QtdeSais WITH QtdeSais + NVL(LocalNensI.Qtds, 0), ;
+										PesoFabrs WITH PesoFabrs + NVL(LocalNensI.Peso2s, 0)
+							ENDIF
+						ENDIF
+
+						IF loc_Destino
+							IF !SEEK(LocalNens.GrupoDs + LocalNens.ContaDs + LocalNensI.CMats + ;
+								loc_lcCodCor + loc_lcCodTam, "TmpResumo", "GrConMat")
+								INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel, CodCors, CodTams) ;
+									VALUES (LocalNens.GrupoDs, LocalNens.ContaDs, LocalNensI.CMats, ;
+									TmpPro.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T., loc_lcCodCor, loc_lcCodTam)
+							ENDIF
+
+							SELECT TmpResumo
+							IF crSigCdOpd.EstDests = 1
+								REPLACE PesoEnts  WITH PesoEnts  + NVL(LocalNensI.Pesos, 0), ;
+										QtdeEnts  WITH QtdeEnts  + NVL(LocalNensI.Qtds, 0), ;
+										PesoFabre WITH PesoFabre + NVL(LocalNensI.Peso2s, 0)
+							ELSE
+								REPLACE PesoSais WITH PesoSais + NVL(LocalNensI.Pesos, 0), ;
+										QtdeSais WITH QtdeSais + NVL(LocalNensI.Qtds, 0), ;
+										PesoFabrs WITH PesoFabrs + NVL(LocalNensI.Peso2s, 0)
+							ENDIF
+						ENDIF
+					ENDSCAN
+				ENDSCAN
+				loc_oBarra.Complete()
+
+				*-- Movimentos de estoque (SigMvCab + SigMvIts)
+				loc_lcQuery = "SELECT a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, " + ;
+					"a.GrupoOs, a.ContaOs, a.GrupoDs, a.ContaDs, " + ;
+					"a.Obses, a.cIdChaves, b.EmpDopNums, b.CPros, b.Qtds, b.Pesos, " + ;
+					"b.CodCors, b.CodTams, b.Citens " + ;
+					"FROM SigMvCab a, SigMvIts b " + ;
+					"WHERE (a.Emps = '" + loc_lcEmp + "' OR a.EmpDs = '" + loc_lcEmp + "') AND " + ;
+					"a.Datas >= ?loc_pDat AND " + ;
+					"(a.GrupoDs = '" + ALLTRIM(loc_lcGrupo) + "' OR a.GrupoOs = '" + ALLTRIM(loc_lcGrupo) + "') AND " + ;
+					"(a.ContaDs = '" + ALLTRIM(loc_lcConta) + "' OR a.ContaOs = '" + ALLTRIM(loc_lcConta) + "') AND " + ;
+					"a.EmpDopNums = b.EmpDopNums " + ;
+					"ORDER BY b.EmpDopNums, b.CPros, b.CodCors, b.CodTams, b.Citens"
+				IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEsti2") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (LocalEsti2).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT LocalEsti2
+				INDEX ON EmpDopNums + CPros + STR(Citens, 4) TAG EmpDopNums
+				SET ORDER TO EmpDopNums
+
+				loc_lcQuery = "SELECT b.EmpDopNums, b.Opers, b.CPros, b.CUnis, b.Qtds, b.Pesos, b.cItens " + ;
+					"FROM SigMvCab a, SigMvItn b " + ;
+					"WHERE (a.Emps = '" + loc_lcEmp + "' OR a.EmpDs = '" + loc_lcEmp + "') AND " + ;
+					"a.Datas >= ?loc_pDat AND " + ;
+					"(a.GrupoDs = '" + ALLTRIM(loc_lcGrupo) + "' OR a.GrupoOs = '" + ALLTRIM(loc_lcGrupo) + "') AND " + ;
+					"(a.ContaDs = '" + ALLTRIM(loc_lcConta) + "' OR a.ContaOs = '" + ALLTRIM(loc_lcConta) + "') AND " + ;
+					"a.EmpDopNums = b.EmpDopNums " + ;
+					"ORDER BY b.EmpDopNums, b.Opers, b.CPros, b.CUnis, b.Qtds, b.Pesos"
+				IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEestI") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (LocalEestI).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT LocalEestI
+				INDEX ON EmpDopNums TAG EmpDopNums
+				SET ORDER TO EmpDopNums
+
+				loc_lcQuery = "SELECT a.Datas, a.Emps, a.EmpDs, a.Dopes, a.Numes, " + ;
+					"a.GrupoOs, a.ContaOs, a.GrupoDs, a.ContaDs, a.cIdChaves, a.EmpDs " + ;
+					"FROM SigMvCab a " + ;
+					"WHERE (a.Emps = '" + loc_lcEmp + "' OR a.EmpDs = '" + loc_lcEmp + "') AND " + ;
+					"a.Datas >= ?loc_pDat AND " + ;
+					"((a.GrupoDs = '" + ALLTRIM(loc_lcGrupo) + "' AND a.ContaDs = '" + ALLTRIM(loc_lcConta) + "') OR " + ;
+					"(a.GrupoOs = '" + ALLTRIM(loc_lcGrupo) + "' AND a.ContaOs = '" + ALLTRIM(loc_lcConta) + "')) " + ;
+					"ORDER BY Datas"
+				IF SQLEXEC(gnConnHandle, loc_lcQuery, "LocalEest") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (LocalEest).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+
+				SELECT LocalEest
+				loc_oBarra = CREATEOBJECT("fwprogressbar", ;
+					"Processando Mov. de Estoque", RECCOUNT("LocalEest"))
+				loc_oBarra.Show()
+
+				SCAN
+					loc_oBarra.Update(.T.)
+
+					IF DTOS(Datas) > DTOS(loc_ldDataL)
+						LOOP
+					ENDIF
+
+					loc_lcEdn = LocalEest.Emps + LocalEest.Dopes + STR(LocalEest.Numes, 6)
+
+					=SEEK(LocalEest.Dopes, "crSigCdOpe", "Dopes")
+
+					loc_Origem  = .F.
+					loc_Destino = .F.
+
+					IF LocalEest.Emps = loc_lcEmp
+						IF INLIST(crSigCdOpe.EstOrigs, 4) OR crSigCdOpe.Opers = 3
+							IF crSigCdOpe.Origems = 1 AND LocalEest.GrupoOs = loc_lcGrupo AND LocalEest.ContaOs = loc_lcConta
+								loc_Origem = .T.
+							ELSE
+								IF crSigCdOpe.Destinos = 1 AND LocalEest.GrupoDs = loc_lcGrupo AND LocalEest.ContaDs = loc_lcConta
+									loc_Destino = .T.
+								ENDIF
+							ENDIF
+						ELSE
+							IF crSigCdOpe.Origems = 1 AND LocalEest.GrupoOs = loc_lcGrupo AND LocalEest.ContaOs = loc_lcConta
+								IF INLIST(crSigCdOpe.EstOrigs, 1, 2)
+									loc_Origem = .T.
+								ENDIF
+							ENDIF
+							IF crSigCdOpe.Destinos = 1 AND LocalEest.GrupoDs = loc_lcGrupo AND LocalEest.ContaDs = loc_lcConta
+								IF INLIST(crSigCdOpe.EstDests, 1, 2)
+									loc_Destino = .T.
+								ENDIF
+							ENDIF
+						ENDIF
+					ELSE
+						IF LocalEest.EmpDs = loc_lcEmp
+							IF crSigCdOpe.Destinos = 1 AND LocalEest.GrupoDs = loc_lcGrupo AND LocalEest.ContaDs = loc_lcConta
+								IF INLIST(crSigCdOpe.EstDests, 1, 2)
+									loc_Destino = .T.
+								ENDIF
+							ENDIF
+						ENDIF
+					ENDIF
+
+					IF !loc_Origem AND !loc_Destino
+						LOOP
+					ENDIF
+
+					SELECT LocalEestI
+					SEEK loc_lcEdn
+					SCAN WHILE EmpDopNums = loc_lcEdn
+						=SEEK(LocalEestI.CPros, "TmpPro", "CPros")
+						=SEEK(TmpPro.Cgrus, "LocalGru", "Cgrus")
+						=SEEK(LocalGru.Mercs, "LocalGgrp", "Codigos")
+
+						LOCAL loc_Grupod2, loc_Contad2, loc_Operacao
+						loc_Grupod2  = SPACE(10)
+						loc_Contad2  = SPACE(10)
+						loc_Operacao = " "
+
+						IF INLIST(crSigCdGcr.UnifBals, 3, 4)
+							loc_Material = IIF(EMPTY(TmpPro.MatPrincs), loc_lcCodMat, TmpPro.MatPrincs)
+						ELSE
+							loc_Material = IIF(crSigCdGcr.UnifBals = 1, loc_lcCodMat, LocalEestI.CPros)
+						ENDIF
+
+						IF crSigCdGcr.UnifBals = 4 AND LocalEestI.CPros <> loc_Material
+							LOOP
+						ENDIF
+
+						loc_nQtde = NVL(LocalEestI.Qtds, 0)
+						loc_nPeso = NVL(LocalEestI.Pesos, 0)
+
+						IF loc_Origem
+							IF !SEEK(loc_lcGrupo + loc_lcConta + LocalEestI.CPros, "TmpResumo", "GruConMat")
+								INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel) ;
+									VALUES (loc_lcGrupo, loc_lcConta, LocalEestI.CPros, ;
+									LocalEestI.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T.)
+							ENDIF
+
+							SELECT TmpResumo
+							IF crSigCdOpe.EstOrigs = 1
+								REPLACE QtdeEnts  WITH QtdeEnts  + loc_nQtde, ;
+										PesoEnts  WITH PesoEnts  + loc_nPeso, ;
+										PesoFabre WITH PesoFabre + loc_nPeso
+							ELSE
+								REPLACE QtdeSais WITH QtdeSais + loc_nQtde, ;
+										PesoSais WITH PesoSais + loc_nPeso, ;
+										PesoFabrs WITH PesoFabrs + loc_nPeso
+							ENDIF
+						ENDIF
+
+						IF loc_Destino
+							IF !SEEK(loc_lcGrupo + loc_lcConta + LocalEestI.CPros, "TmpResumo", "GruConMat")
+								INSERT INTO TmpResumo (Grupo, Conta, CMats, CUnis, Varias, Agregas, Visivel) ;
+									VALUES (loc_lcGrupo, loc_lcConta, LocalEestI.CPros, ;
+									LocalEestI.CUnis, TmpPro.Varias, LocalGru.nAgMts, .T.)
+							ENDIF
+
+							SELECT TmpResumo
+							IF crSigCdOpe.EstDests = 1
+								REPLACE QtdeEnts  WITH QtdeEnts  + loc_nQtde, ;
+										PesoEnts  WITH PesoEnts  + loc_nPeso, ;
+										PesoFabre WITH PesoFabre + loc_nPeso
+							ELSE
+								REPLACE QtdeSais WITH QtdeSais + loc_nQtde, ;
+										PesoSais WITH PesoSais + loc_nPeso, ;
+										PesoFabrs WITH PesoFabrs + loc_nPeso
+							ENDIF
+						ENDIF
+					ENDSCAN
+				ENDSCAN
+				loc_oBarra.Complete()
+
+				*-- Marcar registros do grupo/conta processado
+				SELECT TmpResumo
+				REPLACE Flag3 WITH .T. FOR Grupo + Conta = loc_lcGrupo + loc_lcConta
+
+				*-- Ajuste para UnifBals = 1 (material unificado)
+				IF crSigCdGcr.UnifBals = 1
+					loc_lcMat = loc_lcCodMat
+					SELECT TmpResumo
+					IF !SEEK(loc_lcGrupo + loc_lcConta + loc_lcMat, "TmpResumo", "GruConMat")
+						APPEND BLANK
+						REPLACE CMats   WITH loc_lcMat, ;
+								Grupo   WITH loc_lcGrupo, ;
+								Conta   WITH loc_lcConta, ;
+								Visivel WITH .T.
+					ENDIF
+
+					SELECT [  ] AS Agrupar, SUM(PesoEnts) AS pEnts, SUM(PesoSais) AS pSais ;
+						FROM TmpResumo ;
+						WHERE Grupo + Conta = loc_lcGrupo + loc_lcConta AND ;
+						CMats <> loc_lcMat AND NVL(Varias, 0) <> 1 AND NVL(Agregas, 0) <> 1 ;
+						INTO CURSOR csTotal GROUP BY 1
+					GO TOP IN csTotal
+
+					SELECT TmpResumo
+					=SEEK(loc_lcGrupo + loc_lcConta, "TmpResumo", "GruCon")
+					SCAN WHILE Grupo + Conta = loc_lcGrupo + loc_lcConta
+						IF CMats = loc_lcMat
+							REPLACE PesoEnts WITH PesoEnts + NVL(csTotal.pEnts, 0)
+							REPLACE PesoSais WITH PesoSais + NVL(csTotal.pSais, 0)
+							REPLACE QtdeEnts WITH QtdeEnts + NVL(csTotal.pEnts, 0)
+							REPLACE QtdeSais WITH QtdeSais + NVL(csTotal.pSais, 0)
+						ELSE
+							IF NVL(Agregas, 0) <> 1
+								REPLACE Visivel WITH .F., Flag3 WITH .F.
+							ENDIF
+						ENDIF
+					ENDSCAN
+					USE IN csTotal
+				ENDIF
+
+				*-- Buscar saldo anterior da conta
+				loc_lcSql = "SELECT * FROM SigOpCfe WHERE Codigos = " + ;
+					FormatarNumeroSQL(LocalFecha.Codigos, 0) + ;
+					" AND Emps = '" + loc_lcEmp + "' ORDER BY Codigos, CPros"
+				IF SQLEXEC(gnConnHandle, loc_lcSql, "CrSaldoI") <= 0
+					MsgErro("Falha na conex" + CHR(227) + "o (CrSaldoI).", "Erro")
+					loc_lResultado = .F.
+				ENDIF
+				SELECT CrSaldoI
+				INDEX ON CPros TAG CPros
+				SET ORDER TO CPros
+
+				*-- Calcular saldo final por material
+				LOCAL loc_lcMatAtual
+				loc_lcMatAtual = SPACE(14)
+
+				SELECT TmpResumo
+				SET ORDER TO GrConMat
+				=SEEK(loc_lcGrupo + loc_lcConta, "TmpResumo", "GruCon")
+				SCAN WHILE Grupo + Conta = loc_lcGrupo + loc_lcConta
+					STORE 0 TO loc_Saldoi
+
+					=SEEK(TmpResumo.CMats, "TmpPro", "CPros")
+					IF !loc_llFalse AND TmpResumo.CMats <> loc_lcMatAtual
+						loc_FalhaAdmitida = 0
+						loc_lcMatAtual = TmpResumo.CMats
+					ENDIF
+
+					SELECT CrSaldoI
+					=SEEK(TmpResumo.CMats)
+					loc_Saldoi = NVL(CrSaldoI.Pesagems, 0)
+
+					SELECT TmpResumo
+					REPLACE Saldoi  WITH loc_Saldoi, ;
+							FReal   WITH loc_Saldoi + NVL(TmpResumo.QtdeEnts, 0) - NVL(TmpResumo.QtdeSais, 0) - NVL(TmpResumo.Pesagem, 0), ;
+							FAdmin  WITH loc_FalhaAdmitida, ;
+							Saldof  WITH loc_Saldoi + NVL(TmpResumo.QtdeEnts, 0) - NVL(TmpResumo.QtdeSais, 0) - NVL(TmpResumo.Pesagem, 0) - loc_FalhaAdmitida, ;
+							PfTrabs WITH IIF(loc_Trabalhado <> 0, (Saldof / loc_Trabalhado * 100), 0)
+
+					IF NVL(TmpResumo.Saldof, 0) <> 0 AND ;
+						(NVL(CrSigCdCli.PagFals, 0) = 1 OR NVL(CrSigCdCli.RecFals, 0) = 1)
+						REPLACE Flag  WITH .T., ;
+								Flag2 WITH (NVL(CrSigCdCli.PagFals, 0) = 1 OR NVL(CrSigCdCli.RecFals, 0) = 1) IN TmpResumo
+					ENDIF
+				ENDSCAN
+
+				*-- Saldo do material principal para acumular em Saldos/SaldoAnt
+				SELECT TmpResumo
+				=SEEK(loc_lcGrupo + loc_lcConta + loc_lcCodMat, "TmpResumo", "GruConMat")
+				SCAN WHILE Grupo + Conta + CMats = loc_lcGrupo + loc_lcConta + loc_lcCodMat
+					IF loc_nCt = 2
+						IF !SEEK(loc_lcGrupo, "Saldos", "GruConta")
+							INSERT INTO Saldos (Grupos, Contas, Emps) ;
+								VALUES (loc_lcGrupo, loc_lcConta, loc_lcEmp)
+						ENDIF
+						REPLACE Qtde WITH Qtde + NVL(TmpResumo.SaldoF, 0) IN Saldos
+					ELSE
+						IF !SEEK(loc_lcGrupo, "SaldoAnt", "GruConta")
+							INSERT INTO SaldoAnt (Grupos, Contas, Emps) ;
+								VALUES (loc_lcGrupo, loc_lcConta, loc_lcEmp)
+						ENDIF
+						REPLACE Qtde WITH Qtde + NVL(TmpResumo.SaldoF, 0) IN SaldoAnt
+					ENDIF
+				ENDSCAN
+
+				*-- Limpar cursores temporarios do loop
+				IF USED("LocalNens")
+					USE IN LocalNens
+				ENDIF
+				IF USED("LocalNensI")
+					USE IN LocalNensI
+				ENDIF
+				IF USED("LocalEest")
+					USE IN LocalEest
+				ENDIF
+				IF USED("LocalEestI")
+					USE IN LocalEestI
+				ENDIF
+				IF USED("LocalEsti2")
+					USE IN LocalEsti2
+				ENDIF
+				IF USED("CrSaldoI")
+					USE IN CrSaldoI
+				ENDIF
+			NEXT
+
+			IF USED("LocalFecha")
+				USE IN LocalFecha
+			ENDIF
+			IF USED("CrSigCdCli")
+				USE IN CrSigCdCli
+			ENDIF
+
+			loc_lResultado = .T.
+
+		CATCH TO loc_oErro
+			MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+				" PROC=" + loc_oErro.Procedure, "Erro SigPrFemBO.PosBalanco")
+			loc_lResultado = .F.
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
 
 ENDDEFINE

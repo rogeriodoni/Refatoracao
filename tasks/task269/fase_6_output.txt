@@ -1,0 +1,12 @@
+﻿**Fase 6/8 conclu├¡da.** Para este form OPERACIONAL simples, as mudan├ºas foram:
+
+**Corre├º├Áes aplicadas em `FormSIGPRCOT.prg`:**
+
+1. **`CmdExcluirClick`** ÔÇö verifica├º├úo do retorno de `ExcluirCotacaoAtual` antes de resetar `this_nIncluir` e setar `ReadOnly = .T.` (anteriormente o grid podia ficar edit├ível ap├│s uma exclus├úo bem-sucedida)
+
+2. **`GrdHoraText1KeyPress`** ÔÇö tr├¬s melhorias de robustez:
+   - Captura `loc_nRecnoNovo = THIS.this_nIncluir` antes de acessar o objeto do grid (acesso a `Column2.Text1.Value` pode mudar a work area ativa no VFP9)
+   - `SELECT cursor_4c_Cotacoes` expl├¡cito ap├│s a leitura do `Text1.Value` para restaurar a work area
+   - `GO (loc_nRecnoNovo)` ap├│s detectar duplicata, retornando o ponteiro ao registro novo antes de setar `Text1.Value = "  :  "` e exibir o aviso
+
+**Por que n├úo h├í campos/lookups adicionais:** O legado SIGPRCOT n├úo tem TextBoxes avulsos nem `fwBuscaExt`/`sigacess` ÔÇö toda a entrada de dados ├® inline via as 3 colunas do grid (Data, Hora, Cota├º├úo). O `ConfigurarPaginaDados` est├í completo conforme o original.

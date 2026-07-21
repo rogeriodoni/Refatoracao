@@ -7,7 +7,7 @@
 DEFINE CLASS sigrecpeBO AS RelatorioBase
 
     *-- Cursor de resultado do relatorio
-    this_cCursorDados    = "cursor_4c_Dados"
+    this_cCursorDados    = "CsRelatorio"
 
     *-- Estoque A - Grupo e Conta
     this_cCdGrEstoqueA   = ""
@@ -273,7 +273,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Executa processamento e popula cursor_4c_Dados
+    * PrepararDados - Executa processamento e popula CsRelatorio
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_cSQL, loc_nResult
@@ -338,8 +338,8 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                 ENDIF
 
                 *-- Fechar cursor resultado anterior
-                IF USED("cursor_4c_Dados")
-                    USE IN cursor_4c_Dados
+                IF USED("CsRelatorio")
+                    USE IN CsRelatorio
                 ENDIF
 
                 *-- Executar comparacao conforme tipo selecionado
@@ -350,7 +350,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                     THIS.ExecutarComparacaoProdutosVsB(loc_cGrupoB, loc_cEstoqB, loc_cEmps)
                 ENDIF
 
-                SELECT cursor_4c_Dados
+                SELECT CsRelatorio
                 GO TOP
 
                 loc_lSucesso = .T.
@@ -382,7 +382,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                        WHERE Grupos = par_cGrupoB AND Estos = par_cEstoqB ;
                          AND Emps = par_cEmps AND Sqtds > 0) ;
                   AND a.Cpros = b.Cpros ;
-                INTO CURSOR cursor_4c_Dados READWRITE ;
+                INTO CURSOR CsRelatorio READWRITE ;
                 ORDER BY a.Cpros, a.CodCors, a.CodTams
         ELSE
             *-- Analisa somente por produto (Cpros)
@@ -395,7 +395,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                        WHERE Grupos = par_cGrupoB AND Estos = par_cEstoqB ;
                          AND Emps = par_cEmps AND Sqtds > 0) ;
                   AND a.Cpros = b.Cpros ;
-                INTO CURSOR cursor_4c_Dados READWRITE ;
+                INTO CURSOR CsRelatorio READWRITE ;
                 ORDER BY a.Cpros, a.CodCors, a.CodTams
         ENDIF
     ENDPROC
@@ -543,7 +543,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                        WHERE a.Grupos = par_cGrupoB AND a.Estos = par_cEstoqB ;
                          AND a.Emps = par_cEmps AND a.Sqtds > 0 ;
                          AND a.Cpros = b.Cpros)) ;
-                INTO CURSOR cursor_4c_Dados READWRITE ;
+                INTO CURSOR CsRelatorio READWRITE ;
                 ORDER BY 1
 
             IF USED("cursor_4c_TmpProx")
@@ -561,7 +561,7 @@ DEFINE CLASS sigrecpeBO AS RelatorioBase
                       (SELECT Cpros FROM cursor_4c_LocalEst ;
                        WHERE Grupos = par_cGrupoB AND Estos = par_cEstoqB ;
                          AND Emps = par_cEmps AND Sqtds > 0)) ;
-                INTO CURSOR cursor_4c_Dados READWRITE ;
+                INTO CURSOR CsRelatorio READWRITE ;
                 ORDER BY Cpros
         ENDIF
 

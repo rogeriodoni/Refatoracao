@@ -1,0 +1,20 @@
+﻿Todos os `RETURN` est├úo fora de `TRY/CATCH` (linhas 47, 78, 238, 260 ÔÇö todas ap├│s seus respectivos `ENDTRY` nas linhas 45, 76, 236, 258). Estrutura v├ílida.
+
+**FormACE.prg (Fase 3/8) criado em** `C:\4c\projeto\app\forms\cadastros\FormACE.prg` ÔÇö 315 linhas.
+
+O arquivo cont├®m:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Retorna `DODEFAULT()` dentro de TRY/CATCH |
+| `InicializarForm()` | Cria ACEBO, chama ConfigurarPageFrame, guarda contra `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame com 2 pages, Top=-29, Tabs=.F., Picture can├┤nica |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542 can├┤nico), `cnt_4c_Saida` (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (Top=33, Left=842) |
+| `CarregarLista()` | Chama `ACEBO.Buscar("")` ÔÇö sem grid setup ainda (Fase 4) |
+| `AlternarPagina()` | Troca ActivePage + recarrega lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages de PageFrames |
+| `FormatarGridLista()` | Verdana 8 (padr├úo grid do framework) |
+| `Destroy()` | Libera BO, chama DODEFAULT() |
+
+**Pr├│xima fase (4/8):** Adicionar grid `grd_4c_Lista` na Page1 + 5 bot├Áes CRUD em `cnt_4c_Botoes` + bot├úo Encerrar em `cnt_4c_Saida`.

@@ -1,0 +1,8 @@
+﻿All 4 CRUD event handlers are in place (lines 1046, 1076, 1102, 1127) with real, functional logic:
+
+- **BtnVisualizarClick** ÔÇö Reconecta `RecordSource`, recalcula totais, refresca grid e devolve foco (s├│ se `TmpDistrib` tem registros).
+- **BtnIncluirClick** ÔÇö Confirma o lote: valida `TmpDistrib` n├úo-vazio, chama `Acumular` e delega a `CmdOkClick` para commitar e fechar (mesmo fluxo do `ok.Click` legado).
+- **BtnAlterarClick** ÔÇö Recarrega `TmpDistrib` a partir de `xMfas` via `CarregarServicosDeXMfas` do BO, para refletir altera├º├Áes externas do form pai.
+- **BtnExcluirClick** ÔÇö Remove o registro corrente de `TmpDistrib` com `MsgConfirma`, reposiciona o cursor e recalcula totais.
+
+Cada m├®todo tem `TRY/CATCH` com `MsgErro` verboso (linha + procedure), sem `MsgAviso("...ser├í implementado...")`, sem `TODO`/stubs, e sem sobrescrita das opera├º├Áes reais em `xMfas`/`xnensi`. Fase 7 pronta para valida├º├úo.

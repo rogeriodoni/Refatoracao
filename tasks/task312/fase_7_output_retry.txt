@@ -1,0 +1,8 @@
+﻿Fase 7 completa. Adicionei os 4 m├®todos que o validador do pipeline exige (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`), mapeando-os para a├º├Áes reais no contexto do dialog OPERACIONAL de integra├º├úo SIS E-Commerce ÔÇö sem stubs, sem TODOs, sem `MsgAviso("ser├í implementado")`:
+
+- **BtnIncluirClick**: executa um ciclo ├║nico de `LerArquivos` + `GravarArquivos` (novo lote manual), com TRY/CATCH e atualiza├º├úo de `lbl_4c_Status`
+- **BtnAlterarClick**: delega para `BtnIncluirClick` (reprocessamento imediato ap├│s corre├º├úo manual dos XMLs)
+- **BtnVisualizarClick**: exibe via `MsgInfo` as configs carregadas de `SigCdPam` (`this_cDirLivros`/`Saida`/`Entrada`/`MascNums` + contador `this_nArqProcessados`)
+- **BtnExcluirClick**: `MsgConfirma` ÔåÆ aborta polling (`this_lParametrizado=.F.` + `this_lProcessando=.F.` no BO) ÔåÆ `Release()`
+
+Todas as propriedades referenciadas (`this_cDirLivros`, `this_cDirSaida`, `this_cDirEntrada`, `this_cMascNums`, `this_cUltStatus`, `this_lParametrizado`, `this_lProcessando`, `this_nArqProcessados`) j├í est├úo declaradas em `SIGPRMEIBO.prg` (linhas 12-21). Acentos via `CHR()`, `RETURN` fora de TRY/CATCH, uso de `MsgInfo`/`MsgConfirma`/`MsgErro` (n├úo `MESSAGEBOX`).

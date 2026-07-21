@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. Fase 2 entregue.
+
+**O que foi adicionado ao SIGPRESTBO.prg:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `""` ÔÇö sem tabela SQL Server |
+| `ValidarDados()` | Valida que ao menos um checkbox est├í marcado |
+| `Inserir()` / `Atualizar()` | Override no-op ÔÇö form n├úo persiste em SQL Server |
+| `CarregarDoCursor()` | Override retorna `.F.` ÔÇö sem cursor de dados |
+| `GerarEstrutura(par_lGeraArquivos, par_lGeraIndices)` | **L├│gica principal** migrada do `OK.Click` original: cria `ArqDBF.dbf` (estrutura de campos) e `ArqInd.dbf` (├¡ndices) percorrendo todos os `.DBF` em `basededados\` |
+| `CarregarLogoTipo()` | Garante cursor `csLogoTipo` via SQLEXEC ap├│s o processamento |
+
+**Pontos cr├¡ticos tratados:**
+- `ADIR`/`AFIELDS` recebem `LOCAL ARRAY` que o VFP redimensiona automaticamente
+- `STRT()` legado substitu├¡do por `STRTRAN()` 
+- `MessageBox()` substitu├¡do por `MsgAviso()`
+- Todos os acentos via `CHR()`: `CHR(237)=├¡`, `CHR(233)=├®`, `CHR(225)=├í`, `CHR(205)=├ì`
+- Diret├│rio corrente salvo e restaurado em caso de erro (no bloco CATCH)
+- `RETURN .F.` antecipado no guard de ├¡ndices sem estrutura est├í **fora** do TRY/CATCH (retorno ap├│s `SET DEFAULT TO` no ramo do guard)

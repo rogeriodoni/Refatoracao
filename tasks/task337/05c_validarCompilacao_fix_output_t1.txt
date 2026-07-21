@@ -1,0 +1,1 @@
+﻿Fixed. The `SEEK(expr, alias, tag)` call without `=` was being parsed as a SEEK command, causing a syntax error when VFP9 encountered the second argument. Adding `=` tells VFP9 to treat it as a function call with a discarded return value.

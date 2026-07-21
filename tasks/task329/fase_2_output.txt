@@ -1,0 +1,20 @@
+﻿Perfeito ÔÇö `this_cMensagemErro` e `ValidarDados()` s├úo da BusinessBase. A nossa implementa├º├úo sobrescreve corretamente o `ValidarDados()` PROTECTED.
+
+O arquivo est├í completo e correto. Resumo do que foi implementado na **Fase 2/8**:
+
+**M├®todos adicionados ao `SigPrSddBO.prg`:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `ObterChavePrimaria()` | PUBLIC FUNCTION | Retorna `RTRIM(this_cIdChaves)` |
+| `CarregarDoCursor(alias)` | PUBLIC PROCEDURE | Mapeia todas as 15 colunas de SigPrSnd; `datas` (datetime) tratado com VARTYPE |
+| `ValidarDados()` | PROTECTED PROCEDURE | Valida 6 campos obrigat├│rios; respeita `this_lProducao` (Valor s├│ obrigat├│rio fora do modo produ├º├úo) |
+| `Inserir()` | PUBLIC FUNCTION | INSERT completo com `GETDATE()` para datas, helpers corretos por tipo, LEFT() pelos tamanhos do schema |
+| `Atualizar()` | PUBLIC FUNCTION | UPDATE por `cidchaves` com mesmos helpers |
+| `RegistrarAuditoria(op)` | PUBLIC PROCEDURE | INSERT em LogAuditoria com `GETDATE()` |
+| `GeraSenha()` | PUBLIC FUNCTION | L├│gica principal: valida ÔåÆ busca SenhDEmps ÔåÆ calcula lnNum ÔåÆ `fGerPswDiario()` ÔåÆ `fUniqueIds()` ÔåÆ `Inserir()` ÔåÆ retorna senha |
+| `BuscarSenhDEmps()` | PROTECTED FUNCTION | SELECT senhdemps FROM SigCdPac (bit ÔåÆ logical) |
+| `BuscarNumeroEmpresa()` | PROTECTED FUNCTION | SELECT nemps FROM SigCdEmp WHERE Cemps = ... |
+| `BuscarNumeroFpag()` | PROTECTED FUNCTION | SELECT nfpags FROM SigOpFp WHERE Fpags = ... |
+
+Pontos cr├¡ticos respeitados: sem RETURN dentro de TRY/CATCH; `EscaparSQL`/`FormatarNumeroSQL` por tipo; `LEFT()` por tamanho do destino; `GETDATE()` em auditoria (nunca `FormatarDataSQL(DATETIME())`).

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬ cada item foi tratado:
+
+**Problema 1 [CONTAINER-VISIVEL] ÔÇö CORRIGIDO**: `"CNT_4C_SOMBRA"` adicionado ao INLIST (linha 1673). Com isso, `TornarControlesVisiveis` recursa nos filhos via `TornarSubControlesVisiveis` sem sobrescrever o `Visible` do pr├│prio container (que j├í ├® `.T.` desde `ConfigurarCabecalho`).
+
+**Problema 2 [METODO-INEXISTENTE] ÔÇö FALSO POSITIVO**: `THIS.Controls(loc_i)` ├® a propriedade built-in `Controls(n)` herdada da classe base VFP9 `Form`. N├úo ├® m├®todo inventado ÔÇö ├® a forma can├┤nica de iterar controles em VFP9. `TornarSubControlesVisiveis` usa o mesmo padr├úo (`par_oContainer.Controls(loc_i)`) sem gerar alarme, confirmando que o validator n├úo reconheceu a cole├º├úo built-in. Nenhuma altera├º├úo necess├íria.
+
+**Problemas 3 e 4 [LAYOUT-POSITION] ÔÇö J├ü CORRETOS**: O c├│digo atual tem `cnt_4c_Impchmat.Top = 284` e `.Left = 240` (confirmados na leitura do arquivo), coincidindo exatamente com os valores originais. A review foi gerada sobre uma vers├úo anterior do arquivo; nenhuma altera├º├úo necess├íria.

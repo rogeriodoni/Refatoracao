@@ -1,0 +1,1170 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprema.SCX
+* Data/Hora: 15/07/2026 21:57:15
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPREMA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPREMA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPREMA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPREMA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPREMA
+  Class: shape
+  BaseClass: shape
+
+Objeto: Commandgroup1
+  Parent: SIGPREMA
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grade
+  Parent: SIGPREMA
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPREMA.grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREMA.grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREMA.grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREMA.grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREMA.grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREMA.grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREMA.grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: fweditbox1
+  Parent: SIGPREMA.grade.Column5
+  Class: fweditbox
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPREMA.grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGPREMA.grade.Column6
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnEmail
+  Parent: SIGPREMA
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGPREMA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGPREMA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: REGISTRY1
+  Parent: SIGPREMA
+  Class: registry
+  BaseClass: custom
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Processamento e Geraçao de Email"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  AllowOutput = .T.
+  automatico = .F.
+  contaemail = NONE
+  lcemp = .F.
+  ntempo = .F.
+  oemail = .F.
+  opdf = .F.
+  pcarqemail = .F.
+  pcescolha = .F.
+  podatamgr = 
+  podatamgr2 = .F.
+  Name = "SIGPREMA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 804
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 85
+  Left = 920
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Verdana"
+  FontSize = 8
+  Height = 469
+  Left = 3
+  RecordMark = .F.
+  RowHeight = 18
+  Top = 126
+  Width = 993
+  AllowAutoColumnFit = 2
+  Name = "grade"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 80
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column2"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.Width = 290
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.Width = 290
+  Column3.ReadOnly = .F.
+  Column3.Name = "Column4"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.Width = 290
+  Column4.ReadOnly = .T.
+  Column4.Sparse = .F.
+  Column4.Name = "Column5"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 1
+  Column5.Width = 17
+  Column5.ReadOnly = .F.
+  Column5.Sparse = .F.
+  Column5.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = " Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = " Nome"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Email"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação de Estoque"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column5.fweditbox1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ReadOnly = .T.
+  SpecialEffect = 1
+  Name = "fweditbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.grade.Column6.fwcheckbox1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 0
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.btnEmail
+------------------------------------------------------------
+  Top = 3
+  Left = 850
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  Picture = ..\framework\imagens\geral_envelope_60.jpg
+  Caption = "Enviar Email"
+  ForeColor = 90,90,90
+  Name = "btnEmail"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.apaga
+------------------------------------------------------------
+  Top = 84
+  Left = 43
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 46
+  TabStop = .F.
+  ToolTipText = "Desmarcar Todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.SelTudo
+------------------------------------------------------------
+  Top = 84
+  Left = 4
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 45
+  TabStop = .F.
+  ToolTipText = "Marcar Todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREMA.REGISTRY1
+------------------------------------------------------------
+  Top = 24
+  Left = 492
+  Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPREMA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE criapdf
+------------------------------------------------------------
+PROCEDURE criapdf
+Declare Integer Sleep In WIN32API Integer nMilliseconds
+lPrintPDFCreator = .T.
+lcDefaultPrinter = Set( "PRINTER", 2 )
+
+Thisform.oPdf = Createobject("PDFCreator.clsPDFCreator", "PDFCreator_")
+
+If Thisform.oPdf.cErrorDetail("Number") <> 0
+	lPrintPDFCreator = .F.
+	Messagebox( "Problemas para gerar o obj PDFCretor" +Chr(13) +;
+		"ErrorNr: " + Str( Thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+		"Descr: " 	+ Thisform.oPdf.cErrorDetail("Description"), 48, "Atenção",ThisForm.ntempo )
+Else
+	Wait Window Chr(13) + [Aguarde... Gerando o Arquivo PDF] + Chr(13) Nowait Noclear
+
+	With Thisform.oPdf
+		.cClearCache()
+		.cErrorClear()
+
+		llPDFStart = .cStart("/NoProcessingAtStartup")
+		If llPDFStart = .F.
+			lPrintPDFCreator = .F.
+
+			Messagebox( "Problemas no START do PDFCreator" +Chr(13) +;
+				"ErrorNr: " + Str( Thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+				"Descr: " 	+ Thisform.oPdf.cErrorDetail("Description"), 48, "Atenção",ThisForm.ntempo )
+		Else
+			**			.cVisible = .F.
+			**			.cOption("StartStandardProgram") = 0	&& é o responsável para escolher se o documento será aberto ou não após gravação automática.
+			.cOption("DisableUpdateCheck")   = 1
+			.cOption("UseAutosaveDirectory") = 1
+			.cOption("UseAutosave") 		 = 1
+			.cOption("UseStandardAuthor") 	 = 1
+			.cOption("StandardAuthor") 		 = "FORTYUS"
+			.cOption("StandardTitle") 		 = ""
+			.cOption("AutosaveFormat") 	  	 = 0	&& 0=PDF, 1=PNG, 2=JPG, 3=BMP, 4=PCX, 5=TIFF, 6=PS, 7= EPS, 8=ASCII
+			.cOption("AutosaveDirectory") 	 = Addbs( Justpath( Thisform.pcArqEmail) )
+			.cOption("AutosaveFilename")  	 = Justfname( Thisform.pcArqEmail)
+			.cDefaultPrinter = "PDFCreator"
+			.cPrinterStop 	 = .F.
+		Endif
+	Endwith
+
+	*** Mena - 08/05/2014 - seta pdf como impressora padrao para gerar arquivo ***
+	lcPrn = "PDFCreator"
+	Set Printer To Name (lcPrn)
+
+	If llPDFStart = .T.
+		For lnPDFCount = 1 To 200
+			If Thisform.oPdf.cDefaultPrinter = "PDFCreator"
+				Exit
+			Endif
+			Sleep(500)	&& Sleep IN WIN32API
+		Next lnPDFCount
+
+		If Thisform.oPdf.cDefaultPrinter # "PDFCreator"
+			lPrintPDFCreator = .F.
+			Messagebox( "Problemas para criar a Default-Printer" +Chr(13) +;
+				"ErrorNr: " + Str( Thisform.oPdf.cErrorDetail("Number"), 3 ) +Chr(13) +;
+				"Descr: " 	+ Thisform.oPdf.cErrorDetail("Description"), 48, "Atenção",ThisForm.ntempo )
+		Endif
+	Endif
+Endif
+
+If lPrintPDFCreator = .T. And llPDFStart = .T.
+	Thisform.Documento()
+
+	Sleep( 500 )		&& Milliseconds
+
+	lnMaxSleep  = 0
+	nReadyState = 0		&& Esta var é usada dentro do -> PDF_Event()	&& C:\FrameWork\ReportPreview\PDF_Event.prg
+	Do While nReadyState = 0 And lnMaxSleep <= 10
+		Sleep( 1000 )		&& Milliseconds
+		lnMaxSleep = lnMaxSleep +1
+	Enddo
+Endif
+
+Thisform.oPdf.cDefaultPrinter = lcDefaultPrinter
+Set Printer To Name (lcDefaultPrinter)
+
+Clear Dlls "Sleep"
+
+lnErrorNr = Thisform.oPdf.cErrorDetail("Number")
+lnErrorNr = Iif( Type( "lnErrorNr" )=="N", lnErrorNr, Val( Transform( lnErrorNr ) ) )
+If lnErrorNr # 0
+	lPrintPDFCreator = .F.
+	Messagebox( "Problemas para gerar o ARQ " + Chr(13) + Thisform.pcArqEmail + Chr(13) +;
+		"ErrorNr: " + Str( lnErrorNr, 3 ) +Chr(13) +;
+		"Descr: " 	+ Thisform.oPdf.cErrorDetail("Description"), 48, "Atenção",ThisForm.ntempo )
+Endif
+
+Thisform.oPdf.cClearCache()
+Thisform.oPdf.cClose()
+Thisform.oPdf = Null
+Wait Clear
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Select TmpRelat
+Go top
+
+Report form SigReDc2 To Printer NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impdocto
+------------------------------------------------------------
+PROCEDURE impdocto
+Parameters pcEdn
+
+Local lcEdn
+lcEdn = pcEdn
+
+=Thisform.poDataMgr.cursorquery('SigMvCab','TprMvCab','EmpDopNums',lcEdn )
+=Thisform.poDataMgr.cursorquery('SigCdOpe','crSigCdOpe','dopes',TprMvCab.Dopes)
+=Thisform.poDataMgr.cursorquery('SigOpCdc','crSigOpCdc','Dopes',TprMvCab.Dopes)
+=Thisform.poDataMgr.cursorquery('SigOpCdi','crSigOpCdi','Dopes',TprMvCab.Dopes)
+=Thisform.poDataMgr.cursorquery('SigOpCdd','crSigOpCdd','Dopes',TprMvCab.Dopes)
+******* impressao boleto
+
+Thisform.pcEscolha = ''
+If Inlist(crSigCdOpe.docus,0,1,5)
+
+	Do SigPrIdc With TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes,TprMvCab.valdevs, crSigOpCdc.QtdDocs,.F.,.T.,.F.,.F.,.F.,.F.,Thisform,.T.
+
+	Thisform.pcArqEmail = Addbs(Sys(2023)) + [FORTYUSPDF.PDF]
+
+	lPrintPDFCreator = fGerPDFCreator(Thisform)
+
+Endif
+
+If Inlist(crSigCdOpe.docus, 3, 4, 6, 7, 8, 9)
+	Do Form SigReIfx With TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes, .F., .T.
+Endif
+
+* Impressão do Relatório de Job
+If Inlist(Int(Val(Substr(crSigOpCdi.lbltxidCs, 25, 1))), 1, 3) && Se Tem Campo de Job Ativo Na Tela
+	If (Int(Val(Substr(crSigOpCdd.ConfigGers, 157, 01))) = 1)  && Tela de Job (1-Sim / 2 e 0-Não)
+		Do Form SigReJob With Thisform
+	Endif
+Endif
+
+If Not Empty(crSigCdOpe.nOpCrs) &&crSigCdOpe.OpCrs = 5 And
+	lcSql = [Select Emps, Dopes, Numes, ValDevs From SigMvCab Where EmpDnCrds = ']+TprMvCab.EmpDopNums+[']
+	If Thisform.poDataMgr.SqlExecute(lcSql,'CrEest') > 0
+		pcEmp = crEest.Emps
+		pcDop = crEest.Dopes
+		pnNum = crEest.Numes
+		=Thisform.poDataMgr.cursorquery('SigCdOpe','TmpOpe','dopes',pcDop)
+		If Inlist(TmpOpe.docus,1,5)
+			If Thisform.poDataMgr.cursorquery('SigOpCdc','crSigOpCdc','Dopes',pcDop) And ;
+					ThisForm.poDataMgr.cursorquery('SigMvCab','CrEest','EmpDopNums',pcEmp + pcDop + Str(pnNum,6))
+				Do SigPrIdc With pcEmp, pcDop, pnNum, crEest.valdevs, crSigOpCdc.QtdDocs,.F.,.F.,.F.,.F.,.F.,.F.,Thisform,.T.
+			Endif
+		Endif
+		If Inlist(TmpOpe.docus, 3, 6, 7, 8, 9)
+			Do Form SigReIfx With pcEmp, pcDop, pnNum, .F., .T.
+		Endif
+	Endif
+Endif
+
+If crSigOpCdc.GerOpes = 2 &&Impressão das Multiplas Movimentações geradas
+	Do Form SigOpIgm With Thisform,TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes,.T.
+Endif
+
+Thisform.poDataMgr.cursorquery('SigOpCdi', 'crSigOpCdi', 'Dopes', TprMvCab.Dopes)
+If Not Eof('crSigOpCdi') And (crSigOpCdi.chkInvs = 1)
+	Do Form SigReIiv With TprMvCab.Emps, TprMvCab.Dopes, TprMvCab.Numes
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+***************************************************
+****** Envia email automatico             *********
+***************************************************
+LParameters tcFrom As String, tcTo As String, tcCC As String, tcAssunto As String, tcCorpo As String, tcAnexo As String, ;
+			tcSmtpServer As String, tnSmtpServerPort As Integer, tcSendUserName As String, tcSendPassWord As String
+
+
+Local loEmail As CDO.Message, llOk As Boolean, llEnvioOK As Boolean 
+
+If Type( 'CreateObject("CDO.Message")' ) # "O"
+	MessageBox( "Problemas para instanciar o obj CDO.Message", 48, "Atenção" )
+	Return( .F. )
+EndIf
+
+loEmail = CreateObject("CDO.Message")
+
+With loEmail.Configuration.Fields
+	.Item("http://schemas.microsoft.com/cdo/configuration/sendusing") 			  = 2
+	.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") 			  = Lower( tcSmtpServer )
+	.Item("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout") = 10
+	.Item("http://schemas.microsoft.com/cdo/configuration/smtpserverport") 		  = Iif( tnSmtpServerPort = 0, 25, tnSmtpServerPort )
+	.Item("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") 	  = 1
+	.Item("http://schemas.microsoft.com/cdo/configuration/sendusername") 		  = Lower( tcSendUserName )
+	.Item("http://schemas.microsoft.com/cdo/configuration/sendpassword") 		  = tcSendPassWord 
+	.Item("http://schemas.microsoft.com/cdo/configuration/smtpusessl")	 		  = Iif( tnSmtpServerPort = 465, 1, 0 ) && mena-05/03/2014 incluido para funcionar com gmail - gmail a porta é 465
+	.Update()
+EndWith
+
+llEnvioOK = .T.
+
+With loEmail
+	.To 	  = Lower( tcTo )
+	.Cc 	  = Lower( Nvl( tcCC, "" ) )
+	.From 	  = Lower( tcFrom )
+	.Subject  = AllTrim( tcAssunto )
+	.TextBody = AllTrim( tcCorpo )
+
+	****adiciona anexos ****
+	If !IsNull( tcAnexo ) And !Empty( tcAnexo )
+		If File( tcAnexo )
+			.AddAttachment(tcAnexo)
+		Else
+			llEnvioOK = .F.
+			MessageBox( "Não foi encontrado o arquivo:" +Chr(13)+ tcAnexo + " para ser anexado.", 48, "Atenção",ThisForm.ntempo )
+		EndIf
+	EndIf
+
+	Try
+		If llEnvioOK = .T.
+			.Send()
+			llOk = .T.
+		EndIf
+	Catch
+		Wait Window "Dados do e-mail inválidos." TimeOut 5
+		llOk = .F.
+	EndTry
+
+EndWith
+
+Release oEmail
+
+Return llOk
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters prDopes, pAuto
+
+Private pDti, pDtf 
+
+prDopes = Iif(Type([prDopes])=[C],prDopes,[])
+
+ThisForm.Automatico = pAuto
+ThisForm.ntempo = 5000
+
+pDti = fDtoSQL(Datetime())
+pDtf = fDtoSQL(Datetime(),[23:59:59])
+
+*!*	Cursor que irá receber a lista final de e-mails para serem enviados
+Create Cursor crLocalTotal (Checks N(1),grupos c(10),Contas c(10),Rclis c(30),emails c(50),mensagems m,EmpDopNums c(29), prioridade c(15))
+Index on Contas Tag Contas
+Index on Rclis Tag Rclis
+Index on Emails Tag Emails
+
+Thisform.lcEmp = Substr(prdopes,1,3)
+lcDopes = Substr(prdopes,4,20)
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),[SIGE],ThisForm.ntempo)
+		Return(.F.)
+	Endif
+EndWith 
+
+ThisForm.btnEmail.Enabled = ThisForm.Registry1.IsKey([PDFCreator.clsPDFCreator]) Or ThisForm.Registry1.IsKey([PDFCreatorBeta.JobQueue])
+
+Thisform.grade.RecordSource=''
+
+If Empty(prDopes)
+	lcQuery = [Select 1 as Checks, a.EmpDopNums, a.Jobs, b.Rclis, b.Rclis, b.emails, b.grupos, b.iclis  ] + ;
+			[From SigMvcab a ] + ;
+			[Inner Join SigCdCli b On a.Contads = b.Iclis ] + ;
+			[Where a.datatrans between ?pDti And ?pDtf ] + ;
+			[And empdopnums not in(select Transacaos from sigoplog where progs = 'SIGPREMA') ] + ;
+			[Order by a.EmpDopNums ]
+Else
+	lcQuery = [Select 1 as Checks, a.EmpDopNums, a.Jobs, b.Rclis, b.Rclis, b.emails, b.grupos, b.iclis  ] + ;
+			[From SigMvcab a ] + ;
+			[Inner Join SigCdCli b On a.Contads = b.Iclis ] + ;
+			[Where a.EmpDopNums = '] + prDopes + [']
+EndIf 
+	
+If thisform.podatamgr.SqlExecute(lcQuery,[TmpMvCab]) < 1
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpMvCab)],ThisForm.ntempo)
+	Return .F.
+EndIf
+
+*!*	Gravando os dados no cursor para envio dos e-mails
+Select TmpMvCab
+Go top	
+Scan
+
+	Insert Into crLocalTotal (Checks,grupos,Contas,Rclis,emails,prioridade,EmpDopNums) ;
+					Values (TmpMvCab.Checks,TmpMvCab.grupos,TmpMvCab.iclis,TmpMvCab.Rclis,TmpMvCab.emails,[NORMAL],TmpMvCab.EmpDopNums)
+					
+Endscan
+
+*!* Buscando as contas referente ao grupo parametrizado em SigCdPam (grpadats)
+lcQuery	= [select 0 as Checks, c.grupos, c.iclis as Contas, c.rclis, c.emails, '' as prioridade ] + ;
+	[from SigCdPam p ] + ;
+	[inner  join SigCdCli c on c.grupos = p.grpadats]
+
+If (Thisform.poDatamgr.SqlExecute(lcQuery, [crLocalPAM]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crLocal)],ThisForm.ntempo)
+	Return .F.
+Endif
+
+*!*	Gravando os novos dados no cursor para envio dos e-mails
+Select crLocalPAM
+Scan
+	lcQuery = [Select Jobs From SigClJob Where Iclis = '] + crLocalPAM.Contas + [']
+	If (Thisform.poDatamgr.SqlExecute(lcQuery, [TmpClJob]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpClJob)],ThisForm.ntempo)
+		Return .F.
+	Endif
+	Select TmpClJob
+	Go top
+	If !Eof()
+		Locate For Jobs = TmpMvCab.Jobs
+		If Eof()
+			Loop
+		Endif 
+	Endif
+	
+	lnChecks	= crLocalPAM.Checks
+	lcgrupos	= [] 
+	lcContas	= crLocalPAM.Contas
+	lcRclis		= crLocalPAM.Rclis
+	lcemails	= crLocalPAM.emails
+
+	Select crLocalTotal
+	Locate For Alltrim(crLocalTotal.Contas) = Alltrim(lcContas) And Alltrim(crLocalTotal.Rclis) = Alltrim(lcRclis)
+	If Eof()
+		Insert Into crLocalTotal (Checks,grupos,Contas,Rclis,emails,EmpDopNums,prioridade) ;
+		Values (lnChecks,lcgrupos,lcContas,lcRclis,lcemails,prdopes,[NORMAL])
+	Endif
+
+	Select crLocalPAM
+Endscan
+
+Select crLocalTotal
+Go Top
+
+Thisform.grade.RecordSource='crLocalTotal'
+Thisform.grade.column6.ControlSource = [crLocalTotal.Checks]
+Thisform.grade.column2.ControlSource = [crLocalTotal.Contas]
+Thisform.grade.column3.ControlSource = [crLocalTotal.Rclis]
+Thisform.grade.column4.ControlSource = [crLocalTotal.Emails]
+Thisform.grade.column5.ControlSource = [crLocalTotal.EmpDopNums]
+
+Thisform.grade.column3.header1.Click() && Para ordenar por nome
+Thisform.grade.Refresh()
+
+Thisform.Refresh()
+
+If ThisForm.Automatico
+	ThisForm.btnEmail.Click()
+	ThisForm.Release
+	Return .f.
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Local lcFrm
+
+With ThisForm
+	.Release
+	lcFrm = .Name
+	Release &lcFrm.
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.grade.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Contas
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(64,128,128)
+This.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)
+
+thisform.grade.Refresh()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.grade.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Rclis
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column3.header1.BackColor = RGB(64,128,128)
+This.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)
+
+thisform.grade.Refresh()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.grade.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Emails
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column4.header1.BackColor = RGB(64,128,128)
+
+thisform.grade.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.grade.Column6.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Replace Checks With this.Value in crLocalTotal
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.btnEmail
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcReceptor			= ''
+lcReceptorCopia		= ''
+lcAssunto			= ''
+lcTxtMensagem		= ''
+lcArqAnexo			= ''
+lnImportancia		= 1
+lcMsgRetorno		= ''
+llOk = .t.
+
+Select * From crLocaltotal Where Checks = 1 Into Cursor crLocalTotal2 ReadWrite
+
+Select crLocaltotal2
+Scan
+	
+	If IsEmpty(crLocaltotal2.emails)
+		Loop
+	EndIf 
+	
+	Select crLocaltotal2
+	lcEmps = Substr(crLocaltotal2.EmpDopNums,1,3)
+	lcDopes = Substr(crLocaltotal2.EmpDopNums,4,20)
+	lcNumes = Val(Substr(crLocaltotal2.EmpDopNums,24,6))
+	lcEdn = crLocaltotal2.EmpDopNums
+	
+	If Recno() = 1
+		lcReceptor		= crLocaltotal2.emails
+		lcTxtMensagem	= []
+		lcTxtPrioridade	= Alltrim(crLocaltotal2.prioridade)
+		lcAssunto		= []
+	Else
+		If !Empty(Alltrim(crLocaltotal2.emails))
+			lcReceptorCopia	= lcReceptorCopia + Iif(Empty(lcReceptorCopia),[],[,]) + Alltrim(crLocaltotal2.emails)
+		Endif
+	Endif
+	
+	If File(Addbs(Sys(2023)) + [FORTYUSPDF.PDF])
+		Delete File Addbs(Sys(2023)) + [FORTYUSPDF.PDF]
+	EndIf 
+	
+	llOk = .t.
+	If Not Thisform.ImpDocto(lcEdn)
+		llOk = .F.
+	EndIf 
+			
+	lcArqAnexo = ThisForm.pcarqemail
+		
+	** Busca dados de Email do cadastro da Empresa
+	lcQuery = [Select PadEmails, PadServs, PadSenhas, pastas, PadPortas From SigCdEmp Where CEmps = '] + _Empr + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEmpMail') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEmpMail)',ThisForm.ntempo)
+		Return .f.
+	Endif	
+
+	lcFrom   = Lower(Alltrim(Nvl(TmpEmpMail.PadEmails,[])))	
+	lcServer = Lower(Alltrim(Nvl(TmpEmpMail.PadServs,[])))
+	lcSenha  = Alltrim(Nvl(TmpEmpMail.PadSenhas,[]))
+	lnPorta  = Nvl(TmpEmpMail.PadPortas,0)
+
+	Wait Window Chr(13)+ [Aguarde... gerando EMAIL] Nowait NoClear
+		
+	If llOk
+		If !EnviaEmail(lcReceptor, lcTxtMensagem, lcAssunto, lcArqAnexo, lcFrom, lcReceptorCopia, lcServer, lcSenha, lnPorta)
+			llOk = .f.
+		Endif	
+	EndIf 
+	
+	If llOk
+		fGravarLog( 'T', Thisform.Name, [], lcEdn )
+	EndIf 
+	
+Endscan
+
+Wait Clear
+
+If llOk
+	Wait Window [Email enviado com sucesso!] Timeout 0.02
+	thisform.Release()
+EndIf
+
+If Thisform.automatico 
+	thisform.Release()
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Go top
+Replace All Checks With 0
+Go Top
+ThisForm.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREMA.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Go top
+Replace All Checks With 1
+Go Top
+ThisForm.Refresh()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPREMA
+RESERVED3 (ClassInfo): automatico
+contaemail
+lcemp
+ntempo
+oemail
+opdf
+pcarqemail
+pcescolha
+podatamgr
+podatamgr2
+*criapdf 
+*documento 
+*impdocto 
+*memail 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

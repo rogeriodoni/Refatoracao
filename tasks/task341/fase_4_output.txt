@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. A Fase 4 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado a `FormACE.prg`:
+
+**`ConfigurarPaginaLista()` ÔÇö totalmente reescrita:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, Left=5/80/155/230/305) com `Comic Sans MS`, ├¡cones can├┤nicos, `Themes=.F.`, BINDEVENT para cada handler
+- Bot├úo `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917, Width=90 ÔÇö padr├úo can├┤nico)
+- Grid `grd_4c_Lista` (Top=117, Width=880, Height=498) com `ColumnCount=2`, `GridLines=3`, `ReadOnly=.T.`, `RecordSource=""` inicial
+
+**`CarregarLista()` ÔÇö atualizada:**
+- Ap├│s `Buscar("")`, configura RecordSource, ControlSource (Cemps/Razas), widths (80/795), Headers ("Empresa" / "Descri├º├úo"), e chama `FormatarGridLista()`
+
+**6 handlers adicionados (todos PUBLIC para BINDEVENT):**
+- `BtnIncluirClick` ÔÇö `NovoRegistro()` + modo INCLUIR + `AlternarPagina(2)`
+- `BtnVisualizarClick` / `BtnAlterarClick` ÔÇö l├¬ `cursor_4c_Dados.Cemps`, `CarregarPorCodigo()`, navega para Page2
+- `BtnExcluirClick` ÔÇö confirma├º├úo + `Excluir()` + `CarregarLista()`
+- `BtnBuscarClick` ÔÇö `FormBuscaAuxiliar` + `LOCATE` no cursor para posicionar o grid
+- `BtnEncerrarClick` ÔÇö `THIS.Release()`

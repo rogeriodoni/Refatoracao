@@ -1,0 +1,15 @@
+﻿Analisado o estado completo:
+
+- **BO** (`SigPrMluBO.prg`): completo ÔÇö `BuscarMalas`, `ProcessarUnificacao`, `Inserir`, `Atualizar`, `RegistrarAuditoria`
+- **Form** (`FormSigPrMlu.prg`): completo ÔÇö todos os controles, handlers e m├®todos j├í criados nas Fases 3-4
+- **Integra├º├úo**: `menu.prg` j├í tem `AbrirFormSigPrMlu`; `config.prg` carrega `operacionais/Form*.prg` dinamicamente
+
+**A Fase 5 ├® um no-op para este form.** Este ├® um form OPERACIONAL flat (sem PageFrame/Page2). O `ConfigurarPaginaDados()` j├í est├í corretamente implementado como stub vazio (linha 606-608), porque:
+
+1. N├úo h├í "Page2 com campos" neste form ÔÇö todos os controles (cabecalho, cntNova, grid, bot├Áes) s├úo criados diretamente no form flat via `InicializarForm()`
+2. O layout original `SIGPRMLU` n├úo tem estrutura de dados/edi├º├úo separada ÔÇö ├® apenas uma grade de sele├º├úo + processamento
+3. As Fases 3-4 j├í cobriram 100% da UI deste form OPERACIONAL
+
+O template da pipeline aplica genericamente Fases 5-6 ("campos Page2") a todos os forms, mas para forms OPERACIONAIS esses passos n├úo t├¬m conte├║do.
+
+**O que ainda falta (Fases 6-8):** Para este form, as Fases 6 e 7 tamb├®m s├úo no-op. A Fase 8 (integra├º├úo) est├í parcialmente feita (menu.prg Ô£ô, config.prg auto-detecta Ô£ô). O form est├í **funcionalmente completo**.

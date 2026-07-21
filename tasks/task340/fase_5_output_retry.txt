@@ -1,0 +1,5 @@
+﻿Wiring is clean:
+- `ConfigurarPaginaDados()` creates shp_4c_Shape1, lbl_4c_Label4, txt_4c_Planilha, cmd_4c_GetPlanilha + binds cmd_4c_GetPlanilha click
+- `ConfigurarPaginaLista()` creates cmd_4c_Limpar, cmd_4c_Processar, grd_4c_Dados + binds their clicks
+
+Phase 5 complete: added `ConfigurarPaginaDados()` in `FormSIGPRVTX.prg` (lines 242-318) with real content ÔÇö shape decorativo, label "Planilha:", txt_4c_Planilha (readonly path field) and cmd_4c_GetPlanilha ("..." picker button) ÔÇö the natural "input/data-entry" half of this OPERACIONAL flat form. The remaining half (grid + Processar/Limpar) stays in `ConfigurarPaginaLista()`, and `InicializarForm()` now calls both in order.

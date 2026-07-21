@@ -1,0 +1,14 @@
+﻿Fase 3/8 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormSIGPRINT.prg` criado com **243 linhas** contendo:
+
+**O que foi criado:**
+- `DEFINE CLASS FormSIGPRINT AS FormBase` com propriedades visuais completas (600├ù1000, DataSession=2)
+- `Init()` ÔÇö define Caption com CHR() e chama `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria SIGPRINTBO, chama ConfigurarPageFrame, guarda `gb_4c_ValidandoUI`, seta ActivePage=1
+- `ConfigurarPageFrame()` ÔÇö PageFrame Top=-29, Tabs=.F., 2 p├íginas com fundo `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (Left=344), `cnt_4c_Saida` (can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` (Left=642, Top=26 com compensa├º├úo -3+29)
+- `CarregarLista()` ÔÇö guard com PEMSTATUS para Fase 4 (grid ainda n├úo existe)
+- `TornarControlesVisiveis()` ÔÇö recursivo, itera Pages e Controls
+- `Destroy()` ÔÇö limpa BO e chama DODEFAULT()
+
+**Pr├│xima fase (4/8):** adicionar grid `grd_4c_Lista` e bot├Áes CRUD em `cnt_4c_Botoes`/`cnt_4c_Saida`.

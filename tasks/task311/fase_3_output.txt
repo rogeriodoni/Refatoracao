@@ -1,0 +1,18 @@
+﻿Arquivo criado e corrigido. Fase 3 entregue: `C:\4c\projeto\app\forms\operacionais\Formsigprmdp.prg`
+
+**O que foi implementado:**
+
+- `DEFINE CLASS Formsigprmdp AS FormBase` com todas as propriedades do form original: `Width=800, Height=270, TitleBar=0, ControlBox=.F., Closable=.F., DataSession=2, Themes=.F.`
+- Caption via CHR() (`Substitui├º├úo de Refer├¬ncias de Produtos`)
+- Flags de controle: `this_lCheckCadPro`, `this_lManterBarra`, `this_lCalculaCusto`
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (sem dupla chamada)
+- `ConfigurarPageFrame()` ÔåÆ background `new_background.jpg`
+- `InicializarForm()` com nested IF/ELSE (sem RETURN dentro de TRY ÔÇö regra #1):
+  1. Verifica exist├¬ncia do `ArqDBF.dbf` (original fazia no Load event)
+  2. Cria `sigprmdpBO`
+  3. Chama `BuscarCalcCustos()` + `InicializarCursorContas()`
+  4. Chama `ConfigurarCabecalho()`
+  5. `TornarControlesVisiveis(THIS)`
+- `ConfigurarCabecalho()` ÔåÆ `cnt_4c_Cabecalho` + `lbl_4c_Sombra` + `lbl_4c_Titulo` com AddObject expl├¡cito (evita bug WITH aninhado)
+- `TornarControlesVisiveis()` com filtro para `cnt_4c_Result` (painel de progresso que come├ºa oculto)
+- `Destroy()` ÔåÆ limpa BO + fecha cursor `csContas`

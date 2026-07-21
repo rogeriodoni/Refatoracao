@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "FontSize i", "LineSize n"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters lnLin, lnCol, lcDet, lcEst, lcTam, lcAlt\n\nlnLin = Iif(Type([lnLin]) == [N], lnLin, 0)\nlnCol = Iif(Type([lnCol]) == [N], lnCol, 0)\nlcDet = Iif(Type([lcDet]) == [C], lcDet, [])\nlcEst = Iif(Type([lcEst]) == [C], Alltrim(lcEst), [X])\n\nIf (Not lcEst = [*] And (lnCol <> 0 Or lnLin <> 0))\n\tInsert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ;\n  \t\t   \t\t\tValues (lnLin, lnCol, lcDet, lcEst, lcTam, lcAlt)\nEndIf\n* Fim *******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 108,
+      "codigoOriginal": "Local lcCli, llImp, lnCnt, ldVct, lcDoc, lnTm1, lnTm2, lnTam\n\nZap In crDados\nZap In TmpImprime\n\nIf Not ThisForm.poDataMgr.CursorQuery([SigMvCab], [crTprMvCab], [EmpDopNums], ThisForm.EmpDopNum, [Dopes, ContaOs, ContaDs])\n\t=MessageBox([Movimentação Não Encontrada!!!], 0+16, [Inconsistência Nos Dados])\n\tReturn 0\nEndIf\n\nlcDoc = [Parc.: ] + Alltrim(Str(crGrade.Parcs, 2))\nIf ThisForm.poDataMgr.CursorQuery([SigMvNfi], [crTmpNfis], [EmpDopNums], ThisForm.EmpDopNum, [NFis])\n\tlcDoc = crTmpNfis.NFis + [-]... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "With ThisForm\n\tWith .grdItens\n\t\t.ColumnCount \t   = 4\n\t\t.RecordSource \t   = [crGrade]\n\t\t.DeleteMark \t   = .f.\n\t\t.RecordMark \t   = .f.\n\t\t.ReadOnly \t\t   = .t.\n\t\t.Scrollbars \t   = 2\n\t\t.AllowHeaderSizing = .f.\n\t\t.AllowRowSizing    = .f.\n\n\t\t.Column1.ControlSource  = [crGrade.FPags]\n\t\t.Column2.ControlSource  = [crGrade.Parcs]\n\t\t.Column2.InputMask \t    = [99]\n\t\t.Column3.ControlSource  = [crGrade.Vencs]\n\t\t.Column4.ControlSource  = [crGrade.Valos]\n\t\t.Column4.InputMask \t    = [9999999.99]\n\n\t\tFor I=1 To .Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "Local lcQuery\n\nZap In crGrade\n\nlcQuery = [Select b.FPags, b.Parcs, b.Vencs, b.Datas, b.Valos ] + ;\n\t\t    [From SigMvCab a, SigMvPar b, SigCdOpe c, SigOpCdc d, SigOpFp e ] + ;\n\t\t   [Where a.EmpDopNums = '] + ThisForm.EmpDopNum + [' And ] + ;\n\t\t   \t\t [a.EmpDopNums = b.EmpDopNums And ] + ;\n\t\t   \t\t [b.Dopes = c.Dopes And ] + ;\n\t\t   \t\t [c.Dopes = d.Dopes And ] + ;\n\t\t   \t\t [d.ImpBols = 1 And ] + ;\n\t\t   \t\t [b.FPags = e.FPags And ] + ;\n\t\t   \t\t [e.ImpBols = 1 ] + ;\n\t\t   [Order By b.FPags, b.Parcs]\n\nIf (T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "LParameters pEdn, pFrm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.EmpDopNum = Padr(pEdn, 29)\n\n\t\t.getEmps.Value  = Substr(.EmpDopNum, 01, 03)\n\t\t.getDopes.Value = Substr(.EmpDopNum, 04, 20)\n\t\t.getNumes.Value = Substr(.EmpDopNum, 24, 06)\n\n\t\t.getEmps.Refresh\n\t\t.getDopes.Refresh\n\t\t.getNumes.Refresh\n\n\t\t.MontaGrades\n\n\t\t.SelecionaDados\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crGrade (FPags c(12), Parcs n(2), CLocals c(100), Vencs d(8), Datas d(8), Valos n(12,2), CTxtCds m(4))\n\nCreate Cursor crDados (CLocals c(100), Vencs c(12), DatDoc d, NumDoc c(8), Valor n(14,2), Razaos c(50), Cpfs c(20), ;\n\t\t\t\t\t   EndCobs c(80), BaiCobs c(20), CidCobs c(20), EstCobs c(2), CepCobs c(9), Texto m)\n\nCreate Cursor TmpImprime (Linha n(6,2), Coluna n(6,2), Conteudo c(100), Style c(3), FontName c(64), ;\n\t\t\t\t\t\t  FontSize i, LineSize n(6,2), NHeight n(6,2))\nI... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,FontSize i, LineSize n",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB.ok",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB.grdItens",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nColIndex\n\nSelect crGrade\nThis.Refresh\nThisForm.Refresh\nThisForm.getLocals.Refresh\nThisForm.getTxtCds.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBB.btnImprimir",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If Not Eof('crGrade')\n\tIf MessageBox([Confirma a Impressão do Boleto Bancário da Condição de Pagamento:] + Chr(13) + Chr(13) + ;\n\t\t\t\t  Alltrim(crGrade.FPags) + [ - Parcela: ] + Alltrim(Str(crGrade.Parcs,2)), 32+4 )==6\n\t\tThisForm.Imprimir \n\tEndIf\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRIBB.Procedure",
+      "queryOriginal": "\tInsert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ; \t\t   \t\t\tValues (lnLin, lnCol, lcDet, lcEst, lcTam, lcAlt)",
+      "tabelas": "TmpImprime",
+      "colunas": "Linha,Coluna,Conteudo,Style,LineSize,NHeight",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpImprime"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -737,8 +737,10 @@ DEFINE CLASS FormSigReDif AS FormBase
         TRY
             IF VARTYPE(THIS.this_oRelatorio) = "O"
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao Visualizar")
+                    ENDIF
                 ELSE
                     loc_lSucesso = .T.
                 ENDIF
@@ -761,8 +763,10 @@ DEFINE CLASS FormSigReDif AS FormBase
         TRY
             IF VARTYPE(THIS.this_oRelatorio) = "O"
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao Imprimir")
+                    ENDIF
                 ELSE
                     loc_lSucesso = .T.
                 ENDIF
@@ -785,8 +789,10 @@ DEFINE CLASS FormSigReDif AS FormBase
         TRY
             IF VARTYPE(THIS.this_oRelatorio) = "O"
                 IF !THIS.this_oRelatorio.GerarDocumento()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao Gerar Documento")
+                    ENDIF
                 ELSE
                     loc_lSucesso = .T.
                 ENDIF

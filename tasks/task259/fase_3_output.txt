@@ -1,0 +1,14 @@
+﻿Tudo verificado. O form estava completo (todas as 8 fases j├í executadas em sess├úo anterior). Dois bugs foram corrigidos:
+
+**1. `SigPrAprBO.prg` ÔÇö `CarregarDoCursor` (linhas 230ÔÇô238):**
+Sintaxe inv├ílida `(par_cAliasCursor).campo` substitu├¡da por acesso direto ap├│s `SELECT (par_cAliasCursor)`. Esse era o erro de compila├º├úo reportado no `.ERR`.
+
+**2. `FormSigPrApr.prg` ÔÇö `ConfigurarPageFrame()` (linha 36):**
+Path da imagem de fundo corrigido de `gc_4c_CaminhoIcones + "new_background.jpg"` para `gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"` (o arquivo existe nesse path).
+
+**Estado atual:**
+- Form completo com todos os handlers de lookup, BINDEVENTs, grid, bot├Áes e l├│gica de reajuste
+- BO completo com ProcessarReajuste, AtualizarPrecos, CalcPreco, CalcMarkpa
+- Menu integrado (BAR 22 em `popMovimentos`)
+- Fun├º├Áes externas `fBuscarCotacao`, `fChecaAcesso`, `fUniqueIds` todas dispon├¡veis em `functions.prg`
+- `.FXP` j├í deletados ÔÇö na pr├│xima execu├º├úo VFP9 recompila limpo

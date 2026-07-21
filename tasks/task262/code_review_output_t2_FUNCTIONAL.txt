@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**Fix 1 ÔÇö CONTAINER-VISIVEL** (linha 1554): Removido `"CNT_4C_CABECALHO"` do INLIST em `TornarControlesVisiveis`. O cabe├ºalho ├® criado com `AddObject` (que resulta em `Visible=.F.` por padr├úo) e precisa ser tornado vis├¡vel normalmente pelo m├®todo. Apenas `IMG_4C_PRODUTO` permanece na lista de exclus├úo (├® mostrado apenas ao selecionar produto no grid).
+
+**Fix 2 ÔÇö GRID-WITH** (linhas 1349-1350): `ColumnCount=9` e `RecordSource` foram movidos para **antes** do `WITH`, usando refer├¬ncia expl├¡cita `THIS.grd_4c_Produto.`. As 9 linhas redundantes de `.ColumnN.ControlSource` dentro do `WITH` foram removidas ÔÇö cada coluna j├í define `ControlSource` no seu pr├│prio `WITH .ColumnN` logo abaixo. Agora, quando o `WITH` ├® entrado, `Column1`ÔÇô`Column9` j├í existem e podem ser acessados sem erro `Unknown member`.

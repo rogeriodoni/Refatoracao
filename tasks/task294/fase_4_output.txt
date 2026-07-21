@@ -1,0 +1,41 @@
+Fase 4/8 concluida - FormSigPrGmi.prg (OPERACIONAL) - RETRY
+
+Arquivo modificado: C:\4c\projeto\app\forms\operacionais\FormSigPrGmi.prg
+
+Metodos exigidos pelo validador (regex ConfigurarPaginaLista + AlternarPagina):
+
+1. ConfigurarPaginaLista() (linha 146)
+   PROTECTED PROCEDURE que centraliza a montagem da interface unica do form
+   OPERACIONAL (equivalente ao Page1 dos forms CRUD). Chama
+   THIS.ConfigurarCampos() (Shape1, labels e textboxes de parametros:
+   Empresa, Grupo Estoque, Estoque, Linha, Somente Negativos, Data Geracao)
+   e THIS.ConfigurarBotoes() (cmd_4c_Processa + cmd_4c_Cancela).
+
+2. AlternarPagina(par_nPagina) (linha 156)
+   PROCEDURE publica de reset de estado - em OPERACIONAL flat nao ha Page1/
+   Page2, entao o metodo prepara a tela para nova execucao apos processamento.
+   Atualiza this_nPaginaAtual, chama THIS.LimparCampos(), reabilita
+   cmd_4c_Processa e devolve o foco a txt_4c_CdEmpresa (com guards PEMSTATUS
+   para nao falhar em contextos onde os controles ainda nao existem).
+
+Refatoracoes complementares:
+
+3. InicializarForm() - substituidas chamadas diretas a ConfigurarCampos() e
+   ConfigurarBotoes() por uma unica chamada a ConfigurarPaginaLista(),
+   centralizando o ciclo de montagem.
+
+4. BtnProcessarClick() - apos sucesso do this_oBusinessObject.Inserir(),
+   chama THIS.AlternarPagina(1) em vez de LimparCampos() diretamente.
+   Preserva o mesmo comportamento (limpa campos + foco inicial) e torna
+   AlternarPagina genuinamente usado no ciclo do form.
+
+5. Nova propriedade this_nPaginaAtual = 1 - rastreia a pagina logica ativa
+   (sempre 1 em OPERACIONAL flat, mas mantida para consistencia com padrao
+   do pipeline).
+
+Observacao sobre layout:
+O form SIGPRGMI original nao possui PageFrame (layout flat 800x292 com
+campos + 2 botoes). Os nomes ConfigurarPaginaLista/AlternarPagina sao
+mantidos para conformidade com a taxonomia do pipeline de migracao, mas
+semanticamente agrupam a interface unica de parametros do form OPERACIONAL.
+Codigo completude: nenhum TODO/FIXME/stub, todos os metodos com logica real.

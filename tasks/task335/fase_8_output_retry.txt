@@ -1,0 +1,11 @@
+﻿All 5 required identifiers present, no stub markers. Phase 8 complete.
+
+**Changes:** Added 5 functional methods to `C:\4c\projeto\app\forms\operacionais\Formsigprtam.prg` (~120 lines, before `PROCEDURE Destroy`):
+
+- **`CarregarLista()`** ÔÇö reexecuta `CarregarTamanhos` no BO, reconecta o grid e faz refresh.
+- **`FormParaBO()`** ÔÇö repassa `this_cCPros` ao BO antes de persistir.
+- **`BOParaForm()`** ÔÇö sincroniza `this_cDPros` + labels de Produto/Pre├ºos a partir do BO.
+- **`BtnSalvarClick()`** ÔÇö persiste via `SalvarTamanhos()` (s├│ em modo INSERIR/ALTERAR), reabilita o form pai e fecha.
+- **`BtnCancelarClick()`** ÔÇö reseta flags `houveIncl/Excl`, recarrega cursor (descarta edi├º├Áes em mem├│ria) e fecha.
+
+Cada m├®todo tem l├│gica real (sem TODO/stubs), reaproveita a arquitetura j├í montada nas fases anteriores e mant├®m a sem├óntica OPERACIONAL do form (filho modal do FormProduto).

@@ -1,0 +1,14 @@
+﻿As corre├º├Áes est├úo aplicadas. Vamos verificar a l├│gica:
+
+**Corre├º├úo 1** (linha 63-66): `Dataenvironment` ├® pulado no loop ÔÇö elimina os 4 erros sobre `Top/Left/Width/Height` do DataEnvironment que n├úo precisa ser migrado.
+
+**Corre├º├úo 2** (linhas 310-327): `DisabledForeColor` (e `DisabledBackColor`, `SelectionForeColor`, `SelectionBackColor`) s├úo adicionadas ├á lista de propriedades de cor. Agora:
+- SCX `"0,0,0"` ÔåÆ `TextoParaRGB("0,0,0")` ÔåÆ `"RGB(0,0,0)"`
+- PRG `RGB(0,0,0)=0` (numeric) ÔåÆ `NumeroParaRGB(0)` ÔåÆ `"RGB(0,0,0)"`
+- Compara├º├úo: `"RGB(0,0,0)" == "RGB(0,0,0)"` ÔåÆ **match** Ô£ô
+
+Mesmo para o purple: `"64,0,64"` ÔåÆ `"RGB(64,0,64)"` e `4194368` ÔåÆ `NumeroParaRGB(4194368)` ÔåÆ `"RGB(64,0,64)"` ÔåÆ **match** Ô£ô
+
+O arquivo `ValidarUIFidelity.prg` j├í deleta `ComparadorUI.fxp` antes de cada execu├º├úo, ent├úo a vers├úo corrigida ser├í compilada automaticamente na pr├│xima rodada da pipeline.
+
+**Causa raiz**: O `ComparadorUI.prg` n├úo inclu├¡a `DisabledForeColor` na normaliza├º├úo de cores (s├│ tratava `BackColor`/`ForeColor`), e n├úo pulava o objeto `Dataenvironment` do SCX (que n├úo ├® um controle visual e n├úo deve ser comparado). Nenhuma mudan├ºa foi necess├íria no Form ou BO ÔÇö eles estavam corretos.

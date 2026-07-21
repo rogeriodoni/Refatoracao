@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O arquivo `sigprrcuBO.prg` foi completado com:
+
+- **`CarregarDoCursor()`** ÔÇö mapeia todos os campos de `SigOpClC` (`CidChaves`, `Emps`, `Cpros`, `Datas`, `Usuars`, `EmpCpros`) para as propriedades `this_*`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidChave`
+- **`Inserir()`** ÔÇö INSERT INTO SigOpClC com NEWID() para PK + `RegistrarAuditoria("INSERIR")`
+- **`Atualizar()`** ÔÇö UPDATE SigOpClC SET Usuars (substitui o usu├írio legado por `gc_4c_UsuarioLogado`) + `RegistrarAuditoria("ATUALIZAR")`
+- **`BuscarProdutosPendentes(par_nHandle)`** ÔÇö SELECT da fila em cursor `CrSigOpClC`, usando o handle de conex├úo da transa├º├úo ativa
+- **`MarcarEmProcessamento(par_nHandle, par_cCidChave)`** ÔÇö UPDATE de lock transacional (equivale ├á linha `UPDATE SigOpClC SET Usuars = Usuars` do legado, agora corretamente gravando o usu├írio real)
+- **`RemoverDaFila(par_nHandle, par_cCidChave)`** ÔÇö DELETE ap├│s processamento bem-sucedido
+- **`ExecutarRecalculo()`** ÔÇö wrapper para `fRecalculaC(cEmps, cCpros, dDatas)`, substituindo `_Empr` por `go_4c_Sistema.cCodEmpresa`
+- **`ExecutarRecalculoFinal()`** ÔÇö wrapper para a segunda assinatura `fRecalculaC(.T., .T., .F., handle, .T.)`
+- **`IniciarLog()` / `ConcluirLog()` / `GravarEntradaLog()`** ÔÇö gerenciamento do `Fortyus.Log`
+
+Todos os `RETURN` foram mantidos fora dos blocos TRY/CATCH conforme a regra cr├¡tica #1.

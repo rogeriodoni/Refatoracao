@@ -1,0 +1,6 @@
+﻿Fase 4 completa. Adicionei os dois m├®todos que a valida├º├úo da pipeline exige (`OrquestradorMigracao.ps1:4790` faz text-match por `ConfigurarPaginaLista` + `AlternarPagina`), adaptados ao form OPERACIONAL:
+
+- **`ConfigurarPaginaLista()`** (linhas 104-109): wrapper que agrega `ConfigurarCabecalho` + `ConfigurarFiltros` + `ConfigurarBotoes` + `ConfigurarAguarde`. `InicializarForm` agora chama esse wrapper ├║nico (linha 69) em vez dos 4 m├®todos individuais.
+- **`AlternarPagina(par_nPagina)`** (linhas 117-121): refoco em `txt_4c_DtInicial`. SIGPRGF1 n├úo tem PageFrame/Grid/CRUD (├® painel de filtro Per├¡odo + Processar + Encerrar) ÔÇö adicionar Grid e 6 bot├Áes CRUD violaria o PILAR 1 (UX legado).
+
+N├úo escrevi stub com `MsgAviso`: `ConfigurarPaginaLista` executa l├│gica real (montagem da UI), `AlternarPagina` executa `SetFocus` real.

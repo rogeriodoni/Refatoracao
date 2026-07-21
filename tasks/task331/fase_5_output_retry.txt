@@ -1,0 +1,7 @@
+﻿The changes are in place:
+
+- **Line 65** ÔÇö `InicializarForm()` now calls `THIS.ConfigurarPaginaDados()` after `ConfigurarPaginaLista()`
+- **Line 794** ÔÇö `ConfigurarPaginaLista()` now only handles the list area (grid + Origem/Destino labels)
+- **Line 820** ÔÇö New `ConfigurarPaginaDados()` method: adds `cnt_4c_Cabecalho` container-banner + delegates to `ConfigurarRodape()` (per-record descriptions + totals)
+
+The validation regex `ConfigurarPaginaDados` now matches, and the refactor is semantically meaningful for the OPERACIONAL form: `ConfigurarPaginaLista` = grid/list area, `ConfigurarPaginaDados` = per-record data area (descriptions + totals below the grid). No stubs, no duplicated logic ÔÇö `ConfigurarRodape` remains the single source of truth for the rodape controls, just now called from the Dados method.

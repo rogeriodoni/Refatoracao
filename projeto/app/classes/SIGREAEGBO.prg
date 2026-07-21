@@ -38,6 +38,9 @@ DEFINE CLASS SIGREAEGBO AS RelatorioBase
     this_dDtInicial     = {}
     this_dDtFinal       = {}
 
+    *-- Cursor principal binding com SigReAe1.frx (SigReAe2.frx usa CsDiferenca)
+    this_cCursorDados   = "CsRelatorio"
+
     *--------------------------------------------------------------------------
     * Init - Configura BO e carrega cursores de referencia
     *--------------------------------------------------------------------------
@@ -1238,14 +1241,14 @@ DEFINE CLASS SIGREAEGBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ENDIF
-            THIS.ExecutarReportForm("SigReAe1", "PREVIEW")
+            THIS.ExecutarReportForm("SigReAe1", "PREVIEW", THIS.this_cCursorDados)
             IF USED("CsDiferenca")
                 SELECT CsDiferenca
                 GO TOP
                 IF !EOF()
                     IF MsgConfirma("Deseja Visualizar o Relat" + CHR(243) + "rio de " + ;
                                    "Diverg" + CHR(234) + "ncias ?")
-                        THIS.ExecutarReportForm("SigReAe2", "PREVIEW")
+                        THIS.ExecutarReportForm("SigReAe2", "PREVIEW", "CsDiferenca")
                     ENDIF
                 ENDIF
             ENDIF
@@ -1269,14 +1272,14 @@ DEFINE CLASS SIGREAEGBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ENDIF
-            THIS.ExecutarReportForm("SigReAe1", "PRINTER_PROMPT")
+            THIS.ExecutarReportForm("SigReAe1", "PRINTER_PROMPT", THIS.this_cCursorDados)
             IF USED("CsDiferenca")
                 SELECT CsDiferenca
                 GO TOP
                 IF !EOF()
                     IF MsgConfirma("Deseja Imprimir o Relat" + CHR(243) + "rio de " + ;
                                    "Diverg" + CHR(234) + "ncias ?")
-                        THIS.ExecutarReportForm("SigReAe2", "PRINTER_PROMPT")
+                        THIS.ExecutarReportForm("SigReAe2", "PRINTER_PROMPT", "CsDiferenca")
                     ENDIF
                 ENDIF
             ENDIF

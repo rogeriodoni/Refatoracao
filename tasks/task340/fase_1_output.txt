@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\classes\SIGPRVTXBO.prg` criado com sucesso.
+
+**O que foi declarado:**
+
+- **`this_cSigKey`** ÔÇö chave de configura├º├úo lida de `SigCdPac.sigkeys` char(3)
+- **`this_cPlanilha`** ÔÇö caminho do arquivo `.xls` selecionado
+- **Todos os campos de `sigprvtx`** mapeados para `this_*` com tipo e tamanho corretos:
+  - Da planilha: `this_cSkuId`, `this_cNomeSku`, `this_cSkuAtivo`, `this_cRefSku`
+  - Restantes da tabela: `this_cCpros`, `this_cDescritivo`, `this_cTamanho`, `this_nQtd`, `this_nBxQtd`, `this_lChkAtuStock`, `this_nPvens`, `this_nPrecode`, `this_lCkVtexUp`, `this_lCkAtuDesc`, `this_nVtexProdId`
+- **`this_cCursorDados`** = `"cursor_4c_Grade"` ÔÇö nome do cursor da grade
+- **`Init()`** configura `this_cTabela = "sigprvtx"` e `this_cCampoChave = "cidchaves"` com TRY/CATCH can├┤nico
+- **`ObterChavePrimaria()`** retorna `this_cCidChaves`
+
+Fase 1/8 conclu├¡da. A Fase 2 completar├í o BO com `CarregarDoCursor()`, `CarregarConfiguracao()` (leitura do SigCdPac), `ProcessarPlanilha()` (substitui├º├úo do `ImpExcelDriver`) e `SalvarDados()` (DELETE + INSERT via SQLEXEC).

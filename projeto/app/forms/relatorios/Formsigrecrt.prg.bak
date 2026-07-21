@@ -442,7 +442,9 @@ DEFINE CLASS Formsigrecrt AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Visualizar()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnVisualizarClick")
@@ -459,7 +461,9 @@ DEFINE CLASS Formsigrecrt AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Imprimir()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnImprimirClick")
@@ -475,7 +479,9 @@ DEFINE CLASS Formsigrecrt AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                ENDIF
                 RETURN
             ENDIF
             IF USED("CsRelatorio")
@@ -510,8 +516,10 @@ DEFINE CLASS Formsigrecrt AS FormBase
             THIS.FormParaRelatorio()
             loc_lSucesso = THIS.this_oRelatorio.Visualizar()
             IF !loc_lSucesso
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Gerar Relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnIncluirClick")

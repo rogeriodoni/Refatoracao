@@ -1,0 +1,5 @@
+﻿Nenhuma ocorr├¬ncia residual. As 3 corre├º├Áes foram aplicadas:
+
+1. **[SQL-FILTRO-INVENTADO] CODPROS** ÔÇö removida cl├íusula `WHERE CodPros = m.loc_cCpro` do `SELECT ... FROM CrSigCdPac`. O original n├úo filtrava CrSigCdPac por CodPros; a condi├º├úo foi inventada pela LLM.
+
+2. **[SQL-FILTRO-INVENTADO] UTILIZAR** ÔÇö removida a condi├º├úo `SCAN FOR TmpDisp.Utilizar > 0` em dois locais (BtnConfirmarPage4Click e BtnVoltarPage5Click), substitu├¡da por `SCAN` (itera├º├úo de todos os registros, igual ao original). No original, o loop percorre todos os registros de TmpDisp sem filtrar por Utilizar; subtrair 0 ├® no-op, ent├úo o resultado permanece id├¬ntico ao legado.

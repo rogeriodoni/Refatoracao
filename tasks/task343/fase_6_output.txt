@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. A Fase 6/8 foi implementada com sucesso. Resumo do que foi adicionado:
+
+**Altera├º├Áes em `ConfigurarPaginaDados()`:**
+- Cursor placeholder `cursor_4c_AcJ` criado com `SET NULL ON` para aceitar NULLs do SQL Server
+- Grid `grd_4c_Usuarios` (top=199, left=307, width=343, height=418) com 2 colunas: "Usu├írio" (Usuars) e "Nome" (NComps)
+- BINDEVENT nas colunas Text1 para `When` (controle de editabilidade) e `Valid` (lookup)
+- Bot├úo `cmd_4c_InserirUsuario` (top=199, left=654, 42x42, `Themes=.T.`)
+- Bot├úo `cmd_4c_ExcluirUsuario` (top=241, left=654, 42x42, `Themes=.T.`)
+
+**Novos m├®todos:**
+- `CarregarGridUsuarios()` ÔÇö vincula cursor ao grid, redefine headers ap├│s RecordSource (Problema 32)
+- `BtnInserirUsuarioClick()` ÔÇö adiciona linha em branco, replicando l├│gica do legado (LOCATE For Empty ÔåÆ APPEND BLANK se n├úo encontrar)
+- `BtnExcluirUsuarioClick()` ÔÇö marca como DELETE, reposiciona cursor (fora de TRY para evitar RETURN dentro de TRY)
+- `GrdUsuariosColumn1When/Valid` ÔÇö lookup em `SigCdUsu` por `Usuarios`, preenche NComps automaticamente
+- `GrdUsuariosColumn2When/Valid` ÔÇö edit├ível apenas quando `Usuars` da linha est├í vazio; lookup inverso por `NComps`
+
+**Atualiza├º├Áes:**
+- `BOParaForm()` chama `CarregarGridUsuarios()` ap├│s preencher os campos do cabe├ºalho
+- `BtnIncluirClick()` recria cursor vazio antes de navegar para Page2

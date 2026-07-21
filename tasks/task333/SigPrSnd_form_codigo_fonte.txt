@@ -1,0 +1,551 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrSnd.SCX
+* Data/Hora: 18/07/2026 17:57:06
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRSND
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Label3
+  Parent: SIGPRSND
+  Class: label
+  BaseClass: label
+
+Objeto: getqtdsen
+  Parent: SIGPRSND
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnSenPend
+  Parent: SIGPRSND
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGPRSND
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRSND.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRSND.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: btnExcel
+  Parent: SIGPRSND
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdSenha
+  Parent: SIGPRSND
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRSND.grdSenha.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRSND.grdSenha.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnGerSen
+  Parent: SIGPRSND
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Saida
+  Parent: SIGPRSND
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 324
+  Width = 500
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Senhas livres"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGPRSND"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Qtde de Senhas :"
+  Height = 15
+  Left = 54
+  Top = 87
+  Width = 86
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.getqtdsen
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 152
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 84
+  Width = 31
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "getqtdsen"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.btnSenPend
+------------------------------------------------------------
+  Top = 190
+  Left = 251
+  Picture = ..\framework\imagens\geral_lupa_60.jpg
+  Caption = "Senhas pendentes"
+  TabIndex = 20
+  Name = "btnSenPend"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.btnExcel
+------------------------------------------------------------
+  Top = 4
+  Left = 275
+  Picture = ..\framework\imagens\geral_excel_60.jpg
+  Caption = "Excel"
+  TabIndex = 20
+  Name = "btnExcel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.grdSenha
+------------------------------------------------------------
+  ColumnCount = 1
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 162
+  Left = 48
+  Panel = 1
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 37
+  Top = 110
+  Width = 140
+  GridLineColor = 238,238,238
+  ZOrderSet = 6
+  Name = "grdSenha"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.Width = 100
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.grdSenha.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Senhas geradas"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.grdSenha.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.btnGerSen
+------------------------------------------------------------
+  Top = 4
+  Left = 350
+  Picture = ..\framework\imagens\geral_chaves_60.jpg
+  Caption = "Gerar Senha"
+  TabIndex = 19
+  Name = "btnGerSen"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSND.Saida
+------------------------------------------------------------
+  Top = 4
+  Left = 425
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 18
+  Name = "Saida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRSND
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+pIds = Replicate(Chr(254), 20)
+lcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigPrSnd', 'cIdChaves', 'crSigPrSnd', '', '', lcQrySend)
+		EndWith
+		
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSND.btnSenPend
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+Thisform.grdSenha.RecordSource = []
+
+lcQuery = [Select * From SigPrSnd Where EmpDopNums = '']
+ThisForm.poDataMgr.SqlExecute(lcQuery,'crSigPrSnd')
+
+Select crSigPrSnd
+Go top
+Thisform.grdSenha.RecordSource = [crSigPrSnd]
+ThisForm.grdSenha.Column1.ControlSource = [crSigPrSnd.Senhads]
+ThisForm.grdSenha.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSND.btnExcel
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcExl, lcErr, llErr
+
+Select SenhaDs as Senhas From crSigPrSnd Into Cursor TmpPrSnd
+
+Select TmpPrSnd
+
+llErr = .f.
+lcErr = On([Error])
+On Error llErr = .t.
+
+lcExl = PutFile([Nome da Planilha], [], [XLS;TXT])
+
+If fVerificaPasta(lcExl, 2)
+	If (Lower(Alltrim(JustExt(lcExl))) = [xls])
+		Copy To (lcExl) Type Xl5
+	Else 
+		Copy To (lcExl) Delimited With '' With Character ';'
+	EndIf 
+
+	If File(lcExl)
+		=MessageBox([Arquivo gerado com sucesso], 0+48+32, [Geração de Planilha])
+	EndIf
+Else
+	llErr = .t.
+EndIf
+
+If llErr
+	=MessageBox([Falha na Geração da Planilha. Verifique o Diretório ou Planilha Em Uso], 0+48+32, [Geração de Planilha])
+EndIf 
+
+On Error &lcErr.
+
+Use in TmpPrSnd
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSND.grdSenha.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSND.btnGerSen
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(thisform.getQtdSen.Value) 
+	=Messagebox('Qtde de senhas obrigatório.',48,[Aviso])
+	ThisForm.getQtdSen.Setfocus()
+	Return .f.
+EndIf
+
+lnQtd = thisform.getqtdsen.Value
+If Messagebox([Deseja realmente gerar ] + Alltrim(Str(lnQtd)) + [ senhas livres?],4+32+256,[Gerar Senha]) = 7
+	Return .f.
+Endif
+
+Select crSigPrSnd
+Zap
+
+Thisform.grdSenha.RecordSource = []
+
+ldData = Datetime()
+
+For n = 1 to lnQtd
+	Insert Into crSigPrSnd (Usuars, Datas, Tipos) Values (Usuar, ldData, 0)
+	_Inicio = 0
+	Do While _Inicio = 0
+		_Inicio = fKeyGen()
+		If ThisForm.poDataMgr.ChkRegister('SigPrSnd','SenhaDs',_Inicio)
+			_Inicio =  0
+		Endif
+	Enddo
+	lcSenha = Str(_Inicio,6)
+	Replace Senhads   With lcSenha, ;
+			Horas     With Time(), ;
+			cIdChaves With fUniqueIds() In crSigPrSnd
+Next
+
+Select crSigPrSnd
+Go top
+Thisform.grdSenha.RecordSource = [crSigPrSnd]
+ThisForm.grdSenha.Column1.ControlSource = [crSigPrSnd.Senhads]
+ThisForm.grdSenha.Refresh()
+
+llOk = ThisForm.poDataMgr.Update('crSigPrSnd')
+If llOk
+	ThisForm.poDataMgr.Commit()
+	=Messagebox([Favor anotar as senhas geradas.],48,[Senhas Livres])
+Else
+	ThisForm.poDataMgr.RollBack()
+Endif
+thisform.getqtdsen.Value = 0
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSND.Saida
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRSND
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

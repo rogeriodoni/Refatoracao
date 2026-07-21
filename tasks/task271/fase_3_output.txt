@@ -1,0 +1,7 @@
+﻿**Fase 3/8 conclu├¡da.** O arquivo `FormSIGPRCPR.prg` (587 linhas) j├í existia de uma execu├º├úo anterior e foi corrigido com 3 fixes cr├¡ticos:
+
+1. **BINDEVENT `Valid` ÔåÆ `KeyPress`** ÔÇö `BINDEVENT "Valid"` n├úo funciona em TextBox no VFP9. O handler `TxtLeituraValid/When/LostFocus` foi substitu├¡do por `TxtLeituraKeyPress` com `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` e guard `Enter(13)/Tab(9)`, com `par_nKeyCode = 0` no final para prevenir Tab de mover o foco.
+
+2. **`Column1.Visible = .F.`** ÔÇö A coluna CodBarra devia ficar oculta no grid (apenas usada internamente para SEEK), mas estava vis├¡vel. Adicionado em `ConfigurarGrade`.
+
+3. **Headers resetados ap├│s `RecordSource`** ÔÇö VFP9 reseta os captions das colunas quando `RecordSource` ├® alterado. Adicionados os 5 headers em `InicializarValores` imediatamente ap├│s definir `ControlSource` das colunas.

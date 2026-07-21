@@ -715,8 +715,10 @@ DEFINE CLASS Formsigrecgp AS FormBase
             IF loc_lOK
                 THIS.this_oRelatorio.Visualizar()
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                     "Relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.MostrarProgresso(.F.)
@@ -742,8 +744,10 @@ DEFINE CLASS Formsigrecgp AS FormBase
             IF loc_lOK
                 THIS.this_oRelatorio.Imprimir()
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                     "Relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             THIS.MostrarProgresso(.F.)

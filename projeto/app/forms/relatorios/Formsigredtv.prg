@@ -1068,8 +1068,10 @@ DEFINE CLASS Formsigredtv AS FormBase
                 loc_lOk = THIS.this_oRelatorio.Visualizar()
 
                 IF !loc_lOk AND !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Erro ao visualizar relat" + CHR(243) + "rio")
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -1124,8 +1126,10 @@ DEFINE CLASS Formsigredtv AS FormBase
                 loc_lOk = THIS.this_oRelatorio.Imprimir()
 
                 IF !loc_lOk AND !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Erro ao imprimir relat" + CHR(243) + "rio")
+                    ENDIF
                 ENDIF
             ENDIF
 

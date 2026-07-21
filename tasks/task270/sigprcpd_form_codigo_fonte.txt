@@ -1,0 +1,1368 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprcpd.SCX
+* Data/Hora: 15/07/2026 09:54:59
+* Total de registros: 51
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCPD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCPD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: FigJpg
+  Parent: SIGPRCPD
+  Class: image
+  BaseClass: image
+
+Objeto: Shape4
+  Parent: SIGPRCPD
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_descr
+  Parent: SIGPRCPD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCPD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGPRCPD
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRCPD.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Fase
+  Parent: SIGPRCPD.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGPRCPD.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: get_Data
+  Parent: SIGPRCPD.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGPRCPD
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCPD.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCPD.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container2
+  Parent: SIGPRCPD
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Cap
+  Parent: SIGPRCPD.Container2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Utz
+  Parent: SIGPRCPD.Container2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: get_Sld
+  Parent: SIGPRCPD.Container2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label4
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Label5
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Label6
+  Parent: SIGPRCPD.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Say1
+  Parent: SIGPRCPD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_qtde
+  Parent: SIGPRCPD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Cliente
+  Parent: SIGPRCPD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRCPD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPRCPD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_tEnv
+  Parent: SIGPRCPD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRCPD
+  Class: label
+  BaseClass: label
+
+Objeto: Sair
+  Parent: SIGPRCPD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Capacidade Produtiva"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGPRCPD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = 1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.FigJpg
+------------------------------------------------------------
+  Stretch = 1
+  Height = 105
+  Left = 459
+  Top = 457
+  Visible = .F.
+  Width = 143
+  Name = "FigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Shape4
+------------------------------------------------------------
+  Top = 455
+  Left = 456
+  Height = 109
+  Width = 148
+  Visible = .F.
+  ZOrderSet = 2
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Get_descr
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Height = 23
+  Left = 90
+  TabIndex = 13
+  Top = 468
+  Width = 345
+  ForeColor = 0,0,0
+  BackColor = 255,255,198
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "Get_descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição Produto"
+  Left = 92
+  Top = 455
+  TabIndex = 38
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container1
+------------------------------------------------------------
+  Top = 104
+  Left = 8
+  Width = 278
+  Height = 36
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container1.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Fase :"
+  Height = 17
+  Left = 2
+  Top = 8
+  Width = 40
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container1.Get_Fase
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 44
+  Top = 5
+  Width = 100
+  BackColor = 255,198,140
+  Name = "Get_Fase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container1.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data :"
+  Height = 17
+  Left = 147
+  Top = 9
+  Width = 40
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container1.get_Data
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 189
+  Top = 5
+  Width = 72
+  BackColor = 255,198,140
+  Name = "get_Data"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Arial"
+  DeleteMark = .F.
+  Height = 310
+  Left = 0
+  ReadOnly = .T.
+  RecordMark = .F.
+  ScrollBars = 2
+  Top = 139
+  Width = 801
+  Name = "Grade"
+  Column1.FontName = "Arial"
+  Column1.ColumnOrder = 2
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Arial"
+  Column2.ColumnOrder = 3
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Arial"
+  Column3.ColumnOrder = 4
+  Column3.Width = 24
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Arial"
+  Column4.ColumnOrder = 5
+  Column4.Width = 65
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.InputMask = "9999.99"
+  Column4.Name = "Column4"
+  Column5.FontName = "Arial"
+  Column5.ColumnOrder = 6
+  Column5.Width = 95
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Arial"
+  Column6.ColumnOrder = 7
+  Column6.Width = 190
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Arial"
+  Column7.ColumnOrder = 8
+  Column7.Width = 165
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+  Column8.FontName = "Arial"
+  Column8.ColumnOrder = 1
+  Column8.Width = 80
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Envelope"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "O.P."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Seq"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Minutos"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cliente"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unidade Prod."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Grade.Column8.Text1
+------------------------------------------------------------
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2
+------------------------------------------------------------
+  Top = 104
+  Left = 288
+  Width = 504
+  Height = 36
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  Name = "Container2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Capacidade:"
+  Height = 15
+  Left = 9
+  Top = 10
+  Width = 70
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Get_Cap
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "99999"
+  Left = 81
+  Top = 5
+  Width = 63
+  BackColor = 255,216,176
+  Name = "Get_Cap"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Utilizado:"
+  Height = 15
+  Left = 194
+  Top = 10
+  Width = 54
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Get_Utz
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "99999"
+  Left = 250
+  Top = 5
+  Width = 63
+  BackColor = 255,216,176
+  Name = "Get_Utz"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Saldo : "
+  Height = 15
+  Left = 366
+  Top = 10
+  Width = 42
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.get_Sld
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "99999"
+  Left = 410
+  Top = 5
+  Width = 63
+  BackColor = 255,216,176
+  Name = "get_Sld"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Min"
+  Height = 15
+  Left = 147
+  Top = 10
+  Width = 22
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Min"
+  Height = 15
+  Left = 316
+  Top = 9
+  Width = 22
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Container2.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Min"
+  Height = 15
+  Left = 476
+  Top = 9
+  Width = 22
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Quantidade"
+  Left = 11
+  Top = 455
+  TabIndex = 38
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Get_qtde
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Height = 23
+  InputMask = "99999.999"
+  Left = 9
+  TabIndex = 13
+  Top = 468
+  Width = 74
+  ForeColor = 0,0,0
+  BackColor = 255,255,198
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "Get_qtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Get_Cliente
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Height = 23
+  Left = 9
+  TabIndex = 13
+  Top = 507
+  Width = 425
+  ForeColor = 0,0,0
+  BackColor = 255,255,221
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "Get_Cliente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cliente"
+  Left = 11
+  Top = 494
+  TabIndex = 38
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tempo Total do Envelope"
+  Left = 11
+  Top = 532
+  TabIndex = 38
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Get_tEnv
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Height = 23
+  InputMask = "99999"
+  Left = 9
+  TabIndex = 13
+  Top = 545
+  Width = 74
+  ForeColor = 0,0,0
+  BackColor = 255,255,198
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "Get_tEnv"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "[ Operação com Prioridade ]"
+  Height = 15
+  Left = 617
+  Top = 457
+  Width = 160
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCPD.Sair
+------------------------------------------------------------
+  Top = 4
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCPD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pFase, pUnidade, pData, pCodigo
+
+ThisForm.Setor   = pFase
+ThisForm.Unidade = pUnidade
+ThisForm.data    = pData
+ThisForm.Codigo  = pCodigo
+
+With ThisForm
+
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		ThisForm.Refresh
+		ThisForm.Draw
+		ThisForm.Show
+
+		pDatai = ThisForm.Data
+		pFase  = ThisForm.Setor
+		pnCod  = ThisForm.Codigo
+		pUnid  = ThisForm.Unidade
+		
+		lcSql = [Select * From SigCdPcz Where codigos = ]+Str(pnCod)
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'zTmpPcp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (zTmpPcp)')
+			Return 0
+		EndIf
+		
+		lcSql = [Select Codigos, Sum(minutos) as Minutos, sum(minutos-Saldos) as UtilizadoS, Sum(saldos) as Saldos ]+;
+				[From SigCdPcP Where Codigos = ]+Str(pncod)+[ And Datas = ?pDataI And Fases = ']+pFase+[' ]+;
+				Iif(Empty(pUnid),[],[And UniPrdts = ']+pUnid+['])+[ Group by Codigos ]
+				
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'zTmpPcpcp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (zTmpPcpcp)')
+			Return 0
+		EndIf
+
+
+		lcSql = [Select * from SigCdPcg Where datas = ?pDatai And Fases = ']+pFase+[' And Codigos = ]+Str(pnCod)+[ ]+;
+				Iif(Empty(pUnid),[],[And UniPrdts = ']+pUnid+['])+[ Order by Cidchaves ]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'zTmpPcppp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (zTmpPcppp)')
+			Return 0
+		EndIf
+		
+		lcSql = [Select a.*, a.dopes+'-'+Str(a.numes,6) as Pedido, a.contas+'-'+b.rclis as cliente, b.Rclis ]+;
+				[From SigCdPco a, SigCdCli b ]+;
+				[Where a.Codigos = ]+Str(pnCod)+[ And a.Fases = ']+pFase+[' ]+;
+				Iif(Empty(pUnid),[],[And a.UniPrdts = ']+pUnid+['])+;
+				[ And a.Contas = b.Iclis Order by a.UniPrdts, a.Seqs, a.Nenvs ]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'zTmpPcpOP2') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (zTmpPcpOP2)')
+			Return 0
+		EndIf
+		
+		Select a.Fases, a.UniPrdts, a.Nenvs, a.Seqs, sum(a.Minutos) as Minutos From zTmpPcpOp2 a, zTmpPcpPP b ;
+		Where a.Fases + a.UniPrdts + Str(a.Nenvs,10) + Str(a.Seqs,2) = b.Fases + b.UniPrdts + Str(b.Nenvs,10) + Str(b.Seqs,2) ;
+		Into Cursor zTmpPcpOp3 group by a.Fases,a.UniPrdts,a.Nenvs,a.Seqs
+
+		Select a.*, b.Minutos as TempU, c.Minutos as TempoO, fStoM((a.minutos*60)/(c.minutos*60)*(b.minutos*60)) as TempoReal;
+		From zTmpPcpOp2 a, zTmpPcpPp b, zTmpPcpOp3 c ;
+		Where a.Fases + a.UniPrdts + Str(a.Nenvs,10) + Str(a.Seqs,2) = b.Fases + b.UniPrdts + Str(b.Nenvs,10) + Str(b.seqs,2) And ;
+			a.Fases + a.UniPrdts + Str(a.Nenvs,10) + Str(a.seqs,2) = c.Fases + c.UniPrdts + Str(c.Nenvs,10) + Str(c.seqs,2) ;
+		Into Cursor zTmpPcpOp Order by b.Ordems,a.UniPrdts,a.Seqs,a.Nenvs
+				
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+EndWith
+
+Select zTmpPcpOp
+Go Top
+
+With ThisForm
+	.container1.Get_Data.Value = ThisForm.data
+	.Container1.Get_Fase.Value = ThisForm.Setor
+	.Container2.Get_Cap.Value  = zTmpPcpCp.Minutos
+	.Container2.Get_Utz.Value  = zTmpPcpCp.Utilizados
+	.Container2.Get_Sld.Value  = zTmpPcpCp.Saldos
+EndWith
+
+With ThisForm.grade
+	.RecordSource = 'zTmpPcpOp'
+	.Column1.ControlSource = 'zTmpPcpOp.nenvs'
+	.Column2.Controlsource = 'zTmpPcpOp.Nops'
+	.Column3.Controlsource = 'zTmpPcpOp.ordems'
+	.Column4.Controlsource = 'zTmpPcpOp.TempoReal' &&'zTmpPcpOp.Minutos'
+	.Column5.Controlsource = 'zTmpPcpOp.Cpros'
+	.Column6.Controlsource = 'zTmpPcpOp.Pedido'
+	.Column7.Controlsource = 'zTmpPcpOp.Cliente'
+	.Column8.Controlsource = 'zTmpPcpOp.UniPrdts'
+	.SetAll('DynamicForeColor','iif(zTmpPcpOp.Priors<999990,RGB(0,0,255),RGB(0,0,0))','Column')
+	.Refresh
+EndWith
+
+Go Top in zTmpPcpOp
+ThisForm.Grade.SetFocus
+ThisForm.Grade.AfterRowColChange()
+
+*DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+Dodefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Get_descr
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Container1.Get_Fase
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Container1.get_Data
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Grade
+* Classe: grid (Base: grid)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Thisform.LockScreen = .T.
+lcArquivo4 = Sys(2023)+'\sigprcpd.jpg'
+
+ThisForm.FigJpg.Visible = .F.
+ThisForm.FigJpg.Picture = ''
+
+lcQuery = [Select FigJpgs, Dpros From SigCdPro Where Cpros= ']+zTmpPcpOp.Cpros+[']
+=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')
+
+If Not Empty(CrTmpPro.FigJpgs) And Not IsNull(CrTmpPro.FigJpgs)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+	If (StrToFile(lcFoto, lcArquivo4) > 0)
+		ThisForm.FigJpg.Picture = (lcArquivo4)
+		ThisForm.FigJpg.Visible = .t.
+	EndIf
+EndIf
+
+ThisForm.Get_descr.Value = CrTmpPro.Dpros
+ThisForm.Get_qtde.Value  = zTmpPcpOp.Qtds
+ThisForm.Get_cliente.Value = zTmpPcpOp.Rclis
+ThisForm.Get_tEnv.Value = zTmpPcpOp.TempU &&Minutos
+ThisForm.Get_descr.Refresh
+ThisForm.Get_qtde.Refresh
+ThisForm.Get_Cliente.Refresh
+ThisForm.Get_tEnv.Refresh
+
+Select zTmpPcpOp
+
+Thisform.LockScreen = .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Container2.Get_Cap
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Container2.Get_Utz
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Container2.get_Sld
+* Classe: textbox (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Get_qtde
+* Classe: fwget (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Get_Cliente
+* Classe: fwget (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Get_tEnv
+* Classe: fwget (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCPD.Sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCPD
+RESERVED3 (ClassInfo): codigo
+data
+podatamgr
+setor
+unidade
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

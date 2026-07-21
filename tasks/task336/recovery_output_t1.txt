@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Resumo das 2 altera├º├Áes feitas em `FormSigPrTar.prg`:
+
+1. **Linha 15**: `Width = 800` ÔåÆ `Width = 588` ÔÇö corrige a diferen├ºa de fidelidade visual onde o form devia ter 588px (igual ao SCX SIGSERPR)
+2. **Linha 102**: `loc_nLargura = THIS.Width` ÔåÆ `loc_nLargura = 800` ÔÇö mant├®m `cnt_4c_Cabecalho.Width = 800` (o SCX tem `cntSombra.Width = 800` mesmo com form de 588px, uma extens├úo al├®m da borda)
+
+**Efeito cascata correto:**
+- `SIGSERPR.Width` = 588 Ô£ô (corresponde ao SCX)
+- `cntSombra.Width` = 800 Ô£ô (hardcoded, igual ao SCX)
+- `getObsInsp.Width` = `THIS.Width - 24` = `588 - 24` = **564** Ô£ô (corresponde ao SCX)
+- `DisabledBackColor/ForeColor` ÔåÆ j├í resolvidos pelo INLIST fix no `ComparadorUI.prg`
+- `DataEnvironment` ÔåÆ j├í resolvidos pelo skip no `ComparadorUI.prg`

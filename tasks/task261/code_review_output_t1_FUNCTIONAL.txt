@@ -1,0 +1,9 @@
+﻿Ambas as altera├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö ├Ünico fix real necess├írio, em 2 pontos:
+
+1. **`ConfigurarCabecalho` (linha 100)**: Adicionado `.Visible = .T.` expl├¡cito para `cnt_4c_Sombra`. Necess├írio porque `AddObject` em runtime cria controles com `Visible=.F.` por padr├úo, e ao incluir `CNT_4C_SOMBRA` no filtro abaixo, o header precisava de visibilidade garantida explicitamente.
+
+2. **`TornarControlesVisiveis` (linhas 1006-1008)**: Adicionado `"CNT_4C_SOMBRA"` ao `INLIST`. O m├®todo agora recursa para dentro do container (tornando os labels filhos vis├¡veis) mas n├úo sobrescreve o `Visible` do pr├│prio container ÔÇö consistente com o padr├úo j├í aplicado aos 4 containers `OpConta/OpEstoque/OpCusto/OpCompra`.
+
+**[LAYOUT-POSITION]** ÔÇö Falsos positivos: o c├│digo atual j├í tem os valores corretos (`Top=114/200/349/447`, `Left=139`). A ferramenta de review comparou equivocadamente os r├│tulos internos dos containers (que t├¬m `Top=2`, `Left=171/182`) com os pr├│prios containers.

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö Adicionado `"IMG_4C_FIGJPG"` ao INLIST em `TornarControlesVisiveis` (linha 1732). O `img_4c_FigJpg` ├® criado com `Visible=.F.` (s├│ deve aparecer quando um produto ├® selecionado na grade) e sem esse filtro seria for├ºado para `.T.` durante a inicializa├º├úo. O filtro para `CNT_4C_CABECALHO` j├í estava correto.
+
+**[LAYOUT-POSITION]** ÔÇö Nenhuma altera├º├úo necess├íria. `cnt_4c_Origem.Top = 202` (173+29 do offset do PageFrame) j├í est├í correto. O validador comparou `lbl_4c_LblOrigem.Top = 5` (relativo ao container pai) com o Top=173 do legado ÔÇö falso positivo gerado por n├úo considerar a posi├º├úo do container pai.

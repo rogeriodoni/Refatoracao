@@ -1,0 +1,11 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `FormSigPrIbb.prg` foi criado em `C:\4c\projeto\app\forms\operacionais\` com:
+
+**O que foi implementado:**
+- `DEFINE CLASS FormSigPrIbb AS FormBase` com todas as propriedades visuais do SCX original (Height=700, Width=1000, TitleBar=0, ControlBox=.F., Movable=.F., DataSession=2)
+- `Init()` com `LPARAMETERS par_cEmpDopNum, par_cFrm` ÔÇö processa o EmpDopNum de 29 chars, divide em Emps/Dopes/Numes, define Picture, chama `DODEFAULT()` (que dispara FormBase.Init e corrige SET DATE/CENTURY para DataSession=2)
+- `InicializarForm()` ÔÇö cria `SigPrIbbBO`, verifica `gb_4c_ValidandoUI` e `gnConnHandle`, propaga `this_cEmpDopNum` ao BO, chama `InicializarCursores()`, cria o cabe├ºalho e torna controles vis├¡veis; CATCH verboso (n├úo silencioso)
+- `ConfigurarCabecalho()` ÔÇö cria `cnt_4c_Cabecalho` (equivalente ao `cntSombra` do legado): BackColor=RGB(100,100,100), Width=1008, Height=80, com `lbl_4c_Sombra` (ForeColor preto/sombra) e `lbl_4c_Titulo` (ForeColor branco), sem AutoSize (regra mem├│ria)
+- `TornarControlesVisiveis()` ÔÇö recursivo, suporta PageFrames e containers aninhados
+- `Destroy()` ÔÇö nula BO e chama `DODEFAULT()`
+
+**Pr├│ximas fases** adicionar├úo via Edit: grid `grd_4c_Dados`, textboxes de identifica├º├úo (Emps/Dopes/Numes), editboxes Local e Texto, bot├Áes Imprimir e Encerrar, BINDEVENTs, `CarregarDados()` e handlers.

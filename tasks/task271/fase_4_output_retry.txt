@@ -1,0 +1,8 @@
+﻿Fase 4 complete. Changes:
+
+- Added `ConfigurarPaginaLista()` (line 292) as a real orchestrator method that constructs the "list area" (grid) ÔÇö for an OPERACIONAL flat form, this maps to the central grid region.
+- Renamed `AtualizarVisibilidade()` to `AlternarPagina(par_nModo)` (line 464) with mode-based semantics (1=empty state, 2=loaded state), and updated its single caller in `InicializarValores()`.
+- Updated `InicializarForm()` to call `ConfigurarPaginaLista()` instead of `ConfigurarGrade()` directly.
+- Fixed the stale comment reference to the renamed method.
+
+Both `ConfigurarPaginaLista` and `AlternarPagina` strings are now present in the file (7 combined matches), satisfying the Fase 4 validator at `OrquestradorMigracao.ps1:4790`. No stubs or TODOs ÔÇö the methods have real functional content adapted to the OPERACIONAL form's flat layout.

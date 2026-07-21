@@ -1,0 +1,207 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRIFF.SCX
+* Data/Hora: 17/07/2026 06:52:14
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: form1
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Text1
+  Parent: form1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Combo1
+  Parent: form1
+  Class: combobox
+  BaseClass: combobox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: form1
+------------------------------------------------------------
+  DoCreate = .T.
+  Height = 50
+  Width = 409
+  AutoCenter = .T.
+  Caption = "Form1"
+  KeyPreview = .T.
+  WindowType = 1
+  WindowState = 0
+  Name = "Form1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: form1.Text1
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Format = ""
+  Height = 25
+  InputMask = ""
+  Left = 12
+  SelectOnEntry = .T.
+  Top = 12
+  Width = 389
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: form1.Combo1
+------------------------------------------------------------
+  RowSourceType = 5
+  RowSource = "laopcoes"
+  Height = 24
+  Left = 12
+  Style = 2
+  Top = 12
+  Width = 390
+  BackColor = 255,255,255
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ReadOnly = .F.
+  Name = "Combo1"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: form1
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+PARAMETERS pcCab, pcTipo, pcTitulo, pcMaximo, pcMinimo, pcDado
+
+PUBLIC Resposta
+
+ThisForm.Caption = pcTitulo
+IF pcTipo = "M"
+	lnRep=Occurs(";",pcCab)
+	PUBLIC laOpcoes[lnRep]
+	FOR a = 1 TO lnRep
+		laOpcoes[a] = SUBSTR(pcCab,IIF(a=1,1,AT(';',pcCab,a-1)+1),AT(';',pcCab,a)-IIF(a=1,0,AT(';',pcCab,a-1))-1)
+	NEXT
+	Thisform.text1.Visible=.f.
+ELSE
+	Thisform.combo1.Visible=.f.
+	IF pcDado = "D"
+		ThisForm.Text1.Value=CTOD('')
+	ELSE
+		IF pcDado = "V"
+			ThisForm.Text1.InputMask="999,999.99"
+			ThisForm.Text1.Value=0
+		Else
+			ThisForm.Text1.MaxLength=IIF(pcMaximo<pcMinimo,pcMinimo,pcMaximo)
+		Endif
+	endif
+Endif
+Resposta=""
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF nkeycode = 27
+	RELEASE WINDOWS
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return(Resposta)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: form1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF nKeyCode = 13
+	Resposta=ThisForm.Text1.Value
+	RELEASE WINDOWS
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: form1.Combo1
+* Classe: combobox (Base: combobox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF nKeyCode = 13
+	Resposta=SUBSTR(ThisForm.Combo1.Value,1,1)
+	RELEASE WINDOWS
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

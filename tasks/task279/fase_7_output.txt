@@ -1,0 +1,12 @@
+﻿**Fase 7 conclu├¡da.** ├Ünica altera├º├úo necess├íria foi adicionar a linha 686:
+
+```foxpro
+THIS.obj_4c_BtnReport.Value = IIF(THIS.obj_4c_BtnReport.Buttons(1).Enabled, 1, 2)
+```
+
+Isso replica o comportamento original do Init legado:
+```
+.Value = Iif(.Imprime.Enabled, 1, 2)  && seleciona botao 1 (Imprimir) se habilitado, ou 2 (Encerrar)
+```
+
+**Os eventos `BtnIncluirClick/AlterarClick/VisualizarClick/ExcluirClick` N├âO foram adicionados** pois n├úo existem no form original `SIGPRENV.SCX` ÔÇö que tem apenas `Imprime.Click` e `Sair.Click`, j├í implementados desde fases anteriores como `BtnImprimirClick` e `BtnEncerrarClick`. A descri├º├úo da Fase 7 ├® um template gen├®rico para forms CRUD; este form OPERACIONAL j├í estava completo.

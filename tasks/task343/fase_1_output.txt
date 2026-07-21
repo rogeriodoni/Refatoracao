@@ -1,0 +1,16 @@
+﻿`C:\4c\projeto\app\classes\ACJBO.prg` criado com sucesso. Fase 1/8 conclu├¡da.
+
+O BO inclui:
+
+**Propriedades declaradas:**
+- JOB display (SigCdCli): `this_cGrupos`, `this_cIClis`, `this_cRClis`, `this_cRazaos`, `this_cUsuarsCriador`, `this_dDataIncs`, `this_lInativas`
+- Acesso (SigCdAcJ): `this_cPkChaves`, `this_cJOBs`, `this_cUsuars`, `this_cNComps`
+
+**Init():** configura `this_cTabela = "SigCdAcJ"` e `this_cCampoChave = "pkChaves"`
+
+**M├®todos j├í implementados (aproveitando o contexto):**
+- `Buscar()` ÔÇö lista JOBs de SigCdCli filtrados por SigCdGcr.Coletors=10 ÔåÆ `cursor_4c_GradeJOB`
+- `CarregarAcessos(par_cIClis)` ÔÇö carrega SigCdAcJ com JOIN SigCdUsu ÔåÆ `cursor_4c_AcJ`
+- `SalvarAcessos(par_cIClis)` ÔÇö DELETE antigos + INSERT do cursor (l├│gica do legado `msv_alterar`)
+- `ValidarUnicidadeUsuario()` ÔÇö detecta usu├írio duplicado na grade (l├│gica do `Salva.Click`)
+- `CarregarJobDoCursor()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`

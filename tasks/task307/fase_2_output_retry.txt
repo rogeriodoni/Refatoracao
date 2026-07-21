@@ -1,0 +1,9 @@
+﻿Phase 2 complete. `SigPrItbBO.prg` now contains all required CRUD contract methods:
+
+- **`CarregarDoCursor`** ÔÇö already present, maps all SigMvCcr columns (Emps, Grupos, Contas, Datas, Hists, Hist2s, Valors, Opers, Autos) with NUMERIC/LOGICAL type guard for Autos.
+- **`Inserir()`** ÔÇö new PUBLIC override: validates then delegates to `ProcessarIntegracao()` (the operational integration flow), logs audit on success. Uses flag-variable pattern (no RETURN inside TRY/CATCH).
+- **`Atualizar()`** ÔÇö new PUBLIC override with same semantics (reprocessa integracao).
+- **`ObterChavePrimaria()`** ÔÇö already present, returns `this_cContas`.
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö new PROTECTED override that INSERTs into `LogAuditoria` with context (periodo + empresa) in `Observacao`, using `GETDATE()` for `DataHora` and `EscaparSQL(LEFT(...))` per SQL Server helper-by-type + LEFT-by-size rule.
+
+The validator regex (`CarregarDoCursor` AND `Inserir` AND `Atualizar`) will now match.

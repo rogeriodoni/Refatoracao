@@ -1091,8 +1091,10 @@ DEFINE CLASS FormSIGREEVV AS FormBase
         LOCAL loc_oErro
         TRY
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao visualizar relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BotaoVisualizarClick")
@@ -1106,8 +1108,10 @@ DEFINE CLASS FormSIGREEVV AS FormBase
         LOCAL loc_oErro
         TRY
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao imprimir relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BotaoImprimirClick")
@@ -1124,8 +1128,10 @@ DEFINE CLASS FormSIGREEVV AS FormBase
         LOCAL loc_cArquivo, loc_cAlias, loc_oErro
         TRY
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao preparar dados para exporta" + CHR(231) + CHR(227) + "o")
+                ENDIF
                 RETURN
             ENDIF
 

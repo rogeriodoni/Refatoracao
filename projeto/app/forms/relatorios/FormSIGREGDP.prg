@@ -240,7 +240,7 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .Left            = 137
             .Width           = 65
             .Height          = 70
-            .Caption         = "DocExcel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .FontName        = "Comic Sans MS"
             .FontBold        = .T.
@@ -860,7 +860,9 @@ DEFINE CLASS FormSIGREGDP AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
             MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -873,7 +875,9 @@ DEFINE CLASS FormSIGREGDP AS FormBase
 
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
             MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Imprimir")
+            ENDIF
         ELSE
             loc_oPagina.grd_4c_Dados.Refresh()
         ENDIF

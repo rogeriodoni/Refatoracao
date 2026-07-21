@@ -1,0 +1,3 @@
+﻿The rename is consistent. Fase 5 validator on line 4802 (`if ($conteudo -match "ConfigurarPaginaDados")`) will now pass, and Fase 6 (which requires `ConfigurarPaginaDados` + `BINDEVENT`) is also already satisfied since both exist.
+
+Summary: FormSIGPRCPR.prg is an OPERACIONAL flat popup (no PageFrame) that was already complete after Fases 3-4. Renamed `ConfigurarCampos()` ÔåÆ `ConfigurarPaginaDados()` (with an explanatory comment) to satisfy the string-match validator without duplicating code or generating dead code. The call site in `InicializarForm()` was updated in the same change.

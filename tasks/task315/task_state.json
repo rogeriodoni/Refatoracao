@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task315",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-18T00:36:20",
+    "atualizadoEm":  "2026-07-18T02:08:35",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-18T00:36:20",
+                                            "fim":  "2026-07-18T00:36:20",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task315\\SIGPRNSE.sct",
+                                            "baseName":  "SIGPRNSE",
+                                            "scxFile":  "C:\\4c\\tasks\\task315\\SIGPRNSE.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-18T00:36:20",
+                                          "fim":  "2026-07-18T00:36:20",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGPRNSE",
+                                          "txtFile":  "C:\\4c\\tasks\\task315\\SIGPRNSE_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-18T00:36:20",
+                                              "fim":  "2026-07-18T00:36:20",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task315\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-18T00:36:21",
+                                              "fim":  "2026-07-18T00:36:21",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task315\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task315\\meta_prompt.md",
+                                              "boClass":  "SIGPRNSEBO",
+                                              "formClass":  "FormSIGPRNSE",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task315\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-18T00:36:21",
+                                              "fim":  "2026-07-18T00:36:22",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task315\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-18T00:36:22",
+                                               "fim":  "2026-07-18T00:36:22",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task315\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSIGPRNSE_esqueleto.prg",
+                                                                "SIGPRNSEBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-18T00:36:22",
+                                       "fim":  "2026-07-18T01:42:51",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGPRNSEBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  98.76,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGPRNSE.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2305
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-18T01:42:51",
+                                                  "fim":  "2026-07-18T01:42:58",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGPRNSE.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGPRNSEBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-18T01:42:58",
+                                                 "fim":  "2026-07-18T01:45:24",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-18T01:58:54",
+                                       "fim":  "2026-07-18T01:59:25",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-18T01:59:25",
+                                               "fim":  "2026-07-18T02:03:32",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task315\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-18T02:03:32",
+                                        "fim":  "2026-07-18T02:08:35",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-18T02:08:35",
+                                              "fim":  "2026-07-18T02:08:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task315_SIGPRNSE.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-18T00:36:20",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-18T00:36:21",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task315\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-18T00:36:21",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-18T00:36:21"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-18T01:42:58",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-18T01:42:58",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSIGPRNSE_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGPRNSE.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task315\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-18T01:45:24",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-18T01:45:52",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-18T01:45:52",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-18T01:57:51",
+                                          "passes":  5,
+                                          "problemas":  "[FONTNAME-ERRADO] Linha 172: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 190: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 208: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 238: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 246: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [LAYOUT-POSITION] Controle \u0027optProcessados\u0027 (parent: SIGPRNSE): Top original=100 vs migrado \u0027obj_4c_OptProcessados\u0027 Top=0 (diff=100px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optProcessados\u0027 (parent: SIGPRNSE): Left original=127 vs migrado \u0027obj_4c_OptProcessados\u0027 Left=5 (diff=122px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  7
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-18T01:57:51",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-18T01:58:54",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SIGPRNSEBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSIGPRNSE.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-18T02:03:32",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-18T02:03:32",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  22,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task315\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

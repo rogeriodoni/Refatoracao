@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormSIGPRTRF.prg`:
+
+1. **Bug prim├írio (causa do erro)** ÔÇö `TornarControlesVisiveis()` chamava a si mesma recursivamente com `THIS.TornarControlesVisiveis(loc_oControl)`, mas o m├®todo n├úo tem `LPARAMETERS` para receber esse argumento ÔåÆ VFP9 lan├ºa "No PARAMETER statement is found" durante `InicializarForm`. A chamada era tamb├®m redundante, pois `TornarSubControlesVisiveis` j├í faz a recurs├úo nos filhos. Linha removida.
+
+2. **Bug secund├írio (preventivo)** ÔÇö `TxtCodProdKeyPress(par_nKeyCode, par_nShiftAltCtrl)` usava sintaxe de par├¬nteses em vez de `LPARAMETERS`. Handlers de `BINDEVENT` em VFP9 exigem `LPARAMETERS` dentro do corpo do m├®todo ÔÇö corrigido para evitar erro ao primeiro `KeyPress` do usu├írio.

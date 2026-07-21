@@ -829,7 +829,9 @@ DEFINE CLASS FormSIGREEUN AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReEun", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
@@ -848,7 +850,9 @@ DEFINE CLASS FormSIGREEUN AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReEun", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
@@ -867,7 +871,9 @@ DEFINE CLASS FormSIGREEUN AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cCursor = "dbRelatorio"

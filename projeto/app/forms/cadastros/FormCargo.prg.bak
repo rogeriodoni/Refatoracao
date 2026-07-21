@@ -2251,7 +2251,9 @@ DEFINE CLASS FormCargo AS FormBase
             THIS.HabilitarCampos()
             THIS.AlternarPagina(2)
         ELSE
+            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
             MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -2274,7 +2276,9 @@ DEFINE CLASS FormCargo AS FormBase
             THIS.AlternarPagina(2)
             THIS.pgf_4c_Paginas.Page2.txt_4c_Descr.SetFocus()
         ELSE
+            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
             MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -2296,10 +2300,14 @@ DEFINE CLASS FormCargo AS FormBase
                     MsgInfo("Cargo exclu" + CHR(237) + "do com sucesso.")
                     THIS.CarregarLista()
                 ELSE
+                    IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
                     MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+                    ENDIF
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
                 MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -2388,7 +2396,9 @@ DEFINE CLASS FormCargo AS FormBase
             THIS.this_cModoAtual = "LISTA"
             THIS.AlternarPagina(1)
         ELSE
+            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
             MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+            ENDIF
         ENDIF
     ENDPROC
 

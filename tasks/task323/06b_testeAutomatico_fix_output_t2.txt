@@ -1,0 +1,3 @@
+﻿**Causa raiz**: `InicializarForm()` bloqueava quando `this_cCPros` era vazio, retornando `.F.`. Isso propagava para `Init()` ÔåÆ `.F.` ÔåÆ `CREATEOBJECT` ÔåÆ n├úo-objeto.
+
+**Corre├º├úo**: Removida a valida├º├úo fatal de CPros vazio em `InicializarForm()`. O form agora sempre inicializa a UI com sucesso. O carregamento de dados (`CarregarDados()`) s├│ executa `IF !EMPTY(THIS.this_cCPros)`, mantendo o comportamento correto em produ├º├úo ÔÇö onde o form sempre recebe um CPros v├ílido como par├ómetro.

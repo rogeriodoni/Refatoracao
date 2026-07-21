@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto e completo. Fase 2 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `SigPrIbbBO.prg`:**
+
+| M├®todo | Origem legada | Descri├º├úo |
+|--------|---------------|-----------|
+| `InicializarCursores()` | `PROCEDURE Load` | Cria `cursor_4c_Grade` (grid), `crDados` e `TmpImprime` (nomes legados mantidos para compatibilidade com `SigPrIbl`) |
+| `SelecionarDados(par_cEmpDopNum)` | `PROCEDURE selecionadados` | SQL join em 5 tabelas + loop com lookup SigCnFBl por FPags (c/ fallback para espacos) ÔåÆ popula `cursor_4c_Grade` e `this_nTotal` |
+| `Detalhe(...)` | `PROCEDURE detalhe` | Insere linha de impress├úo em TmpImprime; `par_cDet` armazena express├úo VFP string que `SigPrIbl` avalia em runtime |
+| `Imprimir()` | `PROCEDURE imprimir` | 15 passos: busca SigMvCab ÔåÆ SigMvNfi ÔåÆ SigCdOpe ÔåÆ SigCdCli ÔåÆ SigOpFp ÔåÆ UPDATE SigCnFBl ÔåÆ verifica impressora ÔåÆ monta TmpImprime ÔåÆ `DO SigPrIbl` |
+| `CarregarDoCursor(par_cAliasCursor)` | ÔÇö | Popula `this_cEmpDopNum/Emps/Dopes/Numes` a partir de cursor com campo `EmpDopNums` |
+
+**Decis├úo de design:** `crDados` e `TmpImprime` mant├¬m os nomes originais porque as express├Áes string no campo `Conteudo` (ex: `"crDados.CLocals"`) s├úo avaliadas pelo programa legado `SigPrIbl` em runtime ÔÇö renomear quebraria a impress├úo.

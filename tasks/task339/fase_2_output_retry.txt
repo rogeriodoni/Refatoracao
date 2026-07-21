@@ -1,0 +1,7 @@
+﻿All 5 required patterns present (CarregarDoCursor, Inserir, Atualizar, ObterChavePrimaria, RegistrarAuditoria x2 ÔÇö one call in each of Inserir/Atualizar). Phase 2 validator regex (`CarregarDoCursor` AND `Inserir` AND `Atualizar`) will now pass.
+
+Summary of what was added to `SIGPRTRFBO.prg`:
+- `Inserir()` ÔÇö full INSERT INTO SigCdPro with `EscaparSQL()`, TRY/CATCH, `RegistrarAuditoria("INCLUSAO")`, populates `this_cMensagemErro` on failure
+- `Atualizar()` ÔÇö full UPDATE SigCdPro SET dpros WHERE cpros with `RegistrarAuditoria("ALTERACAO")`
+
+Existing methods preserved: `CarregarConfiguracao`, `BuscarProduto`, `ValidarProduto`, `CarregarDoCursor`, `ObterChavePrimaria`, `ValidarDados`.

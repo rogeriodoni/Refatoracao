@@ -1,0 +1,15 @@
+﻿A integra├º├úo no menu j├í foi feita em fase anterior. A Fase 8 est├í conclu├¡da.
+
+**Resumo da Fase 8:** Adicionei ao `FormSigPrMlu.prg` os m├®todos que faltavam para completar o contrato de pipeline:
+
+- **`CarregarLista()`** ÔÇö chama `BuscarMalas()` + `MontarGrade()` (wrapper p├║blico para o pipeline)
+- **`FormParaBO()`** ÔÇö mapeia `txt_4c_GetNova.Value` ÔåÆ `this_oBusinessObject.this_cDescs` (├║nico campo edit├ível)
+- **`BOParaForm()`** ÔÇö mapeia `this_oBusinessObject.this_cDescs` ÔåÆ `txt_4c_GetNova.Value`
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö habilita/desabilita `txt_4c_GetNova` e `cmd_4c_Processar`
+- **`LimparCampos()`** ÔÇö limpa o campo nome e desmarca todas as sele├º├Áes da grade
+- **`AjustarBotoesPorModo()`** ÔÇö stub (OPERACIONAL n├úo tem modo CRUD)
+- **`BtnBuscarClick()`** ÔÇö recarrega a lista via `CarregarLista()`
+- **`BtnSalvarClick()`** ÔÇö stub que retorna `.F.` (a├º├úo ├® via `BtnProcessarClick`)
+- **`BtnCancelarClick()`** ÔÇö chama `LimparCampos()` para resetar o estado
+
+O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrMlu.prg` est├í completo e funcional (914 linhas). Menu e config j├í estavam integrados de fases anteriores.

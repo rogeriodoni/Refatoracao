@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `AliBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com ORDER BY codigos, filtro opcional por descrs LIKE
+- **`CarregarPorCodigo(par_nCodigo)`** ÔÇö SELECT por PK, seta `this_lNovoRegistro = .F.`, fecha cursor tempor├írio no CATCH
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (alias)` antes de acessar campos (padr├úo correto), mapeia todos os 7 campos
+- **`Inserir()`** ÔÇö INSERT com todos os campos edit├íveis via form (sem `reincids` que n├úo aparece no form)
+- **`Atualizar()`** ÔÇö UPDATE dos campos edit├íveis, WHERE pela PK
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK, com auditoria
+
+Todos os m├®todos: sem RETURN dentro de TRY/CATCH, CATCH com MsgErro verboso, RegistrarAuditoria em INSERT/UPDATE/DELETE.

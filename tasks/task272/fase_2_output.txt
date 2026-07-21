@@ -1,0 +1,22 @@
+﻿Todos os `RETURN` est├úo fora de `TRY/CATCH`. Implementa├º├úo validada.
+
+**Fase 2 conclu├¡da.** `SigPrCtcBO.prg` agora tem os seguintes m├®todos CRUD completos:
+
+| M├®todo | Acesso | Fun├º├úo |
+|--------|--------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cPkChaves` para auditoria |
+| `CarregarDoCursor()` | PROTECTED | Carrega propriedades de uma linha do cursor |
+| `CarregarParaEdicao(par_cEmpDopNums)` | PUBLIC | Cria `cursor_4c_LocalCtMoe` com cota├º├Áes do SQL Server via JOIN com SigCdMoe |
+| `InserirLinhaLocal(par_cEmpDopNums)` | PUBLIC | Adiciona linha em branco ao cursor local (equivale ao `cmdInserir.Click` do legado) |
+| `ExcluirLinhaLocal()` | PUBLIC | Marca linha corrente como deletada e avan├ºa (equivale ao `cmdExcluir.Click`) |
+| `ValidarDuplicidade()` | PUBLIC | Verifica moedas duplicadas no cursor local via SELECT GROUP BY |
+| `BuscarMoeda(par_cCodigo)` | PUBLIC | Lookup em SigCdMoe, popula `cursor_4c_BuscaMoeda` |
+| `AtualizarDescricaoMoeda(par_cDescrs)` | PUBLIC | Preenche campo `Descrs` na linha corrente ap├│s lookup |
+| `SalvarCotacoes(par_cEmpDopNums)` | PUBLIC | DELETE all + INSERT validas no SQL Server com auditoria |
+
+**Destaques da implementa├º├úo:**
+- `CarregarParaEdicao` usa padr├úo `CREATE CURSOR` + `SQLEXEC` em temp + `APPEND FROM DBF` (evita Problema 34 - cursor Grid destru├¡do)
+- `SET NULL ON/OFF` ao redor do `CREATE CURSOR` (Problema 35)
+- `SalvarCotacoes` valida duplicidade antes de persistir, respeita linhas deleted e vazias
+- Gera├º├úo de `pkchaves`: `SYS(2015) + contador` (20 chars ├║nicos por loop)
+- `GETDATE()` inline no INSERT para `dtalts` (regra RegistrarAuditoria)

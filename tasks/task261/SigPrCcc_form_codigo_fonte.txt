@@ -1,0 +1,2677 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrCcc.SCX
+* Data/Hora: 14/07/2026 20:07:17
+* Total de registros: 60
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCCC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCCC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCCC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCCC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRCCC
+  Class: shape
+  BaseClass: shape
+
+Objeto: Processa
+  Parent: SIGPRCCC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cancela
+  Parent: SIGPRCCC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: OpEstoque
+  Parent: SIGPRCCC
+  Class: container
+  BaseClass: container
+
+Objeto: Say15
+  Parent: SIGPRCCC.OpEstoque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGPRCCC.OpEstoque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCCC.OpEstoque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRCCC.OpEstoque
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Estoque
+  Parent: SIGPRCCC.OpEstoque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: txtGrupos
+  Parent: SIGPRCCC.OpEstoque
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblGrupos
+  Parent: SIGPRCCC.OpEstoque
+  Class: label
+  BaseClass: label
+
+Objeto: txtData
+  Parent: SIGPRCCC.OpEstoque
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblData
+  Parent: SIGPRCCC.OpEstoque
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGPRCCC.OpEstoque
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Produto
+  Parent: SIGPRCCC.OpEstoque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descs
+  Parent: SIGPRCCC.OpEstoque
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OpConta
+  Parent: SIGPRCCC
+  Class: container
+  BaseClass: container
+
+Objeto: Say2
+  Parent: SIGPRCCC.OpConta
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: txtContas
+  Parent: SIGPRCCC.OpConta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblContas
+  Parent: SIGPRCCC.OpConta
+  Class: label
+  BaseClass: label
+
+Objeto: txtGrupos
+  Parent: SIGPRCCC.OpConta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblGrupos
+  Parent: SIGPRCCC.OpConta
+  Class: label
+  BaseClass: label
+
+Objeto: txtMoedas
+  Parent: SIGPRCCC.OpConta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblMoedas
+  Parent: SIGPRCCC.OpConta
+  Class: label
+  BaseClass: label
+
+Objeto: txtData
+  Parent: SIGPRCCC.OpConta
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblData
+  Parent: SIGPRCCC.OpConta
+  Class: label
+  BaseClass: label
+
+Objeto: Say15
+  Parent: SIGPRCCC.OpConta
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGPRCCC.OpConta
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: LblEnd
+  Parent: SIGPRCCC
+  Class: label
+  BaseClass: label
+
+Objeto: Estoque
+  Parent: SIGPRCCC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Conta
+  Parent: SIGPRCCC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCusto
+  Parent: SIGPRCCC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OpCusto
+  Parent: SIGPRCCC
+  Class: container
+  BaseClass: container
+
+Objeto: Say2
+  Parent: SIGPRCCC.OpCusto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGPRCCC.OpCusto
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGPRCCC.OpCusto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: txtData
+  Parent: SIGPRCCC.OpCusto
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblData
+  Parent: SIGPRCCC.OpCusto
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGPRCCC.OpCusto
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Produto
+  Parent: SIGPRCCC.OpCusto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descs
+  Parent: SIGPRCCC.OpCusto
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRCCC
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Registro
+  Parent: SIGPRCCC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnCompra
+  Parent: SIGPRCCC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OpCompra
+  Parent: SIGPRCCC
+  Class: container
+  BaseClass: container
+
+Objeto: Say2
+  Parent: SIGPRCCC.OpCompra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGPRCCC.OpCompra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGPRCCC.OpCompra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: txtData
+  Parent: SIGPRCCC.OpCompra
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblData
+  Parent: SIGPRCCC.OpCompra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGPRCCC.OpCompra
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Produto
+  Parent: SIGPRCCC.OpCompra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descs
+  Parent: SIGPRCCC.OpCompra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 110
+  Left = 108
+  Width = 632
+  Height = 436
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Recálculo de Saldos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  AlwaysOnTop = .F.
+  larguraopcompra = .F.
+  Name = "SIGPRCCC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 697
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Processa
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "Processar"
+  Enabled = .F.
+  TabIndex = 5
+  ToolTipText = "Processar"
+  SpecialEffect = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 6
+  ToolTipText = "[ESC] Sair"
+  SpecialEffect = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque
+------------------------------------------------------------
+  Top = 200
+  Left = 139
+  Width = 536
+  Height = 143
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  Enabled = .F.
+  Visible = .F.
+  TabIndex = 4
+  BackColor = 192,192,255
+  BorderColor = 90,90,90
+  Name = "OpEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 31
+  Top = 15
+  Width = 57
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Get_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = (_Empr)
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 12
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .T.
+  Caption = "Opções de Estoque"
+  Left = 182
+  Top = 2
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Caption = "Estoque :"
+  Height = 15
+  Left = 35
+  Top = 65
+  Width = 53
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Get_Estoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 62
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.txtGrupos
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 90
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 37
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.lblGrupos
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 46
+  Top = 40
+  Width = 42
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "lblGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.txtData
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Format = "D"
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 112
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.lblData
+------------------------------------------------------------
+  AutoSize = .T.
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "A partir de :"
+  Height = 15
+  Left = 20
+  Top = 115
+  Width = 68
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "lblData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto :"
+  Left = 35
+  Top = 90
+  Width = 53
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Get_Produto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 87
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpEstoque.Get_Descs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 199
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 87
+  Width = 327
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta
+------------------------------------------------------------
+  Top = 114
+  Left = 139
+  Width = 536
+  Height = 81
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 2
+  BackColor = 192,192,255
+  BorderColor = 90,90,90
+  Name = "OpConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .T.
+  Caption = "Opções de Conta Corrente"
+  Left = 171
+  Top = 2
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.txtContas
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 298
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.lblContas
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 255
+  Top = 24
+  Width = 41
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "lblContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.txtGrupos
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 166
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 20
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.lblGrupos
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 122
+  Top = 24
+  Width = 42
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "lblGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.txtMoedas
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 75
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 46
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "txtMoedas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.lblMoedas
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Moeda :"
+  Height = 15
+  Left = 27
+  Top = 50
+  Width = 46
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "lblMoedas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.txtData
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Format = "D"
+  Height = 23
+  InputMask = ""
+  Left = 191
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 46
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.lblData
+------------------------------------------------------------
+  AutoSize = .T.
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "A partir de :"
+  Height = 15
+  Left = 121
+  Top = 50
+  Width = 68
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "lblData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 16
+  Top = 23
+  Width = 57
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpConta.Get_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = (_Empr)
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 75
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 20
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.LblEnd
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Arial"
+  FontSize = 12
+  WordWrap = .F.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Processamento Concluído"
+  Height = 22
+  Left = 361
+  Top = 545
+  Visible = .F.
+  Width = 205
+  ForeColor = 255,0,0
+  Name = "LblEnd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Estoque
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  AutoSize = .F.
+  Picture = ..\vbmp\folder22.ico
+  DownPicture = ..\vbmp\a_diamd1.bmp
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Estoque"
+  Value = .F.
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 3
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Conta
+------------------------------------------------------------
+  Top = 3
+  Left = 350
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  AutoSize = .F.
+  Picture = ..\vbmp\folder42.ico
+  DownPicture = ..\vbmp\a_cash1.bmp
+  Alignment = 1
+  BackStyle = 0
+  Caption = "C.C."
+  Value = .F.
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 1
+  ToolTipText = "Conta Corrente"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.btnCusto
+------------------------------------------------------------
+  Top = 3
+  Left = 500
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  AutoSize = .F.
+  Picture = ..\vbmp\folder34.ico
+  DownPicture = ..\vbmp\d_misc2.bmp
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Custo"
+  Value = .F.
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 3
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCusto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto
+------------------------------------------------------------
+  Top = 349
+  Left = 139
+  Width = 536
+  Height = 92
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 2
+  BackColor = 192,192,255
+  BorderColor = 90,90,90
+  Name = "OpCusto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .T.
+  Caption = "Opções de Custo de Produto"
+  Left = 155
+  Top = 2
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 31
+  Top = 14
+  Width = 57
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Get_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = (_Empr)
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 11
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.txtData
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Format = "D"
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 61
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.lblData
+------------------------------------------------------------
+  AutoSize = .T.
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "A partir de :"
+  Height = 15
+  Left = 20
+  Top = 64
+  Width = 68
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "lblData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto :"
+  Left = 35
+  Top = 39
+  Width = 53
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Get_Produto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 36
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCusto.Get_Descs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 199
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 36
+  Width = 327
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Registros : "
+  Height = 15
+  Left = 171
+  Top = 547
+  Width = 65
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.Get_Registro
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999,999,999"
+  Left = 238
+  SpecialEffect = 1
+  Top = 543
+  Width = 93
+  Name = "Get_Registro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.btnCompra
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  AutoSize = .F.
+  Picture = ..\vbmp\folder27.ico
+  DownPicture = ..\vbmp\d_misc2.bmp
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Últ. Compra"
+  Value = .F.
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 3
+  ToolTipText = "Última Compra"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCompra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra
+------------------------------------------------------------
+  Top = 447
+  Left = 139
+  Width = 536
+  Height = 91
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 2
+  BackColor = 192,192,255
+  BorderColor = 90,90,90
+  Name = "OpCompra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .T.
+  Caption = "Opções de Ultima Compra do Produto/Cliente"
+  Left = 140
+  Top = 2
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 31
+  Top = 14
+  Width = 57
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Get_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = (_Empr)
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 10
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.txtData
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Format = "D"
+  Height = 23
+  InputMask = ""
+  Left = 90
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 60
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "txtData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.lblData
+------------------------------------------------------------
+  AutoSize = .T.
+  Comment = ""
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "A partir de :"
+  Height = 15
+  Left = 20
+  Top = 64
+  Width = 68
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "lblData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto :"
+  Left = 35
+  Top = 39
+  Width = 53
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Get_Produto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 90
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 35
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCC.OpCompra.Get_Descs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 199
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 35
+  Width = 327
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_Descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCCC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','RECSALDO',.t.)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .podatamgr
+			.AddCursor('SigOpClU','CidChaves','CrSigOpClU' )
+		EndWith
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+=ThisForm.Podatamgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.,[GrupoRecs,GrupoPags,ContaRecs,ContaPags,MoeCentral])
+
+ThisForm.LarguraOpConta   = Thisform.OpConta.Width
+ThisForm.LarguraOpEstoque = Thisform.OpEstoque.Width
+ThisForm.LarguraOpCusto   = Thisform.OpCusto.Width
+ThisForm.LarguraOpCompra  = Thisform.OpCompra.Width
+
+ThisForm.Get_Registro.Value = 0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.Processa
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnTotRegs, lnRegs, llOk
+
+Private _Grupo, _Conta, _Moeda, _Data, _CPros, llConc
+
+With Thisform
+	.Conta.Enabled = .F.
+	.Estoque.Enabled = .F.
+	.btnCusto.Enabled = .F.
+	.Processa.Enabled = .F.
+	.Cancela.Enabled = .F.
+	.LblEnd.Visible = .F.
+EndWith
+
+llSaida = .t.
+
+DO While llSaida
+
+	If ThisForm.Conta.Value 
+
+		_Emps  = Padr(ThisForm.OpConta.Get_Empresa.Value,3)
+		_Grupo = Padr(ThisForm.OpConta.txtGrupos.Value,10)
+		_Conta = Padr(ThisForm.OpConta.txtContas.Value,10)
+		_Moeda = Padr(ThisForm.OpConta.txtMoedas.Value,3)
+		_Data  = fDtoSQL(ThisForm.OpConta.txtData.Value)
+		_Gcm   = Iif(Not Empty(_Grupo) And Not Empty(_Conta) And Not Empty(_moeda),_Grupo + _Conta + _moeda,Space(23))
+		llConc = .t.
+		
+		Wait Window 'Aguarde! Selecionando Registros...' NoWait
+
+		ProgSel = CreateObject( 'fwprogressbar', 'Selecionando Registros...', 1 )
+		ProgSel.Titulo.FontBold = .t.
+		ProgSel.Show
+		ProgSel.Update(.T.)
+
+		Set Talk On
+		Set Talk Window
+		Set Escape Off
+		
+		lcWhere = [Where 0 = 0 ]+;
+				  Iif(Not Empty(_Grupo),[And Grupos = ']+_Grupo+[' ],[ ])+;
+				  Iif(Not Empty(_Conta),[And Contas = ']+_Conta+[' ],[ ])+;
+				  Iif(Not Empty(_moeda),[And Moedas = ']+_moeda+[' ],[ ])+;
+				  Iif(Not Empty(_Emps), [And Emps = ']+_Emps+[' ],[ ])+;
+				  Iif(Not Empty(_Data), [And Datas >= ?_Data ],[ ])
+		_pData = Iif(Empty(_Data),Ctod('01/01/1900'),_Data)
+
+		lcWherC = [Where 0 = 0 ]+;
+		Iif(Not Empty(_Grupo),[And Grupos = ']+_Grupo+[' ],[ ])+;
+				  Iif(Not Empty(_Conta),[And Contas = ']+_Conta+[' ],[ ])+;
+				  Iif(Not Empty(_moeda),[And Moedas = ']+_moeda+[' ],[ ])+;
+				  Iif(Not Empty(_Emps), [And Emps = ']+_Emps+[' ],[ ])+;
+				  Iif(Not Empty(_Data), [And DataConcs >= ?_Data ],[ ])+;
+				  [And Concs = ?llConc ]
+
+		If !Empty( _gcm )
+		
+			Create Cursor TmpConta (Emps c(3), Grupos c(10), Contas c(10), Moedas c(3), CidChaves c(20))
+			Index On CidChaves Tag CidChaves
+			
+			If Empty(_Emps)
+				
+				lcQuery = [ Select Cemps From SigCdEmp ]
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEmps') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEmps)')
+					llSaida = .f.
+					Loop
+				EndIf
+				
+				Select TmpEmps
+				Go Top
+				
+				Scan 
+					Insert into TmpConta (Emps, Grupos,Contas,Moedas,CidChaves) Values ;
+							(TmpEmps.Cemps,_Grupo,_Conta,_moeda,Sys(2015)+Sys(2015))
+					Select TmpEmps
+				EndScan
+					
+			Else
+				Insert into TmpConta (Emps,Grupos,Contas,Moedas,CidChaves) Values ;
+				(_Emps,_Grupo,_Conta,_moeda,Sys(2015)+Sys(2015))
+			EndIf 
+		
+		Else
+
+			lcQuery = [ Select Distinct Emps, Grupos, Contas, Moedas, Space(20) as CidChaves From SigMvCcr ]+lcWhere+;
+					  [ Union all]+;
+					  [ Select Distinct Emps, Grupos, Contas, Moedas, Space(20) as CidChaves From SigMvCcr ]+lcWherc
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpConta') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpConta)')
+				llSaida = .f.
+				Loop
+			EndIf
+			Select TmpConta
+			Replace all CidChaves with Sys(2015)+Sys(2015)
+			Index On CidChaves Tag Cidchaves
+			
+			ProgSel.Complete( .T.,.t. )
+			
+		EndIf
+		
+		Do While .T.
+
+			Select * From TmpConta Into Cursor Selecao Order by Emps,Grupos,Contas,Moedas
+			
+			Select Selecao
+
+			If Reccount() = 0
+				Exit
+			EndIf
+
+			lnReg = Reccount('Selecao')
+			ProgConta = CreateObject( 'fwprogressbar', 'Recalculando Saldo de Conta Corrente', Recc() )
+			ProgConta.Titulo.FontBold = .t.
+			ProgConta.Show
+			Scan
+				lnReg = lnReg - 1
+				ThisForm.Get_Registro.Value = lnReg
+				ThisForm.Get_Registro.Refresh
+				ProgConta.Update( .t. )
+				ProgConta.SubTitulo.Caption = Allt( Grupos ) + " : " + Allt( Contas ) + "-" + Allt( Moedas )
+
+				=fRecalculaS( Selecao.Grupos, Selecao.Contas, _pData, Selecao.Moedas )
+				
+				llOk = fRecalculaS( .t., ThisForm.Podatamgr, .t. )
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+
+				llOk = ( ThisForm.PodataMgr.Commit() > 0 )
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+				
+				Select TmpConta
+				If Seek(Selecao.CidChaves)
+					Delete
+				Endif
+			EndScan
+			
+			ProgConta.Complete( .T.)
+			Use In Selecao
+
+		Enddo
+
+	EndIf
+
+	If ThisForm.Estoque.Value 
+
+		_Estoque = Padr(ThisForm.OpEstoque.Get_Estoque.Value,10)
+		_Empresa = Padr(ThisForm.OpEstoque.Get_Empresa.Value,3)
+		_Grupo   = Padr(ThisForm.OpEstoque.txtGrupos.Value,10)
+		_CPros   = Padr(ThisForm.OpEstoque.Get_Produto.Value,14)
+		_Data    = fDtoSQL(ThisForm.OpEstoque.txtData.Value)
+
+		Wait Window 'Aguarde! Selecionando Registros...' NoWait
+
+		Do Case
+			Case !Empty(_Empresa) And !Empty(_Grupo) And !Empty(_Estoque)
+				lcWhere = [EmpGruEsts = "] + _Empresa + _Grupo + _Estoque + [" ]
+			Case Empty(_Empresa) And Empty(_Grupo) And Empty(_Estoque)
+				lcWhere = ''
+			Otherwise
+				lcEmpIni = Iif(Empty(_Empresa),Space(03),_Empresa)
+				lcGruIni = Iif(Empty(_Grupo)  ,Space(10),_Grupo)
+				lcEstIni = Iif(Empty(_Estoque),Space(10),_Estoque)
+				lcEmpFin = Iif(Empty(_Empresa),Replicate(Chr(254),03),_Empresa)
+				lcGruFin = Iif(Empty(_Grupo)  ,Replicate(Chr(254),10),_Grupo)
+				lcEstFin = Iif(Empty(_Estoque),Replicate(Chr(254),10),_Estoque)
+				lcWhere = [EmpGruEsts Between ']+lcEmpIni+lcGruIni+lcEstIni+[' And ']+lcEmpFin+lcGruFin+lcEstFin+[' ]
+		EndCase
+
+		lcWhere = Iif(!Empty(_CPros),Iif(!Empty(lcWhere),lcWhere+[ And ],[])+[ CPros = ?_CPros ],lcWhere)
+		lcWhere = Iif(!Empty(_Data),Iif(!Empty(lcwhere),lcWhere+[ And ],[])+[ Datas >= ?_Data ],lcWhere)
+		lcWhere = Iif(!Empty(lcWhere),[Where ]+lcWhere,[])
+		_pData  = Iif(Empty(_Data),Ctod('01/01/1900'),_Data)
+
+		lcQuery = [ Select Distinct Emps, Grupos, Estos, Cpros, CodCors, CodTams, Space(20) as CidChaves From SigMvHst ]+lcWhere
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEst') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEst)')
+			llSaida = .f.
+			Loop
+		EndIf
+		
+		Select TmpEst
+		Replace all CidChaves With Sys(2015)+Sys(2015)
+		Index On CidChaves Tag CidChaves
+		
+		DO While .t.
+		
+			Select * From TmpEst Into Cursor Selecao
+			If Reccount('Selecao') = 0
+				Exit
+			Endif
+			
+			Select Selecao
+			lnReg = Reccount('Selecao')
+
+			ProgConta = CreateObject( 'fwprogressbar', 'Recalculando Saldo do Estoque', Recc('Selecao') )
+			ProgConta.Titulo.FontBold = .t.
+			ProgConta.Show
+
+			Select Selecao
+			Scan
+
+				lnReg = lnReg - 1
+				ThisForm.Get_Registro.Value = lnReg
+				ThisForm.Get_Registro.Refresh
+
+				ProgConta.Update( .t. )
+
+				=fRecalculaP( Selecao.Emps, Selecao.Grupos, Selecao.Estos, Selecao.CPros, _pData, Selecao.CodCors, Selecao.CodTams, ThisForm.Podatamgr )
+
+				llOk = fRecalculaP( .t., ThisForm.Podatamgr, .t. )
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+				
+				llOk = ( ThisForm.PodataMgr.Commit() > 0 )
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+				
+				Select TmpEst
+				If Seek(Selecao.CidChaves)
+					Delete
+				EndIf
+
+			Endscan
+			ProgConta.Complete( .T., .T. )
+			Use In Selecao
+
+		EndDo
+		
+	EndIf
+
+	If ThisForm.btnCusto.Value 
+		lcEmp = Padr(ThisForm.OpCusto.Get_Empresa.Value,3)
+		lcPro = Padr(ThisForm.OpCusto.Get_Produto.Value,14)
+		ldDat = fDtoSQL(ThisForm.OpCusto.txtData.Value)
+
+		Wait Window 'Aguarde! Selecionando Registros...' NoWait
+
+		lcQuery = [Select Cemps ] + ;
+				    [From SigCdEmp ] + ;
+				   [Where Not Cemps = Space(3)] + Iif(Empty(lcEmp), [], [ And Cemps = '] + lcEmp + ['])
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalEmp') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalEmp)')
+			llSaida = .f.
+			Loop
+		EndIf
+		
+		lcQuery = [Select Calccustos From SigCdPac ]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalParac') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalParac)')
+			llSaida = .f.
+			Loop
+		EndIf
+
+		llEmp = (LocalParac.CalcCustos <> 1)
+
+		lcQuery = [Select Cpros ] + ;
+				    [From SigCdPro ] + ;
+				   [Where Not Cpros = Space(14)] + Iif(Empty(lcPro), [], [ And Cpros = '] + lcPro + ['])
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalPro2') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalPro2)')
+			llSaida = .f.
+			Loop
+		EndIf
+
+		Select LocalEmp
+		Scan
+		
+			If llEmp
+				lcQuery = [Select Distinct Cpros ] + ;
+				    [From SigMvEst ] + ;
+				   [Where Emps = ']+Localemp.Cemps+[' And Not Cpros = Space(14)] + Iif(Empty(lcPro), [], [ And Cpros = '] + lcPro + ['])
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalPro') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalPro)')
+					llSaida = .f.
+					Exit
+				EndIf
+			Else
+				Select * From LocalPro2 Into Cursor LocalPro ReadWrite
+			Endif
+
+			lnReg = Reccount('LocalPro')
+
+			loCusto = CreateObject('fwprogressbar', 'Preparando Arquivo de Recálculo do Custo de Produtos', lnReg)
+			loCusto.Titulo.FontBold = .t.
+			loCusto.Show
+
+			Select LocalPro
+			Scan
+
+				lnReg = lnReg - 1
+				ThisForm.Get_Registro.Value = lnReg
+				ThisForm.Get_Registro.Refresh
+
+				loCusto.SubTitulo.Caption = 'Empresa : ' + LocalEmp.Cemps + ' - Produto : ' + LocalPro.CPros
+				loCusto.Update(.t.)
+
+				=fRecalculaC(LocalEmp.Cemps, LocalPro.CPros, ldDat, ThisForm.poDataMgr)
+
+				llOk = fRecalculaC(.t., .t., .f., ThisForm.poDataMgr,.t.)
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+				llOk = ( ThisForm.PodataMgr.Commit() > 0 )
+				If Not llOk
+					ThisForm.Podatamgr.Rollback()
+					Loop
+				EndIf
+
+			EndScan
+			If Not llEmp
+				Exit
+			Endif
+		EndScan
+
+		loCusto.Complete(.t., .t.)
+	EndIf
+
+	If ThisForm.BtnCompra.Value 
+	
+		Select CrSigOpClU
+		Zap
+		
+		lcEmp = Padr(ThisForm.OpCompra.Get_Empresa.Value,3)
+		lcPro = Padr(ThisForm.OpCompra.Get_Produto.Value,14)
+		ldDat = fDtoSQL(ThisForm.OpCompra.txtData.Value)
+
+		Wait Window 'Aguarde! Selecionando Registros...' NoWait
+		
+		lcSql = [Select a.datas,a.Emps,a.Dopes,a.Numes,a.EmpDopNums,a.Valos,a.Contads,a.ContaOs,]+;
+				[c.GerGdmis,c.atuCompras,c.TpGdmis,b.cOpers,b.cmoes ]+;
+				[From SigMvCab a, SigCdOpe b, SigCdTom c ]+;
+				[Where a.Dopes = b.Dopes and b.TipoOps = c.Codigos And ]+;
+				[((c.GerGdmis = 1 And c.TpGdmis = 1) Or ( c.GerGdmis = 2 And c.AtuCompras = 1)) And a.Datas >= ?ldDat ]+;
+				Iif(Not Empty(lcEmp),[And a.Emps = ']+lcEmp+[' ],[ ])
+				
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'TprMvCab') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TprMvCab)')
+			llSaida = .f.
+			Loop
+		EndIf
+
+		lcSql = [Select Emps, Dopes, Numes, EmpDopNums, Cpros, Units, Moedas From SigMvItn ]+;
+				[Where EmpDopNums in (Select EmpDopNums	From SigMvCab a, SigCdOpe b, SigCdTom c ]+;
+				[Where a.Dopes = b.Dopes and b.TipoOps = c.Codigos And ]+;
+				[c.GerGdmis = 2 And c.AtuCompras = 1 And a.Datas >= ?ldDat ]+;
+				Iif(Not Empty(lcEmp),[And a.Emps = ']+lcEmp+[' ],[ ])+[ ) ]
+				
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'crTpmMvItn') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTpmMvItn)')
+			llSaida = .f.
+			Loop
+		EndIf
+		
+		lcSql = [Select EmpDopNums From SigOpClU ]
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'LocCalcU') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocCalcU)')
+			llSaida = .f.
+			Loop
+		EndIf
+		Select LocCalcU
+		Index on EmpDopNums Tag EmpDopNums
+		
+		Select TprMvCab
+		Index on EmpDopNums Tag EmpDopNums
+
+		Select crTpmMvItn
+		Index on EmpDopNums Tag EmpDopNums
+
+		lnReg = Reccount('TprMvCab')
+		loCusto = CreateObject('fwprogressbar', 'Preparando Arquivo de Atualização da Ultima Compra', lnReg)
+		loCusto.Titulo.FontBold = .t.
+		loCusto.Show
+
+		Select TprMvCab
+		Scan
+
+			lnReg = lnReg - 1
+			ThisForm.Get_Registro.Value = lnReg
+			ThisForm.Get_Registro.Refresh
+
+			loCusto.SubTitulo.Caption = TprMvCab.Emps + ' ' + TprMvCab.Dopes + ' ' + Str(TprMvCab.Numes,6)
+			loCusto.Update(.t.)
+
+			If Seek(TprMvCab.EmpDopNums,'LocCalcU','EmpdopNums')
+				Loop
+			Endif
+
+			If (TprMvCab.GerGdmis = 1 And TprMvCab.TpGdmis = 1)
+				lcConta = Iif(TprMvCab.Copers=1,TprMvCab.Contads,TprMvCab.Contaos)
+				
+				If TprMvCab.CMoes # crSigCdPam.MoeCentral
+					lnCotaCentral  = fBuscarCotacao( crSigCdPam.MoeCentral, TprMvCab.Datas, ThisForm.Podatamgr  )
+					lnCotaOperac   = fBuscarCotacao( TprMvCab.CMoes, TprMvCab.Datas, ThisForm.Podatamgr  )
+					lnValorCentral = Round( TprMvCab.Valos * lnCotaOperac / lnCotaCentral, 2 )
+				Else
+					lnValorCentral = TprMvCab.Valos
+				Endif
+				
+				llData = TprMvCab.Datas
+				Insert Into CrSigOpClU (Emps,Dopes,Numes,EmpdopNums,iclis,Valors,Datas,Cidchaves) Values ;
+							(TprMvCab.Emps,TprMvCab.Dopes,TprMvCab.Numes,TprMvCab.EmpdopNums,;
+							lcConta,lnValorCentral,llData,fUniqueIds() )
+			EndIf
+
+			If (TprMvCab.GerGdmis = 2 And TprMvCab.AtuCompras = 1)
+				Select crTpmMvItn
+				=Seek(TprMvCab.EmpDopNums)
+				Scan While EmpdopNums = TprMvCab.EmpDopNums
+
+					If Empty(Cpros)
+						Loop
+					EndIf
+					lcSql = [Select Cpros, UltComps From SigCdPro Where Cpros = ']+crTpmMvItn.Cpros+[']
+					If thisform.Podatamgr.sqlexecute(lcsql,'TmpPro') < 1
+						MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Select SigCdPro)')
+						Ret = .f.
+					Endif
+					
+					llData  = TprMvCab.Datas
+					lnValor = crTpmMvItn.Units
+					lcMoeda = crTpmMvItn.Moedas
+
+					Insert Into CrSigOpClU (Emps,Dopes,Numes,empDopNums,cpros,Valors,Datas,Moedas,Cidchaves) Values ;
+								(TprMvCab.Emps,TprMvCab.Dopes,TprMvCab.Numes,TprMvCab.EmpdopNums,;
+								crTpmMvItn.Cpros,lnValor,llData,lcMoeda,fUniqueIds() )
+				EndScan
+			Endif
+		EndScan
+		loCusto.Complete(.t., .t.)
+		If Not ThisForm.Podatamgr.Update('CrSigOpClU')
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update CrSigOpClU)')
+			llSaida = .f.
+			Loop
+		EndIf
+		ThisForm.Podatamgr.commit()
+		
+		lcSql = [Select * From SigOpClU ]
+		ThisForm.Podatamgr.Sqlexecute(lcSql,'CsSelecao')
+
+		Select Distinct Iclis From CsSelecao Into Cursor Selecao
+		
+		lnReg = Reccount('Selecao')
+		loCusto = CreateObject('fwprogressbar', 'Atualizando Valor da Ultima Compra Clientes ', lnReg)
+		loCusto.Titulo.FontBold = .t.
+		loCusto.Show
+
+		Select Selecao
+		Scan
+			lnReg = lnReg - 1
+			ThisForm.Get_Registro.Value = lnReg
+			ThisForm.Get_Registro.Refresh
+
+			loCusto.SubTitulo.Caption = 'Cliente '+Selecao.Iclis
+			loCusto.Update(.t.)
+
+			lcConta = Selecao.Iclis
+			
+			lcSql = [Select Top 1 Iclis,Datas,Valors From SigOpClU Where Iclis = ']+lcConta+[' ]+;
+					[Order by Datas Desc ]
+			If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalCalcU') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalCalcU)')
+				Return .f.
+			Endif
+
+			llData = Iif(Reccount('LocalCalcU') = 0,Null,localCalcU.Datas)
+			lcUpDate = [UpDate SigCdCli Set UltComps = ?llData, vUltComps = ]+Str(LocalCalcU.Valors,12,2)+[ Where Iclis = ']+lcConta+[']
+			If ThisForm.podatamgr.SqlExecute(lcUpDate,'') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigCdCli)')
+				Return .f.
+			Endif
+			
+			lcSql = [Select Top 1 Iclis,Datas,Valors From SigOpClU Where Iclis = ']+lcConta+[' ]+;
+					[Order by Valors Desc ]
+			If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalCalcU') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalCalcU)')
+				Return .f.
+			Endif
+
+			llData = Iif(Reccount('LocalCalcU') = 0,Null,localCalcU.Datas)
+			lcUpDate = [UpDate SigCdCli Set dtfats = ?llData, mfats = ]+Str(LocalCalcU.Valors,12,2)+[ Where Iclis = ']+lcConta+[']
+			If ThisForm.podatamgr.SqlExecute(lcUpDate,'') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigCdCli 2)')
+				Return .f.
+			EndIf
+			ThisForm.Podatamgr.commit()
+		EndScan
+
+		Select Distinct Cpros From CsSelecao Into Cursor Selecao
+		
+		lnReg = Reccount('Selecao')
+		loCusto = CreateObject('fwprogressbar', 'Atualizando Valor da Ultima Compra Produtos', lnReg)
+		loCusto.Titulo.FontBold = .t.
+		loCusto.Show
+
+		Select Selecao
+		Scan
+			lnReg = lnReg - 1
+			ThisForm.Get_Registro.Value = lnReg
+			ThisForm.Get_Registro.Refresh
+
+			loCusto.SubTitulo.Caption = 'Produto '+Selecao.Cpros
+			loCusto.Update(.t.)
+
+			lcSql = [Select Top 1 Cpros,Datas,Valors,Moedas From SigOpClU Where Cpros = ']+Selecao.Cpros+[' ]+;
+					[Order by Datas Desc ]
+			If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalCalcU') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (LocalCalcU)')
+				Return .f.
+			Endif
+
+			llData = Iif(Reccount('LocalCalcU') = 0,Null,localCalcU.Datas)
+			lnValor = LocalCalcU.Valors
+			lcMoeda = LocalCalcU.Moedas
+
+			lcUpDate = [UpDate SigCdPro Set UltComps = ?llData, vUltComps = ]+Str(lnValor,12,2)+[, ]+;
+					   [mUltComps = ']+lcMoeda+[' Where Cpros = ']+selecao.Cpros+[']
+			If ThisForm.podatamgr.SqlExecute(lcUpDate,'') < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigCdPro)')
+				Exit
+			Endif
+			ThisForm.Podatamgr.commit()
+		EndScan
+		loCusto.Complete(.t., .t.)
+	EndIf
+
+	Wait Clear
+	
+	llSaida = .f.
+
+EndDo
+
+With Thisform
+	.Conta.Enabled = .T.
+	.Estoque.Enabled = .T.
+	.btnCusto.Enabled = .T.
+	.Processa.Enabled = .T.
+	.Cancela.Enabled = .T.
+	.LblEnd.Visible = .T.
+	.Cancela.setfocus
+Endwith	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.Cancela
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpEstoque.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;
+						   'crListaRemota', 'cEmps', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cemps', 'XXXXXX', 'Código',.t.,'Cemps')
+		loLista.mAddColuna('Razas','','Descrição',.t.,'Razas')
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Cemps
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpEstoque.Get_Estoque
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value ) And !fAcessoContas( Usuar,This.Parent.txtGrupos.value, 'C', This.Value, This,.f.,.f.,.f.,ThisForm.PodataMgr)
+   return .F.
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpEstoque.txtGrupos
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab( Usuar, 'C', This.Value, This , '',.f.,ThisForm.Podatamgr)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpEstoque.Get_Produto
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                  = Evaluate('CrProds.CPros')
+		This.Parent.Get_Descs.Value = Evaluate('CrProds.DPros')
+	Else
+		This.Value                  = ''
+		This.Parent.Get_Descs.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Descs.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpEstoque.Get_Descs
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                    = Evaluate('CrProds.DPros')
+		This.Parent.Get_Produto.Value = Evaluate('CrProds.CPros')
+	Else
+		This.Value                    = ''
+		This.Parent.Get_Produto.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Produto.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.Get_Produto.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpConta.txtContas
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value ) And !fAcessoContas( Usuar,This.Parent.txtGrupos.value, 'C', This.Value, This,.f.,.f.,.f.,ThisForm.PodataMgr)
+   return .F.
+endif   
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpConta.txtGrupos
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab( Usuar, 'C', This.Value, This , '',.f.,ThisForm.Podatamgr)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpConta.txtMoedas
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'Cmoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cmoes', '', 'Moe',.t.,'Cmoes')
+		loLista.mAddColuna('Dmoes','','Nome',.t.,'Dmoes')
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.CMoes
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpConta.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;
+						   'crListaRemota', 'cEmps', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cemps', 'XXXXXX', 'Código',.t.,'Cemps')
+		loLista.mAddColuna('Razas','','Descrição',.t.,'Razas')
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Cemps
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.Estoque
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.OpEstoque.Enabled = This.Value
+If This.Value
+	for i= 1 to Thisform.LarguraOpEstoque
+		ThisForm.OpEstoque.width = i
+	Next
+Else
+	for i= Thisform.LarguraOpEstoque to 0 step -1
+		ThisForm.OpEstoque.width = i
+	Next
+Endif
+
+ThisForm.OpEstoque.Visible = This.Value
+
+if this.value or ThisForm.Conta.value Or ThisForm.btnCusto.Value Or ThisForm.BtnCompra.Value
+	ThisForm.Processa.enabled = .t.
+else
+	ThisForm.Processa.enabled = .f.	
+Endif
+
+
+ThisForm.Refresh
+Return 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.Conta
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.OpConta.Enabled = This.Value
+If This.Value
+	for i = 1 to Thisform.LarguraOpConta
+		ThisForm.OpConta.width = i
+	Next
+Else
+	for i = Thisform.LarguraOpConta to 0 step -1
+		ThisForm.OpConta.width = i
+	Next
+Endif
+
+ThisForm.OpConta.Visible = This.Value
+
+if this.value or ThisForm.Estoque.value Or ThisForm.btnCusto.Value Or ThisForm.BtnCompra.Value
+	ThisForm.Processa.enabled = .t.
+else
+	ThisForm.Processa.enabled = .f.	
+Endif
+
+ThisForm.Refresh
+Return 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.btnCusto
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.OpCusto.Enabled = This.Value
+If This.Value
+	for i= 1 to Thisform.LarguraOpCusto
+		ThisForm.OpCusto.width = i
+	Next
+Else
+	for i= Thisform.LarguraOpCusto to 0 step -1
+		ThisForm.OpCusto.width = i
+	Next
+Endif
+
+ThisForm.OpCusto.Visible = This.Value
+
+if this.value or ThisForm.Estoque.value Or ThisForm.Conta.Value Or ThisForm.BtnCompra.Value
+	ThisForm.Processa.enabled = .t.
+else
+	ThisForm.Processa.enabled = .f.	
+Endif
+
+ThisForm.Refresh
+Return 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCusto.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;
+						   'crListaRemota', 'cEmps', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cemps', 'XXXXXX', 'Código',.t.,'Cemps')
+		loLista.mAddColuna('Razas','','Descrição',.t.,'Razas')
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Cemps
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCusto.Get_Produto
+* Classe: fwget (Base: textbox)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                  = Evaluate('CrProds.CPros')
+		This.Parent.Get_Descs.Value = Evaluate('CrProds.DPros')
+	Else
+		This.Value                  = ''
+		This.Parent.Get_Descs.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Descs.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCusto.Get_Descs
+* Classe: fwget (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                    = Evaluate('CrProds.DPros')
+		This.Parent.Get_Produto.Value = Evaluate('CrProds.CPros')
+	Else
+		This.Value                    = ''
+		This.Parent.Get_Produto.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Produto.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.Get_Produto.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.Get_Registro
+* Classe: textbox (Base: textbox)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.btnCompra
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.OpCompra.Enabled = This.Value
+If This.Value
+	for i= 1 to Thisform.LarguraOpCompra
+		ThisForm.OpCompra.Width = i
+	Next
+Else
+	for i= Thisform.LarguraOpCompra to 0 step -1
+		ThisForm.OpCompra.Width = i
+	Next
+Endif
+
+ThisForm.OpCompra.Visible = This.Value
+
+if This.value or ThisForm.Estoque.value Or ThisForm.Conta.Value Or ThisForm.BtnCusto.Value
+	ThisForm.Processa.enabled = .t.
+else
+	ThisForm.Processa.enabled = .f.	
+Endif
+
+ThisForm.Refresh
+Return 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCompra.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 54
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;
+						   'crListaRemota', 'cEmps', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cemps', 'XXXXXX', 'Código',.t.,'Cemps')
+		loLista.mAddColuna('Razas','','Descrição',.t.,'Razas')
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Cemps
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCompra.Get_Produto
+* Classe: fwget (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                  = Evaluate('CrProds.CPros')
+		This.Parent.Get_Descs.Value = Evaluate('CrProds.DPros')
+	Else
+		This.Value                  = ''
+		This.Parent.Get_Descs.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Descs.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCCC.OpCompra.Get_Descs
+* Classe: fwget (Base: textbox)
+* Registro: 59
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Seleção',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('DPros','','Descrição')
+		m.loLista.mAddColuna('CPros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                    = Evaluate('CrProds.DPros')
+		This.Parent.Get_Produto.Value = Evaluate('CrProds.CPros')
+	Else
+		This.Value                    = ''
+		This.Parent.Get_Produto.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Get_Produto.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.Get_Produto.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCCC
+RESERVED3 (ClassInfo): larguraopcompra
+larguraopconta
+larguraopcusto
+larguraopestoque
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 27
+================================================================================

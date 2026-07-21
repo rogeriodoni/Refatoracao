@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da.
+
+**Resultado da Fase 6/8 para `FormSigPrRss.prg`:**
+
+Este formul├írio OPERACIONAL (dialog 580├ù120) **n├úo tem campos adicionais nem lookups** ÔÇö o c├│digo fonte original (`SIGPRRSS`) cont├®m apenas: container de cabe├ºalho, 2 bot├Áes e 1 label de status. Toda a funcionalidade j├í estava implementada nas fases anteriores.
+
+**Altera├º├Áes feitas nesta fase:**
+
+1. **Bot├Áes `cmd_4c_Processar` e `cmd_4c_Encerrar`** ÔÇö adicionadas propriedades can├┤nicas que estavam ausentes:
+   - `.SpecialEffect = 0` ÔÇö apar├¬ncia 3D raised (padr├úo framework)
+   - `.PicturePosition = 13` ÔÇö ├¡cone acima da caption, centralizado
+   - `.WordWrap = .T.` e `.AutoSize = .F.` ÔÇö padr├úo CRUD
+   - `.MousePointer = 15` ÔÇö cursor de m├úo ao hover
+
+2. **`Destroy`** ÔÇö adicionada limpeza dos cursores tempor├írios que o BO pode criar:
+   - `TmpSccr` (verifica├º├úo SigMvSlc)
+   - `TmpMccr` (verifica├º├úo SigMvCcr)
+   - `CrSigPrSlS` (hist├│rico de saldos)
+
+**Valida├º├úo:** Nenhum m├®todo cont├®m TODO/stub. Os no-ops (`ConfigurarPaginaLista`, `ConfigurarPaginaDados`, `AlternarPagina`) s├úo intencionais e documentados ÔÇö form OPERACIONAL sem estrutura Page.

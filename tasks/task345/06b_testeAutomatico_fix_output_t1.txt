@@ -1,0 +1,11 @@
+﻿`RETURN` at line 210 is before the `TRY` block ÔÇö valid. All fixes are correct. Summary of changes:
+
+**`aleBO.prg`** ÔÇö Timestamp updated to 17:08:48 (newer than stale `aleBO.fxp` at 16:54:10). VFP9 will now recompile from source, defining the `aleBO` class correctly and resolving the "Class definition ALEBO is not found" error.
+
+**`Formale.prg`** ÔÇö Fixed 4 `RETURN` inside `TRY` violations (VFP9 rule 1):
+- `BtnIncluirClick`: Converted guard to `ELSE` branch
+- `BtnAlterarClick`: Converted guard to `ELSE` branch  
+- `BtnVisualizarClick`: Converted guard to `ELSE` branch with inline logic
+- `BtnExcluirClick`: Added `loc_lProsseguir` flag, converted both `RETURN`s
+
+The root cause was a stale `aleBO.fxp` compiled from a previous pipeline run ÔÇö VFP9 saw the FXP (16:54:10) newer than the PRG (16:50:54) and used the stale cached class definition. Now the PRG is newer (17:08:48), forcing a fresh recompile on the next test run.

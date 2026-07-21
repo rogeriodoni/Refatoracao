@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 8/8 conclu├¡da.
+
+**M├®todos adicionados:**
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `BtnBuscarClick()` | Abre `FormBuscaAuxiliar` para a linha corrente do grid (F4 direto) |
+| `BtnEncerrarClick()` | Alias de `CmdCancelarClick` para compatibilidade com pipeline |
+| `BtnSalvarClick()` | Alias de `CmdOkClick` (confirma lista e aguarda ECF) |
+| `BtnCancelarClick()` | Restaura valor anterior na linha em edi├º├úo (`this_cAntCPro`) |
+| `FormParaBO()` | Chama `BO.CarregarProdutosDeCursor("CrProduto")` |
+| `BOParaForm()` | ZAP + `BO.PopularCursorProdutos("CrProduto")` + APPEND BLANK se vazio |
+| `HabilitarCampos(par_lHabilitar)` | Alterna `Column1.ReadOnly` no grid |
+| `LimparCampos()` | ZAP + APPEND BLANK + reseta `this_cAntCPro` |
+| `CarregarLista()` | Rebinda `RecordSource`/`ControlSource` e reconfigura cabe├ºalhos |
+| `AjustarBotoesPorModo()` | Stub vazio ÔÇö form n├úo tem modos CRUD separados |

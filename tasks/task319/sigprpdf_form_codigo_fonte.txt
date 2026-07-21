@@ -1,0 +1,887 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprpdf.SCX
+* Data/Hora: 18/07/2026 05:16:12
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRPDF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRPDF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRPDF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRPDF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: txtNomeArqSaida
+  Parent: SIGPRPDF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdGetFile
+  Parent: SIGPRPDF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cmd_SAIR
+  Parent: SIGPRPDF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lbl_SalvarEm
+  Parent: SIGPRPDF
+  Class: label
+  BaseClass: label
+
+Objeto: CtnSaida_Email
+  Parent: SIGPRPDF
+  Class: container
+  BaseClass: container
+
+Objeto: txtEmail_Assunto
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_EmailPara
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: label
+  BaseClass: label
+
+Objeto: lblEmail_CC
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: label
+  BaseClass: label
+
+Objeto: lblEmail_Assunto
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: label
+  BaseClass: label
+
+Objeto: lblEmail_Corpo
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: label
+  BaseClass: label
+
+Objeto: EdtEmail_Corpo
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: txtEmail_EnviarDE
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: label
+  BaseClass: label
+
+Objeto: txtEmail_EnviarPara
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: txtEmail_CC
+  Parent: SIGPRPDF.CtnSaida_Email
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Chk_EMAIL
+  Parent: SIGPRPDF
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Cmd_GerarPDF
+  Parent: SIGPRPDF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: optArquivo
+  Parent: SIGPRPDF
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: REGISTRY1
+  Parent: SIGPRPDF
+  Class: registry
+  BaseClass: custom
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnPastasA
+  Parent: SIGPRPDF
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 360
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Geração de PDF e E-mail"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  oparentform = .F.
+  podatamgr = .F.
+  diretorio = .F.
+  Name = "SIGPRPDF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.txtNomeArqSaida
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 205
+  ReadOnly = .T.
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 105
+  Width = 383
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "txtNomeArqSaida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.cmdGetFile
+------------------------------------------------------------
+  Top = 104
+  Left = 589
+  Height = 25
+  Width = 30
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ". . ."
+  TabIndex = 6
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdGetFile"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.Cmd_SAIR
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\relatorio_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 8
+  ToolTipText = "[ESC] - Sair"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Cmd_SAIR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.lbl_SalvarEm
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Salvar em:"
+  Height = 15
+  Left = 150
+  Top = 109
+  Width = 53
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "lbl_SalvarEm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email
+------------------------------------------------------------
+  Top = 148
+  Left = 155
+  Width = 480
+  Height = 185
+  BackStyle = 0
+  Visible = .F.
+  TabIndex = 7
+  Name = "CtnSaida_Email"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.txtEmail_Assunto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 68
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 95
+  Width = 404
+  BorderColor = 100,100,100
+  Name = "txtEmail_Assunto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.lbl_EmailPara
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Para:"
+  Height = 15
+  Left = 38
+  Top = 38
+  Width = 28
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "lbl_EmailPara"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.lblEmail_CC
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "CC:"
+  Height = 15
+  Left = 46
+  Top = 68
+  Width = 20
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "lblEmail_CC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.lblEmail_Assunto
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Assunto:"
+  Height = 15
+  Left = 21
+  Top = 99
+  Width = 45
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "lblEmail_Assunto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.lblEmail_Corpo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Texto:"
+  Height = 15
+  Left = 32
+  Top = 127
+  Width = 34
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "lblEmail_Corpo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.EdtEmail_Corpo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 53
+  Left = 68
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 125
+  Width = 404
+  BorderColor = 100,100,100
+  Name = "EdtEmail_Corpo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.txtEmail_EnviarDE
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 68
+  ReadOnly = .T.
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Menu - Cadastro - Empresas ( Campo Email )"
+  Top = 5
+  Width = 404
+  DisabledBackColor = 239,239,239
+  BorderColor = 100,100,100
+  Name = "txtEmail_EnviarDE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "De:"
+  Height = 15
+  Left = 47
+  Top = 8
+  Width = 19
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.txtEmail_EnviarPara
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 68
+  ScrollBars = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 35
+  Width = 404
+  BorderColor = 100,100,100
+  Name = "txtEmail_EnviarPara"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.CtnSaida_Email.txtEmail_CC
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 68
+  ScrollBars = 0
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 65
+  Width = 404
+  BorderColor = 100,100,100
+  Name = "txtEmail_CC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.Chk_EMAIL
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_enderecos_60.jpg
+  Alignment = 0
+  Caption = "Email"
+  Style = 1
+  TabIndex = 2
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Chk_EMAIL"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.Cmd_GerarPDF
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\geral_disco2_60.jpg
+  Caption = "   Gravar"
+  TabIndex = 3
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Alignment = 6
+  Name = "Cmd_GerarPDF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.optArquivo
+------------------------------------------------------------
+  AutoSize = .T.
+  Height = 85
+  Left = 420
+  Top = -2
+  Width = 161
+  TabIndex = 1
+  Themes = .T.
+  Name = "optArquivo"
+  Option1.FontBold = .T.
+  Option1.FontItalic = .T.
+  Option1.FontName = "Comic Sans MS"
+  Option1.Picture = ..\framework\imagens\pdf_60.png
+  Option1.Caption = "PDF"
+  Option1.Height = 75
+  Option1.Left = 5
+  Option1.Style = 1
+  Option1.Top = 5
+  Option1.Width = 75
+  Option1.ForeColor = 90,90,90
+  Option1.BackColor = 255,255,255
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontItalic = .T.
+  Option2.FontName = "Comic Sans MS"
+  Option2.Picture = ..\framework\imagens\geral_excel_60.jpg
+  Option2.Caption = "Excel"
+  Option2.Height = 75
+  Option2.Left = 81
+  Option2.Style = 1
+  Option2.Top = 5
+  Option2.Width = 75
+  Option2.ForeColor = 90,90,90
+  Option2.BackColor = 255,255,255
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.REGISTRY1
+------------------------------------------------------------
+  Top = 24
+  Left = 60
+  Height = 17
+  Width = 18
+  Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPDF.btnPastasA
+------------------------------------------------------------
+  Top = 100
+  Left = 619
+  Height = 32
+  Width = 40
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_pasta_26.jpg
+  Caption = ""
+  TabIndex = 82
+  ToolTipText = "Abrir o Diretório / Pasta de Arquivos"
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  Name = "btnPastasA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 3, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRPDF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters poformParent, pcAssunto
+
+thisform.oParentForm = poformParent
+Set datasession to thisform.oParentForm.DatasessionId
+
+ThisForm.Diretorio = goSistema.DirFiscais
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+				
+		Thisform.LockScreen = .T. 
+		Thisform.Height = This.Height - This.CtnSaida_Email.Height
+		Thisform.CtnSaida_Email.Visible = .F. 
+		thisform.optArquivo.option1.Enabled = ThisForm.Registry1.IsKey([PDFCreator.clsPDFCreator]) Or ThisForm.Registry1.IsKey([PDFCreatorBeta.JobQueue])
+		thisform.optArquivo.Value = Iif(thisform.optArquivo.option1.Enabled,1,2)
+		thisform.txtNomeArqSaida.Value = ThisForm.Diretorio + [FORTYUSPDF.] + Iif(thisform.optArquivo.Value = 1,[PDF],[XLS])
+		thisform.ctnSaida_Email.txtEmail_EnviarPara.Value = thisform.oParentForm.Contaemail 
+		thisform.ctnSaida_Email.txtEmail_Assunto.Value = Iif(Type([pcAssunto]) = [C],pcAssunto,[])
+		Thisform.Refresh()
+		Thisform.AutoCenter = .F. 
+		Thisform.LockScreen = .F. 
+	
+		** Busca dados de Email do cadastro da Empresa
+		lcQuery = [Select PadEmails, PadServs, PadSenhas, pastas, PadPortas From SigCdEmp Where CEmps = '] + _EMPR + [']
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEmpMail') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEmpMail)')
+			Return .f.
+		Endif		
+
+		Thisform.CtnSaida_Email.TxtEmail_EnviarDE.Value	= Lower( Alltrim( Nvl( TmpEmpMail.PadEmails, [] ) ) )		
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	Endif
+Endwith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.cmdGetFile
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcTpArq = Iif(thisform.optArquivo.Value = 1,[PDF],[XLS])
+
+lcArqSaida = GetFile( lcTpArq , [Arquivo:],[Selecionar],0,[Selecione o arquivo])
+
+If isEmpty( lcArqSaida )
+	Return
+EndIf
+
+If JUSTEXT(lcArqSaida) $ lcTpArq
+	** Ok, Selecionou uma extensão válida
+Else
+	lcArqSaida = ForceExt(lcArqSaida, Left( lcTpArq , 3 ))
+EndIf
+
+ThisForm.TxtNomeArqSaida.Value = Alltrim( lcArqSaida )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.Cmd_SAIR
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+thisform.oparentform.pcArqEmail = []
+thisform.oparentform.oEmail = Null
+ThisForm.Release()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.CtnSaida_Email
+* Classe: container (Base: container)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+**
+This.BorderWidth = 0
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.Chk_EMAIL
+* Classe: checkbox (Base: checkbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.LockScreen = .T. 
+If This.Value = 1
+	ThisForm.Cmd_GerarPDF.Caption = "Enviar Email"
+	ThisForm.Height = ThisForm.Height + ThisForm.CtnSaida_Email.Height 
+	ThisForm.CtnSaida_Email.Visible = .T.
+Else
+	ThisForm.Cmd_GerarPDF.Caption = [\<Gravar] &&ThisForm.Cmd_OK.Tag
+	ThisForm.Height = ThisForm.Height - ThisForm.CtnSaida_Email.Height 
+	ThisForm.CtnSaida_Email.Visible = .F.
+EndIf
+ThisForm.Refresh()
+ThisForm.LockScreen = .F. 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.Cmd_GerarPDF
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+This.Tag = This.Caption
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.oParentForm.pcArqEmail = Alltrim( Nvl( This.Parent.TxtNomeArqSaida.Value, "" ) )
+
+If Empty( ThisForm.oParentForm.pcArqEmail)
+	MessageBox([Selecione um nome para o arquivo!], 48, [Atenção])
+	This.Parent.CmdGetFile.SetFocus()
+	Return
+EndIf
+
+*!*	ThisForm.oParentForm.lPrintPDFCreator = .T.
+*!*	ThisForm.oParentForm.PrintOnExit 	  = .F.
+
+If ThisForm.Chk_EMAIL.Value = 1
+	** Anexar o Arquivo no Email. Enviar o Email
+
+	If Used( "TmpEmpMail" ) And RecCount( "TmpEmpMail" ) > 0
+
+		Local lcTO As String, lcFrom As String
+
+		lcFrom = AllTrim( Nvl( ThisForm.CtnSaida_Email.TxtEmail_EnviarDE.Value,   "" ) ) 
+		lcTO   = AllTrim( Nvl( ThisForm.CtnSaida_Email.txtEmail_EnviarPara.Value, "" ) )
+
+		If Empty( lcFrom )
+			MessageBox( "O campo 'DE:' não foi preenchido.", 48, "Atenção" )
+			ThisForm.CtnSaida_Email.TxtEmail_EnviarDE.SetFocus()
+			Return
+		EndIf
+
+		If Empty( lcTO )
+			MessageBox( "O campo 'PARA:' não foi preenchido.", 48, "Atenção" )
+			ThisForm.CtnSaida_Email.txtEmail_EnviarPara.SetFocus()
+			Return
+		EndIf
+
+		ThisForm.oParentForm.oEMAIL = CreateObject( "CUSTOM" )
+
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cSmtpServer", 	Lower( Alltrim( Nvl( TmpEmpMail.PadServs, "" ) ) ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "nSmtpServerPort", Nvl( TmpEmpMail.PadPortas, 0 ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cSendUserName",   Lower( Alltrim( Nvl( TmpEmpMail.PadEmails, "" ) ) ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cSendPassWord",    Alltrim( Nvl( TmpEmpMail.PadSenhas, "" ) ) )
+
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cFrom",	lcFrom )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cTO",		lcTO )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cCC", 	AllTrim( Nvl( ThisForm.CtnSaida_Email.txtEmail_CC.Value, "" ) ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cAssunto",AllTrim( Nvl( ThisForm.CtnSaida_Email.txtEmail_Assunto.Value, "" ) ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cCorpo", 	AllTrim( Nvl( ThisForm.CtnSaida_Email.EdtEmail_Corpo.Value, "" ) ) )
+		ThisForm.oParentForm.oEMAIL.AddProperty( "cAnexo", 	ThisForm.oParentForm.pcArqEmail)
+
+*!*			ThisForm.oParentForm.nChk_EMAIL = 1
+
+	Else
+		ThisForm.oParentForm.lPrintPDFCreator = .F.
+		MessageBox( "Problemas na seleção de dados do email. Favor enviar novamente.", 48, "Atenção" )
+	EndIf
+EndIf
+
+ThisForm.Release()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.optArquivo
+* Classe: fwoption (Base: optiongroup)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If this.Value = 1
+	thisform.txtNomeArqSaida.Value = ThisForm.Diretorio + [FORTYUSPDF.PDF]
+Else
+	thisform.txtNomeArqSaida.Value = ThisForm.Diretorio + [FORTYUSEXCEL.XLS]
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPDF.btnPastasA
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcDir = ThisForm.Diretorio
+If Not Empty(lcDir)
+	If Not Directory(lcDir)
+		=MessageBox([Diretório não Localizado],0+64,[Atenção])
+	Else
+		loApp = CreateObject([Shell.Application])
+		loApp.Open(lcDir)
+	EndIf 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRPDF
+RESERVED3 (ClassInfo): oparentform
+podatamgr
+diretorio
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

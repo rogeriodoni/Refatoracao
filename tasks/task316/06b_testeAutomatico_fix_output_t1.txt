@@ -1,0 +1,8 @@
+﻿A corre├º├úo foi aplicada. O problema era que `InicializarForm()` s├│ constru├¡a a UI (`ConfigurarPageFrame` + BINDEVENTs) se **ambos** `loc_lBOOk` e `loc_lConfOk` fossem verdadeiros. Em modo de teste (sem DB), `CarregarConfiguracao()` lan├ºa "Connection handle is invalid", retorna `.F.`, e a UI nunca era criada ÔÇö ent├úo `loc_lSucesso = .F.` propagava at├® `FormBase.Init()`, fazendo o `CREATEOBJECT` falhar.
+
+**O que mudou em `InicializarForm()`:**
+- A UI (`ConfigurarPageFrame`, `BINDEVENT`, datas iniciais) ├® **sempre** constru├¡da quando o BO existe
+- `CarregarConfiguracao()` ├® chamada ap├│s a UI estar pronta
+- Os valores TEF s├│ s├úo propagados (`this_cNoCaixa`, `this_cOperacao`) se a config foi carregada
+- `SqlTrans()` s├│ ├® chamada se a config carregou com sucesso (precisa de DB)
+- `loc_lSucesso = .T.` ├® definido sempre que o BO foi criado, independente da disponibilidade do DB

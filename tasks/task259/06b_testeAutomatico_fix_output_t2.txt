@@ -1,0 +1,3 @@
+﻿**Causa raiz**: `ConfigurarGrade()` tentava definir `ControlSource = "cursor_4c_Produtos.*"` antes do cursor existir. Em modo teste (sem conex├úo SQL), `CarregarDadosIniciais()` retorna `.T.` mas n├úo cria o cursor ÔÇö ele s├│ ├® criado em `CarregarLista()`, chamado depois.
+
+**Fix**: Removidos os 5 `ControlSource` de `ConfigurarGrade()`. O `CarregarLista()` j├í os define todos corretamente ap├│s criar o cursor com `CREATE CURSOR`. Nenhuma funcionalidade foi alterada.

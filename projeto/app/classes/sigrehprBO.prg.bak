@@ -858,9 +858,9 @@ DEFINE CLASS sigrehprBO AS RelatorioBase
                     GO TOP
                     IF !EOF()
                         IF !CsCabecalho.ImpPeso
-                            THIS.ExecutarReportForm("SigRehp1", "PREVIEW")
+                            THIS.ExecutarReportForm("SigRehp1", "PREVIEW", THIS.this_cCursorDados)
                         ELSE
-                            THIS.ExecutarReportForm("SigRehp2", "PREVIEW")
+                            THIS.ExecutarReportForm("SigRehp2", "PREVIEW", THIS.this_cCursorDados)
                         ENDIF
                     ENDIF
                     USE IN CsCabecalho

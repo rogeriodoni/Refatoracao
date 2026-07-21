@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. A mudan├ºa remove o aninhamento `IF/ELSE` que bloqueava toda a inicializa├º├úo quando `ObterConfiguracaoPam()` ou `Processar()` falhavam ÔÇö agora ambos mostram o erro mas continuam. A UI ├® constru├¡da com cursores vazios e `InicializarForm()` retorna `.T.`, permitindo que `CREATEOBJECT` funcione.
+
+**Causa raiz:** `FormBase.Init()` (linha 72) retorna `.F.` quando `InicializarForm()` retorna `.F.`, fazendo `CREATEOBJECT` retornar n├úo-objeto. O form usava dois `IF/ELSE` aninhados onde qualquer falha de BD (config SigCdPam ou Processar) deixava `loc_lSucesso = .F.` e pulava toda a constru├º├úo da UI.
+
+**Fix:** as verifica├º├Áes de `ObterConfiguracaoPam()` e `Processar()` agora mostram `MsgErro` (auto-descartado com `SYS(2335,0)` no modo teste) mas n├úo interrompem o fluxo ÔÇö cursores vazios s├úo criados normalmente, UI ├® montada, e `loc_lSucesso = .T.` ├® sempre atingido quando o BO foi criado com sucesso.

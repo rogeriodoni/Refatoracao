@@ -1,0 +1,13 @@
+﻿Tudo integrado corretamente. O FormSIGPRIMP.prg foi atualizado com as seguintes corre├º├Áes em rela├º├úo ├á vers├úo anterior:
+
+**Corre├º├Áes aplicadas:**
+- **Nome do container**: `cnt_4c_Cabecalho` ÔåÆ `cnt_4c_Sombra` (conforme `mapeamento.json`)
+- **Nome do bot├úo Encerrar**: `cmd_4c_BtnSair` ÔåÆ `cmd_4c_Cancela` (conforme `mapeamento.json`)
+- **Propriedades do form**: adicionados `Movable = .F.` e `ClipControls = .F.` (presentes no SCX original)
+- **`txt_4c_Arquivo.Width`**: 380 ÔåÆ 250 (fidelidade ao original)
+- **`obj_4c_Arquivos.Width`**: 420 ÔåÆ 288 (fidelidade ao original)
+- **`cmd_4c_BtnMovEst.PicturePosition`**: 13 ÔåÆ 7 (original usava posi├º├úo 7)
+- **`CarregarArquivos()`**: removido `RETURN .F.` dentro de TRY (violava Regra 1 ÔÇö NEVER RETURN inside TRY/CATCH); substitu├¡do por estrutura IF/ELSE com flag `loc_lSucesso`
+- **`THIS.this_cMensagemErro`**: corrigido o prefixo `THIS.` que estava faltando
+
+A integra├º├úo j├í estava feita: config.prg carrega automaticamente via ADIR, e menu.prg j├í possui `AbrirFormSIGPRIMP()`.

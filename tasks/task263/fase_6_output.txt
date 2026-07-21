@@ -1,0 +1,21 @@
+﻿FRX copiado com sucesso. Aqui est├í o resumo completo da Fase 6:
+
+---
+
+**Fase 6 ÔÇö Resultado: Nada a acrescentar ao c├│digo (form j├í estava completo)**
+
+O form SIGPRCCR ├® extremamente simples: `Width=800, Height=130`, sem nenhum campo de filtro, sem lookups, sem TextBoxes de entrada. Toda a UI ├®:
+- Faixa cinza (`cnt_4c_Cabecalho`) ocupando o form inteiro
+- CommandGroup com 4 bot├Áes de relat├│rio (`cmg_4c_Botoes`)
+
+A instru├º├úo gen├®rica de "Fase 6 - ├║ltimos 50% de campos e lookups" n├úo se aplica a este form ÔÇö o original SCX n├úo tem controles al├®m dos herdados do framework `frmrelatorio`.
+
+**Estado final da migra├º├úo:**
+
+| Artefato | Status |
+|---|---|
+| `SIGPRCCRBO.prg` | Ô£à Completo ÔÇö `PrepararDados()` replica `processamento` do legado |
+| `FormSIGPRCCR.prg` | Ô£à Completo ÔÇö cabecalho + 4 bot├Áes + handlers + helper #117 |
+| `SigPrCcr.frx / .frt` | Ô£à Copiado de `C:\4install\FortyusMC\Fortyus\` |
+| `menu.prg` | Ô£à BAR 171 + `AbrirFormSIGPRCCR` j├í presentes |
+| `config.prg` | Ô£à Auto-load via ADIR ÔÇö sem entrada manual necess├íria |

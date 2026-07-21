@@ -1,0 +1,24 @@
+﻿O arquivo `FormSigPrGst.prg` foi criado com sucesso ÔÇö 649 linhas, 15 procedures.
+
+**Resumo da Fase 3:**
+
+Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrGst.prg` com:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init(par_oFormPai)` | Armazena refer├¬ncia ao form pai antes de DODEFAULT; inicializa `this_cGrupoOper` |
+| `InicializarForm()` | Cria BO + chama configura├º├úo de todos os componentes + BINDEVENTs |
+| `ConfigurarPageFrame()` | Seta `new_background.jpg` (imagem de fundo OPERACIONAL) |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` com `lbl_4c_Sombra`/`lbl_4c_Titulo` (AutoSize=.F., Width=THIS.Width) |
+| `ConfigurarSeparador()` | `shp_4c_ShpP2` ÔÇö shape decorativo original (Top=11, Left=819) |
+| `ConfigurarBotoes()` | `cmd_4c_Confirmar` (Left=850) + `cmd_4c_Encerrar` (Left=925, Cancel=.T.) |
+| `ConfigurarGrdCab()` | Grade de cabe├ºalho ÔÇö 7 colunas, RecordSource=csCabec, DynamicBackColor |
+| `ConfigurarGrdIte()` | Grade de itens ÔÇö 7 colunas, RecordSource=csItens |
+| `GrdCabAfterRowColChange()` | Filtra csItens por `csCabec.EmpDopNums` e d├í Refresh no GrdIte |
+| `BtnConfirmarClick()` | Valida sele├º├úo ÔåÆ chama `GerarPedido()` no BO ÔåÆ abre SigMvCab |
+| `BtnEncerrarClick()` | Conta pedidos n├úo gerados ÔåÆ MsgConfirma ÔåÆ fGravarLog + Release |
+| `ConfigurarBINDEVENTs()` | Vincula Click de ambos bot├Áes + AfterRowColChange da grade |
+| `TornarControlesVisiveis()` | Recurs├úo plana (sem containers flutuantes neste form) |
+| `Destroy()` | Limpa `this_oFormPai` e `this_oBusinessObject` antes de DODEFAULT |
+
+**Decis├úo de design**: As grades foram inclu├¡das nesta fase (em vez de aguardar a Fase 4) porque o form OPERACIONAL n├úo tem TextBoxes de dados ÔÇö as Fases 5-6 n├úo teriam conte├║do. Isso torna o form test├ível imediatamente a partir da Fase 3.

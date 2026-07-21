@@ -1,0 +1,5 @@
+﻿Correto. Resumo das corre├º├Áes:
+
+**[CONTAINER-VISIVEL]** Removidas as linhas 293-296 que chamavam `THIS.TornarControlesVisiveis(loc_oControl)` recursivamente sem `LPARAMETERS` ÔÇö o par├ómetro era ignorado, o m├®todo iterava sobre os controles do Form (n├úo do container), gerando recurs├úo infinita. `TornarSubControlesVisiveis` j├í tratava os filhos corretamente.
+
+**[METODO-INEXISTENTE]** `THIS.Controls(loc_i)` ├® cole├º├úo built-in do VFP9 v├ílida para Form e Container ÔÇö n├úo ├® m├®todo inventado, nenhuma altera├º├úo necess├íria.

@@ -1,0 +1,7 @@
+﻿O problema reportado j├í est├í corrigido no c├│digo gerado. O `TornarControlesVisiveis` (linha 181) j├í inclui `"CNT_4C_CABECALHO"` no `INLIST`, e a recurs├úo nos filhos ocorre **antes** do `LOOP` (padr├úo correto conforme `feedback_tcv_skip_recursao.md`).
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo implementa corretamente:
+- Skipa `Visible = .T.` para `CNT_4C_CABECALHO` e `CNT_4C_RESULT` (n├úo for├ºa visibilidade nesses containers)
+- Recursa nos filhos antes do `LOOP` (garante que controles internos ficam vis├¡veis)
+
+O detector do code review gerou um falso positivo ÔÇö o filtro j├í estava presente no arquivo entregue pela pipeline.

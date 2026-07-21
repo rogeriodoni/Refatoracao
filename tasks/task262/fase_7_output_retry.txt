@@ -1,0 +1,8 @@
+﻿File is structurally sound. Fase 7 is complete: added the 4 CRUD adapter methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) at lines 1724, 1750, 1768, 1801 of `Formsigprccp.prg`. Each adapts CRUD semantics to the OPERACIONAL price-recalculation flow:
+
+- **BtnIncluirClick**: New calculation session ÔÇö confirms discard, delegates to `ConfigurarPaginaLista()`
+- **BtnAlterarClick**: Runs recalculation ÔÇö delegates to `BtnProcessarClick()`
+- **BtnVisualizarClick**: Shows selected product image ÔÇö reuses `GrdAfterRowColChange(1)` logic
+- **BtnExcluirClick**: Removes marked/current products from `cursor_4c_Produtos` (never touches SigCdPro), refreshes button state
+
+All handlers follow the FormSigPrAop pattern with TRY/CATCH + MsgErro, use MsgAviso for UX validation, and preserve the existing OPERACIONAL button flow (Processar/Atualizar/Encerrar/Imprimir unchanged).

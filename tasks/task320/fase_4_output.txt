@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso.
+
+**Resumo do que foi implementado:**
+
+- **`ConfigurarCamposFiltro()`** ÔÇö adiciona `cmg_4c_Operacao` (CommandGroup com Consultar/Encerrar usando Buttons WITH aninhado can├┤nico) + todos os campos de filtro: Grupo, Conta, Opera├º├úo, Per├¡odo e Empresa com posi├º├Áes exatas do legado
+- **`InicializarValores()`** ÔÇö inicializa os campos com espa├ºos/dates (reproduz Init legado)
+- **`ConfigurarBINDEVENTs()`** ÔÇö conecta 9 handlers (7 KeyPress + 2 Click)
+- **`FormParaBO()`** ÔÇö copia todos os campos para o BO antes de consultar
+- **`CmdConsultarClick()`** ÔÇö valida├º├Áes de UI fora do TRY, BO.Inserir() consulta SigMvCab, abre FormSigPrPpp se dispon├¡vel ou exibe contagem
+- **`CmdEncerrarClick()`** ÔÇö Release()
+- **7 handlers KeyPress** com guard Enter/Tab/F4 e l├│gica When do legado (ex: `txt_4c_ContaDesc` s├│ pesquisa quando `txt_4c_Conta` est├í vazio)
+- **7 m├®todos AbrirBusca\*()**  usando o padr├úo can├┤nico FormBuscaAuxiliar com Init-params: SigCdGcr (codigos/descrs), SigCdCli (IClis/RClis), SigCdOpe (single-column Dopes), SigCdEmp (Cemps/Razas)
+
+Regras cr├¡ticas respeitadas: sem RETURN dentro de TRY/CATCH, sem accents literais (CHR()), sem MESSAGEBOX, LPARAMETERS via par├ómetros de PROCEDURE, MaxLength=3 em txt_4c_Empresa, SigCdOpe com uma ├║nica coluna Dopes, SigCdEmp com Cemps/Razas.

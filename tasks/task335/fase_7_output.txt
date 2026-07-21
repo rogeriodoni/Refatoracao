@@ -1,0 +1,18 @@
+﻿O arquivo `Formsigprtam.prg` j├í est├í completo. Analisando o que existe vs. o que a Fase 7 pede:
+
+**O que a Fase 7 pede (template gen├®rico CRUD):**
+- `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()`, `BtnExcluirClick()`
+
+**O que existe no arquivo (equivalentes para form OPERACIONAL):**
+- `BtnInserirClick()` (linha 607) ÔÇö insere linha em branco no grid
+- `BtnExcluirClick()` (linha 619) ÔÇö remove linha corrente do grid
+- `BtnEncerrarClick()` (linha 631) ÔÇö valida, salva via `SalvarTamanhos()` e fecha
+- `GrdColuna1KeyPress()`, `GrdColuna2KeyPress()` (linhas 652, 687) ÔÇö lookup SigCdTam
+- `GrdColuna4KeyPress()`, `GrdColuna5KeyPress()` (linhas 727, 758) ÔÇö c├ílculo bidirecional Percs Ôåö Valor
+- `AbrirBuscaTamanho()` (linha 802) ÔÇö helper do picker FormBuscaAuxiliar
+
+Este ├® um form **OPERACIONAL** (n├úo CRUD frmcadastro), ent├úo os bot├Áes `BtnIncluirClick/AlterarClick/VisualizarClick` padr├úo **n├úo existem e n├úo se aplicam**. O form ├® filho/modal (chamado pelo FormProduto), n├úo tem Page1=Lista/Page2=Dados, e opera diretamente no grid de tamanhos do produto pai.
+
+O template da Fase 7 ├® gen├®rico para forms CRUD ÔÇö para este form operacional os eventos equivalentes j├í foram implementados em fases anteriores.
+
+**A Fase 7 j├í est├í completa.** O arquivo est├í em 881 linhas com todos os eventos necess├írios implementados. A pr├│xima etapa seria a **Fase 8** (integra├º├úo no `config.prg` e `menu.prg`), ou confirmar que o form est├í pronto para teste.

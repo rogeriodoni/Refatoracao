@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarCamposForm()`** ÔÇö cria todos os 9 TextBoxes (`txt_4c_Praca`, `txt_4c_Banco`, `txt_4c_Agencia`, `txt_4c_DvAgencia`, `txt_4c_Conta`, `txt_4c_DvConta`, `txt_4c_Cheque`, `txt_4c_DvCheque`, `txt_4c_Cpf`) e seus labels correspondentes, com `Enabled=.F.` (somente leitura ÔÇö exatamente como o `When()=.F.` do legado), posi├º├Áes id├¬nticas ao SCX original.
+
+2. **`PopularCamposDoBO()`** ÔÇö preenche todos os campos com dados do BO ap├│s o `Init()`, ajusta `lbl_4c_Label1` para "CPF :" ou "CGC :" conforme `this_cTipoPessoa`, e oculta `lbl_4c_Status2/3/4` (que s├│ aparecem em resultado Serasa).
+
+3. **`ExibirResultadoConsulta()`** ÔÇö substitui o bloco de `IF loc_lSucesso` do `CmdCancelaGotFocus`: em sucesso mostra retorno em verde (grande), em erro Serasa exibe 3 linhas em vermelho nos Status2/3/4, em erro simples exibe mensagem ├║nica em vermelho no Status1.
+
+4. **`InicializarForm`** ÔÇö agora chama `ConfigurarCamposForm()` antes de `ConfigurarContainerStatus()`.
+
+5. **`Init`** ÔÇö chama `PopularCamposDoBO()` ap├│s `DODEFAULT()` bem-sucedido.

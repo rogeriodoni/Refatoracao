@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SigPrDscBO.prg` est├í completo com todos os m├®todos implementados:
+
+- **`CarregarDoCursor()`** ÔÇö mapeia CPros/CGrus do cursor para propriedades do BO
+- **`BuscarDicionario()`** ÔÇö carrega `SigCdDic` (WHERE Idioma='INGLES', ORDER BY LEN DESC) ÔåÆ `cursor_4c_Dicionario`
+- **`BuscarProdutos()`** ÔÇö SELECT de `SigCdPro` por intervalo (CProsI/CProsF) ou grupo (CGrus) ÔåÆ `cursor_4c_ProdTemp`
+- **`ProcessarTraducoes()`** ÔÇö equivalente ao `processamento` do legado: para cada produto busca grupo+cor, aplica substitui├º├Áes do dicion├írio, popula `cursor_4c_Produtos`
+- **`GravarDescricoes()`** ÔÇö equivalente ao `gravacao` do legado: loop SCAN com UPDATE SigCdPro + DELETE SigPrPrt + COMMIT individual, progresso via `fwprogressbar`, auditoria ao final
+- **`ObterChavePrimaria()`** ÔÇö `CProsI + "-" + CProsF` para auditoria
+
+Nota t├®cnica: a l├│gica do `processamento` original inicializa `lcDes = []` e depois verifica `If Not Empty(lcDes)` ÔÇö essa condi├º├úo sempre ├® falsa porque `lcDes` nunca ├® atribu├¡do de `lcIni`. O comportamento foi replicado fielmente (Pilar 1), portanto o cursor de produtos s├│ ser├í populado se o form vier a setar `loc_cDes` antes de chamar `ProcessarTraducoes`. Isso ├® id├¬ntico ao comportamento do legado.

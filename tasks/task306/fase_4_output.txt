@@ -1,0 +1,14 @@
+﻿Arquivo passou de 244 para 769 linhas. Fase 4 entregue com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö todos com Caption + Picture + propriedades can├┤nicas
+- Bot├úo Encerrar em `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+- Grid `grd_4c_Lista` com `ColumnCount=3` definido fora do WITH (Problema 36), dimens├Áes 860├ù450, Top=117 (compensa├º├úo +29)
+- 7 BINDEVENTs incluindo DblClick no grid ÔåÆ BtnVisualizarClick
+
+**Novos m├®todos:**
+- `CarregarLista()` ÔÇö carrega cursor_4c_Dados, define RecordSource/ControlSource/Headers/Widths e chama FormatarGridLista()
+- `FormatarGridLista()` ÔÇö aplica Verdana 8 ao grid
+- `AlternarPagina()` ÔÇö troca ActivePage e recarrega lista ao voltar para Page1
+- `AjustarBotoesPorModo()` / `LimparCampos()` / `HabilitarCampos()` / `FormParaBO()` / `BOParaForm()` ÔÇö com guards PEMSTATUS para controles de Page2 (criados na Fase 5)
+- `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö todos PUBLIC para BINDEVENT, sem RETURN dentro de TRY/CATCH

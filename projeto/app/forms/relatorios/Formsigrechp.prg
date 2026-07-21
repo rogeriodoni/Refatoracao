@@ -69,8 +69,10 @@ DEFINE CLASS Formsigrechp AS FormBase
             IF !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
                 THIS.this_oRelatorio.CarregarParametros()
                 IF !THIS.this_oRelatorio.CarregarOperacoes()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Formsigrechp.InicializarForm")
+                    ENDIF
                     loc_lSucesso = .F.
                 ENDIF
             ENDIF
@@ -409,7 +411,9 @@ DEFINE CLASS Formsigrechp AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigrechp")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -424,7 +428,9 @@ DEFINE CLASS Formsigrechp AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigrechp")
+            ENDIF
         ENDIF
     ENDPROC
 

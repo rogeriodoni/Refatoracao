@@ -1,0 +1,7 @@
+﻿Fase 3 conclu├¡da. Resumo das altera├º├Áes feitas:
+
+**`Formsigprila.prg`** ÔÇö Form OPERACIONAL completo j├í existia de execu├º├úo anterior. Corrigido caminho da imagem de fundo de `gc_4c_CaminhoBase + "Framework\imagens\..."` para `gc_4c_CaminhoIcones + "new_background.jpg"` (arquivo existe em `vbmp/`).
+
+**`functions.prg`** ÔÇö Adicionada fun├º├úo `fGerMascara(par_nNum)` que estava ausente. Era usada pelo BO em 3 m├®todos de processamento (`ProcessarTransferencia`, `ProcessarPedidoTerceiro`, etc.) e causaria erro de runtime "File 'fgermascara.prg' does not exist". Gera string zero-padded de 10 d├¡gitos para coluna `SigMvCab.mascnum char(10)`.
+
+**`menu.prg`** ÔÇö Adicionado BAR 71 ("Importa├º├úo de Planilha") no popup `popMovimentos` + procedimento can├┤nico `AbrirFormsigprila()` no final do arquivo.

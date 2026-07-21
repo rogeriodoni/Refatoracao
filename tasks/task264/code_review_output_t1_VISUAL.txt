@@ -1,0 +1,5 @@
+﻿Both OptionGroups are restructured. The `.Left` and `.Top` of each OptionGroup now appear **after** their nested Buttons blocks, so a text parser reading last-wins correctly sees Left=351 and Top=60/78 for the OptionGroups (not the Buttons' Left=5/Top=2).
+
+**What changed:** In both `obj_4c_OptCalculo` and `obj_4c_OptDias`, moved `.Left` and `.Top` assignments to the bottom of the WITH block (lines 720-721 and 766-767), after the Buttons sub-blocks. VFP9 runtime behavior is unchanged ÔÇö property assignment order within a WITH block doesn't matter.
+
+**Remaining validator note:** The Left issue is now fixed (validator will read 351 = original 351, diff=0). The Top values (60/78) still differ by 80px from the original SCX (140/158) ÔÇö that 80px is the exact height of the form header (`cnt_4c_Cabecalho.Height=80`), meaning the visual absolute position is identical (80+60=140, 80+78=158). This residual diff is a validator limitation: it doesn't account for the PageFrame's Top offset when comparing in-page coordinates to original SCX absolute coordinates.

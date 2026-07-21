@@ -1,0 +1,25 @@
+﻿A migra├º├úo do FormSIGPRINT est├í **completa**. Todas as fases j├í foram executadas. Aqui est├í o resumo do status final:
+
+**Arquivos criados:**
+- `C:\4c\projeto\app\classes\SIGPRINTBO.prg` ÔÇö BO com todas as propriedades (`cods`, `descrs`, `mensas`, `tipos`, `cidchaves`) e m├®todos CRUD completos (`Buscar`, `CarregarPorCodigo`, `Inserir`, `Atualizar`, `ExecutarExclusao`)
+- `C:\4c\projeto\app\forms\cadastros\FormSIGPRINT.prg` ÔÇö Form completo com todos os m├®todos da Fase 8 j├í presentes
+
+**M├®todos da Fase 8 verificados no Form:**
+
+| M├®todo | Status |
+|--------|--------|
+| `BtnBuscarClick()` | Ô£à implementado (FormBuscaAuxiliar Mode 2) |
+| `BtnEncerrarClick()` | Ô£à implementado |
+| `BtnSalvarClick()` | Ô£à implementado (valida├º├Áes do legado: c├│digo vazio, descri├º├úo vazia, mensagem vazia, c├│digo duplicado) |
+| `BtnCancelarClick()` | Ô£à implementado (chama `CarregarLista()` ao voltar) |
+| `FormParaBO()` / `BOParaForm()` | Ô£à todos os 4 campos mapeados |
+| `HabilitarCampos()` | Ô£à habilita `descrs`, `mensas`, `opt_4c_Tipo` |
+| `LimparCampos()` | Ô£à limpa todos os campos |
+| `CarregarLista()` | Ô£à com headers reconfigurados p├│s-RecordSource |
+| `AjustarBotoesPorModo()` | Ô£à Confirmar desabilitado em VISUALIZAR |
+
+**Integra├º├úo verificada:**
+- **config.prg** ÔÇö carrega `*BO.prg` e `Form*.prg` dinamicamente; nenhuma entrada manual necess├íria
+- **menu.prg** ÔÇö `DEFINE BAR 23 OF popCadastros` + `ON SELECTION BAR 23` + `AbrirFormSIGPRINT()` j├í presentes
+
+**Schema validado:** tabela `SigOpIns` tem exatamente `cods char(10)`, `descrs char(76)`, `mensas text`, `tipos numeric(1,0)`, `cidchaves char(20)` ÔÇö BO usa nomes exatos.

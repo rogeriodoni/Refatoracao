@@ -1,0 +1,241 @@
+﻿{
+    "taskId":  "task262",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-14T22:09:21",
+    "atualizadoEm":  "2026-07-15T00:47:02",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-14T22:09:21",
+                                            "fim":  "2026-07-14T22:09:21",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task262\\sigprccp.sct",
+                                            "baseName":  "sigprccp",
+                                            "scxFile":  "C:\\4c\\tasks\\task262\\sigprccp.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-14T22:09:21",
+                                          "fim":  "2026-07-14T22:09:22",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigprccp",
+                                          "txtFile":  "C:\\4c\\tasks\\task262\\sigprccp_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-14T22:09:22",
+                                              "fim":  "2026-07-14T22:09:22",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task262\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-14T22:09:23",
+                                              "fim":  "2026-07-14T22:09:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task262\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task262\\meta_prompt.md",
+                                              "boClass":  "sigprccpBO",
+                                              "formClass":  "Formsigprccp",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task262\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-14T22:09:31",
+                                              "fim":  "2026-07-14T22:09:32",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task262\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-14T22:09:32",
+                                               "fim":  "2026-07-14T22:09:32",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task262\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigprccp_esqueleto.prg",
+                                                                "sigprccpBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-14T22:09:32",
+                                       "fim":  "2026-07-14T23:50:37",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\classes\\sigprccpBO.prg",
+                                                               "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprccp.prg"
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprccpBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  120.28,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprccp.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  4567
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-14T23:50:37",
+                                                  "fim":  "2026-07-14T23:50:58",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  52,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprccp.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprccpBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-14T23:50:58",
+                                                 "fim":  "2026-07-14T23:51:00",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-15T00:31:06",
+                                       "fim":  "2026-07-15T00:31:29",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "FAILED",
+                                               "inicio":  "2026-07-15T00:31:29",
+                                               "fim":  "2026-07-15T00:47:02",
+                                               "tentativas":  1,
+                                               "total":  0,
+                                               "passou":  0,
+                                               "falhou":  0,
+                                               "percentual":  0,
+                                               "erro":  "Testes automaticos falharam apos 10 tentativa(s): Testes automaticos: 0% \u003c 100%. Falhas: Teste \u0027Instanciacao\u0027: CREATEOBJECT retornou valor nao-objeto",
+                                               "comentario":  "NOVO - Testes CRUD automaticos"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-14T23:06:23",
+                                        "fim":  "2026-07-14T23:06:23",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  38,
+                                                          "avisos":  0,
+                                                          "diferencas":  38,
+                                                          "total":  38
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-14T23:06:23",
+                                              "fim":  "2026-07-14T23:06:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "C:\\4c\\tasks\\task262\\08_teste_manual.md",
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-14T22:09:22",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-14T22:09:23",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task262\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-14T22:09:23",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-14T22:09:23"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-14T23:50:58",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-14T23:50:58",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigprccp_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprccp.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task262\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-14T23:51:00",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-14T23:51:00",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-14T23:51:00",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-15T00:09:24",
+                                          "passes":  8,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-WITH] Bloco WITH ENDWITH define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: ENDWITH.RecordSource).; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ICLIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CODIGOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CUNIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LINHAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027COLECOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCONTA, SITUAS, IFORS, FORALINHA, MARGEMS, ENCARGOS, CFTIOCS, 1, CGRUS, CPROS, CIDCHAVES, MATPRINCS, CODS, ACRESCS, VALORS, LNTPRECAL, ORDEM, ARREDCS, TPCALCPS, INATIVAS, PVARIAS, LMARCA, NFAIXAFINS, TIPOS; [GRID-RECORDSOURCE-AUTOBIND] Linha 1350: RecordSource reatribuido mas ControlSource NAO redefinido nas proximas linhas. VFP faz auto-bind pela ordem dos campos do cursor, ignorando ControlSource anterior. CORRIGIR: Re-definir .ControlSource de TODAS as colunas APOS .RecordSource = ...; [FONTNAME-ERRADO] Linha 190: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 206: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 224: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 839: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 848: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 934: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 944: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 955: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 993: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1002: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1012: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1069: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1082: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1095: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1109: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1122: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1135: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1148: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1162: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1257: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.; [FONTNAME-ERRADO] Linha 1266: FontName \u0027Comic Sans MS\u0027 encontrado. Botoes devem usar \u0027Tahoma\u0027. Substituir TODAS as ocorrencias.",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  31
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-15T00:09:24",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-15T00:31:06",
+                                                "status":  "FIXED",
+                                                "retries":  3,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprccpBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprccp.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

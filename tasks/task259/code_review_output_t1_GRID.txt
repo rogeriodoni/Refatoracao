@@ -1,0 +1,10 @@
+﻿Todas as 4 corre├º├Áes aplicadas em `FormSigPrApr.prg`:
+
+| Linha | M├®todo | ColumnCount | ControlSources adicionados |
+|-------|--------|-------------|---------------------------|
+| 786 | `ConfigurarGrade` | 5 | Column1ÔÇô5 (lMarca, CPros, DPros, ValAnt, ValAtu) |
+| 971 | `BtnProcessarClick` | 3 | Column1ÔÇô3 (lMarca, CPros, DPros) |
+| 1071 | `BtnIncluirClick` | 3 | Column1ÔÇô3 (lMarca, CPros, DPros) |
+| 2064 | `CarregarLista` | 5 | Column1ÔÇô5 (lMarca, CPros, DPros, ValAnt, ValAtu) |
+
+Em cada caso, as linhas `.ColumnN.ControlSource = "cursor_4c_Produtos.Campo"` foram inseridas imediatamente ap├│s `.RecordSource = ...`, evitando que o auto-bind do VFP9 sobreponha o mapeamento correto dos campos.

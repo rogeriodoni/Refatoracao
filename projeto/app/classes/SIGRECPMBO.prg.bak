@@ -54,8 +54,11 @@ DEFINE CLASS SIGRECPMBO AS RelatorioBase
     this_nPesos         = 0
     this_nQtd           = 0
 
-    *-- Cursor principal de dados
-    this_cCursorDados   = "cursor_4c_SigRecPM"
+    *-- Cursor principal de dados (nome DEVE bater com alias usado nos FRXs legados:
+    *--   Analitico (SigReCPM.frx): crNensi + crNensi2 + crNensi3 + dbCabecalho
+    *--   Sintetico (SigReC2P.frx): crTmpNensi + dbCabecalho
+    *-- Default aponta para o cursor Analitico; troca dinamica em Visualizar/Imprimir se necessario.)
+    this_cCursorDados   = "crNensi"
 
     *--------------------------------------------------------------------------
     * Init - Inicializa o BO com valores padrao
@@ -401,9 +404,9 @@ DEFINE CLASS SIGRECPMBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF THIS.this_nTipo = 1
-                    THIS.ExecutarReportForm("SigReCPM", "PREVIEW")
+                    THIS.ExecutarReportForm("SigReCPM", "PREVIEW", THIS.this_cCursorDados)
                 ELSE
-                    THIS.ExecutarReportForm("SigReC2P", "PREVIEW")
+                    THIS.ExecutarReportForm("SigReC2P", "PREVIEW", THIS.this_cCursorDados)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF

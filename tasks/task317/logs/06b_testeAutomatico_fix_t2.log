@@ -1,0 +1,25 @@
+[2026-07-18 03:55:22] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-18 03:55:22] [INFO] Prompt File: C:\4c\tasks\task317\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-18 03:55:22] [INFO] Output File: C:\4c\tasks\task317\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-18 03:55:22] [INFO] Model: sonnet
+[2026-07-18 03:55:22] [INFO] Timeout: 3600 segundos
+[2026-07-18 03:55:22] [INFO] Max Output Tokens: 128000
+[2026-07-18 03:55:22] [INFO] Context Files: 0 arquivo(s)
+[2026-07-18 03:55:22] [INFO] Invocando Claude CLI...
+[2026-07-18 03:55:22] [INFO] Prompt carregado: 78708 caracteres
+[2026-07-18 03:55:22] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-18 03:55:22] [INFO] Tamanho total do prompt: 78708 caracteres
+[2026-07-18 03:55:22] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-18 03:57:11] [INFO] Claude CLI finalizado em 108.2455507 segundos
+[2026-07-18 03:57:11] [INFO] Exit Code: 0
+[2026-07-18 03:57:11] [INFO] Output salvo em: C:\4c\tasks\task317\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-18 03:57:11] [INFO] Output size: 762 bytes
+[2026-07-18 03:57:11] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-18 03:57:11] [INFO] Preview do output:
+[2026-07-18 03:57:11] [INFO] Corre+º+úo aplicada. O que mudou em `InicializarForm()`:
+
+1. `ConfigurarPageFrame()` + captions do cabe+ºalho agora s+úo chamados **antes** da verifica+º+úo da DLL
+2. `loc_lSucesso = .T.` +® definido logo ap+¦s a cria+º+úo do BO com sucesso ÔÇö a DLL ausente vira aviso n+úo-fatal
+3. `CarregarDadosEmpresa()` e `IniciarProtocolo()` s+úo chamados apenas se DLL dispon+¡vel E EndSitef n+úo-vazio, mas sem bloquear `loc_lSucesso`
+
+A raiz do bug: a estrutura original s+¦ atribu+¡a `loc_lSucesso = 

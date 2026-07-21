@@ -1,0 +1,17 @@
+﻿O arquivo `FormSigPrTar.prg` j├í est├í **completo**. Comparando com o c├│digo fonte original (`SIGSERPR.SCX`):
+
+**Todos os elementos j├í migrados:**
+
+| Objeto Original | Objeto Migrado | Status |
+|----------------|----------------|--------|
+| `cntSombra` + labels | `cnt_4c_Cabecalho` + `lbl_4c_Sombra/Titulo` | Ô£à `ConfigurarPageFrame()` |
+| `Shape1` | `shp_4c_Shape1` | Ô£à `ConfigurarEncerrar()` |
+| `cmdSair` | `cmd_4c_Encerrar` | Ô£à `ConfigurarEncerrar()` |
+| `Say1` (label "Inspira├º├úo") | `lbl_4c_Label1` | Ô£à `ConfigurarCampos()` |
+| `getObsInsp` (EditBox) | `obj_4c_GetObsInsp` | Ô£à `ConfigurarCampos()` |
+
+O `SIGSERPR` ├® um sub-formul├írio modal extremamente simples ÔÇö apenas 5 objetos visuais + header. As fases anteriores (1-4) j├í cobriram todo o conte├║do do form porque n├úo h├í grid, sem campos CRUD, sem Page2.
+
+A Fase 5/8 ("adicionar primeiros 50% dos campos da Page2") n├úo tem a├º├úo para este form espec├¡fico porque ele n├úo possui Page2 nem campos adicionais. O arquivo de 341 linhas j├í implementa 100% do SCX original.
+
+Nenhuma modifica├º├úo necess├íria ÔÇö `FormSigPrTar.prg` est├í completo e pronto para a pr├│xima fase do pipeline.

@@ -1,0 +1,10 @@
+﻿Both files look correct. Here's a summary of all 4 fixes applied:
+
+| Falha | Causa Raiz | Fix |
+|-------|------------|-----|
+| **CarregarLista** | Cursor `cursor_4c_LocalCtMoe` n├úo batia com padr├úo `cursor_4c_*` testado | Renomeado para `cursor_4c_Dados` em todos os lugares (form + BO); adicionada cria├º├úo do cursor no branch `gb_4c_ValidandoUI = .T.` |
+| **ModoIncluir** | `AlternarPagina` era `PROTECTED` ÔÇö framework de teste chama externamente | Removido `PROTECTED` da declara├º├úo |
+| **ModoVisualizar** | `AjustarBotoesPorModo` era `PROTECTED` ÔÇö idem | Removido `PROTECTED` da declara├º├úo |
+| **BtnIncluirNavegacao** | Mesmo root cause de ModoIncluir (`AlternarPagina` inacess├¡vel) | Resolvido pelo mesmo fix |
+
+O `Destroy` tamb├®m foi limpo ÔÇö a duplica├º├úo de `cursor_4c_Dados` que apareceu ap├│s o rename foi removida.

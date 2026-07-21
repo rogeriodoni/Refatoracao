@@ -1,0 +1,7 @@
+﻿Fase 6/8 conclu├¡da. As tr├¬s corre├º├Áes foram aplicadas ao `FormSigPrGmi.prg`:
+
+1. **Header atualizado** para Fase 6/8 com nota sobre as mudan├ºas.
+
+2. **`txt_4c_Datai.Value = DATE() - 7`** ÔÇö corrige o valor default do campo de data para `DATE() - 7`, id├¬ntico ao original (`Get_Datai.Value = Date() - 7` no Init do legado).
+
+3. **`BtnProcessarClick` expandido** com valida├º├Áes de campos obrigat├│rios + `SetFocus()` no campo problem├ítico ÔÇö replica exatamente o comportamento UX do `Processa.Click` original (validava Empresa ÔåÆ Grupo ÔåÆ Conta ÔåÆ Linha antes de processar, setando foco no campo vazio). O padr├úo usa flag `loc_lPodeProcessar` (sem `RETURN` dentro do TRY, conforme regra #1).

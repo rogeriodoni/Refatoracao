@@ -1,0 +1,14 @@
+﻿**Fase 4 n├úo ├® aplic├ível para FormSIGPRIFF.** Este form ├® um di├ílogo utilit├írio gen├®rico (equivalente ao `INPUTBOX()` do VFP), n├úo um form operacional com grid.
+
+Evid├¬ncias:
+- `Width=409, Height=50` ÔÇö di├ílogo min├║sculo
+- Sem PageFrame, sem Page1/Page2
+- Cont├®m apenas TextBox **ou** ComboBox (conforme `par_cTipo`)
+- `this_cTabela = ""` ÔÇö sem tabela no banco
+- J├í implementado e funcional nas Fases 1-3
+
+O pipeline multi-fase aplicou o template gen├®rico de Fase 4 (Grid + CRUD) a este form, mas o `SIGPRIFF` ├® uma exce├º├úo: ├® um di├ílogo de captura de entrada pontual, n├úo um form CRUD ou operacional com grade de dados.
+
+**O FormSIGPRIFF.prg est├í completo.** Nenhuma modifica├º├úo ├® necess├íria na Fase 4. As fases 5-8 tamb├®m n├úo se aplicam (n├úo h├í grid para carregar, sem bot├Áes CRUD, sem Page2 de dados).
+
+Se o pipeline precisar prosseguir para o pr├│ximo form, pode marcar a task301 como conclu├¡da ÔÇö a migra├º├úo do SIGPRIFF foi finalizada nas fases anteriores.

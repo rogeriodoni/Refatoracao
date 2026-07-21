@@ -1,0 +1,7 @@
+﻿All `& .` patterns are gone. File is 2192 lines. Both fixes applied successfully:
+
+1. **`& .` bug fixed** ÔÇö 258 lines added by splitting compound statements (`.Top = 90 & .Left = 454 & ...` ÔåÆ individual lines) across all container sections (lines 740-1068 original range)
+
+2. **`TornarControlesVisiveis()` added** at line 1386 ÔÇö iterates form controls and sets `Visible = .T.` for all except the 5 overlay containers (`cnt_4c_Container1/2/4/5`, `img_4c_ImgFigJpg`) which must start hidden and are shown only when triggered by their action buttons
+
+The form is now complete: Init, InicializarForm, ConfigurarPageFrame, ConfigurarCabecalho, ConfigurarLayout (7 buttons + main grid + 5 overlay containers + Container3 + totals + ObsItens), CarregarDados, TornarControlesVisiveis, Destroy, and all 14 event handlers.

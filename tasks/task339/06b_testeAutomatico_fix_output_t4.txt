@@ -1,0 +1,4 @@
+﻿Corre├º├úo aplicada. O bloco `IF PEMSTATUS... TornarControlesVisiveis(loc_oControl)` foi removido porque:
+
+1. `TornarControlesVisiveis()` n├úo aceita par├ómetros ÔÇö VFP9 lan├ºa "No PARAMETER statement is found" ao ser chamado com `loc_oControl`.
+2. `TornarSubControlesVisiveis(loc_oControl)` logo acima j├í faz a recurs├úo completa em todos os filhos do container, tornando o bloco removido redundante.

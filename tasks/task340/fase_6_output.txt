@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da. Resumo das 9 corre├º├Áes aplicadas:
+
+| # | O que foi corrigido | Detalhe |
+|---|---|---|
+| 1 | `shp_4c_Shape1` | `BorderStyle=0`, `SpecialEffect=1` (igual ao original) |
+| 2 | `lbl_4c_Label4` | `ForeColor=RGB(90,90,90)` (cinza, n├úo branco), `FontBold=.T.`, `AutoSize=.T.` |
+| 3 | `cmd_4c_GetPlanilha` | `Caption=""`, `Picture="geral_pasta_26.jpg"`, `DisabledPicture`, `ForeColor=RGB(36,84,155)`, `FontName="Verdana"`, `Themes=.T.` |
+| 4 | `cmd_4c_Limpar` | ├ìcone correto: `geral_limpa_grade_60.jpg` (era `cadastro_cancelar_60.jpg`) |
+| 5 | `cmd_4c_Processar` | ├ìcone correto: `geral_processar_60.jpg` (era `geral_procura_60.jpg`) |
+| 6 | `grd_4c_Dados` | `FontName="Tahoma"` (igual ao original, era "Verdana") |
+| 7 | Colunas do grid | `ReadOnly=.T.`, `Movable=.F.`, `Resizable=.F.` em colunas 1-3; larguras proporcionais (94/539/94/249) |
+| 8 | `ImportarPlanilha` | Trata `xlResults` ÔåÆ `Planilha` (ImpExcelDriver cria `xlResults`, n├úo `Planilha`); adiciona guard duplicata com SEEK; restaura `SELECT Planilha` ap├│s INSERT |
+| 9 | `CmdProcessarClick` | Limpa `txt_4c_Planilha.Value` ap├│s importa├º├úo com sucesso (igual ao `processamento` do legado) |

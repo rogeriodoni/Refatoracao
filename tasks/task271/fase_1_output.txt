@@ -1,0 +1,12 @@
+﻿Fase 1/8 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\SIGPRCPRBO.prg` foi criado com:
+
+**Propriedades declaradas:**
+- `this_cTabela = "TmpBaixa"` / `this_cCampoChave = "CodBarra"` ÔÇö cursor de trabalho VFP local
+- `this_dData = {}` / `this_cSigKey = ""` ÔÇö contexto de sess├úo vindo do form pai
+- 8 propriedades de configura├º├úo do `SigCdPam`: `this_cGruConfs`, `this_cConConfs`, `this_cGruReservs`, `this_cConReservs`, `this_cDopeCitens`, `this_cTransfEncs`, `this_cGrupoEsts`, `this_cContaEsts`
+
+**M├®todos:**
+- `Init()` ÔÇö configura `this_cTabela`/`this_cCampoChave` e chama `DODEFAULT()`
+- `ObterChavePrimaria()` (PROTECTED) ÔÇö retorna `""` (form operacional sem chave prim├íria ├║nica)
+
+As propriedades de configura├º├úo do `SigCdPam` refletem exatamente as colunas usadas no legado (`gruconfs`, `conconfs`, `grureservs`, `conreservs`, `transfencs` char(20) per schema, etc.). Nas pr├│ximas fases ser├úo adicionados os m├®todos `CarregarBars`, `ConfirmarConferencia`, `MarcarTodos` e `LerCodigoBarras`.

@@ -1,0 +1,23 @@
+[2026-07-16 04:49:42] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-16 04:49:42] [INFO] Prompt File: C:\4c\tasks\task282\runtime_fix_prompt_06b_testeAutomatico_t3.md
+[2026-07-16 04:49:42] [INFO] Output File: C:\4c\tasks\task282\06b_testeAutomatico_fix_output_t3.txt
+[2026-07-16 04:49:42] [INFO] Model: sonnet
+[2026-07-16 04:49:42] [INFO] Timeout: 3600 segundos
+[2026-07-16 04:49:42] [INFO] Max Output Tokens: 128000
+[2026-07-16 04:49:42] [INFO] Context Files: 0 arquivo(s)
+[2026-07-16 04:49:43] [INFO] Invocando Claude CLI...
+[2026-07-16 04:49:43] [INFO] Prompt carregado: 121475 caracteres
+[2026-07-16 04:49:43] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-16 04:49:43] [INFO] Tamanho total do prompt: 121475 caracteres
+[2026-07-16 04:49:43] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-16 04:58:54] [INFO] Claude CLI finalizado em 551.9300348 segundos
+[2026-07-16 04:58:54] [INFO] Exit Code: 0
+[2026-07-16 04:58:54] [INFO] Output salvo em: C:\4c\tasks\task282\06b_testeAutomatico_fix_output_t3.txt
+[2026-07-16 04:58:54] [INFO] Output size: 1001 bytes
+[2026-07-16 04:58:54] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-16 04:58:54] [INFO] Preview do output:
+[2026-07-16 04:58:54] [INFO] As mudan+ºas est+úo corretas:
+- `DataSession = 2` removido (linha 22 anterior)
+- `cursor_4c_Lista` agora tem cleanup em `Destroy` (linhas 1706-1707)
+
+**Diagn+¦stico:** O form tinha `DataSession = 2`, que cria uma datasession privada. Quando `CarregarLista()` era chamado pelo teste, `CREATE CURSOR cursor_4c_Lista` criava o cursor na datasession 2 (privada do form). O `TesteAutomatico` ent+úo verificava `USED("cursor_4c_Lista")` da sua pr+¦pria datasession 1 e n+úo encontrava o cursor, falhand

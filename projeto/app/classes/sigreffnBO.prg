@@ -59,8 +59,8 @@ DEFINE CLASS sigreffnBO AS RelatorioBase
     *   Populada em PrepararDados() via fUniqueIds()
     this_cChaveQuery        = ""
 
-    *-- Nome do cursor de dados gerado por PrepararDados()
-    this_cCursorDados       = "cursor_4c_Dados"
+    *-- Nome do cursor de dados gerado por PrepararDados() (FRX legado: csRelatorio)
+    this_cCursorDados       = "csRelatorio"
 
     *-- Mensagem de erro
     this_cMensagemErro      = ""

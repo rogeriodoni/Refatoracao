@@ -1,0 +1,20 @@
+﻿Ap├│s analisar o arquivo existente e o c├│digo fonte original, o `Formsigprrcu.prg` j├í est├í **completamente implementado** das fases anteriores (1-6). 
+
+Para este formul├írio OPERACIONAL (n├úo CRUD), os "eventos principais" equivalentes s├úo:
+- `CmdProcessarClick()` ÔÇö implementado nas linhas 320-421 (equivale ao `OK.Click()` do legado)
+- `CmdEncerrarClick()` ÔÇö implementado nas linhas 423-430 (equivale ao `SAIR.Click()` do legado)
+
+O template da Fase 7 menciona `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` que s├úo eventos de formul├írios CRUD ÔÇö **n├úo se aplicam** a este OPERACIONAL.
+
+Verificando a cobertura completa vs. comportamento.json (6 m├®todos):
+
+| M├®todo legado | Implementa├º├úo migrada | Status |
+|---|---|---|
+| `SIGPRRCU.Activate` | `Activate()` (linha 305) | Ô£à |
+| `SIGPRRCU.Init` | `Init()` (linha 37) | Ô£à |
+| `SIGPRRCU.Load` (=fConfigGeral) | Tratado pelo startup do framework | Ô£à |
+| `SIGPRRCU.Release` | `Destroy()` (linha 435) | Ô£à |
+| `SIGPRRCU.SAIR.Click` | `CmdEncerrarClick()` (linha 423) | Ô£à |
+| `SIGPRRCU.OK.Click` | `CmdProcessarClick()` (linha 320) | Ô£à |
+
+**Fase 7 j├í est├í completa** ÔÇö nenhuma altera├º├úo necess├íria no arquivo. O form tem 443 linhas com implementa├º├úo funcional total, paridade 100% com o legado.

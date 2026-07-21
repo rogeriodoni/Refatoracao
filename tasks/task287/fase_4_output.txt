@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. O arquivo foi modificado corretamente.
+
+**O que foi adicionado:**
+
+1. **BINDEVENT** em `InicializarForm()` (linha 76): liga `txt_4c_DtFinal.KeyPress` ao handler `TxtDtFinalKeyPress`.
+
+2. **`TxtDtFinalKeyPress()`** (linhas 445-463): equivalente ao `getDtFinal.Valid` do legado ÔÇö dispara apenas em ENTER(13)/TAB(9), popula as datas no BO e chama `ValidarPeriodo()`. Se inv├ílido, exibe `MsgAviso` e reposiciona o foco: `txt_4c_DtFinal` (quando vazia) ou `txt_4c_DtInicial` (quando DtFinal < DtInicial ou per├¡odo > 12 meses).
+
+**Por que n├úo h├í Grid/CRUD buttons:** Este ├® um form OPERACIONAL flat (Width=800, Height=158, sem PageFrame). O original `SIGPRGF1` nunca teve grid nem bot├Áes CRUD ÔÇö apenas filtro de data + Processar + Encerrar. A Fase 4 template ├® para formas CRUD; o equivalente para este form ├® completar o modelo de intera├º├úo com o `Valid` do campo de data, que estava faltando.

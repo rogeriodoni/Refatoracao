@@ -1,0 +1,415 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrIns.SCX
+* Data/Hora: 17/07/2026 12:39:50
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRINS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRINS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRINS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRINS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGPRINS
+  Class: label
+  BaseClass: label
+
+Objeto: get_CodServ
+  Parent: SIGPRINS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_DescServ
+  Parent: SIGPRINS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGPRINS
+  Class: label
+  BaseClass: label
+
+Objeto: get_Valor
+  Parent: SIGPRINS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ok
+  Parent: SIGPRINS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGPRINS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 153
+  Width = 685
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Informações do Serviço"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGPRINS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Serviço :"
+  Height = 17
+  Left = 40
+  Top = 95
+  Width = 49
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.get_CodServ
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 9
+  Height = 23
+  Left = 96
+  MaxLength = 0
+  TabIndex = 5
+  Top = 92
+  Width = 80
+  ZOrderSet = 23
+  Name = "get_CodServ"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.get_DescServ
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 9
+  Height = 23
+  Left = 177
+  MaxLength = 0
+  TabIndex = 5
+  Top = 92
+  Width = 290
+  ZOrderSet = 23
+  Name = "get_DescServ"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Valor :"
+  Height = 17
+  Left = 52
+  Top = 122
+  Width = 37
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.get_Valor
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 9
+  Height = 23
+  InputMask = "9,999,999.99"
+  Left = 96
+  MaxLength = 12
+  TabIndex = 5
+  Top = 119
+  Width = 100
+  ZOrderSet = 23
+  Name = "get_Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 534
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirma"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRINS.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 609
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Caption = "Cancela"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRINS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pFrm
+
+ThisForm.ParentForm = pFrm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm.Enabled = .f.
+ThisForm.get_CodServ.Value = LocalSacOp.cCodServs
+ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'cPros', LocalSacOp.cCodServs, 'dPros')
+ThisForm.get_DescServ.Value = LocalPro.dPros
+ThisForm.get_Valor.Value = LocalSacOp.nVlServs
+ThisForm.get_Valor.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRINS.get_CodServ
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRINS.get_DescServ
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRINS.get_Valor
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRINS.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If( ThisForm.get_Valor.Value <= 0 ) Then
+	MessageBox('O valor do serviço deve ser informado!',16,'')
+	ThisForm.get_Valor.SetFocus
+	Return(.F.)
+EndIf
+ThisForm.ParentForm.cCodServ  = ThisForm.get_CodServ.Value
+ThisForm.ParentForm.nVlServ   = ThisForm.get_Valor.Value
+ThisForm.ParentForm.Enabled   = .T.
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRINS.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.ParentForm.cCodServ  = ''
+ThisForm.ParentForm.nVlServ   = 0
+ThisForm.ParentForm.Enabled   = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRINS
+RESERVED3 (ClassInfo): parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

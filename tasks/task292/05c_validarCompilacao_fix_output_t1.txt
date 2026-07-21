@@ -1,0 +1,9 @@
+﻿The fix is correct. All three errors are resolved in `SigPrGlpBO.prg`:
+
+**Root cause**: VFP9's parser misinterprets `(varName)->field` when it appears inside function call arguments (`ALLTRIM(...)`, `IIF(...)`) or in `LOCATE FOR` ÔÇö the `)` closing the variable name is read as closing the outer call, causing parse errors.
+
+**Fix applied** ÔÇö three changes in `AtualizarPeso` at lines 182ÔÇô206:
+1. **Line 184 (was error)**: `LOCATE FOR CGrus = (loc_cCompo)->CGrus` ÔåÆ pre-captured to `loc_cCGrus`, now `LOCATE FOR CGrus = m.loc_cCGrus`
+2. **Line 188 (was error)**: `ALLTRIM((loc_cCompo)->Mats)` ÔåÆ pre-captured to `loc_cMats`, used directly in SQL string
+3. **Line 200 (was error)**: `IIF(..., (loc_cCompo)->Qtds, (loc_cCompo)->Pesos)` ÔåÆ pre-captured to `loc_nQtds`/`loc_nPesos`, used in IIF directly
+4. The `SELECT (loc_cCompo)` that was only needed before the broken IIF was also removed (values already pre-captured at SCAN entry).

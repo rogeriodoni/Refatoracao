@@ -1,0 +1,1116 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDACJ.SCX
+* Data/Hora: 21/07/2026 13:04:57
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDACJ
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRClis
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRazaos
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getIClis
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupos
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUsuars
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDataIncs
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkInativos
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdUsuarios
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDACJ.Pagina.Dados.grdUsuarios.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACJ.Pagina.Dados.grdUsuarios.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACJ.Pagina.Dados.grdUsuarios.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACJ.Pagina.Dados.grdUsuarios.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnInserir
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnExcluir
+  Parent: SIGCDACJ.Pagina.Dados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 199
+  Left = 179
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Acessos de JOB"
+  Name = "SIGCDACJ"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 480
+  Pagina.Lista.Grade.Left = 30
+  Pagina.Lista.Grade.Top = 101
+  Pagina.Lista.Grade.Width = 938
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 37
+  Pagina.Lista.cntFiltros.Left = 287
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 7
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 82
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 841
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 17
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 0
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 267
+  Top = 49
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "JOB :"
+  Left = 277
+  Top = 75
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descritivo :"
+  Left = 249
+  Top = 101
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Criação do JOB :"
+  Left = 410
+  Top = 49
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getRClis
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.RClis"
+  Left = 390
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 71
+  Width = 360
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getRClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getRazaos
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.Razaos"
+  Height = 23
+  Left = 307
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 97
+  Width = 443
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getRazaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getIClis
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.IClis"
+  Left = 307
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 71
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getIClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getGrupos
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.Grupos"
+  Left = 307
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 45
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getUsuars
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.Usuars"
+  Height = 23
+  Left = 494
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 45
+  Width = 92
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.getDataIncs
+------------------------------------------------------------
+  ControlSource = "crGradeJOB.DataIncs"
+  Left = 670
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 45
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getDataIncs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Criado em :"
+  Left = 611
+  Top = 49
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Lista de Usuários Que Terão Acesso a Esse JOB:"
+  Left = 308
+  Top = 154
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.chkInativos
+------------------------------------------------------------
+  Top = 27
+  Left = 307
+  FontBold = .T.
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Inativo"
+  ControlSource = "crGradeJOB.Inativas"
+  SpecialEffect = 1
+  TabIndex = 1
+  ForeColor = 255,0,0
+  Name = "chkInativos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.grdUsuarios
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Arial"
+  DeleteMark = .F.
+  Height = 418
+  Left = 307
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 14
+  Top = 170
+  Width = 343
+  Name = "grdUsuarios"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Width = 90
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 220
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.grdUsuarios.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.grdUsuarios.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Format = "K!"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.grdUsuarios.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.grdUsuarios.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Format = "K!"
+  Margin = 0
+  MaxLength = 30
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.btnInserir
+------------------------------------------------------------
+  Top = 170
+  Left = 654
+  Height = 42
+  Width = 42
+  Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Caption = ""
+  TabIndex = 15
+  ToolTipText = "Inserir Novo Usuário"
+  PicturePosition = 7
+  Name = "btnInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACJ.Pagina.Dados.btnExcluir
+------------------------------------------------------------
+  Top = 212
+  Left = 654
+  Height = 42
+  Width = 42
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 16
+  ToolTipText = "Excluir Usuário"
+  PicturePosition = 7
+  Name = "btnExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDACJ
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Local llOks
+
+llOks = .t.
+
+If Not ThisForm.poDataMgr.Update([crSigCdAcJ])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdAcJ)])
+	llOks = .f.
+EndIf
+
+If llOKs
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If Not llOks
+	ThisForm.poDataMgr.Rollback()
+EndIf
+
+NoDefault
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Local llOks
+
+llOks = .t.
+
+lcDelete = [Delete From SigCdAcJ Where JOBs = '] + crGradeJOB.IClis + [']
+If ThisForm.PodataMgr.SqlExecute(lcDelete, []) < 0
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Delete - crSigCdAcJ)')
+	llOks = .f.
+EndIf
+
+If llOKs
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If Not llOks
+	ThisForm.poDataMgr.Rollback()
+EndIf
+
+NoDefault
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Local llOks
+
+llOks = .t.
+
+lcDelete = [Delete From SigCdAcJ Where JOBs = '] + crGradeJOB.IClis + [']
+If ThisForm.PodataMgr.SqlExecute(lcDelete, []) < 0
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Delete - crSigCdAcJ)')
+	llOks = .f.
+EndIf
+
+If llOKs
+	If Not ThisForm.poDataMgr.Update([crSigCdAcJ])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdAcJ)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOKs
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If Not llOks
+	ThisForm.poDataMgr.Rollback()
+EndIf
+
+NoDefault
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Local lcQryCdCli, lcQryCdAcJ, lcKey
+
+lcKey = Replicate(Chr(254), 20)
+
+lcQryCdCli = [Select a.Grupos, a.IClis, a.RClis, a.Razaos, a.Inativas, a.Usuars, a.DataIncs ] + ;
+			   [From SigCdGcr b, SigCdCli a ] + ;
+			  [Where b.Coletors = 10 And ] + ;
+			  		[b.Codigos = a.Grupos]
+
+lcQryCdAcJ = [Select a.*, Space(30) as NComps From SigCdAcJ a Where a.pkChaves = '] + lcKey + [']
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdCli], [IClis], [crGradeJOB], [], ThisForm.Pagina.Lista.Grade, lcQryCdCli)
+			.pfSqlTabela(1).pColuna([RCLis],    [], [], [Nome],   	   345, .t.)
+			.pfSqlTabela(1).pColuna([Razaos],   [], [], [Descritivo], 332, .t.)
+			.pfSqlTabela(1).pColuna([IClis],    [], [], [Código], 	   080, .t.)
+			.pfSqlTabela(1).pColuna([Usuars],   [], [], [Usuário],    080, .t.)
+			.pfSqlTabela(1).pColuna([DataIncs], [], [], [Inclusão],   074, .t.)
+
+			.AddCursor([SigCdAcJ], [pkChaves], [crSigCdAcJ], [], [], lcQryCdAcJ)
+		EndWith
+
+		=DoDefault()
+
+		.poDataMgr.Requery([crSigCdAcJ])
+		
+		With .Pagina.Dados.grdUsuarios
+			.AllowHeaderSizing      = .f.
+			.AllowRowSizing         = .f.
+			.ColumnCount            =  2
+			.DeleteMark             = .f.
+			.RecordSource           = [crSigCdAcJ]
+
+			.Column1.ControlSource  = [crSigCdAcJ.Usuars]
+			.Column2.ControlSource  = [crSigCdAcJ.NComps]
+			
+			For I=1 To .ColumnCount
+				lcCol = Alltrim(Str(I))
+				.Column&lcCol..Movable   = .f.
+				.Column&lcCol..Resizable = .f.
+			Next
+		EndWith
+		
+		.Pagina.Lista.Grupo_Op.Inserir.Enabled  = .f.
+		.Pagina.Lista.Grupo_Op.Excluir.Enabled  = .f.
+		.Pagina.Lista.Grupo_Op.Procurar.Enabled = .f.
+		
+		.Pagina.Lista.Grade.SetAll([DynamicForeColor], [Iif(crGradeJOB.Inativas=1, RGB(255,0,0), RGB(0,0,0))], [Column])
+		
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Inserir.When
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Inserir.When
+Return This.Enabled 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Alterar.When
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Alterar.When
+Return This.Enabled 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Procurar.When
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Procurar.When
+Return This.Enabled 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+Select crGradeJOB
+If Not DoDefault(Opcao)
+	ThisForm.mAtivapagina1
+	Return .f.
+EndIf
+
+If Not Inlist(ThisForm.pcEscolha, [CONSULTAR], [ALTERAR])
+	ThisForm.mAtivapagina1
+	Return .f.
+EndIf
+
+lcJob = crGradeJOB.IClis
+ 
+Select crSigCdAcJ
+Zap In crSigCdAcJ
+
+lcQuery = [Select a.*, b.NComps ] + ;
+		    [From SigCdAcJ a Left Join SigCdUsu b ] + ;
+		   	  [On a.Usuars = b.Usuarios ] + ;
+		   [Where a.JOBs = '] + lcJob + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalAcJ]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalAcJ)])
+	Return .f.
+EndIf
+
+Select LocalAcJ
+Scan
+	Scatter Memvar Memo
+	Insert Into crSigCdAcJ From Memvar
+EndScan
+
+If (ThisForm.pcEscolha = [ALTERAR])
+	Append Blank In crSigCdAcJ
+	Go Top In crSigCdAcJ
+	Go Bottom In crSigCdAcJ
+	ThisForm.Pagina.Dados.grdUsuarios.Column1.SetFocus 
+	ThisForm.Pagina.Dados.btnInserir.Visible = .t.
+	ThisForm.Pagina.Dados.btnExcluir.Visible = .t.
+Else
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	ThisForm.Pagina.Dados.btnInserir.Visible = .f.
+	ThisForm.Pagina.Dados.btnExcluir.Visible = .f.
+EndIf
+
+ThisForm.Pagina.Dados.grdUsuarios.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Select Sum(1) as Soma, Usuars ;
+  From crSigCdAcJ ;
+ Where Not Empty(Usuars) ;
+ Group By Usuars ;
+  Into Cursor crDupls
+
+Go Top In crDupls
+Locate For Soma > 1
+If Not Eof([crDupls])
+	=MessageBox([O Usuário "] + Alltrim(crDupls.Usuars) + [" Está Duplicado na Grade!!!], 0+16, [Atenção!!!])
+	Use In crDupls
+	Return .f.
+EndIf
+Use In crDupls
+
+Delete From crSigCdAcJ Where Empty(Usuars)
+
+Update crSigCdAcJ Set pkChaves = fUniqueIds() Where Empty(pkChaves)
+Update crSigCdAcJ Set JOBs = crGradeJOB.IClis
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getRClis
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getRazaos
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getIClis
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getGrupos
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.getDataIncs
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.chkInativos
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.grdUsuarios.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [Usuarios], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Usuarios], [], [Usuário])
+		loLista.mAddColuna([NComps],   [], [Nome])
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)
+	This.Parent.Parent.Column2.Text1.Value = Iif(Lastkey()=27, [], crListaRemota.NComps)
+	Use In crListaRemota
+Else
+	This.Value = []
+	This.Parent.Parent.Column2.Text1.Value = []
+EndIf
+This.Refresh
+This.Parent.Parent.Column2.Text1.Refresh 
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.grdUsuarios.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR]) And Empty(crSigCdAcJ.Usuars)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [NComps], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([NComps],   [], [Nome])
+		loLista.mAddColuna([Usuarios], [], [Usuário])
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, [], crListaRemota.NComps)
+	This.Parent.Parent.Column1.Text1.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)
+	Use In crListaRemota
+Else
+	This.Value = []
+	This.Parent.Parent.Column1.Text1.Value = []
+EndIf
+This.Refresh
+This.Parent.Parent.Column1.Text1.Refresh 
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.btnInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigCdAcJ
+Go Top In crSigCdAcJ
+Locate For Empty(Usuars)
+If Eof([crSigCdAcJ])
+	Append Blank In crSigCdAcJ
+EndIf
+
+ThisForm.Pagina.Dados.grdUsuarios.Refresh
+ThisForm.Pagina.Dados.grdUsuarios.Column1.SetFocus 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACJ.Pagina.Dados.btnExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigCdAcJ
+If Not Eof([crSigCdAcJ])
+	lnRec = Recno([crSigCdAcJ])
+	Delete In crSigCdAcJ
+	Go Top In crSigCdAcJ
+	Go lnRec
+EndIf
+
+ThisForm.Pagina.Dados.grdUsuarios.Refresh
+ThisForm.Pagina.Dados.grdUsuarios.Column1.SetFocus 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDACJ
+RESERVED3 (ClassInfo): busca
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

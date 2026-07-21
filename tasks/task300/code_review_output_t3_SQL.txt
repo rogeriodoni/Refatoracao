@@ -1,0 +1,12 @@
+﻿**Falso positivo confirmado.** N├úo existe nenhuma condi├º├úo `WHERE CONTROLCOUNT` em SQL nos arquivos migrados.
+
+O que o code review detectou como `CONTROLCOUNT` s├úo refer├¬ncias ├á propriedade VFP9 `.ControlCount` de objetos de UI nos m├®todos `TornarControlesVisiveis()` e `TornarFilhosVisiveis()` do form (linhas 635, 642, 650, 661, 667). Exemplos:
+
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount          ÔåÉ propriedade VFP9, n├úo coluna SQL
+IF PEMSTATUS(loc_oCtrl, "ControlCount", 5)  ÔåÉ string de PEMSTATUS, n├úo WHERE
+```
+
+Nenhum desses contextos ├® uma condi├º├úo SQL WHERE. O analisador est├ítico confundiu a propriedade `.ControlCount` de objetos VFP9 com uma coluna de banco de dados.
+
+**Nenhuma corre├º├úo necess├íria.** Os arquivos `FormSigPrIct.prg` e `SigPrIctBO.prg` est├úo corretos ÔÇö n├úo h├í filtro inventado nesses arquivos.

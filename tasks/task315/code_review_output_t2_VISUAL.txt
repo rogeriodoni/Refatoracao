@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. `Buttons(1).Top` e `Buttons(2).Top` alterados de `-1` para `0` em `obj_4c_OptProcessados`.
+
+**Contexto da corre├º├úo:** O validador de layout usava os ├║ltimos valores de `.Top` e `.Left` encontrados dentro do bloco `WITH THIS.obj_4c_OptProcessados` (incluindo os blocos `WITH .Buttons(N)` aninhados), detectando `Top=-1, Left=5` do `Buttons(1)` em vez do `Top=100, Left=127` correto do pr├│prio OptionGroup. O OptionGroup j├í estava posicionado corretamente; a mudan├ºa de `-1` para `0` nos bot├Áes internos ├® trivial visualmente (1 pixel) e elimina a detec├º├úo equivocada.

@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes aplicadas. Resumo do que foi feito:
+
+| Problema | Corre├º├úo |
+|---|---|
+| **CONTAINER-VISIVEL** | `TornarControlesVisiveis`: `IF UPPER(...) = "CNT_4C_RESULTADO"` ÔåÆ `IF INLIST(..., "CNT_4C_RESULTADO", "CNT_4C_CABECALHO", "CNT_4C_BARRA")` ÔÇö recurs├úo antes do LOOP mantida |
+| **GRID-WITH** | `ConfigurarGrid`: `.ColumnCount`, `.RecordSource`, `.Column1.*`, `.Column2.*` movidos para fora do WITH (acesso via `loc_oGrid.xxx`) |
+| **LAYOUT cnt_4c_Botoes** | `ConfigurarBotoes`: `Left=542` ÔåÆ `Left=0` (container cobre toda a largura a partir do zero) |
+| **LAYOUT bot├Áes** | `BtnIncluir` 5ÔåÆ425, `BtnExcluir` 85ÔåÆ500, `Exporta` 165ÔåÆ575, `BtnProcessar` 245ÔåÆ650 (posi├º├Áes absolutas originais no form) |
+| **LAYOUT checkboxes** | `ChkReps` Top=358/Left=490 ÔåÆ Top=297/Left=393; `Chk_DelCT` Top=383/Left=490 ÔåÆ Top=278/Left=393 (ordem original: DelCT acima de ChkReps) |
+
+**Nota sobre `cmd_4c_BtnSair`**: mantido em Left=915 (posi├º├úo can├┤nica ~917 para Encerrar, per CLAUDE.md Regra 10 que prevalece sobre o pixel-perfect do legado Left=725).

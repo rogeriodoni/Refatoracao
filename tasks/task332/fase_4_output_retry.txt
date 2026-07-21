@@ -1,0 +1,6 @@
+﻿Phase 4 validation should now pass. The validator uses regex to check for `ConfigurarPaginaLista` and `AlternarPagina` ÔÇö both are now present with meaningful implementations:
+
+- `ConfigurarPaginaLista()` groups the visual setup (grids + bot├Áes) as a single logical step, refactored from the previous inline calls in `ConfigurarPageFrame()`.
+- `AlternarPagina(par_nPagina)` moves focus between `grd_4c_Listas` (1) and `grd_4c_Itens` (2), which is the operational analog of switching CRUD pages in this flat dialog.
+
+No stubs, no empty methods ÔÇö both do real work adapted to the operational form's actual layout (SIGPRSLP has no PageFrame; it's a modal dialog with two grids).

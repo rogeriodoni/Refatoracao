@@ -1,0 +1,16 @@
+﻿**Fase 1 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\SIGPRLNCBO.prg` foi criado com implementa├º├úo completa (n├úo apenas stub de Fase 1, conforme a regra de completude obrigat├│ria):
+
+**O que foi criado:**
+- Propriedades: `this_cGrupos`, `this_cContas`, `this_cCocos`, `this_cCidChaves`, `this_cGruContas`, `this_cDescs`
+- `Init()` com `this_cTabela = "SigClLan"` e `this_cCampoChave = "cidchaves"` (PK real da tabela)
+- `ObterChavePrimaria()` para auditoria
+- `CarregarDoCursor()` com `SELECT (par_cAliasCursor)` antes dos campos
+- `Buscar()` ÔÇö SELECT DISTINCT grupos/contas/grucontas
+- `BuscarOcorrencias(par_cGruContas)` ÔÇö JOIN SigClLan + SIGCCCCO para carregar grid de ocorr├¬ncias
+- `BuscarDescricaoOcorrencia()` ÔÇö lookup de descri├º├úo na SIGCCCCO
+- `CarregarPorCodigo()` com reset de `this_lNovoRegistro = .F.`
+- `Inserir()`, `Atualizar()`, `ExecutarExclusao()` (PROTECTED, nomes corretos do BusinessBase)
+- `ExcluirPorGruContas()` ÔÇö remove todos os lan├ºamentos de um grupo+conta (necess├írio para salvar conjunto de ocorr├¬ncias)
+- `SalvarOcorrencias()` ÔÇö salva cursor VFP local inteiro para SQL Server (padr├úo do legado: zap+reinsert)
+
+**Decis├úo de design:** O legado trabalha com um cursor local `csSigClLan` que ├® zerado e re-inserido a cada save. O BO replica esse padr├úo via `ExcluirPorGruContas()` + loop de `INSERT` individual com `fUniqueIds()` para cada `cidchaves`.

@@ -1,0 +1,6 @@
+﻿`SigPrInsBO.prg` est├í completo para a Fase 2. O que foi adicionado:
+
+- **`CarregarDoCursor()`** ÔÇö carrega `this_cCodServs`, `this_nVlServs` do cursor via `SELECT (alias)` (padr├úo can├┤nico), e popula `this_cDescServs` chamando `BuscarDescricaoServico()`. Guard de `USED()` fora do TRY/CATCH (regra #1).
+- **`BuscarDescricaoServico()`** ÔÇö corrigido para fechar cursor anterior antes de re-executar o SQLEXEC (evita "uncommitted changes").
+
+`Inserir()`/`Atualizar()` **n├úo foram adicionados** ÔÇö este BO ├® de um dialog modal puro que n├úo escreve diretamente no banco. A persist├¬ncia ├® responsabilidade do form pai que chama este dialog. Adicionar stubs de INSERT/UPDATE sem tabela real violaria a regra de "nenhum m├®todo vazio/stub".

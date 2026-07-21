@@ -37,6 +37,9 @@ DEFINE CLASS SIGREEQRBO AS RelatorioBase
     this_cCursorCabecalho   = "dbCabecalho"
     this_cCursorSelecao     = "Selecao"
 
+    *-- Cursor principal binding com SigReEqr.frx (Pattern #117 guard)
+    this_cCursorDados       = "csTempoGr"
+
     *--------------------------------------------------------------------------
     * Init
     *--------------------------------------------------------------------------
@@ -502,7 +505,7 @@ DEFINE CLASS SIGREEQRBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ELSE
-                THIS.ExecutarReportForm("SigReEqr", "PREVIEW")
+                THIS.ExecutarReportForm("SigReEqr", "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -522,7 +525,7 @@ DEFINE CLASS SIGREEQRBO AS RelatorioBase
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
             ELSE
-                THIS.ExecutarReportForm("SigReEqr", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReEqr", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

@@ -22,9 +22,9 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
     this_cDescInv1          = ""   && "Grupo - Conta" do 1o inventario
     this_cDescInv2          = ""   && "Grupo - Conta" do 2o inventario
 
-    *-- Cursores utilizados
-    this_cCursorDados       = "cursor_4c_DbImp"
-    this_cCursorCabecalho   = "cursor_4c_Cabecalho"
+    *-- Cursores utilizados (nomes DEVEM bater com aliases usados no FRX legado)
+    this_cCursorDados       = "DBImp"
+    this_cCursorCabecalho   = "Cabec"
 
     *-- Configuracao do relatorio
     this_cFRXPath           = ""
@@ -121,13 +121,13 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
 
                 *-- Cursor cabecalho: guarda codigos dos dois inventarios (usado pelo FRX)
                 SET NULL ON
-                CREATE CURSOR cursor_4c_Cabecalho (cnInvs1 N(10), cnInvs2 N(10))
+                CREATE CURSOR Cabec (cnInvs1 N(10), cnInvs2 N(10))
                 SET NULL OFF
-                INSERT INTO cursor_4c_Cabecalho VALUES (loc_nInv1, loc_nInv2)
+                INSERT INTO Cabec VALUES (loc_nInv1, loc_nInv2)
 
                 *-- Cursor resultado: uma linha por produto/localizacao com qtds de cada inventario
                 SET NULL ON
-                CREATE CURSOR cursor_4c_DbImp ;
+                CREATE CURSOR DBImp ;
                     (cPros C(14), dPros C(40), cLocals C(10), ;
                      cnInvs1 N(6), cnInvs2 N(6), Sobras N(6), Faltas N(6), Tipos N(1))
                 SET NULL OFF
@@ -139,7 +139,7 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
 
                 SCAN
                     SCATTER MEMVAR
-                    SELECT cursor_4c_DbImp
+                    SELECT DBImp
                     IF cursor_4c_SigIvTr.codigos = loc_nInv1
                         m.cnInvs1 = cursor_4c_SigIvTr.Qtds
                         m.cnInvs2 = 0
@@ -169,7 +169,7 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
                 ENDSCAN
 
                 *-- Calcula sobras/faltas e elimina registros sem diferenca
-                SELECT cursor_4c_DbImp
+                SELECT DBImp
                 REPLACE ALL Sobras WITH cnInvs1 - cnInvs2 FOR cnInvs1 - cnInvs2 > 0
                 REPLACE ALL Faltas WITH cnInvs2 - cnInvs1 FOR cnInvs2 - cnInvs1 > 0
                 DELETE ALL FOR Sobras = 0 AND Faltas = 0
@@ -202,8 +202,13 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
             IF THIS.ValidarFiltros()
                 IF THIS.PrepararDados()
                     IF FILE(THIS.this_cFRXPath)
-                        REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE
-                        loc_lSucesso = .T.
+                        IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                            MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                     "Relat" + CHR(243) + "rio")
+                        ELSE
+                            REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE
+                            loc_lSucesso = .T.
+                        ENDIF
                     ELSE
                         THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
                                                   CHR(227) + "o encontrado"
@@ -227,8 +232,13 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
             IF THIS.ValidarFiltros()
                 IF THIS.PrepararDados()
                     IF FILE(THIS.this_cFRXPath)
-                        REPORT FORM (THIS.this_cFRXPath) TO PRINTER NOCONSOLE
-                        loc_lSucesso = .T.
+                        IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                            MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                     "Relat" + CHR(243) + "rio")
+                        ELSE
+                            REPORT FORM (THIS.this_cFRXPath) TO PRINTER NOCONSOLE
+                            loc_lSucesso = .T.
+                        ENDIF
                     ELSE
                         THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
                                                   CHR(227) + "o encontrado"
@@ -312,11 +322,11 @@ DEFINE CLASS SigReAivBO AS RelatorioBase
     * Destroy - Libera cursores ao destruir o BO
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_DbImp")
-            USE IN cursor_4c_DbImp
+        IF USED("DBImp")
+            USE IN DBImp
         ENDIF
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("Cabec")
+            USE IN Cabec
         ENDIF
         IF USED("cursor_4c_SigIvTr")
             USE IN cursor_4c_SigIvTr

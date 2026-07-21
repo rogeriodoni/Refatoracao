@@ -1,0 +1,13 @@
+﻿Fase 3 conclu├¡da. `C:/4c/projeto/app/forms/operacionais/FormSIGPRVTX.prg` criado com 238 linhas.
+
+**O que foi entregue:**
+- `DEFINE CLASS FormSIGPRVTX AS FormBase` ÔÇö form OPERACIONAL flat (sem PageFrame), 1000├ù600, TitleBar=0
+- `Init()` ÔåÆ `DODEFAULT()` ÔÇö FormBase chama InicializarForm automaticamente
+- `InicializarForm()` ÔÇö cria `cursor_4c_Grade` (skuid/nomesku/skuativo/refsku com INDEX ON skuid), instancia `SIGPRVTXBO`, chama os 3 configuradores, seta t├¡tulo via CHR()
+- `ConfigurarPageFrame()` ÔÇö fundo `new_background.jpg` + SetAll Tahoma/8
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` cinza RGB(100,100,100) com lbl_4c_Sombra (preto) e lbl_4c_Titulo (branco), AutoSize=.F., Width=1000-20, sem literal acentuado
+- `ConfigurarBotoesPrincipais()` ÔÇö `cmg_4c_Principal` Left=840 com Buttons(1)=Salvar e Buttons(2)=Encerrar, Buttons configurados em WITH aninhado dentro do pai (regra memory)
+- `TornarControlesVisiveis()` ÔÇö recursivo sem filtro de skip (este form n├úo tem containers flutuantes)
+- `Destroy()` ÔÇö fecha cursor_4c_Grade, limpa BO, chama DODEFAULT()
+
+**Pr├│xima fase (4):** adicionar `grd_4c_Dados` com 4 colunas (SKU ID / Nome SKU / SKU Ativo / Refer├¬ncia SKU) e `ConfigurarGrade()`.

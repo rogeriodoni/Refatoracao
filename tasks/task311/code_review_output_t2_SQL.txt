@@ -1,0 +1,5 @@
+﻿Corrigido. Os tr├¬s problemas eram originados no mesmo bloco SQL (linhas 789-795):
+
+- A LLM substituiu `SELECT ... FROM vindsql WHERE nprimarys = 1` por uma query de system catalogs do SQL Server (`sys.indexes`, `sys.index_columns`, `sys.columns`, `sys.tables`) usando join conditions com `index_id` / `column_id` e filtro `is_primary_key = 1`.
+- As tr├¬s colunas flagadas (`INDEX_ID`, `COLUMN_ID`, `IS_PRIMARY_KEY`) eram inven├º├úo da LLM ÔÇö nenhuma existe na cl├íusula WHERE original.
+- A fix restaura a query original que usa `vindsql` (view legada no banco DB_MBAHIA) com a coluna `nprimarys = 1`, mantendo os aliases `Arquivos` e `Indices` que o c├│digo subsequente (INDEX ON + SEEK) j├í espera.

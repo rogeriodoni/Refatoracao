@@ -1,0 +1,725 @@
+*==============================================================================
+* Formsigprico.prg
+*
+* Formulario OPERACIONAL - Mapa Visual (sigprico.SCX)
+* Formulario exclusivamente visual: 27 imagens de icones/diagrama
+* Sem tabela associada, sem operacoes CRUD, sem metodos de evento no original
+*==============================================================================
+
+DEFINE CLASS Formsigprico AS FormBase
+	ShowWindow = 1
+	WindowType = 1
+
+    *--------------------------------------------------------------------------
+    * Propriedades de estado
+    *--------------------------------------------------------------------------
+    this_oBusinessObject = .NULL.
+    this_cModoAtual      = ""
+
+    *--------------------------------------------------------------------------
+    * Propriedades visuais do formulario
+    * Original nao especifica Width/Height; usando dimensao padrao
+    * de forms OPERACIONAIS para acomodar PageFrame e conteudo
+    *--------------------------------------------------------------------------
+    Caption      = "Form1"
+    Width        = 1000
+    Height       = 600
+    AutoCenter   = .T.
+    TitleBar     = 1
+    ControlBox   = .T.
+    MaxButton    = .F.
+    MinButton    = .F.
+    Closable     = .T.
+    ClipControls = .F.
+    FontName     = "Tahoma"
+    FontSize     = 8
+
+    *============================================================================
+    * Init - Inicializa o formulario via FormBase
+    *============================================================================
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *============================================================================
+    * InicializarForm - Cria BO, configura PageFrame e prepara o formulario
+    *============================================================================
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("sigpricoBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar objeto de neg" + CHR(243) + "cio sigpricoBO", "Erro")
+            ELSE
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarContainersPrincipais()
+                THIS.ConfigurarPaginaLista()
+                THIS.ConfigurarPaginaDados()
+
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                THIS.pgf_4c_Paginas.Visible    = .T.
+                THIS.pgf_4c_Paginas.ActivePage = 1
+                THIS.this_cModoAtual           = "VISUAL"
+
+                THIS.TornarControlesVisiveis(THIS)
+
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *============================================================================
+    * ConfigurarPageFrame - Cria PageFrame com 2 paginas (Lista e Dados)
+    * PageFrame.Top = -29 e Tabs = .F. seguindo padrao do framework
+    *============================================================================
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+
+        WITH THIS.pgf_4c_Paginas
+            .Top        = -29
+            .Left       = 0
+            .Width      = THIS.Width
+            .Height     = THIS.Height + 29
+            .PageCount  = 2
+            .Tabs       = .F.
+            .BorderWidth = 0
+            .Themes     = .F.
+            .Visible    = .F.
+
+            .Page1.Caption = "Lista"
+            .Page1.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            .Page2.Caption = "Dados"
+            .Page2.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        ENDWITH
+    ENDPROC
+
+    *============================================================================
+    * ConfigurarContainersPrincipais - Cria containers vazios das 2 paginas
+    * Estes containers sao populados nas fases seguintes (Grid, botoes CRUD,
+    * campos de dados, etc)
+    *============================================================================
+    PROTECTED PROCEDURE ConfigurarContainersPrincipais()
+        LOCAL loc_oPag1, loc_oPag2
+
+        loc_oPag1 = THIS.pgf_4c_Paginas.Page1
+
+        *-- Container do cabecalho escuro (topo da pagina Lista)
+        loc_oPag1.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPag1.cnt_4c_Cabecalho
+            .Top         = 31
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container dos botoes CRUD (lado direito, sera populado na Fase 4)
+        loc_oPag1.AddObject("cnt_4c_Botoes", "Container")
+        WITH loc_oPag1.cnt_4c_Botoes
+            .Top         = 29
+            .Left        = 542
+            .Width       = 390
+            .Height      = 85
+            .BackStyle   = 1
+            .BackColor   = RGB(53, 53, 53)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container de Saida/Encerrar (padrao canonico)
+        loc_oPag1.AddObject("cnt_4c_Saida", "Container")
+        WITH loc_oPag1.cnt_4c_Saida
+            .Top         = 29
+            .Left        = 917
+            .Width       = 90
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- Container dos botoes de acao da pagina Dados (Salvar/Cancelar)
+        loc_oPag2.AddObject("cnt_4c_BotoesAcao", "Container")
+        WITH loc_oPag2.cnt_4c_BotoesAcao
+            .Top         = 33
+            .Left        = 842
+            .Width       = 160
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+    ENDPROC
+
+    *============================================================================
+    * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
+    * Percorre Pages de PageFrames e Controls de Containers
+    *============================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_nP, loc_oControl
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oControl = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oControl) = "O"
+                *-- Pular containers que devem permanecer ocultos (Visible=.F. intencional)
+                IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_BOTOES", "CNT_4C_CABECALHO")
+                    LOOP
+                ENDIF
+
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
+                ENDIF
+
+                IF UPPER(loc_oControl.BaseClass) = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oControl.PageCount
+                        THIS.TornarControlesVisiveis(loc_oControl.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
+                   loc_oControl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oControl)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *============================================================================
+    * ConfigurarPaginaLista - Popula Page1 com cabecalho, botao Encerrar e
+    * as 27 imagens do mapa visual (diagrama de icones do sistema)
+    *============================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPag1, loc_nL, loc_nT
+
+        loc_oPag1 = THIS.pgf_4c_Paginas.Page1
+        loc_nL    = 371
+        loc_nT    = 257
+
+        *-- Labels do cabecalho (sombra deslocada + titulo branco)
+        WITH loc_oPag1.cnt_4c_Cabecalho
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 15
+                .Left      = 12
+                .Width     = 769
+                .Height    = 40
+                .AutoSize  = .F.
+                .Caption   = "Mapa Visual"
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 18
+                .Left      = 10
+                .Width     = 769
+                .Height    = 46
+                .AutoSize  = .F.
+                .Caption   = "Mapa Visual"
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+            ENDWITH
+        ENDWITH
+
+        *-- Botao Encerrar (padrao canonico cnt_4c_Saida)
+        WITH loc_oPag1.cnt_4c_Saida
+            .AddObject("cmd_4c_Encerrar", "CommandButton")
+            WITH .cmd_4c_Encerrar
+                .Top             = 5
+                .Left            = 5
+                .Width           = 75
+                .Height          = 75
+                .Caption         = "Encerrar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .SpecialEffect   = 0
+                .PicturePosition = 13
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+            ENDWITH
+        ENDWITH
+
+        BINDEVENT(loc_oPag1.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+
+        *-- Form puramente visual: cnt_4c_Botoes oculto (sem operacoes CRUD)
+        loc_oPag1.cnt_4c_Botoes.Visible = .F.
+
+        *-- 27 imagens do mapa visual centralizadas na area de conteudo
+        loc_oPag1.AddObject("img_4c_Image1", "Image")
+        WITH loc_oPag1.img_4c_Image1
+            .Picture = gc_4c_CaminhoIcones + "form4.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 0
+            .Left    = loc_nL + 0
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image2", "Image")
+        WITH loc_oPag1.img_4c_Image2
+            .Picture = gc_4c_CaminhoIcones + "form7.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 18
+            .Left    = loc_nL + 0
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image3", "Image")
+        WITH loc_oPag1.img_4c_Image3
+            .Picture = gc_4c_CaminhoIcones + "ohist.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 36
+            .Left    = loc_nL + 0
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image4", "Image")
+        WITH loc_oPag1.img_4c_Image4
+            .Picture = gc_4c_CaminhoIcones + "replace.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 1
+            .Left    = loc_nL + 22
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image5", "Image")
+        WITH loc_oPag1.img_4c_Image5
+            .Picture = gc_4c_CaminhoIcones + "tab.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 1
+            .Left    = loc_nL + 44
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image6", "Image")
+        WITH loc_oPag1.img_4c_Image6
+            .Picture = gc_4c_CaminhoIcones + "a_fold3.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 1
+            .Left    = loc_nL + 67
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image7", "Image")
+        WITH loc_oPag1.img_4c_Image7
+            .Picture = gc_4c_CaminhoIcones + "depend3.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 1
+            .Left    = loc_nL + 90
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image8", "Image")
+        WITH loc_oPag1.img_4c_Image8
+            .Picture = gc_4c_CaminhoIcones + "b_arrow4.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 24
+            .Left    = loc_nL + 24
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image9", "Image")
+        WITH loc_oPag1.img_4c_Image9
+            .Picture = gc_4c_CaminhoIcones + "b_arrow2.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 24
+            .Left    = loc_nL + 53
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image10", "Image")
+        WITH loc_oPag1.img_4c_Image10
+            .Picture = gc_4c_CaminhoIcones + "b_arrow3.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 24
+            .Left    = loc_nL + 84
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image11", "Image")
+        WITH loc_oPag1.img_4c_Image11
+            .Picture = gc_4c_CaminhoIcones + "b_arrow1.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 24
+            .Left    = loc_nL + 116
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image15", "Image")
+        WITH loc_oPag1.img_4c_Image15
+            .Picture = gc_4c_CaminhoIcones + "kuser.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 47
+            .Left    = loc_nL + 144
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image16", "Image")
+        WITH loc_oPag1.img_4c_Image16
+            .Picture = gc_4c_CaminhoIcones + "form4.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 71
+            .Left    = loc_nL + 5
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image17", "Image")
+        WITH loc_oPag1.img_4c_Image17
+            .Picture = gc_4c_CaminhoIcones + "ohist.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 94
+            .Left    = loc_nL + 13
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image18", "Image")
+        WITH loc_oPag1.img_4c_Image18
+            .Picture = gc_4c_CaminhoIcones + "depend3.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 73
+            .Left    = loc_nL + 33
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image19", "Image")
+        WITH loc_oPag1.img_4c_Image19
+            .Picture = gc_4c_CaminhoIcones + "envmail.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 117
+            .Left    = loc_nL + 11
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image20", "Image")
+        WITH loc_oPag1.img_4c_Image20
+            .Picture = gc_4c_CaminhoIcones + "replace.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 95
+            .Left    = loc_nL + 44
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image21", "Image")
+        WITH loc_oPag1.img_4c_Image21
+            .Picture = gc_4c_CaminhoIcones + "server15.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 121
+            .Left    = loc_nL + 40
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image22", "Image")
+        WITH loc_oPag1.img_4c_Image22
+            .Picture = gc_4c_CaminhoIcones + "people1.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 84
+            .Left    = loc_nL + 96
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image23", "Image")
+        WITH loc_oPag1.img_4c_Image23
+            .Picture = gc_4c_CaminhoIcones + "home.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 108
+            .Left    = loc_nL + 101
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image24", "Image")
+        WITH loc_oPag1.img_4c_Image24
+            .Picture = gc_4c_CaminhoIcones + "search2.ico"
+            .Stretch = 2
+            .Top     = loc_nT + 134
+            .Left    = loc_nL + 106
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image25", "Image")
+        WITH loc_oPag1.img_4c_Image25
+            .Picture = gc_4c_CaminhoIcones + "menu1.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 84
+            .Left    = loc_nL + 192
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image26", "Image")
+        WITH loc_oPag1.img_4c_Image26
+            .Picture = gc_4c_CaminhoIcones + "x_planilha1.bmp"
+            .Stretch = 2
+            .Top     = loc_nT + 132
+            .Left    = loc_nL + 204
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+
+        loc_oPag1.AddObject("img_4c_Image27", "Image")
+        WITH loc_oPag1.img_4c_Image27
+            .Picture = gc_4c_CaminhoIcones + "msgstop1.gif"
+            .Stretch = 2
+            .Top     = loc_nT + 180
+            .Left    = loc_nL + 240
+            .Width   = 18
+            .Height  = 17
+        ENDWITH
+    ENDPROC
+
+    *============================================================================
+    * ConfigurarPaginaDados - Configura Page2 (sem campos: form puramente visual)
+    * O formulario sigprico.SCX original nao tem campos de entrada de dados,
+    * lookups nem labels de conteudo ? apenas 27 imagens em Page1.
+    * Page2 existe na estrutura padrao mas nao contem controles de dados.
+    *============================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPag2
+        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- Cabecalho padrao da Page2 (cinza escuro com titulo)
+        loc_oPag2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPag2.cnt_4c_Cabecalho
+            .Top         = 31
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 15
+                .Left      = 12
+                .Width     = THIS.Width
+                .Height    = 40
+                .AutoSize  = .F.
+                .Caption   = "Mapa Visual"
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .AutoSize  = .F.
+                .Caption   = "Mapa Visual"
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *============================================================================
+    * AlternarPagina - Alterna a pagina ativa do PageFrame
+    *============================================================================
+    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+        IF par_nPagina >= 1 AND par_nPagina <= THIS.pgf_4c_Paginas.PageCount
+            THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+        ENDIF
+    ENDPROC
+
+    *============================================================================
+    * BtnIncluirClick - Handler de inclusao
+    * Form sigprico e puramente visual (Mapa Visual com 27 icones): nao possui
+    * dados persistidos nem operacoes CRUD. Informa o usuario e retorna sem
+    * alterar o estado do formulario.
+    *============================================================================
+    PROCEDURE BtnIncluirClick()
+        MsgAviso("Este formul" + CHR(225) + "rio " + CHR(233) + " apenas visual " + ;
+                 "(Mapa Visual do sistema)." + CHR(13) + ;
+                 "N" + CHR(227) + "o h" + CHR(225) + " opera" + CHR(231) + CHR(227) + "o de inclus" + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                 "Aviso")
+    ENDPROC
+
+    *============================================================================
+    * BtnAlterarClick - Handler de alteracao
+    * Form sigprico e puramente visual (Mapa Visual com 27 icones): nao possui
+    * dados persistidos nem operacoes CRUD. Informa o usuario e retorna sem
+    * alterar o estado do formulario.
+    *============================================================================
+    PROCEDURE BtnAlterarClick()
+        MsgAviso("Este formul" + CHR(225) + "rio " + CHR(233) + " apenas visual " + ;
+                 "(Mapa Visual do sistema)." + CHR(13) + ;
+                 "N" + CHR(227) + "o h" + CHR(225) + " opera" + CHR(231) + CHR(227) + "o de altera" + CHR(231) + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                 "Aviso")
+    ENDPROC
+
+    *============================================================================
+    * BtnVisualizarClick - Handler de visualizacao
+    * Form sigprico ja exibe o Mapa Visual completo em Page1 (27 icones
+    * organizados no diagrama). Garante que a pagina de visualizacao esteja
+    * ativa e o PageFrame visivel.
+    *============================================================================
+    PROCEDURE BtnVisualizarClick()
+        IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+            THIS.pgf_4c_Paginas.Visible    = .T.
+            THIS.pgf_4c_Paginas.ActivePage = 1
+            THIS.this_cModoAtual           = "VISUAL"
+        ENDIF
+    ENDPROC
+
+    *============================================================================
+    * BtnExcluirClick - Handler de exclusao
+    * Form sigprico e puramente visual (Mapa Visual com 27 icones): nao possui
+    * dados persistidos nem operacoes CRUD. Informa o usuario e retorna sem
+    * alterar o estado do formulario.
+    *============================================================================
+    PROCEDURE BtnExcluirClick()
+        MsgAviso("Este formul" + CHR(225) + "rio " + CHR(233) + " apenas visual " + ;
+                 "(Mapa Visual do sistema)." + CHR(13) + ;
+                 "N" + CHR(227) + "o h" + CHR(225) + " opera" + CHR(231) + CHR(227) + "o de exclus" + CHR(227) + "o dispon" + CHR(237) + "vel.", ;
+                 "Aviso")
+    ENDPROC
+
+    *============================================================================
+    * CarregarLista - Formulario visual: nao ha lista de dados para carregar
+    *============================================================================
+    FUNCTION CarregarLista()
+        THIS.pgf_4c_Paginas.ActivePage = 1
+        RETURN .T.
+    ENDFUNC
+
+    *============================================================================
+    * AjustarBotoesPorModo - Formulario visual: botoes CRUD ocultos
+    *============================================================================
+    PROTECTED PROCEDURE AjustarBotoesPorModo()
+        *-- Form puramente visual: cnt_4c_Botoes permanece oculto (sem CRUD)
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * HabilitarCampos - Formulario visual: sem campos de entrada
+    *============================================================================
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        *-- Sem controles de entrada de dados
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * LimparCampos - Formulario visual: sem campos a limpar
+    *============================================================================
+    PROTECTED PROCEDURE LimparCampos()
+        *-- Sem controles de entrada de dados
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * FormParaBO - Formulario visual: sem campos a transferir para o BO
+    *============================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        *-- Formulario exclusivamente visual: sem propriedades de dados no BO
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * BOParaForm - Formulario visual: sem campos a popular do BO
+    *============================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        *-- Formulario exclusivamente visual: sem propriedades de dados no BO
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * BtnBuscarClick - Formulario visual: sem operacao de busca
+    *============================================================================
+    PROCEDURE BtnBuscarClick()
+        *-- Form puramente visual: sem dados para buscar
+        RETURN
+    ENDPROC
+
+    *============================================================================
+    * BtnSalvarClick - Formulario visual: retorna para visualizacao
+    *============================================================================
+    PROCEDURE BtnSalvarClick()
+        THIS.pgf_4c_Paginas.ActivePage = 1
+        THIS.this_cModoAtual           = "VISUAL"
+    ENDPROC
+
+    *============================================================================
+    * BtnCancelarClick - Formulario visual: retorna para visualizacao
+    *============================================================================
+    PROCEDURE BtnCancelarClick()
+        THIS.pgf_4c_Paginas.ActivePage = 1
+        THIS.this_cModoAtual           = "VISUAL"
+    ENDPROC
+
+    *============================================================================
+    * BtnEncerrarClick - Fecha o formulario
+    *============================================================================
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *============================================================================
+    * Destroy - Libera recursos ao fechar
+    *============================================================================
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

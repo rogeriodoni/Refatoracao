@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SigPrGf2BO.prg`:**
+
+- **`InicializarCursorGrafico()`** ÔÇö cria `crGrafico1` com a estrutura exata do legado (`gGrafico1s G(4), cChave1s C(100), cempresas C(254), ctitulo1s C(128)`) com `SET NULL ON` para compatibilidade com SQLEXEC.
+
+- **`ObterChavesGrafico(par_aChaves)`** ÔÇö faz `SELECT DISTINCT cEmps` no `crRel1` e popula o array BYREF; o Form usa este resultado para preencher o ComboBox.
+
+- **`CarregarDadosGrafico(par_nLinha, par_aChaves)`** ÔÇö encapsula a l├│gica central do `mGeraGrafico` legado: busca no cache `crGrafico1` pela chave, e se n├úo encontrar, faz SCAN no `crRel1` montando as strings TAB-delimitadas de meses/falhas/recupera├º├Áes, faz `INSERT INTO crGrafico1` + `APPEND GENERAL gGrafico1s CLASS "MSGraph.Chart"`, e atualiza as propriedades `this_*` do BO.
+
+- **`LimparCursorGrafico()`** ÔÇö fecha `crGrafico1` (chamado no Encerrar do Form).
+
+O Form da Fase 3 chamar├í `this_oBusinessObject.CarregarDadosGrafico()` em vez de conter a l├│gica diretamente, e manipular├í as propriedades OLE do `oleGrafico1` ap├│s o retorno do BO.

@@ -1,0 +1,8 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrSddBO.prg` criado com:
+
+- **15 propriedades de dados** mapeadas das colunas reais de `SigPrSnd` (confirmadas no schema.sql):
+  - `this_cIdChaves` (PK char(20)), `this_dDatas`, `this_nDocs`, `this_cHoras`, `this_cMotivos`, `this_cOperas`, `this_cSenhads`, `this_cSolicits`, `this_cUsuars`, `this_nValors`, `this_nTipos`, `this_cEmps`, `this_cFpags`, `this_cEmpdopnums`, `this_nPerlimite`
+- **3 propriedades auxiliares** n├úo persistidas: `this_lProducao` (par├ómetro do form), `this_lSenhDEmps` (flag de SigCdPac, tipo `bit` ÔåÆ `.F.`), `this_cDsEmpresa` (descri├º├úo exibida em Get_Ds_Empresa)
+- **Init()** com TRY/CATCH, configura `this_cTabela = "SigPrSnd"` e `this_cCampoChave = "cIdChaves"`, chama `DODEFAULT()` para inicializar o DataAccess
+
+A pr├│xima fase (2/8) completar├í o BO com `CarregarDoCursor()`, `Inserir()`, `Atualizar()` e os m├®todos de neg├│cio (`GerarSenha`, `CarregarConfigPac`, etc.).

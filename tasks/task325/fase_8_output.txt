@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto e bem formado. A Fase 8 foi conclu├¡da com sucesso.
+
+Resumo do que foi adicionado ao `FormSigPrRet.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `FormParaBO()` | Sincroniza todos os 31 campos de filtro do form ÔåÆ BO |
+| `BOParaForm()` | Sincroniza BO ÔåÆ form + reaplica restri├º├Áes condicionais (When logic) |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles respeitando depend├¬ncias (Enabled condicional dos campos CdGrEstoque, Cgru, etc.) |
+| `LimparCampos()` | Delega para `InicializarCampos()` j├í existente |
+| `CarregarLista()` | Retorna `.T.` ÔÇö form operacional sem grid de lista |
+| `AjustarBotoesPorModo()` | Garante todos os 4 bot├Áes do CommandGroup vis├¡veis/habilitados |
+| `BtnBuscarClick()` | Alias de `BtnConsultaClick()` |
+| `BtnSalvarClick()` | Chama `FormParaBO()` + `BtnConsultaClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` |

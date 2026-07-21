@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. Os 2 problemas GRID-RECORDSOURCE-AUTOBIND foram resolvidos:
+
+- **Linha 2443** (`grd_4c_Disponivel`): ap├│s `.RecordSource = "cursor_4c_Movimentos"`, foram adicionadas as 7 defini├º├Áes de `ControlSource` expl├¡citas (Cpros, Dpros, Units, Qtds, QtBaixas, QtReservas, Saldo) ÔÇö campo a campo, na mesma ordem da configura├º├úo inicial do grid.
+- **Linha 2456** (`grd_4c_ItemXml`): ap├│s `.RecordSource = "cursor_4c_Distribui"`, foram adicionadas as 4 defini├º├Áes de `ControlSource` (Cpros, Dpros, Qtds, Total).
+
+Ambos dentro do mesmo `WITH` block, evitando auto-bind incorreto do VFP9 pela ordem de campos do cursor.

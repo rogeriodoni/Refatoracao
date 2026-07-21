@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added the 4 required event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) before `ENDDEFINE`, each with real semantics for this OPERACIONAL form (not stubs):
+
+- **BtnIncluirClick** ÔÇö insere nova cota├º├úo via BO, marca linha como edit├ível (`this_nIncluir = RECNO()`), desbloqueia grid e d├í foco.
+- **BtnAlterarClick** ÔÇö o SCX legado n├úo tem "Alterar" (edi├º├úo inline), ent├úo replica a sem├óntica marcando a linha corrente como edit├ível e desbloqueando o grid.
+- **BtnVisualizarClick** ÔÇö este form j├í ├® o visualizador; bloqueia grid, cancela edi├º├úo pendente e recarrega dados do banco.
+- **BtnExcluirClick** ÔÇö replica exatamente o bot├úo `delete` do SCX legado (DELETE em `SigCdCot` via BO, com confirma├º├úo `MsgConfirma`).
+
+Os handlers `CmdInserirClick`/`CmdExcluirClick`/`CmdEncerrarClick` originais permanecem intactos, bindados aos bot├Áes f├¡sicos do form.

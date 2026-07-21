@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo no lugar:
+
+1. **`Width = 800`** (linha 12) ÔÇö j├í estava corrigido pelo pipeline. Isso faz `cnt_4c_Sombra.Width = THIS.Width = 800`, eliminando a diferen├ºa visual (`cntSombra.Width` esperado 800 vs obtido 436).
+
+2. **`AjustarBotoesPorModo` agora ├® PUBLIC** (era `PROTECTED PROCEDURE`) ÔÇö corrige viola├º├úo da regra cr├¡tica que exige que `AlternarPagina`, `AjustarBotoesPorModo` e `CarregarLista` sejam PUBLIC.
+
+Os 4 erros de `Dataenvironment` est├úo no limite exato (4/4) e s├úo tolerados pelo validador. As 20 diferen├ºas de labels s├úo n├úo-bloqueantes. Com `cntSombra.Width = 800`, o form deve passar a etapa 07_validarUI na pr├│xima execu├º├úo.

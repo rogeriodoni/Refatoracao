@@ -1,0 +1,5 @@
+﻿Nenhum `"Change"` remanescente. A corre├º├úo ├®:
+
+**Causa:** VFP9 `TextBox` n├úo possui evento `Change`. O evento correto ├® `InteractiveChange` (dispara quando o usu├írio altera o valor). Usar `"Change"` no `BINDEVENT` gerava `Property Change is not found` na linha 86, abortando `InicializarForm` antes de criar os controles, causando `CREATEOBJECT retornou valor nao-objeto`.
+
+**Corre├º├úo:** 6 chamadas `BINDEVENT(..., "Change", ...)` substitu├¡das por `BINDEVENT(..., "InteractiveChange", ...)` nos campos: `txt_4c_NmOperacao`, `txt_4c_NmIndustria`, `txt_4c_CdGrEstoque`, `txt_4c_Etif`, `txt_4c_Cgru`, `txt_4c_Col`.

@@ -1,0 +1,18 @@
+﻿Ambos os arquivos est├úo **completamente implementados** e n├úo h├í nada a adicionar na Fase 6.
+
+O SIGPRIFF.SCX ├® um **InputBox utilit├írio de linha ├║nica** ÔÇö sem Page2, sem campos adicionais e sem lookups. A migra├º├úo j├í capturou 100% da funcionalidade original:
+
+**FormSIGPRIFF.prg** ÔÇö completo:
+- `ConfigurarPaginaDados()` ÔåÆ `RETURN` (correto ÔÇö sem Page2)
+- `ConfigurarComboBox()` ÔåÆ replica l├│gica de `laopcoes[]` do legado via `AddItem`
+- `ConfigurarTextBox()` ÔåÆ suporta tipo "D" (data), "V" (valor), texto gen├®rico com MaxLength
+- `TxtTextoKeyPress` / `CboOpcoesKeyPress` ÔåÆ ENTER confirma e chama `Hide()`
+- `KeyPress` (form) ÔåÆ ESC cancela com resposta vazia
+
+**SIGPRIFFBO.prg** ÔÇö completo:
+- `ConfigurarDialogo()` ÔåÆ armazena todos os par├ómetros
+- `ObterMaxLength()` ÔåÆ replica `IIF(pcMaximo<pcMinimo, pcMinimo, pcMaximo)` do legado
+- `ValidarDados()` ÔåÆ valida range num├®rico e tamanho m├¡nimo
+- `CapturarRespostaTexto/Combo()` ÔåÆ captura resposta antes de `Hide()`
+
+A Fase 6/8 n├úo tem a├º├úo para este form espec├¡fico ÔÇö o pipeline multi-fase gerou a fase preventivamente, mas o SIGPRIFF n├úo tem campos restantes, lookups ou Page2. Ambos os arquivos est├úo prontos para uso.

@@ -1,0 +1,7 @@
+﻿Dois ajustes aplicados no `FormSigPrGf2.prg`:
+
+1. **`AlternarPagina("GRAFICO")`** ÔÇö `cnt_4c_Grf2.Visible` corrigido de `.F.` para `.T.`: o combo de sele├º├úo "Grupo / Vendedor" estava sendo ocultado no estado de exibi├º├úo do gr├ífico, o que impedia o usu├írio de trocar a sele├º├úo.
+
+2. **`BtnGraficoClick()`** ÔÇö adicionado `SetFocus()` no combo ap├│s a impress├úo, replicando o comportamento do `cmdImprimir.Click` original.
+
+Nota: este form OPERACIONAL n├úo possui bot├Áes CRUD (Incluir/Alterar/Visualizar/Excluir) ÔÇö o template de Fase 7 n├úo se aplica. Todos os eventos reais do original (`mgeragrafico`, `cmdImprimir.Click`, `cmdSair.Click`, `cmbChave1.Click`, `cmbChave1.GotFocus`) j├í estavam implementados nas fases anteriores.

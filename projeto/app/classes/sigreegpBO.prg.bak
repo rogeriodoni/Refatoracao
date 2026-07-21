@@ -49,8 +49,8 @@ DEFINE CLASS sigreegpBO AS RelatorioBase
 
     *-- Propriedades internas do relatorio
     this_cNomeRelatorio   = "SigReEg2"
-    this_cCursorDados     = "cursor_4c_EgpRelatorio"
-    this_cCursorCabecalho = "cursor_4c_EgpCabecalho"
+    this_cCursorDados     = "dbRelatorio"
+    this_cCursorCabecalho = "dbCabecalho"
     this_cTipo            = "ESTOQUE"
 
     *--------------------------------------------------------------------------

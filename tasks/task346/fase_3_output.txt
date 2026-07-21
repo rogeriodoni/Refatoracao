@@ -1,0 +1,18 @@
+﻿Arquivo `C:\4c\projeto\app\forms\cadastros\FormAli.prg` criado com sucesso (343 linhas). 
+
+**O que foi criado (Fase 3/8):**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Apenas `DODEFAULT()` ÔÇö FormBase chama `InicializarForm()` |
+| `InicializarForm()` | Cria `AliBO`, chama `ConfigurarPageFrame()`, guarda com `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame `Top=-29`, `Tabs=.F.`, 2 pages com `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_Sombra/Titulo) + `cnt_4c_Botoes` (vazio) + `cnt_4c_Saida` (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (vazio, Left=842, Top=33) |
+| `CarregarLista()` | Chama `Buscar("")`, wira grid via `PEMSTATUS` guard (funciona quando Fase 4 adicionar o grid) |
+| `AlternarPagina()` | Troca ActivePage e recarrega lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrame + Containers |
+| `FormatarGridLista()` | Fonte Tahoma 8 via `SetAll` |
+| `Destroy()` | Limpa BO + `DODEFAULT()` |
+
+**Pr├│xima fase:** Fase 4/8 ÔÇö adicionar Grid `grd_4c_Lista` e bot├Áes CRUD em `cnt_4c_Botoes`/`cnt_4c_Saida`, e bot├Áes Confirmar/Cancelar em `cnt_4c_BotoesAcao`.

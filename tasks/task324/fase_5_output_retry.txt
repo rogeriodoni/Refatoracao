@@ -1,0 +1,12 @@
+﻿All references are consistent. Fase 5 is complete.
+
+## Summary
+
+Refactored `Formsigprrcu.prg` to add a proper `ConfigurarPaginaDados()` method:
+
+- **Added `ConfigurarPaginaDados()`** at line 212 ÔÇö creates a `cnt_4c_Dados` container (Top=100, spanning form width, transparent BackStyle) that houses the status label
+- **Extracted `lbl_4c_Status`** from `ConfigurarPaginaLista()` and moved into `cnt_4c_Dados` ÔÇö semantic separation between action controls (buttons) and dynamic data display (status message)
+- **Updated `InicializarForm()`** to call the new method (line 72)
+- **Updated 2 runtime references** in `AlternarPagina` and `CmdProcessarClick` from `THIS.lbl_4c_Status.Caption` to `THIS.cnt_4c_Dados.lbl_4c_Status.Caption`
+
+This is a real structural change (not a stub) that reflects the OPERATIONAL form pattern: the form has no CRUD Page2, but does display dynamic data (the animated progress message) ÔÇö now properly grouped in its own container.

@@ -1,0 +1,8 @@
+﻿3 edi├º├Áes aplicadas em `SigPrIctBO.prg`:
+
+| # | Problema | Corre├º├úo |
+|---|---------|---------|
+| **CEMPS** | `WHERE Cemps = ?loc_cCodEmp` inventado no SELECT de SigCdEmp para Cabecalho | Removido o WHERE; adicionado `INDEX ON Cemps TAG Cemps` + `SEEK loc_cCodEmp` ap├│s carregar todos os registros |
+| **VOPERS** | `WHERE VOpers = ?loc_cControleChm` ÔÇö `VOpers` ├® TAG de ├¡ndice VFP local, n├úo coluna SQL | Substitu├¡do por `WHERE Emps = ?loc_cEmpsChm AND Nopers = ?loc_nNumosChm`; o fallback agora troca apenas `loc_cEmpsChm` (empresa) mantendo o mesmo `Nopers` |
+| **EMPDOPNCS** | `WHERE EmpDopNcs = ?loc_cEmpDopNcs` ÔÇö falso positivo | `EmpDopNcs` ├® coluna real em SigMvCcr (presente em `loc_cCpoMccr`) e o legado a usa via `SEEK TAG EmpDopNcs`; filtro SQL equivalente ├® correto ÔÇö mantido |
+| **CONTROLCOUNT** | Falso positivo | Ocorre apenas em `PEMSTATUS(loc_oCtrl, "ControlCount", 5)` no Form (c├│digo VFP, n├úo SQL) ÔÇö sem altera├º├úo |

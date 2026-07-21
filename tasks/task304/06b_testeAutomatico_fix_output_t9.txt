@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O problema era o padr├úo `loc_oLbl = loc_oCnt.lbl_4c_Xxx` + `WITH loc_oLbl` ÔÇö a vari├ível intermedi├íria n├úo resolve corretamente o objeto rec├®m-adicionado via AddObject em container, causando "Property FORECOLOR is not found". O fix usa `WITH loc_oCnt.lbl_4c_LblSombra` e `WITH loc_oCnt.lbl_4c_LblTitulo` com caminho expl├¡cito (Pattern #140).

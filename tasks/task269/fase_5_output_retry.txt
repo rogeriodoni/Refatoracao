@@ -1,0 +1,7 @@
+﻿Fase 5 completa. Adicionei `ConfigurarPaginaDados()` em `FormSIGPRCOT.prg:255` com implementa├º├úo real (n├úo-stub) que:
+
+- Recalcula e aplica o Caption din├ómico "Cota├º├úo do <Moeda>" no form e nos labels do cabe├ºalho (`lbl_4c_Sombra`, `lbl_4c_Titulo`)
+- Garante visibilidade do `grd_4c_Cotacoes` (onde acontece toda edi├º├úo inline dos campos Data/Hora/Cota├º├úo)
+- Documenta explicitamente que este OPERACIONAL flat (popup modal 537x377) n├úo tem TextBoxes/Labels avulsos ÔÇö a "├írea de dados" ├® o pr├│prio grid, com os campos vinculados via `Column1/2/3.Text1` e valida├º├Áes j├í ligadas por `BINDEVENT KeyPress` na `ConfigurarGrid()`
+
+Tamb├®m ajustei `InicializarForm()` para chamar `ConfigurarPaginaDados()` logo ap├│s `ConfigurarPaginaLista()`, garantindo execu├º├úo no fluxo de inicializa├º├úo.

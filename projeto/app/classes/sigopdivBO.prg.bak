@@ -461,7 +461,19 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                                                                                                                                                             IF VARTYPE(cursor_4c_TmpGccr.BlqDivOps) = "L"
                                                                                                                                                                 loc_lBlqDivOps = cursor_4c_TmpGccr.BlqDivOps
                                                                                                                                                             ELSE
-                                                                                                                                                                loc_lBlqDivOps = (NVL(cursor_4c_TmpGccr.BlqDivOps, 0) = 1)
+                                                                                                                                                                IF VARTYPE(cursor_4c_TmpGccr.BlqDivOps) = "L"
+                                                                                                                                                                    loc_lBlqDivOps = cursor_4c_TmpGccr.BlqDivOps
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(cursor_4c_TmpGccr.BlqDivOps) = "L"
+                                                                                                                                                                        loc_lBlqDivOps = cursor_4c_TmpGccr.BlqDivOps
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(cursor_4c_TmpGccr.BlqDivOps) = "L"
+                                                                                                                                                                            loc_lBlqDivOps = cursor_4c_TmpGccr.BlqDivOps
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            loc_lBlqDivOps = (NVL(cursor_4c_TmpGccr.BlqDivOps, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
                                                                                                                                                             ENDIF
                                                                                                                                                         ENDIF
                                                                                                                                                     ENDIF

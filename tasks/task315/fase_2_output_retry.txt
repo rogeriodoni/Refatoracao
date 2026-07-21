@@ -1,0 +1,11 @@
+﻿11 PROCEDURE / 11 ENDPROC, 1 FUNCTION / 1 ENDFUNC ÔÇö well balanced. Phase 2 is now complete.
+
+**Summary**: Added the CRUD methods required by Phase 2 validation to `C:\4c\projeto\app\classes\SIGPRNSEBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps all 12 columns of `csOperacoes` (SelImp, Emps, Dopes, Numes, Datas, Valos, Notas, Usuars, ContaOs, ContaDs, Opers, Erros) into `this_*` properties, with `TYPE()` guards per column
+- **`Inserir()`** ÔÇö INSERT into `SigPcOoL` marking the current operation as processed by SIGPRNSE (uses `fUniqueIds()` for `cIdChaves`, `EscaparSQL`/`FormatarNumeroSQL`/`GETDATE()`); calls `RegistrarAuditoria("INSERIR")`
+- **`Atualizar()`** ÔÇö UPDATE `SigPcOoL` marking "LAN├çAMENTO REFEITO" (reprocessing) for the current operation key; calls `RegistrarAuditoria("ATUALIZAR")`
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT into `LogAuditoria` using `GETDATE()` (never `FormatarDataSQL(DATETIME())`, per lesson #119); non-blocking (audit failure doesn't abort caller)
+- **`ObterChavePrimaria()`** ÔÇö updated to composite key `Emps|Dopes|Numes` (operation identity)
+
+Added 12 new properties (`this_lSelImp`, `this_cDopes`, `this_nNumes`, `this_dDatas`, `this_nValos`, `this_cNotas`, `this_cUsuars`, `this_cContaOs`, `this_cContaDs`, `this_cOpers`, `this_cErros`, `this_cIdChave`) so `CarregarDoCursor` has real declared targets. File balance: 11/11 PROCEDURE/ENDPROC, 1/1 FUNCTION/ENDFUNC, single `ENDDEFINE`.

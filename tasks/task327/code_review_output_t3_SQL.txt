@@ -1,0 +1,5 @@
+﻿Confirmado: a linha 259 ├® itera├º├úo de controles VFP9 (`ControlCount` ├® propriedade de container), n├úo SQL. N├úo existe nenhuma cl├íusula `WHERE CONTROLCOUNT` nos arquivos.
+
+O problema reportado ├® um **falso positivo** do scanner: ele confundiu a propriedade VFP9 `ControlCount` (contagem de controles em um container) com uma coluna SQL inventada. O c├│digo SQL nos dois arquivos usa apenas as colunas corretas do original (`ONLINES`, `USUARS`, `CIDCHAVES`, `GRUCONMOES`, `TT`).
+
+**Nenhuma corre├º├úo necess├íria.** O pass SQL est├í limpo ÔÇö n├úo h├í cl├íusula WHERE inventada nos arquivos `FormSigPrRss.prg` e `SigPrRssBO.prg`.

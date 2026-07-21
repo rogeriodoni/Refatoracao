@@ -1,0 +1,22 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\sigprenvBO.prg` criado com 258 linhas.
+
+**O que foi implementado:**
+
+| Propriedade | Tipo | Origem |
+|---|---|---|
+| `this_nEtqIni` / `this_nEtqQtd` | N | Campos do form (Etq_Ini/Etq_Qtd) |
+| `this_nTipoEtq` / `this_cDescTipoEtq` | N/C | Opt_Tipo ÔåÆ SigCdTpe.nTipos/cEtiquetas |
+| `this_cNomeImpressora` / `this_nTpImpressora` | C/N | Opt_Impressora ÔåÆ SigCdMp |
+| `this_nOpcaoImp` | N | Opcao_Imp (1=Allegro, 2=ZPL, 3=EPL) |
+| `this_nAjVerts` / `this_nAjHorzs` / `this_nAjDenss` / `this_nAjVelos` | N | SigCdPam + SigCdPac |
+| `this_nMaxTpEtis` / `this_nMaxImpEti` / `this_nImpEtis` / `this_cTpCBars` | N/C | SigCdPam |
+
+**M├®todos inclu├¡dos (completos, sem stubs):**
+- `Init()` ÔÇö configura tabela/chave vazia (OPERACIONAL) + DODEFAULT()
+- `CarregarParametros()` ÔÇö l├¬ SigCdPam e SigCdPac via SQLEXEC
+- `CarregarTiposEtiqueta()` ÔÇö l├¬ SigCdTpe (nTipos=6, nSituas=1)
+- `CarregarImpressoras(par_cUsuario)` ÔÇö JOIN SigSyImp + SigCdAcG + SigCdMp para filtrar por usu├írio
+- `PrepararImpressao()` ÔÇö monta `cursor_4c_Impressao` com os itens (equivalente a `dbImpressao`)
+- `LimparImpressao()` ÔÇö ZAP p├│s-impress├úo
+- `InicializarCursorImpressao()` ÔÇö cria cursor vazio no Init do form
+- `Destroy()` ÔÇö fecha todos os cursores

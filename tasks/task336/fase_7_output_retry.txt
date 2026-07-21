@@ -1,0 +1,10 @@
+﻿Fase 7 complete. Added 4 CRUD event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) to `FormSigPrTar.prg` (lines 327-498).
+
+Since SIGSERPR is a modal sub-form with no CRUD toolbar (only an EditBox for inspection notes + Encerrar button), the handlers operate on the shared `csTmpPrTar.ObsInsp` field:
+
+- **BtnIncluirClick**: clears ObsInsp, sets EditBox editable, focus + `this_lHouveIncl = .T.`
+- **BtnAlterarClick**: enables editing of current record's ObsInsp
+- **BtnVisualizarClick**: returns EditBox to read-only mode (azul canonical)
+- **BtnExcluirClick**: confirms + clears ObsInsp, sets `this_lHouveExcl = .T.`
+
+All handlers use `TRY/CATCH` with `MsgErro` (LN+PROC), `MsgAviso` for UX validation, accented chars via `CHR()`, guard against missing cursor/field, and follow the pipeline's canonical patterns (no MESSAGEBOX, no stubs, no TODOs).

@@ -1,0 +1,13 @@
+﻿56 `PROCEDURE` / 56 `ENDPROC` ÔÇö perfectly balanced. 1 `ENDDEFINE`. 29 BINDEVENTs. All 6 KeyPress handlers have `LPARAMETERS`. Every TRY has a CATCH with MsgErro.
+
+Phase 6 is complete. `Formacu.prg` is now 2371 lines with full functionality:
+
+**What was added:**
+- `ConfigurarAbaCadastro()` ÔÇö Page3 with 7 TextBoxes/Labels, 6 OptionGroups (nested WITH Buttons pattern), `grd_4c_Grupos` (3 cols, checkbox col1 Sparse=.F.), 10 BINDEVENTs for lookup fields
+- `ConfigurarAbaEmpresa()` ÔÇö Page4 with `grd_4c_Empresas` (2 cols, checkbox col1)
+- `ConfigurarAbaCampos()` ÔÇö Page5 with `grd_4c_AcCamp` (3 cols, col3 ComboBox Normal/Oculto/Bloqueado)
+- 5 grid loaders: `CarregarGruposGrid`, `CarregarEmpresasGrid`, `CarregarAcessosGrid` (includes `ISNULL(a.usuarios,'') AS usuarios` for SalvarAcessos compatibility), `CarregarBarraGrid`, `CarregarCamposGrid`
+- `FormParaBO` / `BOParaForm` / `HabilitarCampos` / `LimparCampos` / `AjustarBotoesPorModo`
+- All 8 CRUD/action handlers + 4 special handlers (Copiar/LimSenha/EfetuarCopia/CancelarCopia)
+- 6 lookup sets (18 methods): Cargo, Departamento, Setores, IClis+RClis (shared picker fills both), CopiarUsuario
+- `Destroy()` closes 3 additional cursors; `ConfigurarPaginaDados()` calls all 5 abas + BINDEVENTs for Confirmar/Cancelar

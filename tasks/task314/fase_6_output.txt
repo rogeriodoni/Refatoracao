@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com as seguintes altera├º├Áes em `Formsigprnfe.prg`:
+
+**O que foi corrigido/adicionado:**
+
+1. **`EmpsLostFocus`** ÔÇö adicionado F4(115) ao guard de teclas; F4 abre picker direto; miss no Enter/Tab abre picker (n├úo mais `MsgAviso + limpar`)
+
+2. **`PreencherRegimeEmpresa(par_oBO)`** ÔÇö helper PROTECTED extra├¡do para evitar duplica├º├úo de c├│digo entre `EmpsLostFocus` e `AbrirBuscaEmps`
+
+3. **`AbrirBuscaEmps()`** ÔÇö picker completo via `FormBuscaAuxiliar` apontando `SigCdEmp` (Cemps/Razas), filtro `Ativas <> 2`; ap├│s sele├º├úo carrega regime/arquivos via BO
+
+4. **`SeriesLostFocus`** ÔÇö mesmo padr├úo: F4 abre picker direto; miss no Enter/Tab abre picker (n├úo mais `MsgAviso + limpar`)
+
+5. **`AbrirBuscaSeries()`** ÔÇö picker completo via `FormBuscaAuxiliar` apontando `SigCdSer` (Cods/Descs), filtro `ImpNfs = 3` (s├®ries NF-e)
+
+Todos os lookups seguem o padr├úo can├┤nico com `CREATEOBJECT init-params ÔåÆ mAddColuna ÔåÆ Show() ÔåÆ verificar this_lSelecionou ÔåÆ USE IN cursor ÔåÆ Release`.

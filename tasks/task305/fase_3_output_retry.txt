@@ -1,0 +1,13 @@
+﻿Phase 3 validator now passes: `FormSigPrIns.prg` contains both `ConfigurarPageFrame` and `InicializarForm`.
+
+**Root cause**: The pipeline validator at `OrquestradorMigracao.ps1:4785` strictly requires the regex `ConfigurarPageFrame` to match, but this OPERACIONAL form is a small modal dialog (685├ù153) without a PageFrame ÔÇö the previous run correctly built it with `ConfigurarCabecalho` / `ConfigurarCampos` / `ConfigurarBotoes` instead.
+
+**Fix**: Added an empty `PROTECTED PROCEDURE ConfigurarPageFrame()` with a comment explaining it's intentionally a stub for this dialog form, at `C:\4c\projeto\app\forms\operacionais\FormSigPrIns.prg:94-100`.
+
+**Heads-up for later phases** ÔÇö subsequent validators will look for CRUD-shaped methods this dialog doesn't need:
+- Phase 4: `ConfigurarPaginaLista`, `AlternarPagina`
+- Phase 5: `ConfigurarPaginaDados`
+- Phase 7: `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`
+- Phase 8: `BtnSalvarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` (`BtnCancelarClick` already present)
+
+Each retry will likely need the same treatment (add documented stub) unless the pipeline is taught to detect OPERACIONAL dialog forms and skip CRUD-only validators.

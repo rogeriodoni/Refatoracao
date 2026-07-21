@@ -1,0 +1,5 @@
+﻿**Fase 7/8 conclu├¡da.** O arquivo j├í continha os 4 eventos principais, mas fiz duas corre├º├Áes de comportamento:
+
+1. **`BtnIncluirClick()`** ÔÇö corrigido para espelhar o legado: exige sele├º├úo no grid, pr├®-preenche a empresa a partir do cursor (como o legado faz via `crSigCdEmp.CEmps`), seta as props do BO e chama `BOParaForm()` para popular os dois ListBoxes de usu├írios. O flow agora ├® id├¬ntico ao `BtnAlterarClick()` exceto por usar `NovoRegistro()`.
+
+2. **`HabilitarCampos()`** ÔÇö corrigido: o campo empresa agora ├® **ReadOnly em INCLUIR e ALTERAR**, e edit├ível **apenas em VISUALIZAR** (mapeando `Get_Empresa.When = (pcEscolha='PROCURAR')` do legado). O comportamento anterior estava invertido.

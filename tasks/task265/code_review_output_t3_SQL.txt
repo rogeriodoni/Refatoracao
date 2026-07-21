@@ -1,0 +1,63 @@
+﻿Analisando todos os dados coletados, posso dar um diagn├│stico preciso dos tr├¬s problemas detectados.
+
+---
+
+## An├ílise das 3 ocorr├¬ncias
+
+### 1. `CODIGOS` em WHERE
+
+**Localiza├º├úo:** Form linha 2282 e BO linha 953-954:
+```prg
+loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE RTRIM(codigos) = " + EscaparSQL(loc_cVal)
+```
+
+**Resultado:** `codigos` **├ë A CHAVE PRIM├üRIA de SigCdGcr** (confirmado em `schema.sql` linha 3728 e constraint `sigcdgcr_codigos` linha 3836). O WHERE est├í correto. **Falso positivo** do checker ÔÇö a lista de colunas originais que ele usou como refer├¬ncia ├® das queries de `CsSigCqChi`, n├úo de `SigCdGcr`.
+
+---
+
+### 2. `EMITIDOS` em WHERE
+
+**Busca no form:** Nenhuma ocorr├¬ncia de `WHERE.*emitidos` (sem prefixo N) ÔÇö o Grep retornou zero resultados.
+
+**O que existe no form linha 2073:**
+```prg
+loc_cSQL = "SELECT bancos, valors, ncheques, datas, emitidos, cancelas, favos " + ;
+           "FROM SigCqChi " + ;
+           "WHERE bancos = " + EscaparSQL(loc_cBanco) + ;
+```
+`emitidos` est├í na lista do **SELECT**, n├úo no **WHERE**. `emitidos` ├® o nome correto da coluna no SQL Server (confirmado em `schema.sql` linha 10105).
+
+**O que existe no BO linha 331:**
+```prg
+WHERE NMarca1s = 0 AND NEmitidos = 0 AND NCancelas = 0
+```
+`NEmitidos` (com prefixo N) ├® a coluna do cursor local, criada pela convers├úo `IIF(Emitidos, 1, 0) AS NEmitidos` no BO linha 245. **Correto.**
+
+**Resultado:** Nenhum WHERE usa `emitidos` sem prefixo N. O BO `ImprimirChequesMatricial` inclusive documenta explicitamente que espera colunas `emitidos, cancelas` do cursor. **Falso positivo.**
+
+---
+
+### 3. `CONTROLCOUNT` em WHERE
+
+**Localiza├º├úo:** Form linhas 1683 e 1700:
+```prg
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+    THIS.TornarSubControlesVisiveis(loc_oControl)
+ENDIF
+```
+
+`ControlCount` ├® uma **propriedade nativa VFP9 de containers**, verificada com `PEMSTATUS()`. N├úo h├í SQL nenhum nessa linha ÔÇö ├® c├│digo de itera├º├úo de controles visuais. **Falso positivo.**
+
+---
+
+## Conclus├úo
+
+Todos os tr├¬s problemas detectados s├úo **falsos positivos** do analisador autom├ítico:
+
+| # | Coluna | Motivo do Falso Positivo | Status |
+|---|--------|--------------------------|--------|
+| 1 | `CODIGOS` | Checker confundiu a refer├¬ncia de WHERE de `CsSigCqChi` com query de `SigCdGcr`; `codigos` ├® PK v├ílida | C├│digo correto |
+| 2 | `EMITIDOS` | `emitidos` est├í na lista SELECT, n├úo no WHERE; `NEmitidos` (N prefix) no WHERE do cursor local ├® correto | C├│digo correto |
+| 3 | `CONTROLCOUNT` | ├ë propriedade VFP9 (`loc_oControl.ControlCount`), n├úo coluna SQL | C├│digo correto |
+
+**Nenhuma altera├º├úo ├® necess├íria.** Alterar o c├│digo para "corrigir" esses falsos positivos quebraria funcionalidade v├ílida (ex: remover `codigos` do WHERE de SigCdGcr deixaria o lookup de grupos sem filtro).

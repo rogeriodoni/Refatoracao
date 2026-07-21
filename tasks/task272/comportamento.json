@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCTC",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\n*!*\tWith Thisform.ParentForm.Pagina.Lista\n*!*\t\tFor lnI=1 to .Grupo_Op.ButtonCount\n*!*\t\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n*!*\t\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n*!*\t\t\tEndIf\n*!*\t\tEndFor\n*!*\t\t.cmdFPOper.Enabled = plHabilita\n*!*\t\t.Grupo_Saida.Sair.Enabled = plHabilita\n*!*\tEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha, pcEmps, pcDopes, pnNumes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\n\nThisForm.pcEdn = pcEmps + pcDopes + Str(pnNumes,6)\n\nWith Thisform\n\t.Caption = 'Cotações ' + AllTrim( Proper( ThisForm.pcEdn ) )\n\t\n*!*\t\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n*!*\t\t.Left    = Thisform.ParentForm.Left + ;\n*!*\t\t\t\t   Thisform.ParentForm.Pagina.Lis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "pcEdn = pcEmps + pcDopes + Str,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.ParentForm.ParentForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'CrListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.CMoes\n\tReplace Descrs With CrListaRemota.DMoes in LocalCtMoe\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Empty( LocalCtMoe.cMoes ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.cmdExcluir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select LocalCtMoe\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.cmdSair",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\t\tSelect LocalCtMoe\n\t\tGo Bottom\n\t\tGo Top\n\t\t\n\t\tSelect cMoes,sum(1) as TT From LocalCtMoe GROUP by 1 Into cursor Totais\n\t\tSelect Totais\n\t\tScan\n\t\t\tIf TT > 1\n\t\t\t\tMessageBox('Moedas '+Alltrim(Totais.cMoes)+' Digitada em Duplicidade!!!!',0+16,'Atenção')\n\t\t\t\tReturn .f.\n\t\t\tEndIf\n\t\tEndScan\n\t\t\n\t\tSelect CrSIGPRCTC\n\t\tZap\n\t\tSelect LocalCtMoe\n\t\tScan\n\t\t\tScatter Memvar\n\t\t\tIf Empty(m.cMoes)\n\t\t\t\tLoop\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cMoes,fUniqueIds,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCTC.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect LocalCtMoe\nLocate for EmpDopNums = ThisForm.pcEdn And CMoes = ' '\nIf Eof()\n\tInsert Into LocalCtMoe(EmpDopNums, pkChaves) Values (ThisForm.pcEdn,fUniqueIds())\nEndIf\n\nSelect LocalCtMoe\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEdn,fUniqueIds",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCTC.cmdSair.Click",
+      "queryOriginal": "\t\tSelect cMoes,sum(1) as TT From LocalCtMoe GROUP by 1 Into cursor Totais",
+      "tabelas": "LocalCtMoe",
+      "colunas": "cMoes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCTC.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into LocalCtMoe(EmpDopNums, pkChaves) Values (ThisForm.pcEdn,fUniqueIds())",
+      "tabelas": "LocalCtMoe",
+      "colunas": "EmpDopNums,pkChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalCtMoe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

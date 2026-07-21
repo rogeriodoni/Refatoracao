@@ -1,0 +1,7 @@
+﻿As 3 corre├º├Áes est├úo aplicadas:
+
+1. **[GRID-WITH]** (`FormSigPrApr.prg` linha ~786): Removidas as 6 linhas redundantes dentro do `WITH THIS.grd_4c_Dados` (`.RecordSource` + `.Column1-5.ControlSource`). O cursor n├úo existe ainda neste ponto; `CarregarLista()` j├í faz o bind correto logo ap├│s.
+
+2. **[CONTAINER-VISIVEL]** (`FormSigPrApr.prg` `TornarControlesVisiveis`): Movido o `INLIST("cnt_4c_cabecalho")` check para **antes** do bloco de recurs├úo. Agora `cnt_4c_Cabecalho` ├® completamente ignorado (nem recurs├úo nos filhos, nem `Visible=.T.`).
+
+3. **[NULL-CURSOR]** (`SigPrAprBO.prg` `CarregarDadosIniciais`): Trocado `SET NULL OFF` por `SET NULL ON` antes do `CREATE CURSOR`, adicionado `NULL` em cada campo, e inserido `SET NULL OFF` ap├│s `INDEX ON`. O cursor criado pelo BO em `ProcessarReajuste` agora aceita NULLs do SQL Server.

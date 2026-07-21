@@ -1,0 +1,11 @@
+﻿**Falso positivo confirmado.** `THIS.Controls(N)` ├® uma **propriedade array nativa do VFP9** ÔÇö n├úo ├® um m├®todo customizado que precise ser definido no form ou no FormBase.
+
+No VFP9, todo objeto Form e Container possui:
+- `ControlCount` ÔÇö n├║mero de controles filhos (tamb├®m usado na linha 398)
+- `Controls(N)` ÔÇö acesso ao N-├®simo controle filho pela posi├º├úo
+
+├ë exatamente o mesmo mecanismo de `CommandGroup.Buttons(N)` ÔÇö um accessor de cole├º├úo nativo. O c├│digo nas linhas 398ÔÇô413 ├® VFP9 padr├úo e correto.
+
+**Nenhuma altera├º├úo necess├íria.** O flag `[METODO-INEXISTENTE]` foi um falso positivo do analisador est├ítico que confundiu acesso ├á cole├º├úo nativa `Controls(N)` com chamada de m├®todo customizado `Controls()`.
+
+O arquivo `FormSIGPRSTF.prg` est├í correto e n├úo requer modifica├º├Áes neste pass.

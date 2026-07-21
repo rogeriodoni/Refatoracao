@@ -1,0 +1,1 @@
+﻿O bug era: `TornarControlesVisiveis()` (sem par├ómetros) chamava `THIS.TornarControlesVisiveis(loc_oControl)` passando um objeto como argumento. VFP9 lan├ºa "No PARAMETER statement is found" porque o m├®todo n├úo declara par├ómetros. A chamada redundante foi removida ÔÇö `TornarSubControlesVisiveis(loc_oControl)` j├í trata os sub-controles recursivamente.

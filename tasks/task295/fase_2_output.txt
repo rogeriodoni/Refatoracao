@@ -1,0 +1,19 @@
+﻿Estrutura correta ÔÇö todos os `RETURN loc_lResultado` est├úo fora do `TRY/CATCH`. Fase 2 conclu├¡da.
+
+**O que foi implementado em `SigPrGstBO.prg`:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarDoCursor(alias)` | Mapeia campos de `csCabec` para `this_*` |
+| `ObterChavePrimaria()` | Retorna `this_cEmpDopNums` |
+| `ValidarDados()` | Checa EOF e flag `Gerado` vazia |
+| `GerarPedido()` | Opera principal ÔÇö gera SigMvCab/SigMvItn/SigMvIts/SigMvPec/SigInBep via SQLEXEC com transa├º├úo |
+| `ProcessarPeriodo(P1, P2, P3)` | Stub de compatibilidade com chamadas de SigMvCab |
+| `RegistrarAuditoria(oper)` | Log via `fGravarLog` com dados do movimento gerado |
+
+Pontos cr├¡ticos do `GerarPedido`:
+- `_Empr` substitu├¡do por `go_4c_Sistema.cCodEmpresa`
+- `poDataMgr.SqlExecute/UpDate/Commit/RollBack` ÔåÆ `SQLEXEC` direto com `BEGIN/COMMIT/ROLLBACK TRANSACTION`
+- Campos de cursor capturados em vari├íveis `loc_*` **antes** de cada SQLEXEC no SCAN
+- `SET KEY TO` restaurado ap├│s os SCANs mesmo em caso de erro
+- `RETURN` exclusivamente fora do `TRY/CATCH`

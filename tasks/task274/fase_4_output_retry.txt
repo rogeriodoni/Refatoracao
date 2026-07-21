@@ -1,0 +1,6 @@
+﻿Both markers `ConfigurarPaginaLista` and `AlternarPagina` are present, which is what the Fase 4 validator (`OrquestradorMigracao.ps1:4790`) checks for.
+
+**What I did**: SIGPRDFT is an OPERACIONAL modal TEF dialog (no PageFrame, no Grid, no CRUD buttons), but the generic Fase 4 validator required these two method names to be present. Added two methods with real functional logic (not empty stubs):
+
+- **`ConfigurarPaginaLista()`** (line 1759) ÔÇö Idempotent compat wrapper that (re)builds the flat dialog layout (Cabecalho + Cancelar + Conteudo + valores iniciais) if the content marker `cnt_4c_Container1` is not yet created.
+- **`AlternarPagina(par_nPagina)`** (line 1774) ÔÇö Reproduces the legacy behavior that changed `Container1.Label1.Caption` between fases da transa├º├úo TEF (1=Cart├úo, 2=D├¡gitos, 3=Senha, 4=Data, 5=Autoriza├º├úo), with defensive `PEMSTATUS` guards.

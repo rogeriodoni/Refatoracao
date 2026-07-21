@@ -1,0 +1,27 @@
+﻿Analisei o c├│digo fonte original, o FormSIGPRPRO.prg atual e o SIGPRPROBO.prg. O FormSIGPRPRO **j├í est├í completo**.
+
+## Situa├º├úo
+
+O SIGPRPRO.SCX original ├® um **popup de consulta somente-leitura** que:
+- ├ë aberto por outro form passando par├ómetros `(pFrm, pPro)`
+- Exibe caracter├¡sticas de um produto (grid + complemento + memo)
+- Tem apenas **1 bot├úo**: "OK" para fechar
+
+O template de Fase 7/8 (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) **n├úo se aplica** a este form porque:
+
+1. O SCX original **n├úo possui esses bot├Áes** ÔÇö adicion├í-los violaria o PILAR 1 (fidelidade UX)
+2. Adicionar stubs violaria a regra "NUNCA criar stubs com MsgAviso"
+
+## Eventos j├í implementados (Fase 6)
+
+Todos os eventos do original est├úo implementados:
+
+| Original | Migrado | Status |
+|---|---|---|
+| `GradeCarac.AfterRowColChange` | `GrdDadosAfterRowColChange` | Ô£ô linha 484 |
+| `Ok.Click` | `CmdOkClick` | Ô£ô linha 496 |
+| `GetMemo.When ÔåÆ .F.` | `edt_4c_Infos.ReadOnly = .T.` | Ô£ô na configura├º├úo |
+| `getComples.When ÔåÆ .F.` | `txt_4c_Comples.ReadOnly = .T.` | Ô£ô na configura├º├úo |
+| `Text1.When ÔåÆ .F.` | `Column1.ReadOnly = .T.` | Ô£ô na configura├º├úo |
+
+O FormSIGPRPRO.prg (504 linhas) e SIGPRPROBO.prg (280 linhas) est├úo **100% completos e funcionais**. Nenhuma altera├º├úo ├® necess├íria ÔÇö a Fase 7/8 para este form espec├¡fico ├® conclu├¡da sem modifica├º├Áes, pois o template gen├®rico n├úo corresponde ao tipo "popup read-only" deste form.

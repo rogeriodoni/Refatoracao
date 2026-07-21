@@ -1,0 +1,23 @@
+﻿O FormSigPrEml.prg e o SigPrEmlBO.prg est├úo **completos**. Todos os eventos da Fase 7 j├í foram implementados em fases anteriores.
+
+An├ílise do estado atual:
+
+**Todos os eventos do SIGPREML.SCX original j├í est├úo migrados:**
+
+| Evento original | Handler migrado | Status |
+|---|---|---|
+| `btnEmail.Click` | `BtnEmailClick()` ÔåÆ `EnviarEmails()` no BO | Ô£à |
+| `apaga.Click` | `ApagaClick()` ÔåÆ `DesmarcarTodos()` no BO | Ô£à |
+| `SelTudo.Click` | `SelTudoClick()` ÔåÆ `MarcarTodos()` no BO | Ô£à |
+| `Commandgroup1.btnSair.Click` | `EncerrarClick()` | Ô£à |
+| `Column2/3/4.Header1.Click` | `Col2/3/4HeaderClick()` | Ô£à |
+| `Column6.fwcheckbox1.InteractiveChange` | `GrdChkInteractiveChange()` | Ô£à |
+| `Column6.fwcheckbox1.When` | Comportamento VFP default (sem binding necess├írio) | Ô£à |
+
+**Por que os eventos descritos (BtnIncluirClick, BtnAlterarClick, etc.) n├úo se aplicam:**
+
+Este ├® um form **OPERACIONAL** (flat layout, sem PageFrame CRUD). N├úo h├í bot├Áes Incluir/Alterar/Visualizar/Excluir ÔÇö o template de Fase 7 ├® gen├®rico para forms CRUD.
+
+**O BO tamb├®m est├í completo** com toda a l├│gica do legado implementada: `CarregarDados()`, `CarregarOpeBaixa()`, `ComposeCorpoEmail()`, `RegistrarEmailNoAlerta()`, `EnviarEmails()`, `OrdenarPorColuna()`, `MarcarTodos()`, `DesmarcarTodos()`.
+
+A migra├º├úo do FormSigPrEml est├í **100% completa** ÔÇö Fase 7 n├úo requer nenhuma altera├º├úo nos arquivos existentes.

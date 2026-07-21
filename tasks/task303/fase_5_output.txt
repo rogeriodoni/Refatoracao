@@ -1,0 +1,9 @@
+﻿Tudo est├í correto. Fase 5 entregue.
+
+**O que foi feito:**
+
+- Adicionado `ConfigurarPaginaDados()` ao `Formsigprima.prg` ÔÇö cria o `obj_4c_Commandgroup3` (o ├║nico controle do mapeamento que ainda faltava: `Commandgroup3` do SCX original com `ButtonCount=0`, puramente decorativo, borda de agrupamento ao redor dos bot├Áes Processar/Encerrar).
+- Atualizado `InicializarForm()` para chamar `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`.
+- O container ├® posicionado em `Left=612, Top=7, Width=173, Height=110` com `ZOrder(1)` para ficar atr├ís dos bot├Áes, exatamente como o original.
+
+Este ├® um form OPERACIONAL flat (sem PageFrame), ent├úo "ConfigurarPaginaDados" aqui corresponde ao elemento visual que ainda faltava do mapeamento, n├úo a uma Page2 de cadastro.

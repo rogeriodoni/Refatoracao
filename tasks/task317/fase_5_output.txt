@@ -1,0 +1,7 @@
+﻿Tudo correto. O arquivo tem agora 704 linhas. As tr├¬s modifica├º├Áes foram aplicadas com sucesso:
+
+1. **`TxtGetSenhaLostFocus`** ÔÇö adicionados: check `DOC INEXISTENTE`, acumula├º├úo TipoCampo 121/122 no `loc_cCupom`, tratamento ProximoComando=20 (`"0"` + LOOP), e chamada final a `THIS.MontaRetorno(loc_cCupom)` quando retorno=0 (faltava completamente).
+
+2. **`TxtSenhaLostFocus`** ÔÇö adicionados: check `DOC INEXISTENTE`, ProximoComando=30 TipoCampo=515 (envia data), ProximoComando=30 TipoCampo=516 (envia NSU em formato 6 ou 9 d├¡gitos conforme `this_cValor`), TipoCampo 121/122 (acumula cupom), l├│gica `loc_llVias`/`"VIA A SER REIMPRESSA"` (responde `"3"`), ProximoComando=20 (`"0"` + LOOP). Esses eram os 65 linhas do legado que estavam ausentes.
+
+3. **`ConfigurarPaginaDados`** ÔÇö adicionado como stub vazio (mesmo padr├úo do `ConfigurarPaginaLista`) para compatibilidade com o pipeline multi-fase.

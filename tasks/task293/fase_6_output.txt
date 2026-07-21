@@ -1,0 +1,18 @@
+﻿File is clean ÔÇö 3444 lines, ends with `ENDDEFINE`. 
+
+Phase 6 is complete. Here's a summary of what was added:
+
+**BINDEVENT additions in `ConfigurarPagina6()` (lines 913, 920):**
+- `Column1.Text1 "KeyPress" ÔåÆ P6ColC1KeyPress`
+- `Column5.Text1 "KeyPress" ÔåÆ P6ColC5KeyPress`
+
+**Anti-pattern fix in `P6ColC1Valid` and `P6ColC5Valid`:**
+- Replaced `MsgAviso(not found) + REPLACE ... ""` with `THIS.AbrirLookupProdutoP6Col1/5(typed_value)` ÔÇö the picker opens pre-filtered with what the user typed, no blocking dialog
+
+**Four new methods added (lines 3262ÔÇô3382):**
+- `P6ColC1KeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö F4 ÔåÆ `AbrirLookupProdutoP6Col1`
+- `AbrirLookupProdutoP6Col1(par_cFiltro)` ÔÇö `DO FormBuscaAuxiliar` for SigCdPro ÔåÆ fills Cpros/Dpros/Cunis in SelPedra
+- `P6ColC5KeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö F4 ÔåÆ `AbrirLookupProdutoP6Col5`
+- `AbrirLookupProdutoP6Col5(par_cFiltro)` ÔÇö `DO FormBuscaAuxiliar` for SigCdPro ÔåÆ fills Cpro2s in SelPedra
+
+The form now has full F4 lookup support on Page6's product columns, consistent with the pattern established in `FormSigPrGlp.prg`. Ready for Phase 7 (config.prg + menu.prg integration) whenever the pipeline reaches it.

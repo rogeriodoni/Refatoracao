@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `sigprtamBO.prg` agora tem os m├®todos CRUD completos adicionados:
+
+- **`Inserir()`** (linha 386): gera `fUniqueIds()` se cidchaves vazio, monta INSERT com todos os campos do schema (`cidchaves`, `codtams`, `cpros`, `pesoms`, `percs`, `valor`, `diasprz`, `dataalts=GETDATE()`), chama `RegistrarAuditoria("I")`.
+
+- **`Atualizar()`** (linha 424): monta UPDATE WHERE cidchaves, atualiza todos os campos + `dataalts=GETDATE()`, chama `RegistrarAuditoria("A")`.
+
+- **`ExecutarExclusao()`** (linha 455): DELETE WHERE cidchaves, chama `RegistrarAuditoria("E")` ÔÇö m├®todo PROTECTED chamado pelo `BusinessBase.Excluir()`.
+
+Os m├®todos j├í existentes (`CarregarDoCursor`, `ObterChavePrimaria`, `SalvarTamanhos`) foram mantidos intactos. Fase 2/8 pronta para prosseguir para a Fase 3 (Form).

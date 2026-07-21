@@ -1,0 +1,10 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\Formsigproer.prg` foi criado com:
+
+- **DEFINE CLASS Formsigproer AS FormBase** com `Width=400, Height=200, TitleBar=0, ControlBox=.F.` ÔÇö preservando o dialogo compacto do legado (PILAR 1)
+- **Init()** com `LPARAMETERS` para os 8 par├ómetros originais (`EndSitef, pcCaixa, pcNSU, pcData, pcValor, pcdata, pcHora, pcCodEstabs`), chamando `CarregarDlls()` antes do `DODEFAULT()` para garantir que as DLLs est├úo declaradas quando `IniciarProtocolo()` for chamado
+- **CarregarDlls()** ÔÇö declara as 3 fun├º├Áes da `CliSiTef32I.DLL` (equivale ao `PROCEDURE Load` do legado)
+- **InicializarForm()** ÔÇö cria BO, hidrata com par├ómetros, valida EndSitef, chama `CarregarDadosEmpresa()` + `IniciarProtocolo()` no BO, monta layout; usa IFs aninhados (sem RETURN dentro do TRY ÔÇö regra cr├¡tica #1)
+- **ConfigurarCabecalho()** ÔÇö header cinza 400├ù80px com lbl_4c_Sombra/lbl_4c_Titulo, usando o padr├úo `loc_oCab.AddObject` + `WITH loc_oCab.filho` (evitando WITH aninhado)
+- **ConfigurarAreaPrincipal()** / **ConfigurarSaida()** ÔÇö containers vazios para Fase 4 adicionar Shape, TextBoxes e CommandGroup CANCELA
+- **RetornoFalha()** ÔÇö delega para `BO.RetornoFalha()` e chama `THIS.Release()`
+- **Destroy()** ÔÇö limpa refer├¬ncia ao BO e chama `DODEFAULT()`

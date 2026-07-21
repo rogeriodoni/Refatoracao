@@ -1,0 +1,22 @@
+﻿Ap├│s ler ambos os arquivos, entendo o quadro completo.
+
+**FormSIGPRMEI ├® um formul├írio OPERACIONAL especial** ÔÇö n├úo ├® um CRUD, ├® um di├ílogo de processamento de 500├ù147 pixels. O original tem apenas:
+- Container cabe├ºalho + 2 labels t├¡tulo
+- 2 bot├Áes (Processar + Encerrar)
+- 2 labels de status
+
+**A Fase 4 n├úo ├® aplic├ível a este form.** O pipeline gerou essa fase genericamente assumindo estrutura CRUD (Page1/Page2 + grid + bot├Áes CRUD), mas SIGPRMEI n├úo tem e nunca teve essa estrutura no legado.
+
+**Ambos os arquivos j├í est├úo completos:**
+- `SIGPRMEIBO.prg` ÔÇö Fases 1+2: BO completo com `LerArquivos()` (processa XMLs de pedidos web, insere SigMvCab/SigMvItn/SigMvpar/SigCdCli com transa├º├Áes), `GravarArquivos()` (gera estoque.xml), `TiraAcima128()`, CRUD padr├úo
+- `FormSIGPRMEI.prg` ÔÇö Fase 3: Form completo com `ConfigurarCabecalho()`, `ConfigurarBotoes()`, `ConfigurarLabels()`, `BtnProcessarClick()` (loop de processamento com INKEY), `Activate()` (modo autom├ítico), `Destroy()`
+
+**Verifica├º├úo do alinhamento com o original:**
+- `cmdBtnForm.Command1 (btnCopiar.Click)` ÔåÆ `BtnProcessarClick()` Ô£ô
+- `cmdBtnForm.Command2 (btnSair.Click)` ÔåÆ `BtnEncerrarClick()` Ô£ô
+- `ThisForm.LerArquivos()` ÔåÆ `this_oBusinessObject.LerArquivos()` Ô£ô
+- `ThisForm.GravarArquivos()` ÔåÆ `this_oBusinessObject.GravarArquivos()` Ô£ô
+- `ThisForm.Parametrizado` ÔåÆ `this_lParametrizado` Ô£ô
+- Auto-start em `Activate` quando parametrizado Ô£ô
+
+**Fase 4/8 conclu├¡da como N/A** ÔÇö form OPERACIONAL sem PageFrame n├úo requer `ConfigurarPaginaLista()` nem `AlternarPagina()`. A migra├º├úo est├í funcional e completa desde a Fase 3.

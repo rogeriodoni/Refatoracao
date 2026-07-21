@@ -1,0 +1,17 @@
+﻿`Formsigprite.prg` criado em `C:\4c\projeto\app\forms\operacionais\Formsigprite.prg` com 1310 linhas.
+
+**O que foi entregue na Fase 3:**
+
+- `DEFINE CLASS Formsigprite AS FormBase` com todas as propriedades visuais do legado (Width=1000, TitleBar=0, ControlBox=.F., FontName="Verdana")
+- `Init(par_cEmp, par_cDop, par_nNum, par_lDis, par_cCnx)` ÔÇö recebe os mesmos 5 par├ómetros do legado
+- `InicializarForm()` ÔÇö inicializa BO, passa par├ómetros, constr├│i layout completo
+- `ConfigurarCabecalho()` ÔÇö container cinza (RGB 100,100,100) com lbl_4c_Sombra/Titulo (AutoSize=.F.)
+- `ConfigurarBotoesAcao()` ÔÇö cmd_4c_Encerrar (Left=917, can├┤nico), cmd_4c_Subniveis, cmd_4c_Entrega com ├¡cones e fontes exatas do legado
+- `ConfigurarShapes()` ÔÇö shpProdutos, shpDescricao, shpCmdSair, shpDisps
+- `ConfigurarGrdCabec()` ÔÇö grid de 4 colunas (cabe├ºalho da OP)
+- `ConfigurarGrdItens()` ÔÇö grid de 11 colunas com Courier New, DynamicForeColor/BackColor para QtdSs e disponibilidade
+- `ConfigurarAreaDescricao()` ÔÇö TextBox/EditBox somente-leitura + img_4c_FigJpg oculta
+- `ConfigurarGrdRodape()` ÔÇö grid de 11 colunas com fundo amarelo-claro (totais por moeda)
+- `TornarControlesVisiveis()` ÔÇö respeita img_4c_FigJpg (sempre oculta) e controles de disponibilidade
+- `ConfigurarBINDEVENTs()` ÔÇö todos os eventos (AfterRowColChange, DblClick produto, GotFocus redirecionamentos)
+- `CarregarItens()`, `GrdItensAfterRowColChange()` (imagem produto), `GrdItensProdutoDblClick()`, `CmdSubniveisClick()`, `CmdEntregaClick()`, `Destroy()`

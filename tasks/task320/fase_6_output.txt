@@ -1,0 +1,14 @@
+﻿Todos os edits est├úo corretos. A Fase 6 est├í completa.
+
+**Resumo das altera├º├Áes aplicadas em `FormSigPrPpc.prg`:**
+
+1. **Header** atualizado para `FASE 6 - COMPLETO`.
+
+2. **CmdConsultarClick** ÔÇö 3 valida├º├Áes de UI adicionadas antes do `TRY`:
+   - Data inicial > data final ÔåÆ `MsgAviso` + `SetFocus` na DtIni
+   - Grupo vazio ÔåÆ `MsgAviso` + `SetFocus` no campo Grupo
+   - Conta vazia ÔåÆ `MsgAviso` + `SetFocus` no campo Conta
+
+3. **7 m├®todos AbrirBusca\*** corrigidos para o padr├úo can├┤nico:
+   - Removida a l├│gica dupla `IF this_lSelecionou AND this_lAchouRegistro` (sempre `.F.` antes do `Show` ÔÇö bug: c├│digo exato n├úo auto-preenchia nem abria picker)
+   - Agora seguem o padr├úo: `mAddColuna ÔåÆ Show() ÔåÆ IF this_lSelecionou ÔåÆ popular campos ÔåÆ Release()`

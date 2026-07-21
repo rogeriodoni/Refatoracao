@@ -1,0 +1,7 @@
+﻿Zero occurrences ÔÇö the buggy `this_lAchouRegistro` pattern is completely gone. All 10 `AbrirBuscaXxx` methods now use the correct `IF !loc_oForm.this_lSelecionou` pattern that correctly handles all three cases:
+
+- **Init found 1 record and auto-selected** ÔåÆ `this_lSelecionou=.T.` at creation ÔåÆ `IF !lSelecionou` skipped ÔåÆ fields filled directly
+- **Init found multiple records** ÔåÆ `this_lSelecionou=.F.` ÔåÆ picker opens via `Show()` ÔåÆ user picks ÔåÆ fields filled  
+- **Init found 0 records** ÔåÆ `this_lSelecionou=.F.` ÔåÆ picker opens (shows empty) ÔåÆ user can search manually
+
+Phase 6 is complete. The `Formsigprccp.prg` migration is now fully functional with no stubs or TODOs.

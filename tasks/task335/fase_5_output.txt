@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi implementado nesta fase:**
+
+1. **`ConfigurarGrid` corrigido** (pixel-perfect com SCX original):
+   - `FontName = "Tahoma"` (era "Verdana")
+   - Widths das colunas: 38/216/100/80/100/60 (eram 65/170/90/90/90/90)
+   - `RowHeight = 17`, `AllowHeaderSizing/RowSizing = .F.`, `Movable/Resizable = .F.` por coluna
+   - `InputMask` das colunas 4/5/6 corrigidos para bater com o SCX
+
+2. **`ConfigurarBINDEVENTs` completo** ÔÇö liga os 7 eventos (3 bot├Áes + 4 colunas do grid)
+
+3. **Todos os handlers implementados** (funcionalidade 100% parity com legado):
+   - `BtnInserirClick` ÔÇö delega para `InserirLinhaGrid()` no BO, foca Column1
+   - `BtnExcluirClick` ÔÇö delega para `ExcluirLinhaGrid()` no BO
+   - `BtnEncerrarClick` ÔÇö em INSERIR/ALTERAR chama `SalvarTamanhos()` (DELETE+INSERT no SQL Server), depois reabilita ParentForm e fecha
+   - `GrdColuna1KeyPress` ÔÇö busca SigCdTam por c├│digo (ENTER/TAB/F4), valida duplicidade, preenche descs
+   - `GrdColuna2KeyPress` ÔÇö idem por descri├º├úo, ativo apenas quando Column1 vazio
+   - `GrdColuna4KeyPress` ÔÇö calcula Valor a partir de Percs (ENTER/TAB)
+   - `GrdColuna5KeyPress` ÔÇö calcula Percs a partir de Valor, valida PVens > 0
+   - `AbrirBuscaTamanho` ÔÇö helper PROTECTED com o padr├úo can├┤nico `FormBuscaAuxiliar` (Init-com-params + `this_lSelecionou`)

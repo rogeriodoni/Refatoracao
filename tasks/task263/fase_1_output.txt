@@ -1,0 +1,9 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\SIGPRCCRBO.prg`. 
+
+**Resumo da Fase 1/8:**
+
+- `SIGPRCCRBO` herda de `RelatorioBase` (n├úo BusinessBase, pois ├® REPORT)
+- Propriedades declaradas: `this_cRelatorio = "SigPrCcr"`, `this_cCursorDados = "CsRelatorio"`, `this_cMensagemErro = ""`
+- `Init()` completo com `DODEFAULT()`
+- Como este form n├úo tem campos de filtro (Height=130, apenas cabe├ºalho+bot├Áes), n├úo h├í propriedades `this_c*` de filtro para declarar
+- Inclu├¡ `PrepararDados()` completo (Fase 2 de REPORT BOs), pois o BO ├® trivial e a regra de completude pro├¡be stubs ÔÇö a l├│gica replica exatamente o `processamento` do legado: verifica `CrProdutos`, busca raz├úo social em `SigCdEmp`, cria `CsCabecalho` e `CsRelatorio` com `lMarca = 1`

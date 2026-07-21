@@ -1,0 +1,7 @@
+﻿Both fixes are correct. Here's the summary:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` now uses `LOOP` at line 1586 when it encounters `CNT_4C_CABECALHO` or `IMG_4C_FIGJPG`. This skips both the `Visible=.T.` assignment AND the recursive descent into those containers, so a hidden container stays fully hidden (children included).
+
+**[LAYOUT-POSITION]** ÔÇö The outer Page1 period label was renamed from `lbl_4c_Label1` to `lbl_4c_Periodo` (lines 362ÔÇô363). This removes the naming collision with the original SCX inner-page `Label1` (which maps correctly to `lbl_4c_CarregarXml` at Top=213, Left=55 on the inner page).
+
+The remaining 6 reported issues were confirmed false positives: OptionGroup buttons all have `.Left` defined, `ObterNodeValue` is implemented at line 2780, and both "GRID-WITH" matches are a `DO FORM ... WITH param` and a `REPLACE ... Total WITH loc_nTot` ÔÇö not `WITH ... ENDWITH` blocks.

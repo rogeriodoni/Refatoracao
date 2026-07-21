@@ -1,0 +1,264 @@
+﻿{
+    "taskId":  "task343",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-21T13:04:57",
+    "atualizadoEm":  "2026-07-21T14:12:25",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-21T13:04:57",
+                                            "fim":  "2026-07-21T13:04:57",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task343\\SIGCDACJ.sct",
+                                            "baseName":  "SIGCDACJ",
+                                            "scxFile":  "C:\\4c\\tasks\\task343\\SIGCDACJ.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-21T13:04:57",
+                                          "fim":  "2026-07-21T13:04:57",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDACJ",
+                                          "txtFile":  "C:\\4c\\tasks\\task343\\SIGCDACJ_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T13:04:57",
+                                              "fim":  "2026-07-21T13:04:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task343\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T13:04:59",
+                                              "fim":  "2026-07-21T13:05:07",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task343\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task343\\meta_prompt.md",
+                                              "boClass":  "ACJBO",
+                                              "formClass":  "FormACJ",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task343\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T13:05:07",
+                                              "fim":  "2026-07-21T13:05:07",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task343\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T13:05:08",
+                                               "fim":  "2026-07-21T13:05:08",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task343\\esqueletos",
+                                               "arquivos":  [
+                                                                "ACJBO_esqueleto.prg",
+                                                                "FormACJ_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T13:05:08",
+                                       "fim":  "2026-07-21T13:41:34",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\ACJBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  31.72,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormACJ.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1116
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-21T13:41:34",
+                                                  "fim":  "2026-07-21T13:41:40",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormACJ.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\ACJBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-21T13:41:40",
+                                                 "fim":  "2026-07-21T13:43:41",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T14:08:19",
+                                       "fim":  "2026-07-21T14:08:57",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T14:08:57",
+                                               "fim":  "2026-07-21T14:12:23",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task343\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-21T14:12:24",
+                                        "fim":  "2026-07-21T14:12:25",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormACJ_20260721141225.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  166,
+                                        "avisos":  166
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T14:12:25",
+                                              "fim":  "2026-07-21T14:12:25",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task343_SIGCDACJ.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-21T13:04:58",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-21T13:04:58",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task343\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-21T13:04:58",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T13:04:59"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-21T13:41:40",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-21T13:41:40",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormACJ_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormACJ.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task343\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-21T13:43:41",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-21T13:43:41",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-21T13:43:41",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-21T14:08:01",
+                                          "passes":  7,
+                                          "problemas":  "[GRID-SQL] Campo \u0027NComps\u0027 usado em ControlSource de cursor_4c_AcJ mas NAO aparece no SELECT SQL; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Descritivo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Inclusão\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Descritivo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Inclusão\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Usuário, Nome. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  7
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-21T14:08:02",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-21T14:08:19",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\ACJBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormACJ.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-21T14:12:23",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T14:12:24",
+                                             "thresholdPx":  5,
+                                             "unmatched":  2,
+                                             "errors":  2,
+                                             "matched":  14,
+                                             "warnings":  13,
+                                             "reportFile":  "C:\\4c\\tasks\\task343\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

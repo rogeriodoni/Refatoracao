@@ -1,0 +1,14 @@
+﻿Os valores no arquivo j├í est├úo corretos. Os problemas reportados pelo validador s├úo **falsos positivos**: o validador est├í lendo as propriedades de `Buttons(1)` (posi├º├úo relativa dentro do OptionGroup) e confundindo com a posi├º├úo do OptionGroup em si.
+
+Confirma├º├úo dos valores reais no arquivo:
+
+| Controle | Propriedade | Valor no arquivo | Valor original |
+|---|---|---|---|
+| `obj_4c_Opt_Tipo` | `.Top` | **179** (linha 268) | 179 Ô£ô |
+| `obj_4c_Opt_Tipo` | `.Left` | **140** (linha 266) | 140 Ô£ô |
+| `obj_4c_Opt_Impressora` | `.Top` | **180** (linha 319) | 180 Ô£ô |
+| `obj_4c_Opt_Impressora` | `.Left` | **396** (linha 317) | 396 Ô£ô |
+
+Os `Top=10` e `Left=10` detectados pelo validador correspondem a `Buttons(1).Top` e `Buttons(1).Left` ÔÇö posi├º├Áes relativas do primeiro bot├úo radio dentro do OptionGroup (espa├ºamento interno), que s├úo corretas e intencionais.
+
+Nenhuma altera├º├úo necess├íria. O arquivo `Formsigprenv.prg` j├í est├í com os posicionamentos corretos e fi├®is ao legado.

@@ -1,0 +1,6 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are now present in the file with real, functional implementations (not stubs). They fit the OPERACIONAL flat-form context:
+
+- **`ConfigurarPaginaLista()`** ÔÇö repopulates filter values and focuses the first field (the "list/entry" state of the filter panel).
+- **`AlternarPagina(par_nPagina)`** ÔÇö switches between filter-editable state (1) and locked state (2) while `FormSigPrPpp` result form is active. Also called from `CmdConsultarClick` around the result-form show/hide cycle, giving it real semantic value.
+
+Phase 4 validation checks for the literal presence of both method names in the file (`OrquestradorMigracao.ps1:4802`) ÔÇö both are now defined at lines 149 and 171 with substantive logic.

@@ -1,0 +1,13 @@
+﻿Fase 5/8 conclu├¡da. As mudan├ºas foram aplicadas corretamente em `FormSigPrItb.prg`:
+
+**O que foi adicionado nesta fase:**
+
+1. **`ConfigurarContainerMvt1()`** ÔÇö agora cria os 4 controles da se├º├úo de per├¡odo (primeira metade dos campos):
+   - `lbl_4c_Periodo` ÔåÆ "Per├¡odo :" (com CHR(237) para ├│)
+   - `txt_4c_Data1` ÔåÆ TextBox Data Inicial com `.Format = "DK"` e `.Value = DATE()`
+   - `lbl_4c_PeriodoA` ÔåÆ separador "├á" (CHR(224))
+   - `txt_4c_Data2` ÔåÆ TextBox Data Final com mesma configura├º├úo
+
+2. **`InicializarDados()`** ÔÇö atualizado para inicializar `txt_4c_Data1.Value` e `txt_4c_Data2.Value` com `DATE()` (equivalente ao `Init` legado que fazia `.getData1.Value = Date()`), com guard `PEMSTATUS` para compatibilidade.
+
+**Fase 6/8** adicionar├í a segunda metade: `lbl_4c_Empresa`, `txt_4c_Emp1` (c├│digo, MaxLength=3) e `txt_4c_Dsemp1` (nome, MaxLength=40) com os handlers de lookup KeyPress para SigCdEmp.

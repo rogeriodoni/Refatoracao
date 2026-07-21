@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. A Fase 7 est├í completa.
+
+**O que foi adicionado:**
+
+1. **BINDEVENTs** para `cmd_4c_Visualizar` e `cmd_4c_Imprimir` em `ConfigurarBotoes` (linha 237-238)
+
+2. **`BtnVisualizarClick`** (linha 474): Abre o arquivo TXT selecionado no Bloco de Notas via `RUN /N notepad.exe` ÔÇö validando se h├í arquivo selecionado e se o arquivo existe antes de abrir.
+
+3. **`BtnImprimirClick`** (linha 502): Delega para `BtnMovEstClick()`, espelhando o comportamento do legado onde `Imprimir.Click` chamava `ThisForm.Processar('I')` ÔÇö a mesma l├│gica de importa├º├úo do `btnMovEst.Click`.
+
+Ambos os bot├Áes permanecem ocultos (`TornarControlesVisiveis` mant├®m o comportamento do legado), mas agora t├¬m handlers completos e funcionais caso sejam tornados vis├¡veis no futuro.

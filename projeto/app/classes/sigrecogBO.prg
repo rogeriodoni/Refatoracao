@@ -28,7 +28,8 @@ DEFINE CLASS sigrecogBO AS RelatorioBase
     *-- Metadados do relatorio
     this_cCaminhoFRX     = ""
     this_cTitulo         = ""
-    this_cCursorDados    = "cursor_4c_Dados"
+    *-- Cursor final do relatorio (nome DEVE bater com alias usado no FRX legado)
+    this_cCursorDados    = "tempo"
 
     *--------------------------------------------------------------------------
     * Init - Configura o BO com caminho FRX, titulo e valores iniciais dos filtros

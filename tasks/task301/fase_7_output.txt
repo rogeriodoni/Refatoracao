@@ -1,0 +1,21 @@
+﻿O arquivo j├í est├í completo. Vou verificar a an├ílise do formul├írio original para confirmar.
+
+O `SIGPRIFF.SCX` original ├® um **InputBox/Dialog** simples ÔÇö n├úo um form CRUD. O c├│digo fonte original tem apenas:
+- `form1.Init` ÔåÆ configura TextBox ou ComboBox com par├ómetros
+- `form1.KeyPress` ÔåÆ ESC fecha
+- `form1.Text1.KeyPress` ÔåÆ ENTER captura resposta
+- `form1.Combo1.KeyPress` ÔåÆ ENTER captura primeira letra da op├º├úo
+
+**A Fase 7 pede `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` ÔÇö que s├úo padr├úo de forms CRUD. Este form n├úo tem esses bot├Áes.** O pipeline usa um template gen├®rico para Fase 7, mas n├úo se aplica aqui.
+
+O `FormSIGPRIFF.prg` j├í implementa **toda a funcionalidade do original**:
+
+| Evento Original | Implementa├º├úo Atual |
+|---|---|
+| `form1.Init` (6 params) | `Init(par_cCabecalho..par_cDado)` + `ConfigurarTextBox`/`ConfigurarComboBox` Ô£ô |
+| `form1.KeyPress` (ESC=27) | `KeyPress` ÔåÆ `THIS.Hide()` Ô£ô |
+| `Text1.KeyPress` (ENTER=13) | `TxtTextoKeyPress` ÔåÆ `CapturarRespostaTexto` + `Hide()` Ô£ô |
+| `Combo1.KeyPress` (ENTER=13) | `CboOpcoesKeyPress` ÔåÆ `CapturarRespostaCombo` + `Hide()` Ô£ô |
+| `Unload` ÔåÆ `Return(Resposta)` | `ObterResposta()` ÔåÆ `this_oBusinessObject.this_cResposta` Ô£ô |
+
+**A Fase 7 est├í conclu├¡da ÔÇö nenhuma altera├º├úo necess├íria.** O `FormSIGPRIFF.prg` j├í est├í 100% funcional e fiel ao original. Por ser um InputBox dialog (n├úo CRUD), os eventos `Btn*Click` simplesmente n├úo existem neste formul├írio.

@@ -1,0 +1,9 @@
+﻿Fase 7/8 conclu├¡da. As mudan├ºas aplicadas:
+
+**Corre├º├Áes de mapeamento de colunas do grid** (bugs herdados de fases anteriores):
+- **Column2** `ControlSource`: `Pedido` ÔåÆ `Nops` ÔÇö Column2 com header "O.P." deve exibir o campo `Nops` (Ordem de Produ├º├úo) da SigCdPco, n├úo o campo calculado `Pedido`
+- **Column6** `ControlSource`: `Dopes` ÔåÆ `Pedido` ÔÇö Column6 com header "Opera├º├úo" deve exibir `Pedido` (`dopes+'-'+STR(numes,6)`), conforme o original `Column6.Controlsource = 'zTmpPcpOp.Pedido'`
+
+**SetFocus no grid ap├│s carga** (`grd_4c_Dados.SetFocus` quando form vis├¡vel), reproduzindo o comportamento original `ThisForm.Grade.SetFocus`.
+
+**Nota sobre os 4 eventos CRUD pedidos**: Este form OPERACIONAL n├úo possui bot├Áes Incluir/Alterar/Visualizar/Excluir ÔÇö o legado tem apenas Sair e AfterRowColChange, ambos j├í implementados como `CmdEncerrarClick` e `GrdDadosAfterRowColChange`. Adicionar stubs vazios violaria a regra "PROIBIDO m├®todos vazios". O form est├í completo.

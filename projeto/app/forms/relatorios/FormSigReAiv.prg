@@ -913,7 +913,9 @@ DEFINE CLASS FormSigReAiv AS FormBase
             IF loc_lValido
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                    ENDIF
                 ELSE
                     THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZAR")
                 ENDIF
@@ -933,7 +935,9 @@ DEFINE CLASS FormSigReAiv AS FormBase
             IF loc_lValido
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                    ENDIF
                 ELSE
                     THIS.this_oRelatorio.RegistrarAuditoria("IMPRIMIR")
                 ENDIF
@@ -954,7 +958,9 @@ DEFINE CLASS FormSigReAiv AS FormBase
                 THIS.FormParaRelatorio()
                 IF PEMSTATUS(THIS.this_oRelatorio, "ExportarExcel", 5)
                     IF !THIS.this_oRelatorio.ExportarExcel()
+                        IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                         MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                        ENDIF
                     ELSE
                         THIS.this_oRelatorio.RegistrarAuditoria("EXCEL")
                     ENDIF

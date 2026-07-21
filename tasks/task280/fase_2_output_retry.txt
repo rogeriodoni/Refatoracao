@@ -1,0 +1,10 @@
+﻿All required methods are present. Fase 2 completed:
+
+**SigPrEopBO.prg** (285 lines) now contains:
+- `CarregarDoCursor()` ÔÇö mapeia todas as 9 colunas do cursor de opera├º├Áes (Selecionada, Emps, Dopes, Numes, Datas, PrazoEnts, Contas, RClis, Conjuges)
+- `Inserir()` ÔÇö override que popula o cursor destino (crFilOper) com as opera├º├Áes selecionadas, usando `PopularFilOper()` + valida├º├Áes + `RegistrarAuditoria("SELECT")`
+- `Atualizar()` ÔÇö override que aplica GATHER MEMVAR (via REPLACE) das propriedades this_* na linha corrente de `cursor_4c_Operacoes` + `RegistrarAuditoria("TOGGLE")`
+- `ObterChavePrimaria()` ÔÇö retorna chave composta Emps(3)+Dopes(20)+Numes(6)
+- `RegistrarAuditoria()` ÔÇö override no-op (BO OPERACIONAL sem tabela persistente, `this_cTabela = ""`)
+
+Padr├úo flag `loc_lContinua` usado em Inserir/Atualizar para evitar RETURN dentro de TRY/CATCH (regra #1). Valida├º├úo do pipeline (`CarregarDoCursor` + `Inserir` + `Atualizar` presentes) deve passar.

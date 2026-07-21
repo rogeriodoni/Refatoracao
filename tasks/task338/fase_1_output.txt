@@ -1,0 +1,18 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SIGPRTFHBO.prg` foi criado com 358 linhas contendo:
+
+**Propriedades declaradas (24):**
+- Configura├º├úo SiTef: `this_cIP`, `this_nInicio`, `this_nIdent`, `this_cPos`, `this_cCaixa`
+- Dados do cheque: `this_cPraca`, `this_cBanco`, `this_cAgencia`, `this_cAgenciaDV`, `this_cConta`, `this_cContaDV`, `this_cNumeroCheque`, `this_cChequeDV`, `this_cCMC7`
+- Dados do portador: `this_cCPF`, `this_cTipoPessoa`, `this_cDtCheque`
+- Transa├º├úo: `this_nValor`, `this_nParcelas`, `this_cCupom`, `this_cCupomNV`, `this_cFuncoes`, `this_cPesquisa`
+- Retorno: `this_cRetornoCheque`, `this_lAbandona`
+- Campos TEF (preenchidos durante consulta): `this_cTipTransacao`, `this_cDataHoraTEF`, `this_cCupomTEF`, `this_cCartao`, `this_cNSU`, `this_cAutorizacao`
+
+**M├®todos inclu├¡dos na Fase 1** (l├│gica completa extra├¡da do legado):
+- `Init()` ÔÇö configura `this_cTabela = ""` e chama `DODEFAULT()`
+- `ObterChavePrimaria()` ÔÇö retorna `""`
+- `ErroTef()` ÔÇö trata os 5 c├│digos de erro SiTef (-1 a -5)
+- `RetornoFalha()` ÔÇö gera arquivos `IntPos.001` e `IntPos.STS` (l├│gica completa do legado)
+- `MontaRetorno()` ÔÇö gera retorno de sucesso com todos os campos TEF (l├│gica completa do legado)
+- `CarregarParametros()` ÔÇö popula todas as propriedades a partir dos par├ómetros do Form
+- `ObterRetornoSerasa()` / `ObterCodigoSerasa()` ÔÇö helpers para os 8 c├│digos Serasa

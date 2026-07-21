@@ -1,0 +1,13 @@
+﻿`ENDDEFINE` est├í na linha 2660 (├║nico). O arquivo est├í correto. Aqui est├í o resumo do que foi feito nesta Fase 3:
+
+---
+
+**Situa├º├úo encontrada**: O form `Formsigprccp.prg` j├í estava **completamente implementado** (todas as 8 fases pelo pipeline anterior ÔÇö 2660 linhas, 52 corre├º├Áes autom├íticas aplicadas). Dois problemas foram identificados e corrigidos:
+
+1. **`ENDDEFINE` ausente** (linha 2660 adicionada) ÔÇö o arquivo terminava sem fechar o `DEFINE CLASS`, o que causaria erro de sintaxe ao compilar.
+
+2. **`DO FORM SigPrCcr` legado** no `BtnImprimirClick` ÔÇö substitu├¡do por `CREATEOBJECT("FormSIGPRCCR")` + `Show()`, alinhado com o padr├úo da nova arquitetura e o que j├í existe no `menu.prg:4032`.
+
+**Estado final dos arquivos**:
+- `sigprccpBO.prg`: 2028 linhas, `ENDDEFINE` na linha 2028 Ô£ô
+- `Formsigprccp.prg`: 2660 linhas, `ENDDEFINE` na linha 2660 Ô£ô, sem `DO FORM` legados Ô£ô

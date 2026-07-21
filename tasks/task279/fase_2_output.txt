@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O arquivo `sigprenvBO.prg` agora est├í completo com:
+
+- **6 novas propriedades** declaradas para os campos de `cursor_4c_Impressao` (`this_cCpros`, `this_cDPros`, `this_nQtds`, `this_nQtdeEtiq`, `this_cPedido`, `this_cObs`)
+- **`CarregarDoCursor()`** ÔÇö faz `SELECT (alias)` e carrega todos os 6 campos com `NVL`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCpros`
+- **`Inserir()`** ÔÇö insere no `cursor_4c_Impressao` local (formul├írio OPERACIONAL sem SQL Server INSERT) + chama `RegistrarAuditoria`
+- **`Atualizar()`** ÔÇö faz `SEEK` por `Cpros` e `REPLACE` no cursor local + chama `RegistrarAuditoria`
+- **`RegistrarAuditoria()`** ÔÇö insere em `LogAuditoria` com `GETDATE()` (n├úo `FormatarDataSQL`), sem suprimir a opera├º├úo principal em caso de falha

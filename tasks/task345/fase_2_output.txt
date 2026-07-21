@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. A FASE 2 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+O `aleBO.prg` j├í estava completo com todos os m├®todos necess├írios para a FASE 2 (gerados em uma execu├º├úo anterior do pipeline), com exce├º├úo de 2 bugs cr├¡ticos que foram corrigidos:
+
+1. **Bug #1 (linha 325):** `RETURN .F.` dentro do bloco `TRY` quando o cursor n├úo estava dispon├¡vel ÔÇö violava a Regra #1 do CLAUDE.md. Corrigido: removido o `RETURN .F.` e o bloco de salvamento foi movido para o ramo `ELSE`.
+
+2. **Bug #2 (linha 424):** `RETURN .F.` dentro do `SCAN` (que estava dentro do `TRY`) quando o `SQLEXEC` falhava. Corrigido: substitu├¡do por `loc_lErroInsert = .T. / EXIT`, e o `COMMIT` agora s├│ ├® executado se `!loc_lErroInsert`.
+
+O BO possui todos os m├®todos necess├írios para o form OPERACIONAL: `CarregarDoCursor`, `CarregarAlertas`, `SalvarAlertas` (equivalente ao Inserir/Atualizar para este tipo OPERACIONAL), `FiltrarPorTabela`, `ObterChavePrimaria` e `LimparDados`.

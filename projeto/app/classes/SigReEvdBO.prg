@@ -17,8 +17,8 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
     this_dDatai       = {}
     this_dDataf       = {}
 
-    *-- Cursor de dados resultado
-    this_cCursorDados = "cursor_4c_Dados"
+    *-- Cursor de dados resultado (nome DEVE bater com FRX legado: CsSelecao)
+    this_cCursorDados = "CsSelecao"
 
     *-- Propriedades espelhando colunas de cursor_4c_Dados (registro corrente)
     *-- Carregadas por CarregarDoCursor() para inspecao/drill-down do relatorio
@@ -90,20 +90,20 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
                 PADL(MONTH(loc_ldDataf), 2, "0") + "-" + ;
                 PADL(DAY(loc_ldDataf),   2, "0") + " 23:59:59'"
 
-            *-- Criar cursores de trabalho locais
-            IF USED("cursor_4c_Envelope")
-                USE IN cursor_4c_Envelope
+            *-- Criar cursores de trabalho locais (nomes DEVEM bater com legado)
+            IF USED("Envelope")
+                USE IN Envelope
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Envelope (Nenvs N(10), GrupoDs C(10), Qt N(5))
+            CREATE CURSOR Envelope (Nenvs N(10), GrupoDs C(10), Qt N(5))
             SET NULL OFF
             INDEX ON STR(Nenvs, 10) + GrupoDs TAG Nenvs
 
-            IF USED("cursor_4c_TmpRelat")
-                USE IN cursor_4c_TmpRelat
+            IF USED("TmpRelat")
+                USE IN TmpRelat
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_TmpRelat ( ;
+            CREATE CURSOR TmpRelat ( ;
                 Nenvs   N(10), GrupoOs C(10), ContaOs C(10), RCliOs C(50), ;
                 Datas   D,     GrupoDs C(10), ContaDs C(10), RCliDs C(50), ;
                 EmpDnPs C(33), Retrabs L)
@@ -229,7 +229,7 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
                     USE IN cursor_4c_NensLoc
 
                     *-- Acumular no TmpRelat
-                    SELECT cursor_4c_TmpRelat
+                    SELECT TmpRelat
                     APPEND BLANK
                     REPLACE Nenvs   WITH loc_nNenvs,   ;
                             GrupoOs WITH loc_cGrupoOs, ;
@@ -243,7 +243,7 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
                             Retrabs WITH loc_lRetrabs
 
                     *-- Atualizar contador de duplicados no cursor Envelope
-                    SELECT cursor_4c_Envelope
+                    SELECT Envelope
                     SET ORDER TO TAG Nenvs
                     IF !SEEK(STR(loc_nNenvs, 10) + loc_cGrupoDs)
                         APPEND BLANK
@@ -273,32 +273,32 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
 
             loc_lcEmp = go_4c_Sistema.cCodEmpresa
 
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("dbCabecalho")
+                USE IN dbCabecalho
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho (Titulo C(100), SubTitulo C(100), NomeEmpresa C(100))
+            CREATE CURSOR dbCabecalho (Titulo C(100), SubTitulo C(100), NomeEmpresa C(100))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho (Titulo, SubTitulo, NomeEmpresa) ;
+            INSERT INTO dbCabecalho (Titulo, SubTitulo, NomeEmpresa) ;
                 VALUES (loc_lcCab, loc_lcSub, loc_lcEmp)
 
             *-- Cursor final: apenas envelopes realmente duplicados (Qt > 1)
             IF USED(THIS.this_cCursorDados)
                 USE IN (THIS.this_cCursorDados)
             ENDIF
-            SELECT A.* FROM cursor_4c_TmpRelat A, cursor_4c_Envelope B ;
+            SELECT A.* FROM TmpRelat A, Envelope B ;
                 WHERE A.Nenvs = B.Nenvs AND A.GrupoDs = B.GrupoDs AND B.Qt > 1 ;
-                INTO CURSOR cursor_4c_Dados READWRITE ;
+                INTO CURSOR CsSelecao READWRITE ;
                 ORDER BY A.Nenvs, A.Datas
 
-            IF USED("cursor_4c_TmpRelat")
-                USE IN cursor_4c_TmpRelat
+            IF USED("TmpRelat")
+                USE IN TmpRelat
             ENDIF
-            IF USED("cursor_4c_Envelope")
-                USE IN cursor_4c_Envelope
+            IF USED("Envelope")
+                USE IN Envelope
             ENDIF
 
-            SELECT cursor_4c_Dados
+            SELECT CsSelecao
             GO TOP
 
             loc_lSucesso = .T.
@@ -473,14 +473,14 @@ DEFINE CLASS SigReEvdBO AS RelatorioBase
         IF USED("cursor_4c_Clientes")
             USE IN cursor_4c_Clientes
         ENDIF
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("dbCabecalho")
+            USE IN dbCabecalho
         ENDIF
-        IF USED("cursor_4c_TmpRelat")
-            USE IN cursor_4c_TmpRelat
+        IF USED("TmpRelat")
+            USE IN TmpRelat
         ENDIF
-        IF USED("cursor_4c_Envelope")
-            USE IN cursor_4c_Envelope
+        IF USED("Envelope")
+            USE IN Envelope
         ENDIF
         IF USED(THIS.this_cCursorDados)
             USE IN (THIS.this_cCursorDados)

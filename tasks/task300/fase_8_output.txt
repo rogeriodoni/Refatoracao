@@ -1,0 +1,15 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi implementado:
+
+**FormSigPrIct.prg** (800 linhas, completo):
+- `BtnBuscarClick()` / `BtnSalvarClick()` / `BtnCancelarClick()` ÔÇö stubs apropriados para OPERACIONAL
+- `BtnEncerrarClick()` ÔÇö delega para `THIS.Release()`
+- `FormParaBO()` ÔÇö copia `txt_4c_DataI/DataF.Value` para `this_oBusinessObject.this_dDataI/F`
+- `BOParaForm()` ÔÇö restaura datas do BO para os TextBoxes
+- `HabilitarCampos(par_lHabilitar)` ÔÇö controla `Enabled` dos dois TextBoxes e `cmd_4c_Processar`
+- `LimparCampos()` ÔÇö redefine ambas as datas para `DATE()`
+- `CarregarLista()` ÔÇö retorna `.T.` (sem grade neste OPERACIONAL flat)
+- `AjustarBotoesPorModo()` ÔÇö stub (controle de UI j├í feito em `ChamarProcessar`/`ChamarGravar`)
+
+**menu.prg** ÔÇö adicionado `DEFINE BAR 68/69 OF popMovimentos` ("Integra├º├úo Cont├íbil") com `ON SELECTION` e `PROCEDURE AbrirFormSigPrIct()` no padr├úo can├┤nico.
+
+**config.prg** ÔÇö n├úo precisou altera├º├úo; ADIR() j├í carrega automaticamente todos os `Form*.prg` de `operacionais\` e todos os `*BO.prg` de `classes\`.

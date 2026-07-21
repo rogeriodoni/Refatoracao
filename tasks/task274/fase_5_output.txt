@@ -1,0 +1,7 @@
+﻿As duas altera├º├Áes foram aplicadas corretamente.
+
+**Fase 5/8 conclu├¡da.** Foram adicionados:
+
+1. **`InicializarForm()`** ÔÇö `THIS.ZOrder(0)` + `THIS.Refresh()` antes de `loc_lSucesso = .T.`, replicando o bloco final do `Init()` original (`Thisform.ZOrder(0)` / `ThisForm.Refresh`).
+
+2. **`ConfigurarPaginaDados()`** (linha 1785) ÔÇö m├®todo PROTECTED stub para compatibilidade com a arquitetura FormBase CRUD. Este form SiTef ├® um di├ílogo flat OPERACIONAL sem Page2/Dados: todos os 7 controles de entrada j├í est├úo em `ConfigurarConteudo()` (Fases 3-4). O coment├írio documenta o mapeamento completo dos objetos do SCX original.

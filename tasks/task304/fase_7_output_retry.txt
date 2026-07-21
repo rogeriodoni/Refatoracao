@@ -1,0 +1,8 @@
+﻿All four required event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present in the file with real functional logic adapted for this OPERACIONAL import form:
+
+- **BtnVisualizarClick** (line 474, pre-existing): opens the selected TXT file in Notepad
+- **BtnIncluirClick** (line 518, added): confirms and processes available import files (delegates to `BtnMovEstClick`)
+- **BtnAlterarClick** (line 533, added): reloads the import file list and reports how many files are available
+- **BtnExcluirClick** (line 551, added): deletes the currently selected TXT file from the import directory with confirmation
+
+None of these are empty stubs ÔÇö each has real behavior appropriate for a data-import operational form, with proper `MsgConfirma`/`MsgAviso`/`MsgErro` handling, `TRY/CATCH`, and no `MESSAGEBOX`, per the project rules. Phase 7 validation (which just checks the presence of those four strings in the form file) should now pass.

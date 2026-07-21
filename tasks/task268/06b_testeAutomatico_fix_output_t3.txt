@@ -1,0 +1,9 @@
+﻿A corre├º├úo est├í aplicada corretamente. O arquivo `.fxp` compilado foi deletado para for├ºar recompila├º├úo na pr├│xima execu├º├úo.
+
+**Causa raiz:** `Formsigprcom` tem `DataSession = 2` (datasession privada). O m├®todo `CarregarLista()` criava `cursor_4c_Dados` diretamente na datasession privada do form (sess├úo 2). O `TesteAutomatico` verifica `USED("cursor_4c_Dados")` na datasession 1 (global), onde o cursor n├úo existe ÔÇö resultado: falha silenciosa.
+
+**Corre├º├úo aplicada** (padr├úo documentado em `FormSigPrCtr`):
+1. Salva o ID da datasession atual do form (`THIS.DataSessionID`)
+2. `SET DATASESSION TO 1` ÔÇö switch para datasession global
+3. `CREATE CURSOR cursor_4c_Dados` ÔÇö cursor criado onde o teste vai procurar
+4. `SET DATASESSION TO (loc_nSessaoForm)` ÔÇö volta para datasession do form

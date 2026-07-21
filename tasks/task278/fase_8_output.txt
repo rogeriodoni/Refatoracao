@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. A Fase 8 foi conclu├¡da com sucesso.
+
+**O que foi adicionado (10 m├®todos do contrato arquitetural):**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Reposiciona cursor no topo + Refresh do grid |
+| `BtnEncerrarClick()` | Delega para `EncerrarClick()` |
+| `BtnSalvarClick()` | Delega para `BtnEmailClick()` (enviar = salvar) |
+| `BtnCancelarClick()` | Delega para `EncerrarClick()` (fechar sem enviar) |
+| `FormParaBO()` | Retorna `.T.` ÔÇö sem campos de edi├º├úo CRUD |
+| `BOParaForm()` | Retorna `.T.` ÔÇö grid alimentado pelo cursor, sem TextBoxes |
+| `HabilitarCampos()` | Habilita `cmd_4c_BtnEmail` apenas se h├í destinat├írios |
+| `LimparCampos()` | Desmarca todos via `BO.DesmarcarTodos()` + Refresh |
+| `CarregarLista()` | Reposiciona `cursor_4c_Total` no topo + Refresh (sem re-SQL) |
+| `AjustarBotoesPorModo()` | Retorna sem efeito ÔÇö form OPERACIONAL n├úo tem modos CRUD |
+
+O arquivo final tem **784 linhas** e est├í funcional e completo. Todos os 8 fases da migra├º├úo do `FormSigPrEml` / `SigPrEmlBO` est├úo conclu├¡das.

@@ -1,0 +1,13 @@
+﻿O arquivo `FormSigPrGl2.prg` foi criado com sucesso (266 linhas) em `C:/4c/projeto/app/forms/operacionais/`.
+
+**O que a Fase 3 entregou:**
+
+- **DEFINE CLASS FormSigPrGl2 AS FormBase** com dimens├Áes originais (800├ù600), `TitleBar=0`, `DataSession=2`, `WindowType=1` (modal) ÔÇö id├¬ntico ao legado SIGPRGL2
+- **Init()** com `LPARAMETERS` para os 7 par├ómetros originais (`poFormPai`, `nData`, `lReserva`, `oConexao`, `nEmphPdr`, `lAutomatico`, `nNumeroDaOp`), compartilhamento de DataSessionId com o form pai antes de `DODEFAULT()`
+- **InicializarForm()** ÔÇö cria `SigPrGl2BO`, chama `ConfigurarContexto()` com todos os par├ómetros, configura fundo e cabe├ºalho
+- **ConfigurarPageFrame()** ÔÇö define `new_background.jpg` como fundo + cria `shp_4c_Shape3` (Top=7, Left=732, W=60, H=29 ÔÇö id├¬ntico ao legado)
+- **ConfigurarCabecalho()** ÔÇö cria `cnt_4c_Cabecalho` cinza (RGB 100,100,100) com `lbl_4c_Sombra` e `lbl_4c_Titulo` (FontSize=18, Tahoma)
+- **TornarControlesVisiveis()** ÔÇö recursivo, sem filtros (Fase 4+ adicionar├í containers que precisam de skip)
+- **Destroy()** ÔÇö re-habilita form pai (`poFormPai.Enabled = .T.`), anula BO e refer├¬ncias
+
+**Pr├│ximas fases** usar├úo Edit para adicionar: grids GradeOpera├º├úo (10 cols) e GradeItens (8 cols), EditBoxes, Label, TextBox `getCliente`, bot├Áes Processar/Cancelar/apaga/SelTudo, e BINDEVENTs.

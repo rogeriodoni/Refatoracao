@@ -1,0 +1,4 @@
+﻿Both fixes applied:
+
+- **Line 397 (`ConfigurarGrade`)**: Added 3 explicit `.ColumnN.ControlSource` assignments immediately after `.RecordSource` (before `.RecordMark`), so the override fires before VFP9 auto-bind locks in field-position mapping.
+- **Line 554 (`BtnSelecionarClick`)**: Added the same 3 `ControlSource` assignments right after `RecordSource` is reassigned at runtime, then the existing header caption redefinitions follow unchanged.

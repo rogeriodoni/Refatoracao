@@ -69,7 +69,9 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
     this_cTipoRel   = ""
 
     *-- Cursor de saida dos dados processados
-    this_cCursorDados = "cursor_4c_Dados"
+    *-- Cursor final do relatorio (nome DEVE bater com alias usado nos FRXs legados:
+    *--   SigReCm1/SigReCm2/SigReCm3.frx todos consomem TmpResult + CsCabecalho)
+    this_cCursorDados = "TmpResult"
 
     *--------------------------------------------------------------------------
     * Init - Inicializa o BO do relatorio

@@ -1,0 +1,14 @@
+﻿Todos os `RETURN` est├úo fora dos blocos TRY/CATCH. A estrutura est├í correta.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormSigPrCtr.prg` foi criado com 427 linhas contendo:
+
+- **DEFINE CLASS FormSigPrCtr AS FormBase** ÔÇö propriedades visuais exatas do original (1200├ù620)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` com TRY/CATCH (sem dupla chamada a InicializarForm)
+- **InicializarForm()** ÔÇö cria `SigPrCtrBO`, chama os 3 ConfigurarXxx, propaga Caption aos labels, guarda `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, `PageCount=2`, imagem de fundo
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (vazio ÔÇö Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (BINDEVENTÔåÆBtnEncerrarClick)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (vazio ÔÇö Fase 4), `pgf_4c_Dados` (PageFrame interno com 2 pages: Lote/Itens)
+- **CarregarLista()** ÔÇö chama `BO.Buscar()`, popula `grd_4c_Dados` com PEMSTATUS guard (grid criado na Fase 4), respeita filtros de data
+- **BtnEncerrarClick()** ÔÇö `THIS.Release()`
+- **FormatarGridLista()** e **TornarControlesVisiveis()** ÔÇö implementa├º├Áes completas
+- **Destroy()** ÔÇö fecha todos os cursores e libera o BO

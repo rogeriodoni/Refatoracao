@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPrGloTBO.prg",
+    "timestamp":  "2026-07-19T03:50:16",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  199,
+                          "Original":  "THIS.this_lDivs = (NVL(Divs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Divs)=\"L\" / THIS.this_lDivs = ... / ELSE / THIS.this_lDivs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  212,
+                          "Original":  "THIS.this_lImprs = (NVL(Imprs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Imprs)=\"L\" / THIS.this_lImprs = ... / ELSE / THIS.this_lImprs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  225,
+                          "Original":  "THIS.this_lIimprs = (NVL(Iimprs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Iimprs)=\"L\" / THIS.this_lIimprs = ... / ELSE / THIS.this_lIimprs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

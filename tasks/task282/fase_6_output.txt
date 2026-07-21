@@ -1,0 +1,18 @@
+﻿All procedures are properly closed and `ENDDEFINE` is the last line. Fase 6/8 is complete. Here's what was added:
+
+**Edit B** ÔÇö `BtnConsultarClick()` now calls:
+1. `CarregarDoCursorTemporario("csTemporario")` on the BO to populate Origem/Destino properties
+2. `CarregarCamposOrigem()` to fill the cnt_4c_Origem fields
+3. `CarregarGradeItens()` to load the items grid
+
+**Edit C** ÔÇö 13 new methods added before `ENDDEFINE`:
+- `CarregarCamposOrigem()` ÔÇö fills GrupoO/ContaO/GrupoD/ContaD + SQL for DcontaD description
+- `CarregarGradeItens()` ÔÇö calls `MontarCursorItens()` on BO, creates `cursor_4c_Itens` with computed `Saldos = qtds - qtbaixas`, wires all 10 columns and auto-loads first item detail
+- `GradeItensAfterRowColChange(par_nColIndex)` ÔÇö updates txt_4c_Descr and txt_4c_ObsItem from cursor row, calls CarregarImagemProduto
+- `CarregarImagemProduto(par_cCpros)` ÔÇö SQLEXEC SigCdPro.FigJpgs BLOB ÔåÆ STRTOFILE ÔåÆ img_4c_FigJpg.Picture
+- `AbrirLookupContaO()` / `AbrirLookupContaD()` ÔÇö full FormBuscaAuxiliar with mAddColuna(Iclis/Rclis), reads selection into txt_4c_ContaO/DcontaO and txt_4c_ContaD/DcontaD
+- `ContaOKeyPress` / `ContaODblClick` / `ContaDKeyPress` / `ContaDDblClick` ÔÇö F4 (keycode 28) and F5 (keycode 115) trigger lookup
+- `DcontaDLostFocus()` / `DrespsDLostFocus()` ÔÇö SetFocus to cmd_4c_Confirmar
+- `BtnCadastrosClick()` ÔÇö `DO FORM SIGCDCTA` with ContaD value
+
+**Edit D** (merged into Destroy) ÔÇö closes cursors `cursor_4c_Itens`, `cursor_4c_Operacao`, `xEestI`, `crSigMvItn` on form close.

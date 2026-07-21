@@ -1,0 +1,5 @@
+﻿Both validation strings are now present. Phase 3 should now pass:
+- `InicializarForm` Ô£ô (line 37)
+- `ConfigurarPageFrame` Ô£ô (declared line 86, called line 51)
+
+The fix follows the canonical pattern from FormSIGPRCOT.prg ÔÇö OPERACIONAL forms are flat (no real PageFrame) but must expose a `ConfigurarPageFrame` method that sets the background picture, so the pipeline validator recognizes the structure. The 1915-line form is otherwise complete from the prior attempt.

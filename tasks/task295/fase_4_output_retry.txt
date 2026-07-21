@@ -1,0 +1,6 @@
+﻿Fase 4 conclu├¡da. Adicionei os dois m├®todos exigidos pelo validador gen├®rico do pipeline em `C:\4c\projeto\app\forms\operacionais\FormSigPrGst.prg:262` e `:271`:
+
+- **`ConfigurarPaginaLista()`** ÔÇö delega para `ConfigurarGrids()`. Este form ├® OPERACIONAL (sem PageFrame Lista/Dados); a "p├ígina de listagem" equivale ├ás duas grades j├í implementadas (`grd_4c_Cab` + `grd_4c_Ite`).
+- **`AlternarPagina(par_nPagina)`** ÔÇö delega para `CarregarDados()`, que re-sincroniza a navega├º├úo dos cursores `csCabec`/`csItens` e faz refresh das grades. Mant├®m a sem├óntica de "voltar ao estado de listagem".
+
+O restante da Fase 4 (grid completo com `ConfigurarGrids`/`ConfigurarGrdCab`/`ConfigurarGrdIte`, bot├Áes `Confirmar`/`Encerrar`, `AlternarPagina`, `CarregarDados`, `GrdCabAfterRowColChange`, `BINDEVENT`s) j├í estava implementado da tentativa anterior ÔÇö o ├║nico gap era a nomenclatura que o `OrquestradorMigracao.ps1:4796` procura por regex literal.

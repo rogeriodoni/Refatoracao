@@ -1,0 +1,8 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigPrScn.prg` foi atualizado com:
+
+**Adicionado:**
+- `ConfigurarCamposLogin()` ÔÇö cria os 4 controles do form de login: `lbl_4c_Label1` ("Usu├írio :"), `lbl_4c_Label2` ("Senha :"), `txt_4c_Usuario` e `txt_4c_Senha` com propriedades exatas do SCX original (FontName="Arial", FontSize=14, InputMask="!!!!!!!!!!", PasswordChar="*", etc.)
+- `TxtSenhaKeyPress` ÔÇö handler BINDEVENT com `LPARAMETERS`, guard `!=13 AND !=9`, delega valida├º├úo ao `SigPrScnBO.ValidarCredenciais()`, chama `CarregarParametros()` se SetFiscal.Ini ausente, `GravarLog()` no sucesso, e `THIS.Release()` fora do TRY/CATCH
+- `AlternarPagina()` ÔÇö no-op para compatibilidade com FormBase
+
+**Regras respeitadas:** sem RETURN dentro de TRY/CATCH, LPARAMETERS no handler KeyPress, CATCH verboso, MsgAviso para valida├º├úo / MsgErro para exce├º├Áes t├®cnicas.

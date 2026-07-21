@@ -1,0 +1,12 @@
+﻿**Falso positivo confirmado.** N├úo h├í nenhuma condi├º├úo `WHERE` com `CONTROLCOUNT` em SQL nestes arquivos.
+
+O que o validador automatizado detectou foi o uso do **property VFP9 `.ControlCount`** nas linhas 469 e 473 do form ÔÇö que ├® c├│digo leg├¡timo para iterar controles de um container em `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_i = 1 TO loc_oContainer.ControlCount          && linha 469
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) ...     && linha 473
+```
+
+Isso **n├úo ├® SQL** ÔÇö ├® acesso ├á propriedade nativa VFP9 de containers. O validador confundiu o token `ControlCount` com um nome de coluna SQL inventado.
+
+**Nenhuma altera├º├úo necess├íria.** Os dois arquivos (`Formsigprcpd.prg` e `sigprcpdBO.prg`) est├úo corretos conforme o original. O problema reportado ├® um **falso positivo do validador autom├ítico de SQL**.

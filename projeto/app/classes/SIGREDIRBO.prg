@@ -15,7 +15,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
 
     *-- Cursores internos
     this_cCursorEmpresas     = "cursor_4c_Empresas"
-    this_cCursorDados        = "cursor_4c_Dados"
+    this_cCursorDados        = "crSigMvNfi"
 
     *-- Arquivo de relatorio (sem extensao)
     this_cArquivoFRX         = "sigReDir"

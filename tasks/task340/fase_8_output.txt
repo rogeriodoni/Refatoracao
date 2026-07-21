@@ -1,0 +1,15 @@
+﻿**Fase 8/8 conclu├¡da.** FormSIGPRVTX.prg tem 942 linhas com 32 m├®todos completos.
+
+M├®todos adicionados nesta fase:
+- `BtnBuscarClick()` ÔÇö delega para `CarregarLista()`
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `BtnSalvarClick()` ÔÇö salva grade com confirma├º├úo (sem RETURN dentro de TRY)
+- `BtnCancelarClick()` ÔÇö limpa grade e campo planilha com confirma├º├úo
+- `CarregarLista()` ÔÇö carrega SKUs do banco via `BO.CarregarGrade()` + reconecta grid
+- `FormParaBO()` ÔÇö passa `this_cPlanilha` para o BO
+- `BOParaForm()` ÔÇö chama `MontaGrade()` para reconectar o grid
+- `HabilitarCampos()` ÔÇö habilita/desabilita os controles de entrada
+- `LimparCampos()` ÔÇö limpa `txt_4c_Planilha` + `LimpaGrade()`
+- `AjustarBotoesPorModo()` ÔÇö sem modos no OPERACIONAL; chama `HabilitarCampos(.T.)`
+
+Tamb├®m foram corrigidos os `RETURN` dentro de TRY/CATCH em `BtnAlterarClick` e `BtnVisualizarClick` (viola├º├úo da regra cr├¡tica #1 das fases anteriores).

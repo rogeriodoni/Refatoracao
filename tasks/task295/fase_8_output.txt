@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 adicionou 9 m├®todos ao `FormSigPrGst.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista` | Alias de `CarregarDados()` |
+| `FormParaBO` | Popula BO com `csCabec` corrente via `CarregarDoCursor` |
+| `BOParaForm` | Refresh de `grd_4c_Cab` + `grd_4c_Ite` |
+| `HabilitarCampos` | Stub vazio ÔÇö form s├│ tem grids ReadOnly |
+| `LimparCampos` | Refresh de ambas as grades |
+| `AjustarBotoesPorModo` | Mant├®m Confirmar + Encerrar habilitados |
+| `BtnBuscarClick` | Alias de `CarregarDados()` |
+| `BtnSalvarClick` | Alias de `BtnConfirmarClick()` |
+| `BtnCancelarClick` | Alias de `BtnEncerrarClick()` |
+
+**Integra├º├úo**: config.prg j├í carrega automaticamente via ADIR() ÔÇö `SigPrGstBO.prg` (pasta `classes/*BO.prg`) e `FormSigPrGst.prg` (pasta `operacionais/Form*.prg`) ÔÇö sem necessidade de altera├º├Áes. O form ├® um sub-form aberto pelo pai com `DO FORM SigMvCab`, portanto n├úo vai no menu.prg.

@@ -1,0 +1,1141 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrMlu.SCX
+* Data/Hora: 17/07/2026 20:47:32
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRMLU
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRMLU
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRMLU.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRMLU.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdselecoes
+  Parent: SIGPRMLU
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRMLU.grdselecoes.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMLU.grdselecoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMLU.grdselecoes.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMLU.grdselecoes.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMLU.grdselecoes.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRMLU.grdselecoes.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMLU.grdselecoes.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdProcessar
+  Parent: SIGPRMLU
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Commandgroup2
+  Parent: SIGPRMLU
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdBtnGrade
+  Parent: SIGPRMLU
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntNova
+  Parent: SIGPRMLU
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRMLU.cntNova
+  Class: label
+  BaseClass: label
+
+Objeto: getNova
+  Parent: SIGPRMLU.cntNova
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 533
+  Width = 794
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Unificação de Mala Direta"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowState = 0
+  _memberdata = <VFPData></VFPData>
+  Name = "SIGPRMLU"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 324
+  Left = 49
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 159
+  Width = 660
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "grdselecoes"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 80
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 260
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 120
+  Column4.Visible = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 80
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 80
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  Caption = ""
+  Value = 0
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Dt.Entrada"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "N.Registros"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.grdselecoes.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cmdProcessar
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 637
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  BorderColor = 136,189,188
+  Name = "cmdProcessar"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "\<Processar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.Commandgroup2
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 712
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  BorderColor = 136,189,188
+  Name = "Commandgroup2"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cmdBtnGrade
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  Value = 1
+  Height = 90
+  Left = 715
+  SpecialEffect = 1
+  Top = 280
+  Width = 50
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Name = "cmdBtnGrade"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\vbmp\to-do-list_checked2.ico
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Seleciona Tudo"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcar"
+  Command2.Top = 45
+  Command2.Left = 5
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\vbmp\onebit_33.ico
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Apaga Tudo"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntNova
+------------------------------------------------------------
+  Top = 112
+  Left = 49
+  Width = 660
+  Height = 42
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 2
+  ZOrderSet = 4
+  Name = "cntNova"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntNova.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " \<Nome da Unificação :"
+  Height = 15
+  Left = 20
+  Top = 13
+  Width = 121
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMLU.cntNova.getNova
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 9
+  Format = "K"
+  Height = 25
+  Left = 151
+  MaxLength = 20
+  TabIndex = 0
+  Top = 8
+  Width = 220
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 11
+  Name = "getNova"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRMLU
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE acertagrades
+------------------------------------------------------------
+PROCEDURE acertagrades
+Lparameters pColuna
+
+ThisForm.GridOrder = Iif(Type('pColuna')='N', pColuna, ThisForm.GridOrder)
+
+Do Case
+	Case (ThisForm.GridOrder = 2)
+		 lcOrd = 'Codigos'
+	Case (ThisForm.GridOrder = 3)
+		 lcOrd = 'Descs'
+	Case (ThisForm.GridOrder = 4)
+		 lcOrd = 'UsuIns'
+	Case (ThisForm.GridOrder = 5)
+		 lcOrd = 'DatIns'
+EndCase
+
+lnRec = Recno()
+Set Order To &lcOrd. In crSigMlItn
+If (Reccount('crSigMlItn') > 0)
+	Go lnRec In crSigMlItn
+EndIf
+
+With Thisform.grdSelecoes
+	For I=1 To .ColumnCount
+		lcNum = Alltrim(Str(I))
+		.Column&lcNum..Header1.BackColor = Iif(ThisForm.GridOrder=I, RGB(220,255,220), ThisForm.BackColor)
+	Next
+	.Refresh 
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrades
+------------------------------------------------------------
+PROCEDURE montagrades
+With ThisForm.GrdSelecoes
+	.RecordSource = ''
+
+	ThisForm.poDataMgr.Requery('crSigMlItn')
+
+	Select crSigMlItn
+	Index On Codigos Tag Codigos
+	Index On Descs   Tag Descs  
+	Index On UsuIns  Tag UsuIns
+	Index On DatIns  Tag DatIns
+
+	ThisForm.AcertaGrades()
+
+	.RecordSource 	   = 'crSigMlItn'
+	.ColumnCount 	   = 6
+	.DeleteMark 	   = .f.
+	.RecordMark 	   = .f.
+	.ReadOnly 		   = .f.
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing    = .f.
+
+	.Column1.ControlSource   = 'crSigMlItn.SelImp'
+	.Column1.Movable		 = .f.
+	.Column1.Resizable		 = .f.
+	.Column1.ReadOnly		 = .f.
+	.Column1.Sparse			 = .f.
+
+	.Column2.ControlSource   = 'crSigMlItn.Codigos'
+	.Column3.ControlSource   = 'crSigMlItn.Descs'
+	.Column4.ControlSource   = 'crSigMlItn.Usuins'
+	.Column5.ControlSource   = 'crSigMlItn.Datins'
+	.Column6.ControlSource   = 'crSigMlItn.Nregis'
+
+	For I=2 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..FontName = 'Courier New'
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..ReadOnly  = .t.
+	Next
+	.Refresh
+EndWith
+* Fim ****************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcNew, lnTot
+
+Private pCod
+
+lcNew = Substr(Sys(2015),3,10)
+lnTot = 0
+
+Set Talk On
+Set Talk Window
+**********************************************************************************
+Wait Window 'Aguarde!!! Selecionando Registros Para Unificação...' NoWait
+
+Select * ;
+  From crSigMlCab ;
+ Where Codigos = lcNew ;
+  Into Cursor csMalaDuplicada ReadWrite
+
+Select Codigos ;
+  From crSigMlItn ;
+ Where SelImp = 1 ;
+  Into Cursor csMalasSelecionadas
+
+lcUni = ''
+Select csMalasSelecionadas
+Scan
+	pCod  = csMalasSelecionadas.Codigos
+	lcUni = lcUni + pCod + '; '
+
+	lcCampo = [a.Cidchaves, a.IClis, a.Codigos, a.Bairs, a.Ceps, a.Compls, a.Estas, a.Faxs, a.Grupos, ] + ;
+			  [a.Mes, a.Nums, a.Rclis, a.Tel1S, a.Tel2S, a.Cidas, a.Endes, a.Nascs, a.Profiss, a.Sexos, ] + ;
+			  [a.Ultcomps, a.Aptos, a.Opdest, a.Desti, a.Opini, a.Dtncons, a.Conjuges, ] + ;
+			  [a.Dtcasas, a.Situas, a.Dataincs, a.Opani, a.Quebras, a.Cpfs ]
+
+	lcQuery = [Select ] + lcCampo + [ From SigMlCab a Where Codigos = ?pCod Order By ] + lcCampo
+
+	ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmp')
+
+	lnTot = lnTot + Reccount('crTmp')
+
+	Select crTmp
+	Scan
+		Select crTmp
+		Scatter Memvar Memo
+
+		Select csMalaDuplicada
+		Append Blank
+		Gather Memvar Memo
+	EndScan
+EndScan
+
+Wait Window 'Aguarde!!! Unificando as Malas Selecionadas Em Uma...' NoWait
+
+Select Padr(Upper(StrTran(a.Desti + a.Ceps + a.Endes + a.Nums + a.Compls, ' ', '')), 200) as ChaveUnica, a.* ;
+  From csMalaDuplicada a ;
+  Into Cursor csMalaUnificada1
+
+*!*	Select * ;
+*!*	  From csMalaUnificada1 ;
+*!*	 Group By ChaveUnica ;
+*!*	  Into Cursor csMalaUnificada ReadWrite
+
+Select * ;
+  From csMalaUnificada1 ;
+  Into Cursor csMalaUnificada ReadWrite
+ 
+Zap In csMalaUnificada 
+
+Select csMalaUnificada   
+Index On ChaveUnica tag idxmalauni
+
+Select csMalaUnificada1
+Scan
+	Scatter memo memvar 
+	If !Seek(csMalaUnificada1.ChaveUnica,'csMalaUnificada','idxmalauni')
+		Insert into csMalaUnificada From Memvar
+	EndIf 
+EndScan
+
+
+  
+**********************************************************************************
+Set Talk Off
+
+pCod = Replicate(Chr(255),10)
+ThisForm.poDataMgr.Requery('crSigMlCab')
+
+Select csMalaUnificada
+Scan
+	Select csMalaUnificada
+	Scatter Memvar Memo
+	m.Codigos = lcNew
+	m.cIdChaves = fUniqueIds()
+
+	Select crSigMlCab
+	Append Blank
+	Gather Memvar Memo
+EndScan
+
+Insert Into crSigMlItn (Codigos, Descs, Ativos, UsuIns, DatIns, DatAlts, Ults, DtEnts, NRegis, Espelhos, Unificas) ;
+			   Values (lcNew, Alltrim(ThisForm.cntNova.getNova.Value), .t., Usuar, DateTime(), .NULL., ;
+			   		   .NULL., .NULL., Reccount('csMalaUnificada'), 'SigPrMlu', lcUni)
+
+With ThisForm.poDataMgr
+	.Update('crSigMlCab')
+	.Update('crSigMlItn')
+	.Commit
+EndWith
+
+ThisForm.MontaGrades
+
+=Messagebox('Unificação "' + Alltrim(ThisForm.cntNova.getNova.Value) + '" Concluída!!! ' + Chr(13) + ;
+			'Foram Selecionados ' + Alltrim(Str(Reccount('csMalaUnificada'))) + ' Registros,' + Chr(13) + ;
+			'Retirados de ' + Alltrim(Str(Reccount('csMalasSelecionadas'))) + ' Malas Diretas,' + Chr(13) + ;
+			'Que Continham Um Total de ' + Alltrim(Str(lnTot)) + ' Registros.', 0+64, '')
+
+ThisForm.cntNova.getNova.Value = ''
+
+Select crSigMlCab
+Locate For Codigos = lcNew
+ThisForm.grdSelecoes.SetFocus
+ThisForm.Refresh
+* Fim ****************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCodigos
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private pCod
+
+=fConfigGeral()
+
+=DoDefault()
+
+pCod = ''
+
+lcQryMalc = 'Select 0 as SelImp, * From SigMlItn'
+lcQryMala = 'Select * From SigMlCab Where Codigos = ?pCod'
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDatamgr
+		.AddCursor('SigMlItn', 'Codigos',   'crSigMlItn', '', '', lcQryMalc)
+		.AddCursor('SigMlCab', 'cIdChaves', 'crSigMlCab', '', '', lcQryMala)
+	EndWith
+EndWith
+
+ThisForm.GridOrder = 2
+
+ThisForm.MontaGrades
+
+Go Top In crSigMlItn
+
+ThisForm.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local SelImp
+
+m.SelImp = Iif(crSigMlItn.SelImp=1, 0, 1)
+
+Select crSigMlItn
+Gather Memvar Fields SelImp
+ThisForm.grdSelecoes.Refresh
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local SelImp
+
+If InList(nKeyCode, 13, 32)
+	m.SelImp = Iif(crSigMlItn.SelImp=1, 0, 1)
+	Select crSigMlItn
+	Gather Memvar Fields SelImp
+	ThisForm.grdSelecoes.Refresh
+
+	NoDefault
+Endif
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.AcertaGrades(2)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.AcertaGrades(3)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.AcertaGrades(4)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column5.Header1
+* Classe: header (Base: header)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.AcertaGrades(5)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.grdselecoes.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.cmdProcessar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.grdselecoes.Refresh 
+Go Top In crSigMlItn
+ThisForm.grdselecoes.Refresh 
+
+This.Enabled = .f.
+
+Select Codigos ;
+  From crSigMlItn ;
+ Where (SelImp = 1) And ;
+ 	   (NRegis > 0) ;
+  Into Cursor csTmp
+
+If (Reccount('csTmp') < 1)
+	=Messagebox('Nenhuma Mala Direta Com Registros Foi Selecionada Para Unificação!!!', 0+48, '')
+	ThisForm.grdSelecoes.SetFocus
+	This.Enabled = .t.
+	Return 0
+EndIf
+
+If (Reccount('csTmp') = 1)
+	=Messagebox('Apenas Uma Mala Direta Com Registros Foi Selecionada Para Ser Unificada!!!' + Chr(13) + ;
+				'Não é Possível Unificar Apenas Uma Mala Direta, Selecione Ao Menos Duas!!!', 0+48, '')
+	ThisForm.grdSelecoes.SetFocus
+	This.Enabled = .t.
+	Return 0
+EndIf
+
+If IsEmpty(ThisForm.cntNova.getNova.Value)
+	=Messagebox('Nome da Unificação Invalido!!! Este é o Nome Que' + Chr(13) + ;
+				'Vai Ser Utilizado Na Unificação Que Será Gerada!!!', 0+48, '')
+	ThisForm.cntNova.getNova.SetFocus
+	This.Enabled = .t.
+	Return 0
+EndIf
+
+Use In csTmp
+
+If (MessageBox('Confirma a Unificação das Malas Diretas?', 4+32+256, '')=6)
+	ThisForm.Processamento
+EndIf
+This.Enabled = .t.
+* Fim ****************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.Commandgroup2
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnsair.Click
+------------------------------------------------------------
+PROCEDURE btnsair.Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMLU.cmdBtnGrade
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update crSigMlItn Set SelImp = This.Value
+ThisForm.grdSelecoes.Refresh
+* Fim ****************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRMLU
+RESERVED3 (ClassInfo): gridorder
+podatamgr
+_memberdata XML Metadata for customizable properties
+*acertagrades 
+*montagrades 
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 21
+================================================================================

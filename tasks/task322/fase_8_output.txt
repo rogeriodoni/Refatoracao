@@ -1,0 +1,11 @@
+﻿Tudo integrado corretamente. Fase 8/8 conclu├¡da com sucesso.
+
+**Resumo do que foi feito:**
+
+- **`AjustarBotoesPorModo()`** adicionado ao `Formsigprpre.prg`: desabilita os bot├Áes CRUD da Page1 quando em modo edi├º├úo (INCLUIR/ALTERAR/VISUALIZAR) e habilita/desabilita Confirmar/Cancelar na Page2 conforme o modo atual
+
+- **menu.prg** ÔÇö dois pontos atualizados:
+  - `DEFINE BAR 95 OF popMovimentos` com "Altera├º├úo de Pre├ºos" + `ON SELECTION BAR 95 DO AbrirFormsigprpre`
+  - `PROCEDURE AbrirFormsigprpre()` no final do arquivo, usando o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro` no catch)
+
+O config.prg j├í carrega automaticamente via `ADIR` todos os `*BO.prg` de `/classes/` e todos os `Form*.prg` de `/forms/cadastros/`, portanto nenhuma altera├º├úo foi necess├íria l├í.

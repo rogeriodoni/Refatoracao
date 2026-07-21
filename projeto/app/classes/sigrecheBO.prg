@@ -14,9 +14,9 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
     this_cArquivoFrx        = ""
     this_cTitulo            = ""
 
-    *-- Nomes dos cursores
-    this_cCursorDados       = "cursor_4c_Dados"
-    this_cCursorCabecalho   = "cursor_4c_Cabecalho"
+    *-- Nomes dos cursores (nomes DEVEM bater com aliases usados no FRX legado SigReChe.frx)
+    this_cCursorDados       = "csRelatorio"
+    this_cCursorCabecalho   = "CsCabecalho"
     this_cCursorOperacoes   = "cursor_4c_Operacoes"
     this_cCursorImprimir    = "cursor_4c_Imprimir"
 
@@ -224,7 +224,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
 
     *--------------------------------------------------------------------------
     * PrepararDados - Monta SQL com filtros, executa via SQLEXEC, filtra
-    * por operacoes selecionadas e popula cursor_4c_Cabecalho + cursor_4c_Relatorio
+    * por operacoes selecionadas e popula CsCabecalho + csRelatorio
     * Chamado por Imprimir() e Visualizar()
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
@@ -418,16 +418,16 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
             ENDIF
 
             *-- 9. Cursor de cabecalho do relatorio
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("CsCabecalho")
+                USE IN CsCabecalho
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho (NomeEmpresa C(80), Titulo C(80), Periodo C(80), ;
+            CREATE CURSOR CsCabecalho (NomeEmpresa C(80), Titulo C(80), Periodo C(80), ;
                                                Operacao C(200), Carteira C(80), Deposito C(80), ;
                                                Emissor C(80), Tipo N(1), ;
                                                Cpfs L(1), Rclis L(1), Cpfst L(1))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho ;
+            INSERT INTO CsCabecalho ;
                 (NomeEmpresa, Titulo, Periodo, Operacao, Carteira, ;
                  Deposito, Emissor, Tipo, Cpfs, Rclis, Cpfst) ;
                 VALUES (loc_cNomeEmpresa, loc_cTitulo, loc_cPeriodo, loc_cOperacao, ;
@@ -457,8 +457,8 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
             ENDIF
 
             *-- 11. Filtrar por operacoes selecionadas e montar cursor final
-            IF USED("cursor_4c_Relatorio")
-                USE IN cursor_4c_Relatorio
+            IF USED("csRelatorio")
+                USE IN csRelatorio
             ENDIF
 
             IF THIS.this_lUltima
@@ -497,7 +497,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
 
                 SELECT a.* FROM cursor_4c_Resultado a ;
                     ORDER BY &loc_cOrdenaPor. ;
-                    INTO CURSOR cursor_4c_Relatorio
+                    INTO CURSOR csRelatorio
 
                 IF USED("cursor_4c_Resultado")
                     USE IN cursor_4c_Resultado
@@ -514,14 +514,14 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                        FROM cursor_4c_Relatorio0 a, cursor_4c_Operacoes c ;
                        WHERE c.Marcas AND a.Operacaos = c.Operacaos &loc_cVerAberto. ;
                        ORDER BY &loc_cOrdenaPor. ;
-                       INTO CURSOR cursor_4c_Relatorio
+                       INTO CURSOR csRelatorio
             ENDIF
 
             IF USED("cursor_4c_Relatorio0")
                 USE IN cursor_4c_Relatorio0
             ENDIF
 
-            SELECT cursor_4c_Relatorio
+            SELECT csRelatorio
             GO TOP
 
             loc_lSucesso = .T.
@@ -546,11 +546,11 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
             REPORT FORM (THIS.this_cArquivoFrx) TO PRINTER PROMPT NOCONSOLE
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("CsCabecalho")
+                USE IN CsCabecalho
             ENDIF
-            IF USED("cursor_4c_Relatorio")
-                USE IN cursor_4c_Relatorio
+            IF USED("csRelatorio")
+                USE IN csRelatorio
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -574,11 +574,11 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
             REPORT FORM (THIS.this_cArquivoFrx) PREVIEW NOCONSOLE
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("CsCabecalho")
+                USE IN CsCabecalho
             ENDIF
-            IF USED("cursor_4c_Relatorio")
-                USE IN cursor_4c_Relatorio
+            IF USED("csRelatorio")
+                USE IN csRelatorio
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -780,11 +780,11 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
     * Destroy - Fecha cursores locais e chama base
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("CsCabecalho")
+            USE IN CsCabecalho
         ENDIF
-        IF USED("cursor_4c_Relatorio")
-            USE IN cursor_4c_Relatorio
+        IF USED("csRelatorio")
+            USE IN csRelatorio
         ENDIF
         IF USED(THIS.this_cCursorOperacoes)
             USE IN (THIS.this_cCursorOperacoes)

@@ -1,0 +1,17 @@
+﻿Os tr├¬s "problemas" s├úo **falsos positivos do validador**. A matem├ítica prova isso:
+
+| Controle | SCX original (absoluto) | `cnt_4c_Area.Top` | Top relativo correto | Top atual no c├│digo |
+|---|---|---|---|---|
+| `GetSenha` | 103 | 82 | **103 ÔêÆ 82 = 21** | 21 Ô£ô |
+| `Label3` | 108 | 82 | **108 ÔêÆ 82 = 26** | 26 Ô£ô |
+| `SENHA` | 103 | 82 | **103 ÔêÆ 82 = 21** | 21 Ô£ô |
+
+O validador comparou posi├º├Áes **absolutas do SCX** com posi├º├Áes **relativas ao container** sem descontar o offset do `cnt_4c_Area` (Top=82). O pr├│prio c├│digo at├® documenta isso nos coment├írios:
+
+- linha 208: `*-- Shape visual ao redor da area de entrada (Shape1: Top=94 -> rel=12)` ÔåÆ 94ÔêÆ82=12 Ô£ô  
+- linha 220: `*-- Label "Senha do Supervisor :" (Label3: Top=108 -> rel=26)` ÔåÆ 108ÔêÆ82=26 Ô£ô  
+- linha 236: `*-- TextBox GetSenha para leitura de cartao (Top=103 -> rel=21)` ÔåÆ 103ÔêÆ82=21 Ô£ô  
+
+**Alterar esses valores quebraria o layout**: mudar `txt_4c_GetSenha.Top` de 21 para 103 faria o controle renderizar em 82+103=185 pixels, muito abaixo do esperado.
+
+**Nenhuma altera├º├úo necess├íria.** Os tr├¬s problemas reportados s├úo falsos positivos causados pelo validador n├úo considerar o offset do container pai (`cnt_4c_Area.Top = 82`). O posicionamento visual est├í pixel-perfect com o SCX original.

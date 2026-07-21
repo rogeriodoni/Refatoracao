@@ -1,0 +1,45 @@
+﻿Ambos os problemas reportados s├úo **falsos positivos** do validador. Aqui est├í a an├ílise:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] `CEMPS`
+
+**Falso positivo.** O schema `docs/schema.sql` confirma que `sigcdemp` existe com a coluna `cemps char(3)` (linha 3021), al├®m de todos os outros campos FTP consultados:
+
+| Campo BO | Coluna schema | Tipo |
+|---|---|---|
+| `Cemps` | `cemps` | char(3) Ô£ô |
+| `TpConexao` | `tpconexao` | char(1) Ô£ô |
+| `FtpEnd` | `ftpend` | char(50) Ô£ô |
+| `FtpUsuario` | `ftpusuario` | char(20) Ô£ô |
+| `FtpSenha` | `ftpsenha` | char(20) Ô£ô |
+| `DriveTs` | `drivets` | char(60) Ô£ô |
+| `DriveLs` | `drivels` | char(60) Ô£ô |
+| `DirFtpTs` | `dirftpts` | char(60) Ô£ô |
+| `DirFtpLs` | `dirftpls` | char(60) Ô£ô |
+| `LocDel` | `locdel` | bit Ô£ô |
+| `FtpDel` | `ftpdel` | bit Ô£ô |
+
+O validador comparou o `WHERE Cemps = ...` contra a lista de **vari├íveis locais** do c├│digo FTP original (`nResult_code, nFtp, llResult, ...`) ÔÇö que s├úo nomes de vari├íveis VFP, n├úo colunas SQL. A lista "WHERE original usa" era inaplic├ível a esta query.
+
+---
+
+### [SQL-FILTRO-INVENTADO] `LISTINDEX`
+
+**Falso positivo.** O `ListIndex` em quest├úo ├® a propriedade VFP de um ListBox (`loc_oObj.ListIndex`), n├úo uma coluna SQL em cl├íusula WHERE:
+
+```foxpro
+* Formsigprftp.prg linhas 2459-2466
+IF VARTYPE(loc_oObj) = "O" AND loc_oObj.ListIndex > 0
+    loc_cArquivo = ALLTRIM(loc_oObj.List(loc_oObj.ListIndex, 1))
+    ...
+    loc_oObj.RemoveItem(loc_oObj.ListIndex)
+```
+
+O validador confundiu a propriedade `.ListIndex` do objeto VFP com um filtro SQL.
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo est├í correto. Os dois arquivos (`Formsigprftp.prg` e `sigprftpBO.prg`) n├úo precisam de modifica├º├úo neste pass.

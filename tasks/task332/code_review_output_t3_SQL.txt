@@ -1,0 +1,23 @@
+﻿Analisei ambos os arquivos completos em busca de uma cl├íusula `WHERE lMarcas` em SQL. Vou documentar o que encontrei.
+
+**An├ílise dos SQL strings no BO:**
+
+1. `BuscarListasDisponiveis` (linhas 61-63): `WHERE lprecos <> EscaparSQL(...)` Ô£ô bate com o original
+2. `BuscarItensDaLista` (linhas 95-101): `WHERE a.lprecos = EscaparSQL(...)` Ô£ô usa `lprecos`
+3. `AdicionarItensMarcados` (linha 144): `DELETE FROM (...) WHERE EMPTY(cpros)` Ô£ô bate com original
+
+**Ocorr├¬ncias de `lMarcas` no c├│digo migrado:**
+- `"SELECT 0 AS lMarcas, ..."` ÔÇö lista do SELECT (coluna computada), **n├úo ├® WHERE**
+- `IF cursor_4c_Itens.lMarcas = 1` ÔÇö condi├º├úo VFP local (n├úo SQL Server)
+- `COUNT FOR lMarcas = 1 TO loc_nMarcados` ÔÇö opera├º├úo VFP local (n├úo SQL Server)
+- `REPLACE ALL lMarcas WITH 1/0` ÔÇö opera├º├úo VFP local
+
+**Conclus├úo:** N├úo existe nenhuma cl├íusula SQL `WHERE lMarcas` no c├│digo migrado. O `lMarcas` s├│ aparece como:
+- Coluna computada no SELECT (`0 AS lMarcas`) ÔÇö exatamente igual ao original (`Select 0 As lMarcas, a.*`)
+- Condi├º├Áes VFP locais em cursores locais ÔÇö correspondendo fielmente ao original (`If CsSigCdLpi.lMarcas = 1`)
+
+O original `lStrQuery = [Select 0 As lMarcas,a.* From SigCdLpi a ]+;` tem `]+;` indicando concatena├º├úo, e "WHERE original usa: LPRECOS" confirma que o WHERE do original tamb├®m usava `lprecos`. O c├│digo migrado usa exatamente `WHERE a.lprecos = EscaparSQL(par_cLPrecos)` ÔÇö correto.
+
+**O problema reportado pelo validator ├® um falso positivo.** O validador confundiu `0 AS lMarcas` na cl├íusula SELECT com uma condi├º├úo WHERE. Nenhuma corre├º├úo ├® necess├íria ÔÇö qualquer altera├º├úo quebraria a l├│gica correta existente.
+
+Os arquivos est├úo corretos e n├úo ser├úo modificados.

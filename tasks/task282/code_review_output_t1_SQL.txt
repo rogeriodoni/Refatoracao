@@ -1,0 +1,13 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e por qu├¬:
+
+**[CIDCHAVES] ÔÇö CORRIGIDO** (`ExecutarAtualizacao` e `ExecutarExclusao` no BO):
+- `WHERE cidchaves = EscaparSQL(THIS.this_cCidchaves)` ÔåÆ `WHERE empdopnums = EscaparSQL(THIS.this_cEmpdopnums)`
+- Os DELETEs em SigMvItn e SigMvIts j├í usavam `empdopnums` ÔÇö agora SigMvPec segue o mesmo padr├úo do original.
+
+**[DOPES] ÔÇö CORRIGIDO** (`CarregarGradeOperacao` no form):
+- Removida a condi├º├úo `WHERE Dopes = EscaparSQL(THIS.this_cDopes)`, inexistente no original.
+- Removida tamb├®m a checagem `EMPTY(THIS.this_cDopes)` que s├│ existia para controlar o filtro removido.
+- A query agora retorna todos os tipos de opera├º├úo: `SELECT Dopes FROM SigCdOpe`.
+
+**[ICLIS] ÔÇö MANTIDO (falso positivo verificado)**:
+- `Iclis` ├® a **PRIMARY KEY** de `SIGCDCLI` (`CONSTRAINT sigcdcli_iclis PRIMARY KEY CLUSTERED`). O `WHERE Iclis = X` ├® a ├║nica forma correta de buscar um cliente espec├¡fico para exibir `Rclis`. Remover essa condi├º├úo retornaria o primeiro cliente aleat├│rio da tabela. Condi├º├úo leg├¡tima, n├úo inventada.

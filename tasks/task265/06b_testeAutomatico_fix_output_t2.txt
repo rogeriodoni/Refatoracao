@@ -1,0 +1,5 @@
+﻿Correto. Linha 424 era onde `AddObject("Header1", "Header")` explodia ÔÇö agora ├® direto `WITH .Header1`.
+
+**Causa raiz:** VFP9 cria `Header1` e `Text1` automaticamente em cada coluna ao definir `ColumnCount`. Tentar `AddObject("Header1", "Header")` novamente gerava "A member object with this name already exists", que abortava `ConfigurarGrade`, deixava `loc_lSucesso = .F.` no CATCH, e fazia `FormBase.Init()` retornar `.F.` ÔåÆ `CREATEOBJECT` retornava n├úo-objeto.
+
+**Fix aplicado:** Removidas as 10 chamadas `AddObject("Header1", "Header")` e 9 chamadas `AddObject("Text1", "TextBox")` dentro dos blocos `WITH .ColumnN` ÔÇö agora apenas acessam os objetos pr├®-existentes via `WITH .Header1` / `WITH .Text1` diretamente. O `AddObject("Check1", "CheckBox")` da Column10 foi mantido (CheckBox n├úo existe por padr├úo na coluna).

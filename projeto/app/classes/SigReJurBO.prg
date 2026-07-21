@@ -277,7 +277,19 @@ DEFINE CLASS SigReJurBO AS BusinessBase
                                                                                                                                 IF VARTYPE(Inativas) = "L"
                                                                                                                                     loc_lAtiva = !Inativas
                                                                                                                                 ELSE
-                                                                                                                                    loc_lAtiva = (NVL(Inativas, 0) = 0)
+                                                                                                                                    IF VARTYPE(Inativas) = "L"
+                                                                                                                                        loc_lAtiva = !Inativas
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(Inativas) = "L"
+                                                                                                                                            loc_lAtiva = !Inativas
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(Inativas) = "L"
+                                                                                                                                                loc_lAtiva = !Inativas
+                                                                                                                                            ELSE
+                                                                                                                                                loc_lAtiva = (NVL(Inativas, 0) = 0)
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF

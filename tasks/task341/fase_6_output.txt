@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. Fase 6 conclu├¡da com sucesso.
+
+**Resumo do que foi implementado:**
+
+1. **ConfigurarPaginaDados()** ÔÇö adicionou os 6 controles faltantes (50% restantes da Page2):
+   - `lst_4c_Usuario` (ListBox, Courier New, MultiSelect, top=125) + BINDEVENT DblClickÔåÆUsuarioDblClick
+   - `lst_4c_Usuemp` (ListBox, Courier New, MultiSelect, top=125) + BINDEVENT DblClickÔåÆUsueEmpDblClick
+   - `cmd_4c_CmdAdd` (seta direita simples, top=232) + BINDEVENTÔåÆCmdAddClick
+   - `cmd_4c_CmdAddAll` (seta direita dupla, top=322) + BINDEVENTÔåÆCmdAddAllClick
+   - `cmd_4c_CmdRemove` (seta esquerda simples, top=277) + BINDEVENTÔåÆCmdRemoveClick
+   - `cmd_4c_CmdRemoveAll` (seta esquerda dupla, top=367) + BINDEVENTÔåÆCmdRemoveAllClick
+
+2. **HabilitarCampos()** ÔÇö removido o bloco que desabilitava bot├Áes ├¡cone-only (ficam ret├óngulo vazio); o controle de modo foi movido para os handlers.
+
+3. **BOParaForm()** ÔÇö `lst_4c_Usuario` s├│ carrega em INCLUIR/ALTERAR, correspondendo ao comportamento original (no VISUALIZAR, apenas mostra quem j├í tem acesso).
+
+4. **6 novos m├®todos PUBLIC** ÔÇö CmdAddClick, CmdAddAllClick, CmdRemoveClick, CmdRemoveAllClick, UsuarioDblClick, UsueEmpDblClick ÔÇö todos verificam `this_cModoAtual` antes de executar transfer├¬ncias.

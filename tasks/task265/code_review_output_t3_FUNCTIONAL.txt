@@ -1,0 +1,9 @@
+﻿Verificando o estado real do arquivo ÔÇö todas as tr├¬s issues reportadas j├í est├úo corretamente implementadas no c├│digo atual:
+
+**[CONTAINER-VISIVEL]** (linhas 1671-1679): `TornarControlesVisiveis` j├í tem o INLIST com `CNT_4C_SOMBRA`, `CNT_4C_JUSTIFICATIVA`, `CNT_4C_IMPCHMAT` e `CNT_4C_PROCURAR`. A recurs├úo `TornarSubControlesVisiveis` ├® injetada antes do `LOOP` (padr├úo correto da mem├│ria), ent├úo os filhos ficam vis├¡veis mas os containers si mesmos preservam `Visible=.F.`.
+
+**[LAYOUT-POSITION] Top** (linha 1111): `.Top = 284` ÔÇö id├¬ntico ao original (diff=0px).
+
+**[LAYOUT-POSITION] Left** (linha 1112): `.Left = 240` ÔÇö id├¬ntico ao original (diff=0px).
+
+O code review detectou estes problemas em uma vers├úo anterior do arquivo. O c├│digo atual j├í os corrige corretamente ÔÇö nenhuma altera├º├úo necess├íria neste pass.

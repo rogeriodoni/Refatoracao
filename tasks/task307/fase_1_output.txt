@@ -1,0 +1,15 @@
+﻿Arquivo criado corretamente em `C:\4c\projeto\app\classes\SigPrItbBO.prg`.
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+- **7 propriedades** derivadas da an├ílise do c├│digo fonte:
+  - `this_dDataIni` / `this_dDataFim` ÔÇö per├¡odo de filtro (campos getData1/getData2)
+  - `this_cEmpresa` / `this_cDsEmpresa` ÔÇö empresa e descri├º├úo (getEmp1/getDsemp1)
+  - `this_cDirContab` ÔÇö diret├│rio cont├íbil carregado de SigCdPam.DirContabv no Init do legado
+  - `this_lProcessado` / `this_lTemInconsistencias` ÔÇö flags de estado do processamento
+
+- **Init()** chama `DODEFAULT()` e define:
+  - `this_cTabela = "SigMvCcr"` (tabela principal do processamento)
+  - `this_cCampoChave = "Contas"`
+
+As pr├│ximas fases adicionar├úo os m├®todos: `CarregarDirContab()`, `Processar()` (l├│gica do `processamento` do legado), `Gravar()` (l├│gica do `gravar`), e a l├│gica de relat├│rio.

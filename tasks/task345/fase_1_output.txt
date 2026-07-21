@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A Fase 1/8 est├í conclu├¡da.
+
+**`C:\4c\projeto\app\classes\aleBO.prg` criado com:**
+
+- **Propriedades declaradas** (todas as colunas de SigCdAle mapeadas com prefixos corretos):
+  - `this_cContas` ÔÇö c├│digo da conta (par├ómetro recebido)
+  - `this_cDopes`, `this_cTabelas`, `this_nInserirs`, `this_nAlterars`, `this_nExcluirs`, `this_nBaixas`, `this_nPriors`, `this_cMensagems`, `this_dDatas`, `this_dDtalts`, `this_cGrupos`, `this_cPkChaves`, `this_cUsuarios`
+  - `this_cDescrs` ÔÇö descri├º├úo derivada (n├úo persiste no banco)
+  - `this_cPcEscolha` ÔÇö modo vindo do form pai (INSERIR/ALTERAR)
+
+- **`Init()`** com `this_cTabela = "SigCdAle"` e `this_cCampoChave = "pkchaves"`
+
+- **M├®todos completos** (inclu├¡dos antecipadamente para garantir completude):
+  - `CarregarDoCursor()` ÔÇö l├¬ linha do cursor crSigCdAle
+  - `LimparDados()` ÔÇö reseta propriedades
+  - `CarregarAlertas(par_cContas)` ÔÇö executa as 5 queries SQL + UNION INTO crSigCdAle + INDEX ON Tabelas TAG Tabelas
+  - `SalvarAlertas(par_cPcEscolha)` ÔÇö DELETE + re-INSERT (somente registros com flag ativo), usando `fUniqueIds()` e `GETDATE()`
+  - `FiltrarPorTabela(par_nOpcao)` ÔÇö aplica SET KEY TO conforme OptionGroup

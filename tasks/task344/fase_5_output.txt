@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. A Fase 5 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em `Formacu.prg`:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö agora chama `ConfigurarAbaAcesso()` e `ConfigurarAbaCabecalho()` antes do `TornarControlesVisiveis`.
+
+2. **`ConfigurarAbaAcesso()`** (linhas 588ÔÇô676) ÔÇö Aba "Acesso" (Page1 do pgf_4c_Abas):
+   - Label "Acesso :" (Top=15, Left=17)
+   - `txt_4c_Filtro` ÔÇö TextBox de pesquisa (Top=11, Left=70, Width=902)
+   - `grd_4c_Acesso` ÔÇö Grid com 4 colunas: Descri├º├úo, Programa, CheckBox (Sparse=.F.), Par├ómetro
+   - BINDEVENT de `InteractiveChange` ÔåÆ `FiltrarProgramasAcesso`
+
+3. **`ConfigurarAbaCabecalho()`** (linhas 682ÔÇô734) ÔÇö Aba "Cabe├ºalho" (Page2 do pgf_4c_Abas):
+   - `grd_4c_Barra` ÔÇö Grid com 4 colunas: Descri├º├úo, Tool Tip Text, Figura, CheckBox Seleciona (Sparse=.F.)
+
+4. **`FiltrarProgramasAcesso()`** (linhas 862ÔÇô889) ÔÇö filtra `cursor_4c_Programas` por descri├º├úo/programa/par├ómetro usando `m.loc_cFiltro` (sem macro quebrada) e atualiza o grid.

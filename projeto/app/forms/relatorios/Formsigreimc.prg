@@ -505,7 +505,9 @@ DEFINE CLASS Formsigreimc AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -515,7 +517,9 @@ DEFINE CLASS Formsigreimc AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 

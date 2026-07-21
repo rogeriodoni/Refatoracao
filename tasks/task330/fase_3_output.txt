@@ -1,0 +1,16 @@
+﻿Todos os `RETURN` est├úo fora dos blocos TRY/ENDTRY. Ô£ô
+
+**Fase 3 conclu├¡da.** `Formsigprsen.prg` criado em `projeto/app/forms/operacionais/` com:
+
+| Elemento | Implementado |
+|---|---|
+| Properties (Width=500, Height=119, DataSession=2, TitleBar=0, etc.) | Ô£ô |
+| `Init(par_lAutomatico)` com modo autom├ítico (chama BO + Release) | Ô£ô |
+| `InicializarForm()` com cria├º├úo do BO + background | Ô£ô |
+| `ConfigurarForm()` com cnt_4c_Cabecalho, lbl_4c_Sombra/Titulo, cmd_4c_GerarSenha, cmd_4c_Encerrar | Ô£ô |
+| `TornarControlesVisiveis()` recursivo | Ô£ô |
+| `CmdGerarSenhaClick()` delegando para `sigprsenBO.Processar()` | Ô£ô |
+| `CmdEncerrarClick()` | Ô£ô |
+| `Destroy()` liberando BO | Ô£ô |
+
+**Fases 4-8:** Grid e bot├Áes CRUD ÔÇö n├úo aplic├ível (form sem grid). TextBoxes ÔÇö n├úo aplic├ível (sem campos). Eventos (BINDEVENTs) ÔÇö a serem adicionados nas fases seguintes para conectar `cmd_4c_GerarSenha.Click` e `cmd_4c_Encerrar.Click` aos handlers.

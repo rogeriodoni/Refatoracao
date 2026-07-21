@@ -1,0 +1,13 @@
+﻿Corre├º├Áes aplicadas com sucesso. Resumo do que foi feito:
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT** ÔÇö Falso positivo: a coluna n├úo existe em nenhum dos arquivos (Form nem BO). Nenhuma a├º├úo necess├íria.
+
+**[TRANSACAO-AVULSA] ÔÇö 8 ocorr├¬ncias removidas em 3 blocos:**
+
+1. **FinalizarRecalculo fail** (linha 331 original): Removido `SQLEXEC(gnConnHandle, "ROLLBACK")` antes do `LOOP` ÔÇö o `LOOP` sozinho ├® suficiente.
+
+2. **Bloco COMMIT p├│s-FinalizarRecalculo** (linhas 335-338 originais): Removido bloco `IF SQLEXEC(gnConnHandle, "COMMIT") <= 0 ... ENDIF` inteiro ÔÇö sem BEGIN TRANSACTION, o COMMIT n├úo tem efeito e o AUTOCOMMIT j├í garantiu o UPDATE anterior.
+
+3. **Bloco COMMIT/ROLLBACK p├│s-GravarHistorico+DeletarDaFila** (linhas 353-362 originais): Colapsado para apenas `IF loc_lOk / loc_oBO.DeletarDaFila / ENDIF` ÔÇö os dois SQLEXECs internos (DELETE + INSERT) s├úo autocommitados individualmente.
+
+4. **"Rollback de seguran├ºa ao fim do ciclo"** (linha 369 original): Removido ÔÇö ROLLBACK sem transa├º├úo aberta ├® no-op e enganoso.

@@ -32,8 +32,8 @@ DEFINE CLASS sigreimpBO AS RelatorioBase
     *-- Nomes dos cursores de trabalho
     this_cCursorOperacoesE  = "cursor_4c_OperacoesE"
     this_cCursorOperacoesS  = "cursor_4c_OperacoesS"
-    this_cCursorDados       = "cursor_4c_Dados"
-    this_cCursorCabecalho   = "cursor_4c_Cabecalho"
+    this_cCursorDados       = "crDados"
+    this_cCursorCabecalho   = "crCabecalho"
 
     *-- Mensagem de erro
     this_cMensagemErro  = ""
@@ -554,7 +554,7 @@ DEFINE CLASS sigreimpBO AS RelatorioBase
                     loc_cRelatorio = gc_4c_CaminhoReports + "SigReIp1.frx"
                 ELSE
                 ENDIF
-                THIS.ExecutarReportForm("SigReIp2", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReIp2", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

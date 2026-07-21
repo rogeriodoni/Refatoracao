@@ -1,0 +1,7 @@
+﻿`CarregarCamposGrid()` is correct. FASE 9 is now complete ÔÇö all three pieces are in place:
+
+1. **`ConfigurarAbaCampos()`** ÔÇö creates `grd_4c_AcCamp` with correct dimensions (Top=18, Width=969, Height=421), three columns (360/360/168), and the `cbo_4c_Status` ComboBox with the four accented Portuguese options.
+
+2. **`InicializarCursorAcCamp()`** ÔÇö creates the local VFP cursor `crAcCamp` with 26 hardcoded field definitions for `SIGCDCLI` (all using CHR() codes for accented characters).
+
+3. **`CarregarCamposGrid()`** ÔÇö correct two-step approach: queries `SigAcTel` from SQL Server into `crTmpAcTel`, then performs a VFP-side LEFT JOIN with `crAcCamp` into `crSigAcTel`, binds the grid with correct ControlSources (`cDescTelas`/`cDescCamps`/`nStatus`) and resets headers after RecordSource change.

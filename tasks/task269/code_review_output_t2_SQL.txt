@@ -1,0 +1,38 @@
+﻿Analisei ambos os arquivos completos. Vou verificar cada um dos tr├¬s flags antes de fazer qualquer altera├º├úo.
+
+**Verifica├º├úo:**
+
+**1. CMOES em WHERE (SIGPRCOTBO.prg:113)**
+```
+"WHERE cmoes = " + EscaparSQL(par_cMoeda) + " " + ;
+```
+Flagrado porque o original usa `Select * From CrSigCdCot Into Cursor TmpCot ReadWrite` sem WHERE. Por├®m no legado `CrSigCdCot` ├® uma tabela local VFP pr├®-populada ÔÇö a filtragem por moeda acontecia via `SEEK(CrSigCdMoe.cmoes + ...)` depois. Na migra├º├úo para SQL Server, o equivalente correto ├® o `WHERE cmoes = ...` na query SQLEXEC. Remover esse filtro carregaria cota├º├Áes de **todas as moedas** quando o form ├® espec├¡fico para uma moeda. **Falso positivo ÔÇö filtro correto e necess├írio.**
+
+**2. DATAS em WHERE**
+Procurando `DATAS` em todos os WHERE do c├│digo migrado:
+- `CarregarCotacoes` (linha 113): `WHERE cmoes = ...` ÔÇö sem DATAS
+- `ExcluirCotacaoAtual` (linha 236): `WHERE cidchaves = ...` ÔÇö sem DATAS
+- `SalvarAlteracoesCursor` (linhas 295, 322): `WHERE cidchaves = ...` ÔÇö sem DATAS
+- `ExecutarExclusao` (linha 440): `WHERE cidchaves = ...` ÔÇö sem DATAS
+
+`datas` aparece apenas em VFP `LOCATE FOR` (BO:170, Form:566) ÔÇö opera├º├Áes VFP sobre cursor local, n├úo WHERE SQL. **Falso positivo ÔÇö n├úo existe DATAS em nenhum WHERE SQL.**
+
+**3. CONTROLCOUNT em WHERE**
+`ControlCount` aparece somente em acessos a propriedade VFP (Form:204, Form:215):
+```
+FOR loc_i = 1 TO loc_oContainer.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+Isso ├® acesso a propriedade de controle VFP9, jamais coluna SQL. **Falso positivo ÔÇö ├® propriedade VFP, n├úo coluna de tabela.**
+
+---
+
+**Resultado da verifica├º├úo:** Os tr├¬s flags s├úo **falsos positivos** do analisador autom├ítico.
+
+| Flag | Detec├º├úo | Realidade | A├º├úo |
+|------|----------|-----------|------|
+| CMOES WHERE | Correto (est├í em WHERE SQL) | Filtro necess├írio p/ SQL Server (equivale ao SEEK legado) | Manter |
+| DATAS WHERE | Incorreto | Est├í em `LOCATE FOR` VFP, n├úo em WHERE SQL | Nenhuma |
+| CONTROLCOUNT WHERE | Incorreto | ├ë `.ControlCount` (propriedade VFP), n├úo coluna SQL | Nenhuma |
+
+O c├│digo dos dois arquivos est├í correto. Nenhuma altera├º├úo ├® necess├íria neste pass SQL.

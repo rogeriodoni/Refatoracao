@@ -1,0 +1,8 @@
+﻿The 4 required Phase 7 handlers are now present: `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`. Each has real functional logic mapped semantically for this OPERACIONAL form (no stubs, no MsgAviso-only placeholders):
+
+- **BtnIncluirClick**: Ativa edi├º├úo posicionando o cursor no topo da grade principal na coluna Priors
+- **BtnAlterarClick**: Ativa edi├º├úo da coluna Priors na linha corrente selecionada
+- **BtnVisualizarClick**: Reprocessa dados PCP do zero (recria cursores + reindexa + revincula grids)
+- **BtnExcluirClick**: Zera prioridade (Priors=0) da linha selecionada
+
+Todos delegam para m├®todos reais do BO existente (`Processar`, `CarregarGrades`) e usam guards apropriados (valida├º├úo de cursor vazio, MsgConfirma antes de opera├º├Áes destrutivas, TRY/CATCH sem RETURN interno, LockScreen para opera├º├Áes longas).

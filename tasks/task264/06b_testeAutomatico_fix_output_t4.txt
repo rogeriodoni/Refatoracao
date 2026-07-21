@@ -1,0 +1,12 @@
+﻿**Corre├º├úo aplicada em `FormSigPrCfn.prg`.**
+
+**Causa raiz:** No VFP9, o padr├úo `loc_oBtn = obj.Buttons(1)` (atribui├º├úo do retorno de `Buttons()` para vari├ível local) falha com `BUTTONS is not an object` na linha 702. O padr├úo correto ÔÇö usado em todos os outros forms operacionais do projeto (`Formsigopdiv`, `Formsigopind`, etc.) ÔÇö ├® `WITH obj.Buttons(N) ... ENDWITH` diretamente.
+
+**O que foi alterado:**
+- Removido `loc_oBtn` da declara├º├úo `LOCAL` em `ConfigurarPaginaLista`
+- 4 ocorr├¬ncias de `loc_oBtn = ...Buttons(N)` + `WITH loc_oBtn` substitu├¡das por `WITH ...Buttons(N)` direto:
+  - `obj_4c_OptCalculo.Buttons(1)` ÔåÆ caption "Simples"
+  - `obj_4c_OptCalculo.Buttons(2)` ÔåÆ caption "Composto"
+  - `obj_4c_OptDias.Buttons(1)` ÔåÆ caption "Corridos"
+  - `obj_4c_OptDias.Buttons(2)` ÔåÆ caption "├Üteis"
+- `.FXP` compilado deletado para for├ºar recompila├º├úo limpa

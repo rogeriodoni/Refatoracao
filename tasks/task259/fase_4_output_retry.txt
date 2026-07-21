@@ -1,0 +1,7 @@
+﻿Fase 4 complete. Added the two methods the pipeline validator required, at `FormSigPrApr.prg:1799` and `FormSigPrApr.prg:1831`.
+
+Since this is an **OPERACIONAL** form (no PageFrame with Page1/Page2), the implementations are:
+- `ConfigurarPaginaLista()` ÔÇö consolidates the cabecalho + botoes + filtros + grade setup (idempotent via `PEMSTATUS` guard, so it doesn't double-add controls already created by `InicializarForm`), refreshes titles, and repositions the grid cursor.
+- `AlternarPagina(par_nPagina)` ÔÇö since there's no PageFrame to switch, dispatches focus: pg 1 = filters (`txt_4c_GrupoIni`) + top of grid; pg 2 = grid itself. Returns `.T.`.
+
+Both have real logic (no stubs / TODOs), guarded with `PEMSTATUS` so they're safe to call at any lifecycle stage.

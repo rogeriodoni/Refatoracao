@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes foram:
+
+**`Formsigprrcu.prg`**:
+- `lbl_4c_Status.Alignment = 0` (esquerda) ÔÇö corrige desvio do PILAR 1 (original Label1 n├úo especifica Alignment, default=0)
+- Check do retorno de `SQLEXEC("COMMIT")` dentro do SCAN: se falhar, faz ROLLBACK + LOOP (alinhado ao comportamento original do `poDataMgr.Commit()`)
+- ROLLBACK antes do EXIT por `loc_nErro < 0` (queda de conex├úo) ÔÇö garante que a transa├º├úo ├® revertida antes de sair do SCAN
+
+**`sigprrcuBO.prg`**:
+- Guard `USE IN CrSigOpClC` antes do SQLEXEC em `BuscarProdutosPendentes` ÔÇö evita "Table buffer contains uncommitted changes" em chamadas repetidas (regra #91)
+
+O formul├írio SIGPRRCU n├úo tem lookups, TextBoxes de entrada ou Page2/CRUD ÔÇö ├® um dialog de processamento puro ÔÇö portanto estas corre├º├Áes de robustez representam todo o conte├║do v├ílido da Fase 6.

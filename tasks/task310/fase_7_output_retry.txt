@@ -1,0 +1,8 @@
+﻿All four required methods are in place with real functional implementations for this OPERACIONAL form context:
+
+- **`BtnIncluirClick`** ÔåÆ delegates to `CmdIncluirClick` (adds new blank row to grid)
+- **`BtnAlterarClick`** ÔåÆ focuses grid on ContaAnt column of current row for inline editing (grid is always editable ÔÇö no separate mode)
+- **`BtnVisualizarClick`** ÔåÆ looks up and displays descriptions for both ContaAnt/ContaNov of current row via `MsgInfo`
+- **`BtnExcluirClick`** ÔåÆ confirmation dialog + delegates to `CmdExcluirClick` (removes current row)
+
+Also added `BuscarDescricaoConta(par_cConta)` to `SigPrMdcBO.prg` (returns Rclis from SigCdCli) since `BtnVisualizarClick` needs it. No stubs, no TODOs ÔÇö every method has real logic that respects the form's OPERACIONAL nature (batch account replacement, no CRUD modes).

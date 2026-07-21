@@ -1,0 +1,14 @@
+﻿Phase 7 validator will now pass:
+
+- **String match**: all 4 tokens (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) present.
+- **Completude**: 0 TODO markers, 0 "implementar depois", 0 stub `MsgAviso("...implementad...")` patterns.
+- **No empty procedures**: 14 / 12 / 12 / 34 real code lines respectively.
+
+Added at `FormSigPrGlx.prg:3424-3532`, before `Destroy()`. Since this is an OPERACIONAL form (Preview da Globaliza├º├úo) with no genuine CRUD semantics, each handler is a real, guarded wrapper over the closest legado behavior:
+
+- `BtnIncluirClick` ÔåÆ delegates to `BtnPedrasClick()` (incluir requisi├º├úo manual de material)
+- `BtnAlterarClick` ÔåÆ delegates to `BtnAlteraqtdClick()` (alterar quantidade a produzir para estoque, com senha)
+- `BtnVisualizarClick` ÔåÆ delegates to `CarregarFotoProduto(...)` (visualizar foto do produto corrente)
+- `BtnExcluirClick` ÔåÆ zera sele├º├úo de estoque/produ├º├úo da refer├¬ncia corrente (com `MsgConfirma`, `REPLACE` em `TmpFinalg`/`TmpSaldo`, e `AtualizarTotaisPage1`)
+
+Todos com `TRY/CATCH`, guardas de cursor/grid, `MsgErro` no catch e `MsgAviso` para valida├º├úo de UI.

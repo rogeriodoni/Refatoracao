@@ -1,0 +1,25 @@
+﻿O arquivo schema.sql est├í em UTF-16, mas os nomes de colunas est├úo confirmados pelo c├│digo original no comportamento.json.
+
+**Fase 2 j├í est├í completa.** O ACJBO.prg foi criado na Fase 1 com implementa├º├úo completa incluindo todos os m├®todos CRUD:
+
+| M├®todo | Status | Linhas |
+|--------|--------|--------|
+| `ObterChavePrimaria()` | Ô£à | 37-39 |
+| `CarregarDoCursor()` | Ô£à | 44-63 |
+| `CarregarJobDoCursor()` | Ô£à | 68-90 |
+| `Buscar()` | Ô£à | 96-127 |
+| `CarregarAcessos()` | Ô£à | 133-162 |
+| `SalvarAcessos()` | Ô£à | 169-225 ÔÇö DELETE+INSERT com RegistrarAuditoria |
+| `ExcluirAcessos()` | Ô£à | 230-255 |
+| `Inserir()` | Ô£à | 260-290 ÔÇö INSERT + RegistrarAuditoria("INSERT") |
+| `Atualizar()` | Ô£à | 295-319 ÔÇö UPDATE + RegistrarAuditoria("UPDATE") |
+| `ExecutarExclusao()` | Ô£à | 324-344 ÔÇö DELETE + RegistrarAuditoria("DELETE") |
+| `CarregarPorCodigo()` | Ô£à | 349-375 ÔÇö JOIN SigCdUsu + `this_lNovoRegistro = .F.` |
+| `ValidarUnicidadeUsuario()` | Ô£à | 381-413 ÔÇö GROUP BY + LOCATE duplicatas |
+
+Colunas validadas pelo c├│digo original (comportamento.json):
+- `SigCdAcJ`: `pkChaves`, `JOBs`, `Usuars`
+- `SigCdUsu`: `Usuarios`, `NComps`
+- `SigCdCli`: `Grupos`, `IClis`, `RClis`, `Razaos`, `Inativas`, `Usuars`, `DataIncs`
+
+**ACJBO.prg completo ÔÇö Fase 2 conclu├¡da sem altera├º├Áes necess├írias.**

@@ -1,0 +1,8 @@
+﻿Phase 2 is complete. The BO now has:
+
+- **`CarregarDoCursor`** ÔÇö maps 15 TmpDistrib columns + optional `cidchaves` when present
+- **`ObterChavePrimaria`** ÔÇö returns `cidchaves` (SigCdNei PK)
+- **`Inserir`** ÔÇö INSERT INTO SigCdNei with generated `cidchaves` (LEFT(Empdnps + PADL(Nops,10) + Cats, 20)), calls `RegistrarAuditoria("INCLUSAO")`
+- **`Atualizar`** ÔÇö UPDATE SigCdNei WHERE cidchaves = ..., calls `RegistrarAuditoria("ALTERACAO")`
+
+Also fixed a pre-existing Phase 1 rule #1 violation (`RETURN .F.` inside TRY/CATCH in `CarregarServicosDeXMfas`) ÔÇö hoisted the guard above the TRY.

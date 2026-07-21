@@ -1,0 +1,4417 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrCtr.SCX
+* Data/Hora: 15/07/2026 13:23:42
+* Total de registros: 89
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCTR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCTR.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRCTR.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: Dt_inicial
+  Parent: SIGPRCTR.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGPRCTR.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Pageframe1
+  Parent: SIGPRCTR.Pagina.Dados
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: Shape1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say2
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Dconta
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Conta
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Arquivo
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Moeda
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: processar
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cpf
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCadastros
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Bot_Consulta
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdEstoque
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Opt_Custo
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Command12
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdOperacao
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Opt_Fil
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page1
+  Class: label
+  BaseClass: label
+
+Objeto: Shape5
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: shape
+  BaseClass: shape
+
+Objeto: grdDisponivel
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_Qtde
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_Qtde
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdBaixa
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdBaixa
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdReserva
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdReserva
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col08_QtdSaldo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col08_QtdSaldo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdItemXml
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col01_Empresa
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col01_Empresa
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col02_Saldo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col02_Saldo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col03_Distribuido
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col03_Distribuido
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col04_Valor
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col04_Valor
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: FigJpg
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: image
+  BaseClass: image
+
+Objeto: lbl_produto
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnExcluirSis
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnExcluirArq
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_produto_inicial
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_pr_venda
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_ref_fornecedor
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ref_fornecedor
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_pr_venda
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_peso_medio
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_pr_venda_moeda
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getEmps
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDopes
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getNumes
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Sistema
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Arquivo
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_custofs
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_moecusfs
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_precoMov
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getcIdChaves
+  Parent: SIGPRCTR.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 620
+  Width = 1200
+  DoCreate = .T.
+  Caption = "Controle de Movimentações por XML"
+  KeyPreview = .T.
+  WindowState = 0
+  podatamgr2 = .F.
+  poobjext1 = .F.
+  sigkey = .F.
+  _memberdata = <VFPData><memberdata name="calcula_saldo" type="method" display="Calcula_Saldo"/></VFPData>
+  Name = "SIGPRCTR"
+  Pagina.ErasePage = .T.
+  Pagina.PageCount = 2
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 0
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1200
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.TabIndex = 6
+  Pagina.Lista.Grade.Top = 130
+  Pagina.Lista.Grade.Width = 1138
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 336
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 708
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 414
+  Pagina.Lista.Grupo_op.TabIndex = 5
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 1115
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 9
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 105
+  Pagina.Lista.cntFiltros.Left = 1019
+  Pagina.Lista.cntFiltros.TabIndex = 10
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.FontName = "Verdana"
+  Pagina.Lista.FontSize = 8
+  Pagina.Lista.Caption = "Lista"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 13
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 1024
+  Pagina.Dados.Grupo_Salva.Top = 29
+  Pagina.Dados.Grupo_Salva.Width = 164
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.FontName = "Verdana"
+  Pagina.Dados.FontSize = 8
+  Pagina.Dados.Caption = "Dados"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -24
+  Pagina.Left = 0
+  Pagina.Width = 1200
+  Pagina.Height = 650
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Lista.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 582
+  Top = 106
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Lista.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Período :"
+  Height = 15
+  Left = 440
+  Top = 106
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Lista.Dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Left = 495
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Filtro de Data Inicial de Lançamentos"
+  Top = 102
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Lista.Dt_final
+------------------------------------------------------------
+  Format = "K"
+  Left = 598
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Filtro de Data Final de Lançamentos"
+  Top = 102
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = 3
+  Left = -1
+  Width = 1199
+  Height = 624
+  ZOrderSet = 0
+  Name = "Pageframe1"
+  Page1.FontBold = .T.
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Filtrar"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "Page1"
+  Page2.FontBold = .T.
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Controle"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 90,90,90
+  Page2.Name = "Page2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Shape1
+------------------------------------------------------------
+  Top = 2
+  Left = 912
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Say2
+------------------------------------------------------------
+  BackStyle = 0
+  Caption = "Diretório :"
+  Height = 15
+  Left = 253
+  Top = 160
+  TabIndex = 12
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Say1
+------------------------------------------------------------
+  BackStyle = 0
+  Caption = "Precificação :"
+  Height = 15
+  Left = 237
+  Top = 114
+  TabIndex = 8
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Say4
+------------------------------------------------------------
+  BackStyle = 0
+  Caption = "Fornecedores :"
+  Height = 15
+  Left = 228
+  Top = 69
+  TabIndex = 3
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Grupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  InputMask = ""
+  Left = 307
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 66
+  Width = 85
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Dconta
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 21
+  Left = 307
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 89
+  Width = 357
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "Get_Dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Conta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  InputMask = ""
+  Left = 394
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 66
+  Width = 85
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Arquivo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = ""
+  Height = 21
+  Left = 307
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 157
+  Width = 357
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "Get_Arquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  InputMask = ""
+  Left = 307
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 11
+  ToolTipText = ""
+  Top = 134
+  Width = 85
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Say3
+------------------------------------------------------------
+  BackStyle = 0
+  Caption = "Moeda :"
+  Height = 15
+  Left = 262
+  Top = 137
+  TabIndex = 10
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.processar
+------------------------------------------------------------
+  Top = 7
+  Left = 962
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "Processar"
+  TabIndex = 21
+  Name = "processar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Say5
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Movimentações :"
+  Left = 203
+  Top = 204
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_cpf
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 21
+  InputMask = "XXXXXXXXXXXXXXXXXXXX"
+  Left = 481
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 66
+  Width = 146
+  Style = 0
+  ForeColor = 0,0,0
+  ZOrderSet = 66
+  Name = "Get_cpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.btnCadastros
+------------------------------------------------------------
+  Top = 70
+  Left = 708
+  Height = 40
+  Width = 40
+  FontSize = 7
+  Picture = z:\framework\imagens\geral_pastas_28.jpg
+  Caption = ""
+  TabIndex = 20
+  ToolTipText = "<F3> Acessa o Cadastro Desta Conta"
+  SpecialEffect = 0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCadastros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Bot_Consulta
+------------------------------------------------------------
+  Top = 70
+  Left = 667
+  Height = 40
+  Width = 40
+  FontName = "Small Fonts"
+  FontSize = 4
+  Picture = z:\framework\imagens\geral_calendario_26.jpg
+  Caption = ""
+  TabIndex = 18
+  ToolTipText = "<F5> Faz a Consulta Genérica de Vendas desta Conta..."
+  SpecialEffect = 0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Bot_Consulta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 340
+  Left = 307
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 206
+  Width = 545
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "grdEstoque"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 70
+  Column1.Name = "Column2"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 200
+  Column2.Name = "Column3"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 80
+  Column3.Name = "Column4"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column5"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Numero"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Opt_Custo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 17
+  Left = 303
+  Top = 113
+  Width = 255
+  TabIndex = 9
+  Name = "Opt_Custo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Custo Total"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 1
+  Option1.Width = 73
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Custo pela Composição"
+  Option2.Height = 15
+  Option2.Left = 98
+  Option2.Top = 1
+  Option2.Width = 129
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Command12
+------------------------------------------------------------
+  Top = 157
+  Left = 667
+  Height = 20
+  Width = 20
+  Caption = "..."
+  TabIndex = 14
+  Name = "Command12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.cmdOperacao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 857
+  Top = 334
+  Width = 85
+  TabIndex = 19
+  Themes = .F.
+  Name = "cmdOperacao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Command1.Caption = "Movimento"
+  Command1.ToolTipText = "Movimentação"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Opt_Fil
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 24
+  Left = 303
+  Top = 179
+  Width = 192
+  TabIndex = 16
+  Name = "Opt_Fil"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Somente"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 60
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 84
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Height = 15
+  Option3.Left = 132
+  Option3.Top = 5
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Carregar produtos que constam nos XML's :"
+  Height = 15
+  Left = 55
+  Top = 184
+  Width = 246
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Shape5
+------------------------------------------------------------
+  Top = 1
+  Left = 424
+  Height = 113
+  Width = 282
+  BackStyle = 0
+  BorderStyle = 1
+  BorderWidth = 2
+  SpecialEffect = 0
+  ZOrderSet = 0
+  Name = "Shape5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 344
+  Left = 8
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 17
+  TabIndex = 3
+  Top = 134
+  Width = 684
+  BackColor = 237,242,243
+  GridLineColor = 238,238,238
+  HighlightForeColor = 15,41,104
+  HighlightStyle = 2
+  Name = "grdDisponivel"
+  Column1.FontBold = .T.
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.FontUnderline = .T.
+  Column1.Width = 100
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,255
+  Column1.BackColor = 237,242,243
+  Column1.MousePointer = 99
+  Column1.MouseIcon = ..\vbmp\h_point.cur
+  Column1.Name = "Col01_Codigo"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 235
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.BackColor = 237,242,243
+  Column2.Name = "Col02_Descricao"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 70
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 237,242,243
+  Column3.Name = "Col04_Valor"
+  Column4.FontBold = .T.
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.Width = 63
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Format = "9"
+  Column4.ForeColor = 0,0,0
+  Column4.BackColor = 237,242,243
+  Column4.Name = "Col05_Qtde"
+  Column5.FontBold = .T.
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.Width = 63
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Format = "9"
+  Column5.ForeColor = 0,0,0
+  Column5.BackColor = 237,242,243
+  Column5.Name = "Col06_QtdBaixa"
+  Column6.FontBold = .T.
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.Width = 63
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Format = "9"
+  Column6.ForeColor = 0,0,0
+  Column6.BackColor = 237,242,243
+  Column6.Name = "Col07_QtdReserva"
+  Column7.FontBold = .T.
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 7
+  Column7.Width = 63
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.BackColor = 237,242,243
+  Column7.Name = "Col08_QtdSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .T.
+  BorderStyle = 0
+  Margin = 0
+  MousePointer = 15
+  ReadOnly = .T.
+  ForeColor = 0,0,255
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Valor.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,9
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Valor.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_Qtde.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_Qtde.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdBaixa.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Baixado"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdBaixa.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdReserva.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Reservado"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdReserva.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col08_QtdSaldo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saldo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col08_QtdSaldo.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 344
+  Left = 693
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  TabIndex = 4
+  Top = 134
+  Width = 493
+  BackColor = 237,242,243
+  GridLineColor = 238,238,238
+  Name = "grdItemXml"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Alignment = 2
+  Column1.Enabled = .F.
+  Column1.Width = 100
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 237,242,243
+  Column1.Name = "Col01_Empresa"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Enabled = .F.
+  Column2.Width = 235
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 237,242,243
+  Column2.Name = "Col02_Saldo"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 63
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.InputMask = "999999"
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 237,242,243
+  Column3.Name = "Col03_Distribuido"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Enabled = .F.
+  Column4.Width = 70
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.BackColor = 237,242,243
+  Column4.Name = "Col04_Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col01_Empresa.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col01_Empresa.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col02_Saldo.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col02_Saldo.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col03_Distribuido.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col03_Distribuido.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col04_Valor.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col04_Valor.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.FigJpg
+------------------------------------------------------------
+  Stretch = 1
+  Height = 109
+  Left = 426
+  Top = 3
+  Width = 278
+  Name = "FigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.lbl_produto
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "\<Procurar Produto :"
+  Height = 15
+  Left = 8
+  Top = 74
+  Width = 91
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "lbl_produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.btnExcluirSis
+------------------------------------------------------------
+  Top = 479
+  Left = 663
+  Height = 37
+  Width = 40
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 13
+  TabStop = .F.
+  ToolTipText = "Excluir Linha da Grade Sistema"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "btnExcluirSis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.btnExcluirArq
+------------------------------------------------------------
+  Top = 479
+  Left = 1146
+  Height = 37
+  Width = 40
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 13
+  TabStop = .F.
+  ToolTipText = "Excluir Linha da Grade Arquivo"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "btnExcluirArq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_produto_inicial
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 8
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 90
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_produto_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_pr_venda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Height = 21
+  InputMask = "99,999.99999"
+  Left = 122
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 29
+  ToolTipText = ""
+  Top = 546
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_pr_venda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.lbl_ref_fornecedor
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Ref. Fornecedor :"
+  Height = 15
+  Left = 30
+  Top = 505
+  Width = 88
+  TabIndex = 28
+  ForeColor = 90,90,90
+  Name = "lbl_ref_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_ref_fornecedor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Format = "K!"
+  Height = 21
+  Left = 122
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 27
+  Top = 502
+  Width = 190
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_ref_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.lbl_pr_venda
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Preço Venda :"
+  Height = 15
+  Left = 49
+  Top = 549
+  Width = 69
+  TabIndex = 32
+  ForeColor = 90,90,90
+  Name = "lbl_pr_venda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Peso :"
+  Height = 15
+  Left = 348
+  Top = 550
+  Width = 32
+  TabIndex = 36
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_peso_medio
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Height = 21
+  InputMask = "99,999.999"
+  Left = 383
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 31
+  ToolTipText = ""
+  Top = 547
+  Width = 75
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_peso_medio"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_pr_venda_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 231
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 30
+  ToolTipText = ""
+  Top = 546
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_pr_venda_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getEmps
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 122
+  SpecialEffect = 1
+  TabIndex = 14
+  ToolTipText = ""
+  Top = 480
+  Width = 65
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Movimentação :"
+  Height = 15
+  Left = 40
+  Top = 483
+  Width = 78
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getDopes
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 188
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 480
+  Width = 205
+  Themes = .F.
+  Name = "getDopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getNumes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 393
+  SpecialEffect = 1
+  TabIndex = 14
+  ToolTipText = ""
+  Top = 480
+  Width = 65
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "getNumes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Sistema
+------------------------------------------------------------
+  FontBold = .T.
+  Alignment = 2
+  Height = 20
+  Left = 8
+  TabIndex = 18
+  Top = 113
+  Width = 684
+  BackColor = 128,255,255
+  Name = "Sistema"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Arquivo
+------------------------------------------------------------
+  FontBold = .T.
+  Alignment = 2
+  Height = 20
+  Left = 691
+  TabIndex = 21
+  Top = 113
+  Width = 495
+  BackColor = 255,255,128
+  Name = "Arquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_custofs
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Height = 21
+  InputMask = "99,999.99999"
+  Left = 122
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 29
+  ToolTipText = ""
+  Top = 568
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_custofs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Preço Custo :"
+  Height = 15
+  Left = 51
+  Top = 571
+  Width = 67
+  TabIndex = 32
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_moecusfs
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 231
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 30
+  ToolTipText = ""
+  Top = 568
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_moecusfs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_precoMov
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Height = 21
+  InputMask = "99,999.99999"
+  Left = 122
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 29
+  ToolTipText = ""
+  Top = 524
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "get_precoMov"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Custo :"
+  Height = 15
+  Left = 81
+  Top = 527
+  Width = 37
+  TabIndex = 32
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getcIdChaves
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 459
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 480
+  Width = 173
+  Themes = .F.
+  Name = "getcIdChaves"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCTR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregaarquivos
+------------------------------------------------------------
+PROCEDURE carregaarquivos
+parameters pTipo
+
+If Empty(ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Conta.Value)
+	MessageBox([Favor Informar uma Conta.],0+16,[Aviso])
+	Return .F.
+EndIf 
+
+Local lcDir, lcFor, lcCgc, lcChv, lcStr, lcArq, lcCCF
+Local lnQtdXml, lnReg
+Local Array laArqs[1]
+
+Store 0 to lnQtdXml, lnReg
+Store [] to lcDir, lcFor, lcCgc, lcChv, lcStr, lcArq, lcCCF
+
+lcAqv = ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Arquivo.Value
+lcCgc = Alltrim(Strtran(Strtran(Strtran(ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Cpf.Value,[.],[]),[/],[]),[-],[]))
+
+If Alltrim(Upper(Right(Justfname(lcAqv),3))) <> 'XML'
+	MessageBox([Arquivo esta em formato diferente de XML.],0+48,[Aviso])
+	Return .F.
+EndIf 
+
+If Not Empty(lcAqv) And Not Empty(lcCgc)
+	lcArq = Alltrim(lcAqv)
+	lcStr = Alltrim(Upper(FileToStr(lcArq)))
+	
+	If !empty(lcStr)
+		lcChv = Alltrim(StrExtract(lcStr, [<CHNFE>], [</CHNFE>]))
+		lcCCF = Substr(lcChv,7,14)
+		llOK = .T.
+		If lcCCF <> lcCgc
+			llOK = .F.
+			lcMsg = [Fornecedor com CPF/CNPJ Diferente do XML, ] + Chr(13) + ;
+					[Arquivo XML: ] + lcCCF + Chr(13) + ;
+					[Fornecedor: ] + lcCgc + Chr(13) + ;
+					[Deseja Continuar?]
+			If MessageBox(lcMsg,4+32+256,[Atenção]) = 6
+				llOK = .T.
+			EndIf 
+		EndIf 
+		If llOK
+			lnReg = lnReg + 1
+			If pTipo 
+				ThisForm.Lerxml(lcArq)
+			EndIf 		
+		EndIf 				
+	EndIf 
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE lerxml
+------------------------------------------------------------
+PROCEDURE lerxml
+parameters pArquivo
+Local lnOldSel, lcArquivo, llOK
+
+lcArquivo = Iif(Type([pArquivo])=[C],pArquivo,[])
+
+If Empty(lcArquivo)
+	Return .F.
+Endif
+
+If !File(lcArquivo)
+	Return .F.
+Endif
+
+lnOldSel = Select()
+
+Set Safet Off
+
+Wait Window 'Carregando Arquivo : ' + lcArquivo Nowait
+
+OXML=Createobject('MSXML.DOMDOCUMENT')
+If !OXML.Load(lcArquivo)
+	= Messagebox( lcArquivo + ' Está corrompido.')
+	Return .F.
+Endif
+
+llCfopLib = .T.
+
+If Upper(OXML.DOCUMENTELEMENT.BASENAME)=[NFEPROC]
+	lcNota   	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/nNF").Text
+	lcSerie  	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/serie").Text
+	lcEmis 	 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/dhEmi").Text
+	lcUf	 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/cUF").Text
+	lcNatOp  	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/natOp").Text
+	lcCodMun 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/ide/cMunFG").Text
+	lcEmissor 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/xNome").Text
+	lcCnpj		= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/CNPJ").Text
+	lcIe 	 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/IE").Text
+	lcCrt		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/CRT").Length > 0,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/CRT").Text, '')
+	lcEndes	 	= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/xLgr").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/xLgr").Text, '')
+	lcNumero	= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/nro").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/nro").Text, '')
+	lcBairro	= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/xBairro").Length > 0,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/xBairro").Text, '')
+	lcCmun		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/cMun").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/cMun").Text, '')
+	lcMunic		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/xMun").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/xMun").Text, '')
+	lcEstas		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/UF").Length > 0		,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/UF").Text, '')
+	lcCEP		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/CEP").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/CEP").Text, '')
+	lcPais		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/xPais").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/xPais").Text, '')
+	lcFone		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/emit/enderEmit/fone").Length > 0	,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/emit/enderEmit/fone").Text, '')
+	lcDest		= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/xNome").Text
+	lcCNPJDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/CNPJ").Text
+	lcIEDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/IE").Text
+	lcEndDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/xLgr").Text
+	lcNumDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/nro").Text
+	lcBaiDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/xBairro").Text
+	lcCMunDest 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/cMun").Text
+	lcMunicDest = OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/xMun").Text
+	lcUfDest	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/UF").Text
+	lcCEPDest	= Iif(OXML.SelectNodes("/nfeProc/NFe/infNFe/dest/enderDest/CEP").Length > 0,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/CEP").Text, '')
+	lcPaisDest	= Iif(OXML.SelectNodes("/nfeProc/NFe/infNFe/dest/enderDest/xPais").Length > 0,OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/dest/enderDest/xPais").Text, '')
+	lcBaseCalc 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vBC").Text
+	lcICMS 		= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vICMS").Text
+	lcBaseST 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vBCST").Text
+	lcICMSST 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vST").Text
+	lcValorUnit = OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vProd").Text
+	lcFrete 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vFrete").Text
+	lcSeguro 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vSeg").Text
+	lcDescontos = OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vDesc").Text
+	lcIImport 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vII").Text
+	lcIPI 		= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vIPI").Text
+	lcPIS 		= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vPIS").Text
+	lcCOFINS 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vCOFINS").Text
+	lcOUTROS 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vOutro").Text
+	lcVTOTAL 	= OXML.SELECTSINGLENODE("/nfeProc/NFe/infNFe/total/ICMSTot/vNF").Text
+	lcChave		= OXML.SELECTSINGLENODE("/nfeProc/protNFe/infProt/chNFe").Text
+	ldEmis		=Ctod(Substr(lcEmis,9,2)+'/'+Substr(lcEmis,6,2)+'/'+Substr(lcEmis,1,4))
+	
+	Select crItens
+	
+	qt_itens = OXML.SelectNodes("//nfeProc/NFe/infNFe/det").Length && conta quantidade de itens na nota
+	lnContaDesconto = 0
+	For i = 0 To qt_itens - 1
+		oXmlTemp = OXML.SelectNodes("//nfeProc/NFe/infNFe/det").Item(i)
+		Append Blank In crItens
+		Replace codigo		With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/cProd").Item(i).Text
+		Replace Descr		With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/xProd").Item(i).Text
+		Replace quant		With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/qCom").Item(i).Text
+		Replace valor_uni	With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/vUnCom").Item(i).Text
+		Replace valor_tot	With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/vProd").Item(i).Text
+		Replace unid		With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/uCom").Item(i).Text
+		Replace cfop		With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/CFOP").Item(i).Text
+		Replace ncm			With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/NCM").Item(i).Text
+				
+		If oXmlTemp.SelectNodes("prod/vDesc").Length > 0
+			Replace desconto	With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/vDesc").Item(lnContaDesconto).Text
+			lnContaDesconto = lnContaDesconto + 1
+		EndIf
+		
+		If oXmlTemp.SelectNodes("prod/vFrete").Length > 0
+			Replace frete	With OXML.SelectNodes("//nfeProc/NFe/infNFe/det/prod/vFrete").Item(i).Text
+		EndIf
+		
+		*-- Removido para correção do Erro de ICMS10
+*!*			lnvBC 		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/vBC").Length >   0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/vBC").Item(i).text, '')
+*!*			lnpICMS		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/pICMS").Length > 0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/pICMS").Item(i).text, '')
+*!*			lnvICMS		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/vICMS").Length > 0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/ICMS/ICMS00/vICMS").Item(i).text, '')
+*!*			lnvBCIPI	= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/vBC").Length >   0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/vBC").Item(i).text, '')
+*!*			lnpIPI		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/pIPI").Length >  0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/pIPI").Item(i).text, '')
+*!*			lnvIPI		= Iif(OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/vIPI").Length >  0,OXML.SelectNodes("//nfeProc/NFe/infNFe/det/imposto/IPI/IPITrib/vIPI").Item(i).text, '')
+*!*			
+*!*			Replace base_icm	With lnvBC in crItens
+*!*			Replace aliq_icm	With lnpICMS in crItens
+*!*			Replace valor_icm	With lnvICMS in crItens
+*!*			Replace base_ipi	With lnvBCIPI in crItens
+*!*			Replace aliq_ipi	With lnpIPI in crItens
+*!*			Replace valor_ipi	With lnvIPI in crItens
+		
+	Endfor
+Else
+	=Messagebox(lcArquivo + ' não é uma nota fiscal com autorização!')
+Endif
+
+Select(lnOldSel)
+Return .T.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregaritemxml
+------------------------------------------------------------
+PROCEDURE carregaritemxml
+Local lnOldSel
+lnOldSel = Select()
+
+Select crItens
+Go Top in crItens
+Scan
+
+	lcProd	= Nvl(crItens.codigo,[])
+	lnQtds	= Iif(Type([crItens.quant])=[N],Nvl(crItens.quant,0),Val(Nvl(crItens.quant,[])))
+	lcCunis	= Iif(Inlist(Type([crItens.unid]),'C','M'),Nvl(crItens.unid,[]),[])
+	lnVal	= Iif(Inlist(Type([crItens.valor_uni]),'C','M'),Val(Nvl(crItens.valor_uni,[])),Iif(Type([crItens.valor_uni])=[N],Nvl(crItens.valor_uni,0),0))
+	lnTot	= Iif(Inlist(Type([crItens.valor_tot]),'C','M'),Val(Nvl(crItens.valor_tot,[])),Iif(Type([crItens.valor_tot])=[N],Nvl(crItens.valor_tot,0),0))
+	
+	lndesconto 	= Iif(Inlist(Type([crItens.desconto]),'C','M'),Val(Nvl(crItens.desconto,[])),Iif(Type([crItens.desconto])=[N],Nvl(crItens.desconto,0),0))
+	lnFrete 	= Iif(Inlist(Type([crItens.Frete]),'C','M'),Val(Nvl(crItens.Frete,[])),Iif(Type([crItens.Frete])=[N],Nvl(crItens.Frete,0),0))
+	lnbase_icm  = Iif(Inlist(Type([crItens.base_icm]),'C','M'),Val(Nvl(crItens.base_icm,[])),Iif(Type([crItens.base_icm])=[N],Nvl(crItens.base_icm,0),0))
+	lnaliq_icm  = Iif(Inlist(Type([crItens.aliq_icm]),'C','M'),Val(Nvl(crItens.aliq_icm,[])),Iif(Type([crItens.aliq_icm])=[N],Nvl(crItens.aliq_icm,0),0))
+	lnvalor_icm = Iif(Inlist(Type([crItens.valor_icm]),'C','M'),Val(Nvl(crItens.valor_icm,[])),Iif(Type([crItens.valor_icm])=[N],Nvl(crItens.valor_icm,0),0))
+	lnbase_ipi  = Iif(Inlist(Type([crItens.base_ipi]),'C','M'),Val(Nvl(crItens.base_ipi,[])),Iif(Type([crItens.base_ipi])=[N],Nvl(crItens.base_ipi,0),0))
+	lnaliq_ipi  = Iif(Inlist(Type([crItens.aliq_ipi]),'C','M'),Val(Nvl(crItens.aliq_ipi,[])),Iif(Type([crItens.aliq_ipi])=[N],Nvl(crItens.aliq_ipi,0),0))
+	lnvalor_ipi = Iif(Inlist(Type([crItens.valor_ipi]),'C','M'),Val(Nvl(crItens.valor_ipi,[])),Iif(Type([crItens.valor_ipi])=[N],Nvl(crItens.valor_ipi,0),0))
+	
+	lnPesos	= 0
+	lcCor	= []
+	lcTam	= []
+
+	If ! IsEmpty(lcProd)
+		lcQuery = [Select * From SigCdPro Where Reffs = '] + lcProd + [']
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'ProdImport') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (ProdImport)')
+			Return 0
+		Endif
+		
+		Select ProdImport
+		If Reccount([ProdImport])=0
+			Use In ProdImport
+			lcQuery = [Select * From SigCdPro Where Cpros = '] + lcProd + [']
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'ProdImport') < 1)
+				If Not ThisForm.Automatico
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (ProdImport)')
+				EndIf 	
+				Return 0
+			Endif
+		Endif
+				
+		Select ProdImport
+		If Reccount([ProdImport])=0
+			Use In ProdImport
+			lcQuery = [Select * From SigCdPro Where dpros = '] + lcProd + [']
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'ProdImport') < 1)
+				If Not ThisForm.Automatico
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (ProdImport)')
+				EndIf 	
+				Return 0
+			Endif
+		EndIf 
+		
+		Select ProdImport
+		If Reccount([ProdImport])=0
+			Use In ProdImport
+			lcQuery = [Select * From SigCdPro Where dpro2s = '] + lcProd + [']
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'ProdImport') < 1)
+				If Not ThisForm.Automatico
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (ProdImport)')
+				EndIf 	
+				Return 0
+			Endif
+		EndIf 
+		
+		If Not Empty(ProdImport.Cpros)
+		
+			lcCunis = Iif(Empty(ProdImport.Cunis),lcCunis,ProdImport.Cunis)
+			
+			lcQuery = [Select * From SigCdUni Where CUnis = '] + lcCunis + [' Order By Etiqs]
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpUni') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpUni)')
+				Return 0
+			EndIf
+			
+			lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+					    [From SigCdGrp ] + ;
+					   [Where CGrus = '] + ProdImport.CGrus + [' ] + ;
+					   [Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpGru') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+				Return 0
+			EndIf
+			
+			If Not Empty(lcTam)
+				lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+				If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpTam') < 1)
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+					Return 0
+				Endif
+
+				Select crTmpTam
+				Go Top
+				If Reccount([crTmpTam])=0
+					lcTam = []
+				Endif
+			Endif
+
+			If Not Empty(lcCor)
+				lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+				If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpCor') < 1)
+					=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+					Return 0
+				Endif
+
+				Select crTmpCor
+				Go Top
+				If Reccount([crTmpCor])=0
+					lcCor = []
+				Endif
+			Endif
+			
+			lcTp = ' '
+			If (lnbase_icm + lnvalor_ipi) <> 0 And (ProdImport.CustoFs <> (lnbase_icm + lnvalor_ipi))
+				lnVariaProd = Round((ProdImport.CustoFs * 0.05),2) + ProdImport.CustoFs
+				If  lnVariaProd < (lnbase_icm + lnvalor_ipi)
+					lcTp = 'X'
+				EndIf 	
+			EndIf 	
+			
+			Select crResultado 
+			Append Blank
+			Replace Cpros With ProdImport.Cpros ,;
+					dpros With ProdImport.Dpros ,;
+					xTp   With lcTp ,;
+					Qtds  With lnQtds ,;
+					units With lnVal ,;
+					Total With lnTot In crResultado 
+			
+			
+		Else
+			Select csPrNAOCad
+			Append Blank
+			Replace Referencia With Nvl(lcProd,[]) ,;
+				Qtds	   With Nvl(lnQtds,0) ,;
+				Pesos	   With Nvl(lnPesos,0) ,;
+				Unidade	   With Nvl(lcCunis,[]) ,;
+				Valor	   With Nvl(lnVal,0) In csPrNAOCad
+		Endif
+	EndIf
+	Select crItens
+Endscan
+
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	Messagebox([Houve produtos não Localizados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_NAO_LOCALIZADOS.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'Produtos_Nao_Localizados' Xl5
+EndIf
+
+Select crItens
+*ThisForm.Pagina.Dados.Pageframe1.Page2.grdItemXml.SetAll('DynamicForeColor',[iif(crItens.xTp='X',RGB(255,62,62),RGB(255,255,255))],'Column')
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+parameters pFiltra
+Local lcCta
+lcCta = ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Conta.Value
+
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.RecordSource = []
+
+lcQuery = [Select 0 as nMarca, a.Emps, a.Dopes, a.Numes, a.EmpDopNums as OriDopNums, a.grupoOs as Grupos, a.contaOs as Contas From SigMvCab a ] + ;
+	[join sigcdope b on a.dopes = b.dopes ] + ;
+	[join SigOpCdd c on b.dopes = c.dopes ] + ;
+	[Where Distribui = 3 ] + ;
+	[And a.chksubn = 0 ] + ;
+	[And a.GrupoOs <> Space(10) And a.ContaOs <> Space(10) ] + ;
+	Iif(pFiltra,[And a.ContaOs = ']+lcCta+[' ],[])
+If Thisform.podatamgr.SqlExecute(lcQuery,'csSigPrCtr') < 1
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csSigPrCtr)')
+	Return 0
+EndIf
+
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.RecordSource = [csSigPrCtr]
+*Thisform.pagina.dados.pageframe1.page1.grdEstoque.column1.ControlSource = [csSigPrCtr.nMarca]
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.column2.ControlSource = [csSigPrCtr.Emps]
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.column3.ControlSource = [csSigPrCtr.Dopes]
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.column4.ControlSource = [csSigPrCtr.Numes]
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.column5.ControlSource = [csSigPrCtr.Grupos]
+Thisform.pagina.dados.pageframe1.page1.grdEstoque.column6.ControlSource = [csSigPrCtr.Contas]
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigPrCtr
+Locate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+* Incluindo os Registros
+llOK = .t.
+If Not ThisForm.poDataMgr.Update('crSigPrCtr')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1.0)')
+	llOK = .f.
+EndIf
+
+If llOK
+	With ThisForm
+		.poDataMgr.Commit()
+		=fGravarLog('C',ThisForm.Name,'INSERIR',;
+					('Tabela('+.poDataMgr.pfSqlTabela(2).pcTabela+;
+					 ') C.P.('+.poDataMgr.pfSqlTabela(2).pcChaveprimaria+')='+;
+					 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(2).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(2).pcChaveprimaria)))),;
+					 Iif(Type('m.usuar')=='C',m.usuar,''))
+	EndWith
+	NoDefault
+Else
+	ThisForm.poDataMgr.RollBack()
+	Return 0
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+
+_Codigo = Iif(Empty(TmpSigPrCtr.Codigos), Replicate(Chr(254), 10), TmpSigPrCtr.Codigos)
+
+llOK = .t.
+
+* Eliminando os Registros
+If llOK
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigPrCtr Where Codigos = ?_Codigo], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')
+		llOK = .f.
+	EndIf
+EndIf
+
+* Incluindo os Registros
+If llOK
+	If Not ThisForm.poDataMgr.Update('crSigPrCtr')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 5.0)')
+		llOK = .f.
+	EndIf
+EndIf
+
+If llOK
+	With ThisForm
+		.poDataMgr.Commit()
+		=fGravarLog('C',ThisForm.Name,'ALTERAR',;
+						('Tabela('+.poDataMgr.pfSqlTabela(2).pcTabela+;
+						 ') C.P.('+.poDataMgr.pfSqlTabela(2).pcChaveprimaria+')='+;
+						 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(2).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(2).pcChaveprimaria)))),;
+						 Iif(Type('m.usuar')=='C',m.usuar,''))
+	EndWith
+Else
+	ThisForm.poDataMgr.RollBack()
+EndIf
+NoDefault
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDataf = ThisForm.Pagina.Lista.Dt_final.Value
+ldDatai = fDtoSQL(ldDatai)
+ldDataf = fDtoSQL(ldDataf,'23:59:59')
+
+Dodefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		
+		ThisForm.plAcAlterar = .f.
+
+		_Codigo = []
+		ldDatai = fDtoSQL(Date())
+		ldDataf = fDtoSQL(Date(),'23:59:59')		
+		lcQueryLista = [Select Distinct a.Codigos, max(a.Datas) as Datas, a.OriDopNums, a.Usuars, a.contas, b.rclis ] + ;
+							[from SigPrCtr a ] + ;
+							[join SigCdCli b on a.contas = b.iclis where Datas Between ?ldDatai And ?ldDataF ] + ; 
+							[group by a.Codigos, a.OriDopNums, a.Usuars, a.contas, b.rclis]
+		lcQueryPrCtr = [Select * from SigPrCtr where Codigos = ?_Codigo]
+		
+		With .poDataMgr
+			.AddCursor('SigPrCtr', 'Codigos', 'TmpSigPrCtr', '', ThisForm.Pagina.Lista.Grade,lcQueryLista)
+			.pfSqlTabela(1).pColuna('Codigos',	  '', '', 'Código', 80, .t.)
+			.pfSqlTabela(1).pColuna('Datas',   	  '', '', 'Data', 75, .t.)
+			.pfSqlTabela(1).pColuna('OriDopNums', '', '', 'Movimentação', 280, .t.)
+			.pfSqlTabela(1).pColuna('Usuars',     '', '', 'Usuário', 80, .t.)
+			.pfSqlTabela(1).pColuna('Contas',     '', '', 'Fornecedor', 80, .t.)
+			.pfSqlTabela(1).pColuna('Rclis', 	  '', '', 'Nome', 180, .t.)
+		
+			.AddCursor('SigPrCtr', 'PkChave',   'crSigPrCtr', '', '',lcQueryPrCtr)
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '')
+			.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn', '', '')
+			.AddCursor('SigMvIts', 'cIdChaves', 'crSigMvIts', '', '')
+			.AddCursor('SigMvHst', 'cIdChaves', 'crSigMvHst', '', '')
+			.AddCursor('SigOpEtq', 'cBars', 	'crSigOpEtq', '', '')
+			.Addcursor('SigCdMlc', 'CidChaves', 'crSigCdMlc', '','')			
+		EndWith
+
+		.Podatamgr2.AddCursor('SigTempd','CidChaves','CrSigTempd','','')
+			
+		lcSql = [Select * From SigCdPam ]
+		.poDataMgr.Sqlexecute(lcsql,'crSigCdPam')
+		
+		lcSql = [Select * From SigCdPac ]
+		.poDataMgr.Sqlexecute(lcsql,'crSigCdPac')
+		ThisForm.Sigkey = crSigCdPac.SigKeys
+		
+		.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f.)
+		Select crSigCdCot
+		Index On CMoes + Dtos(Datas) Tag CMoeData
+		Set Order To CMoeData Descending
+		
+		.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .f., .f., 'CMoes, Cotas')
+		Select crSigCdMoe
+		Index On CMoes Tag CMoes
+		
+		thisform.poobjext1 = Null
+		thisform.pagina.lista.Dt_inicial.Value = Date()
+		thisform.pagina.lista.dt_final.Value = Date()
+		
+		ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Grupo.Value = crSigCdPam.GrPadFors
+		ThisForm.Pagina.Dados.Pageframe1.Page1.Get_Grupo.Refresh
+			
+		=DoDefault()
+		thisform.pagina.lista.Dt_inicial.SetFocus()		
+	Else
+		MessageBox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Destroy
+------------------------------------------------------------
+PROCEDURE Destroy
+**
+If Used( "crDistribui" )
+	Use IN crDistribui
+EndIf
+
+If Used( "crMovimentos" )
+	Use IN crMovimentos
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+If Used([csPrNAOCad])
+	Use In csPrNAOCad
+Endif
+
+If Used([crItens])
+	Use In crItens
+Endif
+
+Create Cursor csPrNAOCad( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Create Cursor crItens( codigo c(15), Descr c(30), quant c(15), valor_uni c(15), valor_tot c(15), ;
+					base_icm c(15), valor_icm c(15), aliq_icm c(15), base_ipi c(15), valor_ipi c(15), aliq_ipi c(15), ;
+					unid c(5), cfop c(4), ncm c(8), desconto c(15), frete c(15))
+					
+Create Cursor crResultado (xTp c(1), cpros c(14), dpros c(60), Qtds n(12,2), Units n(12,2), Total n(12,2))					
+					
+=DoDefault()
+* Fim **************************************************************************************					
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+Thisform.LockScreen   = .T.
+llOk = .T.
+
+If Not DoDefault(Opcao)
+	Thisform.mAtivaPagina1
+	Return 0
+Endif
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao			
+Endif
+
+_Codigo = TmpSigPrCtr.Codigos
+Thisform.podatamgr.Requery([crSigPrCtr])
+
+ThisForm.MontaGrade()
+
+If llOk
+	Select TmpSigPrCtr
+	=DoDefault( Opcao )
+	Thisform.LockScreen = .F.
+	Do Case
+	Case Inlist(Thisform.pcescolha, 'INSERIR', 'PROCURAR')
+		Replace DataS With Date() In TmpSigPrCtr
+		
+		This.parent.parent.Dados.Pageframe1.Page1.Get_Dconta.Value = []
+		This.parent.parent.Dados.Pageframe1.Page1.get_Moeda.Value = []		
+		This.parent.parent.Dados.Pageframe1.Page1.Get_Conta.Value = []
+		This.parent.parent.Dados.Pageframe1.Page1.Get_Grupo.Value = []
+		This.parent.parent.Dados.Pageframe1.Page1.Get_Arquivo.Value = []
+		This.parent.parent.Dados.Pageframe1.Page1.Get_cpf.Value = []
+		
+		Thisform.pagina.dados.pageframe1.page1.Enabled = .T.
+		Thisform.pagina.dados.pageframe1.page2.Enabled = .F.
+		Thisform.pagina.dados.pageframe1.ActivePage = 1
+
+	Case Inlist(Thisform.pcescolha,'ALTERAR','EXCLUIR','CONSULTAR')
+		
+		Local logrdDisponivel As Object, logrdItemXml As Object
+		logrdDisponivel = Thisform.Pagina.dados.pageframe1.page2.grdDisponivel
+		logrdItemXml = Thisform.Pagina.dados.pageframe1.page2.grdItemXml
+		
+		Select 0
+		logrdDisponivel.RecordSourceType = 1 	&& Alias
+		logrdDisponivel.RecordSource = ""
+
+		logrdItemXml.RecordSourceType = 1		&& Alias
+		logrdItemXml.RecordSource = ""
+		
+		TEXT tO lcSQL NoShow TextMerge
+		Select a.Cpros, f.Dpros, a.units, 
+		Sum(a.qtds) as qtds, Sum(a.qtbaixas) As qtbaixas, Sum(a.qtreservas) As qtreservas, (Sum(a.qtds) - Sum(a.qtbaixas) - Sum(a.qtreservas)) as Saldo, sum(g.qtdos) as qtdos,
+		a.EmpDopNums As OriDopNums, f.Cgrus, f.Sgrus, a.units, a.cidchaves, a.Moedas
+			from SigmvItn a 
+			join SigMvCab c on a.EmpDopNums = c.EmpDopNums
+			join sigcdope d on c.dopes = d.dopes
+			join SigOpCdd e on d.dopes = e.dopes
+			Join SigCdpro f on a.Cpros = f.Cpros
+			join sigprctr g on a.empdopnums = g.oridopnums and a.cpros = g.cpros and g.fkchaves = a.cidchaves 
+			Where e.Distribui = 3
+			And c.GrupoDs <> Space(10)
+			And c.ContaDs <> Space(10) 
+			And a.qtds <> a.qtbaixas
+			and a.citem2 = 0
+			and g.codigos = <<_Codigo>>
+			group by a.CPros, f.Dpros, f.Cgrus, f.Sgrus, a.EmpDopNums, a.units, a.cidchaves, a.Moedas
+	ENDTEXT
+
+	If Thisform.podatamgr.SqlExecute(lcSQL, [crMovimentos] ) < 1
+		Messagebox( [Problemas no Select dos Produtos da Movimentação], 48, "Atenção" )
+		Return(0)
+	Endif
+
+	Select crMovimentos
+	Index On Cgrus Tag Cgrus
+	Index On Cpros Tag Cpros 
+	Set Order To Cpros
+	Go Top 
+
+	logrdDisponivel.RecordSourceType = 1
+	logrdDisponivel.RecordSource = [crMovimentos]
+
+	Select crMovimentos
+	Select Cpros, Dpros, Sum(qtdos) as Qtds, Max(Units) as Units, 0 as Total ;
+	from crMovimentos ;
+	Group by Cpros, Dpros ;
+	Into Cursor crDistribui ReadWrite 
+
+	Select crDistribui
+	Index On cPros Tag Tag1
+	Set Order To Tag1
+
+	logrdItemXml.RecordSourceType = 1
+	logrdItemXml.RecordSource = [crDistribui]
+
+*!*			Thisform.pagina.dados.pageframe1.page2.grdDisponivel.SetAll('DynamicForeColor','iif(crMovimentos.QtdSaldo < 0,Rgb(255,0,0),RGB(0,0,0))','Column')
+		Thisform.pagina.dados.pageframe1.page1.Enabled = .F.
+		Thisform.pagina.dados.pageframe1.page2.Enabled = .T.
+		Thisform.pagina.dados.grupo_Salva.salva.Enabled = Iif(Thisform.pcescolha=[CONSULTAR],.F.,.T.)
+		Thisform.pagina.dados.pageframe1.ActivePage = 2
+	Endcase
+Else
+	Thisform.LockScreen = .F.
+	If Thisform.pcescolha = 'INSERIR'
+		Thisform.plcancelar = .T.
+	Endif
+	Thisform.mAtivaPagina1
+	Thisform.Visible = .T.
+	Thisform.Enabled = .T.
+Endif
+
+Select TmpSigPrCtr
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Private lnQtd
+lnQtd = 0
+If Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+
+	Select crSigPrCtr
+	Zap
+	
+	ldData    = Datetime()
+	lcConta   = This.parent.parent.Pageframe1.Page1.Get_Conta.Value
+	lcArquivo = This.parent.parent.Pageframe1.Page1.Get_Arquivo.Value
+	lcMoeda   = This.parent.parent.Pageframe1.Page1.Get_Moeda.Value
+	lnOpc	  = This.parent.parent.Pageframe1.Page1.Opt_Custo.Value
+
+	_Codigo = Iif(thisform.pcescolha = [INSERIR],Alltrim(Str(fGerUniqueKey([SigPrCtr]),10)),TmpSigPrCtr.Codigos)
+
+	Select crMovimentos
+	Set Relation to		
+
+	Select crDistribui
+	Set Order To
+
+	Select a.cpros, a.dpros, a.qtds, a.qtbaixas, a.qtreservas, a.saldo, a.oridopnums, b.qtds As qtdXml, a.cidchaves ;
+	from crMovimentos a ;
+	join crdistribui b on a.cpros = b.cpros ;
+	Where b.qtds <> 0 ;
+	Into Cursor TmpPrCtr ReadWrite 
+
+	Select TmpPrCtr 	
+	Go Top
+	Scan
+		
+		If TmpPrCtr.saldo <= 0 
+			loop
+		EndIf 
+		
+		lnQtd = Iif(TmpPrCtr.qtdXml > TmpPrCtr.Qtds, TmpPrCtr.Qtds, TmpPrCtr.qtdXml)
+		
+		Insert Into crSigPrCtr (Codigos, Cpros, CodCors, CodTams, OriDopNums, Qtds, QtdOs, Contas, Arquivo, Moedas, Precific, fkChaves) Values ;
+			(_Codigo, TmpPrCtr.Cpros, [], [], TmpPrCtr.OriDopNums, TmpPrCtr.Qtds, lnQtd, lcConta, lcArquivo, lcMoeda, lnOpc, TmpPrCtr.cidchaves)
+		
+		If Thisform.pcescolha = [INSERIR]
+			Replace Datas With Datetime() in crSigPrCtr 
+			Replace Usuars With usuar in crSigPrCtr 
+			Replace PkChave With fUniqueIds() in crSigPrCtr 
+		EndIf 
+		
+		If Thisform.pcescolha = [ALTERAR]
+			Replace DtAlts With Datetime() in crSigPrCtr 
+			Replace UsuAlts With m.usuar in crSigPrCtr 
+		EndIf 
+		
+		lcUpdate = [Update SigMvItn set qtReservas = (qtReservas + ?lnQtd ) where cidchaves = ']+TmpPrCtr.CidChaves+[' ]
+		If Thisform.podatamgr.SqlExecute(lcUpdate) < 1
+			Messagebox( [Problemas no Update dos Produtos da Movimentação], 48, "Atenção" )
+			Return(0)
+		Endif
+		Select TmpPrCtr 
+	EndScan	
+Else
+	If Thisform.pcescolha=[EXCLUIR]
+
+		Select crMovimentos
+		Set Relation to		
+
+		Select crDistribui
+		Set Order To
+		
+		Select crMovimentos
+		lcQuery = [Select * From SigMvItn Where EmpDopNums = ']+crMovimentos.oridopnums+[' ]
+		If Thisform.podatamgr.SqlExecute(lcQuery,[crTmpItn]) < 1
+			Messagebox( [Problemas no Select dos Produtos da Movimentação], 48, "Atenção" )
+			Return(0)
+		Endif
+		
+		Select crTmpItn
+		Index On cidchaves Tag cidchaves 
+		Go Top
+		
+		Select a.cpros, a.dpros, a.qtds, a.qtbaixas, a.qtreservas, a.oridopnums, b.qtds As qtdXml, a.cidchaves ;
+		from crMovimentos a ;
+		join crdistribui b on a.cpros = b.cpros ;
+		Where b.qtds <> 0 ;
+		Into Cursor TmpPrCtrEx ReadWrite 
+
+		Select TmpPrCtrEx 	
+		Go Top
+		Scan
+			
+			lnQtd = TmpPrCtrEx.qtdXml
+			lnBaixa = 0
+			If Seek(TmpPrCtrEx.CidChaves,[crTmpItn],[cidchaves])
+				lnQtd = Iif((crTmpItn.qtreservas-TmpPrCtrEx.qtdXml)<=0,0,crTmpItn.qtreservas-TmpPrCtrEx.qtdXml)
+			EndIf 
+								
+			lcUpdate = [Update SigMvItn set qtReservas = ?lnQtd where cidchaves = ']+TmpPrCtrEx.CidChaves+[' ]
+			If Thisform.podatamgr.SqlExecute(lcUpdate) < 1
+				Messagebox( [Problemas no Update dos Produtos da Movimentação], 48, "Atenção" )
+				Return(0)
+			Endif
+			Select TmpPrCtrEx 
+		EndScan	
+	EndIf 
+EndIf
+
+=DoDefault()
+ThisForm.mAtivaPagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+	ThisForm.Pagina.Lista.Enabled = .T. 
+	ThisForm.Pagina.ActivePage = 1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Lista.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Lista.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDataf = ThisForm.Pagina.Lista.Dt_final.Value
+ldDatai = fDtoSQL(ldDatai)
+ldDataf = fDtoSQL(ldDataf,'23:59:59')
+
+thisform.podatamgr.Requery([TmpSigPrCtr])
+ThisForm.Pagina.Lista.Grade.SetFocus()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1
+* Classe: pageframe (Base: pageframe)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Page1.Activate
+------------------------------------------------------------
+PROCEDURE Page1.Activate
+thisform.pagina.dados.Grupo_Salva.salva.Enabled = .f.
+thisform.pagina.dados.pageframe1.page2.Enabled = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Page2.Activate
+------------------------------------------------------------
+PROCEDURE Page2.Activate
+this.grdDisponivel.col01_Codigo.SetFocus()
+this.grdDisponivel.Refresh()
+this.grdItemXml.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+fAcessoContab(Usuar,'C',This.Value,This,'',This.Parent.Get_Conta.Value,Thisform.Podatamgr)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Dconta
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcGrupo, lordem, lcGrupoCad
+lcGrupo= Padr(This.parent.Get_Grupo.Value, 10)
+
+If Not Empty(This.Value)
+	lcGrupoCad = Padr(This.Parent.Get_grupo.Value, 10)
+	lordem  = .t.
+	    
+	If !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This.Parent.Get_Conta, This, lOrdem, lcGrupoCad, ThisForm.poDataMgr,.t.,.f.,.f.,[RCLIS])
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.parent.get_conta.Value = ''
+		This.parent.Get_cpf.Value = ''
+	EndIf
+Else
+	This.parent.get_conta.Value = ''
+	This.parent.Get_cpf.Value = ''
+EndIf
+
+If Not Empty(This.Parent.Get_Conta.Value)
+	lcConta = This.Parent.Get_Conta.Value
+	=ThisForm.Podatamgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,[Cpfs, Grupos])
+	This.parent.Get_cpf.Value = crTmpCli.Cpfs
+	If Not Empty(This.Parent.get_Conta.Value) And Empty(This.Parent.get_grupo.Value)
+		This.Parent.get_grupo.Value = crTmpCli.Grupos
+	EndIf
+	=ThisForm.Montagrade(.T.)
+EndIf 
+
+This.Refresh
+This.parent.Get_cpf.Refresh
+This.parent.get_conta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.Parent.Get_Conta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Conta
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = This.parent.Get_Grupo.Value
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This.Parent.Get_Conta, This.Parent.Get_Dconta)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.parent.Get_DConta.Value = ''
+		This.parent.Get_cpf.Value = ''
+	EndIf
+Else
+	This.parent.get_dConta.Value = ''
+	This.parent.Get_cpf.Value = ''
+EndIf
+
+If Not Empty(This.Parent.Get_Conta.Value)
+	lcConta = This.Parent.Get_Conta.Value
+	=ThisForm.Podatamgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,[Cpfs, Grupos])
+	This.parent.Get_cpf.Value = crTmpCli.Cpfs
+	
+	If Not Empty(This.Parent.get_Conta.Value) And Empty(This.Parent.get_grupo.Value)
+		This.Parent.get_grupo.Value = crTmpCli.Grupos
+	EndIf
+	=ThisForm.Montagrade(.T.)
+EndIf 
+
+This.Refresh
+This.parent.Get_cpf.Refresh 
+This.parent.Get_Dconta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Arquivo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_Moeda
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'CrListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = CrListaRemota.CMoes
+	Use In CrListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.processar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(This.parent.Get_Arquivo.Value)
+	=Messagebox('Nenhum Diretório Foi Informado.', 16, 'Aviso')
+	Return .F.
+EndIf 
+
+*!*	If This.parent.Get_Registro.Value = 0
+*!*		=Messagebox('Nenhum Arquivo XML Foi localizado.', 16, 'Aviso')
+*!*		Return .F.
+*!*	EndIf 
+
+If Empty(This.parent.get_Conta.Value)
+	=Messagebox('Nenhum Fornecedor Foi Informado.', 16, 'Aviso')
+	Return .F.
+EndIf 
+
+If Empty(This.parent.Get_cpf.Value)
+	=Messagebox('CNPJ/CPF do Fornecedor Nao Informado', 16, 'Aviso')
+	Return .F.
+EndIf 
+
+Select csSigPrCtr
+*Go Top
+*!*	Count For Dopes <> '' To lnSel1
+*!*	If lnSel1 = 0
+*!*		=Messagebox('Nenhuma Movimentação Foi Encontrada.', 16, 'Aviso')
+*!*		Return .F.
+*!*	Endif
+
+Local loEmp As Object, loGrp As Object, loCta As Object
+Local logrdDisponivel As Object, logrdItemXml As Object
+logrdDisponivel = Thisform.Pagina.dados.pageframe1.page2.grdDisponivel
+logrdItemXml = Thisform.Pagina.dados.pageframe1.page2.grdItemXml
+
+lnTipo = This.parent.Opt_Fil.Value
+
+Select 0
+logrdDisponivel.RecordSourceType = 1 	&& Alias
+logrdDisponivel.RecordSource = ""
+
+logrdItemXml.RecordSourceType = 1		&& Alias
+logrdItemXml.RecordSource = ""
+
+*** Filtro de estoques de distribuição
+lcEgc = []
+lcEmps = []
+lcEdn = []
+Select csSigPrCtr
+lcEgc = lcEgc + Iif(Empty(lcEgc),[('],[',']) + csSigPrCtr.Emps + csSigPrCtr.Grupos + csSigPrCtr.Contas
+lcEmps = lcEmps + Iif(Empty(lcEmps),[('],[',']) + csSigPrCtr.Emps
+lcEdn = lcEdn + Iif(Empty(lcEdn ),[('],[',']) + csSigPrCtr.OriDopNums
+lcMoeda = CrSigCdPam.moedetqs
+lnCotaMoe = fCarregarCambio(lcMoeda,Date())
+
+		
+*!*	Scan
+*!*		If csSigPrCtr.nMarca = 1
+*!*			lcEgc = lcEgc + Iif(Empty(lcEgc),[('],[',']) + csSigPrCtr.Emps + csSigPrCtr.Grupos + csSigPrCtr.Contas
+*!*			lcEmps = lcEmps + Iif(Empty(lcEmps),[('],[',']) + csSigPrCtr.Emps
+*!*			lcEdn = lcEdn + Iif(Empty(lcEdn ),[('],[',']) + csSigPrCtr.OriDopNums
+*!*		Endif
+*!*	Endscan
+Set Step On 
+lcEgc = Iif(Empty(lcEgc),'',lcEgc + [') ])
+lcEmps = Iif(Empty(lcEmps),'',lcEmps + [') ])
+lcEdn = Iif(Empty(lcEdn),'',lcEdn + [') ])
+
+TEXT tO lcSQL NoShow TextMerge
+	Select a.Cpros, f.Dpros, a.units, Sum(a.qtds) as qtds, Sum(a.qtbaixas) As qtbaixas, Sum(a.qtreservas) As qtreservas, (Sum(a.qtds) - Sum(a.qtbaixas) - Sum(a.qtreservas)) as Saldo, 
+	a.EmpDopNums As OriDopNums, f.Cgrus, f.Sgrus, a.cidchaves, a.Moedas
+		from SigmvItn a 
+		join SigMvCab c on a.EmpDopNums = c.EmpDopNums
+		join sigcdope d on c.dopes = d.dopes
+		join SigOpCdd e on d.dopes = e.dopes
+		Join SigCdpro f on a.Cpros = f.Cpros
+		Where e.Distribui = 3 
+		And c.GrupoOs <> Space(10)
+		And c.ContaOs <> Space(10) 
+		and a.citem2 = 0
+		And a.qtds <> a.qtbaixas
+		And a.EmpDopNums in <<lcEdn>>
+		group by a.CPros, f.Dpros, f.Cgrus, f.Sgrus, a.EmpDopNums, a.units, a.cidchaves, a.Moedas
+ENDTEXT
+
+If Thisform.podatamgr.SqlExecute(lcSQL, [crMovimentos] ) < 1
+	Messagebox( [Problemas no Select dos Produtos da Movimentação], 48, "Atenção" )
+	Return(0)
+Endif
+
+Select crMovimentos
+Index On Cgrus Tag Cgrus
+Index On Cpros Tag Cpros 
+Set Order To Cpros
+Go Top 
+
+Select crItens
+Zap
+Select csPrNAOCad
+Zap
+Select crResultado
+Zap
+
+=ThisForm.carregaarquivos(.T.)
+=ThisForm.CarregarItemXML()
+
+Select crResultado 
+Select Cpros, Dpros, Sum(Qtds) as Qtds, Max(Units) as Units, Sum(Total) as Total ;
+from crResultado ;
+Group by Cpros, Dpros ;
+Into Cursor crDistribui ReadWrite 
+
+Select crDistribui
+Index On cPros Tag Tag1
+Set Order To Tag1
+
+logrdItemXml.RecordSourceType = 1
+logrdItemXml.RecordSource = [crDistribui]
+
+Select crMovimentos
+If lnTipo <> 2
+	If lnTipo = 1
+		Delete From crMovimentos where Cpros Not In (Select Cpros from crDistribui)
+	EndIf 
+	*Set Relation To cPros Into crDistribui
+Else
+	Delete From crMovimentos where Cpros In (Select Cpros from crDistribui)
+EndIf 
+Go Top In crMovimentos
+
+Scan for !Deleted()
+
+	lnCotacao = fCarregarCambio(crMovimentos.Moedas,Date())
+	lnUnits   = Round(crMovimentos.Units * lnCotacao / lnCotaMoe,2)
+	
+	Replace Units With lnUnits In crMovimentos
+	
+	Select crMovimentos
+EndScan
+
+logrdDisponivel.RecordSourceType = 1
+logrdDisponivel.RecordSource = [crMovimentos]
+
+This.parent.parent.Page2.Sistema.Value = 'Sistema'
+This.parent.parent.Page2.Arquivo.Value = 'Arquivo'
+
+Thisform.Pagina.dados.pageframe1.page1.Enabled = .F.
+Thisform.Pagina.dados.pageframe1.page2.Enabled = .T.
+Thisform.Pagina.dados.Grupo_Salva.salva.Enabled = .T.
+Thisform.Pagina.dados.pageframe1.ActivePage = 2
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Get_cpf
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = crSigCdPam.GrPadClis
+If !Empty(This.Value)
+	lnVerCpfCgc = 0
+	lcCgc = This.Value
+	lcCgc = StrTran(StrTran(StrTran(lcCgc,'.',''),'-',''),'/','')
+	If Len(Alltrim(lcCgc)) <> 14
+		lcCgc1 = TransForm(lcCgc,'@R 999.999.999-99')
+		If Len(Alltrim(lcCgc)) = 11
+			lnVerCpfCgc = Iif(fValidarCPF(lcCgc1),1,2)
+		EndIf
+	Else
+		lcCgc1 = TransForm(lcCgc,'@R 99.999.999/9999-99')
+		lnVerCpfCgc = Iif(fValidarCNPJ(lcCgc1),1,2)
+	EndIf
+	
+	If lnVerCpfCgc = 2
+		MessageBox('CPF / CGC Incorreto !!!',48,'')
+		Return 0
+	EndIf
+
+	If !(ThisForm.poDataMgr.CursorQuery('SigCdCli',,'cpfs',Padr(Alltrim(lcCgc1),20)))
+		If lnVerCpfCgc = 1
+			MessageBox('CPF / CGC não encontrado !!!',48,'')
+			Return 0
+		EndIf
+	EndIf
+	
+	lcIclis = CqSigCdCli.iclis
+	If !fAcessoContas(Usuar,Grupo,'C',lcIclis,This.Parent.Get_Conta.Value,This.Parent.Get_DConta.Value)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Parent.Get_Conta.Value  = ''
+		This.Parent.Get_DConta.Value = ''
+		This.Parent.Get_Cpf.Value    = ''
+		Return 0
+	Else
+		Select CqSigCdCli
+		This.Parent.Get_Conta.Value  = CqSigCdCli.iclis
+		This.Parent.Get_DConta.Value = CqSigCdCli.rclis
+		This.Parent.Get_Cpf.Value    = CqSigCdCli.cpfs
+		This.Parent.Get_Conta.Refresh
+		This.Parent.Get_DConta.Refresh
+		This.Parent.Get_Cpf.Refresh
+		
+		
+		If Not Empty(This.Parent.Get_Conta.Value)
+			lcConta = This.Parent.Get_Conta.Value
+			=ThisForm.Podatamgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,[Cpfs, Grupos])
+			If Not Empty(This.Parent.get_Conta.Value) And Empty(This.Parent.get_grupo.Value)
+				This.Parent.get_grupo.Value = crTmpCli.Grupos
+			EndIf
+		EndIf 
+		=ThisForm.Montagrade(.T.)
+	EndIf
+Else
+	This.Parent.Get_DConta.Value = ''
+EndIf
+
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.Parent.Get_Conta.Value))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.btnCadastros
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(This.Parent.Get_Conta.Value)
+      =MessageBox([É Necessário o Preenchimento Da Conta!!!], 0+48, [Dados Incompletos]) 
+      This.Parent.Get_Conta.SetFocus
+      Return .f.
+Else
+      If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR], [CONSULTAR])
+            Do Form SIGCDCTA With 0, [SIGCDCTA], This.Parent.Get_conta.Value, .t., [], [], (ThisForm.pcEscolha = [CONSULTAR])
+      EndIf
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Bot_Consulta
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+If IsEmpty( This.Parent.Get_Conta.Value ) 
+	MessageBox( 'É necessário o preenchimento da Conta...', 48 ) 
+	This.Parent.Get_Conta.SetFocus
+	Return 0
+
+EndIf
+
+If Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+	ThisForm.Enabled = .f.
+
+	Do Form SigOpCgv With ThisForm, This.Parent.Get_Conta.Value
+
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigPrCtr
+Index on Emps Tag Emps
+With This.parent.parent
+	.Column2.Header1.BackColor = RGB(251,253,176)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigPrCtr
+Index on Dopes Tag Dopes
+With This.parent.parent
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(251,253,176)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigPrCtr
+Index on Numes Tag Numes
+With This.parent.parent
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(251,253,176)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column5.Header1
+* Classe: header (Base: header)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigPrCtr
+Index on Grupos Tag Grupos
+With This.parent.parent
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(251,253,176)
+	.Column6.Header1.BackColor = RGB(192,192,192)
+	.Refresh
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column6.Header1
+* Classe: header (Base: header)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigPrCtr
+Index on Contas Tag Contas
+With This.parent.parent
+	.Column2.Header1.BackColor = RGB(192,192,192)
+	.Column3.Header1.BackColor = RGB(192,192,192)
+	.Column4.Header1.BackColor = RGB(192,192,192)
+	.Column5.Header1.BackColor = RGB(192,192,192)
+	.Column6.Header1.BackColor = RGB(251,253,176)
+	.Refresh
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.Command12
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcArquivo = GetFile([XML])
+If !IsEmpty(lcArquivo)
+	This.parent.Get_Arquivo.value = lcArquivo
+EndIf
+
+*ThisForm.CarregaArquivos()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page1.cmdOperacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AddObject
+------------------------------------------------------------
+PROCEDURE AddObject
+LPARAMETERS cName, cClass
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnOperacao.Valid
+------------------------------------------------------------
+PROCEDURE btnOperacao.Valid
+If Empty(csSigPrCtr.Emps) Or Empty(csSigPrCtr.Dopes) Or Empty(csSigPrCtr.Numes)
+	=MessageBox([Selecione Um Registro Na Grade!!!], 0+48, [Atenção!!!])
+Else
+	lcSql = [Select Dopes From SigCdOpe Where Dopes = ']+csSigPrCtr.Dopes+[']
+	If thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0
+		Do Form SigMvExp With csSigPrCtr.Dopes, 'C', csSigPrCtr.Numes, csSigPrCtr.Emps, .t.
+	Else
+		lcSql = [Select Dopps From SigCdOpd Where Dopps = ']+csSigPrCtr.Dopes+[']
+		If Thisform.Podatamgr.SqlExecute(lcsql,'TmpOpp') > 0 And Reccount('TmpOpp') > 0
+			Do Form SigMvPdt With csSigPrCtr.Dopes, 'C', csSigPrCtr.Numes, csSigPrCtr.Emps, .t.
+		EndIf
+	Endif
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel
+* Classe: fwgrade (Base: grid)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+lcArquivo2 = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+m.SelectPro   = [Select a.cpros,a.cgrus,a.dpros,a.sgrus,a.cunis,a.cunips,a.ifors,a.reffs,a.qmins,a.valors,a.moedas,a.icms,]+;
+	[a.custofs,a.moecusfs,a.margems,a.markupa,a.pvens,a.moevs,a.dtincs,a.datas,a.pesoms,a.fcustos,a.moepcs,]+;
+	[a.fvendas,a.moepvs,a.obspeds,a.obspes,a.DPro2s,a.linhas,a.situas,a.colecoes,a.cftios,a.pftios,a.mftios,]+;
+	[a.pcuss,a.moecs,a.pvideals,a.CodCors,c.rclis,g.dgrus,g.arreds,g.tipoestos,]+;
+	[g.Caracteris,u.cEstos, b.descs As desccol,l.descs As desclin,f.descs As descftio,]+;
+	[a.Volumes, a.FigTecs,a.cproeqs,a.obsetqs,a.UltComps,a.vultcomps,a.multcomps,a.cClass,a.UsuIncs,]+;
+	[a.Locals,a.Mercs, a.cbars, h.descs as descgru,a.volumes,a.pesoms,] + ;
+	[a.pesobs,a.tamps,a.tamhs,a.cpros,a.ltminsv,]+;
+	[a.DPro3s,a.tamls,a.CodFinP, a.FigJpgs, i.Descs as DCodFinP ]+;
+	[From SigCdPro a ]+;
+	[Left Join SigCdGrp g On a.cgrus = g.cgrus ]+;
+	[Left Join SigCdUni u On a.cunis = u.cunis ]+;
+	[Left Join SigCdCol b On a.colecoes = b.colecoes ]+;
+	[Left Join SigCdLin l On a.linhas = l.linhas ]+;
+	[Left Join SigPrFti f On a.cftios = f.cods ]+;
+	[Left Join SigCdCli c On a.ifors = c.iclis ]+;
+	[Left Join SigCdGpr h On a.Mercs= h.codigos ]+;
+	[left join SigCdFip i On a.CodFinP = i.Cods ]+;
+	[Where a.cpros = ']+crMovimentos.Cpros+[' ]
+
+If Used('CrTSigPro')
+	Use In CrTSigPro
+Endif
+lnQueryOk = Thisform.poDataMgr.SqlExecute(m.SelectPro,'CrTSigPro')
+If lnQueryOk < 1
+	Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+Endif
+
+Select CrTSigPro
+Go Top
+lcCodGru  = CrTSigPro.cgrus
+lcCodSgru = CrTSigPro.sgrus
+lcCodCor  = CrTSigPro.CodCors
+
+If Used('Tmp_Sgru')
+	Use In Tmp_Sgru
+Endif
+
+If Thisform.poDataMgr.SqlExecute([Select s.codigos,s.descricaos From SigCdPsg s Where s.cgrus = ']+lcCodGru+[' And s.codigos = ']+lcCodSgru+[' ],'Tmp_Sgru') < 1
+	Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+Endif
+
+With Thisform.pagina.dados.pageframe1.page2
+	.Get_ref_fornecedor.Value     = Nvl(CrTSigPro.reffs,'')
+	.Get_peso_medio.Value         = Nvl(CrTSigPro.pesoms,0)
+	.get_moecusfs.Value			  = Nvl(CrTSigPro.moecusfs,'')
+	.get_custofs.Value			  = Nvl(CrTSigPro.custofs,0)
+	.get_precoMov.Value			  = Nvl(CrTSigPro.pCuss,0)
+	
+	.getcIdChaves.value			  = Nvl(crMovimentos.cIdChaves,[])
+	.getEmps.Value				  = Substr(crMovimentos.OriDopNums,1,3)
+	.getDopes.Value				  = Substr(crMovimentos.OriDopNums,4,20)
+	.getNumes.Value				  = Alltrim(Right(crMovimentos.OriDopNums,6))
+	
+
+	If Not Isnull(CrTSigPro.FigJpgs) And Not IsEmpty(CrTSigPro.FigJpgs)
+		.FigJpg.Visible = .F.
+		.FigJpg.Picture = ''
+		Clear Resources
+		lcFoto=Strconv(Strtran(Strtran(Strtran(CrTSigPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+		=StrToFile(lcFoto, lcArquivo2)
+		*Copy Memo CrTSigPro.FigJpgs To (lcArquivo2)
+		.FigJpg.Picture = (lcArquivo2)
+		.FigJpg.Visible = .T.
+	Else
+		.FigJpg.Visible = .F.
+		.FigJpg.Picture = ''
+	Endif
+
+	Select CrTSigPro
+	If IsEmpty(CrSigCdPam.moedetqs)
+		.Get_pr_venda.Value          = Nvl(CrTSigPro.pvens,0)
+		.Get_pr_venda_moeda.Value    = Nvl(CrTSigPro.moevs,'')
+	Else
+		Select CrSigCdCot
+		Locate For (CrSigCdCot.cmoes = CrSigCdPam.moedetqs)
+		If Found()
+			cotacao = CrSigCdCot.valos
+		Else
+			cotacao = 1
+		Endif
+		Select CrSigCdCot
+		Go Top
+		Locate For (CrSigCdCot.cmoes = CrTSigPro.moevs)
+		If Found()
+			cotven = CrSigCdCot.valos
+		Else
+			cotven = 1
+		Endif
+		ValVenda = Round(CrTSigPro.pvens * cotven / cotacao,2)
+		.Get_pr_venda.Value          = ValVenda
+		.Get_pr_venda_moeda.Value    = CrSigCdPam.moedetqs
+	Endif
+	If CrTSigPro.arreds # 0
+		_FatArred = CrTSigPro.arreds
+		_Soma = _FatArred
+		Do While _Soma < .Get_pr_venda.Value
+			_Soma = _Soma + _FatArred
+		Enddo
+		.Get_pr_venda.Value = _Soma
+	Endif
+
+EndWith
+
+This.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+If Not Empty(This.Value)
+	If IsNull(ThisForm.poObjExt1)
+		If goSistema.ConsultaAberta = .t.
+			MessageBox('A Pesquisa Global de Produtos Já está Aberta.'+Chr(13)+;
+					'Feche para poder executar nova pesquisa',0+16,'')
+			Return
+		Else
+			Do Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow
+		EndIf
+	EndIf
+
+	If (Type([ThisForm.poObjExt1])=[O])
+		With ThisForm.poObjExt1
+			.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.grp_operacao.cmd_consulta.Click()
+		EndWith 
+	EndIf 
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.grdItemXml.Col03_Distribuido.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 62
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.FigJpg
+* Classe: image (Base: image)
+* Registro: 65
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArquivo
+
+lcArquivo = Sys(2023) + '\' + goSistema.Sys2015Tmp + Sys(2015) + '.Jpg'
+
+Select crMovimentos
+lcCodPro  = crMovimentos.Cpros
+
+lcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]
+ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')
+
+* Figura no Campo Memo
+If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+	=StrToFile(crTmpPro.FigJpgs, lcArquivo)
+
+	If File(lcArquivo)
+		Do Form SigOpZom With lcArquivo, ;
+							'Produto : ' + crMovimentos.CPros + ' - ' + crMovimentos.DPros, ' '
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.btnExcluirSis
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 67
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Select crMovimentos
+	If Not Eof()
+		Delete
+	EndIf
+	
+	If Not Eof()
+		Skip 
+		Skip - 1
+	EndIf 
+	Go Top
+	This.parent.grdDisponivel.SetFocus
+	This.parent.grdDisponivel.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.btnExcluirArq
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 68
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Select crDistribui
+	If Not Eof()
+		Delete
+	EndIf
+	
+	If Not Eof()
+		Skip 
+		Skip - 1
+	EndIf 
+	Go Top
+	This.parent.grdItemXml.SetFocus
+	This.parent.grdItemXml.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_produto_inicial
+* Classe: textbox (Base: textbox)
+* Registro: 69
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(this.Value)
+	Select crMovimentos
+	lnReg = Recno()
+	Go top
+	Locate for Cpros = this.Value
+	If Eof()
+		Go lnReg
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_pr_venda
+* Classe: textbox (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_ref_fornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 72
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_peso_medio
+* Classe: textbox (Base: textbox)
+* Registro: 75
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_pr_venda_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 76
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getEmps
+* Classe: textbox (Base: textbox)
+* Registro: 77
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getDopes
+* Classe: textbox (Base: textbox)
+* Registro: 79
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getNumes
+* Classe: textbox (Base: textbox)
+* Registro: 80
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Sistema
+* Classe: textbox (Base: textbox)
+* Registro: 81
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.Arquivo
+* Classe: textbox (Base: textbox)
+* Registro: 82
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_custofs
+* Classe: textbox (Base: textbox)
+* Registro: 83
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_moecusfs
+* Classe: textbox (Base: textbox)
+* Registro: 85
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.get_precoMov
+* Classe: textbox (Base: textbox)
+* Registro: 86
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCTR.Pagina.Dados.Pageframe1.Page2.getcIdChaves
+* Classe: textbox (Base: textbox)
+* Registro: 88
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCTR
+RESERVED3 (ClassInfo): podatamgr2
+poobjext1
+sigkey
+_memberdata XML Metadata for customizable properties
+*calcula_saldo 
+*etiqueta 
+*carregaarquivos 
+*lerxml 
+*carregaritemxml 
+*montagrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 69
+================================================================================

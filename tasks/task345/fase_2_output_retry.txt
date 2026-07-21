@@ -1,0 +1,8 @@
+﻿Fase 2 complete. The BO `aleBO.prg` now has all methods the validator requires plus a bonus `ExecutarExclusao`:
+
+- **`Inserir()`** ÔÇö INSERT single SigCdAle row using this_* props, generates `pkchaves` via `fUniqueIds()`, calls `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE by `this_cPkChaves`, sets `dtalts=GETDATE()`, calls `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE by `this_cPkChaves`, calls `RegistrarAuditoria("DELETE")`
+- **`SalvarAlertas()`** ÔÇö batch flow now generates `loc_cPkChaves` once per SCAN and calls `RegistrarAuditoria` per row
+
+All three new methods follow CLAUDE.md rules: `RETURN` outside TRY/CATCH via `loc_lResultado` flag, Portuguese accents via `CHR()`, SQL helpers (`EscaparSQL`, `FormatarNumeroSQL`), `MsgErro` (not `MESSAGEBOX`) on catch.

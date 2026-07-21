@@ -499,7 +499,9 @@ DEFINE CLASS Formsigrecpe AS FormBase
                 ENDIF
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
                 EXIT
             ENDDO
@@ -522,7 +524,9 @@ DEFINE CLASS Formsigrecpe AS FormBase
                 ENDIF
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
                 EXIT
             ENDDO
@@ -545,7 +549,9 @@ DEFINE CLASS Formsigrecpe AS FormBase
                 ENDIF
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     EXIT
                 ENDIF
                 loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
@@ -1255,10 +1261,7 @@ DEFINE CLASS Formsigrecpe AS FormBase
                     loc_oPg.txt_4c_CdEstoqueA.Value   = ""
                     loc_oPg.txt_4c_DsEstoqueA.Value   = ""
                 ELSE
-                    MsgAviso("Grupo de Estoque n" + CHR(227) + "o encontrado.", ;
-                        "Grupo de Estoque")
-                    loc_oPg.txt_4c_CdGrEstoqueA.Value = ""
-                    loc_oPg.txt_4c_DsGrEstoqueA.Value = ""
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                     THIS.AbrirBuscaGrEstoque("A")
                 ENDIF
                 EXIT
@@ -1346,10 +1349,7 @@ DEFINE CLASS Formsigrecpe AS FormBase
                     loc_oPg.txt_4c_CdEstoqueA.Value = ALLTRIM(cursor_4c_ContaAVal.iclis)
                     loc_oPg.txt_4c_DsEstoqueA.Value = ALLTRIM(cursor_4c_ContaAVal.razaos)
                 ELSE
-                    MsgAviso("Conta de Estoque n" + CHR(227) + "o encontrada.", ;
-                        "Conta de Estoque")
-                    loc_oPg.txt_4c_CdEstoqueA.Value = ""
-                    loc_oPg.txt_4c_DsEstoqueA.Value = ""
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                     THIS.AbrirBuscaConta("A")
                 ENDIF
                 EXIT
@@ -1445,10 +1445,7 @@ DEFINE CLASS Formsigrecpe AS FormBase
                     loc_oPg.txt_4c_CdContaB.Value  = ""
                     loc_oPg.txt_4c_DsContaB.Value  = ""
                 ELSE
-                    MsgAviso("Grupo de Estoque n" + CHR(227) + "o encontrado.", ;
-                        "Grupo de Estoque")
-                    loc_oPg.txt_4c_CdGrupoB.Value = ""
-                    loc_oPg.txt_4c_DsGrupoB.Value = ""
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                     THIS.AbrirBuscaGrEstoque("B")
                 ENDIF
                 EXIT
@@ -1493,10 +1490,7 @@ DEFINE CLASS Formsigrecpe AS FormBase
                     loc_oPg.txt_4c_CdContaB.Value = ALLTRIM(cursor_4c_ContaBVal.iclis)
                     loc_oPg.txt_4c_DsContaB.Value = ALLTRIM(cursor_4c_ContaBVal.razaos)
                 ELSE
-                    MsgAviso("Conta de Estoque n" + CHR(227) + "o encontrada.", ;
-                        "Conta de Estoque")
-                    loc_oPg.txt_4c_CdContaB.Value = ""
-                    loc_oPg.txt_4c_DsContaB.Value = ""
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                     THIS.AbrirBuscaConta("B")
                 ENDIF
                 EXIT

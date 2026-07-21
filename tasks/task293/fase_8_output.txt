@@ -1,0 +1,15 @@
+﻿Todos os 9 m├®todos da Fase 8 foram adicionados com sucesso. O arquivo passou de 3557 para 3740 linhas.
+
+**Resumo do que foi adicionado:**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Liga `grd_4c_GradeItens` ao cursor `TmpFinalg` (ColumnCount=10) + atualiza totais |
+| `AjustarBotoesPorModo()` | Delega para `AjustarVisibilidadeBotoes()` (form operacional n├úo tem modos CRUD) |
+| `FormParaBO()` | SUMs de `TmpFinalg` e `TmpFinal` ÔåÆ propriedades `this_nTot*` do BO |
+| `BOParaForm()` | Delega para `AtualizarTotaisPage1()` + `AtualizarTotaisPage2()` |
+| `HabilitarCampos()` | ReadOnly nas colunas 7/8/10 do grid e Enabled no btn Processar baseado em `this_lProcessando` |
+| `LimparCampos()` | Zera `txt_4c_Tot_*` da Page1 e `txt_4c_TotXxxP2` da Page2 com PEMSTATUS |
+| `BtnBuscarClick()` | Chama `CarregarLista()` + `Refresh()` no grid |
+| `BtnSalvarClick()` | Alias de `BtnProcessarClick()` |
+| `BtnCancelarClick()` | Alias de `BtnEncerrarClick()` |

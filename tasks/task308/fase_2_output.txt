@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 2 est├í completa.
+
+**Resumo do que foi implementado em `sigpriteBO.prg`:**
+
+- `this_nImagems = 0` ÔÇö nova propriedade para flag SigCdOpe.Imagems
+
+- **`InicializarCursores()`** ÔÇö cria `cursor_4c_Itens` (14 colunas, espelho de crGrade) e `cursor_4c_Rodape` (7 colunas, espelho de crRodape); estrutura id├¬ntica ao legado
+
+- **`BuscarItens()`** ÔÇö equivalente ao `selecionaDados` do legado: SQL no SQL Server via SQLEXEC em cursor tempor├írio, popula `cursor_4c_Itens` com n├║mero sequencial como CItens (exatamente como o legado fazia com `Recno()`), e `cursor_4c_Rodape` com totais agrupados por moeda; sem RETURN dentro do TRY
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö carrega todas as propriedades `this_*` do item corrente do cursor
+
+- **`CarregarInfoOperacao(par_cDopes)`** ÔÇö consulta `SigCdOpe.Imagems` e armazena em `this_nImagems` (define se exibe foto do produto no AfterRowColChange)
+
+- **`CarregarImagemProduto(par_cCPros, par_cArquivo)`** ÔÇö equivalente ao `poDataMgr.CursorQuery` + decode base64 do legado; busca `SigCdPro.FigJpgs` e escreve no arquivo tempor├írio
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cEmpDopNum` (chave char 29)

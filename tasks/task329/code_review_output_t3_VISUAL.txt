@@ -1,0 +1,24 @@
+﻿An├ílise completa dos dois problemas detectados:
+
+**Problema 1 ÔÇö `cmd_4c_GeraSenha` Left=80 (original=649, diff=569px)**
+
+O bot├úo est├í dentro do container `cnt_4c_BotoesAcao` que tem `Left=569`. A posi├º├úo absoluta na Page ├® `569 + 80 = **649**`, que corresponde exatamente ao Left original. O revisor autom├ítico n├úo computou o offset do container pai ÔÇö **falso positivo**.
+
+**Problema 2 ÔÇö `cnt_4c_Saida` Left=917 (original=724, diff=193px)**
+
+Este ├® o container "Encerrar". A CLAUDE.md ÔÇö Regra #10 (Padr├úo Can├┤nico Sa├¡da/Encerrar) **exige explicitamente `Left=917`** e declara que essa regra *tem preced├¬ncia sobre o PILAR 1 (pixel-perfect legado)*:
+
+> "Se o SCX legado tem `Grupo_Saida.Left=935`, `Width=60`... **IGNORAR e usar o can├┤nico**."
+
+O valor `Left=917` ├® o padr├úo can├┤nico obrigat├│rio do sistema, independente de o SCX legado ter `Left=724`. Alterar para 724 violaria a Regra #10 ÔÇö **falso positivo**.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** Ambos os problemas detectados pelo revisor s├úo falsos positivos:
+
+| Problema | Por qu├¬ n├úo corrigir |
+|----------|---------------------|
+| `cmd_4c_GeraSenha` Left=80 | Posi├º├úo absoluta = 569 (container) + 80 = **649** = original Ô£ô |
+| `cnt_4c_Saida` Left=917 | Can├┤nico obrigat├│rio per CLAUDE.md Regra #10, sobrep├Áe-se ao legado Ô£ô |
+
+O arquivo `FormSigPrSdd.prg` est├í correto como est├í. Nenhuma propriedade visual precisa ser modificada neste pass.

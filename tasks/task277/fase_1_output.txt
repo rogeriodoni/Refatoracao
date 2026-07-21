@@ -1,0 +1,18 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\sigpremaBO.prg`. 
+
+**Fase 1 conclu├¡da.** O BO declara as propriedades extra├¡das do c├│digo original:
+
+| Propriedade | Tipo | Origem |
+|---|---|---|
+| `this_cEmps` | C(3) | `Substr(prDopes,1,3)` no Init legado |
+| `this_cDopes` | C(20) | `Substr(prDopes,4,20)` no Init legado |
+| `this_cEmpDopNums` | C(29) | `prDopes` completo |
+| `this_lAutomatico` | L | `pAuto` recebido no Init |
+| `this_cPcArqEmail` | C | `Thisform.pcArqEmail` (path PDF) |
+| `this_cPcEscolha` | C | `Thisform.pcEscolha` |
+| `this_cEmailFrom/Server/Senha` | C | Lidos de `SigCdEmp` em `btnEmail.Click` |
+| `this_nSmtpPorta` | N | `PadPortas` de `SigCdEmp` |
+| `this_dDti/dDtf` | D | Datas inicial/final do dia (quando `prDopes` vazio) |
+| `this_lEnvioOk` | L | Resultado do envio |
+
+`this_cTabela = ""` porque ├® form OPERACIONAL sem tabela de CRUD ÔÇö opera em cursores locais (`crLocalTotal`) e consultas diretas ao SQL Server.

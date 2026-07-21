@@ -1,0 +1,24 @@
+﻿Ap├│s ler o c├│digo fonte original e o arquivo atual, o `FormSigPrTar.prg` j├í est├í **completo para esta fase**.
+
+**Por qu├¬?**
+
+O formul├írio `SIGSERPR` ├® um **sub-form modal read-only** ÔÇö n├úo um CRUD. O original tem apenas 3 m├®todos:
+
+| Original | Migrado | Status |
+|---|---|---|
+| `Init` (recebe form pai, compartilha datasession) | `Init(par_oFormPai)` | Ô£à Implementado |
+| `Load` (chama `fConfigGeral()`) | N├úo aplic├ível ÔÇö `fConfigGeral` ├® legado; `config.prg` j├í inicializa | Ô£à N/A |
+| `cmdSair.Click` (reativa form pai + Release) | `CmdEncerrarClick()` | Ô£à Implementado |
+
+Os eventos adicionais que o template Fase 7 pede (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) **n├úo existem no original** ÔÇö o form n├úo tem bot├Áes CRUD. Adicion├í-los como stubs violaria a regra `PROIBIDO criar stubs com MsgAviso`.
+
+**Eventos j├í presentes e funcionais:**
+- `Init` ÔåÆ recebe form pai, compartilha datasession, chama `DODEFAULT()`
+- `InicializarForm` ÔåÆ cria BO, layout completo
+- `ConfigurarPageFrame` / `ConfigurarEncerrar` / `ConfigurarPaginaDados` / `ConfigurarPaginaLista`
+- `CarregarDados` ÔåÆ vincula `obj_4c_GetObsInsp.ControlSource` ao cursor `csTmpPrTar.ObsInsp`
+- `AlternarPagina` ÔåÆ refresca/reposiciona cursor quando chamado pelo form pai
+- `CmdEncerrarClick` ÔåÆ reativa form pai + `THIS.Release()`
+- `Destroy` ÔåÆ limpeza de refer├¬ncias
+
+**Fase 7/8 conclu├¡da** ÔÇö o formul├írio j├í est├í com 100% dos eventos do original implementados. Nenhuma altera├º├úo necess├íria.

@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 3/8 conclu├¡da ÔÇö `FormSigPrPcp.prg` criado em `C:/4c/projeto/app/forms/operacionais/` com 247 linhas cobrindo:
+
+- **DEFINE CLASS** com todas as propriedades visuais exatas do original (Width=800, Height=600, TitleBar=0, ControlBox=.F., Movable=.F., DataSession=2, etc.)
+- **Init()** ÔÇö corrige DataSession=2 com SET DATE BRITISH + CENTURY ON antes do DODEFAULT()
+- **InicializarForm()** ÔÇö cria o BO (`SigPrPcpBO`), l├¬ configura├º├úo do SigCdPam, cria `cursor_4c_PcpDados` (equivalente ao `zTmppPcp` do legado), roda `Processar()`, cria `cursor_4c_Selecao` com `SELECT DISTINCT` + 4 ├¡ndices de ordena├º├úo, estabelece `SET RELATION`, e chama os m├®todos visuais
+- **ConfigurarPageFrame()** ÔÇö define `Picture` com o background `new_background.jpg` (sem PageFrame, form OPERACIONAL flat)
+- **ConfigurarCabecalho()** ÔÇö `cnt_4c_Sombra` com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco), seguindo o padr├úo do FormSigPrCcc
+- **TornarControlesVisiveis()** ÔÇö recursivo, filtra `img_4c_FigJpg` e `shp_4c_Shape4` (devem permanecer `Visible=.F.` at├® produto ser selecionado)
+- **Destroy()** ÔÇö encerra rela├º├úo, fecha cursores, apaga arquivo tempor├írio de imagem
+
+As Fases 4ÔÇô8 adicionar├úo os grids, bot├Áes, TextBoxes e eventos via Edit no arquivo criado.

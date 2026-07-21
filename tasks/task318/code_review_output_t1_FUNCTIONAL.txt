@@ -1,0 +1,10 @@
+﻿3 fixes aplicados. Sobre o item **[METODO-INEXISTENTE]** (`THIS.Controls()`): ├® falso positivo. `Controls(n)` ├® a propriedade array nativa VFP9 de qualquer objeto Container/Form ÔÇö `ControlCount` + `Controls(n)` ├® o idioma can├┤nico para iterar controles em VFP9, n├úo ├® m├®todo inventado. N├úo h├í alternativa v├ílida; manter como est├í ├® correto.
+
+**Resumo das altera├º├Áes:**
+
+| Problema | Fix |
+|---|---|
+| CONTAINER-VISIVEL | Adicionou `"CNT_4C_SOMBRA"` ao INLIST em `TornarControlesVisiveis` ÔÇö container permanece com o Visible configurado em `ConfigurarCabecalho`, n├úo ├® for├ºado para `.T.` pelo loop recursivo |
+| METODO-INEXISTENTE | Falso positivo ÔÇö `THIS.Controls(n)` ├® propriedade array nativa VFP9 (Container.Controls), n├úo requer defini├º├úo de PROCEDURE |
+| GRID-WITH grd_4c_Dados | `ColumnCount` e `RecordSource` movidos para fora do WITH em `CarregarGrades`; colunas acessadas apenas ap├│s RecordSource estar definido |
+| GRID-WITH grd_4c_Itens | Mesmo padr├úo aplicado ao bloco `grd_4c_Itens` |

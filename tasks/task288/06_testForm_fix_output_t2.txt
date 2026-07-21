@@ -1,0 +1,19 @@
+﻿All 4 fixes look correct. Here's a summary of what was changed and why:
+
+---
+
+**4 bugs fixed across 2 files:**
+
+**`SigPrGf2BO.prg` ÔÇö `ObterChavesGrafico`**
+- `IF !USED(crRel1)` assigned to undeclared `loc_lResultado` but had **no RETURN** ÔåÆ execution fell through to `SELECT DISTINCT ... FROM crRel1` which threw an alias-not-found error, triggering `MsgErro` in CATCH
+- Fix: moved the check **before TRY** with `RETURN 0` (follows Rule #1: NEVER RETURN inside TRY)
+
+**`SigPrGf2BO.prg` ÔÇö `CarregarDadosGrafico` (2 fixes)**
+- Same pattern: both guard IFs (`!USED` and `VARTYPE(par_aChaves)`) had no RETURN ÔåÆ execution continued into dangerous territory
+- Fix: moved both validations before TRY with `RETURN .F.`
+- **Critical**: `APPEND GENERAL CLASS "MSGraph.Chart"` was called unconditionally even when `loc_nNmeses = 0` (no data from crRel1). The form comment already documents that `SYS(2335) nao intercepta dialogs OS` ÔÇö this was the **root cause of the 300-second hang**: the COM dialog opened by MSGraph when given empty data cannot be auto-dismissed
+- Fix: wrapped `INSERT`/`APPEND GENERAL` in `IF loc_nNmeses > 0`; moved `loc_lResultado = .T.` into each branch
+
+**`FormSigPrGf2.prg` ÔÇö `InicializarForm`**
+- `cbo_4c_CmbChave1.ListIndex = 1` set unconditionally even when combo is empty (standalone test) ÔåÆ would throw error caught by CATCH ÔåÆ extra `MsgErro` call
+- Fix: added `IF ListCount > 0` guard

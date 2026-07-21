@@ -1,0 +1,5 @@
+﻿A Fase 5/8 j├í estava implementada de uma sess├úo anterior ÔÇö `ConfigurarPaginaDados()` completo com todos os controles da Page2 (linhas 598-887). Durante a revis├úo identifiquei e corrigi dois bugs relacionados:
+
+1. **SIGPRCNBBO.prg**: `CarregarFormasPagto()` criava cursor com nome `cursor_4c_FormasPagto` (com 's'), mas o form esperava `cursor_4c_FormaPagto` ÔÇö SEEK de valida├º├úo nunca funcionaria.
+
+2. **FormSIGPRCNB.prg** `InicializarValores()`: Faltava o `INDEX ON fpags TAG FpagSgru` ap├│s carregar as formas de pagamento ÔÇö necess├írio para o `SEEK PADR(loc_cCod,12) ORDER TAG FpagSgru` em `ValidarTitBan()`. Tamb├®m adicionada verifica├º├úo de retorno da chamada.

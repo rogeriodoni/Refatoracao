@@ -46,8 +46,8 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
     *-- Filtro: Agrupar por fator de venda? (1=Sim / 2=Nao)
     this_nOpcFator     = 1
 
-    *-- Controle interno
-    this_cCursorDados  = "cursor_4c_sigreeunDados"
+    *-- Controle interno (cursor consumido pelo FRX legado ? dbRelatorio eh o detail band)
+    this_cCursorDados  = "dbRelatorio"
 
     *--------------------------------------------------------------------------
     * Init - Configura tabela principal e chave primaria
@@ -79,19 +79,19 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * RegistrarCotacao - Acumula taxa de cambio de uma moeda em cursor_4c_TempMoe
+    * RegistrarCotacao - Acumula taxa de cambio de uma moeda em TempMoe
     * Equivalente ao bloco Seek/Append Blank de TempMoe no processamento original
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE RegistrarCotacao(par_cMoeda, par_dData)
         IF EMPTY(ALLTRIM(NVL(par_cMoeda, "")))
             RETURN
         ENDIF
-        SELECT cursor_4c_TempMoe
+        SELECT TempMoe
         SET ORDER TO cmoes
-        IF !SEEK(par_cMoeda, "cursor_4c_TempMoe", "cmoes")
+        IF !SEEK(par_cMoeda, "TempMoe", "cmoes")
             APPEND BLANK
-            REPLACE cursor_4c_TempMoe.cmoes   WITH par_cMoeda
-            REPLACE cursor_4c_TempMoe.cotacao WITH fBuscarCotacao(ALLTRIM(par_cMoeda), par_dData)
+            REPLACE TempMoe.cmoes   WITH par_cMoeda
+            REPLACE TempMoe.cotacao WITH fBuscarCotacao(ALLTRIM(par_cMoeda), par_dData)
         ENDIF
     ENDPROC
 
@@ -104,8 +104,8 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
     *   dbCabecalho  (NomeEmpresa, Titulo, SubTitulo, Cabecalho) - lido pelo FRX
     *   dbRelatorio  (Detalhe)                                    - lido pelo FRX
     * Cursores intermediarios (sufixo Ru=com unidade, All=sem unidade):
-    *   cursor_4c_TempMoe    - cotacoes de moeda acumuladas
-    *   cursor_4c_dbRelat    - totais por unidade + fator de venda
+    *   TempMoe    - cotacoes de moeda acumuladas
+    *   dbRelat    - totais por unidade + fator de venda
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_lFalhou
@@ -188,20 +188,20 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                 CREATE CURSOR dbRelatorio (Detalhe C(200))
 
                 *-- Cursor de cotacoes acumuladas por moeda
-                IF USED("cursor_4c_TempMoe")
-                    USE IN cursor_4c_TempMoe
+                IF USED("TempMoe")
+                    USE IN TempMoe
                 ENDIF
                 SET NULL ON
-                CREATE CURSOR cursor_4c_TempMoe (cmoes C(3), cotacao N(14,4))
+                CREATE CURSOR TempMoe (cmoes C(3), cotacao N(14,4))
                 SET NULL OFF
                 INDEX ON cmoes TAG cmoes
 
                 *-- Cursor de totais por unidade + fator de venda
-                IF USED("cursor_4c_dbRelat")
-                    USE IN cursor_4c_dbRelat
+                IF USED("dbRelat")
+                    USE IN dbRelat
                 ENDIF
                 SET NULL ON
-                CREATE CURSOR cursor_4c_dbRelat ;
+                CREATE CURSOR dbRelat ;
                     (cunis C(3), dunis C(20), qtds N(10,3), ;
                      vends N(15,2), custs N(15,2), fatvens C(3))
                 SET NULL OFF
@@ -332,19 +332,19 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                             loc_lcFatVens = "   "
                         ENDIF
 
-                        *-- Acumular totais por unidade em cursor_4c_dbRelat
-                        SELECT cursor_4c_dbRelat
+                        *-- Acumular totais por unidade em dbRelat
+                        SELECT dbRelat
                         SET ORDER TO cunis
                         IF !SEEK(cursor_4c_SigCdProRu.cunis + loc_lcFatVens, ;
-                                 "cursor_4c_dbRelat", "cunis")
+                                 "dbRelat", "cunis")
                             APPEND BLANK
-                            REPLACE cursor_4c_dbRelat.cunis   WITH cursor_4c_SigCdProRu.cunis
-                            REPLACE cursor_4c_dbRelat.fatvens WITH loc_lcFatVens
-                            REPLACE cursor_4c_dbRelat.dunis   WITH NVL(cursor_4c_SigCdProRu.dunis, "")
+                            REPLACE dbRelat.cunis   WITH cursor_4c_SigCdProRu.cunis
+                            REPLACE dbRelat.fatvens WITH loc_lcFatVens
+                            REPLACE dbRelat.dunis   WITH NVL(cursor_4c_SigCdProRu.dunis, "")
                         ENDIF
-                        REPLACE cursor_4c_dbRelat.qtds  WITH cursor_4c_dbRelat.qtds  + loc_lnSqtds
-                        REPLACE cursor_4c_dbRelat.vends WITH cursor_4c_dbRelat.vends + loc_lnValor
-                        REPLACE cursor_4c_dbRelat.custs WITH cursor_4c_dbRelat.custs + loc_lnCusto
+                        REPLACE dbRelat.qtds  WITH dbRelat.qtds  + loc_lnSqtds
+                        REPLACE dbRelat.vends WITH dbRelat.vends + loc_lnValor
+                        REPLACE dbRelat.custs WITH dbRelat.custs + loc_lnCusto
 
                         SELECT cursor_4c_SigCdProRu
                     ENDSCAN
@@ -485,19 +485,19 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                                 loc_lcFatVens = "   "
                             ENDIF
 
-                            *-- Acumular em cursor_4c_dbRelat
-                            SELECT cursor_4c_dbRelat
+                            *-- Acumular em dbRelat
+                            SELECT dbRelat
                             SET ORDER TO cunis
                             IF !SEEK(cursor_4c_TmpProAll.cunis + loc_lcFatVens, ;
-                                     "cursor_4c_dbRelat", "cunis")
+                                     "dbRelat", "cunis")
                                 APPEND BLANK
-                                REPLACE cursor_4c_dbRelat.cunis   WITH cursor_4c_TmpProAll.cunis
-                                REPLACE cursor_4c_dbRelat.fatvens WITH loc_lcFatVens
-                                REPLACE cursor_4c_dbRelat.dunis   WITH NVL(cursor_4c_TmpProAll.dunis, "")
+                                REPLACE dbRelat.cunis   WITH cursor_4c_TmpProAll.cunis
+                                REPLACE dbRelat.fatvens WITH loc_lcFatVens
+                                REPLACE dbRelat.dunis   WITH NVL(cursor_4c_TmpProAll.dunis, "")
                             ENDIF
-                            REPLACE cursor_4c_dbRelat.qtds  WITH cursor_4c_dbRelat.qtds  + loc_lnSqtds
-                            REPLACE cursor_4c_dbRelat.vends WITH cursor_4c_dbRelat.vends + loc_lnValor
-                            REPLACE cursor_4c_dbRelat.custs WITH cursor_4c_dbRelat.custs + loc_lnCusto
+                            REPLACE dbRelat.qtds  WITH dbRelat.qtds  + loc_lnSqtds
+                            REPLACE dbRelat.vends WITH dbRelat.vends + loc_lnValor
+                            REPLACE dbRelat.custs WITH dbRelat.custs + loc_lnCusto
 
                             SELECT cursor_4c_TmpSaldoAll
                         ENDSCAN
@@ -520,7 +520,7 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
             ENDIF
 
             *-- ==================================================================
-            *-- FORMATACAO FINAL: cursor_4c_dbRelat -> dbRelatorio
+            *-- FORMATACAO FINAL: dbRelat -> dbRelatorio
             *-- ==================================================================
             IF !loc_lFalhou
 
@@ -528,23 +528,23 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                 loc_nTotCusto = 0
                 loc_nTotVenda = 0
 
-                SELECT cursor_4c_dbRelat
+                SELECT dbRelat
                 GO TOP
                 SCAN
-                    loc_cDetalhe = PADR(cursor_4c_dbRelat.cunis, 3) + " "
-                    loc_cDetalhe = loc_cDetalhe + PADR(cursor_4c_dbRelat.dunis, 20) + " "
-                    loc_cDetalhe = loc_cDetalhe + PADC(cursor_4c_dbRelat.fatvens, 14) + " "
+                    loc_cDetalhe = PADR(dbRelat.cunis, 3) + " "
+                    loc_cDetalhe = loc_cDetalhe + PADR(dbRelat.dunis, 20) + " "
+                    loc_cDetalhe = loc_cDetalhe + PADC(dbRelat.fatvens, 14) + " "
                     loc_cDetalhe = loc_cDetalhe + ;
-                        PADL(TRANSFORM(cursor_4c_dbRelat.qtds,  "999999.999"), 10) + " "
+                        PADL(TRANSFORM(dbRelat.qtds,  "999999.999"), 10) + " "
                     loc_cDetalhe = loc_cDetalhe + ;
-                        PADL(TRANSFORM(cursor_4c_dbRelat.custs, "99,999,999,999.99"), 17) + " "
+                        PADL(TRANSFORM(dbRelat.custs, "99,999,999,999.99"), 17) + " "
                     loc_cDetalhe = loc_cDetalhe + ;
-                        PADL(TRANSFORM(cursor_4c_dbRelat.vends, "99,999,999,999.99"), 17)
+                        PADL(TRANSFORM(dbRelat.vends, "99,999,999,999.99"), 17)
                     INSERT INTO dbRelatorio (Detalhe) VALUES (loc_cDetalhe)
 
-                    loc_nTotQtds  = loc_nTotQtds  + cursor_4c_dbRelat.qtds
-                    loc_nTotCusto = loc_nTotCusto + cursor_4c_dbRelat.custs
-                    loc_nTotVenda = loc_nTotVenda + cursor_4c_dbRelat.vends
+                    loc_nTotQtds  = loc_nTotQtds  + dbRelat.qtds
+                    loc_nTotCusto = loc_nTotCusto + dbRelat.custs
+                    loc_nTotVenda = loc_nTotVenda + dbRelat.vends
                 ENDSCAN
 
                 *-- Linha separadora de totais
@@ -566,7 +566,7 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                 *-- Secao de cotacoes (se solicitado e com moeda preenchida)
                 IF loc_lDadosCotacao = 1 AND !EMPTY(loc_lcMoeda)
-                    SELECT cursor_4c_TempMoe
+                    SELECT TempMoe
                     GO TOP
                     IF !EOF()
                         INSERT INTO dbRelatorio (Detalhe) VALUES ("")
@@ -585,9 +585,9 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                         INSERT INTO dbRelatorio (Detalhe) VALUES (loc_cDetalhe)
 
                         SCAN
-                            loc_cDetalhe = PADR(cursor_4c_TempMoe.cmoes, 5) + " "
+                            loc_cDetalhe = PADR(TempMoe.cmoes, 5) + " "
                             loc_cDetalhe = loc_cDetalhe + ;
-                                PADL(TRANSFORM(cursor_4c_TempMoe.cotacao, "999,999,999.99"), 14)
+                                PADL(TRANSFORM(TempMoe.cotacao, "999,999,999.99"), 14)
                             INSERT INTO dbRelatorio (Detalhe) VALUES (loc_cDetalhe)
                         ENDSCAN
                     ENDIF
@@ -746,11 +746,11 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
         IF USED("dbRelatorio")
             USE IN dbRelatorio
         ENDIF
-        IF USED("cursor_4c_TempMoe")
-            USE IN cursor_4c_TempMoe
+        IF USED("TempMoe")
+            USE IN TempMoe
         ENDIF
-        IF USED("cursor_4c_dbRelat")
-            USE IN cursor_4c_dbRelat
+        IF USED("dbRelat")
+            USE IN dbRelat
         ENDIF
         IF USED("cursor_4c_sigEmpReeun")
             USE IN cursor_4c_sigEmpReeun

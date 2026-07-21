@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task342",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-21T09:58:57",
+    "atualizadoEm":  "2026-07-21T13:04:57",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-21T09:58:57",
+                                            "fim":  "2026-07-21T09:58:57",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task342\\sigcdacg.sct",
+                                            "baseName":  "sigcdacg",
+                                            "scxFile":  "C:\\4c\\tasks\\task342\\sigcdacg.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-21T09:58:57",
+                                          "fim":  "2026-07-21T09:58:58",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdacg",
+                                          "txtFile":  "C:\\4c\\tasks\\task342\\sigcdacg_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T09:58:58",
+                                              "fim":  "2026-07-21T09:58:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task342\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T09:58:59",
+                                              "fim":  "2026-07-21T09:59:08",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task342\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task342\\meta_prompt.md",
+                                              "boClass":  "acgBO",
+                                              "formClass":  "Formacg",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task342\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T09:59:08",
+                                              "fim":  "2026-07-21T09:59:08",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task342\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T09:59:08",
+                                               "fim":  "2026-07-21T09:59:09",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task342\\esqueletos",
+                                               "arquivos":  [
+                                                                "acgBO_esqueleto.prg",
+                                                                "Formacg_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T09:59:09",
+                                       "fim":  "2026-07-21T11:28:22",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "erro":  null,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\forms\\cadastros\\Formacg.prg",
+                                                               "C:\\4c\\projeto\\app\\classes\\acgBO.prg"
+                                                           ],
+                                       "comentario":  "Migracao manual via Claude - FormACG + acgBO",
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\acgBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  91.18,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formacg.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  3006
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-21T11:28:22",
+                                                  "fim":  "2026-07-21T11:28:30",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formacg.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\acgBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-21T11:28:30",
+                                                 "fim":  "2026-07-21T11:28:31",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T11:59:47",
+                                       "fim":  "2026-07-21T11:59:47",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T11:59:47",
+                                               "fim":  "2026-07-21T13:04:55",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  5,
+                                               "resultFile":  "C:\\4c\\tasks\\task342\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-21T13:04:55",
+                                        "fim":  "2026-07-21T13:04:57",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formacg_20260721130456.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  398,
+                                        "avisos":  398
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T13:04:57",
+                                              "fim":  "2026-07-21T13:04:57",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task342_sigcdacg.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-21T09:58:58",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-21T09:58:59",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task342\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-21T09:58:59",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T09:58:59"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-21T11:28:30",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  2,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-21T11:28:30",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formacg_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formacg.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task342\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-21T11:28:31",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  2,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-21T11:28:31",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-21T11:28:31",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-21T11:59:14",
+                                          "passes":  6,
+                                          "problemas":  "[GRID-SQL] Campo \u0027Descricaos\u0027 usado em ControlSource de cursor_4c_Programas mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Programas\u0027 usado em ControlSource de cursor_4c_Programas mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Marcas\u0027 usado em ControlSource de cursor_4c_Programas mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Parametros\u0027 usado em ControlSource de cursor_4c_Programas mas NAO aparece no SELECT SQL; [CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_SAIDA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNCNT, TEXTO, EXPANDI, I, CCAMPOS, GRUPOS, CTIPOS, LNERRO1, PKCHAVES, USUARIOS, 0, PARAMETROS, C, MARCAS, PROGRAMAS, NSTATUS; [LAYOUT-POSITION] Controle \u0027Grupo\u0027 (parent: SIGCDACG.Pagina.Dados.Pagina.Cadastro): Top original=8 vs migrado \u0027lbl_4c_Grupo\u0027 Top=126 (diff=118px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027NomeCompleto\u0027 (parent: SIGCDACG.Pagina.Dados.Pagina.Cadastro): Top original=34 vs migrado \u0027lbl_4c_NomeCompleto\u0027 Top=152 (diff=118px, tolerancia=30px)",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  8
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-21T11:59:14",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-21T11:59:47",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\acgBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formacg.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-21T13:04:55",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T13:04:55",
+                                             "thresholdPx":  5,
+                                             "unmatched":  22,
+                                             "errors":  22,
+                                             "matched":  7,
+                                             "warnings":  16,
+                                             "reportFile":  "C:\\4c\\tasks\\task342\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

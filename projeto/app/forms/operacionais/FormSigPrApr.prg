@@ -791,6 +791,13 @@ DEFINE CLASS FormSigPrApr AS FormBase
                 .Sparse     = .F.
                 .AddObject("Check1", "CheckBox")
                 .Check1.Caption = ""
+                .Check1.Alignment = 0
+                .Check1.ReadOnly  = .F.
+                .Check1.Visible   = .T.
+                .Check1.Top       = 9
+                .Check1.Left      = 2
+                .Check1.Height    = 17
+                .Check1.Width     = 22
                 .Check1.Value   = 0
                 .CurrentControl = "Check1"
                 WITH .Header1

@@ -1,0 +1,13 @@
+﻿Arquivo criado e validado. A Fase 3 est├í completa.
+
+**`C:\4c\projeto\app\forms\cadastros\Formsigprcom.prg`** criado com:
+
+- **DEFINE CLASS Formsigprcom AS FormBase** ÔÇö propriedades visuais (Height=675, Width=1000, DataSession=2, TitleBar=0, Themes=.F.)
+- **Propriedades extras** ÔÇö `this_cPProduto/PCPros/PDPros/PExterno/...` para suportar chamada externa com produto pr├®-selecionado (padr├úo do legado `LPARAMETERS _Acesso, pcEsc, ...`)
+- **Init()** ÔÇö captura os LPARAMETERS externos antes do DODEFAULT(), armazena em `this_*` e ent├úo chama FormBase.Init()
+- **InicializarForm()** ÔÇö cria BO, configura PageFrames, decide entre Page1 (modo normal) ou Page2 (modo externo com produto fixo)
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Width=1003, Height=704, 2 pages com `new_background.jpg`
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra/lbl_4c_Titulo), cnt_4c_Botoes (Left=544), cnt_4c_Saida (can├┤nico Left=917), cmd_4c_BtnCopiar (Left=474), cnt_4c_Copia (Visible=.F. ÔÇö inicia oculto, restaurado ap├│s TornarControlesVisiveis)
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesAcao (Left=843, Top=26)
+- **CarregarLista()** ÔÇö chama BO.Buscar(""); Fases 4+ completam com configura├º├úo do grid
+- **TornarControlesVisiveis()** + **FormatarGridLista()** + **Destroy()** completos

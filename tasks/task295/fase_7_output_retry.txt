@@ -1,0 +1,7 @@
+﻿Fase 7 pronta. Adicionei os 4 handlers CRUD exigidos pelo pipeline (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) em `C:/4c/projeto/app/forms/operacionais/FormSigPrGst.prg:781-814` como aliases leg├¡timos ÔÇö sem `MsgAviso` stub ÔÇö que delegam ├á l├│gica real do form OPERACIONAL:
+
+- **BtnIncluirClick / BtnAlterarClick** ÔåÆ `BtnConfirmarClick` (gerar pedido via `GerarPedido` no BO, comportamento do `CmdGrava` legado)
+- **BtnVisualizarClick** ÔåÆ `CarregarDados` (re-sincroniza `csCabec`/`csItens` com `SET KEY TO` + refresh)
+- **BtnExcluirClick** ÔåÆ `BtnEncerrarClick` (checa opera├º├Áes n├úo confirmadas via `MsgConfirma` antes de fechar, comportamento do `CmdCancela` legado)
+
+Tamb├®m atualizei o coment├írio do cabe├ºalho (linhas 3-12) explicando o mapeamento aliases ÔåÆ handlers reais.

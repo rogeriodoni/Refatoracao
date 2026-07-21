@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi implementado na Fase 4:
+
+**M├®todos adicionados a `FormSigPrEop.prg`:**
+
+- **`ConfigurarGrade()`** ÔÇö Grid com 7 colunas fiel ao legado: checkbox de sele├º├úo (Column1 com `Sparse=.F.`, `AddObject` ÔåÆ `CurrentControl` ÔåÆ `ControlSource` na ordem correta), Data, Emp, Prev. Entrega (caption din├ómico via `this_cCabData`), Cliente, Nome do Cliente, Conjug├®. `RecordSource` setado por ├║ltimo.
+
+- **`ConfigurarRodape()`** ÔÇö Checkbox `chk_4c_Ck_Marca` (selecionar-todos, Top=123 alinhado ao header do grid), labels e textboxes somente-leitura `txt_4c_Operacao` / `txt_4c_Numes` com `ControlSource` nos campos do cursor.
+
+- **5 handlers p├║blicos** (BINDEVENT exige PUBLIC):
+  - `GrdAfterRowColChange` ÔÇö refresha textboxes ao navegar (com `LPARAMETERS`)
+  - `ChkSelecaoClick` ÔÇö refresh simples (binding via `ControlSource` j├í atualizou o cursor)
+  - `ChkSelecaoKeyPress` ÔÇö ENTER inverte sele├º├úo via `BO.AlternarSelecao()` (com `LPARAMETERS`)
+  - `ChkMarcaClick` ÔÇö delega para `BO.MarcarDesmarcarTodos()`
+  - `CmdConfirmarClick` ÔÇö chama `BO.PopularFilOper()` e fecha com `THIS.Release()`
+
+- **`InicializarForm()`** atualizado: comment substitu├¡do pelas chamadas reais + 5 BINDEVENTs.

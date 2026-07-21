@@ -1,0 +1,11 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\SIGPRCNBBO.prg` foi criado com:
+
+- **24 propriedades declaradas**, organizadas em dois grupos:
+  - **Filtros da tela** (`this_cEmps`, `this_cDsEmpresa`, `this_dDatIni`, `this_dDatFim`, `this_cCdCarConta`, `this_cDsCarConta`, `this_cTitBan`, `this_lNaoProcessadas`, `this_nPeriodo`, `this_nDiasProt`)
+  - **Campos do SigPcOoL** (`this_cTipos`, `this_cDopes`, `this_nNumes`, `this_cEmpDs`, `this_cDopeDs`, `this_nNumeDs`, `this_dDatas`, `this_cUsuars`, `this_cProdutos`, `this_cCidChaves`, `this_cEdnDests`, `this_cEmpDopNums`, `this_cProcessos`, `this_nNopers`) ÔÇö todos com tipos e tamanhos confirmados no `schema_ascii.sql`
+
+- **`Init()`** configura `this_cTabela = "SigPcOoL"` e `this_cCampoChave = "cidchaves"` antes de delegar ao `DODEFAULT()`
+
+- **`ObterChavePrimaria()`** retorna `this_cCidChaves`, conforme padr├úo do sistema de auditoria
+
+Os m├®todos de neg├│cio (`BuscarOperacoes`, `Processar`, `GerarCnab`, `CnabBrasil/Itau/Bradesco/Santander`, `ImprimirBoleto`) ser├úo adicionados na Fase 2.

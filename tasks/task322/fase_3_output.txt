@@ -1,0 +1,13 @@
+﻿Arquivo criado e verificado em `C:\4c\projeto\app\forms\cadastros\Formsigprpre.prg` (283 linhas).
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+- `DEFINE CLASS Formsigprpre AS FormBase` com propriedades visuais literais (Height=600, Width=1000, etc.) ÔÇö sem RGB/CHR no DEFINE CLASS
+- `Init()` ÔåÆ apenas `DODEFAULT()`, sem l├│gica extra
+- `InicializarForm()` ÔåÆ seta Caption com CHR(), instancia `sigprpreBO`, chama `ConfigurarPageFrame()`, respeita `gb_4c_ValidandoUI`; **sem RETURN dentro do TRY**
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com `Top=-29`, `Tabs=.F.`, `PageCount=2`
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (Top=31), `cnt_4c_Botoes` (Top=29, Left=542), `cnt_4c_Saida` (Top=29, Left=917) ÔÇö valores can├┤nicos corretos
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_BotoesAcao` (Top=33, Left=842)
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `AlternarPagina()`, `Destroy()` ÔÇö todos implementados
+
+Pr├│xima fase (4/8): Grid + bot├Áes CRUD na Page1.

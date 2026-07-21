@@ -72,8 +72,10 @@ DEFINE CLASS FormSigreato AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao inicializar dados")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -208,7 +210,7 @@ DEFINE CLASS FormSigreato AS FormBase
             .Left            = 137
             .Width           = 65
             .Height          = 70
-            .Caption         = "Doc Excel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .FontName        = "Comic Sans MS"
             .FontBold        = .T.
@@ -830,25 +832,22 @@ DEFINE CLASS FormSigreato AS FormBase
         loc_oGrd.RecordSource = "cursor_4c_OperacoesE"
 
         WITH loc_oGrd.Column1
-            .Width         = 15
-            .Sparse        = .F.
-            .Alignment     = 0
-            .Enabled       = .T.
-            .ReadOnly      = .F.
-            .Movable       = .F.
-            .Resizable     = .F.
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Width          = 15
+            .Alignment      = 0
+            .Enabled        = .T.
+            .Sparse         = .F.
+            .AddObject("Check1", "CheckBox")
+            .Check1.Caption   = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Visible   = .T.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
+            .CurrentControl = "Check1"
+            .ControlSource  = "cursor_4c_OperacoesE.SelImp"
         ENDWITH
-        loc_oGrd.Column1.AddObject("chk_4c_Marca", "CheckBox")
-        WITH loc_oGrd.Column1.chk_4c_Marca
-            .Caption   = ""
-            .Alignment = 0
-            .BackStyle = 0
-            .Enabled   = .T.
-        ENDWITH
-        loc_oGrd.Column1.CurrentControl = "chk_4c_Marca"
-        loc_oGrd.Column1.ControlSource  = "cursor_4c_OperacoesE.SelImp"
 
         WITH loc_oGrd.Column2
             .Width         = 20
@@ -950,25 +949,22 @@ DEFINE CLASS FormSigreato AS FormBase
         loc_oGrd.RecordSource = "cursor_4c_OperacoesS"
 
         WITH loc_oGrd.Column1
-            .Width         = 15
-            .Sparse        = .F.
-            .Alignment     = 0
-            .Enabled       = .T.
-            .ReadOnly      = .F.
-            .Movable       = .F.
-            .Resizable     = .F.
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Width          = 15
+            .Alignment      = 0
+            .Enabled        = .T.
+            .Sparse         = .F.
+            .AddObject("Check1", "CheckBox")
+            .Check1.Caption   = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Visible   = .T.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
+            .CurrentControl = "Check1"
+            .ControlSource  = "cursor_4c_OperacoesS.SelImp"
         ENDWITH
-        loc_oGrd.Column1.AddObject("chk_4c_marca2", "CheckBox")
-        WITH loc_oGrd.Column1.chk_4c_marca2
-            .Caption   = ""
-            .Alignment = 0
-            .BackStyle = 0
-            .Enabled   = .T.
-        ENDWITH
-        loc_oGrd.Column1.CurrentControl = "chk_4c_marca2"
-        loc_oGrd.Column1.ControlSource  = "cursor_4c_OperacoesS.SelImp"
 
         WITH loc_oGrd.Column2
             .Width         = 20
@@ -1070,25 +1066,22 @@ DEFINE CLASS FormSigreato AS FormBase
         loc_oGrd.RecordSource = "cursor_4c_SigCdCeg"
 
         WITH loc_oGrd.Column1
-            .Width         = 15
-            .Sparse        = .F.
-            .Alignment     = 0
-            .Enabled       = .T.
-            .ReadOnly      = .F.
-            .Movable       = .F.
-            .Resizable     = .F.
-            .FontName      = "Tahoma"
-            .FontSize      = 8
+            .Width          = 15
+            .Alignment      = 0
+            .Enabled        = .T.
+            .Sparse         = .F.
+            .AddObject("Check1", "CheckBox")
+            .Check1.Caption   = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Visible   = .T.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
+            .CurrentControl = "Check1"
+            .ControlSource  = "cursor_4c_SigCdCeg.lMarca"
         ENDWITH
-        loc_oGrd.Column1.AddObject("chk_4c_marca3", "CheckBox")
-        WITH loc_oGrd.Column1.chk_4c_marca3
-            .Caption   = ""
-            .Alignment = 0
-            .BackStyle = 0
-            .Enabled   = .T.
-        ENDWITH
-        loc_oGrd.Column1.CurrentControl = "chk_4c_marca3"
-        loc_oGrd.Column1.ControlSource  = "cursor_4c_SigCdCeg.lMarca"
 
         WITH loc_oGrd.Column2
             .Width         = 80

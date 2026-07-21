@@ -1,0 +1,10 @@
+﻿Todas as 7 atribui├º├Áes de `RecordSource` est├úo agora **fora** dos blocos `WITH`. Resumo das corre├º├Áes aplicadas:
+
+| Problema | Fix aplicado |
+|---|---|
+| `[GRID-HEADER] Produto2` | Linha 1127: caption trocado para `"Produto"` |
+| `[MADDCOLUNA-PARAMS]` x2 | Linhas 2438-2439: assinatura corrigida para `(campo, "", titulo)` |
+| `[CONTAINER-VISIVEL]` | `TornarControlesVisiveis`: adicionado segundo INLIST para `cnt_4c_Cabecalho` e `cnt_4c_Container3` com `Visible=.T.` expl├¡cito antes do LOOP |
+| `[GRID-WITH]` x7 | `RecordSource` movido para fora de todos os WITH blocks em `ConfigurarPaginaDados`, `CarregarDados`, `BtnTotLinhaClick`, `BtnDisponiveiClick`, `BtnPedrasClick` e `BtnSelEstoqueClick` |
+| `[METODO-INEXISTENTE] THIS.Controls()` | N├úo alterado ÔÇö `Controls(n)` ├® propriedade built-in do VFP9 em containers/forms |
+| `[LAYOUT-POSITION]` x13 | N├úo alterado ÔÇö pass Functional n├úo toca propriedades visuais |

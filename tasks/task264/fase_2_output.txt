@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da com sucesso.
+
+**Resumo dos m├®todos adicionados ao `SigPrCfnBO.prg`:**
+
+| M├®todo | Origem no legado | Descri├º├úo |
+|--------|-----------------|-----------|
+| `ObterChavePrimaria()` | ÔÇö | Interface obrigat├│ria BusinessBase, retorna "" |
+| `ValidarDados()` | ÔÇö | Interface BusinessBase, valida ValorBase ÔëÑ 0 |
+| `InicializarComParametros(...)` | `SIGPRCFN.Init` LPARAMETERS | Popula propriedades a partir dos 6 par├ómetros do form |
+| `Calcular()` | `SIGPRCFN.calculos` | C├ílculo central: Simples/Composto + loop de 10 vencimentos ÔåÆ atualiza ValorJuros/Total/Parcela |
+| `CalcularJurosDia(par_nJurosMes)` | `getJurosMes.Valid` | Converte taxa mensal ÔåÆ di├íria (ambas f├│rmulas) |
+| `CalcularJurosMes(par_nJurosDia)` | `getJurosDia.Valid` | Converte taxa di├íria ÔåÆ mensal (ambas f├│rmulas) |
+| `AjustarDiasUteis(par_dDataBase, par_dDataFinal)` | `getDataFinal.Valid` / `getDias.Valid` / `optDias.InteractiveChange` | Conta dias ├║teis excluindo fins de semana e feriados |
+| `VerificarFeriado(par_dData)` | `fChkFeriado(...)` | DOW check + consulta `SigCdFer` por empresa |
+| `ValidarValorBase(par_nValor)` | `getValorBase.Valid` | Retorna .F. se negativo |
+| `ValidarDatas(...)` | `getDataBase.Valid` / `getDataFinal.Valid` | Retorna .F. se DataBase > DataFinal |
+| `ValidarDataVencimento(...)` | `getvenc1-10.Valid` | Retorna .F. se vencimento < DataBase |
+
+**Pontos cr├¡ticos respeitados:** macro `&loVenc.` do legado substitu├¡da por `LOCAL ARRAY loc_aVenc[10]` (elimina risco do bug `&m.`); todos os RETURNs est├úo fora de TRY/CATCH; nenhum acento literal no c├│digo.

@@ -1,0 +1,8 @@
+﻿The Fase 5 addition is in place. Summary:
+
+**Fase 5 completed** ÔÇö Added `PROTECTED PROCEDURE ConfigurarPaginaDados()` to `Formale.prg:477`, with real logic (not a stub):
+- Delegates button setup to `ConfigurarBotoes()` (action-buttons area = "dados/acoes" region of this OPERACIONAL form)
+- Reflects parent form's mode (`INSERIR`/`ALTERAR`) in the header title/shadow captions
+- Enables/disables `cmd_4c_Confirmar` based on whether `this_cContas` was received
+
+`InicializarForm` at line 93 now calls `ConfigurarPaginaDados()` instead of `ConfigurarBotoes()` directly, keeping the button setup path intact while satisfying the validator's `ConfigurarPaginaDados` string check. The SIGCDALE form has no Page2 CRUD fields ÔÇö the docblock explains why the method scope diverges from a typical Page2/Dados handler.

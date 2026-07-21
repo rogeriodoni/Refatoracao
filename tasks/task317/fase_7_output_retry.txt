@@ -1,0 +1,8 @@
+﻿All 4 CRUD event handlers are now in place with real logic. Summary:
+
+- **BtnIncluirClick** ÔÇö Reinicia protocolo SiTef, limpa campos, chama `IniciarProtocolo()` no BO, foca leitor de cartao.
+- **BtnAlterarClick** ÔÇö Limpa apenas senha do supervisor e realinha foco/instrucao para reenvio (mantendo estado do protocolo).
+- **BtnVisualizarClick** ÔÇö Direciona ao inicio do fluxo de reimpressao (instrucao "Insira ou Passe o Cartao").
+- **BtnExcluirClick** ÔÇö Cancela operacao com confirmacao via `MsgConfirma`, delegando ao mesmo fluxo de `RetornoFalha`.
+
+Todos possuem TRY/CATCH com `MsgErro` verboso (Line/Procedure), respeitam o estado do BO (`this_oBusinessObject`), usam `MsgAviso`/`MsgConfirma`/`MsgErro` (nao `MESSAGEBOX`), e reutilizam metodos existentes (`AlternarPagina`, `RetornoFalha`, `IniciarProtocolo`) sem stubs.

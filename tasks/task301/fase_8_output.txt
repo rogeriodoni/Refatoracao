@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSIGPRIFF.prg` foi expandido de 342 para 490 linhas com os 10 m├®todos adicionados:
+
+| M├®todo | Sem├óntica para este InputBox |
+|--------|------------------------------|
+| `BtnBuscarClick` | Delega para `BtnVisualizarClick` (foco no controle) |
+| `BtnEncerrarClick` | Limpa resposta e fecha (como ESC) |
+| `BtnSalvarClick` | Delega para `BtnIncluirClick` (confirmar/submeter) |
+| `BtnCancelarClick` | Delega para `BtnExcluirClick` (cancelar/descartar) |
+| `FormParaBO` | Chama `CapturarRespostaTexto/Combo` conforme `this_cTipo` |
+| `BOParaForm` | Restaura `this_cResposta` de volta ao controle (TextBox/ComboBox) |
+| `HabilitarCampos` | Habilita/desabilita o controle de entrada |
+| `LimparCampos` | Zera o controle e `this_cResposta` no BO |
+| `CarregarLista` | No-op (retorna `.T.`) ÔÇö InputBox sem lista |
+| `AjustarBotoesPorModo` | No-op ÔÇö InputBox sem modos CRUD |

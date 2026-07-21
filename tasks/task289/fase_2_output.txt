@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `SigPrGl2BO.prg` agora tem:
+
+**Adi├º├Áes da Fase 2:**
+- `this_lFlag = .F.` ÔÇö propriedade faltante para o campo de sele├º├úo do grid
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö popula todas as 15 propriedades `this_*` a partir do cursor TmpCabec, usando `SELECT (par_cAliasCursor)` + acesso direto aos campos (padr├úo correto VFP9)
+- `ObterChavePrimaria()` ÔÇö retorna a chave `Emps + Dopes + STR(Numes, 6)` no formato EmpDopNum
+
+**Nota:** `Inserir()` e `Atualizar()` **n├úo foram implementados** porque este ├® um form OPERACIONAL ÔÇö as inser├º├Áes no SQL Server ocorrem nos forms downstream `SigPrGlp`/`SigPrGlx` ap├│s `ProcessarOperacoes()` completar o trabalho. For├ºar stubs aqui violaria a regra de "PROIBIDO m├®todos vazios".

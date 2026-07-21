@@ -1,0 +1,9 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSIGPRLNC.prg` est├í agora completo com todos os m├®todos exigidos:
+
+**Adicionados nesta fase:**
+- `FormParaBO()` ÔÇö transfere `txt_4c_Grupo` + `txt_4c_Contas` para `this_oBusinessObject.this_cGrupos/Contas/GruContas`
+- `BOParaForm()` ÔÇö carrega propriedades do BO nos campos da Page2 e dispara `IniciarDescricoes()` para preencher as descri├º├Áes
+- `AjustarBotoesPorModo()` ÔÇö habilita Visualizar/Alterar/Excluir apenas quando h├í registros na lista; Incluir e Buscar sempre habilitados
+- `CarregarLista()` atualizado para chamar `AjustarBotoesPorModo()` ap├│s carga bem-sucedida
+
+**Integra├º├úo confirmada:** `config.prg` usa ADIR din├ómico ÔÇö `SIGPRLNCBO.prg` (em `classes/`) e `FormSIGPRLNC.prg` (em `forms/cadastros/`) s├úo carregados automaticamente. A fun├º├úo `AbrirFormSIGPRLNC()` j├í existia no `menu.prg` desde fase anterior.

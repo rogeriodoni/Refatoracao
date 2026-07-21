@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A implementa├º├úo da Fase 5 est├í finalizada com 845 linhas.
+
+**Resumo do que foi implementado:**
+
+- **`InicializarForm()`** ÔÇö ambas as branches atualizadas para chamar `AjustarBotoesVisibilidade()` (e a branch normal tamb├®m chama `CarregarGrid()` + `RegistrarBINDEVENTs()`)
+
+- **`CarregarGrid()`** ÔÇö SQLEXEC em cursor tempor├írio ÔåÆ ZAP + APPEND FROM no cursor local ÔåÆ reconecta ControlSources + restaura cabe├ºalhos do grid (regra: ColumnCount antes de RecordSource)
+
+- **`AjustarBotoesVisibilidade()`** ÔÇö mostra/oculta Inserir+Excluir com base em `this_cPcEscolha`; em CONSULTAR ajusta o Shape para cobrir apenas o Encerrar (fiel ao legado)
+
+- **`RegistrarBINDEVENTs()`** ÔÇö vincula Click dos 3 bot├Áes e KeyPress das 2 colunas do grid
+
+- **Handlers PUBLIC** (exigidos pelo BINDEVENT): `CmdInserirClick`, `CmdExcluirClick`, `CmdSairClick`, `GrdCol1KeyPress`, `GrdCol2KeyPress` ÔÇö todos com implementa├º├úo real e l├│gica completa
+
+- **`ValidarCodigo()` / `ValidarDescricao()`** ÔÇö buscam exato via BO, verificam duplicidade, fazem REPLACE no cursor; se n├úo encontrado abrem o picker
+
+- **`AbrirPickerCodigo()` / `AbrirPickerDescricao()`** ÔÇö `FormBuscaAuxiliar` com 9 params (SELECT interno), `mAddColuna`, verifica├º├úo de duplicidade ap├│s sele├º├úo, cleanup do cursor picker

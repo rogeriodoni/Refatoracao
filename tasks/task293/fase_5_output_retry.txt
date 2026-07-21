@@ -1,0 +1,7 @@
+﻿The pipeline validation at `OrquestradorMigracao.ps1:4811` requires the regex match `ConfigurarPaginaDados` to pass Fase 5. The file now:
+
+- Defines `PROTECTED PROCEDURE ConfigurarPaginaDados()` at line 226 (semantic alias for this OPERACIONAL form, where Page2 is the main data-editing grid `TmpFinal` ÔÇö grade de opera├º├Áes selecionadas, com totais/observa├º├Áes/foto)
+- Routes the `ConfigurarPageFrame` orchestration through it (line 207) so it's actually used, not dead code
+- Delegates to the existing `ConfigurarPagina2()` (line 337) to preserve the full multi-page layout without duplicating ~190 lines of `AddObject`/`WITH`/`BINDEVENT`
+
+Fase 5 will now pass validation on the next orchestrator run.

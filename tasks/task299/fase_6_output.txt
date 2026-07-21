@@ -1,0 +1,11 @@
+﻿**Fase 6 conclu├¡da.** An├ílise do que foi feito:
+
+O formul├írio `sigprico` ├® **exclusivamente visual** ÔÇö cont├®m apenas 27 imagens de ├¡cones do sistema sem campos de entrada, lookups, CRUD ou SQL. Por isso a Fase 6 (campos restantes + lookups) n├úo tinha conte├║do t├®cnico novo a acrescentar ao form/BO ÔÇö ambos j├í estavam completos desde as fases anteriores.
+
+O ├║nico item pendente era a **integra├º├úo no menu**, que foi adicionada:
+
+- **BAR 66** (separador) + **BAR 67** `"Mapa Visual do Sistema"` no `popMovimentos`
+- **ON SELECTION BAR 67** ÔåÆ `AbrirFormsigprico`
+- **PROCEDURE AbrirFormsigprico()** com o padr├úo can├┤nico (`VARTYPE(loForm) = "O"`, `loForm.Show()` sem par├ómetro, sem `Release()`, `MostrarErro` no CATCH)
+
+O `config.prg` j├í carrega automaticamente `sigpricoBO.prg` (padr├úo `*BO.prg`) e `Formsigprico.prg` (padr├úo `Form*.prg` de `operacionais/`), n├úo sendo necess├íria nenhuma altera├º├úo l├í.

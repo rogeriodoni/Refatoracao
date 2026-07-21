@@ -1,0 +1,18 @@
+﻿Ap├│s verifica├º├úo, tenho a an├ílise completa:
+
+**CEMPS**: A coluna `Cemps` ├® a PK de `SigCdEmp` e est├í confirmada como v├ílida em m├║ltiplos BOs do projeto (`SigPdMp9BO.prg:298`, `SIGPGCNBBO.prg:373`, `SIGPRCCRBO.prg:43`, `sigpremaBO.prg:222`, `SigPrEmlBO.prg:544`). O WHERE `Cemps = EscaparSQL(par_cCodEmp)` ├® **correto e necess├írio**.
+
+**LISTINDEX**: `loc_oObj.ListIndex` na linha 2452 ├® **acesso a propriedade de ListBox VFP9**, n├úo uma condi├º├úo SQL WHERE. O validator confundiu acesso OOP com filtro SQL.
+
+Ambos os problemas flaggeados s├úo **falsos positivos** ap├│s verifica├º├úo:
+
+| Issue | Tipo | Status |
+|-------|------|--------|
+| `CEMPS` | Coluna v├ílida (`SigCdEmp.Cemps` = PK confirmada em 5+ BOs) | Falso positivo |
+| `LISTINDEX` | Propriedade VFP `ListBox.ListIndex`, n├úo SQL | Falso positivo |
+
+O task instrui: *"VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original."* ÔÇö A verifica├º├úo mostra que:
+- O `WHERE Cemps = ...` ├® a forma can├┤nica de buscar empresa no projeto inteiro
+- `ListIndex` n├úo ├® SQL ÔÇö ├® `loc_oObj.ListIndex > 0` (guard antes de `loc_oObj.List(loc_oObj.ListIndex, 1)`)
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os arquivos `Formsigprftp.prg` e `sigprftpBO.prg` est├úo corretos conforme valida├º├úo.

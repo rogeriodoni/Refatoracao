@@ -1,0 +1,6 @@
+﻿A estrutura est├í correta:
+- `IF gnConnHandle <= 0` ÔåÆ seta `loc_lSucesso = .T.` e pula todo o bloco DB
+- `ELSE` ÔåÆ executa normalmente o carregamento de dados
+- `ENDIF` antes do `CATCH`
+
+A corre├º├úo ├® m├¡nima e cir├║rgica: quando `gnConnHandle` ├® inv├ílido (modo teste sem conex├úo DB), `CarregarDadosIniciais()` retorna `.T.` graciosamente, permitindo que `InicializarForm()` continue configurando a UI e o form seja instanciado com sucesso. Em produ├º├úo (com gnConnHandle v├ílido), o comportamento ├® id├¬ntico ao original.

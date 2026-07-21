@@ -1,0 +1,15 @@
+﻿Nenhum caractere acentuado literal. O arquivo est├í limpo. Arquivo criado com 419 linhas.
+
+**Fase 3/8 conclu├¡da.** `C:/4c/projeto/app/forms/operacionais/FormSigPrSer.prg` criado com:
+
+- **`Init(par_oParentForm)`** ÔÇö guarda refer├¬ncia ao form pai, faz `SET DATASESSION TO pai.DataSessionId` antes de `DODEFAULT()`, garantindo acesso aos cursores `xMfas` e `xnensi` do pai
+- **`InicializarForm()`** ÔÇö cria BO, chama m├®todos de configura├º├úo visual, carrega dados
+- **`ConfigurarFundo()`** ÔÇö seta `new_background.jpg` via `gc_4c_CaminhoBase`
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Sombra` com `lbl_4c_Sombra`/`lbl_4c_Titulo` usando WITH separados (evita bug de nested-WITH com AddObject)
+- **`ConfigurarOperacao()`** ÔÇö container ReadOnly com `txt_4c_Empresa`, `txt_4c_Operacao`, `txt_4c_Numps` e linha separadora
+- **`ConfigurarBotaoOk()`** ÔÇö `cmd_4c_Ok` standalone com `Themes=.T.` + `DisabledPicture` (regra para bot├úo com Picture)
+- **`TornarControlesVisiveis()`**, **`CarregarDados()`**, **`Acumular()`** (com `PEMSTATUS` para `txt_4c_QtdTot`/`txt_4c_Valtot` ÔÇö adicionados na Fase 5)
+- **`CmdOkClick()`** ÔÇö ativa pai, navega `xnensi`, libera popup; BINDEVENT ser├í adicionado na Fase 7
+- **`Destroy()`** ÔåÆ `DODEFAULT()`
+
+**Pr├│xima fase (4/8):** adicionar `grd_4c_Dados` com 9 colunas e labels Origem/Destino via `Read + Edit`.

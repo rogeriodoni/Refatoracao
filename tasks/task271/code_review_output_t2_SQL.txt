@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**Problema real corrigido:**
+- `WHERE 0=1` (linha 844, `SIGPRCPRBO.prg`) ÔåÆ substitu├¡do por `SELECT TOP 0 ... FROM ...`. Funcionalmente equivalente (retorna cursor vazio com estrutura correta) sem a condi├º├úo esp├║ria.
+
+**Falsos positivos confirmados (sem altera├º├úo):**
+- **`CAMPO`**: O scanner extrai "CAMPO" do nome de vari├ível `par_cCampo` na string `" WHERE " + par_cCampo + " = "`. As chamadas reais usam apenas colunas v├ílidas do original (EmpDopNums, CBars, CPros, Dopes, etc.). Nenhuma condi├º├úo inventada.
+- **`CONTROLCOUNT`**: Vem de `loc_oControl.ControlCount > 0` no `TornarControlesVisiveis` ÔÇö c├│digo VFP9 OOP, n├úo SQL. O scanner confundiu acesso a propriedade VFP9 com condi├º├úo WHERE.

@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi alterado:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (linhas ~203-215):
+- Recurs├úo movida para **antes** da verifica├º├úo de visibilidade (padr├úo can├┤nico ÔÇö garante que filhos fiquem vis├¡veis mesmo que o container pai seja filtrado)
+- Adicionado `INLIST` que impede for├ºar `Visible=.T.` em `cnt_4c_cabecalho` e `img_4c_icone`
+- `ConfigurarCabecalho` recebeu `THIS.cnt_4c_Cabecalho.Visible = .T.` expl├¡cito ao final, garantindo que o cabe├ºalho cinza apare├ºa via controle direto (n├úo via sweep recursivo)
+- `img_4c_icone` permanece `Visible=.F.` at├® `AtualizarPreviewIcone()` encontrar um arquivo v├ílido
+
+**[GRID-WITH]** ÔÇö dois locais:
+- `ConfigurarPaginaLista`: `ColumnCount = 1` movido para `THIS.grd_4c_Dados.ColumnCount = 1` **antes** do WITH, evitando que o acesso a `.Column1.*` dentro do mesmo WITH falhe com `Unknown member COLUMN1`
+- `CarregarDados`: `RecordSource = "crSigSyIco1"` movido para `THIS.grd_4c_Dados.RecordSource = "crSigSyIco1"` **antes** do WITH, pelo mesmo motivo

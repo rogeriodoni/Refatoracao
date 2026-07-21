@@ -1,0 +1,12 @@
+﻿A **Fase 7/8 j├í est├í implementada**. Este formul├írio OPERACIONAL n├úo tem os bot├Áes padr├úo CRUD (Incluir/Alterar/Visualizar/Excluir) - os eventos equivalentes j├í existem no arquivo:
+
+| Evento original (SCX) | Implementado em FormSIGPRCPR.prg |
+|---|---|
+| `Ok.Click` (confirmar confer├¬ncia) | `CmdOkClick()` (linha 594) |
+| `Conferencia.Click` (conf. autom├ítica) | `CmdConferirAutoClick()` (linha 580) |
+| `Sair.Click` (encerrar) | `CmdEncerrarClick()` (linha 617) |
+| `Get_Leitura.Valid` (leitura de barcode) | `TxtLeituraKeyPress()` (linha 550) |
+
+O BO tamb├®m est├í completo com todos os m├®todos (`CarregarBars`, `MarcarLeitura`, `ConferirAutomatico`, `ConfirmarConferencia`, `CursorQuery`, etc.).
+
+A migra├º├úo do FormSIGPRCPR est├í **completa nas 8 fases**. Para testar, deletar os `.fxp` e abrir o form pai que chama este popup (FormSIGPRCIC ou similar), pois ele ├® um modal chamado com `CREATEOBJECT("FormSIGPRCPR", loFormPai)`.

@@ -1,0 +1,19 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma corre├º├úo necess├íria.**
+
+**An├ílise da detec├º├úo:**
+
+O pass detectou `ICLIS` no WHERE migrado como "inventado" porque o original usava `WHERE Iclis = I` onde `I` era uma vari├ível local VFP. A ferramenta automatizada extraiu os **valores do lado direito** do WHERE (vari├íveis: `LNLIN, FPAGS, LNCNT, I, EMPDOPNUMS, ...`) e confundiu a vari├ível `I` com um nome de coluna ÔÇö n├úo reconhecendo que `Iclis` j├í estava presente no lado esquerdo do original.
+
+**Verifica├º├úo via schema.sql (linha 2211-2213):**
+```sql
+CONSTRAINT [sigcdcli_iclis] PRIMARY KEY CLUSTERED
+    [iclis] ASC
+```
+
+`Iclis` ├® a PK real de `SIGCDCLI`. A condi├º├úo `WHERE Iclis = EscaparSQL(loc_cCli)` no BO (linha 313) ├®:
+
+- Correta ÔÇö usa a chave prim├íria exata da tabela
+- Necess├íria ÔÇö sem ela retornaria **todos** os clientes
+- Fiel ao original ÔÇö o original tinha `WHERE Iclis = I` com `I` sendo a vari├ível que hoje ├® `loc_cCli`
+
+**Nenhum arquivo foi alterado.** O c├│digo atual est├í correto e n├úo requer modifica├º├úo.

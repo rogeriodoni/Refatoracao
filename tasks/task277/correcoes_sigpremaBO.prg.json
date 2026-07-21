@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigpremaBO.prg",
+    "timestamp":  "2026-07-15T23:14:38",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  418,
+                          "Original":  "loc_lInvAtivo = (NVL(crSigOpCdi.chkInvs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigOpCdi.chkInvs)=\"L\" / loc_lInvAtivo = ... / ELSE / loc_lInvAtivo = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

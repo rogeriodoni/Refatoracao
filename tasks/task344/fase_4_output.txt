@@ -1,0 +1,11 @@
+﻿Phase 4 complete. `CarregarLista()` now:
+
+1. Calls `Buscar("")` to populate `cursor_4c_Dados`
+2. Sets `RecordSource` and `ColumnCount` **outside** the `WITH` block (Problema 36 ÔÇö columns won't be created inside WITH)
+3. Sets all `ControlSource` values **after** `RecordSource` (Problema 48 ÔÇö RecordSource triggers auto-bind by position)
+4. Sets all `Header1.Caption` values **after** `RecordSource` (Problema 32 ÔÇö RecordSource resets headers to field names)
+5. Calls `FormatarGridLista()` for visual formatting
+
+Grid columns bound to `cursor_4c_Dados`: `usuarios` (90px), `ncomps` (300px), `ccargs` (80px), `deptos` (100px), `cativos` (50px).
+
+**Next: Phase 5** ÔÇö populate the 5 inner tabs in `ConfigurarPaginaDados()` (Acesso, Cabe├ºalho, Cadastro, Empresa, Campos) with their respective fields.

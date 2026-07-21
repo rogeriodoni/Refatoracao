@@ -1,0 +1,21 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumindo o que foi corrigido:
+
+**Corrigido (6 mudan├ºas reais):**
+
+1. **[OPTIONGROUP-LEFT] opt_4c_Custo** ÔÇö Adicionado `.FontName`/`.FontSize` em `Buttons(1)` para consist├¬ncia com `Buttons(2)` (linha 672)
+
+2. **[OPTIONGROUP-LEFT] opt_4c_Fil** ÔÇö Adicionado `.FontName`/`.FontSize` em `Buttons(1)` para consist├¬ncia com `Buttons(2)` e `(3)` (linha 809)
+
+3. **[GRID-WITH] grd_4c_Disponivel** ÔÇö `.RecordSourceType` e `.RecordSource` movidos para fora do WITH (linhas 2525ÔÇô2526)
+
+4. **[GRID-WITH] grd_4c_ItemXml** ÔÇö `.RecordSourceType` e `.RecordSource` movidos para fora do WITH (linhas 2538ÔÇô2539)
+
+5. **[GRID-HEADER]** ÔÇö Caption `"N" + CHR(250) + "mero"` ÔåÆ `"Numero"` em `CarregarLista` (id├¬ntico ao legado, linha 1481)
+
+6. **[LAYOUT-POSITION]** ÔÇö `lbl_4c_Label1` na p├ígina interna (`pgf_4c_Dados.Page1`) renomeado para `lbl_4c_CarregarXml`, eliminando a ambiguidade com o `lbl_4c_Label1` correto da p├ígina Lista (Top=135=106+29, Left=440)
+
+**Falsos positivos identificados (sem altera├º├úo necess├íria):**
+
+- **[CONTAINER-VISIVEL]** ÔÇö INLIST para `CNT_4C_CABECALHO` j├í existia na linha 1589
+- **[METODO-INEXISTENTE] ObterNodeValue** ÔÇö M├®todo j├í definido como `PROTECTED FUNCTION` na linha 2782
+- **[GRID-WITH] loc_cConta / loc_nTot** ÔÇö Nomes incorretos do checker; `loc_cConta` ├® string de c├│digo e `loc_nTot` ├® vari├ível num├®rica ÔÇö nenhum WITH de grid encontrado com esses nomes

@@ -1,0 +1,17 @@
+﻿Arquivo correto e completo. A Fase 5/8 est├í conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`InicializarForm()`** ÔÇö nova chamada `THIS.ConfigurarPaginaDados()` na sequ├¬ncia de inicializa├º├úo.
+
+2. **`ConfigurarPaginaDados()`** (m├®todo novo) ÔÇö preenche Page2 com:
+   - `cnt_4c_Cabecalho`: `lbl_4c_Sombra` + `lbl_4c_Titulo` ("Senha do Dia", FontSize=18, fiel ao SCX)
+   - `cnt_4c_BotoesAcao`: `cmd_4c_Boleto` + `cmd_4c_GeraSenha` com BINDEVENTs
+   - `cnt_4c_Saida`: `cmd_4c_Encerrar` com BINDEVENT para `BtnEncerrarClick` j├í existente
+   - Primeira metade dos campos (com offset +29): `txt_4c_Solic`, `txt_4c_Cd_Empresa` (MaxLength=3), `txt_4c_Ds_Empresa`, `txt_4c_Operacao` + seus labels
+
+3. **`BtnBoletoClick()`** ÔÇö abre `FormSigOpBol` via `CREATEOBJECT`.
+
+4. **`BtnGeraSenhaClick()`** ÔÇö l├¬ os campos via `PEMSTATUS` (guarda seguro para execu├º├úo parcial), popula o BO e chama `BO.GeraSenha()`. Se senha gerada, exibe com `MsgInfo` e retorna para Page1; se valida├º├úo falhar, exibe `MsgAviso` com a mensagem do BO.
+
+**Fase 6/8** adicionar├í a segunda metade dos campos: `txt_4c_Doc`, `txt_4c_Fpg`, `txt_4c_Data` (ReadOnly), `txt_4c_Valor` e `txt_4c_Motivo`.

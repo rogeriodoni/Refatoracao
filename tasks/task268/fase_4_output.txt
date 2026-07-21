@@ -1,0 +1,30 @@
+﻿FASE 4/8 conclu├¡da. O arquivo `Formsigprcom.prg` agora tem 1324 linhas com:
+
+**Edit 2 ÔÇö CarregarLista()** (linhas 858ÔÇô903):
+- Chama `BO.Buscar("")` ÔåÆ popula `cursor_4c_Dados`
+- Define `RecordSource = "cursor_4c_Dados"` FORA de WITH (Problema 36)
+- Seta `ControlSource` para as 6 colunas: cpros, dpros, cgrus, ifors, reffs, situas
+- Re-seta todos os `Header1.Caption` ap├│s RecordSource (VFP9 reseta headers)
+- Chama `FormatarGridLista(loc_oGrid)`
+
+**Edit 3 ÔÇö 15 novos m├®todos** (linhas 968ÔÇô1321):
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `AlternarPagina` | PROTECTED | Muda ActivePage + this_cModoAtual |
+| `BtnIncluirClick` | PUBLIC | INSERIR ÔåÆ Page2 |
+| `BtnVisualizarClick` | PUBLIC | L├¬ cpros do cursor ÔåÆ CONSULTAR ÔåÆ Page2 |
+| `BtnAlterarClick` | PUBLIC | L├¬ cpros do cursor ÔåÆ ALTERAR ÔåÆ Page2 |
+| `BtnExcluirClick` | PUBLIC | MsgConfirma + SQLEXEC DELETE SigCdMax + CarregarLista |
+| `BtnBuscarClick` | PUBLIC | PROCURAR ÔåÆ Page2 |
+| `BtnEncerrarClick` | PUBLIC | THIS.Release() |
+| `LimparCampos` | PROTECTED | Stub para Fases 5/6 |
+| `BtnCopiarClick` | PUBLIC | Oculta grid/bot├Áes, exibe cnt_4c_Copia |
+| `EmpOsLostFocus` | PUBLIC | Habilita/desabilita txt_4c_EmpDs |
+| `BtnProcessarCopiaClick` | PUBLIC | Valida EmpOs/EmpDs ÔåÆ BO.CarregarCopiaParaCursor ÔåÆ configura grd_4c_DadosCopia |
+| `BtnConfirmarCopiaClick` | PUBLIC | MsgConfirma ÔåÆ BO.CopiarMaxEntreEmpresas ÔåÆ BtnSairCopiaClick |
+| `BtnSairCopiaClick` | PUBLIC | Oculta cnt_4c_Copia, restaura controles, fecha cursor |
+| `BtnMarcarCopiaClick` | PUBLIC | REPLACE ALL marcas WITH 1 + Refresh |
+| `BtnDesmarcarCopiaClick` | PUBLIC | REPLACE ALL marcas WITH 0 + Refresh |
+
+A pr├│xima fase (FASE 5/6) completa Page2 com os campos do produto e a grade SigCdMax.

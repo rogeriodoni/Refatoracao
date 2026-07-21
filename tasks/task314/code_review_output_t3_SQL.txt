@@ -1,0 +1,14 @@
+﻿Confirmado: `cidchaves` ├® a **PRIMARY KEY** de `SigMvNfi` (linha 14476 do schema). O `WHERE cidchaves = ...` no UPDATE ├® absolutamente correto.
+
+Este ├® um **falso positivo** do code review. Veja a an├ílise:
+
+| Aspecto | Resultado |
+|---|---|
+| `cidchaves` existe em `SigMvNfi`? | **Sim** (schema linha 14418) |
+| ├ë PK de `SigMvNfi`? | **Sim** (`CONSTRAINT sigmvnfi_cidchaves PRIMARY KEY`) |
+| WHERE inventado? | **N├úo** ÔÇö ├® a PK correta para UPDATE |
+| Por que n├úo aparece no original? | Original usa `poDataMgr.Update()` (framework abstrai a PK internamente) |
+
+O c├│digo migrado em `sigprnfeBO.prg` faz o UPDATE direto via SQLEXEC com `WHERE cidchaves = ...` ÔÇö que ├® a abordagem mais correta e eficiente (filtro por PK), equivalente ao que o `poDataMgr.Update()` do framework legado fazia internamente.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `sigprnfeBO.prg` est├í correto neste ponto. O ├║nico problema detectado (SQL-FILTRO-INVENTADO com CIDCHAVES) ├® um falso positivo ÔÇö `cidchaves` ├® a PK real de `SigMvNfi` e o uso como filtro de UPDATE ├® semanticamente equivalente ao original.

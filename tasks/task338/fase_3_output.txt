@@ -1,0 +1,16 @@
+﻿Arquivo criado com 382 linhas. Resumo do que foi entregue na **Fase 3/8** (`FormSIGPRTFH.prg`):
+
+**Estrutura Base criada:**
+- `DEFINE CLASS FormSIGPRTFH AS FormBase` com propriedades visuais do original: `Width=467, Height=350, TitleBar=0, WindowType=1, ControlBox=.F., Cancel=.T.` (dialog SiTef pequeno, sem barra de t├¡tulo)
+- `Init(LPARAMETERS 24 params)` ÔÇö recebe todos os par├ómetros de transa├º├úo de cheque, cria o BO (`SIGPRTFHBO`) e repassa via `CarregarParametros()`
+- `InicializarForm()` ÔÇö orquestra a cria├º├úo dos containers
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_Sombra/lbl_4c_Titulo` (cinza escuro, posi├º├Áes exatas do legado)
+- `ConfigurarBotaoCancela()` ÔÇö `cmd_4c_Cancela` standalone com `Cancel=.T.` e `Themes=.T.` (regra #99); BINDEVENTs para `GotFocus` e `Click`
+- `ConfigurarCorpoForm()` ÔÇö `shp_4c_Painel` (Shape2 do legado, delimita ├írea dos campos)
+- `ConfigurarContainerStatus()` ÔÇö `cnt_4c_Status` com 4 labels de status (`lbl_4c_Status1..4`, posi├º├Áes exatas)
+- `CmdCancelaGotFocus()` ÔÇö dispara automaticamente (├║nico controle focaliz├ível), chama `CarregarDLL()` ÔåÆ `Inserir()`, captura retorno em `this_cRetValores`, fecha o form
+- `CmdCancelaClick()` ÔÇö guarda de ESC (se LASTKEY=13, retorna sem fechar), sen├úo seta `this_lAbandona=.T.` e `Release()`
+- `AtualizarStatus()` ÔÇö atualiza as 3 linhas de texto do container de status
+- `TornarControlesVisiveis()` e `Destroy()` can├┤nicos
+
+**Pr├│ximas fases:** TextBoxes dos dados do cheque (GetPraca, GetBanco, GetAgencia, etc.) e Labels correspondentes (Fases 5-6).

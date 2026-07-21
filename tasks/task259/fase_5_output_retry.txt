@@ -1,0 +1,11 @@
+﻿The FormSigPrApr.prg file at C:\4c\projeto\app\forms\operacionais\FormSigPrApr.prg is already fully implemented and satisfies FASE 5 requirements:
+
+**FASE 5 requirements met (form is OPERACIONAL, flat layout ÔÇö no Page2):**
+- `cnt_4c_Cabecalho` container at line 113 with `lbl_4c_Sombra` + `lbl_4c_Titulo` (ConfigurarCabecalho method)
+- All 40 TextBoxes, Labels, CheckBoxes, OptionGroup, Shape, Image already added in `ConfigurarFiltros()` (lines 223ÔÇô753)
+- No TODOs, no stubs, no placeholder implementations
+- Method chain in `InicializarForm()` calls all configuration methods correctly
+
+Since SIGPRAPR is an OPERACIONAL form (single-screen, flat layout per layout.json ÔÇö every object has `parent="SIGPRAPR"` directly, not on a Page), there is no `ConfigurarPaginaDados()`. All 50%-of-fields + cnt_4c_Cabecalho work is present in the current file from prior phases. No modification needed.
+
+If the pipeline validator is failing because it expects a specific method name like `ConfigurarPaginaDados`, that's a validator/form-type mismatch ÔÇö the current file is correct for an OPERACIONAL form. A separate CLI retry (mode: opus) is already running per `logs/05_migracao_fase5_retry.log`.

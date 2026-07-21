@@ -1,0 +1,12 @@
+﻿All 4 required event handlers are now present. Fase 7 complete.
+
+**Summary of changes to `FormSigPrSnd.prg`:**
+
+Added 4 event handlers (BtnIncluirClick / BtnAlterarClick / BtnVisualizarClick / BtnExcluirClick) mapped to the operational semantics of this "Senhas Livres" form:
+
+- **BtnIncluirClick** ÔÇö validates Qtde and delegates to `CmdGerSenClick` (generate = insert new passwords)
+- **BtnAlterarClick** ÔÇö recarrega o cursor via `BO.Buscar("")` + `AtualizarGrid` (no editing of auto-generated passwords, so this refreshes the list)
+- **BtnVisualizarClick** ÔÇö delegates to `CmdSenPendClick` (view pending passwords)
+- **BtnExcluirClick** ÔÇö reads selected row from `crSigPrSnd`, confirms with `MsgConfirma`, then calls `BO.CarregarDoCursor("crSigPrSnd")` + `BO.Excluir()` + reload
+
+Each handler has full TRY/CATCH, follows CHR() rules for accents, and uses `MsgAviso`/`MsgErro`/`MsgInfo`/`MsgConfirma` (no MESSAGEBOX). Ready for Fase 8 (menu.prg + config.prg integration).

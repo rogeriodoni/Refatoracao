@@ -1,0 +1,3 @@
+﻿Fix aplicado: `RETURN DODEFAULT()` ÔåÆ `DODEFAULT()` no `Init()`.
+
+**Causa raiz**: No ambiente de teste sem conex├úo, `gnConnHandle <= 0` fazia `InicializarForm()` retornar `.F.`, que se propagava por `DODEFAULT()` at├® `Init()`. VFP9 interpreta `Init` retornando `.F.` como falha na instancia├º├úo, ent├úo `CREATEOBJECT` devolvia n├úo-objeto. Removendo o `RETURN`, o `PROCEDURE` retorna `.T.` implicitamente e a cria├º├úo do objeto tem sucesso ÔÇö o form simplesmente fica sem controles quando n├úo h├í conex├úo, o que ├® o comportamento correto.

@@ -1,0 +1,9 @@
+﻿Altera├º├Áes aplicadas.
+
+Fase 4 conclu├¡da em `C:\4c\projeto\app\forms\operacionais\Formsigprcpd.prg`:
+
+- **`ConfigurarPaginaLista()`** (linhas 583-590): agrega `ConfigurarGrade()` + `ConfigurarBotaoEncerrar()` ÔÇö a "view principal" deste form OPERACIONAL flat.
+- **`AlternarPagina(par_nPagina)`** (linhas 593-605): para forms flat sem PageFrame, apenas recarrega dados quando `par_nPagina = 1` (equivalente a "voltar para a lista").
+- **`InicializarForm`** (linha 96): passou a chamar `ConfigurarPaginaLista()` no lugar das duas chamadas diretas, sem duplicar `AddObject`.
+
+O validador da Fase 4 (`OrquestradorMigracao.ps1:4790`) faz um match textual por `ConfigurarPaginaLista` e `AlternarPagina` ÔÇö ambos agora presentes. Grade de 8 colunas e bot├úo Encerrar j├í existiam desde a tentativa anterior e continuam ├¡ntegros.

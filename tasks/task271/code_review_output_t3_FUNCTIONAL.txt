@@ -1,0 +1,26 @@
+﻿Analisando o arquivo real (906 linhas, lido completo), todos os 3 problemas listados j├í est├úo resolvidos na vers├úo atual do arquivo.
+
+**Problema 1 [CONTAINER-VISIVEL]** ÔÇö `CNT_4C_CABECALHO` j├í est├í no INLIST (linha 526):
+```foxpro
+IF INLIST(loc_cNome, "GRD_4C_DADOS", "TXT_4C_LEITURA", "LBL_4C_LEITURA", ;
+                     "CMD_4C_OK", "CMD_4C_CONFERIRAUTO", "CNT_4C_CABECALHO")
+```
+O LOOP j├í preserva o estado dos 5 controles ocultos, e a recurs├úo antes do LOOP j├í garante que sub-controles dos containers (como os Labels do cabe├ºalho) fiquem vis├¡veis.
+
+**Problema 2 [GRID-WITH] em `InicializarValores()`** ÔÇö `ColumnCount` e `RecordSource` j├í est├úo fora do WITH (linhas 438-440):
+```foxpro
+THIS.grd_4c_Dados.ColumnCount = 5           ÔåÉ fora do WITH
+THIS.grd_4c_Dados.RecordSource = "TmpBaixa" ÔåÉ fora do WITH
+WITH THIS.grd_4c_Dados
+    .Column1.ControlSource = ...             ÔåÉ s├│ acesso ├ás colunas
+```
+
+**Problema 3 [GRID-WITH] em `CarregarLista()`** ÔÇö mesmo padr├úo correto (linhas 753-755):
+```foxpro
+THIS.grd_4c_Dados.ColumnCount = 5           ÔåÉ fora do WITH
+THIS.grd_4c_Dados.RecordSource = "TmpBaixa" ÔåÉ fora do WITH
+WITH THIS.grd_4c_Dados
+    .Column1.ControlSource = ...             ÔåÉ s├│ acesso ├ás colunas
+```
+
+O code review foi gerado sobre uma vers├úo anterior do arquivo onde esses problemas existiam. A vers├úo atual do `FormSIGPRCPR.prg` j├í tem todos os 3 fixes aplicados corretamente ÔÇö nenhuma altera├º├úo ├® necess├íria.

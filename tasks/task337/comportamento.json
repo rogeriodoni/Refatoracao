@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 10,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FinFimVinc", "fChecaAcesso", "fLerFiscal", "fDecriptografar", "fConfigGeral", "fwBuscaSel", "for ! Deleted", "File", "Found"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigprtef",
+      "evento": "Procedure",
+      "linhas": 79,
+      "codigoOriginal": "lcHeader = ''\n\nIf (alltrim(crSigFiTef.cTpTrans)= '99' and coSigCdPam.Sistef = 1) OR coSigCdPam.Sistef = 3\n\tlcHeader = Space(3)\nElse\n\tlcHeader = crSigFiTef.cHeaders\nEndif\n\nDECLARE laSigFiTra[3,2]\nlaSigFiTra[1,1]='nTipos'\nlaSigFiTra[1,2]=coSigCdPam.Sistef\nlaSigFiTra[2,1]='cHeaders'\nlaSigFiTra[2,2]=lcHeader\nlaSigFiTra[3,1]='cTpTrans'\nlaSigFiTra[3,2]=crSigFiTef.cTpTrans\nThisForm.podatamgr.CursorQuery('SigFiTra','crSigFiTra', @laSigFiTra)\nSelect crSigFiTra\nif eof() or crSigFiTef.cTpTrans = '99'\n\tlcTr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Lparameters pcIdent\n\nllchecaSigTef = .f.\nIf !used('SigTef')\n\tUse goSistema.DirTefEcfs + [\\SigTef] in 0\n\tllchecaSigTef = .t.\nEndif\n=seek('R'+_empr+Thisform.cOperacao+pcIdent,'SigTef','Ident')\nSelect SigTef\nIf !eof('SigTef')\n\tDelete in SigTef\nEndif\t\t\t\t\nIf llchecaSigTef \n\tUse in SigTef\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef",
+      "evento": "Procedure",
+      "linhas": 148,
+      "codigoOriginal": "lParameters pIdent\n\nLocal llOk,llVenda,loModem,lnValor,lcpartable,llRelatX\nSelect crSigFiFis\nGoto top\n\nllRelatX = .t.\nIf !empty(Thisform.cOperacao)\n\tRetCVinc = .f.\n\tLoopCVinc = .t.\n\tRetImpr = .f.\n\tRetNImp = .f.\n\tlPrimeira = .t.\n\tRetFim =.t.\n\tDo While LoopCVinc\n\t\tClear TypeAHead\n\t\tThisform.CntTxt\n\t\tSelect CrTefImp\n\t\tlnValor = [0]\n\t\tgoto top\n\t\tLOCATE FOR cinfos = ' VALOR VENDA'\n\t\tIF EOF()\n\t\t\tLOCATE FOR cinfos = '    FINAL'\n\t\t\tlnValor = STRTRAN(STRTRAN(ALLTRIM(SUBSTR(cinfos,10)),[,],[]),[.],[])\n\t\tE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "FinFimVinc",
+        "metodosFormChamados": "CursorQuery,cOperacao,0,lcTipo,val,DeleteTef,SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef",
+      "evento": "Init",
+      "linhas": 54,
+      "codigoOriginal": "Parameters pcModal, pcIdChaves\n\nIf pcModal\n\tThisForm.WindowType = 1\nEndif\n\nThisForm.pcidchaves = Iif(Type('pcIdChaves') = [C], pcIdChaves, [])\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\tENDWITH\n\t\n\t.poDatamgr.SqlExecute([Select Sistef From SigCdPam],'coSigCdPam')\n\n\t=fLerFiscal()\n\tselect crSigFi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fLerFiscal,fDecriptografar",
+        "metodosFormChamados": "pcidchaves = Iif,CursorQuery,cOperacao = PADR",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.Get_redetef",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local lcod,lfan,codcor,xobj\n\n=fLerFiscal()\nSelect crSigFiFis\nGo Top\n\nIf !empty(this.value)\n\tlcSql = [Select * From SigFiNfs Where Imps = ']+CrSigFiFis.Imps+[']\n\tIf ThisForm.PodataMgr.SqlExecute(lcSql,'CrSigFiNfs') < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\tReturn .f.\n\tEndIf\n\tSelect CrSigFiNfs\n\tIndex On cComprovs Tag cComprovs\n\tIf !Seek( This.Value, 'CrSigFiNfs', 'cComprovs' )\n\t\tloBrowse = CreateObject( 'fwBuscaSel', 'CrSigFiNfs', 'cComprovs', This.Value, 'Seleção... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fLerFiscal",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigprtef.Sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.TefAdm",
+      "evento": "Click",
+      "linhas": 116,
+      "codigoOriginal": "Local lcRedeTef,SendTef,lcTipo,lnIdent, okTef\n\ncreate cursor CrTefImp (cinfos c(100),nordems N(2),cnIdents C(10))\nIndex on cnIdents tag Ident\noFormulario =Thisform.oModem\nokTef = .t.\n\nWait Window 'Aguarde Verificando TEF Ativo!!' nowait\nlcRedeTef = Thisform.get_redetef.value\nIf coSigCdPam.Sistef = 1\n\tlcTipo = 'ATV'\n\tSendTef = SigFiTefReq (ThisForm,Thisform.NoCaixa,_Empr,Thisform.cOperacao,0,0,lcTipo,0,lcRedeTef)\n\tIf Type('SendTef')='N'\n\tElse\n\t\tokTef = .f.\n\t\tMessagebox('Gerenciador Padrão não Ati... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for ! Deleted",
+        "metodosFormChamados": "SqlExecute,ImprFiscal,CursorQuery,DeleteTef",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.TefAdm",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!empty(Thisform.get_redetef.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.Command1",
+      "evento": "Click",
+      "linhas": 139,
+      "codigoOriginal": "Local lcRedeTef,SendTef,lcTipo,lnIdent, okTef\n\ncreate cursor CrTefImp (cinfos c(100),nordems N(2),cnIdents C(10))\nIndex on cnIdents tag Ident\noFormulario =Thisform.oModem\nokTef = .t.\n\n=fLerFiscal()\n\nWait Window 'Aguarde Verificando TEF Ativo!!' nowait\nlcRedeTef = Thisform.get_redetef.value\nIf coSigCdPam.Sistef = 1\n\tlcTipo = 'ATV'\n\tSendTef = SigFiTefReq (ThisForm,Thisform.NoCaixa,_Empr,Thisform.cOperacao,0,0,lcTipo,0,lcRedeTef)\n\tIf Type('SendTef')='N'\n\tElse\n\t\tokTef = .f.\n\t\tMessagebox('Gerenciador... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fLerFiscal,File,Found",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.Command1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!empty(Thisform.get_redetef.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.TefAtv",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lcRedeTef,lcTipo,SendTef\n\nWait Window 'Aguarde Processamento TEF !!' nowait\n\nlcRedeTef = Thisform.get_redetef.value\nlcTipo = 'ATV'\nSendTef = SigFiTefReq (ThisForm,Thisform.NoCaixa,_Empr,Thisform.cOperacao,0,0,lcTipo,0,lcRedeTef)\nIf Type('SendTef')='N'\n\tMessagebox('Gerenciador Padrão Ativo !!',0+48,'')\nElse\n\tMessagebox('Gerenciador Padrão não Ativo !!',0+48,'')\n\tThisForm.podatamgr.CursorQuery('SigFiNfs','crSigFiNfs', 'cComprovs', lcRedeTef)\n\tSelect CrSigFiNfs\n\tLocate for Imps = CrSigFiFis.I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigprtef.TefAtv",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!empty(Thisform.get_redetef.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_redetef",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigprtef.Init",
+      "queryOriginal": "\t.poDatamgr.SqlExecute([Select Sistef From SigCdPam],'coSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "Sistef",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigprtef.Get_redetef.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigFiNfs Where Imps = ']+CrSigFiFis.Imps+['] \tIf ThisForm.PodataMgr.SqlExecute(lcSql,'CrSigFiNfs') < 1",
+      "tabelas": "SigFiNfs",
+      "colunas": "Imps,Imps+[],SqlExecutelcSql,CrSigFiNfs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam", "SigFiNfs"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

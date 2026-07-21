@@ -1,0 +1,16 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\AliBO.prg` criado com:
+
+**Propriedades declaradas** (extra├¡das do schema SIGCDALI):
+| Propriedade | Tipo/Tamanho | Observa├º├úo |
+|---|---|---|
+| `this_nCodigos` | numeric(3,0) | PK |
+| `this_cDescrs` | char(40) | |
+| `this_cOpAutos` | char(15) | FK ÔåÆ SigCdOpt |
+| `this_cOpSaidas` | char(15) | FK ÔåÆ SigCdOpt |
+| `this_cFPagSAutos` | char(12) | FK ÔåÆ SigOpFp |
+| `this_nPefins` | numeric(1,0) | OptionGroup (1=Sim, 2=N├úo), default=2 |
+| `this_nReincids` | numeric(4,2) | N├úo exibido no form, default=0 |
+
+**Init()** com `this_cTabela = "SIGCDALI"` e `this_cCampoChave = "codigos"` (corretos, diferente do esqueleto que tinha `SigOpFp`/`cods`).
+
+**ObterChavePrimaria()** retorna `TRANSFORM(THIS.this_nCodigos)` para o sistema de auditoria.

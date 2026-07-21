@@ -1,0 +1,14 @@
+﻿Phase 2 complete. Added the required CRUD methods to `SigPrGf2BO.prg` while preserving Phase 1's domain-specific graph methods.
+
+**Added CRUD methods** (all with real implementations, no stubs):
+- `ObterChavePrimaria()` ÔåÆ returns `this_cChave1` (vendor/group code selected in ComboBox)
+- `CarregarDoCursor(par_cAliasCursor)` ÔåÆ maps ALL columns from both `crRel1` (parent form's data source: cEmps, cTitulo1s, cTitulo2s, cEmpresas, cStranomes) and `crGrafico1` (cache: cChave1s, ctitulo1s, cempresas), with per-field TYPE guards
+- `Inserir()` ÔåÆ INSERT into the `crGrafico1` cache cursor (this form has no SQL table ÔÇö data comes from parent's `crRel1`), with duplicate-key check
+- `Atualizar()` ÔåÆ REPLACE on `crGrafico1` cache row, with existence check via LOCATE
+- `RegistrarAuditoria(par_cOperacao)` ÔåÆ real INSERT INTO LogAuditoria using "SigPrGf2" as virtual table + this_cChave1 as ChaveRegistro, called from Inserir/Atualizar
+
+**Compliance checks**:
+- CLAUDE.md rule #1: refactored all early `RETURN` inside TRY/CATCH into `DO CASE/OTHERWISE` flow with single `RETURN loc_lResultado` outside
+- Rule #4: Portuguese accents via CHR() (231, 227, 225)
+- Rule #9: every CATCH calls `MsgErro(...)` and sets `this_cMensagemErro`
+- File structure balanced: 10 PROCEDURE / 10 ENDPROC / 1 DEFINE CLASS / 1 ENDDEFINE

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e do que n├úo foi alterado:
+
+**Corrigido:**
+- `TornarControlesVisiveis` linha 1689: adicionado `"CNT_4C_PAINELCOPIA"` ao INLIST. O painel de c├│pia ├® intencionalmente oculto (`Visible=.F.`) e n├úo deve ter sua visibilidade for├ºada pelo m├®todo recursivo ÔÇö antes dependia de reset manual na linha 367.
+
+**N├úo alterado (false positives):**
+- `lbl_4c_Grupo.Top=126` e `lbl_4c_NomeCompleto.Top=152` ÔÇö o validador comparou Top=8/34 do SCX original (que viviam dentro de um PageFrame interno posicionado em TopÔëê118 na Dados page) com as coordenadas na Page2 migrada. A conta `118+8=126` e `118+34=152` confirma que as posi├º├Áes est├úo corretas. Mover para Top=8 colocaria os campos dentro do cabe├ºalho cinza que termina no Top=114.

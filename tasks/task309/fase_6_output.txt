@@ -1,0 +1,17 @@
+﻿Tudo correto. A Fase 6 est├í conclu├¡da. Aqui o resumo do que foi feito:
+
+**Fase 6 ÔÇö Campos restantes, lookups e guard do grid:**
+
+1. **BINDEVENTs F4/DblClick adicionados** em `ConfigurarPaginaDados()`:
+   - `txt_4c_Grupo` ÔåÆ `GrupoKeyPress` (F4) + `GrupoDblClick`
+   - `txt_4c_Contas` ÔåÆ `ContaKeyPress` (F4) + `ContaDblClick`
+
+2. **6 m├®todos novos** implementados completamente:
+   - `GrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö detecta F4 (keyCode=28) e chama `AbrirLookupGrupo()`
+   - `GrupoDblClick()` ÔÇö chama `AbrirLookupGrupo()`
+   - `AbrirLookupGrupo()` ÔÇö abre `FormBuscaAuxiliar` em `SigCdGcr` (Codigos/Descrs), com guard de campo habilitado
+   - `ContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö detecta F4 e chama `AbrirLookupConta()`
+   - `ContaDblClick()` ÔÇö chama `AbrirLookupConta()`
+   - `AbrirLookupConta()` ÔÇö abre `FormBuscaAuxiliar` em `SigCdCli` (Iclis/Rclis)
+
+3. **Guard do `GradeAfterRowColChange` corrigido**: agora verifica `par_nColIndex != 1` (retorna cedo quando o usu├írio n├úo saiu da coluna Cocos), e limpa `descs` quando `Cocos` ├® apagado ÔÇö corrigindo o bug de re-lookup n├úo disparar ao trocar o c├│digo.

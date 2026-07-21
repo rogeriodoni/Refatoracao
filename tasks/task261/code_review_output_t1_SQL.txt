@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes foram aplicadas com sucesso. Resumo das 7 flags resolvidas:
+
+| Flag | Localiza├º├úo | Corre├º├úo |
+|------|-------------|----------|
+| `1` (WHERE 1=1) | 4 m├®todos | Substitu├¡do por WHERE din├ómico com `IIF(EMPTY(m.loc_cWhere), " WHERE ", " AND ")` |
+| `ESTOS` | `RecalcularSaldosEstoque` | Removido bloco `AND estos = EscaparSQL(THIS.this_cEstoque)` |
+| `OPERS` | `RecalcularSaldosCusto` + `RecalcularSaldosCompra` | Removido `opers = 'E'` do WHERE base e da query interna de detalhe |
+| `UNITS` | `RecalcularSaldosCusto` | Removido `AND units > 0` do WHERE base |
+| `QTDS` | `RecalcularSaldosCusto` | Removido `AND qtds > 0` do WHERE base |
+| `CUSTOFSMEDIO` | `RecalcularSaldosCusto` SCAN | Simplificado para `IF !ISNULL(custofsMedio)` (guard `> 0` inventado removido; NULLIF j├í trata zero no SQL) |
+| `CIDCHAVES` | UPDATE SigMvCcr/SigMvHst | **Mantido** ÔÇö `WHERE cidchaves = X` ├® identificador de PK necess├írio para UPDATE SQL individual; remo├º├úo quebraria toda a l├│gica de atualiza├º├úo por registro |

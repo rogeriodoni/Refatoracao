@@ -94,7 +94,7 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
                 USE IN cursor_4c_SigCdNec
             ENDIF
             loc_cSql = "SELECT TOP 1 EmpDNps, ChkSubn FROM SigCdNec " + ;
-                       "WHERE EmpDNps = " + EscaparSQL(loc_cEmpDNps)
+                       "WHERE Nops = " + FormatarNumeroSQL(par_nNops, 0)
             IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdNec") > 0
                 IF !EOF("cursor_4c_SigCdNec")
                     SELECT cursor_4c_SigCdNec
@@ -102,17 +102,17 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
                     loc_lOPValida = .T.
                 ENDIF
                 USE IN cursor_4c_SigCdNec
+
+                IF loc_lOPValida AND loc_lChkSubn
+                    MsgAviso("O.P. J" + CHR(225) + " Foi Encerrada!!!", "Aviso")
+                    loc_lOPValida = .F.
+                ENDIF
+
+                IF !loc_lOPValida AND !loc_lChkSubn AND par_nNops > 0
+                    MsgAviso("O.P. N" + CHR(227) + "o Localizada!!!", "Aviso")
+                ENDIF
             ELSE
                 MsgErro("Erro ao validar O.P.", "Erro")
-            ENDIF
-
-            IF loc_lOPValida AND loc_lChkSubn
-                MsgAviso("O.P. J" + CHR(225) + " Foi Encerrada!!!", "Aviso")
-                loc_lOPValida = .F.
-            ENDIF
-
-            IF !loc_lOPValida AND !loc_lChkSubn AND par_nNops > 0
-                MsgAviso("O.P. N" + CHR(227) + "o Localizada!!!", "Aviso")
             ENDIF
 
             IF loc_lOPValida
@@ -121,7 +121,7 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
                     USE IN cursor_4c_SigPdMvfLoad
                 ENDIF
                 loc_cSql = "SELECT TOP 1 CodPds FROM SigPdMvf " + ;
-                           "WHERE EmpDNps = " + EscaparSQL(loc_cEmpDNps)
+                           "WHERE Nops = " + FormatarNumeroSQL(par_nNops, 0)
                 IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigPdMvfLoad") > 0
                     IF !EOF("cursor_4c_SigPdMvfLoad")
                         SELECT cursor_4c_SigPdMvfLoad
@@ -262,7 +262,7 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
                         *-- Localiza linha correspondente em SigOpPicSave por Citens+Dopes+Numes
                         SELECT cursor_4c_SigOpPicSave
                         GO TOP
-                        SCAN FOR Nops = loc_nNops AND Citens = loc_nCitens AND SeqDivs = 0
+                        SCAN FOR Nops = loc_nNops AND Citens = loc_nCitens
                             IF NVL(ALLTRIM(Dopes), "") + STR(NVL(Numes, 0), 6) = ;
                                loc_cDopes + STR(loc_nNumes, 6)
                                 loc_cChave = NVL(ALLTRIM(cIdChaves), "")
@@ -295,7 +295,7 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
                         USE IN cursor_4c_SigPdMvfSave
                     ENDIF
                     loc_cSql = "SELECT TOP 1 cIdChaves FROM SigPdMvf " + ;
-                               "WHERE EmpDNps = " + EscaparSQL(THIS.this_cEmpDNps)
+                               "WHERE Nops = " + FormatarNumeroSQL(loc_nNops, 0)
                     IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigPdMvfSave") > 0
                         SELECT cursor_4c_SigPdMvfSave
                         IF !EOF("cursor_4c_SigPdMvfSave")
@@ -367,7 +367,7 @@ DEFINE CLASS SigPrAopBO AS BusinessBase
     *---------------------------------------------------------------------------
         LOCAL loc_cSql, loc_oErro
         TRY
-            loc_cSql = "INSERT INTO LogAuditoria (Tabela, Chave, Operacao, Usuario, DataHora) " + ;
+            loc_cSql = "INSERT INTO LogAuditoria (Tabela, ChaveRegistro, Operacao, Usuario, DataHora) " + ;
                        "VALUES (" + ;
                        EscaparSQL("SigOpPic") + ", " + ;
                        EscaparSQL(THIS.ObterChavePrimaria()) + ", " + ;

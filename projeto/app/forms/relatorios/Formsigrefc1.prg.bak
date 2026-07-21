@@ -609,7 +609,9 @@ DEFINE CLASS Formsigrefc1 AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -634,7 +636,9 @@ DEFINE CLASS Formsigrefc1 AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -659,7 +663,9 @@ DEFINE CLASS Formsigrefc1 AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.GerarExcel()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

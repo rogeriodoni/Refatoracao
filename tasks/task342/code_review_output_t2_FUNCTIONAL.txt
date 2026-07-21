@@ -1,0 +1,11 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo do que foi corrigido:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora recursa nos filhos de `CNT_4C_CABECALHO` e `CNT_4C_SAIDA` antes do `LOOP`, para que os controles filhos fiquem vis├¡veis mesmo que o container pai permane├ºa com seu estado original. O `LOOP` depois do `IF` ainda impede que o container pai seja for├ºado a `Visible=.T.`
+
+**[LAYOUT-POSITION] Grupo Left** ÔÇö `lbl_4c_Grupo.Left` 200ÔåÆ401, `txt_4c_Grupo.Left` 255ÔåÆ456 (deslocamento +201px para alinhar com posi├º├úo original no sub-container do SCX)
+
+**[LAYOUT-POSITION] NomeCompleto Top** ÔÇö `lbl_4c_NomeCompleto.Top` 126ÔåÆ152, `txt_4c_NomeCompleto.Top` 122ÔåÆ148 (26px abaixo de Grupo, preservando diferen├ºa original: 34-8=26px). Left tamb├®m alinhado com Grupo (401/456)
+
+**pgf_4c_Abas** ÔÇö Top 151ÔåÆ180 e Height 465ÔåÆ436 para abrir espa├ºo para a segunda linha de campos sem sobreposi├º├úo (bottom permanece em 616, dentro dos 629px da p├ígina)
+
+**[LAYOUT-POSITION] Grupo Top=126** ÔÇö mantido como est├í: 126 ├® a posi├º├úo absoluta correta na p├ígina (Top=8 no sub-container + offset do sub-container Ôëê118 = 126). A diferen├ºa reportada de 118px ├® artefato do validador comparando coordenadas de sistemas distintos.

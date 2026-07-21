@@ -1,0 +1,31 @@
+﻿## Resultado da Verifica├º├úo
+
+Ap├│s comparar o c├│digo migrado contra o original, todos os 4 flags s├úo **falsos positivos**. Nenhuma altera├º├úo ├® necess├íria:
+
+### CIDCHAVES (linhas 225, 250)
+```
+UPDATE SigMvpar SET ... WHERE cidchaves = ...
+DELETE FROM SigMvpar WHERE cidchaves = ...
+```
+`cidchaves` ├® a **PK de SigMvpar**. O original usava `poDataMgr.Update([crSigMvpar])` que internamente filtra pela PK. A migra├º├úo converte isso em SQL expl├¡cito ÔÇö correto e equivalente.
+
+### ICLIS (linhas 630, 658ÔÇô744)
+```
+SELECT COUNT(*) FROM SigCdCli WHERE IClis = ...
+UPDATE SigCdCli SET ... WHERE IClis = ...
+```
+`IClis` ├® a **PK de SigCdCli**. O original usava `poDataMgr.Update([crSigCdCli])` + cursores. A migra├º├úo usa SQL direto com WHERE na PK ÔÇö correto e equivalente. Remover esses filtros deduplicaria clientes ou atualizaria todos os registros de uma vez.
+
+### ENCARGOS
+`Encargos` **n├úo aparece em nenhum WHERE** no c├│digo migrado. Aparece apenas:
+- Na lista SELECT: `b.prodwebs, b.prodvars, b.Encargos,` (linhas 303, 311)  
+- Em c├ílculo VFP: `IIF(!EMPTY(Encargos), ((pvens * Encargos) / 100), 0)` (linhas 342, 359)
+
+Falso positivo ÔÇö o validador confundiu o campo no cursor com condi├º├úo WHERE.
+
+### CONTROLCOUNT
+`ControlCount` ├® uma **propriedade VFP** usada em `TornarControlesVisiveis` do Form (linha 523), n├úo SQL. O validador confundiu c├│digo VFP com SQL.
+
+---
+
+**Nenhuma corre├º├úo aplicada.** Os quatro flags s├úo falsos positivos ÔÇö remover os WHERE de `cidchaves`/`IClis` quebraria UPDATE/DELETE; `Encargos` e `ControlCount` nunca foram condi├º├Áes WHERE.

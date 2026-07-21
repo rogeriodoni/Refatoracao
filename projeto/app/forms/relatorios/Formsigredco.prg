@@ -154,7 +154,9 @@ DEFINE CLASS Formsigredco AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.CarregarLocalEmp()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -376,7 +378,7 @@ DEFINE CLASS Formsigredco AS FormBase
             ENDWITH
 
             WITH .Buttons(3)
-                .Caption         = "DocExcel"
+                .Caption         = "\<Arquivos Email"
                 .Left            = 137
                 .Top             = 5
                 .Width           = 65
@@ -527,7 +529,9 @@ DEFINE CLASS Formsigredco AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -539,7 +543,9 @@ DEFINE CLASS Formsigredco AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -551,7 +557,9 @@ DEFINE CLASS Formsigredco AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.ImprimirDocumento()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC

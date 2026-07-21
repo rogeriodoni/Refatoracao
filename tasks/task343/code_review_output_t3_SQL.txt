@@ -1,0 +1,11 @@
+﻿Analisando o problema reportado: o validador flagou `NComps` como ausente no SELECT SQL do `cursor_4c_AcJ`. Verificando o c├│digo atual:
+
+1. **CREATE CURSOR** (linhas 664, 1044, 1254): `NComps C(30)` ÔÇö presente Ô£ô  
+2. **SQLEXEC** em `CarregarAcessos()` (ACJBO.prg linha 138): `b.NComps` via LEFT JOIN SigCdUsu ÔÇö presente Ô£ô  
+3. **ControlSource** (linhas 703, 1264): `cursor_4c_AcJ.NComps` ÔÇö correto Ô£ô
+
+O campo `NComps` j├í est├í corretamente inclu├¡do em todos os SELECTs e CREATEs que alimentam o cursor. O validador gerou um falso positivo ÔÇö provavelmente porque analisou apenas o arquivo do Form e n├úo encontrou um SQLEXEC direto no form (o SELECT com `b.NComps` est├í no BO, em `CarregarAcessos()`), ignorando os `CREATE CURSOR` expl├¡citos que definem o campo.
+
+**Nenhuma corre├º├úo ├® necess├íria:** o c├│digo migrado j├í trata `NComps` corretamente via JOIN com `SigCdUsu` no m├®todo `CarregarAcessos()` do BO, e os cursores placeholder criados com `CREATE CURSOR` tamb├®m declaram a coluna.
+
+Observa├º├úo paralela (fora do escopo deste pass): linha 696 define `ColumnCount = 3` mas apenas 2 colunas s├úo configuradas (Column1=Usuars, Column2=NComps), enquanto linha 677 j├í havia definido `ColumnCount = 2`. A linha 696 sobrescreve para 3, deixando uma terceira coluna fantasma sem ControlSource. Mas isso ├® uma quest├úo visual/estrutural, n├úo SQL ÔÇö n├úo deve ser corrigida neste pass focado em SQL.

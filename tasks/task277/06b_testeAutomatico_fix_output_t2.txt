@@ -1,0 +1,5 @@
+﻿The fix is applied. The change is minimal and correct:
+
+**Root cause**: `CarregarDados()` throws internally when `gnConnHandle` is 0 (test mode has no DB), its CATCH catches it but returns `.F.`. Back in `InicializarForm()`, the old code treated that `.F.` as fatal (`loc_lOK = .F.`), which blocked `ConfigurarPageFrame()` and prevented `loc_lSucesso = .T.` from ever being reached. FormBase then aborted Init, causing CREATEOBJECT to return non-object.
+
+**Fix**: Call `CarregarDados()` without treating failure as fatal. The cursor `crLocalTotal` is still created inside `CarregarDados` before the SQLEXEC throws (the `CREATE CURSOR` line runs first), so `ConfigurarGrade`'s `ControlSource` assignments will bind to an empty cursor. The form opens normally; the grid is just empty until the user triggers a real load with a DB connection.

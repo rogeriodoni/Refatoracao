@@ -565,8 +565,10 @@ DEFINE CLASS FormSigReCgc AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Visualizar Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -581,8 +583,10 @@ DEFINE CLASS FormSigReCgc AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Imprimir Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -594,8 +598,10 @@ DEFINE CLASS FormSigReCgc AS FormBase
     PROCEDURE BtnExcelClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.ExportarExcel()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Exportar Excel")
+            ENDIF
         ENDIF
     ENDPROC
 

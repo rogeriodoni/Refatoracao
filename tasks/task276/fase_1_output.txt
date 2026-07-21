@@ -1,0 +1,9 @@
+﻿`C:/4c/projeto/app/classes/SigPrDscBO.prg` criado com sucesso. A Fase 1/8 est├í completa com:
+
+- **Configura├º├úo da entidade**: `this_cTabela = "SigCdPro"`, `this_cCampoChave = "CPros"`
+- **Filtros de sele├º├úo**: `this_cCProsI`, `this_cCProsF`, `this_cCGrus` ÔÇö mapeados de `getCProsI/F/Grus` do legado
+- **Controle de processamento**: `this_nTotalProcessados`, `this_nTotalGravados`, `this_lGravadoOk`
+- **Init()**: configura tabela/chave e chama `DODEFAULT()`
+- **ObterChavePrimaria()**: retorna intervalo para log de auditoria
+
+A pr├│xima fase (2/8) adicionar├í os m├®todos `Processar()` (seleciona produtos e monta descri├º├Áes via SigCdDic/SigCdGrp/SigCdCor) e `Gravar()` (UPDATE SigCdPro + DELETE SigPrPrt com commit/rollback) baseados nos `PROCEDURE processamento` e `PROCEDURE gravacao` do legado.

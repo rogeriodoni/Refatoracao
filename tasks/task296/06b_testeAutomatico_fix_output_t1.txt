@@ -1,0 +1,1 @@
+﻿Fixed. `CarregarDados` was declared `PROTECTED`, so the test framework couldn't access it externally and got "Property CARREGARDADOS is not found". Removing `PROTECTED` makes it public (VFP9 default), which is required for any method called from outside the class ÔÇö including the `TesteAutomatico` harness at line 799.

@@ -1,0 +1,10 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSIGPRPRO.prg` foi criado com:
+
+- **DEFINE CLASS FormSIGPRPRO AS FormBase** ÔÇö 1000├ù600, TitleBar=0, ControlBox=.F., Movable=.F., WindowType=1 (modal), DataSession=2
+- **Init(par_oFrm, par_cCPros)** ÔÇö captura os dois par├ómetros do legado (`pFrm`, `pPro`) em properties antes de chamar DODEFAULT()
+- **InicializarForm()** ÔÇö valida par├ómetro, cria BO (SIGPRPROBO), chama BuscarDadosProduto, cria cursor placeholder `cursor_4c_Carac` (cidchaves/caracteris/compls/infos), monta cabecalho. Sem RETURN dentro de TRY/CATCH (regra #1 VFP9)
+- **ConfigurarCabecalho()** ÔÇö container cinza 1000├ù96, lbl_4c_Sombra (preto) + lbl_4c_Titulo (branco), AutoSize=.F. (regra labels cabecalho), AddObject fora de WITH aninhado (regra nested-WITH)
+- **TornarControlesVisiveis()** ÔÇö recursivo, sem LOOP que quebraria filhos hidden
+- **Destroy()** ÔÇö fecha cursor_4c_Carac + DODEFAULT()
+
+**Pr├│ximas fases:** Fase 4 adicionar├í o grid `grd_4c_Dados` (GradeCarac), shapes decorativos e bot├úo OK via Edit no arquivo existente.

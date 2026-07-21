@@ -1,0 +1,17 @@
+﻿Tudo correto. A Fase 8 est├í conclu├¡da. Aqui est├í o resumo do que foi adicionado:
+
+**M├®todos adicionados ao `FormSigPrPpc.prg`:**
+
+| M├®todo | Sem├óntica OPERACIONAL |
+|--------|----------------------|
+| `BOParaForm()` | Preenche campos do form com props do BO (restaurar filtros) |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os 9 controles de filtro + bot├úo Consultar |
+| `LimparCampos()` | Delega para `InicializarValores()` |
+| `CarregarLista()` | Retorna `.T.` ÔÇö form OPERACIONAL n├úo tem grade de listagem |
+| `AjustarBotoesPorModo()` | Sincroniza estado do bot├úo Consultar com `Enabled` dos campos |
+| `BtnBuscarClick()` | ÔåÆ `CmdConsultarClick()` |
+| `BtnEncerrarClick()` | ÔåÆ `CmdEncerrarClick()` |
+| `BtnSalvarClick()` | ÔåÆ `CmdConsultarClick()` (confirma filtros) |
+| `BtnCancelarClick()` | Fecha TprMvCab + limpa filtros + reabilita campos |
+
+**Menu atualizado:** `AbrirFormSigPrPpc()` adicionado ao final de `menu.prg` com o padr├úo can├┤nico (`VARTYPE = "O"` + `Show()` sem par├ómetro + `MostrarErro` detalhado no catch).

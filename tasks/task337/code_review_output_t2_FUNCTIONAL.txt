@@ -1,0 +1,7 @@
+﻿O problema detectado pelo code review **j├í est├í corrigido** no arquivo atual. O m├®todo `TornarControlesVisiveis` (linhas 485ÔÇô491) j├í implementa corretamente o filtro:
+
+1. **Linha 485**: `IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_TEFTXT")` ÔÇö detecta o container oculto por l├│gica TEF
+2. **Linhas 488ÔÇô490**: Recurs├úo nos filhos **antes** do LOOP (padr├úo can├┤nico do `feedback_tcv_skip_recursao.md`) ÔÇö os labels internos ficam `Visible=.T.` para quando o container for exibido posteriormente  
+3. **Linha 491**: `LOOP` ÔÇö pula a atribui├º├úo `loc_oControl.Visible = .T.`, mantendo `cnt_4c_TefTxt` com `Visible=.F.`
+
+O code review foi gerado sobre uma vers├úo anterior do arquivo antes da corre├º├úo ser aplicada. O problema **[CONTAINER-VISIVEL]** j├í est├í resolvido ÔÇö nenhuma altera├º├úo necess├íria em `Formsigprtef.prg`.

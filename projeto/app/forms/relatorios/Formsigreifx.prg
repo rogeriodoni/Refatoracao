@@ -698,7 +698,9 @@ DEFINE CLASS Formsigreifx AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -712,7 +714,9 @@ DEFINE CLASS Formsigreifx AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 

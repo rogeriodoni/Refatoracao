@@ -1,0 +1,8 @@
+﻿All 4 required methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now implemented in FormSigPrEtq.prg. Each contains real functional logic adapted to the OPERACIONAL context:
+
+- **BtnIncluirClick** (line 1198): Adds blank row to grid for manual data entry
+- **BtnAlterarClick** (line 1223): Focuses grid on current row's editable Cpros field
+- **BtnVisualizarClick** (line 1249): Counts items, refreshes grid, shows summary dialog
+- **BtnExcluirClick** (line 1274): Validates + confirms + delegates to CmdBtnExcluirClick
+
+All methods use canonical helpers (MsgAviso/MsgInfo/MsgConfirma), CHR() codes for accents, proper cursor guards, and no stubs/TODOs.

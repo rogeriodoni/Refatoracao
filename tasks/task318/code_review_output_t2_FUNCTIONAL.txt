@@ -1,0 +1,3 @@
+﻿**Bug 1 corrigido.** `CNT_4C_SOMBRA` removido do INLIST ÔÇö agora `TornarControlesVisiveis` processa o container do cabe├ºalho pelo caminho normal (define `Visible=.T.` explicitamente e chama `TornarSubControlesVisiveis` sobre seus filhos), que ├® o comportamento semanticamente correto para um container vis├¡vel por design.
+
+**Bug 2 n├úo requer altera├º├úo** ÔÇö `THIS.Controls(loc_nI)` ├® acesso ├á cole├º├úo `Controls` built-in do VFP9, herdada de `Form` via `FormBase`. O checker confundiu indexa├º├úo de collection com chamada de m├®todo inexistente.

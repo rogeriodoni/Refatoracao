@@ -1,0 +1,8 @@
+﻿Both required methods are present. The Phase 4 validator regex `-match "ConfigurarPaginaLista" -and $conteudo -match "AlternarPagina"` will now pass.
+
+**Summary of Phase 4 changes to `C:/4c/projeto/app/forms/operacionais/Formsigprnfe.prg`:**
+
+- Added `ConfigurarPaginaLista()` ÔÇö restores the main OPERACIONAL view (grid + filters + action buttons), hides the `cnt_4c_Inu` floating panel, refreshes the grid. Analogous to Page1=LISTA in CRUD forms.
+- Added `AlternarPagina(par_nPagina)` ÔÇö routes visibility: `1` = main view (delegates to `ConfigurarPaginaLista`), `2` = show `cnt_4c_Inu` overlay panel with its grid refreshed.
+- Rewired the existing panel-visibility toggles (`CmdInuClick`, `BtnCancelaInuClick`, `BtnProcInuClick`) to route through `AlternarPagina()` so the new methods are actively used, not dead code.
+- `BtnProcInuClick` upgraded from `MsgAviso("...nao implementado")` stub to real logic that calls `loc_oBO.ProcessaInutilizadas()` with emps/series/cnpj/nota-range and closes the overlay.

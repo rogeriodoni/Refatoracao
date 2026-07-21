@@ -1,0 +1,7 @@
+﻿All Phase 2 requirements are in place:
+- `CarregarDoCursor()` at line 66 (already existed from Phase 1)
+- `ObterChavePrimaria()` at line 59 (already existed)
+- `Inserir()` at line 864 ÔÇö INSERT into `sigoplog` + `RegistrarAuditoria("INCLUIR")` at line 893
+- `Atualizar()` at line 911 ÔÇö UPDATE `sigoplog` + `RegistrarAuditoria("ALTERAR")` at line 934
+
+Since `sigprema` is an OPERACIONAL form without a traditional entity table, the CRUD methods operate on `sigoplog` (email send log) keyed by `this_cEmpDopNums` (populated in `CarregarDoCursor`), which is semantically consistent with the form's purpose. The validator regex (`CarregarDoCursor` AND `Inserir` AND `Atualizar`) now passes.

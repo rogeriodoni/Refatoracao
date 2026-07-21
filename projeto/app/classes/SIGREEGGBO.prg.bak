@@ -19,7 +19,7 @@
 *   cursor_4c_SigCdEmp  - empresas (cemps, razas, ativas)
 *
 * Cursor de resultado produzido por PrepararDados():
-*   cursor_4c_Relatorio - dados agrupados para REPORT FORM SigReEgg
+*   CsRelatorio - dados agrupados para REPORT FORM SigReEgg
 *
 * Cursor de cabecalho produzido por GerarCabecalho():
 *   CsCabecalho - nomeempresa, titulo1, titulo2, periodo, impetiq, Impcusto
@@ -42,7 +42,7 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
     this_cDsMoeda       = ""
 
     *-- Nome do cursor de resultado
-    this_cCursorDados   = "cursor_4c_Relatorio"
+    this_cCursorDados   = "CsRelatorio"
 
     *--------------------------------------------------------------------------
     * Init - Configura BO e carrega cursor de empresas para processamento
@@ -271,7 +271,7 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
     * Processar - Orquestra o processamento por empresa.
     * Se empresa vazia: itera todas as empresas ativas de cursor_4c_SigCdEmp.
     * Se empresa especificada: processa apenas ela.
-    * Acumula resultados em cursor_4c_Relatorio.
+    * Acumula resultados em CsRelatorio.
     * Equivalente ao corpo de PROCEDURE processamento do legado.
     *--------------------------------------------------------------------------
     PROCEDURE Processar()
@@ -288,8 +288,8 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
             loc_cGGrp    = ALLTRIM(THIS.this_cCdGGrupo)
 
             *-- Fechar cursor de relatorio anterior
-            IF USED("cursor_4c_Relatorio")
-                USE IN cursor_4c_Relatorio
+            IF USED("CsRelatorio")
+                USE IN CsRelatorio
             ENDIF
 
             IF EMPTY(loc_cEmpresa)
@@ -311,14 +311,14 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
                             loc_lSucesso = .F.
                         ENDIF
                         IF loc_llInicio
-                            SELECT * FROM CsRel INTO CURSOR cursor_4c_Relatorio READWRITE
+                            SELECT * FROM CsRel INTO CURSOR CsRelatorio READWRITE
                             loc_llInicio = .F.
                         ELSE
                             SELECT CsRel
                             GO TOP
                             SCAN
                                 SCATTER MEMO MEMVAR
-                                INSERT INTO cursor_4c_Relatorio FROM MEMVAR
+                                INSERT INTO CsRelatorio FROM MEMVAR
                                 SELECT CsRel
                             ENDSCAN
                         ENDIF
@@ -332,11 +332,11 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
                 IF !loc_llProcessa
                     loc_lSucesso = .F.
                 ENDIF
-                SELECT * FROM CsRel INTO CURSOR cursor_4c_Relatorio READWRITE
+                SELECT * FROM CsRel INTO CURSOR CsRelatorio READWRITE
             ENDIF
 
-            IF USED("cursor_4c_Relatorio")
-                SELECT cursor_4c_Relatorio
+            IF USED("CsRelatorio")
+                SELECT CsRelatorio
                 GO TOP
             ENDIF
 
@@ -837,8 +837,8 @@ DEFINE CLASS SIGREEGGBO AS RelatorioBase
         IF USED("cursor_4c_SigCdEmp")
             USE IN cursor_4c_SigCdEmp
         ENDIF
-        IF USED("cursor_4c_Relatorio")
-            USE IN cursor_4c_Relatorio
+        IF USED("CsRelatorio")
+            USE IN CsRelatorio
         ENDIF
 
         DODEFAULT()

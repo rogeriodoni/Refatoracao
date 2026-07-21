@@ -15,7 +15,7 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
     this_cTituloRelatorio   = ""
 
     *-- Cursor de saida do relatorio
-    this_cCursorDados       = "cursor_4c_ReCtp"
+    this_cCursorDados       = "crImpressao"
 
     *-- Filtros de periodo de cotacao (obrigatorios)
     this_dDtInicial         = {}
@@ -93,10 +93,10 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Monta cursor cursor_4c_ReCtp com dados de cotacoes de
+    * PrepararDados - Monta cursor crImpressao com dados de cotacoes de
     * compras conforme filtros definidos nas propriedades this_*.
     * Equivalente ao PROCEDURE processamento do legado SIGRECTP.
-    * Tambem cria cursor CsCabecalho para cabecalho do relatorio FRX.
+    * Tambem cria cursor crCabecalho para cabecalho do relatorio FRX.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_oErro
@@ -222,11 +222,11 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
                 loc_cPeriodo = "Per" + CHR(237) + "odo: " + ;
                     DTOC(THIS.this_dDtInicial) + " " + CHR(150) + " " + DTOC(THIS.this_dDtFinal)
 
-                IF USED("CsCabecalho")
-                    USE IN CsCabecalho
+                IF USED("crCabecalho")
+                    USE IN crCabecalho
                 ENDIF
-                CREATE CURSOR CsCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
-                INSERT INTO CsCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+                CREATE CURSOR crCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
+                INSERT INTO crCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
                     VALUES (loc_cEmpresa, loc_cTitulo, loc_cPeriodo)
 
                 SELECT (THIS.this_cCursorDados)
@@ -391,8 +391,8 @@ DEFINE CLASS SIGRECTPBO AS RelatorioBase
         IF USED(THIS.this_cCursorDados)
             USE IN (THIS.this_cCursorDados)
         ENDIF
-        IF USED("CsCabecalho")
-            USE IN CsCabecalho
+        IF USED("crCabecalho")
+            USE IN crCabecalho
         ENDIF
         DODEFAULT()
     ENDPROC

@@ -1,0 +1,3 @@
+﻿Corrigido. O problema era que o `TesteAutomatico` instancia o form sem par├ómetros (`CREATEOBJECT("FormSIGPRPRO")`), fazendo `par_cCPros` assumir o valor `.F.` (booleano padr├úo VFP9 para par├ómetros n├úo informados). A chamada `ALLTRIM(.F.)` resulta em "Function argument value, type, or count is invalid."
+
+A corre├º├úo usa `IIF(VARTYPE(...) = "C", ...)` para ambos os par├ómetros ÔÇö se n├úo forem do tipo esperado (string/objeto), assume o valor padr├úo seguro (`""` / `.NULL.`).

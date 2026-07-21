@@ -690,7 +690,9 @@ DEFINE CLASS FormSigReIpr AS FormBase
             IF THIS.this_oRelatorio.PrepararDados()
                 loc_lPode = .T.
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
             IF loc_lPode
                 REPORT FORM (THIS.this_oRelatorio.this_cCaminhoFRX) PREVIEW NOCONSOLE
@@ -714,7 +716,9 @@ DEFINE CLASS FormSigReIpr AS FormBase
             IF THIS.this_oRelatorio.PrepararDados()
                 loc_lPode = .T.
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
             IF loc_lPode
                 REPORT FORM (THIS.this_oRelatorio.this_cCaminhoFRX) TO PRINTER PROMPT NOCONSOLE
@@ -750,7 +754,9 @@ DEFINE CLASS FormSigReIpr AS FormBase
                     MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

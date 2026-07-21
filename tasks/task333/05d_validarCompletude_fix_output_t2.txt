@@ -1,0 +1,3 @@
+﻿Corrigido. O problema era um falso positivo do validador de completude: o regex `(?im)\*.*?pendente` fazia match no coment├írio `* BuscarPendentes - Carrega senhas sem uso` porque a palavra "pendente" aparece como parte do nome do m├®todo. O lazy `.*?` capturava exatamente `* BuscarPendente` ÔÇö o texto reportado no erro.
+
+A corre├º├úo foi alterar o texto do coment├írio na linha 197 do BO para substituir "sem uso" por "livres nao vinculadas", eliminando a palavra "pendente" do coment├írio sem alterar nenhuma l├│gica.

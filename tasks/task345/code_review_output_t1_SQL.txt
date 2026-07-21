@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas em `aleBO.prg`:
+
+1. **PKCHAVES em WHERE** ÔÇö removidos os m├®todos `Atualizar()` e `ExecutarExclusao()` PROTECTED (LLM-inventados, n├úo usados pelo form OPERACIONAL que opera via `SalvarAlertas()`). O original legado n├úo tem esses m├®todos ÔÇö usa DELETE por Contas + re-INSERT em batch.
+
+2. **CONTROLCOUNT** ÔÇö **falso positivo confirmado**: ├® propriedade VFP9 de objeto usada em loop de controles visuais (`TornarControlesVisiveis`), n├úo condi├º├úo SQL. Nenhuma altera├º├úo necess├íria.
+
+3. **TRANSACAO-AVULSA linha 438** ÔÇö removido `SQLEXEC(gnConnHandle, "COMMIT")` sem BEGIN TRANSACTION correspondente. Conex├úo ODBC usa AUTOCOMMIT ÔÇö cada SQLEXEC j├í ├® transa├º├úo impl├¡cita.

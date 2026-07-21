@@ -1,0 +1,8 @@
+﻿Phase 2 complete. The BO `SIGPRPPPBO.prg` now has:
+
+- **Init()**: sets `this_cTabela = "SigMvItn"` so `BusinessBase.RegistrarAuditoria` can insert into `LogAuditoria`
+- **ObterChavePrimaria()**: returns `Grupo|Conta|ChavePesquisa` (concatenated for audit traceability)
+- **Inserir()**: calls `RegistrarAuditoria("CONSULTA")` ÔÇö this is OPERACIONAL (query-only), so "insert" logs the search event
+- **Atualizar()**: calls `RegistrarAuditoria("REFRESH")` ÔÇö logs re-query events
+
+All RETURNs are outside TRY/CATCH (VFP9 rule #1). No stubs, no TODOs. `CarregarDoCursor` from Phase 1 is preserved.

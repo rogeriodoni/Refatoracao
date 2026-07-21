@@ -1,0 +1,10 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\Formsigprico.prg` criado com:
+
+- `DEFINE CLASS Formsigprico AS FormBase` ÔÇö heran├ºa correta
+- `Caption = "Form1"`, `Width = 280`, `Height = 220` ÔÇö dimens├Áes proporcionais ao conte├║do (imagens ocupam ~258├ù197 px; original n├úo especificava Width/Height)
+- `Init()` ÔåÆ `DODEFAULT()` ÔÇö padr├úo can├┤nico
+- `InicializarForm()` ÔÇö cria `sigpricoBO`, TRY/CATCH verboso, sem RETURN dentro do bloco
+- `TornarControlesVisiveis()` ÔÇö recursivo, pronto para Fase 4 (AddObject das 27 imagens)
+- `Destroy()` ÔÇö libera BO + `DODEFAULT()`
+
+**Fase 4** adicionar├í `AdicionarImagens()` com os 27 `AddObject("img_4c_ImageN", "Image")` e chamar├í `THIS.AdicionarImagens()` + `THIS.TornarControlesVisiveis(THIS)` dentro de `InicializarForm()`.

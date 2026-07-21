@@ -1,0 +1,15 @@
+﻿The form ends properly with `ENDDEFINE` and all 49 procedures are intact. Fase 8 is now complete.
+
+**Resumo do que foi feito em `C:\4c\projeto\app\forms\operacionais\Formsigprnfe.prg`** (linhas 1941-2192, +247 linhas):
+
+- **`FormParaBO()`** ÔÇö copia UI ÔåÆ BO em 3 blocos: (1) 15 filtros de sele├º├úo (Emps/Series/Datas/Acao/Ambiente/Impressao/Contin/InuIni-Fim/Regime/Arquivos/IniContin/Processados/Tipos), (2) 4 checkboxes (HVerao/Venc/OptSub/OptArq com convers├úo num├®ricoÔåÆl├│gico), (3) 15 campos do registro corrente de csOperacoes (SelImp/Dopes/Numes/Datas/Valos/Notas/NFMemo/Erros/stats/statts/ids/lotes/recibos/prots + EmpDopNums calculado).
+- **`BOParaForm()`** ÔÇö espelho reverso com convers├úo l├│gicoÔåÆnum├®rico nos checkboxes e Refresh do grid.
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö delega para `HabilitarControles`.
+- **`LimparCampos()`** ÔÇö reseta 18 controles para default + chama `LimpaSelecao`.
+- **`CarregarLista()`** ÔÇö valida filtros m├¡nimos e delega para `BtnSelecionarClick`.
+- **`AjustarBotoesPorModo(par_nModo)`** ÔÇö mapeia modo 1=livre / 2=sele├º├úo para `HabilitarControles`.
+- **`BtnSalvarClick()`** ÔÇö valida fila + marca├º├Áes e delega para `BtnCopiarClick` (processamento SEFAZ).
+- **`BtnCancelarClick()`** ÔÇö pede confirma├º├úo se fila populada e delega para `BtnLimparClick`.
+- **`BtnBuscarClick()`** ÔÇö delega para `BtnSelecionarClick`.
+
+Cada m├®todo tem implementa├º├úo real (n├úo stub) respeitando as regras cr├¡ticas: `MsgAviso`/`MsgConfirma` (nunca MESSAGEBOX), CHR() para acentos, VARTYPE guards, checkbox `.Value` num├®rico, e sem├óntica adaptada ao contexto OPERACIONAL de processamento de NF-e.

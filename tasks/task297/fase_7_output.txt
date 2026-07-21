@@ -1,0 +1,37 @@
+﻿Agora tenho o quadro completo. Veja o que encontrei:
+
+## Status da Fase 7/8 ÔÇö FormSigPrIbb
+
+**A fase 7 est├í completa.** O template da Fase 7 pede `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö esses eventos existem apenas em forms CRUD. Este ├® um form **OPERACIONAL** sem bot├Áes de cadastro.
+
+### Eventos reais do form ÔÇö todos j├í implementados
+
+| Evento | Handler | Status |
+|--------|---------|--------|
+| `grdItens.AfterRowColChange` | `GrdDadosAfterRowColChange()` | Ô£ô Completo |
+| `btnImprimir.Click` | `CmdImprimirClick()` | Ô£ô Completo |
+| `ok.Click` | `CmdEncerrarClick()` | Ô£ô Completo |
+
+### BO ÔÇö todos os m├®todos implementados
+
+| M├®todo BO | Status |
+|-----------|--------|
+| `InicializarCursores()` | Ô£ô Completo |
+| `SelecionarDados()` | Ô£ô Completo |
+| `Detalhe()` | Ô£ô Completo |
+| `Imprimir()` | Ô£ô Completo (108 linhas de l├│gica) |
+| `Inserir()` / `Atualizar()` | Ô£ô Completo |
+
+### Ponto de aten├º├úo para outra fase
+
+`SIGREGDPBO.prg:297` chama `DO FORM SigPrIbb WITH loc_cChave, .NULL.` ÔÇö sintaxe legada para SCX. Com a migra├º├úo do form para `FormSigPrIbb` (classe `.prg`), essa linha precisa ser atualizada para:
+
+```foxpro
+LOCAL loForm
+loForm = CREATEOBJECT("FormSigPrIbb", loc_cChave)
+IF VARTYPE(loForm) = "O"
+    loForm.Show()
+ENDIF
+```
+
+Isso ├® uma corre├º├úo em `SIGREGDPBO.prg`, fora do escopo da Fase 7. Quer que eu corrija agora ou fica para outra fase?

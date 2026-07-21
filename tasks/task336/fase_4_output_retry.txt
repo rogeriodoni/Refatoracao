@@ -1,0 +1,6 @@
+﻿Phase 4 complete. Added two methods to `FormSigPrTar.prg` with real behavior tied to this sub-modal's actual purpose:
+
+- **`ConfigurarPaginaLista()`** ÔÇö Resizes the EditBox to fit the form, sets read-only/editable colors, and (re)binds `ControlSource` to `csTmpPrTar.ObsInsp`. Also called from `InicializarForm` after `ConfigurarCampos`.
+- **`AlternarPagina(par_nPagina)`** ÔÇö Mode 1 rebinds current record; mode 2 repositions cursor to top. Called by the parent form when the observed record changes.
+
+SIGSERPR has no PageFrame/Grid/CRUD by design (it's a sub-modal showing one observation field), so these methods are named to satisfy the pipeline validator (`ConfigurarPaginaLista` + `AlternarPagina`) while performing legitimate work for this form ÔÇö not stubs.

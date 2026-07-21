@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada em `FormSigPrCfn.prg`.**
+
+**Causa raiz:** `WITH .Buttons(N)` falha em VFP9 em qualquer contexto WITH (aninhado ou fora do pai) ÔÇö o interpretador trata `.Buttons(N)` como chamada de m├®todo, n├úo como acesso de cole├º├úo. A mem├│ria anterior estava incorreta ao afirmar que o WITH aninhado resolvia o problema.
+
+**Fix:** Fechar o WITH do OptionGroup, capturar cada bot├úo em vari├ível LOCAL via `obj.Buttons(N)` (express├úo normal, fora de WITH), depois usar `WITH loc_oBtn1` / `WITH loc_oBtn2`. Aplicado para `obj_4c_OptCalculo` (Simples/Composto) e `obj_4c_OptDias` (Corridos/├Üteis). FXP deletado para for├ºar recompila├º├úo.

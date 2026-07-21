@@ -1,0 +1,10 @@
+﻿Structural balance verified: 18 PROCEDURE / 18 ENDPROC / 1 DEFINE CLASS / 1 ENDDEFINE. Phase 2 complete.
+
+Added to `C:\4c\projeto\app\classes\SigPrEmlBO.prg`:
+
+- **10 record-level properties** for SigAlert (`this_cPkChaves`, `this_cGrupos`, `this_cContas`, `this_cEmails`, `this_cMensagems`, `this_cPrioridade`, `this_cAcaos`, `this_tDtAlerts`, `this_cMsg1s`, `this_cUsuars`)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö hydrates BO props from a SigAlert cursor row using `SELECT (alias)` + `TratarNulo`, with `TYPE()` guards for `Numes` (numeric), `DtAlerts` (T/D) and optional `msg1s`/`Usuars` columns
+- **`Inserir()`** ÔÇö INSERT into `SigAlert` via `this_nConnAlerta` (auto-opens the DB_ALERTA connection if needed), auto-generates PK via `SYS(2015)+SYS(2015)` when empty, uses `EscaparSQL` + `LEFT()` per column length from schema, `FormatarNumeroSQL` for `Numes`, `GETDATE()` fallback for empty datetime
+- **`Atualizar()`** ÔÇö UPDATE by `pkchaves`, same helper-per-type + `LEFT()`-per-length pattern; `MsgAviso` guard when PK empty
+
+Left untouched: `ObterChavePrimaria` (already correct ÔÇö returns `this_cCampoChave = "pkchaves"`) and `RegistrarAuditoria` (deliberately empty override ÔÇö SigAlert is itself the audit log for this flow).

@@ -1,0 +1,14 @@
+﻿O problema detectado ÔÇö `cnt_4c_cabecalho` sendo for├ºado a `Visible=.T.` ÔÇö **j├í est├í corrigido** no c├│digo atual.
+
+A linha 211 j├í cont├®m o INLIST correto:
+```foxpro
+IF !INLIST(LOWER(loc_oControl.Name), "cnt_4c_cabecalho", "img_4c_icone")
+```
+
+Isso exclui ambos os controles que precisam manter seu Visible original:
+- `cnt_4c_Cabecalho` ÔÇö definido explicitamente como `.T.` em `ConfigurarCabecalho()` (linha 189)
+- `img_4c_Icone` ÔÇö mantido como `.F.` at├® que um ├¡cone seja carregado em `AtualizarPreviewIcone()`
+
+A recurs├úo tamb├®m est├í correta: ela ocorre **antes** da checagem de visibilidade (linha 207-208 antes da linha 210-214), garantindo que os filhos do container (lbl_4c_Sombra, lbl_4c_Titulo) sejam tornados vis├¡veis mesmo que o container pai esteja no INLIST ÔÇö padr├úo descrito no feedback `TornarControlesVisiveis skip com LOOP`.
+
+Nenhuma altera├º├úo necess├íria. O ├║nico problema listado no pass functional j├í estava resolvido no c├│digo atual.

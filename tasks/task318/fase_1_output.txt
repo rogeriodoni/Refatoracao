@@ -1,0 +1,11 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrPcpBO.prg` criado com:
+
+- **`this_cTabela = "SigMvCab"` / `this_cCampoChave = "EmpDopNums"`** ÔÇö alvo do UPDATE de prioridades
+- **Propriedades extra├¡das do c├│digo fonte original:**
+  - Par├ómetros de configura├º├úo: `this_cOperacao` (DoppPads), `this_cServico` (DoppServs) de `SigCdPam`
+  - Campos do cursor `zTmppPcp`: `this_nPriors`, `this_nNenvs`, `this_nNops`, `this_cEmps`, `this_cDopes`, `this_nNumes`, `this_cContas`, `this_cRclis`, `this_tPrazoEnts`, `this_cCpros`, `this_nQtds`, `this_nAPriors`
+  - Contexto de processamento (`SigCdOpd`): `this_cNivels`, `this_nChkDests`
+  - Dados de grade (`SigMvCab` + `SigCdOpe`): `this_cContaOs`, `this_cContaDs`, `this_nGlobalizas`, `this_nServicos`
+  - Chave concatenada: `this_cEmpDopNum`
+- **`Init()`** ÔÇö seta `this_cTabela`/`this_cCampoChave` antes do `DODEFAULT()`
+- **`ObterChavePrimaria()`** ÔÇö retorna `Emps + Dopes + Str(Numes,6)` (chave usada em INDEX/RELATION no legado)

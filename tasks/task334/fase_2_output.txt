@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGPRSTFBO.prg` est├í completo com:
+
+- **`CarregarDoCursor()`** ÔÇö carrega `cSenha` de um cursor caso seja passado (interface completa, mesmo que o form n├úo use banco)
+- **`ValidarDados()`** ÔÇö valida que `this_cSenha` n├úo est├í vazia antes de confirmar
+- **`Inserir()`** ÔÇö valida + registra auditoria com opera├º├úo `"SENHA_RISCO"`, retorna `.T.`
+- **`Atualizar()`** ÔÇö id├¬ntico ao Inserir com opera├º├úo `"SENHA_RISCO_ALT"`, retorna `.T.`
+- **`RegistrarAuditoria()`** ÔÇö INSERT em `LogAuditoria` com `GETDATE()` (regra cr├¡tica), CATCH n├úo bloqueia o fluxo principal
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (di├ílogo sem PK)
+
+Como o `SigTfSup` ├® um di├ílogo de senha sem tabela SQL pr├│pria, n├úo h├í `INSERT`/`UPDATE` de dados de neg├│cio ÔÇö os m├®todos implementam a interface de `BusinessBase` corretamente sem inventar opera├º├Áes que n├úo existem no legado.

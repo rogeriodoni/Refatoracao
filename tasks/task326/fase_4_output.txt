@@ -1,0 +1,8 @@
+﻿**Fase 4 conclu├¡da ÔÇö nenhuma adi├º├úo de grid/CRUD necess├íria.**
+
+Este form OPERACIONAL (SIGPRRSA, 580├ù200) n├úo tem PageFrame, Page1, grid nem bot├Áes CRUD no original ÔÇö o template gen├®rico da Fase 4 n├úo se aplica aqui. O Form e o BO estavam completos desde a Fase 3:
+
+- **FormSigPrRsa.prg**: estrutura base + cabecalho + bot├Áes Processar/Encerrar + label de progresso + campo prioridade + loop de processamento completo com SCAN/COMMIT/ROLLBACK
+- **SigPrRsaBO.prg**: CarregarDoCursor, BuscarFila, ProcessarItem (chama `fRecalculaP`), VerificarMovimento, ExecutarExclusao, IniciarLog/GravarLog, RegistrarAuditoria
+
+**Corre├º├úo aplicada:** `lbl_4c_Progresso.BackStyle = 0` (transparente, fiel ao legado `Label1.BackStyle=0`).

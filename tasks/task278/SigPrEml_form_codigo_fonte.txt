@@ -1,0 +1,1023 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrEml.SCX
+* Data/Hora: 15/07/2026 23:20:11
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPREML
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPREML
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGPREML
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPREML.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPREML.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup1
+  Parent: SIGPREML
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grade_alerta
+  Parent: SIGPREML
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPREML.grade_alerta.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREML.grade_alerta.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREML.grade_alerta.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREML.grade_alerta.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREML.grade_alerta.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREML.grade_alerta.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREML.grade_alerta.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: fweditbox1
+  Parent: SIGPREML.grade_alerta.Column5
+  Class: fweditbox
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPREML.grade_alerta.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGPREML.grade_alerta.Column6
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnEmail
+  Parent: SIGPREML
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGPREML
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGPREML
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "ALERTA - Email"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  AllowOutput = .T.
+  contaemail = NONE
+  lcemp = .F.
+  oemail = .F.
+  pcarqemail = .F.
+  pcescolha = .F.
+  podatamgr = 
+  podatamgr2 = .F.
+  Name = "SIGPREML"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.Shape1
+------------------------------------------------------------
+  Top = -2
+  Left = 819
+  Height = 84
+  Width = 84
+  BackStyle = 0
+  BorderStyle = 0
+  BorderWidth = 1
+  SpecialEffect = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -1
+  Width = 1004
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 85
+  Left = 918
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "[Esc] Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Verdana"
+  FontSize = 8
+  Height = 435
+  Left = 3
+  RecordMark = .F.
+  RowHeight = 18
+  Top = 132
+  Width = 993
+  AllowAutoColumnFit = 2
+  Name = "grade_alerta"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 80
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column2"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.Width = 290
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.Width = 290
+  Column3.ReadOnly = .F.
+  Column3.Name = "Column4"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.Width = 290
+  Column4.ReadOnly = .T.
+  Column4.Sparse = .F.
+  Column4.Name = "Column5"
+  Column5.FontName = "Verdana"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 1
+  Column5.Width = 17
+  Column5.ReadOnly = .F.
+  Column5.Sparse = .F.
+  Column5.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = " Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = " Nome"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Email"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Mensagem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column5.fweditbox1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ReadOnly = .T.
+  SpecialEffect = 1
+  Name = "fweditbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column6.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.grade_alerta.Column6.fwcheckbox1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 0
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.btnEmail
+------------------------------------------------------------
+  Top = 3
+  Left = 848
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_envelope_60.jpg
+  Caption = "Enviar Email"
+  Name = "btnEmail"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.apaga
+------------------------------------------------------------
+  Top = 90
+  Left = 43
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 46
+  TabStop = .F.
+  ToolTipText = "Desmarcar Todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREML.SelTudo
+------------------------------------------------------------
+  Top = 90
+  Left = 4
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 45
+  TabStop = .F.
+  ToolTipText = "Marcar Todos"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPREML
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters prDopes, pcEscolha, laOpeBaixa
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+*!*	Cursor que irá receber a lista final de e-mails para serem enviados
+Create Cursor crLocalTotal (Checks N(1),grupos c(10),Contas c(10),Rclis c(30),emails c(50),mensagems m,prioridade c(15),EmpDopNums c(29), Acaos c(10))
+Index on Contas Tag Contas
+Index on Rclis Tag Rclis
+Index on Emails Tag Emails
+
+Thisform.lcEmp = Substr(prdopes,1,3)
+lcDopes = Substr(prdopes,4,20)
+Thisform.pcEscolha = pcEscolha
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector','SIGE')
+	.poDatamgr2 = Createobject('fSqlConector','ALERTA')
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),[SIGE])
+		Return(.F.)
+	Endif
+
+	If Not .poDatamgr2.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),[ALERTA])
+		Return(.F.)
+	Endif
+
+	lcQuery = [Select * From SigAlert Where 0 = 1]
+	.poDatamgr2.AddCursor('SigAlert','pkchaves','crSigAlert','','',lcQuery)
+	.poDatamgr2.Requery([crSigAlert])
+
+	Thisform.grade_alerta.RecordSource=''
+	
+	lcQuery = [Select a.EmpDopNums, a.Jobs, b.Rclis, a.ObsCabMovs, a.Obses From SigMvcab a Inner Join SigCdCli b On a.Jobs = b.Iclis Where a.EmpDopNums = '] + prDopes + [']
+	If thisform.podatamgr.SqlExecute(lcQuery,[TmpMvCab]) < 1
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpMvCab)])
+		Return .F.
+	Endif
+	Select TmpMvCab
+	Go top	
+
+*!*	Select para trazer os e-mails a partir das informações do SigCdAle
+	lcQuery = [Select 1 as Checks,ALE.grupos,Ale.Contas, Cli.Rclis,CLI.emails,ALE.mensagems,  ] + ;
+		[case when ALE.priors = 1 then 'URGENTE' when ALE.priors = 2 then 'IMPORTANTE' else 'NORMAL' end 'prioridade', ] + ;
+		[ALE.datas,ALE.dtalts,ALE.pkchaves,ALE.priors,ALE.dopes, ?lcDopes as EmpDopNums ] + ;
+		[from SigCdAle ALE ] + ;
+		[Inner Join SigCdCli Cli On Ale.Contas = Cli.IcliS ] + ;
+		[Where ALE.Dopes = '] + lcDopes + [' And ] + ;
+		Iif(Thisform.pcEscolha = [INSERIR],[ALE.inserirs = 1 ] , ;
+		Iif(Thisform.pcEscolha = [ALTERAR],[ALE.alterars = 1 ] , ;
+		Iif(Thisform.pcEscolha = [EXCLUIR],[ALE.excluirs = 1 ] , [])))
+
+	If (.poDatamgr.SqlExecute(lcQuery, [crLocalALE]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crLocal)])
+		Return .F.
+	Endif
+
+	If Type([laOpeBaixa],1) = [A]
+		lcDope = []
+		lcEDN = []
+		For x = 1 To Alen(laOpeBaixa)
+			If !IsEmpty(laOpeBaixa(x))
+				lcDope = lcDope + Iif(Empty(lcDope),[('],[',']) + Alltrim(Substr(laOpeBaixa(x),4,20))
+				lcEDN = lcEDN + Iif(Empty(lcEDN),[('],[',']) + Alltrim(laOpeBaixa(x))
+			Endif
+		Next
+		lcDope = Iif(Empty(lcDope),'',lcDope+ [') ])
+		lcEDN = Iif(Empty(lcEDN),'',lcEDN+ [') ])
+		If !IsEmpty(lcDope)
+			lcQuery = [Select Top 1 Contas, Acaos, EmpDopNums, Emps, Dopes, Numes, Space(50) as emails, Space(15) as Prioridade, Msg1s as Mensagems, 1 as Checks ] + ;
+						[From SigAlert where EmpDopNums in ] + lcEDN + [ And Acaos = 'BAIXAR']
+			If (.poDatamgr2.SqlExecute(lcQuery, [crOpeBaixa]) < 1)
+				=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crOpeBaixa)])
+				Return .F.
+			Endif
+
+			Select crOpeBaixa
+			Scan
+				lcQuery = [Select a.Emails, Case when b.priors = 1 then 'URGENTE' when b.priors = 2 then 'IMPORTANTE' else 'NORMAL' end as prioridade, b.mensagems ] + ;
+					[from SigCdCli a Inner Join SigCdAle b On a.Iclis = b.Contas Where a.Iclis = ']	+ crOpeBaixa.Contas + [' And b.Dopes = '] + crOpeBaixa.Dopes + [']
+				If (.poDatamgr.SqlExecute(lcQuery, [TmpCli]) < 1)
+					=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpCli)])
+					Return .F.
+				Endif
+				Replace emails With TmpCli.emails, prioridade With TmpCli.prioridade, mensagems With TmpCli.mensagems In crOpeBaixa
+			Endscan
+
+			If Reccount([crOpeBaixa]) = 0
+				lcQuery = [Select 1 as Checks,ALE.grupos,Ale.Contas, Cli.Rclis,CLI.emails,ALE.mensagems,  ] + ;
+					[case when ALE.priors = 1 then 'URGENTE' when ALE.priors = 2 then 'IMPORTANTE' else 'NORMAL' end 'prioridade', ] + ;
+					[ALE.datas,ALE.dtalts,ALE.pkchaves,ALE.priors,ALE.dopes, Space(29) as EmpDopNums, '] + Thisform.pcEscolha + [' as Acaos ] + ;
+					[from SigCdAle ALE ] + ;
+					[Inner Join SigCdCli Cli On Ale.Contas = Cli.Iclis ] + ;
+					[Where ALE.Dopes in ] + lcDope + [ And ALE.baixas = 1 ]
+				If (.poDatamgr.SqlExecute(lcQuery, [crOpeBaixa]) < 1)
+					=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crOpeBaixa)])
+					Return .F.
+				Endif
+
+				For x = 1 To Alen(laOpeBaixa)
+					If !IsEmpty(laOpeBaixa(x))				
+						Select crOpeBaixa
+						Go Top
+						Replace All EmpDopNums With Alltrim(laOpeBaixa(x)) For Dopes = Alltrim(Substr(laOpeBaixa(x),4,20))
+					Endif
+				Next
+			Endif
+
+		Endif
+	Else
+		Dimension laOpeBaixa(1) && Linha apenas para não dar erro na geração do exe		
+	Endif
+Endwith
+
+Select crLocalALE
+Go Top In crLocalALE
+
+*!*	Gravando os dados no cursor para envio dos e-mails
+Select crLocalALE
+Scan
+	lcQuery = [Select Jobs From SigClJob Where Iclis = '] + crLocalAle.Contas + [']
+	If (Thisform.poDatamgr.SqlExecute(lcQuery, [TmpClJob]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpClJob)])
+		Return .F.
+	Endif
+	Select TmpClJob
+	Go top
+	If !Eof()
+		Locate For Jobs = TmpMvCab.Jobs
+		If Eof()
+			Loop
+		Endif 
+	Endif
+
+	Insert Into crLocalTotal (Checks,grupos,Contas,Rclis,emails,mensagems,prioridade,EmpDopNums,Acaos) Values ;
+		(crLocalALE.Checks,crLocalALE.grupos,crLocalALE.Contas,crLocalALE.Rclis,crLocalALE.emails,Nvl(crLocalALE.mensagems,[]),crLocalALE.prioridade,prdopes,Thisform.pcEscolha)
+Endscan
+
+*!* Buscando as contas referente ao grupo parametrizado em SigCdPam (grpadats)
+lcQuery	= [select 0 as Checks,CLI.grupos,CLI.iclis as Contas,CLI.rclis,CLI.emails,'' as prioridade ] + ;
+	[from SigCdPam PAM ] + ;
+	[inner  join SigCdCli CLI on CLI.grupos = PAM.grpadats]
+
+If (Thisform.poDatamgr.SqlExecute(lcQuery, [crLocalPAM]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crLocal)])
+	Return .F.
+Endif
+
+*!*	Gravando os novos dados no cursor para envio dos e-mails
+Select crLocalPAM
+Scan
+	lcQuery = [Select Jobs From SigClJob Where Iclis = '] + crLocalPAM.Contas + [']
+	If (Thisform.poDatamgr.SqlExecute(lcQuery, [TmpClJob]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpClJob)])
+		Return .F.
+	Endif
+	Select TmpClJob
+	Go top
+	If !Eof()
+		Locate For Jobs = TmpMvCab.Jobs
+		If Eof()
+			Loop
+		Endif 
+	Endif
+	
+	lnChecks	= crLocalPAM.Checks
+	lcgrupos	= [] &&crLocalPAM.grupos
+	lcContas	= crLocalPAM.Contas
+	lcRclis		= crLocalPAM.Rclis
+	lcemails	= crLocalPAM.emails
+
+	Select crLocalTotal
+	Locate For Alltrim(crLocalTotal.Contas) = Alltrim(lcContas) And Alltrim(crLocalTotal.Rclis) = Alltrim(lcRclis)
+	If Eof()
+		Insert Into crLocalTotal (Checks,grupos,Contas,Rclis,emails,EmpDopNums,Acaos,prioridade) Values ;
+			(lnChecks,lcgrupos,lcContas,lcRclis,lcemails,prdopes,Thisform.pcEscolha,[NORMAL])
+	Endif
+
+	Select crLocalPAM
+Endscan
+
+Select crLocalTotal
+Go Top
+
+Thisform.grade_alerta.RecordSource='crLocalTotal'
+Thisform.grade_alerta.column6.ControlSource = [crLocalTotal.Checks]
+Thisform.grade_alerta.column2.ControlSource = [crLocalTotal.Contas]
+Thisform.grade_alerta.column3.ControlSource = [crLocalTotal.Rclis]
+Thisform.grade_alerta.column4.ControlSource = [crLocalTotal.Emails]
+Thisform.grade_alerta.column5.ControlSource = [crLocalTotal.Mensagems]
+
+Thisform.grade_alerta.column3.header1.Click() && Para ordenar por nome
+Thisform.grade_alerta.Refresh()
+
+Thisform.Refresh()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Local lcFrm
+
+With ThisForm
+	.Release
+	lcFrm = .Name
+	Release &lcFrm.
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.grade_alerta.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Contas
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(64,128,128)
+This.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)
+
+thisform.grade_alerta.Refresh()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.grade_alerta.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Rclis
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column3.header1.BackColor = RGB(64,128,128)
+This.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)
+
+thisform.grade_alerta.Refresh()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.grade_alerta.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Set Order To tag Emails
+
+This.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)
+This.Parent.Parent.Column4.header1.BackColor = RGB(64,128,128)
+
+thisform.grade_alerta.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.grade_alerta.Column6.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Replace Checks With this.Value in crLocalTotal
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.btnEmail
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcReceptor			= ''
+lcReceptorCopia		= ''
+lcAssunto			= 'ALERTA'
+lcTxtMensagem		= ''
+lcArqAnexo			= ''
+lnImportancia		= 1
+lcMsgRetorno		= ''
+
+Select * From crLocaltotal Where Checks = 1 Into Cursor crLocalTotal2
+
+Select crLocaltotal2
+Scan
+	If Recno() = 1
+		lcReceptor		= crLocaltotal2.emails
+		lcTxtMensagem	= Iif(!IsEmpty(TmpMvCab.Jobs),[JOB          : ] + TmpMvCab.Jobs + [ - ] + Alltrim(TmpMvCab.Rclis) + Chr(13) + Chr(10),[]) +;
+						  Iif(!IsEmpty(TmpMvCab.ObsCabMovs),[Descritivo : ] + Alltrim(TmpMvCab.ObsCabMovs) + Chr(13) + Chr(10),[]) +;
+						  [Movimentação : ] + Substr(crLocaltotal2.EmpDopNums,1,3) + [ / ] + Substr(crLocaltotal2.EmpDopNums,4,20) + [ / ] + Substr(crLocaltotal2.EmpDopNums,24,6) + Chr(13) + Chr(10) +;
+						  [Ação         : ] + thisform.pcescolha + Chr(13) + Chr(10) +;
+						  [Usuário      : ] + m.Usuar + Chr(13) + Chr(10) +;
+						  [Data         : ] + Ttoc(Datetime()) + Chr(13) + Chr(10) +;
+						  Iif(!IsEmpty(crLocaltotal2.mensagems),[Mensagem     : ] + Alltrim(crLocaltotal2.mensagems) + Chr(13) + Chr(10),[]) +;
+						  Iif(!IsEmpty(TmpMvCab.Obses),[Observação   : ] + Alltrim(TmpMvCab.Obses),[])
+						  
+		lcTxtPrioridade	= Alltrim(crLocaltotal2.prioridade)
+		lcAssunto		= 'ALERTA - ' + lcTxtPrioridade
+	Else
+		If !Empty(Alltrim(crLocaltotal2.emails))
+			lcReceptorCopia	= lcReceptorCopia + Iif(Empty(lcReceptorCopia),[],[,]) + Alltrim(crLocaltotal2.emails)
+		Endif
+	Endif
+	
+	Select crLocaltotal2
+	Scatter Memo Memvar
+	m.DtAlerts = Datetime()
+	m.msg1s = lcTxtMensagem
+	m.PkChaves = fUniqueIds()
+	m.Emps = Substr(m.EmpDopNums,1,3)
+	m.Dopes = Substr(m.EmpDopNums,4,20)
+	m.Numes = Val(Substr(m.EmpDopNums,24,6))
+	m.Grupos = []
+	m.Usuars = m.Usuar	
+	
+	Insert Into crSigAlert from Memvar
+Endscan
+
+* pega dados de nfe do cadastro da empresa
+lcQuery = [Select AleServs, AleEmails, AleSenhas, AlePortas From SigCdEmp Where CEmps = '] + Thisform.lcEmp + [']
+If (Thisform.poDataMgr.SqlExecute(lcQuery, [LocalEmp]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEmp)])
+	Return .F.
+Endif
+
+lcFrom  = Alltrim(LocalEmp.Aleemails)
+lcServer= Alltrim(LocalEmp.AleServs)
+lcSenha = Alltrim(LocalEmp.AleSenhas)
+lnPorta = LocalEmp.AlePortas
+
+Wait Window Chr(13)+ [Aguarde... gerando EMAIL] Nowait NoClear
+
+llOk = .t.
+If !EnviaEmail(lcReceptor, lcTxtMensagem, lcAssunto, lcArqAnexo, lcFrom, lcReceptorCopia, lcServer, lcSenha, lnPorta)
+	llOk = .f.
+Endif
+
+Wait Clear
+
+If llOk And Used([CrOpeBaixa])
+	lcReceptor			= ''
+	lcReceptorCopia		= ''
+	lcAssunto			= 'ALERTA'
+	lcTxtMensagem		= ''
+	lcArqAnexo			= ''
+	lnImportancia		= 1
+	lcMsgRetorno		= ''
+
+	Select crOpeBaixa
+	Go Top
+	Scan
+		If Recno() = 1		
+			lcReceptor		= crOpeBaixa.emails
+			lcTxtMensagem	= Iif(!IsEmpty(TmpMvCab.Jobs),[JOB          : ] + TmpMvCab.Jobs + [ - ] + Alltrim(TmpMvCab.Rclis) + Chr(13) + Chr(10),[]) +;
+							  Iif(!IsEmpty(TmpMvCab.ObsCabMovs),[Descritivo : ] + Alltrim(TmpMvCab.ObsCabMovs) + Chr(13) + Chr(10),[]) +;
+							  [Movimentação : ] + Substr(TmpMvCab.EmpDopNums,1,3) + [ / ] + Substr(TmpMvCab.EmpDopNums,4,20) + [ / ] + Substr(TmpMvCab.EmpDopNums,24,6) + Chr(13) + Chr(10) +;
+							  [Ação         : ] + thisform.pcescolha + Chr(13) + Chr(10) +;
+ 							  [Movimentação baixada ] + Iif(thisform.pcescolha = [EXCLUIR],[cancelada],[]) + [: ] + ;
+ 							  Substr(crOpeBaixa.EmpDopNums,1,3) + [ / ] + Substr(crOpeBaixa.EmpDopNums,4,20) + [ / ] + Substr(crOpeBaixa.EmpDopNums,24,6) + Chr(13) + Chr(10) +;
+							  [Usuário      : ] + m.Usuar + Chr(13) + Chr(10) +;
+							  [Data         : ] + Ttoc(Datetime()) + Chr(13) + Chr(10) +;
+							  Iif(!IsEmpty(crOpeBaixa.mensagems),[Mensagem     : ] + Alltrim(crOpeBaixa.mensagems) + Chr(13) + Chr(10),[]) +;
+							  Iif(!IsEmpty(TmpMvCab.Obses),[Observação   : ] + Alltrim(TmpMvCab.Obses),[])
+						
+*!*				[JOB :] + TmpMvCab.Jobs + [ - ] + TmpMvCab.Rclis + Chr(13) + [Movimentação : ] + TmpMvCab.EmpDopNums +  Chr(13) + ;
+*!*									[Ação : ] + thisform.pcescolha + Chr(13) + ;
+*!*									[Movimentação baixada ] + Iif(thisform.pcescolha = [EXCLUIR],[cancelada],[]) + [: ] + crOpeBaixa.EmpDopNums + Chr(13) + ;
+*!*									[Usuário : ] + m.Usuar + [- Data : ] + Ttoc(Datetime()) + Chr(13) + Alltrim(crOpeBaixa.mensagems)
+			
+			lcTxtPrioridade	= Alltrim(crOpeBaixa.prioridade)
+			lcAssunto		= 'ALERTA - ' + lcTxtPrioridade
+		Else
+			If !Empty(Alltrim(crOpeBaixa.emails))
+				lcReceptorCopia	= lcReceptorCopia + Iif(Empty(lcReceptorCopia),[],[,]) + Alltrim(crOpeBaixa.emails)
+			Endif			
+		Endif
+
+		Scatter Memo Memvar
+		m.DtAlerts = Datetime()
+		m.msg1s = lcTxtMensagem
+		m.PkChaves = fUniqueIds()
+		m.Emps = Substr(m.EmpDopNums,1,3)
+		m.Dopes = Substr(m.EmpDopNums,4,20)
+		m.Numes = Val(Substr(m.EmpDopNums,24,6))
+		m.Acaos = [BAIXAR]
+		m.Grupos = []
+		m.Usuars = m.Usuar
+		
+		Insert Into crSigAlert from Memvar	
+	Endscan
+
+	Wait Window Chr(13)+ [Aguarde... gerando EMAIL] Nowait NoClear
+	
+	If !EnviaEmail(lcReceptor, lcTxtMensagem, lcAssunto, lcArqAnexo, lcFrom, lcReceptorCopia, lcServer, lcSenha, lnPorta)	
+		llOk = .f.
+	Endif	
+
+	Wait Clear	
+Endif
+
+If llOk
+	If !thisform.podatamgr2.Update([crSigAlert])
+		thisform.podatamgr2.RollBack()
+		Messagebox([Erro de conexão.],48,[crSigAlert])
+	Else
+		thisform.podatamgr2.Commit()
+	Endif 	
+	Wait Window [Email enviado com sucesso!] Timeout 0.02
+	thisform.Release()
+Else
+	Return .f.
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Go top
+Replace All Checks With 0
+Go Top
+ThisForm.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREML.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crLocalTotal
+Go top
+Replace All Checks With 1
+Go Top
+ThisForm.Refresh()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPREML
+RESERVED3 (ClassInfo): contaemail
+lcemp
+oemail
+pcarqemail
+pcescolha
+podatamgr
+podatamgr2
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

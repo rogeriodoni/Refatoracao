@@ -1,0 +1,22 @@
+﻿A investiga├º├úo est├í completa. Confirmo que as duas flags s├úo **falsos positivos** do code review.
+
+## Resultado da Verifica├º├úo
+
+O arquivo original `sigpres2.SCT` (legado) cont├®m exatamente essas condi├º├Áes WHERE, via chamadas ao m├®todo `poDataMgr.CursorQuery`:
+
+**DOPES (SigOpCdc/SigCdOpe):**
+```
+ThisForm.poDataMgr.CursorQuery('SigOpCdc', 'crSigOpCdc', 'Dopes', csTemporario.Dopes)
+ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', csTemporario.Dopes)
+```
+
+**ICLIS (SigCdCli):**
+```
+ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', csTemporario.ContaOs)
+ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', csTemporario.ContaDs)
+ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', csTemporario.Vends)
+```
+
+`poDataMgr.CursorQuery(tabela, cursor, campo, valor)` ├® o equivalente legado de `SELECT * FROM tabela WHERE campo = valor`. A migra├º├úo traduziu corretamente essas chamadas para `SQLEXEC` com `WHERE Dopes = ...` e `WHERE Iclis = ...`.
+
+**Nenhuma altera├º├úo necess├íria.** Os dois problemas reportados pelo pass SQL s├úo falsos positivos ÔÇö as condi├º├Áes WHERE com DOPES e ICLIS existem no legado original e foram migradas corretamente.

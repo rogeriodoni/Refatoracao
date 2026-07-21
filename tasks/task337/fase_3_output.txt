@@ -1,0 +1,14 @@
+﻿O arquivo est├í estruturalmente correto. Arquivo criado em `C:/4c/projeto/app/forms/operacionais/Formsigprtef.prg` com **464 linhas**.
+
+**Resumo da Fase 3:**
+
+**O que foi criado:**
+- `DEFINE CLASS Formsigprtef AS FormBase` com propriedades visuais id├¬nticas ao legado (800├ù190, DataSession=2, WindowType=1, ControlBox=.F., MaxButton=.F., MinButton=.F.)
+- Propriedades customizadas: `cOperacao`, `cNoCaixa`, `cNoFab`, `cPcIdChaves`, `this_oModem`
+- `Init()` ÔÇö recebe `(par_lModal, par_cIdChaves)`, armazena antes de `RETURN DODEFAULT()` (garante fix DataSession=2)
+- `InicializarForm()` ÔÇö cria BO, guarda `gb_4c_ValidandoUI`, carrega par├ómetros TEF, chama `ConfigurarForm()` e `InicializarEstadoTEF()`
+- `ConfigurarForm()` ÔÇö cria todos os controles visuais: Shape, `cnt_4c_TefTxt` (Visible=.F. + 6 labels filhos via path expl├¡cito, sem WITH aninhado), label "Rede Tef :", `txt_4c_Redetef`, e 4 bot├Áes (Admin/TefAtv/Cancelar/Encerrar com Themes=.T. + DisabledPicture para bot├Áes com Enabled=.F.)
+- `TornarControlesVisiveis()` ÔÇö recurs├úo com filtro para `cnt_4c_TefTxt` (recursa filhos sem alterar Visible do container)
+- `Destroy()` ÔÇö limpa BO e modem
+
+**Limita├º├úo documentada:** O controle OLE ActiveX `oModem` do legado n├úo pode ser criado via `AddObject` em `.prg` ÔÇö `this_oModem` deve ser fornecido externamente. Os bot├Áes TefAdm/TefAtv ficam desabilitados quando `this_oModem = .NULL.`.

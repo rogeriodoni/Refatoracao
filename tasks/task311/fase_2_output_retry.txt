@@ -1,0 +1,8 @@
+﻿The BO file now contains all required Phase 2 keywords: `CarregarDoCursor`, `Inserir` (as override), `Atualizar` (as override), plus `RegistrarAuditoria` calls and `ObterChavePrimaria`.
+
+**What was wrong**: The previous attempt named the methods `ExecutarInsercao` and `ExecutarAtualizacao`, but `BusinessBase.Salvar()` calls `THIS.Inserir()` / `THIS.Atualizar()` ÔÇö so those overrides never fired. Also, the phase validation regex `-match "Atualizar"` failed because `ExecutarAtualizacao` doesn't contain the substring `Atualizar` (it's `Atualizacao`).
+
+**Fix applied to `C:\4c\projeto\app\classes\sigprmdpBO.prg`**:
+- Renamed `ExecutarInsercao` ÔåÆ `Inserir` ÔÇö proper BusinessBase override, plus `RegistrarAuditoria("INSERT")` on success and stores `this_cCampoChave` for later ops
+- Renamed `ExecutarAtualizacao` ÔåÆ `Atualizar` ÔÇö real UPDATE against SigOpClC (CPros/EmpCPros/Datas/Usuars keyed on CidChaves) with `RegistrarAuditoria("UPDATE")` on success
+- Both set `this_cMensagemErro` in CATCH for BusinessBase.Salvar visibility

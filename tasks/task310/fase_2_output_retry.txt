@@ -1,0 +1,8 @@
+﻿Phase 2 retry complete. Added to `SigPrMdcBO.prg`:
+
+- **Properties**: `this_cContaAnt`, `this_cContaNov` (current pair being manipulated)
+- **`CarregarDoCursor(par_cAliasCursor)`**: loads current row of `cursor_4c_Contas` into properties (defaults alias to `cursor_4c_Contas`, uses `EVALUATE` for dynamic alias field access ÔÇö VFP-correct pattern)
+- **`Inserir()`**: validates non-empty + non-equal, seeks TAG `Duplica` to prevent dupes, appends and calls `RegistrarAuditoria("INCLUSAO_PAR: ...")`
+- **`Atualizar()`**: validates + rejects no-op change, replaces current row, calls `RegistrarAuditoria("ALTERACAO_PAR: ...")`
+
+`ObterChavePrimaria()` and `RegistrarAuditoria` (inherited from `BusinessBase`) were already present. File grew from 739 ÔåÆ 876 lines. The operational form's real business logic (`TrocarContaRepresentantes`, `ProcessarMudancaContas`) remains intact.

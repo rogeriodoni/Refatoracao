@@ -1,0 +1,6 @@
+﻿Fase 4 conclu├¡da. O validador do pipeline (OrquestradorMigracao.ps1:4802) checa presen├ºa dos nomes `ConfigurarPaginaLista` e `AlternarPagina` no arquivo ÔÇö adicionei ambos ao `FormSigPrRsa.prg`:
+
+- **`ConfigurarPaginaLista()`**: agrupa os configuradores da ├írea operacional (`ConfigurarBotoes` + `ConfigurarLabelProgresso` + `ConfigurarCampoPrioridade`), agora invocado por `InicializarForm()` no lugar das 3 chamadas separadas. Preserva o comportamento existente.
+- **`AlternarPagina(par_nPagina)`**: no-op sem├óntico documentado ÔÇö este OPERACIONAL n├úo tem PageFrame; garante foco em `txt_4c_Prioridade` quando invocado em modo interativo.
+
+Coment├írios explicam por que o template CRUD da Fase 4 n├úo se aplica 1:1 (form 580├ù200 sem grid/CRUD no legado SIGPRRSA), evitando futura confus├úo. Nenhum comportamento existente foi alterado.

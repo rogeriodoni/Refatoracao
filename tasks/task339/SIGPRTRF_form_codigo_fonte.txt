@@ -1,0 +1,981 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRTRF.SCX
+* Data/Hora: 18/07/2026 23:13:02
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigprtrf
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Cnt_Referencia
+  Parent: sigprtrf
+  Class: container
+  BaseClass: container
+
+Objeto: lblident
+  Parent: sigprtrf.Cnt_Referencia
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: sigprtrf.Cnt_Referencia
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: sigprtrf.Cnt_Referencia.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigprtrf.Cnt_Referencia.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigprtrf.Cnt_Referencia.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigprtrf.Cnt_Referencia.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: oModem
+  Parent: sigprtrf
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Shape1
+  Parent: sigprtrf
+  Class: shape
+  BaseClass: shape
+
+Objeto: altera
+  Parent: sigprtrf
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: sair
+  Parent: sigprtrf
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cnt_Mensagem
+  Parent: sigprtrf
+  Class: container
+  BaseClass: container
+
+Objeto: Mensagem1
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: label
+  BaseClass: label
+
+Objeto: Botao1
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao2
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao3
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao4
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao5
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao6
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao7
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao8
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao9
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao10
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao11
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao12
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: botao13
+  Parent: sigprtrf.Cnt_Mensagem
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 266
+  Left = 178
+  Width = 389
+  Height = 325
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  ControlBox = .F.
+  Height = 450
+  Width = 436
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relação de Produtos"
+  WindowType = 1
+  Name = "SIGPRTRF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia
+------------------------------------------------------------
+  Top = 1
+  Left = 2
+  Height = 392
+  Width = 433
+  BackStyle = 1
+  TabIndex = 3
+  TabStop = .F.
+  BackColor = 255,255,255
+  BorderColor = 128,128,128
+  Name = "Cnt_Referencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.lblident
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 11
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Informe os Produtos"
+  Height = 20
+  Left = 8
+  Top = 57
+  Width = 146
+  ForeColor = 0,0,255
+  TabIndex = 8
+  ZOrderSet = 8
+  Name = "lblident"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  ScrollBars = 2
+  Top = 78
+  Left = 3
+  Height = 309
+  Width = 429
+  FontName = "Arial"
+  FontSize = 8
+  ReadOnly = .F.
+  RowHeight = 17
+  TabIndex = 29
+  ZOrderSet = 1
+  Name = "Grade"
+  Column1.Width = 108
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Format = "K!"
+  Column1.ReadOnly = .F.
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.Width = 290
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód. Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "!!!!!!!!!!"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Referencia.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.oModem
+------------------------------------------------------------
+  Top = 24
+  Left = 384
+  Height = 100
+  Width = 100
+  Name = "oModem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Shape1
+------------------------------------------------------------
+  Top = 396
+  Left = 311
+  Height = 52
+  Width = 121
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.altera
+------------------------------------------------------------
+  Top = 399
+  Left = 314
+  Height = 47
+  Width = 58
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\vbmp\a_save1.bmp
+  Cancel = .F.
+  Caption = "\<Ok"
+  TabIndex = 2
+  ForeColor = 0,128,0
+  Name = "altera"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.sair
+------------------------------------------------------------
+  Top = 399
+  Left = 372
+  Height = 47
+  Width = 58
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\vbmp\cancelar.bmp
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 3
+  ForeColor = 0,0,0
+  Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem
+------------------------------------------------------------
+  Top = 395
+  Left = 3
+  Height = 55
+  Width = 302
+  SpecialEffect = 0
+  TabIndex = 9
+  Visible = .F.
+  Name = "Cnt_Mensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.Mensagem1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 14
+  Caption = "Aguarde. Verificando Dados!!!"
+  Height = 25
+  Left = 16
+  Top = 2
+  Width = 277
+  ForeColor = 255,0,0
+  Name = "Mensagem1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.Botao1
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 55
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "Botao1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao2
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 71
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao3
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 87
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao4
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 103
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao5
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 119
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao6
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 135
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao7
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 151
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao8
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 167
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao9
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 183
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao10
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 199
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao11
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 215
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao12
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 231
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigprtrf.Cnt_Mensagem.botao13
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 11
+  Left = 247
+  Top = 34
+  Visible = .T.
+  Width = 13
+  BackColor = 255,0,0
+  Name = "botao13"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigprtrf
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector')
+	If (.poDataMgr.pnIdconn > 0)
+		
+		lcSql = [Select ClockEcfs From SigCdPac ]
+		ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac')
+
+		=DoDefault()
+		
+		ThisForm.Retorno = ' '
+
+		With Thisform.Cnt_Referencia.Grade
+			.RecordSource = 'CrProduto'
+			.Column1.ControlSource = 'CrProduto.Cpros'
+			.Column2.ControlSource = 'CrProduto.Dpros'
+			.Refresh
+		EndWith
+		
+		Select CrProduto
+		Append Blank
+		
+		ThisForm.Cnt_Referencia.Grade.column1.SetFocus
+
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+Create Cursor CrProduto (Cpros c(14), dpros c(40))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return ThisForm.Retorno
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Referencia.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Lastkey() = 13
+	Select CrProduto
+	If Empty(cpros)
+		ThisForm.Altera.SetFocUs
+	Else
+		_lnRecno = Recno()
+		Locate For Empty(Cpros)
+		If Eof()
+			Append Blank
+		EndIf
+		Locate For Recno() = _LnRecno
+		Keyboard '{DNARROW}'
+	Endif
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = ThisForm.AntCPro
+	Return
+EndIf
+
+If Not Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If Used('CrProds')
+		This.Value = Evaluate('CrProds.Cpros')
+		Replace CrProduto.Dpros With CrProds.dpros in CrProduto
+		This.Parent.Parent.Column2.Text1.Value = Evaluate('CrProds.Dpros')
+	EndIf
+EndIf
+Return(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntCPro = This.Value
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Referencia.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.altera
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrProduto
+Count to x for Not Empty(Cpros)
+If x=0
+	MessageBox('Nenhum Produto Informado!!!',0+16,'')
+	Return .f.
+Endif
+
+ThisForm.Cnt_Mensagem.Visible = .t.
+ldDataI = Datetime()
+_w = LocalParac.ClockEcfs / 3
+_x = 13
+_y = 1
+DO While Datetime() - ldDataI < LocalParac.ClockEcfs
+	_Tempo = Datetime() - ldDataI
+	If _x >= 13
+		_x = 1
+	Else
+		_x = _x + 1
+	EndIf
+	If _Tempo > _W
+		If _Tempo < _W * 2
+			For lnBot = 1 To 13
+				lcMacro = 'ThisForm.Cnt_Mensagem.botao'+Alltrim(Str(lnBot,2))
+				&lcMacro..BackColor = 65535
+			Next
+		Else
+			For lnBot = 1 To 13
+				lcMacro = 'ThisForm.Cnt_Mensagem.botao'+Alltrim(Str(lnBot,2))
+				&lcMacro..Backcolor = 4227072
+			Next
+		EndIf
+	Else
+		For lnBot = 1 To 13
+			lcMacro = 'ThisForm.Cnt_Mensagem.botao'+Alltrim(Str(lnBot,2))
+			&lcMacro..Backcolor = 255
+		Next
+	EndIf
+	
+	For lnBot = 1 To 13
+		lcMacro = 'ThisForm.Cnt_Mensagem.botao'+Alltrim(Str(lnBot,2))
+		&lcMacro..Visible = lnBot <= _x
+	Next
+	
+Enddo
+ThisForm.Retorno = 'Ok'
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.sair
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Retorno = ' '
+Thisform.release
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.Botao1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao2
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao3
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao4
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao5
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao6
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao7
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao8
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao9
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao10
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao11
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao12
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigprtrf.Cnt_Mensagem.botao13
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigprtrf
+RESERVED3 (ClassInfo): antcpro
+podatamgr
+retorno
+
+
+* Objeto: oModem
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿþÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

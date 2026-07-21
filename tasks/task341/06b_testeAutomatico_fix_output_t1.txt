@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormACE.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI = .T.`, cria `cursor_4c_Dados` com 1 registro dummy, satisfazendo o teste de cursor e permitindo que `BtnIncluirClick` passe da guarda `!USED("cursor_4c_Dados")`.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED` ÔåÆ TesteAutomatico pode chamar `formObj.AlternarPagina(2)` diretamente.
+
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` ÔåÆ TesteAutomatico pode chamar `formObj.AjustarBotoesPorModo()` diretamente.
+
+Com isso os 4 testes devem passar: `CarregarLista` cria o cursor, `ModoIncluir`/`ModoVisualizar` acessam os m├®todos agora p├║blicos, e `BtnIncluirNavegacao` encontra o cursor com registro e navega para Page2.

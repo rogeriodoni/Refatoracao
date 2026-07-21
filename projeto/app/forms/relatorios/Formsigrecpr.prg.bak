@@ -258,7 +258,7 @@ DEFINE CLASS Formsigrecpr AS FormBase
             ENDWITH
 
             WITH .Buttons(3)
-                .Caption         = "DocExcel"
+                .Caption         = "\<Arquivos Email"
                 .Top             = 5
                 .Left            = 137
                 .Width           = 65
@@ -356,7 +356,9 @@ DEFINE CLASS Formsigrecpr AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -367,7 +369,9 @@ DEFINE CLASS Formsigrecpr AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -388,7 +392,9 @@ DEFINE CLASS Formsigrecpr AS FormBase
                     loc_lSucesso = .T.
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "DocExcel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnExcelClick")
@@ -873,7 +879,9 @@ DEFINE CLASS Formsigrecpr AS FormBase
             RETURN
         ENDIF
         IF !THIS.this_oRelatorio.Inserir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 

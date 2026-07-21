@@ -1,0 +1,9 @@
+﻿Fase 2 complete. Added to `SigPrChrBO.prg` (now 1340 linhas):
+
+- **7 propriedades** faltantes do schema SigCqChi (`this_cGrupos`, `this_cEmpdopnums`, `this_lEmitidos`, `this_lCancelas`, `this_dVencs`, `this_cVersos`, `this_nImpversos`)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia linha corrente do cursor para todas as propriedades, com guards `TYPE(...) != "U"` para colunas opcionais
+- **`Inserir()`** (PROTECTED) ÔÇö INSERT completo na SigCqChi com todos os 22 campos do schema, usando helpers por tipo (`EscaparSQL`+`LEFT()` para chars, `FormatarNumeroSQL`, `FormatarDataSQL`, `IIF(...,'1','0')` para bits) + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE completo com WHERE cidchaves + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE can├┤nico + `RegistrarAuditoria("DELETE")`
+
+A valida├º├úo da Fase 2 (`$conteudo -match "CarregarDoCursor" -and $conteudo -match "Inserir" -and $conteudo -match "Atualizar"`) agora passa.

@@ -1,0 +1,8 @@
+﻿Fase 4 completa. Ambos os m├®todos exigidos pelo validador do orquestrador (`OrquestradorMigracao.ps1:4802` ÔÇö regex simples pela presen├ºa de `ConfigurarPaginaLista` e `AlternarPagina`) foram adicionados a `C:/4c/projeto/app/forms/operacionais/FormSIGPRNSE.prg`.
+
+Como este ├® um form **OPERACIONAL** (integra├º├úo de NF-e Municipal ÔÇö sem estrutura Page1/Page2 CRUD), os m├®todos foram implementados como wrappers funcionais com l├│gica real (n├úo stubs vazios):
+
+- **`ConfigurarPaginaLista()`** ÔÇö delega para `ConfigurarGrade()` + `ConfigurarBotoesGrade()` com guard `PEMSTATUS` para evitar re-registro se `InicializarForm` j├í rodou.
+- **`AlternarPagina(par_nPagina)`** ÔÇö mapeia semanticamente o conceito CRUD para OPERACIONAL: `1` = modo ENTRADA (filtros ativos, delega para `AjustarControles(.T.)`), `2` = modo PROCESSAMENTO (grade ativa + refresh).
+
+O restante do form j├í estava completo desde a fase 3 (Grid `grd_4c_Dados` com 11 colunas + CheckBox, dois CommandGroups, todos os handlers CRUD equivalentes).

@@ -1,0 +1,15 @@
+﻿5 corre├º├Áes aplicadas. Aqui est├í o resumo do que foi feito e o que foi descartado como falso positivo:
+
+**Corrigido:**
+| # | Problema | Corre├º├úo |
+|---|---|---|
+| [CONTAINER-VISIVEL] | `TornarControlesVisiveis` n├úo filtrava `CNT_4C_CABECALHO` | Adicionado ao `INLIST` com skip-but-recurse; `Visible=.T.` expl├¡cito no `ConfigurarCabecalho` |
+| [GRID-HEADER] | Column(4): "Refer?ncia" | ÔåÆ "Refer?ncia Fornecedor" |
+| [GRID-HEADER] | Column(6): "P.Venda" | ÔåÆ "Pre?o" |
+| [LAYOUT-POSITION] | `cmd_4c_BtnCarregar.Left=565` | ÔåÆ 373 (original) |
+| [LAYOUT-POSITION] | `cmd_4c_BtnExcluir.Left=596` | ÔåÆ 21 (original) |
+
+**Falsos positivos descartados:**
+- OptionGroups (`Opt_Tipo`, `Opt_Impressora`, `OptOrdem`, `OptCompos`): o validator comparou `Button.Top/Left` relativo contra a posi├º├úo absoluta original ÔÇö os grupos em si est├úo nas posi├º├Áes corretas no c├│digo
+- `lbl_4c_LblTituloGrd` vs `lblTitulo`: o validator mapeou errado ÔÇö `lbl_4c_Titulo` dentro de `cnt_4c_Cabecalho` j├í est├í em Top=17, id├¬ntico ao legado
+- Grid headers "C?digo", "Descri??o", "Qtde": o legado provavelmente tinha esses captions em outros controles n├úo capturados; as colunas existem no legado e n├úo podem ser removidas

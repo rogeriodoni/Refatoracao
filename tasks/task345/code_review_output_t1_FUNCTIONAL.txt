@@ -1,0 +1,29 @@
+﻿Analisando os 3 problemas reportados com o arquivo completo em m├úos:
+
+---
+
+**Problema 1 ÔÇö [METODO-INEXISTENTE] THIS.Controls()**
+
+`Controls(n)` ├® uma **propriedade nativa do VFP9** na classe Form ÔÇö n├úo ├® um m├®todo definido pelo usu├írio. Ela existe em toda Form e Container do VFP9 (como `Buttons(n)` em OptionGroup). O code review flaggeou porque a sintaxe `THIS.Controls(loc_i)` parece uma chamada de m├®todo, mas ├® acesso indexado a um array nativo. O c├│digo nas linhas 610 e 617 est├í **correto** ÔÇö n├úo deve ser alterado.
+
+---
+
+**Problemas 2 & 3 ÔÇö [LAYOUT-POSITION] obj_4c_OptTabela Top/Left**
+
+Verificando o c├│digo atual em `ConfigurarFiltros()` (linhas 235ÔÇô236):
+
+```foxpro
+.Left = 128   ÔåÉ correto (original=128)
+.Top  = 93    ÔåÉ correto (original=93)
+```
+
+O review reportou Top=5 e Left=5, mas esses valores s├úo de **Buttons(1)** dentro do OptionGroup (linhas 245ÔÇô246) ÔÇö posi├º├úo relativa ao pr├│prio OptionGroup, n├úo absoluta no form. O review tool confundiu a posi├º├úo dos bot├Áes internos com a posi├º├úo do OptionGroup. Valores j├í est├úo corretos.
+
+---
+
+**Resultado:** Os 3 problemas reportados s├úo **falsos positivos**. O c├│digo est├í correto:
+- `Controls(n)` ├® nativo VFP9 ÔÇö herdado da classe Form base, n├úo precisa ser definido
+- `obj_4c_OptTabela.Top = 93` e `.Left = 128` j├í correspondem ao legado
+- `Buttons(1).Top = 5 / .Left = 5` s├úo coordenadas relativas ao OptionGroup (correto)
+
+Nenhuma altera├º├úo no arquivo ├® necess├íria.

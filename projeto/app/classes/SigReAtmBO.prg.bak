@@ -71,6 +71,9 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
     this_cCursorClientes  = "cursor_4c_Clientes"
     this_cCursorTpGOp     = "cursor_4c_TpGOp"
 
+    *-- Cursor principal binding com SigReAt2/SigReAt3.frx (Pattern #117 guard)
+    this_cCursorDados     = "TmpRelat"
+
     *--------------------------------------------------------------------------
     PROCEDURE Init()
         RETURN DODEFAULT()
@@ -909,9 +912,9 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
             IF THIS.PrepararDados()
                 DO CASE
                     CASE THIS.this_nAgru = 1
-                        THIS.ExecutarReportForm("SigReAt2", "PREVIEW")
+                        THIS.ExecutarReportForm("SigReAt2", "PREVIEW", THIS.this_cCursorDados)
                     OTHERWISE
-                        THIS.ExecutarReportForm("SigReAt3", "PREVIEW")
+                        THIS.ExecutarReportForm("SigReAt3", "PREVIEW", THIS.this_cCursorDados)
                 ENDCASE
                 loc_lSucesso = .T.
             ENDIF
@@ -931,9 +934,9 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
             IF THIS.PrepararDados()
                 DO CASE
                     CASE THIS.this_nAgru = 1
-                        THIS.ExecutarReportForm("SigReAt2", "PRINTER_PROMPT")
+                        THIS.ExecutarReportForm("SigReAt2", "PRINTER_PROMPT", THIS.this_cCursorDados)
                     OTHERWISE
-                        THIS.ExecutarReportForm("SigReAt3", "PRINTER_PROMPT")
+                        THIS.ExecutarReportForm("SigReAt3", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 ENDCASE
                 loc_lSucesso = .T.
             ENDIF

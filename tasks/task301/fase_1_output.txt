@@ -1,0 +1,9 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SIGPRIFFBO.prg` criado com:
+
+- **Propriedades declaradas**: `this_cCabecalho`, `this_cTipo`, `this_cTitulo`, `this_nMaximo`, `this_nMinimo`, `this_cDado`, `this_cResposta` ÔÇö mapeiam os 6 par├ómetros originais (`pcCab`, `pcTipo`, `pcTitulo`, `pcMaximo`, `pcMinimo`, `pcDado`) + o retorno `Resposta`
+- `this_cTabela = ""` e `this_cCampoChave = ""` ÔÇö sem tabela de banco (di├ílogo utilit├írio puro)
+- **`Init()`** ÔÇö inicializa todas as props e chama `DODEFAULT()` para acionar `BusinessBase.Init()`
+- **`ConfigurarDialogo()`** ÔÇö m├®todo para popular os par├ómetros com guards de `VARTYPE`
+- **`ObterOpcoes()`** ÔÇö replica a l├│gica `OCCURS(";")` + `SUBSTR`/`AT` do legado para extrair op├º├Áes do Combo
+- **`ObterMaxLength()`** ÔÇö replica `IIF(pcMaximo < pcMinimo, pcMinimo, pcMaximo)` do legado
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cResposta` (exigido pela `BusinessBase`)

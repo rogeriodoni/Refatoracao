@@ -1,0 +1,16 @@
+﻿Arquivo criado e verificado. Fase 3/8 conclu├¡da.
+
+**`C:/4c/projeto/app/forms/operacionais/FormSigPrCfn.prg`** ÔÇö estrutura base criada com:
+
+| Decis├úo | Motivo |
+|---|---|
+| **Sem PageFrame** | Form ├® um dialog calculador flat (600├ù300), n├úo CRUD |
+| **TitleBar=0 + ControlBox=.F.** | Copiado exato do SCX original (PILAR 1) |
+| **LPARAMETERS em Init()** | Original recebe pVal/pTip/pJMe/pJDi/pDtB/pDtF dos callers |
+| **Caption via CHR(225) em Init()** | Propriedades em DEFINE CLASS n├úo aceitam CHR() ÔÇö definido em Init() antes de DODEFAULT() |
+| **cmd_4c_BtnOK.Themes=.T.** | Standalone CommandButton com .Picture exige Themes=.T. (feedback #standalone) |
+| **lbl_4c_* AutoSize=.F.** | Regra: labels no cabecalho nunca AutoSize=.T. (feedback #cabecalho_labels) |
+| **FILE() guard no background** | new_background.jpg pode n├úo existir em vbmp/ ÔÇö degrada├º├úo graciosa |
+| **RETURN fora do TRY/CATCH** | Regra cr├¡tica #1: loc_lSucesso pattern |
+
+**Pr├│ximas fases** adicionar├úo via Edit: campos de entrada (Fase 4-5), OptionGroups, vencimentos, e eventos BINDEVENT (Fases 6-8).

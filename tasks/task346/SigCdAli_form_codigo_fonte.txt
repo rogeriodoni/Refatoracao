@@ -1,0 +1,651 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdAli.SCX
+* Data/Hora: 21/07/2026 17:22:01
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDALI
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetFPagSAutos
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOpSaidas
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigos
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescrs
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getOpAutos
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDALI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optPefins
+  Parent: SIGCDALI.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 271
+  Left = 96
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = "Cadastro de Alíneas"
+  Name = "SIGCDALI"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Left = 343
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 718
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 107
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 617
+  Pagina.Dados.Grupo_Salva.Top = 19
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 288
+  Top = 171
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Condição de Pagamento Automatica :"
+  Left = 148
+  Top = 271
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação de Saida de Cheque :"
+  Left = 175
+  Top = 246
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 275
+  Top = 196
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.GetFPagSAutos
+------------------------------------------------------------
+  ControlSource = "crSigCdAli.FPagSAutos"
+  Left = 335
+  TabIndex = 10
+  Top = 268
+  Width = 94
+  ZOrderSet = 5
+  Name = "GetFPagSAutos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.GetOpSaidas
+------------------------------------------------------------
+  ControlSource = "crSigCdAli.OpSaidas"
+  Left = 335
+  TabIndex = 8
+  Top = 243
+  Width = 115
+  ZOrderSet = 5
+  Name = "GetOpSaidas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.getCodigos
+------------------------------------------------------------
+  ControlSource = "crSigCdAli.codigos"
+  Left = 335
+  MaxLength = 3
+  TabIndex = 2
+  Top = 168
+  Width = 33
+  ZOrderSet = 4
+  plprocurar = .T.
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.getDescrs
+------------------------------------------------------------
+  ControlSource = "crSigCdAli.descrs"
+  Left = 335
+  TabIndex = 4
+  Top = 193
+  Width = 290
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação de Cheque Automática :"
+  Left = 162
+  Top = 221
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.getOpAutos
+------------------------------------------------------------
+  ControlSource = "crSigCdAli.opautos"
+  Left = 335
+  TabIndex = 6
+  Top = 218
+  Width = 115
+  ZOrderSet = 5
+  Name = "getOpAutos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Gera Pendências Financeiras :"
+  Left = 184
+  Top = 295
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDALI.Pagina.Dados.optPefins
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdAli.Pefins"
+  Height = 27
+  Left = 335
+  Top = 291
+  Width = 96
+  TabIndex = 12
+  Name = "optPefins"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 51
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 40
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDALI
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdAli','codigos','crSigCdAli','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Codigos','','','Código',50,.t.)
+		.pfSqlTabela(1).pColuna('Descrs','','','Descriçãos',290,.t.)
+		.pfSqlTabela(1).pColuna('Opautos','','','Oper. Autom. Cheque',115,.t.)
+		.pfSqlTabela(1).pColuna('Fpagsautos','','','Cond. Pag. Autom.',94,.t.)
+		.AddCursor('SigCdOpt','Operacaos','crSigCdOpt','','')		
+		.AddCursor('SigOpFp','Fpags','crSigOpFp','','')		
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.getcodigos.Value)
+	ThisForm.poDataMgr.LocateCursor('CrSigCdAli','codigos',ThisForm.Pagina.Dados.getcodigos.Value)
+Else	
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.getdescrs.Value)
+		ThisForm.poDataMgr.LocateCursor('CrSigCdAli','descrs',ThisForm.Pagina.Dados.getdescrs.Value)
+	EndIf
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !DoDefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select CrSigCdAli
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+		ThisForm.Pagina.Dados.getCodigos.Setfocus	
+
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.getDescrs.Setfocus	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+Endcase
+
+Select CrSigCdAli
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+   If IsEmpty(ThisForm.Pagina.Dados.getCodigos.Value)
+	  MessageBox( 'Obrigatório Informar o Código.', 48, '' )
+	  ThisForm.Pagina.Dados.getCodigos.SetFocus
+	  Return
+   Endif
+
+	If ThisForm.poDataMgr.ChkRegister('SigCdAli','Codigos',ThisForm.Pagina.Dados.GetCodigos.Value)
+	  MessageBox( 'Código Já Cadastrado...', 48, '' )
+	  ThisForm.Pagina.Dados.getCodigos.SetFocus
+	  Return
+   Endif
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDALI.Pagina.Dados.GetFPagSAutos
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigOpFp','crSigOpFp','Fpags',This.Value,'Condição de Pagamento',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Fpags','','Condição de Pagamento')
+		m.loLista.Show()
+	EndIf
+
+	this.value = lcod
+	this.parent.getFpagsAutos.value = Iif(LastKey()==27,Space(15),crSigOpFp.fpags)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDALI.Pagina.Dados.GetOpSaidas
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdOpt','crSigCdOpt','Operacaos',This.Value,'Operações de Cheques',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Operacaos','','Operações de Cheques')
+		m.loLista.Show()
+	EndIf
+
+	this.value = lcod
+	this.parent.getOpsaidas.value = Iif(LastKey()==27,Space(15),crSigCdOpt.Operacaos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDALI.Pagina.Dados.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' )
+   Return(.F.)
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDALI.Pagina.Dados.getDescrs
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDALI.Pagina.Dados.getOpAutos
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdOpt','crSigCdOpt','Operacaos',This.Value,'Operações de Cheques',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Operacaos','','Operações de Cheques')
+		m.loLista.Show()
+	EndIf
+
+	this.value = lcod
+	this.parent.getOpautos.value = Iif(LastKey()==27,Space(15),crSigCdOpt.Operacaos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

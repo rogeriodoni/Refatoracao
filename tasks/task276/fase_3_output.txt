@@ -1,0 +1,16 @@
+﻿633 linhas, 15 m├®todos com 15 ENDPROCs correspondentes ÔÇö balanceado.
+
+**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormSigPrDsc.prg` criado com:
+
+- **DEFINE CLASS FormSigPrDsc AS FormBase** ÔÇö form OPERACIONAL flat (sem PageFrame), 1000├ù600, DataSession=1, TitleBar=0, sem ControlBox/MaxButton/MinButton
+- **Init()** ÔåÆ `RETURN DODEFAULT()`
+- **InicializarForm()** ÔÇö cria SigPrDscBO, cursor_4c_Produtos (estrutura id├¬ntica ao legado), chama todos os ConfigurarXxx + TornarControlesVisiveis + CarregarDados; zero RETURNs dentro de TRY
+- **ConfigurarCabecalho()** ÔÇö cnt_4c_Cabecalho completo (RGB(100,100,100), lbl_4c_Sombra/Titulo em CHR(), AutoSize=.F., Width=980)
+- **ConfigurarBotoes()** ÔÇö cmd_4c_Encerrar (Left=905) + cmd_4c_Atualizar (Left=820), ambos standalone com Themes=.T. + DisabledPicture
+- **ConfigurarFiltros()** ÔÇö labels + txt_4c_CProsI/F/CGrus + cmd_4c_Selecionar, posi├º├Áes 800ÔåÆ1000px proporcionais
+- **ConfigurarGrade()** ÔÇö grd_4c_Dados 3 colunas, RecordMark/DeleteMark=.F., ColumnCount antes de RecordSource
+- **CarregarDados()** ÔÇö chama BuscarDicionario() do BO
+- **BtnEncerrarClick / BtnAtualizarClick / BtnSelecionarClick** ÔÇö l├│gica completa fiel ao legado
+- **TxtCProsIKeyPress / TxtCGrusKeyPress / AbrirBuscaGrupo** ÔÇö lookup de grupo via FormBuscaAuxiliar.Init com params (sem pr├®-popular, sem datasession conflict)
+- **TornarControlesVisiveis()** ÔÇö recurs├úo correta via Pages() + ControlCount
+- **Destroy()** ÔÇö fecha todos os cursores + this_oBusinessObject = .NULL. + DODEFAULT()

@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos CRUD exigidos pela valida├º├úo (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) em `FormSigPrRet.prg` linhas 1499-1526. Como este ├® um form OPERACIONAL (dispatcher do relat├│rio SigOpIpE, n├úo CRUD), cada m├®todo roteia para a a├º├úo operacional equivalente com implementa├º├úo real:
+
+- `BtnIncluirClick` ÔåÆ `BtnDigitacaoClick` (nova entrada / filtros zerados)
+- `BtnAlterarClick` ÔåÆ `BtnConsultaClick` (filtros atuais)
+- `BtnVisualizarClick` ÔåÆ `BtnConsultaClick` (visualiza├º├úo)
+- `BtnExcluirClick` ÔåÆ `BtnArquivadasClick` (etiquetas arquivadas)
+
+Sem stubs, sem `MsgAviso`, sem TODOs ÔÇö cada handler retorna o resultado real da a├º├úo delegada.

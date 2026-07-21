@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormSigPrGlx.prg`:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (linha 1208): o `IF loc_cNome = "CNT_4C_AGUARDE"` foi expandido para `INLIST(loc_cNome, "CNT_4C_AGUARDE", "CNT_4C_SOMBRA", "CNT_4C_CONTAINER5", "CNT_4C_CONTAINER3", "CNT_4C_CONTAINER1")`. Todos os 5 containers mant├¬m `Visible=.F.` mas seus filhos recebem `Visible=.T.` pela recurs├úo antes do LOOP.
+
+**[NAVEGACAO-PAGINA]** ÔÇö `ColC3Click` (linha 2432): `THIS.pgf_4c_1.ActivePage = 2` substitu├¡do por `THIS.AlternarPagina(2)`, que habilita/desabilita p├íginas corretamente e dispara o evento `Activate` da Page2 (o qual j├í tem BINDEVENT para `Pagina2Activate` que carrega os dados da linha selecionada).
+
+**[GRID-WITH]** ÔÇö 8 grids corrigidos (linhas 346, 614, 721, 884, 1045, 1294, 1589, 1727): `.ColumnCount` e `.RecordSource` movidos para **fora** do bloco WITH usando refer├¬ncia expl├¡cita, eliminando o risco de `Unknown member COLUMN1` causado pela cria├º├úo tardia de colunas dentro do WITH.

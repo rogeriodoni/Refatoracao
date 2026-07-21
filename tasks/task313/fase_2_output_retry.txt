@@ -1,0 +1,11 @@
+﻿All required CRUD methods now present in `SigPrMluBO.prg`:
+
+- `Init()` ÔÇö sets `this_cTabela`/`this_cCampoChave`
+- `ObterChavePrimaria()` ÔÇö returns `this_cCodigos`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps cursor to properties
+- `Inserir()` ÔÇö INSERT INTO SigMlItn with all NOT NULL columns + `RegistrarAuditoria("I")`
+- `Atualizar()` ÔÇö UPDATE SigMlItn + `RegistrarAuditoria("A")` (added just now)
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö INSERT INTO LogAuditoria
+- Plus operational methods: `BuscarMalas`, `ProcessarUnificacao`, `GerarSQLInsertSigMlCab`
+
+Fase 2 validation gate (`CarregarDoCursor` + `Inserir` + `Atualizar` present) now passes.

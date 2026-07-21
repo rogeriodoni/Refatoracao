@@ -1,0 +1,16 @@
+﻿Ap├│s investiga├º├úo completa, ambos os problemas reportados s├úo **falsos positivos** no estado atual do c├│digo:
+
+**CIDCHAVES** (linha 596 de `sigprnfeBO.prg`):
+```foxpro
+"WHERE cidchaves = " + EscaparSQL(LEFT(ALLTRIM(THIS.this_cCidChaves), 20))
+```
+├ë um `UPDATE SigMvNfi` leg├¡timo usando `cidchaves` como PK da tabela. O BO declara `THIS.this_cCampoChave = "cidchaves"` (linha 115) e confirma via `SELECT TOP 1 cidchaves FROM SigMvNfi` (linha 562) que essa coluna existe no schema. O original usava `poDataMgr.Update(crSigMvNfi)` que constru├¡a o WHERE por PK automaticamente ÔÇö o c├│digo migrado faz o mesmo de forma expl├¡cita.
+
+**CONTROLCOUNT**:
+N├úo existe em nenhum WHERE SQL do projeto. A ├║nica ocorr├¬ncia no c├│digo ├® `.ControlCount` como propriedade de objeto VFP9 em `TesteAutomatico.prg` (itera├º├úo de controles de formul├írio), que o scanner confundiu com nome de coluna SQL.
+
+**Nenhuma corre├º├úo necess├íria.** Os dois alertas foram gerados por:
+- `CIDCHAVES`: scanner n├úo reconheceu que a coluna ├® PK real de SigMvNfi
+- `CONTROLCOUNT`: falso positivo ÔÇö propriedade VFP9 lida como coluna SQL
+
+O arquivo `sigprnfeBO.prg` est├í correto como est├í.

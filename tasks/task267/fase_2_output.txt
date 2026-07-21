@@ -1,0 +1,22 @@
+﻿`SIGPRCNBBO.prg` est├í completo com 499 linhas. Fase 2/8 conclu├¡da.
+
+**16 m├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|---|---|---|
+| `CarregarDoCursor` | PUBLIC | Mapeia todos os 15 campos de SigPcOoL via `(alias).campo` |
+| `ValidarDados` | PROTECTED | Valida cEmps, cDopes, cEmpDopNums antes de salvar |
+| `Inserir` | PUBLIC | INSERT em SigPcOoL + `RegistrarAuditoria("INSERT")` |
+| `Atualizar` | PUBLIC | UPDATE SigPcOoL WHERE cidchaves + auditoria |
+| `ExecutarExclusao` | PROTECTED | DELETE SigPcOoL + auditoria (chamado por `Excluir()`) |
+| `CarregarOperacoes` | PUBLIC | SELECT SigCdOpe WHERE parcontas=1 AND valpends=1 ÔåÆ cursor_4c_Operacoes |
+| `CarregarFormasPagto` | PUBLIC | SELECT SigOpFp WHERE situas IN('R','A') AND infos='K' ÔåÆ cursor_4c_FormasPagto |
+| `BuscarTitulos` | PUBLIC | JOIN complexo SigMvPar+SigOpFp+SigMvCab+SigCdCli+SigMvCcr; filtros de per├¡odo, empresa, opera├º├Áes e SigPcOoL (NOT)EXISTS ÔåÆ cursor_4c_Filtro |
+| `BuscarEmpresa` | PUBLIC | SELECT SigCdEmp ÔåÆ cursor_4c_Empresa |
+| `BuscarClientePorConta` | PUBLIC | SELECT SigCdCli WHERE iclis ÔåÆ cursor_4c_ClienteConta |
+| `BuscarConvenio` | PUBLIC | SELECT SIGCDCEB WHERE grucontas = par_cGrupo + par_cConta ÔåÆ cursor_4c_Convenio |
+| `BuscarTituloBanco` | PUBLIC | SELECT SigMvCcr.titulos/titbans ÔåÆ cursor_4c_TitBan |
+| `MarcarTituloBanco` | PUBLIC | UPDATE SigMvCcr SET titbans |
+| `InserirRegistroCNAB` | PUBLIC | INSERT direto em SigPcOoL com tipos='SIGPRCNB' hardcoded + GETDATE() |
+| `CommitAlteracoes` | PUBLIC | `SQLCOMMIT(gnConnHandle)` |
+| `RollbackAlteracoes` | PUBLIC | `SQLROLLBACK(gnConnHandle)` |

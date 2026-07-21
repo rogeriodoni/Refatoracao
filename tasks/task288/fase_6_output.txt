@@ -1,0 +1,12 @@
+﻿O arquivo est├í correto e completo. A Fase 6 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **`InicializarForm()` atualizado** (linhas 81-89): ap├│s `Show()` e `Draw()`, agora chama `GerarGrafico(1)` com `LockScreen=.T.`, depois transita para estado `"GRAFICO"` e seta `ListIndex=1` ÔÇö exatamente o fluxo do `Init` legado.
+
+2. **`GerarGrafico(par_nLinha)`** (linhas 536-771): o m├®todo central do form, equivalente ao `mgeragrafico` do legado:
+   - Salva/restaura `SET POINT`/`SET SEPARATOR` (isolamento de locale)
+   - **1┬¬ chamada**: popula o ComboBox com `ObterChavesGrafico()`, redimensiona `cnt_4c_Grf2`
+   - **Toda chamada**: verifica cache em `crGrafico1` antes de chamar `BO.CarregarDadosGrafico()`
+   - **Cache miss**: configura todas as propriedades do `MSGraph.Chart` via OLE (ChartArea, PlotArea, ChartTitle, Legend, Axes(1/2), ChartGroups com loops por s├®rie e ponto) ÔÇö erros OLE n├úo fatais via TRY/CATCH interno
+   - **Cache hit**: apenas refor├ºa `ControlSource` e chama `Refresh()`

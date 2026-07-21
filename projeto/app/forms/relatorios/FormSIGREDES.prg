@@ -1097,7 +1097,9 @@ DEFINE CLASS FormSIGREDES AS FormBase
                 THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZAR")
                 loc_lSucesso = .T.
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1115,7 +1117,9 @@ DEFINE CLASS FormSIGREDES AS FormBase
                 THIS.this_oRelatorio.RegistrarAuditoria("IMPRIMIR")
                 loc_lSucesso = .T.
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1147,7 +1151,9 @@ DEFINE CLASS FormSIGREDES AS FormBase
                     loc_lSucesso = .T.
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

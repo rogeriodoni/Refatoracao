@@ -1,0 +1,6 @@
+﻿config.prg already loads all `Form*.prg` from `operacionais\` via ADIR (line 316-319) and all `*BO.prg` from `classes\` (line 276). FormSIGPRNSE and SIGPRNSEBO are picked up automatically ÔÇö no manual entry needed.
+
+The integration is complete. Summary of what was done:
+
+- **menu.prg**: Added `DEFINE BAR 88` (separator) and `DEFINE BAR 89` ("Integra├º├úo de NF-e Municipal") to `popMovimentos`, plus `ON SELECTION BAR 89 DO AbrirFormSIGPRNSE`, and the `AbrirFormSIGPRNSE()` procedure (identical pattern to adjacent procedures).
+- **config.prg**: No changes needed ÔÇö ADIR wildcards for `operacionais\Form*.prg` and `classes\*BO.prg` already cover both files automatically.

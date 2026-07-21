@@ -60,6 +60,11 @@ DEFINE CLASS ComparadorUI AS Custom
             loc_cProp = par_oExtrator.aResultados[i, 2]
             loc_cValorOriginal = par_oExtrator.aResultados[i, 3]
 
+            *-- Pula DataEnvironment: nao eh controle visual, nao precisa ser migrado
+            IF UPPER(LEFT(loc_cObjeto, 15)) = "DATAENVIRONMENT"
+                LOOP
+            ENDIF
+
             *-- Debug apenas nas primeiras 3 propriedades
             IF i <= 3
                 ? ""
@@ -302,7 +307,8 @@ DEFINE CLASS ComparadorUI AS Custom
         CASE loc_cTipo = "C"
             *-- String
             *-- Se for propriedade de cor no formato "90,90,90", normaliza para RGB()
-            IF (par_cProp = "BackColor" OR par_cProp = "ForeColor") AND "," $ par_vValor
+            IF INLIST(par_cProp, "BackColor", "ForeColor", "DisabledForeColor", ;
+                      "DisabledBackColor", "SelectionForeColor", "SelectionBackColor") AND "," $ par_vValor
                 *-- Verifica se ja esta no formato RGB()
                 IF LEFT(UPPER(ALLTRIM(par_vValor)), 4) != "RGB("
                     RETURN THIS.TextoParaRGB(par_vValor)
@@ -312,7 +318,8 @@ DEFINE CLASS ComparadorUI AS Custom
 
         CASE loc_cTipo = "N"
             *-- Numero
-            IF par_cProp = "BackColor" OR par_cProp = "ForeColor"
+            IF INLIST(par_cProp, "BackColor", "ForeColor", "DisabledForeColor", ;
+                      "DisabledBackColor", "SelectionForeColor", "SelectionBackColor")
                 *-- Converte numero para RGB(r,g,b)
                 RETURN THIS.NumeroParaRGB(par_vValor)
             ELSE

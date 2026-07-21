@@ -1,0 +1,13 @@
+﻿Tudo correto. Fase 4 implementada com sucesso. Resumo do que foi adicionado ao `FormSigPrSer.prg`:
+
+**Novos m├®todos adicionados:**
+- `ConfigurarGrade()` ÔÇö grid 9 colunas (Opera├º├úo/Grupo/Conta/Grupo/Conta/Servi├ºo/Qtde/Valor/Total) com RecordMark/DeleteMark=.F., BINDEVENT para AfterRowColChange
+- `ConfigurarLabelsCabecalhoGrade()` ÔÇö labels "Origem" (Left=264) e "Destino" (Left=426) acima do grid
+- `ConfigurarRodape()` ÔÇö label "Descri├º├úo", txt_4c_Descr/DescOrig/DescDest, txt_4c_QtdTot/Valtot (fundo amarelo)
+- `ConfigurarRecordSourceGrade()` ÔÇö vincula TmpDistrib ao grid p├│s-carga, redefine headers (VFP9 reseta ao mudar RecordSource), vincula ControlSource das descri├º├Áes
+- `GrdDadosAfterRowColChange()` ÔÇö handler do BINDEVENT, atualiza os 3 campos de descri├º├úo ao mudar linha
+
+**M├®todos atualizados:**
+- `InicializarForm()` ÔÇö adiciona chamadas ├ás 3 novas ConfigurarXxx()
+- `CarregarDados()` ÔÇö chama `ConfigurarRecordSourceGrade()` antes de `Acumular()`
+- `Acumular()` ÔÇö remove PEMSTATUS desnecess├írio (controles agora existem ap├│s Fase 4)

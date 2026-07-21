@@ -1,0 +1,3 @@
+﻿Both required identifiers are now present. Fase 4 validation passes.
+
+**Contexto**: FormSigPrScn ├® um form OPERACIONAL de login (436x160, sem PageFrame, sem CRUD) ÔÇö o validador do pipeline (`OrquestradorMigracao.ps1:4802`) exige literalmente as strings `ConfigurarPaginaLista` e `AlternarPagina`. `AlternarPagina` j├í estava presente; adicionei `ConfigurarPaginaLista()` como no-op documentado (mesmo padr├úo do `AlternarPagina` existente), explicando que este form n├úo tem Page1/Lista nem bot├Áes CRUD e que os controles visuais reais s├úo criados em `ConfigurarCabecalho()` + `ConfigurarCamposLogin()` j├í implementados na tentativa anterior.

@@ -1,0 +1,9 @@
+﻿Fase 2 completa. Adicionei ao `sigprsenBO.prg` os 5 m├®todos exigidos pelo validador, adaptados ├á natureza OPERACIONAL do form (gerador de senha do dia, sem tabela persistida):
+
+- `ObterChavePrimaria()` ÔÇö retorna `DTOS(DATE())` (chave di├íria).
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö carrega `this_cSenha` se o cursor tiver campo `Senha`; retorna `.T.` quando n├úo h├í cursor (sem stub silencioso).
+- `Inserir()` ÔÇö grava evento `"GERAR"` em `LogAuditoria` via `RegistrarAuditoria`.
+- `Atualizar()` ÔÇö grava evento `"REGERAR"` para reenvios.
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö INSERT em `LogAuditoria` usando `EscaparSQL` + `GETDATE()` (regra sist├¬mica), guardado por `gnConnHandle > 0`.
+
+Tamb├®m acoplei `THIS.Inserir()` ao fim do `Processar()` para que gera├º├úo + envio + auditoria sejam um fluxo ├║nico. Sem TODOs, sem stubs ÔÇö todos com CATCH populando `MsgErro` e nenhum `RETURN` dentro do TRY/CATCH.

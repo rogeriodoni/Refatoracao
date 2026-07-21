@@ -1,0 +1,11 @@
+﻿Encontrei a resposta definitiva. O SCT original usa `CursorQuery([SigCdCli], [crTmpCli], [Iclis], lcCli, ...)`, que ├® exatamente `WHERE Iclis = lcCli`.
+
+**Este ├® um falso positivo do validador.**
+
+A lista `WHERE original usa: LNLIN, FPAGS, LNCNT, I, EMPDOPNUMS, CTXTCDS, DOPES, IMPBOLS` cont├®m:
+- `I` = vari├ível de loop `For I=1 To .ColumnCount` (n├úo coluna SQL)
+- `Iclis` n├úo aparece explicitamente pois est├í escondido dentro do helper `CursorQuery` como par├ómetro string ÔÇö o validador n├úo o extrai
+
+O c├│digo migrado `WHERE Iclis = EscaparSQL(loc_cCli)` em `SigPrIbbBO.prg` est├í **correto** e fiel ao original. Remover essa condi├º├úo quebraria completamente a busca de dados do cliente.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `SigPrIbbBO.prg` n├úo deve ser modificado neste pass.

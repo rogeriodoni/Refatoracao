@@ -1,0 +1,14 @@
+﻿Phase 6/8 is complete. Here's a summary of all changes applied:
+
+**Edit 1** (prior session): 7 BINDEVENTs in `ConfigurarLayout()` ÔÇö columns 1,2,3,4,5,7,8 of `grd_4c_Dados` GotFocus ÔåÆ `GrdColXGotFocus`.
+
+**Edit 2** (line 1026ÔÇô1030): 4 BINDEVENTs ÔÇö columns 1,2,3,4 of `cnt_4c_Container2.grd_4c_Dados` GotFocus ÔåÆ `Cnt2GrdColXGotFocus`.
+
+**Edit 3** (line 1133ÔÇô1135): 3 BINDEVENTs ÔÇö `cnt_4c_Container4.grd_4c_Dados` Column4.When ÔåÆ `Cnt4Col4TextWhen`, Column5.When ÔåÆ `Cnt4Col5TextWhen`, Column5.Valid ÔåÆ `Cnt4Col5TextValid`.
+
+**Edit 4** (lines 2415ÔÇô2489): 5 new handler methods:
+- `GrdColXGotFocus` ÔÇö redirects focus to `grd_4c_Dados.Column6.Text1`
+- `Cnt2GrdColXGotFocus` ÔÇö redirects focus to `cnt_4c_Container2.grd_4c_Dados.Column5.Text1`
+- `Cnt4Col4TextWhen` ÔÇö returns `!EMPTY(Column1.Text1.Value)` (enables Column4 only when CPros is filled)
+- `Cnt4Col5TextWhen` ÔÇö same condition for Column5 (Cpro2s)
+- `Cnt4Col5TextValid` ÔÇö SQLEXEC direct-match on `SigCdPro.CPros`; on miss opens `FormBuscaAuxiliar` picker; on empty clears `SelPedra.Cpro2s`

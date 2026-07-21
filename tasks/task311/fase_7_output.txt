@@ -1,0 +1,17 @@
+﻿A Fase 7/8 j├í est├í completa. Analisando o arquivo atual:
+
+**`Formsigprmdp.prg` - todos os eventos j├í implementados:**
+- `BtnSairClick()` - linha 579
+- `BtnIncluirClick()` - linha 586 (adiciona linha ao grid csContas)
+- `BtnExcluirClick()` - linha 609 (remove linha selecionada)
+- `BtnExportaClick()` - linha 625 (importa XLS)
+- `BtnProcessarClick()` - linha 666 (processamento completo com SCAN/UPDATE/ROLLBACK)
+- `TxtCprosAntKeyPress()` - linha 1050 (lookup produto no grid)
+- `AbrirBuscaProduto()` - linha 1104
+
+**Integra├º├úo j├í feita:**
+- `menu.prg:323` ÔÇö `ON SELECTION BAR 81 OF popMovimentos DO AbrirFormsigprmdp`
+- `menu.prg:5037` ÔÇö `PROCEDURE AbrirFormsigprmdp()` com padr├úo can├┤nico (VARTYPE + Show() sem par├ómetro)
+- `config.prg` ÔÇö auto-carrega via `ADIR(*BO.prg)` e `ADIR(operacionais\Form*.prg)`
+
+A migra├º├úo do `Formsigprmdp` est├í 100% completa. As fases anteriores da pipeline j├í inclu├¡ram todos os eventos principais. N├úo h├í nada a modificar nesta Fase 7/8.

@@ -927,7 +927,9 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("relsigrectp", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
@@ -949,7 +951,9 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("relsigrectp", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
@@ -970,7 +974,9 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cCursor = THIS.this_oRelatorio.this_cCursorDados

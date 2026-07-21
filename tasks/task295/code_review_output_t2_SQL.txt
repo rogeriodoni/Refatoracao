@@ -1,0 +1,34 @@
+﻿Ap├│s an├ílise detalhada do c├│digo e do schema, esta ├® a minha conclus├úo:
+
+## Resultado da Verifica├º├úo: Falsos Positivos
+
+Os dois problemas reportados pelo checker s├úo **falsos positivos**. Nenhuma altera├º├úo ├® necess├íria ou segura.
+
+### An├ílise das duas flags
+
+**Flag 1 ÔÇö `WHERE cpros`** (linha 278-279 do BO):
+```foxpro
+"SELECT TOP 1 cgrus, cunis FROM SigCdPro " + ;
+"WHERE cpros = " + EscaparSQL(loc_cCPros)
+```
+- `cpros` ├® a **chave prim├íria** de `SigCdPro` (confirmado: `[cpros] [char](14) NOT NULL`)
+- Remover ou trocar por `WHERE embs = ...` retornaria um produto aleat├│rio ao inv├®s do produto do item corrente ÔÇö quebraria completamente a l├│gica
+
+**Flag 2 ÔÇö `WHERE cgrus`** (linha 295-296 do BO):
+```foxpro
+"SELECT TOP 1 tipoestos, embs FROM SigCdGrp " + ;
+"WHERE cgrus = " + EscaparSQL(loc_cCGrus)
+```
+- `cgrus` ├® a **chave prim├íria** de `SigCdGrp` (confirmado: `[cgrus] [char](3) NOT NULL`)
+- `embs` existe nessa tabela mas ├® uma **coluna retornada** pelo SELECT, n├úo um filtro v├ílido de chave
+
+### Por que o checker errou
+
+O checker comparou as colunas em clauses WHERE ao longo de todo o arquivo e detectou que o original exibe `EMBS` em algum contexto WHERE (provavelmente no `SigCdGrp WHERE cgrus = ... AND embs > 0` ou similar). Ao ver `CPROS` e `CGRUS` como WHERE nas queries migradas (que substituem opera├º├Áes VFP de cursor/SEEK do original), flagou-as como "inventadas". Mas s├úo corretas:
+
+| Opera├º├úo original (VFP) | Opera├º├úo migrada (SQL) |
+|---|---|
+| Load crTmpPro ÔåÆ SEEK cpros | `SELECT ... FROM SigCdPro WHERE cpros = ...` |
+| `=Seek(crTmpPro.cUnis, "crSigCdEmb", "Cods")` | `SELECT ... FROM SigCdGrp WHERE cgrus = ...` + SEEK local |
+
+**Conclus├úo**: O c├│digo est├í correto. Alterar ou remover esses WHERE quebraria a funcionalidade de gera├º├úo de movimenta├º├Áes. Nenhum arquivo foi modificado ÔÇö os problemas listados s├úo falsos positivos do validador SQL autom├ítico.

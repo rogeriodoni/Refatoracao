@@ -1,0 +1,2305 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRNSE.SCX
+* Data/Hora: 18/07/2026 00:36:20
+* Total de registros: 48
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRNSE
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cmdBtnGrade
+  Parent: SIGPRNSE
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getCEmps
+  Parent: SIGPRNSE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDirs
+  Parent: SIGPRNSE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmps
+  Parent: SIGPRNSE
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optProcessados
+  Parent: SIGPRNSE
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFin
+  Parent: SIGPRNSE
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtIni
+  Parent: SIGPRNSE
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnSelecionar
+  Parent: SIGPRNSE
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmbCidades
+  Parent: SIGPRNSE
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnDirs
+  Parent: SIGPRNSE
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdOperacoes
+  Parent: SIGPRNSE
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRNSE.GrdOperacoes.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRNSE.GrdOperacoes.Column11
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRNSE.GrdOperacoes.Column11
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getErros
+  Parent: SIGPRNSE
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGPRNSE
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGPRNSE
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRNSE.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRNSE.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnForm
+  Parent: SIGPRNSE
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 699
+  Width = 1021
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Integração de NF-e Municipal"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 0
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGPRNSE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cmdBtnGrade
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 135
+  Left = 957
+  Top = 339
+  Width = 43
+  TabIndex = 17
+  Themes = .F.
+  Name = "cmdBtnGrade"
+  Command1.Top = -1
+  Command1.Left = -1
+  Command1.Height = 45
+  Command1.Width = 45
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Command1.Caption = ""
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Selecionar"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcaTudo"
+  Command2.Top = 45
+  Command2.Left = -1
+  Command2.Height = 45
+  Command2.Width = 45
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Desmarcar"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+  Command3.Top = 91
+  Command3.Left = -1
+  Command3.Height = 45
+  Command3.Width = 45
+  Command3.FontName = "Verdana"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_configuracao_26.jpg
+  Command3.Caption = ""
+  Command3.TabIndex = 3
+  Command3.ToolTipText = "Documento"
+  Command3.ForeColor = 36,84,155
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "btnDocumentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getCEmps
+------------------------------------------------------------
+  Left = 134
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Empresa Para Filtro das Notas"
+  Top = 145
+  Width = 31
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 36,84,155
+  ZOrderSet = 2
+  Name = "getCEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getDirs
+------------------------------------------------------------
+  Height = 23
+  Left = 134
+  SpecialEffect = 1
+  TabIndex = 11
+  ToolTipText = "Diretório / Pasta de gravação do Arquivo"
+  Top = 196
+  Width = 421
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  ZOrderSet = 4
+  Name = "getDirs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getDEmps
+------------------------------------------------------------
+  Height = 23
+  Left = 168
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = "Empresa Para Filtro das Notas"
+  Top = 145
+  Width = 305
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  ZOrderSet = 4
+  Name = "getDEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say4
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 72
+  Top = 149
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.optProcessados
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 15
+  Left = 127
+  Top = 100
+  Width = 235
+  TabIndex = 14
+  Name = "optProcessados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Não Processadas"
+  Option1.Left = 5
+  Option1.Top = -1
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Já Processadas"
+  Option2.Left = 126
+  Option2.Top = -1
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say2
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "até"
+  Left = 217
+  Top = 123
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getDtFin
+------------------------------------------------------------
+  Height = 23
+  Left = 240
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Data Final Para Seleção das Notas"
+  Top = 119
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  Name = "getDtFin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say1
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 79
+  Top = 123
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getDtIni
+------------------------------------------------------------
+  Left = 134
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Data Inicial Para Seleção das Notas"
+  Top = 119
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  Name = "getDtIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.btnSelecionar
+------------------------------------------------------------
+  Top = 106
+  Left = 484
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Selecionar Notas"
+  TabIndex = 13
+  ToolTipText = "Seleciona as Notas Conforme os Filtros Digitados"
+  PicturePosition = 7
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnSelecionar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cmbCidades
+------------------------------------------------------------
+  FontName = "Courier New"
+  ColumnWidths = "60"
+  RowSourceType = 1
+  RowSource = "RJ - Rio de Janeiro,SP - São Paulo"
+  Value = 0
+  FirstElement = 1
+  Height = 22
+  Left = 134
+  NumberOfElements = 0
+  SpecialEffect = 1
+  Style = 2
+  TabIndex = 9
+  Top = 171
+  Width = 339
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  BoundTo = .T.
+  Name = "cmbCidades"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say3
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Município :"
+  Left = 70
+  Top = 175
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say5
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Pasta do Arquivo :"
+  Left = 25
+  Top = 200
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.btnDirs
+------------------------------------------------------------
+  Top = 192
+  Left = 558
+  Height = 30
+  Width = 32
+  Picture = ..\framework\imagens\geral_pasta_26.jpg
+  Caption = ""
+  TabIndex = 12
+  ToolTipText = "Carregar o Diretório / Pasta de Gravação do Arquivo"
+  PicturePosition = 13
+  Name = "btnDirs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes
+------------------------------------------------------------
+  ColumnCount = 11
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 19
+  Height = 346
+  Left = 21
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 16
+  Top = 230
+  Width = 929
+  ZOrderSet = 16
+  Name = "GrdOperacoes"
+  Column1.Width = 15
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.Width = 52
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.Width = 80
+  Column3.Visible = .T.
+  Column3.Name = "Column3"
+  Column4.Width = 104
+  Column4.Name = "Column4"
+  Column5.Width = 75
+  Column5.Name = "Column5"
+  Column6.Width = 85
+  Column6.Name = "Column6"
+  Column7.Width = 85
+  Column7.Name = "Column7"
+  Column8.Width = 85
+  Column8.Name = "Column8"
+  Column9.Width = 37
+  Column9.Name = "Column9"
+  Column10.Width = 37
+  Column10.Name = "Column10"
+  Column11.Width = 242
+  Column11.ReadOnly = .F.
+  Column11.Name = "Column11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  Alignment = 0
+  Caption = ""
+  ToolTipText = "Marca/Desmarca Esta Operação Para o Processamento"
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column2.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  ToolTipText = "Código da Operação na Origem"
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column3.Text1
+------------------------------------------------------------
+  Margin = 0
+  ToolTipText = "Data da Operação na Origem"
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Valor da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Documento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Documento da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column6.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Usuário Que Gerou a Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column7.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Origem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column7.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Conta de Origem da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column8.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Destino"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column8.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Conta de Destino da Operação na Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column9.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column9.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Empresa da Operação de Origem"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column10.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "E / S"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column10.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ToolTipText = "Empresa da Operação de Destino"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column11.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.GrdOperacoes.Column11.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.getErros
+------------------------------------------------------------
+  Height = 77
+  Left = 21
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 595
+  Width = 929
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 36,84,155
+  BorderColor = 90,90,90
+  ControlSource = "csOperacoes.Erros"
+  Name = "getErros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.Say6
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Erros dos Dados"
+  Left = 21
+  Top = 580
+  TabIndex = 18
+  ForeColor = 255,255,255
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1068
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRNSE.cmdBtnForm
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 110
+  Left = 742
+  SpecialEffect = 1
+  Top = -2
+  Width = 251
+  TabIndex = 15
+  BorderColor = 136,189,188
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 11
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Command1.Caption = "Limpar Seleção"
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Limpar a Seleção da Grade Abaixo"
+  Command1.PicturePosition = 7
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnLimpar"
+  Command2.Top = 5
+  Command2.Left = 86
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\geral_disco2_60.jpg
+  Command2.Caption = "Gerar Arquivo"
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Gerar o Arquivo de Integração"
+  Command2.PicturePosition = 7
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnCopiar"
+  Command3.Top = 5
+  Command3.Left = 161
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.WordWrap = .T.
+  Command3.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command3.Cancel = .T.
+  Command3.Caption = "Sair do Processo"
+  Command3.TabIndex = 3
+  Command3.ToolTipText = "[ESC] Sair"
+  Command3.PicturePosition = 7
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRNSE
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE ajustacontroles
+------------------------------------------------------------
+PROCEDURE ajustacontroles
+Lparameters pTip
+
+With ThisForm
+	.optProcessados.Option1.Enabled 	= pTip
+	.optProcessados.Option2.Enabled 	= pTip
+	.getDtIni.Enabled 					= pTip
+	.getDtFin.Enabled 					= pTip
+	.getCEmps.Enabled  					= pTip
+	.getDEmps.Enabled 					= pTip
+	.cmbCidades.Enabled					= pTip
+	.btnSelecionar.Enabled 				= pTip
+	.getDirs.Enabled					= pTip
+	.btnDirs.Enabled 					= pTip
+
+	.cmdBtnForm.btnLimpar.Enabled       = Not pTip
+	.cmdBtnForm.btnCopiar.Enabled       = Not pTip
+	.cmdBtnGrade.btnMarcaTudo.Enabled   = Not pTip
+	.cmdBtnGrade.btnDesmarcar.Enabled   = Not pTip
+	.cmdBtnGrade.btnDocumentos.Enabled  = Not pTip
+EndWith
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE prcrjriodejaneiro
+------------------------------------------------------------
+PROCEDURE prcrjriodejaneiro
+* NOTA FISCAL DE SERVIÇO ELETRÔNICA (NFS-e) 
+* Prefeitura Municipal da Cidade do Rio de Janeiro
+* Arquivo TXT – Versão 3.1 - 27/05/2014 (Richard Diegues)
+Local lcArq, lcDir, lnR20, lnR40, lnTsr, lnTdd, lnTdc, lnTdi, lcFim, lcTip, lcCpf, lcIms, ;
+	  lcDtI, lcDtF
+
+* Carregando as Notas de Saída
+Select a.* ;
+  From LocalNotas a, csOperacoes b ;
+ Where a.Operas = [S] And ;
+ 	   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ;
+ 	   b.SelImp ;
+  Into Cursor LocalNfS Readwrite
+
+* Carregando as Notas de Entrada
+Select a.* ;
+  From LocalNotas a, csOperacoes b ;
+ Where a.Operas = [E] And ;
+ 	   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ;
+ 	   b.SelImp ;
+  Into Cursor LocalNfE Readwrite
+
+* Totalizadores Para o Tipo 90
+lnR20 = 0 && Total de Linhas do Tipo 20
+lnR40 = 0 && Total de Linhas do Tipo 40
+lnTsr = 0 && Valor total serviços contido no arquivo
+lnTdd = 0 && Valor total deduções contidas no arquivo 
+lnTdc = 0 && Valor total descontos condicionados no arquivo
+lnTdi = 0 && Valor total descontos incondicionados no arq
+
+lcFim = Chr(13) + Chr(10)
+
+lcTip = Iif(LocalEmp.TpEmps	= 1, [1], [2])				&& 1-CPF; 2-CNPJ da Empresa
+lcCpf = Padl(Chrtran(LocalEmp.Cgcs,[.-/ ],[]), 14, [0])	&& CPF/CNPJ da Empresa
+lcIms = Padl(Chrtran(LocalEmp.IMs,[.-/ ],[]), 15, [0])	&& Inscrição Municipal da Empresa
+lcDtI = Dtos(ThisForm.getDtIni.Value)					&& Data Inicial dos Dados Enviados
+lcDtF = Dtos(ThisForm.getDtFin.Value)					&& Data Final dos Dados Enviados
+
+lcDir = Alltrim(ThisForm.getDirs.Value)
+lcArq = lcDir + Alltrim(lcIms) + [_] + Left(Chrtran(Ttoc(Datetime()), [/: ], [--_]), 16) + [.TXT] && Nome do Arquivo a Ser Gerado
+
+=StrToFile([], lcArq, .f.)
+
+If Not File(lcArq)
+	=MessageBox([O Arquivo "] + lcArq + [" Não Pode Ser Criado!!!] + Chr(13) + ;
+				[Verifique Suas Permissões de Criação e Tente Novamente!!!], ;
+				0+16, [Erro Na Criação do Arquivo])
+	Return .f.
+EndIf
+
+* 3.2. Registro Tipo 10 – Cabeçalho
+lcStr = [10] + ; 	&& 1 - Tipo de registro 						 - 01 a 02 [02] Numérico - S (Deve ser preenchido com valor “10”, indicando linha de cabeçalho.)
+		[003] + ; 	&& 2 - Versão do Arquivo 						 - 03 a 05 [03] Numérico - S (Indica a versão do lay-out a ser utilizada. Deve ser preenchido com o número da versão atual. A versão atual é a 003.)
+		lcTip + ;	&& 3 - Identificação CPF ou CNPJ do Contribuinte - 06 a 06 [01] Numérico - S (Este campo indica o tipo de dados fornecido no campo CPF/CNPJ do Contribuinte 1 - CPF. 2 - CNPJ.)
+		lcCpf + ; 	&& 4 - CPF ou CNPJ do Contribuinte 				 - 07 a 20 [14] Numérico - S (CNPJ do contribuinte com 14 posições ou CPF do contribuinte com 11 posições. Sem formatação (ponto, traço, barra,....)
+		lcIms + ;	&& 5 - Inscrição Municipal do Contribuinte		 - 21 a 35 [15] Numérico - S (Inscrição municipal do prestador (com 15 posições) a que se refere o arquivo.)
+		lcDtI + ;	&& 6 - Data de Início do Período no Arquivo		 - 36 a 43 [08] AAAAMMDD - S (O arquivo de transferência deverá conter todos os RPS referentes a um período. Informe neste campo a Data INICIAL desse período no formato AAAAMMDD.)
+		lcDtF + ;	&& 7 - Data de Fim do Período no Arquivo		 - 44 a 51 [08] AAAAMMDD - S (O arquivo de transferência deverá conter todos os RPS referentes a um período. Informe neste campo a Data FINAL desse período no formato AAAAMMDD.)
+		lcFim		&& 8 - Caractere de Fim de Linha 				 - 52 a 53 [02] Texto    - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).)
+
+=StrToFile(lcStr, lcArq, .t.)
+
+* Processando as Notas de Saída
+Select LocalNfS
+Scan
+	lcSer = Padr(Alltrim(LocalNfS.Series), 5) 					&& Série da Nota
+	lcNot = Padl(Alltrim(LocalNfS.NFis), 15, [0])				&& Número da Nota
+	lcEmi = Dtos(LocalNfS.Emis)									&& Data de Emissão da NF
+	lcSts = Iif(LocalNfS.Cancelas, [2], [1])					&& Status do RPS: 1–Normal; 2–Cancelado
+
+	* Dados do Tomador
+	lcTpT = Padl(LocalNfS.TpClis, 1, [0])						&& Tomador: 1-CPF; 2-CNPJ; 3-Não Informado
+	lcTpT = Iif(lcTpT = [0], [3], lcTpT)
+	lcCpW = Padl(Chrtran(LocalNfS.Cpfs, [.-/ ],[]), 14, [0])	&& CPF/CNPJ do Tomador
+	If (lcCpW = [00000000000000])
+		lcTpT = [3]
+	EndIf
+	lcImT = Padl(Chrtran(LocalNfS.InscMuns, [.-/ ],[]), 15,[0]) && Inscrição Municipal do Tomador
+	lcIeT = Padl(Chrtran(LocalNfS.Rgs, 	[.-/ ],[]), 15, [0])	&& Inscrição Estadual do Tomador
+	lcNmT = Alltrim(LocalNfS.Razaos)							&& Nome/Razão Social do Tomador
+	lcNmT = Padr(Iif(Empty(lcNmT), Alltrim(LocalNfS.RClis), lcNmT), 115)
+	lcEdT = Padr(Alltrim(LocalNfS.Endes), 125)					&& Endereço do Tomador
+	lcTeT = Alltrim(Left(lcEdT, At([ ], lcEdT)))				&& Tipo do Endereço do Tomador
+	lcTeT = Padr(Iif(Empty(lcTeT), [RUA], lcTeT), 3)
+	lcNeT = Padr(Alltrim(LocalNfS.Nums), 10)					&& Número do Endereço do Tomador
+	lcCeT = Padr(Alltrim(LocalNfS.Compls), 60)					&& Complemento do Endereço do Tomador
+	lcBaT = Padr(Alltrim(LocalNfS.Bairs), 72)					&& Bairro do Tomador
+	lcCdT = Padr(Alltrim(LocalNfS.Cidas), 50)					&& Cidade do Tomador
+	lcUfT = Padr(Alltrim(LocalNfS.Estas), 2)					&& UF do Tomador
+	lcCcT = Padl(Chrtran(LocalNfS.Ceps, [-],[]), 8, [0])		&& CEP do Tomador
+	lcT1T = Padr(Chrtran(LocalNfS.Tel1s, [.-],[]), 11)			&& Telefone de Contato do Tomador
+	lcEmT = Padr(Alltrim(LocalNfS.eMails), 80) 					&& E-mail do Tomador
+
+	lcTts = Padl(LocalNfS.TpTribSers, 2, [0])					&& Tipo de Tributação de Serviços
+																&& 01-No Município; 02-Fora do Município; 03-Isenta; 04-Imune; 
+																&& 05-Suspensa por Decisão Judicial; 06-Suspensa por Decisão Administrativa; 
+																&& ATENÇÃO: As opções 3 e 4 exige preenchimento do código do benefício fiscal.
+	lcCps = lcCdT
+	lcUps = lcUfT
+	If Seek(LocalNfS.PrestServs, [LocalUfs], [Codigos])
+		lcCps = Padr(Upper(Alltrim(LocalUfs.Descs)), 50)		&& Cidade de Prestação do Serviço
+		lcUps = Padr(Upper(Alltrim(LocalUfs.Estados)), 2)		&& UF de Prestação do Serviço
+	EndIf
+	
+	lcRet = Padl(LocalEmp.Empofs, 2, [0])						&& Regime Especial de Tributação da Nota:
+																&& 00–Nenhum; 01–Microempresa Municipal; 02–Estimativa; 03–Sociedade de Profissionais; 
+																&& 04–Cooperativa; 05–Microempreendedor Individual; 06–Art. 33, inc. II, item 8, Lei nº 691/84.
+	lcOSN = Iif(LocalNfS.OptSimples = [S], [1], [0])			&& Opção Pelo Simples: 0-Não Optante; 1-Optante
+	lcInC = Iif(InList(lcTts, [03], [04]), [1], [0])			&& Incentivo Cultural: 0–Não; 1–Sim
+	lcCsF = Padr(LocalEmp.CodOpers, 4)							&& Código do Serviço Federal - Ver tabela de serviços
+	lcCdB = Padl(Alltrim(LocalNfS.CodBenefs), 3, [0])			&& Código do Benefício Fiscal, quando utilizado.
+	lcCsM = Padr(Strtran(LocalNfS.CodSrvFis, [.], []), 6)		&& Código do Serviço Municipal
+
+	* Valores
+	lnAlq = (LocalNfS.VTotIss / LocalNfS.TotProds) * 100
+	lcAlq = Padl(Chrtran(Str(lnAlq,9,2),[., ],[]),5,[0])					&& Alíquota
+	lcVal = Padl(Chrtran(Str(LocalNfS.TotProds,20,2),[., ],[]),15,[0])		&& Valor dos Serviços
+	lcVde = Padl(Chrtran(Str(LocalNfS.VDeducoes,20,2),[., ],[]),15,[0])		&& Valor das Deduções
+	lcVds = Padl(Chrtran(Str(LocalNfS.VDscConds,20,2),[., ],[]),15,[0])		&& Valor do Desconto Condicionado
+	lcVdi = Padl(Chrtran(Str(LocalNfS.VDscIConds,20,2),[., ],[]),15,[0])	&& Valor do Desconto Incondicionado
+	lcCof = Padl(Chrtran(Str(LocalNfS.VCofins,20,2),[., ],[]),15,[0])		&& Valor COFINS
+	lcCsl = Padl(Chrtran(Str(LocalNfS.VCsll,20,2),[., ],[]),15,[0])			&& Valor CSLL
+	lcIns = Padl(Chrtran(Str(LocalNfS.VInss,20,2),[., ],[]),15,[0])			&& Valor INSS
+	lcIrf = Padl(Chrtran(Str(LocalNfS.VIrf,20,2),[., ],[]),15,[0])			&& Valor IRPJ
+	lcPis = Padl(Chrtran(Str(LocalNfS.VPis,20,2),[., ],[]),15,[0])			&& Valor PIS/PASEP
+	lcOut = Padl(Chrtran(Str(LocalNfS.OutRetens,20,2),[., ],[]),15,[0])		&& Valor de Outras Retenções Federais
+	lcIss = Padl(Chrtran(Str(LocalNfS.VTotIss,20,2),[., ],[]),15,[0])		&& Valor do ISS
+	lcRtd = Iif(LocalNfS.ISSRetidos = 1, [1], [0])							&& ISS Retido: 0-Não; 1-Sim
+Set Step On 
+	lcObs = Alltrim(Strtran(Strtran(Nvl(LocalNfS.Obses, []), Chr(13), [|]), Chr(10), [])) && Discriminação dos Serviços
+	lcObs = Iif(Empty(lcObs), [Serviços Prestados], lcObs)
+
+	* Alimentando Totalizadores Para Registro 90
+	lnTsr = lnTsr + LocalNfS.TotProds 		&& Valor total serviços contido no arquivo
+	lnTdd = lnTdd + LocalNfS.VDeducoes 		&& Valor total deduções contidas no arquivo 
+	lnTdc = lnTdc + LocalNfS.VDscConds 		&& Valor total descontos condicionados no arquivo
+	lnTdi = lnTdi + LocalNfS.VDscIConds		&& Valor total descontos incondicionados no arq
+		
+	* 3.3. Registro Tipo 20 – Detalhe
+	lcStr = [20] + ;			&& 01 - Tipo do registro 					- 001 a 002 [002] Numérico - S (Deve ser preenchido com valor “20”, indicando linha de detalhe.
+			[0] + ;				&& 02 - Tipo do RPS 						- 003 a 003 [001] Numérico - S (Informe o Tipo do RPS emitido com 01 posição. Tipos Válidos: 0 – Recibo Provisório de Serviços (RPS); 1 – Recibo Provisório de Serviços proveniente de Nota Fiscal Conjugada/ Mista (RPS-M).
+			lcSer + ;			&& 03 - Série do RPS 						- 004 a 008 [005] Texto    - N (Informe a Série do RPS com 05 posições.
+			lcNot + ;			&& 04 - Número do RPS 						- 009 a 023 [015] Numérico - S (Informe o Número do RPS com 15 posições.
+			lcEmi + ;			&& 05 - Data de Emissão do RPS 				- 024 a 031 [008] AAAAMMDD - S (Informe a Data de emissão do RPS no formato AAAAMMDD.
+			lcSts + ;			&& 06 - Status do RPS 						- 032 a 032 [001] Numérico - S (Status do RPS: 1 – Normal; 2 – Cancelado.
+			lcTpT + ;			&& 07 - CPF ou CNPJ do Tomador	 			- 033 a 033 [001] Numérico - S (Este campo indica o tipo de dados fornecido no campo CPF/CNPJ do Tomador. Informe um dos seguintes valores: 1 - CPF; 2 - CNPJ; 3 - Não Informado.
+			lcCpW + ;			&& 08 - CPF ou CNPJ do Tomador 				- 034 a 047 [014] Numérico - S (CNPJ do Tomador com 14 posições ou CPF do Tomador com 11 posições. Sem formatação (ponto, traço, barra,....). ATENÇÃO! Caso não possua o CPF/CNPJ do tomador, utilize a opção 3 (Não informado) no campo 7 e preencha este campo com “00000000000000”
+			lcImT + ;			&& 09 - Inscrição Municipal do Tomador 		- 048 a 062 [015] Texto    - N (Inscrição Municipal do Tomador, com 15 posições. ATENÇÃO!!! Este campo só deverá ser preenchido para tomadores estabelecidos neste município. Quando este campo for preenchido, seu conteúdo será considerado como prioritário com relação ao campo de CPF/CNPJ do Tomador, sendo utilizado para identificar o Tomador e recuperar seus dados da base de dados da Prefeitura.
+			lcIeT + ;			&& 10 - Inscrição Estadual do Tomador 		- 063 a 077 [015] Numérico - N (Inscrição Estadual do Tomador, com 15 posições.
+			lcNmT + ;			&& 11 - Nome/Razão Social do Tomador 		- 078 a 192 [115] Texto    - S ((PJ) Razão Social do Tomador.
+			lcTeT + ;			&& 12 - Tipo do Endereço do Tomador 		- 193 a 195 [003] Texto    - S (PJ) Tipo do Endereço do Tomador. (Rua, Av, ...)
+			lcEdT + ;			&& 13 - Endereço do Tomador 				- 196 a 320 [125] Texto    - S ((PJ) Endereço do Tomador.
+			lcNeT + ;			&& 14 - Número do Endereço do Tomador 		- 321 a 330 [010] Texto    - N (Número do Endereço do Tomador.
+			lcCeT + ;			&& 15 - Complemento do Endereço do Tomador 	- 331 a 390 [060] Texto    - N (Complemento do Endereço do Tomador.
+			lcBaT + ;			&& 16 - Bairro do Tomador 					- 391 a 462 [072] Texto    - S ((PJ) Bairro do Tomador
+			lcCdT + ;			&& 17 - Cidade do Tomador 					- 463 a 512 [050] Texto    - S ((PJ) Cidade do Tomador.
+			lcUfT + ;			&& 18 - UF do Tomador 						- 513 a 514 [002] Texto    - S ((PJ) UF do Tomador.
+			lcCcT + ;			&& 19 - CEP do Tomador 						- 515 a 522 [008] Numérico - S ((PJ) CEP do Tomador.
+			lcT1T + ;			&& 20 - Telefone de Contato do Tomador 		- 523 a 533 [011] Texto    - N (Telefone de Contato do Tomador.
+			lcEmT + ;			&& 21 - E-mail do Tomador 					- 534 a 613 [080] Texto    - N (E-mail do Tomador.
+			lcTts + ;			&& 22 - Tipo de Tributação de Serviços 		- 614 a 615 [002] Numérico - S (Tributação de Serviços da Nota: 01 - Tributação no Município; 02 - Tributação Fora do Município; 03 - Operação Isenta; 04 - Operação Imune; 05 - Operação Suspensa por Decisão Judicial; 06 - Operação Suspensa por Decisão Administrativa; ATENÇÃO: A utilização das opções 3 ou 4 (Isenta e Imune respectivamente) exige o preenchimento do código do benefício fiscal.
+			lcCps + ;			&& 23 - Cidade de Prestação do Serviço 		- 616 a 665 [050] Texto    - S (Cidade onde o Serviço foi prestado.
+			lcUps + ;			&& 24 - UF de Prestação do Serviço 			- 666 a 667 [002] Texto    - S (UF onde o Serviço foi prestado.
+			lcRet + ;			&& 25 - Regime Especial de Tributação 		- 668 a 669 [002] Numérico - S (Regime Especial de Tributação da Nota: 00 – Nenhum; 01 – Microempresa Municipal; 02 – Estimativa; 03 – Sociedade de Profissionais; 04 – Cooperativa; 05 – Microempreendedor Individual (MEI) 06 – Art. 33, inc. II, item 8, Lei nº 691/84.
+			lcOSN + ;			&& 26 - Opção Pelo Simples 					- 670 a 670 [001] Numérico - S (Opção pelo Simples Nacional do Prestador de Serviços: 0 - Não-Optante pelo Simples Nacional; 1 - Optante pelo Simples Nacional (Recolhimento pelo DAS).
+			lcInC + ;			&& 27 - Incentivo Cultural 					- 671 a 671 [001] Numérico - S (Utilização de Incentivo Cultural: 0 – Não; 1 – Sim.
+			lcCsF + ;			&& 28 - Código do Serviço Federal 			- 672 a 675 [004] Texto    - S (Código do Serviço da lista Federal (LC 116). O campo deve ser preenchido sem formatação Exemplo: "07.20" será "0720" ou " 720" A tabela de serviços está disponível através do menu Manuais no sistema. https://notacarioca.rio.gov.br/manuais.aspx
+			Space(11) + ;		&& 29A- Reservado 							- 676 a 686 [011] Texto    - N (Preencher com brancos.
+			lcCdB + ;			&& 29B- Código do Benefício 				- 687 a 689 [003] Numérico - N (Nos casos em que o Tipo de Tributação de Serviços for Isenta ou Imune será exigida a informação quanto ao código de benefício fiscal utilizado. Para consultar a Lista de Benecícios acesse: https://notacarioca.rio.gov.br/manuais.aspx
+			lcCsM + ;			&& 29C- Código do Serviço Municipal 		- 690 a 695 [006] Texto    - S (Código do Serviço da lista Municipal. O campo deve ser preenchido sem formatação Exemplo: "07.20.10" será "072010" ou " 72010" A tabela de serviços está disponível através do menu Manuais no sistema. https://notacarioca.rio.gov.br/manuais.aspx 
+			lcAlq + ;			&& 30 - Alíquota 							- 696 a 700 [005] Numérico - S (Valor da Alíquota, incluindo duas casas decimais (sem ponto decimal e sem %) com 5 posições Exemplo: 105,00% – 10500 2,75% – 00275
+			lcVal + ;			&& 31 - Valor dos Serviços 					- 701 a 715 [015] Numérico - S (Valor dos Serviços da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000 Caso a situação da nota seja igual a “2” (Cancelada), as 15 posições poderão estar preenchidas com zeros.
+			lcVde + ;			&& 32 - Valor das Deduções 					- 716 a 730 [015] Numérico - N (Valor das Deduções da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcVds + ;			&& 33 - Valor do Desconto Condicionado 		- 731 a 745 [015] Numérico - N (Valor dos Descontos Condicionados da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. O Desconto Condicionado não altera a base de cálculo. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcVdi + ;			&& 34 - Valor do Desconto Incondicionado 	- 746 a 760 [015] Numérico - N (Valor dos Descontos Incondicionados da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. O Desconto incondicionado altera a base de cálculo. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcCof + ;			&& 35 - Valor COFINS 						- 761 a 775 [015] Numérico - N (Valor da retenção de COFINS da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcCsl + ;			&& 36 - Valor CSLL 							- 776 a 790 [015] Numérico - N (Valor da retenção de CSLL da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcIns + ;			&& 37 - Valor INSS 							- 791 a 805 [015] Numérico - N (Valor da retenção de INSS da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcIrf + ;			&& 38 - Valor IRPJ 							- 806 a 820 [015] Numérico - N (Valor da retenção de IRPJ da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcPis + ;			&& 39 - Valor PIS/PASEP 					- 821 a 835 [015] Numérico - N (Valor da retenção de PIS/PASEP da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcOut + ;			&& 40 - Valor de Outras Retenções Federais 	- 836 a 850 [015] Numérico - N (Valor de outras retenções federais da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcIss + ;			&& 41 - Valor do ISS 						- 851 a 865 [015] Numérico - N (Valor do ISS da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcRtd + ;			&& 42 - ISS Retido 							- 866 a 866 [001] Numérico - S (Retenção do ISS: 0 - Nota Fiscal sem ISS Retido; 1 - ISS Retido.
+			lcEmi + ;			&& 43 - Data de Competência 				- 867 a 874 [008] AAAAMMDD - S (Utilize a data de emissão do RPS em caso de ISS não retido e a data para pagamento em caso de ISS retido.
+			Space(15) + ;		&& 44 - Código da Obra 						- 875 a 889 [015] Texto    - N (S Código CEI / Código da Obra para serviços de construção civil. Alguns códigos de Serviço Municipal exigem o prenchimento deste campo. Informe o código CEI (com dv). Se a obra não possui CEI, digite "CO" seguido do código da obra.
+			Space(15) + ;		&& 45 - Anotação Responsabilidade Técnica 	- 890 a 904 [015] Texto    - N (Anotação de Responsabilidade Técnica para serviços de construção civil.
+			Space(05) + ;		&& 46 - Série do RPS Substituido 			- 905 a 909 [005] Texto    - N (Série do RPS susbstituido caso seja um RPS substituto
+			Padl([],15,[0]) + ;	&& 47 - Número do RPS Substituido 			- 910 a 924 [015] Numérico - N (Número do RPS susbstituido caso seja um RPS substituto
+			Space(30) + ;		&& 48 - Reservado 							- 925 a 954 [030] Texto    - N (Preencher com brancos
+			lcObs + ;			&& 49 - Discriminação dos Serviços 			- 955 a 955 [4000]Texto    - S (Descritivo dos serviços. Texto contínuo. O conjunto de caracteres correspondentes ao código ASC 13 e ASC 10 (Chr(13) + Chr(10)) deverá ser substituído pelo caracter | (pipe ou barra vertical. ASC 124). Exemplo: Digitado na NF “Lavagem de carro com lavagem de motor” Preenchimento do arquivo: “Lavagem de carro|com lavagem de motor” Não devem ser colocados espaços neste campo para completar seu tamanho máximo, devendo o campo ser preenchido apenas com conteúdo a ser processado / armazenado. (*) Este campo é impresso num retângulo com 95 caracteres de largura e 24 linhas de altura (22 linhas se houverem tributos federais). Caso seja ultrapassado o limite de linhas, o conteúdo será truncado durante a impressão da Nota.
+			lcFim				&& 50 - Caractere de Fim de Linha 			- 955 a 956 [002] Texto    - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).
+
+	lnR20 = lnR20 + 1 && Contador de Linhas do Registro 20
+
+	=StrToFile(lcStr, lcArq, .t.)
+EndScan
+
+* Processando as Notas de Entrada
+Select LocalNfE
+Scan
+	lcTpn = Padl(Alltrim(LocalNfE.TipoNFs), 2, [0])				&& Tipo da Nota Convencional: 1-NF de Serviço; 2-NF Fatura de Serviço; 3-Bilhete de Ingresso; 
+																&& 4-NF Simplificada de Serviço; 5-NF de Entrada; 6-NF Remessa de Material e Equipamento; 
+																&& 7-Cupom de Máquina Registradora; 8-Carnê de Pagamento; 9-Bilhete Eletrônico de Ingressos; 
+																&& 10-Nota Fiscal de Entrada e Serviço; 11-Rol de Lavanderia; 12-Nota de Hospedagem; 
+																&& 13-Cupom de Estacionamento; 14-NF Conjunta Estadual; 15-NF Conjunta Federal; 
+																&& 16-Conhecimento de Transporte Conjunto Estadual; 17-Emissor de Cupons Fiscais - ECF; 
+																&& 18-Recibo; 19-NF Saída de Mercadoria; 20-NF de Estacionamento; 99-Fora do País
+
+	lcSer = Padr(Alltrim(LocalNfE.Series), 5)					&& Série da Nota
+	lcNot = Padl(Alltrim(LocalNfE.NFis), 15, [0])				&& Número da Nota
+	lcEmi = Dtos(LocalNfE.Emis)									&& Data de Emnissão da NF
+	lcSts = Iif(LocalNfE.Cancelas, [2], [1])					&& Status da NF: 1–Normal; 2–Cancelado
+
+	* Dados do Prestador
+	lcTpT = Padl(LocalNfE.TpClis, 1, [0])						&& Prestador: 1-CPF; 2-CNPJ; 3-Não Informado
+	lcTpT = Iif(lcTpT = [0], [3], lcTpT)
+	lcCpW = Padl(Chrtran(LocalNfE.Cpfs, [.-/ ],[]), 14, [0])	&& CPF/CNPJ do Prestador
+	If (lcCpW = [00000000000000])
+		lcTpT = [3]
+	EndIf
+	lcImT = Padl(Chrtran(LocalNfE.InscMuns, [.-/ ],[]), 15,[0]) && Inscrição Municipal do Prestador
+	lcIeT = Padl(Chrtran(LocalNfE.Rgs, 	[.-/ ],[]), 15, [0])	&& Inscrição Estadual do Prestador
+	lcNmT = Alltrim(LocalNfE.Razaos)							&& Nome/Razão Social do Prestador
+	lcNmT = Padr(Iif(Empty(lcNmT), Alltrim(LocalNfE.RClis), lcNmT), 115)
+	lcEdT = Padr(Alltrim(LocalNfE.Endes), 125)					&& Endereço do Prestador
+	lcTeT = Alltrim(Left(lcEdT, At([ ], lcEdT)))				&& Tipo do Endereço do Prestador
+	lcTeT = Padr(Iif(Empty(lcTeT), [RUA], lcTeT), 3)
+	lcNeT = Padr(Alltrim(LocalNfE.Nums), 10)					&& Número do Endereço do Prestador
+	lcCeT = Padr(Alltrim(LocalNfE.Compls), 60)					&& Complemento do Endereço do Prestador
+	lcBaT = Padr(Alltrim(LocalNfE.Bairs), 72)					&& Bairro do Prestador
+	lcCdT = Padr(Alltrim(LocalNfE.Cidas), 50)					&& Cidade do Prestador
+	lcUfT = Padr(Alltrim(LocalNfE.Estas), 2)					&& UF do Prestador
+	lcCcT = Padl(Chrtran(LocalNfE.Ceps, [-],[]), 8, [0])		&& CEP do Prestador
+	lcT1T = Padr(Chrtran(LocalNfE.Tel1s, [.-],[]), 11)			&& Telefone de Contato do Prestador
+	lcEmT = Padr(Alltrim(LocalNfE.eMails), 80) 					&& E-mail do Prestador		
+
+	lcTts = Padl(LocalNfE.TpTribSers, 2, [0])					&& Tipo de Tributação de Serviços
+																&& 01-No Município; 02-Fora do Município; 03-Isenta; 04-Imune; 
+																&& 05-Suspensa por Decisão Judicial; 06-Suspensa por Decisão Administrativa; 
+																&& ATENÇÃO: As opções 3 e 4 exige preenchimento do código do benefício fiscal.
+
+	lcOSN = Iif(LocalNfE.OptSimples = [S], [1], [0])			&& Opção Pelo Simples: 0-Não Optante; 1-Optante
+	lcCsF = Padr(LocalEmp.CodOpers, 4)							&& Código do Serviço Federal - Ver tabela de serviços
+	lcCdB = Padl(Alltrim(LocalNfE.CodBenefs), 3, [0])			&& Código do Benefício Fiscal, quando utilizado.
+	lcCsM = Padr(Strtran(LocalNfE.CodSrvFis, [.], []), 6)		&& Código do Serviço Municipal
+
+	* Valores
+	lnAlq = (LocalNfE.VTotIss / LocalNfE.TotProds) * 100
+	lcAlq = Padl(Chrtran(Str(lnAlq,9,2),[., ],[]),5,[0])				&& Alíquota
+	lcVal = Padl(Chrtran(Str(LocalNfE.TotProds,20,2),[., ],[]),15,[0])	&& Valor dos Serviços
+	lcVde = Padl(Chrtran(Str(LocalNfE.VDeducoes,20,2),[., ],[]),15,[0])	&& Valor das Deduções
+	lcIss = Padl(Chrtran(Str(LocalNfE.VTotIss,20,2),[., ],[]),15,[0])	&& Valor do ISS
+	lcRtd = Iif(LocalNfE.ISSRetidos = 1, [1], [0])						&& ISS Retido: 0-Não; 1-Sim
+Set Step On 
+	lcObs = Alltrim(Strtran(Strtran(Nvl(LocalNfE.Obses, []), Chr(13), [|]), Chr(10), [])) && Discriminação dos Serviços
+	lcObs = Iif(Empty(lcObs), [Serviços Prestados], lcObs)
+
+	* Alimentando Totalizadores Para Registro 90
+	lnTsr = lnTsr + LocalNfE.TotProds 	&& Valor total serviços contido no arquivo
+	lnTdd = lnTdd + LocalNfE.VDeducoes 	&& Valor total deduções contidas no arquivo 
+			
+	* 3.6. Registro Tipo 40 – Declaração de Notas Convencionais Recebidas
+	lcStr = [40] + ;			&& 01 - Tipo de Registro 					- 001 a 002 [002] Numérico - S (Deve ser preenchido com valor “40”, indicando linha de Declaração de Notas Convencionais Recebida.
+			lcTpn + ;			&& 02 - Tipo da Nota Convencional 			- 003 a 004 [002] Numérico - S (Ver Tipos Acima)
+			lcSer + ;			&& 03 - Série da Nota Convencional 			- 005 a 009 [005] Texto    - N (Informe a Série da Nota Convencional com 05 posições.
+			lcNot + ;			&& 04 - Número da Nota Convencional 		- 010 a 024 [015] Numérico - S (Informe o Número da Nota Convencional com 15 posições.
+			lcEmi + ;			&& 05 - Data de Emissão da NF Convencional 	- 025 a 032 [008] AAAAMMDD - S (Informe a Data de emissão da Nota Convencional no formato AAAAMMDD.
+			lcSts + ;			&& 06 - Status da Nota Convencional 		- 033 a 033 [001] Numérico - S (Status da Nota Fiscal: 1 - Normal; 2 - Cancelada.
+			lcTpT + ;			&& 07 - Identificação de CPF ou CNPJ		- 034 a 034 [001] Numérico - S (Este campo indica o tipo de dados fornecido no campo CPF/CNPJ do Prestador. Informe um dos seguintes valores: 1 - CPF; 2 - CNPJ; 3 - Não Informado.
+			lcCpW + ;			&& 08 - CPF ou CNPJ do Prestador 			- 035 a 048 [014] Numérico - S (CNPJ do Tomador com 14 posições ou CPF do Tomador com 11 posições. Sem formatação (ponto, traço, barra,....). ATENÇÃO! Caso não possua o CPF/CNPJ do tomador, utilize a opção 3 (Não informado) no campo 7 e preencha este campo com “00000000000000”
+			lcImT + ;			&& 09 - Inscrição Municipal do Prestador 	- 049 a 063 [015] Numérico - N (Inscrição Municipal do Prestador, com 15 posições.
+			lcIeT + ;			&& 10 - Inscrição Estadual do Prestador 	- 064 a 078 [015] Numérico - N (Inscrição Estadual do Prestador, com 15 posições.
+			lcNmT + ;			&& 11 - Nome ou Razão Social do Prestador 	- 079 a 193 [115] Texto    - S (Nome ou Razão Social do Prestador de Serviços. 
+			lcTeT + ;			&& 12 - Tipo do Endereço do Prestador  		- 194 a 196 [003] Texto    - S (Tipo do Endereço do Prestador. (Rua, Av, ...)
+			lcEdT + ;			&& 13 - Endereço do Prestador 				- 197 a 321 [125] Texto    - S (Endereço do Prestador. 
+			lcNeT + ;			&& 14 - Número do Endereço do Prestador 	- 322 a 331 [010] Texto    - N (Número do Endereço do Prestador.
+			lcCeT + ;			&& 15 - Complemento do Endereço Prestador 	- 332 a 391 [060] Texto    - N (Complemento do Endereço do Prestador.
+			lcBaT + ;			&& 16 - Bairro do Prestador 				- 392 a 463 [072] Texto    - S (Bairro do Prestador.
+			lcCdT + ;			&& 17 - Cidade do Prestador 				- 464 a 513 [050] Texto    - S (Cidade do Prestador. No caso de Nota com tipo 99 (Fora do País) este campo não será validado.
+			lcUfT + ;			&& 18 - UF do Prestador 					- 514 a 515 [002] Texto    - S (UF do Prestador. No caso de Nota com tipo 99 (Fora do País) este campo não será validado.
+			lcCcT + ;			&& 19 - CEP do Prestador 					- 516 a 523 [008] Numérico - S (CEP do Prestador.
+			lcT1T + ;			&& 20 - Telefone de Contato do Prestador 	- 524 a 534 [011] Texto    - N (Telefone de Contato do Prestador.
+			lcEmT + ;			&& 21 - E-mail do Prestador 				- 535 a 614 [080] Texto    - N (E-mail do Prestador.
+			lcTts + ;			&& 22 - Tipo de Tributação de Serviços 		- 615 a 616 [002] Numérico - S (Tributação de Serviços da Nota: ver códigos acima)
+			Space(54) + ;		&& 23 - Reservado 							- 617 a 670 [054] Texto    - N (Preencher com brancos
+			lcOSN + ;			&& 24 - Opção Pelo Simples 					- 671 a 671 [001] Numérico - S (Opção pelo Simples Nacional do Prestador de Serviços: 0 - Não-Optante pelo Simples Nacional; 1 - Optante pelo Simples Nacional (Recolhimento pelo DAS).
+			lcCsF + ;			&& 25 - Código do Serviço Federal 			- 672 a 675 [004] Texto    - S (Código do Serviço da lista Federal (LC 116). O campo deve ser preenchido sem formatação Exemplo: "07.20" será "0720" ou " 720" Ver Tabela.
+			Space(11) + ;		&& 26A- Reservado 							- 676 a 686 [011] Texto    - N (Preencher com brancos.
+			lcCdB + ;			&& 26B- Código do Benefício 				- 687 a 689 [003] Numérico - N (Nos casos em que o Tipo de Tributação de Serviços Isenta ou Imune será exigida a informação quanto ao código de benefício fiscal utilizado. Ver Tabela.
+			lcCsM + ;			&& 26C- Código do Serviço Municipal 		- 690 a 695 [006] Texto    - S (Código do Serviço da lista Municipal. O campo deve ser preenchido sem formatação Exemplo: "07.20.10" será "072010" ou " 72010". Ver Tabela.
+			lcAlq + ;			&& 27 - Alíquota 							- 696 a 700 [005] Numérico - S (Valor da Alíquota, incluindo duas casas decimais (sem ponto decimal e sem %) com 5 posições Exemplo: 105,00% – 10500 2,75% – 00275
+			lcVal + ;			&& 28 - Valor dos Serviços 					- 701 a 715 [015] Numérico - S (Valor dos Serviços da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000 Caso a situação da nota seja igual a “2” (Cancelada), as 15 posições poderão estar preenchidas com zeros. 
+			lcVde + ;			&& 29 - Valor das Deduções 					- 716 a 730 [015] Numérico - N (Valor das Deduções da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000 
+			Space(30) + ;		&& 30 - Reservado 							- 731 a 760 [030] Texto    - N (Preencher com brancos
+			lcIss + ;			&& 31 - Valor do ISS 						- 761 a 775 [015] Numérico - N (Valor do ISS da nota fiscal, incluindo os centavos (sem ponto decimal e sem R$), com 15 posições. Exemplo: R$ 500,85 – 000000000050085 R$ 500,00 – 000000000050000
+			lcRtd + ;			&& 32 - ISS Retido 							- 776 a 776 [001] Numérico - S (Retenção de ISS: 0 - Nota Fiscal sem ISS Retido; 1 - ISS Retido.
+			lcEmi + ;			&& 33 - Data de Competência 				- 777 a 784 [008] AAAAMMDD - S (Utilize a data de emissão da NFS em caso de ISS não retido e a data para pagamento em caso de ISS retido.
+			Space(15) + ;		&& 34 - Código da Obra 						- 785 a 799 [015] Texto    - N (Código CEI / Código da Obra para serviços de construção civil. Alguns códigos de Serviço Municipal exigem o prenchimento deste campo. Informe o código CEI (com dv). Se a obra não possui CEI, digite "CO" seguido do código da obra.
+			Space(15) + ;		&& 35 - Anotação Responsabilidade Técnica 	- 800 a 814 [015] Texto    - N (Anotação de Responsabilidade Técnica para serviços de construção civil. 
+			lcObs + ;			&& 36 - Discriminação dos Serviços 			- 815 a 815 [4000]Texto    - N (Descritivo dos serviços. Texto contínuo. O conjunto de caracteres correspondentes ao código ASC 13 e ASC 10 (Chr(13) + Chr(10)) deverá ser substituído pelo caracter | (pipe ou barra vertical. ASC 124).
+			lcFim				&& 37 - Caractere de Fim de Linha 			- 815 a 816 [002] Texto    - S (ASC(13)+ASC(10)
+
+	lnR40 = lnR40 + 1 && Contador de Linhas do Registro 40
+
+	=StrToFile(lcStr, lcArq, .t.)
+EndScan
+
+* Registro Tipo 90 – Rodapé
+lcNdt = Padl(Chrtran(Str(lnR20 + lnR40, 20, 0), [., ], []), 8, [0])
+lcTsr = Padl(Chrtran(Str(lnTsr, 20, 2), [., ], []), 15, [0])
+lcTdd = Padl(Chrtran(Str(lnTdd, 20, 2), [., ], []), 15, [0])
+lcTdc = Padl(Chrtran(Str(lnTdc, 20, 2), [., ], []), 15, [0])
+lcTdi = Padl(Chrtran(Str(lnTdi, 20, 2), [., ], []), 15, [0])
+
+lcStr = [90] + ; 	&& 01 - Tipo de registro 								- 01 a 02 [02] Numérico - S (Deve ser preenchido com valor “90”, indicando linha de rodapé.
+		lcNdt + ;	&& 02 - Número de linhas detalhe do arquivo 			- 03 a 10 [08] Numérico - S (Número de linhas de detalhe (Tipo de registro 20 + Tipo de registro 21 + Tipo de registro 30 + Tipo de registro 40 + Tipo de registro 50) contidas no arquivo.
+		lcTsr + ;	&& 03 - Valor total serviços contido no arquivo 		- 11 a 25 [15] Numérico - S (Informe a soma dos valores dos serviços das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40 + Tipo de registro 50) contidas no arquivo. Obs: O valor do registro 50 deverá ser a soma do campo 21- Valor Total da Nota. 
+		lcTdd + ; 	&& 04 - Valor total deduções contidas no arquivo 		- 26 a 40 [15] Numérico - S (Informe a soma dos valores das deduções das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40) contidas no arquivo. 
+		lcTdc + ;	&& 05 - Valor total descontos condicionados no arquivo 	- 41 a 55 [15] Numérico - S (Informa a soma dos valores dos descontos condicionados das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40) contidas no arquivo.
+		lcTdi + ;	&& 06 - Valor total descontos incondicionados no arq	- 56 a 70 [15] Numérico - S (Informa a soma dos valores dos descontos incondicionados das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40) contidas no arquivo. 
+		lcFim		&& 07 - Caractere de Fim de Linha 						- 71 a 72 [02] Texto    - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).
+
+=StrToFile(lcStr, lcArq, .t.)
+
+=MessageBox([O Arquivo "] + lcArq + [" Foi Gerado!] + Chr(13) + ;
+			[Notas de Saída: ] + Alltrim(Str(lnR20, 10)) + Chr(13) + ;
+			[Notas de Entrada: ] + Alltrim(Str(lnR40, 10)), 0+64, [Processamento Finalizado])
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE prcspsaopaulo
+------------------------------------------------------------
+PROCEDURE prcspsaopaulo
+* NOTA FISCAL DE SERVIÇO ELETRÔNICA (NFS-e) 
+* Prefeitura Municipal da Cidade de São Paulo
+* Arquivo TXT – Versão 3.4 - 10/07/2014 (Richard Diegues)
+Local lcArq, lcDir, lnRg2, lnTsr, lnTdd, lnTdc, lnTdi, lcFim, lcTip, lcCpf, lcIms, lcDtI, lcDtF
+
+* Carregando as Notas de Saída
+Select a.* ;
+  From LocalNotas a, csOperacoes b ;
+ Where a.Operas = [S] And ;
+ 	   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ;
+ 	   b.SelImp ;
+  Into Cursor LocalNfS Readwrite
+
+* Totalizadores Para o Tipo 9
+lnRg2 = 0 && Total de Linhas do Tipo 2
+lnTsr = 0 && Valor total serviços contido no arquivo
+lnTdd = 0 && Valor total deduções contidas no arquivo 
+
+lcFim = Chr(13) + Chr(10)
+
+lcTip = Iif(LocalEmp.TpEmps	= 1, [1], [2])				&& 1-CPF; 2-CNPJ da Empresa
+lcCpf = Padl(Chrtran(LocalEmp.Cgcs,[.-/ ],[]), 14, [0])	&& CPF/CNPJ da Empresa
+lcIms = Padl(Chrtran(LocalEmp.IMs,[.-/ ],[]), 8, [0])	&& Inscrição Municipal da Empresa
+lcDtI = Dtos(ThisForm.getDtIni.Value)					&& Data Inicial dos Dados Enviados
+lcDtF = Dtos(ThisForm.getDtFin.Value)					&& Data Final dos Dados Enviados
+
+lcDir = Alltrim(ThisForm.getDirs.Value)
+lcArq = lcDir + Alltrim(lcIms) + [_] + Left(Chrtran(Ttoc(Datetime()), [/: ], [--_]), 16) + [.TXT] && Nome do Arquivo a Ser Gerado
+
+=StrToFile([], lcArq, .f.)
+
+If Not File(lcArq)
+	=MessageBox([O Arquivo "] + lcArq + [" Não Pode Ser Criado!!!] + Chr(13) + ;
+				[Verifique Suas Permissões de Criação e Tente Novamente!!!], ;
+				0+16, [Erro Na Criação do Arquivo])
+	Return .f.
+EndIf
+
+* 3.2. Registro Tipo 1 – Cabeçalho
+lcStr = [1] + ; 	&& 1 - Tipo de registro 						 - 01 a 01 [01] Numérico - S (Deve ser preenchido com valor “1”, indicando linha de cabeçalho.)
+		[002] + ; 	&& 2 - Versão do Arquivo 						 - 02 a 04 [03] Numérico - S (Indica a versão do lay-out a ser utilizada. Deve ser preenchido com o número da versão atual. A versão atual é a 001.)
+		lcIms + ;	&& 3 - Inscrição Municipal do Prestador			 - 05 a 12 [08] Numérico - S (Inscrição municipal do prestador a que se refere o arquivo.)
+		lcDtI + ;	&& 4 - Data de Início do Período no Arquivo		 - 13 a 20 [08] AAAAMMDD - S (O arquivo de transferência deverá conter todos os RPS referentes a um período. Informe neste campo a Data INICIAL desse período no formato AAAAMMDD.)
+		lcDtF + ;	&& 5 - Data de Fim do Período no Arquivo		 - 21 a 28 [08] AAAAMMDD - S (O arquivo de transferência deverá conter todos os RPS referentes a um período. Informe neste campo a Data FINAL desse período no formato AAAAMMDD.)
+		lcFim		&& 6 - Caractere de Fim de Linha 				 - 29 a 30 [02] Texto    - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).)
+
+=StrToFile(lcStr, lcArq, .t.)
+
+* Processando as Notas de Saída
+Select LocalNfS
+Scan
+	lcTpT = Padl(LocalNfS.TpClis, 1, [0])									&& Tomador: 1-CPF; 2-CNPJ; 3-Não Informado
+	lcTpT = Iif(lcTpT = [0], [3], lcTpT)
+	lcCpW = Padl(Chrtran(LocalNfS.Cpfs, [.-/ ],[]), 14, [0])				&& CPF/CNPJ do Tomador
+	If (lcCpW = [00000000000000])
+		lcTpT = [3]
+	EndIf
+	lcImT = Padl(Chrtran(LocalNfS.InscMuns, [.-/ ],[]), 8, [0]) 			&& Inscrição Municipal do Tomador
+	lcIeT = Padl(Chrtran(LocalNfS.Rgs, 	[.-/ ],[]), 12, [0])				&& Inscrição Estadual do Tomador
+	lcNmT = Alltrim(LocalNfS.Razaos)										&& Nome/Razão Social do Tomador
+	lcNmT = Padr(Iif(Empty(lcNmT), Alltrim(LocalNfS.RClis), lcNmT), 75)
+	lcEdT = Padr(Alltrim(LocalNfS.Endes), 50)								&& Endereço do Tomador
+	lcTeT = Alltrim(Left(lcEdT, At([ ], lcEdT)))							&& Tipo do Endereço do Tomador
+	lcTeT = Padr(Iif(Empty(lcTeT), [RUA], lcTeT), 3)
+	lcNeT = Padr(Alltrim(LocalNfS.Nums), 10)								&& Número do Endereço do Tomador
+	lcCeT = Padr(Alltrim(LocalNfS.Compls), 30)								&& Complemento do Endereço do Tomador
+	lcBaT = Padr(Alltrim(LocalNfS.Bairs), 30)								&& Bairro do Tomador
+	lcCdT = Padr(Alltrim(LocalNfS.Cidas), 50)								&& Cidade do Tomador
+	lcUfT = Padr(Alltrim(LocalNfS.Estas), 2)								&& UF do Tomador
+	lcCcT = Padl(Chrtran(LocalNfS.Ceps, [-],[]), 8, [0])					&& CEP do Tomador
+	lcEmT = Padr(Alltrim(LocalNfS.eMails), 75) 								&& E-mail do Tomador
+
+	lcSer = Padr(Alltrim(LocalNfS.Series), 5) 								&& Série da Nota
+	lcNot = Padl(Alltrim(LocalNfS.NFis), 12, [0])							&& Número da Nota
+	lcEmi = Dtos(LocalNfS.Emis)												&& Data de Emissão da NF
+	lcTts = Iif(LocalNfS.TpTribSers = 1, [T], ;								&& Situacao do RPS: T - Operacao normal (tributacao conforme documento emitido)
+			Iif(LocalNfS.TpTribSers = 2, [I], ;								&& 				    I - Operacao isenta ou nao tributavel, executadas no Municipio de Sao Paulo
+			Iif(LocalNfS.TpTribSers = 3, [F], ;								&& 			 	    F - Operacao isenta ou nao tributavel pelo Municipio de Sao Paulo, executada em outro Municipio
+			Iif(LocalNfS.TpTribSers = 4, [C], ;								&& 				    C - Cancelado
+			Iif(LocalNfS.TpTribSers = 5, [E], ;								&& 				    E - Extraviado
+			Iif(LocalNfS.TpTribSers = 6, [J], [T]))))))						&& 				    J - ISS Suspenso por Decisao Judicial (neste caso, informar no campo Discriminacao dos Servicos, o numero do processo judicial na 1a instancia).
+
+	lcVal = Padl(Chrtran(Str(LocalNfS.TotProds,20,2),[., ],[]),15,[0])		&& Valor dos Serviços
+	lcVde = Padl(Chrtran(Str(LocalNfS.VDeducoes,20,2),[., ],[]),15,[0])		&& Valor das Deduções
+	lcCsM = Padr(Strtran(LocalNfS.CodSrvFis, [.], []), 5)					&& Código do Serviço Municipal
+	lcMps = Padl(Alltrim(LocalNfS.PrestServs), 7, [0])						&& Código IBGE do Município de Prestação do Serviço
+
+	lnAlq = (LocalNfS.VTotIss / LocalNfS.TotProds) * 100
+	lcAlq = Padl(Chrtran(Str(lnAlq,9,2), [., ], []), 4, [0])				&& Alíquota
+	lcRtd = Padr(Iif(LocalNfS.ISSRetidos=1, 2, 1), 1)						&& ISS Retido: 1-Tomador; 2-NF Sem ISS Retido; 3-para ISS Retido pelo Intermediario
+	lcPis = Padl(Chrtran(Str(LocalNfS.VPis,20,2),[., ],[]),15,[0])			&& Valor PIS/PASEP
+	lcCof = Padl(Chrtran(Str(LocalNfS.VCofins,20,2),[., ],[]),15,[0])		&& Valor COFINS
+	lcIns = Padl(Chrtran(Str(LocalNfS.VInss,20,2),[., ],[]),15,[0])			&& Valor INSS
+	lcIrf = Padl(Chrtran(Str(LocalNfS.VIrf,20,2),[., ],[]),15,[0])			&& Valor IRPJ
+	lcCsl = Padl(Chrtran(Str(LocalNfS.VCsll,20,2),[., ],[]),15,[0])			&& Valor CSLL
+	
+	lcObs = Alltrim(Strtran(Strtran(Nvl(LocalNfS.Obses, []), Chr(13), [|]), Chr(10), [])) && Discriminação dos Serviços
+	lcObs = Iif(Empty(lcObs), [Serviços Prestados], lcObs)
+
+	* Alimentando Totalizadores Para Registro 9
+	lnTsr = lnTsr + LocalNfS.TotProds 		&& Valor total serviços contido no arquivo
+	lnTdd = lnTdd + LocalNfS.VDeducoes 		&& Valor total deduções contidas no arquivo 
+
+	* 3.3 Registro Tipo 6
+	lcStr = [6] + ;				&& 01 - Tipo de registro 			- 001 a 001 [01] - Numerico  - S (Deve ser preenchido com valor "6", indicando linha de detalhe.)
+			[RPS  ] + ;			&& 02 - Tipo do RPS 				- 002 a 006 [05] - Texto 	 - S (Informe o Tipo do RPS emitido com 05 posicoes. Tipos Validos: RPS - Recibo Provisorio de Servicos; RPS-M - Recibo Provisorio de Servicos proveniente de Nota Fiscal Conjugada (Mista))
+			lcSer + ;			&& 03 - Serie do RPS 				- 007 a 011 [05] - Texto 	 - N (Informe a Serie do RPS com 05 posicoes.)
+			lcNot + ;			&& 04 - Numero do RPS 				- 012 a 023 [12] - Numerico  - S (Informe o Numero do RPS com 12 posicoes.)
+			lcEmi + ;			&& 05 - Data de Emissao do RPS 		- 024 a 031 [08] - AAAAMMDD  - S (Informe a Data de emissao do RPS no formato AAAAMMDD.)
+			lcTts + ;			&& 06 - Situacao do RPS	 			- 032 a 032 [01] - Caractere - S (Informe a Situacao do RPS com 01 posicao, de acordo com o tipo do RPS.)
+			[] + ;				&& 																	  T	- Operação normal (tributação conforme documento emitido) 
+			[] + ;				&& 																	  F	- Operação isenta ou não tributável pelo Município de São Paulo, executada em outro Município 
+			[] + ;				&& 																	  C	- Cancelado 
+			[] + ;				&& 																	  A	- Tributado em São Paulo, porém Isento 
+			[] + ;				&& 																	  B	- Tributado Fora de São Paulo, porém Isento 
+			[] + ;				&& 																	  M	- Tributado em São Paulo, porém Imune 
+			[] + ;				&& 																	  N	- Tributado Fora de São Paulo, porém Imune 
+			[] + ;				&& 																	  X	- Tributado em São Paulo, porém Exigibilidade Suspensa 
+			[] + ;				&& 																	  V	- Tributado Fora de São Paulo, porém Exigibilidade Suspensa 
+			[] + ;				&& 																	  P	- Exportação de Serviços 
+			lcVal + ;			&& 07 - Valor dos Servicos 			- 033 a 047 [15] - Numerico  - S (Informe o Valor dos Servicos com 15 posicoes. Campo obrigatorio caso a situacao do RPS seja diferente de "C" (Cancelado) e "E" (Extraviado).
+			lcVde + ;			&& 08 - Valor das Deducoes			- 048 a 062 [15] - Numerico  - S (Informe o Valor das Deducoes com 15 posicoes.)
+			lcCsM + ;			&& 09 - Codigo do Servico 			- 063 a 067 [05] - Numerico  - S (Informe o Codigo do Servico do RPS com 05 posicoes. Este codigo deve pertencer a lista de servicos.)
+			lcAlq + ;			&& 10 - Aliquota					- 068 a 071 [04] - Numerico  - S (Informe o Valor da Aliquota com 4 posicoes. Obs.: O conteudo deste campo sera ignorado caso a tributacao ocorra no municipio (Situacao do RPS = "T")
+			lcRtd + ;			&& 11 - ISS Retido					- 072 a 072 [01] - Numerico  - S (1 para ISS Retido pelo Tomador; 2 para Nota Fiscal sem ISS Retido; 3 para ISS Retido pelo Intermediario.)
+			lcTpT + ;			&& 12 - Indicador de CPF/CNPJ 		- 073 a 073 [01] - Numerico  - S (Tipo de dados no campo CPF/CNPJ do Tomador; 1 para CPF.; 2 para CNPJ.; 3 para CPF nao-informado.)
+			lcCpW + ;			&& 13 - CPF ou CNPJ do Tomador  	- 074 a 087 [14] - Numerico  - S (Informe o CNPJ do tomador com 14 posicoes ou CPF do tomador com 11 posicoes.)
+			lcImT + ;			&& 14 - Inscricao Municipal 		- 088 a 095 [08] - Numerico  - N (Informe a Inscricao Municipal do Tomador, com 8 posicoes.)
+			lcIeT + ;			&& 15 - Inscricao Estadual 			- 096 a 107 [12] - Numerico  - N (Este campo sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcNmT + ;			&& 16 - Nome/ Razao Social 			- 108 a 182 [75] - Texto	 - S (Este campo sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcTeT + ;			&& 17 - Tipo do Endereco			- 183 a 185 [03] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcEdT + ;			&& 18 - Endereco do Tomador			- 186 a 235 [50] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcNeT + ;			&& 19 - Numero do Endereco 			- 236 a 245 [10] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcCeT + ;			&& 20 - Complemento do Endereco 	- 246 a 275 [30] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcBaT + ;			&& 21 - Bairro do Tomador			- 276 a 305 [30] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcCdT + ;			&& 22 - Cidade do Tomador			- 306 a 355 [50] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcUfT + ;			&& 23 - UF do Tomador				- 356 a 357 [02] - Texto	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcCcT + ;			&& 24 - CEP do Tomador				- 358 a 365 [08] - Numerico	 - * (O conteudo destes campos sera ignorado caso seja fornecido um CPF/CNPJ ou a Inscricao Municipal do tomador pertenca ao municipio de Sao Paulo.)
+			lcEmT + ;			&& 25 - Email do Tomador			- 366 a 440 [75] - Texto	 - N (Campo contendo o e-mail do tomador)
+			lcPis + ;			&& 26 - PIS/PASEP 					- 441 a 455 [15] - Numérico  - N - Informe o valor da retenção do PIS com 15 posições.
+			lcCof + ;			&& 27 - COFINS 						- 456 a 470 [15] - Numérico  - N - Informe o valor da retenção da COFINS com 15 posições.
+			lcIns + ;			&& 28 - INSS 						- 471 a 485 [15] - Numérico  - N - Informe o valor da retenção do INSS com 15 posições.
+			lcIrf + ;			&& 29 - IR 							- 486 a 500 [15] - Numérico  - N - Informe o valor da retenção do IR com 15 posições.
+			lcCsl + ;			&& 30 - CSSL 						- 501 a 515 [15] - Numérico  - N - Informe o valor da retenção da CSSL com 15 posições.
+			Padl(0,15,[0]) + ;	&& 31 - Carga tributária: Valor 	- 516 a 530 [15] - Numérico  - N - Informe o valor aproximado do Total dos Tributos com 15 posições. 
+			Padl(0,05,[0]) + ;	&& 32 - Carga tributária: % 		- 531 a 535 [05] - Numérico  - N - Informe o valor da Porcentagem do Total da Carga Tributária com 5 posições. 
+			Space(10) + ;		&& 33 - Carga tributária: fonte 	- 536 a 545 [10] - Texto     - N - Informe a fonte de informação dos dados tributários mencionados.
+			Padl(0,12,[0]) + ;	&& 34 - CEI 						- 546 a 557 [12] - Numérico  - N - Informe o CEI (Cadastro Específico do INSS).
+			Padl(0,12,[0]) + ;	&& 35 - Matrícula da Obra 			- 558 a 569 [12] - Numérico  - N - No momento não deve ser informado. Aguarde previsão de obrigatoriedade na legislação municipal.
+			lcMps + ;			&& 36 - Município prestação – IBGE 	- 570 a 576 [07] - Numérico  - * - Este campo é obrigatório quando o serviço for tributado fora do município de São Paulo (Campo Situação do RPS preenchido com “F”, “B”, “N” ou “V”. Informe o código relativo ao município onde ocorreu a prestação do serviço. Este código é composto por 6 dígitos, conforme tabela de Códigos de Municípios, elaborada pelo IBGE.
+			Space(200) + ;		&& 37 - Campo reservado 			- 577 a 776 [200]- Texto     - * - Campo reservado. Deverá ser preenchido com espaços em branco à direita até completar seu tamanho máximo.			
+			lcObs + ;			&& 38 - Discriminacao dos Servicos	- 777 a 777 [NN] - Texto     - S (Descritivo dos serviços. Texto contínuo. O conjunto de caracteres correspondentes ao código ASC 13 e ASC 10 (Chr(13) + Chr(10)) deverá ser substituído pelo caracter | (pipe ou barra vertical. ASC 124). 
+			lcFim				&& 39 - Caractere de Fim de Linha 	- NNN a NNN [02] - Texto     - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).
+
+	lnRg2 = lnRg2 + 1 && Contador de Linhas do Registro 2
+
+	=StrToFile(lcStr, lcArq, .t.)
+EndScan
+
+* Registro Tipo 90 – Rodapé
+lcNdt = Padl(Chrtran(Str(lnRg2, 20, 0), [., ], []), 07, [0])
+lcTsr = Padl(Chrtran(Str(lnTsr, 20, 2), [., ], []), 15, [0])
+lcTdd = Padl(Chrtran(Str(lnTdd, 20, 2), [., ], []), 15, [0])
+
+lcStr = [9] + ; 	&& 01 - Tipo de registro 								- 01 a 01 [01] Numérico - S (Deve ser preenchido com valor “9”, indicando linha de rodapé.
+		lcNdt + ;	&& 02 - Número de linhas detalhe do arquivo 			- 02 a 08 [07] Numérico - S (Número de linhas de detalhe (apenas Tipo 2 +Tipo 3) contidas no arquivo
+		lcTsr + ;	&& 03 - Valor total serviços contido no arquivo 		- 09 a 23 [15] Numérico - S (Informe a soma dos valores dos serviços das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40 + Tipo de registro 50) contidas no arquivo. Obs: O valor do registro 50 deverá ser a soma do campo 21- Valor Total da Nota. 
+		lcTdd + ; 	&& 04 - Valor total deduções contidas no arquivo 		- 24 a 38 [15] Numérico - S (Informe a soma dos valores das deduções das linhas de detalhe (Tipo de registro 20 + Tipo de registro 30 + Tipo de registro 40) contidas no arquivo. 
+		lcFim		&& 05 - Caractere de Fim de Linha 						- 39 a 40 [02] Texto    - S (Caractere de Fim de Linha “Enter” (Chr(13) + Chr(10)).
+
+=StrToFile(lcStr, lcArq, .t.)
+
+=MessageBox([O Arquivo "] + lcArq + [" Foi Gerado!] + Chr(13) + ;
+			[Notas de Saída: ] + Alltrim(Str(lnRg2, 10)), 0+64, [Processamento Finalizado])
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local llOks, lcCid
+
+llOks = .f.
+
+lcCid = ThisForm.cmbCidades.Value && 1-RJ - Rio de Janeiro
+								  && 2-SP - São Paulo
+
+Do Case
+	Case (Alltrim(lcCid) = [RJ - Rio de Janeiro])
+		llOks = ThisForm.PrcRJRioDeJaneiro()
+		
+	Case (Alltrim(lcCid) = [SP - São Paulo])
+		llOks = ThisForm.PrcSPSaoPaulo()
+EndCase
+
+If llOks
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+
+	ThisForm.AjustaControles(.t.)
+	Zap In csOperacoes 
+	ThisForm.btnSelecionar.Click(.t.)
+EndIf
+
+If Not llOks
+	ThisForm.poDataMgr.RollBack()
+EndIf
+	
+Return llOks
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selecionar
+------------------------------------------------------------
+PROCEDURE selecionar
+Private pDtI, pDtF, pDay
+
+Local llOks, llNPr, lcEmp, ldDtI, ldDtF, lcDir
+
+llNPr = (ThisForm.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados
+lcEmp = Padr(ThisForm.getCEmps.Value, 3)
+ldDtI = ThisForm.getDtIni.Value
+ldDtF = ThisForm.getDtFin.Value
+lcDir = ThisForm.getDirs.Value
+
+If Not llNPr && Se For Reprocessar as Notas
+	If Messagebox([Confirma a Seleção de Notas Fiscais Já Processadas Anteriormente?] + Chr(13) + ;
+				  [Este Processo Poderá Sobrepor Registros no Arquivo Gerado e Pode] + Chr(13) + ;
+				  [Causar Duplicidade ou Msmo Cancelamento das Notas Anteriores!!!], 4+32+256, [Atenção!!!]) <> 6
+		ThisForm.optProcessados.Value = 1
+		Return .f.
+	EndIf
+EndIf
+
+If Empty(ldDtI)
+	=Messagebox([Data Inicial Inválida!!!], 0+48, [Dados Inválidos])
+	ThisForm.getDtIni.SetFocus
+	Return .f.
+EndIf
+
+If Empty(ldDtF)
+	=Messagebox([Data Final Inválida!!!], 0+48, [Dados Inválidos])
+	ThisForm.getDtFin.SetFocus
+	Return .f.
+EndIf
+
+If (ldDtF < ldDtI)
+	=Messagebox([A Data Final Não Pode Ser Menor Que a Inicial!!!], 0+48, [Dados Inválidos])
+	ThisForm.getDtFin.SetFocus
+	Return .f.
+Endif
+
+If Empty(lcEmp)
+	=Messagebox([Empresa Inválida!!!], 0+48, [Dados Inválidos])
+	ThisForm.getCEmps.SetFocus
+	Return .f.
+EndIf
+
+If Empty(Alltrim(lcDir)) Or Not Directory(lcDir)
+	=Messagebox([Pasta do Arquivo Inválida!!!], 0+48, [Dados Inválidos])
+	ThisForm.btnDirs.SetFocus
+	Return .f.
+EndIf
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, [23:59:59])
+
+lcQuery = [Select TpEmps, Cgcs, IMs, Empofs, CodOpers, Dirs ] + ;
+		    [From SigCdEmp ] + ;
+		   [Where CEmps = '] + lcEmp + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalEmp]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEmp)])
+	Return .f
+EndIf
+
+lcQuery = [Select a.Emps, a.Dopes, a.Numes, a.Operas, a.Nfis, a.Series, a.Emis, b.Obses, a.Cancelas, ] + ;
+				 [a.TotProds, a.VCofins, a.TpTribSers, a.PrestServs, a.CodBenefs, a.CodSrvFis, ] + ;
+				 [a.VDeducoes, a.VDscConds, a.VDscIConds, a.OutRetens, a.ISSRetidos, a.TipoNFs, ] + ;
+				 [a.VCsll, a.VInss, a.VIrf, a.VPis, a.VTotIss, b.Usuars, b.ContaOs, b.ContaDs, ] + ;
+				 [c.TpClis, c.Cpfs, c.InscMuns, c.Rgs, c.Razaos, c.RClis, c.Endes, c.Nums, ] + ;
+				 [c.Compls, c.Bairs, c.Cidas, c.Estas, c.Ceps, c.Tel1s, c.eMails, c.OptSimples ] + ;
+		    [From SigMvNfi a, SigMvCab b, SigCdCli c, SigCdSer d ] + ;
+		   [Where a.Emis BetWeen ?pDtI And ?pDtF And ] + ;
+				 [a.Emps = '] + lcEmp + [' And ] + ;
+		   		 [a.EmpDopNums = b.EmpDopNums And ] + ;
+		   		 [b.ContaDs = c.IClis And ] + ;
+		   		 [Left(a.Series, 3) = d.Cods And ] + ;
+		   		 [d.TpServicos In(1, 3) And ] + ;
+		   		 [a.EmpDopNums ] + Iif(llNPr, [Not ], []) + ;
+		   		 [In (Select o.EmpDopNums ] + ;
+	 	  		  	   [From SigPcOoL o ] + ;
+	 	  		  	  [Where o.Tipos = 'SIGPRNSE')]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNotas]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalNotas)])
+	Return .f
+EndIf
+
+Select LocalNotas
+Go Top In LocalNotas
+If Eof([LocalNotas])
+	=MessageBox([Não Foram Encontrados Dados Com os Filtros Informados!!!], 0+64, [Seleção de Notas])
+	ThisForm.AjustaControles(.t.)
+	Return .f.
+EndIf
+
+Zap In csOperacoes
+
+Select LocalNotas
+Scan
+	lcErr = []
+
+	If Empty(Alltrim(LocalNotas.Razaos)) And Empty(Alltrim(LocalNotas.RClis))
+		lcErr = lcErr + [O Nome e a Razão Social da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Series))
+		lcErr = lcErr + [A Série da Nota Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.NFis))
+		lcErr = lcErr + [O Número da Nota Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Ceps))
+		lcErr = lcErr + [O CEP da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Ceps))
+		lcErr = lcErr + [O Endereço da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Ceps))
+		lcErr = lcErr + [O Bairro da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Ceps))
+		lcErr = lcErr + [A Cidade da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(LocalNotas.Ceps))
+		lcErr = lcErr + [A UF da Conta "] + Alltrim(LocalNotas.ContaOs) + [" Está em Branco;] + Chr(13)
+	EndIf
+	If IsEmpty(LocalNotas.Emis)
+		lcErr = lcErr + [A Data de Emissão da Nota Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(Alltrim(Strtran(LocalNotas.CodSrvFis, [.], [])))
+		lcErr = lcErr + [O Código do Serviço Municipal da Nota Está em Branco;] + Chr(13)
+	EndIf
+	If Empty(LocalNotas.TotProds)
+		lcErr = lcErr + [O Valor dos Serviços da Nota Está Zerado;] + Chr(13)
+	EndIf
+
+	Insert Into csOperacoes (SelImp, Emps, Dopes, Numes, Datas, Valos, Notas, Usuars, ContaOs, ContaDs, Opers, Erros) ;
+					 Values (Empty(lcErr), LocalNotas.Emps, LocalNotas.Dopes, LocalNotas.Numes, Ttod(Nvl(LocalNotas.Emis, ;
+					 		 Ctot([]))), LocalNotas.TotProds, LocalNotas.NFis, LocalNotas.Usuars, LocalNotas.ContaOs, ;
+					 		 LocalNotas.ContaDs, LocalNotas.Operas, lcErr)
+
+	pDay = Datetime()
+
+	lcQuery = [Insert Into SigPcOoL (Tipos, Emps, Dopes, Numes, Empds, Dopeds, Numeds, Datas, Usuars, ] + ;
+									[Produtos, Processos, cIdChaves, EmpDopNums, EdnDests) ] + ;
+							[Values ('SIGPRNSE', '] + LocalNotas.Emps + [', '] + LocalNotas.Dopes + ;
+									[', ] + Alltrim(Str(LocalNotas.Numes, 12, 0)) + [, '', '', 0, ?pDay, ] + ;
+									['] + Usuar + [', '] + Iif(llNPr, [], [LANÇAMENTO REFEITO]) + ;
+									[', '', '] + fUniqueIds() + [', '] + LocalNotas.Emps + ;
+									LocalNotas.Dopes + Str(LocalNotas.Numes, 6) + [', '')]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Insert SigPcOoL)])
+		ThisForm.poDataMgr.RollBack()
+		ThisForm.AjustaControles(.t.)
+		Return .f.
+	EndIf											
+EndScan
+
+ThisForm.AjustaControles(.f.)
+
+ThisForm.grdOperacoes.Column1.SetFocus
+ThisForm.grdOperacoes.Column1.Refresh
+ThisForm.grdOperacoes.Refresh
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor csOperacoes (SelImp l(1), Emps c(3), Dopes c(20), Numes n(6), Datas d(8), Valos n(12,2), ;
+						   Notas c(10), Usuars c(10), ContaOs c(10), ContaDs c(10), Opers c(1), Erros m(4))
+
+Index On Emps + Dopes + Str(Numes, 6) 				Tag Operacao
+Index On Dtos(Datas) + Emps + Dopes + Str(Numes, 6) Tag Data
+Index On Notas + Emps + Dopes + Str(Numes, 6) 		Tag Nota
+Index On ContaOs + Emps + Dopes + Str(Numes, 6) 	Tag Origem
+Index On ContaDs + Emps + Dopes + Str(Numes, 6) 	Tag Destino
+
+=DoDefault()
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name, .t.)
+
+	.getDtIni.Value		= Date()
+	.getDtFin.Value 	= Date()
+	.cmbCidades.Value	= [RJ - Rio de Janeiro]
+	.getDirs.Value 		= [C:\]
+
+	If (.poDataMgr.pnIdconn < 1)
+		=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+
+	.AjustaControles(.t.)
+
+	lcQuery = [Select Distinct a.Codigos, a.Descs, b.Estados ] + ;
+				[From SigCdMun a, SigCdUfs b ] + ;
+			   [Where a.UFIBGEs = b.UFIBGEs]
+
+	If (.poDataMgr.SqlExecute(lcQuery, [LocalUfs]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalUfs)])
+		Return .f
+	EndIf
+	Select LocalUfs
+	Index On Codigos Tag Codigos	
+	
+	With .grdOperacoes
+		.ColumnCount  	   = 11
+		.RecordSource 	   = [csOperacoes]
+		.HeaderHeight 	   = 19
+		.DeleteMark   	   = .f.
+		.RecordMark   	   = .f.
+		.ReadOnly     	   = .f.
+		.Scrollbars   	   =  2
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource = [csOperacoes.SelImp]
+		.Column1.Movable   = .f.
+		.Column1.Resizable = .f.
+		.Column1.ReadOnly  = .f.
+		.Column1.Sparse    = .f.
+		.Column1.Check1.AutoSize = .t.
+
+		.Column2.ControlSource  = [csOperacoes.Numes]
+		.Column3.ControlSource  = [csOperacoes.Datas]
+		.Column4.ControlSource  = [csOperacoes.Valos]
+		.Column5.ControlSource  = [csOperacoes.Notas]
+		.Column6.ControlSource  = [csOperacoes.Usuars]
+		.Column7.ControlSource  = [csOperacoes.ContaOs]
+		.Column8.ControlSource  = [csOperacoes.ContaDs]
+		.Column9.ControlSource  = [csOperacoes.Emps]
+		.Column10.ControlSource = [csOperacoes.Opers]
+		.Column11.ControlSource = [csOperacoes.Dopes]
+
+		For I=2 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..FontName  = [Courier New]
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+		Next
+		.SetAll([DynamicForeColor],[Iif(Empty(Alltrim(csOperacoes.Erros)), Rgb(0,0,0), Rgb(255,0,0))], [Column])
+	EndWith
+EndWith
+* Fim ********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.cmdBtnGrade
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Case
+   Case This.Value = 1 And This.btnMarcaTudo.Enabled
+		* Marca Tudo
+		Select csOperacoes
+		Replace All SelImp With .t. For Empty(Alltrim(csOperacoes.Erros))
+		Go Top
+		ThisForm.GrdOperacoes.Refresh
+		 
+   Case This.Value = 2 And This.btnDesmarcar.Enabled
+   		* Desmarcar
+		Select csOperacoes
+		Replace All SelImp With .f.
+		Go Top
+		ThisForm.GrdOperacoes.Refresh
+		 
+   Case This.Value = 3 And This.btnDocumentos.Enabled
+		Do Form SigMvExp With csOperacoes.Dopes, 'C', csOperacoes.Numes, csOperacoes.Emps, .t.
+EndCase
+* Fim ********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.getCEmps
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.getDirs
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.getDEmps
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCEmps.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.poDataMgr)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.btnSelecionar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.Selecionar()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.btnDirs
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcDir
+
+lcDir = Alltrim(ThisForm.getDirs.Value)
+
+lcDir = Alltrim(GetDir(lcDir, [Selecione o Diretório / Pasta De Gravação do Arquivo], [Seleção de Diretórios], 2))
+
+If Not Empty(lcDir)
+	ThisForm.getDirs.Value = lcDir
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes
+* Classe: grid (Base: grid)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.getErros.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Alltrim(csOperacoes.Erros))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local SelImp
+
+m.SelImp = (Not csOperacoes.SelImp)
+
+Select csOperacoes
+Gather Memvar Fields SelImp
+ThisForm.GrdOperacoes.Refresh
+
+NoDefault
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local SelImp
+
+If InList(nKeyCode, 13, 32)
+	m.SelImp = (Not csOperacoes.SelImp)
+
+	Select csOperacoes
+	Gather Memvar Fields SelImp
+	ThisForm.GrdOperacoes.Refresh
+
+	NoDefault
+EndIf
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.GrdOperacoes.Column10.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRNSE.cmdBtnForm
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If (This.Value = 2) && Se Clicou em Copiar Faz a Checagem
+	Select SelImp, Count(1) as Selecionados ;
+	  From csOperacoes ;
+	 Where SelImp ;
+	 Group By SelImp ;
+	  Into Cursor csSeles
+	  
+	If (csSeles.Selecionados < 1)
+		=Messagebox([Nenhum Lançamento Foi Encontrado!!!], 0+48, [Sem Lançamentos])
+		ThisForm.cntOperacoes.cmbOperacoes.SetFocus
+		Return .f.
+	EndIf
+EndIf 
+
+Do Case
+	Case (This.Value = 1) And This.btnLimpar.Enabled
+		 ThisForm.AjustaControles(.t.)
+		 Zap In csOperacoes 
+		 
+	Case (This.Value = 2) And This.btnCopiar.Enabled
+		ThisForm.Processamento()
+		 
+	Case This.Value = 3
+		 ThisForm.Release
+EndCase
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRNSE
+RESERVED3 (ClassInfo): podatamgr
+*ajustacontroles 
+*prcrjriodejaneiro 
+*prcspsaopaulo 
+*processamento 
+*selecionar 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 32
+================================================================================

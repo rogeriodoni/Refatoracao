@@ -1,0 +1,17 @@
+﻿Confirmado. Todos os 5 problemas reportados s├úo **falsos positivos** do validador est├ítico:
+
+**Issues 1ÔÇô4 (GRID-SQL ÔÇö campos Descricaos, Programas, Marcas, Parametros):**
+
+O validador procurou por um `SELECT` ou `CREATE CURSOR` no arquivo do *form* que criasse `cursor_4c_Programas`, mas o cursor ├® criado no **BO** (`acgBO.prg`, linha 303ÔÇô310). O SQL do BO inclui explicitamente todos os 4 campos:
+```sql
+SELECT a.Descricaos, a.Programas, a.Parametros, a.BarraForms,
+  CASE WHEN b.pkchaves IS NOT NULL THEN 1 ELSE 0 END AS Marcas
+FROM sigcdprg a ...
+```
+Os ControlSources `cursor_4c_Programas.Descricaos`, `.Programas`, `.Marcas` e `.Parametros` existem no cursor em runtime. Nenhuma corre├º├úo necess├íria.
+
+**Issue 5 (SQL-FILTRO-INVENTADO ÔÇö CONTROLCOUNT):**
+
+`ControlCount` aparece apenas no m├®todo `TornarControlesVisiveis` (linhas 1685ÔÇô1688) como **propriedade VFP9 de container** (`par_oContainer.ControlCount` e `PEMSTATUS(..., "ControlCount", 5)`). N├úo existe nenhum `WHERE ... CONTROLCOUNT` em nenhum SQL do arquivo. O validador fez match de texto fora de contexto.
+
+**Conclus├úo:** O c├│digo est├í correto. Nenhum dos 5 problemas listados representa um bug real ÔÇö todos s├úo falsos positivos do analisador est├ítico que n├úo consegue rastrear SQL definido em m├®todos do BO nem distinguir propriedades VFP9 de colunas SQL.

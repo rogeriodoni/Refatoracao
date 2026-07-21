@@ -1,0 +1,19 @@
+﻿All edits complete. Here's a summary of what Fase 6 added to `FormSigPrCtr.prg`:
+
+**BINDEVENTs added in `ConfigurarPaginaDadosLote()`** (lines 474-570):
+- `txt_4c_Grupo`: `KeyPress ÔåÆ TxtGrupoKeyPress`, `DblClick ÔåÆ TxtGrupoDblClick`
+- `txt_4c_Conta`: `KeyPress ÔåÆ TxtContaKeyPress`, `DblClick ÔåÆ TxtContaDblClick`
+- `txt_4c_Dconta`: `KeyPress ÔåÆ TxtDcontaKeyPress`, `DblClick ÔåÆ TxtDcontaDblClick`
+- `txt_4c_Moeda`: `KeyPress ÔåÆ TxtMoedaKeyPress`, `DblClick ÔåÆ TxtMoedaDblClick`
+
+**12 new PUBLIC methods added** (before `TxtGrupoLostFocus`):
+- `TxtGrupoKeyPress` / `TxtGrupoDblClick` ÔåÆ call `AbrirLookupGrupo()`
+- `AbrirLookupGrupo()` ÔÇö full `FormBuscaAuxiliar` picker for `SigCdGrp` (cgrus/dgrus)
+- `TxtContaKeyPress` / `TxtContaDblClick` ÔåÆ call `AbrirLookupConta()`
+- `AbrirLookupConta()` ÔÇö full picker for `SigCdCli` by Iclis, fills Conta/Dconta/Cpf + loads movimentos
+- `TxtDcontaKeyPress` / `TxtDcontaDblClick` ÔåÆ call `AbrirLookupDconta()`
+- `AbrirLookupDconta()` ÔÇö full picker for `SigCdCli` by Rclis, fills same fields
+- `TxtMoedaKeyPress` / `TxtMoedaDblClick` ÔåÆ call `AbrirLookupMoeda()`
+- `AbrirLookupMoeda()` ÔÇö full picker for `SigCdMoe` (CMoes/DMoes)
+
+F4 key code `115` is used throughout (VFP9 canonical). All methods are `PROCEDURE` (PUBLIC by default, not `PROTECTED`). Fase 6 is complete ÔÇö the file is ready for Fase 7 (validations and final integration testing).

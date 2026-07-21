@@ -1,0 +1,17 @@
+﻿Todos os m├®todos est├úo presentes. Arquivo completo com 772 linhas.
+
+**Fase 8 conclu├¡da.** Os seguintes m├®todos foram adicionados ao `Formsigprema.prg`:
+
+| M├®todo | Sem├óntica para OPERACIONAL |
+|--------|---------------------------|
+| `CarregarLista()` | Chama `BO.CarregarDados()` e reconecta `RecordSource` do grid |
+| `BtnBuscarClick()` | Delega a `CarregarLista()` |
+| `BtnSalvarClick()` | Delega a `BtnEmailClick()` (envio de email ├® a "a├º├úo salvar") |
+| `BtnCancelarClick()` | Delega a `BtnEncerrarClick()` |
+| `FormParaBO()` | Popula o BO via `CarregarDoCursor("crLocalTotal")` do registro corrente |
+| `BOParaForm()` | Reconecta grid ao cursor e refresha (sem campos edit├íveis individuais) |
+| `HabilitarCampos()` | Comentado: bot├Áes s├úo icone-only e n├úo devem ter `.Enabled=.F.` (regra do pipeline) |
+| `LimparCampos()` | ZAP no cursor, reset das props do BO |
+| `AjustarBotoesPorModo()` | Controla visibilidade do btn Enviar Email baseado na contagem de registros |
+
+O form est├í registrado no menu (`menu.prg:236`) e integrado ao pipeline.

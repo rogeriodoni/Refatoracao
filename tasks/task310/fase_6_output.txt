@@ -1,0 +1,15 @@
+﻿Tudo correto. Fase 6 conclu├¡da para este form OPERACIONAL.
+
+---
+
+**Resumo da Fase 6:**
+
+Este form `FormSigPrMdc` ├® um form OPERACIONAL de layout plano (sem PageFrame/Page2), ent├úo o objetivo gen├®rico da Fase 6 ("campos restantes de Page2") n├úo se aplica ÔÇö todos os controles e lookups j├í foram implementados nas fases anteriores.
+
+O que foi feito nesta fase:
+
+1. **`InicializarForm`** ÔÇö adicionada sincroniza├º├úo do flag `this_lCheckCadPro` do form para o BO logo ap├│s cria├º├úo do objeto (garante que o BO valida contas no mesmo modo que o form exibe)
+
+2. **`Activate()`** ÔÇö novo m├®todo que d├í foco ao `grd_4c_Dados` quando o form ├® exibido (equivalente ao `ThisForm.Grade.Column1.Text1.SetFocus` do legado no Init)
+
+3. **`menu.prg`** ÔÇö adicionados BAR 78 (separador) e BAR 79 ("Muda Conta") ao `popMovimentos`, com `AbrirFormSigPrMdc()` procedure seguindo o padr├úo can├┤nico dos outros forms operacionais

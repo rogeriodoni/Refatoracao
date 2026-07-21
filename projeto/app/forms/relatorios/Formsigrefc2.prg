@@ -547,7 +547,9 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -557,7 +559,9 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -567,7 +571,9 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     PROCEDURE BtnExcelClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.GerarExcel()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "GerarExcel")
+            ENDIF
         ENDIF
     ENDPROC
 

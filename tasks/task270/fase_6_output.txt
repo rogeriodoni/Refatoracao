@@ -1,0 +1,25 @@
+﻿Est├í tudo correto. A Fase 6 foi conclu├¡da com as seguintes corre├º├Áes aplicadas ao `Formsigprcpd.prg`:
+
+**Corre├º├Áes feitas:**
+
+1. **Grid FontName**: `"Verdana"` ÔåÆ `"Arial"` (identico ao legado)
+
+2. **BackColors dos campos de detalhe** (todos foram mapeados errado nas fases anteriores):
+   - `txt_4c_Qtde`: RGB(255,198,140) ÔåÆ RGB(255,255,198) + InputMask="99999.999" + FontBold=.T.
+   - `txt_4c_Descr`: RGB(255,198,140) ÔåÆ RGB(255,255,198) + ForeColor=RGB(0,0,0) + FontBold=.T.
+   - `txt_4c_Cliente`: RGB(255,198,140) ÔåÆ RGB(255,255,221) + ForeColor + FontBold
+   - `txt_4c_TEnv`: RGB(255,198,140) ÔåÆ RGB(255,255,198) + InputMask="99999" + FontBold + ForeColor
+
+3. **Column4 ControlSource**: `Minutos` (minutos brutos) ÔåÆ `TempoReal` (tempo proporcional calculado pelo BO ÔÇö este era o erro funcional principal)
+
+4. **ColumnOrder**: Column8 (Unidade Prod.) passa para posi├º├úo visual 1, com restante sequencial ÔÇö id├¬ntico ao legado onde Col8.ColumnOrder=1
+
+5. **Widths**: Corrigidos para valores exatos do SCX (Col1=80, Col3=24, Col4=65, Col5=95, Col6=190, Col7=165, Col8=80)
+
+6. **Movable/Resizable=.F.** + **ReadOnly=.T.** em todas as colunas
+
+7. **Header1 properties**: FontName, FontSize, Alignment e ForeColor configurados explicitamente em cada coluna
+
+8. **DynamicForeColor**: itens com `Priors < 999990` aparecem em azul (prioridade) ÔÇö id├¬ntico ao legado
+
+9. **`GrdDadosAfterRowColChange`**: campo Cliente agora usa `Rclis` (nome puro, como no legado) em vez de `cliente` (c├│digo+nome que o grid j├í exibe)

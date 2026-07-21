@@ -1,0 +1,20 @@
+﻿Analisando o arquivo existente e o c├│digo fonte original, posso confirmar o estado atual:
+
+**FormSigPrIns.prg** ÔÇö 365 linhas, todas as fases j├í implementadas:
+- `ConfigurarCabecalho()` ÔÇö container cinza com t├¡tulo Ô£ô
+- `ConfigurarCampos()` ÔÇö todos os 5 controles do original presentes Ô£ô
+- `ConfigurarBotoes()` ÔÇö `cmd_4c_Confirmar` e `cmd_4c_Cancelar` Ô£ô
+- `BtnConfirmarClick()` / `BtnCancelarClick()` ÔÇö l├│gica completa Ô£ô
+- `Destroy()` ÔÇö limpa `this_oFormPai` Ô£ô
+
+**SigPrInsBO.prg** ÔÇö 232 linhas, completo Ô£ô
+
+**Fase 6 ├® no-op para este form espec├¡fico.** O pipeline aplicou o template gen├®rico de Fase 6/8, mas o SIGPRINS ├® um dialog simples (685├ù153, flat, sem PageFrame) onde:
+
+| Item Fase 6 | Status |
+|---|---|
+| "├Ültimos 50% dos TextBoxes e Labels" | J├í presentes ÔÇö original tem apenas Label1, get\_CodServ, get\_DescServ, Label2, get\_Valor |
+| "TODOS os lookups com BINDEVENT (F4/F5)" | **Nenhum lookup existe no original** ÔÇö get\_CodServ e get\_DescServ t├¬m `When = .F.` (readonly), sem F4/sigacess |
+| "Container cnt\_4c\_BotoesAcao" | Bot├Áes standalone diretos no form (igual ao original: `ok` e `Cancela` s├úo filhos diretos de SIGPRINS) |
+
+O form estava **100% completo ao final da Fase 5**. N├úo h├í nada a acrescentar em Fase 6. Fases 7 e 8 (integra├º├úo com menu.prg e valida├º├úo final) podem prosseguir normalmente.

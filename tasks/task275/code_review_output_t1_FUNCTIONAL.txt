@@ -1,0 +1,14 @@
+﻿Todas as 8 corre├º├Áes foram aplicadas. Resumo:
+
+**[LOSTFOCUS-SEM-GUARDIA] ├ù 2:**
+- Adicionadas propriedades `this_cUltimoCGrupoValidado` e `this_cUltimoDGrupoValidado` na classe
+- BINDEVENTs de `txt_4c_CodGrupo` e `txt_4c_DsGrupo` alterados de `KeyPress` ÔåÆ `LostFocus`
+- Handlers `TxtCGrupoValid()` e `TxtDGrupoValid()`: removidos par├ómetros KeyPress, adicionado guard de "valor mudou" (`IF loc_c == THIS.this_cUltimo... RETURN`) e atualiza├º├úo da propriedade ap├│s valida├º├úo bem-sucedida
+
+**[GRID-HEADER] ├ù 6 (em todos os pontos do arquivo):**
+- `"Lote (C?digo)"` ÔåÆ `"C?digo"` (legado tem "C?digo")
+- `"Data/Hora"` ÔåÆ `""` (n├úo existe no legado)
+- `"Sa?da"` ÔåÆ `"Distribuido"` (legado tem "Distribuido") ÔÇö corrigido em BtnProcessarPage1Click e BtnFiltrarClick
+- `"Qtd"` ÔåÆ `"Quantidade"` (legado tem "Quantidade") ÔÇö corrigido em ConfigurarSubPaginaDistribuicao e BtnProcessarPage1Click
+- `"N?mero"` ÔåÆ `""` (n├úo existe no legado) ÔÇö corrigido em ConfigurarSubPaginaOperacoes e BtnSalvarClick
+- `"Data"` ÔåÆ `""` (n├úo existe no legado) ÔÇö corrigido nos mesmos dois locais

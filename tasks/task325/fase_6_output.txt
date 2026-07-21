@@ -1,0 +1,7 @@
+﻿All three bug categories have been fixed in `FormSigPrRet.prg`:
+
+1. **KPress handlers (21 methods)** ÔÇö Code fields now use F4(115)ÔåÆ`AbrirBusca*` for browsing and Tab/Enter(9,13)ÔåÆ`Validar*` for typed-code validation. Description-only fields (`DsEmpresa`, `DsGrEstoque`, `DsEstoque`, `Dcod`) still open picker on all three keys (no LostFocus recursion risk there).
+
+2. **Validar* methods (17 methods)** ÔÇö Removed all `AbrirBusca*()` calls from the not-found `ELSE` branches. When the typed code isn't found, fields are cleared silently. The user can press F4 explicitly to browse.
+
+3. **AbrirBuscaEstoque** ÔÇö Fixed the bug where `txt_4c_DsEstoque.Value` was being set to the code value (`contas`) instead of the description. Now it's cleared to `""` and `THIS.ValidarEstoque()` is called after the cursor is released, which runs the JOIN against SigCdGcr to fill the description correctly via `b.descrs`.

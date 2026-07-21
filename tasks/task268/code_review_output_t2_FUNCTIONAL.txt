@@ -1,0 +1,8 @@
+﻿All edits are confirmed in place. The PASS FUNCTIONAL review is complete:
+
+**Issues 1, 2, 3, 10, 11** ÔÇö Verified already correct in current code, no changes needed.
+
+**Issues 4ÔÇô9 [GRID-HEADER]** ÔÇö Fixed across both files:
+- `ConfigurarPaginaLista()`: `ColumnCount = 5` (was 6), 5 correct column widths
+- `CarregarLista()`: 5 columns with legacy-correct ControlSources (`cpros/dpros/ifors/reffs/sgrus`) and captions (`Produto/Descri├º├úo/Fornecedor/Refer├¬ncia/Sub Grp`), Column3 header corrected from "Grupo"ÔåÆ"Fornecedor", Column1 header corrected from "C├│digo"ÔåÆ"Produto"
+- `sigprcomBO.Buscar()`: `p.sgrus` added to SELECT in both branches so `cursor_4c_Dados.sgrus` is available for Column5 binding

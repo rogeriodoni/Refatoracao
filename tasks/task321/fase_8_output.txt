@@ -1,0 +1,16 @@
+﻿O arquivo ficou correto. Este form ├® um popup chamado por `FormSigPrPpc` diretamente via `CREATEOBJECT`, n├úo precisa de entrada no menu. O `config.prg` carrega automaticamente via `ADIR()` todos `Form*.prg` e `*BO.prg`, ent├úo a integra├º├úo j├í est├í garantida.
+
+**Fase 8/8 conclu├¡da.** Foram adicionados 8 m├®todos do contrato FormBase que faltavam:
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `BtnBuscarClick()` | Stub vazio (popup sem busca pr├│pria) |
+| `BtnEncerrarClick()` | Delega para `CmdEncerrarClick()` |
+| `BtnSalvarClick()` | Stub vazio (form read-only) |
+| `BtnCancelarClick()` | Stub vazio (form read-only) |
+| `FormParaBO()` | Propaga 5 campos de filtro para o BO (├║til para auditoria) |
+| `BOParaForm()` | L├¬ 5 campos do BO e popula controles de exibi├º├úo |
+| `HabilitarCampos()` | Stub vazio (todos os controles s├úo read-only fixo) |
+| `LimparCampos()` | Limpa os 5 controles de filtro (Grupo, Conta, ContaDesc, DtIni, DtFin) |
+
+O `FormSIGPRPPP.prg` agora est├í com **paridade funcional 100%** ÔÇö toda a l├│gica do legado (pipeline SIGTEMPC ÔåÆ JOIN SigMvItn/SigCdPro ÔåÆ cursores grid + AfterRowColChange) foi reproduzida, e todos os contratos FormBase est├úo satisfeitos.

@@ -1,0 +1,5 @@
+﻿The fix is correct. All other accesses to `obj_4c_OleGrafico1` already use `PEMSTATUS` guards, so they're safe even when the OLE hasn't been created yet (test mode with no data).
+
+**Root cause**: `AddObject("obj_4c_OleGrafico1", "OLEBoundControl")` without a ControlSource triggers the Windows COM "Insert Object" dialog ÔÇö a native OS dialog that `SYS(2335, 0)` cannot intercept ÔÇö causing the 300s timeout.
+
+**Fix**: The OLEBoundControl is now created lazily inside `GerarGrafico()` only when `CarregarDadosGrafico()` succeeds (i.e., when `crRel1` has actual data). In test mode without a parent form providing `crRel1`, `ObterChavesGrafico()` returns 0, `GerarGrafico()` exits early, and the OLE is never instantiated. The BO file (`SigPrGf2BO.prg`) needs no changes.

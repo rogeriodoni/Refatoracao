@@ -1,0 +1,10 @@
+﻿Fase 7/8 j├í estava completa (todos os 4 eventos existiam no arquivo). Conclu├¡ a **Fase 8/8 ÔÇö integra├º├úo**:
+
+**O que foi feito:**
+- `DEFINE BAR 26 OF popCadastros PROMPT "Acessos de JOB"` adicionado ao menu (linha 87)
+- `ON SELECTION BAR 26 OF popCadastros DO AbrirFormACJ` vinculado (linha 109)
+- `PROCEDURE AbrirFormACJ()` adicionado no final do menu.prg (linha 5555)
+
+**Observa├º├úo sobre config.prg:** N├úo foi necess├írio alter├í-lo ÔÇö o sistema usa `ADIR()` din├ómico para carregar todos os `*BO.prg` de `app/classes/` e todos os `Form*.prg` de `app/forms/cadastros/`, ent├úo `ACJBO.prg` e `FormACJ.prg` s├úo carregados automaticamente.
+
+A migra├º├úo do FormACJ est├í **100% completa**: o form acess├¡vel via menu Cadastros ÔåÆ "Acessos de JOB".

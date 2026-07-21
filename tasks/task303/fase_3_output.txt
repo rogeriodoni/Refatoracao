@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `Formsigprima.prg` (240 linhas) foi criado em `C:\4c\projeto\app\forms\operacionais\` com:
+
+**Estrutura gerada:**
+- `DEFINE CLASS Formsigprima AS FormBase` ÔÇö form flat (sem PageFrame), Width=800, Height=200, TitleBar=0, ControlBox=.F., DataSession=2
+- `Init(par_cTipo1, par_cPath1)` ÔÇö armazena par├ómetros antes de DODEFAULT, cria sigprimaBO, trata modo autom├ítico ('A') chamando `BO.Processamento()` direto e retornando .F.
+- `InicializarForm()` ÔÇö define Caption via CHR(), configura Picture de background, chama ConfigurarCabecalho + TornarControlesVisiveis
+- `ConfigurarCabecalho()` ÔÇö cria cnt_4c_Sombra (100,100,100) com lbl_4c_LblSombra (preto) e lbl_4c_LblTitulo (branco), AutoSize=.F. + Width=THIS.Width (conforme regra de mem├│ria)
+- `TornarControlesVisiveis()` + `TornarSubControlesVisiveis()` ÔÇö varredura recursiva
+- `Unload()` ÔÇö CLEAR EVENTS em modo autom├ítico
+- `Destroy()` ÔÇö libera BO
+
+**Pr├│ximas fases:**
+- **Fase 4:** `ConfigurarBotoesTopo()` ÔÇö Commandgroup3 (decorativo), cmd_4c_BtnProcessar, cmd_4c_BtnSair
+- **Fases 5-6:** `ConfigurarCampos()` ÔÇö lbl_4c_Label1, txt_4c_Arquivo, cmd_4c_BtnArquivo, `ConfigurarOpcoes()` ÔÇö obj_4c_OptTipo + lbl_4c_Label2
+- **Fases 7-8:** `ConfigurarBINDEVENTs()` + handlers de click/keypress

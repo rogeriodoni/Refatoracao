@@ -1,0 +1,86 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SigTfSup",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "RETURN (lcSenha)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigTfSup",
+      "evento": "Init",
+      "linhas": 4,
+      "codigoOriginal": "PUBLIC lcSenha\n\nThisForm.Container1.Label1.Caption=\"Digite a Senha\"+CHR(13)+\"do Supervisor\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigTfSup.SAIDA",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Senha.Value=\"\"\nRELEASE Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SigTfSup.SENHA",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF nKeyCode = 13\n\tlcSenha=ThisForm.SeNHA.Value\n\tRELEASE Windows\neNDIF",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

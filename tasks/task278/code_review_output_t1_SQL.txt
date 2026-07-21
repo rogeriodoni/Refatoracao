@@ -1,0 +1,15 @@
+﻿An├ílise completa. Os dois flags s├úo **falsos positivos** ÔÇö nenhuma corre├º├úo ├® necess├íria.
+
+## Resultado da An├ílise
+
+### Flag 1: `PKCHAVES`
+- **Onde est├í**: `SigPrEmlBO.prg:1099` ÔåÆ `UPDATE SigAlert SET ... WHERE pkchaves = ...`
+- **Conclus├úo**: `pkchaves` ├® a **PK real** de `sigalert` (schema.sql linha 536: `[pkchaves] [char](20) NOT NULL, CONSTRAINT PRIMARY KEY`). Usar `WHERE pkchaves = ...` num UPDATE ├® o padr├úo correto para identificar o registro a atualizar.
+- N├úo existe nenhum SELECT com WHERE pkchaves ÔÇö apenas o UPDATE, que ├® leg├¡timo.
+
+### Flag 2: `CONTROLCOUNT`
+- **Onde est├í**: `FormSigPrEml.prg:492,498,507,513`
+- **Contexto**: `THIS.ControlCount`, `par_oContainer.ControlCount`, `loc_oControl.ControlCount`
+- **Conclus├úo**: ├ë a **propriedade VFP9** `.ControlCount` de objetos de formul├írio, usada para iterar controles em `TornarControlesVisiveis()` / `RecursarControlesVisiveis()`. N├úo aparece em nenhuma string SQL ou WHERE clause.
+
+Ambos os flags foram gerados pelo analisador ao varrer padr├Áes superficialmente, sem distinguir c├│digo SQL dentro de strings de c├│digo VFP9 nativo. **Nenhuma altera├º├úo ├® necess├íria** ÔÇö o c├│digo est├í correto.

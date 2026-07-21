@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Foram adicionados 10 m├®todos ao `FormSIGPRCPR.prg`:
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `CarregarLista()` | Recarrega TmpBaixa via `BO.CarregarBars()`, faz bind completo do grid com headers, chama `AlternarPagina` |
+| `FormParaBO()` | Copia `txt_4c_Data.Value` ÔåÆ `BO.this_dData` |
+| `BOParaForm()` | Copia `BO.this_dData` ÔåÆ `txt_4c_Data.Value` |
+| `HabilitarCampos(par_lHabilitar)` | Controla `Enabled` do `txt_4c_Leitura` e `Visible` dos bot├Áes Ok/ConferirAuto |
+| `LimparCampos()` | Zera `txt_4c_Leitura.Value = 0` |
+| `AjustarBotoesPorModo()` | Verifica `RECCOUNT("TmpBaixa")` e chama `AlternarPagina` + `HabilitarCampos` |
+| `BtnBuscarClick()` | Delega a `CarregarLista()` |
+| `BtnEncerrarClick()` | Delega a `CmdEncerrarClick()` |
+| `BtnSalvarClick()` | Delega a `CmdOkClick()` (confirma confer├¬ncia) |
+| `BtnCancelarClick()` | Delega a `CmdEncerrarClick()` (sai sem gravar) |
+
+O arquivo `FormSIGPRCPR.prg` est├í completo (898 linhas). Pr├│ximo passo: verificar se o form est├í registrado em `config.prg` e se h├í entrada no `menu.prg` para abri-lo a partir do form pai.

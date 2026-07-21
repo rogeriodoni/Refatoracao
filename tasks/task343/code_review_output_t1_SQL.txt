@@ -1,0 +1,5 @@
+﻿Feito. Resumo das corre├º├Áes:
+
+- **SQL-FILTRO-INVENTADO** (`ACJBO.prg:108-109`): Removido `OR a.Razaos LIKE ...` do filtro din├ómico do m├®todo `Buscar`. O WHERE original filtra apenas por `IClis`; a condi├º├úo por `Razaos` foi inventada pela LLM. O filtro agora usa somente `a.IClis LIKE`.
+
+- **GRID-SQL** (`NComps` em `cursor_4c_AcJ`): Falso positivo ÔÇö `b.NComps` est├í corretamente no SELECT do `CarregarAcessos` via `LEFT JOIN SigCdUsu`, e todos os `CREATE CURSOR cursor_4c_AcJ` no form declaram `NComps C(30)`. Nenhuma altera├º├úo necess├íria.

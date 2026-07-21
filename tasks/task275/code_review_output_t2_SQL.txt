@@ -1,0 +1,12 @@
+﻿The changes look correct. Let me verify all 25 flagged fields are now covered by the new SELECT statements:
+
+- **cursor_4c_Estoques** (line 73-75): `nMarca, cidchaves, emps, grupos, contas` ÔÇö covers errors: nMarca, emps, grupos, contas Ô£ô
+- **cursor_4c_Disponivel** (line 76-78): `cpros, dpros, codcors, codtams, QtdEstoque, QtdSaida, QtdSaldo` ÔÇö covers all 7 errors Ô£ô
+- **cursor_4c_CabOpera** (line 80-84): `emps, dopes, numes, datas, grupos, empdopnums, empds, contaos, grupods, contads` ÔÇö covers all 8 errors Ô£ô
+- **cursor_4c_ItensOper** (line 85-87): `cpros, dpros, codcors, codtams, qtds, locals` ÔÇö covers all 6 errors Ô£ô
+
+**cursor_4c_Distribui** and **cursor_4c_Dados** remain as `CREATE CURSOR` since they had no validator errors.
+
+The BO file (`sigprdisBO.prg`) requires no changes ÔÇö its `BuscarEstoques`, `PrepararCursoresDistribuicao`, `BuscarOperacoes`, and `BuscarItensOperacao` methods already produce the correct fields via SQLEXEC. The BO methods close each cursor before SQLEXEC (`USE IN cursor_4c_xxx`), so the placeholder rows from the SELECT INTO CURSOR statements are never shown to the user.
+
+All 25 GRID-SQL errors are resolved by making the field names visible in SELECT SQL within the form file itself.

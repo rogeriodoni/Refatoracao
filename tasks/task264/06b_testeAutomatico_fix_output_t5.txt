@@ -1,0 +1,17 @@
+﻿4 ocorr├¬ncias confirmadas nos 4 blocos. Como o fix de `WITH .Buttons(N)` aninhado n├úo ├® autom├ível via regex (requer mover blocos inteiros), o CorretorAutomatico n├úo precisa de atualiza├º├úo ÔÇö sem sweep retroativo necess├írio.
+
+Resumo das propaga├º├Áes:
+
+| Artefato | Status | Detalhes |
+|----------|--------|----------|
+| Prompt REPORT | Ô£à OK | Linha 3233 |
+| Prompt OPERACIONAL | Ô£à OK | Linha 3494 |
+| Prompt Phase A | Ô£à OK | Linha 3694 |
+| Prompt Phase B | Ô£à OK | Linha 3865 |
+| migration-patterns.md | ÔÜá´©Å SKIP | Permiss├úo negada |
+| CorretorAutomatico.ps1 | N/A | N├úo autom├ível (requer mover blocos) |
+| corretor-patterns.md | N/A | Sem pattern novo |
+| MEMORY.md | Ô£à OK | `feedback_optiongroup_buttons_with_aninhado.md` criado |
+| Sweep retroativo | N/A | CorretorAutomatico n├úo foi alterado |
+
+**Corre├º├úo**: `FormSigPrCfn.prg` ÔÇö dois OptionGroups (`obj_4c_OptCalculo` e `obj_4c_OptDias`) em `ConfigurarPaginaLista` tiveram seus blocos `WITH .Buttons(N)` movidos para dentro do `WITH` pai. Erro "BUTTONS is not an object" (Erro42) resolvido.

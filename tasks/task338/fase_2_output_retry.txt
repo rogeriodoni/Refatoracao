@@ -1,0 +1,8 @@
+﻿The file is properly updated. Fase 2 completa: adicionei os tr├¬s m├®todos CRUD ao `SIGPRTFHBO.prg`:
+
+- **`ObterChavePrimaria()`** ÔÇö atualizada para retornar `this_nIdent` como chave sint├®tica (havia retornado `""` sempre, o que impediria `RegistrarAuditoria()` de gravar).
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todas as 22 propriedades do BO a partir de campos opcionais do cursor, usando `TYPE()`-guard + `TratarNulo()` (padr├úo VFP9 do projeto).
+- **`Inserir()`** ÔÇö valida par├ómetros m├¡nimos (IP/POS/Ident/Valor), dispara `ExecutarConsulta()` (loop SiTef), e ao sucesso emite `MontaRetorno()` + `RegistrarAuditoria("CONSULTA_CHEQUE")`; ao falhar emite `RetornoFalha()`.
+- **`Atualizar()`** ÔÇö reexecuta a consulta SiTef mantendo o mesmo `Ident` (reprocessamento), com a mesma cadeia de auditoria/retorno usando `"REPROCESSA_CHEQUE"`.
+
+Todos os m├®todos usam `TRY/CATCH` com `MensagemErro`, seguem as regras VFP9 (acentos via `CHR()`, sem `RETURN` dentro de `TRY`), e reutilizam `RetornoFalha`/`MontaRetorno`/`ExecutarConsulta` j├í implementados na Fase 1.

@@ -1,0 +1,310 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "Form SigOpDen With Substr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRITE",
+      "evento": "Procedure",
+      "linhas": 89,
+      "codigoOriginal": "With ThisForm\n\tWith .grdItens\n\t\t.ColumnCount \t   = 11\n\t\t.RecordSource \t   = 'crGrade'\n\t\t.DeleteMark \t   = .f.\n\t\t.RecordMark \t   = .f.\n\t\t.ReadOnly \t\t   = .t.\n\t\t.Scrollbars \t   = 2\n\t\t.AllowHeaderSizing = .f.\n\t\t.AllowRowSizing    = .f.\n\n\t\t.Column1.ControlSource  = 'crGrade.CItens'\n\t\t.Column1.InputMask \t    = '999999'\n\t\t.Column2.ControlSource  = 'crGrade.CPros'\n\t\t.Column3.ControlSource  = 'crGrade.CUnis'\n\t\t.Column4.ControlSource  = 'crGrade.Volumes'\n\t\t.Column4.InputMask \t    = '999'\n\t\t.Column5.Contr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE",
+      "evento": "Procedure",
+      "linhas": 42,
+      "codigoOriginal": "Local lcQuery\nZap In crGrade\nZap In crRodape\n\nlcQuery = [Select a.CItens, a.CPros, a.DPros, a.Obs, a.CUnis, c.Volumes, a.Opers, a.Qtds as QtdOs, ] + ;\n\t\t\t\t [a.QtBaixas as QtdBs, a.Qtds - a.QtBaixas as QtdSs, a.Units, a.Moedas as CMoes, a.Totas ] + ;\n\t\t    [From SigMvItn a, SigCdOpe b, SigCdPro c ] + ;\n\t\t   [Where a.EmpDopNums = '] + ThisForm.EmpDopNum + [' And ] + ;\n\t\t   \t\t [a.Dopes = b.Dopes And ] + ;\n\t\t   \t\t [a.CPros = c.CPros ] + ;\n\t\t   [Order By a.CItens, a.CPros]\n\nIf (ThisForm.poDataMgr.Sql... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "LParameters pEmp, pDop, pNum, pDis, pCnx\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', Alltrim(Iif(Type('pCnx')='C', pCnx, .Name)))\n\t.Icon = '\\vbmp\\4Control1.ico'\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.LockScreen = .t.\n\n\t\tIf pDis\n\t\t\t.loNegocios = CreateObject('ClassAgen', ThisForm)\n\t\tEndIf\n\n\t\t.Caption = Alltrim(pEmp) + [ - ] + Alltrim(pDop) + [ - ] + Alltrim(Str(pNum, 6)) + ' - Itens'\n\n\t\t.Arquivo = Sys(2023) + [\\] + Sys(2015) + [.Jpg]\n\n\t\t.EmpDopNum = Padr(pEmp, 3) + Padr(pDop, 20) + Str(p... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRITE",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crGrade (CItens n(10), CPros c(14), DPros c(40), Obs m(4), CUnis c(3), Volumes n(3), ;\n\t\t\t\t\t   Opers c(1), QtdOs n(10,3), QtdBs n(10,3), QtdSs n(10,3), Units n(12,2), ;\n\t\t\t\t\t   CMoes c(3), Totas n(12,2), Disps n(10,3))\n\nCreate Cursor crRodape (CPros c(14), Volumes n(3), QtdOs n(10,3), QtdBs n(10,3), QtdSs n(10,3), ;\n\t\t\t\t\t\tCMoes c(3), Totas n(12,2))\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdCabec.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grdItens.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdCabec.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdCabec.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = This.Tag",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdItens",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "LParameters nColIndex\n\nThisForm.LockScreen = .t.\n\nLocal lcArq\n\nlcArq = ThisForm.Arquivo\n\nThisForm.FigJpg.Visible = .f.\nThisForm.FigJpg.Picture = ''\n\nSelect crGrade\nIf (crSigCdOpe.Imagems = 1) And Not Eof('crGrade') And Not Empty(crGrade.Cpros) \n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', crGrade.CPros, 'FigJpgs')\n\tIf Not Empty(LocalPro.FigJpgs) And Not IsNull(LocalPro.FigJpgs)\n\t\tClear Resources\n\t\tlcFoto=Strconv(Strtran(Strtran(Strtran(LocalPro.FigJpgs,[data:image/png;base64,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Picture =",
+        "controlesReferenciados": "Get_Obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdItens.Column2.Text1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf IsNull(ThisForm.poObjExt1)\n\t\tDo Form SIGOPCGP.Scx Name ThisForm.poObjExt1 Linked With [SIGOPCGP] NoShow\n\tEndIf\n\n\tIf (Type([ThisForm.poObjExt1])=[O])\n\t\tWith ThisForm.poObjExt1\n\t\t\t.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()\n\t\t\t.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 10)\n\t\t\t.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 10)\n\t\t\t.fld_principal.Pag_Consulta.grp_opera... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_produto_inicial,get_produto_final,cmd_consulta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRITE.Get_obs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdRodape.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grdItens.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdRodape.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.grdRodape.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = This.Tag",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.btnSubniveis",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "With ThisForm\n\tDo Form SigMvMvt With .f., Substr(.EmpDopNum, 1, 3), Substr(.EmpDopNum, 4, 20), Int(Val(Substr(.EmpDopNum, 24, 6)))\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.btnEntrega",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "With ThisForm\n\tDo Form SigOpDen With Substr(.EmpDopNum, 1, 3), Substr(.EmpDopNum, 4, 20), Int(Val(Substr(.EmpDopNum, 24, 6)))\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Form SigOpDen With Substr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRITE.cmdsair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

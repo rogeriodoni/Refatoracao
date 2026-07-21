@@ -1,0 +1,19 @@
+﻿`cidchaves` est├í confirmado no schema. Deixa eu ver a defini├º├úo completa da tabela.
+
+A tabela `sigscjim` no schema.sql (linha 19066) tem exatamente:
+- `cidchaves char(20) NOT NULL` ÔÇö **PRIMARY KEY** (`CONSTRAINT [sigscjim_cidchaves] PRIMARY KEY CLUSTERED`)
+- `cpros char(14)`
+- `idimagem numeric(38,0)`
+- `refforref char(50)`
+- `imagem text`
+
+A coluna `cidchaves` **existe de facto** na tabela como chave prim├íria. A condi├º├úo `WHERE cidchaves = ...` no m├®todo `Atualizar()` ├® o padr├úo correto para update por PK no novo sistema.
+
+O flag **[SQL-FILTRO-INVENTADO]** ├® um **falso positivo** neste caso. Explica├º├úo:
+
+- O c├│digo original usava `poDataMgr.Update([crSigScjIm])` ÔÇö um m├®todo do framework legado que **internamente** gera `WHERE cidchaves = <valor>` com base na PK da tabela.
+- A ferramenta de review compara os WHERE expl├¡citos vis├¡veis no c├│digo legado (LNIMG, IDIMAGEM, CPROS, etc.) mas n├úo enxerga o WHERE impl├¡cito dentro do `poDataMgr.Update()`.
+- No c├│digo migrado, o `Atualizar()` faz a mesma coisa de forma expl├¡cita: `WHERE cidchaves = EscaparSQL(THIS.this_cCidchaves)`.
+- Alterar ou remover este WHERE quebraria o UPDATE (atualizaria TODOS os registros da tabela).
+
+**Nenhuma corre├º├úo ├® necess├íria.** O arquivo `sigprimaBO.prg` est├í correto. O ├║nico WHERE com `cidchaves` ├® o do m├®todo `Atualizar()`, que ├® exatamente o padr├úo can├┤nico do sistema para update por chave prim├íria.

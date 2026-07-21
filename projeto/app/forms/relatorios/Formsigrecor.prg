@@ -877,7 +877,9 @@ DEFINE CLASS Formsigrecor AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnVisualizarClick")
@@ -892,7 +894,9 @@ DEFINE CLASS Formsigrecor AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnImprimirClick")
@@ -918,7 +922,9 @@ DEFINE CLASS Formsigrecor AS FormBase
                     MsgAviso("Nenhum dado para exportar.", "Excel")
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnExcelClick")

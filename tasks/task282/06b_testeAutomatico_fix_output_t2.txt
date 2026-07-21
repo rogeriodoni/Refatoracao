@@ -1,0 +1,8 @@
+﻿4 corre├º├Áes aplicadas:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `CarregarLista`: nenhum cursor criado | Em modo UI-validation sem `csTemporario`, nenhum cursor era criado | Cria `cursor_4c_Lista` vazio quando `gb_4c_ValidandoUI=.T.` |
+| `ModoIncluir`: Property ALTERNARPAGINA not found (linha 412) | M├®todo `AlternarPagina` era `PROTECTED` ÔÇö inacess├¡vel externamente | Removido `PROTECTED` |
+| `ModoVisualizar`: Property AJUSTARBOTOESPORMODO not found (linha 542) | M├®todo `AjustarBotoesPorModo` era `PROTECTED` | Removido `PROTECTED` |
+| `BtnIncluirNavegacao`: ActivePage=1 em vez de 2 | `BtnIncluirClick` chamava `AlternarPagina(1)` | Alterado para `AlternarPagina(2)` |

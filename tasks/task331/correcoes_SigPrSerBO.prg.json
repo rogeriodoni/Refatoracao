@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPrSerBO.prg",
+    "timestamp":  "2026-07-18T16:48:22",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  261,
+                          "Original":  "THIS.this_lRetrabs = (NVL(Retrabs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Retrabs)=\"L\" / THIS.this_lRetrabs = ... / ELSE / THIS.this_lRetrabs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

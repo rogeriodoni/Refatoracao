@@ -1,0 +1,5 @@
+﻿**Falso positivo do revisor.** `Controls(N)` ├® uma **collection built-in do VFP9**, n├úo um m├®todo definido pelo usu├írio. Em VFP9, todo objeto container (Form, Container, Page, PageFrame) exp├Áe a collection `Controls` acess├¡vel via ├¡ndice: `object.Controls(N)`. ├ë o mecanismo padr├úo para iterar controles filhos, equivalente ao loop `FOR loc_i = 1 TO THIS.ControlCount`.
+
+O c├│digo em `TornarControlesVisiveis` (linha 561) e `TornarSubControlesVisiveis` (linha 577) usa `THIS.Controls(loc_i)` e `par_oContainer.Controls(loc_i)` corretamente ÔÇö ├® sintaxe VFP9 v├ílida, n├úo um m├®todo inventado.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormSigPrMlu.prg` est├í correto para este ponto de verifica├º├úo. O revisor confundiu acesso ├á collection built-in `Controls(N)` com chamada de m├®todo.

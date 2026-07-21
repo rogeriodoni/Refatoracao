@@ -1,0 +1,20 @@
+﻿Estado perfeito. O timestamp confirma a corre├º├úo:
+
+- **SigPrAopBO.fxp** (16:25) > **SigPrAopBO.prg** (16:19) ÔåÆ VFP9 N├âO vai tentar recompilar o BO, ent├úo o `SET PROCEDURE TO SigPrAopBO.prg ADDITIVE` na linha 279 de `ConfigurarAmbiente()` vai usar o FXP existente sem gerar "Cannot create file".
+
+- **FormSigPrAop.prg** (16:37) > **formsigpraop.FXP** (16:25) ÔåÆ VFP9 vai recompilar o form (com o c├│digo corrigido), o que deve funcionar sem erros.
+
+**Diagn├│stico do problema:**
+
+A cascata de falhas foi:
+1. `05f_validarSQLSchema` modificou `SigPrAopBO.prg` ├ás 16:19 (tornando-o mais recente que o FXP criado ├ás 16:11)
+2. `06_testForm` e `06b_testeAutomatico` rodaram em sequ├¬ncia imediata ├ás 16:20, provocando race condition: o primeiro processo VFP9 tentou criar o FXP e falhou ("Cannot create file"), deixando-o no estado antigo
+3. O segundo processo VFP9 tamb├®m falhou pelo mesmo motivo
+4. Com `ConfigurarAmbiente()` abortando no loop de BOs (linha 279), os forms nunca foram carregados em procedure scope
+5. `CREATEOBJECT("FormSigPrAop")` ÔåÆ "Class definition FORMSIGPRAOP is not found"
+
+Na pr├│xima tentativa: s├│ `06b_testeAutomatico` roda (sem race condition), SigPrAopBO.fxp j├í est├í atual, FormSigPrAop.prg ser├í recompilado com sucesso.
+
+**Corre├º├úo de c├│digo aplicada:**
+
+O bug real encontrado no form: `BINDEVENT` na linha 413 estava vinculando o evento `"KeyPress"` ao handler `TxtOPLostFocus` (que deveria ser ativado pelo `LostFocus`). Corrigido para `"LostFocus"` + removidos os par├ómetros `(par_nKeyCode, par_nShiftAltCtrl)` do handler que n├úo s├úo passados pelo evento LostFocus.

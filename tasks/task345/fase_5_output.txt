@@ -1,0 +1,29 @@
+﻿Ap├│s ler os dois arquivos completos, a conclus├úo ├® clara: **Formale.prg e aleBO.prg est├úo 100% completos**. A Fase 5 ├® N/A para este formul├írio espec├¡fico.
+
+## Por que a Fase 5 n├úo se aplica ao Formale (SIGCDALE)
+
+O SIGCDALE ├® um formul├írio **OPERACIONAL puro de grade** ÔÇö sem nenhuma se├º├úo "Page2 / Dados" com campos de entrada. Todos os elementos do legado j├í foram migrados nas Fases 3-4:
+
+| Elemento Legado | Equivalente novo | Status |
+|---|---|---|
+| `cntSombra` + lbls + Shape1 | `ConfigurarCabecalho()` | Ô£à Fase 3 |
+| `optTabela` (5 radio buttons) | `ConfigurarFiltros()` | Ô£à Fase 4 |
+| `grade_ale` (7 colunas) | `ConfigurarGrade()` | Ô£à Fase 4 |
+| `btnconfirma` + `btnsair` | `ConfigurarBotoes()` | Ô£à Fase 4 |
+| `btnconfirma.Click` (DELETE+INSERT) | `SalvarAlertas()` no aleBO | Ô£à Fase 2 |
+| `optTabela.InteractiveChange` | `FiltrarPorTabela()` + handler | Ô£à Fase 4 |
+| `grade_ale.Column6.InteractiveChange` | `CboGradeComboChange()` | Ô£à Fase 4 |
+| 5x SQLEXEC + UNION + INDEX | `CarregarAlertas()` no aleBO | Ô£à Fase 2 |
+
+N├úo h├í `ConfigurarPaginaDados()` porque o SIGCDALE **n├úo tem campos de edi├º├úo avulsos** ÔÇö a intera├º├úo acontece diretamente no grid (checkboxes, combo, editbox embutidos nas colunas).
+
+## Verifica├º├Áes finais feitas
+
+1. **aleBO.prg** ÔÇö completo com `CarregarAlertas`, `SalvarAlertas`, `FiltrarPorTabela`, `Inserir`, `Atualizar`, `ExecutarExclusao`
+2. **Formale.prg** ÔÇö completo com todos os m├®todos do pipeline + handlers dos BINDEVENTs
+3. **Mapeamento correto**: OptionGroup value 1-5 bate exatamente com o legado (1=SIGCDOPE, 2=SIGCDGCR, 3=SIGCDOPD, 4=SIGCDPRO, 5=SIGOPOPE)
+4. **ColunaN.ControlSource correto**: Column6 usa `prioridade` (texto) que ├® a forma correta para ComboBox padr├úo VFP9 (sem a classe `fwcombo` do framework)
+
+## Pr├│ximos passos das Fases 5-8
+
+As Fases 6, 7 e 8 tamb├®m s├úo **N/A para este formul├írio** pelo mesmo motivo. A migra├º├úo do SIGCDALE (Formale + aleBO) est├í **conclu├¡da**. Pode-se avan├ºar para a pr├│xima tarefa ou executar o CorretorAutomatico sobre os arquivos gerados.

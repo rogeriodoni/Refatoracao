@@ -1,0 +1,9 @@
+﻿Feito. Adicionados 3 m├®todos ao `sigprpdfBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia as 5 colunas de email (`PadEmails`, `PadServs`, `PadSenhas`, `pastas`, `PadPortas`) do cursor `cursor_4c_EmailEmp` / `TmpEmpMail` para as propriedades `this_*`. Usa padr├úo correto `SELECT (par_cAliasCursor)` antes de acessar campos.
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (form auxiliar sem tabela de CRUD).
+
+- **`ValidarDados()`** (PROTECTED) ÔÇö delega para `ValidarParaSalvar()`, mantendo compatibilidade com o fluxo `BusinessBase.Salvar()` caso seja chamado.
+
+O BO continua OPERACIONAL ÔÇö sem `Inserir()`, `Atualizar()` ou `ExecutarExclusao()` porque n├úo h├í tabela destino. Toda a l├│gica de neg├│cio relevante (email, extens├úo, pasta, valida├º├Áes) j├í estava completa na Fase 1.

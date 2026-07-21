@@ -1,0 +1,12 @@
+﻿Analisei o arquivo real em ambos os locais relevantes. O c├│digo atual j├í est├í correto:
+
+**Problema 1 [CONTAINER-VISIVEL]**: O `CNT_4C_SOMBRA` j├í est├í na INLIST do TCV (linha 655). O container ├® explicitamente definido como `Visible = .T.` em `ConfigurarCabecalho` (linha 141) antes do TCV ser chamado (linha 87). O TCV respeita essa defini├º├úo ÔÇö ao encontrar `CNT_4C_SOMBRA` no INLIST, recursa nos filhos sem sobrescrever o `.Visible` do container pai. Comportamento correto.
+
+**Problema 2 [LAYOUT-POSITION]**: `obj_4c_OptArquivo.Left = 420` (linha 197) j├í bate com o original (`optArquivo.Left=420`). O `Left=5` apontado pelo reviewer ├® o `Buttons(1).Left = 5` (linha 209) ÔÇö posi├º├úo relativa do bot├úo dentro do OptionGroup, n├úo do OptionGroup no form. Nenhuma diverg├¬ncia real.
+
+Ambos os problemas detectados pelo pass automatizado s├úo **falsos positivos** no estado atual do c├│digo ÔÇö o arquivo j├í cont├®m as corre├º├Áes corretas:
+
+- `TornarControlesVisiveis` filtra `CNT_4C_SOMBRA` no INLIST (linha 655) com recurs├úo nos filhos antes do LOOP (padr├úo correto conforme feedback `tcv_skip_recursao`)
+- `obj_4c_OptArquivo.Left = 420` (linha 197) ├® id├¬ntico ao original SCX
+
+Nenhuma altera├º├úo funcional ├® necess├íria. O c├│digo est├í correto e n├úo h├í regress├Áes a corrigir neste pass.

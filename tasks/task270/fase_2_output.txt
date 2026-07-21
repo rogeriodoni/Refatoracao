@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Vou fazer um resumo r├ípido do que foi adicionado:
+
+**Fase 2/8 conclu├¡da.** Foram adicionados 4 m├®todos ao `sigprcpdBO.prg`:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `TRANSFORM(this_nCodigo)` |
+| `CarregarDoCursor(alias)` | Mapeia `codigos` do cursor para `this_nCodigo` |
+| `CarregarDados(nCod, cFase, cUnid, dData)` | 6 passos sequenciais com `loc_lCont` flag (sem RETURN dentro do TRY): (1) SigCdPcz, (2) SigCdPcP agregado + popula `this_n*`, (3) SigCdPcg, (4) SigCdPco JOIN SigCdCli, (5) SELECT VFP local agrupado por envelope/seq ÔåÆ `cursor_4c_GrupoOp`, (6) SELECT VFP local final com `TempoReal` ÔåÆ `cursor_4c_Dados` |
+| `CarregarFotoProduto(cCpros)` | SQLEXEC em SigCdPro, decodifica base64 ÔåÆ arquivo JPEG temp, popula `this_cDescricaoProduto` e `this_cFotoArquivo` |
+
+**Pontos t├®cnicos respeitados:**
+- `fStoM()` n├úo existe no novo sistema ÔåÆ substitu├¡da por `IIF(c.Minutos = 0, 0, (a.minutos*60)/(c.Minutos*60)*(b.Minutos*60))` (f├│rmula proporcional do original)
+- Filtro de unidade produtiva opcional implementado em duas variantes (`loc_cFiltro` sem alias e `loc_cFiltroA` com `a.` para o JOIN)
+- Cursores fechados antes de recriar (`USE IN ...`)
+- Pattern `loc_lCont` para encadeamento sem RETURN dentro de TRY

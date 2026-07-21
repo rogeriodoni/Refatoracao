@@ -1,0 +1,12 @@
+﻿Phase 9 is complete. Here's a summary of what was done:
+
+**Already implemented (from prior session):**
+- `ConfigurarPaginaDadosDetalhe()` at line 2472 ÔÇö all 27 top-level controls from legacy `Page2`: Shape5, FigJpg, Sistema/Arquivo textboxes, product search label + field, `grd_4c_Disponivel` (7 cols), `grd_4c_ItemXml` (4 cols), two delete buttons, and all product detail fields/labels
+- Handlers: `GrdDisponivelAfterRowColChange`, `BtnExcluirSisClick`, `BtnExcluirArqClick`, `TxtProdutoInicialLostFocus`, `PgfDadosPage2Activate`
+- Call in `ConfigurarPaginaDados()` at line 439 (before `TornarControlesVisiveis`)
+
+**Added now (two missing DblClick handlers):**
+- `BINDEVENT(img_4c_FigJpg, "DblClick", ..., "ImgFigJpgDblClick")` at line 2491
+- `BINDEVENT(grd_4c_Disponivel, "DblClick", ..., "GrdDisponivelDblClick")` at line 2614
+- `ImgFigJpgDblClick()` (line 3099): re-fetches `FigJpgs` from `SigCdPro`, writes to temp, tries to open `FormSigOpZom` and falls back to `ShellExecute` if unavailable
+- `GrdDisponivelDblClick()` (line 3156): guards to Column 1 only, tries to open `FormSigOpCgp`, falls back to `MsgInfo` with product code/description

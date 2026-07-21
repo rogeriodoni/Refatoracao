@@ -313,7 +313,7 @@ DEFINE CLASS Formsigrecgr AS FormBase
                 .Left            = 155
                 .Width           = 75
                 .Height          = 70
-                .Caption         = "Doc. Excel"
+                .Caption         = "\<Arquivos Email"
                 .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
                 .FontName        = "Comic Sans MS"
                 .FontBold        = .T.

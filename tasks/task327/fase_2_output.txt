@@ -1,0 +1,17 @@
+﻿Fase 2 conclu├¡da. O `SigPrRssBO.prg` foi completado com os seguintes m├®todos adicionados:
+
+**M├®todos CRUD (requisito da Fase 2):**
+- `ObterChavePrimaria()` ÔÇö corrigido para retornar `this_cCidChaves` (valor, n├úo nome do campo)
+- `CarregarDoCursor()` ÔÇö mapeia todas as 8 colunas de SigPrSlS/SigOpCls
+- `ValidarDados()` ÔÇö valida CidChaves obrigat├│rio
+- `Inserir()` ÔÇö INSERT completo em SigPrSlS + `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE completo em SigPrSlS + `RegistrarAuditoria("UPDATE")`
+
+**M├®todos de processamento OPERACIONAL (paridade 100% com o legado):**
+- `BuscarPendentes(cUsuario, lOnline)` ÔÇö consulta SigOpCls com os mesmos filtros do legado, popula `CrSigOpCls`
+- `MarcarProcessando(cCidChaves)` ÔÇö `UPDATE SigOpCls SET Usuars = Usuars` (lock otimista)
+- `VerificarMovimentos(cGruConMoes)` ÔÇö verifica SigMvSlc ÔåÆ SigMvCcr (mesma l├│gica do legado)
+- `GravarHistorico(...)` ÔÇö INSERT em SigPrSlS (equivale ao SCATTER/ZAP/GATHER do legado)
+- `DeletarDaFila(cCidChaves)` ÔÇö DELETE FROM SigOpCls ap├│s processar
+- `RecalcularSaldo(...)` ÔÇö encapsula `fRecalculaS(Grupos, Contas, Datas, Moedas, gnConnHandle)`
+- `FinalizarRecalculo()` ÔÇö encapsula `fRecalculaS(.T., gnConnHandle, .T., .F., .F., .T.)`

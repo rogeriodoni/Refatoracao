@@ -1,0 +1,11 @@
+﻿O form e BO j├í est├úo registrados no menu.prg. Como o config.prg usa ADIR() para auto-carregar `*BO.prg` e `Form*.prg`, n├úo ├® necess├írio registro manual.
+
+**A Fase 8/8 j├í est├í completa.** O arquivo `FormSigPrGlo.prg` foi totalmente implementado nas fases anteriores e cont├®m todos os m├®todos necess├írios:
+
+- `FormParaBO()` / `BOParaForm()` ÔÇö completos com todos os 15 campos
+- `LimparCampos()` ÔÇö limpa todos os campos de filtro
+- `CarregarLista()` ÔÇö compatibilidade com FormBase, chama `PopularCamposIniciais()`
+- `AjustarBotoesPorModo()` ÔÇö delega para `AlternarPagina("ENTRADA")`
+- `BtnEncerrarClick()`, `BtnBuscarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö stubs de compatibilidade com FormBase
+
+O `SigPrGloBO.prg` tamb├®m est├í completo com todas as propriedades referenciadas no form declaradas (linhas 59ÔÇô104) e o m├®todo `ProcessarOP()` com a l├│gica completa do legado (scan de opera├º├Áes, busca em SigMvCab/SigMvItn/SigMvIts, cria├º├úo dos cursores de sa├¡da para FormSigPrGl2).

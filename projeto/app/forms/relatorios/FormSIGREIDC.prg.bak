@@ -73,7 +73,9 @@ DEFINE CLASS FormSIGREIDC AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarFiltros()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -682,11 +684,15 @@ DEFINE CLASS FormSIGREIDC AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReIdc", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
@@ -706,11 +712,15 @@ DEFINE CLASS FormSIGREIDC AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReIdc", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
@@ -730,11 +740,15 @@ DEFINE CLASS FormSIGREIDC AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             IF !USED("cIde") OR RECCOUNT("cIde") = 0

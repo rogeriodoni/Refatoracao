@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrChrBO.prg` criado com:
+
+**Propriedades declaradas (54 no total):**
+- `this_cTabela` / `this_cCampoChave` ÔÇö identifica├º├úo da tabela principal (`SigCqChi`, PK `cidchaves`)
+- `this_cCursor*` (3) ÔÇö nomes dos cursores: cheques, contas, modelos de impressora
+- Filtros de consulta (6): `this_cCdGrupos`, `this_cCdContas`, `this_dDtInicial`, `this_dDtFinal` + descriptions
+- Change-detection (6): `this_cAntCd*`, `this_cAntDs*`, `this_dAntDt*`
+- Dados do cheque corrente (17): mapeamento exato das colunas do cursor `csSigCqChi` do original ÔÇö incluindo `this_nNemitidos`/`this_nNcancelas` como num├®ricos (computados via `IIF(Emitidos,1,0)`)
+- Permiss├Áes (2): `this_lExcluirDocumento`, `this_lExcluirCheque` ÔÇö carregadas no form
+- Estado operacional (6): `this_lInicial`, `this_lPlInicio`, `this_lChMatIni`, `this_lPlLeCheque`, `this_cPcChqLido`, `this_lPlLeitor` ÔÇö espelham as custom props do form legado
+
+**Init():** define tabela/chave, inicializa datas com `DATE()`, chama `DODEFAULT()`.

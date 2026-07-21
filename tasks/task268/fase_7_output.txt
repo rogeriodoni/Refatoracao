@@ -1,0 +1,22 @@
+﻿O arquivo j├í est├í completo. Todos os 4 eventos da Fase 7/8 j├í estavam implementados de fases anteriores:
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `BtnIncluirClick()` | 1409 | Ô£ô Implementado |
+| `BtnVisualizarClick()` | 1423 | Ô£ô Implementado |
+| `BtnAlterarClick()` | 1453 | Ô£ô Implementado |
+| `BtnExcluirClick()` | 1483 | Ô£ô Implementado |
+
+O arquivo `Formsigprcom.prg` est├í **completo** (2330 linhas, ENDDEFINE na linha 2330), incluindo:
+- Todos os 4 eventos CRUD principais
+- `BtnSalvarClick` / `BtnCancelarClick`
+- `CarregarInfoProduto` / `CarregarGradeMaximos`
+- Lookups via F4 para produto, tamanho, cor e departamento
+- Painel de c├│pia entre empresas com 6 m├®todos
+- `GradeIAfterRowColChange`, `QmaxsLostFocus`, `BtnExcluirGradeClick`
+
+**Aten├º├úo:** Notei uma poss├¡vel inconsist├¬ncia nos lookups de tamanho/cor que vale verificar em teste:
+- `AbrirLookupTamanho()` (linha 2138) usa campo `"ctams"` ÔÇö o original usa `'cods'` (de `CrTamanhos.cods`)
+- `AbrirLookupCor()` (linha 2191) usa campo `"ccors"` ÔÇö o original usa `'cods'` (de `CrCores.cods`)
+
+Se esses campos n├úo existirem no schema de `SigCdTam`/`SigCdCor`, os lookups falhar├úo em runtime. Recomendo validar contra `docs/schema.sql` antes de testar.

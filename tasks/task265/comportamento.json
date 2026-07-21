@@ -1,0 +1,950 @@
+{
+  "resumo": {
+    "totalMetodos": 55,
+    "metodosComSQL": 12,
+    "metodosComValidacao": 20,
+    "totalQueries": 7,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fChecaAcesso", "Form SigCdPgr With Left", "fwBuscaInt", "Found", "fGravarLog", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCHR",
+      "evento": "Procedure",
+      "linhas": 84,
+      "codigoOriginal": "Create Cursor TmpConta (grupos c(10),contas c(10),flag l,valos n(12,2),acerto n(12,2),moedas c(3),datas d,vencs d,;\n\t\t\t\t\t\thists c(50),nomes c(50),emps c(3),nopers n(9),dopes c(20),numes n(6),tipos c(1),fpags c(12),;\n\t\t\t\t\t\topers c(1),baixa n(12,2),baixaaut n(12,2),cotacaos n(12,4),grupocs c(10),contacs c(10),;\n\t\t\t\t\t\tcotorigs n(12,4),moedacs c(3),cotacaocs n(12,4),valocs n(12,2),empos c(3), OrdCopChs n(3))\n\n_Chave = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)\n\nIf Used('TmpPrIt')\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "LParameters llSeek\n\nThisForm.LockScreen = .T.\nllSeek = Iif(Type('llSeek') = 'L',llSeek,.F.)\nIf Used('CsSigCqChi')\n\tUpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1\nEndIf\n\nIf Empty(ThisForm.getCdContas.Value)\n\tSelect CsSigCqChi\n\tSet Order To NCopias\n\tIf llSeek\n\t\tSeek Chr(255) In CsSigCqChi Order NCopias Ascending\n\tEndIf\nElse\n\tSelect CsSigCqChi\n\tSet Order To contas\n\tSet Key To ThisForm.getCdContas.Value\n\tIf llSeek\n\t\tSeek ThisForm.getCdContas.Value + Chr(255) In CsSigCqChi Order contas Ascendi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value + Chr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR",
+      "evento": "Procedure",
+      "linhas": 109,
+      "codigoOriginal": "Lparameters llPosiciona\n\nPrivate lcDtInicial, lcDtFinal\n\nThisForm.LockScreen = .T.\n\nIf llPosiciona\n\tlcBusca = csSigCqChi.Bancos + CsSigCqChi.Agencias + CsSigCqChi.ncontas + CsSigCqChi.Ncheques\nEndIf\n\nlcDtInicial = fDtoSQL(ThisForm.Dt_Inicial.Value)\nlcDtFinal   = fDtoSQL(ThisForm.Dt_Final.Value,'23:59:59')\nlcCdGrupo   = ThisForm.getCdGrupos.Value\nlcCdConta   = ThisForm.getCdContas.Value\n\nWait Window 'Aguarde! Selecionando Cheques...' NoWait\n\nIf Used('CsSigCqChi')\n\tThisForm.GrdCCheques.RecordSourc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCHR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR",
+      "evento": "Init",
+      "linhas": 94,
+      "codigoOriginal": "Public xImpOk\nLocal lcEscape,lcTalk,lcQueryChi\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poDataMgr = CreateObject('fSqlConector',This.Name)\n\nThisForm.Dt_Inicial.Value = Date()\nThisForm.Dt_Final.Value   = Date()\nThisForm.AntDtIni         = Ctod('')\nThisForm.AntDtFin         = Ctod('')\nThisForm.AntCdGrupo       = ''\nThisForm.AntDsGrupo       = ''\nThisForm.AntCdConta       = ''\nThisForm.AntDsConta       = ''\n\nThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "poDataMgr = CreateObject,Value = Date,Value   = Date,AntDtIni         = Ctod,AntDtFin         = Ctod,ExcluirDocumento = fChecaAcesso,ExcluirCheque    = fChecaAcesso,Value   = Space,Value = Space,Value  = Space,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "LParameters nDirection\n\nlCancelas = (CsSigCqChi.ncancelas <> 0)\n\nThisForm.TxtFavorecido.Value          = CsSigCqChi.favos\nThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas\nThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)\nThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas\nThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas\nThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)\nIf lCancelas\n\tWith Thisform.cntjustificativa\n\t\t.Visible=.T.\n\t\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled  =,Enabled =",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "LParameters nDirection\n\nlCancelas = (CsSigCqChi.ncancelas <> 0)\n\nThisForm.TxtFavorecido.Value          = CsSigCqChi.favos\nThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas\nThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)\nThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas\nThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas\nThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)\nIf lCancelas\n\tWith Thisform.cntjustificativa\n\t\t.Visible=.T.\n\t\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled  =,Enabled =",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "LParameters nColIndex\n\nlCancelas = (CsSigCqChi.ncancelas <> 0)\n\nThisForm.TxtFavorecido.Value          = CsSigCqChi.favos\nThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas\nThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)\nThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas\nThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas\nThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)\nIf lCancelas\n\tWith Thisform.cntjustificativa\n\t\t.Visible=.T.\n\t\t.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled  =,Enabled =",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "LParameters nColIndex\n\nlCancelas = (CsSigCqChi.ncancelas <> 0)\n\nThisForm.TxtFavorecido.Value          = CsSigCqChi.favos\nThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas\nThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)\nThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas\nThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas\nThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)\nIf lCancelas\n\tWith Thisform.cntjustificativa\n\t\t.Visible=.T.\n\t\t.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled  =,Enabled =",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques.clnNcopias.Header1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If (Empty(ThisForm.getCdContas.Value) And !Upper(Order('CsSigCqChi')) = 'NCOPIAS')\n\tThisForm.mExibeCheques(.F.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And !Upper,mExibeCheques",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques.clnImprime.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nThis.KeyPress(32,0)\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques.clnImprime.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques.clnImprime.Check1",
+      "evento": "KeyPress",
+      "linhas": 16,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\nLocal lcKeyChq1,lnRecno1\n\nIf InList(m.nKeyCode,13,32)\n\tlnRecno1  = RecNo('CsSigCqChi')\n\tlcKeyChq1 = (CsSigCqChi.bancos + CsSigCqChi.agencias + CsSigCqChi.ncontas + CsSigCqChi.ncheques)\n\t\n\tUpDate CsSigCqChi Set nMarca1s = Iif(nMarca1s = 1,0,1) ;\n\tWhere bancos + agencias + ncontas + ncheques = lcKeyChq1 And nEmitidos = 0 And nCancelas = 0\n\t\n\tThisForm.GrdCCheques.Refresh\n\tIf BetWeen(m.lnRecno1,1,RecCount('CsSigCqChi'))\n\t\tGoTo lnRecno1\n\tEndIf\n\tNoDefault\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.grdCcheques.clnImprime.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.txtFavorecido",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Local lnRecno1\n\nThisForm.LockScreen = .T.\n\nlnRecno1= RecNo('CsSigCqChi')\n\nIf !Eof('CsSigCqChi')\n\tlcEDNs    = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)\n\tIf ThisForm.poDataMgr.CursorQuery('SigCdPgr',,'empdopnums',lcEDNs)\n\t\tDo Form SigCdPgr With Left(CsSigCqChi.dopes,1),.T.,CsSigCqChi.emps,CsSigCqChi.dopes,CsSigCqChi.numes\n\t\tSigCdPgr.AlwaysOnTop = .T.\n\t\tIf BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))\n\t\t\tGoto lnRecno1 In CsSigCqChi\n\t\tEndIf\n\t\tThisForm.mExibeCheques(.F.)\n\t\tSigCdPgr.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Form SigCdPgr With Left",
+        "metodosFormChamados": "CursorQuery,mExibeCheques",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If Used('TmpContas')\n\tUse In TmpContas\nEndIf\nIf Used('CrContas')\n\tUse In CrContas\nEndif\nThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "llCarrega = ThisForm.CarregaConta()\n\nIf llCarrega\n\tDo Form SigReEch With CsSigCqChi.emps,CsSigCqChi.dopes,CsSigCqChi.numes,'CONSULTAR',CsSigCqChi.nCheques\nElse\n\tReturn(.F.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CarregaConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.plInicio = .T.\nThisForm.CntProcurar.Init",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "llCarrega = ThisForm.CarregaConta()\n\nIf llCarrega\n\tDo Form SigRerec With ThisForm,'RECIBO'\nElse\n\tReturn(.F.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CarregaConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "With Thisform.cntjustificativa\n\t.Visible=.T.\n\t.get_justificativa.Value=''\n\t.get_justificativa.Width=238\n\t.get_justificativa.ReadOnly=.F.\n\t.get_justificativa.SetFocus \n\t\n\t.CmdGconf.Enabled=.T.\n\t.CmdGconf.Visible=.T.\n\t.CmdGconf.cmConfirmar.Enabled=.T. \nEndWith \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 185,
+      "codigoOriginal": "Local Array laPrinters(1)\nLocal lcPoint,lcSeparator,lcStrgMes,lnPrinters,lcNomeImp1,loBrowse1,lcNomeImp1,lcPrnIni1,lnMaxcol1,lnLivl1,lnClvl1,;\n\t\tlnLivext1,lnClvext1,lnLivext2,lnClvext2,lnLinom1,lnClnom1,lnLicid1,lnClcid1,lnLidia1,lnCldia1,lnLimes1,lnClmes1,;\n\t\tlnLiano1,lnClano1,lcPgchq1,lcStrImp1,lcStrImp2,lcStrImp3,loBarra1\n\nlcPoint     = Set('Point')\nlcSeparator = Set('Separator')\nlcStrgMes   = 'Janeiro  FevereiroMarço    Abril    Maio     Junho    Julho    Agosto   Setembro Outubro  Novembro ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute,,",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 63,
+      "codigoOriginal": "Local xCont,xRecno\nSelect CsSigCqChi\nxRecno = Recno()\n\nIf Used('TmpChi')\n\tUse In TmpChi\nEndIf\n\nSelect Distinct Bancos ;\n  From csSigCqChi ;\n Where nMarca1s = 1 ;\n  Into Cursor TmpChi\n\nSelect TmpChi\nGo Top\nIf !Eof()\n\tIf Reccount('TmpChi') > 1\n\t\tMessageBox('Todos os cheques selecionados devem ser do mesmo banco',48,'Atenção')\n\t\tGo xRecno\n\t\tThisForm.GrdCCheques.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\n\tSelect bancos,valors,ncheques,datas,nemitidos,ncancelas,favos From CsSigCqChi ;\n\tWhere nMarca1s = 1 ;\n\tOrde... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdGok",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "If CsSigCqChi.ncancelas = 1 And ThisForm.ExcluirCheque\n\tIf MessageBox('Deseja realmente excluir o cheque :' + Chr(13) + CsSigCqChi.bancos + ' / ' + CsSigCqChi.agencias + ;\n\t\t' / ' + CsSigCqChi.ncontas + ' / ' + CsSigCqChi.ncheques + ' ?',4+32+256,'Exclusão de cheque cancelado') = 6\n\n\t\tlStrQuery = [Delete From SigCqChi Where cidchaves = ']+CsSigCqChi.cidchaves+[' ]\n\t\tlnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'')\n\t\tlcMensa = 'Exclusão do cheque cancelado : ' + CsSigCqChi.bancos + '/' + C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.getCdContas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AntCdConta = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.getCdContas",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Grupo = ThisForm.GetCdGrupos.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,This,ThisForm.GetDsContas)\n\t\tMessagebox('Acesso Negado !!!',48,'')\n\t\tThis.Value                 = ''\n\t\tThisForm.GetDsContas.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.GetDsContas.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.GetDsContas.Value = ''\n\tThisForm.GetDsContas.Refresh\nEndIf\nIf This.Value <> ThisForm.AntCdConta\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.getDsContas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AntDsConta = This.Value\nReturn(Empty(ThisForm.GetCdContas.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.getDsContas",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Grupo = ThisForm.GetCdGrupos.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.GetCdContas,This)\n\t\tMessagebox('Acesso Negado !!!',48,'')\n\t\tThis.Value                 = ''\n\t\tThisForm.GetCdContas.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.GetCdContas.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.GetCdContas.Value = ''\n\tThisForm.GetCdContas.Refresh\nEndIf\nIf This.Value <> ThisForm.AntDsConta\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdApaga1",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\n\nlnRecno1 = RecNo('CsSigCqChi')\nUpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1\nIf BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))\n\tGoTo lnRecno1 In ('CsSigCqChi')\nEndIf\nThisForm.GrdCCheques.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.Dt_inicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AntDtIni = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If This.Value > ThisForm.Dt_final.Value\n\tThisForm.Dt_Final.Value = This.Value\nEndIf\nIf This.Value <> ThisForm.AntDtIni\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.Dt_final",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AntDtFin = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.Dt_final",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If This.Value < ThisForm.Dt_Inicial.Value\n\tThisForm.Dt_Inicial.Value = This.Value\nEndIf\nIf This.Value <> ThisForm.AntDtFin\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.Command2",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "If ThisForm.Dt_Inicial.Value > ThisForm.Dt_Final.Value\n\tMessageBox('Data Final menor que Data Inicial !!!',16,'Período Inválido')\n\tThisForm.Dt_Inicial.SetFocus\n\tReturn 0\nEndIf\n\n*!*\tIf Empty(ThisForm.GetCdGrupos.Value)\n*!*\t\tMessageBox('Grupo Inválido !!!',48,'Campo Obrigatório')\n*!*\t\tThisForm.GetCdGrupos.SetFocus\n*!*\t\tReturn 0\n*!*\tEndIf\n\n*!*\tIf Empty(ThisForm.GetCdContas.Value)\n*!*\t\tMessageBox('Conta Inválida !!!',48,'Campo Obrigatório')\n*!*\t\tThisForm.GetCdContas.SetFocus\n*!*\t\tReturn 0\n*!*\tEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MontaChq",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.GetCdGrupos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AntCdGrupo = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.GetCdGrupos",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This,ThisForm.GetDsGrupos)\nElse\n\tThisForm.GetDsGrupos.Value = ''\n\tThisForm.GetDsGrupos.Refresh\nEndIf\nIf This.Value <> ThisForm.AntCdGrupo\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.GetDsGrupos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AntDsGrupo = This.Value\nReturn(Empty(ThisForm.GetCdGrupos.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.GetDsGrupos",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,ThisForm.GetCdGrupos,This)\nElse\n\tThisForm.GetCdGrupos.Value = ''\n\tThisForm.GetCdGrupos.Refresh\nEndIf\nIf This.Value <> ThisForm.AntDsGrupo\n\tIf Used('CsSigCqChi')\n\t\tZap In CsSigCqChi\n\t\tThisForm.GrdCCheques.Refresh\n\tEndIf\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntjustificativa.cmdGconf",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "Local lnRecno1\n\nIf Empty(This.Parent.Parent.get_justificativa.Value)\n\tMessageBox('Atenção, justificativa em Branco',16,'')\n\tthis.Parent.Parent.get_justificativa.SetFocus\n\tReturn 0\nEndIf \n\nThisForm.LockScreen = .T.\n\nlnRecno1= RecNo('CsSigCqChi')\n\nIf !Eof('CsSigCqChi')\n\tlcEDNs    = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)\n\tIf ThisForm.poDataMgr.CursorQuery('SigCdPgr',,'empdopnums',lcEDNs)\n\t\tThisForm.Enabled = .F.\n\t\tDo Form SigCdPgr With Left(CsSigCqChi.dopes,1),.F.,CsSigCqChi.e... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Form SigCdPgr With Left",
+        "metodosFormChamados": "CursorQuery,mExibeCheques",
+        "controlesReferenciados": "get_justificativa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntjustificativa.cmdGconf",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "This.Parent.Enabled=.F.\nThis.Parent.Parent.Visible=.F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntjustificativa.get_justificativa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cmdTudo1",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\n\nlnRecno1 = RecNo('CsSigCqChi')\nUpDate CsSigCqChi Set nMarca1s = 1 Where nMarca1s = 0 And nEmitidos = 0 And nCancelas = 0\nIf BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))\n\tGoTo lnRecno1 In ('CsSigCqChi')\nEndIf\nThisForm.GrdCCheques.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "If ThisForm.ChMatIni\n\n\tThisForm.LockScreen = .T.\n\n\tThisForm.ChMatIni   = .F.\n\tThis.getBanco.Value = ''\n\tThis.getChIni.Value = ''\n\tThis.getChFin.Value = '' \n\n\tThisForm.CmdGOk.Enabled   = .F.\n\tThisForm.ImpChMat.Enabled = .T.\n\tThisForm.ImpChMat.Visible = .T.\n\tThisForm.ImpChMat.getBanco.SetFocus\n\tThisForm.Refresh\n\n\tThisForm.LockScreen = .F.\n\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat.getBanco",
+      "evento": "KeyPress",
+      "linhas": 18,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf m.nKeyCode = 60\n\tIf !(ThisForm.plLeCheque)\n\t\tThisForm.pcChqLido = ''\n\tEndIf\n\tThisForm.plLeCheque = .T.\nEndIf\n\nIf ThisForm.plLeCheque\n\tNoDefault\n\tThisForm.pcChqLido = ThisForm.pcChqLido + Chr(m.nKeyCode)\nEndIf\n\nIf m.nKeyCode = 58\n\tThis.Valid\n\tThisForm.plLeCheque = .F.\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcChqLido + Chr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat.getChfin",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "This.Value = PadL(Alltrim(This.Value),6,'0')\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat.cmdGprocurar",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "If Empty(ThisForm.ImpChMat.getBanco.Value)\n\tMessageBox('Banco não preenchido !!!',48,'Atenção')\n\tThisForm.ImpChMat.getBanco.SetFocus\n\tReturn(.F.)\nEndIf\nIf Empty(ThisForm.ImpChMat.getChIni.Value)\n\tMessageBox('Número do cheque inicial não preenchido !!!',48,'Atenção')\n\tThisForm.ImpChMat.getChIni.SetFocus \n\tReturn(.F.)\nEndIf\nIf Empty(ThisForm.ImpChMat.getChFin.Value)\n\tMessageBox('Núumero do cheque final não preenchido !!!',48,'Atenção')\n\tThisForm.ImpChMat.getChFin.SetFocus \n\tReturn(.F.)\nEndIf\nIf Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat.cmdGprocurar",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.LockScreen = .T.\n\nThisForm.CmdGOk.Enabled   = .T.\nThisForm.ImpChMat.Enabled = .F.\nThisForm.ImpChMat.Visible = .F.\n\nThisForm.mExibeCheques(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mExibeCheques",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.impchmat.Getchini",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "This.Value = Padl(Alltrim(This.Value),6,'0')\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "If ThisForm.plInicio\n\n\tThisForm.LockScreen = .T.\n\n\tThisForm.plInicio = .F.\n\n\tThisForm.getCdContas.Enabled   = .F.\n\tThisForm.getDsContas.Enabled   = .F.\n\tThisForm.GrdCCheques.Enabled   = .F.\n\tThisForm.TxtFavorecido.Enabled = .F.\n\tThisForm.CmdGOk.Enabled        = .F.\n\tThisForm.CntProcurar.Enabled   = .T.\n\tThisForm.CntProcurar.Visible   = .T.\n\tThisForm.CntProcurar.getBanco.SetFocus\n\tThisForm.Refresh\n\n\tThisForm.LockScreen = .F.\n\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.getBanco",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local lcLeitor\n\nIf ThisForm.plLeCheque\n\tlcLeitor = ThisForm.pcChqLido\nElse\n\tlcLeitor = \"\"\nEndIf\n\nThisForm.plLeitor = .F.\n\nIf LastKey()==9\n\tKeyBoard \"{CTRL+TAB}\"\nElse\n\tThisForm.plleitor = .T.\n\n\tIf Len(lcLeitor) >= 33\n\t\tThisForm.CntProcurar.getBanco.Value   = Substr(lcLeitor,2,3)\n\t\tThisForm.CntProcurar.getAgencia.Value = Substr(lcLeitor,5,4)\n\t\tThisForm.CntProcurar.getConta.Value   = Substr(lcLeitor,23,10)\n\t\tThisForm.CntProcurar.getCheque.Value  = Substr(lcLeitor,14,6)\n\t\tThisForm.Refresh\n\t\tThis.Par... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value   = Substr,Value = Substr,Value  = Substr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.getBanco",
+      "evento": "KeyPress",
+      "linhas": 18,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf m.nKeyCode = 60\n\tIf !(ThisForm.plLeCheque)\n\t\tThisForm.pcChqLido = ''\n\tEndIf\n\tThisForm.plLeCheque = .T.\nEndIf\n\nIf ThisForm.plLeCheque\n\tNoDefault\n\tThisForm.pcChqLido = ThisForm.pcChqLido + Chr(m.nKeyCode)\nEndIf\n\nIf m.nKeyCode = 58\n\tThis.Valid\n\tThisForm.plLeCheque = .F.\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcChqLido + Chr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.getEmissao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.getValor.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.getValor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.getEmissao.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.cmdgprocurar",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "Set Near On\n\nThis.Parent.Parent.getBanco.Value = PadR(AllTrim(This.Parent.Parent.getBanco.Value),3)\n\nSelect CsSigCqChi\nDo Case\n\tCase !Empty(This.Parent.Parent.getEmissao.Value)\n\t\tSet Order To Emissao\t\t\n\t\tSeek Dtos(This.Parent.Parent.getEmissao.Value) + This.Parent.Parent.getBanco.Value +;\n\t\t\tThis.Parent.Parent.getAgencia.Value + This.Parent.Parent.getConta.Value +;\n\t\t\tThis.Parent.Parent.getCheque.Value\n\t\t         \n\tCase !Empty(This.Parent.Parent.getValor.Value)\n\t\tSet Order To Valor\n\t\tSeek Str(Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mExibeCheques",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCHR.cntProcurar.cmdgprocurar",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.LockScreen = .T.\n\nThisForm.getCdContas.Enabled   = .T.\nThisForm.getDsContas.Enabled   = .T.\nThisForm.GrdCCheques.Enabled   = .T.\nThisForm.TxtFavorecido.Enabled = .T.\nThisForm.CmdGOk.Enabled        = .T.\nThisForm.CntProcurar.Enabled   = .F.\nThisForm.CntProcurar.Visible   = .F.\n\nThisForm.mExibeCheques(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mExibeCheques",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCHR.Procedure",
+      "queryOriginal": "\tUpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1",
+      "tabelas": "CsSigCqChi",
+      "colunas": "nMarca1s",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.grdCcheques.clnImprime.Check1.KeyPress",
+      "queryOriginal": "\tUpDate CsSigCqChi Set nMarca1s = Iif(nMarca1s = 1,0,1) ; \tWhere bancos + agencias + ncontas + ncheques = lcKeyChq1 And nEmitidos = 0 And nCancelas = 0",
+      "tabelas": "CsSigCqChi",
+      "colunas": "nMarca1s",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.cmdGok.Click",
+      "queryOriginal": "Select Distinct Bancos ; From csSigCqChi ; Where nMarca1s = 1 ; Into Cursor TmpChi",
+      "tabelas": "csSigCqChi",
+      "colunas": "nMarca1s,TmpChi",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.cmdGok.Click",
+      "queryOriginal": "\tSelect bancos,valors,ncheques,datas,nemitidos,ncancelas,favos From CsSigCqChi ; \tWhere nMarca1s = 1 ; \tOrde... [TRUNCADO]",
+      "tabelas": "CsSigCqChi",
+      "colunas": "bancos,valors,ncheques,datas,nemitidos,ncancelas,favos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.cmdGok.Click",
+      "queryOriginal": "\t\tlStrQuery = [Delete From SigCqChi Where cidchaves = ']+CsSigCqChi.cidchaves+[' ] \t\tlnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'')",
+      "tabelas": "SigCqChi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.cmdApaga1.Click",
+      "queryOriginal": "UpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1",
+      "tabelas": "CsSigCqChi",
+      "colunas": "nMarca1s",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCHR.cmdTudo1.Click",
+      "queryOriginal": "UpDate CsSigCqChi Set nMarca1s = 1 Where nMarca1s = 0 And nEmitidos = 0 And nCancelas = 0",
+      "tabelas": "CsSigCqChi",
+      "colunas": "nMarca1s",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CsSigCqChi", "SigCqChi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

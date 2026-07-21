@@ -1739,7 +1739,7 @@ DEFINE CLASS Formsigregli AS FormBase
         IF VARTYPE(THIS.this_oParentForm) = "O"
             LOCAL loc_cNomePai
             loc_cNomePai = UPPER(ALLTRIM(THIS.this_oParentForm.Name))
-            IF loc_cNomePai = "SIGPRGLP" OR loc_cNomePai = "SIGPRGLX"
+            IF loc_cNomePai = "SIGPRGLP" OR loc_cNomePai = "SIGPRGLX" OR loc_cNomePai = "FORMSIGPRGLP"
                 THIS.obj_4c_TpOrdem.Value = 1
             ELSE
                 THIS.obj_4c_TpOrdem.Value = 2

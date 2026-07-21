@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormSIGPRLNC.prg` (266 linhas) foi criado com:
+
+- **DEFINE CLASS FormSIGPRLNC AS FormBase** ÔÇö propriedades visuais (Width=1000, Height=600, Caption sem acento como placeholder)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- **InicializarForm()** ÔÇö cria SIGPRLNCBO, seta Caption com CHR(231), chama os 3 Configurar*, propaga caption ao label, guarda gb_4c_ValidandoUI antes de CarregarLista, seta ActivePage=1
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Width=1003, Height=629, 2 pages com Picture=fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** ÔÇö containers: cnt_4c_Cabecalho (com lbl_4c_Titulo), cnt_4c_Botoes (Left=542), cnt_4c_Saida (Left=917 ÔÇö can├┤nico), cnt_4c_Filtros (sem conte├║do ÔÇö legado n├úo tem filtros)
+- **ConfigurarPaginaDados()** ÔÇö container cnt_4c_BotoesAcao (Top=38, Left=819)
+- **CarregarLista()** ÔÇö guarda gb_4c_ValidandoUI, chama `this_oBusinessObject.Buscar("")`
+- **TornarControlesVisiveis()** ÔÇö recurs├úo correta com suporte a PageFrame
+- **Destroy()** ÔÇö libera BO e chama DODEFAULT()

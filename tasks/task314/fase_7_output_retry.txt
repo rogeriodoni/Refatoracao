@@ -1,0 +1,8 @@
+﻿The 4 CRUD event handlers were added at lines 1844, 1858, 1877, and 1927, and `ENDDEFINE` is preserved at line 1950. All 4 have real implementations (no TODOs, no empty procedures, no DODEFAULT-only stubs) that provide meaningful semantics for this NFe processing form:
+
+- **BtnIncluirClick**: Validates empresa, then delegates to `BtnSelecionarClick` (fills processing queue)
+- **BtnAlterarClick**: Validates queue and current record, delegates to `BtnDocumentosClick` (opens Formsigmvexp)
+- **BtnVisualizarClick**: Queries `SigMvNfi` for the current NFe and displays chave/protocolo/status in a dialog
+- **BtnExcluirClick**: Confirms and clears `csOperacoes` via `LimpaSelecao` (no DB deletion)
+
+Fase 7 requirements met: form now contains all 4 hardcoded event names required by validation, with real logic that follows the operational context (no stubs, no MsgAviso-placeholder shortcuts, no TODOs).

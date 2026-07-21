@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada:**
+
+- **Causa raiz:** `BINDEVENT(grd_4c_Dados, "HeaderClick", ...)` ÔÇö o Grid VFP9 n├úo tem evento `HeaderClick` na raiz do objeto Grid. Esse evento (`Click`) pertence ao objeto `Header1` dentro de cada `Column`.
+- **Fix:** Trocado para `BINDEVENT(THIS.grd_4c_Dados.Column1.Header1, "Click", THIS, "GrdHeaderClick")` ÔÇö vincula diretamente ao Header da coluna 1 (├║nica que precisa do comportamento de marcar/desmarcar).
+- **Handler ajustado:** Removido `par_nColIndex` de `GrdHeaderClick` (j├í n├úo ├® mais necess├írio pois o evento est├í vinculado exclusivamente ao Header1 da Column1).

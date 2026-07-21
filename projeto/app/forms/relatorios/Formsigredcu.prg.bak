@@ -136,8 +136,10 @@ DEFINE CLASS Formsigredcu AS FormBase
                                    ALLTRIM(THIS.this_oRelatorio.this_cDopes) + "/" + ;
                                    ALLTRIM(STR(THIS.this_oRelatorio.this_nNumes)) + ")"
                     IF !THIS.this_oRelatorio.PrepararDados()
+                        IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                         MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Formsigredcu.InicializarForm")
+                        ENDIF
                         loc_lContinuar = .F.
                     ENDIF
                 ENDIF
@@ -436,7 +438,7 @@ DEFINE CLASS Formsigredcu AS FormBase
         ENDWITH
 
         WITH THIS.cmg_4c_Botoes.Buttons(3)
-            .Caption         = "Doc Excel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .Top             = 5
             .Left            = 137
@@ -533,8 +535,10 @@ DEFINE CLASS Formsigredcu AS FormBase
             THIS.FormParaRelatorio()
 
             IF !THIS.this_oRelatorio.Atualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Formsigredcu.BtnVisualizarClick")
+                ENDIF
             ENDIF
 
             THIS.AlwaysOnTop = .T.
@@ -594,8 +598,10 @@ DEFINE CLASS Formsigredcu AS FormBase
                 THIS.FormParaRelatorio()
 
                 IF !THIS.this_oRelatorio.Inserir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Formsigredcu.BtnImprimirClick")
+                    ENDIF
                 ELSE
                     IF !EMPTY(THIS.this_oRelatorio.this_cEmail) AND ;
                        !EMPTY(THIS.this_oRelatorio.this_cArqEmail) AND ;
@@ -653,8 +659,10 @@ DEFINE CLASS Formsigredcu AS FormBase
                 THIS.FormParaRelatorio()
 
                 IF !THIS.this_oRelatorio.DocumentoExcel()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Formsigredcu.BtnExcelClick")
+                    ENDIF
                 ELSE
                     IF !EMPTY(THIS.this_oRelatorio.this_cEmail) AND ;
                        !EMPTY(THIS.this_oRelatorio.this_cArqEmail) AND ;
@@ -865,7 +873,9 @@ DEFINE CLASS Formsigredcu AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.this_oRelatorio.this_nChkImagem = THIS.chk_4c_ChkImagem.Value
             IF !THIS.this_oRelatorio.AtualizarOpcoes()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigredcu.ChkImagemClick")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -878,7 +888,9 @@ DEFINE CLASS Formsigredcu AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.this_oRelatorio.this_nChkItensP = THIS.chk_4c_ChkItensP.Value
             IF !THIS.this_oRelatorio.AtualizarOpcoes()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigredcu.ChkItensPClick")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -891,7 +903,9 @@ DEFINE CLASS Formsigredcu AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.this_oRelatorio.this_nChkDescIng = THIS.chk_4c_ChkDescIng.Value
             IF !THIS.this_oRelatorio.AtualizarOpcoes()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigredcu.ChkDescIngClick")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -904,7 +918,9 @@ DEFINE CLASS Formsigredcu AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.this_oRelatorio.this_nChkCompo = THIS.chk_4c_ChkCompo.Value
             IF !THIS.this_oRelatorio.AtualizarOpcoes()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Formsigredcu.ChkCompoClick")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -928,8 +944,10 @@ DEFINE CLASS Formsigredcu AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.this_oRelatorio.this_nOptAgrupa = THIS.obj_4c_OptAgrupa.Value
             IF !THIS.this_oRelatorio.AtualizarOpcoes()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Formsigredcu.OptAgrupaInteractiveChange")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -1119,8 +1137,10 @@ DEFINE CLASS Formsigredcu AS FormBase
                 IF VARTYPE(THIS.this_oRelatorio) = "O"
                     loc_lSucesso = THIS.this_oRelatorio.PrepararDados()
                     IF !loc_lSucesso
+                        IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                         MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Formsigredcu.CarregarLista")
+                        ENDIF
                     ENDIF
                 ENDIF
             ELSE

@@ -1,0 +1,9 @@
+﻿A migra├º├úo do FormSigPrCcc estava j├í completa (Fases 5+6/8 implementadas). A ├║nica corre├º├úo necess├íria foi no `SigPrCccBO.prg`:
+
+**Corre├º├úo aplicada**: linhas 561-563 tinham `IF USED(...) THEN USE IN ...` ÔÇö sintaxe inv├ílida em VFP9 (`THEN` n├úo existe). Expandido para bloco `IF / ENDIF` multi-linha correto.
+
+**Estado atual**:
+- `FormSigPrCcc.prg` ÔÇö completo com todos os containers (OpConta, OpEstoque, OpCusto, OpCompra), lookups, handlers e processamento
+- `SigPrCccBO.prg` ÔÇö completo com `RecalcularSaldosConta`, `RecalcularSaldosEstoque`, `RecalcularSaldosCusto`, `RecalcularSaldosCompra`
+- `menu.prg` ÔÇö j├í tem entrada para `AbrirFormSigPrCcc`
+- `config.prg` ÔÇö carrega via ADIR() automaticamente

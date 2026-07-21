@@ -700,7 +700,9 @@ DEFINE CLASS FormSigReIfp AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -723,7 +725,9 @@ DEFINE CLASS FormSigReIfp AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -747,7 +751,9 @@ DEFINE CLASS FormSigReIfp AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cCursor = THIS.this_oRelatorio.this_cCursorDados

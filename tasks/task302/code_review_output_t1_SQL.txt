@@ -1,0 +1,13 @@
+﻿As tr├¬s corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**Fix 1 & 2 ÔÇö CEMPS** (`ProcessarTransferencia` e `ProcessarPedidoTerceiro`):
+- Adicionado `SQLEXEC(... "SELECT Cemps FROM SigCdEmp" ...)` uma ├║nica vez antes do `BEGIN TRANSACTION` (padr├úo original: cursor pr├®-carregado)
+- Removidos os 4 `SQLEXEC` por-linha com `WHERE Cemps = X` dentro do SCAN
+- Substitu├¡dos por `SELECT crSigCdEmp` + `LOCATE FOR ALLTRIM(Cemps) = ALLTRIM(loc_cX)` + `IF !FOUND()`
+
+**Fix 3 ÔÇö CODIGOS** (`LimiteCreditoMatriz`, linha ~1999):
+- Removido `WHERE Codigos = EscaparSQL(par_cGrupo)` do SELECT de SigCdGcr
+- Adicionado `LOCATE FOR ALLTRIM(Codigos) = ALLTRIM(par_cGrupo)` ap├│s carregar todos os registros
+- Condi├º├úo ajustada para `IF FOUND() AND !EMPTY(crSigCdGcr2.GrupoLms)`
+
+**CONTROLCOUNT** ÔÇö falso positivo: `ControlCount` no form ├® propriedade VFP de itera├º├úo de controles (`FOR i = 1 TO container.ControlCount`), n├úo uma cl├íusula SQL WHERE. Nenhuma altera├º├úo necess├íria.

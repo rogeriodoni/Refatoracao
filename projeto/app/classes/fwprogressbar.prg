@@ -110,7 +110,17 @@ DEFINE CLASS fwprogressbar AS Form
     ENDPROC
 
     PROCEDURE Update
-        LPARAMETERS par_lRefresh
+        LPARAMETERS par_cTextoOrRefresh, par_lRefresh
+        LOCAL loc_lRefresh
+
+        *-- Aceita Update("texto") OU Update(.T.) OU Update("texto", .T.)
+        IF VARTYPE(par_cTextoOrRefresh) = "C"
+            THIS.SubTitulo.Caption = par_cTextoOrRefresh
+            loc_lRefresh = .T.
+        ELSE
+            loc_lRefresh = IIF(VARTYPE(par_cTextoOrRefresh) = "L", par_cTextoOrRefresh, .T.)
+        ENDIF
+
         THIS.this_nAtual = THIS.this_nAtual + 1
         IF THIS.this_nAtual > THIS.this_nTotal
             THIS.this_nAtual = THIS.this_nTotal
@@ -120,7 +130,7 @@ DEFINE CLASS fwprogressbar AS Form
             INT((THIS.this_nAtual / THIS.this_nTotal) * 100), 100)
         THIS.shpThermBar.Width = MAX(1, INT((loc_nPct / 100.0) * 358))
         THIS.lblPercentage.Caption = TRANSFORM(loc_nPct) + "%"
-        IF par_lRefresh
+        IF loc_lRefresh
             THIS.Refresh
         ENDIF
     ENDPROC

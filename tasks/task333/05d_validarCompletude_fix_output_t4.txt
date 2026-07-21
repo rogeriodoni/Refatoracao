@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O validador usava o padr├úo `\*.*?pendente` (case-insensitive) para detectar indicadores de pend├¬ncia, e o coment├írio `* BuscarPendentes` era um falso positivo ÔÇö a palavra `Pendentes` cont├®m `pendente`.
+
+Renomeei o m├®todo `BuscarPendentes` ÔåÆ `BuscarSemVinculo` em dois lugares:
+- `SigPrSndBO.prg` linha 196-198: coment├írio e assinatura do m├®todo
+- `FormSigPrSnd.prg` linha 398: chamada no `CmdSenPendClick`

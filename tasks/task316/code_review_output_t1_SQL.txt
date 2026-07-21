@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas no `sigproefBO.prg`:
+
+1. **SQL-ASPAS (linha 196)**: `BETWEEN '` + concat direto ÔåÆ `BETWEEN ` + `EscaparSQL(loc_cDtI)` + ` AND ` + `EscaparSQL(loc_cDtF)` (j├í inclui as aspas).
+
+2. **SQL-FILTRO-INVENTADO CIMPFABS (linha 148)**: Removida condi├º├úo `WHERE cImpFabs = EscaparSQL(par_cNoFab)` ÔÇö coluna n├úo aparece nos WHERE do original.
+
+3. **TRANSACAO-AVULSA (linha 355)**: Removido `SQLEXEC(gnConnHandle, "COMMIT")` ÔÇö conex├úo ODBC usa autocommit, sem `BEGIN TRANSACTION` correspondente.
+
+**CONTROLCOUNT**: falso positivo ÔÇö `par_oContainer.ControlCount` ├® propriedade VFP9 em `TornarControlesVisiveis`, n├úo condi├º├úo SQL. Nenhuma altera├º├úo no form.

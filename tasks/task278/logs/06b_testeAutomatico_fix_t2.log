@@ -1,0 +1,24 @@
+[2026-07-16 00:32:03] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-16 00:32:03] [INFO] Prompt File: C:\4c\tasks\task278\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-16 00:32:03] [INFO] Output File: C:\4c\tasks\task278\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-16 00:32:03] [INFO] Model: sonnet
+[2026-07-16 00:32:03] [INFO] Timeout: 3600 segundos
+[2026-07-16 00:32:03] [INFO] Max Output Tokens: 128000
+[2026-07-16 00:32:03] [INFO] Context Files: 0 arquivo(s)
+[2026-07-16 00:32:03] [INFO] Invocando Claude CLI...
+[2026-07-16 00:32:03] [INFO] Prompt carregado: 96021 caracteres
+[2026-07-16 00:32:03] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-16 00:32:03] [INFO] Tamanho total do prompt: 96021 caracteres
+[2026-07-16 00:32:03] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-16 00:34:13] [INFO] Claude CLI finalizado em 130.7052912 segundos
+[2026-07-16 00:34:13] [INFO] Exit Code: 0
+[2026-07-16 00:34:13] [INFO] Output salvo em: C:\4c\tasks\task278\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-16 00:34:14] [INFO] Output size: 927 bytes
+[2026-07-16 00:34:14] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-16 00:34:14] [INFO] Preview do output:
+[2026-07-16 00:34:14] [INFO] Corre+º+úo aplicada. O problema e a solu+º+úo:
+
+**Causa raiz**: `InicializarForm()` tentava a conex+úo com `DB_ALERTA` *antes* de configurar qualquer controle de UI. Se a conex+úo falhasse (como no ambiente de teste), o form pulava toda a setup de UI e retornava `.F.` ÔåÆ `Init()` retornava `.F.` ÔåÆ `CREATEOBJECT` falhava.
+
+**Fix aplicado em `InicializarForm()`**:
+1. **Cria `cursor_4c_Total` vazio primeiro** ÔÇö o `ConfigurarGrade()` seta `RecordSource = "cursor_4c_Total"` e precisa do ali

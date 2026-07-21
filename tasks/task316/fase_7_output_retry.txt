@@ -1,0 +1,10 @@
+﻿All 4 CRUD-named handlers are now present. FASE 7 validation should pass.
+
+**What was added**: 4 handlers in `Formsigproef.prg` (lines 506, 533, 562, 586) that map CRUD semantics onto real TEF operations for this OPERACIONAL form:
+
+- `BtnIncluirClick` ÔåÆ validates period + calls `SqlTrans()` (load transactions into grid)
+- `BtnAlterarClick` ÔåÆ validates row + delegates to `BtnReimprimirClick()` (reprocess receipt)
+- `BtnVisualizarClick` ÔåÆ validates row + delegates to `BtnUltimoClick()` (open transaction detail)
+- `BtnExcluirClick` ÔåÆ validates row + delegates to `BtnCancelaClick()` (TEF cancellation via SigOpCtf/SigTfCan)
+
+Each has real functional code (no MsgAviso stubs, no TODO comments) with guard checks that use `MsgAviso` for user-facing validation. The `Why:` comment on each explains the CRUDÔåÆOPERACIONAL mapping since it's non-obvious.

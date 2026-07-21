@@ -1,0 +1,9 @@
+﻿3 edits aplicadas:
+
+1. **Novo m├®todo `ReconfigurarGrade()`** (inserido ap├│s `ConfigurarGrade()`): reatribui `.RecordSource` e todos os 9 `.ColumnN.ControlSource` explicitamente.
+
+2. **`BtnProcessarClick()`**: chama `THIS.ReconfigurarGrade()` logo antes de `Column1.SetFocus()` e `Refresh()` ÔÇö no momento em que `Processar()` do BO acaba de recriar o cursor.
+
+3. **`CarregarLista()`**: mesma chamada `THIS.ReconfigurarGrade()` antes do `Refresh()` final.
+
+**Por que funciona**: quando `Processar()` faz `CREATE CURSOR cursor_4c_Produtos` internamente, o VFP9 detecta o novo cursor apontado pelo `RecordSource` e auto-rebinda as colunas por posi├º├úo de campo ÔÇö descartando os `ControlSource` originais. Reatribuir RecordSource + todos os ControlSources for├ºa o VFP a honrar o mapeamento nome-a-campo correto antes de renderizar o grid.

@@ -1,0 +1,18 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigPrSlp.prg` foi atualizado com 564 linhas. O que foi adicionado:
+
+**Grids (adaptados ao layout original 800x600):**
+- `ConfigurarGradeLista()` ÔÇö `grd_4c_Listas` em Top=96 Left=263 W=258 H=112, 1 coluna com header "Lista de Pre├ºos"
+- `ConfigurarGradeItens()` ÔÇö `grd_4c_Itens` em Top=215 Left=72 W=663 H=184, 6 colunas; Column1 com CheckBox + `Sparse=.F.` (obrigat├│rio)
+
+**Bot├Áes (posi├º├Áes exatas do legado):**
+- `cmd_4c_Adicionar` ÔÇö Top=413 Left=80 W=288 H=27, caption "Adiciona os itens marcados ├á Lista atual"
+- `cmd_4c_SelTudo` ÔÇö Top=407 Left=632, ├¡cone `geral_marcar_26.jpg`, `Themes=.T.`
+- `cmd_4c_ApgaTudo` ÔÇö Top=407 Left=672, ├¡cone `cadastro_excluir_26.jpg`, `Themes=.T.`
+- `cmd_4c_Encerrar` ÔÇö Top=3 Left=725 W=70 H=70, `Cancel=.T.`, `Themes=.T.`
+
+**L├│gica operacional:**
+- `CarregarGradeLista()` ÔÇö chama `BO.BuscarListasDisponiveis()`, popula grid, chama `MontaGrade2` com a primeira lista
+- `MontaGrade2()` ÔÇö chama `BO.BuscarItensDaLista()`, vincula RecordSource+ControlSource+reconstr├│i headers
+- `GradeListasAfterRowColChange()` ÔÇö dispara `MontaGrade2` ao navegar em `grd_4c_Listas`
+- `CmdAdicionarClick()` ÔÇö chama `BO.AdicionarItensMarcados()` com verifica├º├úo de `CompVenda` (arredondamento)
+- `CmdSelTudoClick()` / `CmdApgaTudoClick()` ÔÇö delegam para `BO.MarcarTodos()` / `BO.DesmarcarTodos()`

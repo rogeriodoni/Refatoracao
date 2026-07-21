@@ -59,8 +59,8 @@ DEFINE CLASS SIGREDESBO AS RelatorioBase
     this_nLanc          = 0
 
     *-- Cursores gerenciados pelo BO
-    this_cCursorDados      = "cursor_4c_Dados"
-    this_cCursorRelatorio  = "cursor_4c_Relatorio"
+    this_cCursorDados      = "csRelatorio"
+    this_cCursorRelatorio  = "csCabecalho"
     this_cCursorOpFp       = "cursor_4c_OpFp"
 
     *--------------------------------------------------------------------------

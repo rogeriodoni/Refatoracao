@@ -1,0 +1,16 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\SigPrGloBO.prg` foi criado com:
+
+- **22 propriedades `this_*`** mapeadas diretamente dos campos do form original:
+  - 6 campos de data (`this_dDataei/ef/pi/pf`, `this_dPrevisao`, `this_dGeracao`)
+  - 3 campos de opera├º├úo (1 string + 2 num├®ricos de intervalo)
+  - 3 campos de conta/cliente (grupo, conta, descri├º├úo)
+  - 3 campos de respons├ível/vendedor (grupo, conta, descri├º├úo)
+  - 2 campos de empresa (c├│digo + descri├º├úo)
+  - `this_nNaoEmpenharPedras` (checkbox)
+  - `this_nNumeroOP` e `this_cTipoGerOP`
+- **5 propriedades de modo** mapeadas das custom props do form (`this_lReserva`, `this_lAutomatico`, `this_lPorDestino`, `this_lGerPorTp`, `this_lAlterEmp`)
+- **5 nomes de cursores de trabalho** (`this_cCursorOper`, etc.) para reuso nas fases seguintes
+- `this_cTabela = "SigMvCab"` e `this_cCampoChave = "EmpDopNums"`
+- `ObterChavePrimaria()` para o sistema de auditoria
+
+Pr├│xima fase: **Fase 2/8 - completar o BO** com `Processar()`, `ValidarParametros()`, `BuscarOperacoes()`, `BuscarTiposGeracao()` e demais m├®todos extra├¡dos do `Processar.Click` do legado.

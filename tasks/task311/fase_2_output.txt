@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da com sucesso.
+
+`sigprmdpBO.prg` agora cont├®m todos os m├®todos solicitados:
+
+**M├®todos CRUD (padr├úo BusinessBase):**
+- `CarregarDoCursor()` ÔÇö carrega `CprosAnt`, `CprosNov`, `BarraAnt` do cursor csContas
+- `ObterChavePrimaria()` ÔÇö retorna `"CidChaves"`
+- `ValidarDados()` ÔÇö valida `this_cCprosNov` e `cCodEmpresa`
+- `ExecutarInsercao()` ÔÇö INSERT em `SigOpClC` com `fUniqueIds()` + helpers SQL corretos
+- `ExecutarAtualizacao()` ÔÇö retorna `.T.` (n├úo aplic├ível: SigOpClC ├® append-only)
+- `ExecutarExclusao()` ÔÇö DELETE de `SigOpClC` por `CidChaves`
+
+**M├®todos de neg├│cio (l├│gica do form original migrada para o BO):**
+- `InicializarCursorContas()` ÔÇö cria o cursor VFP local `csContas` com 3 ├¡ndices
+- `BuscarCalcCustos()` ÔÇö consulta `SigCdPaC` e seta `this_lCalculaCusto`
+- `ValidarParesNoGrid()` ÔÇö valida todos os pares antes do processamento (valida├º├Áes do `btnProcessar.Click` original)
+- `InserirPendencia()` ÔÇö INSERT individual em `SigOpClC` para rec├ílculo posterior
+- `ImportarXLS()` ÔÇö importa pares de uma planilha Excel para `csContas`

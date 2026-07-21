@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado a `FormSigPrMdc.prg`:**
+
+- `ConfigurarPaginaLista()` ÔÇö orquestra todos os sub-m├®todos do corpo do form
+- `ConfigurarBotoesAcao()` ÔÇö 5 bot├Áes dentro de `cnt_4c_Botoes`: Incluir (Left=5), Excluir (85), Importar (165), Processar (245), Encerrar (915); standalone CommandButton com `Themes=.T.` e ├¡cones do originais (`cadastro_inserir_60.jpg`, `cadastro_excluir_60.jpg`, `geral_multiplos_60.jpg`, `geral_processar_60.jpg`, `cadastro_sair_60.jpg`)
+- `ConfigurarGrid()` ÔÇö `grd_4c_Dados` com 2 colunas (Conta Antiga / Conta Nova), headers reconfigrados ap├│s RecordSource, `Sparse=.F.`
+- `ConfigurarCheckboxes()` ÔÇö `chk_4c_ChkReps` e `chk_4c_Chk_DelCT`
+- `ConfigurarResultadoInternos()` ÔÇö internos de `cnt_4c_Resultado`: `txt_4c_Arquivo`, barra de progresso (`cnt_4c_Barra` ÔåÆ `shp_4c_Barra` + `lbl_4c_Porcento`) com nomes que batem exatamente com `AtualizarProgresso()`
+- `VincularEventos()` ÔÇö BINDEVENTs para todos os bot├Áes, checkbox e grid (KeyPress F4 + AfterRowColChange)
+- `AlternarPagina()` ÔÇö mostra/oculta painel de progresso
+- Handlers completos: `CmdIncluirClick`, `CmdExcluirClick`, `CmdExportaClick`, `CmdProcessarClick` (com valida├º├úo ÔåÆ confirma├º├úo ÔåÆ execu├º├úo BO ÔåÆ ZAP cursor), `CmdSairClick`, `ChkRepsClick`
+- `GrdDadosKeyPress` / `GrdDadosAfterRowColChange` ÔÇö F4 abre lookup, tab para col 2 valida ContaAnt
+- `ValidarContaAnt` / `ValidarContaNov` / `AbrirLookupContaAnt` / `AbrirLookupContaNov` ÔÇö valida├º├úo com FormBuscaAuxiliar via Init com params

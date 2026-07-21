@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao `sigprimaBO.prg`:**
+
+- **`ValidarDados()`** ÔÇö valida que `this_cCpros` n├úo est├í vazio antes de inserir/atualizar
+- **`CarregarDoCursor()`** ÔÇö carrega as 4 colunas de sigscjim via `SELECT (alias)` + `TratarNulo`
+- **`Inserir()`** ÔÇö INSERT em sigscjim com `fUniqueIds()` para cidchaves + `RegistrarAuditoria("I")`
+- **`Atualizar()`** ÔÇö UPDATE em sigscjim com WHERE por cidchaves + `RegistrarAuditoria("A")`
+- **`Processamento(par_cDiretorio, par_nTipo)`** ÔÇö l├│gica completa portada do legado:
+  - 5 tentativas de busca no SigCdPro (CPros ÔåÆ dPro2s ÔåÆ dPro2s sem pontos ÔåÆ reffs ÔåÆ dPro3s convert)
+  - UPDATE SigCdPro com imagem bin├íria via par├ómetro `?` + `@loc_cImagem2`
+  - INSERT/UPDATE SigCdPrc com `GETDATE()` para DataAlts
+  - DELETE SigPrPrt
+  - BEGIN/COMMIT/ROLLBACK TRANSACTION expl├¡citos
+  - Move arquivo para subpasta `OK\` ap├│s sucesso
+  - Modo auxiliar (sigscjim) via UPDATE com par├ómetro bin├írio
+- **`Exportar(par_cDiretorio)`** ÔÇö exporta imagens por grupo de produtos, grava `.jpg` via `STRTOFILE`, converte para base64 com `STRCONV(ÔÇª,13,1046)` e atualiza `FigJpgs64`

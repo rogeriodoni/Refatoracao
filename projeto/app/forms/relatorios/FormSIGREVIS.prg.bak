@@ -88,7 +88,9 @@ DEFINE CLASS FormSIGREVIS AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarFiltros()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -856,7 +858,9 @@ DEFINE CLASS FormSIGREVIS AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReVis", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
@@ -877,7 +881,9 @@ DEFINE CLASS FormSIGREVIS AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             THIS.ExecutarReportForm("SigReVis", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
@@ -899,7 +905,9 @@ DEFINE CLASS FormSIGREVIS AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cCursor = THIS.this_oRelatorio.this_cCursorDados

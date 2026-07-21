@@ -1,0 +1,12 @@
+﻿**Phase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigprnfeBO.prg` criado com 106 linhas contendo:
+
+- **66 propriedades** `this_*` declaradas, agrupadas em:
+  - Filtros do formul├írio (controles de `cntOperacoes`: empresa, s├®rie, datas, OptionGroups, checkboxes)
+  - Dados NF-e em processamento (equivalente ├ás `PUBLIC vars` do legado: `cId`, `cCnpj`, `cLote`, `cRecibo`, `cProt`, etc.)
+  - Caminhos de pastas NF-e (`this_cPEnvio`, `this_cPAutorizados`, `this_cPTxt`, etc.)
+  - Dados da empresa emitente (`this_cCemps`, `this_cRazas`, `this_cEstas`, dados SMTP)
+  - Respons├ível t├®cnico NF-e 4.0 (de `LocalParac`)
+  - Controle de processamento em lote
+
+- **`Init()`** configurando `this_cTabela = "SigMvNfi"` e `this_cCampoChave = "empdopnums"`
+- **`ObterChavePrimaria()`** retornando `this_cId` (chave de acesso NF-e)

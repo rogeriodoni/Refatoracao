@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\SigPrGstBO.prg` criado com:
+
+- **26 propriedades** cobrindo todos os campos usados no form:
+  - `this_cGrupoOper` / `this_cPcEscolha` ÔÇö contexto do form pai
+  - 17 props de `csCabec` ÔÇö empresa, opera├º├úo, n├║mero, chave composta, grupos/contas O/D, flag gerado, etc.
+  - 7 props de `csItens` ÔÇö produto, descri├º├úo, moeda, quantidade, total
+- **Init()** configurando `this_cTabela = "SigMvCab"` e `this_cCampoChave = "EmpDopNums"`
+
+**Observa├º├Áes para as pr├│ximas fases:**
+- `fGerMascara` e `fGravarLog` s├úo usadas no legado mas **n├úo est├úo definidas** no projeto novo ÔÇö precisar├úo de stubs ou equivalentes nas fases 2+
+- `fGerUniqueKey` e `fUniqueIds` **existem** em `utils/functions.prg` ÔÇö podem ser usadas diretamente
+- O form ├® **filho** (recebe `poform` como par├ómetro) e opera sobre cursores do pai ÔÇö o Form (fases 3+) precisar├í receber e repassar esses cursores ao BO

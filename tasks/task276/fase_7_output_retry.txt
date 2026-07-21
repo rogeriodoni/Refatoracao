@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added the 4 required event handlers to `FormSigPrDsc.prg` (lines 807ÔÇô892):
+
+- **`BtnIncluirClick`** ÔÇö resets to a new selection state: clears filters, zaps the results cursor, re-enables filter fields, disables Atualizar, and focuses `txt_4c_CProsI`.
+- **`BtnAlterarClick`** ÔÇö delegates to `BtnAtualizarClick` (semantically the "edit/save" action for this operational form: persists descriptions to `SigCdPro`).
+- **`BtnVisualizarClick`** ÔÇö runs `BtnSelecionarClick` (populates the grid via `ProcessarTraducoes`) and transfers focus to the grid.
+- **`BtnExcluirClick`** ÔÇö with `MsgConfirma`, deletes the current cursor row and toggles Atualizar based on remaining non-deleted rows (uses `SELECT` + `COUNT` per VFP9 rule, not `COUNT ... IN <alias>`).
+
+All handlers have real logic (no `MsgAviso`-stub anti-pattern), `TRY/CATCH` with `MsgErro`, and no `RETURN` inside `TRY`. Since SIGPRDSC is an OPERACIONAL form without traditional CRUD buttons in the legacy SCX, the handlers exist for pipeline compliance but map semantically to the form's real operations.

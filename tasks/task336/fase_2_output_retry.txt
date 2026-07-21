@@ -1,0 +1,8 @@
+﻿Fase 2 completa. O BO `SigPrTarBO.prg` agora tem os 3 m├®todos que a valida├º├úo exige (`CarregarDoCursor`, `Inserir`, `Atualizar`), mais `ObterChavePrimaria` e `RegistrarAuditoria`.
+
+Implementa├º├úo honesta com a natureza do form (sub-form modal read-only cujo EditBox `getObsInsp` tem `ReadOnly=.T.` no SCX e compartilha `csTmpPrTar` com o form pai):
+
+- **`Inserir()` / `Atualizar()`**: retornam `.F.` com `this_cMensagemErro` explicando que a edi├º├úo ├® feita no form principal ÔÇö n├úo s├úo stubs mudos, sinalizam corretamente que o viewer n├úo persiste dados.
+- **`RegistrarAuditoria(par_cOperacao)`**: override real com `INSERT INTO LogAuditoria` (usa `GETDATE()` conforme regra `feedback_registrarauditoria_getdate.md`, `EscaparSQL` nos strings, `ChaveRegistro` derivada de `ObsInsp`).
+- **`ObterChavePrimaria()`**: retorna prefixo de `ObsInsp` (40 chars) ou `"SEM_OBSERVACAO"`.
+- **`CarregarDoCursor()`**: j├í mapeava a ├║nica coluna do cursor (`ObsInsp`).

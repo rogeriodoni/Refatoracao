@@ -1,0 +1,7 @@
+﻿As corre├º├Áes est├úo corretas. O problema era que VFP9 n├úo suporta `:` como separador de declara├º├Áes dentro de blocos `WITH` ao usar a sintaxe `.Propriedade = valor`. Todas as ocorr├¬ncias foram expandidas para linhas separadas.
+
+**Resumo das corre├º├Áes em `Formacu.prg`:**
+- `ConfigurarAbaCadastro()` (linhas ~995ÔÇô1206): 14 blocos `WITH` de Labels/TextBoxes + 6 blocos de OptionGroups + bloco lbl_4c_Grupos ÔÇö todos os `:` separadores expandidos para linhas individuais
+- `ConfigurarAbaEmpresa()` (linha ~1280): bloco `lbl_4c_Empresas` corrigido
+
+O `acuBO.prg` n├úo tinha erros ÔÇö os erros de compila├º├úo eram todos no form.

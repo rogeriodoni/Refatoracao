@@ -1,0 +1,13 @@
+﻿Fase 7/8 conclu├¡da. As altera├º├Áes em `Formsigprila.prg`:
+
+**`CmdokClick()`** ÔÇö simplificado para delegar ao `BtnIncluirClick()`, seguindo o padr├úo pipeline OPERACIONAL.
+
+**`BtnIncluirClick()`** ÔÇö cont├®m a l├│gica real de importa├º├úo (valida├º├Áes + delega├º├úo ao BO + reset do form via `AlternarPagina(1)` ap├│s sucesso). Duas corre├º├Áes importantes em rela├º├úo ├á vers├úo anterior:
+- Agora verifica o retorno de `Processamento()` (`.T.`/`.F.`)
+- Chama `AlternarPagina(1)` ap├│s importa├º├úo bem-sucedida, permitindo re-uso sem fechar o form
+
+**`BtnAlterarClick()`** ÔÇö delega ao `BtnIncluirClick()` (importa├º├úo ├® sempre idempotente/substitui├º├úo)
+
+**`BtnVisualizarClick()`** ÔÇö valida configura├º├úo sem importar: verifica tipo, arquivo, exist├¬ncia do arquivo no disco e rotina reconhecida pelo BO, com foco reposicionado no campo inv├ílido
+
+**`BtnExcluirClick()`** ÔÇö limpa sele├º├Áes via `AlternarPagina(1)` ap├│s confirma├º├úo, permitindo reiniciar sem fechar o form

@@ -2384,7 +2384,9 @@ DEFINE CLASS FormSigReDpD AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         *-- Restaura visibilidade do container apos relatorio
         IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
@@ -2402,7 +2404,9 @@ DEFINE CLASS FormSigReDpD AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir(.T.)
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
             LOCAL loc_oPg3

@@ -19,8 +19,8 @@
 *      - Operas='P'    : pesagens de SigOpCfe por SigCdCli
 *      - Operas='H'    : historico de estoque via SigMvEst + SigMvHst
 *      - Operas='T'    : insere linha de sub-total/total geral
-*   6. Monta cursor_4c_Cabecalho com empresa, titulo e periodo
-*   7. Monta cursor_4c_Result com todas as linhas do demonstrativo
+*   6. Monta csCabecalho com empresa, titulo e periodo
+*   7. Monta TmpResult com todas as linhas do demonstrativo
 *
 * Relatorio FRX: SigReDdp.frx (na pasta gc_4c_CaminhoReports)
 *==============================================================================
@@ -32,7 +32,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
     this_dDtFinal           = {}    && Data final de referencia para apuracao
 
     *-- Cursor principal de saida (populado por PrepararDados)
-    this_cCursorDados       = "cursor_4c_Result"
+    this_cCursorDados       = "TmpResult"
 
     *-- Titulo do relatorio (exibido no cabecalho)
     this_cTituloRelatorio   = ""
@@ -140,7 +140,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
         TRY
             THIS.this_cMensagemErro = ""
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReDdp", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReDdp", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -153,7 +153,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Monta cursor_4c_Cabecalho e cursor_4c_Result
+    * PrepararDados - Monta csCabecalho e TmpResult
     * Replica a logica do procedure 'processamento' do form original SIGREDDP
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDados()
@@ -189,11 +189,11 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
             ENDIF
 
             *-- Limpa cursores de saida de execucao anterior
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("csCabecalho")
+                USE IN csCabecalho
             ENDIF
-            IF USED("cursor_4c_Result")
-                USE IN cursor_4c_Result
+            IF USED("TmpResult")
+                USE IN TmpResult
             ENDIF
 
             *-- 1. Carrega parametro Ouros de SigCdPam
@@ -225,14 +225,14 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
 
             *-- 4. Cria cursores de saida
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho ;
+            CREATE CURSOR csCabecalho ;
                 (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80), SdInicial N(12,3))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+            INSERT INTO csCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
                    VALUES (loc_lcCbEmpresa, loc_lcCbTitulo, loc_lcCbPeriodo)
 
             SET NULL ON
-            CREATE CURSOR cursor_4c_Result ;
+            CREATE CURSOR TmpResult ;
                 (Ordem N(3), Grupos C(10), Contas C(10), Nome C(50), ;
                  TpOps C(15), Operas C(1), Qtds N(12,3))
             SET NULL OFF
@@ -297,7 +297,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
                     IF ALLTRIM(cursor_4c_SigOpCfe.CPros) = loc_lcOuros
                         loc_lnQtde  = cursor_4c_SigOpCfe.Saldos
                         loc_lnSaldo = loc_lnSaldo + loc_lnQtde
-                        INSERT INTO cursor_4c_Result (Grupos, Contas, TpOps, Qtds) ;
+                        INSERT INTO TmpResult (Grupos, Contas, TpOps, Qtds) ;
                                VALUES (loc_lcPrDmoGrupos, loc_lcPrDmoContas, ;
                                        "Saldo Inicial", loc_lnQtde)
                     ENDIF
@@ -312,9 +312,9 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
             ENDIF
 
             *-- Grava saldo inicial no cabecalho
-            SELECT cursor_4c_Cabecalho
+            SELECT csCabecalho
             GO TOP
-            REPLACE cursor_4c_Cabecalho.SdInicial WITH loc_lnSaldo
+            REPLACE csCabecalho.SdInicial WITH loc_lnSaldo
             loc_lnSubTotal = loc_lnSaldo
 
             *-- 7. Busca e processa linhas do demonstrativo (SigCdDpr)
@@ -332,7 +332,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
 
                 IF ALLTRIM(cursor_4c_SigCdDpr.Operas) = "T"
                     *-- Sub-Total ou Total Geral
-                    INSERT INTO cursor_4c_Result (Operas, Qtds, Ordem, Nome) ;
+                    INSERT INTO TmpResult (Operas, Qtds, Ordem, Nome) ;
                            VALUES ("T", loc_lnSubTotal, cursor_4c_SigCdDpr.Ordems, ;
                                    IIF(cursor_4c_SigCdDpr.Ordems = 999, ;
                                        "Total Geral", "Sub-Total"))
@@ -391,7 +391,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
                             SELECT cursor_4c_SigOpCfe
                             SCAN
                                 IF ALLTRIM(cursor_4c_SigOpCfe.CPros) = loc_lcOuros
-                                    INSERT INTO cursor_4c_Result ;
+                                    INSERT INTO TmpResult ;
                                            (Grupos, Contas, Nome, TpOps, Operas, Qtds, Ordem) ;
                                            VALUES (loc_lcDprGrupos, loc_lcDprContas, ;
                                                    loc_lcNome, "PESAGEM", loc_lcDprOperas, ;
@@ -429,7 +429,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
                                     loc_lnQtde = IIF(loc_lcDprOperas = "E", ;
                                                      cursor_4c_SigCdFes.PesoEnts, ;
                                                      cursor_4c_SigCdFes.PesoSais)
-                                    INSERT INTO cursor_4c_Result ;
+                                    INSERT INTO TmpResult ;
                                            (Grupos, Contas, Nome, TpOps, Operas, Qtds, Ordem) ;
                                            VALUES (loc_lcDprGrupos, loc_lcDprContas, ;
                                                    loc_lcNome, ;
@@ -541,7 +541,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
                     *-- Apos ENDSCAN cursor esta no primeiro registro nao-H (ou EOF)
 
                     IF loc_lnPeso <> 0
-                        INSERT INTO cursor_4c_Result ;
+                        INSERT INTO TmpResult ;
                                (Grupos, Contas, Nome, Operas, Qtds, Ordem) ;
                                VALUES (cursor_4c_SigCdDpr.Grupos, ;
                                        cursor_4c_SigCdDpr.Contas, ;
@@ -562,7 +562,7 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
                 USE IN cursor_4c_SigCdCli
             ENDIF
 
-            SELECT cursor_4c_Result
+            SELECT TmpResult
             GO TOP
 
             loc_lSucesso = .T.
@@ -574,11 +574,11 @@ DEFINE CLASS SigReDdpBO AS RelatorioBase
             MsgErro(loc_oErro.Message, "Erro em PrepararDados")
 
             *-- Fecha cursores de saida (dados incompletos)
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("csCabecalho")
+                USE IN csCabecalho
             ENDIF
-            IF USED("cursor_4c_Result")
-                USE IN cursor_4c_Result
+            IF USED("TmpResult")
+                USE IN TmpResult
             ENDIF
             *-- Fecha cursores intermediarios
             IF USED("cursor_4c_SigCdPam")

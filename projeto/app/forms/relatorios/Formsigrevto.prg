@@ -73,7 +73,9 @@ DEFINE CLASS Formsigrevto AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarFiltros()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -737,7 +739,9 @@ DEFINE CLASS Formsigrevto AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReVto", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -759,7 +763,9 @@ DEFINE CLASS Formsigrevto AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReVto", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -781,7 +787,9 @@ DEFINE CLASS Formsigrevto AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReVto", "PRINTER", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

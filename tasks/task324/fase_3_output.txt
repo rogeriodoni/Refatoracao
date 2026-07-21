@@ -1,0 +1,10 @@
+﻿Tudo integrado corretamente. Fase 3/8 conclu├¡da:
+
+**`Formsigprrcu.prg`** criado em `projeto/app/forms/operacionais/` com:
+
+- **Layout fiel ao original**: 580├ù150px, TitleBar=0, AutoCenter, DataSession=2, sem barra de t├¡tulo (id├¬ntico ao SIGPRRCU.SCX)
+- **Cabecalho** (`cnt_4c_Sombra`): cinza RGB(100,100,100) com lbl_4c_LblSombra (sombra preta) + lbl_4c_LblTitulo (branco), AutoSize=.F.
+- **Bot├Áes standalone** com Themes=.T. + DisabledPicture (regra #99 ÔÇö ├¡cone preservado quando Enabled=.F. durante processamento): `cmd_4c_Processar` (Left=430, `geral_processar_60.jpg`) e `cmd_4c_Encerrar` (Left=505, `cadastro_sair_60.jpg`)
+- **Label de status** `lbl_4c_Status` animado durante o loop
+- **`CmdProcessarClick()`**: reproduz fielmente o loop do `OK.Click` original ÔÇö BEGIN TRANSACTION por item, MarcarEmProcessamento ÔåÆ ExecutarRecalculo (1┬¬ e 2┬¬ chamada fRecalculaC) ÔåÆ RemoverDaFila ÔåÆ COMMIT; ROLLBACK em falha; INKEY(0.5) entre itera├º├Áes; modo Fortyus.Exe auto-processa e fecha
+- **Menu**: BAR 97 em popMovimentos + `AbrirFormsigprrcu()` ao final de menu.prg

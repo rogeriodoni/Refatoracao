@@ -1,0 +1,3 @@
+﻿**Fase 7/8 conclu├¡da.** O form `Formsigprsen.prg` j├í estava completo ÔÇö os "eventos principais" para este form OPERACIONAL s├úo `CmdGerarSenhaClick()` e `CmdEncerrarClick()`, ambos implementados nas fases anteriores com BINDEVENT em `ConfigurarPaginaDados()`. N├úo h├í `BtnIncluirClick/Alterar/Visualizar/Excluir` porque este form n├úo ├® CRUD.
+
+Aproveitei para corrigir um bug no `sigprsenBO.prg`: `Processar()` tinha dois `RETURN .F.` dentro do bloco `TRY/CATCH` (viola├º├úo da Regra #1). Refatorei para usar flag `loc_lConfirmado` e RETURN ├║nico fora do TRY/CATCH.

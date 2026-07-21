@@ -1766,3 +1766,13 @@ FUNCTION fGerUniqueKey(par_cChave)
 
     RETURN loc_nNovo
 ENDFUNC
+
+*==============================================================================
+* FUNCTION fGerMascara
+* Formata numero sequencial como mascara de 10 digitos com zeros a esquerda
+* Par: par_nNum - numero inteiro gerado por fGerUniqueKey
+* Ret: string de 10 caracteres (ex: "0000000001")
+*==============================================================================
+FUNCTION fGerMascara(par_nNum)
+    RETURN PADL(ALLTRIM(STR(INT(NVL(par_nNum, 0)))), 10, "0")
+ENDFUNC

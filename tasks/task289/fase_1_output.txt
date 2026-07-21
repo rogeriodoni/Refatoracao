@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Aqui est├í o resumo do que foi criado na Fase 1:
+
+**`C:/4c/projeto/app/classes/SigPrGl2BO.prg`** ÔÇö 844 linhas criadas com:
+
+**Propriedades declaradas:**
+- Conex├Áes: `this_oConexao`, `this_oConexao2`, `this_oFormPai`
+- Par├ómetros de abertura: `this_lReserva`, `this_nEmphPdr`, `this_lAutomatico`, `this_nNumeroDaOp`, `this_cPorDestino`
+- Estado: `this_cOrdConta`, `this_lProcessado`, `this_nContadorSelecionadas`
+- Dados do registro corrente do TmpCabec: `this_cEmps`, `this_cDopes`, `this_nNumes`, `this_dDatas`, `this_dEntregas`, `this_nPeso`, `this_cContav`, `this_cConta`, `this_cDConta`, `this_cObs`, `this_cNotas`, `this_cJobs`, `this_cGrupoDs`, `this_cContaDs`
+
+**M├®todos implementados:**
+- `Init()` ÔÇö configura `this_cTabela = "SigMvCab"` e `this_cCampoChave = "EmpDopNums"`
+- `ConfigurarContexto()` ÔÇö recebe os 8 par├ómetros do form pai (equivale ao Init() do SCX legado)
+- `OrdenarGrade()`, `DefinirOrdemMovimentacao()`, `DefinirOrdemEntrega()` ÔÇö l├│gica de ordena├º├úo do GradeOpera├º├úo
+- `SincronizarItens()` ÔÇö filtra TmpItens para o registro corrente de TmpCabec (AfterRowColChange)
+- `SelecionarTodos()`, `DesmarcarTodos()` ÔÇö bot├Áes SelTudo/apaga
+- `ValidarSelecao()` ÔÇö valida sele├º├úo com mesmo JOB (l├│gica do Processar.Click)
+- `ProcessarOperacoes()` ÔÇö toda a l├│gica do Processar.Click (390 linhas ÔåÆ agora encapsulada no BO)
+- `ProcessarFabrico()` (PROTECTED) ÔÇö sub-rotina para c├ílculo de estoque em fabrica├º├úo
+- `EncerrarForm()`, `Destroy()` ÔÇö limpeza e encerramento

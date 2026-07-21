@@ -1,0 +1,21 @@
+﻿The migration-patterns.md requires explicit approval. Let me present the propagation summary to the user.
+
+---
+
+Propagation of lesson Erro47 (WITH aninhado / ForeColor) completed for all applicable artifacts:
+
+| Artefato | Status | Detalhes |
+|----------|--------|----------|
+| Prompt OPERACIONAL | Ô£à OK | Linha 3236 |
+| Prompt REPORT/outro | Ô£à OK | Linha 3500 |
+| Prompt Phase A | Ô£à OK | Linha 3702 |
+| Prompt Phase B | Ô£à OK | Linha 3875 |
+| migration-patterns.md | ÔÅ│ Aguardando permiss├úo | Se├º├úo ## 140 pronta para inserir |
+| CorretorAutomatico.ps1 | N/A | Padr├úo n├úo ├® autom├ível via regex |
+| corretor-patterns.md | N/A | Idem |
+| MEMORY.md | Ô£à OK | Linha adicionada + arquivo `feedback_with_aninhado_addobj_forecolor.md` criado |
+| Sweep retroativo | N/A | CorretorAutomatico n├úo mudou |
+
+**migration-patterns.md** (se├º├úo ## 140) est├í bloqueando por falta de permiss├úo de escrita. Se voc├¬ aprovar agora, posso tentar novamente.
+
+**Resumo da li├º├úo propagada**: Dentro de `WITH THIS.cnt_X`, chamar `.AddObject("filho", "Label")` e depois `WITH .filho` (WITH relativo aninhado) causa "Property FORECOLOR is not found" em VFP9 ÔÇö o VFP9 tenta resolver `.filho` no contexto do container pai, n├úo no filho rec├®m-criado. Solu├º├úo can├┤nica: `loc_oCnt = THIS.cnt_X` ÔåÆ `loc_oCnt.AddObject(...)` fora de WITH ÔåÆ `WITH loc_oCnt.filho` com caminho expl├¡cito.

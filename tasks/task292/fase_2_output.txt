@@ -1,0 +1,6 @@
+﻿Fase 2 conclu├¡da. Adicionados 4 m├®todos ao `SigPrGlpBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö carrega propriedades do BO (Reserva, Automatico, NumeroDaOp, SigKey, EmphPdr, datas) de um cursor de par├ómetros usando `TYPE()` para verificar exist├¬ncia de cada campo
+- **`Inserir()`** ÔÇö override de BusinessBase que delega ao `Processar()` com as datas `this_dPrevisao`/`this_dGeracao` (preenchidas ou defaultadas para `DATE()`), seguido de `RegistrarAuditoria("I")`
+- **`Atualizar()`** ÔÇö override retornando `.F.` (form OPERACIONAL gera novas ordens, n├úo atualiza existentes)
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö registra em `LogAuditoria` com `GETDATE()` (nunca `FormatarDataSQL(DATETIME())`)

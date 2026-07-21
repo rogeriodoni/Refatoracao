@@ -1,0 +1,41 @@
+﻿Ap├│s leitura completa do form (1734 linhas) e do BO (SigPrGloBO.prg, 1245 linhas) e verifica├º├úo no schema.sql, posso dar um diagn├│stico definitivo.
+
+---
+
+## Resultado: Todos os 15 itens s├úo FALSOS POSITIVOS
+
+A ferramenta de code review comparou as colunas das cl├íusulas WHERE no c├│digo migrado contra uma lista parcial do legado, mas essa lista extrai colunas de **queries diferentes** (SigCdOpe, SigMvItn, SigMvIts) e ignorou as colunas do WHERE do **SigMvCab** original.
+
+### Verifica├º├úo coluna a coluna contra `docs/schema.sql`
+
+| Coluna flagrada | Tabela no BO | Existe no schema? | Status |
+|---|---|---|---|
+| `CIDCHAVES` | SigOpPic PK | Ô£à Sim | Leg├¡timo (CRUD) |
+| `DOPPS` | SigCdOpd | Ô£à Sim | Leg├¡timo |
+| `DATAS` | SigMvCab | Ô£à Sim (`datas datetime`) | Filtro per├¡odo emiss├úo |
+| `PRAZOENTS` | SigMvCab | Ô£à Sim (`prazoents datetime`) | Filtro previs├úo entrega |
+| `GRUPOOS` | SigMvCab | Ô£à Sim (`grupoos char(10)`) | Filtro Conta opcional |
+| `GRUPODS` | SigMvCab | Ô£à Sim (`grupods char(10)`) | Filtro Conta opcional |
+| `CONTAOS` | SigMvCab | Ô£à Sim (`contaos char(10)`) | Filtro Conta opcional |
+| `CONTADS` | SigMvCab | Ô£à Sim (`contads char(10)`) | Filtro Conta opcional |
+| `GRVENDS` | SigMvCab | Ô£à Sim (`grvends char(10)`) | Filtro Respons├ível |
+| `VENDS` | SigMvCab | Ô£à Sim (`vends char(10)`) | Filtro Respons├ível |
+| `NOPS` | SigMvCab | Ô£à Sim (`nops numeric(10,0)`) | `AND Nops = 0` = apenas n├úo-processados |
+| `CGRUS` | SigCdPro | Ô£à Coluna bem conhecida | Lookup SigCdGrp |
+| `ICLIS` | SigCdCli | Ô£à Coluna bem conhecida | Lookup nome cliente |
+| `CONTROLCOUNT` | ÔÇö | N├úo ├® coluna SQL | **Propriedade VFP9** `.ControlCount` (linha 951 do form) |
+| `CEMPS` | SigCdEmp | Ô£à PK confirmada (Pattern #125) | PopularCamposIniciais |
+
+### Raiz do falso positivo
+
+A ferramenta construiu a lista de refer├¬ncia mesclando colunas de WHERE de **queries distintas** (SigCdOpe, SigMvItn, SigMvIts) e n├úo capturou as condi├º├Áes din├ómicas do SigMvCab original, que constroem o WHERE com filtros opcionais de data, conta e respons├ível.
+
+### Resultado
+
+**Nenhuma altera├º├úo necess├íria.** O form `FormSigPrGlo.prg` e o BO `SigPrGloBO.prg` est├úo corretos:
+
+- Todas as colunas usadas em WHERE existem nas tabelas correspondentes (validado no schema.sql)
+- `AND Nops = 0` ├® l├│gica de neg├│cio cr├¡tica ÔÇö impede reprocessar pedidos que j├í t├¬m OP gerada
+- `ControlCount` n├úo ├® SQL, ├® propriedade VFP9 de container (linha 951 do form)
+
+Remover qualquer dessas condi├º├Áes quebraria a funcionalidade. O pass SQL n├úo tem corre├º├Áes a fazer neste form.

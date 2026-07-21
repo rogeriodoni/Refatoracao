@@ -1,0 +1,8 @@
+﻿4 event handlers added to `Formsigprdis.prg` before `ENDDEFINE`:
+
+- **`BtnIncluirClick()`** ÔÇö delegates to `THIS.AbrirNovoBatch()` (new distribution lot)
+- **`BtnAlterarClick()`** ÔÇö reads `Codigos` from `cursor_4c_Dados`, delegates to `THIS.AbrirBatchExistente()`
+- **`BtnVisualizarClick()`** ÔÇö same as Alterar (opens existing lot for review)
+- **`BtnExcluirClick()`** ÔÇö confirms with user, runs `DELETE FROM SigPrDis WHERE Codigos = ...`, reloads list on success; uses `loc_lResultado` flag pattern (no RETURN inside TRY/CATCH), CHR() for accented chars, proper CATCH with `MsgErro`
+
+Phase 7/8 complete. The file now has 2207 lines.

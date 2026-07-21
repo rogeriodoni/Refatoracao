@@ -1,0 +1,11 @@
+﻿Ap├│s an├ílise completa do form (1398 linhas) e do BO, os dois alertas s├úo **falsos positivos** do c├│digo de revis├úo autom├ítica:
+
+1. **`CURSOR_4C_TOTA`** ÔÇö o c├│digo real usa `cursor_4c_Totais` como **nome de cursor VFP** em `SELECT ... INTO CURSOR cursor_4c_Totais` (BO linha 225) e `USED("cursor_4c_Totais")` / `USE IN cursor_4c_Totais` (Form linhas 667-668, BO linhas 218-237). N├úo ├® coluna SQL em cl├íusula WHERE.
+
+2. **`CONTROLCOUNT`** ÔÇö o c├│digo real usa `par_oContainer.ControlCount` como **propriedade VFP9 de objeto** (Form linhas 776 e 791 em `TornarControlesVisiveis`). N├úo ├® coluna SQL em cl├íusula WHERE.
+
+Verifica├º├úo: nenhum `WHERE` nos dois arquivos cont├®m essas strings como nome de coluna:
+- `WHERE` em `SigPrCtcBO.prg`: apenas `WHERE a.empdopnums = ...`, `WHERE cmoes LIKE ...`, `WHERE !DELETED() AND !EMPTY(ALLTRIM(cmoes))`, `WHERE empdopnums = ...`
+- `WHERE` em `FormSigPrCtc.prg`: apenas `WHERE !DELETED()` e `LOCATE FOR ... !DELETED()`
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos ÔÇö o validador confundiu aliases de cursores VFP e propriedades de objetos com nomes de colunas SQL.

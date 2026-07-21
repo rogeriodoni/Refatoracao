@@ -1,0 +1,27 @@
+﻿Ambos os arquivos est├úo **completamente implementados**. A Fase 6 j├í foi conclu├¡da nas fases anteriores. Aqui est├í o resumo do estado atual:
+
+**FormSigPrEs1.prg** (1960 linhas) ÔÇö COMPLETO:
+- `ConfigurarContainerFiltros()` ÔÇö todos os 40+ controles do Container1 criados
+- `ConfigurarBotoes()` ÔÇö CommandGroup com Consultar + Encerrar
+- `InicializarCampos()` ÔÇö todos os campos inicializados
+- `TornarControlesVisiveis()` ÔÇö recurs├úo sem skip (sem containers flutuantes)
+- `FormParaBO()` / `BOParaForm()` ÔÇö todos os 22 campos mapeados
+- `BtnConsultarClick()` / `BtnEncerrarClick()` ÔÇö l├│gica completa
+- 6 m├®todos `AbrirBusca*()` ÔÇö Empresa, Opera├º├úo, Moeda, Conta, Respons├ível, GrupoCont├íbil
+- 12 handlers `Validar*()` ÔÇö ENTER/TAB/F4 com SELECT exato + fallback picker
+- `ConfigurarBindEvents()` ÔÇö todos os BINDEVENTs registrados
+- `Destroy()` ÔÇö libera cursores e BO
+
+**SigPrEs1BO.prg** (506 linhas) ÔÇö COMPLETO:
+- Propriedades `this_*` para todos os filtros
+- `CarregarGrPadVens()` ÔÇö carrega grupo padr├úo de vendedores de SigCdPam
+- `ValidarFiltros()` ÔÇö valida empresa, opera├º├úo e per├¡odo
+- `ExecutarConsulta()` ÔÇö monta WHERE din├ómico completo e cria `csTemporario`
+- `ValidarCpfCnpj()` ÔÇö valida CPF/CNPJ e localiza conta em SigCdCli
+- `RegistrarAuditoria()` ÔÇö usa `GETDATE()` (regra can├┤nica)
+
+**Integra├º├úo**:
+- `menu.prg` ÔÇö `AbrirFormSigPrEs1()` implementado + BAR 41 em `popMovimentos` Ô£ô
+- `config.prg` ÔÇö carrega automaticamente via `ADIR(*BO.prg)` e `ADIR(Form*.prg)` Ô£ô
+
+A migra├º├úo do **FormSigPrEs1** est├í 100% funcional. As fases 7 e 8 do pipeline multi-fase dever├úo cobrir etapas como valida├º├úo de UI fidelidade e integra├º├úo final.

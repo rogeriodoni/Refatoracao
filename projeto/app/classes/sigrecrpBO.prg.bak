@@ -8,7 +8,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
 
     this_cArquivoFRX    = ""
     this_cTitulo        = ""
-    this_cCursorDados   = "cursor_4c_Dados"
+    this_cCursorDados   = "Resultado"
     this_lMensagemAviso = .F.
 
     *-- Opcao: 1=Debito (D), 2=Credito (C)
@@ -52,7 +52,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Executa processamento e popula cursor_4c_Dados e cursor_4c_Cabecalho
+    * PrepararDados - Executa processamento e popula Resultado e CsCabecalho
     * Replica logica completa do procedimento "processamento" do SIGRECRP.SCX
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDados()
@@ -107,21 +107,21 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
         loc_cCbTitulo  = loc_cCbTitulo + loc_cCbPeriodo
 
         *-- Cursor de cabecalho para o relatorio
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("CsCabecalho")
+            USE IN CsCabecalho
         ENDIF
         SET NULL ON
-        CREATE CURSOR cursor_4c_Cabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
+        CREATE CURSOR CsCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
         SET NULL OFF
-        INSERT INTO cursor_4c_Cabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+        INSERT INTO CsCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
             VALUES (loc_cCbEmpresa, loc_cCbTitulo, loc_cCbPeriodo)
 
         *-- Cursor principal de resultado
-        IF USED("cursor_4c_Dados")
-            USE IN cursor_4c_Dados
+        IF USED("Resultado")
+            USE IN Resultado
         ENDIF
         SET NULL ON
-        CREATE CURSOR cursor_4c_Dados ( ;
+        CREATE CURSOR Resultado ( ;
             Tipo      N(1), ;
             Grupo     C(10), ;
             Conta     C(10), ;
@@ -191,7 +191,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
                 ENDIF
                 loc_nValor = cursor_4c_SigrecrpMvCcr.Valors - cursor_4c_SigrecrpMvCcr.ValPags
                 IF loc_nValor <> 0
-                    INSERT INTO cursor_4c_Dados (Tipo, Grupo, Conta, Nome, Empresa, ;
+                    INSERT INTO Resultado (Tipo, Grupo, Conta, Nome, Empresa, ;
                         Data, Vecto, Historico, Integral, Pendente, Moeda) ;
                         VALUES (1, loc_cCodigoGrupo, ;
                             ALLTRIM(cursor_4c_SigrecrpMvCcr.Contas), ;
@@ -339,7 +339,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
                             LOOP
                         ENDIF
 
-                        INSERT INTO cursor_4c_Dados (Tipo, Grupo, Conta, Nome, Empresa, ;
+                        INSERT INTO Resultado (Tipo, Grupo, Conta, Nome, Empresa, ;
                             Data, Vecto, Historico, Integral, Pendente, Moeda) ;
                             VALUES (1, loc_cCodigoGrupo, ALLTRIM(loc_cContasCab), ;
                                 ALLTRIM(loc_cNomeCab), ALLTRIM(loc_cEmps), ;
@@ -373,7 +373,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
         ENDIF
 
         *-- Verifica se ha dados no resultado
-        SELECT cursor_4c_Dados
+        SELECT Resultado
         INDEX ON STR(Tipo, 1) + Empresa + Grupo + Conta + DTOS(Vecto) TAG GruConVec
         GO TOP
         IF EOF()
@@ -389,7 +389,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
             USE IN cursor_4c_SigrecrpTotaliza
         ENDIF
         SELECT Moeda, SUM(Integral) AS Integral, SUM(Pendente) AS Pendente ;
-            FROM cursor_4c_Dados ;
+            FROM Resultado ;
             GROUP BY Moeda ;
             ORDER BY Moeda ;
             INTO CURSOR cursor_4c_SigrecrpTotaliza
@@ -397,8 +397,8 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
         loc_nTipo = 2
         SELECT cursor_4c_SigrecrpTotaliza
         SCAN
-            SELECT cursor_4c_Dados
-            INSERT INTO cursor_4c_Dados (Tipo, Moeda, Pendente, Integral) ;
+            SELECT Resultado
+            INSERT INTO Resultado (Tipo, Moeda, Pendente, Integral) ;
                 VALUES (loc_nTipo, ALLTRIM(cursor_4c_SigrecrpTotaliza.Moeda), ;
                     cursor_4c_SigrecrpTotaliza.Pendente, ;
                     cursor_4c_SigrecrpTotaliza.Integral)
@@ -412,7 +412,7 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
             USE IN cursor_4c_SigrecrpTotaliza
         ENDIF
 
-        SELECT cursor_4c_Dados
+        SELECT Resultado
         GO TOP
 
         RETURN .T.
@@ -633,11 +633,11 @@ DEFINE CLASS sigrecrpBO AS RelatorioBase
     * Destroy - Limpeza de todos os cursors abertos pelo BO
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_Dados")
-            USE IN cursor_4c_Dados
+        IF USED("Resultado")
+            USE IN Resultado
         ENDIF
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("CsCabecalho")
+            USE IN CsCabecalho
         ENDIF
         IF USED("cursor_4c_SigrecrpEmp")
             USE IN cursor_4c_SigrecrpEmp

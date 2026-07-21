@@ -1,0 +1,13 @@
+﻿O alerta `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo**.
+
+`ControlCount` n├úo aparece em nenhuma cl├íusula SQL WHERE ÔÇö ├® uma propriedade VFP9 nativa usada no m├®todo `TornarControlesVisiveis` (linhas 898 e 906) para iterar sobre controles visuais de um container:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount       && propriedade VFP9
+    ...
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) ... && idem
+```
+
+N├úo h├í nenhuma condi├º├úo SQL inventada nos arquivos `Formsigprenv.prg` e `sigprenvBO.prg`. O pipeline de code-review confundiu o nome da propriedade com um poss├¡vel nome de coluna SQL.
+
+Nenhuma corre├º├úo ├® necess├íria neste pass.

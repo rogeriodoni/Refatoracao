@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrMdc.prg` foi criado com:
+
+**Estrutura entregue:**
+- `DEFINE CLASS FormSigPrMdc AS FormBase` ÔÇö propriedades visuais exatas do legado (TitleBar=0, ControlBox=.F., Closable=.F., DataSession=2) + Width=1000/Height=600
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (padr├úo correto)
+- `ConfigurarPageFrame()` ÔÇö setup de fundo/fontes do form (adapta├º├úo OPERACIONAL do m├®todo que FormBase espera)
+- `InicializarForm()` ÔÇö cria BO, inicializa cursor de contas, monta containers base; sem `RETURN` dentro do `TRY/CATCH`
+- `ConfigurarCabecalho()` ÔÇö cnt_4c_Cabecalho + lbl_4c_Sombra/Titulo (cinza RGB(100,100,100), AutoSize=.F.)
+- `ConfigurarBotoes()` ÔÇö cnt_4c_Botoes vazio (Fase 4 adiciona bot├Áes individuais)
+- `ConfigurarContainerResultado()` ÔÇö cnt_4c_Resultado com `Visible=.F.` (container flutuante de progresso)
+- `AtualizarProgresso()` ÔÇö chamado pelo BO durante processamento, p├║blico
+- `TornarControlesVisiveis()` ÔÇö com guard para `cnt_4c_Resultado` (recursa filhos mas n├úo seta Visible do container)
+- `Destroy()` ÔÇö fecha cursores e nulifica BO
+
+**Pr├│xima fase (4/8):** Adicionar grid `grd_4c_Dados`, bot├Áes individuais em `cnt_4c_Botoes`, checkboxes e conte├║do interno do `cnt_4c_Resultado`.

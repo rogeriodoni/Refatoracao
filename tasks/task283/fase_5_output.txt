@@ -1,0 +1,8 @@
+﻿O arquivo est├í correto. A migra├º├úo do FormSIGPREST estava completa desde a Fase 4 ÔÇö a Fase 5 n├úo tem campos a adicionar porque este ├® um di├ílogo utilit├írio simples (sem Page2/Dados, sem TextBoxes, sem campos de cadastro). O que encontrei e corrigi:
+
+**Bug corrigido em `SIGPRESTBO.prg`:** `RETURN .F.` dentro de TRY/CATCH (viola├º├úo da Regra #1). Substitu├¡do por flag `loc_lInterrompido` com fluxo correto de controle ÔÇö se `ArqDBF.Dbf` n├úo existir quando Gerar├ìndices=.T., o processamento aborta graciosamente sem `RETURN` dentro do bloco TRY.
+
+**Status da migra├º├úo task283:**
+- BO (`SIGPRESTBO.prg`) ÔÇö completo e corrigido
+- Form (`FormSIGPREST.prg`) ÔÇö completo
+- Fases 6, 7 e 8 tamb├®m n├úo t├¬m conte├║do a adicionar (mesmo motivo: zero campos/Page2)

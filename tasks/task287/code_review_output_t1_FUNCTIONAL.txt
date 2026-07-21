@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes foram aplicadas corretamente.
+
+**Resumo das corre├º├Áes:**
+
+**[CONTAINER-VISIVEL]** ÔÇö dois pontos alterados:
+- `ConfigurarCabecalho()` (linha 201): adicionado `.Visible = .T.` dentro do `WITH THIS.cnt_4c_Cabecalho` antes do `ENDWITH`. O container agora controla sua pr├│pria visibilidade explicitamente ao ser constru├¡do.
+- `TornarControlesVisiveis()` (linha 369): substitu├¡do `IF UPPER(...) = "CNT_4C_AGUARDE"` por `IF INLIST(UPPER(...), "CNT_4C_AGUARDE", "CNT_4C_CABECALHO")`. O m├®todo agora pula ambos os containers (ainda recursando os filhos antes do LOOP), n├úo for├ºando `.Visible=.T.` pelo sweep gen├®rico.
+
+**[METODO-INEXISTENTE]** ÔÇö `Controls(n)` ├® propriedade built-in de Form/Container no VFP9 (cole├º├úo indexada). N├úo ├® m├®todo inventado ÔÇö nenhuma altera├º├úo necess├íria.

@@ -1,0 +1,46 @@
+﻿Analisei os dois arquivos completos. Vou comparar as cl├íusulas WHERE do c├│digo migrado com as do original.
+
+**An├ílise dos 3 itens detectados:**
+
+---
+
+**Item 1: Coluna `CAMPO`** ÔÇö Falso positivo do checker
+
+O checker detectou `par_cCampo` no m├®todo `CursorQuery` (BO linha 839):
+```
+" WHERE " + par_cCampo + " = " + EscaparSQL(loc_lcValor)
+```
+N├úo ├® um filtro inventado ÔÇö ├® um helper gen├®rico parametrizado. As colunas reais passadas pelos callers s├úo todas v├ílidas e est├úo no original:
+- `"EmpDopNums"` (linhas 296, 315, 390)
+- `"Dopes"` (linha 325)
+- `"CPros"`, `"CGrus"`, `"IClis"`, `"CBars"` (linhas 353, 362, 374, 638)
+
+---
+
+**Item 2: Coluna `0`** ÔÇö Falso positivo do checker
+
+Detectado em `CursorQuery` (BO linha 842):
+```foxpro
+SQLEXEC(gnConnHandle, "SELECT " + loc_lcCampos + " FROM " + par_cTabela + ;
+        " WHERE 0=1", par_cCursor)
+```
+O `WHERE 0=1` ├® um padr├úo SQL padr├úo para retornar cursor vazio com a estrutura da tabela, usado como fallback quando a query principal falha. N├úo ├® filtro de neg├│cio ÔÇö ├® infraestrutura de schema clone.
+
+---
+
+**Item 3: Coluna `CONTROLCOUNT`** ÔÇö Falso positivo do checker
+
+Detectado no Form em `TornarControlesVisiveis` (linhas 513, 526, 537):
+```foxpro
+FOR loc_i = 1 TO loc_oContainer.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+`ControlCount` ├® uma **propriedade VFP** de containers de UI, n├úo uma coluna SQL. O checker varreu todo o c├│digo-fonte e confundiu acesso a propriedade VFP com cl├íusula WHERE.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.**
+
+Todos os 3 itens s├úo falsos positivos do analisador est├ítico:
+- As cl├íusulas WHERE reais nos SQLs do BO batem com o original: `EmpDopNums`, `CPros`, `CodCors`, `CodTams`, `CItens`, `cIdChaves`, `CBars`, `QtdeLido`, `DtMovs`, `Contas`
+- Nenhum filtro inventado existe nos arquivos `FormSIGPRCPR.prg` e `SIGPRCPRBO.prg`

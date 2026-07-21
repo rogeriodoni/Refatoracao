@@ -24,7 +24,7 @@ DEFINE CLASS SIGREIDCBO AS RelatorioBase
 
     *-- Configuracao do relatorio
     this_cNomeRelatorio = "SigReIdc"
-    this_cCursorDados   = "cursor_4c_Dados"
+    this_cCursorDados   = "cIde"    && Nome exigido pelo FRX legado
 
     *--------------------------------------------------------------------------
     * Init - Construtor

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `.RowSourceType = 2` (Alias) + `.RowSource = "cursor_4c_SigCdmp"` fazia o VFP9 tentar acessar o cursor imediatamente, mas `cursor_4c_SigCdmp` s├│ existe ap├│s `CarregarImpressoras()` ser chamado em `AplicarConfiguracoes()`.
+
+**Fix**: inicializar com `RowSourceType = 0` / `RowSource = ""`. O m├®todo `AplicarConfiguracoes()` (que j├í existia e era chamado ap├│s a cria├º├úo do cursor) restaura o bind correto com `RowSourceType = 2` e `RowSource = "cursor_4c_SigCdmp"` quando o cursor est├í dispon├¡vel. Durante testes automatizados (`gb_4c_ValidandoUI = .T.`), o ComboBox fica sem dados mas o form instancia sem crash.

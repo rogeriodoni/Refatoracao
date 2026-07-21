@@ -569,6 +569,17 @@ DEFINE CLASS FormRelPlanoContas AS FormBase
             THIS.this_oBO.LimparCursores()
             THIS.this_oBO = .NULL.
         ENDIF
+
+        *-- FIX menu-shrinks (Erro58): forms que nao herdam FormBase precisam do
+        *-- RELEASE POPUP + CriarMenuPrincipal inline no Destroy, pois nao herdam
+        *-- o fix via DODEFAULT(). Sem isso, popups do _MSYSMENU renderizam
+        *-- truncados apos este form fechar (cache visual stale do VFP9).
+        TRY
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal nao carregada no escopo - silencioso
+        ENDTRY
     ENDPROC
 
 ENDDEFINE

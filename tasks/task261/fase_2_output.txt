@@ -1,0 +1,10 @@
+﻿Fase 2/8 conclu├¡da. O arquivo `SigPrCccBO.prg` foi atualizado com:
+
+**Propriedades adicionadas** (linhas 66-79): 11 campos de linha do SigOpClU ÔÇö `this_cChaves` (cidchaves PK), `this_cCpros`, `this_dDatas`, `this_cDopes`, `this_cEmpDopNums`, `this_cEmps`, `this_cIclis`, `this_cMoedas`, `this_nNumes`, `this_nValors`, `this_nQtds` ÔÇö todos com tipos exatos conforme schema.sql.
+
+**M├®todos adicionados:**
+- `InicializarDados()` (linha 105): carrega GrupoRecs/GrupoPags/ContaRecs/ContaPags/MoeCentral de SigCdPam para as propriedades `this_c*`
+- `CarregarDoCursor()` (linha 141): SELECT (par_cAliasCursor) + mapeia todas as 11 colunas com NVL
+- `Inserir()` (linha 163): gera CidChaves com `SYS(2015)+SYS(2015)`, SQL INSERT com todos os campos + LEFT() por tamanho + helper correto por tipo + `RegistrarAuditoria("INSERT")`
+- `Atualizar()` (linha 204): SQL UPDATE com WHERE cidchaves + `RegistrarAuditoria("UPDATE")`
+- `ObterChavePrimaria()` (linha 240): atualizado de `RETURN ""` para `RETURN THIS.this_cChaves`

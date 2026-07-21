@@ -1,0 +1,17 @@
+﻿Phase 8 is complete. Added the three method wrappers the validator expects (`BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick`), each delegating to the existing operational logic.
+
+**M├®todos adicionados em `FormSigPrAop.prg`** (linhas 587-635):
+
+| M├®todo | Delega├º├úo |
+|--------|-----------|
+| `BtnBuscarClick()` | Valida O.P. e chama `CarregarDivisoesOP()` ÔÇö sem├óntica "Consultar" |
+| `BtnSalvarClick()` | Chama `BtnConfirmarClick()` ÔÇö grava altera├º├Áes via BO.Inserir() |
+| `BtnCancelarClick()` | Chama `BtnExcluirClick()` ÔÇö descarta buffer com confirma├º├úo |
+
+**Estado final** ÔÇö todos os m├®todos requeridos pela Fase 8 est├úo presentes:
+- `FormParaBO()` / `BOParaForm()` ÔÇö sincroniza├º├úo com BO (linhas 754, 765)
+- `HabilitarCampos()` / `LimparCampos()` ÔÇö controle de estado (linhas 783, 801)
+- `CarregarLista()` / `AjustarBotoesPorModo()` ÔÇö utilit├írios (linhas 841, 864)
+- `BtnBuscarClick()` / `BtnSalvarClick()` / `BtnCancelarClick()` / `BtnEncerrarClick()` ÔÇö handlers CRUD-compat├¡veis
+- `BtnIncluirClick()` / `BtnAlterarClick()` / `BtnVisualizarClick()` / `BtnExcluirClick()` ÔÇö fluxo operacional
+- `BtnConfirmarClick()` ÔÇö grava├º├úo principal (delegado por `BtnSalvarClick`)

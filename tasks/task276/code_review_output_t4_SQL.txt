@@ -1,0 +1,13 @@
+﻿Analisei todos os `WHERE` de ambos os arquivos. O `ControlCount` aparece **apenas** em c├│digo VFP9 de itera├º├úo de controles UI (linhas 476 e 488 do form), nunca em SQL. As cl├íusulas WHERE nos SQLs s├úo:
+
+**FormSigPrDsc.prg** ÔÇö todas corretas:
+- `WHERE CPros = ` (x2, valida├º├úo produto)
+- `WHERE CGrus = ` (valida├º├úo grupo)
+
+**SigPrDscBO.prg** ÔÇö todas corretas e alinhadas ao legado:
+- `WHERE Idioma = 'INGLES    '` (BuscarDicionario)
+- `WHERE CGrus = ` / `WHERE CPros BETWEEN ` (BuscarProdutos)
+- `WHERE a.CPros = ` (ProcessarTraducoes)
+- `WHERE CPros = ` (UPDATE + DELETE em GravarDescricoes)
+
+**Diagn├│stico: falso positivo.** O validador automatizado leu `par_oContainer.ControlCount` (propriedade VFP9 de controles) e catalogou como coluna SQL inventada. N├úo h├í nenhum `CONTROLCOUNT` em cl├íusula WHERE de nenhum SQL nos dois arquivos ÔÇö nenhuma corre├º├úo ├® necess├íria.

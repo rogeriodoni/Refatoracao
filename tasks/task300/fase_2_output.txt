@@ -1,0 +1,13 @@
+﻿The form is complete and correct. The file is 508 lines, ends with `ENDDEFINE`, and all methods are properly closed.
+
+**`FormSigPrIct.prg` ÔÇö Phase 3/8 complete.** The form (508 lines) implements:
+
+- **Layout**: Width=800├ùHeight=192, DataSession=2, matches legacy pixel positions (header at 0ÔÇô80, labels at top=108/141, date textboxes at left=227)
+- **Init()**: Sets Caption via CHR() codes ÔåÆ calls DODEFAULT() ÔåÆ FormBase.Init() ÔåÆ InicializarForm()
+- **InicializarForm()**: Creates `SigPrIctBO`, calls `CarregarParametros()`, then builds all visual objects (Cabecalho + campos + botoes)
+- **Two-phase button layout**: `cmd_4c_Processar`+`cmd_4c_Encerrar` always visible; `cnt_4c_PosProc` (Video+Impressora+Encerrar) hidden until processing with inconsistencies is detected
+- **ChamarProcessar()**: Calls BO `InicializarCursores()` then `Processar()`, handles `this_lTemDiferencas` (asks about SigReDif), handles `this_lTemInconsistencias` (shows post-proc container or auto-calls ChamarGravar)
+- **ChamarGravar()**: Restores UI, confirms file generation, delegates to BO `GerarArquivoContabil()`
+- **ExecutarRelatorioInconsistencias()**: Full report guard (FILE check + cursor check + SET POINT/SEPARATOR isolation + `_REPORTBEHAVIOR = 80`), then always calls ChamarGravar
+
+The remaining phases (4ÔÇô8) would wire any additional event handling or refinements to the form, but the core structure is complete and functional.

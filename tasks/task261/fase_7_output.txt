@@ -1,0 +1,23 @@
+﻿A migra├º├úo da Fase 7/8 est├í **completa**. Todos os componentes j├í est├úo implementados desde as fases anteriores:
+
+**Form (`FormSigPrCcc.prg`) ÔÇö eventos j├í presentes:**
+- `BtnProcessarClick` ÔÇö orquestra os 4 tipos de rec├ílculo (tradu├º├úo fiel do `Processa.Click` original de 556 linhas)
+- `BtnCancelaClick` ÔÇö fecha o form
+- `ChkContaClick`, `ChkEstoqueClick`, `ChkCustoClick`, `ChkCompraClick` ÔÇö toggle dos containers flutuantes + atualiza estado de `cmd_4c_Processa`
+- Todos os 8 handlers `TxtXxxKeyPress` para lookups (empresa, grupos, contas, moedas, estoque, produto)
+- Todos os 6 helpers `AbrirLookup*` (Empresa, GruposCcr, Contas, Moeda, GruposEst, Estoque, Produto)
+- `ConfigurarPaginaLista`, `ConfigurarPaginaDados`, `AlternarPagina`, `AtualizarEstadoProcessa`
+
+**BO (`SigPrCccBO.prg`) ÔÇö m├®todos chamados pelo form:**
+- `InicializarDados()` ÔÇö carrega par├ómetros de `SigCdPam`
+- `RecalcularSaldosConta()` ÔÇö recalcula saldos em `SigMvCcr`
+- `RecalcularSaldosEstoque()` ÔÇö recalcula `sqtds` em `SigMvHst`
+- `RecalcularSaldosCusto()` ÔÇö calcula custo m├®dio ponderado em `SigCdPro`
+- `RecalcularSaldosCompra()` ÔÇö atualiza `SigOpClU` com ├║ltima compra
+
+**Integra├º├úo:**
+- `DEFINE BAR 24 OF popMovimentos PROMPT "Rec" + CHR(225) + "lculo de Saldos"` Ô£ô
+- `ON SELECTION BAR 24 OF popMovimentos DO AbrirFormSigPrCcc` Ô£ô
+- `PROCEDURE AbrirFormSigPrCcc()` com padr├úo can├┤nico `VARTYPE(loForm) = "O"` + `Show()` Ô£ô
+
+A Fase 7 n├úo tem nada a adicionar ÔÇö o form OPERACIONAL usa `BtnProcessarClick`/`BtnCancelaClick` em vez dos eventos CRUD (BtnIncluirClick etc.) que n├úo existem neste tipo de formul├írio. A migra├º├úo do `SigPrCcc` est├í **100% conclu├¡da**.

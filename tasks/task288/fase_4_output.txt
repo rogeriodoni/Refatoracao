@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`InicializarForm()`** ÔÇö chamada a `THIS.ConfigurarPaginaLista()` + substitui├º├úo das 4 linhas `Visible` por `THIS.AlternarPagina("AGUARDE")`
+
+2. **`ConfigurarPaginaLista()`** (PROTECTED) ÔÇö adiciona `obj_4c_OleGrafico1` (OLEBoundControl) ao `cnt_4c_Grf1` com as propriedades exatas do SCX original; configura `Buttons(1)` (Gr├ífico, `geral_grafico_pizza_60.jpg`) e `Buttons(2)` (Encerrar, `cadastro_sair_60.jpg`) com `Comic Sans MS`, `Themes=.F.`, `PicturePosition=13`; registra BINDEVENT do CommandGroup no handler `CmdGraficoClick`
+
+3. **`AlternarPagina(par_cEstado)`** (PUBLIC) ÔÇö dois estados: `"AGUARDE"` (Aguarde vis├¡vel, Grf1/Grf2/CmdgGrafico ocultos) e `"GRAFICO"` (Aguarde oculto, Grf1/CmdgGrafico vis├¡veis, Grf2 ainda oculto ÔÇö fiel ao Init original que mant├®m cntGrf2 oculto ap├│s mGeraGrafico)
+
+4. **`CmdGraficoClick()`** (PUBLIC) ÔÇö despachante por `.Value` do CommandGroup
+
+5. **`BtnGraficoClick()`** (PROTECTED) ÔÇö guard `FILE()` + isolamento `SET POINT/SEPARATOR/REPORTBEHAVIOR 80` + `REPORT FORM NEXT 1 TO PRINTER PROMPT NOCONSOLE` + restore + guard RECCOUNT
+
+6. **`BtnEncerrarClick()`** (PROTECTED) ÔÇö `PEMSTATUS` seguro + limpa `ControlSource` + fecha `crGrafico1` + `Release()`

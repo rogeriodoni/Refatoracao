@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRGF1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "If Empty(ThisForm.getDtFinal.Value)\n\tThisForm.pcMsg = 'Data Final Inválida!!!'\n\tThisForm.getDtFinal.SetFocus\n\tReturn .f.\nEndIf\n\nIf (ThisForm.getDtFinal.Value < ThisForm.getDtInicial.Value)\n\tThisForm.pcMsg = 'Data Inicial Maior Que a Data Final!!!'\n\tThisForm.getDtInicial.SetFocus\n\tReturn .f.\nEndIf\n\nIf ((Year(ThisForm.getDtInicial.Value)==Year(ThisForm.getDtFinal.Value) And ;\n\t(Month(ThisForm.getDtInicial.Value)-Month(ThisForm.getDtFinal.Value)+1)>12) Or ;\n\t(Not Year(ThisForm.getDtInicial.Value)==... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value)==Year,Value)-Month,Value))+Month",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGF1",
+      "evento": "Procedure",
+      "linhas": 72,
+      "codigoOriginal": "Local Array laAnoMes(1), laCampo1(1), laCampo2(1)\nLocal lndecimals,lcfixed,lcexact,lddata1,lddata2,lcanomes1,lcanomes2,lcempresa,lcgrupomt,lcmoedarlt,;\n      ldmoedarlt,lcmoedap,lntprlt,lncotacao,lcnomeempresa,lcstrgmes,lctitulo1,lctitulo2,lcmcrsql1,;\n      lcstrgmes1,lcstrgmes2,lnconta1,lnncolini,lcchave1,lcchave2,lcstrgmoeda1,lcemp,lcanomes,lcgrupo,;\n      lcconta,lcdope,lncaixa,lnoper,lncoper,lnoperacao,lddtmov1,lddtmov2,lcmoedamov,lnmeta,lnconta2,;\n      lnvalor,lnncol1,lcdata1,lnvendsubn,ln... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF1",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.LockScreen = .t.\n\t\t.Caption = Prompt()\n\t\t.getDtInicial.Value = Ctod('01/' + Str(Month(Date()), 2, 0) + '/' + Str(Year(Date()), 4, 0))\n\t\t.getDtFinal.Value = (GoMonth(.getDtInicial.Value, 1) -1)\n\t\t.pcMsg = ''\n\t\t.getDtInicial.SetFocus\n\t\t.cntAguarde.Visible = .f.\n\n\t\t=DoDefault()\n\n\t\t.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGF1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF1.cmdGprocessa",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "With ThisForm\n\t.pcMsg = ''\n\n\tIf .mChkValid()\n\t\t.mProcessamento()\n\t\t\n\t\tIf Not Eof()\n\t\t\t.Enabled = .f.\n\t\t\tDo Form SigPrGf2 With ThisForm\n\t\tElse\n\t\t\t.pcMsg = 'Nenhum Registro Encontrado.'\n\t\tEndIf\n\tEndIf\n\tIf Not Empty(.pcMsg)\n\t\t.LockScreen = .f.\n\t\t=MessageBox(.pcMsg, 0+48+0, '')\n\tEndIf\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValid(",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF1.cmdGprocessa",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "With ThisForm\n\t.LockScreen = .t.\n\t\n\tIf Used('crLstMatLote')\n\t\tUse In ('crLstMatLote')\n\tEndIf\n\t\n\t.Release\n\t.Refresh\n\t.LockScreen = .f.\n\t\n\tIf (Type('ThisForm.poForm1') = 'O')\n\t\t.poForm1.LockScreen = .t.\n\t\t.poForm1.Enabled = .t.\n\t\t.poForm1.mAtivaPgMovto1()\n\t\t.poForm1.LockScreen = .f.\n\tEndIf\t\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

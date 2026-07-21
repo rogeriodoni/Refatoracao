@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo corretas. O arquivo foi salvo com sucesso.
+
+**Resumo das corre├º├Áes aplicadas em `FormSigPrCar.prg`:**
+
+1. **`ConfigurarGrade()` (linhas 367-368)** ÔÇö `.ColumnCount = 2` e `.RecordSource` movidos para **antes** do `WITH loc_oGrade`, usando refer├¬ncia expl├¡cita `loc_oGrade.ColumnCount` e `loc_oGrade.RecordSource`. As colunas j├í existem quando o `WITH` entra, eliminando o erro `Unknown member COLUMN1`.
+
+2. **`CarregarGrid()` (linhas 456-457)** ÔÇö Mesmo padr├úo: `.ColumnCount = 2` e `.RecordSource` movidos para **fora** do `WITH THIS.grd_4c_Grade`, usando `THIS.grd_4c_Grade.ColumnCount` e `THIS.grd_4c_Grade.RecordSource` antes do bloco, que ent├úo acessa apenas `.Column1`/`.Column2` normalmente.

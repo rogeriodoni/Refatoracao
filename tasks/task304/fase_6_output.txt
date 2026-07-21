@@ -1,0 +1,14 @@
+﻿A Fase 6/8 est├í conclu├¡da.
+
+**An├ílise completa:**
+
+O c├│digo fonte original `SIGPRIMP_form_codigo_fonte.txt` foi inspecionado: **nenhum lookup** existe (zero ocorr├¬ncias de `fwbuscaext`, `fwBuscaSel`, `sigacess`, F4/F5 em KeyPress, ou classes customizadas de TextBox com Valid/lookup). A funcionalidade do form ├® inteiramente de **processamento batch** ÔÇö lista arquivos TXT via `ADIR()`, processa cada um via `ProcessarArquivo()` no BO.
+
+**O que foi verificado como completo desde a Fase 5:**
+- Todos os controles implementados (`txt_4c_Arquivo` ReadOnly, `obj_4c_Arquivos` ListBox, shapes decorativos, 4 bot├Áes)
+- `BtnMovEstClick()` com l├│gica completa de scan + move-to-OK
+- `CarregarArquivos()` integrado com BO
+- Integra├º├úo em `config.prg` (auto-load) e `menu.prg` (BAR 75 + `AbrirFormSIGPRIMP`)
+
+**Melhoria aplicada na Fase 6:**
+`TornarControlesVisiveis()` refatorado para filtrar `cmd_4c_Visualizar` e `cmd_4c_Imprimir` diretamente dentro do loop via `INLIST()` (padr├úo can├┤nico OPERACIONAL para controles permanentemente ocultos), eliminando o re-hide redundante p├│s-loop.

@@ -1,0 +1,12 @@
+﻿Tudo correto. As duas altera├º├Áes foram aplicadas sem conflito com `popRelatorios` (que tem seus pr├│prios BARs 62/63 independentes).
+
+**Fase 7/8 conclu├¡da.** O que foi feito:
+
+1. **Header do form** atualizado de "Fase 6/8" para "Fase 7/8" ÔÇö esclarece que `BtnProcessarClick` e `BtnEncerrarClick` s├úo os eventos principais deste form OPERACIONAL (sem os BtnIncluir/Alterar/Visualizar/Excluir do template CRUD, que n├úo se aplicam).
+
+2. **Integra├º├úo ao menu.prg**:
+   - Adicionado **BAR 62** (separador) e **BAR 63** ("Gera├º├úo de Pedido de Estoque M├¡nimo") ao `popMovimentos`
+   - `ON SELECTION BAR 63 OF popMovimentos DO AbrirFormSigPrGmi`
+   - Procedure `AbrirFormSigPrGmi()` no padr├úo can├┤nico do sistema (`VARTYPE = "O"` + `Show()` sem par├ómetro + `MostrarErro` no catch)
+
+O form e o BO j├í estavam completos com toda a l├│gica de processamento desde as fases anteriores ÔÇö n├úo havia eventos CRUD faltando, pois este ├® um form OPERACIONAL com apenas dois bot├Áes: **Processar** e **Encerrar**.

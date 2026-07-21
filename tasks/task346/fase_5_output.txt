@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. A Fase 5/8 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+Primeira metade dos campos da Page2 (3 pares label+textbox):
+
+| Controle | Posi├º├úo (top+29, left) | Mapeia para |
+|---|---|---|
+| `lbl_4c_Label1` | top=200, left=288 | Say1 "C├│digo :" |
+| `txt_4c_Codigos` | top=197, left=335, w=33 | getCodigos (numeric, InputMask="999") |
+| `lbl_4c_Label2` | top=225, left=275 | Say2 "Descri├º├úo :" |
+| `txt_4c_Descrs` | top=222, left=335, w=290 | getDescrs (char 40) |
+| `lbl_4c_Label3` | top=250, left=162 | Say3 "Opera├º├úo de Cheque Autom├ítica :" |
+| `txt_4c_OpAutos` | top=247, left=335, w=115 | getOpAutos (char 15) |
+
+**M├®todo adicionado:** `ValidarOpAutos()` ÔÇö lookup no `SigCdOpt/Operacaos` via `FormBuscaAuxiliar`, com `BINDEVENT` no `LostFocus` do `txt_4c_OpAutos`. A Fase 6/8 adicionar├í os 3 pares restantes (OpSaidas, FPagSAutos, opt_4c_OptPefins).

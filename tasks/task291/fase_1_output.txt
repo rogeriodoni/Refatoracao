@@ -1,0 +1,16 @@
+﻿Task 291 is complete. Here's a summary of what was created:
+
+**`C:\4c\projeto\app\classes\SigPrGloTBO.prg`** (Phase 1 - previous session):
+- Business Object for "Processamento de O.P. por Totais" 
+- Inherits from `BusinessBase`, targets `SigOpPic` with PK `Cidchaves`
+- Full property set matching SigOpPic schema + all filter properties
+- `ProcessarOP()` uses `GROUP BY a.Emps, a.Dopes, b.CPros` + `SUM(b.Qtds)` to totalize items by product ÔÇö the key differentiator from `SigPrGloBO`
+- All cursor names have "T" suffix (`cursor_4c_TmpCabecT`, etc.) to isolate from SigPrGloBO cursors
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrGloT.prg`** (Phase 2 - this session):
+- OPERACIONAL flat layout (Width=680, Height=379), identical to `FormSigPrGlo`
+- Uses `SigPrGloTBO` as BO
+- Key addition: `PrepararCursoresParaGl2()` bridges `cursor_4c_TmpCabecT`/`cursor_4c_TmpItensT` ÔåÆ `TmpCabec`/`TmpItens` before opening `FormSigPrGl2`, which is what `SigPrGl2BO` expects
+- All lookup cursors use "T" suffix for isolation
+- Menu function `AbrirFormSigPrGloT()` updated to pass `pTipo=.T.` so `cnt_4c_TipoOp` is enabled ("Processamento Global por Tipo")
+- Both files auto-load via `config.prg`'s ADIR scan

@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**Fix 1 ÔÇö CONTAINER-VISIVEL** (`TornarControlesVisiveis`, linha 1258):
+- Removido o bloco com `loc_oControl` (vari├ível inexistente ÔÇö typo de `loc_oCtrl`) e a tentativa de recurs├úo com par├ómetro em m├®todo n├úo-param├®trico
+- Removido o INLIST que exclu├¡a `cnt_4c_sombra` e `cnt_4c_grade` de serem tornados vis├¡veis (eles precisam ser vis├¡veis na view principal)
+- M├®todo agora itera todos os controles e seta `Visible = .T.`, depois re-oculta explicitamente `cnt_4c_Inu` e `cmd_4c_Inu`
+
+**Fix 2 ÔÇö GRID-WITH** (`ConfigurarCntInu` + `CmdInuClick`):
+- Adicionado `ControlSource = "csInutil.field"` nas 6 colunas do `grd_4c_Inu` durante a inicializa├º├úo em `ConfigurarCntInu` (colunas 1201ÔÇô1242)
+- Removido o `WITH THIS.cnt_4c_Inu.grd_4c_Inu { .Column1.ControlSource = ... }` do `CmdInuClick` ÔÇö que acessava Columns dentro de um WITH imediatamente ap├│s mudar RecordSource (VFP9 pode recriar as colunas nessa opera├º├úo, causando "Unknown member COLUMN1")
+- `CmdInuClick` agora s├│ seta `RecordSource` e chama `Refresh()` (linha 1641ÔÇô1642)

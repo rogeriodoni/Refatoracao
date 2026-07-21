@@ -1,0 +1,6 @@
+﻿Both the menu definition (bars 58/59 + ON SELECTION) and the `AbrirFormsigprftp()` procedure are in place. Migration of SIGPRFTP is complete across all phases:
+
+- **Fase 3**: estrutura base (Init, InicializarForm, CriarCursores, ConfigurarForm, ConfigurarPageFrame, CarregarParametros, TornarControlesVisiveis, Inf, Destroy)
+- **Fase 4**: controles visuais completos ÔÇö bot├Áes superiores (Conecta/Transfere/Recebe/Encerrar), conte├║do dos PageFrames locais e FTP com ListBoxes e TextBoxes, setas de transfer├¬ncia individual, grids de log e progresso, rodap├® com ComboBox Dial-Up; todos os handlers de evento e m├®todos operacionais (MontarContainer, Transfere, Receber) e API WinInet (GetFtpDirectory, RasftpGet, RasftpPut, DeleteFtpFile)
+- **Fase 5**: integra├º├úo ÔÇö BAR 58/59 em `popMovimentos` + `AbrirFormsigprftp()` em `menu.prg`; `config.prg` carrega o form automaticamente via ADIR `operacionais\Form*.prg`
+- **Fase 6**: `.fxp` stale deletados

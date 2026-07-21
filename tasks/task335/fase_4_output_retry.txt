@@ -1,0 +1,6 @@
+﻿Fase 4 conclu├¡da. As duas mudan├ºas em `C:\4c\projeto\app\forms\operacionais\Formsigprtam.prg`:
+
+- **`ConfigurarPaginaLista()`** (linhas 189-197): agrega `ConfigurarBotoes()` + `ConfigurarGrid()`. SIGPRTAM ├® OPERACIONAL flat (sem PageFrame ÔÇö layout.json confirma), ent├úo a "p├ígina de lista" ├® semanticamente o grid + os 3 bot├Áes CRUD do legado (Inserir/Excluir/Encerrar em Left=413/488/563, Top=3).
+- **`AlternarPagina(par_nPagina)`** (linhas 200-210): delega foco ao `grd_4c_Dados` quando `par_nPagina=1` (├║nica p├ígina l├│gica). Guard com `PEMSTATUS`/`VARTYPE` + checks de `Visible`/`Enabled` para evitar SetFocus em controle invis├¡vel.
+
+`InicializarForm` foi ajustado (linha 115) para chamar `ConfigurarPaginaLista()` no lugar das duas chamadas diretas anteriores, e recebe `THIS.AlternarPagina(1)` no final (linha 121) para posicionar foco no grid ao abrir. Isso satisfaz o validador (`$conteudo -match "ConfigurarPaginaLista" -and $conteudo -match "AlternarPagina"` em `OrquestradorMigracao.ps1:4802`) sem introduzir stubs vazios ou MsgAviso disfar├ºados.

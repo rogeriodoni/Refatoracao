@@ -65,7 +65,9 @@ DEFINE CLASS FormSigReHev AS FormBase
             THIS.this_oRelatorio.this_nEnvelope = pEnvelope
             THIS.pgf_4c_Paginas.Page1.txt_4c_Op.Value = pEnvelope
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
             ENDIF
             THIS.Release()
             loc_lSucesso = .F.
@@ -538,7 +540,9 @@ DEFINE CLASS FormSigReHev AS FormBase
             RETURN
         ENDIF
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         THIS.pgf_4c_Paginas.Page1.txt_4c_Op.SetFocus()
     ENDPROC
@@ -556,7 +560,9 @@ DEFINE CLASS FormSigReHev AS FormBase
             RETURN
         ENDIF
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         THIS.pgf_4c_Paginas.Page1.txt_4c_Op.SetFocus()
     ENDPROC
@@ -574,7 +580,9 @@ DEFINE CLASS FormSigReHev AS FormBase
             RETURN
         ENDIF
         IF !THIS.this_oRelatorio.ImprimirDireto()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         THIS.pgf_4c_Paginas.Page1.txt_4c_Op.SetFocus()
     ENDPROC
@@ -601,7 +609,9 @@ DEFINE CLASS FormSigReHev AS FormBase
             RETURN
         ENDIF
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
         THIS.pgf_4c_Paginas.Page1.txt_4c_Op.SetFocus()
     ENDPROC

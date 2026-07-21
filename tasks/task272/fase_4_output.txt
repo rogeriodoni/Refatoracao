@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. A Fase 4 foi conclu├¡da com sucesso. Aqui est├í o que foi adicionado ao `FormSigPrCtc.prg`:
+
+**Modifica├º├Áes em `ConfigurarPaginaLista()`:**
+- Declara├º├úo de `loc_oGrid` no LOCAL
+- `cmd_4c_Encerrar` no `cnt_4c_Saida` (can├┤nico: 75├ù75, caption "Encerrar")
+- 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones corretos, Left=5/80/155/230/305
+- Grid `grd_4c_Dados` (Top=117, Width=890, 3 colunas: Moeda 100px / Descri├º├úo 550px / Cota├º├úo 200px read-only)
+- BINDEVENT em todos os bot├Áes e `AfterRowColChange` do grid
+- Chamada a `TornarControlesVisiveis(loc_oPagina)` no final
+
+**Novos m├®todos adicionados:**
+- `AlternarPagina(par_nPagina)` ÔÇö troca entre Page1/Page2
+- `CarregarLista()` ÔÇö chama `BO.CarregarParaEdicao()`, seta RecordSource + ColumnCount fora do WITH, redefine ControlSources/Headers dentro do WITH
+- `TornarControlesVisiveis(par_oContainer)` ÔÇö recurs├úo correta com loop Pages para PageFrames
+- `FormatarGridLista(par_oGrid)` ÔÇö SetAll Tahoma/8
+- Handlers PUBLIC: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`
+- `GrdDadosAfterRowColChange(par_nColIndex)` ÔÇö valida moeda quando sai da coluna 1 (par_nColIndex=1 = coluna anterior)
+- `AbrirBuscaMoeda(par_cValor)` PROTECTED ÔÇö equivalente ao Valid/fwbuscaext do legado, usa FormBuscaAuxiliar MODO 1
+
+**Em `InicializarForm()`:** chamada a `CarregarLista()` com guard `gb_4c_ValidandoUI`, ap├│s os Configure*.

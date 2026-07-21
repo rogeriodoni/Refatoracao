@@ -1,0 +1,1155 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigproef.SCX
+* Data/Hora: 18/07/2026 02:08:35
+* Total de registros: 32
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: sigproef
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: CntTransa
+  Parent: sigproef
+  Class: container
+  BaseClass: container
+
+Objeto: Grade
+  Parent: sigproef.CntTransa
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: sigproef.CntTransa.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: sigproef.CntTransa.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: sigproef.CntTransa
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: sigproef.CntTransa
+  Class: shape
+  BaseClass: shape
+
+Objeto: Line1
+  Parent: sigproef.CntTransa
+  Class: line
+  BaseClass: line
+
+Objeto: Ok
+  Parent: sigproef.CntTransa
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cnt_periodo
+  Parent: sigproef.CntTransa
+  Class: container
+  BaseClass: container
+
+Objeto: Dt_inicial
+  Parent: sigproef.CntTransa.Cnt_periodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: sigproef.CntTransa.Cnt_periodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: sigproef.CntTransa.Cnt_periodo
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: sigproef.CntTransa.Cnt_periodo
+  Class: label
+  BaseClass: label
+
+Objeto: Cancela
+  Parent: sigproef.CntTransa
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Reimprime
+  Parent: sigproef.CntTransa
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Gerencial
+  Parent: sigproef.CntTransa
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Ultimo
+  Parent: sigproef.CntTransa
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: oModem
+  Parent: sigproef
+  Class: olecontrol
+  BaseClass: olecontrol
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef
+------------------------------------------------------------
+  DoCreate = .T.
+  ControlBox = .F.
+  Height = 334
+  Width = 580
+  AutoCenter = .T.
+  MaxButton = .F.
+  MinButton = .F.
+  Caption = "Selecao da Transacao"
+  KeyPreview = .T.
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGPROEF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa
+------------------------------------------------------------
+  Top = 3
+  Left = 1
+  Height = 333
+  Width = 581
+  SpecialEffect = 0
+  TabIndex = 21
+  Visible = .T.
+  Name = "CntTransa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade
+------------------------------------------------------------
+  ColumnCount = 6
+  ScrollBars = 2
+  Top = 41
+  Left = 8
+  Height = 230
+  Width = 569
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 16
+  ReadOnly = .T.
+  RecordSource = "Transacao"
+  RowHeight = 15
+  GridLineColor = 192,192,192
+  Name = "Grade"
+  Column1.Width = 70
+  Column1.FontSize = 8
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.Width = 70
+  Column2.FontSize = 8
+  Column2.Movable = .F.
+  Column2.ControlSource = ""
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.Width = 65
+  Column3.FontSize = 8
+  Column3.Movable = .F.
+  Column3.ControlSource = ""
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.Width = 70
+  Column4.FontSize = 8
+  Column4.Movable = .F.
+  Column4.ControlSource = ""
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontSize = 8
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontSize = 8
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Rede"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "N.Autorizacao"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column5.Header1
+------------------------------------------------------------
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column6.Header1
+------------------------------------------------------------
+  Caption = "Header1"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Grade.Column6.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .T.
+  FontSize = 12
+  Caption = "Transações Efetuadas"
+  Left = 191
+  Top = 9
+  ForeColor = 0,0,160
+  TabIndex = 6
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Shape1
+------------------------------------------------------------
+  Top = 277
+  Left = 245
+  Height = 53
+  Width = 331
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Line1
+------------------------------------------------------------
+  BorderWidth = 4
+  Height = 0
+  Left = 7
+  Top = 29
+  Width = 571
+  BorderColor = 0,0,160
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Ok
+------------------------------------------------------------
+  Top = 281
+  Left = 507
+  Height = 46
+  Width = 64
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\vbmp\sair.bmp
+  Cancel = .T.
+  Caption = "<ESC> Sair"
+  TabIndex = 4
+  ForeColor = 0,0,255
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cnt_periodo
+------------------------------------------------------------
+  Top = 278
+  Left = 7
+  Height = 52
+  Width = 217
+  SpecialEffect = 0
+  TabIndex = 1
+  Name = "Cnt_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cnt_periodo.Dt_inicial
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Height = 23
+  Left = 14
+  TabIndex = 3
+  Top = 22
+  Width = 81
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cnt_periodo.Dt_final
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Height = 23
+  Left = 119
+  TabIndex = 4
+  Top = 22
+  Width = 81
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cnt_periodo.Say2
+------------------------------------------------------------
+  Caption = "a"
+  Left = 103
+  Top = 25
+  TabIndex = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cnt_periodo.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontItalic = .T.
+  FontSize = 10
+  FontUnderline = .T.
+  Caption = "Período"
+  Height = 18
+  Left = 16
+  Top = 3
+  Width = 59
+  ForeColor = 0,0,160
+  TabIndex = 2
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Cancela
+------------------------------------------------------------
+  Top = 281
+  Left = 443
+  Height = 46
+  Width = 64
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\vbmp\e_exit1.bmp
+  Caption = "<F5>\<Cancelar"
+  TabIndex = 4
+  ForeColor = 0,0,255
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Reimprime
+------------------------------------------------------------
+  Top = 281
+  Left = 379
+  Height = 46
+  Width = 64
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\vbmp\imprimir.bmp
+  Caption = "<F4>\<Reimprimir"
+  TabIndex = 4
+  ForeColor = 0,0,255
+  Name = "Reimprime"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Gerencial
+------------------------------------------------------------
+  Top = 281
+  Left = 251
+  Height = 46
+  Width = 64
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\vbmp\imprimir.bmp
+  Caption = "<F2>\<Gerencial"
+  TabIndex = 4
+  ForeColor = 0,0,255
+  Name = "Gerencial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.CntTransa.Ultimo
+------------------------------------------------------------
+  Top = 281
+  Left = 315
+  Height = 46
+  Width = 64
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\vbmp\imprimir.bmp
+  Caption = "<F3>\<Ultimo"
+  TabIndex = 4
+  ForeColor = 0,0,255
+  Name = "Ultimo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: sigproef.oModem
+------------------------------------------------------------
+  Top = 144
+  Left = 264
+  Height = 100
+  Width = 100
+  Name = "oModem"
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: sigproef
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigOpFp','FPags','crSigOpFp','FPags',.f.)
+		.Requery('crSigOpFp')
+	EndWith
+
+	.poDatamgr.SqlExecute([Select ncchequeps,Sistef, NumIps From SigCdPam],"crSigCdPam")
+	.poDatamgr.SqlExecute([Select VerSitefs From SigCdPac],"crSigCdPac")
+
+	=fLerFiscal()
+
+Endwith	
+
+ThisForm.CntTransa.Cancela.Visible = fChecaAcesso('SIGPROEF','CANCELA')
+
+oFormulario =Thisform.oModem
+
+Select crSigCdPam
+goto top
+
+Thisform.cOperacao = ''
+ok = .t.
+lnNoFabr = LeituraFab(oFormulario)
+If Type('lnNoFabr')='C'
+	lcNoFabr=fDecriptografar(alltrim(lnNoFabr))
+	ThisForm.podatamgr.CursorQuery('SigFiMpF','crSigFiMpF', 'cimpfabs', lcNoFabr)
+	SELECT crSigFiMpF
+	If eof()
+		Messagebox('Impressora Fiscal Inválida para esta Loja !!',0+48,'ERRO')
+		ok = .f.
+	Endif
+	Thisform.NoCaixa = crSigFiMpf.cnCaixas
+	Thisform.NoFab = lnNoFabr
+	Thisform.cOperacao = PADR(Thisform.NoCaixa+Thisform.NoFab+'ADM',20)
+Else
+	MessageBox('Erro na Leitura do N.Fabricação!!!',0+48,'')
+	ThisForm.Release
+	Return .f.
+EndIf
+
+ThisForm.CntTransa.Cnt_periodo.Dt_Inicial.Value=DATE()
+ThisForm.CntTransa.Cnt_periodo.Dt_Final.Value=DATE()
+ThisForm.Sqltrans()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+
+	Case nKeyCode = -1  && F2
+		NoDefault
+		ThisForm.Cnttransa.Gerencial.Click()
+
+	Case nKeyCode = -2 && F3
+		NoDefault
+		ThisForm.CntTransa.Ultimo.Click()
+
+	Case nKeyCode = -3 && F4
+		NoDefault
+		ThisForm.CntTransa.Reimprime.Click()
+
+	Case nKeyCode = -4 And ThisForm.CntTransa.Cancela.Visible && F5
+		NoDefault
+		ThisForm.CntTransa.Cancela.Click()
+
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaretorno
+------------------------------------------------------------
+PROCEDURE montaretorno
+PARAMETERS lsTipTran, lsDataHora, lsCupom, lsCartao, lsNsu, lsAutoriza, lsFinaliza, lnValPago
+
+lsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,"99999999999.99")),".",",")
+
+DECLARE laCartao[11]
+laCartao[1]="Outro, nao definido"
+laCartao[2]="Visa"
+laCartao[3]="Mastercard"
+laCartao[4]="Diners"
+laCartao[5]="American Express"
+laCartao[6]="Sollo"
+laCartao[7]="Sidecard (Redecard)"
+laCartao[8]="Private Label (Redecard)"
+laCartao[9]="Redeshop"
+laCartao[10]=""
+laCartao[11]="Fininvest"
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = "+lsValPago)
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = "+laCartao[VAL(lsCartao)+1])
+INSERT INTO crSiTef (Tef) VALUES ("011-000 = "+lsTipTran)
+INSERT INTO crSiTef (Tef) VALUES ("012-000 = "+lsNsu)
+INSERT INTO crSiTef (Tef) VALUES ("013-000 = "+lsAutoriza)
+INSERT INTO crSiTef (Tef) VALUES ("015-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("018-000 = 1")
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("019-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("020-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("021-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("022-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,1,4))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+lsFinaliza)
+INSERT INTO crSiTef (Tef) VALUES ("027-000 = "+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = 27")
+lsPos=1
+lnLinha=1
+DO WHILE lsPos <> 0
+	lsPos=AT(CHR(10),lsCupom)
+	INSERT INTO crSiTef (Tef) VALUES ("029-"+TRANSFORM(lnLinha,"@L 999")+" = "+IIF(lsPos<>0,SUBSTR(lsCupom,1,lsPos-1),lsCupom))
+	lsCupom=SUBSTR(lscupom,lsPos+1)
+	lnLinha=lnLinha+1
+Enddo
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = Transacao OK")
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+	
+USE
+	
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE sqltrans
+------------------------------------------------------------
+PROCEDURE sqltrans
+ThisForm.LockScreen = .t.
+
+Wait Window 'Aguarde...' Nowait
+
+llDatai = Dtos(ThisForm.CntTransa.Cnt_periodo.Dt_Inicial.Value)
+llDataf = Dtos(ThisForm.CntTransa.Cnt_periodo.Dt_Final.Value)
+llDti   = fDtoSQL(ThisForm.CntTransa.Cnt_periodo.Dt_Inicial.Value)
+llDtf   = fDtoSQL(ThisForm.CntTransa.Cnt_periodo.Dt_Final.Value,"23:59:59")
+
+Set Talk Window
+Set Talk On
+
+WITH ThisForm.poDatamgr
+	PRIVATE lcIdQuery
+	lcIdQuery=SYS(2015)
+	vSql=[Select Distinct a.Cemps, a.cDopes, a.cncupoms, a.cnIdents, a.cCupomNvs, a.cNnsus, a.cNValors, a.cnDtTrans, a.CnHrTrans, a.cStatus, a.FPags ]+;
+	     [From SigFiTef a ]+;
+		 [Where cndttransI Between ?llDatai And ?llDataf And a.ctipos = 'R' And (a.cHeaders='CRT' or a.cHeaders='CHQ') And Not a.cnnsus = '   ']+;
+		 [Order By a.cnDtTrans,a.CnHrTrans]
+	.SqlExecute(vSql,"Selecao")
+
+	lcSql = [Select a.EmpDopNums, a.Notas, b.CupFis From SigMvCab a, SigCdOpe b where a.Datas Between ?llDti And ?llDtf ]+;
+			[And a.dopes = b.dopes and b.Cupfis in(1,3)]
+
+	.SqlExecute(lcSql,"Selecao2")
+	Select Selecao2
+	Index On EmpDopNums Tag EmpDopNums			
+
+EndWith
+Set Talk Off
+
+Create Cursor Transacao (cDopes c(20), cnCupoms c(10), ccupomnvs c(20), cnnsus c(12), cnvalors n(12,2), ;
+						cndttrans d, CnHrTrans c(8)  , cStatus c(3), FPags c(12), lCancel l(1), ;
+						CupFis n(1), EmpdopNums c(29), cnIdents c(10))
+Index On cndttrans Tag Datas
+
+Select Selecao
+Scan
+	Scatter Memvar
+	m.CnHrTrans = Transform(m.CnHrTrans,"@R xx:xx:xx")
+	m.CnValors  = Round(Val(Strtran(m.cnValors,',',''))/100,2)
+	m.CnDtTrans = Ctod(Substr(m.CnDtTrans,1,2)+'/'+Substr(m.CnDtTrans,3,2)+'/'+Right(m.CnDtTrans,4))
+	
+	=Seek(m.Cemps + Padr(m.Cdopes,20) + Str(Val(m.cncupoms),6),'Selecao2')
+
+	m.cnCupoms = Selecao2.Notas
+	m.Cupfis   = Selecao2.CupFis
+	m.EmpdopNums = Selecao2.EmpdopNums
+	
+	Select Transacao
+	Append Blank
+	Gather Memvar
+	Replace cnnsus WITH Substr(cnnsus,1,12)
+	Replace lCancel With IIF(cStatus="CNC",.t.,.f.)
+
+EndScan
+
+Wait Clear
+
+Select Transacao
+Go Bott
+
+With ThisForm.CntTransa.Grade
+	.RecordSource = 'Transacao'
+	.ColumnCount  = 7
+	.ReadOnly     = .T.
+	.Column1.ControlSource     = 'Transacao.cCupomnvs'
+	.Column1.FontSize          = 8
+	.Column1.Movable           = .F.
+	.Column1.Resizable         = .F.
+	.Column1.Width			   = 70
+	.Column1.Header1.Caption   = 'Rede'
+	.Column1.Header1.Alignment = 2
+	.Column1.Header1.FontSize  = 8
+	.Column1.Text1.FontSize    = 8
+
+	.Column2.ControlSource     = 'Transacao.cnnsus'
+	.Column2.FontSize          = 8
+	.Column2.Movable           = .F.
+	.Column2.Resizable         = .F.
+	.Column2.Width			   = 78
+	.Column2.Header1.Caption   = 'No.Autorização'
+	.Column2.Header1.Alignment = 2
+	.Column2.Header1.FontSize  = 8
+	.Column2.Text1.FontSize    = 8
+
+	.Column3.ControlSource     = 'Transacao.cnValors'
+	.Column3.FontSize          = 8
+	.Column3.Movable           = .F.
+	.Column3.Resizable         = .F.
+	.Column3.Width			   = 75
+	.Column3.Header1.Caption   = 'Valor'
+	.Column3.Header1.Alignment = 2
+	.Column3.Header1.FontSize  = 8
+	.Column3.Text1.FontSize    = 8
+
+	.Column4.ControlSource     = 'Transacao.CnDtTrans'
+	.Column4.FontSize          = 8
+	.Column4.Movable           = .F.
+	.Column4.Resizable         = .F.
+	.Column4.Width			   = 65
+	.Column4.Alignment     	   = 2
+	.Column4.Header1.Caption   = 'Data'
+	.Column4.Header1.Alignment = 2
+	.Column4.Header1.FontSize  = 8
+	.Column4.Text1.FontSize    = 8
+	.Column4.Text1.Alignment   = 2
+
+	.Column5.ControlSource     = 'Transacao.CnHrTrans'
+	.Column5.FontSize          = 8
+	.Column5.Movable           = .F.
+	.Column5.Resizable         = .F.
+	.Column5.Width			   = 55
+	.Column5.Header1.Caption   = 'Hora'
+	.Column5.Header1.Alignment = 2
+	.Column5.Header1.FontSize  = 8
+	.Column5.Text1.FontSize    = 8
+
+	.Column6.ControlSource     = 'Transacao.CnCupoms'
+	.Column6.FontSize          = 8
+	.Column6.Movable           = .F.
+	.Column6.Resizable         = .F.
+	.Column6.Width			   = 60
+	.Column6.Header1.Caption   = 'Cupom'
+	.Column6.Header1.Alignment = 2
+	.Column6.Header1.FontSize  = 8
+	.Column6.Text1.FontSize    = 8
+
+	.Column7.ControlSource     = 'Transacao.cDopes'
+	.Column7.FontSize          = 8
+	.Column7.Movable           = .F.
+	.Column7.Resizable         = .F.
+	.Column7.Width			   = 120
+	.Column7.Header1.Caption   = 'Operação'
+	.Column7.Header1.Alignment = 2
+	.Column7.Header1.FontSize  = 8
+	.Column7.Text1.FontSize    = 8
+
+EndWith 
+
+ThisForm.LockScreen = .f.
+
+Thisform.CntTransa.Grade.SetAll("DynamicForeColor", ;
+   "IIF(Transacao.lCancel, RGB(255,0,0) ;
+   , RGB(0,0,0))", "Column") 
+ThisForm.cntTransa.Grade.Refresh
+
+Thisform.Cnttransa.Grade.setfocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+Return(IIF(USED("TRANSACAO"),Transacao.cnnsus,""))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Ok
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Cnt_periodo.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.CntTransa.Cnt_periodo.Dt_Final.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value
+	ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value = This.Value
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Cnt_periodo.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.SqlTrans
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value
+	ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value = This.Value
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Cancela
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT Transacao
+If Eof()
+	MessageBox('Nao Existem Transacoes Efetuadas',16,'')
+	Return
+Endif
+IF Transacao.cStatus = "CNC"
+	MESSAGEBOX("Transacao Cancelada",64)
+	Return 
+EndIf
+If Transacao.CupFis = 3
+	If MessageBox('Atenção! Esta é uma operação de Cupom Não Fiscal.'+Chr(13)+;
+			'Deseja Realmente Continuar com o Cancelamento?',4+64+256,'') = 7
+		Return
+	EndIf
+Endif
+
+lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']
+ThisFOrm.poDatamgr.SqlExecute(lcSql,"csSigOpFp")
+SELECT Transacao
+lcData=DTOC(cndttrans)
+lcData=SUBSTR(lcData,1,2)+SUBSTR(lcData,4,2)+SUBSTR(lcData,7,4)
+
+If Alltrim(CrSigCdPac.VerSitefs) = '4.1'
+	DO FORM SigOpCtf WITH crSigCdPam.NumIps, crSigFiMpf.CnCaixas, cnValors, csSigOpFp.Opers, lcData, cnnsus, csSigOpFp.lCartao, .f., csSigOpFp.CodEstabs TO llCancel
+Else
+	DO FORM SigTfCan WITH crSigCdPam.NumIps, crSigFiMpf.CnCaixas, cnValors, csSigOpFp.Opers, lcData, cnnsus, csSigOpFp.lCartao, .f., csSigOpFp.CodEstabs TO llCancel
+Endif
+IF llCancel
+	lcSql=[Update SigFiTef set cStatus = 'CNC', UsuCancs = ']+Usuar+[' Where ctipos = 'R' And cHeaders='CRT' AND CNNSUS = ']+ALLTRIM(Transacao.cnnsus)+[']
+	RetSql=ThisFOrm.poDatamgr.SqlExecute(lcSql)
+
+	lcSql=[Select EmpDopNums,Valos,CnIdTefs,cidChaves From SigMvPar where EmpDopNums = ']+Transacao.EmpDopNums+[']
+	ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalPar')
+	Select LocalPar
+	Locate for CnIdTefs = Transacao.CnIdents
+	If Not Eof() And RetSql > 0
+		llTrue = .t.
+		lcsql = [Update SigMvPar Set lCancelas = ?llTrue Where CidChaves = ']+LocalPar.Cidchaves+[']
+		RetSql = ThisForm.Podatamgr.sqlexecute(lcSql,'')
+	EndIf
+	If RetSql > 0
+		ThisForm.poDatamgr.Commit()
+	EndIf
+	
+Endif
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Reimprime
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT Transacao
+If Eof()
+	MessageBox('Nao Existem Transacoes Efetuadas',16,'')
+	Return
+Endif
+IF Transacao.cStatus = "CNC"
+	MESSAGEBOX("Transacao Cancelada",64)
+	RETURN
+ENDIF
+
+SELECT Transacao
+lcNSU=cnnsus
+lcData=DTOC(cndttrans)
+lcData=SUBSTR(lcData,1,2)+SUBSTR(lcData,4,2)+SUBSTR(lcData,7,4)
+SKIP
+lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']
+ThisFOrm.poDatamgr.SqlExecute(lcSql,"csSigOpFp")
+
+If Alltrim(CrSigCdPac.VerSitefs) = '4.1'
+	DO FORM SigPrOer WITH crSigCdPam.NumIps, crSigFiMpF.CnCaixas, lcNSu, lcData, Transacao.cnValors, Transacao.cndttrans, Transacao.cnhrtrans, csSigOpFp.CodEstabs
+Else
+	DO FORM SigTfSup WITH crSigCdPam.NumIps, crSigFiMpF.CnCaixas, lcNSu, lcData, Transacao.cnValors, Transacao.cndttrans, Transacao.cnhrtrans, csSigOpFp.CodEstabs
+EndIf
+
+SELECT Transacao
+SKIP -1
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Gerencial
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Resposta=SigPrTef(crSigCdPam.NumIps,110,Transacao.cnValors,"1",crSigFiMpF.CnCaixas,,"SW000001",0)
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: sigproef.CntTransa.Ultimo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+SELECT Transacao
+If Eof()
+	MessageBox('Nao Existem Transacoes Efetuadas',16,'')
+	Return
+Endif
+lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']
+ThisFOrm.poDatamgr.SqlExecute(lcSql,"csSigOpFp")
+Select Transacao
+lcNSU=cnnsus
+lcData=DTOC(cndttrans)
+lcData=SUBSTR(lcData,1,2)+SUBSTR(lcData,4,2)+SUBSTR(lcData,7,4)
+SKIP
+
+If Alltrim(CrSigCdPac.VerSitefs) = '4.1'
+	DO FORM SigPrOer WITH crSigCdPam.NumIps, crSigFiMpF.CnCaixas, lcNSU, "", "", "", "", csSigOpFp.CodEstabs
+Else
+	DO FORM SigTfSup WITH crSigCdPam.NumIps, crSigFiMpF.CnCaixas, lcNSU, "", "", "", "", csSigOpFp.CodEstabs
+EndIf
+SELECT Transacao
+GO bott
+Release Windows
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: sigproef
+RESERVED3 (ClassInfo): coperacao
+nocaixa
+nofab
+podatamgr
+*montaretorno 
+*sqltrans 
+
+
+* Objeto: oModem
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿþÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

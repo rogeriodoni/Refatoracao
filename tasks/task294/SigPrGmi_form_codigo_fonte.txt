@@ -1,0 +1,1167 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrGmi.SCX
+* Data/Hora: 16/07/2026 23:29:23
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRGMI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPRGMI
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGPRGMI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRGMI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRGMI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Say2
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_estoque
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Cd_GrEstoque
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_estoque
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Ds_GrEstoque
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DLinha
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Linha
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_negativo
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Datai
+  Parent: SIGPRGMI
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_Conta
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGPRGMI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Processa
+  Parent: SIGPRGMI
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGPRGMI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGPRGMI
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 1016
+  Height = 544
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 292
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Geração de Pedido de Estoque Mínimo"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGPRGMI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 698
+  Height = 41
+  Width = 46
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 864
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Linha de Produção : "
+  Left = 164
+  Top = 193
+  Width = 100
+  TabIndex = 15
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_ds_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 348
+  MaxLength = 40
+  TabIndex = 7
+  Top = 163
+  Width = 290
+  ZOrderSet = 3
+  Name = "get_ds_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_Cd_GrEstoque
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 268
+  MaxLength = 10
+  TabIndex = 4
+  Top = 138
+  Width = 80
+  ZOrderSet = 4
+  Name = "get_Cd_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_cd_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 268
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 163
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_cd_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_Ds_GrEstoque
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 348
+  MaxLength = 20
+  TabIndex = 5
+  Top = 138
+  Width = 150
+  ZOrderSet = 3
+  Name = "get_Ds_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Get_DLinha
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 348
+  MaxLength = 40
+  TabIndex = 9
+  Top = 188
+  Width = 290
+  ZOrderSet = 3
+  Name = "Get_DLinha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Get_Linha
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 268
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 188
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Linha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Somente Negativos :"
+  Left = 162
+  Top = 218
+  Width = 102
+  TabIndex = 16
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Get_negativo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 268
+  MaxLength = 1
+  TabIndex = 10
+  Top = 213
+  Width = 17
+  ZOrderSet = 4
+  Name = "Get_negativo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  Caption = "< S / N >"
+  Left = 292
+  Top = 217
+  Width = 52
+  TabIndex = 13
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Estoque : "
+  Left = 213
+  Top = 168
+  Width = 51
+  TabIndex = 17
+  ZOrderSet = 2
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo de Estoque : "
+  Left = 166
+  Top = 142
+  Width = 98
+  TabIndex = 14
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Get_Datai
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Height = 23
+  Left = 268
+  TabIndex = 11
+  Top = 238
+  Width = 82
+  Name = "Get_Datai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Say_Conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Data Geração :"
+  Left = 189
+  Top = 243
+  Width = 75
+  TabIndex = 1
+  Name = "Say_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Cancela
+------------------------------------------------------------
+  Top = 4
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.Processa
+------------------------------------------------------------
+  Top = 4
+  Left = 648
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "Processa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Empresa : "
+  Left = 211
+  Top = 118
+  Width = 53
+  TabIndex = 12
+  ZOrderSet = 18
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 348
+  MaxLength = 40
+  TabIndex = 3
+  Top = 113
+  Width = 290
+  ZOrderSet = 19
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGMI.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = "XXX"
+  Left = 268
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 113
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 20
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRGMI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryEest = [Select * From SigMvCab]
+lcQryEesti = [Select * From SigMvItn]
+lcQrySigCdLin = [Select descs,linhas,pedidos From SigCdLin Order By descs,linhas,pedidos ]
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', , lcQryEest)
+			.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn', '', , lcQryEesti)
+			.AddCursor('SigCdLin', 'Linhas', 'crSigCdLin', '', , lcQrySigCdLin)
+
+			.ReQuery('crSigCdLin')
+		EndWith
+		
+		ThisForm.Get_Datai.Value = Date() - 7
+
+		=DoDefault()
+		
+		Select crSigCdLin
+		Index On DESCS tag DESCS
+		Index On linhas tag linhas
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_ds_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque,,,ThisForm.podatamgr.pnIdConn)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		ThisForm.get_cd_estoque.Value = ''
+		ThisForm.get_cd_estoque.Refresh
+		return 0 
+	Endif
+Else
+	ThisForm.get_cd_estoque.Value = ''
+	ThisForm.get_cd_estoque.Refresh
+	return(.t.)
+endif
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.get_cd_estoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_Cd_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque,ThisForm.get_cd_estoque.value,ThisForm.podatamgr.pnIdConn)
+Else
+	ThisForm.get_Ds_GrEstoque.value = ''
+	ThisForm.get_Ds_GrEstoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_cd_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque,,,ThisForm.podatamgr.pnIdConn)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		ThisForm.get_ds_estoque.Value = ''
+		ThisForm.get_ds_estoque.Refresh
+		return 0 
+	Endif
+Else
+	ThisForm.get_ds_estoque.Value = ''
+	ThisForm.get_ds_estoque.Refresh
+	return(.t.)
+endif
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_Ds_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque,ThisForm.get_cd_estoque.value,ThisForm.podatamgr.pnIdConn)
+Else
+	ThisForm.get_Cd_GrEstoque.value = ''
+	ThisForm.get_Cd_GrEstoque.refresh
+endif
+return(.t.)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(ThisForm.get_cd_grestoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.Get_DLinha
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( This.Value )
+	Select crSigCdLin
+	Set Order to Descs
+	If !Seek( This.Value )
+		loBrow = CreateObject( 'fwBuscaSel', 'crSigCdLin', 'Descs', This.Value, 'Linhas de Produção' )
+		loBrow.AddColuna( 'Descs', '', 'Descrição', .t., 'Descs' )
+		loBrow.AddColuna( 'Linhas', '', 'Código', .t., 'Linhas' )
+		loBrow.Show
+		If Lastkey() # 27
+			This.Parent.Get_Linha.Value = crSigCdLin.Linhas
+			This.Parent.Get_dLinha.Value = crSigCdLin.Descs
+		Else
+			This.Parent.Get_Linha.Value = ''
+			This.Parent.Get_dLinha.Value = ''
+		Endif
+	Else
+		This.Parent.Get_Linha.Value = crSigCdLin.Linhas
+		This.Parent.Get_dLinha.Value = crSigCdLin.Descs
+	Endif
+Else		
+	This.Parent.Get_Linha.Value = ''
+	This.Parent.Get_dLinha.Value = ''
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( IsEmpty( ThisForm.Get_Linha.Value ) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.Get_Linha
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty( This.Value )
+	Select crSigCdLin
+	Set Order to Linhas
+	If !Seek( This.Value )
+		loBrow = CreateObject( 'fwBuscaSel', 'crSigCdLin', 'Linhas', This.Value, 'Linhas de Produção' )
+		loBrow.AddColuna( 'Linhas', '', 'Código', .t., 'Linhas' )
+		loBrow.AddColuna( 'Descs', '', 'Descrição', .t., 'Descs' )
+		loBrow.Show
+		If Lastkey() # 27
+			This.Parent.Get_Linha.Value = crSigCdLin.Linhas
+			This.Parent.Get_dLinha.Value = crSigCdLin.Descs
+		Else
+			This.Parent.Get_Linha.Value = ''
+			This.Parent.Get_dLinha.Value = ''
+		Endif
+	Else
+		This.Parent.Get_Linha.Value = crSigCdLin.Linhas
+		This.Parent.Get_dLinha.Value = crSigCdLin.Descs
+	Endif
+Else		
+	This.Parent.Get_Linha.Value = ''
+	This.Parent.Get_dLinha.Value = ''
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.Get_negativo
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return Inlist(This.Value, "S","N")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.Processa
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private lcGrupo, lcEmpresa, lcConta, lcLinha, lcOperacao, lcFornece, Chave
+Local lnItens, lnNumero
+
+lcEmpresa = ThisForm.Get_cd_Empresa.Value
+lcGrupo   = ThisForm.Get_cd_GrEstoque.Value
+lcConta   = ThisForm.Get_cd_Estoque.Value
+lcLinha   = ThisForm.Get_Linha.Value
+lcNega    = ThisForm.Get_negativo.Value
+ldData    = fDtoSQL(ThisForm.Get_Datai.Value)
+
+If IsEmpty( lcEmpresa )
+	Messagebox( 'É obrigatório informar a Empresa...', 32, '' )
+	ThisForm.Get_cd_Empresa.SetFocus
+	Return
+Endif
+
+If IsEmpty( lcGrupo )
+	Messagebox( 'É obrigatório informar o Grupo...', 32, '' )
+	ThisForm.Get_cd_GrEstoque.SetFocus
+	Return
+Endif
+
+If IsEmpty( lcConta )
+	Messagebox( 'É obrigatório informar a Conta...', 32, '' )
+	ThisForm.Get_cd_Estoque.SetFocus
+	Return
+Endif
+
+If IsEmpty( lcLinha )
+	Messagebox( 'É obrigatório informar a Linha...', 32, '' )
+	ThisForm.Get_Linha.SetFocus
+	Return
+Endif
+
+Select crSigCdLin
+Set Order to Linhas
+If !Seek( lcLinha )
+	Messagebox( 'Esta Linha de Produção não está cadastrada...',32, '' )
+	ThisForm.Get_Linha.SetFocus
+	Return
+Endif
+
+If IsEmpty( crSigCdLin.Pedidos )	
+	Messagebox( 'Esta Linha de Produção não possui uma Operação cadastrada...', 32, '' )
+	ThisForm.Get_Linha.SetFocus
+	Return
+Endif
+lcOperacao = crSigCdLin.Pedidos
+
+Set Talk On
+Set Talk Window
+
+If lcNega # "S"
+
+	lcQuery = [	Select E.Emps, E.Grupos, E.Estos, E.CPros, E.SQtds,]+;
+			  [ P.CPros, P.Linhas, P.Situas, P.QMins, P.IFors, P.PVens, P.Moevs, P.Dpros ]+;
+			  [ From SigMvEst E, SigCdPro P ]+;
+			  [ Where E.Emps = ?lcEmpresa And E.Grupos = ?lcGrupo And ]+;
+			  [		E.Estos = ?lcConta And E.CPros = P.CPros And ]+;
+			  [		E.SQtds < P.QMins And P.Linhas = ?lcLinha And ]+;
+			  [		P.Situas = 1 And P.QMins > 0 ] + ;
+			  [ Order By E.Emps, E.Grupos, E.Estos, E.CPros, E.SQtds,]+;
+			  [ P.CPros, P.Linhas, P.Situas, P.QMins, P.IFors, P.PVens, P.Moevs, P.Dpros ]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTemp1') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp)')
+		Return 0
+	EndIf
+	Chave = lcEmpresa+lcGrupo+lcConta
+
+	lcQuery = [ Select CPros, QMins, IFors, PVens, Moevs, Dpros ]+;
+		[	From SigCdPro ]+;
+		[	Where Linhas = ?lcLinha and QMins > 0 And Situas=1 And ?Chave+CPros ]+;
+		[		Not In (Select empgruests+Cpros as Chave From SigMvEst ) ]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTemp2') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp2)')
+		Return 0
+	EndIf
+
+	Select Emps, Grupos, Estos, CPros, SQtds, QMins, QMins - SQtds As DifProds, IFors, PVens, Moevs, Dpros ;
+		From crTemp1 ;
+		Where Emps = lcEmpresa And Grupos = lcGrupo And ;
+				Estos = lcConta And ;
+				SQtds < QMins And Linhas = lcLinha And ;
+				Situas = 1 And QMins > 0 ;
+	Union all;
+	Select lcEmpresa as Emps, lcGrupo as Grupos, lcConta as Estos, CPros, 000000000.00 as SQtds, QMins,;
+			QMins As DifProds, IFors, PVens, Moevs, Dpros ;
+		From CrTemp2 ;
+	Into Cursor TmpMinimo
+
+Else
+	lcQuery = [ Select E.Emps, E.Grupos, E.Estos, E.CPros, E.SQtds, ]+;
+			  [  P.IFors, P.CPros, P.Situas, P.Linhas, P.PVens, P.Moevs, P.dpros ]+;
+			  [ From SigMvEst E, SigCdPro P ]+;
+			  [ Where E.Emps = ?lcEmpresa And E.Grupos = ?lcGrupo And ]+;
+			  [	E.Estos = ?lcConta And E.CPros = P.CPros And ]+;
+			  [	E.SQtds < 0 And P.Linhas = ?lcLinha And ]+;
+			  [	P.Situas = 1 ] + ;
+			  [ Order By E.Emps, E.Grupos, E.Estos, E.CPros, E.SQtds, ]+;
+			  [  P.IFors, P.CPros, P.Situas, P.Linhas, P.PVens, P.Moevs, P.dpros ]
+			  			  
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTemp3') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp3)')
+		Return 0
+	EndIf
+
+	Select Emps, Grupos, Estos, CPros, SQtds, 0 as QMins,;
+			Abs(SQtds) As DifProds, IFors, PVens, Moevs, dpros ;
+		From crTemp3 ;
+	Into Cursor TmpMinimo
+Endif
+Set Talk Off
+
+Select TmpMinimo
+Go Top
+If Eof() Or Lastkey() = 27
+	Messagebox( 'Nenhum produto selecionado...', 32, '' )
+	Return
+Endif
+
+Set Talk On
+Set Talk Window
+
+lcQuery = [Select I.CPros, I.Qtds, I.QtBxProds, I.empdopnums, E.empdopnums, E.Grupods, E.Contads, E.Dopes, E.Emps, ] + ;
+		  [ O.Dopes, O.Globalizas ] + ;
+		  [	From SigMvCab E, SigMvItn I, SigCdOpe O ] + ;
+		  [	Where E.Dopes = O.Dopes And E.Emps = ?lcEmpresa And ] + ;
+		  [	(O.Globalizas=1 or O.Globalizas=2) And ] + ;
+		  [	E.Grupods = ?lcGrupo And ] + ;
+		  [	E.Contads = ?lcConta And E.EmpDopNums = I.EmpDopNums ] + ;
+		  [ Order By I.CPros, I.Qtds, I.QtBxProds, I.empdopnums, E.empdopnums, E.Grupods, E.Contads, E.Dopes, E.Emps, ] + ;
+		  [ O.Dopes, O.Globalizas ]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTemp4') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp4)')
+	Return 0
+EndIf
+
+Select CPros, Sum(Qtds - QtBxProds) As Produzindo ;
+  From crTemp4 ;
+ Group By CPros ;
+  Into Cursor TmpPedidos
+
+Set Talk Off
+
+Select TmpPedidos
+Index on Cpros Tag CPros
+
+Select TmpMinimo
+Index on IFors + CPros Tag ForProd
+
+Select M.CPros, M.IFors, M.PVens, M.Moevs, M.Dpros,;
+	M.DifProds - Iif( IsNull( P.Produzindo ), 0, P.Produzindo ) as Qtds;
+	From TmpMinimo M Left Join TmpPedidos P On M.CPros = P.CPros ;
+	Where M.DifProds > Iif( IsNull( P.Produzindo ), 0, P.Produzindo ) ;
+	Into Cursor TmpProd
+
+Select TmpProd
+Go Top
+If Eof()
+	Messagebox( 'Nenhum produto selecionado...', 32, '' )
+	Return
+Endif
+
+Select TmpProd
+Index on IFors + CPros Tag ForProd
+Count to lnTotalReg
+
+loBarra = CreateObject( 'fwprogressbar', 'Processando Pedidos...', lnTotalReg )
+loBarra.Show
+
+lcFornece = Repl( Chr( 255 ), 10 ) 
+
+Select TmpProd
+Scan 
+	loBarra.Update( .t. )
+	If lcFornece # TmpProd.IFors
+		
+		lnNumero  = fGerUniqueKey( Alltrim( lcOperacao ) + lcEmpresa )
+		lcFornece = TmpProd.IFors
+
+		lcQuery = [Select Dopes, GruOrigs, Opers ] + ;
+		    [ From SigCdOpe ] + ;
+		    [ Where Dopes=?lcOperacao ] + ;
+		    [ Order By Dopes, GruOrigs, Opers ]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdOpe') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdOpe)')
+			Return 0
+		EndIf
+		Go Top in ('crSigCdOpe')
+		Select TmpProd
+		
+		Insert Into crSigMvCab ( Emps, Dopes, Numes, Datas, Datars, MascNum,;
+								Grupoos, Contaos, Grupods, Contads, Usuars, EmpDopNums, CidChaves, DtAlts ) ;
+				Value ( lcEmpresa, lcOperacao, lnNumero, ldData, ldData,;
+						Alltrim( fGerMascara( lnNumero ) ), Iif(IsEmpty(crSigCdOpe.GruOrigs),'ESTOQUE',crSigCdOpe.GruOrigs), lcFornece, lcGrupo,;
+						lcConta, Usuar, lcEmpresa+lcOperacao+Str(lnNumero,6), fUniqueIds(), Date() )
+		Select crSigMvCab
+		Replace Datars     With Iif(IsEmpty(Datars),Null,Datars),;
+				Datas      With Iif(IsEmpty(Datas),Null,Datas),;
+				DataTrans  With Iif(IsEmpty(DataTrans),Null,DataTrans),;
+				PrazoEnts  With Iif(IsEmpty(PrazoEnts ),Null,PrazoEnts ),;
+				Dtemis     With Iif(IsEmpty(Dtemis),Null,Dtemis),;
+				Obses      With Iif(IsEmpty(obses),Null,Obses),;
+				DtFechas   With Iif(IsEmpty(DtFechas),Null,DtFechas),;
+				DtAudits   With Iif(IsEmpty(DtAudits),Null,DtAudits)
+
+		lnItens = 0
+	Endif
+	lnItens = lnItens + 1
+	Insert Into crSigMvItn ( Emps, Dopes, Numes, CItens, CPros, Qtds, Units, Moedas, opers, totas, dpros, EmpDopNums, CidChaves, DtAlts ) ;
+			Value ( lcEmpresa, lcOperacao, lnNumero, lnItens, TmpProd.CPros,;
+					TmpProd.Qtds, TmpProd.PVens, TmpProd.Moevs, Iif(crSigCdOpe.opers = 1,'E','S'),(TmpProd.Qtds * TmpProd.PVens),TmpProd.dpros,;
+					lcEmpresa + lcOperacao + Str(lnNumero,6), fUniqueIds(), Date() )
+	Select crSigMvCab
+	Replace crSigMvCab.ValInis with crSigMvCab.ValInis + ( TmpProd.PVens * TmpProd.Qtds ),;
+			crSigMvCab.Valos with crSigMvCab.Valos + ( TmpProd.PVens * TmpProd.Qtds ),;
+			crSigMvCab.DtAlts With Date()
+Endscan
+loBarra.Complete( .t. )
+
+Select Min(Datas) as Datas From CrSigMvCab Into Cursor TmpGdm
+
+**********************************************************************************************
+If Not ThisForm.poDataMgr.Update('crSigMvCab')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvCab)')
+	Return 0
+EndIf
+If Not ThisForm.poDataMgr.Update('crSigMvItn')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvItn)')
+	Return 0
+EndIf
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+	Return 0
+EndIf
+**********************************************************************************************
+
+Messagebox( 'Processamento Finalizado...', 32, '' )
+
+Return
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(ThisForm.get_cd_empresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGMI.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRGMI
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

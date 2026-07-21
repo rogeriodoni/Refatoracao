@@ -1,0 +1,13 @@
+﻿Phase 8 complete. Added 10 methods (lines 1789ÔÇô2036) to `FormSigPrCcc.prg`, all with real implementations mapped to the OPERACIONAL "Recalcular Saldos" semantics:
+
+- **FormParaBO** / **BOParaForm** ÔÇö full mapping of all fields from the 4 containers (OpConta, OpEstoque, OpCusto, OpCompra) to/from the declared BO properties (`this_cEmpConta`, `this_dDataEst`, `this_cProdCompra`, etc.)
+- **HabilitarCampos(par_lHabilitar)** ÔÇö toggles checkboxes, containers and action buttons; respects individual checkbox state
+- **LimparCampos** ÔÇö clears all 4 containers, restores default empresa, resets counter/label
+- **CarregarLista** ÔÇö reloads system parameters via `BO.InicializarDados()` + `BOParaForm()`
+- **AjustarBotoesPorModo("INICIAL"|"PROCESSANDO"|"CONCLUIDO")** ÔÇö real button-state matrix
+- **BtnBuscarClick** ÔÇö reloads SigCdPam parameters
+- **BtnEncerrarClick** ÔÇö releases form
+- **BtnSalvarClick** ÔÇö aliased to `BtnProcessarClick` (positive action in OPERACIONAL)
+- **BtnCancelarClick** ÔÇö aliased to `BtnCancelaClick`
+
+File is 2046 lines, ends cleanly with `ENDDEFINE`, no TODO/FIXME/stub markers introduced (the two `TODOS` grep hits are the Portuguese word for "all" in pre-existing comments).

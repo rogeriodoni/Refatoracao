@@ -30,6 +30,9 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
     this_lAnaPag     = .F.   && Analitico Por Pagamentos
     this_lVendRes    = .F.   && Resumo Por Vendedor
 
+    *-- Cursor principal binding com RelSigReFec.frx (Pattern #117 guard)
+    this_cCursorDados = "crImpressao"
+
     *--------------------------------------------------------------------------
     * Init - Inicializa BO com valores padrao
     *--------------------------------------------------------------------------
@@ -801,7 +804,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("RelSigReFec", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("RelSigReFec", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -821,7 +824,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("RelSigReFec", "PREVIEW")
+                THIS.ExecutarReportForm("RelSigReFec", "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

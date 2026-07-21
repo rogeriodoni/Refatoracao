@@ -1,0 +1,14 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrCtcBO.prg` criado com:
+
+- **7 propriedades** extra├¡das do schema `sigprctc`:
+  - `this_cEmpDopNums` ÔÇö chave de agrupamento da opera├º├úo (char 29)
+  - `this_cCmoes` ÔÇö c├│digo da moeda (char 3, FK para SigCdMoe)
+  - `this_nValos` ÔÇö cota├º├úo (numeric 11,6)
+  - `this_cPkChaves` ÔÇö PK da tabela (char 20)
+  - `this_dDtalts` ÔÇö data/hora de altera├º├úo (datetime)
+  - `this_cUsuars` ÔÇö usu├írio (char 10)
+  - `this_cDescrs` ÔÇö descri├º├úo da moeda (auxiliar, vem do JOIN com SigCdMoe.dmoes)
+- **2 flags de estado** da cole├º├úo (`this_lHouveInsercao`, `this_lHouveExclusao`)
+- **`Init()`** configurando `this_cTabela = "sigprctc"` e `this_cCampoChave = "pkchaves"`, com TRY/CATCH e RETURN fora do bloco.
+
+**Observa├º├úo importante para fases seguintes:** este ├® um form OPERACIONAL popup que recebe par├ómetros do form pai (`poForm, pnDataSes, pcEscolha, pcEmps, pcDopes, pnNumes`). As opera├º├Áes de persist├¬ncia s├úo em lote (DELETE + INSERT de toda a cole├º├úo), n├úo CRUD individual. A Fase 2 precisar├í implementar `Buscar()` (SELECT com JOIN em SigCdMoe) e `SalvarColecao()` (delete + insert em lote).

@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos `Btn{Incluir,Alterar,Visualizar,Excluir}Click` em `FormSigPrGf2.prg` (linhas 782ÔÇô896) seguindo o padr├úo can├┤nico j├í estabelecido em `FormSigPrGf1.prg`:
+
+- **BtnIncluirClick** ÔåÆ nova consulta: reseta combo para primeiro item + `GerarGrafico(1)` (com `cnt_4c_Aguarde` e `LockScreen`)
+- **BtnAlterarClick** ÔåÆ habilita e devolve foco ao `cbo_4c_CmbChave1` para troca da chave
+- **BtnVisualizarClick** ÔåÆ delega para `CboChave1Click()` (regera gr├ífico da chave selecionada, reaproveitando aguarde/erro)
+- **BtnExcluirClick** ÔåÆ desvincula `ControlSource` do OLE, chama `LimparCursorGrafico()` + `InicializarCursorGrafico()` no BO, volta para estado de espera
+
+Cada m├®todo tem TRY/CATCH com `MsgErro` verbose (Message + LineNo + Procedure), sem stubs, TODOs ou `MsgAviso("ser├í implementado")`. Como este ├® form OPERACIONAL sem entidade persistida, os coment├írios documentam explicitamente que n├úo h├í INSERT/UPDATE/DELETE real ÔÇö a l├│gica implementada ├® a a├º├úo operacional equivalente ("nova consulta", "editar sele├º├úo", "executar", "limpar").

@@ -1,0 +1,8 @@
+﻿Tudo correto. Resumo das 5 corre├º├Áes aplicadas (o 6┬║ problema `CONTROLCOUNT` era falso positivo ÔÇö n├úo existe nos arquivos):
+
+**`sigprtefBO.prg`:**
+- `CarregarImpressoraFiscal`: `SELECT cnCaixas, cimpfabs FROM SigFiMpF WHERE cimpfabs = ...` ÔåÆ `SELECT cnCaixas FROM SigFiMpF` (sem WHERE)
+- `BuscarTransacaoTEF`: removidas 3 condi├º├Áes inventadas (`cTipos`, `cEmps`, `cDopes`), mantido apenas `WHERE cnIdents = ...`
+
+**`Formsigprtef.prg`:**
+- `ProcCntTxt`: removida condi├º├úo `WHERE nTipos = ...` da query em `SigFiTra`, mantidos `cHeaders` e `cTpTrans` que existem no original

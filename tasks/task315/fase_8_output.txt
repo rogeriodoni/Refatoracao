@@ -1,0 +1,20 @@
+﻿config.prg auto-carrega `*BO.prg` de `gcCaminhoClasses` e `Form*.prg` de `operacionais\` via ADIR ÔÇö nenhum registro manual necess├írio. A integra├º├úo est├í completa.
+
+**Resumo da Fase 8 conclu├¡da:**
+
+Os 10 m├®todos foram adicionados ao `FormSIGPRNSE.prg` antes do `Destroy`:
+
+| M├®todo | Comportamento no OPERACIONAL |
+|--------|------------------------------|
+| `BtnBuscarClick()` | Delega para `BtnSelecionarClick()` |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Chama `BO.Processamento()` (gera arquivo TXT) |
+| `BtnCancelarClick()` | Limpa fila e volta para modo ENTRADA |
+| `FormParaBO()` | Copia filtros do form para as `this_*` do BO |
+| `BOParaForm()` | Restaura `this_*` do BO para os controles |
+| `HabilitarCampos()` | Wrapper sobre `AjustarControles()` |
+| `LimparCampos()` | Reseta todos os campos + ZAP csOperacoes |
+| `CarregarLista()` | Refresh do grid + editbox de erros |
+| `AjustarBotoesPorModo()` | Wrapper com parse de "ENTRADA"/"PROCESSAMENTO" |
+
+O arquivo `FormSIGPRNSE.prg` est├í completo com 1416 linhas. O `SIGPRNSEBO.prg` j├í existia completo das fases anteriores. Ambos ser├úo carregados automaticamente pelo config.prg via ADIR.

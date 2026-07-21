@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 handlers CRUD can├┤nicos (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) em `FormSIGPRIBL.prg` antes de `TornarControlesVisiveis`, cada um com l├│gica real mapeada ao contexto OPERACIONAL de impress├úo de boleto:
+
+- **BtnIncluirClick**: valida sele├º├úo e delega para `CmdImprimirClick` (a a├º├úo principal do form).
+- **BtnAlterarClick**: recarrega config do FPags selecionado via `AtualizaBoleto` e foca em `txt_4c_Locals`.
+- **BtnVisualizarClick**: abre o picker `AbrirLookupFPags` (FormBuscaAuxiliar sobre SigCnFBl).
+- **BtnExcluirClick**: confirma com `MsgConfirma`, limpa FPags/Locals/TxtCds e reseta estado via `AtualizaBoleto("")`.
+
+Todos os m├®todos t├¬m implementa├º├úo real (sem stubs/MsgAviso "ser├í implementado"), seguem o padr├úo VFP9 obrigat├│rio (TRY/CATCH sem RETURN interno, `PEMSTATUS` guard, `CHR()` para acentos, `MsgAviso/MsgErro` em vez de `MESSAGEBOX`).

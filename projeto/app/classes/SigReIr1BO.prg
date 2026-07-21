@@ -76,7 +76,7 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
     this_nSaldoPs        = 0
 
     *-- Cursor principal de dados
-    this_cCursorDados    = "cursor_4c_Dados"
+    this_cCursorDados    = "CsRelatorio"
 
     *-- Cache para ConverteMoe (0=inativo, 1=verificar, 2=tabelas carregadas)
     this_nChkConversao1  = 0
@@ -229,7 +229,19 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
                                                                                                                                                 IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
                                                                                                                                                     THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
                                                                                                                                                 ELSE
-                                                                                                                                                    THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                                    IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                        THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                    ELSE
+                                                                                                                                                        IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                            THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                        ELSE
+                                                                                                                                                            IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                                THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                            ELSE
+                                                                                                                                                                THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                                            ENDIF
+                                                                                                                                                        ENDIF
+                                                                                                                                                    ENDIF
                                                                                                                                                 ENDIF
                                                                                                                                             ENDIF
                                                                                                                                         ENDIF
@@ -469,7 +481,19 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
                                                                                                                             IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
                                                                                                                                 THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
                                                                                                                             ELSE
-                                                                                                                                THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                    THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                        THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                            THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                        ELSE
+                                                                                                                                            THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF

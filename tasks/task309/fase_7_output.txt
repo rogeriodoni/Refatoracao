@@ -1,0 +1,7 @@
+﻿Tudo correto. A Fase 7 j├í estava completa no form (os 4 eventos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` j├í existiam com l├│gica completa desde fases anteriores), e agora a integra├º├úo com o menu.prg foi adicionada:
+
+- **BAR 24** em `popCadastros` com prompt "Lan├ºamentos C/C"
+- `ON SELECTION BAR 24` vinculado a `AbrirFormSIGPRLNC`
+- `PROCEDURE AbrirFormSIGPRLNC()` adicionada no final do arquivo com o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+O config.prg n├úo precisou de altera├º├úo pois usa `ADIR()` autom├ítico que carrega todos os `*BO.prg` e `Form*.prg` das pastas corretas.

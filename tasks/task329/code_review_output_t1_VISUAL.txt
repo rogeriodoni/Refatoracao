@@ -1,0 +1,13 @@
+﻿Tudo correto. Resumo das 4 corre├º├Áes aplicadas:
+
+**1. [GRID-SQLEXEC] ÔÇö Corrigido** (`CarregarLista`, linha ~490):  
+SQLEXEC agora vai para `cursor_4c_ListaTemp`. Se `cursor_4c_Lista` j├í existe (grid ativo), faz ZAP+APPEND preservando as colunas configuradas. Na primeira chamada, usa `SELECT * FROM ... INTO CURSOR ... READWRITE`. Cleanup do temp adicionado no `Destroy` tamb├®m.
+
+**2. [NAVEGACAO-PAGINA] ÔÇö Corrigido** (`InicializarForm`, linha ~85):  
+Antes de setar `ActivePage = 2`, agora chama `AjustarBotoesPorModo()`, `LimparCampos()` e `HabilitarCampos("INCLUIR")` ÔÇö alinhado com o padr├úo do `BtnIncluirClick`. O form abre em modo INCLUIR com campos vazios e habilitados corretamente.
+
+**3. [LAYOUT-POSITION] GeraSenha ÔÇö Corrigido** (`ConfigurarPageFrame`, linha ~174):  
+`cnt_4c_BotoesAcao.Left` alterado de `300` ÔåÆ `569`. Isso posiciona `cmd_4c_GeraSenha` (Left=80 dentro do container) em posi├º├úo absoluta 649, alinhado com o original SIGPRSDD.SCX.
+
+**4. [LAYOUT-POSITION] Saida ÔÇö N├âO alterado** (falso positivo do detector):  
+`cnt_4c_Saida.Left = 917` ├® o valor **can├┤nico** da Regra 10 do CLAUDE.md e prevalece sobre o original SCX (724). O detector comparou o absoluto legado com o can├┤nico novo ÔÇö diferen├ºa esperada e intencional.

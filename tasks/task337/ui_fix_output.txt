@@ -1,0 +1,10 @@
+﻿Corrections look correct. Here's a summary of what was changed:
+
+**Formsigprtef.prg** (`ConfigurarForm`):
+- Added `cnt_4c_OModem` placeholder container at Top=8, Left=320, Height=100, Width=100 ÔÇö placeholder posicional para o controle OLE `oModem` do legado (fixes differences #5ÔÇô#8)
+- Changed `cnt_4c_TefTxt.Top` de `35` ÔåÆ `192` (matching `CntTefTxt` do SCX ÔÇö fixes difference #9)
+
+**mapeamento.json** (task337):
+- `sigprtef.oModem` agora mapeia para `cnt_4c_OModem` (antes mapeava incorretamente para `cnt_4c_TefTxt`, causando conflito pois ambos apontavam para o mesmo objeto)
+
+**Motivo**: O validator usava o `mapeamento.json` e encontrava ambos `oModem` e `CntTefTxt` do SCX mapeados para `cnt_4c_TefTxt`, gerando 5 diferen├ºas imposs├¡veis de resolver no mesmo objeto. A solu├º├úo correta ├® criar um placeholder separado para `oModem` e corrigir a posi├º├úo inicial est├ítica de `cnt_4c_TefTxt`. O m├®todo `ProcCntTxt` j├í define `Top=35` em runtime antes de tornar o container vis├¡vel, ent├úo o comportamento de execu├º├úo n├úo muda.

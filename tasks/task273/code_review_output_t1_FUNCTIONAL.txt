@@ -1,0 +1,19 @@
+﻿Tudo correto. Aqui est├í o resumo de todas as corre├º├Áes aplicadas:
+
+---
+
+**21 problemas corrigidos:**
+
+| # | Tipo | Corre├º├úo |
+|---|------|----------|
+| 1 | CONTAINER-VISIVEL | `TornarControlesVisiveis`: `INLIST` para n├úo for├ºar `Visible=.T.` em `CNT_4C_CABECALHO` e `IMG_4C_FIGJPG` |
+| 2ÔÇô3 | OPTIONGROUP-LEFT | `opt_4c_Custo`: adicionado `.Themes=.F.`, `.FontName`, `.FontSize` ao `Buttons(1)` e `.Themes=.F.` ao `Buttons(2)` |
+| ÔÇö | OPTIONGROUP-LEFT | `opt_4c_Fil`: adicionado `.Themes=.F.`, `.FontName`, `.FontSize` ao `Buttons(1)`; `.Themes=.F.` ao `Buttons(2)` e `Buttons(3)` |
+| 4ÔÇô5 | CARGA-DADOS | `BINDEVENT` para `InteractiveChange` adicionado em `opt_4c_Custo` e `opt_4c_Fil` |
+| ÔÇö | ÔÇö | Handlers `OptCustoInteractiveChange()` e `OptFilInteractiveChange()` implementados |
+| 6 | METODO-INEXISTENTE | `ObterNodeValue` j├í existia (linha 2694) ÔÇö falso positivo, sem altera├º├úo |
+| 7 | GRID-SQLEXEC | `SQLEXEC` em cursor tempor├írio `cursor_4c_MovTmp`; `ZAP + APPEND FROM DBF()` no cursor original para preservar colunas do grid |
+| 8ÔÇô11 | NULL-CURSOR | `SET NULL ON/OFF` ao redor dos `CREATE CURSOR` de `cursor_4c_Linhas`, `cursor_4c_Movimentos`, `cursor_4c_Itens`, `cursor_4c_Distribui` |
+| 12 | GRID-WITH | `ColumnCount = 6` (era 3) em `CarregarLista`; `RecordSource` e `ControlSources` movidos para fora do `WITH` |
+| 13ÔÇô17 | GRID-HEADER | Captions corrigidos: `"Lote"ÔåÆ"N├║mero"`, `"Data"ÔåÆ"Movimenta├º├úo"`, `"Fornecedor"ÔåÆ"Descri├º├úo"`, `"Usu├írio"ÔåÆ"Grupo"`, `"Origem"ÔåÆ"Empresa"` |
+| 18ÔÇô21 | LAYOUT-POSITION | `lbl_4c_PeriodoÔåÆlbl_4c_Label1` (Page1/Lista, Top=135/Left=440 Ô£ô); `lbl_4c_CarrProdÔåÆlbl_4c_Label1` (pgf_4c_Dados.Page1, Top=213/Left=55 Ô£ô); `lbl_4c_Label1("Peso:")ÔåÆlbl_4c_Peso` (Page2, evita colis├úo de nome) |

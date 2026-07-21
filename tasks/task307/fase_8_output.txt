@@ -1,0 +1,16 @@
+﻿Tudo correto. Fase 8 conclu├¡da:
+
+**FormSigPrItb.prg** ÔÇö adicionados 9 m├®todos antes do `Destroy`:
+- `FormParaBO()` ÔÇö copia campos do form para o BO (Data1/Data2/Emp1/Dsemp1)
+- `BOParaForm()` ÔÇö copia propriedades do BO de volta para o form
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita todos os inputs
+- `LimparCampos()` ÔÇö restaura campos para valores iniciais (DATE() + SPACE)
+- `CarregarLista()` ÔÇö no-op com RETURN .T. (sem grid neste form operacional)
+- `AjustarBotoesPorModo(par_cEstado)` ÔÇö delega para `AlternarPagina()` que j├í centraliza toda a l├│gica de estado
+- `BtnSalvarClick()` ÔÇö delega para `BtnGravarClick()`
+- `BtnCancelarClick()` ÔÇö restaura estado INICIAL + limpa campos
+- `BtnBuscarClick()` ÔÇö no-op (form sem pesquisa)
+
+**menu.prg** ÔÇö duas altera├º├Áes:
+- Adicionado BAR 76 (separador) + BAR 77 "Integra├º├úo Cont├íbil Total" em `popMovimentos` com `ON SELECTION DO AbrirFormSigPrItb`
+- Adicionado `PROCEDURE AbrirFormSigPrItb()` no padr├úo can├┤nico (VARTYPE + MostrarErro + CATCH detalhado)

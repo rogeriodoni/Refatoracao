@@ -1,0 +1,11 @@
+﻿Migration for SIGPRNSE (task315) is complete. Summary of all fixes applied in this session:
+
+**SIGPRNSEBO.prg** (BO):
+- Moved all 5 validation checks (confirmation dialog, date validation, empresa, directory) **before** the `TRY` block so each fails fast with a single `RETURN .F.` ÔÇö no more cascading multiple dialogs on first validation failure
+- Wrapped the SCAN processing block in `ELSE` after the EOF check so `loc_lSucesso = .T.` is only reached when data was actually found and processed
+
+**FormSIGPRNSE.prg** (Form):
+- Fixed BINDEVENT on line 774: `"KeyPress"` ÔåÆ `"LostFocus"` for `TxtCEmpsLostFocus` handler (the wrong event was bound, meaning empresa validation on focus-out never fired)
+- Removed duplicate `WindowType = 0` left by CorretorAutomatico
+
+Both files committed as `275b3608`.

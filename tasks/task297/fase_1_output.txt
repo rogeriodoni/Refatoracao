@@ -1,0 +1,12 @@
+﻿`C:\4c\projeto\app\classes\SigPrIbbBO.prg` criado com sucesso. A Fase 1/8 est├í completa.
+
+**O que foi criado:**
+- `DEFINE CLASS SigPrIbbBO AS BusinessBase`
+- 5 propriedades declaradas:
+  - `this_cEmpDopNum` ÔÇö chave composta de 29 chars (`Emps[3] + Dopes[20] + Numes[6]`)
+  - `this_cEmps`, `this_cDopes`, `this_cNumes` ÔÇö segmentos individuais da chave
+  - `this_nTotal` ÔÇö total das parcelas (exibido em `getTotal` no form)
+- `Init()` configurando `this_cTabela = "SigMvCab"` e `this_cCampoChave = "EmpDopNums"`, com `DODEFAULT()`
+- `ObterChavePrimaria()` retornando `this_cEmpDopNum`
+
+**Fase 2** adicionar├í os m├®todos: `SelecionarDados()`, `Imprimir()`, `Detalhe()`, `MontaGrades()` e os cursors `crGrade`/`crDados`/`TmpImprime`.

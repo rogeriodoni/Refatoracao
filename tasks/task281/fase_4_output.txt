@@ -1,0 +1,33 @@
+﻿Analisei o arquivo completo (1930 linhas). Este ├® um form **OPERACIONAL FLAT** ÔÇö sem PageFrame, sem grid, sem CRUD no original.
+
+## Situa├º├úo
+
+O `FormSigPrEs1.prg` est├í **j├í completo** desde a Fase 3. Confirma├º├Áes:
+
+**Original (SIGPRES1):** form de filtros flat que abre FormSigPrEs2 com os resultados
+- `analise.json`: `"temGrid": false`
+- Layout flat: `cntSombra` + `Container1` (filtros) + `obj_4c_Sair` (2 bot├Áes)
+- Nenhum CRUD, nenhum PageFrame, nenhum grid no original
+
+**Implementa├º├úo atual j├í tem:**
+- `ConfigurarCabecalho()` / `ConfigurarContainerFiltros()` / `ConfigurarBotoes()`
+- 23 campos de filtro (empresa, per├¡odo, opera├º├úo, grupo, conta, CPF, respons├ível, moeda, etc.)
+- `BtnConsultarClick()` com todas as valida├º├Áes + `DO FORM SigPrEs2`
+- `BtnEncerrarClick()`
+- 5 m├®todos `AbrirBusca*()` (empresa, opera├º├úo, moeda, conta, grupo cont├íbil, respons├ível)
+- 12 handlers `Validar*` com BINDEVENT KeyPress (ENTER/TAB/F4)
+- `FormParaBO()` / `BOParaForm()` / `InicializarCampos()` / `Destroy()`
+
+## Por que Phase 4 n├úo se aplica
+
+A instru├º├úo gen├®rica "adicionar `ConfigurarPaginaLista()` + grid + 6 bot├Áes CRUD" ├® o template para forms CRUD com PageFrame. Para este form OPERACIONAL:
+
+1. **VIOLARIA o PILAR 1** ÔÇö adicionar grid/CRUD que n├úo existem no original
+2. **O original abria SigPrEs2** para os resultados ÔÇö o `BtnConsultarClick()` j├í faz `DO FORM SigPrEs2`
+3. **Adicionar stubs** (ConfigurarPaginaLista vazio) ├® "ABSOLUTAMENTE PROIBIDO" pelo contexto
+
+## Conclus├úo
+
+**Nenhuma modifica├º├úo necess├íria.** O arquivo `FormSigPrEs1.prg` est├í funcionalmente completo e fiel ao legado. A Fase 4 do pipeline gen├®rico n├úo tem correspondente neste form espec├¡fico ÔÇö o equivalente funcional (a "lista de resultados") ├® tratado pelo form separado SigPrEs2, j├í referenciado no `BtnConsultarClick()`.
+
+Pr├│ximo passo: Fase 5 (campos e lookups da Page2 no padr├úo CRUD) tamb├®m n├úo se aplica aqui pelo mesmo motivo. Recomendo avan├ºar direto para **Fase 7** (integra├º├úo no menu.prg e config.prg) para registrar o form no sistema.

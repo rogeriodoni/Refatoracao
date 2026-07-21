@@ -1,0 +1,34 @@
+﻿Todos os 5 problemas reportados s├úo **falsos positivos**. Nenhuma altera├º├úo ├® necess├íria.
+
+---
+
+### An├ílise dos problemas
+
+**[GRID-SQL] Campos `Descricaos`, `Programas`, `Marcas`, `Parametros` em `cursor_4c_Programas`**
+
+O validador analisou apenas o form em isolamento e n├úo conseguiu enxergar o BO. O cursor ├® populado pelo m├®todo `CarregarProgramas()` em `acgBO.prg`, cujo SELECT retorna exatamente esses 4 campos:
+
+```foxpro
+"SELECT a.Descricaos, a.Programas, a.Parametros, a.BarraForms," + ;
+" CASE WHEN b.pkchaves IS NOT NULL THEN 1 ELSE 0 END AS Marcas" + ;
+" FROM sigcdprg a ..."
+```
+
+Os ControlSources `cursor_4c_Programas.Descricaos`, `.Programas`, `.Marcas` e `.Parametros` est├úo todos corretos.
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna `CONTROLCOUNT`**
+
+N├úo ├® uma condi├º├úo WHERE inventada em SQL. ├ë a propriedade VFP nativa `ControlCount` usada no m├®todo `TornarControlesVisiveis` (linhas 1685 e 1692):
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount        && propriedade VFP
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+O validador confundiu acesso a propriedade de objeto VFP com uma cl├íusula WHERE de SQL.
+
+---
+
+**Conclus├úo**: O c├│digo do form e do BO est├úo corretos. Nenhuma modifica├º├úo ├® necess├íria para este pass SQL.

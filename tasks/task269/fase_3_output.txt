@@ -1,0 +1,15 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormSIGPRCOT.prg` criado com 236 linhas.
+
+**O que foi entregue:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `Init(par_oParent, par_cMoeda)` | Armazena refer├¬ncia ao form pai e c├│digo da moeda antes de `DODEFAULT()` |
+| `InicializarForm()` | Cria BO, define caption din├ómico, chama ConfigurarPageFrame/Cabecalho/TornarControlesVisiveis/CarregarDados |
+| `ConfigurarPageFrame()` | Form flat ÔÇö apenas seta `THIS.Picture` com `new_background.jpg` do Framework |
+| `ConfigurarCabecalho()` | Cria `cnt_4c_Cabecalho` (RGB 100,100,100, H=80) com `lbl_4c_Sombra` + `lbl_4c_Titulo` (Tahoma 18 bold, AutoSize=.F.) |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrames e Containers |
+| `CarregarDados()` | Stub que chama `this_oBusinessObject.CarregarCotacoes(this_cMoeda)` |
+| `Destroy()` | Libera BO e fecha `cursor_4c_Cotacoes` |
+
+**Fase 4** adicionar├í o grid `grd_4c_Cotacoes` (3 colunas: Data/Cota├º├úo/Hora) e os 3 bot├Áes (Inserir/Excluir/Encerrar).

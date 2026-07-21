@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 6 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado:
+
+**Campos adicionados na `ConfigurarPaginaDados()` (├║ltimos 50%):**
+- `txt_4c_PVens` / `lbl_4c_PVens` ÔÇö Pre├ºo Atual (numeric, edit├ível, Top=219)
+- `txt_4c_PVensAnt` / `lbl_4c_PVensAnt` ÔÇö Pre├ºo Anterior (numeric, readonly, Top=219)
+- `txt_4c_Usuals` / `lbl_4c_Usuals` ÔÇö Usu├írio (char, readonly, Top=249)
+- `chk_4c_CKAtuSite` ÔÇö CheckBox "Atualizar Site" (logical, Top=283)
+
+**Lookups completamente implementados com F4/DblClick:**
+- `BINDEVENT` KeyPress + DblClick em `txt_4c_CPros` ÔåÆ `CProsKeyPress` / `CProsDblClick` (abrem `ValidarCPros`)
+- `BINDEVENT` KeyPress + DblClick em `txt_4c_Moevs` ÔåÆ `MoevsKeyPress` / `MoevsDblClick` (abrem `ValidarMoeda`)
+
+**Novos m├®todos PUBLIC adicionados** (antes de `Destroy`):
+- `CProsKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö guarda F4=28
+- `CProsDblClick()` ÔÇö delega para `ValidarCPros()`
+- `MoevsKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö guarda F4=28
+- `MoevsDblClick()` ÔÇö delega para `ValidarMoeda()`
+
+Todos os campos j├í estavam referenciados em `FormParaBO`, `BOParaForm`, `HabilitarCampos` e `LimparCampos` (adicionados na Fase 5), portanto a integra├º├úo est├í completa. O arquivo est├í pronto para a Fase 7.

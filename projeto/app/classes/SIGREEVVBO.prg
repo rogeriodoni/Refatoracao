@@ -364,7 +364,7 @@ DEFINE CLASS SIGREEVVBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReEvv", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReEvv", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -439,7 +439,7 @@ DEFINE CLASS SIGREEVVBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReEvv", "PREVIEW")
+                THIS.ExecutarReportForm("SigReEvv", "PREVIEW", THIS.this_cCursorDados)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

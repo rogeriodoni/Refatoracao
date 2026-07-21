@@ -1,0 +1,10 @@
+﻿Fase 4 conclu├¡da. Como este ├® um form **OPERACIONAL plano** (800├ù350, sem PageFrame), o template gen├®rico de "Grid + Bot├Áes CRUD" n├úo se aplica ÔÇö a estrutura visual j├í estava completa desde a Fase 3.
+
+As duas melhorias aplicadas:
+
+1. **`CmbTiposInteractiveChange`** ÔÇö guard `EMPTY(NVL(...Value, ""))` evita chamadas desnecess├írias ao BO quando o combo ainda n├úo tem sele├º├úo (ex.: inicializa├º├úo ou edge cases de foco).
+
+2. **`Destroy`** ÔÇö limpeza ampliada dos cursores que ficam abertos ap├│s processamento:
+   - `crSigCdMoe` / `crSigCdCot` ÔÇö abertos por `InicializarParametros` no BO e mantidos vivos durante toda a sess├úo do form
+   - `csPrNAOCad` / `csPrSemCT` ÔÇö cursores de erros de importa├º├úo (produtos n├úo cadastrados / sem CT)
+   - `crNomeLista` ÔÇö cursor intermedi├írio de `ProcessarListaPreco`

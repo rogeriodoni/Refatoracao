@@ -1,0 +1,6 @@
+﻿Todos os 7 `SQLEXEC COMMIT/ROLLBACK` foram removidos. Resumo das mudan├ºas em `FormSigPrRsa.prg`:
+
+- Removidos os `SQLEXEC(gnConnHandle, "ROLLBACK")` ap├│s UPDATE falho, ProcessarItem falho, COMMIT falho, Excluir falho e o ROLLBACK final do loop
+- Removido o `SQLEXEC(gnConnHandle, "COMMIT")` ap├│s ProcessarItem e ap├│s Excluir
+- A l├│gica de controle de fluxo (`LOOP`/`EXIT`) foi preservada ÔÇö apenas as chamadas COMMIT/ROLLBACK esp├║rias foram eliminadas
+- A conex├úo ODBC j├í opera em AUTOCOMMIT, ent├úo cada `SQLEXEC` j├í ├® transa├º├úo impl├¡cita independente

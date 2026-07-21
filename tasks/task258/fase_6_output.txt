@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. 
+
+**Fase 6 conclu├¡da.** Duas corre├º├Áes foram feitas:
+
+1. **`FormSigPrAop.prg` linha 368**: `InputMask` corrigido de `"999999"` (6 d├¡gitos) para `"9999999999"` (10 d├¡gitos), alinhado com o campo `Nops N(10,0)` do banco. O original tinha 12 d├¡gitos mas o campo no banco suporta apenas 10.
+
+2. **`SigPrAopBO.prg` linhas 106-116**: Reestrutura├º├úo do bloco de valida├º├úo da O.P. ÔÇö as mensagens "Encerrada" e "N├úo Localizada" foram movidas para **dentro** do bloco de sucesso do SQLEXEC. Antes, uma falha de SQL mostrava MsgErro + MsgAviso "N├úo Localizada" em sequ├¬ncia (bug de dupla mensagem); agora a mensagem de usu├írio s├│ aparece quando o SQL retornou dados v├ílidos.
+
+**Contexto do form**: Este form OPERACIONAL ├® plano (sem PageFrame), tem apenas dois campos de entrada (`txt_4c_OP` e `txt_4c_Produto` read-only), sem lookups F4/F5. Toda a l├│gica de valida├º├úo de O.P. e carga das divis├Áes est├í implementada e correta.

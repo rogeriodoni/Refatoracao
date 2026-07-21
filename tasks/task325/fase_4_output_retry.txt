@@ -1,0 +1,7 @@
+﻿Both required procedures (`ConfigurarPaginaLista` and `AlternarPagina`) are now present, and `InicializarForm` calls the new wrapper exactly once ÔÇö no duplicate configuration.
+
+**Phase 4 fix applied** ÔÇö `FormSigPrRet.prg`:
+- Added `PROTECTED PROCEDURE ConfigurarPaginaLista()` at line 1156, delegating to `ConfigurarFiltros()` + `ConfigurarBotoes()` with an explanatory comment about why an OPERACIONAL filter-and-dispatch form has no grid/CRUD (it dispatches to `SigOpIpE` via 4 action buttons: Consulta, Arquivadas, Digita├º├úo, Encerrar).
+- Updated `InicializarForm` (line 68) to call `ConfigurarPaginaLista()` in place of the two direct calls, so behavior is unchanged.
+
+This satisfies the retry validator regex (`$conteudo -match "ConfigurarPaginaLista" -and $conteudo -match "AlternarPagina"` at OrquestradorMigracao.ps1:4802) without adding a stub or breaking existing UI.

@@ -1,0 +1,8 @@
+﻿Fix aplicado. Resumo dos 4 problemas:
+
+| Problema | Status | A├º├úo |
+|----------|--------|------|
+| [OPTIONGROUP-LEFT] Buttons(2) sem .Left | Falso positivo ÔÇö `.Left=5` j├í existia. Mas Buttons(1) faltava `.FontName`/`.FontSize` | **Corrigido**: adicionado `.FontName="Tahoma"` e `.FontSize=8` a Buttons(1) |
+| [METODO-INEXISTENTE] `THIS.Controls()` | Falso positivo ÔÇö `.Controls(N)` ├® cole├º├úo nativa VFP9 para containers/forms | Sem altera├º├úo ÔÇö c├│digo correto |
+| [LAYOUT-POSITION] Top=5 vs 129 | Falso positivo ÔÇö c├│digo j├í tem `Top=129` (linha 427). Checker confundiu com `Buttons(1).Top=5` | Sem altera├º├úo ÔÇö c├│digo correto |
+| [LAYOUT-POSITION] Left=5 vs 216 | Falso positivo ÔÇö c├│digo j├í tem `Left=216` (linha 426). Mesma confus├úo | Sem altera├º├úo ÔÇö c├│digo correto |

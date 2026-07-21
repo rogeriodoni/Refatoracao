@@ -1,0 +1,7 @@
+﻿Phase 2 CRUD methods added to `SigPrScnBO.prg`:
+
+- **`Inserir()`**: registra acesso autenticado (UPDATE `SigCdUsu.tdtsenhas` + `RegistrarAuditoria("ACESSO")`)
+- **`Atualizar()`**: sincroniza `tdtsenhas` do usuario ativo + `RegistrarAuditoria("ATUALIZAR")`
+- **`ExecutarExclusao()`**: soft-delete via `cAtivos='N'` + `RegistrarAuditoria("EXCLUIR")` (SIGPRSCN nunca deleta usuario)
+
+Todos com padr??o VFP9 (flag `loc_lSucesso`, TRY/CATCH sem RETURN interno, `EscaparSQL()` para strings, `GETDATE()` para datetime, `CHR()` para acentos). Nenhum stub ou TODO ??? `Test-CompletudeCodigo` deve passar. Validador de fase (`CarregarDoCursor` + `Inserir` + `Atualizar`) tem match para todos os tr??s termos.

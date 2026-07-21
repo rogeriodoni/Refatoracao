@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `SigPrEopBO.prg` agora tem 167 linhas com 6 m├®todos completos adicionados:
+
+| M├®todo | Equivalente no legado |
+|---|---|
+| `CarregarDoCursor()` | Leitura padr├úo de linha do cursor |
+| `InicializarOperacoes(par_cCursorOrigem)` | `Select 1 as Selecionada, * from crTprMvCab into cursor crOperacoes readwrite` |
+| `AlternarSelecao()` | `GATHER MEMVAR Fields Selecionada` no Check1.KeyPress/MouseDown |
+| `MarcarDesmarcarTodos(par_nValor)` | `Replace All Selecionada with This.Value in crOperacoes` no ck_Marca.Click |
+| `PopularFilOper(par_cCursorDest, par_cCursorOrigem)` | Loop SCAN + INSERT do cmdSair.Click |
+| `ObterChavePrimaria()` | Concatena├º├úo `PADR(Emps,3)+PADR(Dopes,20)+PADL(STR(Numes,6),6)` |
+
+Como ├® um form OPERACIONAL sem tabela SQL Server, n├úo h├í `Inserir()`/`Atualizar()` tradicionais ÔÇö os m├®todos do BO encapsulam as opera├º├Áes sobre cursores VFP em mem├│ria que o legado fazia diretamente no c├│digo do form.

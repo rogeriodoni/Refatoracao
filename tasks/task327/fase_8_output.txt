@@ -1,0 +1,16 @@
+﻿O config.prg usa ADIR() para carregar automaticamente todos os `Form*.prg` e `*BO.prg`, ent├úo n├úo ├® necess├írio registro manual. O menu.prg j├í estava atualizado das fases anteriores.
+
+**Fase 8 conclu├¡da.** O `FormSigPrRss.prg` agora tem todos os m├®todos requeridos:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | No-op sem├óntico (fila consultada em tempo real por `BtnProcessarClick`) |
+| `FormParaBO()` | Propaga `this_lParametrizado`, `this_cUsuario`, `this_lOnline`, `this_lProcessando` para o BO |
+| `BOParaForm()` | Sincroniza `this_lProcessando` e `this_lErroConexao` de volta do BO |
+| `HabilitarCampos(par_lHabilitar)` | Liga/desliga `cmd_4c_Processar` e `cmd_4c_Encerrar` |
+| `LimparCampos()` | Limpa `lbl_4c_Status.Caption` |
+| `AjustarBotoesPorModo()` | Chama `HabilitarCampos(!this_lProcessando)` |
+| `BtnBuscarClick()` | No-op sem├óntico |
+| `BtnSalvarClick()` | No-op sem├óntico |
+| `BtnCancelarClick()` | No-op sem├óntico |
+| `this_lErroConexao` | Declarada no cabe├ºalho da classe (posi├º├úo correta) |

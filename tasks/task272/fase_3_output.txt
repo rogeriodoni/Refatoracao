@@ -1,0 +1,11 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrCtc.prg` foi criado com a estrutura base do form OPERACIONAL flat (sem PageFrame):
+
+**O que foi entregue:**
+- `DEFINE CLASS FormSigPrCtc AS FormBase` com todas as propriedades visuais do original (550├ù384, DataSession=2, ControlBox=.F., TitleBar=0)
+- `Init()` com `LPARAMETERS` recebendo `par_oParentForm, par_cEscolha, par_cEmps, par_cDopes, par_nNumes`, construindo `this_cEmpDopNums = pcEmps + pcDopes + STR(pnNumes,6)` e desabilitando o form pai
+- `InicializarForm()` que cria o BO e chama `ConfigurarCabecalho()` + `ConfigurarBotoesAcao()`
+- `ConfigurarCabecalho()` ÔÇö container `cnt_4c_Cabecalho` com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco), dimens├Áes exatas do legado
+- `ConfigurarBotoesAcao()` ÔÇö 3 bot├Áes (`cmd_4c_Inserir/Excluir/Encerrar`) com visibilidade controlada por `this_cEscolha`
+- `Destroy()` que fecha cursores, nulifica BO, re-habilita `this_oParentForm.Enabled = .T.`
+
+**Pr├│xima fase (4/8):** Criar a grade `grd_4c_Dados` com 3 colunas (Moeda 50px, Descri├º├úo 200px, Cota├º├úo 95px) e o m├®todo `CarregarCotacoes()`.

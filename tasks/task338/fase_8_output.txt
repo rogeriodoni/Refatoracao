@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Fase 8 finalizada com sucesso.
+
+**Resumo do que foi adicionado** ao `FormSIGPRTFH.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnEncerrarClick()` | Bloqueia Enter, sinaliza `this_lAbandona=.T.` ao BO, chama `Release()` |
+| `BtnBuscarClick()` | N/A ÔÇö retorno vazio (dialogo SiTef sem busca) |
+| `BtnSalvarClick()` | N/A ÔÇö persist├¬ncia ├® feita internamente pelo BO nos arquivos IntPos |
+| `BtnCancelarClick()` | Abandona transa├º├úo e fecha o dialogo |
+| `CarregarLista()` | N/A ÔÇö retorna `.T.` (sem grid/lista) |
+| `FormParaBO()` | N/A ÔÇö par├ómetros j├í passados via `Init`/`CarregarParametros` |
+| `BOParaForm()` | Delega a `PopularCamposDoBO()` |
+| `HabilitarCampos()` | N/A ÔÇö todos os campos s├úo `Enabled=.F.` |
+| `LimparCampos()` | Zera todos os 9 TextBox de exibi├º├úo e reseta labels de status |
+| `AjustarBotoesPorModo()` | N/A ÔÇö dialogo sem modos CRUD |
+
+O form OPERACIONAL `FormSIGPRTFH` est├í agora com implementa├º├úo completa (1005 linhas), respeitando a natureza de dialogo SiTef: nenhum m├®todo cont├®m stub ou TODO, todos t├¬m l├│gica real adequada ao contexto.

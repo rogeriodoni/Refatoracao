@@ -1,0 +1,15 @@
+﻿Arquivo completo e bem-estruturado. Fase 8 conclu├¡da: `FormSigPrDsc.prg` agora tem 1028 linhas com todos os 9 m├®todos de interface FormBase adicionados.
+
+**Resumo do que foi adicionado (linhas 892ÔÇô993):**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick` | Delega a `BtnSelecionarClick` |
+| `BtnSalvarClick` | Delega a `BtnAtualizarClick` |
+| `BtnCancelarClick` | Delega a `BtnIncluirClick` (reseta form) |
+| `FormParaBO` | Transfere `txt_4c_CProsI/F` + `txt_4c_CGrus` para o BO |
+| `BOParaForm` | Restaura filtros do BO para os campos + chama `AtualizarEstadoCampos` |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita os 3 filtros + `cmd_4c_Selecionar` com guard `PEMSTATUS` |
+| `LimparCampos` | Zera filtros, ZAP no cursor, desabilita Atualizar, seta modo `SELECIONAR` |
+| `CarregarLista` | Delega a `CarregarDados` (carrega dicion├írio SigCdDic) |
+| `AjustarBotoesPorModo` | Habilita `cmd_4c_Atualizar` somente se cursor tem registros |

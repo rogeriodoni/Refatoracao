@@ -21,7 +21,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
 
     *-- Controle interno do relatorio
     this_cNomeRelatorio   = "SIGREFUN"
-    this_cCursorDados     = "cursor_4c_Dados"
+    this_cCursorDados     = "Relatorio"    && Nome exigido pelo FRX legado
     this_cTituloRelatorio = ""
 
     *--------------------------------------------------------------------------

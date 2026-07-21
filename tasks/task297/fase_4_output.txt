@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado ao `FormSigPrIbb.prg`:**
+
+1. **`InicializarForm()`** ÔÇö atualizado para chamar `ConfigurarPaginaLista()`, `MontarGrade()` e `SelecionarDadosForm()` tanto no modo normal quanto no modo UI validation.
+
+2. **`ConfigurarPaginaLista()`** ÔÇö cria todos os controles visuais do form OPERACIONAL:
+   - `shp_4c_Shape1` (Shape decorativo)
+   - `cmd_4c_Encerrar` e `cmd_4c_BtnImprimir` (bot├Áes Encerrar e Imprimir)
+   - `txt_4c_Emps`, `txt_4c_Dopes`, `txt_4c_Numes` (TextBoxes de identifica├º├úo, `Enabled=.F.`)
+   - `grd_4c_Dados` (Grid com 4 colunas)
+   - `lbl_4c_Label3`, `lbl_4c_Label31` (Labels)
+   - `obj_4c_GetLocals`, `obj_4c_GetTxtCds` (EditBoxes com `ControlSource` condicional)
+   - `txt_4c_Total` (TextBox total, `Enabled=.F.`)
+   - BINDEVENTs para os 3 controles interativos
+
+3. **`MontarGrade()`** ÔÇö configura `RecordSource`, `ControlSource` de cada coluna, headers, fontes (Courier New conforme legado) e desabilita movimenta├º├úo/redimensionamento.
+
+4. **`SelecionarDadosForm()`** ÔÇö chama `BO.SelecionarDados()` e atualiza `txt_4c_Total` e o grid.
+
+5. **`AlternarPagina()`** ÔÇö conven├º├úo de arquitetura (vazia, pois OPERACIONAL n├úo tem PageFrame).
+
+6. **`GrdDadosAfterRowColChange()`**, **`CmdEncerrarClick()`**, **`CmdImprimirClick()`** ÔÇö handlers dos BINDEVENTs com l├│gica id├¬ntica ao legado.
