@@ -1,0 +1,646 @@
+{
+  "resumo": {
+    "totalMetodos": 39,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 13,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FileTimeToSystemTime", "FtpServer VALUES", "FtpDeleteFile", "FtpGetCurrentDirectory", "FtpFindFirstFile", "for allt", "Found", "FtpOpenFile", "FtpGetFile", "FtpPutFile", "fGravarLog", "FtpRenameFile"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "\t\t  LPARAMETERS lcBuffer\n\t    \n\t      LOCAL lcAttributes, lnValue\n    \n    #define BYTE_1\t\t\t\t\t\t\t\t\t\t\t 1\n\t#define BYTE_2                                           256\n\t#define BYTE_3                                           65536\n\t#define BYTE_4                                           16777216\n\t#define MAXDWORD\t\t\t\t\t\t\t\t\t\t 4294967295\n\n\t#define BIT_ATTRIBUTE_READONLY         \t\t\t\t \t 0\n\t#define BIT_ATTRIBUTE_HIDDEN           \t\t\t\t \t 1\n\t#define BIT_ATTRIBUTE_SYSTEM              \t\t\t\t 2\n\t#define BIT_ATT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "\t\t  LPARAMETERS lcOutBuffer\n\t\t  \n\t\t  LOCAL lcInBuffer, ldDateTime, fResult, lcBuild, ;\n\t\t  \t\tlnDay, lnMonth, lnYear, lnHour, lnMinute, lnSecond\n    #define BYTE_1\t\t\t\t\t\t\t\t\t\t\t 1\n\t#define BYTE_2                                           256\n\t#define BYTE_3                                           65536\n\t#define BYTE_4                                           16777216\n\t#define MAXDWORD\t\t\t\t\t\t\t\t\t\t 4294967295\n\n          DECLARE Integer FileTimeToSystemTime IN Kernel32 ;\n\t\t   \t\t\tString @lpcBuffer, Str... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FileTimeToSystemTime",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 67,
+      "codigoOriginal": "\t      LPARAMETERS lcString\n\t      \t\n\t      LOCAL lcFileName, lcAlterName, lnSizeHigh, lnSizeLow, lnFileSize, ;\n\t      \t\tlcAttributes, lnArrayLen, lcTimeBuff, ;\n\t      \t\tldCreateDate, ldAccessDate, ldWriteDate, laNewArray, lnResult\n\n\t#define BYTE_1\t\t\t\t\t\t\t\t\t\t\t 1\n\t#define BYTE_2                                           256\n\t#define BYTE_3                                           65536\n\t#define BYTE_4                                           16777216\n\t#define MAXDWORD\t\t\t\t\t\t\t\t\t\t 4294967295\n\n     ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpServer VALUES",
+        "metodosFormChamados": "CToWord",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "*** CTOWORD\n*** Combierte un buffer en un número\nLPARAMETER cBuffer\nRETURN ASC(SUBSTR(cBuffer,1,1)) + ASC(SUBSTR(cBuffer,2,1))*256 + ASC(SUBSTR(cBuffer,3,1))*65536 + ASC(SUBSTR(cBuffer,4,1))*16777216 \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 82,
+      "codigoOriginal": "LPARAMETERS lcRemoteFile\nLocal lnSegIni,lnSegFim,llContinua\n\n#DEFINE FILE_ATTRIBUTE_NORMAL          128\n#DEFINE FILE_ATTRIBUTE_DIRECTORY        16\n#DEFINE INTERNET_FLAG_RAW_DATA   1073741824\n\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FILE_ATTRIBUTE_NORMAL         128\n\n\n#defin... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpDeleteFile",
+        "metodosFormChamados": "Inf",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters pStep, pTotal, pMessage\n\nWith ThisForm.FileControl\n\n\tIf Type('pMessage') = 'C'\n\t\t.StatusText = pMessage\n\tEndIf\n\n\tDo Case\n\t\tCase Type('pStep') = 'N'\n\t\t\tIf .StatusPercent < Int( (pStep / pTotal) * 100 )\n\t\t\t\t.StatusPercent = Int( (pStep / pTotal) * 100 )\n\t\t\tEndIf\n\t\t\tReturn (pStep + 1)\n\t\t\n\t\tCase Type('pStep') = 'L'\n\t\t\t.StatusPercent = 0\n\t\t\t.Visible       = pStep\n\tEndCase\n\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 159,
+      "codigoOriginal": "LPARAMETERS lcDirloc, lcMask\n\t      \nLOCAL cStruct, llResult, lnCount, fResult, lffHandle, lcTempDir, lManual, nInternet, nFtp\nlManual = .f.\nnInternet=0\nnFtp=0\n\n#define ERROR_SUCCESS\t\t\t\t\t0\n#define ERROR_FILE_NOT_FOUND            2\n#define ERROR_PATH_NOT_FOUND            3\n#define ERROR_ACCESS_DENIED             5\n#define ERROR_INVALID_HANDLE            6\n#define ERROR_NO_MORE_FILES\t\t\t\t18\n#define ERROR_FILE_EXISTS               80\n#define ERROR_INVALID_PARAMETER         87\n\n\n#DEFINE FILE_ATTRIBUT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpGetCurrentDirectory,FtpFindFirstFile,ftpserver",
+        "metodosFormChamados": "Inf,InErrorCase,CrackFile",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 232,
+      "codigoOriginal": "Parameters lnError\nLOCAL cMessage\n\n#define ERROR_SUCCESS\t\t\t\t\t\t\t  0\n#define ERROR_FILE_NOT_FOUND             \t\t  2\n#define ERROR_PATH_NOT_FOUND             \t\t  3\n#define ERROR_ACCESS_DENIED              \t\t  5\n#define ERROR_INVALID_HANDLE             \t\t  6\n#define ERROR_NO_MORE_FILES\t\t\t\t\t\t  18\n#define ERROR_FILE_EXISTS                \t\t  80\n#define ERROR_INVALID_PARAMETER          \t\t  87\n\n#define ERROR_INTERNET_BASE \t\t\t\t\t  12000\n#define ERROR_INTERNET_OUT_OF_HANDLES             (ERROR_INTERNET_BAS... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OPTION,OPTION_LENGTH,OPTION_NOT_SETTABLE",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Parameters lText, lCor, alias_old\nalias_old = alias()\n\nsele logftp\nappend blank\nreplace memo with lText\nreplace cor with lCor\nWith ThisForm.GrdInf\n\t.SetAll('DynamicForeColor','iif(logftp.cor=\"R\", RGB(255,255,255),iif(logftp.cor=\"G\",RGB(0,128,0),\tiif(logftp.cor=\"B\",RGB(0,0,255),RGB(0,255,255) )))','Column')\n\t.SetAll('DynamicBackColor','iif(logftp.cor=\"R\", RGB(255,0,0), RGB(255,255,255) )','Column') \nEndWith\ngo bott\nThisForm.GrdInf.refresh\nif !empt(alias_old)\n\tsele(alias_old)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 88,
+      "codigoOriginal": "local cDir, oObj, tmpdirloc, newfileloc, newdefa, nconta \nDefa_old = sys(5)+sys(2003)\nnconta = 0\n=ThisForm.Inf(\"Carregando os paramêtros da tela... Aguarde\",\"B\")\n*-[ A Receber do Host ]-*\nif !Empt(Thisform._direnvloc)\n   =ThisForm.Inf(\"Estabelecendo uma conexão com o servidor FTP no endereço \"+Thisform._ftpadd,\"B\")\n   ThisForm.GetFtpDirectory(Thisform._direnvloc, \"*.*\")\n\n   if used(\"FtpServer\")\n\n      oObj = ThisForm.Container1.pgfftp.Page2.lstenvloc\n      for i=1 to oObj.listcount\n         oObj... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for allt,Found",
+        "metodosFormChamados": "Inf,GetFtpDirectory",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 98,
+      "codigoOriginal": "Parameters plcfile, plnsize, plclocal, plchost, plntransf, plnbuffer, plnsecini, plnsec, plcstatus\nif plnsec = 0\n   plnsec=0.001 && Valor minimo de tempo de transferencia\nendif   \n\nif plcstatus == \"I\"  && Iniciando\n   ThisForm.FileCtrlUp(.T., .T., 'Iniciando a transferência...')\n   sele tmpprog\n   append blank\n   replace file   with plcfile\n   replace size   with plnsize\n   replace local  with plclocal\n   replace host   with plchost\n   replace status with \"0 bytes copiados, 0% completado\"\nendif ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FILE",
+        "metodosFormChamados": "FileCtrlUp,sectohour,inf,list,DeleteFtpFile",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 52,
+      "codigoOriginal": "LPARAMETER cArrayReturn\n\nDECLARE INTEGER RasEnumConnections ;\n\tIN RASAPI32.DLL ;\n\tSTRING  @ RasConnectionsBuffer, ;\n\tINTEGER @ dwSize, ;\n\tINTEGER @ nCount\n\nDECLARE INTEGER RasGetErrorString ;\n\tIN RASAPI32.DLL;\n\tINTEGER   ErrorValue, ;\n\tSTRING  @ MessageBuffer, ;\n\tINTEGER   BufferLen\n\ncConexion = ThisForm.WordToC(412) ;\n+ REPLICATE( CHR(0), 408 )\n\ncConexiones = REPLICATE( cConexion, 16 )\n\n\nnSize = LEN( cConexiones )\nnCount = 0\n\nnResult = RasEnumConnections( ;\n@cConexiones, ;\n@nSize, ;\n@nCount )\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "WordToC,ctoword",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 79,
+      "codigoOriginal": "LPARAMETER cConexion\n\nDECLARE Integer RasDial ;\n\tIN RASAPI32.DLL  ;\n\tInteger   RasDialExtensions, ;\n\tInteger   Phonebook, ;\n\tString  @ RasDialParams, ;\n\tInteger   NotifierType, ;\n\tInteger   Notifier, ;\n\tInteger @ hRasConn \n\nDECLARE Integer RasHangUp ;\n\tIN RASAPI32.DLL ;\n\tInteger   hRasConn\n\nDECLARE Integer RasGetEntryDialParams ;\n\tIN RASAPI32.DLL ;\n\tString  @ PhoneDirectory, ;\n\tString  @ RasDialParams, ;\n\tInteger @ IsPassword \n\nDECLARE Integer RasGetErrorString ;\n   IN RASAPI32.DLL ;\n   Integer ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "WordToC,Inf",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 52,
+      "codigoOriginal": "LPARAMETER cArrayReturn\n\nLOCAL cStructRasEntryName\nLOCAL cStructRasEntryNames, nSize\nLOCAL nEntries, nResult, cRasEntryName\n\n#DEFINE RAS_MAXENTRYNAME 256\n\nDECLARE INTEGER RasEnumEntries ;\n\tIN RASAPI32.DLL ;\n\tINTEGER   reserved,;\n\tSTRING    PhoneBox,;\n\tSTRING  @ RasEntryName,;\n\tINTEGER @ SizeOfRasEntryName,;\n\tINTEGER @ Entries\n\ncStructRasEntryName = ThisForm.WordToC(264) ;\n+ REPLICATE( CHR(0), RAS_MAXENTRYNAME )\n\ncArrayRasEntryNames = REPLICATE( ;\ncStructRasEntryName, 255 )\n\n\nnSize = LEN( cArrayR... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "WordToC",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "LPARAMETER nRasConn\n\n\nDECLARE Integer RasHangUp ;\n\tIN RASAPI32.DLL ;\n\tInteger   hRasConn\n\nDECLARE Integer Sleep ;\n\tIN Win32API ;\n\tInteger   Milliseconds\n\nLOCAL nResult\n\n=ThisForm.Inf(\"Desconectando... \",\"R\")\nnResult = RasHangUp( nRasConn )\n\n=Sleep(3000)\nRETURN nResult",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Inf",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 84,
+      "codigoOriginal": "PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpRemArq\nLocal lOk\nlok = .t.\n\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FTP_TRANSFER_TYPE_ASCII         1\n#DEFINE FTP_TRANSFER_TYPE_BINARY        2\n#DEFINE GENERIC_READ            2147483648\n#DEFINE GENERIC_WRITE           1073741824\n\nD... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpOpenFile",
+        "metodosFormChamados": "Inf",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 195,
+      "codigoOriginal": "PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpRemArq, cFtpLocArq\nLocal lOk, nInternet, nFtp\nlOk = .f.\nnInternet=0\nnFtp=0\n\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FILE_ATTRIBUTE_NORMAL         128\n#DEFINE FTP_TRANSFER_TYPE_ASCII         1\n#DEFINE FTP_TRANSFER_TYPE_BINARY        ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "file,FtpGetFile",
+        "metodosFormChamados": "Inf,processa",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 195,
+      "codigoOriginal": "PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpLocArq, cFtpRemArq\nLocal gnFile,nSize,cBuffer, cFtpNewRem, lOk, nInternet, nFtp\nlOk = .f.\n\n#DEFINE GENERIC_WRITE           1073741824\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FTP_TRANSFER_TYPE_ASCII         1\n#DEFINE FTP_TRANSFER_TYP... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpPutFile",
+        "metodosFormChamados": "Inf,processa",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 143,
+      "codigoOriginal": "PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpLocIni\n\n#DEFINE FILE_ATTRIBUTE_NORMAL          128\n#DEFINE FILE_ATTRIBUTE_DIRECTORY        16\n#DEFINE INTERNET_FLAG_RAW_DATA   1073741824\n\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FILE_ATTRIBUTE_NORMAL         128\n\n*** Declaración de... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "ftpserver,FtpFindFirstFile",
+        "metodosFormChamados": "Inf,CToWord",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 86,
+      "codigoOriginal": "Parameters ptptrans\nLocal zct, arqproc, lOk, arqproc, cArquivo_local, cArquivo_FTP, ARRECEB, ntrans, oObj, nselected, lnQtdArq\nlOk = .t.\nntrans = 0\nnselected = 0\n\n*-[ RECEBE os arquivos do FTP para Local (Remote to Host) ]-*\n*=ThisForm.Inf(\"2ª FASE: Iniciando a Fase de Recebimento de Arquivos do FTP.\",\"B\")\nThisForm.Container1.pgfftp.Page2.zorder\noObj = ThisForm.Container1.pgfftp.Page2.lstenvloc\nif oObj.ListCount <=0\n   lOk = .f.\n   =ThisForm.Inf(\"NÃO existe nenhum arquivo a ser recebido do FTP.\"... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Inf,_dirEnvLoc+allt,_dirRecFtp)+allt,Name,'REC FTP',substr,rasfile,rasftpget",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 72,
+      "codigoOriginal": "LPARAMETERS lcOldFile, lcNewFile \n\n#DEFINE FILE_ATTRIBUTE_NORMAL          128\n#DEFINE FILE_ATTRIBUTE_DIRECTORY        16\n#DEFINE INTERNET_FLAG_RAW_DATA  1073741824\n\n#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0\n#define INTERNET_OPEN_TYPE_DIRECT        1\n#define INTERNET_OPEN_TYPE_PROXY         3\n#DEFINE INTERNET_DEFAULT_FTP_PORT       21\n#DEFINE INTERNET_SERVICE_FTP             1\n#DEFINE INTERNET_FLAG_PASSIVE     14217728\n#DEFINE FILE_ATTRIBUTE_NORMAL          128\n\n#define cNULL\t   CHR(0)\n\nDECLARE ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FtpRenameFile",
+        "metodosFormChamados": "Inf",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Parameters nSecto\n\nzhora = int(nSecto/3600)\nzMinu = mod(int(nSecto/60),60)\nzSeco = mod(nSecto,60)\n\nReturn(iif(zhora>0,allt(str(zhora))+ \" h, \",\"\")+iif(zMinu>0,allt(str(zMinu))+ \" m, \",\"\")+allt(str(zSeco))+\" s\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters pStep, pTotal, pMessage\n\nWith ThisForm.StatControl\n\t\n\tIf Type('pMessage') = 'C'\n\t\t.StatusText = pMessage\n\tEndIf\n\n\tDo Case\n\t\tCase Type('pStep') = 'N'\n\t\t\tIf .StatusPercent < Int( (pStep / pTotal) * 100 )\n\t\t\t\t.StatusPercent = Int( (pStep / pTotal) * 100 )\n\t\t\tEndIf\n\t\t\n\t\t\tReturn(pStep + 1)\n\t\t\t\n\t\tCase Type('pStep') = 'L'\n\t\t\t.StatusPercent = 0\n\t\t\t.Visible       = pStep\n\tEndCase\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 105,
+      "codigoOriginal": "Parameters ptptrans\nLocal zct, arqproc, lOk, cArquivo_local, cArquivo_FTP, ARENV, oObj, ntrans, nselected, nEmpFail, lcEmps,;\n\t\tlcArq1\nlOk = .t.\nntrans    = 0\nnselected = 0\nnEmpFail  = 0\n\n*-[ Transfere os arquivos do Local para o FTP (Host to Remote) ]-*\nThisForm.Container1.pgfloc.Page1.zorder\noObj = ThisForm.Container1.pgfloc.Page1.lstEnvftp\nif oObj.listcount <=0\n   =ThisForm.Inf(\"NÃO existe nenhum arquivo a ser Transferido para o FTP.\",\"B\")\n   lOk = .f. \nEndif\n\nlnQtdArq = oObj.ListCount\nif lOk... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Inf,_dirEnvFtp+alltrim,_dirRecloc)+alltrim,Name,'ENVIO FTP',substr,rasftpPUT",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETER nNumber\nRETURN CHR(BITAND(255,nNumber)) ;\n\t+ CHR(BITAND(65280,nNumber)%255) ; \n\t+ CHR(BITAND(16711680,nNumber)%255) ;\n\t+ CHR(BITAND(4278190080,nNumber)%255)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Init",
+      "linhas": 223,
+      "codigoOriginal": "Parameters cTpEnv, cTpRec, cTpConnect, cFtpAdd, cFtpUser, cFtpPass, ;\n           cDirEnvFtp, cDirRecFtp, cDirEnvLoc, cDirRecLoc, ;\n           lDelLocal, lDelHost, nTpConect, lCaseSensitive\n\nPUBLIC ARRAY aProvedor(1)\nPUBLIC cProvedor\nLocal lOk, cemptoseek\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn < 1)\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\n\n\t= DoDefault()\nEndWi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,_DirRecLoc) And IsEmpty,Inf,_DirRecLoc,1)==\"/\" or empt,_DirEnvLoc,1)==\"/\" or empt",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "*-[ Cursor do Log ]-*\nsele 0\nCreate cursor Logftp (memo C(254), cor C(1))\n*-[ Cursor do progresso ]-*\nsele 0\nCreate cursor tmpprog (file C(254), Size N(12), Local C(254), Host C(254), Status C(50) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "if ThisForm._TpConnect = \"D\" && Dial-UP\n   PUBLIC ARRAY aAtivas(1)\n \n   nAtivas = ThisForm.RasAtivas(\"aAtivas\")\n   IF nAtivas > 0\n      =MessageBox(\"A conexão à internet ainda está ativa...\",0+64,\"Atenção\") \n      IF !IsEmpty(cProvedor)\n         cRun = \"RUN /N Rundll Rnaui.dll,RnaDial \" + ALLTRIM(cProvedor)\n        &cRun.\n      ENDIF   \n   ENDIF\n   Release aAtivas\nEndif   \nRelease aAtivas, cProvedor, aProvedor\nif used(\"logftp\") \n   sele logftp\n   use\nendif   \nif used(\"tmpprog\") \n   sele tmpprog\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RasAtivas",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.pgfloc",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "This.Parent.Parent.pgfftp.Page1.zorder\nThis.Parent.Parent.cmdtransfere.enabled = .t.\nThis.Parent.Parent.cmdrecebe.enabled = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.pgfloc",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "This.Parent.Parent.pgfftp.Page2.zorder\nThis.Parent.Parent.cmdtransfere.enabled = .f.\nThis.Parent.Parent.cmdrecebe.enabled = .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.pgfftp",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "This.Parent.Parent.pgfloc.Page1.zorder\nThis.Parent.Parent.cmdtransfere.enabled = .t.\nThis.Parent.Parent.cmdrecebe.enabled = .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.pgfftp",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "This.Parent.Parent.pgfloc.Page2.zorder\nThis.Parent.Parent.cmdtransfere.enabled = .f.\nThis.Parent.Parent.cmdrecebe.enabled = .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.cmdtransfere",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=Thisform.transfere(\"I\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "transfere",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.Container1.cmdrecebe",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=Thisform.recebe(\"I\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "recebe",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.cmdtran",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "=Thisform.transfere(\"A\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "transfere",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.cmdsair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.cmdrec",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "=thisform.recebe(\"A\")\n\n\n\n    \n   \n   \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "recebe",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.cmdconect",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "*-[ Conecta se for Dial-Up ]-*\nDo Case\n   Case ThisForm._TpConnect = \"D\" && Dial Up\n\n    IF ThisForm.RasAtivas(\"aAtivas\") > 0\n       =ThisForm.inf(\"Este computador já está conectado à INTERNET\",\"B\")\n    ELSE\n       =ThisForm.inf(\"Esperando por uma Conexão à Internet via Dial-UP\",\"B\")\n       IF !IsEmpty(nprovedor)\n          cProvedor = aProvedor(nProvedor)\n          cRun = \"RUN /N Rundll Rnaui.dll,RnaDial \" + ALLTRIM(cProvedor)\n          &cRun.\n        ELSE\n          =ThisForm.inf(\"Nome de Proved... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RasAtivas,inf",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRFTP.cmdload",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "Local lOk \nlOk = .t.\n\nThis.enabled = .f.\n*-[ Valida o Tipo da Conexao e conecta se for Dial-Up ]-*\nDo Case\n   Case ThisForm._TpConnect = \"D\" && Dial Up\n\n    IF ThisForm.RasAtivas(\"aAtivas\") > 0\n       =ThisForm.inf(\"Este computador já está conectado à INTERNET\",\"B\")\n       =ThisForm.MontaContainer() && Monta os pageframes com todos os arquivos a enviar e receber\n       lOk = .t.\n    ELSE\n       =ThisForm.inf(\"Conexão à Internet Não detectada\",\"R\")\n       =ThisForm.inf(\"Esperando por uma Conexão ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RasAtivas,inf,MontaContainer",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

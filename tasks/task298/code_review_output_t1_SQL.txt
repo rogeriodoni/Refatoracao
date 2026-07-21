@@ -1,0 +1,9 @@
+﻿Correto. Os 3 problemas foram investigados e resolvidos:
+
+| Flag | Diagn├│stico | A├º├úo |
+|------|-------------|------|
+| `DOPES` ÔÇö `WHERE Dopes = ... FROM SigOpCdc` | **Bug real**: `SigOpCdc` n├úo tem coluna `ImpBols`. O SQLEXEC sempre falhava ÔåÆ todos os movimentos eram saltados com LOOP. Bloco inteiro era inven├º├úo da LLM. | **Removido** (linhas 691-714 do original) |
+| `ICLIS` ÔÇö `WHERE Iclis = ... FROM SigCdCli` | **Falso positivo**: `Iclis` ├® a PK de `SigCdCli` (confirmado via `CONSTRAINT [sigcdcli_iclis] PRIMARY KEY`). Query correta e necess├íria. | Sem altera├º├úo |
+| `CONTROLCOUNT` | **Falso positivo**: `loc_oRef.ControlCount` e `loc_oControl.ControlCount` s├úo propriedades nativas VFP9 de containers ÔÇö n├úo SQL. O scanner confundiu com coluna de banco. | Sem altera├º├úo |
+
+A l├│gica de verificar `ImpBols` via `SigOpFp WHERE Fpags = ...` (linha ~775) permanece intacta e ├® a checagem correta do original.

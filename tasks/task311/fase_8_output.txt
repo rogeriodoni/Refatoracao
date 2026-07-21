@@ -1,0 +1,7 @@
+﻿A Fase 8 est├í conclu├¡da. O arquivo `Formsigprmdp.prg` estava essencialmente completo das fases anteriores. A ├║nica corre├º├úo aplicada foi o path da imagem de fundo em `ConfigurarPageFrame()` ÔÇö estava usando `gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"` (path inv├ílido, sem separador de diret├│rio), corrigido para `gc_4c_CaminhoIcones + "new_background.jpg"` (padr├úo can├┤nico dos outros forms operacionais).
+
+**Resumo da migra├º├úo Formsigprmdp (completa):**
+- `sigprmdpBO.prg` ÔÇö BO completo com `InicializarCursorContas`, `BuscarCalcCustos`, `ValidarParesNoGrid`, `ImportarXLS`
+- `Formsigprmdp.prg` ÔÇö 21 m├®todos, layout flat 800├ù270 sem PageFrame, l├│gica de substitui├º├úo em batch com transa├º├úo SQL e barra de progresso
+- Menu ÔÇö `DEFINE BAR 81 OF popMovimentos` + `AbrirFormsigprmdp()` can├┤nico
+- Config ÔÇö auto-load via ADIR (`*BO.prg` + `operacionais\Form*.prg`)

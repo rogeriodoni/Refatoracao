@@ -1,0 +1,19 @@
+﻿All changes applied. Summary of what was done:
+
+**`SigPrGl2BO.prg` ÔÇö 13 fixes:**
+1. `SELECT CrSigTempd / ZAP` ÔåÆ `IF USED / CREATE CURSOR CrSigTempd (6 cols)` with correct schema
+2. `UpDate("CrSigTempd") / RollBack / Commit` ÔåÆ SCAN loop with `SQLEXEC(gnConnHandle, "INSERT INTO SigTempd ... Dpros=' '")`
+3. `this_oConexao.SqlExecute(..., "TmpEstoque")` ÔåÆ `SQLEXEC(gnConnHandle, ..., "TmpEstoque")` with `IF USED` guard
+4. `this_oConexao2.fSqlApagarTmp(...)` ÔåÆ `SQLEXEC(gnConnHandle, "DELETE FROM SigTempD WHERE CidQuerys = ...")`
+5. `CursorQuery("SigCdOpe", ...)` ÔåÆ `IF USED / SQLEXEC SELECT`
+6. `?loc_pEdI And ?loc_pEdF` + `SqlExecute` ÔåÆ inline `EscaparSQL()` + `SQLEXEC` for TempEest
+7. `CursorQuery("SigMvItn", ...)` ÔåÆ `IF USED / SQLEXEC SELECT` for TempEestI
+8. `?loc_pItn` + `SqlExecute` ÔåÆ `FormatarNumeroSQL()` + `SQLEXEC` for TempEsti2
+9. `CursorQuery("SigCdPro", ...)` (ProcessarOperacoes) ÔåÆ `IF USED / SQLEXEC SELECT`
+10. `?loc_llFalse` + `SqlExecute` ÔåÆ inline `0` + `SQLEXEC` for TmpOpi
+11. `SqlExecute(..., "TmpMfas")` ÔåÆ `IF USED / SQLEXEC` for TmpMfas
+12. `?loc_llData` + `SqlExecute` ÔåÆ `FormatarDataSQL()` + `SQLEXEC` for LocalEest
+13. `SqlExecute(..., "CrSigCdPro")` (ProcessarFabrico) ÔåÆ `IF USED / SQLEXEC`
+
+**`FormSigPrGlo.prg` ÔÇö integration fix:**
+- `CmdProcessarClick`: replaced `MsgInfo("...conclu├¡do...")` with check for non-empty TmpItens/TmpCabec ÔåÆ `THIS.Enabled = .F.` ÔåÆ `CREATEOBJECT("FormSigPrGl2", THIS, ...)` ÔåÆ `Show(1)` modal ÔåÆ re-enable parent

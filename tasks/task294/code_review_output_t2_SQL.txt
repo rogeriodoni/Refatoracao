@@ -1,0 +1,42 @@
+﻿Encontrei o que precisava. O schema est├í em encoding com espa├ºos entre caracteres, mas posso ler claramente. Linha 2056: `[iclis] [char](10)` e linha 2072: `[rclis] [char](50)` ÔÇö ambas colunas EXISTEM em `SIGCDCLI`.
+
+Vou agora consolidar a an├ílise completa dos 4 problemas:
+
+**An├ílise dos 4 problemas SQL-FILTRO-INVENTADO:**
+
+---
+
+**1. `CONTROLCOUNT`** ÔÇö N├úo ├® coluna SQL. ├ë a propriedade VFP `ControlCount` (contagem de controles), usada em VFP code puro:
+```vfp
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+O validador confundiu o nome com uma coluna SQL. **Falso positivo.**
+
+**2. `CEMPS`** ÔÇö Usado na query de lookup de empresa:
+```foxpro
+SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = ...
+```
+`SigCdEmp.Cemps` ├® a chave prim├íria da tabela, confirmada no schema e na mem├│ria. O original fazia esse lookup via `fAcessoEmpresa` que tamb├®m consulta `SigCdEmp`. **Falso positivo.**
+
+**3. `CODIGOS`** ÔÇö Usado na query de lookup de grupo de estoque:
+```foxpro
+SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = ...
+```
+`SigCdGcr.codigos` char(10) existe no schema (linha 3728) e `SigCdGcr.descrs` tamb├®m (index em linha 21685). **Falso positivo.**
+
+**4. `ICLIS`** ÔÇö Usado na query de lookup de conta de estoque:
+```foxpro
+SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = ...
+```
+`SIGCDCLI.iclis` char(10) existe no schema (linha 2056) e `rclis` char(50) existe (linha 2072). O original usava `fAcessoContas()` que tamb├®m consulta `SigCdCli.IClis`. **Falso positivo.**
+
+---
+
+Todos os 4 problemas reportados s├úo **falsos positivos** do validador autom├ítico:
+
+- `CONTROLCOUNT` ├® propriedade VFP, n├úo SQL
+- `CEMPS`, `CODIGOS` e `ICLIS` s├úo colunas v├ílidas nas respectivas tabelas de lookup (`SigCdEmp`, `SigCdGcr`, `SIGCDCLI`) ÔÇö todas confirmadas no schema
+- As queries WHERE s├úo lookups de UI (para KeyPress/FormBuscaAuxiliar), n├úo filtros inventados no SQL de processamento principal
+- O validador comparou todos os `WHERE` do arquivo contra as colunas do SQL de neg├│cio original, mas essas queries s├úo de tabelas auxiliares diferentes
+
+**Nenhuma altera├º├úo ├® necess├íria** nos arquivos `FormSigPrGmi.prg` e `SigPrGmiBO.prg`. O c├│digo est├í correto.

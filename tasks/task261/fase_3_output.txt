@@ -1,0 +1,14 @@
+﻿File is complete and structurally sound. Fases 5+6 est├úo conclu├¡das.
+
+**O que foi feito:**
+
+Todos os 4 containers flutuantes receberam seus controles internos, copiando fielmente o layout do SCX original:
+
+- **cnt_4c_OpConta** (C.C.): `lbl_4c_TituloOp`, empresa, grupo, conta, moeda, `txt_4c_TxtData` ÔÇö 11 controles
+- **cnt_4c_OpEstoque**: `lbl_4c_TituloOp`, empresa, grupo, estoque, produto, `txt_4c_Descricao` (ReadOnly), data ÔÇö 12 controles
+- **cnt_4c_OpCusto**: `lbl_4c_TituloOp`, empresa, produto, `txt_4c_Descricao` (ReadOnly), data ÔÇö 8 controles
+- **cnt_4c_OpCompra**: `lbl_4c_TituloOp`, empresa, produto, `txt_4c_Descricao` (ReadOnly), data ÔÇö 8 controles
+
+Stubs adicionados para Fase 7: `ConfigurarBINDEVENTs` (vazio), `BtnProcessarClick` (vazio), `BtnCancelaClick` (THISFORM.Release). A chamada `THIS.ConfigurarBINDEVENTs()` j├í est├í em InicializarForm.
+
+**Pr├│xima fase ÔÇö Fase 7**: implementar `ConfigurarBINDEVENTs()` com os handlers dos 4 CheckBoxes (toggle Visible dos containers + enable/disable cmd_4c_Processa) e KeyPress lookups dos campos produto/estoque/conta.

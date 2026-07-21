@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Fase 8 conclu├¡da.
+
+**Resumo do que foi adicionado (linhas 560ÔÇô685):**
+
+| M├®todo | Comportamento |
+|--------|---------------|
+| `BtnBuscarClick()` | Re-executa `BuscarDadosProduto` + `CarregarDados` + `Refresh` do grid |
+| `BtnEncerrarClick()` | `THIS.Release()` ÔÇö fecha o popup |
+| `BtnSalvarClick()` | `MsgAviso` explicando que o form ├® somente-leitura |
+| `BtnCancelarClick()` | `THIS.Release()` ÔÇö fecha sem a├º├úo |
+| `FormParaBO()` | Propaga `this_cCPros` ao BO (├║nico dado relevante num form read-only) |
+| `BOParaForm()` | Popula `txt_4c_DPros`, `txt_4c_Comples` e `edt_4c_Infos` a partir do BO/cursor |
+| `HabilitarCampos()` | No-op ÔÇö todos os campos s├úo permanentemente read-only conforme o SCX original (`When=.F.`) |
+| `LimparCampos()` | Zera os tr├¬s campos de exibi├º├úo com guards `PEMSTATUS` |
+| `CarregarLista()` | Alias de `CarregarDados()` para compatibilidade com `FormBase` |
+| `AjustarBotoesPorModo()` | No-op ÔÇö form plano sem modos CRUD |

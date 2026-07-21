@@ -1,0 +1,16 @@
+﻿**Fase 8/8 conclu├¡da.** O arquivo `FormSigPrGf2.prg` est├í completo com os seguintes m├®todos adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Regenera gr├ífico OLE para o item atual do ComboBox |
+| `FormParaBO()` | Copia sele├º├úo do combo para `this_oBusinessObject.this_cChave1` |
+| `BOParaForm()` | Sincroniza caption do cabe├ºalho com `this_cCaption` do BO |
+| `HabilitarCampos()` | Habilita/desabilita combo e CommandGroup |
+| `LimparCampos()` | Desvincula OLE, limpa cursor de cache, reseta combo, chama `AlternarPagina("AGUARDE")` |
+| `AjustarBotoesPorModo()` | Mostra/oculta CommandGroup conforme exist├¬ncia de dados em `crGrafico1` |
+| `BtnBuscarClick()` | Delega para `CboChave1Click()` |
+| `BtnSalvarClick()` | No-op (form sem persist├¬ncia ÔÇö dados em cursor de mem├│ria) |
+| `BtnCancelarClick()` | Delega para `BtnEncerrarClick()` |
+| `TornarControlesVisiveis()` | Recurs├úo padr├úo sem filtro (estado gerenciado por `AlternarPagina`) |
+
+**Integra├º├úo**: Nenhuma entrada em `menu.prg` necess├íria ÔÇö SigPrGf2 ├® form filho aberto por `FormSigPrGf1.BtnProcessarClick()` via `CREATEOBJECT("FormSigPrGf2", THIS)`. O `config.prg` j├í carrega automaticamente via ADIR().

@@ -1,0 +1,5 @@
+﻿Dois problemas corrigidos em `FormSIGPRVTX.prg`:
+
+1. **GRID-WITH** (`MontaGrade()` linha ~578): `.RecordSource = ""`, `SELECT`, `GO TOP`, `.ColumnCount = 4` e `.RecordSource = "cursor_4c_Grade"` movidos para FORA do `WITH loc_oGrid`, usando refer├¬ncia expl├¡cita `loc_oGrid.RecordSource` / `loc_oGrid.ColumnCount`. O WITH agora inicia apenas com as colunas j├í dispon├¡veis.
+
+2. **GRID-HEADER** (linha 616): `"Refer" + CHR(234) + "ncia SKU"` ÔåÆ `"Referencia SKU"` (sem acento ├¬), id├¬ntico ao caption do legado.

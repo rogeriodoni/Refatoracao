@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A Fase 6 foi conclu├¡da com sucesso.
+
+**Resumo das mudan├ºas aplicadas:**
+
+1. **`ClipControls = .F.`** adicionado ├ás propriedades do form (propriedade presente no SCX original que estava faltando)
+
+2. **`ConfigurarPaginaDados()`** agora cont├®m todos os 6 controles de status consolidados:
+   - `chk_4c_Ck_Marca` (checkbox marcar-todos)
+   - `lbl_4c_Lbl_descricao` + `txt_4c_Operacao` (label + campo da opera├º├úo corrente)
+   - `lbl_4c_Label1` + `txt_4c_Numes` (label + campo do n├║mero ÔÇö movidos de `ConfigurarRodape()`)
+
+3. **`ConfigurarRodape()`** removido ÔÇö era m├®todo auxiliar tempor├írio de fase anterior
+
+4. **`ConfigurarPaginaLista()`** atualizado para chamar apenas 4 m├®todos (sem `ConfigurarRodape()`)
+
+5. **Coment├írios limpos** ÔÇö removidas todas as refer├¬ncias a "Fase 5/Fase 6"
+
+**Nota sobre lookups:** Este popup OPERACIONAL n├úo tem lookups ÔÇö os campos `get_Operacao`/`get_Numes` do legado tinham `When() Return(.F.)` (somente leitura), exibindo apenas o registro corrente do grid. Sem F4/sigacess no original, a Fase 6 ficou restrita ├á consolida├º├úo estrutural do c├│digo.

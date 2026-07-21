@@ -1,0 +1,30 @@
+﻿Analisei os dois arquivos gerados nas fases anteriores. O FormSigPrEml.prg e o SigPrEmlBO.prg est├úo **completamente implementados** - as fases anteriores entregaram o form inteiro.
+
+**Por que a Fase 5 n├úo tem nada a adicionar:**
+
+Este ├® um form OPERACIONAL flat (sem PageFrame), e o `ConfigurarPaginaDados()` j├í est├í completo:
+
+```
+PROTECTED PROCEDURE ConfigurarPaginaDados()
+    THIS.ConfigurarGrade()           ÔåÉ 5 colunas + checkbox implementado (linhas 314-460)
+    THIS.ConfigurarSelecaoBotoes()   ÔåÉ SelTudo/Apaga implementado (linhas 270-311)
+ENDPROC
+```
+
+N├úo h├í TextBoxes ou Labels de "Page2" porque o form original SIGPREML n├úo os tem ÔÇö a UI ├® apenas: cabe├ºalho + grid de destinat├írios + bot├Áes de a├º├úo. Todos os objetos do legado est├úo migrados:
+
+| Objeto Legado | Migrado | Status |
+|---|---|---|
+| `cntSombra` | `cnt_4c_Sombra` | Ô£à |
+| `Shape1` | `shp_4c_Shape1` | Ô£à |
+| `Commandgroup1` | `cnt_4c_Saida/cmd_4c_Encerrar` | Ô£à |
+| `grade_alerta` (5 col) | `grd_4c_Dados` (5 col) | Ô£à |
+| `btnEmail` | `cmd_4c_BtnEmail` | Ô£à |
+| `apaga` | `cmd_4c_Apaga` | Ô£à |
+| `SelTudo` | `cmd_4c_SelTudo` | Ô£à |
+
+O form tamb├®m j├í tem: `ConfigurarBINDEVENTs`, todos os handlers (`BtnEmailClick`, `SelTudoClick`, `ApagaClick`, `EncerrarClick`, `Col2/3/4HeaderClick`, `GrdChkInteractiveChange`), `TornarControlesVisiveis`/`RecursarControlesVisiveis` e `Destroy`.
+
+**O pipeline de fases esperava um form com campos de Page2** (TextBoxes/Labels), mas SIGPREML ├® mais simples ÔÇö o gerador cobriu tudo em fases 3-4. A Fase 5 para este form est├í **conclu├¡da** sem altera├º├Áes necess├írias.
+
+As pr├│ximas fases (6-7-8) provavelmente abordar├úo o mesmo padr├úo ÔÇö confirme se deseja prosseguir com elas ou avan├ºar para integra├º├úo (config.prg + menu.prg), que seria o passo natural seguinte.

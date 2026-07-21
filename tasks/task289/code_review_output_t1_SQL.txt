@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo das decis├Áes:
+
+| Problema | A├º├úo | Motivo |
+|---|---|---|
+| `COOPERS` (linha 803 BO) | **Corrigido** ÔåÆ `copers` | `CoOpers` (7 chars) Ôëá `copers` (6 chars) ÔÇö coluna inexistente em `LocalEest`, causaria `Variable 'COOPERS' is not found` em runtime |
+| `CIDQUERYS` (linha 406 BO) | **Sem altera├º├úo** | O `WHERE CidQuerys =` est├í num `DELETE` de limpeza de dados tempor├írios p├│s-processo, n├úo num SELECT de neg├│cio. Remover o WHERE deletaria todas as linhas de SigTempD de todos os usu├írios |
+| `CONTROLCOUNT` (linhas 247/250 Form) | **Sem altera├º├úo** | ├ë a propriedade VFP `.ControlCount` usada em `TornarControlesVisiveis` para iterar controles ÔÇö n├úo ├® coluna SQL |

@@ -1,0 +1,21 @@
+﻿O arquivo `FormSigPrEtq.prg` j├í est├í **completo**. A Fase 7 foi executada nas fases anteriores ÔÇö o formul├írio OPERACIONAL n├úo tem bot├Áes CRUD (Incluir/Alterar/Visualizar/Excluir), e todos os eventos equivalentes j├í est├úo implementados:
+
+| Evento implementado | Linha | Equivalente ao legado |
+|---|---|---|
+| `CmdBtnCarregarClick()` | 1079 | `SIGPRETQ.btnCarregar.Click` |
+| `CmdBtnExcluirClick()` | 1175 | `SIGPRETQ.btnexcluir.Click` |
+| `BtnImprimirClick()` | 1195 | `SIGPRETQ.BTNREPORT.Buttons(1).Click` |
+| `BtnEncerrarClick()` | 1307 | `SIGPRETQ.BTNREPORT.Buttons(2).Click` |
+| `TxtEmpsKeyPress()` | 637 | `getEmps.Valid` |
+| `TxtDopesKeyPress()` | 680 | `getDopes.Valid` |
+| `TxtCprosKeyPress()` | 719 | `col_cpros.txt_cpros.Valid` |
+| `TxtDprosKeyPress()` | 750 | `col_dpros.txt_dpros.Valid` |
+| `TxtQtdsKeyPress()` | 779 | `col_qtds.txt_qtds.Valid` |
+| `TxtLprecoKeyPress()` | 819 | `Get_lpreco.Valid` |
+| `ObjOptTipoChange()` | 2071 | `Opt_Tipo.InteractiveChange` |
+| `ObjOpcaoImpChange()` | 2093 | `Get_Printer.InteractiveChange` |
+| `CboGetPrinterChange()` | 2110 | `Opt_Impressora.InteractiveChange` |
+
+O BO tamb├®m est├í completo, incluindo `PrepararImpressao()` (linha 802) que ├® o m├®todo principal chamado pelo bot├úo Imprimir.
+
+O form OPERACIONAL n├úo precisa de `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö esse template ├® para cadastros CRUD. A migra├º├úo de `FormSigPrEtq.prg` est├í finalizada.

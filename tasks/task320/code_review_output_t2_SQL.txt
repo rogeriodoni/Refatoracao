@@ -1,0 +1,30 @@
+﻿Ap├│s verificar o schema (`docs/schema.sql`) e comparar com o c├│digo migrado, posso confirmar que todos os 5 alertas s├úo **falsos positivos** do scanner autom├ítico.
+
+## An├ílise dos Problemas Detectados
+
+### Colunas flagadas e verifica├º├úo no schema:
+
+| Coluna flagada | Tabela usada no c├│digo | Existe no schema? | Contexto |
+|---|---|---|---|
+| `CODIGOS` | `SigCdGcr.codigos` | Ô£à linha 3728 | Sub-query de valida├º├úo |
+| `ICLIS` | `SigCdCli.iclis` | Ô£à linha 2056 (SIGCDCLI) | Sub-query de valida├º├úo |
+| `CEMPS` | `SigCdEmp.cemps` | Ô£à linha 3021 (PK) | Sub-query de valida├º├úo |
+| `ICL` / `RCL` | `SigCdCli.iclis` / `rclis` | Ô£à linhas 2056/2072 | Detec├º├úo de substring falsa |
+
+### Por que o scanner errou:
+
+O scanner comparou **todos** os WHEREs do c├│digo migrado contra as colunas do WHERE da query principal (SigMvCab). Mas as colunas `codigos`, `iclis`, `cemps` aparecem nas **sub-queries de valida├º├úo** (`ValidarGrupo`, `ValidarConta`, `ValidarEmpresa`), contra tabelas diferentes (SigCdGcr, SigCdCli, SigCdEmp) ÔÇö n├úo no WHERE da SigMvCab.
+
+### O WHERE principal da SigMvCab est├í correto:
+
+O c├│digo usa exatamente as colunas do original:
+
+| Original | Migrado | Existe em SigMvCab? |
+|---|---|---|
+| `GRUPODS` | `GrupoDs` | Ô£à linha 13092 |
+| `CONTADS` | `ContaDs` | Ô£à linha 13080 |
+| `DOPES` | `Dopes` | Ô£à linha 13088 |
+| `EMPS` | `Emps` | Ô£à linha 13090 |
+| `DATAS` | `Datas` (BETWEEN) | Ô£à linha 13083 |
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo SQL est├í correto: as colunas validadas (`codigos`, `IClis`, `Cemps`) s├úo v├ílidas nas suas respectivas tabelas, e o WHERE do SigMvCab usa exatamente as mesmas colunas do original. Os 5 alertas foram gerados porque o scanner n├úo diferenciou sub-queries de valida├º├úo do WHERE principal.

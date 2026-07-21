@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. Duas corre├º├Áes foram aplicadas:
+
+1. **Bug corrigido (linha 316):** Removida a propriedade `.Visible = .F.` da `Column1` em `ConfigurarGrade()`. Ela estava oculta indevidamente ÔÇö sem c├│digo posterior que a tornasse vis├¡vel, a coluna "C├│d. Barra" nunca apareceria mesmo quando a grade estivesse vis├¡vel.
+
+2. **Melhoria em `TornarControlesVisiveis()`:** Adicionado filtro `INLIST` que pula os 5 controles que devem iniciar ocultos (`grd_4c_Dados`, `txt_4c_Leitura`, `lbl_4c_Leitura`, `cmd_4c_Ok`, `cmd_4c_ConferirAuto`) ÔÇö eles s├úo controlados por `AtualizarVisibilidade()` e n├úo devem ser setados para `Visible=.T.` incondicionalmente.
+
+**Nota:** Esta ├® uma form OPERACIONAL flat (popup modal 800├ù400, sem PageFrame). A estrutura de `ConfigurarPaginaLista()` / `AlternarPagina()` / bot├Áes CRUD do template Phase 4 n├úo se aplica ÔÇö o equivalente operacional (grade em `ConfigurarGrade()` + bot├Áes especializados em `ConfigurarBotoes()`) j├í estava completo na Fase 3.

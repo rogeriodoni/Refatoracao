@@ -10,7 +10,7 @@ DEFINE CLASS SigReEtlBO AS RelatorioBase
 
     *-- Identificacao
     this_cMensagemErro  = ""
-    this_cCursorDados   = "cursor_4c_Dados"
+    this_cCursorDados   = "CsImpressao"
     this_cFRXAtual      = ""
 
     *-- Filtros: Empresa

@@ -35,7 +35,7 @@ DEFINE CLASS sigrebctBO AS RelatorioBase
     *-- Configuracao do relatorio
     this_cTitulo      = ""
     this_cCaminhoFRX  = ""
-    this_cCursorDados = "cursor_4c_Balancete"
+    this_cCursorDados = "cPlconta"    && Nome bate com FRX legado (Create Cursor cPlconta)
 
     *--------------------------------------------------------------------------
     * Init - Configura titulo e caminho do FRX

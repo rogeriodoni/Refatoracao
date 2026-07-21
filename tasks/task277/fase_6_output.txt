@@ -1,0 +1,9 @@
+﻿As duas altera├º├Áes foram aplicadas corretamente. Fase 6 conclu├¡da:
+
+**sigpremaBO.prg** ÔÇö Bug corrigido em `ProcessarEnvioEmails()`: adicionada flag `loc_lIterOK` por itera├º├úo dentro do SCAN. O original VFP9 resetava `llOk = .T.` a cada itera├º├úo; o c├│digo anterior usava `loc_lTudoOK` global, fazendo com que uma falha na 1┬¬ movimenta├º├úo bloqueasse o envio de todas as demais. Agora cada movimenta├º├úo ├® processada independentemente.
+
+**Formsigprema.prg** ÔÇö `BtnEmailClick()` aprimorado com:
+- Contagem de registros marcados (`COUNT FOR Checks = 1`) antes de processar
+- `MsgAviso` se nenhum registro estiver selecionado
+- `WAIT WINDOW "Aguarde..."` durante o processamento
+- `WAIT CLEAR` ap├│s concluir (inclusive em caso de falha)

@@ -32,6 +32,9 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
     *-- Nome do cursor de saida principal com dados de rastreabilidade
     this_cCursorSaida   = "TmpRastro"
 
+    *-- Cursor principal binding com SigReCgr.frx (Pattern #117 guard)
+    this_cCursorDados   = "TmpRastro"
+
     *--------------------------------------------------------------------------
     * Init
     *--------------------------------------------------------------------------

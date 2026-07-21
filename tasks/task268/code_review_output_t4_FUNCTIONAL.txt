@@ -1,0 +1,22 @@
+﻿Analisei o arquivo completo. Vou agora verificar os pontos cr├¡ticos espec├¡ficos de cada problema listado:
+
+Ap├│s leitura completa do arquivo, posso confirmar o estado atual de cada problema:
+
+**1. [CONTAINER-VISIVEL]** ÔÇö Linha 1341: `INLIST(loc_cNome, "CNT_4C_COPIA", "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")` ÔÇö **J├ü CORRETO**. Ambos os containers est├úo na lista de exclus├úo do TornarControlesVisiveis.
+
+**2. [INIT-DUPLICADO]** ÔÇö Init() (linhas 64ÔÇô95) chama apenas `DODEFAULT()`, sem nenhuma chamada a `THIS.InicializarForm()`. O coment├írio na linha 86 at├® explica: "DODEFAULT() chama FormBase.Init() que chama THIS.InicializarForm()". **J├ü CORRETO**.
+
+**3. [GRID-WITH]** ÔÇö Todos os grids seguem o padr├úo correto: `RecordSource = ""` e `ColumnCount = N` s├úo definidos FORA do WITH (linhas 443ÔÇô444, 633ÔÇô634, 1151ÔÇô1152). Dentro do WITH s├│ s├úo acessadas propriedades de colunas j├í criadas pelo ColumnCount. **J├ü CORRETO**.
+
+**4ÔÇô7. [GRID-HEADER]** ÔÇö Os cabe├ºalhos "Produto", "Descri├º├úo", "Fornecedor", "Refer├¬ncia", "Sub Grp" s├úo para o `grd_4c_Lista` (Page1, lista de produtos). O SCX original `SIGPRCOM.SCX` foi deletado (`D origem/sigprcom.scx`), ent├úo a ferramenta de auditoria s├│ encontrou cabe├ºalhos dos outros dois grids (`grd_4c_DadosCopia` e `grd_4c_Gradei`). Os cabe├ºalhos s├úo semanticamente corretos para os campos `cpros, dpros, ifors, reffs, sgrus`. **FALSO POSITIVO** ÔÇö imposs├¡vel verificar contra SCX deletado.
+
+**8ÔÇô9. [LAYOUT-POSITION]** ÔÇö O `obj_4c_Opc_situacao` est├í posicionado em `.Top = 100 + 29` e `.Left = 555` (linhas 1050ÔÇô1051). O Top=5 e Left=5 que o revisor detectou s├úo de `Buttons(1)` dentro do OptionGroup (WITH aninhado, linhas 1059ÔÇô1067). **FALSO POSITIVO** ÔÇö a ferramenta confundiu WITH aninhado com posi├º├úo do pai.
+
+---
+
+**Conclus├úo**: Todos os 9 problemas listados j├í est├úo corretamente tratados no c├│digo atual. O arquivo `Formsigprcom.prg` n├úo requer altera├º├Áes para este pass.
+
+Os falsos positivos t├¬m origem em:
+- SCX original deletado (imposs├¡vel validar headers do grd_4c_Lista)
+- A ferramenta de auditoria lendo posi├º├Áes de `Buttons(1)` dentro de WITH aninhado como posi├º├úo do OptionGroup pai
+- O c├│digo foi aparentemente corrigido entre a gera├º├úo do relat├│rio de problemas e a execu├º├úo deste pass

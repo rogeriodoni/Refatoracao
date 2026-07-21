@@ -411,7 +411,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdPam.LibObss) = "L"
                                                                                                                                         loc_lLibObss = crSigCdPam.LibObss
                                                                                                                                     ELSE
-                                                                                                                                        loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                            loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                    loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
@@ -540,7 +552,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
                                                                                                                                         loc_lTrfPesas = crSigCdOpd.TrfPesas
                                                                                                                                     ELSE
-                                                                                                                                        loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                            loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                                loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                                    loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
@@ -1209,7 +1233,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdPam.LibObss) = "L"
                                                                                                                                         loc_lLibObss = crSigCdPam.LibObss
                                                                                                                                     ELSE
-                                                                                                                                        loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                            loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                    loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
@@ -1453,7 +1489,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdOpd.PesoBals) = "L"
                                                                                                                                         loc_lPesoBals = crSigCdOpd.PesoBals
                                                                                                                                     ELSE
-                                                                                                                                        loc_lPesoBals = (NVL(crSigCdOpd.PesoBals, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdOpd.PesoBals) = "L"
+                                                                                                                                            loc_lPesoBals = crSigCdOpd.PesoBals
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdOpd.PesoBals) = "L"
+                                                                                                                                                loc_lPesoBals = crSigCdOpd.PesoBals
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdOpd.PesoBals) = "L"
+                                                                                                                                                    loc_lPesoBals = crSigCdOpd.PesoBals
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lPesoBals = (NVL(crSigCdOpd.PesoBals, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
@@ -1578,7 +1626,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
                                                                                                                                         loc_lTrfPesas = crSigCdOpd.TrfPesas
                                                                                                                                     ELSE
-                                                                                                                                        loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                            loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                                loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdOpd.TrfPesas) = "L"
+                                                                                                                                                    loc_lTrfPesas = crSigCdOpd.TrfPesas
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF
@@ -2759,7 +2819,19 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
                                                                                                                                     IF VARTYPE(crSigCdPam.LibObss) = "L"
                                                                                                                                         loc_lLibObss = crSigCdPam.LibObss
                                                                                                                                     ELSE
-                                                                                                                                        loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                        IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                            loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                        ELSE
+                                                                                                                                            IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(crSigCdPam.LibObss) = "L"
+                                                                                                                                                    loc_lLibObss = crSigCdPam.LibObss
+                                                                                                                                                ELSE
+                                                                                                                                                    loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
+                                                                                                                                        ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
                                                                                                                             ENDIF

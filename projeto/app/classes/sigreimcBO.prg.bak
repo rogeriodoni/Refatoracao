@@ -48,7 +48,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
     *   Estrutura: cemps, cseries, cnfis, noccors, mretifs, clifors, emis,
     *              correcs, rclis, razaos, endes, cidas, estas, nums, compls,
     *              cdescrs, numvias
-    this_cCursorDados   = "cursor_4c_XCorNf"
+    this_cCursorDados   = "XCorNf"
 
     *--------------------------------------------------------------------------
     * Init - Configura BO do relatorio de impressao de cartas
@@ -154,7 +154,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                 USE IN (THIS.this_cCursorDados)
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_XCorNf ;
+            CREATE CURSOR XCorNf ;
                 (cemps C(3), cseries C(3), cnfis C(6), noccors N(3), ;
                  mretifs M NULL, clifors C(10), emis D, correcs L, ;
                  rclis C(50), razaos C(50), endes C(60), ;
@@ -174,7 +174,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                 FOR loc_nVia = 1 TO loc_nCopias
                     SELECT cursor_4c_NfCorBase
                     SCATTER MEMVAR MEMO
-                    SELECT cursor_4c_XCorNf
+                    SELECT XCorNf
                     APPEND BLANK
                     GATHER MEMVAR MEMO
                     REPLACE numvias WITH loc_nVia
@@ -185,7 +185,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
             USE IN cursor_4c_NfCorBase
 
             *-- Ordena cursor de saida por empresa/serie/nota/via
-            SELECT cursor_4c_XCorNf
+            SELECT XCorNf
             INDEX ON cemps + cseries + cnfis + STR(numvias, 8) TAG XCorNfIdx
 
             loc_lSucesso = .T.
@@ -266,7 +266,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                     "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
                 loc_lSucesso = .F.
             ENDIF
-            SELECT cursor_4c_XCorNf
+            SELECT XCorNf
             THIS.ExecutarReportForm("SigReImc", "PRINTER_PROMPT", THIS.this_cCursorDados)
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -290,7 +290,7 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
                     "rio n" + CHR(227) + "o encontrado: " + loc_cFrx
                 loc_lSucesso = .F.
             ENDIF
-            SELECT cursor_4c_XCorNf
+            SELECT XCorNf
             THIS.ExecutarReportForm("SigReImc", "PREVIEW", THIS.this_cCursorDados)
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -310,8 +310,8 @@ DEFINE CLASS sigreimcBO AS RelatorioBase
     * Destroy - Libera cursor de saida
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_XCorNf")
-            USE IN cursor_4c_XCorNf
+        IF USED("XCorNf")
+            USE IN XCorNf
         ENDIF
         IF USED("cursor_4c_NfCorBase")
             USE IN cursor_4c_NfCorBase

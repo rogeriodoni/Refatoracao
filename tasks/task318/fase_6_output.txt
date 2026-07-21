@@ -1,0 +1,13 @@
+﻿**Fase 6/8 conclu├¡da.** 
+
+O FormSigPrPcp.prg estava **100% completo desde a Fase 5** ÔÇö este ├® um form OPERACIONAL sem PageFrame onde o original n├úo possui nenhum lookup (F4/F5). Todos os 15 objetos do legado foram migrados:
+
+- `grd_4c_Dados` (Grade principal, 6 colunas, Column1 edit├ível para prioridade)
+- `grd_4c_Itens` (GradeItem, 4 colunas, somente leitura)
+- `cmd_4c_Confirmar` / `cmd_4c_Cancelar` com BINDEVENT
+- `txt_4c_Info`, `lbl_4c_Cliente`, `txt_4c_Cliente` (somente leitura, preenchidos via AfterRowColChange)
+- `cbo_4c_Ordenacao` com handler InteractiveChange
+- `shp_4c_Shape4` + `img_4c_FigJpg` (foto do produto, Visible=.F. por padr├úo)
+- Todos os BINDEVENTs wired: AfterRowColChange (ambas grades), LostFocus (col. TAB), InteractiveChange (combo), Click (bot├Áes)
+
+A Fase 6 atualizou o header para refletir a conclus├úo com invent├írio completo dos objetos migrados.

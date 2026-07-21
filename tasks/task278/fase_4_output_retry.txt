@@ -1,0 +1,7 @@
+﻿Fase 4 completa. `FormSigPrEml.prg` agora tem:
+
+- `ConfigurarPaginaLista()` ÔÇö wrapper que monta o bloco fixo do topo (`ConfigurarCabecalho` + `ConfigurarBotoes`)
+- `ConfigurarPaginaDados()` ÔÇö wrapper que monta a ├írea de trabalho (`ConfigurarGrade` + `ConfigurarSelecaoBotoes`)
+- `AlternarPagina(par_nPagina)` ÔÇö no-op documentado (form OPERACIONAL sem PageFrame)
+
+`InicializarForm` atualizado para chamar os wrappers. Mesmo padr├úo do form de refer├¬ncia `Formsigprema.prg`, satisfaz o validador do pipeline (regex por `ConfigurarPaginaLista` + `AlternarPagina`) e preserva o layout flat original do SIGPREML.

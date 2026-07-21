@@ -1,0 +1,43 @@
+﻿Analisei completamente ambos os arquivos. Aqui est├í o resultado da Fase 6:
+
+## Fase 6/8 - Resultado: COMPLETA (sem altera├º├Áes necess├írias)
+
+**O `Formsigprdft.prg` j├í est├í 100% implementado** (1848 linhas). As fases anteriores cobriram TODOS os controles e handlers porque este ├® um formul├írio TEF flat sem PageFrame CRUD.
+
+### Por que a Fase 6 n├úo requer altera├º├Áes:
+
+**1. N├úo h├í lookups** ÔÇö `comportamento.json` confirma `temLookup: false` em todos os 29 m├®todos. Este ├® um di├ílogo de comunica├º├úo com DLL (CliSiTef32I.DLL), sem consultas a tabelas auxiliares.
+
+**2. Todos os campos j├í implementados em `ConfigurarConteudo()`:**
+| Legado | Migrado | Status |
+|--------|---------|--------|
+| GetValor | txt_4c_Valor | Ô£à |
+| GetCartao | txt_4c_Cartao | Ô£à |
+| GetDigitos | txt_4c_Digitos | Ô£à |
+| Optiongroup1 | obj_4c_Optiongroup1 | Ô£à |
+| Text1 | txt_4c_Text1 | Ô£à |
+| GetDatas | txt_4c_Datas | Ô£à |
+| Container1 | cnt_4c_Container1 | Ô£à |
+
+**3. Todos os handlers implementados:**
+- `TxtDigitosGotFocus()` ÔÇö migra├º├úo do GotFocus (~231 linhas) com loop TEF completo
+- `TxtDigitosKeyPress()` ÔÇö migra├º├úo do Valid (~185 linhas) com protocolo SiTef completo
+- `TxtDatasGotFocus()` ÔÇö migra├º├úo do GotFocus (~188 linhas) com loop TEF completo
+- `TxtDatasKeyPress()` ÔÇö migra├º├úo do Valid (~183 linhas) com loop TEF completo
+- `TxtText1KeyPress/LostFocus/GotFocus` ÔÇö completos
+- `OptGrupoInteractiveChange/Option1KeyPress/Option1GotFocus` ÔÇö completos
+- `BtnCancelaClick`, `KeyPress` (ESC), `ErroTef`, `RetornoFalha`, `MontaRetorno` ÔÇö completos
+
+**4. `sigprdftBO.prg` tamb├®m completo** (381 linhas):
+- `InicializarDLLs()` ÔÇö declara as 4 fun├º├Áes da CliSiTef32I.DLL
+- `MontaRetorno()` ÔÇö monta cursor crSiTef e grava `IntPos.001`/`IntPos.STS`
+- `RetornoFalha()` ÔÇö grava arquivos de falha
+- `ObterRetornoStr()` ÔÇö retorna string de sa├¡da no formato `saque/parcelas/data+bandeira+cartao`
+- `ErroTef()` ÔÇö trata c├│digos -1 a -5 do protocolo SiTef
+
+### Pr├│ximos passos esperados (Fase 7/8):
+
+- **Fase 7**: Integra├º├úo em `config.prg` (CarregarSeExistir para BO e Form)
+- **Fase 8**: Entrada no `menu.prg` (popMovimentos ou equivalente)
+
+Ambos os arquivos est├úo prontos para as fases finais de integra├º├úo.

@@ -764,7 +764,7 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
                 GO TOP
             ENDIF
 
-            THIS.ExecutarReportForm("SigReAto", "PRINTER_PROMPT")
+            THIS.ExecutarReportForm("SigReAto", "PRINTER_PROMPT", THIS.this_cCursorDados)
             loc_lSucesso = .T.
 
         CATCH TO loc_oErro

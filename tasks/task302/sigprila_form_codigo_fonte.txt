@@ -1,0 +1,3662 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprila.SCX
+* Data/Hora: 17/07/2026 07:21:33
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRILA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRILA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRILA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRILA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntplanilha
+  Parent: SIGPRILA
+  Class: container
+  BaseClass: container
+
+Objeto: cmdgetp
+  Parent: SIGPRILA.cntplanilha
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: List1
+  Parent: SIGPRILA.cntplanilha
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: cmbTipos
+  Parent: SIGPRILA.cntplanilha
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkCabecalho
+  Parent: SIGPRILA.cntplanilha
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: OptTipo
+  Parent: SIGPRILA.cntplanilha
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say4
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGPRILA.cntplanilha
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptPreco
+  Parent: SIGPRILA.cntplanilha
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: GetPlanilha
+  Parent: SIGPRILA.cntplanilha
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grupo_Botao
+  Parent: SIGPRILA
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 350
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (Prompt())
+  ControlBox = .F.
+  MaxButton = .F.
+  TitleBar = 0
+  BindControls = .T.
+  planilha = .F.
+  podatamgr = .F.
+  sigkey = .F.
+  valoracumulado = .F.
+  Name = "SIGPRILA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha
+------------------------------------------------------------
+  Top = 96
+  Left = 167
+  Width = 466
+  Height = 221
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 1
+  Name = "cntplanilha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.cmdgetp
+------------------------------------------------------------
+  Top = 36
+  Left = 423
+  Height = 25
+  Width = 36
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\a_fold1.bmp
+  Caption = ""
+  TabIndex = 5
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdgetp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.List1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BoundColumn = 2
+  ColumnCount = 2
+  ColumnWidths = "172,70"
+  RowSourceType = 1
+  RowSource = ""
+  ControlSource = "TmpList"
+  FirstElement = 1
+  Height = 124
+  Left = 82
+  MoverBars = .T.
+  NumberOfElements = 0
+  SpecialEffect = 0
+  TabIndex = 7
+  Top = 78
+  Width = 191
+  AutoHideScrollbar = 1
+  Name = "List1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.cmbTipos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ColumnCount = 1
+  ColumnWidths = "100"
+  RowSourceType = 6
+  RowSource = ""
+  FirstElement = 1
+  Height = 23
+  Left = 85
+  NumberOfElements = 0
+  Style = 2
+  TabIndex = 2
+  Top = 12
+  Width = 187
+  ForeColor = 0,0,0
+  Name = "cmbTipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.chkCabecalho
+------------------------------------------------------------
+  Top = 204
+  Left = 289
+  Height = 15
+  Width = 142
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cabeçalho na 1ª Linha"
+  Value = 0
+  ControlSource = ""
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "chkCabecalho"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.OptTipo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  Value = 1
+  Height = 65
+  Left = 335
+  Top = 80
+  Width = 123
+  Themes = .T.
+  Name = "OptTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Código"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Descritivo"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 22
+  Option2.Width = 65
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Referência Forn."
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Top = 41
+  Option3.Width = 99
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Themes = .F.
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Planilha:"
+  Height = 15
+  Left = 34
+  Top = 40
+  Width = 49
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem das Colunas na Planilha:"
+  Height = 15
+  Left = 85
+  Top = 63
+  Width = 177
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Clique e Arraste para Mudar"
+  Height = 15
+  Left = 83
+  Top = 204
+  Width = 160
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo:"
+  Height = 15
+  Left = 54
+  Top = 15
+  Width = 29
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Validar :"
+  Height = 15
+  Left = 290
+  Top = 82
+  Width = 47
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Preço :"
+  Height = 15
+  Left = 297
+  Top = 142
+  Width = 40
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.OptPreco
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  Value = 1
+  Height = 44
+  Left = 335
+  Top = 140
+  Width = 123
+  Themes = .T.
+  Name = "OptPreco"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Venda"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 48
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Custo"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 22
+  Option2.Width = 46
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.cntplanilha.GetPlanilha
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Enabled = .F.
+  Height = 23
+  Left = 85
+  MaxLength = 40
+  ReadOnly = .T.
+  TabIndex = 4
+  Top = 37
+  Width = 336
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "GetPlanilha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRILA.Grupo_Botao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = ""
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 2
+  BorderColor = 136,189,188
+  Name = "Grupo_Botao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "\<Processar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRILA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atuapreco
+------------------------------------------------------------
+PROCEDURE atuapreco
+Local lnTipo, lcArq, lcNomArq
+lnTipo = ThisForm.cntplanilha.OptTipo.Value 
+lcArq = ThisForm.cntplanilha.GetPlanilha.Value
+lcNomArq = Alltrim(JustFname(lcArq))
+
+Select TmpPlanilha
+Go Top 
+
+loBarraLista = Createobject('fwprogressbar','Importando Lista...',Reccount('TmpPlanilha'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .T.
+loBarraLista.Show
+
+Scan
+
+	If IsEmpty(TmpPlanilha.Referencia)
+		Select TmpPlanilha	
+		Loop 
+	EndIf 
+	
+	loBarraLista.Update(.T.,'Referencia: ' +TmpPlanilha.Referencia)
+	
+	
+	plCodProd = TmpPlanilha.Referencia
+	
+	lnPreDe = Iif(Type([TmpPlanilha.PrecoVen])=[N],TmpPlanilha.PrecoVen,Val(TmpPlanilha.PrecoVen))
+	lnPVens = Iif(Type([TmpPlanilha.PrecoEsp])=[N],TmpPlanilha.PrecoEsp,Val(TmpPlanilha.PrecoEsp))
+	
+	lcProdOff = Alltrim(TmpPlanilha.ProdOff)
+	
+	If lnPVens = 0
+		lnPVens = lnPreDe
+		lnPreDe = 0
+	EndIf 
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),plCodProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,cGrus,PrecoDe])
+	
+	Select crSigCdPro
+	If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+		Select TmpPlanilha	
+		Loop 
+	EndIf 
+	
+	lcCpros  = crSigCdPro.Cpros
+	lcMoevs  = crSigCdPro.Moevs
+	lnValAnt = crSigCdPro.pVens
+	lnValDe	 = crSigCdPro.PrecoDe
+	lcMoeAnt = []
+	
+	If lnPVens <> crSigcdPro.PVens Or lnPreDe <> crSigcdPro.PrecoDe
+		Insert Into CrSigPrPre (Cpros, cIdChaves, PVens, PVensAnt, Moevs, MoevsAnt, Datas) Values ;
+					(lcCpros, fUniqueIds(), lnPVens, lnValAnt, lcMoevs, lcMoeAnt, Datetime())
+	EndIf 
+	
+	Select 	CrSigImpPr
+	Append Blank
+	Replace Cpros 		With lcCpros ,;
+			Referencia	With TmpPlanilha.Referencia ,;
+			PrecoVen	With lnPreDe, ;
+			PrecoEsp	With lnPVens, ;
+			DtInicial	With TmpPlanilha.DtInicial, ;
+			DtFinal		With TmpPlanilha.DtFinal, ;
+			UsuImp		With Usuar, ;
+			DataImp		With Datetime(), ;
+			Utilizado 	With 0, ;
+			Arquivos	With lcNomArq, ;
+			CidChaves 	With fUniqueIds() In CrSigImpPr
+	
+	
+	
+	*-- 17/07/2017 - Varrer a tabela de tamanho e corrigir o preço conforme o PVens do Produto
+	=Thisform.Podatamgr.CursorQuery([SigCdGrp],[crSigCdGrp],[cGrus],crSigCdPro.cGrus,[AtuPreTam])
+	If crSigCdGrp.AtuPreTam = 1
+		lcQuery = [Select * From SigPrTam Where Cpros = ']+lcCpros+[' ]	
+		If ThisForm.poDatamgr.SqlExecute(lcQuery,[crSigPrTam]) <1
+			=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigPrTam)])
+			Return 0
+		EndIf 
+		
+		Select crSigPrTam
+		Go Top
+		Scan
+			lnValTam = 0
+			
+			If Not Empty(crSigPrTam.Percs)
+				lnValTam = lnPVens + (lnPVens * (crSigPrTam.Percs/100))
+			Else
+				lnValTam = lnPVens
+			EndIf 
+			
+			Replace Valor with lnValTam In crSigPrTam
+			
+		EndScan 
+	EndIf 
+	
+	lcUpdate = [Update SigCdPro Set pVens = ]+Alltrim(Str(lnPVens,12,5)) + ;
+						[ , PrecoDe = ]+Alltrim(Str(lnPreDe,12,5)) + ;
+						Iif(Not Empty(lcProdOff),[,Prodoff = ]+Iif(lcProdOff='S','1','0'),[]) + ;
+				[ Where CPros = ']+lcCpros+[' ] 
+	If ThisForm.poDatamgr.SqlExecute(lcUpdate) <1
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - CrSigImpPr)])
+		Return 0
+	EndIf 
+	
+	lcDelete = [Delete from SigPrPrt Where CPros = ']+lcCpros+[' ] 
+	If ThisForm.poDatamgr.SqlExecute(lcDelete) <1
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Delete - 1)])
+		Return 0
+	EndIf 
+	
+*!*		lcDelete = [Delete from SigPrWeb Where CPros = ']+lcCpros+[' ] 
+*!*		If ThisForm.poDatamgr.SqlExecute(lcDelete) <1
+*!*			=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Delete - 2)])
+*!*			Return 0
+*!*		EndIf 
+		
+	If Not Thisform.poDataMgr.Update('CrSigImpPr')
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - CrSigImpPr)])
+		Return 0
+	Endif
+	
+	If Not Thisform.poDataMgr.Update('CrSigPrPre')
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - CrSigPrPre)])
+		Return 0
+	Endif
+	
+	If Not Thisform.poDataMgr.Update('CrSigPrTam')
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - CrSigPrTam)])
+		Return 0
+	Endif
+	
+	If (Thisform.poDataMgr.Commit() < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		Return 0
+	EndIf
+	
+	Select TmpPlanilha
+Endscan
+loBarraLista .Complete(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE completalista
+------------------------------------------------------------
+PROCEDURE completalista
+Select ComboTipo
+ThisForm.Cntplanilha.List1.RowSource = Alltrim(ComboTipo.ColunaLi)
+
+*-- Rafael - 05/12/2016 - Informa a Chave do Campo Produto
+If InList(Upper(Alltrim(ComboTipo.Titulo)),'TRANSFERENCIA','PRECIFICACAO','PEDIDO TERCEIRO','PEDIDO CONSIGNADO','PEDIDO FABRICA','PEDIDO ACESSORIO')
+	ThisForm.cntplanilha.Say5.Visible = .T.
+	ThisForm.cntplanilha.OptTipo.Visible = .T.
+Else
+	ThisForm.cntplanilha.Say5.Visible = .F.
+	ThisForm.cntplanilha.OptTipo.Visible = .F.
+EndIf 
+
+If InList(Upper(Alltrim(ComboTipo.Titulo)),'PEDIDO TERCEIRO','PEDIDO CONSIGNADO','PEDIDO FABRICA','PEDIDO ACESSORIO')
+	ThisForm.cntplanilha.Say6.Visible = .T.
+	ThisForm.cntplanilha.OptPreco.Visible = .T.
+Else
+	ThisForm.cntplanilha.Say6.Visible = .F.
+	ThisForm.cntplanilha.OptPreco.Visible = .F.
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE criaplanilha
+------------------------------------------------------------
+PROCEDURE criaplanilha
+If Empty(Thisform.Cntplanilha.CmbTipos.Value)
+	MessageBox('Tipo Inválido',16,'')
+	ThisForm.Cntplanilha.CmbTipos.SetFocus
+	Return .f.
+EndIf 
+
+If Empty(Thisform.Cntplanilha.getPlanilha.Value)
+	MessageBox('Arquivo Inválido',16,'')
+	ThisForm.Cntplanilha.cmdgetp.SetFocus
+	Return .f.
+EndIf 
+
+If Used([TmpPlanilha])
+	Use in TmpPlanilha
+EndIf 
+
+lcFile = Addbs(Sys(5)+Sys(2003))
+If File(lcFile+'TmpPlanilha.dbf')	
+	Delete File lcFile+'TmpPlanilha.dbf'
+EndIf 
+
+lcCursor = 'Create Table TmpPlanilha ('
+
+FOR nCnt = 1 TO ThisForm.cntplanilha.List1.ListCount
+   lcCursor = lcCursor + ThisForm.cntplanilha.List1.List(nCnt,2) + ','
+EndFor
+
+If Right(lcCursor,1) = ','
+	lcCursor = Substr(lcCursor,1,Len(lcCursor)-1)
+EndIf 
+
+lcCursor = lcCursor +')'
+lcCursor = STRTRAN(lcCursor, '|', ',')  
+&lcCursor
+llRecno = .f.
+
+Try
+	Select TmpPlanilha 
+	lcArq = Alltrim(Thisform.Cntplanilha.getPlanilha.Value)
+	Append From Alltrim(Thisform.Cntplanilha.getPlanilha.Value) Type Xl5
+	llRecno = .t.
+Catch
+	llRecno = .F.
+EndTry 
+
+If Not llRecno 
+	lcMsg = 'Não foi possível criar o cursor temporario.' + Chr(13) 
+	lcMsg = lcMsg + 'Verifique se a planilha não está aberta ou que esteja salva com o Formato :'+Chr(13)
+	lcMsg = lcMsg + 'Microsoft Excel 5.0/95 (.xls)'
+	MessageBox(lcMsg,16,'Problema na Leitura da Planilha')
+	Return .f.
+EndIf 
+
+Select TmpPlanilha 	
+If Thisform.Cntplanilha.ChkCabecalho.Value = 1
+	Go top 
+	Delete In TmpPlanilha 
+EndIf 
+
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gerapedido
+------------------------------------------------------------
+PROCEDURE gerapedido
+
+&& Rotina da Importação da Planilha de transferencias
+Private pDt
+pDt = fDtoSQL(Datetime())
+
+If Used([csPrNAOCad])
+	use in csPrNAOCad
+EndIf 
+
+If Used([csPrSemCT])
+	use in csPrSemCT
+EndIf 
+
+Create Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade n(12,2),Grupo c(10),Barra n(14,0), Cor c(4),Tamanho c(4))
+
+Create Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Local lnErro1
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lnTipo  = ThisForm.cntplanilha.OptTipo.Value 
+lnTpPre = ThisForm.Cntplanilha.OptPreco.Value 
+
+Select crSigCdPac
+lcDopes = crSigCdPac.DopTrfPed
+
+If Empty(lcDopes)
+	MessageBox([Movimentação da Importação da Planilha não Informada.]+Chr(13)+Chr(13)+[Parâmetros do Sistema > Diversos > Geral],0+64,[Atenção])
+	Return .F.
+EndIf 
+
+=ThisForm.Podatamgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+=ThisForm.Podatamgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)
+
+Select crSigCdOpe
+If Empty(crSigCdOpe.GruOrigs) 
+	MessageBox([Grupo de Origem não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+EndIf 
+
+If Empty(crSigCdOpe.GruDests) or Empty(crSigCdOpe.ConDests)
+	MessageBox([Grupo ou Conta de Destino não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+EndIf 
+
+lcOpers   = iif(crSigCdOpe.opers=1,'E','S')
+lcGrupoOs = crSigCdOpe.GruOrigs
+lcContaOs = crSigCdOpe.ConOrigs
+lcGrupoDs = crSigCdOpe.GruDests
+lcContaDs = crSigCdOpe.ConDests
+lnEstoqs  = crSigCdOpe.Estoqs
+lcGrupoCs = crSigOpCdd.GruposCC
+lcContaCs = crSigOpCdd.ContasCC
+
+
+Select TmpPlanilha
+lnQtdIni = 0
+Scan for !Deleted() 
+	If IsEmpty(TmpPlanilha.Empds) Or IsEmpty(TmpPlanilha.Emps)
+		Loop 
+	EndIf 
+	lnQtdIni = lnQtdIni + 1
+EndScan 
+
+Select distinct * From TmpPlanilha Into Cursor csTransf ReadWrite
+
+Select csTransf
+Index on Empds Tag Empresa
+Go Top
+lnQtdFim = 0
+Scan for !Deleted() 
+	If IsEmpty(csTransf.Empds) Or IsEmpty(csTransf.Emps)
+		Loop 
+	EndIf 
+	lnQtdFim = lnQtdFim + 1
+EndScan 
+
+If lnQtdIni <> lnQtdFim
+	MessageBox([Há Registros duplicados, Favor Verificar a Planilha.],0+48,[Atenção])
+	Return .F.
+EndIf 
+
+lnVezes  = 1
+lcXEmps  = [X]
+lcXEmpDs = [X]
+
+loBarraLista = CreateObject('fwprogressbar','Importando Transferencias...',Reccount('csTransf'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .t.
+loBarraLista.Show
+Scan
+
+ 	loBarraLista.Update(.T.,'Empresa: ' +csTransf.EmpDs)
+ 	
+ 	lcEmps    = csTransf.Emps
+ 	lcEmps    = Padr(Alltrim(lcEmps),3)
+ 	lcEmpDs   = csTransf.Empds
+ 	lcEmpDs   = Padr(Alltrim(lcEmpDs),3)
+ 	lnPecas   = csTransf.Qtds
+ 	lcProd    = csTransf.Cpros
+ 	lnCBars   = 0
+ 	lcCor     = csTransf.Cors
+ 	lcTam	  = csTransf.Tams
+ 	lnPeso	  = csTransf.Pesos
+	lcContaOs = csTransf.ContaOs
+	ldPrz	= csTransf.Prazo
+	
+ 	If lnPecas = 0 
+ 		Select csTransf
+		Loop 
+	EndIf 
+	
+	If Empty(lcEmps)
+		Select csTransf
+		Loop 	
+	EndIf 
+	
+	If Empty(lcEmpDs)
+		Select csTransf
+		Loop 	
+	EndIf 
+	
+	If Empty(lcContaOs)
+		Select csTransf
+		Loop 	
+	EndIf
+	
+	If Empty(lcProd)
+		Select csTransf
+		Loop 
+	EndIf 
+	
+	lnBarra = 0
+	If Not Empty(lnCBars) And (Not Empty(lcCor) Or Not Empty(lcTam))
+		lnBarra = 0
+	Else
+		lnBarra = lnCBars
+	Endif
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp
+	If Reccount([crSigCdEmp])=0 
+		Select csTransf	
+		Loop 
+	EndIf 
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdEmp],[crSigCdEmp2],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp2
+	If Reccount([crSigCdEmp2])=0 
+		Select csTransf	
+		Loop 
+	EndIf
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],lcContaOs,[Iclis])
+	Select crSigCdCli
+	If Reccount([crSigCdCli])=0 
+		Select csTransf	
+		Loop 
+	EndIf 
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),lcProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,ForaLinha,Situas,moecusfs,custofs,cgrus])
+	
+	Select crSigCdPro
+	If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+	
+		Select csPrNAOCad
+		Append Blank 
+		Replace Produto 	With Nvl(lcProd,[]) ,;
+				Quantidade  With Nvl(lnPecas,0) ,;
+				Cor	   		With Nvl(lcCor,[]) ,;
+				Tamanho	    With Nvl(lcTam,[]) ,;
+				Barra	    With Nvl(lnCBars,0) ,;
+				Origem 		With Nvl(lcEmps,[]) ,;
+				Destino		With Nvl(lcEmpDs,[]) in csPrNAOCad
+	
+		Select csTransf	
+		Loop 
+	EndIf 
+		
+	If crSigCdPro.ForaLinha = 1
+		If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Descontinuado, Deseja importar mesmo descontinuado?],4+32,[Atenção]) <> 6
+			Select csTransf
+			loop
+		EndIf 
+		
+	EndIf 
+	
+	If crSigCdPro.Situas = 2
+		If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Inativo, Deseja Importar mesmo Inativo?],4+32,[Atenção]) <> 6
+			Select csTransf
+			loop
+		EndIf 
+	EndIf
+	
+	lcCpros = crSigCdPro.Cpros
+	lcDpros = crSigCdPro.Dpros
+	If lnTpPre = 1
+		lnPvens = crSigCdPro.PVens
+		lcMoevs = crSigCdPro.Moevs
+	Else
+		lnPvens = crSigCdPro.custofs
+		lcMoevs = crSigCdPro.moecusfs
+	EndIf 
+	lcCunis = crSigCdPro.CUnis
+	lnPesos = Iif(Empty(lnPeso),crSigCdPro.PesoMs,lnPeso)
+	
+	If Not Empty(lnBarra)
+	
+		=Thisform.Podatamgr.CursorQuery([SigOpEtq],[crSigOpEtq],[Cbars],lnBarra,[Cbars,CPros])
+		
+		If Reccount([crSigOpEtq])=0
+			Select csTransf
+			Loop 
+		EndIf 
+		
+		If crSigOpEtq.Cpros <> lcCpros 
+			Select csTransf
+			Loop
+		EndIf 
+	EndIf 
+	
+	If Not Empty(lcTam)
+		lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpTam') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+			Return 0
+		Endif
+
+		Select crTmpTam
+		Go Top
+		If Reccount([crTmpTam])=0
+			lcTam = []
+		Endif
+	Endif
+
+	If Not Empty(lcCor)
+		lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpCor') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+			Return 0
+		Endif
+
+		Select crTmpCor
+		Go Top
+		If Reccount([crTmpCor])=0
+			lcCor = []
+		Endif
+	Endif
+
+	lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+		[From SigCdGrp ] + ;
+		[Where CGrus = '] + crSigCdPro.CGrus + [' ] + ;
+		[Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpGru') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+		Return 0
+	Endif
+	
+	llPular = .F.
+	If Empty(lcTam) And Inlist(crTmpGru.TipoEstos,3,4)
+		llPular = .T.
+	EndIf 
+	
+	If Empty(lcCor) And Inlist(crTmpGru.TipoEstos,2,4)
+		llPular = .T.
+	EndIf
+		
+	If llPular 
+		Select csPrSemCT
+		Append Blank
+		Replace Referencia With crSigCdPro.CPros ,;
+			Qtds	   With Nvl(lnPecas,0) ,;
+			Pesos	   With Nvl(lnPesos,0) ,;
+			Unidade	   With Nvl(lcCunis,[]) ,;
+			Valor	   With Nvl(lnPvens,0) In csPrSemCT
+	Else
+	
+		If lcEmps <> lcXEmps or lcEmpDs <> lcXEmpDs
+			lcXEmps  = lcEmps
+			lcXEmpDs = lcEmpDs
+			lnVezes  = 1000
+		EndIf
+
+		If lnVezes > 999
+			lnNumes = fGerUniqueKey(Alltrim(lcDopes) + lcEmps)
+			Insert Into CrSigMvCab (Datars,DataS,Dopes,Emps,EmpDs,Numes,MascNum,GrupoOs,ContaOs,GrupoDs,ContaDs,CIdChaves,DtAlts,EmpDopNums, usuals, Usuars, PRAZOENTS, grupoccs, contaccs) ;
+				Values (pDt,pDt,lcDopes,lcEmps,lcEmpDs,lnNumes,fGerMascara(lnNumes),lcGrupoOs,lcContaOs,lcGrupoDs,lcContaDs,fUniqueIds(),Datetime(),lcEmps + lcDopes + Str(lnNumes,6),Usuar, Usuar, ldPrz, lcGrupoCs, lcContaCs)
+			lnVezes = 1
+		Endif
+
+		
+		Insert Into CrSigMvItn (CPros,Dopes,Emps,Numes,Opers,Qtds,CItens,Units,Totas,Moedas,DPros,AQtds,CUnis,CIdChaves,DtAlts,EmpDopNums,Pesos,codbarras) ;
+			Values (lcCpros,lcDopes,lcEmps,lnNumes,lcOpers,lnPecas,lnVezes,lnPvens,;
+			lnPvens * lnPecas,lcMoevs,lcDPros,lnPecas,lcCUnis,fUniqueIds(),Date(),lcEmps + lcDopes + Str(lnNumes,6),lnPesos,lnBarra)
+
+		*--Lanca o Barra no SIGMVITS
+		If (Not Empty(lcCor) Or Not Empty(lcTam))
+			Insert Into CrSigMvIts (Emps,Dopes,Numes,CPros,CodTams,CodCors,Qtds,AQtds,codbarras,Pesos,CIdChaves,EmpDopNums,chksubn,CItens) ;
+				Values (lcEmps,lcDopes,lnNumes,lcCPros,lcTam,lcCor,lnPecas,lnPecas,lnCbars,lnPesos,fUniqueIds(),lcEmps + lcDopes + Str(lnNumes,6),.F.,lnVezes)
+		Endif
+
+		If lnEstoqs = 1
+
+			pCidC = Dtos(pDt)+lcOpers+Transform(fGerUniqueKey(Dtos(pDt)),"@L 999999")+Thisform.Sigkey
+			pSeq  = fGerUniqueKey('HISTBAR')
+
+			Insert Into CrSigMvHst (CPros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,Opers,Numes,Qtds,Units,Totas,Grupos,;
+				Estos,CIdChaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+				Values (lcCPros,pDt,pDt,Null,lcDopes,lcEmps,lcEmps,;
+				lcOpers,lnNumes,lnPecas,lnPVens,lnPVens * lnPecas,lcGrupoOs,;
+				lcContaOs,pCidC,lcEmps + lcDopes + Str(lnNumes,6),;
+				lcEmps + lcGrupoOs + lcContaOs,lcEmps + lcDopes + Str(lnNumes,6),pSeq,lnPesos, Usuar, ;
+				lnCbars, lcTam, lcCor)
+
+			=SqlCalcP2( CrSigMvHst.Emps, CrSigMvHst.Grupos, CrSigMvHst.Estos, CrSigMvHst.CPros, CrSigMvHst.DataS, CrSigMvHst.CodCors, CrSigMvHst.CodTams, Thisform.poDataMgr )
+			=fRecalculaC( CrSigMvHst.Emps, CrSigMvHst.CPros, CrSigMvHst.DataS, Thisform.poDataMgr )
+
+		Endif
+
+		If Not Empty(lnCbars) And lcOpers = 'S'
+			lcUpdate = [Update SigOpEtq Set Contas = Space(10), Grupos = Space(10) Where Cbars = ]+Str(lnCbars,14)
+			If Thisform.poDataMgr.SqlExecute(lcUpdate) < 1
+				Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (lcUpdate - Transferencia)')
+				Return .F.
+			Endif
+		Endif
+
+		lnVezes = lnVezes + 1
+	EndIf 
+	Select csTransf
+EndScan 
+loBarraLista .Complete(.T.)
+
+lnOldSel = Select()
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	MessageBox([Houve Produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA' xl5
+EndIf
+ 
+Select csPrSemCT
+Go Top
+If Reccount([csPrSemCT])>0
+	Messagebox([Houve produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO.XLS',0+64,[Atenção],5000)
+	Select csPrSemCT
+	Copy To Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO' Xl5
+Endif
+
+Select CrSigMvItn
+Go Top
+Select EmpDopNums, Sum(Totas) as Total From CrSigMvItn Group by EmpDopNums Order by EmpDopNums Into Cursor csTmpTot ReadWrite
+
+Select csTmpTot
+Go Top
+Scan 
+	Update CrSigMvCab Set Valos = csTmpTot.Total Where EmpDopNums = csTmpTot.EmpDopNums
+	Select csTmpTot	
+EndScan
+ThisForm.ValorAcumulado = 0
+*-- Rafael - 14/11/2017 - Limite de credito pela Matriz contabil
+If Inlist( crSigCdOpe.limcres, 7 ) 
+	Select CrSigMvCab
+	Go Top
+	Scan 
+		If Not Empty(crSigOpCdd.GruposCC) And Not Empty(crSigOpCdd.ContasCC) And Not Empty(crSigOpCdd.GruposEmt) And Not Empty(crSigOpCdd.ContasEmt)
+			If !ThisForm.LimiteCreditoMatriz( crSigOpCdd.GruposCC, crSigOpCdd.ContasCC, crSigOpCdd.GruposEmt, crSigOpCdd.ContasEmt, 'Centro de Custo' )
+				Return .F.
+			EndIf 
+		EndIf 
+	EndScan 	
+EndIf
+
+Select(lnOldSel)
+Set Step On 
+lcMsg = 'Importação da Planilha de Tranferencia: ' + Alltrim(Thisform.Cntplanilha.getPlanilha.Value)
+=fGravarLog('T', lcDopes, [SIGPRILA], lcMsg, Usuar )
+
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvCab'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvItn'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvIts'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvHst'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(SqlCalcP2(.T.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(fRecalculaC(.T.,.F.,.F.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Thisform.poDataMgr.Commit()
+Endif
+If lnErro1 < 1
+	Messagebox('Falha na Gravacao dos Dados.',0+16,'')
+	Thisform.poDataMgr.Rollback()
+	Return
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE geratransf
+------------------------------------------------------------
+PROCEDURE geratransf
+
+&& Rotina da Importação da Planilha de transferencias
+Private pDt
+pDt = fDtoSQL(Datetime())
+
+If Used([csPrNAOCad])
+	Use In csPrNAOCad
+Endif
+
+If Used([csPrSemCT])
+	use in csPrSemCT
+EndIf 
+
+Create Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))
+
+Create Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Local lnErro1
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lnTipo = Thisform.cntplanilha.OptTipo.Value
+
+Select crSigCdPac
+lcDopes = crSigCdPac.DopImpPlan
+
+If Empty(lcDopes)
+	Messagebox([Movimentação da Importação da Planilha não Informada.]+Chr(13)+Chr(13)+[Parâmetros do Sistema > Diversos > Geral],0+64,[Atenção])
+	Return .F.
+Endif
+
+=Thisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+
+Select crSigCdOpe
+If Empty(crSigCdOpe.GruOrigs) Or Empty(crSigCdOpe.ConOrigs)
+	Messagebox([Grupo ou Conta de Origem não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+Endif
+
+If Empty(crSigCdOpe.GruDests) Or Empty(crSigCdOpe.ConDests)
+	Messagebox([Grupo ou Conta de Destino não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+Endif
+
+lcOpers   = Iif(crSigCdOpe.opers=1,'E','S')
+lcGrupoOs = crSigCdOpe.GruOrigs
+lcContaOs = crSigCdOpe.ConOrigs
+lcGrupoDs = crSigCdOpe.GruDests
+lcContaDs = crSigCdOpe.ConDests
+lnEstoqs  = crSigCdOpe.Estoqs
+
+Select TmpPlanilha
+lnQtdIni = 0
+Scan For !Deleted()
+	lnQtdIni = lnQtdIni + 1
+Endscan
+
+Select Distinct *, Alltrim(Right(EmpresaO,3)) As Emps, Alltrim(Right(EmpresaD,3)) As EmpDs From TmpPlanilha Into Cursor csTransf Readwrite
+
+Select csTransf
+Index On Emps + EmpDs Tag Empresa
+Go Top
+lnQtdFim = Reccount([csTransf])
+
+If lnQtdIni <> lnQtdFim
+	Messagebox([Há Registros duplicados, Favor Verificar a Planilha.],0+48,[Atenção])
+	Return .F.
+Endif
+
+*!*	If lnQtdIni <> lnQtdFim
+*!*
+*!*		If MessageBox([Há Registros duplicados, Deseja continuar com a Importação?],4+32,[Atenção]) <> 6
+*!*			Return .F.
+*!*		EndIf
+*!*		MessageBox([A importação irá importar somente um registro dos registros duplicados],0+64,[Atenção],5000)
+*!*	EndIf
+
+lnVezes  = 1
+lcXEmps  = [X]
+lcXEmpDs = [X]
+
+loBarraLista = Createobject('fwprogressbar','Importando Transferencias...',Reccount('csTransf'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .T.
+loBarraLista.Show
+Scan
+
+	loBarraLista.Update(.T.,'Empresa: ' +csTransf.Emps)
+
+	lcEmps  = csTransf.Emps
+	lcEmpds = csTransf.EmpDs
+	lnPecas = csTransf.Qtds
+	lcProd  = csTransf.Cpros
+	lnCBars = csTransf.Cbars
+	lcCor   = csTransf.Cors
+	lcTam	= csTransf.Tams
+	ldPrz	= csTransf.Prazo
+
+	If lnPecas = 0
+		Select csTransf
+		Loop
+	Endif
+
+	If Empty(lcEmps) Or Empty(lcEmpds)
+		Select csTransf
+		Loop
+	Endif
+
+	If Empty(lcProd)
+		Select csTransf
+		Loop
+	Endif
+
+	lnBarra = 0
+	If Not Empty(lnCBars) And (Not Empty(lcCor) Or Not Empty(lcTam))
+		lnBarra = 0
+	Else
+		lnBarra = lnCBars
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp
+	If Reccount([crSigCdEmp])=0
+		Select csTransf
+		Loop
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp2],[Cemps],lcEmpds,[Cemps])
+	Select crSigCdEmp2
+	If Reccount([crSigCdEmp2])=0
+		Select csTransf
+		Loop
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),lcProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,ForaLinha,Situas,cgrus])
+
+	Select crSigCdPro
+	If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+
+
+		Select csPrNAOCad
+		Append Blank
+		Replace Produto 	With Nvl(lcProd,[]) ,;
+			Quantidade  With Nvl(lnPecas,0) ,;
+			Cor	   		With Nvl(lcCor,[]) ,;
+			Tamanho	    With Nvl(lcTam,[]) ,;
+			Barra	    With Nvl(lnCBars,0) ,;
+			Origem 		With Nvl(lcEmps,[]) ,;
+			Destino		With Nvl(lcEmpds,[]) In csPrNAOCad
+
+		Select csTransf
+		Loop
+	Endif
+
+	lcCpros = crSigCdPro.Cpros
+	lcDpros = crSigCdPro.Dpros
+	lnPvens = crSigCdPro.PVens
+	lcMoevs = crSigCdPro.Moevs
+	lcCunis = crSigCdPro.CUnis
+	lnPesos = crSigCdPro.PesoMs
+
+	If crSigCdPro.ForaLinha = 1
+		If Messagebox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Descontinuado, Deseja importar mesmo descontinuado?],4+32,[Atenção]) <> 6
+			Select csTransf
+			Loop
+		Endif
+
+	Endif
+
+	If crSigCdPro.Situas = 2
+		If Messagebox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Inativo, Deseja Importar mesmo Inativo?],4+32,[Atenção]) <> 6
+			Select csTransf
+			Loop
+		Endif
+	Endif
+
+	If Not Empty(lnBarra)
+
+		=Thisform.poDataMgr.CursorQuery([SigOpEtq],[crSigOpEtq],[Cbars],lnBarra,[Cbars,CPros])
+
+		If Reccount([crSigOpEtq])=0
+			Select csTransf
+			Loop
+		Endif
+
+		If crSigOpEtq.Cpros <> lcCpros
+			Select csTransf
+			Loop
+		Endif
+	Endif
+
+	If Not Empty(lcTam)
+		lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpTam') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+			Return 0
+		Endif
+
+		Select crTmpTam
+		Go Top
+		If Reccount([crTmpTam])=0
+			lcTam = []
+		Endif
+	Endif
+
+	If Not Empty(lcCor)
+		lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpCor') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+			Return 0
+		Endif
+
+		Select crTmpCor
+		Go Top
+		If Reccount([crTmpCor])=0
+			lcCor = []
+		Endif
+	Endif
+
+	lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+		[From SigCdGrp ] + ;
+		[Where CGrus = '] + crSigCdPro.CGrus + [' ] + ;
+		[Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpGru') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+		Return 0
+	Endif
+
+	llPular = .F.
+	If Empty(lcTam) And Inlist(crTmpGru.TipoEstos,3,4)
+		llPular = .T.
+	Endif
+
+	If Empty(lcCor) And Inlist(crTmpGru.TipoEstos,2,4)
+		llPular = .T.
+	Endif
+
+	If llPular
+		Select csPrSemCT
+		Append Blank
+		Replace Referencia With crSigCdPro.Cpros ,;
+			Qtds	   With Nvl(lnPecas,0) ,;
+			Pesos	   With Nvl(lnPesos,0) ,;
+			Unidade	   With Nvl(lcCunis,[]) ,;
+			Valor	   With Nvl(lnPvens,0) In csPrSemCT
+	Else
+
+		If lcEmps <> lcXEmps Or lcEmpds <> lcXEmpDs
+			lcXEmps  = lcEmps
+			lcXEmpDs = lcEmpds
+			lnVezes  = 1000
+		Endif
+
+		If lnVezes > 999
+			lnNumes = fGerUniqueKey(Alltrim(lcDopes) + lcEmps)
+			Insert Into CrSigMvCab (Datars,DataS,Dopes,Emps,EmpDs,Numes,MascNum,GrupoOs,ContaOs,GrupoDs,ContaDs,CIdChaves,DtAlts,EmpDopNums, usuals, Usuars, PRAZOENTS) ;
+				Values (pDt,pDt,lcDopes,lcEmps,lcEmpds,lnNumes,fGerMascara(lnNumes),lcGrupoOs,lcContaOs,lcGrupoDs,lcContaDs,fUniqueIds(),Datetime(),lcEmps + lcDopes + Str(lnNumes,6),Usuar, Usuar, ldPrz)
+			lnVezes = 1
+		Endif
+
+
+		Insert Into CrSigMvItn (Cpros,Dopes,Emps,Numes,opers,Qtds,CItens,Units,Totas,Moedas,Dpros,AQtds,CUnis,CIdChaves,DtAlts,EmpDopNums,Pesos,codbarras) ;
+			Values (lcCpros,lcDopes,lcEmps,lnNumes,lcOpers,lnPecas,lnVezes,lnPvens,;
+			lnPvens * lnPecas,lcMoevs,lcDpros,lnPecas,lcCunis,fUniqueIds(),Date(),lcEmps + lcDopes + Str(lnNumes,6),lnPesos,lnBarra)
+
+		*--Lanca o Barra no SIGMVITS
+		If (Not Empty(lcCor) Or Not Empty(lcTam))
+			Insert Into CrSigMvIts (Emps,Dopes,Numes,Cpros,CodTams,CodCors,Qtds,AQtds,codbarras,Pesos,CIdChaves,EmpDopNums,chksubn,CItens) ;
+				Values (lcEmps,lcDopes,lnNumes,lcCpros,lcTam,lcCor,lnPecas,lnPecas,lnCBars,lnPesos,fUniqueIds(),lcEmps + lcDopes + Str(lnNumes,6),.F.,lnVezes)
+		Endif
+
+		If lnEstoqs = 1
+
+			pCidC = Dtos(pDt)+lcOpers+Transform(fGerUniqueKey(Dtos(pDt)),"@L 999999")+Thisform.Sigkey
+			pSeq  = fGerUniqueKey('HISTBAR')
+
+			Insert Into CrSigMvHst (Cpros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,opers,Numes,Qtds,Units,Totas,Grupos,;
+				Estos,CIdChaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+				Values (lcCpros,pDt,pDt,Null,lcDopes,lcEmps,lcEmps,;
+				lcOpers,lnNumes,lnPecas,lnPvens,lnPvens * lnPecas,lcGrupoOs,;
+				lcContaOs,pCidC,lcEmps + lcDopes + Str(lnNumes,6),;
+				lcEmps + lcGrupoOs + lcContaOs,lcEmps + lcDopes + Str(lnNumes,6),pSeq,lnPesos, Usuar, ;
+				lnCBars, lcTam, lcCor)
+
+			=SqlCalcP2( CrSigMvHst.Emps, CrSigMvHst.Grupos, CrSigMvHst.Estos, CrSigMvHst.Cpros, CrSigMvHst.DataS, CrSigMvHst.CodCors, CrSigMvHst.CodTams, Thisform.poDataMgr )
+			=fRecalculaC( CrSigMvHst.Emps, CrSigMvHst.Cpros, CrSigMvHst.DataS, Thisform.poDataMgr )
+
+		Endif
+
+		If Not Empty(lnCBars) And lcOpers = 'S'
+			lcUpdate = [Update SigOpEtq Set Contas = Space(10), Grupos = Space(10) Where Cbars = ]+Str(lnCBars,14)
+			If Thisform.poDataMgr.SqlExecute(lcUpdate) < 1
+				Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (lcUpdate - Transferencia)')
+				Return .F.
+			Endif
+		Endif
+
+		lnVezes = lnVezes + 1
+	Endif
+	Select csTransf
+Endscan
+loBarraLista .Complete(.T.)
+
+lnOldSel = Select()
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	Messagebox([Houve Produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA' Xl5
+Endif
+
+Select csPrSemCT
+Go Top
+If Reccount([csPrSemCT])>0
+	Messagebox([Houve produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO.XLS',0+64,[Atenção],5000)
+	Select csPrSemCT
+	Copy To Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO' Xl5
+Endif
+
+Select(lnOldSel)
+
+lcMsg = 'Importação da Planilha de Tranferencia: ' + Alltrim(Thisform.cntplanilha.getPlanilha.Value)
+=fGravarLog('T', lcDopes, [SIGPRILA], lcMsg, Usuar )
+
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvCab'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvItn'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvIts'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvHst'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(SqlCalcP2(.T.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(fRecalculaC(.T.,.F.,.F.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Thisform.poDataMgr.Commit()
+Endif
+If lnErro1 < 1
+	Messagebox('Falha na Gravacao dos Dados.',0+16,'')
+	Thisform.poDataMgr.Rollback()
+	Return
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE listapreco
+------------------------------------------------------------
+PROCEDURE listapreco
+&& Rotina da Importação da Lista de Preço
+
+Private plPrecos,plCodLista,pPro, plEmps
+plPrecos   = Replicate (Chr(254),30)	
+plCodLista = Replicate (Chr(254),30)
+pPro	   = Replicate (Chr(254),10)
+plEmps	   = Replicate (Chr(254),3)
+
+Select Distinct NomeLista, Emps From TmpPlanilha Into Cursor crNomeLista
+Select crNomeLista && Se tiver mais de 1 lista por planilha
+
+loBarraLista = CreateObject('fwprogressbar','Importando Lista...',Reccount('crNomeLista'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .t.
+loBarraLista.Show
+Scan
+
+ 	loBarraLista.Update(.T.,'Lista: ' +crNomeLista.NomeLista)
+ 	plCodLista = crNomeLista.NomeLista
+ 	plEmps 	   = crNomeLista.Emps
+ 	
+ 	If Not Empty(plEmps)
+		lcQuery = [Select lPrecos ] + ;
+				    [From SigCdLpc ] + ;
+				   [Where Emps = '] + plEmps + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus 1)])
+			Select crNomeLista
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=Messagebox([Já Existe uma Lista de Preço Cadastrado para a Empresa : ] + plEmps, 48, [Atenção!!!])
+			Select crNomeLista
+			loop
+		EndIf
+	EndIf
+	
+ 	Select crNomeLista
+	ThisForm.Podatamgr.Requery('crSigCdLpc')
+	Select crSigCdLpc
+	If Eof('crSigCdLpc')
+		Append Blank
+		Replace lPrecos	 With crNomeLista.NomeLista ,;
+				Codigos  With fGerUniqueKey('SigCdLpc') ,; 
+				Formulas With 2 ,;
+				Ncomiss  With 2 ,;
+				Nvencs   With 2 ,;
+				Tipos    WITH ' ' ,;
+				Emps	 With Nvl(crNomeLista.Emps,'') ,;
+				CidChaves With fUniqueIds() In crSigCdLpc
+
+		*--------- Produtos
+		ThisForm.Podatamgr.Requery('crSigCdLpi')
+		Select * from TmpPlanilha Where NomeLista = crNomeLista.NomeLista Into Cursor crTmpPlanilha
+		Select crTmpPlanilha
+
+		Replace nQtdes with Reccount('crTmpPlanilha') In crSigCdLpc
+		
+		loBarraProLi = CreateObject('fwprogressbar','Importando Lista...',Reccount('crTmpPlanilha'))
+		loBarraProLi.Top = loBarraProLi.Top + Int(loBarraProLi.Height/2) + 1
+		loBarraProLi.Show
+		Scan 
+			pPro = crTmpPlanilha.cPros
+			ThisForm.Podatamgr.Requery('crSigCdPro')
+			loBarraProLi.Update(.T.,'Produto: ' + crSigCdPro.cPros + ' - ' + crSigCdPro.dPros)	
+			Select 	crSigCdLpi
+			Append Blank
+			Replace cGrus 	With crSigCdPro.cGrus ,;
+					cPros	With crSigCdPro.cPros ,;
+					dPros	With crSigCdPro.dPros ,;
+					MoeVs	With crSigCdPro.MoeVs ,;
+					pCuss	With crSigCdPro.pCuss ,;	
+					Ean13	With crSigCdPro.Ean13 ,;					
+					Reffs	With crSigCdPro.Reffs ,;	
+					lPrecos	With crTmpPlanilha.NomeLista ,;
+					pVens	With Iif(Type([crTmpPlanilha.Valor])=[N],crTmpPlanilha.Valor,Val(crTmpPlanilha.Valor)), ;
+					PrecoDe	With Iif(Type([crTmpPlanilha.PrecoDe])=[N],crTmpPlanilha.PrecoDe,Val(crTmpPlanilha.PrecoDe)), ;
+					Vencis	With crTmpPlanilha.DataIni, ;
+					Vencfs	With crTmpPlanilha.DataFim, ;
+					CidChaves With fUniqueIds() In crSigCdLpi
+		EndScan 
+		loBarraProLi.Complete(.T.)
+		
+		If Not ThisForm.poDataMgr.Update('crSigCdLpc')
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdLpc)])
+			Return 0
+		EndIf
+		
+		If Not ThisForm.poDataMgr.Update('crSigCdLpi')
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdLpi)])
+			Return 0
+		EndIf
+		
+		If (ThisForm.poDataMgr.Commit() < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+			Return 0
+		EndIf	
+	Else
+		MessageBox('Lista ' + Alltrim(plCodLista) + ' já cadastrada'+Chr(13)+'Processo Abortado',16,'')
+		Exit
+		Return .f.
+	EndIf 	
+EndScan 
+loBarraLista .Complete(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pedidocons
+------------------------------------------------------------
+PROCEDURE pedidocons
+
+&& Rotina da Importação da Planilha de transferencias
+Private pDt
+pDt = fDtoSQL(Datetime())
+
+If Used([csPrNAOCad])
+	Use In csPrNAOCad
+Endif
+
+If Used([csPrSemCT])
+	Use In csPrSemCT
+Endif
+
+Create Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))
+
+Create Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Local lnErro1
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lnTipo = Thisform.cntplanilha.OptTipo.Value
+lnTpPre = Thisform.cntplanilha.OptPreco.Value
+
+Select crSigCdPac
+lcDopes = crSigCdPac.DopPedCon
+
+If Empty(lcDopes)
+	Messagebox([Movimentação da Importação da Planilha não Informada.]+Chr(13)+Chr(13)+[Parâmetros do Sistema > Diversos > Geral],0+64,[Atenção])
+	Return .F.
+Endif
+
+=Thisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+=Thisform.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)
+
+Select crSigCdOpe
+If Empty(crSigCdOpe.GruOrigs)
+	Messagebox([Grupo de Origem não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+Endif
+
+If Empty(crSigCdOpe.GruDests) Or Empty(crSigCdOpe.ConDests)
+	Messagebox([Grupo ou Conta de Destino não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+Endif
+
+lcOpers   = Iif(crSigCdOpe.opers=1,'E','S')
+lcGrupoOs = crSigCdOpe.GruOrigs
+lcContaOs = crSigCdOpe.ConOrigs
+lcGrupoDs = crSigCdOpe.GruDests
+lcContaDs = crSigCdOpe.ConDests
+lnEstoqs  = crSigCdOpe.Estoqs
+lcGrupoCs = crSigOpCdd.GruposCC
+lcContaCs = crSigOpCdd.ContasCC
+
+Select TmpPlanilha
+lnQtdIni = 0
+Scan For !Deleted()
+	If IsEmpty(TmpPlanilha.Empds) Or IsEmpty(TmpPlanilha.Emps)
+		Loop
+	Endif
+	lnQtdIni = lnQtdIni + 1
+Endscan
+
+Select Distinct * From TmpPlanilha Into Cursor csTransf Readwrite
+
+Select csTransf
+Index On Empds Tag Empresa
+Go Top
+
+lnQtdFim = 0
+Scan For !Deleted()
+	If IsEmpty(csTransf.Empds) Or IsEmpty(TmpPlanilha.Emps)
+		Loop
+	Endif
+	lnQtdFim = lnQtdFim + 1
+Endscan
+
+If lnQtdIni <> lnQtdFim
+	Messagebox([Há Registros duplicados, Favor Verificar a Planilha.],0+48,[Atenção])
+	Return .F.
+Endif
+
+lnVezes  = 1
+lcXEmps  = [X]
+lcXEmpDs = [X]
+
+loBarraLista = Createobject('fwprogressbar','Importando Transferencias...',Reccount('csTransf'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .T.
+loBarraLista.Show
+
+Scan
+
+	loBarraLista.Update(.T.,'Empresa: ' +csTransf.Empds)
+
+	lcEmps  = csTransf.Emps
+	lcEmps  = Padr(Alltrim(lcEmps),3)
+	lcEmpDs = csTransf.Empds
+	lcEmpDs = Padr(Alltrim(lcEmpDs),3)
+	lnPecas = csTransf.Qtds
+	lcProd  = csTransf.Cpros
+	lnCBars = 0
+	lcCor   = csTransf.Cors
+	lcTam	= csTransf.Tams
+	lnPeso	= csTransf.Pesos
+	lcCta 	= csTransf.ContaOs
+	ldPrz	= csTransf.Prazo
+
+	If lnPecas = 0
+		Select csTransf
+		Loop
+	Endif
+
+	If Empty(lcEmps) Or Empty(lcEmpDs)
+		Select csTransf
+		Loop
+	Endif
+
+	If Empty(lcCta)
+		Select csTransf
+		Loop
+	Endif
+
+	If Empty(lcProd)
+		Select csTransf
+		Loop
+	Endif
+
+	If Not Empty(lcTam)
+		lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpTam') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+			Return 0
+		Endif
+
+		Select crTmpTam
+		Go Top
+		If Reccount([crTmpTam])=0
+			lcTam = []
+		Endif
+	Endif
+
+	If Not Empty(lcCor)
+		lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpCor') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+			Return 0
+		Endif
+
+		Select crTmpCor
+		Go Top
+		If Reccount([crTmpCor])=0
+			lcCor = []
+		Endif
+	Endif
+
+	lnBarra = 0
+	If Not Empty(lnCBars) And (Not Empty(lcCor) Or Not Empty(lcTam))
+		lnBarra = 0
+	Else
+		lnBarra = lnCBars
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp
+	If Reccount([crSigCdEmp])=0
+		Select csTransf
+		Loop
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp2],[Cemps],lcEmpDs,[Cemps])
+	Select crSigCdEmp2
+	If Reccount([crSigCdEmp2])=0
+		Select csTransf
+		Loop
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],lcCta,[Iclis])
+	Select crSigCdCli
+	If Reccount([crSigCdCli])=0
+		Select csTransf
+		Loop
+	Endif
+
+	=Thisform.poDataMgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),lcProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,ForaLinha,Situas,custofs,moecusfs,cgrus])
+
+	Select crSigCdPro
+	If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+
+		Select csPrNAOCad
+		Append Blank
+		Replace Produto 	With Nvl(lcProd,[]) ,;
+			Quantidade  With Nvl(lnPecas,0) ,;
+			Cor	   		With Nvl(lcCor,[]) ,;
+			Tamanho	    With Nvl(lcTam,[]) ,;
+			Barra	    With Nvl(lnCBars,0) ,;
+			Origem 		With Nvl(lcEmps,[]) ,;
+			Destino		With Nvl(lcEmpDs,[]) In csPrNAOCad
+
+		Select csTransf
+		Loop
+	Endif
+
+	If crSigCdPro.ForaLinha = 1
+		If Messagebox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Descontinuado, Deseja importar mesmo descontinuado?],4+32,[Atenção]) <> 6
+			Select csTransf
+			Loop
+		Endif
+
+	Endif
+
+	If crSigCdPro.Situas = 2
+		If Messagebox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Inativo, Deseja Importar mesmo Inativo?],4+32,[Atenção]) <> 6
+			Select csTransf
+			Loop
+		Endif
+	Endif
+
+	lcCpros = crSigCdPro.Cpros
+	lcDpros = crSigCdPro.Dpros
+	If lnTpPre = 1
+		lnPvens = crSigCdPro.PVens
+		lcMoevs = crSigCdPro.Moevs
+	Else
+		lnPvens = crSigCdPro.custofs
+		lcMoevs = crSigCdPro.moecusfs
+	Endif
+	lcCunis = crSigCdPro.CUnis
+	lnPesos = Iif(Empty(lnPeso),crSigCdPro.PesoMs,lnPeso)
+
+	If Not Empty(lnBarra)
+
+		=Thisform.poDataMgr.CursorQuery([SigOpEtq],[crSigOpEtq],[Cbars],lnBarra,[Cbars,CPros])
+
+		If Reccount([crSigOpEtq])=0
+			Select csTransf
+			Loop
+		Endif
+
+		If crSigOpEtq.Cpros <> lcCpros
+			Select csTransf
+			Loop
+		Endif
+	Endif
+
+	lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+		[From SigCdGrp ] + ;
+		[Where CGrus = '] + crSigCdPro.CGrus + [' ] + ;
+		[Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpGru') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+		Return 0
+	Endif
+
+	llPular = .F.
+	If Empty(lcTam) And Inlist(crTmpGru.TipoEstos,3,4)
+		llPular = .T.
+	Endif
+
+	If Empty(lcCor) And Inlist(crTmpGru.TipoEstos,2,4)
+		llPular = .T.
+	Endif
+
+	If llPular
+		Select csPrSemCT
+		Append Blank
+		Replace Referencia With lcCpros ,;
+			Qtds	   With Nvl(lnPecas,0) ,;
+			Pesos	   With Nvl(lnPesos,0) ,;
+			Unidade	   With Nvl(lcCunis,[]) ,;
+			Valor	   With Nvl(lnPvens,0) In csPrSemCT
+	Else
+		If lcEmps <> lcXEmps Or lcXEmpDs <> lcEmpDs
+			lcXEmps  = lcEmps
+			lcXEmpDs = lcEmpDs
+			lnVezes  = 1000
+		Endif
+
+		If lnVezes > 999
+			lnNumes = fGerUniqueKey(Alltrim(lcDopes) + lcEmps)
+			Insert Into CrSigMvCab (Datars,DataS,Dopes,Emps,Empds,Numes,MascNum,GrupoOs,ContaOs,GrupoDs,ContaDs,CIdChaves,DtAlts,EmpDopNums, usuals, Usuars, PRAZOENTS, grupoccs, contaccs) ;
+				Values (pDt,pDt,lcDopes,lcEmps,lcEmpDs,lnNumes,fGerMascara(lnNumes),lcGrupoOs,lcCta,lcGrupoDs,lcContaDs,fUniqueIds(),Datetime(),lcEmps + lcDopes + Str(lnNumes,6),Usuar, Usuar, ldPrz, lcGrupoCs, lcContaCs)
+			lnVezes = 1
+		Endif
+
+
+		Insert Into CrSigMvItn (Cpros,Dopes,Emps,Numes,opers,Qtds,CItens,Units,Totas,Moedas,Dpros,AQtds,CUnis,CIdChaves,DtAlts,EmpDopNums,Pesos,codbarras) ;
+			Values (lcCpros,lcDopes,lcEmps,lnNumes,lcOpers,lnPecas,lnVezes,lnPvens,;
+			lnPvens * lnPecas,lcMoevs,lcDpros,lnPecas,lcCunis,fUniqueIds(),Date(),lcEmps + lcDopes + Str(lnNumes,6),lnPesos,lnBarra)
+
+		*--Lanca o Barra no SIGMVITS
+		If (Not Empty(lcCor) Or Not Empty(lcTam))
+			Insert Into CrSigMvIts (Emps,Dopes,Numes,Cpros,CodTams,CodCors,Qtds,AQtds,codbarras,Pesos,CIdChaves,EmpDopNums,chksubn,CItens) ;
+				Values (lcEmps,lcDopes,lnNumes,lcCpros,lcTam,lcCor,lnPecas,lnPecas,lnCBars,lnPesos,fUniqueIds(),lcEmps + lcDopes + Str(lnNumes,6),.F.,lnVezes)
+		Endif
+
+		If lnEstoqs = 1
+
+			pCidC = Dtos(pDt)+lcOpers+Transform(fGerUniqueKey(Dtos(pDt)),"@L 999999")+Thisform.Sigkey
+			pSeq  = fGerUniqueKey('HISTBAR')
+
+			Insert Into CrSigMvHst (Cpros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,opers,Numes,Qtds,Units,Totas,Grupos,;
+				Estos,CIdChaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+				Values (lcCpros,pDt,pDt,Null,lcDopes,lcEmps,lcEmps,;
+				lcOpers,lnNumes,lnPecas,lnPvens,lnPvens * lnPecas,lcGrupoOs,;
+				lcContaOs,pCidC,lcEmps + lcDopes + Str(lnNumes,6),;
+				lcEmps + lcGrupoOs + lcContaOs,lcEmps + lcDopes + Str(lnNumes,6),pSeq,lnPesos, Usuar, ;
+				lnCBars, lcTam, lcCor)
+
+			=SqlCalcP2( CrSigMvHst.Emps, CrSigMvHst.Grupos, CrSigMvHst.Estos, CrSigMvHst.Cpros, CrSigMvHst.DataS, CrSigMvHst.CodCors, CrSigMvHst.CodTams, Thisform.poDataMgr )
+			=fRecalculaC( CrSigMvHst.Emps, CrSigMvHst.Cpros, CrSigMvHst.DataS, Thisform.poDataMgr )
+
+		Endif
+
+		If Not Empty(lnCBars) And lcOpers = 'S'
+			lcUpdate = [Update SigOpEtq Set Contas = Space(10), Grupos = Space(10) Where Cbars = ]+Str(lnCBars,14)
+			If Thisform.poDataMgr.SqlExecute(lcUpdate) < 1
+				Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (lcUpdate - Transferencia)')
+				Return .F.
+			Endif
+		Endif
+
+		lnVezes = lnVezes + 1
+	Endif
+	Select csTransf
+Endscan
+loBarraLista .Complete(.T.)
+
+lnOldSel = Select()
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	Messagebox([Houve Produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA' Xl5
+Endif
+
+Select csPrSemCT
+Go Top
+If Reccount([csPrSemCT])>0
+	Messagebox([Houve produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO.XLS',0+64,[Atenção],5000)
+	Select csPrSemCT
+	Copy To Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO' Xl5
+Endif
+
+Select CrSigMvItn
+Go Top
+Select EmpDopNums, Sum(Totas) As Total From CrSigMvItn Group By EmpDopNums Order By EmpDopNums Into Cursor csTmpTot Readwrite
+
+Select csTmpTot
+Go Top
+Scan
+	Update CrSigMvCab Set Valos = csTmpTot.Total Where EmpDopNums = csTmpTot.EmpDopNums
+	Select csTmpTot
+EndScan
+
+ThisForm.ValorAcumulado = 0
+*-- Rafael - 14/11/2017 - Limite de credito pela Matriz contabil
+If Inlist( crSigCdOpe.limcres, 7 )
+	Select CrSigMvCab
+	Go Top
+	Scan
+		If Not Empty(crSigOpCdd.GruposCC) And Not Empty(crSigOpCdd.ContasCC) And Not Empty(crSigOpCdd.GruposEmt) And Not Empty(crSigOpCdd.ContasEmt)
+			If !Thisform.LimiteCreditoMatriz( crSigOpCdd.GruposCC, crSigOpCdd.ContasCC, crSigOpCdd.GruposEmt, crSigOpCdd.ContasEmt, 'Centro de Custo' )
+				Return .F.
+			Endif
+		Endif
+	Endscan
+Endif
+
+Select(lnOldSel)
+
+lcMsg = 'Importação da Planilha de Tranferencia: ' + Alltrim(Thisform.cntplanilha.getPlanilha.Value)
+=fGravarLog('T', lcDopes, [SIGPRILA], lcMsg, Usuar )
+
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvCab'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvItn'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvIts'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvHst'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(SqlCalcP2(.T.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(fRecalculaC(.T.,.F.,.F.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Thisform.poDataMgr.Commit()
+Endif
+If lnErro1 < 1
+	Messagebox('Falha na Gravacao dos Dados.',0+16,'')
+	Thisform.poDataMgr.Rollback()
+	Return
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE preenchetipo
+------------------------------------------------------------
+PROCEDURE preenchetipo
+Create Cursor ComboTipo (Titulo c(20), Rotina c(20), ColunaLi m)
+Dimension aComboTipo [7,3]
+
+&&Coluna 1 = Titulo da Combo																
+&&Coluna 2 = Nome da Metodo / Acesso (Maximo 10 char)                                       
+&&Coluna 3 = Campos que Aparecem na List (Campo da lista,Campo pra criar o Cursor	(| = ,))
+
+aComboTipo [1,1] = 'Lista de Preço'
+aComboTipo [1,2] = 'ListaPreco'
+aComboTipo [1,3] = 'Empresa,Emps c(3), Nome da Lista,NomeLista c(20),Código Produto,cPros c(14),Valor ,Valor c(16),Data Inicial,DataIni d,Data Final,DataFim d,Preco De ,PrecoDe c(16)'
+*--Rafael - Alteração no tipo da coluna valor, nao esta importando valor numerico
+*aComboTipo [1,3] = 'Nome da Lista,NomeLista c(20),Código Produto,cPros c(14),Valor ,Valor n(13|2),Data Inicial,DataIni d,Data Final,DataFim d'
+
+aComboTipo [2,1] = 'Transferencia'
+aComboTipo [2,2] = 'GeraTransf'
+aComboTipo [2,3] = 'Empresa Origem,EmpresaO c(6),Empresa Destino,EmpresaD c(6),'+;
+				   'Categoria ,Categoria c(10),Colecao,Colecao c(20),Produto,cpros c(20),'+;
+				   'Quantidade,Qtds n(10|3),Grupo,Grupo c(10),Prazo Entrega ,prazo d,Codigo Barra,CBars n(14|0),'+;
+				   'Cor,Cors c(4),Tamanho,Tams c(4) '
+
+aComboTipo [3,1] = 'Precificacao'
+aComboTipo [3,2] = 'AtuaPreco'
+aComboTipo [3,3] = 'Referencia,Referencia c(20),Data Inicio,dtInicial d,Data Termino,dtFinal d,Valor Venda,PrecoVen c(16),Preco Especial,PrecoEsp c(16),Produto Off,ProdOff c(1)'
+
+aComboTipo [4,1] = 'Pedido Terceiro'
+aComboTipo [4,2] = 'GeraPedido'
+aComboTipo [4,3] = 'Empresa Origem,Emps c(6),Empresa Destino,Empds c(6),'+;
+				   'Conta Origem ,ContaOs c(10),Produto,cpros c(20),'+;
+				   'Quantidade,Qtds n(10|3),Cor,Cors c(4),Tamanho,Tams c(4),Peso,Pesos n(12|5),Data Recebimento ,prazo d '
+				   
+aComboTipo [5,1] = 'Pedido Consignado'
+aComboTipo [5,2] = 'Pedidocons'
+aComboTipo [5,3] = 'Empresa Origem,Emps c(6),Empresa Destino,Empds c(6),'+;
+				   'Conta Origem ,ContaOs c(10),Produto,cpros c(20),'+;
+				   'Quantidade,Qtds n(10|3),Cor,Cors c(4),Tamanho,Tams c(4),Peso,Pesos n(12|5),Data Recebimento ,prazo d '				   
+
+aComboTipo [6,1] = 'Pedido Fabrica'
+aComboTipo [6,2] = 'PedidoFab'
+aComboTipo [6,3] = 'Conta Origem ,ContaOs c(10),Produto,cpros c(20),Quantidade,Qtds n(10|3),Cor,Cors c(4),Tamanho,Tams c(4),Peso,Pesos n(12|5), ' + ;
+				   'Valor ,Units n(12|5),Moeda,Moedas c(3),Prazo ,prazoents d,Movimentacao, Dopes c(20)'	
+
+aComboTipo [7,1] = 'Pedido Acessorio'
+aComboTipo [7,2] = 'PedAcesso'
+aComboTipo [7,3] = 'Empresa Origem,Emps c(6),Empresa Destino,Empds c(6),'+;
+				   'Conta Origem ,ContaOs c(10),Produto,cpros c(20),'+;
+				   'Quantidade,Qtds n(10|3),Cor,Cors c(4),Tamanho,Tams c(4),Peso,Pesos n(12|5),Data Recebimento ,prazo d '
+
+For i = 1 to Alen(aComboTipo,1)
+	If fChecaAcesso('SIGPRILA',Upper(aComboTipo[i,2]))
+		Insert Into ComboTipo (Titulo,Rotina,ColunaLi) values (aComboTipo[i,1],aComboTipo[i,2],aComboTipo[i,3])
+	EndIf 
+Next 
+
+With ThisForm.Cntplanilha.CmbTipos
+	.RowSourceType = 6
+	.RowSource = 'ComboTipo.Titulo,Rotina,ColunaLi'
+	.Style = 2
+	.ColumnCount = 1
+EndWith 
+
+*-- Rafael - 05/12/2016 - Informa a Chave do Campo Produto
+ThisForm.cntplanilha.Say5.Visible = .F.
+ThisForm.cntplanilha.OptTipo.Visible = .F.
+
+ThisForm.cntplanilha.Say6.Visible = .F.
+ThisForm.cntplanilha.OptPreco.Visible = .F.
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+If ThisForm.CriaPlanilha()
+	If ThisForm.ValidaCols(ThisForm, Alltrim(ComboTipo.Rotina))	
+		If MessageBox('Atenção, a ordem das colunas é muito importante. Certifique-se que elas estão corretas.'+Chr(13)+;
+				  	  'Ordem incorreta resultará em uma importação incorreta, e este processo é irreversível.'+Chr(13)+;
+				  	  'Tem certeza que deseja continuar a importação com a ordem selecionada',4+64+256,'') = 6
+
+		  	lcRotina = 'ThisForm.'+Alltrim(ComboTipo.Rotina)+[()]
+			&lcRotina 
+		EndIf 
+	Else
+		MessageBox('Método ' + Alltrim(ComboTipo.Rotina) + ' não localizado',16,'')
+	EndIf 
+EndIf 
+
+thisform.cntplanilha.getPlanilha.Value = ''
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE validacols
+------------------------------------------------------------
+PROCEDURE validacols
+Lparameters pFrm, pPar
+Return (Vartype(pFrm.ReadMethod(pPar))=[C])
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE limitecreditomatriz
+------------------------------------------------------------
+PROCEDURE limitecreditomatriz
+Lparameters _Grupo, _Conta, _GrupoEm, _ContaEm, _Tipo
+Local _Limite, _CotLim, _Saldo, _CotSal, _CotPar, _FatConv, _ValorAnt, _ValorMov, _pData, _Matriz, _pAno, _pMes, _Campo, _CmpUp
+
+=Thisform.poDataMgr.CursorQuery('SigCdGcr', 'crSigCdGcr2', 'Codigos', _Grupo)
+
+_Grupo = Iif(Not Empty(CrSigCdGcr2.GrupoLms),CrSigCdGcr2.GrupoLms,_Grupo)
+
+_pData = CrSigMvCab.DataS &&crSigMvCcr.vencs
+_pAno  = Str(Year(_pData),4)
+_pMes  = Padl(Month(_pData),2,'0')
+_Valor = CrSigMvCab.Valos &&crSigMvCcr.Valors
+
+_Campo = []
+_CmpUp = []
+
+_ValidaLim = .T.
+
+Do Case
+Case _pMes = '01'
+	_Campo = ' ,a.Val_Jan As LimCres, a.Acm_Jan As Saldos '
+	_CmpUp = ' Acm_Jan '
+Case _pMes = '02'
+	_Campo = ' ,a.Val_Fev As LimCres, a.Acm_Fev As Saldos '
+	_CmpUp = ' Acm_Fev '
+Case _pMes = '03'
+	_Campo = ' ,a.Val_Mar As LimCres, a.Acm_Mar As Saldos '
+	_CmpUp = ' Acm_Mar '
+Case _pMes = '04'
+	_Campo = ' ,a.Val_Abr As LimCres, a.Acm_Abr As Saldos '
+	_CmpUp = ' Acm_Abr '
+Case _pMes = '05'
+	_Campo = ' ,a.Val_Mai As LimCres, a.Acm_Mai As Saldos '
+	_CmpUp = ' Acm_Mai '
+Case _pMes = '06'
+	_Campo = ' ,a.Val_Jun As LimCres, a.Acm_Jun As Saldos '
+	_CmpUp = ' Acm_Jun '
+Case _pMes = '07'
+	_Campo = ' ,a.Val_Jul As LimCres, a.Acm_Jul As Saldos '
+	_CmpUp = ' Acm_Jul '
+Case _pMes = '08'
+	_Campo = ' ,a.Val_Ago As LimCres, a.Acm_Ago As Saldos '
+	_CmpUp = ' Acm_Ago '
+Case _pMes = '09'
+	_Campo = ' ,a.Val_Set As LimCres, a.Acm_Set As Saldos '
+	_CmpUp = ' Acm_Set '
+Case _pMes = '10'
+	_Campo = ' ,a.Val_Out As LimCres, a.Acm_Out As Saldos '
+	_CmpUp = ' Acm_Out '
+Case _pMes = '11'
+	_Campo = ' ,a.Val_Nov As LimCres, a.Acm_Nov As Saldos '
+	_CmpUp = ' Acm_Nov '
+Case _pMes = '12'
+	_Campo = ' ,a.Val_Dez As LimCres, a.Acm_Dez As Saldos '
+	_CmpUp = ' Acm_Dez '
+Endcase
+
+Select CrSigCdGcr2
+
+lcQuery = [Select a.cidchaves, a.codigo, a.grupos, a.contas, a.chkvalida, b.sgrupos, b.scontas, b.Ano, b.moeda ] +_Campo+ ;
+	[From SigCdMtI a ] + ;
+	[join SigCdMtz b on a.codigo = b.codigo ] + ;
+	[Where b.Inativas = 0 And b.ano = ']+_pAno+[' and b.sgrupos = ']+_Grupo+[' and b.scontas = ']+_Conta+[' ] + ;
+	[And Grupos = ']+_GrupoEm+[' and Contas = ']+_ContaEm+[' ]
+
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, [crSigCdMtI]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdMtI)])
+	Return .F.
+Endif
+
+_MoeMov = []
+lcMoedaOrc = []
+Select crSigCdMtI
+_MoedaOrc = crSigCdMtI.Moeda
+If Empty(_MoedaOrc)
+	_MoedaOrc = crSigCdPam.MoedaPs
+EndIf 
+_MoeMov = _MoedaOrc
+Set Step On 
+lcQuery = [Select Ano, replicate('0',2-len(ltrim(rtrim(Mes))))+ltrim(rtrim(Mes)) as Mes, ] + ; 
+        [GruposEmt, ContasEmt, GruposCC, ContasCC, sum(valos) as Valos, a.cmoes ] + ; 
+        [from( ] + ;   
+        [select a.limcres, a.dopes, ] + ;  
+        [case when b.GruposEmt = space(10) then c.grupods else b.GruposEmt end as GruposEmt, ] + ;   
+        [case when b.ContasEmt = space(10) then c.Contads else b.ContasEmt end as ContasEmt, ] + ;  
+        [month(datas) as mes, year(datas) as ano, ] + ;    
+        [case when c.grupoccs = space(10) then b.GruposCC else c.grupoccs end as GruposCC, ] + ;   
+        [case when c.contaccs = space(10) then b.ContasCC else c.contaccs end as ContasCC, ] + ;   
+        [c.datas, case when a.cmoes = space(3) then (Select moedaps from sigcdpam) else a.cmoes end as cmoes, ] + ;  
+		[case when a.limcres = 8 then c.valos*-1 else c.valos*1 end as valos ] + ; 
+        [from sigcdope a  ] + ;  
+        [join sigopcdd b on a.dopes = b.dopes ] + ;    
+        [join sigmvcab c on a.dopes = c.dopes ] + ;    
+        [where a.limcres in(7,8) and c.valos <> 0 ) a ] + ;   
+        [Where 0=0 ] + ;  
+		[And Ano = ']+_pAno+[' and Mes = ']+_pMes+[' ] + ;
+		[and GruposCC = ']+_Grupo+[' and ContasCC = ']+_Conta+[' ] + ; 
+		[and GruposEmt = ']+_GrupoEm+[' and ContasEmt = ']+_ContaEm+[' ] + ;
+		[group by GruposEmt, ContasEmt, mes, ano, GruposCC, ContasCC, Cmoes ]
+	
+If (Thisform.poDataMgr.SqlExecute(lcQuery, [crSldMov]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSldMov)])
+	Return .F.
+Endif
+
+_SaldoMov = 0
+_SaldoAc  = 0
+_MoedaMov = []
+
+Select crSldMov
+Go Top
+Scan 
+	_SaldoAc = crSldMov.Valos 
+	_MoedaMov = crSldMov.CMoes
+	
+	_CotAc  = Thisform.Cotacao(_MoedaMov)
+	_CotLim = Thisform.Cotacao(_MoedaOrc)
+	If _MoedaMov # _MoedaOrc
+		_SaldoMov = _SaldoMov + Round( _SaldoAc * _CotAc / _CotLim, 2 )
+	Else
+		_SaldoMov = _SaldoMov + _SaldoAc
+	Endif
+	Select crSldMov
+EndScan 
+
+_SaldoMov = _SaldoMov + ThisForm.ValorAcumulado
+
+If Empty(_SaldoMov)
+	_SaldoMov = crSigCdMtI.Saldos
+EndIf 
+
+* Checando o Limite de Crédito da Empresa Matriz de Cobrança
+_Matriz = []
+Thisform.poDataMgr.CursorQuery([SigCdCli], [LocalMtz], [IClis], _Conta, [ContaMats])
+If Not Used([LocalMtz])
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalMtz)])
+	Return .F.
+Endif
+Go Top In LocalMtz
+If Not Eof([LocalMtz]) And Not Empty(LocalMtz.ContaMats)
+	_Matriz = LocalMtz.ContaMats
+
+	lcQuery = [Select a.cidchaves, a.codigo, a.grupos, a.contas, a.chkvalida, b.sgrupos, b.scontas, b.Ano, b.moeda ] + _Campo + ;
+		[From SigCdMtI a ] + ;
+		[join SigCdMtz b on a.codigo = b.codigo ] + ;
+		[Where b.ano = ']+_pAno+[' and b.sgrupos = ']+_Grupo+[' and b.scontas = ']+_Matriz+[' ] + ;
+		[And Grupos = ']+_GrupoEm+[' and Contas = ']+_ContaEm+[' ]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, [crSigCdMtI]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdMtI)])
+		Return .F.
+	Endif
+	If Not Used([crSigCdMtI])
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdMtI)])
+		Return .F.
+	Endif
+	Go Top In crSigCdMtI
+Endif
+
+If Empty(_Matriz)
+	Thisform.poDataMgr.CursorQuery([SigCdCli], [LocalContas], [IClis], _Conta, [IClis])
+	If Not Used([LocalMtz])
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalMtz)])
+		Return .F.
+	Endif
+Else
+	lcQuery = [Select IClis ] + ;
+		[From SigCdCli ] + ;
+		[Where ContaMats = '] + _Matriz + [']
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, [LocalContas]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalContas)])
+		Return .F.
+	Endif
+Endif
+
+_Conta = LocalContas.IClis
+
+_ValidaLim = (crSigCdMtI.chkvalida = 1)
+
+If CrSigCdGcr2.LimCres = 1
+	lcTitulo = 'Crédito'
+	_Saldo = 0
+	
+	Select crSigCdMtI
+	Go Top
+	_Limite = LimCres
+	_MoeLim = Moeda
+	_CotLim = fCarregarCambio(Moeda, DateTime())
+
+	If Empty(_Limite)
+		_Limite = 0.01
+	EndIf 
+	
+	_CotSal = Thisform.Cotacao(_MoeMov)
+	If _MoeMov # crSigCdMtI.Moeda
+		_Saldo = _Saldo + Round( _SaldoMov * _CotSal / _CotLim, 2 )
+	Else
+		_Saldo = _Saldo + _SaldoMov
+	Endif
+		
+	=Thisform.poDataMgr.CursorQuery('SigCdOpe','crSigCdOpe','dopes',CrSigMvCab.Dopes)
+	If crSigCdOpe.Cmoes # crSigCdMtI.Moeda
+		_CotMov = Thisform.Cotacao(crSigCdOpe.Cmoes)
+		_Valor =  Round( _Valor * _CotMov / _CotLim, 2 )
+	Endif
+	_ValorAnt = 0
+	_FatConv = 1
+
+	If crSigCdOpe.Cmoes # crSigCdMtI.Moeda
+		_FatConv = _CotSal / _CotLim
+	EndIf
+	
+	=Thisform.poDataMgr.CursorQuery('SigMvPar','CrPar','EmpDopNums',CrSigMvCab.Emps + CrSigMvCab.Dopes + Str( CrSigMvCab.Numes, 6 ))
+	Select crPar
+	_ValorAnt = 0
+	Scan
+		=Thisform.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',crPar.Fpags)
+		If crSigOpFp.ValPends # 1
+			Loop
+		Endif
+		*--Rafael - 30/06/2016 - Nao checa o Limite de Credito pela condição de pagamento
+		If crSigOpFp.ChkLimCre = 2
+			Loop
+		Endif
+		_CotPar = fCarregarCambio(Moefpgs, DateTime())
+		_ValorAnt = _ValorAnt + Round( Valos * _CotPar / _CotLim, 2 )
+	Endscan	
+
+	_Saldo = _Saldo + _Valor - _ValorAnt
+
+	_chequec = 0
+	_chequep = 0
+	Select LocalContas
+	Scan
+		lcQuery = [Select sum(a.valors) as Valors, a.fpags ]+;
+			[From SigChe a, SigCdOpt b Where a.GrClis = ']+_Grupo+[' ]+;
+			[And a.Iclis = '] + LocalContas.IClis + [' And a.umovs = b.operacaos And b.tipos='DB' Group By a.Fpags ]
+
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'Cheques') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Cheques)')
+			Return .F.
+		Endif
+
+		Select Cheques
+		Scan
+			If IsEmpty(Fpags)
+				_chequep = _chequep + valors
+			Else
+				=Thisform.poDataMgr.CursorQuery('SigOpFp','crSigOpFp','Fpags',xPar.Fpags)
+				*--Rafael - 30/06/2016 - Nao checa o Limite de Credito pela condição de pagamento
+				If crSigOpFp.ChkLimCre = 2
+					Loop
+				Endif
+				If crSigOpFp.ValPends # 1
+					_chequec = _chequec + valors
+				Else
+					_chequep = _chequep + valors
+				Endif
+			Endif
+		Endscan
+		_chequec = Round( _chequec / _CotLim, 2 )
+		_chequep = Round( _chequep / _CotLim, 2 )
+
+		If crSigCdPam.ChqlCreds
+			_Saldo = _Saldo + _chequec
+		Endif
+	Endscan
+Endif
+
+If CrSigCdGcr2.LimEstoqs = 1 And !IsEmpty( crSigCdPam.MoeLimes )
+	lcTitulo = 'Estoque'
+	lcChave  = CrSigMvCab.Emps + CrSigMvCab.Dopes + Str(CrSigMvCab.Numes,6)
+
+	_MoeLim = crSigCdPam.MoeLimes
+		
+	_CotLim = fCarregarCambio(crSigCdPam.MoeLimes, _pData)
+
+	If CrSigCdGcr2.LimCres <> 1
+		_Limite = 0
+		_Saldo  = 0
+
+		Select crSigClLcr
+		Scan
+			_CotLmc = fCarregarCambio(Moedas, _pData)
+			_Limite = _Limite + ( LimCres * Iif(Moedas#_MoeLim,_CotLmc / _CotLim, 1 ) )
+		Endscan
+	Endif
+	=Thisform.poDataMgr.CursorQuery('SigCdOpe','crSigCdOpe','dopes',CrSigMvCab.Dopes)
+
+	Select LocalContas
+	Scan
+		If crSigCdOpe.EstDests = 1
+			lcQuery = [Select a.Cpros, Sum(a.Sqtds) as Qtds From SigMvEst a, SigCdGcr b ]+;
+				[Where a.Estos = '] + LocalContas.IClis + [' And a.Grupos = b.codigos And b.chkLimEsts <> 2 Group by a.Cpros ]
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'CrEst') < 1)
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Estoque)')
+				Return .F.
+			Endif
+
+			lcQuery = [Select Cpros, Sum(Qtds*-1) as Qtds From SigMvItn Where EmpDopNums = ']+lcChave+[' Group By Cpros ]
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'CrEsti') < 1)
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Estoque 2)')
+				Return .F.
+			Endif
+
+			Select Cpros, Sum(qtds) As qtds From crEst Group By Cpros ;
+				Union All;
+				Select Cpros, Sum(qtds) As qtds From crTpmMvItn Group By Cpros;
+				Union All;
+				Select Cpros, Sum(qtds) As qtds From crEsti Group By Cpros;
+				Into Cursor TmpEst
+		Else
+			lcQuery = [Select a.Cpros, Sum(a.Sqtds) as Qtds From SigMvEst a, SigCdGcr b ]+;
+				[Where a.Estos = '] + LocalContas.IClis + [' And a.Grupos = b.Codigos And b.ChkLimEsts <> 2 Group by a.Cpros ]
+			If (Thisform.poDataMgr.SqlExecute(lcQuery, 'TmpEst') < 1)
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEst)')
+				Return .F.
+			Endif
+		Endif
+
+		Select TmpEst
+		Scan
+			=Thisform.poDataMgr.CursorQuery('SigCdPro','CrTmpPro','Cpros',TmpEst.Cpros, [Cpros, Moevs, pvens, fvendas, moepvs, pesoms, custofs, moecusfs, Linhas, cunis, cproeqs, sgrus, mercs,CodFinP])
+			=Thisform.poDataMgr.CursorQuery('SigCdLin','CrTmpLin','Linhas',CrTmpPro.Linhas)
+
+			If crSigCdPam.TpPrecos = 1
+				m.moeEst = CrTmpPro.Moevs
+				m.vlEst  = Round( CrTmpPro.pvens * Iif( CrTmpPro.fvendas # 0 And !IsEmpty( CrTmpPro.moepvs ), CrTmpPro.fvendas, 1 ) , 2 )
+				If CrTmpLin.TpVendas = '2'
+					m.vlEst = CrTmpPro.Pesoms * m.vlEst
+				Endif
+			Else
+				m.vlEst = CrTmpPro.Custofs
+				If CrTmpLin.TpCustos = '2'
+					m.vlEst = CrTmpPro.Pesoms * m.vlEst
+				Endif
+				m.moeEst = CrTmpPro.Moecusfs
+			Endif
+			m.vlEst = m.vlEst * TmpEst.qtds
+
+			If _MoeLim # m.moeEst
+				_Saldo = _Saldo + ( m.vlEst * fCarregarCambio(m.moeEst, _pData) / _CotLim )
+			Else
+				_Saldo = _Saldo + m.vlEst
+			Endif
+		Endscan
+	Endscan
+Endif
+
+llUpdate = .T.
+
+If CrSigCdGcr2.LimCres = 1 Or (CrSigCdGcr2.LimEstoqs = 1 And !IsEmpty( crSigCdPam.MoeLimes ) )
+
+	If _Limite <> 0 And _Saldo = 0
+		_Saldo = _Valor
+	Endif
+
+	If _Saldo > _Limite And _ValidaLim
+
+		Messagebox( 'O Limite de '+lcTitulo+' da conta de ' + Alltrim( _Tipo ) + ' é de : ' + ;
+			Transf( _Limite, '999,999,999.99' ) + ' ' + Alltrim( _MoeLim ) + '. ' + Chr( 13 ) + ;
+			'O saldo desta conta somado ao valor ' + Chr( 13 ) + ;
+			'da movimentação excedeu o limite de '+lcTitulo+' : ' + ;
+			Transf( _Saldo, '999,999,999.99' ) + ' ' + Alltrim( _MoeLim ) + '. ' + Chr( 13 ) , 48, '' )
+		Do Form SigOpSen With 'LIMITE', _Conta, ' ', CrSigMvCab.Numes, _pData, CrSigMvCab.Emps To _Retorno
+		llOk = ( Left( _Retorno, 1 ) = "*" )
+
+		If !llOk
+			llUpdate = .F.
+			Return .F.
+		Else
+			llUpdate = .T.
+		Endif
+	EndIf
+	
+	ThisForm.ValorAcumulado = ThisForm.ValorAcumulado + _Valor 
+	
+	lcUpdate = [Update SigCdMti set ]+_CmpUp+[ = ]+Alltrim(Str((_Valor + _SaldoMov),13,2))+[ Where cIdChaves = ']+crSigCdMtI.cIdChaves+[']
+	If (Thisform.poDataMgr.SqlExecute(lcUpdate) < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdMti)')
+		Return .F.
+	Endif
+
+Endif
+
+Return .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pedidofab
+------------------------------------------------------------
+PROCEDURE pedidofab
+
+&& Rotina da Importação da Planilha de transferencias
+Private pDt
+pDt = fDtoSQL(Datetime())
+
+If Used([csPrNAOCad])
+	Use In csPrNAOCad
+Endif
+
+If Used([csPrSemCT])
+	use in csPrSemCT
+EndIf 
+
+Create Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade N(12,2),Grupo c(10),Barra N(14,0), Cor c(4),Tamanho c(4))
+
+Create Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Local lnErro1
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lnTipo = Thisform.cntplanilha.OptTipo.Value
+lnTpPre = Thisform.cntplanilha.OptPreco.Value
+
+lcEmpresa = []
+If (Thisform.poDataMgr.SQLExecute([Select Cemps From SigCdEmp Where ChkEsc = 1], [crChkEsc]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão- crChkEsc)])
+	Return .F.
+Endif
+
+lcEmpresa = crChkEsc.Cemps
+
+Select TmpPlanilha
+Select Distinct Contaos, Dopes, PrazoEnts From TmpPlanilha ;
+	where Not Empty(Contaos) And Not Empty(Cpros) And Not Empty(Qtds) And Not Empty(Dopes) ;
+	into Cursor csMovPlan Readwrite
+
+Select csMovPlan
+Go Top
+Scan
+
+	lcDopes = csMovPlan.Dopes
+	lcGrupo = []
+
+	=Thisform.poDataMgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+	=Thisform.poDataMgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)
+
+	Select crSigCdOpe
+	If Empty(crSigCdOpe.GruOrigs)
+		=Thisform.poDataMgr.CursorQuery([SigCdCli],[crTmpCli],[Iclis],csMovPlan.Contaos,[Grupos])
+		lcGrupo = crTmpCli.Grupos
+	Else
+		lcGrupo = crSigCdOpe.GruOrigs
+	Endif
+
+	If Empty(crSigCdOpe.GruDests) Or Empty(crSigCdOpe.ConDests)
+		Messagebox([Grupo ou Conta de Destino não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+		Select csMovPlan
+		Loop
+	Endif
+
+	lcOpers   = Iif(crSigCdOpe.opers=1,'E','S')
+	lcGrupoOs = lcGrupo
+	lcContaOs = csMovPlan.Contaos
+	lcGrupoDs = crSigCdOpe.GruDests
+	lcContaDs = crSigCdOpe.ConDests
+	lnEstoqs  = crSigCdOpe.Estoqs
+	lnVezes   = 1000
+	lcGrupoCs = crSigOpCdd.GruposCC
+	lcContaCs = crSigOpCdd.ContasCC
+
+	Select * From TmpPlanilha Where Contaos = lcContaOs And Dopes = lcDopes Into Cursor csPedFab Readwrite
+	Select csPedFab
+	Go Top
+	Scan
+
+		lcEmps  = lcEmpresa
+		lcEmps  = Padr(Alltrim(lcEmps),3)
+		lcEmpDs = []
+		lcEmpDs = Padr(Alltrim(lcEmpDs),3)
+		lnPecas = csPedFab.Qtds
+		lcProd  = csPedFab.Cpros
+		lnCBars = 0
+		lcCor   = csPedFab.Cors
+		lcTam	= csPedFab.Tams
+		lnPeso	= csPedFab.Pesos
+		lnUnits	= csPedFab.Units
+		lcCta 	= lcContaOs
+		ldPrz	= csPedFab.PrazoEnts
+		lnBarra = 0
+		lcMoeda = csPedFab.Moedas
+
+		If lnPecas = 0
+			Select csPedFab
+			Loop
+		Endif
+
+		If Empty(lcEmps)
+			Select csPedFab
+			Loop
+		Endif
+
+		If Empty(lcCta)
+			Select csPedFab
+			Loop
+		Endif
+
+		If Empty(lcProd)
+			Select csPedFab
+			Loop
+		Endif
+
+		If Not Empty(lcTam)
+			lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+			If (Thisform.poDataMgr.SQLExecute(lcQuery, 'crTmpTam') < 1)
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+				Return 0
+			Endif
+
+			Select crTmpTam
+			Go Top
+			If Reccount([crTmpTam])=0
+				lcTam = []
+			Endif
+		Endif
+
+		If Not Empty(lcCor)
+			lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+			If (Thisform.poDataMgr.SQLExecute(lcQuery, 'crTmpCor') < 1)
+				=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+				Return 0
+			Endif
+
+			Select crTmpCor
+			Go Top
+			If Reccount([crTmpCor])=0
+				lcCor = []
+			Endif
+		Endif
+
+		=Thisform.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],lcCta,[Iclis])
+		Select crSigCdCli
+		If Reccount([crSigCdCli])=0
+			Select csPedFab
+			Loop
+		Endif
+
+		=Thisform.poDataMgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),lcProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,ForaLinha,Situas,custofs,moecusfs,cgrus])
+
+		Select crSigCdPro
+		If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+
+
+			Select csPrNAOCad
+			Append Blank
+			Replace Produto 	With Nvl(lcProd,[]) ,;
+				Quantidade  With Nvl(lnPecas,0) ,;
+				Cor	   		With Nvl(lcCor,[]) ,;
+				Tamanho	    With Nvl(lcTam,[]) ,;
+				Barra	    With Nvl(lnCBars,0) ,;
+				Origem 		With Nvl(lcEmps,[]) ,;
+				Destino		With Nvl(lcEmpDs,[]) In csPrNAOCad
+
+			Select csPedFab
+			Loop
+		Endif
+
+		*!*			If crSigCdPro.ForaLinha = 1
+		*!*				If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Descontinuado, Deseja importar mesmo descontinuado?],4+32,[Atenção]) <> 6
+		*!*					Select csPedFab
+		*!*					loop
+		*!*				EndIf
+		*!*
+		*!*			EndIf
+		*!*
+		*!*			If crSigCdPro.Situas = 2
+		*!*				If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Inativo, Deseja Importar mesmo Inativo?],4+32,[Atenção]) <> 6
+		*!*					Select csPedFab
+		*!*					loop
+		*!*				EndIf
+		*!*			EndIf
+
+		lcCpros = crSigCdPro.Cpros
+		lcDpros = crSigCdPro.Dpros
+
+		If lnTpPre = 1
+			lnPvens = crSigCdPro.PVens
+			lcMoevs = crSigCdPro.Moevs
+		Else
+			lnPvens = crSigCdPro.custofs
+			lcMoevs = crSigCdPro.moecusfs
+		Endif
+
+		If Not Empty(lnUnits)
+			lnPvens = lnUnits
+		Endif
+
+		If Not Empty(lcMoeda)
+			lcMoevs = lcMoeda
+		Endif
+
+		lcCunis = crSigCdPro.CUnis
+		lnPesos = Iif(Empty(lnPeso),crSigCdPro.PesoMs,lnPeso)
+
+		If Not Empty(lnBarra)
+
+			=Thisform.poDataMgr.CursorQuery([SigOpEtq],[crSigOpEtq],[Cbars],lnBarra,[Cbars,CPros])
+
+			If Reccount([crSigOpEtq])=0
+				Select csPedFab
+				Loop
+			Endif
+
+			If crSigOpEtq.Cpros <> lcCpros
+				Select csPedFab
+				Loop
+			Endif
+		Endif
+
+		lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+			[From SigCdGrp ] + ;
+			[Where CGrus = '] + crSigCdPro.CGrus + [' ] + ;
+			[Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+		If (Thisform.poDataMgr.SQLExecute(lcQuery, 'crTmpGru') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+			Return 0
+		Endif
+
+		llPular = .F.
+		If Empty(lcTam) And Inlist(crTmpGru.TipoEstos,3,4)
+			llPular = .T.
+		Endif
+
+		If Empty(lcCor) And Inlist(crTmpGru.TipoEstos,2,4)
+			llPular = .T.
+		Endif
+
+		If llPular
+			Select csPrSemCT
+			Append Blank
+			Replace Referencia With lcCpros ,;
+				Qtds	   With Nvl(lnPecas,0) ,;
+				Pesos	   With Nvl(lnPesos,0) ,;
+				Unidade	   With Nvl(lcCunis,[]) ,;
+				Valor	   With Nvl(lnPvens,0) In csPrSemCT
+		Else
+
+			If lnVezes > 999
+				lnNumes = fGerUniqueKey(Alltrim(lcDopes) + lcEmps)
+				Insert Into CrSigMvCab (Datars,DataS,Dopes,Emps,EmpDs,Numes,MascNum,GrupoOs,Contaos,GrupoDs,ContaDs,CIdChaves,DtAlts,EmpDopNums, usuals, Usuars, PrazoEnts, grupoccs, contaccs) ;
+					Values (pDt,pDt,lcDopes,lcEmps,lcEmpDs,lnNumes,fGerMascara(lnNumes),lcGrupoOs,lcCta,lcGrupoDs,lcContaDs,fUniqueIds(),Datetime(),lcEmps + lcDopes + Str(lnNumes,6),Usuar, Usuar, ldPrz, lcGrupoCs, lcContaCs)
+				lnVezes = 1
+			Endif
+
+			Insert Into CrSigMvItn (Cpros,Dopes,Emps,Numes,opers,Qtds,CItens,Units,Totas,Moedas,Dpros,AQtds,CUnis,CIdChaves,DtAlts,EmpDopNums,Pesos,codbarras) ;
+				Values (lcCpros,lcDopes,lcEmps,lnNumes,lcOpers,lnPecas,lnVezes,lnPvens,;
+				lnPvens * lnPecas,lcMoevs,lcDpros,lnPecas,lcCunis,fUniqueIds(),Date(),lcEmps + lcDopes + Str(lnNumes,6),lnPesos,lnBarra)
+
+			*--Lanca o Barra no SIGMVITS
+			If (Not Empty(lcCor) Or Not Empty(lcTam))
+				Insert Into CrSigMvIts (Emps,Dopes,Numes,Cpros,CodTams,CodCors,Qtds,AQtds,codbarras,Pesos,CIdChaves,EmpDopNums,chksubn,CItens) ;
+					Values (lcEmps,lcDopes,lnNumes,lcCpros,lcTam,lcCor,lnPecas,lnPecas,lnCBars,lnPesos,fUniqueIds(),lcEmps + lcDopes + Str(lnNumes,6),.F.,lnVezes)
+			Endif
+
+			If lnEstoqs = 1
+
+				pCidC = Dtos(pDt)+lcOpers+Transform(fGerUniqueKey(Dtos(pDt)),"@L 999999")+Thisform.Sigkey
+				pSeq  = fGerUniqueKey('HISTBAR')
+
+				Insert Into CrSigMvHst (Cpros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,opers,Numes,Qtds,Units,Totas,Grupos,;
+					Estos,CIdChaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+					Values (lcCpros,pDt,pDt,Null,lcDopes,lcEmps,lcEmps,;
+					lcOpers,lnNumes,lnPecas,lnPvens,lnPvens * lnPecas,lcGrupoOs,;
+					lcContaOs,pCidC,lcEmps + lcDopes + Str(lnNumes,6),;
+					lcEmps + lcGrupoOs + lcContaOs,lcEmps + lcDopes + Str(lnNumes,6),pSeq,lnPesos, Usuar, ;
+					lnCBars, lcTam, lcCor)
+
+				=SqlCalcP2( CrSigMvHst.Emps, CrSigMvHst.Grupos, CrSigMvHst.Estos, CrSigMvHst.Cpros, CrSigMvHst.DataS, CrSigMvHst.CodCors, CrSigMvHst.CodTams, Thisform.poDataMgr )
+				=fRecalculaC( CrSigMvHst.Emps, CrSigMvHst.Cpros, CrSigMvHst.DataS, Thisform.poDataMgr )
+
+			Endif
+
+			lnVezes = lnVezes + 1
+		Endif
+		Select csPedFab
+	Endscan
+
+	lnVezes =  1
+
+	Select csMovPlan
+Endscan
+
+lnOldSel = Select()
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	Messagebox([Houve Produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA' Xl5
+Endif
+
+Select csPrSemCT
+Go Top
+If Reccount([csPrSemCT])>0
+	Messagebox([Houve produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO.XLS',0+64,[Atenção],5000)
+	Select csPrSemCT
+	Copy To Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO' Xl5
+Endif
+
+Set Step On
+Select CrSigMvItn
+Go Top
+Select EmpDopNums, Sum(Totas) As Total From CrSigMvItn Group By EmpDopNums Order By EmpDopNums Into Cursor csTmpTot Readwrite
+
+Select csTmpTot
+Go Top
+Scan
+	Update CrSigMvCab Set Valos = csTmpTot.Total Where EmpDopNums = csTmpTot.EmpDopNums
+	Select csTmpTot
+Endscan
+ThisForm.ValorAcumulado = 0
+*-- Rafael - 14/11/2017 - Limite de credito pela Matriz contabil
+If Inlist( crSigCdOpe.limcres, 7 )
+	Select CrSigMvCab
+	Go Top
+	Scan
+		If Not Empty(crSigOpCdd.GruposCC) And Not Empty(crSigOpCdd.ContasCC) And Not Empty(crSigOpCdd.GruposEmt) And Not Empty(crSigOpCdd.ContasEmt)
+			If !Thisform.LimiteCreditoMatriz( crSigOpCdd.GruposCC, crSigOpCdd.ContasCC, crSigOpCdd.GruposEmt, crSigOpCdd.ContasEmt, 'Centro de Custo' )
+				Return .F.
+			Endif
+		Endif
+	Endscan
+Endif
+
+Select(lnOldSel)
+
+
+lcMsg = 'Importação da Planilha de Tranferencia: ' + Alltrim(Thisform.cntplanilha.getPlanilha.Value)
+=fGravarLog('T', lcDopes, [SIGPRILA], lcMsg, Usuar )
+
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvCab'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvItn'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvIts'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvHst'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(SqlCalcP2(.T.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(fRecalculaC(.T.,.F.,.F.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Thisform.poDataMgr.Commit()
+Endif
+If lnErro1 < 1
+	Messagebox('Falha na Gravacao dos Dados.',0+16,'')
+	Thisform.poDataMgr.Rollback()
+	Return
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pedacesso
+------------------------------------------------------------
+PROCEDURE pedacesso
+
+&& Rotina da Importação da Planilha de transferencias
+Private pDt
+pDt = fDtoSQL(Datetime())
+
+If Used([csPrNAOCad])
+	use in csPrNAOCad
+EndIf 
+
+If Used([csPrSemCT])
+	use in csPrSemCT
+EndIf 
+
+Create Cursor csPrNAOCad(Origem c(10),Destino c(10),Produto c(20),Quantidade n(12,2),Grupo c(10),Barra n(14,0), Cor c(4),Tamanho c(4))
+
+Create Cursor csPrSemCT( Referencia c(25), Unidade c(3), Qtds N(12,2), Pesos N(12,2), Valor N(12,2))
+
+Local lnErro1
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+lnTipo  = ThisForm.cntplanilha.OptTipo.Value 
+lnTpPre = ThisForm.Cntplanilha.OptPreco.Value 
+
+Select crSigCdPac
+lcDopes = crSigCdPac.DopAcePed
+
+If Empty(lcDopes)
+	MessageBox([Movimentação da Importação da Planilha não Informada.]+Chr(13)+Chr(13)+[Parâmetros do Sistema > Diversos > Geral],0+64,[Atenção])
+	Return .F.
+EndIf 
+
+=ThisForm.Podatamgr.CursorQuery([SigCdOpe],[crSigCdOpe],[Dopes],lcDopes)
+=ThisForm.Podatamgr.CursorQuery([SigOpCdd],[crSigOpCdd],[Dopes],lcDopes)
+
+Select crSigCdOpe
+If Empty(crSigCdOpe.GruOrigs) 
+	MessageBox([Grupo de Origem não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+EndIf 
+
+If Empty(crSigCdOpe.GruDests) or Empty(crSigCdOpe.ConDests)
+	MessageBox([Grupo ou Conta de Destino não definido na Movimentação ]+Alltrim(crSigCdOpe.Dopes),0+64,[Atenção])
+	Return .F.
+EndIf 
+
+lcOpers   = iif(crSigCdOpe.opers=1,'E','S')
+lcGrupoOs = crSigCdOpe.GruOrigs
+lcContaOs = crSigCdOpe.ConOrigs
+lcGrupoDs = crSigCdOpe.GruDests
+lcContaDs = crSigCdOpe.ConDests
+lnEstoqs  = crSigCdOpe.Estoqs
+lcGrupoCs = crSigOpCdd.GruposCC
+lcContaCs = crSigOpCdd.ContasCC
+
+Select TmpPlanilha
+lnQtdIni = 0
+Scan for !Deleted() 
+	If IsEmpty(TmpPlanilha.Empds) Or IsEmpty(TmpPlanilha.Emps)
+		Loop 
+	EndIf 
+	lnQtdIni = lnQtdIni + 1
+EndScan 
+
+Select distinct * From TmpPlanilha Into Cursor csTransf ReadWrite
+
+Select csTransf
+Index on Empds Tag Empresa
+Go Top
+lnQtdFim = 0
+Scan for !Deleted() 
+	If IsEmpty(csTransf.Empds) Or IsEmpty(csTransf.Emps)
+		Loop 
+	EndIf 
+	lnQtdFim = lnQtdFim + 1
+EndScan 
+
+If lnQtdIni <> lnQtdFim
+	MessageBox([Há Registros duplicados, Favor Verificar a Planilha.],0+48,[Atenção])
+	Return .F.
+EndIf 
+
+lnVezes  = 1
+lcXEmps  = [X]
+lcXEmpDs = [X]
+
+loBarraLista = CreateObject('fwprogressbar','Importando Transferencias...',Reccount('csTransf'))
+loBarraLista.Top = loBarraLista.Top - Int(loBarraLista.Height/2) - 1
+loBarraLista.Titulo.FontBold = .t.
+loBarraLista.Show
+Scan
+
+ 	loBarraLista.Update(.T.,'Empresa: ' +csTransf.EmpDs)
+ 	
+ 	lcEmps    = csTransf.Emps
+ 	lcEmps    = Padr(Alltrim(lcEmps),3)
+ 	lcEmpDs   = csTransf.Empds
+ 	lcEmpDs   = Padr(Alltrim(lcEmpDs),3)
+ 	lnPecas   = csTransf.Qtds
+ 	lcProd    = csTransf.Cpros
+ 	lnCBars   = 0
+ 	lcCor     = csTransf.Cors
+ 	lcTam	  = csTransf.Tams
+ 	lnPeso	  = csTransf.Pesos
+	lcContaOs = csTransf.ContaOs
+	ldPrz	= csTransf.Prazo
+	
+ 	If lnPecas = 0 
+ 		Select csTransf
+		Loop 
+	EndIf 
+	
+	If Empty(lcEmps)
+		Select csTransf
+		Loop 	
+	EndIf 
+	
+	If Empty(lcEmpDs)
+		Select csTransf
+		Loop 	
+	EndIf 
+	
+	If Empty(lcContaOs)
+		Select csTransf
+		Loop 	
+	EndIf
+	
+	If Empty(lcProd)
+		Select csTransf
+		Loop 
+	EndIf 
+	
+	lnBarra = 0
+	If Not Empty(lnCBars) And (Not Empty(lcCor) Or Not Empty(lcTam))
+		lnBarra = 0
+	Else
+		lnBarra = lnCBars
+	Endif
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp
+	If Reccount([crSigCdEmp])=0 
+		Select csTransf	
+		Loop 
+	EndIf 
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdEmp],[crSigCdEmp2],[Cemps],lcEmps,[Cemps])
+	Select crSigCdEmp2
+	If Reccount([crSigCdEmp2])=0 
+		Select csTransf	
+		Loop 
+	EndIf
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],lcContaOs,[Iclis])
+	Select crSigCdCli
+	If Reccount([crSigCdCli])=0 
+		Select csTransf	
+		Loop 
+	EndIf 
+	
+	=Thisform.Podatamgr.CursorQuery([SigCdPro],[crSigCdPro],Iif(lnTipo=1,[Cpros],Iif(lnTipo=2,[Dpro2s],[Reffs])),lcProd,[Cpros,Dpros,PVens,Moevs,CUnis,PesoMs,ForaLinha,Situas,moecusfs,custofs,cgrus])
+	
+	Select crSigCdPro
+	If Reccount([crSigCdPro])=0 Or IsEmpty(crSigCdPro.Cpros)
+	
+		Select csPrNAOCad
+		Append Blank 
+		Replace Produto 	With Nvl(lcProd,[]) ,;
+				Quantidade  With Nvl(lnPecas,0) ,;
+				Cor	   		With Nvl(lcCor,[]) ,;
+				Tamanho	    With Nvl(lcTam,[]) ,;
+				Barra	    With Nvl(lnCBars,0) ,;
+				Origem 		With Nvl(lcEmps,[]) ,;
+				Destino		With Nvl(lcEmpDs,[]) in csPrNAOCad
+	
+		Select csTransf	
+		Loop 
+	EndIf 
+		
+	If crSigCdPro.ForaLinha = 1
+		If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Descontinuado, Deseja importar mesmo descontinuado?],4+32,[Atenção]) <> 6
+			Select csTransf
+			loop
+		EndIf 
+		
+	EndIf 
+	
+	If crSigCdPro.Situas = 2
+		If MessageBox([Produto ]+Alltrim(crSigCdPro.Cpros)+[ Inativo, Deseja Importar mesmo Inativo?],4+32,[Atenção]) <> 6
+			Select csTransf
+			loop
+		EndIf 
+	EndIf
+	
+	lcCpros = crSigCdPro.Cpros
+	lcDpros = crSigCdPro.Dpros
+	If lnTpPre = 1
+		lnPvens = crSigCdPro.PVens
+		lcMoevs = crSigCdPro.Moevs
+	Else
+		lnPvens = crSigCdPro.custofs
+		lcMoevs = crSigCdPro.moecusfs
+	EndIf 
+	lcCunis = crSigCdPro.CUnis
+	lnPesos = Iif(Empty(lnPeso),crSigCdPro.PesoMs,lnPeso)
+	
+	If Not Empty(lnBarra)
+	
+		=Thisform.Podatamgr.CursorQuery([SigOpEtq],[crSigOpEtq],[Cbars],lnBarra,[Cbars,CPros])
+		
+		If Reccount([crSigOpEtq])=0
+			Select csTransf
+			Loop 
+		EndIf 
+		
+		If crSigOpEtq.Cpros <> lcCpros 
+			Select csTransf
+			Loop
+		EndIf 
+	EndIf 
+	
+	If Not Empty(lcTam)
+		lcQuery = [Select * From SigCdTam Where Cods = ']+lcTam+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpTam') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpTam)')
+			Return 0
+		Endif
+
+		Select crTmpTam
+		Go Top
+		If Reccount([crTmpTam])=0
+			lcTam = []
+		Endif
+	Endif
+
+	If Not Empty(lcCor)
+		lcQuery = [Select * From SigCdCor Where Cods = ']+lcCor+[' ]
+		If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpCor') < 1)
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCor)')
+			Return 0
+		Endif
+
+		Select crTmpCor
+		Go Top
+		If Reccount([crTmpCor])=0
+			lcCor = []
+		Endif
+	Endif
+
+	lcQuery = [Select TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas, mtPrimas, LocalPdr ] + ;
+		[From SigCdGrp ] + ;
+		[Where CGrus = '] + crSigCdPro.CGrus + [' ] + ;
+		[Order By TipoEstos, Mercs, Cores, Tams, Embs, Cgrus, Dgrus, Pesos, Entregas]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crTmpGru') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpGru)')
+		Return 0
+	Endif
+	
+	llPular = .F.
+	If Empty(lcTam) And Inlist(crTmpGru.TipoEstos,3,4)
+		llPular = .T.
+	EndIf 
+	
+	If Empty(lcCor) And Inlist(crTmpGru.TipoEstos,2,4)
+		llPular = .T.
+	EndIf
+		
+	If llPular 
+		Select csPrSemCT
+		Append Blank
+		Replace Referencia With crSigCdPro.CPros ,;
+			Qtds	   With Nvl(lnPecas,0) ,;
+			Pesos	   With Nvl(lnPesos,0) ,;
+			Unidade	   With Nvl(lcCunis,[]) ,;
+			Valor	   With Nvl(lnPvens,0) In csPrSemCT
+	Else
+	
+		If lcEmps <> lcXEmps or lcEmpDs <> lcXEmpDs
+			lcXEmps  = lcEmps
+			lcXEmpDs = lcEmpDs
+			lnVezes  = 1000
+		EndIf
+		
+		If lnVezes > 999
+			lnNumes = fGerUniqueKey(Alltrim(lcDopes) + lcEmps)
+			Insert Into CrSigMvCab (Datars,DataS,Dopes,Emps,EmpDs,Numes,MascNum,GrupoOs,ContaOs,GrupoDs,ContaDs,CIdChaves,DtAlts,EmpDopNums, usuals, Usuars, PRAZOENTS, grupoccs, contaccs) ;
+				Values (pDt,pDt,lcDopes,lcEmps,lcEmpDs,lnNumes,fGerMascara(lnNumes),lcGrupoOs,lcContaOs,lcGrupoDs,lcContaDs,fUniqueIds(),Datetime(),lcEmps + lcDopes + Str(lnNumes,6),Usuar, Usuar, ldPrz, lcGrupoCs, lcContaCs)
+			lnVezes = 1
+		Endif
+
+		
+		Insert Into CrSigMvItn (CPros,Dopes,Emps,Numes,Opers,Qtds,CItens,Units,Totas,Moedas,DPros,AQtds,CUnis,CIdChaves,DtAlts,EmpDopNums,Pesos,codbarras) ;
+			Values (lcCpros,lcDopes,lcEmps,lnNumes,lcOpers,lnPecas,lnVezes,lnPvens,;
+			lnPvens * lnPecas,lcMoevs,lcDPros,lnPecas,lcCUnis,fUniqueIds(),Date(),lcEmps + lcDopes + Str(lnNumes,6),lnPesos,lnBarra)
+
+		*--Lanca o Barra no SIGMVITS
+		If (Not Empty(lcCor) Or Not Empty(lcTam))
+			Insert Into CrSigMvIts (Emps,Dopes,Numes,CPros,CodTams,CodCors,Qtds,AQtds,codbarras,Pesos,CIdChaves,EmpDopNums,chksubn,CItens) ;
+				Values (lcEmps,lcDopes,lnNumes,lcCPros,lcTam,lcCor,lnPecas,lnPecas,lnCbars,lnPesos,fUniqueIds(),lcEmps + lcDopes + Str(lnNumes,6),.F.,lnVezes)
+		Endif
+
+		If lnEstoqs = 1
+
+			pCidC = Dtos(pDt)+lcOpers+Transform(fGerUniqueKey(Dtos(pDt)),"@L 999999")+Thisform.Sigkey
+			pSeq  = fGerUniqueKey('HISTBAR')
+
+			Insert Into CrSigMvHst (CPros,Datars,DataS,DtAudits,Dopes,EmpOs,Emps,Opers,Numes,Qtds,Units,Totas,Grupos,;
+				Estos,CIdChaves,EmpDopNums,EmpGruEsts,Oridopnums,Seqs,Pesos, Usuars, codbarras, CodTams, CodCors) ;
+				Values (lcCPros,pDt,pDt,Null,lcDopes,lcEmps,lcEmps,;
+				lcOpers,lnNumes,lnPecas,lnPVens,lnPVens * lnPecas,lcGrupoOs,;
+				lcContaOs,pCidC,lcEmps + lcDopes + Str(lnNumes,6),;
+				lcEmps + lcGrupoOs + lcContaOs,lcEmps + lcDopes + Str(lnNumes,6),pSeq,lnPesos, Usuar, ;
+				lnCbars, lcTam, lcCor)
+
+			=SqlCalcP2( CrSigMvHst.Emps, CrSigMvHst.Grupos, CrSigMvHst.Estos, CrSigMvHst.CPros, CrSigMvHst.DataS, CrSigMvHst.CodCors, CrSigMvHst.CodTams, Thisform.poDataMgr )
+			=fRecalculaC( CrSigMvHst.Emps, CrSigMvHst.CPros, CrSigMvHst.DataS, Thisform.poDataMgr )
+
+		Endif
+
+		If Not Empty(lnCbars) And lcOpers = 'S'
+			lcUpdate = [Update SigOpEtq Set Contas = Space(10), Grupos = Space(10) Where Cbars = ]+Str(lnCbars,14)
+			If Thisform.poDataMgr.SqlExecute(lcUpdate) < 1
+				Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (lcUpdate - Transferencia)')
+				Return .F.
+			Endif
+		Endif
+
+		lnVezes = lnVezes + 1
+	EndIf 
+	Select csTransf
+EndScan 
+loBarraLista .Complete(.T.)
+
+lnOldSel = Select()
+Select csPrNAOCad
+Go Top
+If Reccount([csPrNAOCad])>0
+	MessageBox([Houve Produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA.XLS',0+64,[Atenção],5000)
+	Select csPrNAOCad
+	Copy To Addbs(Sys(5)+Sys(2003))+'TRANSFERENCIA_NAO_IMPORTADA' xl5
+EndIf
+ 
+Select csPrSemCT
+Go Top
+If Reccount([csPrSemCT])>0
+	Messagebox([Houve produtos não Importados]+Chr(13)+Chr(13)+[Arquivo : ]+Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO.XLS',0+64,[Atenção],5000)
+	Select csPrSemCT
+	Copy To Addbs(Sys(5)+Sys(2003))+'PRODUTOS_SEM_CORTAMANHO' Xl5
+Endif
+
+Select CrSigMvItn
+Go Top
+Select EmpDopNums, Sum(Totas) as Total From CrSigMvItn Group by EmpDopNums Order by EmpDopNums Into Cursor csTmpTot ReadWrite
+
+Select csTmpTot
+Go Top
+Scan 
+	Update CrSigMvCab Set Valos = csTmpTot.Total Where EmpDopNums = csTmpTot.EmpDopNums
+	Select csTmpTot	
+EndScan
+Set Step On 
+ThisForm.ValorAcumulado = 0 
+*-- Rafael - 14/11/2017 - Limite de credito pela Matriz contabil
+If Inlist( crSigCdOpe.limcres, 7 ) 
+	Select CrSigMvCab
+	Go Top
+	Scan 
+		If Not Empty(crSigOpCdd.GruposCC) And Not Empty(crSigOpCdd.ContasCC) And Not Empty(crSigOpCdd.GruposEmt) And Not Empty(crSigOpCdd.ContasEmt)
+			If !ThisForm.LimiteCreditoMatriz( crSigOpCdd.GruposCC, crSigOpCdd.ContasCC, crSigOpCdd.GruposEmt, crSigOpCdd.ContasEmt, 'Centro de Custo' )
+				Return .F.
+			EndIf 
+		EndIf 
+	EndScan 	
+EndIf
+
+Select(lnOldSel)
+Set Step On 
+lcMsg = 'Importação da Planilha de Tranferencia: ' + Alltrim(Thisform.Cntplanilha.getPlanilha.Value)
+=fGravarLog('T', lcDopes, [SIGPRILA], lcMsg, Usuar )
+
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvCab'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvItn'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvIts'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigMvHst'), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(SqlCalcP2(.T.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Iif(fRecalculaC(.T.,.F.,.F.,Thisform.poDataMgr), 1, -1)
+Endif
+If lnErro1>0
+	lnErro1 = Thisform.poDataMgr.Commit()
+Endif
+If lnErro1 < 1
+	Messagebox('Falha na Gravacao dos Dados.',0+16,'')
+	Thisform.poDataMgr.Rollback()
+	Return
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cotacao
+------------------------------------------------------------
+PROCEDURE cotacao
+LParameters _xMoeda, _xData
+Local _xCotacao, lcAlias
+
+lcAlias   = Alias()
+_xCotacao = 1
+_xData    = Iif(Type('_xData') = 'D', _xData, CrSigMvCab.Datas)
+
+If Not IsEmpty( _xMoeda ) 
+	lcSql = [Select Cotas From SigCdMoe where Cmoes = ']+_xMoeda+[']
+	If ThisForm.poDataMgr.Sqlexecute(lcsql,'LocalMoe') < 1
+		MessageBox([Favor reiniciar o Processo.],0+16,[Falha de conexão (LocalMoe)])
+		Return .F.
+	EndIf 
+	If LocalMoe.Cotas
+		If !Seek( _xMoeda, "TmpCot" )
+			_xCotacao = fBuscarCotacao(_xMoeda,_xData,ThisForm.poDataMgr)
+			Insert Into TmpCot ( Cmoes, Valos ) Values ( _xMoeda, _xCotacao )
+		Else
+			If TmpCot.Valos = 0
+				_xCotacao = fBuscarCotacao(_xMoeda,_xData,ThisForm.poDataMgr)
+				Replace Valos With _xCotacao In TmpCot
+			EndIf
+			_xCotacao = TmpCot.Valos
+		Endif
+
+		*** Tiago - 08/09/2015 - Alterado para gravar a cotação na tabela SIGMVMOV pois no SIGMVITN já está gravado convertido e perde a cotação caso tenha sido alterado
+		Select TmpTotal
+		Set Order To tag Moeds		
+		If !Seek(_xMoeda)
+			Insert Into TmpTotal (Moeds) Values (_xMoeda)
+		Endif
+		Replace MoeVals With _xCotacao In TmpTotal		
+	Else
+		_xCotacao = 1
+	EndIf
+EndIf
+
+If Not IsEmpty(lcAlias)
+	Select (lcAlias)
+EndIf
+
+Return _xCotacao
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+*thisform.podatamgr.release 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 27
+	thisform.grupo_Botao.cmdsair.Click
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private plPrecos,plCodLista,pPro
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+plPrecos   = Replicate (Chr(254),30)
+plEmps	   = Replicate (Chr(254),3)
+plCodLista = Replicate (Chr(254),30)	
+pPro	   = Replicate (Chr(254),14)
+
+lcQryListaPreco  = 'Select * from SigCdLpc  Where lPrecos = ?plCodLista And Emps = ?plEmps'
+lcQryListaPrecoi = 'Select * from SigCdLpi Where lPrecos = ?plPrecos '
+lcQryPro		 = 'Select cGrus, cPros, dPros, MoeVs, pCuss, Ean13, Reffs From SigCdPro Where cPros = ?pPro'
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdLpc','Codigos'  ,'crSigCdLpc','','', lcQryListaPreco)
+			.AddCursor('SigCdLpi','cIdChaves','crSigCdLpi','','', lcQryListaPrecoi)
+			.AddCursor('SigCdPro','cPros'    ,'crSigCdPro','','', lcQryPro)
+			.AddCursor('SigMvCab','CIdChaves','CrSigMvCab','','')
+			.AddCursor('SigMvItn','CIdChaves','CrSigMvItn','','')
+			.AddCursor('SigMvIts','CIdChaves','CrSigMvIts','','')
+			.AddCursor('SigMvHst','CIdChaves','CrSigMvHst','','')
+			.AddCursor('SigImpPr','CIdChaves','CrSigImpPr','','')
+			.AddCursor('SigPrPre','CIdChaves','CrSigPrPre','','')
+			.AddCursor('SigPrTam','CIdChaves','CrSigPrTam','','')
+		EndWith 
+		= .poDataMgr.SqlExecute([Select * From SigCdPam],[crSigCdPam])
+		= .poDataMgr.SqlExecute([Select * From SigCdPac],[crSigCdPac])
+		
+		ThisForm.SigKey = CrSigCdPac.SigKeys
+	
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf	
+EndWith 
+
+m.lnErro1 = ThisForm.podatamgr.pnIdConn
+If Not Used('crSigCdMoe') 
+	m.lcMcrSql1 = [select a.cmoes,a.cotas,a.moeqs,a.qtdeqs from SigCdMoe a order by 1]
+	If m.lnErro1>0 
+		m.lnErro1 = SQLExec(ThisForm.poDataMgr.pnIdConn,m.lcMcrSql1,'crSigCdMoe')
+	EndIf 
+	If Used('crSigCdMoe') 
+		Select ('crSigCdMoe') 
+		Index On cmoes Tag cmoes
+		Set Order To ('') In ('crSigCdMoe') 
+	EndIf 
+EndIf 
+
+If Not Used('crSigCdCot')
+	m.lcMcrSql1 = [select a.cmoes,a.datas,a.horas,a.valos from SigCdCot a order by 1 asc,2 desc,3 desc]
+	If m.lnErro1>0 
+		m.lnErro1 = SQLExec(ThisForm.poDataMgr.pnIdConn,m.lcMcrSql1,'crSigCdCot')
+	EndIf 
+	If Used('crSigCdCot') 
+		Select ('crSigCdCot') 
+		Index On cmoes+Dtos(datas)+horas Tag cmoedata
+		Set Order To ('') In ('crSigCdCot') 
+	EndIf 
+EndIf 
+
+ThisForm.Preenchetipo()
+
+
+
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRILA.cntplanilha.cmdgetp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Parent.getPlanilha.Value = GetFile('xls','Planilha','Importar')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRILA.cntplanilha.cmbTipos
+* Classe: fwcombo (Base: combobox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.Completalista()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRILA.cntplanilha.GetPlanilha
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRILA.Grupo_Botao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdok.Click
+------------------------------------------------------------
+PROCEDURE cmdok.Click
+If Thisform.Planilha
+	ThisForm.ChecaPlanilha()
+Else
+	ThisForm.Processamento()
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdsair.Click
+------------------------------------------------------------
+PROCEDURE cmdsair.Click
+thisform.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRILA
+RESERVED3 (ClassInfo): planilha
+podatamgr
+sigkey
+valoracumulado
+*atuapreco 
+*completalista 
+*criaplanilha 
+*gerapedido 
+*geratransf 
+*listapreco 
+*pedidocons 
+*preenchetipo 
+*processamento 
+*validacols 
+*limitecreditomatriz 
+*pedidofab 
+*pedacesso 
+*cotacao 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 22
+================================================================================

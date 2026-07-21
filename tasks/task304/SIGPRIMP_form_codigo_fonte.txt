@@ -1,0 +1,854 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRIMP.SCX
+* Data/Hora: 17/07/2026 10:02:29
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRIMP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPRIMP
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGPRIMP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRIMP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRIMP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGPRIMP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Cancela
+  Parent: SIGPRIMP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Arquivo
+  Parent: SIGPRIMP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGPRIMP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Arquivos
+  Parent: SIGPRIMP
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: Visualizar
+  Parent: SIGPRIMP
+  Class: fwbtnm
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Imprimir
+  Parent: SIGPRIMP
+  Class: fwbtnm
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnMovEst
+  Parent: SIGPRIMP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -2
+  Left = 4
+  Width = 912
+  Height = 485
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 330
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Importação de dados"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGPRIMP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Shape1
+------------------------------------------------------------
+  Top = -12
+  Left = 773
+  Height = 110
+  Width = 229
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  Enabled = .T.
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Shape2
+------------------------------------------------------------
+  Top = 7
+  Left = 4
+  Height = 110
+  Width = 758
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 925
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  PicturePosition = 13
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Get_Arquivo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 21
+  Left = 440
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 108
+  Width = 250
+  BorderColor = 100,100,100
+  Name = "Get_Arquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Say4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Arquivos Importação :"
+  Left = 310
+  Top = 111
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Arquivos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 1
+  RowSource = ""
+  Height = 169
+  Left = 402
+  Sorted = .T.
+  TabIndex = 6
+  Top = 130
+  Width = 288
+  BorderColor = 100,100,100
+  Name = "Arquivos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Visualizar
+------------------------------------------------------------
+  Top = 3
+  Left = 775
+  Height = 75
+  Width = 75
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Caption = "\<Video"
+  Enabled = .T.
+  PicturePosition = 13
+  DisabledBackColor = 255,255,255
+  Name = "Visualizar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.Imprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 850
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Caption = "\<Impressora "
+  Enabled = .T.
+  PicturePosition = 13
+  DisabledBackColor = 255,255,255
+  Name = "Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMP.btnMovEst
+------------------------------------------------------------
+  Top = 3
+  Left = 700
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\geral_empilha_60.jpg
+  Caption = "Moviment. de Estoque"
+  ToolTipText = "Movimentação de Estoque"
+  PicturePosition = 7
+  Name = "btnMovEst"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRIMP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE movest
+------------------------------------------------------------
+PROCEDURE movest
+Lparameters pcArq
+
+Local lcArq, llOk
+
+*!*	01	TPREGS	C	005	-	Tipo do Registro - Conteúdo Fixo "MVITN"
+*!*	02	EMPS	C	003	--	Código da Empresa 
+*!*	03	DOPES	C	020	-	Movimentação a ser gravada no sistema
+*!*	04	OPERS	C	001	-	Tipo de Movimento no Estoque: E = entrada; S = saída
+*!*	05	CITENS	C	004	-	Código de Sequencia do Item dentro da movimentação
+*!*	06	CODBARRAS	C	014	-	Código de Barras do Item
+*!*	07	CPROS	C	014	-	Código do Item
+*!*	08	DPROS	C	040	-	Descrição do Item
+*!*	09	OBS	C	-	-	Observação de detalhamento do item
+*!*	10	MOEDAS	C	003	-	Código de Moeda de Precificação do Item
+*!*	11	MOEVS	C	003	-	Código de Moeda de Venda do Item
+*!*	12	MOEVALS	N	015	06	Índice de Cotação da moeda para conversão nacional 
+*!*	13	QTDS	N	015	03	Quantidade do Item
+*!*	14	CUNIS	C	003	-	Código da Unidade de Medida
+*!*	15	PESOS	N	015	03	Quantidade auxiliar para segunda medida do Item
+*!*	16	CUNIPS	C	003	-	Código da Unidade Auxiliar de Medida
+*!*	17	FATORS	N	015	03	Fator Multiplicador de Quantidade do Item
+*!*	18	UNITS	N	015	06	Valor Unitário do Item
+*!*	19	TOTAS	N	015	02	Valor Total do Item
+*!*	20	VALDESCS	N	015	02	Valor de Desconto no Item
+*!*	21	VALBASES	N	015	02	Valor de Base de Cálculo do Item
+*!*	22	SITRIBS	C	002	-	Situação Tributária do Item
+*!*	23	TPIPIS	C	001	-	Tipo de Tributação de IPI do Item
+*!*	24	BCIPIS	N	015	02	Base de Cálculo de IPI do Item
+*!*	25	BASEIPI2S	N	015	02	Base de Cálculo de IPI Isento do Item
+*!*	26	BASEIPI3S	N	015	02	Base de Cálculo de IPI Outros do Item
+*!*	27	ALIQS	N	015	02	Alíquota de IPI do Item
+*!*	28	VALIPIS	N	015	02	Valor de IPI do Item
+*!*	29	SITTRICMS	C	003	-	Tipo de Tributação de ICMS do Item
+*!*	30	BASEICMS	N	015	02	Base de Cálculo de ICMS do Item
+*!*	31	BASEICM2S	N	015	02	Base de Cálculo de ICMS Isento do Item
+*!*	32	BASEICM3S	N	015	02	Base de Cálculo de ICMS Outros do Item
+*!*	33	ALIQICMS	N	015	02	Alíquota de ICMS do Item
+*!*	34	ICMS	N	015	02	Valor de ICMS do Item
+*!*	35	CFOPS	C	010	-	CFOP de Substituição Tributária do Item
+*!*	36	BCICMSS	N	015	02	Base de Cálculo de ICMS de Substituição Tributária do Item
+*!*	37	ICMSS	N	015	02	Valor de ICMS de Substituição Tributária do Item
+*!*	38	ALIQPIS	N	015	02	Alíquota de PIS do Item
+*!*	39	VPIS	N	015	02	Valor de PIS do Item
+*!*	40	ALIQCOFS	N	015	02	Alíquota de COFINS do Item
+*!*	41	VCOFINS	N	015	02	Valor de COFINS do Item
+*!*	42	ISS	N	015	02	Valor de ISS do Item
+*!*	43	IRRF	N	015	02	Valor de IRRF do Item
+*!*	44	INSS	N	015	02	Valor de INSS do Item
+*!*	45	CSSL	N	015	02	Valor de CSSL do Item
+*!*	46	ALIQIIS	N	015	02	Alíquota de Imposto de Importação do Item
+*!*	47	TAXAIIS	N	015	02	Valor de Imposto de Importação do Item
+*!*	48	NADIS	N	003	00	Número de Adição de Importação do Item
+*!*	49	NIADIS	N	003	00	Item de Adição de Importação do Item
+*!*	50	CODFABS	C	060	-	Código do Fabricante Estrangeiro de Importação do Item
+*!*	51	ORIGMERCS	C	001	-	Origem da Mercadoria do Item
+*!*	52	GRUORIGS	C	010	-	Grupo de Origem da Movimentação
+*!*	53	CONORIGS	C	010	-	Conta de Origem da Movimentação
+*!*	54	GRUDESTS	C	010	-	Grupo de Destino da Movimentação
+*!*	55	CONDESTS	C	010	-	Conta de Destino da Movimentação
+*!*	56	DATAS	D	010	-	Data da Movimentação no formato DD/MM/AAAA
+*!*	57	VENDS	C	010	--	Código do Vendedor
+
+llOk = .t.
+lcMsg = []
+
+*** Tiago - Checagem de espaço no caminho do arquivo para não dar erro
+lcArq = pcArq &&thisform.get_Arquivo.Value
+If At([ ],lcArq) > 0
+	=MessageBox([Arquivo '] + lcArq + [' Inválido! Verifique se o caminho possui espaços em branco!], 0+16, [Seleção de Arquivo])
+	Return .f.
+Endif
+
+Create Cursor crImpMvCab (TPREGS C(5), EMPS C(3), DOPES C(20), OPERS C(1), CITENS C(4), CODBARRAS C(14), CPROS C(14), DPROS C(40), OBS C(250), MOEDAS C(3), ;
+	MOEVS C(3), MOEVALS	N(15,6), QTDS N(15,3), CUNIS C(3), PESOS N(15,3), CUNIPS C(3), FATORS N(15,3), UNITS N(15,6), TOTAS	N(15,2), VALDESCS N(15,2), ;
+	VALBASES N(15,2), SITRIBS C(2), TPIPIS C(1), BCIPIS N(15,2), BASEIPI2S N(15,2), BASEIPI3S N(15,2), ALIQS N(15,2), VALIPIS N(15,2), SITTRICMS C(3), ;
+	BASEICMS N(15,2), BASEICM2S	N(15,2), BASEICM3S N(15,2), ALIQICMS N(15,2), ICMS N(15,2), CFOPS C(10), BCICMSS N(15,2), ICMSS N(15,2), ALIQPIS N(15,2), ;
+	VPIS N(15,2), ALIQCOFS N(15,2), VCOFINS	N(15,2), ISS N(15,2), IRRF N(15,2), INSS N(15,2), CSSL N(15,2), ALIQIIS	N(15,2), TAXAIIS N(15,2), ;
+	NADIS N(3), NIADIS N(3), CODFABS C(60), ORIGMERCS C(1), GRUORIGS C(10), CONORIGS C(10), GRUDESTS C(10), CONDESTS C(10), DATAS D, VENDS C(10), ;
+	CODCORS C(4), CODTAMS C(4), OBSES C(250))
+
+Select crImpMvCab
+Append From &lcArq delimited with character '|'
+Go Top
+
+If Eof() Or crImpMvCab.TPREGS # [MVITN]
+	Messagebox([Arquivo '] + lcArq + [' inválido para importação de movimentações],48,[Importação cancelada])
+	Return .f.
+Endif
+
+lcQuery = [Select Dopes, NDopes, Numeras, vCompensas, GrVends, Cmoes From SigCdOpe Where Dopes = '] + crImpMvCab.Dopes + [']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdOpe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdOpe)')
+	Return .f.
+EndIf
+If Eof([crSigCdOpe])
+	lcMsg = [Movimentação não configurada no sistema.]
+	llOk = .f.
+Endif
+
+If llOk
+	lcQuery = [Select cEmps From SigCdEmp Where cEmps = '] + crImpMvCab.Emps + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdEmp') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdEmp)')
+		Return .f.
+	EndIf
+	If Eof([crSigCdEmp])
+		lcMsg = [Empresa não cadastrada.]
+		llOk = .f.
+	Endif
+	Use In crSigCdEmp
+Endif
+
+If llOk
+	lcQuery = [Select Rclis From SigCdCli Where Iclis = '] + crImpMvCab.CONORIGS + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+		Return .f.
+	EndIf
+	If Eof([crSigCdCli])
+		lcMsg = [Conta de origem não cadastrada.]
+		llOk = .f.
+	Endif
+	Use In crSigCdCli
+Endif
+
+If llOk
+	lcQuery = [Select Rclis From SigCdCli Where Iclis = '] + crImpMvCab.CONDESTS + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+		Return .f.
+	EndIf
+	If Eof([crSigCdCli])
+		lcMsg = [Conta de destino não cadastrada.]
+		llOk = .f.
+	Endif
+	Use In crSigCdCli	
+Endif
+
+If llOk
+	lcQuery = [Select Rclis From SigCdCli Where Iclis = '] + crImpMvCab.VENDS + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+		Return .f.
+	EndIf
+	If Eof([crSigCdCli])
+		lcMsg = [Conta de vendedor não cadastrada.]	
+		llOk = .f.
+	Endif
+	Use In crSigCdCli	
+Endif
+
+If llOk
+	Create Cursor TmpTotal (Moeds C(3), Valtots N(12,2), Valitens N(12,2), Valdifs N(12,2), PorcDifs N(12,4), Tipos C(1), Coefs n(6,3), Teors n(6,3), ;
+							Qtdes n(10,3), Mobras n(10,2), nSinals N(3), MoeVals n(12,5))
+	Index On Moeds Tag Moeds
+
+	Select crSigMvCab
+	Zap
+	Select crSigMvItn
+	Zap
+	Select crSigMvIts
+	Zap
+	Select crSigMvMov
+	Zap	
+
+	Wait Window 'Processando arquivos de movimentação de estoque...' Nowait NoClear	
+
+	Select crImpMvCab
+
+	llNew = .t.
+	_Inicio = 0	
+	If crSigCdOpe.Numeras = 5 && Numeração aleatória
+		Do While _Inicio = 0
+			_Inicio = fKeyGen()
+			If ThisForm.poDataMgr.ChkRegister('SigMvCab','EmpDopNums',crImpMvCab.Emps + crImpMvCab.Dopes + Str(_Inicio,6))
+				_Inicio =  0
+			Endif
+		Enddo
+		llNew = .f.			
+	Endif
+
+	If llNew And crSigCdOpe.Numeras # 2 && Não pode gerar numeração quando puxa subnível pois pode gerar numeração já existente
+		_Inicio = fGerUniqueKey( Alltrim( crImpMvCab.Dopes ) + crImpMvCab.Emps )
+	Endif
+
+	_IniLet = Alltrim( fGerMascara( _Inicio ) )
+	_pData = ThisForm.poDataMgr.GetDatetime() && datetime()
+	lcGruVend = Left(crSigCdOpe.GrVends,10)
+	lcEDN = crImpMvCab.Emps + crImpMvCab.Dopes + Str(_Inicio,6)
+
+	Insert Into crSigMvCab ( Emps, Dopes, Numes, Usuars, Datars, Datas, Transps, Mascnum, Tabds, LPrecos, CidChaves, ;
+							EmpDopNums, Dgopes, vCompensas, GrupoOs, ContaOs, GrupoDs, ContaDs, ;
+							GrVends, Vends, GrResps, Resps, Obses, DataTrans) Values ;
+							( crImpMvCab.Emps, crImpMvCab.Dopes, _Inicio, Usuar, _pData, crImpMvCab.Datas, .F., _IniLet, [], [], fUniqueIds(), ;
+							lcEDN, [], crSigCdOpe.vCompensas, crImpMvCab.GRUORIGS, crImpMvCab.CONORIGS, crImpMvCab.GRUDESTS, crImpMvCab.CONDESTS, ;
+							lcGruVend, crImpMvCab.VENDS, lcGruVend, crImpMvCab.VENDS, crImpMvCab.OBSES, _pData)
+
+	lcMoeOpe = crSigCdOpe.Cmoes &&Iif(!Empty(crSigCdOpe.Cmoes),crSigCdOpe.Cmoes,crSigCdPam.MoedaPs)
+	lnCotMov = fBuscarCotacao(Iif(!Empty(lcMoeOpe),lcMoeOpe,crSigCdPam.MoedaPs), crImpMvCab.Datas, Thisform.podatamgr)
+	If !Empty(lcMoeOpe)
+		If !Seek(lcMoeOpe, "TmpTotal" )
+			Insert Into TmpTotal (Moeds, Moevals) Values (lcMoeOpe, lnCotMov)
+		Else
+			lnCotMov = TmpTotal.MoeVals
+		Endif
+	Endif
+
+	lnValtot = 0						
+	Select crImpMvCab
+	Scan
+		lcQuery = [Select Dpros From SigCdPro Where Cpros = '] + crImpMvCab.Cpros + [']
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPro') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPro)')			
+			Return .f.
+		EndIf
+		If Eof([crSigCdPro])
+			lcMsg = [Produto ] + Alltrim(crImpMvCab.Cpros) + [ não cadastrado.]		
+			llOk = .f.
+			Exit
+		Endif
+		Use In crSigCdPro
+
+		Select crImpMvCab	
+		Scatter Memo Memvar
+		m.Numes = crSigMvCab.Numes
+		m.EmpDopNums = m.Emps + m.Dopes + Str(m.Numes,6)
+		m.Citens = Val(m.Citens)
+		m.CodBarras = Val(m.CodBarras)
+		m.CidChaves = fUniqueIds()
+
+		lnCotItn = Iif(!Empty(m.MoeVals), m.MoeVals, fBuscarCotacao(m.Moedas, m.Datas, ThisForm.poDataMgr))
+		If !Empty(m.Moedas)		
+			If !Seek(m.Moedas, "TmpTotal" )
+				Insert Into TmpTotal (Moeds, Moevals) Values (m.Moedas, m.MoeVals)
+			Endif
+		Endif
+		If !Empty(lcMoeOpe) And lcMoeOpe # m.Moedas
+			m.Units = m.Units * lnCotItn / lnCotMov 
+			m.Totas = m.Totas * lnCotItn / lnCotMov
+			m.Moedas = lcMoeOpe
+		Endif
+		m.Unit2s = m.Units
+		m.UniVals = m.Units
+
+		Insert Into crSigMvItn From Memvar
+		
+		If !Empty(crImpMvCab.CODCORS) Or !Empty(crImpMvCab.CODTAMS)
+			If !Empty(crImpMvCab.CODCORS)		
+				lcQuery = [Select Cods From SigCdCor Where Cods = '] + crImpMvCab.CodCors + [']
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCor') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCor)')			
+					Return .f.
+				EndIf
+				If Eof([crSigCdCor])
+					lcMsg = [Cor ] + Alltrim(crImpMvCab.CodCors) + [ não cadastrada.]		
+					llOk = .f.
+					Exit
+				Endif
+				Use In crSigCdCor
+			Endif
+			If !Empty(crImpMvCab.CODTAMS)					
+				lcQuery = [Select Cods From SigCdTam Where Cods = '] + crImpMvCab.CodTams + [']
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdTam') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdTam)')			
+					Return .f.
+				EndIf
+				If Eof([crSigCdTam])
+					lcMsg = [Tamanho ] + Alltrim(crImpMvCab.CodTams) + [ não cadastrado.]		
+					llOk = .f.
+					Exit
+				Endif
+				Use In crSigCdTam
+			Endif
+			
+			m.CidChaves = fUniqueIds()
+			m.QtdEmbs = 1
+			
+			Insert Into crSigMvIts From Memvar
+		Endif
+
+		lnValtot = lnValtot + Iif(lcMoeOpe # m.Moedas, (m.Totas * m.Moevals) / lnCotMov, m.Totas)		
+	Endscan
+	If llOk
+		Replace Valos With lnValtot, ValInis With lnValtot in crSigMvCab
+
+		Select TmpTotal
+		Scan
+			If !Empty(TmpTotal.Moeds) And !Empty(TmpTotal.MoeVals)
+				Insert Into crSigMvMov ( Emps, Dopes, Numes, Moeds, ValTots, ValItens, ValDifs, ;
+						PorcDifs, Tipos, Datatrans, Coefs, Teors, Qtdes, mObras, nSinals, EmpDopNums, CidChaves, DtAlts, MoeVals ) ;
+					Values (crSigMvCab.Emps, crSigMvCab.Dopes, crSigMvCab.Numes, TmpTotal.Moeds, ;
+							 TmpTotal.ValTots, TmpTotal.ValItens, TmpTotal.ValDifs, TmpTotal.PorcDifs, ;
+							 TmpTotal.Tipos, Nvl(crSigMvCab.Datatrans,Ctod('')), TmpTotal.Coefs, TmpTotal.Teors, ;
+							 TmpTotal.Qtdes, TmpTotal.mObras, TmpTotal.nSinals, crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6),;
+							 fUniqueIds(), crSigMvCab.Datas, TmpTotal.MoeVals )
+			EndIf
+		EndScan		
+	Endif
+Endif
+
+If llOk And !ThisForm.poDataMgr.Update('crSigMvCab')
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update crSigMvCab)')
+	llOk = .f.
+EndIf
+If llOk And !ThisForm.poDataMgr.UpDate('crSigMvItn')
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update crSigMvItn)')
+	llOk = .f.
+Endif
+If llOk And !ThisForm.poDataMgr.UpDate('crSigMvIts')
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update crSigMvIts)')
+	llOk = .f.
+Endif
+If llOk And !ThisForm.poDataMgr.UpDate('crSigMvMov')
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update crSigMvMov)')
+	llOk = .f.
+Endif
+
+If llOk 
+	ThisForm.poDataMgr.Commit()
+	=fGravarLog('T', crSigMvCab.Dopes, [INSERIR], crSigMvCab.Emps + '-' + AllTrim(crSigMvCab.Dopes) + '-' + AllTrim(Str(crSigMvCab.Numes,6)))	
+	MessageBox([Arquivo '] + lcArq + [' importado!],64,'Importação concluída')
+	llOk = .t.
+Else
+	ThisForm.poDataMgr.RollBack()
+	MessageBox(lcArq + [ - ] + lcMsg,64,'Importação cancelada')
+	=fGravarLog('T', [SIGPRIMP], [ERRO], lcArq + [ - ] + lcMsg )		
+	llOk = .f.
+Endif
+
+Select crSigMvCab
+Zap
+Select crSigMvItn
+Zap
+Select crSigMvIts
+Zap
+Select crSigMvMov
+Zap
+
+Use In crImpMvCab
+Use In TmpTotal
+
+*!*	thisform.get_Arquivo.Value = []
+
+Return llOk
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn < 1)
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	Endif
+
+	With ThisForm.podatamgr
+		.AddCursor('SigMvCab', 'CidChaves',  'crSigMvCab', '', '')
+		.Addcursor('SigMvItn', 'CidChaves',  'crSigMvItn', '', '')
+		.Addcursor('SigMvIts', 'CidChaves',  'crSigMvIts', '', '')	
+		.Addcursor('SigMvMov', 'CidChaves',  'crSigMvMov', '', '')	
+	Endwith
+
+	lcQuery = [Select MoedaPs, MascNums, DirImports From SigCdPam]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPam') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPam)')
+		Return .f.
+	Endif
+	
+	Thisform.get_Arquivo.Value = crSigCdPam.DirImports
+
+	*** Busca os relação de arquivos que estão na pasta para serem importados
+	lcDirImport = Alltrim(crSigCdPam.DirImports)
+	lnArq = ADir(laArq, lcDirImport + [*.TXT])
+	If lnArq > 0
+		For lnPrc = 1 To lnArq
+			lcArq = Alltrim(laArq(lnPrc, 1))
+			ThisForm.Arquivos.Additem(lcArq)			
+		Next	
+	Endif
+	
+	Thisform.imprimir.Visible = .f.
+	Thisform.visualizar.Visible = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMP.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMP.Get_Arquivo
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMP.Imprimir
+* Classe: fwbtnm (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(ThisForm.opEstoque.Get_Datai.Value) Or Empty(ThisForm.opEstoque.get_Dataf.Value)
+	=MessageBox('Data Inicial e Data Final não podem ser Brancos!!!',0+48,'')
+	ThisForm.opEstoque.Get_Datai.SetFocus
+Else
+	If Empty(ThisForm.OpEstoque.Get_Arquivo.Value)
+		=MessageBox('Nome do Arquivo de Erro é Obrigatório!!!',0+48,'')
+		ThisForm.OpEstoque.Get_Arquivo.Setfocus
+	Else
+		ThisForm.Processar( 'I' )
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMP.btnMovEst
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArq, llOk
+
+lcDirImport = Alltrim(crSigCdPam.DirImports)
+
+lnArq = ADir(laArq, lcDirImport + [*.TXT])
+If lnArq > 0
+	lnDel = 0
+	For lnPrc = 1 To lnArq
+		Wait [Processando Arquivo ] + Alltrim(Str(lnPrc)) + [ de ] + Alltrim(Str(lnArq)) Window NoWait NoClear	
+
+		lcArq = lcDirImport + Alltrim(laArq(lnPrc, 1))
+		llOk = ThisForm.MovEst(lcArq)
+		If llOk
+			lcOK = lcDirImport + [OK\]	
+			If Not Directory(lcOK)
+				MkDir &lcOK.
+			EndIf	
+			If Directory(lcOK)
+				lcDst = lcOK + Alltrim(laArq(lnPrc, 1))
+				Copy File &lcArq. To &lcDst.
+			EndIf			
+			If File(lcDst)
+				Delete File &lcArq.
+				Thisform.Arquivos.RemoveItem(lnPrc - lnDel)
+				lnDel = lnDel + 1
+			EndIf			
+			Thisform.Arquivos.Refresh()
+		Endif
+	Next
+Else
+	Messagebox([Nenhum arquivo para importar.],64,[Aviso])
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return !Empty(thisform.get_Arquivo.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRIMP
+RESERVED3 (ClassInfo): podatamgr
+*gravaerro 
+*movest processa movimentação de estoque
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

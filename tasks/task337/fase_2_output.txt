@@ -1,0 +1,20 @@
+﻿Fase 2 completa. O `sigprtefBO.prg` foi expandido de 32 para 317 linhas com os seguintes m├®todos adicionados:
+
+**M├®todos de contrato BusinessBase:**
+- `CarregarDoCursor()` ÔÇö mapeia `Sistef` de `coSigCdPam`
+- `ObterChavePrimaria()` ÔÇö retorna `this_cOperacao`
+- `Inserir()` / `Atualizar()` ÔÇö no-op (form OPERACIONAL sem entidade CRUD)
+- `RegistrarAuditoria()` ÔÇö INSERT em `LogAuditoria` com `GETDATE()` Ô£ô
+
+**M├®todos de neg├│cio TEF (usados pelo Form nas fases seguintes):**
+- `CarregarParametrosTEF()` ÔÇö SELECT Sistef FROM SigCdPam ÔåÆ `coSigCdPam`
+- `CarregarImpressoraFiscal(par_cNoFab)` ÔÇö SELECT FROM SigFiMpF ÔåÆ popula `this_cNoCaixa`
+- `BuscarComprovantes(par_cImps)` ÔÇö SELECT FROM SigFiNfs ÔåÆ `CrSigFiNfs`
+- `BuscarNFiscalPorComprovante(par_cImps, par_cComprovs)` ÔÇö SELECT FROM SigFiNfs ÔåÆ `crTmpNFis`
+- `BuscarTransacaoTEF(...)` ÔÇö SELECT FROM SigFiTef por tipo/empresa/opera├º├úo/ident ÔåÆ `crSigFiTef`
+- `BuscarTransacaoPorIdChaves(par_cIdChaves)` ÔÇö SELECT FROM SigFiTef ÔåÆ `csSigFiTef`
+- `AtualizarStatusTef(par_cIdChaves, par_cStatus)` ÔÇö UPDATE por cIdChaves + SQLCOMMIT + auditoria
+- `AtualizarStatusTefPorRede(...)` ÔÇö UPDATE por cnmredes/cnnsus/CRT + SQLCOMMIT + auditoria
+- `AtualizarStatusTefPorIdents(...)` ÔÇö UPDATE por cnIdents + SQLCOMMIT + auditoria
+
+Todos os m├®todos seguem as regras cr├¡ticas: sem RETURN dentro de TRY/CATCH, CHR() para acentos, EscaparSQL() para strings, GETDATE() na auditoria, CATCH nunca silencioso.

@@ -1,0 +1,19 @@
+﻿O arquivo j├í est├í completo. Ap├│s ler todas as 2947 linhas, constatei que **o FormSigPrRet.prg j├í implementa 100% dos 61 objetos** do SIGPRRET original ÔÇö n├úo h├í nada a adicionar na Fase 5.
+
+**Por que isso aconteceu:**
+
+O SIGPRRET ├® um form **OPERACIONAL flat** (sem PageFrame Lista/Dados), ent├úo:
+- `ConfigurarPageFrame()` ÔåÆ cria o `cnt_4c_Sombra` com os dois labels de t├¡tulo
+- `ConfigurarFiltros()` ÔåÆ adiciona **todos** os TextBoxes, Labels e OptionGroups diretamente no form
+- `ConfigurarBotoes()` ÔåÆ cria o CommandGroup com 4 bot├Áes (Consulta/Arquivadas/Digita├º├úo/Encerrar)
+
+O `ConfigurarPaginaDados()` que a Fase 5 pede ├® espec├¡fico de forms **CRUD** (Page1=Lista, Page2=Dados). Em forms OPERACIONAIS como este, o equivalente ├® o `ConfigurarFiltros()`, que j├í foi criado nas fases anteriores com todos os campos.
+
+**Status da migra├º├úo:**
+- Todos os 61 objetos do `layout.json` est├úo implementados
+- Todos os handlers de KeyPress, LostFocus e Change est├úo presentes
+- Todos os pickers `AbrirBusca*` est├úo implementados
+- Os 3 modos de a├º├úo (BtnConsultaClick, BtnArquivadasClick, BtnDigitacaoClick) est├úo completos
+- `Destroy()` limpa os cursores tempor├írios
+
+A Fase 5/8 est├í **conclu├¡da** para este form ÔÇö n├úo h├í c├│digo a adicionar.

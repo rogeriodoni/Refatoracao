@@ -1,0 +1,9 @@
+﻿4 corre├º├Áes aplicadas em `FormSIGPRLNC.prg`:
+
+1. **ValidarGrupoLostFocus**: removido par├ómetro da assinatura do `PROCEDURE`, adicionado `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` + guard `IF !INLIST(par_nKeyCode, 13, 9) RETURN` (sem o guard, o handler abriria picker a cada tecla digitada)
+
+2. **ValidarContaLostFocus**: mesma corre├º├úo
+
+3. **Column1.Header1.Caption**: `"Grupo"` ÔåÆ `"Ocorr" + CHR(234) + "ncia"` (id├¬ntico ao legado)
+
+4. **Column2.Header1.Caption**: `"Conta"` ÔåÆ `"Descri" + CHR(231) + CHR(227) + "o"` (id├¬ntico ao legado)

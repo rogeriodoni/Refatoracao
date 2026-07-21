@@ -1,0 +1,16 @@
+﻿Vou verificar a linha exata do c├│digo para analisar o uso de `THIS.Controls()` antes de qualquer corre├º├úo.
+
+Looking at line 944 and 968 ÔÇö `THIS.Controls(loc_i)` e `par_oContainer.Controls(loc_i)`.
+
+`Controls(N)` ├® uma **propriedade cole├º├úo nativa do VFP9** dispon├¡vel em todos os objetos Container/Form. ├ë a forma padr├úo e correta de acessar um controle pelo ├¡ndice em VFP9 ÔÇö equivalente a `Buttons(N)` em OptionGroup. N├úo ├® um m├®todo customizado, n├úo precisa ser definido no Form nem herdado de FormBase.
+
+A forma de uso no c├│digo est├í correta:
+
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount
+    loc_oCtrl = THIS.Controls(loc_i)   ÔåÉ nativo VFP9, v├ílido
+```
+
+**Diagn├│stico**: Falso positivo do code review. O revisor confundiu a sintaxe `Controls(N)` (acesso indexado ├á cole├º├úo built-in) com uma chamada de m├®todo customizado. O c├│digo em `TornarControlesVisiveis` (linha 944) e `TornarSubControlesVisiveis` (linha 968) est├í correto.
+
+**Nenhuma altera├º├úo necess├íria** em `FormSigPrGlo.prg` ÔÇö o ├║nico problema listado ├® um falso positivo, e modificar o c├│digo introduziria risco sem benef├¡cio.

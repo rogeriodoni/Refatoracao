@@ -1,0 +1,23 @@
+﻿The `05_migracao_fase3.log` shows the ClaudeInvoker is still active ÔÇö this session IS the Claude CLI invocation that was started by the pipeline. The context was compressed mid-session, but the work was completed: all three edits to `FormSigPrIct.prg` were applied before the compression occurred.
+
+**Phase 3 verification:**
+
+- `FormSigPrIct.prg` exists at 633 lines Ô£ô
+- `ConfigurarPageFrame()` present Ô£ô
+- `InicializarForm()` present Ô£ô
+- `ConfigurarCabecalho()` present (lines 67ÔÇô117) ÔÇö creates `cnt_4c_Cabecalho` with `lbl_4c_Sombra` + `lbl_4c_Titulo` Ô£ô
+- `lbl_4c_Label1` (Top=141, " Per├¡odo ") and `lbl_4c_Label4` (Top=108, hidden by design) in `ConfigurarCampos()` Ô£ô
+- `TornarControlesVisiveis()` present (lines 591ÔÇô614) ÔÇö skips `CNT_4C_POSPROC` and `LBL_4C_LABEL4`, recurses via `TornarFilhosVisiveis()` Ô£ô
+- `TornarFilhosVisiveis(par_oContainer)` present (lines 616ÔÇô631) Ô£ô
+
+**Phase 3/3 complete.** `FormSigPrIct.prg` (633 lines) implements the full OPERACIONAL form for Integra├º├úo Cont├íbil:
+- Flat layout (Width=800├ùHeight=192), no PageFrame content pages
+- Gray header (`cnt_4c_Cabecalho`, RGB 100,100,100) with shadow+title labels
+- Date fields (`txt_4c_DataI` / `txt_4c_DataF`) at legacy pixel positions
+- "Per├¡odo" labels (Label1 visible, Label4 hidden as in legacy)
+- Primary buttons: Processar + Encerrar
+- Post-processing container (`cnt_4c_PosProc`, Visible=.F.) with V├¡deo/Imprimir/Encerrar buttons
+- Full event wiring via BINDEVENT
+- Processing flow: CmdProcessarClick ÔåÆ ChamarProcessar ÔåÆ SigPrIctBO.Processar() ÔåÆ conditional SigReDif / inconsistency display
+- File generation flow: ChamarGravar ÔåÆ SigPrIctBO.GerarArquivoContabil()
+- Report display: ExecutarRelatorioInconsistencias() with FILE() guard + locale isolation (SET POINT/SEPARATOR/REPORTBEHAVIOR 80)

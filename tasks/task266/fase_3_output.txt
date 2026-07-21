@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSIGPRCIC.prg` foi criado com a estrutura base completa.
+
+**O que foi implementado:**
+
+- `DEFINE CLASS FormSIGPRCIC AS FormBase` com dimens├Áes do popup original (469├ù496), TitleBar=0, DataSession=1, WindowType=1
+- Propriedades customizadas `pcIdChaves` e `poForm1` (do RESERVED3 do legado)
+- `Init()` com LPARAMETERS: armazena params e **define DataSessionId = pai.DataSessionId antes do DODEFAULT()** ÔÇö cr├¡tico para que crProg1/crProg2/crSigSyIco1 (cursores do pai) fiquem acess├¡veis
+- `InicializarForm()`: cria SIGPRCICBO, chama CarregarPorChave, configura background e header, guard gb_4c_ValidandoUI
+- `ConfigurarPageFrame()`: carrega `Framework\imagens\new_background.jpg` sem reescalonar para 1000├ù600 (mant├®m dimens├Áes do popup)
+- `ConfigurarCabecalho()`: container cinza RGB(100,100,100) com lbl_4c_Sombra/lbl_4c_Titulo usando AutoSize=.F. (regra de mem├│ria)
+- `TornarControlesVisiveis()` com LPARAMETERS opcional (funciona com ou sem par├ómetro)
+- `KeyPress`: ESC chama Release()
+- `Destroy()`: limpa BO e refer├¬ncia ao pai
+
+**Pr├│xima fase (4/8):** grid grd_4c_Dados com a lista de ├¡cones (crSigSyIco1.carqicones) e preview de imagem.

@@ -178,7 +178,19 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                                                                                                                             IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
                                                                                                                                 THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
                                                                                                                             ELSE
-                                                                                                                                THIS.this_lBalcTrats = (NVL(CsSigCdPam.BalcTrats, 0) = 1)
+                                                                                                                                IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
+                                                                                                                                    THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
+                                                                                                                                ELSE
+                                                                                                                                    IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
+                                                                                                                                        THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
+                                                                                                                                    ELSE
+                                                                                                                                        IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
+                                                                                                                                            THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
+                                                                                                                                        ELSE
+                                                                                                                                            THIS.this_lBalcTrats = (NVL(CsSigCdPam.BalcTrats, 0) = 1)
+                                                                                                                                        ENDIF
+                                                                                                                                    ENDIF
+                                                                                                                                ENDIF
                                                                                                                             ENDIF
                                                                                                                         ENDIF
                                                                                                                     ENDIF

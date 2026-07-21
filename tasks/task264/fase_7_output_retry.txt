@@ -1,0 +1,10 @@
+﻿All referenced dependencies exist. Phase 7 is now complete.
+
+Added 4 CRUD-style event handlers to `FormSigPrCfn.prg` at lines 260/314/365/402:
+
+- **BtnIncluirClick** ÔÇö Novo C├ílculo: reseta todos os inputs, resultados e 10 vencimentos; desabilita campos dependentes; chama `NovoRegistro()` do BO; foca ValorBase.
+- **BtnAlterarClick** ÔÇö Recalcular: sincroniza form ÔåÆ BO (todas as 8 propriedades), habilita campos se ValorBase>0, dispara `Calculos()`.
+- **BtnVisualizarClick** ÔÇö Ver Resultado: recalcula e exibe resumo (Valor Base, Juros/M├¬s, Juros/Dia, Dias, Juros, Total, Parcela) via `MsgInfo`; valida ValorBase antes.
+- **BtnExcluirClick** ÔÇö Limpar Vencimentos: verifica se h├í vencimentos, pede confirma├º├úo (`MsgConfirma`), limpa os 10 campos e recalcula.
+
+Todos os m├®todos usam l├│gica real da calculadora (n├úo stubs), respeitam as regras VFP9 (LPARAMETERS opcionais para PROCEDURE sem args, TRY/CATCH com filtro para membros inexistentes, `CHR()` para acentos, `MsgAviso`/`MsgInfo`/`MsgConfirma` do messages.prg), e todas as propriedades do BO (`this_nValorBase`, `this_nTipoCalculo`, etc.) e m├®todos (`NovoRegistro`, `Calculos`, `AjustarDiasUteis`) referenciados existem.

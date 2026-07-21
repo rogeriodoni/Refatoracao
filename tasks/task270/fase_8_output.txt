@@ -1,0 +1,18 @@
+﻿Fase 8 conclu├¡da. O arquivo `Formsigprcpd.prg` est├í completo com 1089 linhas.
+
+**M├®todos adicionados na Fase 8:**
+
+| M├®todo | Comportamento |
+|---|---|
+| `CarregarLista()` | Alias de `CarregarDados()` ÔÇö compatibilidade pipeline |
+| `BOParaForm()` | Popula Container1/Container2 a partir do BO e par├ómetros |
+| `FormParaBO()` | Retorna `.T.` ÔÇö form read-only, sem campos a salvar |
+| `HabilitarCampos()` | Stub ÔÇö todos os campos s├úo `ReadOnly` |
+| `LimparCampos()` | Limpa todos os campos de exibi├º├úo + oculta foto/shape |
+| `AjustarBotoesPorModo()` | Stub ÔÇö form flat sem bot├Áes CRUD |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnBuscarClick()` | Recarrega dados do banco (refresh) |
+| `BtnSalvarClick()` | Stub ÔÇö form read-only |
+| `BtnCancelarClick()` | `THIS.Release()` |
+
+A integra├º├úo no `menu.prg` (procedure `AbrirFormsigprcpd` na linha 4133) j├í estava correta com o padr├úo can├┤nico `VARTYPE(loForm) = "O"` + `loForm.Show()` sem `Release()` posterior. O `config.prg` carrega automaticamente via `ADIR()` todos os `*.prg` em `classes/` e `forms/`.

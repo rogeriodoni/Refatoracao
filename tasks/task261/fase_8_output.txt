@@ -1,0 +1,21 @@
+﻿A Fase 8/8 da migra├º├úo SIGPRCCC est├í conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+## Fase 8/8 - Resultado
+
+**FormSigPrCcc.prg** estava j├í completo das fases anteriores com 47 m├®todos implementados. As ├║nicas corre├º├Áes aplicadas nesta fase foram:
+
+1. **Cabe├ºalho atualizado** ÔÇö coment├írio agora reflete "Fase 8/8: COMPLETO"
+
+2. **`fwprogressbar.prg` ÔÇö `Update()` corrigido** ÔÇö o m├®todo agora aceita tanto `Update("Recalculando Conta Corrente...")` (string) quanto `Update(.T.)` (boolean), exibindo o texto no `SubTitulo` do progress bar. Antes, chamadas com string eram silenciosamente ignoradas.
+
+3. **`loc_oProgress.Show()`** ÔÇö substitu├¡do `Visible = .T.` por `Show()` para exibir corretamente o progress bar como janela separada.
+
+## Estado final da migra├º├úo
+
+| Arquivo | Linhas | Status |
+|---------|--------|--------|
+| `SigPrCccBO.prg` | 575 | Completo (4 m├®todos RecalcularXxx + CRUD + Init) |
+| `FormSigPrCcc.prg` | ~1793 | Completo (47 m├®todos, todos os lookup handlers, containers flutuantes) |
+| `menu.prg` | ÔÇö | Integrado (BAR 24 + AbrirFormSigPrCcc) |
+| `config.prg` | ÔÇö | Auto-carregado via ADIR |
+| `fwprogressbar.prg` | 147 | Atualizado (Update aceita string) |

@@ -1,0 +1,18 @@
+﻿As ocorr├¬ncias de `ControlCount` est├úo todas na linha 651-667 do form, dentro do m├®todo `TornarControlesVisiveis` ÔÇö s├úo acessos ├á propriedade VFP de container (`par_oContainer.ControlCount`), n├úo colunas SQL em nenhum WHERE.
+
+A ├║nica query SQL real nos dois arquivos est├í no BO (`sigprpdfBO.prg`), m├®todo `CarregarEmailEmpresa`:
+
+```foxpro
+loc_cSQL = "SELECT PadEmails, PadServs, PadSenhas, pastas, PadPortas " + ;
+           "FROM SigCdEmp " + ;
+           "WHERE CEmps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+```
+
+Isso bate exatamente com o original legado:
+```foxpro
+lcQuery = [Select PadEmails, PadServs, PadSenhas, pastas, PadPortas From SigCdEmp Where CEmps = '] + _EMPR + [']
+```
+
+Ambos usam `CEmps` como ├║nico filtro. N├úo existe nenhuma condi├º├úo `CONTROLCOUNT` em SQL nestes arquivos ÔÇö o code review gerou um **falso positivo**, confundindo a propriedade VFP `ControlCount` (usada no loop de controles visuais) com uma coluna SQL.
+
+**Nenhuma corre├º├úo necess├íria.** Os arquivos est├úo corretos.

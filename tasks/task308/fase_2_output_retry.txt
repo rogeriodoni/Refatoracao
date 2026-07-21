@@ -1,0 +1,11 @@
+﻿Phase 2 conclu├¡da. Adicionei ao `sigpriteBO.prg`:
+
+- `ValidarDados()` PROTECTED ÔÇö valida Emp/Dop/Num/CPros/QtdOs antes de Inserir/Atualizar, monta `this_cEmpDopNum` se vazio.
+- `Inserir()` PROTECTED ÔÇö SQL INSERT em `SigMvItn` com todos os campos do BO (Emps, Dopes, Numes, EmpDopNums, CItens, CPros, DPros, Obs, CUnis, Opers, Qtds, QtBaixas, Units, Moedas, Totas, DtAlts=GETDATE()), chama `RegistrarAuditoria("INSERT")`.
+- `Atualizar()` PROTECTED ÔÇö SQL UPDATE em `SigMvItn` por `EmpDopNums + CItens`, chama `RegistrarAuditoria("UPDATE")`.
+- `ExecutarExclusao()` PROTECTED ÔÇö SQL DELETE por `EmpDopNums + CItens`, chama `RegistrarAuditoria("DELETE")`.
+- `ObterChavePrimaria()` ajustado para retornar chave composta `EmpDopNum + CItens` (evita colis├úo de auditoria entre itens da mesma OP).
+
+`CarregarDoCursor` j├í mapeava todas as colunas do cursor (CItens, CPros, DPros, Obs, CUnis, Volumes, Opers, QtdOs, QtdBs, QtdSs, Units, CMoes, Totas, Disps).
+
+Todos os m├®todos usam `EscaparSQL`/`FormatarNumeroSQL` com `PADR`/`LEFT` conforme tamanhos do schema; TRY/CATCH sem RETURN interno; RegistrarAuditoria em todas as tr├¬s opera├º├Áes.

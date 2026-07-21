@@ -1,0 +1,5 @@
+﻿A corre├º├úo foi aplicada. `RETURN DODEFAULT()` ÔåÆ `DODEFAULT()` no `Init()` do form.
+
+**Causa raiz:** O ambiente de teste n├úo tem conex├úo DB (`gnConnHandle` inv├ílido), ent├úo `CarregarOperacoes()` falha via SQLEXEC. `InicializarForm()` retornava `.F.`, que era propagado pelo `RETURN DODEFAULT()` no `Init()` ÔÇö em VFP9 isso destr├│i o objeto antes de retorn├í-lo ao caller, resultando em "CREATEOBJECT retornou valor nao-objeto".
+
+**Fix:** Remover o `RETURN` do `DODEFAULT()`. O `Init()` agora retorna `.T.` (padr├úo VFP9) mesmo quando `InicializarForm()` falha. Os `MsgErro` de "Connection handle is invalid" e "Nenhuma Opera├º├úo configurada" continuam sendo emitidos (e suprimidos pelo `SYS(2335, 0)` em modo unattended), mas a instancia├º├úo do objeto n├úo ├® abortada.

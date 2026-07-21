@@ -1498,7 +1498,9 @@ DEFINE CLASS Formsigrecrp AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Inserir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
             RETURN
         ENDIF
         THIS.BtnImprimirClick()

@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigprdftBO.prg` criado com:
+
+- **20 propriedades** cobrindo todos os dados identificados no c├│digo fonte:
+  - Par├ómetros de entrada do `Init` (EndSiTef, ValPago, Cupom, Caixa, DebCred, TipPagto, NumParcs, Ident, Opers)
+  - Dados retornados pelo SiTef (Bandeira, Cartao, Nsu, Autoriza, DataHora, TipTran, Finaliza, MsgRetorno)
+  - Flags de controle (Abandonou, DCD, SaqueValor, Parcelas)
+  - Dados do terminal (IdTerminal, ValorStr)
+- **Init()** chamando `DODEFAULT()` e configurando `this_cTabela = ""` / `this_cCampoChave = ""` (form operacional sem tabela CRUD)
+
+**Nota sobre o form:** O SIGPRDFT ├® um di├ílogo TEF que comunica com a DLL `CliSiTef32I.DLL` via `DECLARE`. N├úo tem tabela SQL Server pr├│pria ÔÇö grava resultados em `C:\client\Resp\IntPos.001` e `IntPos.STS`. As fases seguintes (2-8) completar├úo o BO e criar├úo o Form.

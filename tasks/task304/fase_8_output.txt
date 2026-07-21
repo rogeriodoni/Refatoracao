@@ -1,0 +1,16 @@
+﻿Fase 8/8 conclu├¡da. O arquivo `FormSIGPRIMP.prg` agora cont├®m todos os m├®todos exigidos pelo pipeline:
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `BtnBuscarClick()` | Chama `CarregarLista()` + `AjustarBotoesPorModo()` |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Confirma├º├úo + `BtnMovEstClick()` (contexto OPERACIONAL) |
+| `BtnCancelarClick()` | `THIS.Release()` |
+| `FormParaBO()` | Propaga arquivo selecionado no listbox ÔåÆ `this_cArquivoAtual` do BO |
+| `BOParaForm()` | Carrega `this_cDirImports` ÔåÆ `txt_4c_Arquivo` |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita `cmd_4c_BtnMovEst` e `obj_4c_Arquivos` |
+| `LimparCampos()` | Reseta `txt_4c_Arquivo` ao diret├│rio e limpa sele├º├úo do listbox |
+| `CarregarLista()` | Chama `CarregarArquivos()`, re-vincula listbox e retorna contagem |
+| `AjustarBotoesPorModo()` | `BtnMovEst.Enabled` = h├í arquivos no cursor; Cancela sempre habilitado |
+
+O form OPERACIONAL est├í completo com paridade funcional 100% ao legado ÔÇö sem stubs, sem TODOs, todos os m├®todos com implementa├º├úo real adaptada ao contexto de importa├º├úo de movimenta├º├úo de estoque.

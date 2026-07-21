@@ -1,0 +1,11 @@
+﻿Arquivo atualizado corretamente. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** (linha 167): cria todos os controles do di├ílogo ÔÇö `shp_4c_Shape1`, `cmd_4c_OK` (Gerar), `cmd_4c_Cancela` (Encerrar), `chk_4c_GeraArquivos`, `chk_4c_GeraIndices` e `lbl_4c_Mensagem1` ÔÇö com BINDEVENTs nos bot├Áes.
+
+- **`BtnOKClick()`** (linha 300): implementa toda a l├│gica do legado (gera├º├úo de ArqDBF.DBF com estrutura dos campos via `AFIELDS` + gera├º├úo de ArqInd.DBF com ├¡ndices via `TAG/KEY/SYS(2021)`). Usa flag `loc_lInterrompido` em vez de RETURN dentro de TRY/CATCH, salva/restaura o diret├│rio corrente e o `SET SAFETY`.
+
+- **`BtnCancelaClick()`** (linha 467): restaura cursor logo e libera o form.
+
+- **`InicializarForm()`** (linha 63): inserida chamada a `THIS.ConfigurarPaginaLista()` entre `ConfigurarCabecalho()` e `TornarControlesVisiveis()`.

@@ -113,132 +113,142 @@ DEFINE CLASS Formsigredoc AS FormBase
             .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
             .Visible     = .T.
+        ENDWITH
 
-            .AddObject("lbl_4c_Sombra", "Label")
-            WITH .lbl_4c_Sombra
-                .Top       = 22
-                .Left      = 22
-                .Width     = THIS.Width
-                .Height    = 30
-                .Caption   = "Impress" + CHR(227) + "o de Documento"
-                .FontName  = "Tahoma"
-                .FontSize  = 14
-                .FontBold  = .T.
-                .ForeColor = RGB(0, 0, 0)
-                .BackStyle = 0
-                .Visible   = .T.
+        *-- Labels e CommandGroup: adicionar via caminho explicito (loc_oCab.AddObject)
+        *-- e configurar via WITH loc_oCab.<filho> (evita WITH aninhado que causa
+        *-- falha de resolucao de propriedades ? Erro47/Erro49 pattern).
+        loc_oCab.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oCab.lbl_4c_Sombra
+            .Top       = 22
+            .Left      = 22
+            .Width     = THIS.Width
+            .Height    = 30
+            .Caption   = "Impress" + CHR(227) + "o de Documento"
+            .FontName  = "Tahoma"
+            .FontSize  = 14
+            .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oCab.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oCab.lbl_4c_Titulo
+            .Top       = 20
+            .Left      = 20
+            .Width     = THIS.Width
+            .Height    = 30
+            .Caption   = "Impress" + CHR(227) + "o de Documento"
+            .FontName  = "Tahoma"
+            .FontSize  = 14
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Botoes de relatorio (framework frmrelatorio: cmg_4c_Botoes)
+        *-- Geometria canonica: Top=0, Left=527, Width=273, Height=80
+        *-- Buttons Width=65, Height=70, Lefts=5/71/137/203 (incremento 66)
+        loc_oCab.AddObject("cmg_4c_Botoes", "CommandGroup")
+        loc_oCmg = loc_oCab.cmg_4c_Botoes
+        WITH loc_oCmg
+            .Top           = 0
+            .Left          = 527
+            .Width         = 273
+            .Height        = 80
+            .ButtonCount   = 4
+            .BackStyle     = 0
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 1
+            .Themes        = .F.
+            .Visible       = .T.
+
+            WITH .Buttons(1)
+                .Caption         = "Visualizar"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .Top             = 5
+                .Left            = 5
+                .Width           = 65
+                .Height          = 70
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                .PicturePosition = 13
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .Themes          = .F.
+                .Visible         = .T.
             ENDWITH
 
-            .AddObject("lbl_4c_Titulo", "Label")
-            WITH .lbl_4c_Titulo
-                .Top       = 20
-                .Left      = 20
-                .Width     = THIS.Width
-                .Height    = 30
-                .Caption   = "Impress" + CHR(227) + "o de Documento"
-                .FontName  = "Tahoma"
-                .FontSize  = 14
-                .FontBold  = .T.
-                .ForeColor = RGB(255, 255, 255)
-                .BackStyle = 0
-                .Visible   = .T.
+            WITH .Buttons(2)
+                .Caption         = "Imprimir"
+                .Top             = 5
+                .Left            = 71
+                .Width           = 65
+                .Height          = 70
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                .PicturePosition = 13
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .Themes          = .F.
+                .Visible         = .T.
             ENDWITH
 
-            .AddObject("cmg_4c_Botoes", "CommandGroup")
-            WITH .cmg_4c_Botoes
-                .Top           = 0
-                .Left          = 529
-                .Width         = THIS.Width
-                .Height        = 80
-                .ButtonCount   = 4
-                .BackStyle     = 0
-                .BorderColor   = RGB(136, 189, 188)
-                .SpecialEffect = 1
-                .Themes        = .F.
-                .Visible       = .T.
+            WITH .Buttons(3)
+                .Caption         = "\<Arquivos Email"
+                .WordWrap        = .T.
+                .Top             = 5
+                .Left            = 137
+                .Width           = 65
+                .Height          = 70
+                .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
+                .PicturePosition = 13
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
 
-                WITH .Buttons(1)
-                    .Caption         = "Visualizar"
-                    .FontName        = "Comic Sans MS"
-                    .FontSize        = 8
-                    .Top             = 5
-                    .Left            = 5
-                    .Width           = THIS.Width
-                    .Height          = 70
-                    .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
-                    .PicturePosition = 13
-                    .FontBold        = .T.
-                    .FontItalic      = .T.
-                    .BackColor       = RGB(255, 255, 255)
-                    .ForeColor       = RGB(90, 90, 90)
-                    .SpecialEffect   = 0
-                    .MousePointer    = 15
-                    .Themes          = .F.
-                ENDWITH
-
-                WITH .Buttons(2)
-                    .Caption         = "Imprimir"
-                    .Top             = 5
-                    .Left            = 71
-                    .Width           = THIS.Width
-                    .Height          = 70
-                    .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
-                    .PicturePosition = 13
-                    .FontName        = "Comic Sans MS"
-                    .FontSize        = 8
-                    .FontBold        = .T.
-                    .FontItalic      = .T.
-                    .BackColor       = RGB(255, 255, 255)
-                    .ForeColor       = RGB(90, 90, 90)
-                    .SpecialEffect   = 0
-                    .MousePointer    = 15
-                    .Themes          = .F.
-                ENDWITH
-
-                WITH .Buttons(3)
-                    .Caption         = "Doc. Excel"
-                    .WordWrap        = .T.
-                    .Top             = 5
-                    .Left            = 137
-                    .Width           = THIS.Width
-                    .Height          = 70
-                    .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
-                    .PicturePosition = 13
-                    .FontName        = "Comic Sans MS"
-                    .FontSize        = 8
-                    .FontBold        = .T.
-                    .FontItalic      = .T.
-                    .BackColor       = RGB(255, 255, 255)
-                    .ForeColor       = RGB(90, 90, 90)
-                    .SpecialEffect   = 0
-                    .MousePointer    = 15
-                    .Themes          = .F.
-                ENDWITH
-
-                WITH .Buttons(4)
-                    .Caption         = "Sair"
-                    .WordWrap        = .T.
-                    .Top             = 5
-                    .Left            = 203
-                    .Width           = THIS.Width
-                    .Height          = 70
-                    .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
-                    .PicturePosition = 13
-                    .Cancel          = .T.
-                    .FontName        = "Comic Sans MS"
-                    .FontSize        = 8
-                    .FontBold        = .T.
-                    .FontItalic      = .T.
-                    .BackColor       = RGB(255, 255, 255)
-                    .ForeColor       = RGB(90, 90, 90)
-                    .SpecialEffect   = 0
-                    .MousePointer    = 15
-                    .Themes          = .F.
-                ENDWITH
+            WITH .Buttons(4)
+                .Caption         = "Sair"
+                .WordWrap        = .T.
+                .Top             = 5
+                .Left            = 203
+                .Width           = 65
+                .Height          = 70
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+                .PicturePosition = 13
+                .Cancel          = .T.
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .Themes          = .F.
+                .Visible         = .T.
             ENDWITH
         ENDWITH
 
-        loc_oCmg = loc_oCab.cmg_4c_Botoes
         BINDEVENT(loc_oCmg.Buttons(1), "Click", THIS, "BtnVisualizarClick")
         BINDEVENT(loc_oCmg.Buttons(2), "Click", THIS, "BtnImprimirClick")
         BINDEVENT(loc_oCmg.Buttons(3), "Click", THIS, "BtnGerarExcelClick")
@@ -1029,8 +1039,10 @@ DEFINE CLASS Formsigredoc AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Erro ao Visualizar")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1056,8 +1068,10 @@ DEFINE CLASS Formsigredoc AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.ImprimirComDialog()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Erro ao Imprimir")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1083,8 +1097,10 @@ DEFINE CLASS Formsigredoc AS FormBase
             IF loc_lContinuar
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                             "Erro ao Imprimir")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

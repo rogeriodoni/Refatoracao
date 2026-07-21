@@ -1,0 +1,46 @@
+﻿Analisei ambos os casos em detalhe. Ambos s├úo **falsos positivos** do scanner automatizado. Nenhuma altera├º├úo deve ser feita:
+
+---
+
+## An├ílise dos 2 alertas SQL-FILTRO-INVENTADO
+
+### 1. `PKCHAVES` ÔÇö Falso positivo
+
+**Onde aparece:** `SigPrEmlBO.prg:1099`
+```foxpro
+"WHERE pkchaves = " + EscaparSQL(ALLTRIM(THIS.this_cPkChaves))
+```
+
+**Diagn├│stico:** `pkchaves` ├® a **chave prim├íria real de SigAlert**, confirmada no `docs/schema.sql` (linha 536/542):
+```sql
+[pkchaves] [char](20) NOT NULL,
+PRIMARY KEY CLUSTERED ([pkchaves] ASC)
+```
+
+O original usava `podatamgr2.Update([crSigAlert])` ÔÇö um mecanismo cursor-bound do framework VFP que usa a PK internamente. A migra├º├úo corretamente substituiu isso por `UPDATE SigAlert SET ... WHERE pkchaves = ...`. Remover este WHERE atualizaria **todas as linhas** da tabela SigAlert ÔÇö seria catastr├│fico.
+
+**A├º├úo: nenhuma altera├º├úo.**
+
+---
+
+### 2. `CONTROLCOUNT` ÔÇö Falso positivo
+
+**Onde aparece:** `FormSigPrEml.prg:499,505,514,520`
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+**Diagn├│stico:** `ControlCount` aqui ├® uma **propriedade VFP9 de objetos/containers**, n├úo uma coluna SQL. O scanner detectou a string `ControlCount` num contexto que cont├®m `>` (operador de compara├º├úo) e classificou erroneamente como cl├íusula `WHERE`. N├úo h├í nenhum SQL com `WHERE ... CONTROLCOUNT ...` nesses arquivos.
+
+**A├º├úo: nenhuma altera├º├úo.**
+
+---
+
+## Conclus├úo
+
+Os arquivos `SigPrEmlBO.prg` e `FormSigPrEml.prg` est├úo **corretos** para este pass SQL. Os dois alertas detectados pelo scanner automatizado s├úo falsos positivos:
+- O scanner confundiu a PK real da tabela com um filtro inventado
+- O scanner confundiu uma propriedade VFP9 com uma coluna SQL em WHERE
+
+Nenhuma altera├º├úo foi feita ÔÇö qualquer mudan├ºa quebraria o c├│digo.

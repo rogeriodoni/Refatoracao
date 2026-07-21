@@ -1,0 +1,3 @@
+﻿**Fix 1 applied**: Removed `"CNT_4C_CABECALHO"` from the INLIST at line 372. Now `TornarControlesVisiveis()` will correctly set `cnt_4c_Cabecalho.Visible = .T.` (making the header visible), while `cnt_4c_Aguarde` remains `Visible=.F.` as required ÔÇö its children are already recursed before the LOOP so they're ready when toggled during processing.
+
+**Fix 2 (no change needed)**: `THIS.Controls(loc_i)` is a standard VFP9 built-in collection ÔÇö `Controls(N)` on any Form/Container returns the Nth child control, exactly like `ControlCount` is a built-in count property. The code review tool produced a false positive by not recognizing this native VFP9 syntax.

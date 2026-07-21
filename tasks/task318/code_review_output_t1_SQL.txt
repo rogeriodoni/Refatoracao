@@ -1,0 +1,12 @@
+﻿Analisando os dois alertas detectados:
+
+**DOPPS** ÔÇö O schema confirma que `SigCdOpd` tem a coluna `[dopps] [char](20)` (schema.sql linha 5428). A query no BO ├® `Select * From SigCdOpd Where Dopps = ...`, que ├® semanticamente correta. O validador confundiu porque o original usava cursor pr├®-carregado `crSigCdOpd` (navegado via `Select crSigCdOpd`), mas a coluna `Dopps` ├® v├ílida e necess├íria como filtro.
+
+**CONTROLCOUNT** ÔÇö O Grep mostra que `ControlCount` aparece exclusivamente como propriedade VFP9 (`THIS.ControlCount`, `loc_oObj.ControlCount`, `PEMSTATUS(loc_oObj, "ControlCount", 5)`), nunca em cl├íusula SQL WHERE. ├ë um false positive do validador que fez busca textual e capturou c├│digo VFP9.
+
+**Ambos os alertas s├úo falsos positivos.** Nenhuma corre├º├úo ├® necess├íria:
+
+- Remover o `Where Dopps = ...` da query SigCdOpd retornaria todos os registros da tabela ÔÇö comportamento incorreto
+- `ControlCount` n├úo existe em nenhuma SQL WHERE clause nos arquivos
+
+Os arquivos `FormSigPrPcp.prg` e `SigPrPcpBO.prg` est├úo corretos como est├úo para este pass SQL.

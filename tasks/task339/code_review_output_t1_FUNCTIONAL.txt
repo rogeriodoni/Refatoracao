@@ -1,0 +1,9 @@
+﻿Feito. Apenas uma altera├º├úo no arquivo:
+
+**Linha 289**: Substitu├¡do `IF UPPER(loc_oControl.Name) = "CNT_4C_MENSAGEM"` por `IF INLIST(UPPER(loc_oControl.Name), "CNT_4C_MENSAGEM", "CNT_4C_REFERENCIA")`.
+
+Ambos os containers agora passam pelo caminho `TornarSubControlesVisiveis` + `LOOP`, garantindo que:
+- `cnt_4c_Mensagem` (Visible=.F.) mant├®m-se oculto enquanto seus filhos ficam vis├¡veis
+- `cnt_4c_Referencia` (Visible=.T. via `ConfigurarReferencia`) n├úo ├® redefinido pelo loop geral, e seus filhos (grid e label) s├úo tornados vis├¡veis
+
+**Problema 2** ÔÇö `THIS.Controls(loc_i)` ├® a propriedade array nativa de containers/forms no VFP9 (documentada como `Controls Property`). N├úo ├® um m├®todo inventado ÔÇö ├® equivalente a `Controls[N]`. O c├│digo est├í correto e nenhuma altera├º├úo foi feita.

@@ -464,6 +464,11 @@ DEFINE CLASS Formsigreipe AS FormBase
                 .Sparse    = .F.
                 .AddObject("Check1", "CheckBox")
                 .Check1.Caption = ""
+                .Check1.Alignment = 0
+                .Check1.ReadOnly  = .F.
+                .Check1.Visible   = .T.
+                .Check1.Top       = 9
+                .Check1.Left      = 2
                 .Check1.Value   = 0
                 .Check1.Width   = 25
                 .Check1.Height  = 14
@@ -2111,7 +2116,9 @@ DEFINE CLASS Formsigreipe AS FormBase
                 IF THIS.this_oRelatorio.PrepararDadosMalaDireta()
                     loc_lSucesso = .T.
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao carregar dados")
+                    ENDIF
                 ENDIF
             ENDIF
 

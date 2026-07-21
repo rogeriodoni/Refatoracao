@@ -1,0 +1,12 @@
+﻿As duas edi├º├Áes est├úo corretas. Fase 6/8 conclu├¡da:
+
+**Mudan├ºas aplicadas em `Formsigproef.prg`:**
+
+1. **`InicializarForm()` (linha 69-71)** ÔÇö ap├│s `CarregarConfiguracao()` bem-sucedido, propaga propriedades do BO para o form:
+   - `this_cNoCaixa` ÔåÉ `this_oBusinessObject.this_cCnCaixas` (n├║mero do caixa da impressora fiscal)
+   - `this_cOperacao` ÔåÉ `PADR(NoCaixa + NoFab + "ADM", 20)` (identificador de transa├º├úo usado em `MontarRetorno`)
+   - Nota: `this_cNoFab` permanece vazio pois `LeituraFab()` (OLE control do hardware) n├úo ├® port├ível para a nova arquitetura
+
+2. **`ConfigurarPaginaLista()` (linhas 253-286)** ÔÇö cabe├ºalhos das 7 colunas configurados no momento do `AddObject` do grid, evitando que o grid mostre "Column1ÔÇªColumn7" gen├®ricos durante o carregamento inicial antes de `SqlTrans()` executar.
+
+O form n├úo tem lookups (F4/F5) nem campos Page2 pois ├® OPERACIONAL ÔÇö a Fase 6 gen├®rica do pipeline foi adaptada para completar a sincroniza├º├úo BOÔåÆForm e a configura├º├úo antecipada do grid.

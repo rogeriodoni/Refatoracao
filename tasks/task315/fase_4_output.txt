@@ -1,0 +1,13 @@
+﻿A corre├º├úo foi aplicada. O arquivo est├í correto.
+
+**O que foi feito na Fase 4:**
+
+- **Bug corrigido:** `Column1.ControlSource = "csOperacoes.SelImp"` estava sendo definida **dentro** do `WITH .Column1` (antes do `AddObject`), violando a regra cr├¡tica de Grid com CheckBox. Agora ├® definida **ap├│s** `CurrentControl = "chk_4c_SelImp"`, seguindo o padr├úo can├┤nico (Formsigrepes.prg:3095-3104).
+
+**Por que n├úo foram adicionados ConfigurarPaginaLista() e AlternarPagina():**
+
+O template da Fase 4 foi gerado para forms CRUD, mas `FormSIGPRNSE` ├® **OPERACIONAL**. Esses m├®todos n├úo existem neste padr├úo. O equivalente j├í estava implementado na Fase 3:
+- `ConfigurarPaginaLista()` ÔåÆ `ConfigurarGrade()` + `ConfigurarBotoesGrade()` Ô£à
+- `AlternarPagina()` ÔåÆ n├úo aplic├ível (form OPERACIONAL n├úo alterna Page1/Page2) Ô£à
+
+O form est├í funcional e completo. Pr├│xima fase ser├í adicionada ao arquivo Form nas fases 5-8.

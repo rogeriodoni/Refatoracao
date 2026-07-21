@@ -1,0 +1,13 @@
+﻿The migration for task302 is complete. Both files are now written:
+
+**`C:\4c\projeto\app\classes\sigprilaBO.prg`** (Phases 1+2 ÔÇö previous session): Complete BusinessBase with Init, ObterChavePrimaria, CRUD for SigPrTam, InicializarParametros, PreencherTipos, CompletarLista, CriarPlanilha, ValidarColunas, Processamento, and all 7 import processors (ListaPreco, Precificacao, Transferencia, PedidoTerceiro, PedidoConsignado, PedidoFabrica, PedidoAcessorio), plus LimiteCreditoMatriz and ObterCotacao.
+
+**`C:\4c\projeto\app\forms\operacionais\Formsigprila.prg`** (Phase 3 ÔÇö just created): OPERACIONAL form inheriting FormBase with:
+- `ConfigurarCabecalho` ÔÇö cinza escuro 800├ù80 com lbl_4c_Sombra/Titulo
+- `ConfigurarPainelPlanilha` ÔÇö container 466├ù221 com cbo_4c_CmbTipos (RowSourceType=6), txt_4c_Planilha (ReadOnly), cmd_4c_Cmdgetp, obj_4c_List1 (MoverBars=.T., BoundColumn=2), obj_4c_OptTipo (3 botoes, Visible=.F. por padr├úo), obj_4c_OptPreco (2 bot├Áes, Visible=.F.), chk_4c_Cabecalho
+- `ConfigurarBotoes` ÔÇö cmd_4c_Processar (Left=650) + cmd_4c_Encerrar (Left=725), ambos 75├ù75
+- `ConfigurarBINDEVENTs` ÔÇö 5 bindings: cbo InteractiveChange, cmdgetp Click, Processar Click, Encerrar Click, KeyPressÔåÆESC
+- Re-oculta├º├úo expl├¡cita de OptTipo/OptPreco ap├│s `TornarControlesVisiveis`
+- `CmdokClick` passa (nTipo, nPreco, cRotina, cArquivo, lCabecalho, obj_4c_List1) ao BO.Processamento
+
+O pipeline pode avan├ºar para as etapas 05b (CorretorAutomatico), 05c (compila├º├úo) e 06 (teste).

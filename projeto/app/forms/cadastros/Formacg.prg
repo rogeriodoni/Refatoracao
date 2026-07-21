@@ -1,2690 +1,1748 @@
 *==============================================================================
-* Formacg.prg
-* Formulario de Cadastro de Acesso de Grupos
-* Tabela principal: sigcdgra
-* Tabelas relacionadas: sigcdacg, sigcdacu, SigCdAcB, SigAcTel, sigcdprg
+* Formacg.prg - Formulario de Cadastro de Acesso de Grupos (SIGCDACG)
+* Tabela: sigcdgra (PK: Grupos, NComps)
+* Relacionados: sigcdacg, sigcdacu, sigcdacb, sigactel
 * Legado: SIGCDACG.SCX (frmcadastro)
 *==============================================================================
+SET SAFETY OFF
+SET RESOURCE OFF
 
-*------------------------------------------------------------------------------
-* Classe: FormAcg
-* Descricao: Gerenciamento de grupos de acesso ao sistema
-* Herda de: FormBase
-*------------------------------------------------------------------------------
-DEFINE CLASS FormAcg AS FormBase
+DEFINE CLASS Formacg AS FormBase
 
-    *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
-    Width       = 1000
-    Caption     = "Acesso de Grupos"
-    AutoCenter  = .T.
-    ShowWindow  = 1
-    WindowType  = 1
-    ControlBox  = .F.
-    TitleBar    = 0
-    Themes      = .F.
-    BorderStyle = 2
+    *-- Propriedades visuais
+    Caption      = "Acesso de Grupos"
+    Height       = 600
+    Width        = 1000
+    DataSession  = 1
+    AutoCenter   = .T.
+    ShowWindow   = 1
+    WindowType   = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    TitleBar     = 0
+    ClipControls = .F.
+    Themes       = .F.
+    BorderStyle  = 2
 
-    *-- Propriedades do Business Object
-    this_oBusinessObject = .NULL.
+    this_cTituloForm       = "Acesso de Grupos"
+    this_oBusinessObject   = .NULL.
+    this_cFiltroPrograma   = ""
 
-    *-- Necessaria para CATCH blocks (NAO herdada de FormBase)
-    this_cMensagemErro = ""
-
-    *-- Propriedades customizadas do formulario (legado)
-    this_cGrupos                = ""   && Codigo do grupo atual
-    this_cSupervisor            = ""   && Flag supervisor (I = sim, N = nao)
-    this_nMouseX                = 0    && Posicao X do mouse (drag)
-    this_nMouseY                = 0    && Posicao Y do mouse (drag)
-    this_nDragThreshold         = 8    && Threshold para inicio do drag
-    this_cUltimoGrupoValidado   = ""   && Guard para LostFocus do campo CopiarAcessos
-
-    *--------------------------------------------------------------------------
-    * Init - Inicializa o formulario
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * Init
+    *==========================================================================
     PROCEDURE Init()
         RETURN DODEFAULT()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * InicializarForm - Inicializa todos os componentes do formulario
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * InicializarForm
+    *==========================================================================
     PROTECTED PROCEDURE InicializarForm()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("acgBO")
+            IF VARTYPE(THIS.this_oBusinessObject) <> "O" OR ISNULL(THIS.this_oBusinessObject)
+                MsgErro("Erro ao criar acgBO", "Erro")
+            ELSE
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarPaginaLista()
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+                THIS.ConfigurarPaginaDados()
 
-        THIS.this_oBusinessObject = CREATEOBJECT("AcgBO")
+                IF NOT (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                    THIS.CarregarLista()
+                ENDIF
 
-        IF ISNULL(THIS.this_oBusinessObject)
-            MsgErro("Erro ao criar Business Object de Acesso de Grupos!")
-            RETURN .F.
-        ENDIF
-
-        *-- Criar cursores necessarios antes de configurar grids
-        THIS.CriarCursoresPermanentes()
-
-        THIS.ConfigurarPageFrame()
-        THIS.ConfigurarPaginaLista()
-        THIS.ConfigurarPaginaDados()
-
-        *-- Propagar Caption do form para label de titulo
-        THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-
-        *-- Ocultar container de copia (inativo por padrao)
-        THIS.AtivaCopia(.F.)
-
-        *-- Verificar permissao de gerar grupo (legado: fChecaAcesso)
-        THIS.pgf_4c_Paginas.Page1.cmd_4c_GerarGrupo.Visible = .F.
-
-        *-- Pular CarregarLista() se estiver validando UI (sem conexao SQL)
-        IF NOT (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
-            IF !THIS.CarregarLista()
-                *-- Falha nao impede abertura
+                THIS.pgf_4c_Paginas.Visible  = .T.
+                THIS.pgf_4c_Paginas.ActivePage = 1
+                THIS.this_cModoAtual = "LISTA"
+                THIS.AjustarBotoesPorModo()
+                loc_lSucesso = .T.
             ENDIF
-        ENDIF
-
-        THIS.pgf_4c_Paginas.Visible = .T.
-        THIS.pgf_4c_Paginas.Visible = .T.
-        THIS.pgf_4c_Paginas.ActivePage = 1
-        THIS.this_cModoAtual = "LISTA"
-        loc_lSucesso = .T.
-
+        CATCH TO loc_oErro
+            MsgErro("Erro ao inicializar: " + loc_oErro.Message + ;
+                " [" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
+        ENDTRY
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CriarCursoresPermanentes - Cria cursores necessarios ao formulario
-    * (Equivalente ao Load do legado)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CriarCursoresPermanentes()
-        *-- TmpBarra: acesso rapido (icones da barra de ferramentas)
-        IF NOT USED("TmpBarra")
-            SET NULL ON
-            CREATE CURSOR TmpBarra (;
-                BarraOrdem N(4),;
-                Descricaos C(100),;
-                BarraForms C(50),;
-                BarraTip   C(50),;
-                BarraPict  C(30),;
-                Programas  C(15),;
-                Parametros C(15),;
-                SelBarras  L,;
-                Usuarios   C(10);
-            )
-            SET NULL OFF
-            INDEX ON Descricaos          TAG Descricaos
-            INDEX ON BarraOrdem          TAG BarraOrdem
-            INDEX ON Programas+Parametros TAG ProPar
-        ENDIF
-
-        *-- crLogData: log de alteracoes de usuarios
-        IF NOT USED("crLogData")
-            SET NULL ON
-            CREATE CURSOR crLogData (;
-                cIdChaves C(20),;
-                cOcors    C(100),;
-                cTipos    C(1);
-            )
-            SET NULL OFF
-            INDEX ON cIdChaves TAG cIdChaves
-        ENDIF
-
-        *-- crAcCamp: configuracao de campos controlados por tela
-        IF NOT USED("crAcCamp")
-            SET NULL ON
-            CREATE CURSOR crAcCamp (;
-                cCodigos   C(10),;
-                cDescTelas C(50),;
-                cCampos    C(30),;
-                cObjetos   C(100),;
-                cDescCamps C(50),;
-                nStatus    N(1);
-            )
-            SET NULL OFF
-            INDEX ON cCodigos TAG cCodigos
-            THIS.PopularAcCamp()
-        ENDIF
-
-        *-- crsigcdgra: placeholder para binding dos TextBoxes (txt_4c_Grupo, txt_4c_NomeCompleto)
-        IF NOT USED("crsigcdgra")
-            SET NULL ON
-            CREATE CURSOR crsigcdgra (;
-                Grupos C(10),;
-                NComps C(100);
-            )
-            SET NULL OFF
-            APPEND BLANK
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * PopularAcCamp - Insere configuracao de campos controlados (SIGCDCLI)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE PopularAcCamp()
-        LOCAL loc_cCod, loc_cDesc
-        loc_cCod  = "SIGCDCLI"
-        loc_cDesc = "Cadastro Contas"
-
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.endes", ;
-                "This.pgframeDados.pgframeDados1.getendere" + CHR(231) + "o", ;
-                "Endere" + CHR(231) + "o", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.fpubls", ;
-                "This.pgframeDados.pgframeDados1.getcodfun", ;
-                "Forma de publicidade", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.nacionals", ;
-                "This.pgframeDados.pgframeDados1.getnacionals", ;
-                "Nacionalidade", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.estcivils", ;
-                "This.pgframeDados.pgframeDados1.cmbestcivils", ;
-                "Estado civil", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.conjuges", ;
-                "This.pgframeDados.pgframeDados1.getconjuges", ;
-                "C" + CHR(244) + "njuge", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.ultcomps", ;
-                "This.pgframeDados.pgframeDados1.getultcom", ;
-                CHR(218) + "ltima compra", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.codsegs", ;
-                "This.pgframeDados.pgframeDados1.get_seg", ;
-                "Segmento", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.profiss", ;
-                "This.pgframeDados.pgframeDados1.getpro", ;
-                "Profiss" + CHR(227) + "o", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.DtVals", ;
-                "This.pgframeDados.pgframeDados1.getdtvals", ;
-                "Validade", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.tel1s", ;
-                "This.pgframeDados.pgframeDados1.gettel1", ;
-                "Telefone", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.emails", ;
-                "This.pgframeDados.pgframeDados1.getemail", ;
-                "E-mail", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.contato", ;
-                "This.pgframeDados.pgframeDados1.get_contato", ;
-                "Contato", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.CTELEMS", ;
-                "This.pgframeDados.pgframeDados1.gettelem", ;
-                "Telemarketing", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.codigos", ;
-                "This.pgframeDados.pgframeDados1.getclacod", ;
-                "Classifica" + CHR(231) + CHR(227) + "o", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.sexos", ;
-                "This.pgframeDados.pgframeDados1.getsexo", ;
-                "Sexo", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.obs", ;
-                "This.pgframeDados.pgframeDados1.memofun", ;
-                "Observa" + CHR(231) + CHR(227) + "o", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.pastas", ;
-                "This.pgframeDados.pgframeDados1.getpastas", ;
-                "Pasta", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.nascs", ;
-                "This.pgframeDados.pgframeDados1.getdatnas", ;
-                "Nascimento", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.idcontas", ;
-                "This.pgframeDados.pgframeDados1.get_idconta", ;
-                "ID", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.CCargs", ;
-                "This.pgframeDados.pgframeDados5.get_cargo", ;
-                "Cargo", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.grupovens", ;
-                "This.pgframeDados.pgframeDados5.get_grupoven", ;
-                "C/C - Centro de Custo", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.vinculas", ;
-                "This.pgframeDados.pgframeDados5.op_vincula", ;
-                "Conta Vinculada", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.patrietqs", ;
-                "This.pgframeDados.pgframeDados5.opt_patrim", ;
-                "Patrimonial por Etiqueta", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCDCLI.Concilias", ;
-                "This.pgframeDados.pgframeDados5.op_concilia", ;
-                "Conta Concili" + CHR(225) + "vel", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCLCRC.Caracteris", ;
-                "This.pgframeDados.pgframeDados11.getComples", ;
-                "Caracter" + CHR(237) + "stica Conta", 0)
-        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) ;
-            VALUES (loc_cCod, loc_cDesc, "CRSIGCLJOB.JOBS", ;
-                "This.pgframeDados.pgframeDados11.grdAceMovs", ;
-                "Acesso Jobs", 0)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Configura o PageFrame principal (externo)
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarPageFrame
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
         THIS.AddObject("pgf_4c_Paginas", "PageFrame")
-
         WITH THIS.pgf_4c_Paginas
-            .PageCount       = 2
-            .Top             = -29
-            .Left            = 0
-            .Width           = 1003
-            .Height          = 631
-            .Tabs            = .F.
-            .Page1.Caption   = "Lista"
-            .Page2.Caption   = "Dados"
-            .Page1.BackColor = RGB(255,255,255)
-            .Page2.BackColor = RGB(255,255,255)
-            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Visible         = .T.
+            .PageCount = 2
+            .Top       = -29
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 629
+            .Tabs      = .F.
         ENDWITH
+        THIS.pgf_4c_Paginas.Page1.Caption  = "Lista"
+        THIS.pgf_4c_Paginas.Page1.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        THIS.pgf_4c_Paginas.Page2.Caption  = "Dados"
+        THIS.pgf_4c_Paginas.Page2.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Configura Page1 (Lista)
-    * Compensacao Top: original + 29 (PageFrame.Top = -29)
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarPaginaLista - Page1: grid de grupos + botoes CRUD
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPaginaLista()
-        LOCAL loc_oPagina
-        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+        LOCAL loc_oP1
+        loc_oP1 = THIS.pgf_4c_Paginas.Page1
 
-        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
-        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-
-        *-- Container Cabecalho (cntSombra: Top=2+29=31, Left=0, Width=1009, Height=80)
-        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 31
-            .Left        = 0
-            .Width       = 1009
-            .Height      = 80
-            .BackStyle   = 0
+        *-- Cabecalho cinza (sombra + titulo)
+        loc_oP1.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oP1.cnt_4c_Cabecalho
+            .Top       = 31
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 85
+            .BackStyle = 1
+            .BackColor = RGB(215,215,215)
             .BorderWidth = 0
-            .Visible     = .T.
+            .Visible   = .T.
         ENDWITH
-
-        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
-        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
+        loc_oP1.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oP1.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .Caption   = ""
+            .Top       = 0
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 85
+            .AutoSize  = .F.
+            .BackStyle = 1
+            .BackColor = RGB(215,215,215)
+        ENDWITH
+        loc_oP1.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oP1.cnt_4c_Cabecalho.lbl_4c_Titulo
             .Caption   = "Acesso de Grupos"
+            .Top       = 30
+            .Left      = 10
+            .Width     = 500
+            .Height    = 25
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 14
             .FontBold  = .T.
-            .ForeColor = RGB(90,90,90)
             .BackStyle = 0
-            .AutoSize  = .F.
-            .Width     = THIS.Width
-            .Height    = 30
-            .Top       = 25
-            .Left      = 20
+            .ForeColor = RGB(60,60,60)
         ENDWITH
 
-        *-- Container Botoes CRUD (Grupo_op: Left=540, Top=0+29=29)
-        loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
-        WITH loc_oPagina.cnt_4c_Botoes
-            .Top         = 29
-            .Left        =  542
-            .Width       = 390
-            .Height      = 85
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+        *-- Container botoes CRUD (Incluir, Alterar, Excluir, Buscar, Copiar)
+        loc_oP1.AddObject("cnt_4c_Botoes", "Container")
+        WITH loc_oP1.cnt_4c_Botoes
+            .Top       = 29
+            .Left      =  542
+            .Width     = 465
+            .Height    = 85
+            .BackStyle = 0
             .BorderWidth = 0
-            .Visible     = .T.
+            .Visible   = .T.
         ENDWITH
 
-        *-- Botao Inserir (Left=5)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Incluir
             .Caption         = "Incluir"
-            .Width           = 75
-            .Height          = 75
             .Left            = 5
             .Top             = 5
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_60.jpg"
-            .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
-            .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
-
-        *-- Botao Consultar (Left=80)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
-            .Caption         = "Consultar"
             .Width           = 75
             .Height          = 75
-            .Left            = 80
-            .Top             = 5
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
 
-        *-- Botao Alterar (Left=155)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Alterar
             .Caption         = "Alterar"
+            .Left            = 85
+            .Top             = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 155
-            .Top             = 5
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
 
-        *-- Botao Excluir (Left=230)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Excluir
             .Caption         = "Excluir"
+            .Left            = 165
+            .Top             = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 230
-            .Top             = 5
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
 
-        *-- Botao Procurar (Left=305)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar
-            .Caption         = "Procurar"
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Buscar
+            .Caption         = "Buscar"
+            .Left            = 245
+            .Top             = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 305
-            .Top             = 5
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
 
-        *-- Container Sair (Grupo_Saida: Left=915, Top=0+29=29)
-        loc_oPagina.AddObject("cnt_4c_Saida", "Container")
-        WITH loc_oPagina.cnt_4c_Saida
-            .Top         = 29
-            .Left        = 917
-            .Width       = 90
-            .Height      = 85
-            .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
-            .BorderWidth = 0
-            .Visible     = .T.
-        ENDWITH
-
-        loc_oPagina.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar
-            .Caption         = "Encerrar"
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_CopiarAcesso", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_CopiarAcesso
+            .Caption         = "Copiar" + CHR(13) + "Acessos"
+            .Left            = 325
+            .Top             = 5
             .Width           = 75
             .Height          = 75
+            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_26.jpg"
+            .PicturePosition = 13
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .BackColor       = RGB(255,255,255)
+            .ForeColor       = RGB(90,90,90)
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_CopiarAcesso, "Click", THIS, "BtnCopiarAcessoClick")
+
+        *-- Painel de copia (oculto por padrao - ativado por BtnCopiarAcessoClick)
+        loc_oP1.AddObject("cnt_4c_PainelCopia", "Container")
+        WITH loc_oP1.cnt_4c_PainelCopia
+            .Top       = 29
+            .Left      = 480
+            .Width     = 430
+            .Height    = 85
+            .BackStyle = 1
+            .BackColor = RGB(235,235,255)
+            .BorderWidth = 1
+            .Visible   = .F.
+        ENDWITH
+        loc_oP1.cnt_4c_PainelCopia.AddObject("lbl_4c_CopiarDe", "Label")
+        WITH loc_oP1.cnt_4c_PainelCopia.lbl_4c_CopiarDe
+            .Caption   = "Copiar do Grupo:"
+            .Top       = 10
+            .Left      = 10
+            .Width     = 120
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+        ENDWITH
+        loc_oP1.cnt_4c_PainelCopia.AddObject("txt_4c_GrupoOrigem", "TextBox")
+        WITH loc_oP1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem
+            .Top           = 30
+            .Left          = 10
+            .Width         = 120
+            .Height        = 23
+            .MaxLength     = 10
+            .Value         = ""
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(255,255,255)
+        ENDWITH
+        BINDEVENT(loc_oP1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem, "KeyPress", THIS, "TxtGrupoOrigemValid")
+        loc_oP1.cnt_4c_PainelCopia.AddObject("cmd_4c_CopiarOk", "CommandButton")
+        WITH loc_oP1.cnt_4c_PainelCopia.cmd_4c_CopiarOk
+            .Caption = "Copiar"
+            .Left    = 145
+            .Top     = 18
+            .Width   = 75
+            .Height  = 50
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes  = .T.
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(loc_oP1.cnt_4c_PainelCopia.cmd_4c_CopiarOk, "Click", THIS, "BtnCopiarOkClick")
+        loc_oP1.cnt_4c_PainelCopia.AddObject("cmd_4c_CopiarCancelar", "CommandButton")
+        WITH loc_oP1.cnt_4c_PainelCopia.cmd_4c_CopiarCancelar
+            .Caption = "Cancelar"
+            .Left    = 235
+            .Top     = 18
+            .Width   = 75
+            .Height  = 50
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes  = .T.
+            .Visible = .T.
+        ENDWITH
+        BINDEVENT(loc_oP1.cnt_4c_PainelCopia.cmd_4c_CopiarCancelar, "Click", THIS, "BtnCopiarCancelarClick")
+
+        *-- Container Saida canonico (Left=917, Width=90)
+        loc_oP1.AddObject("cnt_4c_Saida", "Container")
+        WITH loc_oP1.cnt_4c_Saida
+            .Top       = 29
+            .Left      = 917
+            .Width     = 90
+            .Height    = 85
+            .BackStyle = 0
+            .BorderWidth = 0
+            .Visible   = .T.
+        ENDWITH
+        loc_oP1.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH loc_oP1.cnt_4c_Saida.cmd_4c_Encerrar
+            .Caption         = "Encerrar"
             .Left            = 5
             .Top             = 5
+            .Width           = 75
+            .Height          = 75
             .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+        BINDEVENT(loc_oP1.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
 
-        *-- Botoes Copiar Acesso (cmdCopia.btnCopia: Left=390+5=395, Top=0+5+29=34)
-        loc_oPagina.AddObject("cmd_4c_CopiarAcesso", "CommandButton")
-        WITH loc_oPagina.cmd_4c_CopiarAcesso
-            .Caption         = "Copiar"
-            .Width           = 75
-            .Height          = 75
-            .Left            = 395
-            .Top             = 34
-            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_acesso_60.jpg"
-            .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+        *-- Grid principal
+        loc_oP1.AddObject("grd_4c_Lista", "Grid")
+        WITH loc_oP1.grd_4c_Lista
+            .Top             = 121
+            .Left            = 12
+            .Width           = 976
+            .Height          = 455
+            .ColumnCount     = 2
+            .RecordSourceType = 1
+            .ReadOnly        = .T.
+            .DeleteMark      = .F.
+            .RecordMark      = .F.
+            .ScrollBars      = 3
+            .GridLines       = 3
+            .AllowHeaderSizing = .T.
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .ToolTipText     = "Copiar Acesso de Grupo"
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
+            .GridLineColor   = RGB(238,238,238)
             .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_CopiarAcesso, "Click", THIS, "BtnCopiarAcessoClick")
-
-        *-- Botao Gerar Grupo (cmdCopia.CmdGru: Left=390+80=470, Top=34)
-        loc_oPagina.AddObject("cmd_4c_GerarGrupo", "CommandButton")
-        WITH loc_oPagina.cmd_4c_GerarGrupo
-            .Caption         = "gerar"
-            .Width           = 75
-            .Height          = 75
-            .Left            = 470
-            .Top             = 34
-            .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .ToolTipText     = "Gerar Grupo"
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
-            .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_GerarGrupo, "Click", THIS, "BtnGerarGrupoClick")
-
-        *-- Grid de Lista (Grade: Top=121+29=150, Left=12, Width=935, Height=420)
-        loc_oPagina.AddObject("grd_4c_Lista", "Grid")
-        WITH loc_oPagina.grd_4c_Lista
-            .Top               = 150
-            .Left              = 12
-            .Width             = 935
-            .Height            = 420
-            .ReadOnly          = .T.
-            .DeleteMark        = .F.
-            .RecordMark        = .F.
-            .ScrollBars        = 3
-            .RowHeight         = 16
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
-            .ColumnCount       = 2
-            .RecordSourceType  = 1
-            .GridLineColor     = RGB(238,238,238)
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-            .Visible           = .T.
+            .Column1.Width   = 120
+            .Column1.Header1.Caption = ""
+            .Column2.Width   = 500
+            .Column2.Header1.Caption = ""
         ENDWITH
 
-        *-- Container flutuante: Copiar Acesso (cntCopiarAcesso: Top=246+29=275)
-        loc_oPagina.AddObject("cnt_4c_CopiarAcesso", "Container")
-        WITH loc_oPagina.cnt_4c_CopiarAcesso
-            .Top          = 275
-            .Left         = 351
-            .Width        = 283
-            .Height       = 90
-            .BorderWidth  = 2
-            .SpecialEffect = 0
-            .BackColor    = RGB(255,255,255)
-            .Visible      = .F.
-        ENDWITH
-
-        *-- Label "Copiar do Grupo" (Say8: Top=9, Left=13)
-        loc_oPagina.cnt_4c_CopiarAcesso.AddObject("lbl_4c_Say8", "Label")
-        WITH loc_oPagina.cnt_4c_CopiarAcesso.lbl_4c_Say8
-            .Caption   = " Copiar do Grupo"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .FontBold  = .T.
-            .BackStyle = 0
-            .Left      = 13
-            .Top       = 9
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
-        ENDWITH
-
-        *-- TextBox getCopiarAcessos (Left=20, Top=26, Width=81, Height=23)
-        loc_oPagina.cnt_4c_CopiarAcesso.AddObject("txt_4c_CopiarAcessos", "TextBox")
-        WITH loc_oPagina.cnt_4c_CopiarAcesso.txt_4c_CopiarAcessos
-            .Height        = 23
-            .Left          = 20
-            .MaxLength     = 10
-            .SpecialEffect = 1
-            .Top           = 26
-            .Width         = 81
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .Value         = ""
-        ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_CopiarAcesso.txt_4c_CopiarAcessos, "KeyPress", THIS, "ValidarCopiarAcessos")
-
-        *-- Botao Copiar (btnCopiarAcessos: Top=7, Left=126, 75x75)
-        loc_oPagina.cnt_4c_CopiarAcesso.AddObject("cmd_4c_BtnCopiarAcessos", "CommandButton")
-        WITH loc_oPagina.cnt_4c_CopiarAcesso.cmd_4c_BtnCopiarAcessos
-            .Caption         = "Copiar"
-            .Width           = 75
-            .Height          = 75
-            .Left            = 126
-            .Top             = 7
-            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_acesso_60.jpg"
-            .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .ToolTipText     = "Copiar"
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
-            .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_CopiarAcesso.cmd_4c_BtnCopiarAcessos, "Click", THIS, "BtnCopiarAcessosClick")
-
-        *-- Botao Cancelar (btnCancelar: Top=7, Left=201, 75x75)
-        loc_oPagina.cnt_4c_CopiarAcesso.AddObject("cmd_4c_BtnCancelarCopia", "CommandButton")
-        WITH loc_oPagina.cnt_4c_CopiarAcesso.cmd_4c_BtnCancelarCopia
-            .Caption         = "Cancelar"
-            .Width           = 75
-            .Height          = 75
-            .Left            = 201
-            .Top             = 7
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
-            .PicturePosition = 13
-            .Cancel          = .T.
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .ToolTipText     = "Cancelar"
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
-            .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_CopiarAcesso.cmd_4c_BtnCancelarCopia, "Click", THIS, "BtnCancelarCopiaClick")
-
-        THIS.TornarControlesVisiveis(loc_oPagina)
+        THIS.TornarControlesVisiveis(loc_oP1)
+        loc_oP1.cnt_4c_PainelCopia.Visible = .F.
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Configura Page2 (Dados)
-    * Compensacao Top: original + 29 (PageFrame.Top = -29)
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    * ConfigurarPaginaDados - Page2: campos + 4 abas internas
+    *==========================================================================
     PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oPagina, loc_oPgfDados
-        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        LOCAL loc_oP2
+        loc_oP2 = THIS.pgf_4c_Paginas.Page2
 
-        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
-        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-
-        *-- Container Botoes Dados (Grupo_Salva: Left=817, Top=0+29=29)
-        loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
-        WITH loc_oPagina.cnt_4c_BotoesDados
-            .Top         = 29
-            .Left        = 817
-            .Width       = 165
-            .Height      = 85
+        *-- Cabecalho cinza
+        loc_oP2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oP2.cnt_4c_Cabecalho
+            .Top       = 29
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 85
             .BackStyle = 1
-            .BackColor = RGB(255, 255, 255)
+            .BackColor = RGB(215,215,215)
             .BorderWidth = 0
-            .Visible     = .T.
+            .Visible   = .T.
+        ENDWITH
+        loc_oP2.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oP2.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .Caption   = ""
+            .Top       = 0
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 85
+            .AutoSize  = .F.
+            .BackStyle = 1
+            .BackColor = RGB(215,215,215)
+        ENDWITH
+        loc_oP2.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oP2.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Caption   = "Acesso de Grupos - Dados"
+            .Top       = 30
+            .Left      = 10
+            .Width     = 500
+            .Height    = 25
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 14
+            .FontBold  = .T.
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
         ENDWITH
 
-        *-- Botao Salvar (Salva: Left=5)
-        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Salvar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Salvar
+        *-- Botoes Salvar/Cancelar (sobrepostos ao cabecalho, lado direito)
+        loc_oP2.AddObject("cnt_4c_BotoesDados", "Container")
+        WITH loc_oP2.cnt_4c_BotoesDados
+            .Top       = 29
+            .Left      = 830
+            .Width     = 170
+            .Height    = 85
+            .BackStyle = 0
+            .BorderWidth = 0
+            .Visible   = .T.
+        ENDWITH
+        loc_oP2.cnt_4c_BotoesDados.AddObject("cmd_4c_Salvar", "CommandButton")
+        WITH loc_oP2.cnt_4c_BotoesDados.cmd_4c_Salvar
             .Caption         = "Salvar"
-            .Width           = 75
-            .Height          = 75
             .Left            = 5
             .Top             = 5
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-            .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
-            .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .Themes          = .F.
-            .BackColor       = RGB(255,255,255)
-            .ForeColor       = RGB(90,90,90)
-            .Visible         = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Salvar, "Click", THIS, "BtnSalvarClick")
-
-        *-- Botao Cancelar (Cancelar: Left=80)
-        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Cancelar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar
-            .Caption         = "Encerrar"
             .Width           = 75
             .Height          = 75
-            .Left            = 80
-            .Top             = 5
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 13
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
-            .FontBold        = .T.
-            .FontItalic      = .T.
             .Themes          = .F.
+            .SpecialEffect   = 0
             .BackColor       = RGB(255,255,255)
             .ForeColor       = RGB(90,90,90)
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
-
-        *-- PageFrame interno com 4 abas (Pagina.Dados.Pagina)
-        *-- Top = 121 + 29 (compensacao) = 150
-        loc_oPagina.AddObject("pgf_4c_Dados", "PageFrame")
-        WITH loc_oPagina.pgf_4c_Dados
-            .PageCount  = 4
-            .Top        = 150
-            .Left       = 0
-            .Width      = 1000
-            .Height     = 420
-            .Tabs       = .T.
-            *-- Page1: Cadastro (PageOrder=1 - aba padrao, aparece primeiro)
-            .Page1.Caption   = "Cadastro"
-            .Page1.BackColor = RGB(255,255,255)
-            .Page1.ForeColor = RGB(90,90,90)
-            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            *-- Page2: Acesso (PageOrder=2)
-            .Page2.Caption   = "Acesso"
-            .Page2.BackColor = RGB(255,255,255)
-            .Page2.ForeColor = RGB(90,90,90)
-            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            *-- Page3: Acesso Rapido (PageOrder=3)
-            .Page3.Caption   = "Acesso R" + CHR(225) + "pido"
-            .Page3.BackColor = RGB(255,255,255)
-            .Page3.ForeColor = RGB(90,90,90)
-            .Page3.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            *-- Page4: Acesso Tela (PageOrder=4)
-            .Page4.Caption   = "Acesso Tela"
-            .Page4.BackColor = RGB(255,255,255)
-            .Page4.ForeColor = RGB(90,90,90)
-            .Page4.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .ActivePage = 1
-            .Visible    = .T.
+        BINDEVENT(loc_oP2.cnt_4c_BotoesDados.cmd_4c_Salvar, "Click", THIS, "BtnSalvarClick")
+        loc_oP2.cnt_4c_BotoesDados.AddObject("cmd_4c_Cancelar", "CommandButton")
+        WITH loc_oP2.cnt_4c_BotoesDados.cmd_4c_Cancelar
+            .Caption         = "Encerrar"
+            .Left            = 85
+            .Top             = 5
+            .Width           = 75
+            .Height          = 75
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
+            .PicturePosition = 13
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .BackColor       = RGB(255,255,255)
+            .ForeColor       = RGB(90,90,90)
+            .Visible         = .T.
         ENDWITH
+        BINDEVENT(loc_oP2.cnt_4c_BotoesDados.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
 
-        loc_oPgfDados = loc_oPagina.pgf_4c_Dados
-
-        *-- Configurar cada aba do PageFrame interno
-        THIS.ConfigurarPageInnerCadastro(loc_oPgfDados.Page1)
-        THIS.ConfigurarPageInnerAcesso(loc_oPgfDados.Page2)
-        THIS.ConfigurarPageInnerAcRap(loc_oPgfDados.Page3)
-        THIS.ConfigurarPageInnerAcTela(loc_oPgfDados.Page4)
-
-        THIS.TornarControlesVisiveis(loc_oPagina)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPageInnerCadastro - Configura aba Cadastro (Page1 do pgf_4c_Dados)
-    * Posicoes: originais do SCX (sem compensacao adicional)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageInnerCadastro(par_oPage)
-
-        *-- Label1: "Grupo :" (Left=358, Top=11)
-        par_oPage.AddObject("lbl_4c_Label1", "Label")
-        WITH par_oPage.lbl_4c_Label1
-            .Caption   = "Grupo :"
+        *-- Campo Grupo
+        loc_oP2.AddObject("lbl_4c_Grupo", "Label")
+        WITH loc_oP2.lbl_4c_Grupo
+            .Caption   = "Grupo:"
+            .Top       = 126
+            .Left      = 401
+            .Width     = 50
+            .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .Left      = 358
-            .Top       = 11
-            .Width     = 38
-            .Height    = 15
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
+            .ForeColor = RGB(60,60,60)
+            .Alignment = 1
         ENDWITH
-
-        *-- Label2: "Descricao :" (Left=341, Top=37)
-        par_oPage.AddObject("lbl_4c_Label2", "Label")
-        WITH par_oPage.lbl_4c_Label2
-            .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .Left      = 341
-            .Top       = 37
-            .Width     = 55
-            .Height    = 15
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
-        ENDWITH
-
-        *-- Grupo: txt_4c_Grupo (ControlSource=crsigcdgra.grupos, Left=401, Top=8, Width=80)
-        par_oPage.AddObject("txt_4c_Grupo", "TextBox")
-        WITH par_oPage.txt_4c_Grupo
-            .ControlSource = "crsigcdgra.grupos"
-            .Format        = "K!"
+        loc_oP2.AddObject("txt_4c_Grupo", "TextBox")
+        WITH loc_oP2.txt_4c_Grupo
+            .Top           = 122
+            .Left          = 456
+            .Width         = 100
             .Height        = 23
-            .Left          = 401
             .MaxLength     = 10
-            .SpecialEffect = 1
-            .Top           = 8
-            .Width         = 80
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .Value         = ""
-        ENDWITH
-
-        *-- NomeCompleto: txt_4c_NomeCompleto (ControlSource=crsigcdgra.ncomps, Left=401, Top=34)
-        par_oPage.AddObject("txt_4c_NomeCompleto", "TextBox")
-        WITH par_oPage.txt_4c_NomeCompleto
-            .ControlSource = "crsigcdgra.ncomps"
-            .Height        = 24
-            .Left          = 401
+            .BorderStyle   = 1
             .SpecialEffect = 1
-            .Top           = 34
-            .Width         = 220
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .Value         = ""
+            .BackColor     = RGB(255,255,255)
+            .ForeColor     = RGB(0,0,0)
+            .Visible       = .T.
         ENDWITH
 
-        *-- Label3: "Situacao :" (Left=327, Top=426)
-        par_oPage.AddObject("lbl_4c_Label3", "Label")
-        WITH par_oPage.lbl_4c_Label3
-            .Caption   = "Situa" + CHR(231) + CHR(227) + "o :"
+        *-- Campo NomeCompleto
+        loc_oP2.AddObject("lbl_4c_NomeCompleto", "Label")
+        WITH loc_oP2.lbl_4c_NomeCompleto
+            .Caption   = "Nome:"
+            .Top       = 152
+            .Left      = 401
+            .Width     = 45
+            .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+            .Alignment = 1
+        ENDWITH
+        loc_oP2.AddObject("txt_4c_NomeCompleto", "TextBox")
+        WITH loc_oP2.txt_4c_NomeCompleto
+            .Top           = 148
+            .Left          = 456
+            .Width         = 280
+            .Height        = 23
+            .MaxLength     = 30
+            .Value         = ""
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(255,255,255)
+            .ForeColor     = RGB(0,0,0)
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Inner PageFrame com 4 abas (COM tabs visiveis)
+        loc_oP2.AddObject("pgf_4c_Abas", "PageFrame")
+        WITH loc_oP2.pgf_4c_Abas
+            .Top       = 180
+            .Left      = 0
+            .Width     = 1000
+            .Height    = 436
+            .PageCount = 4
+            .Tabs      = .T.
+            .Visible   = .T.
+        ENDWITH
+        loc_oP2.pgf_4c_Abas.Page1.Caption = "Usu" + CHR(225) + "rios"
+        loc_oP2.pgf_4c_Abas.Page2.Caption = "Programas"
+        loc_oP2.pgf_4c_Abas.Page3.Caption = "Barra de Ferramentas"
+        loc_oP2.pgf_4c_Abas.Page4.Caption = "Acesso a Telas"
+
+        THIS.ConfigurarAbaUsuarios()
+        THIS.ConfigurarAbaProgramas()
+        THIS.ConfigurarAbaBarra()
+        THIS.ConfigurarPgPage1()
+
+        THIS.TornarControlesVisiveis(loc_oP2)
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarAbaUsuarios - Page1 interna: listboxes de usuarios
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarAbaUsuarios()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+
+        loc_oAba.AddObject("lbl_4c_Disponiveis", "Label")
+        WITH loc_oAba.lbl_4c_Disponiveis
+            .Caption  = "Usu" + CHR(225) + "rios Dispon" + CHR(237) + "veis"
+            .Top      = 8
+            .Left     = 80
+            .Width    = 200
+            .Height   = 17
+            .AutoSize = .F.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .FontBold = .T.
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+        ENDWITH
+
+        loc_oAba.AddObject("lbx_4c_Disponiveis", "ListBox")
+        WITH loc_oAba.lbx_4c_Disponiveis
+            .Top           = 28
+            .Left          = 80
+            .Width         = 200
+            .Height        = 350
+            .MultiSelect   = .T.
+            .RowSourceType = 0
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oAba.lbx_4c_Disponiveis, "Click", THIS, "LbxDisponiveisClick")
+
+        loc_oAba.AddObject("lbl_4c_Label3", "Label")
+        WITH loc_oAba.lbl_4c_Label3
+            .Caption   = "Situa" + CHR(231) + CHR(227) + "o :"
+            .Top       = 426
             .Left      = 327
-            .Top       = 426
-            .Width     = 50
+            .Width     = 60
             .Height    = 15
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
-        ENDWITH
-
-        *-- Label4: status usuario esquerdo (Left=387, Top=426)
-        par_oPage.AddObject("lbl_4c_Label4", "Label")
-        WITH par_oPage.lbl_4c_Label4
-            .Caption   = ""
-            .FontName  = "Verdana"
-            .FontSize  = 8
-            .FontBold  = .T.
-            .BackStyle = 0
-            .Left      = 387
-            .Top       = 426
-            .Width     = 2
-            .Height    = 15
-            .ForeColor = RGB(36,84,155)
-            .AutoSize  = .T.
-        ENDWITH
-
-        *-- Label5: "Situacao :" direito (Left=529, Top=426)
-        par_oPage.AddObject("lbl_4c_Label5", "Label")
-        WITH par_oPage.lbl_4c_Label5
-            .Caption   = "Situa" + CHR(231) + CHR(227) + "o :"
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .Left      = 529
-            .Top       = 426
-            .Width     = 50
-            .Height    = 15
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
+            .ForeColor = RGB(60,60,60)
         ENDWITH
 
-        *-- Label6: status usuario direito (Left=589, Top=426)
-        par_oPage.AddObject("lbl_4c_Label6", "Label")
-        WITH par_oPage.lbl_4c_Label6
+        loc_oAba.AddObject("lbl_4c_StatusDisp", "Label")
+        WITH loc_oAba.lbl_4c_StatusDisp
             .Caption   = ""
-            .FontName  = "Verdana"
-            .FontSize  = 8
-            .FontBold  = .T.
-            .BackStyle = 0
-            .Left      = 589
-            .Top       = 426
-            .Width     = 2
-            .Height    = 15
-            .ForeColor = RGB(36,84,155)
-            .AutoSize  = .T.
-        ENDWITH
-
-        *-- ListBox Usuario: usuarios disponiveis (Left=326, Top=64, Width=142, Height=358)
-        par_oPage.AddObject("obj_4c_Usuario", "ListBox")
-        WITH par_oPage.obj_4c_Usuario
-            .FontName      = "Courier New"
-            .Height        = 358
-            .Left          = 326
-            .SpecialEffect = 1
-            .Top           = 64
-            .Width         = 142
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.obj_4c_Usuario, "Click", THIS, "UsuarioListClick")
-        BINDEVENT(par_oPage.obj_4c_Usuario, "DblClick", THIS, "UsuarioListDblClick")
-
-        *-- ListBox UsuarioSl: usuarios selecionados (Left=528, Top=64, Width=142, Height=358)
-        par_oPage.AddObject("obj_4c_UsuarioSl", "ListBox")
-        WITH par_oPage.obj_4c_UsuarioSl
-            .FontName      = "Courier New"
-            .Height        = 358
-            .Left          = 528
-            .SpecialEffect = 1
-            .Top           = 64
-            .Width         = 142
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.obj_4c_UsuarioSl, "Click", THIS, "UsuarioSlListClick")
-        BINDEVENT(par_oPage.obj_4c_UsuarioSl, "DblClick", THIS, "UsuarioSlListDblClick")
-
-        *-- Botao Adicionar selecionados (cmdAdd: Left=475, Top=108, 45x45)
-        par_oPage.AddObject("cmd_4c_CmdAdd", "CommandButton")
-        WITH par_oPage.cmd_4c_CmdAdd
-            .Caption       = ">"
-            .Width         = 45
-            .Height        = 45
-            .Left          = 475
-            .Top           = 108
-            .FontSize      = 8
-            .FontBold      = .T.
-            .WordWrap      = .T.
-            .ToolTipText   = "Adicionar itens selecionados"
-            .ForeColor     = RGB(36,84,155)
-            .BackColor     = RGB(255,255,255)
-            .Themes        = .F.
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.cmd_4c_CmdAdd, "Click", THIS, "BtnAddClick")
-
-        *-- Botao Adicionar todos (cmdAddAll: Left=475, Top=198, 45x45)
-        par_oPage.AddObject("cmd_4c_CmdAddAll", "CommandButton")
-        WITH par_oPage.cmd_4c_CmdAddAll
-            .Caption       = ">>"
-            .Width         = 45
-            .Height        = 45
-            .Left          = 475
-            .Top           = 198
-            .FontSize      = 8
-            .FontBold      = .T.
-            .WordWrap      = .T.
-            .ToolTipText   = "Adicionar todos os itens"
-            .ForeColor     = RGB(36,84,155)
-            .BackColor     = RGB(255,255,255)
-            .Themes        = .F.
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.cmd_4c_CmdAddAll, "Click", THIS, "BtnAddAllClick")
-
-        *-- Botao Remover selecionados (cmdRemove: Left=475, Top=153, 45x45)
-        par_oPage.AddObject("cmd_4c_CmdRemove", "CommandButton")
-        WITH par_oPage.cmd_4c_CmdRemove
-            .Caption       = "<"
-            .Width         = 45
-            .Height        = 45
-            .Left          = 475
-            .Top           = 153
-            .FontSize      = 8
-            .FontBold      = .T.
-            .WordWrap      = .T.
-            .ToolTipText   = "Remover itens selecionados"
-            .ForeColor     = RGB(36,84,155)
-            .BackColor     = RGB(255,255,255)
-            .Themes        = .F.
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.cmd_4c_CmdRemove, "Click", THIS, "BtnRemoveClick")
-
-        *-- Botao Remover todos (cmdRemoveAll: Left=475, Top=243, 45x45)
-        par_oPage.AddObject("cmd_4c_CmdRemoveAll", "CommandButton")
-        WITH par_oPage.cmd_4c_CmdRemoveAll
-            .Caption       = "<<"
-            .Width         = 45
-            .Height        = 45
-            .Left          = 475
-            .Top           = 243
-            .FontSize      = 8
-            .FontBold      = .T.
-            .WordWrap      = .T.
-            .ToolTipText   = "Remover todos os itens"
-            .ForeColor     = RGB(36,84,155)
-            .BackColor     = RGB(255,255,255)
-            .Themes        = .F.
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(par_oPage.cmd_4c_CmdRemoveAll, "Click", THIS, "BtnRemoveAllClick")
-
-        THIS.TornarControlesVisiveis(par_oPage)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPageInnerAcesso - Configura aba Acesso (Page2 do pgf_4c_Dados)
-    * Grid com 4 colunas: CheckBox(marca), Descricao, Programa, Parametro
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageInnerAcesso(par_oPage)
-        LOCAL loc_oGrid
-
-        *-- Label "Acesso :" (Label2: Left=49, Top=16)
-        par_oPage.AddObject("lbl_4c_LabelAcesso", "Label")
-        WITH par_oPage.lbl_4c_LabelAcesso
-            .Caption   = "Acesso :"
+            .Top       = 382
+            .Left      = 143
+            .Width     = 120
+            .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .Left      = 49
-            .Top       = 16
-            .Width     = 43
-            .Height    = 15
-            .ForeColor = RGB(90,90,90)
-            .AutoSize  = .T.
+            .ForeColor = RGB(0,128,0)
         ENDWITH
 
-        *-- Filtro (getfiltro: Left=93, Top=12, Width=866, Height=25)
-        par_oPage.AddObject("txt_4c_Filtro", "TextBox")
-        WITH par_oPage.txt_4c_Filtro
-            .Format        = "K!"
-            .Height        = 25
-            .Left          = 93
-            .SpecialEffect = 1
-            .Top           = 12
-            .Width         = 866
+        *-- Botoes de transferencia
+        loc_oAba.AddObject("cmd_4c_AddUsu", "CommandButton")
+        WITH loc_oAba.cmd_4c_AddUsu
+            .Caption     = CHR(187)
+            .Top         = 75
+            .Left        = 295
+            .Width       = 45
+            .Height      = 30
+            .FontName    = "Tahoma"
+            .FontSize    = 10
+            .FontBold    = .T.
+            .Themes      = .T.
+            .Visible     = .T.
+            .ToolTipText = "Adicionar selecionados"
+        ENDWITH
+        BINDEVENT(loc_oAba.cmd_4c_AddUsu, "Click", THIS, "BtnAddUsuClick")
+
+        loc_oAba.AddObject("cmd_4c_AddAllUsu", "CommandButton")
+        WITH loc_oAba.cmd_4c_AddAllUsu
+            .Caption     = CHR(187) + CHR(187)
+            .Top         = 120
+            .Left        = 295
+            .Width       = 45
+            .Height      = 30
+            .FontName    = "Tahoma"
+            .FontSize    = 10
+            .FontBold    = .T.
+            .Themes      = .T.
+            .Visible     = .T.
+            .ToolTipText = "Adicionar todos"
+        ENDWITH
+        BINDEVENT(loc_oAba.cmd_4c_AddAllUsu, "Click", THIS, "BtnAddAllUsuClick")
+
+        loc_oAba.AddObject("cmd_4c_RemUsu", "CommandButton")
+        WITH loc_oAba.cmd_4c_RemUsu
+            .Caption     = CHR(171)
+            .Top         = 170
+            .Left        = 295
+            .Width       = 45
+            .Height      = 30
+            .FontName    = "Tahoma"
+            .FontSize    = 10
+            .FontBold    = .T.
+            .Themes      = .T.
+            .Visible     = .T.
+            .ToolTipText = "Remover selecionados"
+        ENDWITH
+        BINDEVENT(loc_oAba.cmd_4c_RemUsu, "Click", THIS, "BtnRemUsuClick")
+
+        loc_oAba.AddObject("cmd_4c_RemAllUsu", "CommandButton")
+        WITH loc_oAba.cmd_4c_RemAllUsu
+            .Caption     = CHR(171) + CHR(171)
+            .Top         = 215
+            .Left        = 295
+            .Width       = 45
+            .Height      = 30
+            .FontName    = "Tahoma"
+            .FontSize    = 10
+            .FontBold    = .T.
+            .Themes      = .T.
+            .Visible     = .T.
+            .ToolTipText = "Remover todos"
+        ENDWITH
+        BINDEVENT(loc_oAba.cmd_4c_RemAllUsu, "Click", THIS, "BtnRemAllUsuClick")
+
+        loc_oAba.AddObject("lbl_4c_Selecionados", "Label")
+        WITH loc_oAba.lbl_4c_Selecionados
+            .Caption  = "Usu" + CHR(225) + "rios do Grupo"
+            .Top      = 8
+            .Left     = 356
+            .Width    = 200
+            .Height   = 17
+            .AutoSize = .F.
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .FontBold = .T.
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+        ENDWITH
+
+        loc_oAba.AddObject("lbx_4c_Selecionados", "ListBox")
+        WITH loc_oAba.lbx_4c_Selecionados
+            .Top           = 28
+            .Left          = 356
+            .Width         = 200
+            .Height        = 350
+            .MultiSelect   = .T.
+            .RowSourceType = 0
             .FontName      = "Tahoma"
             .FontSize      = 8
+            .Visible       = .T.
+        ENDWITH
+        BINDEVENT(loc_oAba.lbx_4c_Selecionados, "Click", THIS, "LbxSelecionadosClick")
+
+        loc_oAba.AddObject("lbl_4c_Label5", "Label")
+        WITH loc_oAba.lbl_4c_Label5
+            .Caption   = "Situa" + CHR(231) + CHR(227) + "o :"
+            .Top       = 426
+            .Left      = 529
+            .Width     = 60
+            .Height    = 15
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_StatusSel", "Label")
+        WITH loc_oAba.lbl_4c_StatusSel
+            .Caption   = ""
+            .Top       = 382
+            .Left      = 419
+            .Width     = 120
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(0,128,0)
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarAbaProgramas - Page2 interna: grid de programas com checkbox
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarAbaProgramas()
+        LOCAL loc_oAba, loc_oGrid
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2
+
+        loc_oAba.AddObject("lbl_4c_FiltroAcesso", "Label")
+        WITH loc_oAba.lbl_4c_FiltroAcesso
+            .Caption   = "Filtro:"
+            .Top       = 10
+            .Left      = 10
+            .Width     = 45
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(60,60,60)
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_FiltroAcesso", "TextBox")
+        WITH loc_oAba.txt_4c_FiltroAcesso
+            .Top           = 7
+            .Left          = 60
+            .Width         = 300
+            .Height        = 23
             .Value         = ""
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(255,255,255)
         ENDWITH
-        BINDEVENT(par_oPage.txt_4c_Filtro, "KeyPress", THIS, "FiltroAcessoLostFocus")
+        BINDEVENT(loc_oAba.txt_4c_FiltroAcesso, "LostFocus", THIS, "TxtFiltroAcessoValid")
 
-        *-- Cursor placeholder: previne auto-bind de Check1 a campo Char (crsigcdgra.Grupos)
-        IF NOT USED("cursor_4c_AcPh")
-            SET NULL ON
-            CREATE CURSOR cursor_4c_AcPh (;
-                Marcas     N(1),;
-                Descricaos C(100),;
-                Programas  C(15),;
-                Parametros C(10);
-            )
-            SET NULL OFF
-            APPEND BLANK
-        ENDIF
-        SELECT cursor_4c_AcPh
-
-        *-- Grid Acesso (grdAcesso: Left=88, Top=41, Width=871, Height=387)
-        *-- Colunas em ordem visual: Check(17), Descricao(650), Programa(90), Parametro(90)
-        par_oPage.AddObject("grd_4c_Acesso", "Grid")
-        WITH par_oPage.grd_4c_Acesso
-            .ColumnCount       = 4
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-            .DeleteMark        = .F.
-            .Height            = 387
-            .Left              = 88
-            .RecordMark        = .F.
-            .RowHeight         = 16
-            .ScrollBars        = 2
-            .Top               = 41
-            .Width             = 871
-            .GridLineColor     = RGB(238,238,238)
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
+        loc_oAba.AddObject("grd_4c_Programas", "Grid")
+        loc_oGrid = loc_oAba.grd_4c_Programas
+        WITH loc_oGrid
+            .Top              = 35
+            .Left             = 5
+            .Width            = 990
+            .Height           = 400
+            .ColumnCount      = 4
+            .RecordSourceType = 1
+            .ReadOnly         = .F.
+            .DeleteMark       = .F.
+            .RecordMark       = .F.
+            .ScrollBars       = 3
+            .GridLines        = 3
+            .AllowHeaderSizing = .T.
+            .FontName         = "Tahoma"
+            .FontSize         = 8
+            .GridLineColor    = RGB(238,238,238)
+            .Visible          = .T.
+            .Column1.Width    = 380
+            .Column1.ReadOnly = .T.
+            .Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            .Column2.Width    = 120
+            .Column2.ReadOnly = .T.
+            .Column2.Header1.Caption = "Programa"
+            .Column3.Width    = 65
+            .Column3.ReadOnly = .F.
+            .Column3.Sparse   = .F.
+            .Column3.Header1.Caption = ""
+            .Column4.Width    = 120
+            .Column4.ReadOnly = .T.
+            .Column4.Header1.Caption = "Parametro"
         ENDWITH
-
-        loc_oGrid = par_oPage.grd_4c_Acesso
-
-        *-- Column1: CheckBox para Marcas (Width=17, sem header)
-        WITH loc_oGrid.Column1
-            .Width     = 17
-            .Sparse    = .F.
-            .Movable   = .F.
-            .Resizable = .F.
-            .AddObject("Check1", "CheckBox")
-            .Check1.Caption = ""
-            .Check1.Value   = 0
-            .CurrentControl = "Check1"
-            .Header1.Caption = ""
-        ENDWITH
-        BINDEVENT(loc_oGrid.Column1.Check1, "Click", THIS, "CheckAcessoClick")
-
-        *-- Column2: Descricao do programa (Width=650)
-        WITH loc_oGrid.Column2
-            .Width     = 650
-            .Movable   = .F.
-            .Resizable = .F.
-            .ReadOnly  = .F.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption = "descri" + CHR(231) + CHR(227) + "o"
-            .Header1.FontName = "Tahoma"
-            .Header1.FontSize = 8
-        ENDWITH
-
-        *-- Column3: Programa (Width=90, ReadOnly)
         WITH loc_oGrid.Column3
-            .Width     = 90
-            .Movable   = .F.
-            .Resizable = .F.
-            .ReadOnly  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption = "Programa"
-            .Header1.FontName = "Tahoma"
-            .Header1.FontSize = 8
+            .AddObject("chk_4c_Marcas", "CheckBox")
         ENDWITH
-
-        *-- Column4: Parametro (Width=90, ReadOnly)
-        WITH loc_oGrid.Column4
-            .Width     = 90
-            .Movable   = .F.
-            .Resizable = .F.
-            .ReadOnly  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption = "Parametro"
-            .Header1.FontName = "Tahoma"
-            .Header1.FontSize = 8
+        WITH loc_oGrid.Column3.chk_4c_Marcas
+            .Caption   = ""
+            .Width     = 60
+            .Height    = 17
+            .BackStyle = 0
+            .Themes    = .F.
         ENDWITH
-
-        THIS.TornarControlesVisiveis(par_oPage)
+        BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPageInnerAcRap - Configura aba Acesso Rapido (Page3 do pgf_4c_Dados)
-    * Grid TmpBarra: CheckBox(seleciona) + Descricao
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageInnerAcRap(par_oPage)
-        LOCAL loc_oGrid
+    *==========================================================================
+    * ConfigurarAbaBarra - Page3 interna: grid barra de ferramentas
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarAbaBarra()
+        LOCAL loc_oAba, loc_oGrid
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3
 
-        *-- Grid Acesso Rapido (Grade: Left=147, Top=17, Width=702, Height=418)
-        *-- Colunas em ordem visual: Seleciona(CheckBox,18), Descricao(650)
-        par_oPage.AddObject("grd_4c_GradeAcRap", "Grid")
-        WITH par_oPage.grd_4c_GradeAcRap
-            .ColumnCount       = 2
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
-            .DeleteMark        = .F.
-            .Height            = 418
-            .Left              = 147
-            .RecordMark        = .F.
-            .RowHeight         = 16
-            .ScrollBars        = 2
-            .Top               = 17
-            .Width             = 702
-            .GridLineColor     = RGB(238,238,238)
+        loc_oAba.AddObject("grd_4c_Barra", "Grid")
+        loc_oGrid = loc_oAba.grd_4c_Barra
+        WITH loc_oGrid
+            .Top              = 10
+            .Left             = 5
+            .Width            = 990
+            .Height           = 430
+            .ColumnCount      = 2
+            .RecordSourceType = 1
+            .ReadOnly         = .F.
+            .DeleteMark       = .F.
+            .RecordMark       = .F.
+            .ScrollBars       = 3
+            .GridLines        = 3
+            .AllowHeaderSizing = .T.
+            .FontName         = "Tahoma"
+            .FontSize         = 8
+            .GridLineColor    = RGB(238,238,238)
+            .Visible          = .T.
+            .Column1.Width    = 550
+            .Column1.ReadOnly = .T.
+            .Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            .Column2.Width    = 80
+            .Column2.ReadOnly = .F.
+            .Column2.Sparse   = .F.
+            .Column2.Header1.Caption = ""
         ENDWITH
-
-        loc_oGrid = par_oPage.grd_4c_GradeAcRap
-
-        *-- Configurar RecordSource e colunas APOS criar o grid
-        *-- Coluna 1: CheckBox Seleciona (Width=18)
-        WITH loc_oGrid.Column1
-            .Width     = 18
-            .Sparse    = .F.
-            .Resizable = .F.
-            .AddObject("Check1", "CheckBox")
-            .Check1.Caption = ""
-            .Check1.Value   = 0
-            .CurrentControl = "Check1"
-            .Header1.Caption = ""
-            .Header1.FontName = "Tahoma"
-            .Header1.FontSize = 8
-        ENDWITH
-
-        *-- Coluna 2: Descricao (Width=650, ReadOnly)
         WITH loc_oGrid.Column2
-            .Width     = 650
-            .Movable   = .F.
-            .Resizable = .F.
-            .ReadOnly  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption  = "Descri" + CHR(231) + CHR(227) + "o"
-            .Header1.FontName = "Tahoma"
-            .Header1.FontSize = 8
-            .Header1.Alignment = 2
+            .AddObject("chk_4c_SelBarras", "CheckBox")
         ENDWITH
-
-        *-- Vincular ao TmpBarra (criado em CriarCursoresPermanentes)
-        IF USED("TmpBarra")
-            loc_oGrid.RecordSource = "TmpBarra"
-            loc_oGrid.Column1.ControlSource = "TmpBarra.SelBarras"
-            loc_oGrid.Column2.ControlSource = "TmpBarra.Descricaos"
-        ENDIF
-
-        THIS.TornarControlesVisiveis(par_oPage)
+        WITH loc_oGrid.Column2.chk_4c_SelBarras
+            .Caption   = ""
+            .Width     = 75
+            .Height    = 17
+            .BackStyle = 0
+            .Themes    = .F.
+        ENDWITH
+        BINDEVENT(loc_oGrid.Column2.chk_4c_SelBarras, "When", THIS, "ChkSelBarrasWhen")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPageInnerAcTela - Configura aba Acesso Tela (Page4 do pgf_4c_Dados)
-    * Grid crSigAcTel: Tela, Campo, Status(ComboBox)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageInnerAcTela(par_oPage)
-        LOCAL loc_oGrid
+    *==========================================================================
+    * ConfigurarPgPage1 - Page4 interna: grid "Acesso Tela" com ComboBox Status
+    * Corresponde a SIGCDACG.Pagina.Dados.Pagina.Page1 (caption "Acesso Tela")
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPgPage1()
+        LOCAL loc_oAba, loc_oGrid
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4
 
-        *-- Grid Acesso Tela (Grade: Left=13, Top=26, Width=969, Height=414)
-        par_oPage.AddObject("grd_4c_GradeAcTela", "Grid")
-        WITH par_oPage.grd_4c_GradeAcTela
-            .ColumnCount       = 3
-            .FontName          = "Tahoma"
-            .FontSize          = 8
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
-            .DeleteMark        = .F.
-            .Height            = 414
-            .Left              = 13
-            .RecordMark        = .F.
-            .RowHeight         = 16
-            .ScrollBars        = 2
+        loc_oAba.AddObject("grd_4c_Telas", "Grid")
+        loc_oGrid = loc_oAba.grd_4c_Telas
+        WITH loc_oGrid
             .Top               = 26
+            .Left              = 13
             .Width             = 969
+            .Height            = 414
+            .ColumnCount       = 3
+            .RecordSourceType  = 1
+            .ReadOnly          = .F.
+            .DeleteMark        = .F.
+            .RecordMark        = .F.
+            .ScrollBars        = 2
+            .GridLines         = 3
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .FontName          = "Tahoma"
+            .FontSize          = 8
             .GridLineColor     = RGB(238,238,238)
+            .RowHeight         = 16
+            .Visible           = .T.
+            .Column1.Width     = 360
+            .Column1.ReadOnly  = .T.
+            .Column1.Header1.Caption = "Tela"
+            .Column2.Width     = 360
+            .Column2.ReadOnly  = .T.
+            .Column2.Header1.Caption = "Campo"
+            .Column3.Width     = 168
+            .Column3.ReadOnly  = .F.
+            .Column3.Sparse    = .F.
+            .Column3.Header1.Caption = "Status"
         ENDWITH
-
-        loc_oGrid = par_oPage.grd_4c_GradeAcTela
-
-        *-- Coluna 1: Tela (Width=360, ReadOnly)
-        WITH loc_oGrid.Column1
-            .Width     = 360
-            .Movable   = .F.
-            .Resizable = .F.
-            .ReadOnly  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption   = "Tela"
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.Alignment = 2
-        ENDWITH
-
-        *-- Coluna 2: Campo (Width=360, ReadOnly)
-        WITH loc_oGrid.Column2
-            .Width     = 360
-            .Resizable = .F.
-            .ReadOnly  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption   = "Campo"
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.Alignment = 2
-        ENDWITH
-
-        *-- Coluna 3: Status (Width=168, ComboBox)
         WITH loc_oGrid.Column3
-            .Width     = 168
-            .Resizable = .F.
-            .Sparse    = .F.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Header1.Caption   = "Status"
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.Alignment = 2
             .AddObject("cbo_4c_CmbStatus", "ComboBox")
-            WITH .cbo_4c_CmbStatus
-                .FontName       = "Tahoma"
-                .FontSize       = 8
-                .RowSourceType  = 1
-                .RowSource      = "Padr" + CHR(227) + "o,Invis" + CHR(237) + "vel,N" + CHR(227) + "o Edit" + CHR(225) + "vel,Obrigat" + CHR(243) + "rio"
-                .Style          = 2
-                .Left           = 0
-                .Top            = 0
-                .Value          = ""
-            ENDWITH
-            .CurrentControl = "cbo_4c_CmbStatus"
         ENDWITH
-
-        THIS.TornarControlesVisiveis(par_oPage)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna controles do container visiveis
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oCtrl
-
-        IF VARTYPE(par_oContainer) # "O"
-            RETURN
-        ENDIF
-
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oCtrl = par_oContainer.Controls(loc_i)
-            loc_oCtrl.Visible = .T.
-        ENDFOR
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AtivaCopia - Ativa/desativa modo de copia de acesso
-    * par_lStatus: .T. = ativar, .F. = desativar
-    *--------------------------------------------------------------------------
-    PROCEDURE AtivaCopia(par_lStatus)
-        LOCAL loc_oPag1
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page1
-
-        WITH loc_oPag1.cnt_4c_CopiarAcesso
-            .Enabled = par_lStatus
-            .Visible = par_lStatus
-            .Visible     = .T.
+        WITH loc_oGrid.Column3.cbo_4c_CmbStatus
+            .RowSourceType = 1
+            .RowSource     = "Padr" + CHR(227) + "o," + ;
+                             "Invis" + CHR(237) + "vel," + ;
+                             "N" + CHR(227) + "o Edit" + CHR(225) + "vel," + ;
+                             "Obrigat" + CHR(243) + "rio"
+            .BoundTo       = .T.
+            .Style         = 2
+            .Width         = 160
+            .Height        = 20
+            .FontName      = "Tahoma"
+            .FontSize      = 8
         ENDWITH
-
-        WITH loc_oPag1
-            .grd_4c_Lista.Enabled       = NOT par_lStatus
-            .cnt_4c_Botoes.Enabled      = NOT par_lStatus
-            .cmd_4c_CopiarAcesso.Enabled = NOT par_lStatus
-            .cmd_4c_GerarGrupo.Enabled  = NOT par_lStatus
-            .cnt_4c_Saida.Enabled       = NOT par_lStatus
-        ENDWITH
+        BINDEVENT(loc_oGrid.Column3.cbo_4c_CmbStatus, "When", THIS, "ChkStatusWhen")
     ENDPROC
 
     *==========================================================================
-    * METODOS DE DADOS
+    * CarregarLista - Carrega cursor_4c_Dados e vincula ao grd_4c_Lista
     *==========================================================================
-
-    *--------------------------------------------------------------------------
-    * CarregarLista - Carrega grid de grupos (sigcdgra)
-    *--------------------------------------------------------------------------
     PROCEDURE CarregarLista()
-        LOCAL loc_oGrid, loc_lSucesso
+        LOCAL loc_lSucesso, loc_oGrid
         loc_lSucesso = .F.
-
         TRY
+            THIS.this_oBusinessObject.Buscar("")
+            IF !USED("cursor_4c_Dados")
+                CREATE CURSOR cursor_4c_Dados (Grupos C(10), NComps C(30))
+            ENDIF
             loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-
-            IF NOT THIS.this_oBusinessObject.Buscar("")
-                IF NOT USED("cursor_4c_Dados")
-                    SET NULL ON
-                    CREATE CURSOR cursor_4c_Dados (;
-                        Grupos C(10),;
-                        NComps C(100);
-                    )
-                    SET NULL OFF
-                ENDIF
-            ENDIF
-
-            IF USED("cursor_4c_Dados")
-                loc_oGrid.ColumnCount = 2
-                loc_oGrid.RecordSource = "cursor_4c_Dados"
-                IF loc_oGrid.ColumnCount >= 2
-                    loc_oGrid.Column1.Header1.Caption = "Grupo"
-                    loc_oGrid.Column1.ControlSource   = "cursor_4c_Dados.Grupos"
-                    loc_oGrid.Column1.Width            = 80
-                    loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                    loc_oGrid.Column2.ControlSource   = "cursor_4c_Dados.NComps"
-                    loc_oGrid.Column2.Width            = 820
-                ENDIF
-                loc_oGrid.Refresh()
-                loc_lSucesso = .T.
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDadosGrupo - Carrega todos os dados do grupo selecionado
-    * (usuarios, programas, barras de acesso rapido, acesso por tela)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDadosGrupo()
-        LOCAL loc_lSucesso, loc_cGrupos, loc_cSQL, loc_nRet
-        LOCAL loc_oPag1, loc_oPag2, loc_oPag3, loc_oGridAc, loc_oGridAcRap
-
-        loc_lSucesso = .F.
-        loc_cGrupos  = PADR(THIS.this_cGrupos, 10)
-        loc_oPag1    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_oPag2    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
-        loc_oPag3    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
-
-        TRY
-            *-- Carregar dados basicos via BO (popula crsigcdgra para binding)
-            IF NOT THIS.this_cModoAtual = "INCLUIR"
-                THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cGrupos)
-            ENDIF
-
-            *-- Limpar listboxes e labels de status
-            loc_oPag1.obj_4c_Usuario.Clear()
-            loc_oPag1.obj_4c_UsuarioSl.Clear()
-            loc_oPag1.lbl_4c_Label4.Caption = ""
-            loc_oPag1.lbl_4c_Label6.Caption = ""
-
-            *-- Carregar usuarios disponiveis (nao atribuidos) para INCLUIR/ALTERAR
-            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                IF THIS.this_cModoAtual = "INCLUIR"
-                    loc_cSQL = "SELECT DISTINCT usuarios FROM sigcdusu " + ;
-                               "WHERE cativos <> 'N' ORDER BY usuarios"
-                ELSE
-                    loc_cSQL = "SELECT DISTINCT a.usuarios FROM sigcdusu a " + ;
-                               "WHERE a.cativos <> 'N' " + ;
-                               "AND a.usuarios NOT IN " + ;
-                               "(SELECT DISTINCT b.usuarios FROM sigcdacg b " + ;
-                               "WHERE b.grupos = " + EscaparSQL(loc_cGrupos) + ") " + ;
-                               "ORDER BY a.usuarios"
-                ENDIF
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpUsu")
-                IF loc_nRet > 0
-                    SELECT cursor_4c_TmpUsu
-                    SCAN
-                        loc_oPag1.obj_4c_Usuario.AddItem(ALLTRIM(cursor_4c_TmpUsu.usuarios))
-                    ENDSCAN
-                ENDIF
-                IF USED("cursor_4c_TmpUsu")
-                    USE IN cursor_4c_TmpUsu
-                ENDIF
-            ENDIF
-
-            *-- Carregar usuarios ja atribuidos ao grupo (nao-INSERT)
-            IF NOT THIS.this_cModoAtual = "INCLUIR"
-                loc_cSQL = "SELECT DISTINCT usuarios FROM sigcdacg " + ;
-                           "WHERE grupos = " + EscaparSQL(loc_cGrupos) + " ORDER BY usuarios"
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpUsuSl")
-                IF loc_nRet > 0
-                    SELECT cursor_4c_TmpUsuSl
-                    SCAN
-                        loc_oPag1.obj_4c_UsuarioSl.AddItem(ALLTRIM(cursor_4c_TmpUsuSl.usuarios))
-                    ENDSCAN
-                ENDIF
-                IF USED("cursor_4c_TmpUsuSl")
-                    USE IN cursor_4c_TmpUsuSl
-                ENDIF
-            ENDIF
-
-            *-- Carregar crSigCdPrg: todos os programas com flag Marcas=0, Filtro=0
-            loc_oGridAc = loc_oPag2.grd_4c_Acesso
-            loc_oGridAc.RecordSource = ""
-            IF USED("crSigCdPrg")
-                USE IN crSigCdPrg
-            ENDIF
-
-            loc_cSQL = "SELECT 0 AS Marcas, 0 AS Filtro, barraforms, barrapict, " + ;
-                       "descricaos, parametros, programas, MAX(pkchaves) AS pkchaves " + ;
-                       "FROM sigcdprg " + ;
-                       "GROUP BY barraforms, barrapict, descricaos, parametros, programas " + ;
-                       "ORDER BY descricaos, programas, parametros"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdPrg")
-
-            IF loc_nRet > 0
-                SELECT crSigCdPrg
-                INDEX ON pkchaves TAG pkchaves
-                INDEX ON descricaos + programas + parametros TAG DescProPar
-                SET ORDER TO DescProPar
-                GO TOP
-
-                *-- Marcar Marcas=1 para programas que o grupo ja tem acesso
-                IF NOT THIS.this_cModoAtual = "INCLUIR" AND NOT EMPTY(ALLTRIM(THIS.this_cGrupos))
-                    loc_cSQL = "SELECT DISTINCT a.descricaos, a.programas, a.parametros, " + ;
-                               "a.barraforms, c.grupos, c.pkchaves AS ckchaves, " + ;
-                               "' ' AS cStatus, a.pkchaves AS fkChaves " + ;
-                               "FROM sigcdprg a " + ;
-                               "INNER JOIN sigcdacu c " + ;
-                               "ON a.programas + a.parametros = c.programas + c.parametros " + ;
-                               "WHERE c.grupos = " + EscaparSQL(loc_cGrupos)
-                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ListAce")
-                    IF loc_nRet > 0
-                        SELECT cursor_4c_ListAce
-                        INDEX ON fkChaves TAG fkChaves
-                        SCAN
-                            IF SEEK(cursor_4c_ListAce.fkChaves, "crSigCdPrg", "pkchaves")
-                                REPLACE Marcas WITH 1 IN crSigCdPrg
-                            ENDIF
-                        ENDSCAN
-                    ENDIF
-                    IF USED("cursor_4c_ListAce")
-                        USE IN cursor_4c_ListAce
-                    ENDIF
-                ENDIF
-
-                *-- DynamicBackColor para destacar registros filtrados
-                IF PEMSTATUS(loc_oGridAc, "SetAll", 5)
-                    loc_oGridAc.SetAll("DynamicBackColor", ;
-                        "IIF(crSigCdPrg.Filtro=1,RGB(255,255,0),RGB(255,255,255))", ;
-                        "Column")
-                ENDIF
-
-                loc_oGridAc.RecordSource          = "crSigCdPrg"
-                loc_oGridAc.Column1.ControlSource = "crSigCdPrg.Marcas"
-                loc_oGridAc.Column2.ControlSource = "crSigCdPrg.Descricaos"
-                loc_oGridAc.Column3.ControlSource = "crSigCdPrg.Programas"
-                loc_oGridAc.Column4.ControlSource = "crSigCdPrg.Parametros"
-                loc_oGridAc.Refresh()
-            ENDIF
-
-            *-- Carregar crListBarra: barras de acesso rapido ja atribuidas
-            IF USED("crListBarra")
-                USE IN crListBarra
-            ENDIF
-
-            IF NOT THIS.this_cModoAtual = "INCLUIR" AND NOT EMPTY(ALLTRIM(THIS.this_cGrupos))
-                loc_cSQL = "SELECT b.grupos, b.usuarios, b.descricaos, b.barraforms, " + ;
-                           "b.barraordem, b.programas, b.parametros, " + ;
-                           "CAST(b.selbarras AS int) AS selbarras, b.pkchaves " + ;
-                           "FROM sigcdacu a, sigcdacb b " + ;
-                           "WHERE a.grupos = " + EscaparSQL(loc_cGrupos) + ;
-                           " AND a.grupos = b.grupos " + ;
-                           " AND a.programas = b.programas " + ;
-                           " AND a.parametros = b.parametros " + ;
-                           " ORDER BY b.programas, b.parametros"
-                SQLEXEC(gnConnHandle, loc_cSQL, "crListBarra")
-            ELSE
-                SET NULL ON
-                CREATE CURSOR crListBarra (;
-                    grupos C(10), usuarios C(10), descricaos C(73),;
-                    barraforms C(50), barraordem N(10), programas C(15),;
-                    parametros C(10), selbarras N(1), pkchaves C(20);
-                )
-                SET NULL OFF
-            ENDIF
-
-            *-- Para INCLUIR/ALTERAR: reconstruir TmpBarra com programas de acesso rapido
-            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                *-- Criar crDestino: programas ja atribuidos ao grupo
-                IF USED("crDestino")
-                    USE IN crDestino
-                ENDIF
-
-                IF THIS.this_cModoAtual = "INCLUIR" OR EMPTY(ALLTRIM(THIS.this_cGrupos))
-                    SET NULL ON
-                    CREATE CURSOR crDestino (;
-                        Descricaos C(150), Programas C(15), Parametros C(10),;
-                        BarraForms C(50), barrapict C(60), Grupos C(10), pkChaves C(45), cStatus C(1);
-                    )
-                    SET NULL OFF
-                ELSE
-                    loc_cSQL = "SELECT DISTINCT a.Descricaos, a.Programas, a.Parametros, " + ;
-                               "a.BarraForms, a.barrapict, " + ;
-                               "c.Grupos, c.pkChaves, ' ' AS cStatus " + ;
-                               "FROM sigcdprg a " + ;
-                               "INNER JOIN sigcdacu c " + ;
-                               "ON a.Programas + a.Parametros = c.Programas + c.Parametros " + ;
-                               "WHERE c.Grupos = " + EscaparSQL(loc_cGrupos) + " ORDER BY 1"
-                    SQLEXEC(gnConnHandle, loc_cSQL, "crDestino")
-                ENDIF
-
-                *-- Reconstruir TmpBarra do zero com programas de acesso rapido
-                THIS.AtualizaTmp(1)
-
-                *-- Marcar SelBarras nas barras que o grupo ja possui (de crListBarra)
-                IF USED("crListBarra") AND RECCOUNT("crListBarra") > 0
-                    SELECT crListBarra
-                    INDEX ON Programas + Parametros TAG skgroup1
-                    SET ORDER TO skgroup1
-                    SCAN
-                        IF SEEK(crListBarra.Programas + crListBarra.Parametros, "TmpBarra", "ProPar")
-                            REPLACE SelBarras WITH (crListBarra.selbarras = 1) IN TmpBarra
-                        ELSE
-                            IF NOT EMPTY(crListBarra.BarraForms)
-                                SELECT crListBarra
-                                SCATTER MEMVAR
-                                m.BarraOrdem = RECCOUNT("TmpBarra") + 1
-                                m.SelBarras  = (crListBarra.selbarras = 1)
-                                INSERT INTO TmpBarra FROM MEMVAR
-                            ENDIF
-                        ENDIF
-                    ENDSCAN
-                ENDIF
-            ENDIF
-
-            *-- Configurar grid de Acesso Rapido (Page3) com TmpBarra
-            loc_oGridAcRap = loc_oPag3.grd_4c_GradeAcRap
-            SELECT TmpBarra
-            SET ORDER TO BarraOrdem
-            GO TOP
-            loc_oGridAcRap.RecordSource          = "TmpBarra"
-            loc_oGridAcRap.Column1.ControlSource = "TmpBarra.SelBarras"
-            loc_oGridAcRap.Column2.ControlSource = "TmpBarra.Descricaos"
-            loc_oGridAcRap.Refresh()
-
-            *-- Carregar crTmpAcTel de SigAcTel para este grupo
-            IF USED("crTmpAcTel")
-                USE IN crTmpAcTel
-            ENDIF
-
-            IF NOT THIS.this_cModoAtual = "INCLUIR" AND NOT EMPTY(ALLTRIM(THIS.this_cGrupos))
-                loc_cSQL = "SELECT * FROM sigactel WHERE grupos = " + EscaparSQL(loc_cGrupos) + ;
-                           " ORDER BY ccodigos"
-                SQLEXEC(gnConnHandle, loc_cSQL, "crTmpAcTel")
-            ELSE
-                SET NULL ON
-                CREATE CURSOR crTmpAcTel (;
-                    ccampos C(30), ccodigos C(10), cdesccamps C(50),;
-                    cdesctelas C(50), cobjetos C(100), nstatus N(1),;
-                    grupos C(10), pkchaves C(20), usuarios C(10);
-                )
-                SET NULL OFF
-            ENDIF
-
-            *-- Montar grid de Acesso por Tela (Page4)
-            THIS.MontaAcesso()
-
-            *-- Limpar log de alteracoes de usuarios
-            IF USED("crLogData")
-                ZAP IN crLogData
-            ENDIF
-
+            loc_oGrid.ColumnCount = 2
+            loc_oGrid.RecordSource = "cursor_4c_Dados"
+            loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Grupos"
+            loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.NComps"
+            loc_oGrid.Column1.Header1.Caption = ""
+            loc_oGrid.Column2.Header1.Caption = ""
+            loc_oGrid.Column1.Width = 120
+            loc_oGrid.Column2.Width = 500
+            loc_oGrid.FontName = "Tahoma"
+            loc_oGrid.FontSize = 8
+            loc_oGrid.Refresh()
             loc_lSucesso = .T.
-
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro("Erro ao carregar lista: " + loc_oErro.Message, "Erro")
         ENDTRY
-
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * MontaAcesso - Monta crSigAcTel via LEFT JOIN e configura grd_4c_GradeAcTela
-    *--------------------------------------------------------------------------
-    PROCEDURE MontaAcesso()
-        LOCAL loc_oGrid, loc_nRet
-        loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4.grd_4c_GradeAcTela
-
+    *==========================================================================
+    * CarregarDadosGrupo - Carrega todas as 4 abas para o grupo
+    *==========================================================================
+    PROCEDURE CarregarDadosGrupo(par_cGrupos)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
         TRY
-            IF USED("crSigAcTel")
-                USE IN crSigAcTel
+            IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
+                THIS.CarregarUsuariosAbas(par_cGrupos)
+                THIS.CarregarProgramasAba(par_cGrupos)
+                THIS.CarregarBarraAba(par_cGrupos)
+                THIS.CarregarTelasAba(par_cGrupos)
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar dados do grupo: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * CarregarUsuariosAbas - Preenche as duas listboxes de usuarios
+    *==========================================================================
+    PROCEDURE CarregarUsuariosAbas(par_cGrupos)
+        LOCAL loc_oAba, loc_lNovoGrupo, loc_cUsu, loc_lNaGrupo
+        TRY
+            loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+            loc_oAba.lbx_4c_Disponiveis.Clear()
+            loc_oAba.lbx_4c_Selecionados.Clear()
+            loc_oAba.lbl_4c_StatusDisp.Caption = ""
+            loc_oAba.lbl_4c_StatusSel.Caption  = ""
+
+            loc_lNovoGrupo = EMPTY(ALLTRIM(par_cGrupos))
+
+            *-- Carregar usuarios do grupo (se grupo existente)
+            IF !loc_lNovoGrupo
+                THIS.this_oBusinessObject.CarregarUsuariosDoGrupo(par_cGrupos)
             ENDIF
 
-            IF USED("crAcCamp") AND USED("crTmpAcTel")
-                SELECT a.cCodigos, a.cDescTelas, a.cCampos, a.cObjetos, a.cDescCamps, ;
-                    NVL(b.nStatus, 1) AS nStatus, ;
-                    NVL(b.Grupos, SPACE(10)) AS Grupos, ;
-                    NVL(b.Usuarios, SPACE(10)) AS Usuarios, ;
-                    NVL(b.PkChaves, SPACE(20)) AS PkChaves ;
-                    FROM crAcCamp a ;
-                    LEFT JOIN crTmpAcTel b ;
-                    ON a.cCodigos = b.ccodigos AND a.cCampos = b.ccampos ;
-                    INTO CURSOR crSigAcTel READWRITE
-                loc_nRet = 1
-            ELSE
-                SET NULL ON
-                CREATE CURSOR crSigAcTel (;
-                    cCodigos  C(10), cDescTelas C(50), cCampos C(30),;
-                    cObjetos  C(100), cDescCamps C(50), nStatus N(1),;
-                    Grupos    C(10), Usuarios C(10), PkChaves C(20);
-                )
-                SET NULL OFF
-                loc_nRet = 1
+            *-- Carregar todos os usuarios do sistema
+            IF THIS.this_oBusinessObject.BuscarTodosUsuarios() AND USED("cursor_4c_TodosUsuarios")
+                SELECT cursor_4c_TodosUsuarios
+                GO TOP
+                SCAN
+                    loc_cUsu = ALLTRIM(Usuarios)
+                    loc_lNaGrupo = .F.
+                    IF !loc_lNovoGrupo AND USED("cursor_4c_UsuariosGrupo")
+                        SELECT cursor_4c_UsuariosGrupo
+                        LOCATE FOR ALLTRIM(Usuarios) == m.loc_cUsu
+                        IF !EOF()
+                            loc_lNaGrupo = .T.
+                        ENDIF
+                    ENDIF
+                    SELECT cursor_4c_TodosUsuarios
+                    IF loc_lNaGrupo
+                        loc_oAba.lbx_4c_Selecionados.AddItem(loc_cUsu)
+                    ELSE
+                        loc_oAba.lbx_4c_Disponiveis.AddItem(loc_cUsu)
+                    ENDIF
+                ENDSCAN
             ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar usu" + CHR(225) + "rios: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
 
-            IF loc_nRet = 1
-                loc_oGrid.RecordSource          = ""
-                loc_oGrid.RecordSource          = "crSigAcTel"
+    *==========================================================================
+    * CarregarProgramasAba - Vincula cursor_4c_Programas ao grd_4c_Programas
+    *==========================================================================
+    PROCEDURE CarregarProgramasAba(par_cGrupos)
+        LOCAL loc_oGrid
+        TRY
+            IF THIS.this_oBusinessObject.CarregarProgramas(par_cGrupos)
+                THIS.this_cFiltroPrograma = ""
+                IF USED("cursor_4c_Programas")
+                    SELECT cursor_4c_Programas
+                    SET FILTER TO
+                ENDIF
+                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
+                loc_oGrid.ColumnCount = 4
+                loc_oGrid.RecordSource = "cursor_4c_Programas"
+                loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.Descricaos"
+                loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.Programas"
+                loc_oGrid.Column3.ControlSource = "cursor_4c_Programas.Marcas"
+                loc_oGrid.Column4.ControlSource = "cursor_4c_Programas.Parametros"
+                loc_oGrid.Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                loc_oGrid.Column2.Header1.Caption = "Programa"
+                loc_oGrid.Column3.Header1.Caption = ""
+                loc_oGrid.Column4.Header1.Caption = "Parametro"
+                loc_oGrid.Column1.Width = 380
+                loc_oGrid.Column2.Width = 120
+                loc_oGrid.Column3.Width = 65
+                loc_oGrid.Column4.Width = 120
+                loc_oGrid.FontName = "Tahoma"
+                loc_oGrid.FontSize = 8
+                loc_oGrid.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar programas: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * CarregarBarraAba - Vincula TmpBarra ao grd_4c_Barra
+    *==========================================================================
+    PROCEDURE CarregarBarraAba(par_cGrupos)
+        LOCAL loc_oGrid
+        TRY
+            IF THIS.this_oBusinessObject.CarregarBarra(par_cGrupos)
+                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra
+                loc_oGrid.ColumnCount = 2
+                loc_oGrid.RecordSource = "TmpBarra"
+                loc_oGrid.Column1.ControlSource = "TmpBarra.Descricaos"
+                loc_oGrid.Column2.ControlSource = "TmpBarra.SelBarras"
+                loc_oGrid.Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                loc_oGrid.Column2.Header1.Caption = ""
+                loc_oGrid.Column1.Width = 550
+                loc_oGrid.Column2.Width = 80
+                loc_oGrid.FontName = "Tahoma"
+                loc_oGrid.FontSize = 8
+                loc_oGrid.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar barra: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * CarregarTelasAba - Vincula crSigAcTel ao grd_4c_Telas
+    *==========================================================================
+    PROCEDURE CarregarTelasAba(par_cGrupos)
+        LOCAL loc_oGrid
+        TRY
+            IF THIS.this_oBusinessObject.CarregarAcessoTelas(par_cGrupos)
+                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Telas
+                loc_oGrid.ColumnCount = 3
+                loc_oGrid.RecordSource = "crSigAcTel"
                 loc_oGrid.Column1.ControlSource = "crSigAcTel.cDescTelas"
                 loc_oGrid.Column2.ControlSource = "crSigAcTel.cDescCamps"
                 loc_oGrid.Column3.ControlSource = "crSigAcTel.nStatus"
+                loc_oGrid.Column1.Header1.Caption = "Tela"
+                loc_oGrid.Column2.Header1.Caption = "Campo"
+                loc_oGrid.Column3.Header1.Caption = "Status"
+                loc_oGrid.Column1.Width = 360
+                loc_oGrid.Column2.Width = 360
+                loc_oGrid.Column3.Width = 168
+                loc_oGrid.Column3.cbo_4c_CmbStatus.RowSourceType = 1
+                loc_oGrid.Column3.cbo_4c_CmbStatus.RowSource = "Padr" + CHR(227) + "o," + ;
+                    "Invis" + CHR(237) + "vel," + ;
+                    "N" + CHR(227) + "o Edit" + CHR(225) + "vel," + ;
+                    "Obrigat" + CHR(243) + "rio"
+                loc_oGrid.FontName = "Tahoma"
+                loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
             ENDIF
-
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro("Erro ao carregar acesso a telas: " + loc_oErro.Message, "Erro")
         ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AtualizaTmp - Reconstroi TmpBarra com programas de acesso rapido
-    * par_nTodos: 1 = reconstruir do zero, 0 = atualizar delta
-    *--------------------------------------------------------------------------
-    PROCEDURE AtualizaTmp(par_nTodos)
-        LOCAL loc_nPos
-        loc_nPos = 0
-
-        IF par_nTodos = 1
-            ZAP IN TmpBarra
-        ELSE
-            *-- Remover do TmpBarra programas nao mais em crDestino
-            IF USED("crDestino")
-                DELETE FROM TmpBarra ;
-                    WHERE NOT TmpBarra.Programas + TmpBarra.Parametros ;
-                    IN (SELECT b.Programas + b.Parametros FROM crDestino b ;
-                        WHERE NOT EMPTY(b.Grupos))
-            ELSE
-                ZAP IN TmpBarra
-            ENDIF
-        ENDIF
-
-        *-- Scan crDestino: inserir na TmpBarra programas com BarraForms nao vazio
-        IF USED("crDestino")
-            SELECT crDestino
-            SCAN
-                loc_nPos = loc_nPos + 1
-                SCATTER MEMVAR
-                m.BarraOrdem = loc_nPos
-                m.SelBarras  = .F.
-                IF NOT EMPTY(m.BarraForms) AND ;
-                   NOT SEEK(m.Programas + m.Parametros, "TmpBarra", "ProPar")
-                    INSERT INTO TmpBarra FROM MEMVAR
-                ENDIF
-            ENDSCAN
-        ENDIF
-
-        SELECT TmpBarra
-        SET ORDER TO BarraOrdem
-        GO TOP
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - Transfere dados do Form para o Business Object
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oPage
-        loc_oPage = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-
-        WITH THIS.this_oBusinessObject
-            .this_cGrupos = ALLTRIM(loc_oPage.txt_4c_Grupo.Value)
-            .this_cNComps = ALLTRIM(loc_oPage.txt_4c_NomeCompleto.Value)
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BOParaForm - Transfere dados do Business Object para o Form
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPage
-        loc_oPage = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-
-        WITH THIS.this_oBusinessObject
-            loc_oPage.txt_4c_Grupo.Value        = .this_cGrupos
-            loc_oPage.txt_4c_NomeCompleto.Value = .this_cNComps
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * LimparCampos - Limpa campos do formulario
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oPage
-        loc_oPage = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-
-        loc_oPage.txt_4c_Grupo.Value        = ""
-        loc_oPage.txt_4c_NomeCompleto.Value = ""
-        loc_oPage.lbl_4c_Label4.Caption     = ""
-        loc_oPage.lbl_4c_Label6.Caption     = ""
-        loc_oPage.obj_4c_Usuario.Clear()
-        loc_oPage.obj_4c_UsuarioSl.Clear()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - Habilita/desabilita campos conforme modo
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oPage, loc_oGridAc
-        loc_oPage = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-
-        loc_oPage.txt_4c_Grupo.Enabled        = (par_lHabilitar AND THIS.this_cModoAtual = "INCLUIR")
-        loc_oPage.txt_4c_NomeCompleto.Enabled = par_lHabilitar
-        loc_oPage.cmd_4c_CmdAdd.Enabled       = par_lHabilitar
-        loc_oPage.cmd_4c_CmdAddAll.Enabled    = par_lHabilitar
-        loc_oPage.cmd_4c_CmdRemove.Enabled    = par_lHabilitar
-        loc_oPage.cmd_4c_CmdRemoveAll.Enabled = par_lHabilitar
-
-        *-- Controlar ReadOnly do grid de acesso a programas (aba Acesso)
-        *-- Em modo consulta/exclusao o grid fica somente-leitura
-        TRY
-            loc_oGridAc = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Acesso
-            loc_oGridAc.ReadOnly = NOT par_lHabilitar
-        CATCH TO loc_oErro
-            *-- INTENCIONAL: grid de acesso pode nao estar instanciado em modos iniciais; ReadOnly eh melhor-esforco
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ObterCodigoSelecionado - Retorna codigo do registro selecionado no grid
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterCodigoSelecionado()
-        LOCAL loc_cCodigo
-        loc_cCodigo = ""
-
-        IF USED("cursor_4c_Dados") AND RECCOUNT("cursor_4c_Dados") > 0
-            loc_cCodigo = ALLTRIM(cursor_4c_Dados.Grupos)
-        ENDIF
-
-        RETURN loc_cCodigo
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Alterna entre paginas do PageFrame externo
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-        THIS.pgf_4c_Paginas.ActivePage = par_nPagina
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-        LOCAL loc_cModo
-        loc_cModo = THIS.this_cModoAtual
-
-        DO CASE
-        CASE loc_cModo = "VISUALIZAR"
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Salvar.Enabled   = .F.
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Cancelar.Enabled = .T.
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Cancelar.Caption = "Voltar"
-
-        CASE loc_cModo = "INCLUIR" OR loc_cModo = "ALTERAR"
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Salvar.Enabled   = .T.
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Cancelar.Enabled = .T.
-            THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesDados.cmd_4c_Cancelar.Caption = "Cancelar"
-        ENDCASE
     ENDPROC
 
     *==========================================================================
-    * HANDLERS DE EVENTOS - Botoes da Lista
+    * FormParaBO
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO()
+        WITH THIS.this_oBusinessObject
+            .this_cGrupos = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
+            .this_cNComps = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_NomeCompleto.Value)
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm()
+        WITH THIS.pgf_4c_Paginas.Page2
+            .txt_4c_Grupo.Value        = THIS.this_oBusinessObject.this_cGrupos
+            .txt_4c_NomeCompleto.Value = THIS.this_oBusinessObject.this_cNComps
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oP2, loc_oAbas
+        loc_oP2   = THIS.pgf_4c_Paginas.Page2
+        loc_oAbas = loc_oP2.pgf_4c_Abas
+        loc_oP2.txt_4c_Grupo.Value        = ""
+        loc_oP2.txt_4c_NomeCompleto.Value = ""
+        loc_oAbas.Page1.lbx_4c_Disponiveis.Clear()
+        loc_oAbas.Page1.lbx_4c_Selecionados.Clear()
+        loc_oAbas.Page1.lbl_4c_StatusDisp.Caption = ""
+        loc_oAbas.Page1.lbl_4c_StatusSel.Caption  = ""
+        loc_oAbas.Page2.txt_4c_FiltroAcesso.Value = ""
+        loc_oAbas.Page2.grd_4c_Programas.RecordSource = ""
+        loc_oAbas.Page3.grd_4c_Barra.RecordSource = ""
+        loc_oAbas.Page4.grd_4c_Telas.RecordSource = ""
+        THIS.this_cFiltroPrograma = ""
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oP2
+        loc_oP2 = THIS.pgf_4c_Paginas.Page2
+        *-- Grupo: so editavel no INCLUIR
+        loc_oP2.txt_4c_Grupo.Enabled = (par_lHabilitar AND THIS.this_cModoAtual = "INCLUIR")
+        loc_oP2.txt_4c_NomeCompleto.Enabled = par_lHabilitar
+        THIS.HabilitarAbaUsuarios(par_lHabilitar)
+        THIS.HabilitarColunasGrid(par_lHabilitar)
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarAbaUsuarios
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarAbaUsuarios(par_lHabilitar)
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        loc_oAba.cmd_4c_AddUsu.Enabled    = par_lHabilitar
+        loc_oAba.cmd_4c_AddAllUsu.Enabled = par_lHabilitar
+        loc_oAba.cmd_4c_RemUsu.Enabled    = par_lHabilitar
+        loc_oAba.cmd_4c_RemAllUsu.Enabled = par_lHabilitar
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarColunasGrid - Habilita/desabilita colunas de checkbox nos grids
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarColunasGrid(par_lHabilitar)
+        TRY
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas.Column3.ReadOnly = !par_lHabilitar
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra.Column2.ReadOnly     = !par_lHabilitar
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Telas.Column3.ReadOnly     = !par_lHabilitar
+        CATCH TO loc_oErro
+            MsgErro("Erro ao habilitar grids: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - Ajusta estado dos botoes CRUD conforme modo atual
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_lNaLista, loc_oBotoes
+        TRY
+            loc_lNaLista = (THIS.this_cModoAtual = "LISTA")
+            loc_oBotoes  = THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes
+            loc_oBotoes.cmd_4c_Incluir.Enabled      = .T.
+            loc_oBotoes.cmd_4c_Alterar.Enabled      = loc_lNaLista
+            loc_oBotoes.cmd_4c_Excluir.Enabled      = loc_lNaLista
+            loc_oBotoes.cmd_4c_Buscar.Enabled       = loc_lNaLista
+            loc_oBotoes.cmd_4c_CopiarAcesso.Enabled = loc_lNaLista
+            THIS.pgf_4c_Paginas.Page1.cnt_4c_Saida.cmd_4c_Encerrar.Enabled = .T.
+        CATCH TO loc_oErro
+            MsgErro("Erro em AjustarBotoesPorModo: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * AlternarPagina - Alterna entre Page1 (Lista) e Page2 (Dados)
+    *==========================================================================
+    PROCEDURE AlternarPagina(par_nPagina)
+        IF VARTYPE(par_nPagina) != "N" OR par_nPagina < 1 OR par_nPagina > 2
+            RETURN .F.
+        ENDIF
+        THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * AtivaCopia - Mostra/oculta painel de copia de acessos na Page1
+    *==========================================================================
+    PROCEDURE AtivaCopia(par_lAtivo)
+        LOCAL loc_oP1
+        loc_oP1 = THIS.pgf_4c_Paginas.Page1
+        loc_oP1.cnt_4c_PainelCopia.Visible = par_lAtivo
+        loc_oP1.cnt_4c_Botoes.Visible      = !par_lAtivo
+        loc_oP1.grd_4c_Lista.Enabled       = !par_lAtivo
+        IF par_lAtivo
+            loc_oP1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem.Value = ""
+            loc_oP1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * SalvarDadosRelacionados - Salva usuarios, programas, barra e telas
+    *==========================================================================
+    PROCEDURE SalvarDadosRelacionados(par_cGrupos)
+        LOCAL loc_lSucesso, loc_oAba1, loc_nI, loc_cUsu
+        loc_lSucesso = .T.
+        TRY
+            loc_oAba1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+
+            *-- Cursor temporario com usuarios selecionados
+            IF USED("cursor_4c_UsrSalvar")
+                USE IN cursor_4c_UsrSalvar
+            ENDIF
+            SET NULL ON
+            CREATE CURSOR cursor_4c_UsrSalvar (Usuarios C(10))
+            SET NULL OFF
+            FOR loc_nI = 1 TO loc_oAba1.lbx_4c_Selecionados.ListCount
+                loc_cUsu = ALLTRIM(loc_oAba1.lbx_4c_Selecionados.List(loc_nI))
+                IF !EMPTY(loc_cUsu)
+                    INSERT INTO cursor_4c_UsrSalvar VALUES (m.loc_cUsu)
+                ENDIF
+            ENDFOR
+
+            IF !THIS.this_oBusinessObject.SalvarUsuarios(par_cGrupos, "cursor_4c_UsrSalvar")
+                loc_lSucesso = .F.
+            ENDIF
+            IF USED("cursor_4c_UsrSalvar")
+                USE IN cursor_4c_UsrSalvar
+            ENDIF
+
+            *-- Salvar programas (limpar filtro antes)
+            IF USED("cursor_4c_Programas")
+                SELECT cursor_4c_Programas
+                SET FILTER TO
+                GO TOP
+                IF !THIS.this_oBusinessObject.SalvarProgramas(par_cGrupos, "cursor_4c_Programas")
+                    loc_lSucesso = .F.
+                ENDIF
+            ENDIF
+
+            *-- Salvar barra
+            IF USED("TmpBarra")
+                IF !THIS.this_oBusinessObject.SalvarBarra(par_cGrupos, "TmpBarra")
+                    loc_lSucesso = .F.
+                ENDIF
+            ENDIF
+
+            *-- Salvar acesso a telas
+            IF USED("crSigAcTel")
+                IF !THIS.this_oBusinessObject.SalvarAcessoTelas(par_cGrupos, "crSigAcTel")
+                    loc_lSucesso = .F.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao salvar dados relacionados: " + loc_oErro.Message, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * ObterStatusUsuario - Retorna "Ativo" ou "Inativo" para um usuario
+    *==========================================================================
+    PROCEDURE ObterStatusUsuario(par_cUsuarios)
+        LOCAL loc_cStatus, loc_nResult
+        loc_cStatus = ""
+        TRY
+            loc_nResult = SQLEXEC(gnConnHandle, ;
+                "SELECT cAtivos FROM sigcdusu WHERE Usuarios = " + EscaparSQL(ALLTRIM(par_cUsuarios)), ;
+                "cursor_4c_TmpUsu")
+            IF loc_nResult >= 0 AND USED("cursor_4c_TmpUsu") AND RECCOUNT("cursor_4c_TmpUsu") > 0
+                SELECT cursor_4c_TmpUsu
+                IF ALLTRIM(cAtivos) = "N"
+                    loc_cStatus = "Inativo"
+                ELSE
+                    loc_cStatus = "Ativo"
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_TmpUsu")
+                USE IN cursor_4c_TmpUsu
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao obter status do usu" + CHR(225) + "rio: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_cStatus
+    ENDPROC
+
+    *==========================================================================
+    * --- HANDLERS DE BOTOES ---
     *==========================================================================
 
     PROCEDURE BtnIncluirClick()
-        THIS.this_cGrupos = ""
         THIS.this_oBusinessObject.NovoRegistro()
         THIS.LimparCampos()
         THIS.this_cModoAtual = "INCLUIR"
         THIS.HabilitarCampos(.T.)
-        THIS.AjustarBotoesPorModo()
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.ActivePage = 1
+        THIS.CarregarDadosGrupo("")
         THIS.AlternarPagina(2)
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1.txt_4c_Grupo.SetFocus()
-    ENDPROC
-
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cCodigo
-        loc_cCodigo = THIS.ObterCodigoSelecionado()
-
-        IF EMPTY(loc_cCodigo)
-            MsgAviso("Selecione um grupo para consultar!")
-            RETURN
+        IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
+            THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
         ENDIF
-
-        THIS.this_cGrupos = loc_cCodigo
-        THIS.this_cModoAtual = "VISUALIZAR"
-        THIS.HabilitarCampos(.F.)
-        THIS.AjustarBotoesPorModo()
-        THIS.CarregarDadosGrupo()
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.ActivePage = 1
-        THIS.AlternarPagina(2)
     ENDPROC
 
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_cCodigo
-        loc_cCodigo = THIS.ObterCodigoSelecionado()
-
-        IF EMPTY(loc_cCodigo)
-            MsgAviso("Selecione um grupo para alterar!")
+        LOCAL loc_cGrupos
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um grupo na lista.")
             RETURN
         ENDIF
+        SELECT cursor_4c_Dados
+        loc_cGrupos = ALLTRIM(Grupos)
+        IF EMPTY(loc_cGrupos)
+            MsgAviso("Selecione um grupo na lista.")
+            RETURN
+        ENDIF
+        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cGrupos)
+            THIS.this_oBusinessObject.EditarRegistro()
+            THIS.BOParaForm()
+            THIS.this_cModoAtual = "ALTERAR"
+            THIS.HabilitarCampos(.T.)
+            THIS.CarregarDadosGrupo(loc_cGrupos)
+            THIS.AlternarPagina(2)
+        ENDIF
+    ENDPROC
 
-        THIS.this_cGrupos = loc_cCodigo
-        THIS.this_cModoAtual = "ALTERAR"
-        THIS.HabilitarCampos(.T.)
-        THIS.AjustarBotoesPorModo()
-        THIS.CarregarDadosGrupo()
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.ActivePage = 1
-        THIS.AlternarPagina(2)
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1.txt_4c_NomeCompleto.SetFocus()
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cGrupos
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um grupo na lista.")
+            RETURN
+        ENDIF
+        SELECT cursor_4c_Dados
+        loc_cGrupos = ALLTRIM(Grupos)
+        IF EMPTY(loc_cGrupos)
+            MsgAviso("Selecione um grupo na lista.")
+            RETURN
+        ENDIF
+        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cGrupos)
+            THIS.BOParaForm()
+            THIS.this_cModoAtual = "VISUALIZAR"
+            THIS.HabilitarCampos(.F.)
+            THIS.CarregarDadosGrupo(loc_cGrupos)
+            THIS.AlternarPagina(2)
+        ENDIF
     ENDPROC
 
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_cCodigo, loc_lSucesso
-        loc_cCodigo  = THIS.ObterCodigoSelecionado()
-        loc_lSucesso = .F.
-
-        IF EMPTY(loc_cCodigo)
-            MsgAviso("Selecione um grupo para excluir!")
+        LOCAL loc_cGrupos
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um grupo na lista.")
             RETURN
         ENDIF
-
-        IF !MsgConfirma("Deseja realmente excluir o grupo " + ALLTRIM(loc_cCodigo) + "?")
+        SELECT cursor_4c_Dados
+        loc_cGrupos = ALLTRIM(Grupos)
+        IF EMPTY(loc_cGrupos)
+            MsgAviso("Selecione um grupo na lista.")
             RETURN
         ENDIF
-
-        THIS.this_cGrupos = loc_cCodigo
-        THIS.this_oBusinessObject.this_cGrupos = loc_cCodigo
-        loc_lSucesso = THIS.this_oBusinessObject.ExecutarExclusao()
-
-        IF loc_lSucesso
-            THIS.CarregarLista()
-            MsgInfo("Grupo exclu" + CHR(237) + "do com sucesso!")
+        IF MsgConfirma("Confirma exclus" + CHR(227) + "o do grupo " + loc_cGrupos + "?")
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cGrupos)
+                IF THIS.this_oBusinessObject.Excluir()
+                    MsgInfo("Grupo exclu" + CHR(237) + "do com sucesso.")
+                    THIS.CarregarLista()
+                ENDIF
+            ENDIF
         ENDIF
     ENDPROC
 
     PROCEDURE BtnBuscarClick()
+        LOCAL loc_oBusca, loc_cGrupoSel
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "sigcdgra", ;
+                "cursor_4c_Busca", "Grupos", "", "Buscar Grupo")
+            loc_oBusca.mAddColuna("Grupos", "", "Grupo")
+            loc_oBusca.mAddColuna("NComps", "", "Nome")
+            loc_oBusca.Show()
+            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Busca")
+                SELECT cursor_4c_Busca
+                loc_cGrupoSel = ALLTRIM(Grupos)
+                USE IN cursor_4c_Busca
+                THIS.this_oBusinessObject.Buscar(loc_cGrupoSel)
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 2
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.Grupos"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.ControlSource = "cursor_4c_Dados.NComps"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = ""
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Header1.Caption = ""
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+            ELSE
+                IF USED("cursor_4c_Busca")
+                    USE IN cursor_4c_Busca
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao buscar grupo: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnSalvarClick()
+        LOCAL loc_cGrupos, loc_cNome
+        loc_cGrupos = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
+        loc_cNome   = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_NomeCompleto.Value)
+
+        IF EMPTY(loc_cGrupos)
+            MsgAviso("C" + CHR(243) + "digo do grupo " + CHR(233) + " obrigat" + CHR(243) + "rio.")
+            THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
+            RETURN
+        ENDIF
+
+        IF EMPTY(loc_cNome)
+            MsgAviso("Nome do grupo " + CHR(233) + " obrigat" + CHR(243) + "rio.")
+            THIS.pgf_4c_Paginas.Page2.txt_4c_NomeCompleto.SetFocus()
+            RETURN
+        ENDIF
+
+        IF THIS.this_cModoAtual = "INCLUIR"
+            IF THIS.this_oBusinessObject.VerificarDuplicidade(loc_cGrupos)
+                MsgAviso("Grupo " + loc_cGrupos + " j" + CHR(225) + " cadastrado.")
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
+                RETURN
+            ENDIF
+        ENDIF
+
+        THIS.FormParaBO()
+
+        IF THIS.this_oBusinessObject.Salvar()
+            IF !THIS.SalvarDadosRelacionados(loc_cGrupos)
+                MsgAviso("Grupo salvo, mas houve erro ao salvar dados relacionados.")
+            ELSE
+                MsgInfo("Grupo salvo com sucesso.")
+            ENDIF
+            THIS.this_cModoAtual = "LISTA"
+            THIS.AlternarPagina(1)
+            THIS.CarregarLista()
+            THIS.AjustarBotoesPorModo()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnCancelarClick()
+        THIS.this_cModoAtual = "LISTA"
+        THIS.AlternarPagina(1)
         THIS.CarregarLista()
+        THIS.AjustarBotoesPorModo()
     ENDPROC
 
     PROCEDURE BtnEncerrarClick()
         THIS.Release()
     ENDPROC
 
-    *==========================================================================
-    * HANDLERS DE EVENTOS - Botoes da Dados
-    *==========================================================================
-
-    PROCEDURE BtnSalvarClick()
-        LOCAL loc_lSucesso, loc_cGrupos, loc_nRet, loc_cSQL
-        LOCAL loc_oPag1, loc_i, loc_cUsuario, loc_nCount
-
-        loc_lSucesso = .F.
-        loc_oPag1    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-
-        THIS.FormParaBO()
-
-        TRY
-            *-- Validar e gravar sigcdgra via BO
-            loc_lSucesso = THIS.this_oBusinessObject.Salvar()
-
-            IF loc_lSucesso
-                loc_cGrupos = PADR(THIS.this_oBusinessObject.this_cGrupos, 10)
-                THIS.this_cGrupos = ALLTRIM(loc_cGrupos)
-
-                *-- 1. Atualizar sigcdacg (usuarios vinculados ao grupo)
-                SQLEXEC(gnConnHandle, "DELETE FROM sigcdacg WHERE grupos = " + EscaparSQL(loc_cGrupos))
-
-                loc_nCount = loc_oPag1.obj_4c_UsuarioSl.ListCount
-                loc_i = 1
-                DO WHILE loc_i <= loc_nCount
-                    loc_cUsuario = ALLTRIM(loc_oPag1.obj_4c_UsuarioSl.List(loc_i))
-                    IF NOT EMPTY(loc_cUsuario)
-                        loc_cSQL = "INSERT INTO sigcdacg (grupos, usuarios, pkchaves) VALUES (" + ;
-                                   EscaparSQL(loc_cGrupos) + ", " + ;
-                                   EscaparSQL(PADR(loc_cUsuario, 10)) + ", " + ;
-                                   EscaparSQL(fUniqueIds(20)) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDIF
-                    loc_i = loc_i + 1
-                ENDDO
-
-                *-- 2. Atualizar sigcdacu (programas com acesso: crSigCdPrg.Marcas=1)
-                SQLEXEC(gnConnHandle, "DELETE FROM sigcdacu WHERE grupos = " + EscaparSQL(loc_cGrupos))
-
-                IF USED("crSigCdPrg")
-                    SELECT crSigCdPrg
-                    SCAN FOR crSigCdPrg.Marcas = 1
-                        loc_cSQL = "INSERT INTO sigcdacu " + ;
-                                   "(grupos, parametros, programas, usuarios, pkchaves) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(loc_cGrupos) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(crSigCdPrg.parametros), 10)) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(crSigCdPrg.programas), 15)) + ", " + ;
-                                   EscaparSQL(SPACE(10)) + ", " + ;
-                                   EscaparSQL(fUniqueIds()) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                *-- 3. Atualizar sigcdacb (barras de acesso rapido: TmpBarra.SelBarras=.T.)
-                SQLEXEC(gnConnHandle, "DELETE FROM sigcdacb WHERE grupos = " + EscaparSQL(loc_cGrupos))
-
-                IF USED("TmpBarra")
-                    SELECT TmpBarra
-                    SCAN FOR TmpBarra.SelBarras
-                        loc_cSQL = "INSERT INTO sigcdacb " + ;
-                                   "(grupos, usuarios, descricaos, barraforms, barraordem, " + ;
-                                   "programas, parametros, selbarras, pkchaves) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(loc_cGrupos) + ", " + ;
-                                   EscaparSQL(SPACE(10)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(TmpBarra.Descricaos), 73)) + ", " + ;
-                                   EscaparSQL(ALLTRIM(TmpBarra.BarraForms)) + ", " + ;
-                                   FormatarNumeroSQL(TmpBarra.BarraOrdem) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(TmpBarra.Programas), 15)) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(TmpBarra.Parametros), 10)) + ", " + ;
-                                   "1, " + ;
-                                   EscaparSQL(fUniqueIds(20)) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                *-- 4. Atualizar sigactel (acesso por campo/tela: nStatus != 1)
-                SQLEXEC(gnConnHandle, "DELETE FROM sigactel WHERE grupos = " + EscaparSQL(loc_cGrupos))
-
-                IF USED("crSigAcTel")
-                    SELECT crSigAcTel
-                    SCAN FOR NOT DELETED() AND crSigAcTel.nStatus != 1
-                        loc_cSQL = "INSERT INTO sigactel " + ;
-                                   "(ccampos, ccodigos, cdesccamps, cdesctelas, cobjetos, " + ;
-                                   "nstatus, grupos, pkchaves, usuarios) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(LEFT(ALLTRIM(crSigAcTel.cCampos), 30)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(crSigAcTel.cCodigos), 10)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(crSigAcTel.cDescCamps), 50)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(crSigAcTel.cDescTelas), 50)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(crSigAcTel.cObjetos), 100)) + ", " + ;
-                                   FormatarNumeroSQL(crSigAcTel.nStatus) + ", " + ;
-                                   EscaparSQL(loc_cGrupos) + ", " + ;
-                                   EscaparSQL(fUniqueIds(20)) + ", " + ;
-                                   EscaparSQL(SPACE(10)) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                *-- Voltar para lista
-                THIS.CarregarLista()
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AlternarPagina(1)
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro("Erro ao salvar: " + THIS.this_cMensagemErro)
-            loc_lSucesso = .F.
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDPROC
-
-    PROCEDURE BtnCancelarClick()
-        THIS.AlternarPagina(1)
-        THIS.this_cModoAtual = "LISTA"
-    ENDPROC
-
-    *==========================================================================
-    * HANDLERS DE EVENTOS - Copiar Acesso
-    *==========================================================================
-
     PROCEDURE BtnCopiarAcessoClick()
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um grupo destino para copiar acessos.")
+            RETURN
+        ENDIF
         THIS.AtivaCopia(.T.)
-        THIS.pgf_4c_Paginas.Page1.cnt_4c_CopiarAcesso.txt_4c_CopiarAcessos.SetFocus()
     ENDPROC
 
-    PROCEDURE BtnGerarGrupoClick()
-        LOCAL loc_cGrupos, loc_cSQL, loc_nRet, loc_lSucesso
-        LOCAL loc_cGruposEsc
-
-        loc_lSucesso = .F.
-        loc_cGrupos  = THIS.ObterCodigoSelecionado()
-
-        IF EMPTY(loc_cGrupos)
-            MsgAviso("Selecione um grupo para gerar!")
+    *==========================================================================
+    * TxtGrupoOrigemValid - Lookup do grupo de origem no painel de copia
+    *==========================================================================
+    PROCEDURE TxtGrupoOrigemValid(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
             RETURN
         ENDIF
-
-        IF NOT MsgConfirma("Confirma a Gera" + CHR(231) + CHR(227) + "o do Grupo " + ALLTRIM(loc_cGrupos) + "?")
-            RETURN
-        ENDIF
-
-        loc_cGruposEsc = EscaparSQL(PADR(ALLTRIM(loc_cGrupos), 10))
-
+        LOCAL loc_oTxt, loc_oBusca, loc_cValor
         TRY
-            *-- Propagar acessos do grupo (sigcdacu) para todos os usuarios do grupo (sigcdacg)
-            *-- Para cada usuario no grupo, garantir que sigcdacu tenha entrada por usuario
-            loc_cSQL = "SELECT DISTINCT a.usuarios FROM sigcdacg a " + ;
-                       "WHERE a.grupos = " + loc_cGruposEsc + ;
-                       " AND NOT EMPTY(RTRIM(a.usuarios))"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrpUsu")
-
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_GrpUsu") > 0
-                SELECT cursor_4c_GrpUsu
-                SCAN
-                    LOCAL loc_cUsuario
-                    loc_cUsuario = PADR(ALLTRIM(cursor_4c_GrpUsu.usuarios), 10)
-
-                    *-- Inserir entradas de acesso por usuario para programas do grupo
-                    loc_cSQL = "INSERT INTO sigcdacu " + ;
-                               "(grupos, parametros, programas, usuarios, pkchaves) " + ;
-                               "SELECT grupos, parametros, programas, " + ;
-                               EscaparSQL(loc_cUsuario) + ", " + ;
-                               "NEWID() " + ;
-                               "FROM sigcdacu " + ;
-                               "WHERE grupos = " + loc_cGruposEsc + ;
-                               " AND usuarios = '' " + ;
-                               " AND programas + parametros NOT IN " + ;
-                               "(SELECT programas + parametros FROM sigcdacu " + ;
-                               " WHERE grupos = " + loc_cGruposEsc + ;
-                               " AND usuarios = " + EscaparSQL(loc_cUsuario) + ")"
-                    SQLEXEC(gnConnHandle, loc_cSQL)
-                ENDSCAN
-                loc_lSucesso = .T.
+            loc_oTxt = THIS.pgf_4c_Paginas.Page1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem
+            loc_cValor = ALLTRIM(loc_oTxt.Value)
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "sigcdgra", ;
+                "cursor_4c_BuscaOrigem", "Grupos", loc_cValor, "Selecionar Grupo Origem")
+            loc_oBusca.mAddColuna("Grupos", "", "Grupo")
+            loc_oBusca.mAddColuna("NComps", "", "Nome")
+            loc_oBusca.Show()
+            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOrigem")
+                SELECT cursor_4c_BuscaOrigem
+                loc_oTxt.Value = ALLTRIM(Grupos)
+                USE IN cursor_4c_BuscaOrigem
             ELSE
-                *-- Nenhum usuario no grupo - operacao concluida sem alteracoes
-                loc_lSucesso = .T.
+                IF USED("cursor_4c_BuscaOrigem")
+                    USE IN cursor_4c_BuscaOrigem
+                ENDIF
             ENDIF
-
-            IF USED("cursor_4c_GrpUsu")
-                USE IN cursor_4c_GrpUsu
-            ENDIF
-
-            IF loc_lSucesso
-                MsgInfo("Grupo " + CHR(34) + ALLTRIM(loc_cGrupos) + CHR(34) + ;
-                        " gerado com sucesso!")
-                THIS.CarregarLista()
-            ENDIF
-
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro("Erro ao gerar grupo: " + THIS.this_cMensagemErro)
-            IF USED("cursor_4c_GrpUsu")
-                USE IN cursor_4c_GrpUsu
-            ENDIF
+            MsgErro("Erro ao buscar grupo de origem: " + loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    PROCEDURE BtnCopiarAcessosClick()
-        LOCAL loc_lSucesso, loc_cGruOri, loc_cGruDes, loc_cSQL, loc_nRet
-        LOCAL loc_oPag1Cnt
-
-        loc_lSucesso = .F.
-        loc_oPag1Cnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_CopiarAcesso
-
-        IF NOT USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-            MsgAviso("Selecione um grupo de destino na lista!")
-            THIS.AtivaCopia(.F.)
+    *==========================================================================
+    * BtnCopiarOkClick - Executa copia de acessos entre grupos
+    *==========================================================================
+    PROCEDURE BtnCopiarOkClick()
+        LOCAL loc_cGrupoOrigem, loc_cGrupoDestino
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um grupo destino na lista.")
             RETURN
         ENDIF
-
-        loc_cGruDes = PADR(ALLTRIM(cursor_4c_Dados.Grupos), 10)
-        loc_cGruOri = PADR(ALLTRIM(loc_oPag1Cnt.txt_4c_CopiarAcessos.Value), 10)
-
-        IF EMPTY(ALLTRIM(loc_cGruOri)) OR loc_cGruDes = loc_cGruOri
-            MsgAviso("Grupo Inv" + CHR(225) + "lido!!!")
-            loc_oPag1Cnt.txt_4c_CopiarAcessos.SetFocus()
+        loc_cGrupoOrigem = ALLTRIM(THIS.pgf_4c_Paginas.Page1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem.Value)
+        IF EMPTY(loc_cGrupoOrigem)
+            MsgAviso("Informe o grupo de origem.")
+            THIS.pgf_4c_Paginas.Page1.cnt_4c_PainelCopia.txt_4c_GrupoOrigem.SetFocus()
             RETURN
         ENDIF
-
-        TRY
-            IF USED("crLogData")
-                ZAP IN crLogData
+        SELECT cursor_4c_Dados
+        loc_cGrupoDestino = ALLTRIM(Grupos)
+        IF UPPER(loc_cGrupoOrigem) = UPPER(loc_cGrupoDestino)
+            MsgAviso("Grupo de origem e destino s" + CHR(227) + "o iguais.")
+            RETURN
+        ENDIF
+        IF MsgConfirma("Copiar acessos de [" + loc_cGrupoOrigem + "] para [" + loc_cGrupoDestino + "]?")
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cGrupoDestino)
+                IF THIS.this_oBusinessObject.CopiarAcessos(loc_cGrupoOrigem)
+                    MsgInfo("Acessos copiados com sucesso.")
+                    THIS.AtivaCopia(.F.)
+                ENDIF
             ENDIF
-
-            *-- Acessos do grupo de origem que o destino nao tem (sigcdacu)
-            loc_cSQL = "SELECT a.usuarios, a.parametros, a.programas " + ;
-                       "FROM sigcdacu a " + ;
-                       "WHERE a.grupos = " + EscaparSQL(loc_cGruOri) + ;
-                       " AND a.programas + a.parametros NOT IN " + ;
-                       "(SELECT b.programas + b.parametros " + ;
-                       " FROM sigcdacu b " + ;
-                       " WHERE b.grupos = " + EscaparSQL(loc_cGruDes) + ") " + ;
-                       "ORDER BY a.programas, a.parametros"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpAcus")
-
-            *-- Barras do grupo de origem que o destino nao tem (sigcdacb)
-            loc_cSQL = "SELECT a.usuarios, a.descricaos, a.barraforms, " + ;
-                       "a.barraordem, a.programas, a.parametros, " + ;
-                       "CAST(a.selbarras AS int) AS selbarras " + ;
-                       "FROM sigcdacb a " + ;
-                       "WHERE a.grupos = " + EscaparSQL(loc_cGruOri) + ;
-                       " AND a.programas + a.parametros NOT IN " + ;
-                       "(SELECT b.programas + b.parametros " + ;
-                       " FROM sigcdacb b " + ;
-                       " WHERE b.grupos = " + EscaparSQL(loc_cGruDes) + ") " + ;
-                       "ORDER BY a.programas"
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpAcB")
-
-            *-- Acessos de tela do grupo de origem
-            loc_cSQL = "SELECT * FROM sigactel WHERE grupos = " + EscaparSQL(loc_cGruOri)
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpAcTelCop")
-
-            IF MsgConfirma("Confirma a C" + CHR(243) + "pia dos Acessos?")
-                *-- Inserir acessos de programa (sigcdacu)
-                IF USED("cursor_4c_TmpAcus") AND RECCOUNT("cursor_4c_TmpAcus") > 0
-                    SELECT cursor_4c_TmpAcus
-                    SCAN
-                        loc_cSQL = "INSERT INTO sigcdacu " + ;
-                                   "(grupos, parametros, programas, usuarios, pkchaves) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(loc_cGruDes) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(cursor_4c_TmpAcus.parametros), 10)) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(cursor_4c_TmpAcus.programas), 15)) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(NVL(cursor_4c_TmpAcus.usuarios, "")), 10)) + ", " + ;
-                                   EscaparSQL(fUniqueIds()) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                *-- Inserir barras de acesso rapido (sigcdacb)
-                IF USED("cursor_4c_TmpAcB") AND RECCOUNT("cursor_4c_TmpAcB") > 0
-                    SELECT cursor_4c_TmpAcB
-                    SCAN
-                        loc_cSQL = "INSERT INTO sigcdacb " + ;
-                                   "(grupos, usuarios, descricaos, barraforms, barraordem, " + ;
-                                   "programas, parametros, selbarras, pkchaves) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(loc_cGruDes) + ", " + ;
-                                   EscaparSQL(SPACE(10)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcB.descricaos), 73)) + ", " + ;
-                                   EscaparSQL(ALLTRIM(cursor_4c_TmpAcB.barraforms)) + ", " + ;
-                                   FormatarNumeroSQL(cursor_4c_TmpAcB.barraordem) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(cursor_4c_TmpAcB.programas), 15)) + ", " + ;
-                                   EscaparSQL(PADR(ALLTRIM(cursor_4c_TmpAcB.parametros), 10)) + ", " + ;
-                                   IIF(cursor_4c_TmpAcB.selbarras = 1, "1", "0") + ", " + ;
-                                   EscaparSQL(fUniqueIds(20)) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                *-- Inserir acessos de tela (sigactel)
-                IF USED("cursor_4c_TmpAcTelCop") AND RECCOUNT("cursor_4c_TmpAcTelCop") > 0
-                    SELECT cursor_4c_TmpAcTelCop
-                    SCAN
-                        loc_cSQL = "INSERT INTO sigactel " + ;
-                                   "(ccampos, ccodigos, cdesccamps, cdesctelas, cobjetos, " + ;
-                                   "nstatus, grupos, pkchaves, usuarios) " + ;
-                                   "VALUES (" + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcTelCop.ccampos), 30)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcTelCop.ccodigos), 10)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcTelCop.cdesccamps), 50)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcTelCop.cdesctelas), 50)) + ", " + ;
-                                   EscaparSQL(LEFT(ALLTRIM(cursor_4c_TmpAcTelCop.cobjetos), 100)) + ", " + ;
-                                   FormatarNumeroSQL(cursor_4c_TmpAcTelCop.nstatus) + ", " + ;
-                                   EscaparSQL(loc_cGruDes) + ", " + ;
-                                   EscaparSQL(fUniqueIds(20)) + ", " + ;
-                                   EscaparSQL(SPACE(10)) + ")"
-                        SQLEXEC(gnConnHandle, loc_cSQL)
-                    ENDSCAN
-                ENDIF
-
-                loc_lSucesso = .T.
-                MsgInfo("C" + CHR(243) + "pia de Acessos Efetuada com Sucesso!!!")
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro("Erro ao copiar acessos: " + THIS.this_cMensagemErro)
-        ENDTRY
-
-        IF USED("cursor_4c_TmpAcus")
-            USE IN cursor_4c_TmpAcus
         ENDIF
-        IF USED("cursor_4c_TmpAcB")
-            USE IN cursor_4c_TmpAcB
-        ENDIF
-        IF USED("cursor_4c_TmpAcTelCop")
-            USE IN cursor_4c_TmpAcTelCop
-        ENDIF
+    ENDPROC
 
+    PROCEDURE BtnCopiarCancelarClick()
         THIS.AtivaCopia(.F.)
     ENDPROC
 
-    PROCEDURE BtnCancelarCopiaClick()
-        THIS.AtivaCopia(.F.)
-        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.SetFocus()
-    ENDPROC
-
     *==========================================================================
-    * HANDLERS DE EVENTOS - Campos de busca e filtro
+    * --- HANDLERS DE LISTBOX ---
     *==========================================================================
 
-    PROCEDURE ValidarCopiarAcessos(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_oLista, loc_nRet, loc_oPag1Cnt
-
-        loc_oPag1Cnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_CopiarAcesso
-        loc_cValor   = ALLTRIM(loc_oPag1Cnt.txt_4c_CopiarAcessos.Value)
-
-        *-- Guard: evitar re-disparos sem mudanca de valor
-        IF loc_cValor = THIS.this_cUltimoGrupoValidado
-            RETURN
-        ENDIF
-        THIS.this_cUltimoGrupoValidado = loc_cValor
-
-        IF EMPTY(loc_cValor)
-            RETURN
-        ENDIF
-
-        *-- Tentar encontrar diretamente no banco
-        loc_nRet = SQLEXEC(gnConnHandle, ;
-            "SELECT grupos FROM sigcdgra WHERE grupos = " + EscaparSQL(loc_cValor), ;
-            "cursor_4c_GruOri")
-
-        IF loc_nRet > 0 AND RECCOUNT("cursor_4c_GruOri") > 0
-            SELECT cursor_4c_GruOri
-            loc_oPag1Cnt.txt_4c_CopiarAcessos.Value = ALLTRIM(cursor_4c_GruOri.grupos)
-        ELSE
-            *-- Nao encontrado diretamente - abrir lookup
-            loc_oLista = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "sigcdgra", ;
-                "crListaGrupo", "grupos", loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o")
-            IF NOT ISNULL(loc_oLista)
-                loc_oLista.mAddColuna("grupos", "", "Grupo")
-                loc_oLista.mAddColuna("ncomps", "", "Nome")
-                IF NOT loc_oLista.this_lAchouRegistro
-                    loc_oLista.Show()
-                ENDIF
-                IF loc_oLista.this_lSelecionou OR loc_oLista.this_lAchouRegistro
-                    IF USED("crListaGrupo")
-                        SELECT crListaGrupo
-                        loc_oPag1Cnt.txt_4c_CopiarAcessos.Value = ALLTRIM(crListaGrupo.grupos)
-                        USE IN crListaGrupo
-                    ENDIF
-                ELSE
-                    loc_oPag1Cnt.txt_4c_CopiarAcessos.Value = ""
-                    THIS.this_cUltimoGrupoValidado = ""
-                ENDIF
-                loc_oLista.Release()
-                loc_oLista = .NULL.
-            ENDIF
-        ENDIF
-
-        IF USED("cursor_4c_GruOri")
-            USE IN cursor_4c_GruOri
+    PROCEDURE LbxDisponiveisClick()
+        LOCAL loc_oAba, loc_cUsu, loc_cStatus
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        IF loc_oAba.lbx_4c_Disponiveis.ListIndex > 0
+            loc_cUsu    = ALLTRIM(loc_oAba.lbx_4c_Disponiveis.List(loc_oAba.lbx_4c_Disponiveis.ListIndex))
+            loc_cStatus = THIS.ObterStatusUsuario(loc_cUsu)
+            loc_oAba.lbl_4c_StatusDisp.Caption  = loc_cStatus
+            loc_oAba.lbl_4c_StatusDisp.ForeColor = IIF(loc_cStatus = "Inativo", RGB(200,0,0), RGB(0,128,0))
         ENDIF
     ENDPROC
 
-    PROCEDURE FiltroAcessoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cFiltro, loc_oPag2
-
-        loc_oPag2   = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
-        loc_cFiltro = ALLTRIM(loc_oPag2.txt_4c_Filtro.Value)
-
-        IF NOT USED("crSigCdPrg")
-            RETURN
+    PROCEDURE LbxSelecionadosClick()
+        LOCAL loc_oAba, loc_cUsu, loc_cStatus
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        IF loc_oAba.lbx_4c_Selecionados.ListIndex > 0
+            loc_cUsu    = ALLTRIM(loc_oAba.lbx_4c_Selecionados.List(loc_oAba.lbx_4c_Selecionados.ListIndex))
+            loc_cStatus = THIS.ObterStatusUsuario(loc_cUsu)
+            loc_oAba.lbl_4c_StatusSel.Caption  = loc_cStatus
+            loc_oAba.lbl_4c_StatusSel.ForeColor = IIF(loc_cStatus = "Inativo", RGB(200,0,0), RGB(0,128,0))
         ENDIF
-
-        SELECT crSigCdPrg
-
-        *-- Resetar flags de filtro
-        REPLACE ALL Filtro WITH 0 IN crSigCdPrg
-
-        IF NOT EMPTY(loc_cFiltro)
-            *-- Marcar Filtro=1 onde descricao contem o texto
-            SELECT pkchaves FROM crSigCdPrg ;
-                WHERE ALLTRIM(m.loc_cFiltro) $ UPPER(descricaos) ;
-                INTO CURSOR cursor_4c_Filtra READWRITE
-
-            IF USED("cursor_4c_Filtra") AND RECCOUNT("cursor_4c_Filtra") > 0
-                SELECT cursor_4c_Filtra
-                SCAN
-                    REPLACE Filtro WITH 1 ;
-                        FOR crSigCdPrg.pkchaves = cursor_4c_Filtra.pkchaves ;
-                        IN crSigCdPrg
-                ENDSCAN
-                USE IN cursor_4c_Filtra
-            ENDIF
-        ENDIF
-
-        SELECT crSigCdPrg
-        GO TOP
-        loc_oPag2.grd_4c_Acesso.Refresh()
     ENDPROC
 
     *==========================================================================
-    * HANDLERS DE EVENTOS - ListBoxes de usuarios
+    * --- HANDLERS DE TRANSFERENCIA DE USUARIOS ---
     *==========================================================================
 
-    PROCEDURE UsuarioListClick()
-        LOCAL loc_oPag1, loc_nIdx, loc_cUsuario, loc_nRet
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nIdx  = loc_oPag1.obj_4c_Usuario.ListIndex
-
-        IF loc_nIdx < 1
+    PROCEDURE BtnAddUsuClick()
+        LOCAL loc_oAba, loc_nI, loc_cUsu
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             RETURN
         ENDIF
-
-        loc_cUsuario = ALLTRIM(loc_oPag1.obj_4c_Usuario.List(loc_nIdx))
-
-        TRY
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT cativos FROM sigcdusu WHERE usuarios = " + EscaparSQL(loc_cUsuario), ;
-                "cursor_4c_TmpUsi")
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_TmpUsi") > 0
-                SELECT cursor_4c_TmpUsi
-                IF cursor_4c_TmpUsi.cativos = "N"
-                    loc_oPag1.lbl_4c_Label4.ForeColor = RGB(255, 0, 0)
-                    loc_oPag1.lbl_4c_Label4.Caption   = "Inativo"
-                ELSE
-                    loc_oPag1.lbl_4c_Label4.ForeColor = RGB(0, 0, 255)
-                    loc_oPag1.lbl_4c_Label4.Caption   = "Ativo"
-                ENDIF
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        FOR loc_nI = loc_oAba.lbx_4c_Disponiveis.ListCount TO 1 STEP -1
+            IF loc_oAba.lbx_4c_Disponiveis.Selected(loc_nI)
+                loc_cUsu = ALLTRIM(loc_oAba.lbx_4c_Disponiveis.List(loc_nI))
+                loc_oAba.lbx_4c_Selecionados.AddItem(loc_cUsu)
+                loc_oAba.lbx_4c_Disponiveis.RemoveItem(loc_nI)
             ENDIF
-            IF USED("cursor_4c_TmpUsi")
-                USE IN cursor_4c_TmpUsi
-            ENDIF
-        CATCH TO loc_oErro
-            *-- Ignorar erro de consulta
-        ENDTRY
+        ENDFOR
     ENDPROC
 
-    PROCEDURE UsuarioListDblClick()
-        LOCAL loc_oPag1, loc_nIdx, loc_cUsuario, loc_cIdChaves
-
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    PROCEDURE BtnAddAllUsuClick()
+        LOCAL loc_oAba, loc_nI
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             RETURN
         ENDIF
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        FOR loc_nI = 1 TO loc_oAba.lbx_4c_Disponiveis.ListCount
+            loc_oAba.lbx_4c_Selecionados.AddItem(ALLTRIM(loc_oAba.lbx_4c_Disponiveis.List(loc_nI)))
+        ENDFOR
+        loc_oAba.lbx_4c_Disponiveis.Clear()
+    ENDPROC
 
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nIdx  = loc_oPag1.obj_4c_Usuario.ListIndex
-
-        IF loc_nIdx < 1
+    PROCEDURE BtnRemUsuClick()
+        LOCAL loc_oAba, loc_nI, loc_cUsu
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
             RETURN
         ENDIF
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        FOR loc_nI = loc_oAba.lbx_4c_Selecionados.ListCount TO 1 STEP -1
+            IF loc_oAba.lbx_4c_Selecionados.Selected(loc_nI)
+                loc_cUsu = ALLTRIM(loc_oAba.lbx_4c_Selecionados.List(loc_nI))
+                loc_oAba.lbx_4c_Disponiveis.AddItem(loc_cUsu)
+                loc_oAba.lbx_4c_Selecionados.RemoveItem(loc_nI)
+            ENDIF
+        ENDFOR
+    ENDPROC
 
-        loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_Usuario.List(loc_nIdx))
-        loc_cIdChaves = "USUARIO" + loc_cUsuario
+    PROCEDURE BtnRemAllUsuClick()
+        LOCAL loc_oAba, loc_nI
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+        FOR loc_nI = 1 TO loc_oAba.lbx_4c_Selecionados.ListCount
+            loc_oAba.lbx_4c_Disponiveis.AddItem(ALLTRIM(loc_oAba.lbx_4c_Selecionados.List(loc_nI)))
+        ENDFOR
+        loc_oAba.lbx_4c_Selecionados.Clear()
+    ENDPROC
 
-        loc_oPag1.obj_4c_UsuarioSl.AddItem(loc_cUsuario)
-
-        IF USED("crLogData")
-            SELECT crLogData
-            SEEK loc_cIdChaves
-            IF NOT FOUND()
-                INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                    VALUES(loc_cIdChaves, ;
-                    "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "I")
+    *==========================================================================
+    * TxtFiltroAcessoValid - Aplica filtro na grid de programas
+    *==========================================================================
+    PROCEDURE TxtFiltroAcessoValid()
+        THIS.this_cFiltroPrograma = UPPER(ALLTRIM( ;
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.txt_4c_FiltroAcesso.Value))
+        IF USED("cursor_4c_Programas")
+            SELECT cursor_4c_Programas
+            IF EMPTY(THIS.this_cFiltroPrograma)
+                SET FILTER TO
             ELSE
-                IF crLogData.cTipos = "E"
-                    DELETE
-                ENDIF
+                SET FILTER TO THISFORM.this_cFiltroPrograma $ UPPER(ALLTRIM(Descricaos))
             ENDIF
+            GO TOP
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas.Refresh()
         ENDIF
-
-        loc_oPag1.obj_4c_Usuario.RemoveItem(loc_nIdx)
-    ENDPROC
-
-    PROCEDURE UsuarioSlListClick()
-        LOCAL loc_oPag1, loc_nIdx, loc_cUsuario, loc_nRet
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nIdx  = loc_oPag1.obj_4c_UsuarioSl.ListIndex
-
-        IF loc_nIdx < 1
-            RETURN
-        ENDIF
-
-        loc_cUsuario = ALLTRIM(loc_oPag1.obj_4c_UsuarioSl.List(loc_nIdx))
-
-        TRY
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT cativos FROM sigcdusu WHERE usuarios = " + EscaparSQL(loc_cUsuario), ;
-                "cursor_4c_TmpUsj")
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_TmpUsj") > 0
-                SELECT cursor_4c_TmpUsj
-                IF cursor_4c_TmpUsj.cativos = "N"
-                    loc_oPag1.lbl_4c_Label6.ForeColor = RGB(255, 0, 0)
-                    loc_oPag1.lbl_4c_Label6.Caption   = "Inativo"
-                ELSE
-                    loc_oPag1.lbl_4c_Label6.ForeColor = RGB(0, 0, 255)
-                    loc_oPag1.lbl_4c_Label6.Caption   = "Ativo"
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_TmpUsj")
-                USE IN cursor_4c_TmpUsj
-            ENDIF
-        CATCH TO loc_oErro
-            *-- Ignorar erro de consulta
-        ENDTRY
-    ENDPROC
-
-    PROCEDURE UsuarioSlListDblClick()
-        LOCAL loc_oPag1, loc_nIdx, loc_cUsuario, loc_cIdChaves
-
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-            RETURN
-        ENDIF
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nIdx  = loc_oPag1.obj_4c_UsuarioSl.ListIndex
-
-        IF loc_nIdx < 1
-            RETURN
-        ENDIF
-
-        loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_UsuarioSl.List(loc_nIdx))
-        loc_cIdChaves = "USUARIO" + loc_cUsuario
-
-        loc_oPag1.obj_4c_Usuario.AddItem(loc_cUsuario)
-
-        IF USED("crLogData")
-            SELECT crLogData
-            SEEK loc_cIdChaves
-            IF NOT FOUND()
-                INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                    VALUES(loc_cIdChaves, ;
-                    "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "E")
-            ELSE
-                IF crLogData.cTipos = "I"
-                    DELETE
-                ENDIF
-            ENDIF
-        ENDIF
-
-        loc_oPag1.obj_4c_UsuarioSl.RemoveItem(loc_nIdx)
     ENDPROC
 
     *==========================================================================
-    * HANDLERS DE EVENTOS - Botoes Adicionar/Remover usuarios
+    * ChkMarcasWhen - Permite editar checkbox Marcas somente em INCLUIR/ALTERAR
     *==========================================================================
+    PROCEDURE ChkMarcasWhen()
+        RETURN INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    ENDPROC
 
-    PROCEDURE BtnAddClick()
-        LOCAL loc_oPag1, loc_nCnt, loc_cUsuario, loc_cIdChaves
+    *==========================================================================
+    * ChkSelBarrasWhen - Permite editar checkbox SelBarras somente em INCLUIR/ALTERAR
+    *==========================================================================
+    PROCEDURE ChkSelBarrasWhen()
+        RETURN INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    ENDPROC
 
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    *==========================================================================
+    * ChkStatusWhen - Permite editar checkbox nStatus somente em INCLUIR/ALTERAR
+    *==========================================================================
+    PROCEDURE ChkStatusWhen()
+        RETURN INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    ENDPROC
+
+    *==========================================================================
+    * TornarControlesVisiveis - Torna controles visiveis recursivamente
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oCtrl, loc_cNome
+        IF VARTYPE(par_oContainer) <> "O"
             RETURN
         ENDIF
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nCnt  = 1
-        DO WHILE loc_nCnt <= loc_oPag1.obj_4c_Usuario.ListCount
-            IF loc_oPag1.obj_4c_Usuario.Selected(loc_nCnt)
-                loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_Usuario.List(loc_nCnt))
-                loc_cIdChaves = "USUARIO" + loc_cUsuario
-
-                loc_oPag1.obj_4c_UsuarioSl.AddItem(loc_cUsuario)
-
-                IF USED("crLogData")
-                    SELECT crLogData
-                    SEEK loc_cIdChaves
-                    IF NOT FOUND()
-                        INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                            VALUES(loc_cIdChaves, ;
-                            "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "I")
-                    ELSE
-                        IF crLogData.cTipos = "E"
-                            DELETE
-                        ENDIF
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oCtrl) = "O"
+                loc_cNome = UPPER(loc_oCtrl.Name)
+                IF INLIST(loc_cNome, "CNT_4C_CABECALHO", "CNT_4C_SAIDA", "CNT_4C_PAINELCOPIA")
+                    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                        THIS.TornarControlesVisiveis(loc_oCtrl)
                     ENDIF
+                    LOOP
                 ENDIF
-
-                loc_oPag1.obj_4c_Usuario.RemoveItem(loc_nCnt)
-            ELSE
-                loc_nCnt = loc_nCnt + 1
-            ENDIF
-        ENDDO
-    ENDPROC
-
-    PROCEDURE BtnAddAllClick()
-        LOCAL loc_oPag1, loc_i, loc_nCount, loc_cUsuario, loc_cIdChaves
-
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-            RETURN
-        ENDIF
-
-        loc_oPag1  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nCount = loc_oPag1.obj_4c_Usuario.ListCount
-
-        FOR loc_i = 1 TO loc_nCount
-            loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_Usuario.List(loc_i))
-            loc_cIdChaves = "USUARIO" + loc_cUsuario
-
-            loc_oPag1.obj_4c_UsuarioSl.AddItem(loc_cUsuario)
-
-            IF USED("crLogData")
-                SELECT crLogData
-                SEEK loc_cIdChaves
-                IF NOT FOUND()
-                    INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                        VALUES(loc_cIdChaves, ;
-                        "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "I")
-                ELSE
-                    IF crLogData.cTipos = "E"
-                        DELETE
-                    ENDIF
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarControlesVisiveis(loc_oCtrl)
+                ENDIF
+                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                    loc_oCtrl.Visible = .T.
                 ENDIF
             ENDIF
-        NEXT
-
-        loc_oPag1.obj_4c_Usuario.Clear()
-    ENDPROC
-
-    PROCEDURE BtnRemoveClick()
-        LOCAL loc_oPag1, loc_nCnt, loc_cUsuario, loc_cIdChaves
-
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-            RETURN
-        ENDIF
-
-        loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nCnt  = 1
-        DO WHILE loc_nCnt <= loc_oPag1.obj_4c_UsuarioSl.ListCount
-            IF loc_oPag1.obj_4c_UsuarioSl.Selected(loc_nCnt)
-                loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_UsuarioSl.List(loc_nCnt))
-                loc_cIdChaves = "USUARIO" + loc_cUsuario
-
-                loc_oPag1.obj_4c_Usuario.AddItem(loc_cUsuario)
-
-                IF USED("crLogData")
-                    SELECT crLogData
-                    SEEK loc_cIdChaves
-                    IF NOT FOUND()
-                        INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                            VALUES(loc_cIdChaves, ;
-                            "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "E")
-                    ELSE
-                        IF crLogData.cTipos = "I"
-                            DELETE
-                        ENDIF
-                    ENDIF
-                ENDIF
-
-                loc_oPag1.obj_4c_UsuarioSl.RemoveItem(loc_nCnt)
-            ELSE
-                loc_nCnt = loc_nCnt + 1
-            ENDIF
-        ENDDO
-    ENDPROC
-
-    PROCEDURE BtnRemoveAllClick()
-        LOCAL loc_oPag1, loc_i, loc_nCount, loc_cUsuario, loc_cIdChaves
-
-        IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-            RETURN
-        ENDIF
-
-        loc_oPag1  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-        loc_nCount = loc_oPag1.obj_4c_UsuarioSl.ListCount
-
-        FOR loc_i = 1 TO loc_nCount
-            loc_cUsuario  = ALLTRIM(loc_oPag1.obj_4c_UsuarioSl.List(loc_i))
-            loc_cIdChaves = "USUARIO" + loc_cUsuario
-
-            loc_oPag1.obj_4c_Usuario.AddItem(loc_cUsuario)
-
-            IF USED("crLogData")
-                SELECT crLogData
-                SEEK loc_cIdChaves
-                IF NOT FOUND()
-                    INSERT INTO crLogData (cIdChaves, cOcors, cTipos) ;
-                        VALUES(loc_cIdChaves, ;
-                        "Grupo : " + THIS.this_cGrupos + " Usuario : " + loc_cUsuario, "E")
-                ELSE
-                    IF crLogData.cTipos = "I"
-                        DELETE
-                    ENDIF
-                ENDIF
-            ENDIF
-        NEXT
-
-        loc_oPag1.obj_4c_UsuarioSl.Clear()
+        ENDFOR
     ENDPROC
 
     *==========================================================================
-    * HANDLER DE EVENTO - Grid CheckBox de acesso a programas
+    * Destroy
     *==========================================================================
-
-    PROCEDURE CheckAcessoClick()
-        *-- VFP9 ja atualizou crSigCdPrg.Marcas via Column1.ControlSource antes
-        *-- de disparar o Click. Apenas atualizar o grid para refletir o novo valor.
-        *-- NAO fazer REPLACE aqui ? causaria double-toggle revertendo a marcacao.
-        IF NOT USED("crSigCdPrg")
-            RETURN
-        ENDIF
-
-        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Acesso.Refresh()
-    ENDPROC
-
-    *==========================================================================
-    * CICLO DE VIDA
-    *==========================================================================
-
     PROCEDURE Destroy()
-        *-- Fechar cursores proprios do formulario
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
+        IF USED("cursor_4c_Programas")
+            USE IN cursor_4c_Programas
+        ENDIF
         IF USED("TmpBarra")
             USE IN TmpBarra
-        ENDIF
-        IF USED("crLogData")
-            USE IN crLogData
-        ENDIF
-        IF USED("crAcCamp")
-            USE IN crAcCamp
-        ENDIF
-        IF USED("crsigcdgra")
-            USE IN crsigcdgra
-        ENDIF
-        IF USED("crSigCdPrg")
-            USE IN crSigCdPrg
         ENDIF
         IF USED("crSigAcTel")
             USE IN crSigAcTel
         ENDIF
-        IF USED("crTmpAcTel")
-            USE IN crTmpAcTel
+        IF USED("cursor_4c_TodosUsuarios")
+            USE IN cursor_4c_TodosUsuarios
         ENDIF
-        IF USED("crOrigem")
-            USE IN crOrigem
+        IF USED("cursor_4c_UsuariosGrupo")
+            USE IN cursor_4c_UsuariosGrupo
         ENDIF
-        IF USED("crDestino")
-            USE IN crDestino
+        IF USED("cursor_4c_UsrSalvar")
+            USE IN cursor_4c_UsrSalvar
         ENDIF
-        IF USED("crListBarra")
-            USE IN crListBarra
+        IF USED("cursor_4c_BuscaOrigem")
+            USE IN cursor_4c_BuscaOrigem
         ENDIF
-        IF USED("cursor_4c_Dados")
-            USE IN cursor_4c_Dados
+        IF USED("cursor_4c_Busca")
+            USE IN cursor_4c_Busca
         ENDIF
-        IF USED("cursor_4c_AcPh")
-            USE IN cursor_4c_AcPh
+        IF USED("cursor_4c_TmpUsu")
+            USE IN cursor_4c_TmpUsu
         ENDIF
-
-        IF NOT ISNULL(THIS.this_oBusinessObject)
-            THIS.this_oBusinessObject = .NULL.
-        ENDIF
-
         DODEFAULT()
     ENDPROC
 
 ENDDEFINE
-
-*==============================================================================
-* FUNCTION fUniqueIds - Gera ID unico baseado em SYS(2015)
-* par_nTamanho: tamanho desejado do ID (padrao 20)
-*==============================================================================
-FUNCTION fUniqueIds(par_nTamanho)
-    LOCAL loc_nTam, loc_cId
-    loc_nTam = IIF(VARTYPE(par_nTamanho) = "N" AND par_nTamanho > 0, par_nTamanho, 20)
-    loc_cId  = SYS(2015) + SYS(2015) + SYS(2015) + SYS(2015) + SYS(2015)
-    RETURN LEFT(loc_cId, loc_nTam)
-ENDFUNC

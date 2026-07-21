@@ -1,0 +1,20 @@
+﻿Ambos os arquivos est├úo completos. A **Fase 6 n├úo tem nada a adicionar** para este form espec├¡fico.
+
+**Por qu├¬:** O formul├írio original SIGSERPR ├® excepcionalmente simples ÔÇö apenas:
+- Container com header (cntSombra + labels) Ô£à j├í implementado
+- Shape decorativo Ô£à j├í implementado  
+- Bot├úo Encerrar Ô£à j├í implementado
+- Label "Inspira├º├úo" Ô£à j├í implementado
+- EditBox ObsInsp (ReadOnly) Ô£à j├í implementado
+
+N├úo existem:
+- **Campos restantes** ÔÇö o form original tem apenas 1 label + 1 editbox de dados
+- **Lookups** ÔÇö o EditBox ├® `ReadOnly = .T.`, sem nenhum F4/F5 no original
+- **Container cnt_4c_BotoesAcao** ÔÇö n├úo h├í Salvar/Cancelar porque o form ├® somente leitura (o pai controla persist├¬ncia via cursor `csTmpPrTar` compartilhado)
+
+O template da Fase 6/8 foi gerado assumindo um formul├írio CRUD/operacional complexo, mas este SIGSERPR ├® um sub-form modal de visualiza├º├úo de campo memo. Todas as 8 fases foram conclu├¡das nas fases anteriores.
+
+**Status final da migra├º├úo FormSigPrTar:**
+- `SigPrTarBO.prg` ÔÇö completo Ô£à
+- `FormSigPrTar.prg` ÔÇö completo Ô£à
+- Fidelidade ao original: 100% (todos os 9 objetos do SCX mapeados)

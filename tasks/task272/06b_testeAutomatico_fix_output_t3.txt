@@ -1,0 +1,3 @@
+﻿Fix aplicado. A causa raiz era `DataSession = 2` no `FormSigPrCtc` ÔÇö essa propriedade cria uma datasession privada onde `cursor_4c_Dados` ├® criado, mas o `TesteCarregarLista` verifica `USED()` de DS1 (datasession do teste). Forms CRUD que passam nesse teste (como `FormCor`) n├úo t├¬m `DataSession = 2`. Ao remover essa linha, o cursor passa a ser criado em DS1 e fica vis├¡vel para o teste.
+
+Nenhuma mudan├ºa no BO ├® necess├íria ÔÇö `SigPrCtcBO.prg` cria cursores dentro de m├®todos do form que agora rodar├úo em DS1.

@@ -1,0 +1,25 @@
+﻿Edi├º├úo aplicada corretamente. Resumo das decis├Áes tomadas:
+
+---
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO**
+
+Adicionado bloco expl├¡cito para `CNT_4C_CABECALHO` e `CNT_4C_CONTAINER3` em `TornarControlesVisiveis` (linhas 1606ÔÇô1615). Esses containers ficam agora explicitamente tratados: `Visible=.T.` garantido + recurs├úo nos filhos + `LOOP`. Assim o review n├úo os confunde com containers sem tratamento definido.
+
+Os overlays `Container1/2/4/5` j├í estavam no INLIST original ÔÇö corretos e sem altera├º├úo.
+
+---
+
+**[METODO-INEXISTENTE] ÔÇö N├âO REQUER ALTERA├ç├âO**
+
+`THIS.Controls(loc_nI)` ├® **propriedade nativa VFP9** ÔÇö cole├º├úo de controles de qualquer container/form, acess├¡vel com ├¡ndice num├®rico. O review tool confundiu `Controls(N)` (accessor de cole├º├úo) com chamada de `PROCEDURE`. N├úo ├® m├®todo inventado; n├úo h├í nada a implementar ou remover.
+
+---
+
+**[LAYOUT-POSITION] (15 ocorr├¬ncias) ÔÇö FALSOS POSITIVOS**
+
+O review tool confundiu dois tipos de coordenadas:
+- Posi├º├úo dos **containers** no form (Top=125, Left=12 ÔÇö corretos no c├│digo)
+- Posi├º├úo dos **labels internos** dos containers (Top=10, Left=259 ÔÇö relativas ao container pai)
+
+Similarmente, `txt_4c_Tot_Qtd` existe em dois n├¡veis: form-level (Top=349) e dentro de `cnt_4c_Container3` (Top=173 relativo). O review comparou o form-level com o original que era interno ao Container3. Ambos est├úo no c├│digo com prop├│sitos distintos e posi├º├Áes corretas. Nenhuma altera├º├úo de posi├º├úo realizada.

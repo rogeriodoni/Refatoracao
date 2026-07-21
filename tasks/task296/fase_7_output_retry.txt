@@ -1,0 +1,10 @@
+﻿Fase 7 completa. Adicionados 4 handlers CRUD (aliases pipeline) em `FormSigPrHpr.prg:963-1046` que delegam para as a├º├Áes operacionais reais deste form de consulta (hist├│rico readonly + auditoria):
+
+| Handler | Delega para | Sem├óntica |
+|---------|-------------|-----------|
+| `BtnIncluirClick` | `CarregarDados()` | Recarrega hist├│rico com filtro atual |
+| `BtnAlterarClick` | `ChkAuditadoClick()` (toggle) | Marca/desmarca auditoria (valida permiss├úo) |
+| `BtnVisualizarClick` | `CmdMovimentoClick()` | Abre `FormSigMvExp`/`FormSigMvPdt` do documento associado |
+| `BtnExcluirClick` | `ChkAuditadoClick()` (0) | Remove marca de auditoria (com `MsgConfirma`) ÔÇö ├║nico atributo mut├ível |
+
+Cada m├®todo tem l├│gica funcional real (guards de cursor vazio, verifica├º├úo de permiss├úo, `TRY/CATCH` com `MsgErro`), sem TODOs/stubs. Segue o padr├úo can├┤nico de `FormSigPrGst.prg:791-822`.

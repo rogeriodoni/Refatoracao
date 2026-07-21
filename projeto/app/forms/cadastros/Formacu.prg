@@ -111,6 +111,9 @@ DEFINE CLASS Formacu AS FormBase
         LOCAL loc_oPagina
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
+        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
         *-- Container de cabecalho (cntSombra: Top=2+29=31)
         loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
         WITH loc_oPagina.cnt_4c_Cabecalho
@@ -118,7 +121,7 @@ DEFINE CLASS Formacu AS FormBase
             .Left       = 0
             .Width      = THIS.Width
             .Height     = 80
-            .BackColor  = RGB(53, 53, 53)
+            .BackColor  = RGB(100, 100, 100)
             .BorderWidth = 0
             .Visible    = .T.
 
@@ -127,7 +130,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Caption   = ""
                 .Top       = 15
                 .Left      = 10
-                .Width     = 769
+                .Width     = THIS.Width
                 .Height    = 40
                 .FontName  = "Tahoma"
                 .FontSize  = 16
@@ -143,7 +146,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Caption   = ""
                 .Top       = 18
                 .Left      = 10
-                .Width     = 769
+                .Width     = THIS.Width
                 .Height    = 46
                 .FontName  = "Tahoma"
                 .FontSize  = 16
@@ -173,7 +176,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
@@ -182,7 +185,6 @@ DEFINE CLASS Formacu AS FormBase
                 .FontSize        = 8
                 .ForeColor       = RGB(90, 90, 90)
                 .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
                 .SpecialEffect   = 0
                 .MousePointer    = 15
                 .WordWrap        = .T.
@@ -196,7 +198,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 80
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
@@ -219,7 +221,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 155
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
@@ -242,7 +244,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 230
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
@@ -265,7 +267,7 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 305
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
@@ -455,8 +457,8 @@ DEFINE CLASS Formacu AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 75
+                .Left            = 917
+                .Width           = 90
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
                 .FontBold        = .T.
@@ -464,7 +466,6 @@ DEFINE CLASS Formacu AS FormBase
                 .FontSize        = 8
                 .ForeColor       = RGB(90, 90, 90)
                 .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
                 .SpecialEffect   = 0
                 .MousePointer    = 15
                 .WordWrap        = .T.
@@ -501,6 +502,9 @@ DEFINE CLASS Formacu AS FormBase
         LOCAL loc_oPagina
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
+        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
         *-- Container de botoes Confirmar/Cancelar (cnt_4c_Salva: Top=4+29=33)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
@@ -527,7 +531,6 @@ DEFINE CLASS Formacu AS FormBase
                 .FontSize        = 8
                 .ForeColor       = RGB(90, 90, 90)
                 .BackColor       = RGB(255, 255, 255)
-                .Themes          = .F.
                 .SpecialEffect   = 0
                 .MousePointer    = 15
                 .WordWrap        = .T.
@@ -538,7 +541,7 @@ DEFINE CLASS Formacu AS FormBase
 
             .AddObject("cmd_4c_Cancelar", "CommandButton")
             WITH .cmd_4c_Cancelar
-                .Caption         = "Cancelar"
+                .Caption         = "Encerrar"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
@@ -680,7 +683,7 @@ DEFINE CLASS Formacu AS FormBase
 
                 .Column4.Width           = 290
                 .Column4.ReadOnly        = .T.
-                .Column4.Header1.Caption = "Par" + CHR(226) + "metro"
+                .Column4.Header1.Caption = "Parametro"
             ENDWITH
 
             *-- CheckBox na coluna 3 (Sparse=.F. ja definido acima)
@@ -757,7 +760,7 @@ DEFINE CLASS Formacu AS FormBase
     *--------------------------------------------------------------------------
     * CarregarLista - Carrega dados no Grid da Page1 (Lista)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarLista()
+    PROCEDURE CarregarLista()
         LOCAL loc_lSucesso, loc_oGrid
         loc_lSucesso = .F.
 
@@ -772,6 +775,7 @@ DEFINE CLASS Formacu AS FormBase
                 loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
                 *-- Problema 36: RecordSource e ColumnCount FORA do WITH
+                loc_oGrid.ColumnCount = 3
                 loc_oGrid.RecordSource = "cursor_4c_Dados"
                 loc_oGrid.ColumnCount  = 5
 
@@ -853,12 +857,27 @@ DEFINE CLASS Formacu AS FormBase
     * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_nI, loc_oObjeto
+        LOCAL loc_nI, loc_oObjeto, loc_cNome
 
         FOR loc_nI = 1 TO par_oContainer.ControlCount
             loc_oObjeto = par_oContainer.Controls(loc_nI)
 
             IF VARTYPE(loc_oObjeto) = "O"
+                loc_cNome = UPPER(loc_oObjeto.Name)
+
+                *-- Containers estruturais ocultos: recursao nos filhos sem forcar Visible
+                IF INLIST(loc_cNome, "CNT_4C_CABECALHO", "CNT_4C_SAIDA", "CNT_4C_BOTOESACAO")
+                    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                        THIS.TornarControlesVisiveis(loc_oObjeto)
+                    ENDIF
+                    LOOP
+                ENDIF
+
+                *-- Container toggle: pular completamente (Visible=.F. controlado por botao)
+                IF loc_cNome = "CNT_4C_COPIARACESSO"
+                    LOOP
+                ENDIF
+
                 IF PEMSTATUS(loc_oObjeto, "Visible", 5)
                     loc_oObjeto.Visible = .T.
                 ENDIF
@@ -914,8 +933,8 @@ DEFINE CLASS Formacu AS FormBase
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
         WITH par_oGrid
-            .SetAll("FontName", "Verdana", "Column")
-            .SetAll("FontSize", 8, "Column")
+            .FontName = "Verdana"
+            .FontSize = 8
         ENDWITH
     ENDPROC
 
@@ -990,183 +1009,293 @@ DEFINE CLASS Formacu AS FormBase
 
             WITH loc_oAba.lbl_4c_Usuario
                 .Caption  = "Usu" + CHR(225) + "rio:"
-                .Top = 18 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 18
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_Usuario
-                .Top = 18 : .Left = 152 : .Width = 81 : .Height = 21
+                .Top       = 18
+                .Left      = 152
+                .Width     = 81
+                .Height    = 21
                 .MaxLength = 10
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_NComps
                 .Caption  = "Nome Completo:"
-                .Top = 45 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 45
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_NComps
-                .Top = 45 : .Left = 152 : .Width = 220 : .Height = 21
+                .Top       = 45
+                .Left      = 152
+                .Width     = 220
+                .Height    = 21
                 .MaxLength = 40
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_Cargo
                 .Caption  = "Cargo:"
-                .Top = 72 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 72
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_Cargo
-                .Top = 72 : .Left = 152 : .Width = 80 : .Height = 21
+                .Top       = 72
+                .Left      = 152
+                .Width     = 80
+                .Height    = 21
                 .MaxLength = 6
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_Departamento
                 .Caption  = "Departamento:"
-                .Top = 99 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 99
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_Departamento
-                .Top = 99 : .Left = 152 : .Width = 80 : .Height = 21
+                .Top       = 99
+                .Left      = 152
+                .Width     = 80
+                .Height    = 21
                 .MaxLength = 4
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_Setores
                 .Caption  = "Setor:"
-                .Top = 126 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 126
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_Setores
-                .Top = 126 : .Left = 152 : .Width = 80 : .Height = 21
+                .Top       = 126
+                .Left      = 152
+                .Width     = 80
+                .Height    = 21
                 .MaxLength = 4
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_IClis
                 .Caption  = CHR(205) + "ndice Clientes:"
-                .Top = 154 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 154
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_IClis
-                .Top = 154 : .Left = 152 : .Width = 80 : .Height = 21
+                .Top       = 154
+                .Left      = 152
+                .Width     = 80
+                .Height    = 21
                 .MaxLength = 6
-                .FontName = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             WITH loc_oAba.lbl_4c_RClis
                 .Caption  = "Raz" + CHR(227) + "o Clientes:"
-                .Top = 154 : .Left = 240 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 154
+                .Left     = 240
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_RClis
-                .Top = 154 : .Left = 385 : .Width = 150 : .Height = 21
+                .Top       = 154
+                .Left      = 385
+                .Width     = 150
+                .Height    = 21
                 .MaxLength = 40
                 .ReadOnly  = .T.
                 .BackColor = RGB(240, 240, 240)
-                .FontName  = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             *-- OptionGroups
             loc_oAba.AddObject("opt_4c_Optsenhadia", "OptionGroup")
             WITH loc_oAba.opt_4c_Optsenhadia
-                .Top = 181 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 213
+                .Left        = 148
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 1
                 WITH .Buttons(1)
-                    .Caption  = "Trocar Senha"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Trocar Senha"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "Mant" + CHR(233) + "m Senha"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
             loc_oAba.AddObject("opt_4c_Optlibpesag", "OptionGroup")
             WITH loc_oAba.opt_4c_Optlibpesag
-                .Top = 208 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 240
+                .Left        = 148
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 1
                 WITH .Buttons(1)
-                    .Caption  = "Lib. Pesagem"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Lib. Pesagem"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "Bloq. Pesagem"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
             loc_oAba.AddObject("opt_4c_Optlibprod", "OptionGroup")
             WITH loc_oAba.opt_4c_Optlibprod
-                .Top = 235 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 266
+                .Left        = 148
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 1
                 WITH .Buttons(1)
-                    .Caption  = "Lib. Produtos"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Lib. Produtos"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "Bloq. Produtos"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
             loc_oAba.AddObject("opt_4c_ObrigSenha", "OptionGroup")
             WITH loc_oAba.opt_4c_ObrigSenha
-                .Top = 262 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 262
+                .Left        = 10
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 2
                 WITH .Buttons(1)
-                    .Caption  = "Obriga Senha"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Obriga Senha"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "N" + CHR(227) + "o Obriga"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
             loc_oAba.AddObject("opt_4c_LibQtMin", "OptionGroup")
             WITH loc_oAba.opt_4c_LibQtMin
-                .Top = 289 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 289
+                .Left        = 10
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 2
                 WITH .Buttons(1)
-                    .Caption  = "Lib. Qt.Min"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Lib. Qt.Min"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "Bloq. Qt.Min"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
             loc_oAba.AddObject("opt_4c_Supervisao", "OptionGroup")
             WITH loc_oAba.opt_4c_Supervisao
-                .Top = 316 : .Left = 10 : .Width = 200 : .Height = 21
+                .Top         = 316
+                .Left        = 10
+                .Width       = 200
+                .Height      = 21
                 .ButtonCount = 2
                 .Value       = 2
                 WITH .Buttons(1)
-                    .Caption  = "Supervisor"
-                    .Top = 0 : .Left = 0 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Caption = "Supervisor"
+                    .Top     = 0
+                    .Left    = 0
+                    .Width   = 95
+                    .Height  = 21
                 ENDWITH
                 WITH .Buttons(2)
                     .Caption  = "N" + CHR(227) + "o Supervisor"
-                    .Top = 0 : .Left = 100 : .Width = 95 : .Height = 21
-                    .FontName = "Verdana" : .FontSize = 8
+                    .Top      = 0
+                    .Left     = 100
+                    .Width    = 95
+                    .Height   = 21
+                    .FontName = "Verdana"
+                    .FontSize = 8
                 ENDWITH
             ENDWITH
 
@@ -1175,14 +1304,22 @@ DEFINE CLASS Formacu AS FormBase
             loc_oAba.AddObject("txt_4c_LimDescs", "TextBox")
             WITH loc_oAba.lbl_4c_LimDescs
                 .Caption  = "Limite Desconto %:"
-                .Top = 343 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 343
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_LimDescs
-                .Top = 343 : .Left = 152 : .Width = 60 : .Height = 21
-                .MaxLength  = 5
-                .InputMask  = "99.99"
-                .FontName   = "Verdana" : .FontSize = 8
+                .Top       = 343
+                .Left      = 152
+                .Width     = 60
+                .Height    = 21
+                .MaxLength = 5
+                .InputMask = "99.99"
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             *-- Data de troca de senha
@@ -1190,21 +1327,33 @@ DEFINE CLASS Formacu AS FormBase
             loc_oAba.AddObject("txt_4c_TdtSenhas", "TextBox")
             WITH loc_oAba.lbl_4c_TdtSenhas
                 .Caption  = "Troca Senha em:"
-                .Top = 370 : .Left = 10 : .Width = 140 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 370
+                .Left     = 10
+                .Width    = 140
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
             WITH loc_oAba.txt_4c_TdtSenhas
-                .Top = 370 : .Left = 152 : .Width = 80 : .Height = 21
+                .Top       = 370
+                .Left      = 152
+                .Width     = 80
+                .Height    = 21
                 .InputMask = "99/99/9999"
-                .FontName  = "Verdana" : .FontSize = 8
+                .FontName  = "Verdana"
+                .FontSize  = 8
             ENDWITH
 
             *-- Grid de Grupos (substitui OLE TreeView olegru)
             loc_oAba.AddObject("lbl_4c_Grupos", "Label")
             WITH loc_oAba.lbl_4c_Grupos
                 .Caption  = "Grupos de Acesso:"
-                .Top = 20 : .Left = 570 : .Width = 150 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 20
+                .Left     = 570
+                .Width    = 150
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
 
             loc_oAba.AddObject("grd_4c_Grupos", "Grid")
@@ -1281,8 +1430,12 @@ DEFINE CLASS Formacu AS FormBase
             loc_oAba.AddObject("lbl_4c_Empresas", "Label")
             WITH loc_oAba.lbl_4c_Empresas
                 .Caption  = "Empresas com acesso:"
-                .Top = 10 : .Left = 10 : .Width = 200 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
+                .Top      = 10
+                .Left     = 10
+                .Width    = 200
+                .Height   = 17
+                .FontName = "Verdana"
+                .FontSize = 8
             ENDWITH
 
             loc_oAba.AddObject("grd_4c_Empresas", "Grid")
@@ -1326,76 +1479,161 @@ DEFINE CLASS Formacu AS FormBase
 
     *--------------------------------------------------------------------------
     * ConfigurarAbaCampos - Aba "Campos" (Page5 do pgf_4c_Abas)
-    * Grid para configurar visibilidade dos campos por usuario
+    * Grid para configurar visibilidade dos campos por usuario (original: Page1 / Acesso Tela)
+    * Grade: Top=18, Left=6, Width=969, Height=421, 3 colunas
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarAbaCampos()
-        LOCAL loc_oAba, loc_oGrid, loc_oCol, loc_oCbo
+        LOCAL loc_oAba, loc_oGrid, loc_oCbo, loc_cRowSource
         loc_oAba  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page5
         loc_oGrid = .NULL.
-        loc_oCol  = .NULL.
         loc_oCbo  = .NULL.
 
         TRY
-            loc_oAba.AddObject("lbl_4c_Campos", "Label")
-            WITH loc_oAba.lbl_4c_Campos
-                .Caption  = "Campos por usu" + CHR(225) + "rio:"
-                .Top = 10 : .Left = 10 : .Width = 200 : .Height = 17
-                .FontName = "Verdana" : .FontSize = 8
-            ENDWITH
-
+            *-- Grid de campos por usuario (Grade: Top=18, Left=6, Width=969, Height=421)
             loc_oAba.AddObject("grd_4c_AcCamp", "Grid")
             loc_oGrid = loc_oAba.grd_4c_AcCamp
+
             WITH loc_oGrid
-                .Top         = 35
-                .Left        = 10
-                .Width       = 700
-                .Height      = 350
-                .ColumnCount = 3
-                .ReadOnly    = .F.
-                .GridLines   = 1
-                .FontName    = "Verdana"
-                .FontSize    = 8
+                .Top                = 18
+                .Left               = 6
+                .Width              = 969
+                .Height             = 421
+                .ColumnCount        = 3
+                .FontName           = "Verdana"
+                .FontSize           = 8
+                .ForeColor          = RGB(0, 0, 0)
+                .BackColor          = RGB(255, 255, 255)
+                .GridLineColor      = RGB(238, 238, 238)
+                .HighlightBackColor = RGB(255, 255, 255)
+                .HighlightForeColor = RGB(15, 41, 104)
+                .HighlightStyle     = 2
+                .DeleteMark         = .F.
+                .RecordMark         = .F.
+                .RowHeight          = 16
+                .ScrollBars         = 2
+                .Visible            = .T.
             ENDWITH
 
-            *-- Coluna 1: programa/tela
-            loc_oCol = loc_oGrid.Column1
-            WITH loc_oCol
-                .Width           = 200
-                .Header1.Caption = "Programa"
+            *-- Coluna 1: Tela (original column2, ColumnOrder=1, Width=360)
+            WITH loc_oGrid.Column1
+                .Width           = 360
+                .Movable         = .F.
+                .Resizable       = .F.
                 .ReadOnly        = .T.
-                .Sparse          = .F.
+                .Header1.Caption = "Tela"
+                .Header1.FontName = "Tahoma"
+                .Header1.FontSize = 8
             ENDWITH
 
-            *-- Coluna 2: campo
-            loc_oCol = loc_oGrid.Column2
-            WITH loc_oCol
-                .Width           = 150
+            *-- Coluna 2: Campo (original Column3, Width=360)
+            WITH loc_oGrid.Column2
+                .Width           = 360
+                .Resizable       = .F.
+                .ReadOnly        = .T.
                 .Header1.Caption = "Campo"
-                .ReadOnly        = .T.
-                .Sparse          = .F.
+                .Header1.FontName = "Tahoma"
+                .Header1.FontSize = 8
             ENDWITH
 
-            *-- Coluna 3: status (ComboBox)
-            loc_oCol = loc_oGrid.Column3
-            WITH loc_oCol
-                .Width           = 345
-                .Header1.Caption = "Status"
+            *-- Coluna 3: Status com ComboBox (original Column4, Width=168, Sparse=.F.)
+            WITH loc_oGrid.Column3
+                .Width           = 168
+                .Resizable       = .F.
                 .Sparse          = .F.
-                .AddObject("cbo_4c_Status", "ComboBox")
-                .CurrentControl  = "cbo_4c_Status"
+                .Header1.Caption = "Status"
+                .Header1.FontName = "Tahoma"
+                .Header1.FontSize = 8
             ENDWITH
+
+            *-- ComboBox na coluna Status (original cmbStatus: Left=25, Top=29)
+            loc_oGrid.Column3.AddObject("cbo_4c_Status", "ComboBox")
+            loc_oGrid.Column3.CurrentControl = "cbo_4c_Status"
+
+            loc_cRowSource = "Padr" + CHR(227) + "o,Invis" + CHR(237) + "vel," + ;
+                             "N" + CHR(227) + "o Edit" + CHR(225) + "vel,Obrigat" + CHR(243) + "rio"
+
             loc_oCbo = loc_oGrid.Column3.cbo_4c_Status
             WITH loc_oCbo
+                .Left          = 25
+                .Top           = 29
                 .RowSourceType = 1
-                .RowSource     = "Normal,Oculto,Bloqueado"
+                .RowSource     = loc_cRowSource
                 .Style         = 2
-                .FontName      = "Verdana"
+                .FontName      = "Tahoma"
                 .FontSize      = 8
             ENDWITH
 
         CATCH TO loException
             MsgErro("Erro em Formacu.ConfigurarAbaCampos:" + CHR(13) + loException.Message, "Erro")
         ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarCursorAcCamp - Cria cursor local com definicao dos campos
+    * configurados para controle de acesso por usuario (26 campos SIGCDCLI)
+    * Espelha o bloco CREATE CURSOR + INSERT do procedimento Load do original
+    *--------------------------------------------------------------------------
+    PROCEDURE InicializarCursorAcCamp()
+        IF USED("crAcCamp")
+            USE IN crAcCamp
+        ENDIF
+
+        CREATE CURSOR crAcCamp (cCodigos c(10), cDescTelas c(50), cCampos c(30), ;
+                                cObjetos c(100), cDescCamps c(50), nStatus n(1))
+        INDEX ON cCodigos TAG cCodigos
+
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.endes",     "Endere" + CHR(231) + "o", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.fpubls",    "Forma de publicidade", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.nacionals",  "Nacionalidade", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.estcivils",  "Estado civil", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.conjuges",   "C" + CHR(244) + "njuge", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.ultcomps",   CHR(218) + "ltima compra", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.codsegs",    "Segmento", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.profiss",    "Profiss" + CHR(227) + "o", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.DtVals",     "Validade", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.tel1s",      "Telefone", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.emails",     "E-mail", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.contato",    "Contato", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.CTELEMS",    "Telemarketing", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.codigos",    "Classifica" + CHR(231) + CHR(227) + "o", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.sexos",      "Sexo", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.obs",        "Observa" + CHR(231) + CHR(227) + "o", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.pastas",     "Pasta", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.nascs",      "Nascimento", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.idcontas",   "ID", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.CCargs",     "Cargo", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.grupovens",  "C/C - Centro de Custo", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.vinculas",   "Conta Vinculada", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.patrietqs",  "Patrimonial por Etiqueta", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCDCLI.Concilias",  "Conta Concili" + CHR(225) + "vel", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCLCRC.Caracteris", "Caracter" + CHR(237) + "stica Conta", 0)
+        INSERT INTO crAcCamp (cCodigos, cDescTelas, cCampos, cDescCamps, nStatus) VALUES ;
+            ("SIGCDCLI", "Cadastro Contas", "CRSIGCLJOB.JOBS",       "Acesso Jobs", 0)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1417,25 +1655,40 @@ DEFINE CLASS Formacu AS FormBase
         loc_lResultado = .F.
 
         TRY
-            loc_cSQL = "SELECT g.grupos, g.descrs, " + ;
+            loc_cSQL = "SELECT g.grupos, g.dgrus, " + ;
                        "CAST(CASE WHEN ag.usuarios IS NOT NULL THEN 1 ELSE 0 END AS BIT) AS marca " + ;
                        "FROM sigcdgra g " + ;
                        "LEFT JOIN sigcdacg ag ON ag.grupos = g.grupos AND ag.usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
                        "ORDER BY g.grupos"
 
-            IF USED("cursor_4c_GruposGrid")
-                USE IN cursor_4c_GruposGrid
+            IF USED("cursor_4c_GruposGridTemp")
+                USE IN cursor_4c_GruposGridTemp
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruposGrid") > 0
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Grupos
-                loc_oGrid.Column1.ControlSource = "cursor_4c_GruposGrid.marca"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_GruposGrid.grupos"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_GruposGrid.descrs"
-                loc_oGrid.RecordSource          = "cursor_4c_GruposGrid"
-                loc_oGrid.Column1.Header1.Caption = ""
-                loc_oGrid.Column2.Header1.Caption = "Grupo"
-                loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruposGridTemp") > 0
+                IF USED("cursor_4c_GruposGrid")
+                    *-- Reload: ZAP + APPEND preserva definicoes de colunas do Grid
+                    SELECT cursor_4c_GruposGrid
+                    ZAP
+                    APPEND FROM DBF("cursor_4c_GruposGridTemp")
+                    GO TOP
+                ELSE
+                    *-- Primeira carga: criar cursor nomeado e configurar Grid
+                    SELECT * FROM cursor_4c_GruposGridTemp INTO CURSOR cursor_4c_GruposGrid READWRITE
+                    GO TOP IN cursor_4c_GruposGrid
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Grupos
+                    loc_oGrid.ColumnCount = 3
+                    loc_oGrid.RecordSource          = "cursor_4c_GruposGrid"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_GruposGrid.marca"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_GruposGrid.grupos"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_GruposGrid.dgrus"
+                    loc_oGrid.Column1.Header1.Caption = ""
+                    loc_oGrid.Column2.Header1.Caption = "Grupo"
+                    loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                ENDIF
+                IF USED("cursor_4c_GruposGridTemp")
+                    USE IN cursor_4c_GruposGridTemp
+                ENDIF
                 loc_lResultado = .T.
             ELSE
                 MsgErro("Erro ao carregar grupos de acesso.", "Erro")
@@ -1462,17 +1715,32 @@ DEFINE CLASS Formacu AS FormBase
                        "LEFT JOIN sigcdace ae ON ae.emps = e.Cemps AND ae.usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
                        "ORDER BY e.Cemps"
 
-            IF USED("cursor_4c_EmpresasGrid")
-                USE IN cursor_4c_EmpresasGrid
+            IF USED("cursor_4c_EmpresasGridTemp")
+                USE IN cursor_4c_EmpresasGridTemp
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpresasGrid") > 0
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Empresas
-                loc_oGrid.Column1.ControlSource = "cursor_4c_EmpresasGrid.marcas"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_EmpresasGrid.Razas"
-                loc_oGrid.RecordSource          = "cursor_4c_EmpresasGrid"
-                loc_oGrid.Column1.Header1.Caption = ""
-                loc_oGrid.Column2.Header1.Caption = "Empresa"
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpresasGridTemp") > 0
+                IF USED("cursor_4c_EmpresasGrid")
+                    *-- Reload: ZAP + APPEND preserva definicoes de colunas do Grid
+                    SELECT cursor_4c_EmpresasGrid
+                    ZAP
+                    APPEND FROM DBF("cursor_4c_EmpresasGridTemp")
+                    GO TOP
+                ELSE
+                    *-- Primeira carga: criar cursor nomeado e configurar Grid
+                    SELECT * FROM cursor_4c_EmpresasGridTemp INTO CURSOR cursor_4c_EmpresasGrid READWRITE
+                    GO TOP IN cursor_4c_EmpresasGrid
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Empresas
+                    loc_oGrid.ColumnCount = 2
+                    loc_oGrid.RecordSource          = "cursor_4c_EmpresasGrid"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_EmpresasGrid.marcas"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_EmpresasGrid.Razas"
+                    loc_oGrid.Column1.Header1.Caption = ""
+                    loc_oGrid.Column2.Header1.Caption = "Empresa"
+                ENDIF
+                IF USED("cursor_4c_EmpresasGridTemp")
+                    USE IN cursor_4c_EmpresasGridTemp
+                ENDIF
                 loc_lResultado = .T.
             ELSE
                 MsgErro("Erro ao carregar empresas.", "Erro")
@@ -1500,19 +1768,36 @@ DEFINE CLASS Formacu AS FormBase
                        "LEFT JOIN sigcdacu a ON a.programas = p.programas AND a.usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
                        "ORDER BY p.grupos, p.programas"
 
-            IF USED("cursor_4c_Programas")
-                USE IN cursor_4c_Programas
+            IF USED("cursor_4c_ProgramasTemp")
+                USE IN cursor_4c_ProgramasTemp
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Programas") > 0
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.grd_4c_Programas
-                loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.marcas"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.programas"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_Programas.descricaos"
-                loc_oGrid.RecordSource          = "cursor_4c_Programas"
-                loc_oGrid.Column1.Header1.Caption = ""
-                loc_oGrid.Column2.Header1.Caption = "Programa"
-                loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ProgramasTemp") > 0
+                IF USED("cursor_4c_Programas")
+                    *-- Reload: ZAP + APPEND preserva definicoes de colunas do Grid
+                    SELECT cursor_4c_Programas
+                    ZAP
+                    APPEND FROM DBF("cursor_4c_ProgramasTemp")
+                    GO TOP
+                ELSE
+                    *-- Primeira carga: criar cursor nomeado e configurar Grid
+                    SELECT * FROM cursor_4c_ProgramasTemp INTO CURSOR cursor_4c_Programas READWRITE
+                    GO TOP IN cursor_4c_Programas
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.grd_4c_Programas
+                    loc_oGrid.ColumnCount = 4
+                    loc_oGrid.RecordSource          = "cursor_4c_Programas"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.marcas"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.programas"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_Programas.descricaos"
+                    loc_oGrid.Column4.ControlSource = "cursor_4c_Programas.parametros"
+                    loc_oGrid.Column1.Header1.Caption = ""
+                    loc_oGrid.Column2.Header1.Caption = "Programa"
+                    loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                    loc_oGrid.Column4.Header1.Caption = "Parametro"
+                ENDIF
+                IF USED("cursor_4c_ProgramasTemp")
+                    USE IN cursor_4c_ProgramasTemp
+                ENDIF
                 loc_lResultado = .T.
             ELSE
                 MsgErro("Erro ao carregar programas de acesso.", "Erro")
@@ -1541,21 +1826,36 @@ DEFINE CLASS Formacu AS FormBase
                        "LEFT JOIN sigcdacb b ON b.programas = p.programas AND b.usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
                        "ORDER BY p.programas"
 
-            IF USED("cursor_4c_Barra")
-                USE IN cursor_4c_Barra
+            IF USED("cursor_4c_BarraTemp")
+                USE IN cursor_4c_BarraTemp
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Barra") > 0
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Barra
-                loc_oGrid.Column1.ControlSource = "cursor_4c_Barra.marcas"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_Barra.programas"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_Barra.descricaos"
-                loc_oGrid.Column4.ControlSource = "cursor_4c_Barra.barratips"
-                loc_oGrid.RecordSource          = "cursor_4c_Barra"
-                loc_oGrid.Column1.Header1.Caption = ""
-                loc_oGrid.Column2.Header1.Caption = "Programa"
-                loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                loc_oGrid.Column4.Header1.Caption = "Tooltip"
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BarraTemp") > 0
+                IF USED("cursor_4c_Barra")
+                    *-- Reload: ZAP + APPEND preserva definicoes de colunas do Grid
+                    SELECT cursor_4c_Barra
+                    ZAP
+                    APPEND FROM DBF("cursor_4c_BarraTemp")
+                    GO TOP
+                ELSE
+                    *-- Primeira carga: criar cursor nomeado e configurar Grid
+                    SELECT * FROM cursor_4c_BarraTemp INTO CURSOR cursor_4c_Barra READWRITE
+                    GO TOP IN cursor_4c_Barra
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Barra
+                    loc_oGrid.ColumnCount = 4
+                    loc_oGrid.RecordSource          = "cursor_4c_Barra"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_Barra.marcas"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_Barra.programas"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_Barra.descricaos"
+                    loc_oGrid.Column4.ControlSource = "cursor_4c_Barra.barratips"
+                    loc_oGrid.Column1.Header1.Caption = ""
+                    loc_oGrid.Column2.Header1.Caption = "Programa"
+                    loc_oGrid.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                    loc_oGrid.Column4.Header1.Caption = "Tool Tip Text"
+                ENDIF
+                IF USED("cursor_4c_BarraTemp")
+                    USE IN cursor_4c_BarraTemp
+                ENDIF
                 loc_lResultado = .T.
             ELSE
                 MsgErro("Erro ao carregar barra de ferramentas.", "Erro")
@@ -1576,28 +1876,43 @@ DEFINE CLASS Formacu AS FormBase
         loc_lResultado = .F.
 
         TRY
-            loc_cSQL = "SELECT programas, campos, " + ;
-                       "ISNULL(status, 'Normal') AS status " + ;
-                       "FROM SigAcTel " + ;
-                       "WHERE usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
-                       "ORDER BY programas, campos"
+            THIS.InicializarCursorAcCamp()
 
-            IF USED("cursor_4c_AcCamp")
-                USE IN cursor_4c_AcCamp
+            loc_cSQL = "SELECT cCodigos, cCampos, nStatus, Grupos, Usuarios, PkChaves " + ;
+                       "FROM SigAcTel " + ;
+                       "WHERE Usuarios = " + EscaparSQL(par_cUsuarios) + " " + ;
+                       "ORDER BY cCodigos"
+
+            IF USED("crTmpAcTel")
+                USE IN crTmpAcTel
             ENDIF
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_AcCamp") > 0
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpAcTel") > 0
+                IF USED("crSigAcTel")
+                    USE IN crSigAcTel
+                ENDIF
+
+                SELECT a.cCodigos, a.cDescTelas, a.cCampos, a.cObjetos, a.cDescCamps, ;
+                       IIF(ISNULL(b.nStatus), 1, b.nStatus) AS nStatus, ;
+                       IIF(ISNULL(b.Grupos),    "", b.Grupos)    AS Grupos, ;
+                       IIF(ISNULL(b.Usuarios),  "", b.Usuarios)  AS Usuarios, ;
+                       IIF(ISNULL(b.PkChaves),  "", b.PkChaves)  AS PkChaves ;
+                       FROM crAcCamp a ;
+                       LEFT JOIN crTmpAcTel b ON a.cCodigos = b.cCodigos AND a.cCampos = b.cCampos ;
+                       INTO CURSOR crSigAcTel READWRITE
+
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page5.grd_4c_AcCamp
-                loc_oGrid.Column1.ControlSource = "cursor_4c_AcCamp.programas"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_AcCamp.campos"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_AcCamp.status"
-                loc_oGrid.RecordSource          = "cursor_4c_AcCamp"
-                loc_oGrid.Column1.Header1.Caption = "Programa"
+                loc_oGrid.RecordSource = ""
+                loc_oGrid.RecordSource = "crSigAcTel"
+                loc_oGrid.Column1.ControlSource   = "crSigAcTel.cDescTelas"
+                loc_oGrid.Column2.ControlSource   = "crSigAcTel.cDescCamps"
+                loc_oGrid.Column3.ControlSource   = "crSigAcTel.nStatus"
+                loc_oGrid.Column1.Header1.Caption = "Tela"
                 loc_oGrid.Column2.Header1.Caption = "Campo"
                 loc_oGrid.Column3.Header1.Caption = "Status"
                 loc_lResultado = .T.
             ELSE
-                MsgErro("Erro ao carregar campos por usu" + CHR(225) + "rio.", "Erro")
+                MsgErro("Erro ao carregar campos de acesso.", "Erro")
             ENDIF
 
         CATCH TO loException
@@ -1608,7 +1923,7 @@ DEFINE CLASS Formacu AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * FormParaBO - Lê controles da Page3 (Cadastro) e preenche o BO
+    * FormParaBO - L? controles da Page3 (Cadastro) e preenche o BO
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE FormParaBO()
         LOCAL loc_oAba, loc_oBo
@@ -2035,21 +2350,21 @@ DEFINE CLASS Formacu AS FormBase
         loc_lConf      = .F.
         loc_lResultado = .F.
 
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Selecione um usu" + CHR(225) + "rio para limpar a senha.")
+            RETURN
+        ENDIF
+
+        loc_cUsuarios = ALLTRIM(cursor_4c_Dados.usuarios)
+
+        IF EMPTY(loc_cUsuarios)
+            MsgAviso("Selecione um usu" + CHR(225) + "rio.")
+            RETURN
+        ENDIF
+
+        loc_lConf = MsgConfirma("Confirma a limpeza de senha do usu" + CHR(225) + "rio '" + ALLTRIM(loc_cUsuarios) + "'?")
+
         TRY
-            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-                MsgAviso("Selecione um usu" + CHR(225) + "rio para limpar a senha.")
-                RETURN
-            ENDIF
-
-            loc_cUsuarios = ALLTRIM(cursor_4c_Dados.usuarios)
-
-            IF EMPTY(loc_cUsuarios)
-                MsgAviso("Selecione um usu" + CHR(225) + "rio.")
-                RETURN
-            ENDIF
-
-            loc_lConf = MsgConfirma("Confirma a limpeza de senha do usu" + CHR(225) + "rio '" + ALLTRIM(loc_cUsuarios) + "'?")
-
             IF loc_lConf
                 loc_lResultado = THIS.this_oBusinessObject.LimparSenha(loc_cUsuarios)
                 IF loc_lResultado
@@ -2075,22 +2390,22 @@ DEFINE CLASS Formacu AS FormBase
         loc_lConf          = .F.
         loc_lResultado     = .F.
 
+        loc_cUsuarioOrigem  = ALLTRIM(loc_oPagina.cnt_4c_CopiarAcesso.txt_4c_CopiarAcessos.Value)
+        loc_cUsuarioDestino = ALLTRIM(cursor_4c_Dados.usuarios)
+
+        IF EMPTY(loc_cUsuarioOrigem)
+            MsgAviso("Informe o usu" + CHR(225) + "rio de origem para copiar acessos.")
+            RETURN
+        ENDIF
+
+        IF EMPTY(loc_cUsuarioDestino)
+            MsgAviso("Selecione o usu" + CHR(225) + "rio de destino na lista.")
+            RETURN
+        ENDIF
+
+        loc_lConf = MsgConfirma("Copiar acessos de '" + ALLTRIM(loc_cUsuarioOrigem) + "' para '" + ALLTRIM(loc_cUsuarioDestino) + "'?")
+
         TRY
-            loc_cUsuarioOrigem  = ALLTRIM(loc_oPagina.cnt_4c_CopiarAcesso.txt_4c_CopiarAcessos.Value)
-            loc_cUsuarioDestino = ALLTRIM(cursor_4c_Dados.usuarios)
-
-            IF EMPTY(loc_cUsuarioOrigem)
-                MsgAviso("Informe o usu" + CHR(225) + "rio de origem para copiar acessos.")
-                RETURN
-            ENDIF
-
-            IF EMPTY(loc_cUsuarioDestino)
-                MsgAviso("Selecione o usu" + CHR(225) + "rio de destino na lista.")
-                RETURN
-            ENDIF
-
-            loc_lConf = MsgConfirma("Copiar acessos de '" + ALLTRIM(loc_cUsuarioOrigem) + "' para '" + ALLTRIM(loc_cUsuarioDestino) + "'?")
-
             IF loc_lConf
                 loc_lResultado = THIS.this_oBusinessObject.CopiarAcessos(loc_cUsuarioOrigem, loc_cUsuarioDestino)
                 IF loc_lResultado
@@ -2122,7 +2437,6 @@ DEFINE CLASS Formacu AS FormBase
     * HANDLERS DE LOOKUP - Cargo (SigCdCrg)
     *==========================================================================
     PROCEDURE CargoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupCargo()
         ENDIF
@@ -2167,7 +2481,6 @@ DEFINE CLASS Formacu AS FormBase
     * HANDLERS DE LOOKUP - Departamento (SigCdDpt)
     *==========================================================================
     PROCEDURE DepartamentoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupDepartamento()
         ENDIF
@@ -2212,7 +2525,6 @@ DEFINE CLASS Formacu AS FormBase
     * HANDLERS DE LOOKUP - Setor (SigCdSet)
     *==========================================================================
     PROCEDURE SetoresKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupSetores()
         ENDIF
@@ -2257,7 +2569,6 @@ DEFINE CLASS Formacu AS FormBase
     * HANDLERS DE LOOKUP - IClis / RClis (SigCdCli) - preenche ambos campos
     *==========================================================================
     PROCEDURE IClisKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupCli()
         ENDIF
@@ -2268,7 +2579,6 @@ DEFINE CLASS Formacu AS FormBase
     ENDPROC
 
     PROCEDURE RClisKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupCli()
         ENDIF
@@ -2314,7 +2624,6 @@ DEFINE CLASS Formacu AS FormBase
     * HANDLERS DE LOOKUP - CopiarAcessos (sigcdusu) - painel cnt_4c_CopiarAcesso
     *==========================================================================
     PROCEDURE CopiarUsuarioKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = 13 OR par_nKeyCode = 115
             THIS.AbrirLookupCopiarUsuario()
         ENDIF

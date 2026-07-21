@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O que foi feito:
+
+- **Removidos** `.ColumnCount`, `.RecordSource` e os tr├¬s `.ColumnN.ControlSource` de dentro do `WITH THIS.grd_4c_Dados`
+- **Fechado** o WITH com apenas as propriedades visuais (Top/Left/Width/Height/RecordMark/DeleteMark etc.)
+- **Ap├│s o ENDWITH**: `THIS.grd_4c_Dados.ColumnCount = 3` ÔåÆ `THIS.grd_4c_Dados.RecordSource = "cursor_4c_Produtos"` (nessa ordem ÔÇö ColumnCount antes de RecordSource ├® a regra cr├¡tica)
+- **Blocos WITH de coluna** movidos para fora usando `WITH THIS.grd_4c_Dados.Column1/2/3` com refer├¬ncia expl├¡cita, garantindo que as colunas j├í existem quando s├úo acessadas

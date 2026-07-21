@@ -1,0 +1,147 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRIBL",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "Lparameters lpCond\n\nPrivate pPag\n\npPag = Padr(lpCond, 12)\n\nWith ThisForm\n\t.poDataMgr.Requery('crSigCnFBl')\n\n\tSelect crSigCnFBl\n\tGo Top\n\n\tIf Eof('crSigCnFBl')\n\t\t.getTxtCds.Enabled = .f.\n\t\t.getLocals.Enabled = .f.\n\t\t.lblAviso.Visible  = .t.\n\t\t.cmdGImprimir.cmdImprimir.Enabled = .f.\n\t\t.cmdGImprimir.Value = 2\n\tElse\n\t\t.getTxtCds.Enabled = .t.\n\t\t.getLocals.Enabled = .t.\n\t\t.lblAviso.Visible  = .f.\n\t\t.getTxtCds.Value   = crSigCnFBl.cTxtCds\n\t\t.cmdGImprimir.cmdImprimir.Enabled = .t.\n\tEndIf\n\n\t.getTxtCds.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBL",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters lnLinha, lnColuna, lcDetalhe, lcEstilo, lclinesize, lcheight\n\nlnLinha   = Iif(Type('lnLinha')  =='N', lnLinha,  0)\nlnColuna  = Iif(Type('lnColuna') =='N', lnColuna, 0)\nlcDetalhe = Iif(Type('lcDetalhe')=='C', lcDetalhe,'')\nlcEstilo  = Iif(Type('lcEstilo') =='C', lcEstilo, 'X')\n\nIf (Not m.lcEstilo=='*' And (lnColuna<>0 Or lnLinha<>0))\n\tInsert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ;\n  \t\t   \t\t\tValues (lnLinha, lnColuna, lcDetalhe, Alltrim(lcEstilo), lcLineSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBL",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "Lparameters lcChave1, lcNform1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pPag\n\npPag = Space(12)\n\nlcQueryCfgBl  = [Select * From SigCnFBl Where FPags = ?pPag]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', .Name)\n\tWith .poDataMgr\n\t\t.AddCursor('SigCnFBl', 'cIdChaves', 'crSigCnFBl', '', '',lcQueryCfgBl)\n\tEndWith\n\n\t.pcChave1 = lcChave1\n\t.pcNform1 = lcNform1\n\n\t=DoDefault()\n\n\t.AtualizaBoleto([]) \n\n\tIf Not Used('... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBL.cmdGImprimir",
+      "evento": "Click",
+      "linhas": 165,
+      "codigoOriginal": "Local lcEscape,lcTalk,lnDecimals,lcFixed,llArea1,llArea2,llArea3,llArea4,llArea5,llArea6,llArea7,lnConta1,lnConta2,lnMemo,lnLnTxt,cLdetalhes,cEstilos,nLinhas,nColunas,;\n      lnQtLinha,cTxtCds,laPrinters,llTemImp,lnConta1,lnNffatorln,lnNffatorcl,lnTamFolha1\n\nm.lnNffatorln = 0\nm.lnNffatorcl = 0\nThisForm.LockScreen = .t.\n\nIf MessageBox('Confirma a Impressão do(s) Boleto(s) Bancário(s)?',32+4,[Confirmação])==6\n\n\tCreate Cursor Crdados(clocal c(100),vencs c(12),datdoc d,numdoc c(8),valor n(14,2),raza... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,commit,cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIBL.cmdGImprimir",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If (Not ThisForm.cmdGImprimir.cmdImprimir.Enabled) Or ;\n\t   (Thisform.cmdGImprimir.cmdImprimir.Enabled And ;\n\t    Messagebox('Deseja Abandonar as Impressões do Boleto?', 4+32+256, [Confirmação])==6)\n\n\tIf Type('ThisForm.pcNform1')=='O'\n\t\tIf Type('ThisForm.pcNform1')=='O'\n\t\t\tThisForm.pcNform1.Enabled = .t.\n\t\tElse\n\t\t\tThisForm.pcNform1.Enabled = .t.\n\t\tEndIf\n\tEndIf\n\tThisForm.poDataMgr.Release\n\tThisForm.Release\nEndIf\n* Fim *******************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBL.getFPags",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIBL.getFPags",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFBl', ;\n\t\t\t\t\t\t   'crListaRemota', 'FPags', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('FPags', '', 'Condição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.FPags)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nThisForm.AtualizaBoleto(This.Value)\n* Fim **********************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "AtualizaBoleto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRIBL.Procedure",
+      "queryOriginal": "\tInsert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ; \t\t   \t\t\tValues (lnLinha, lnColuna, lcDetalhe, Alltrim(lcEstilo), lcLineSi... [TRUNCADO]",
+      "tabelas": "TmpImprime",
+      "colunas": "Linha,Coluna,Conteudo,Style,LineSize,NHeight",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRIBL.Init",
+      "queryOriginal": "lcQueryCfgBl  = [Select * From SigCnFBl Where FPags = ?pPag]",
+      "tabelas": "SigCnFBl",
+      "colunas": "FPags",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpImprime", "SigCnFBl"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

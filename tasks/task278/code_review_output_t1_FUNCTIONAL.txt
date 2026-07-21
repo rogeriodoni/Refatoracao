@@ -1,0 +1,12 @@
+﻿**Falso positivo do checker ÔÇö nenhuma corre├º├úo necess├íria.**
+
+`Controls(n)` **├® uma propriedade built-in do VFP9**, n├úo um m├®todo definido pelo usu├írio. Todo Form e Container em VFP9 exp├Áe a cole├º├úo `Controls` como array index├ível: `THIS.Controls(1)`, `THIS.Controls(2)`, etc. ÔÇö sintaxe id├¬ntica ├á de um m├®todo, o que confundiu o checker autom├ítico.
+
+A utiliza├º├úo no arquivo est├í 100% correta:
+
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount
+    loc_oControl = THIS.Controls(loc_i)   ÔåÉ VFP9 built-in, n├úo m├®todo inventado
+```
+
+O checker interpretou `Controls()` como chamada de m├®todo definido pelo programador e disparou o alerta erroneamente. Nenhum arquivo precisa ser alterado.

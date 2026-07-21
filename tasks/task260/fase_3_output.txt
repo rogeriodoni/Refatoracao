@@ -1,0 +1,14 @@
+﻿Arquivo criado com sucesso. Fase 3/8 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrCar.prg`** ÔÇö estrutura base do sub-form modal de Caracter├¡sticas do Produto:
+
+- **DEFINE CLASS** com dimens├Áes originais (480├ù540, sub-form pequeno, n├úo 1000├ù600)
+- **Propriedades**: `this_oParentForm`, `this_cCpros`, `this_cCgrus`, `this_cPcEscolha`, `this_lHouveIncl/Excl`, `this_cCursorCarac`
+- **Init(4 params)**: armazena refer├¬ncia ao form pai + dados do produto com `VARTYPE()` guard antes de `DODEFAULT()`
+- **ConfigurarPageFrame()**: aplica `new_background.jpg` com guard `IF FILE()`
+- **InicializarForm()**: cria BO + cabecalho (Fase 3 only); Fases 4+ adicionar├úo bot├Áes/grade/BINDEVENTs via Edit
+- **ConfigurarCabecalho()**: `cnt_4c_Cabecalho` com `lbl_4c_Sombra`/`lbl_4c_Titulo` (AutoSize=.F., CHR(237) para "├¡")
+- **TornarControlesVisiveis()**: recursivo cobrindo PageFrame.Pages e containers
+- **Destroy()**: fecha cursor `cursor_4c_CaracProd` + libera BO + `DODEFAULT()`
+
+Pr├│xima fase: **Fase 4/8** ÔÇö ConfigurarBotoes (Shape1 decorativo + cmd_4c_Inserir/Excluir/Sair) + ConfigurarGrade (grd_4c_Grade com 2 colunas: Codigos/Descrs).

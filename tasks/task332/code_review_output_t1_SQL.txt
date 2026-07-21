@@ -1,0 +1,25 @@
+﻿Ap├│s ler o arquivo completo, posso analisar ambas as ocorr├¬ncias.
+
+**CIDCHAVES no WHERE** ÔÇö aparece apenas em `Atualizar()` (linha 368) e `ExecutarExclusao()` (linha 400), ambos m├®todos CRUD padr├úo da BusinessBase:
+```
+"WHERE cidchaves = " + EscaparSQL(THIS.this_cCidchaves)
+```
+Esses s├úo filtros por chave prim├íria para UPDATE/DELETE no SQL Server ÔÇö corretos e obrigat├│rios. Remover esses WHEREs causaria UPDATE/DELETE em TODAS as linhas de SigCdLpi (catastr├│fico). Esses m├®todos existem como parte do template BusinessBase, mas n├úo s├úo chamados pelo fluxo operacional deste dialog.
+
+**LMARCAS no WHERE** ÔÇö n├úo existe nenhum SQL Server WHERE com `lMarcas`. As ├║nicas ocorr├¬ncias s├úo:
+- Linha 711: `loc_lPermitir = (lMarcas = 0)` ÔÇö condicional VFP local
+- Linhas 794/952: `COUNT FOR lMarcas = 1` ÔÇö sintaxe VFP de cursor local
+
+O validador confundiu a cl├íusula VFP `COUNT FOR lMarcas = 1` (que opera sobre cursor local em mem├│ria, n├úo SQL Server) com um SQL WHERE.
+
+**Conclus├úo: ambos os alertas s├úo falsos positivos ap├│s verifica├º├úo.**
+
+- O `WHERE cidchaves` nos m├®todos CRUD ├® correto e obrigat├│rio para UPDATE/DELETE por PK
+- O `lMarcas` n├úo est├í em nenhum WHERE SQL ÔÇö est├í em opera├º├Áes VFP sobre cursores locais
+
+Nenhuma altera├º├úo deve ser feita. Modificar qualquer um desses pontos quebraria o c├│digo:
+- Remover `WHERE cidchaves` do UPDATE ÔåÆ atualiza todos os registros da tabela
+- Remover `WHERE cidchaves` do DELETE ÔåÆ apaga todos os registros da tabela
+- O "lMarcas no WHERE" n├úo existe em SQL ÔÇö n├úo h├í nada a remover
+
+Os arquivos est├úo corretos. Pass SQL conclu├¡do sem altera├º├Áes necess├írias.

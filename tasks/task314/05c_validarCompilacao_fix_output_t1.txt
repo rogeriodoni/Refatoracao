@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada corretamente. `loc_cXmlPed` agora est├í declarado na linha 909 (fora do TRY) e a linha `LOCAL loc_cXmlPed` dentro do TRY foi removida.
+
+**Causa raiz:** `LOCAL loc_cXmlPed` estava declarado na linha 937, dentro do bloco `TRY...ENDTRY`. Em VFP9, declara├º├Áes `LOCAL` dentro de blocos TRY causam "Syntax error" durante a compila├º├úo. O compilador VFP9 ao encontrar esse erro na linha 937/943 do `ProcessarConsulta`, propagava erros cascata para os procedimentos subsequentes (`ProcessarCancelamento` linha 1004 e `ProcessaInutilizadas` linha 1463), mesmo que esses procedimentos n├úo tivessem o mesmo problema.
+
+**Corre├º├úo:** `LOCAL loc_cXmlPed` foi movido para a linha 909, junto com as outras declara├º├Áes `LOCAL` do procedimento, fora do TRY.

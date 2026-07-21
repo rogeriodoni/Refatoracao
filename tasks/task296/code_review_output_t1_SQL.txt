@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada e verificada. Resumo do que foi feito:
+
+**`DOPES` em WHERE (CORRIGIDO)** ÔÇö `SigPrHprBO.prg`, m├®todo `CarregarDocumento`:
+- **Removido**: bloco inventado `SELECT TOP 1 Dopes FROM SigCdOpe WHERE Dopes = ...` que a LLM usou para detectar qual tabela consultar (n├úo existe no legado).
+- **Substitu├¡do**: tentativa sequencial conforme o original ÔÇö tenta `SigMvCab WHERE empdopnums = ...` primeiro; se retornar 0 registros, tenta `SigCdNec WHERE empdnps = ...`.
+- `loc_lTemOpe` removido das declara├º├Áes LOCAL (vari├ível desnecess├íria).
+
+**`CURSOR_4C_SUBNIVE` em WHERE (FALSO POSITIVO)** ÔÇö O checker identificou `ControlSource = "cursor_4c_Subniveis.dopes"` no grid (linhas 430-431 do form) como se fosse uma condi├º├úo SQL WHERE. Esse binding VFP est├í correto ÔÇö mapeia exatamente o original `crSubniveis.Dopes` ÔÇö e **n├úo foi alterado**.

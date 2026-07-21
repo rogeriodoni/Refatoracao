@@ -1,0 +1,19 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**Corre├º├Áes aplicadas:**
+
+| # | Problema | Arquivo | Linha | Corre├º├úo |
+|---|----------|---------|-------|----------|
+| 1 | [SQL-ASPAS] | `SigPrGlpBO.prg` | 194 | `'" + loc_cMats + "' AND"` ÔåÆ `EscaparSQL(loc_cMats) + " AND"` |
+| 2 | [SQL-ASPAS / CAMPO] | `SigPrGlpBO.prg` | 347 | `CursorQuery`: `"'" + ALLTRIM(par_xValor) + "'"` ÔåÆ `EscaparSQL(par_xValor)` |
+| 3 | [SQL-FILTRO-INVENTADO / ICLIS+CODIGOS] | `FormSigPrGlp.prg` | ~2090 | Removido bloco `WHERE Iclis/Codigos` em `GradeItensAfterRowColChange` |
+| 4 | [SQL-FILTRO-INVENTADO / ICLIS+CODIGOS] | `FormSigPrGlp.prg` | ~2285 | Removido bloco `WHERE Iclis/Codigos` em `Cnt5GradeAfterRowColChange` |
+| 5 | [SQL-FILTRO-INVENTADO / ICLIS+CODIGOS] | `FormSigPrGlp.prg` | ~2505 | Removido bloco `WHERE Iclis/Codigos` em `Cnt3GradeAfterRowColChange` |
+
+**Falsos positivos identificados (sem altera├º├úo necess├íria):**
+- **CAMPO**: `par_cCampo` ├® vari├ível VFP de par├ómetro, n├úo coluna SQL "CAMPO"
+- **OPZERS**: `DbParam.OpZers = 1` ├® condi├º├úo VFP em IIF(), n├úo WHERE SQL
+- **CONTROLCOUNT**: `.ControlCount` ├® propriedade VFP de objeto, n├úo coluna SQL
+- **ESTOQUE**: `TmpFinal.Estoque` ├® campo de cursor VFP local, n├úo coluna SQL Server em WHERE
+
+O `SigCdGpr WHERE Codigos` do BO linha 516 foi mantido ÔÇö o schema confirma que `Codigos` ├® PK v├ílida de `SigCdGpr`.

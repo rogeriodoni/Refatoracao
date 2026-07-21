@@ -1,0 +1,12 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma altera├º├úo necess├íria.**
+
+`Controls(n)` ├® uma **propriedade de cole├º├úo nativa do VFP9**, n├úo um m├®todo customizado. Em VFP9, tanto Form quanto Container exp├Áem:
+
+- `ControlCount` ÔÇö n├║mero de controles filhos
+- `Controls(n)` ÔÇö refer├¬ncia ao n-├®simo controle filho (equivalente a `Controls[n]`)
+
+O analisador est├ítico disparou o alerta porque viu a sintaxe `THIS.Controls(loc_i)` e interpretou os par├¬nteses como chamada de m├®todo. Na realidade, ├® acesso a array/cole├º├úo built-in do runtime VFP9 ÔÇö o mesmo padr├úo usado em `FormBase`, `GridBase` e em toda documenta├º├úo oficial do produto.
+
+**Evid├¬ncia**: o `ControlCount` logo acima na mesma linha (`THIS.ControlCount`) ├® a propriedade par, e ambas fazem parte do mesmo contrato de objeto VFP9. Nenhuma das duas ├® declarada no `DEFINE CLASS`.
+
+O c├│digo em `TornarControlesVisiveis` (linha 500) e `RecursarControlesVisiveis` (linha 515) est├í **correto**. Alterar para qualquer outra forma (`FOR EACH`, ├¡ndice com `[]`, etc.) n├úo muda o comportamento e pode introduzir regress├úo. Nenhuma modifica├º├úo aplicada.

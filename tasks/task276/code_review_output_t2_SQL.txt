@@ -1,0 +1,24 @@
+﻿Confirmed ÔÇö this is a **false positive** in the automated code review.
+
+The `CONTROLCOUNT` occurrences in `FormSigPrDsc.prg` (lines 476 and 488) are VFP9 container property accesses inside `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+    ...
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+This is `par_oContainer.ControlCount` ÔÇö a standard VFP9 property that returns the number of child controls. It has nothing to do with SQL.
+
+All actual WHERE clauses in both files are clean and match the original:
+
+| File | WHERE condition | Original column |
+|------|----------------|-----------------|
+| `SigPrDscBO.prg:80` | `Idioma = 'INGLES    '` | IDIOMA Ô£ô |
+| `SigPrDscBO.prg:108` | `CGrus = ...` | group filter Ô£ô |
+| `SigPrDscBO.prg:112` | `CPros BETWEEN ...` | CPROS Ô£ô |
+| `SigPrDscBO.prg:182` | `a.CPros = ...` | CPROS Ô£ô |
+| `SigPrDscBO.prg:289` | `CPros = ...` (UPDATE) | CPROS Ô£ô |
+| `SigPrDscBO.prg:298` | `CPros = ...` (DELETE SigPrPrt) | CPROS Ô£ô |
+
+**No changes needed.** The automated pass regex matched `.ControlCount` and incorrectly classified it as a SQL column. Both files are correct.

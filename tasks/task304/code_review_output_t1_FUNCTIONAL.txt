@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo das mudan├ºas em `TornarControlesVisiveis()`:
+
+**[CONTAINER-VISIVEL]**: `cnt_4c_Sombra` adicionado ao INLIST de exclus├úo. O form usa `Picture` de fundo (`new_background.jpg`) ÔÇö o container cinza escuro n├úo deve ser exibido e deve permanecer em `Visible=.F.` ap├│s `AddObject()`.
+
+**[METODO-INEXISTENTE]**: Removido o bloco bugado nas linhas 614-616 que usava `loc_oControl` (vari├ível nunca declarada) e chamava `THIS.TornarControlesVisiveis(loc_oControl)` (par├ómetro n├úo aceito pelo m├®todo). O `THIS.Controls(n)` restante ├® sintaxe VFP9 v├ílida para acesso ├á propriedade array built-in de Form/Container.

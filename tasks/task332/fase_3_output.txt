@@ -1,0 +1,16 @@
+﻿Arquivo criado corretamente. Fase 3 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrSlp.prg`** criado com a estrutura base:
+
+| Elemento | Detalhe |
+|---|---|
+| `Init(par_oParentForm, par_cLPreco)` | Armazena refer├¬ncia ao form pai e c├│digo da lista atual, define Caption com CHR(), chama `DODEFAULT()` |
+| `InicializarForm()` | Cria `SigPrSlpBO`, chama `ConfigurarCabecalho()` e `TornarControlesVisiveis()` |
+| `ConfigurarCabecalho()` | Container cinza escuro (RGB 100,100,100) h=80 + lbl_4c_Sombra (preto) + lbl_4c_Titulo (branco), AutoSize=.F. (regra feedback) |
+| `TornarControlesVisiveis()` | Recurs├úo completa (PageFrame + Controls) |
+| `Destroy()` | Chama `BO.LimparCursores()`, reativa `this_oParentForm.Enabled = .T.`, DODEFAULT() |
+
+**Fases seguintes** adicionar├úo via `Read + Edit`:
+- **Fase 4**: `grd_4c_Listas` e `grd_4c_Itens` com suas colunas/headers, bot├Áes (Sair, Command1, cmdSelTudo, CmdApgTudo)
+- **Fases 5-6**: L├│gica de carga de dados em `InicializarForm()` (chamadas ao BO)
+- **Fases 7-8**: Handlers de eventos (AfterRowColChange, Check1.When, clicks)

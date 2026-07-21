@@ -673,7 +673,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
 
                 SELECT a.* ;
                   FROM crDados1 a ;
-                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Emps ;
+                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Cemps ;
                  INNER JOIN cursor_4c_SigOpOpe c ON c.Dopes = a.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc d ON d.Codigos = a.Codigos ;
                  WHERE (b.Imps = 1) AND (c.Imps = 1) AND (d.Imps = 1) AND ;
@@ -681,7 +681,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
                  UNION ALL ;
                 SELECT e.* ;
                   FROM LocalPrev e ;
-                 INNER JOIN cursor_4c_SigCdEmp f ON f.cEmps = e.Emps ;
+                 INNER JOIN cursor_4c_SigCdEmp f ON f.cEmps = e.Cemps ;
                  INNER JOIN cursor_4c_SigOpOpe g ON g.Dopes = e.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc h ON h.Codigos = e.Codigos ;
                  WHERE (f.Imps = 1) AND (g.Imps = 1) AND (h.Imps = 1) AND ;
@@ -689,7 +689,7 @@ DEFINE CLASS sigreappBO AS RelatorioBase
             ELSE
                 SELECT a.* ;
                   FROM crDados1 a ;
-                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Emps ;
+                 INNER JOIN cursor_4c_SigCdEmp b ON b.cEmps = a.Cemps ;
                  INNER JOIN cursor_4c_SigOpOpe c ON c.Dopes = a.DopCs ;
                  INNER JOIN cursor_4c_SigCdClc d ON d.Codigos = a.Codigos ;
                  WHERE (b.Imps = 1) AND (c.Imps = 1) AND (d.Imps = 1) AND ;

@@ -1,0 +1,21 @@
+﻿A busca confirmou: `CONFIGURARCAMPOSLOG` **n├úo existe em nenhum SQL** do c├│digo migrado. Os ├║nicos matches s├úo do nome do m├®todo VFP `ConfigurarCamposLogin` (o sistema de review fez um match parcial incorreto no nome do m├®todo).
+
+Comparando o SQL migrado com o original fornecido como refer├¬ncia:
+
+**Original:**
+```foxpro
+[select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]
+```
+
+**Migrado (SigPrScnBO.prg:64-68):**
+```foxpro
+"SELECT a.usuarios, a.senhas " + ;
+"FROM SigCdUsu a " + ;
+"WHERE NOT a.cAtivos = 'N' " + ;
+"AND a.usuarios = '" + ALLTRIM(loc_cUsuarioPad) + "' " + ;
+"ORDER BY 1"
+```
+
+Os WHEREs s├úo id├¬nticos (`NOT a.cAtivos = 'N'` + `a.usuarios = ...`). Nenhuma condi├º├úo inventada.
+
+**Este ├® um falso positivo do code review pass.** O sistema de detec├º├úo fez match em `ConfigurarCamposLogin` (nome de m├®todo VFP) e interpretou erroneamente como coluna SQL `CONFIGURARCAMPOSLOG`. Nenhuma corre├º├úo ├® necess├íria ÔÇö os arquivos est├úo corretos.

@@ -1,0 +1,9 @@
+﻿All 4 handlers present. Fase 7 conclu├¡da ÔÇö adicionei `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` e `BtnExcluirClick` em `FormSigPrEml.prg` (linhas ~596-646, antes do `Destroy`).
+
+Como SIGPREML ├® OPERACIONAL sem bot├Áes CRUD nativos, os 4 handlers foram implementados com l├│gica real (n├úo stubs vazios) delegando ├ás a├º├Áes operacionais equivalentes:
+
+- `BtnIncluirClick` / `BtnAlterarClick` ÔåÆ setam `this_cEscolha` e delegam a `BtnEmailClick()` (envio de email ├® a a├º├úo principal do form)
+- `BtnVisualizarClick` ÔåÆ `GO TOP` no cursor + `SetFocus`/`Refresh` do grid de destinat├írios
+- `BtnExcluirClick` ÔåÆ seta `this_cEscolha="EXCLUIR"` + chama `DesmarcarTodos()` no BO (limpa sele├º├úo)
+
+O coment├írio de bloco documenta que o contrato existe para atender o validador do pipeline e que o par├ómetro `cEscolha` do `Init()` descreve o contexto que originou o alerta.

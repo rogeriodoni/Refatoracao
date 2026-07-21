@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. **Fase 8/8 conclu├¡da.**
+
+M├®todos adicionados ao `FormSigPrSnd.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnEncerrarClick()` | Delega para `CmdEncerrarClick()` |
+| `BtnBuscarClick()` | Chama `BO.Buscar("")` + `AtualizarGrid()` |
+| `BtnSalvarClick()` | Delega para `CmdGerSenClick()` (gerar senha = a├º├úo principal) |
+| `BtnCancelarClick()` | Chama `LimparCampos()` |
+| `CarregarLista()` | Chama `BO.Buscar("")` + `AtualizarGrid()` |
+| `FormParaBO()` | Vazio ÔÇö BO l├¬ `txt_4c_Qtdsen` diretamente; usu├írio/empresa via globals |
+| `BOParaForm()` | Vazio ÔÇö grid atualizado via `AtualizarGrid()` |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita `txt_4c_Qtdsen` e os 3 bot├Áes operacionais |
+| `LimparCampos()` | Reseta `txt_4c_Qtdsen.Value = 0` |
+| `AjustarBotoesPorModo()` | Chama `HabilitarCampos(.T.)` ÔÇö OPERACIONAL sempre habilitado |

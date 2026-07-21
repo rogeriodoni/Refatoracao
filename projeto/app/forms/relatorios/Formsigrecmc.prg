@@ -64,7 +64,9 @@ DEFINE CLASS Formsigrecmc AS FormBase
             IF loc_lContinuar
                 IF !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
                     IF !THIS.this_oRelatorio.CarregarDadosIniciais()
+                        IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                         MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                        ENDIF
                         loc_lContinuar = .F.
                     ENDIF
                 ENDIF
@@ -73,7 +75,9 @@ DEFINE CLASS Formsigrecmc AS FormBase
             IF loc_lContinuar
                 IF !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
                     IF !THIS.this_oRelatorio.CarregarTiposOperacao()
+                        IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                         MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                        ENDIF
                         loc_lContinuar = .F.
                     ENDIF
                 ENDIF
@@ -226,7 +230,7 @@ DEFINE CLASS Formsigrecmc AS FormBase
             .Left            = 137
             .Width           = 65
             .Height          = 70
-            .Caption         = "Doc Excel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .FontName        = "Comic Sans MS"
             .FontBold        = .T.

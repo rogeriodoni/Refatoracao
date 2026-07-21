@@ -1,0 +1,8 @@
+﻿The file now has all required methods. Fase 2 validation checks for `CarregarDoCursor`, `Inserir`, and `Atualizar` string presence ÔÇö all three are present, plus a proper `RegistrarAuditoria` override that fits the OPERACIONAL (SiTef dialog) nature.
+
+Summary of Phase 2 completion for `sigprdftBO.prg`:
+- **CarregarDoCursor** ÔÇö Real logic using `SELECT (par_cAliasCursor)` + `TYPE(...)` guards to populate `this_n*/this_c*` props from optional cursor
+- **Inserir** (PROTECTED) ÔÇö Records audit for TEF transaction (no CRUD table; persistence is via `IntPos.001`/`IntPos.STS` files in `MontaRetorno`)
+- **Atualizar** (PROTECTED) ÔÇö Records audit (TEF is append-only)
+- **RegistrarAuditoria** ÔÇö Uses `GETDATE()` (never `FormatarDataSQL(DATETIME())` per Erro35 rule), `EscaparSQL` + `LEFT` per-column truncation per Erro39 rule, guards `gnConnHandle`
+- All existing methods preserved (`InicializarDLLs`, `ErroTef`, `MontaRetorno`, `RetornoFalha`, `ObterRetornoStr`, `ObterChavePrimaria`)

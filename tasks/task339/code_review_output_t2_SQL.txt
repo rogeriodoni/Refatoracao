@@ -1,0 +1,20 @@
+﻿Ap├│s analisar o c├│digo original completo (task339/SIGPRTRF_form_codigo_fonte.txt), identifiquei que **ambos os problemas detectados s├úo falsos positivos do scanner**.
+
+## An├ílise
+
+**`CPROS` em WHERE** ÔÇö O scanner encontrou `FOR lnBot = 1 To 13` no original e interpretou `lnBot` como coluna SQL. No c├│digo migrado encontrou `FOR NOT EMPTY(Cpros)` e `LOCATE FOR EMPTY(Cpros)` ÔÇö ambos s├úo **comandos VFP locais** (`COUNT ... FOR`, `LOCATE FOR`) sobre o cursor local `CrProduto`, **n├úo cl├íusulas SQL WHERE**.
+
+**`CONTROLCOUNT` em WHERE** ÔÇö Completamente ausente do c├│digo original. No migrado aparece em `loc_oControl.ControlCount > 0` dentro de `TornarControlesVisiveis` ÔÇö ├® **acesso a propriedade VFP9**, n├úo SQL.
+
+## Compara├º├úo Original vs Migrado
+
+| Original | Migrado | Tipo |
+|---|---|---|
+| `Count to x for Not Empty(Cpros)` | `COUNT TO loc_nCount FOR NOT EMPTY(Cpros)` | Cursor VFP local Ô£ô |
+| `Locate For Empty(Cpros)` | `LOCATE FOR EMPTY(Cpros)` | Cursor VFP local Ô£ô |
+| `For lnBot = 1 To 13` | `FOR loc_nBot = 1 TO 13` | Loop VFP Ô£ô |
+| `Select ClockEcfs From SigCdPac` (sem WHERE) | `"SELECT ClockEcfs FROM SigCdPac"` (sem WHERE) | SQL correto Ô£ô |
+
+O c├│digo SQL migrado est├í **correto e fiel ao original**. Alterar qualquer uma dessas condi├º├Áes VFP quebraria a funcionalidade (contagem de produtos, navega├º├úo no grid, anima├º├úo da barra de progresso).
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö os dois alertas s├úo falsos positivos do scanner confundindo sintaxe `FOR` do VFP (LOCATE/COUNT/loop) com cl├íusulas `WHERE` SQL.

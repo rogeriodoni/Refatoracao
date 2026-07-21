@@ -1,0 +1,9 @@
+﻿**Falso positivo ÔÇö nenhuma altera├º├úo necess├íria.**
+
+`THIS.Controls(N)` e `loc_oControl.Controls(N)` s├úo propriedades de cole├º├úo **nativas do VFP9**, fazem parte do model de objeto de Form/Container (assim como `THIS.ControlCount`). N├úo s├úo m├®todos definidos pelo usu├írio nem inventados pela LLM ÔÇö s├úo equivalentes ao `Controls` collection do VB6/VBA.
+
+A checker tool confundiu a sintaxe de indexa├º├úo de cole├º├úo `Controls(N)` com uma chamada de m├®todo PROCEDURE definida pelo usu├írio. O c├│digo est├í **correto** e funcionar├í sem erros em runtime.
+
+Evid├¬ncia: o pr├│prio loop usa `THIS.ControlCount` (linha 250) que ├® da mesma fam├¡lia de propriedades nativas ÔÇö `ControlCount` + `Controls(N)` s├úo o par padr├úo VFP9 para iterar controles de um container.
+
+Nenhuma altera├º├úo necess├íria no `FormSigPrRss.prg`.

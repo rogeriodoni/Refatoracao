@@ -1,0 +1,6 @@
+﻿Dois problemas corrigidos em `FormSigPrSlp.prg`:
+
+- **`CarregarGradeLista()`** (linha ~500): o `WITH THIS.grd_4c_Listas` que definia `.RecordSource` e acessava `.Column1` foi substitu├¡do por refer├¬ncias expl├¡citas `THIS.grd_4c_Listas.RecordSource` / `THIS.grd_4c_Listas.Column1.*`.
+- **`MontaGrade2()`** (linha ~535): mesmo padr├úo corrigido para `grd_4c_Itens` ÔÇö todas as atribui├º├Áes de `.RecordSource`, `.ColumnN.ControlSource` e `.ColumnN.Header1.Caption` agora usam refer├¬ncias expl├¡citas fora de WITH.
+
+O BO (`SigPrSlpBO.prg`) n├úo tinha nenhum dos problemas listados.

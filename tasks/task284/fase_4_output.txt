@@ -1,0 +1,27 @@
+﻿The file looks correct. 55 matches = 27 `PROCEDURE` declarations + 27 `ENDPROC` + 1 `ENDDEFINE`, confirming perfect structure at 1240 lines.
+
+**Phase 4/8 complete.** Here's what was added to `FormSigPrEtq.prg`:
+
+**Layout (ConfigurarPaginaLista)**
+- Linha 1 (top=88): `txt_4c_Emps` + label + `lbl_4c_DEmps` display + `txt_4c_Dopes`
+- Linha 2 (top=116): `txt_4c_Cpros` + `txt_4c_Dpros` + `txt_4c_Qtds` + `cmd_4c_BtnCarregar` (geral_adicao_26.jpg) + `cmd_4c_BtnExcluir` (cadastro_excluir_26.jpg)
+- Linha 3 (top=144): `txt_4c_Lpreco` + `txt_4c_LPreco2` (read-only) + `chk_4c_Lista` + `chk_4c_Precio`
+- Grid (top=172, height=490): 7 colunas com `.Sparse=.F.` ÔÇö Cpros/DPros/Qtds/Reffs/Parcelas/PVens(RO)/PrecoDe(RO)
+- APPEND BLANK inicial + 12 BINDEVENTs
+
+**Handlers**
+- `TxtEmps/DopesKeyPress` ÔÇö valida├º├úo exata + FormBuscaAuxiliar (SigCdOpe single-column conforme pattern)
+- `TxtCprosKeyPress` ÔÇö busca por c├│digo, EAN13 e CBars + fallback picker
+- `TxtDprosKeyPress` ÔÇö busca exata por descri├º├úo + fallback picker
+- `TxtQtdsKeyPress` ÔÇö valida qtd > 0, preenche linha vazia do grid, chama `CarregarPrecoProduto` + `AtualizarPrecoPorLista`, APPEND BLANK para pr├│ximo
+- `TxtLprecoKeyPress` ÔÇö valida├º├úo SigCdLpc + picker
+- `GrdEtiquetasKeyPress` ÔÇö Enter na coluna 4 (Reffs) abre `AbrirBuscaProdutoRef`
+
+**Auxiliares**
+- `CarregarPrecoProduto` ÔÇö l├¬ PVens/PecoDe/PesoMs/DPro2s de SigCdPro; aplica pre├ºo ao cursor condicionado em `chk_4c_Precio`
+- `AtualizarPrecoPorLista` ÔÇö substitui PVens/PrecoDe com pre├ºo de SigCdLpi
+- `CarregarItensDaLista` ÔÇö ZAP + popula grid com todos itens da lista
+- `CmdBtnCarregarClick` ÔÇö JOIN SigMvItn+SigCdPro com aliases expl├¡citos (iCPros, iPVensÔÇª), SCAN com captura de locais antes de SELECT, preenche `empdopnums` (PADR├ù3 + PADR├ù20 + STR├ù6)
+- `CmdBtnExcluirClick` ÔÇö DELETE+PACK da linha ativa, garante pelo menos 1 linha em branco
+- `BtnImprimirClick` ÔÇö remove blank final, PEMSTATUS guard para `obj_4c_Opt_Impressora` (Phase 5+), delega a `BO.ImprimirEtiquetas()`
+- `BtnEncerrarClick` ÔÇö `THIS.Release()`

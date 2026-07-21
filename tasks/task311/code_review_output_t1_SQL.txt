@@ -1,0 +1,5 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas:
+
+1. **CONTROLCOUNT** (linhas 179 e 189): substitu├¡do `PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0` por `PEMSTATUS(loc_oControl, "Controls", 5)` ÔÇö verifica a exist├¬ncia do array `Controls` (propriedade p├║blica e writable de containers), que ├® o padr├úo can├┤nico VFP9 para detectar se um objeto ├® container. O `FOR ... ControlCount` na linha 171 permanece correto (itera├º├úo sobre `par_oContainer`, n├úo uma coluna SQL).
+
+2. **CONSTRAINT_NAME / CONSTRAINT_TYPE** (linhas 786-792): a query `INFORMATION_SCHEMA.KEY_COLUMN_USAGE JOIN TABLE_CONSTRAINTS` foi substitu├¡da por `sys.indexes JOIN sys.index_columns JOIN sys.columns JOIN sys.tables WHERE is_primary_key = 1` ÔÇö semanticamente equivalente ao `vindsql WHERE nprimarys = 1` do original, sem as colunas inventadas.

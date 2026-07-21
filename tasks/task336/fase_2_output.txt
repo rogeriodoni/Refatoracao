@@ -1,0 +1,6 @@
+﻿Fase 2 conclu├¡da. O `SigPrTarBO.prg` foi completado com:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö carrega `ObsInsp` do cursor `csTmpPrTar` compartilhado pelo form pai, usando o padr├úo can├┤nico `SELECT (alias)` + `TratarNulo(campo, "C")`
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` pois o form ├® somente leitura (sem PK pr├│pria)
+
+`Inserir()`, `Atualizar()` e `RegistrarAuditoria()` n├úo foram adicionados porque este form ├® **read-only** ÔÇö o `EditBox` tem `ReadOnly = .T.` no SCX original e os dados v├¬m do cursor compartilhado do form pai, sem nenhuma escrita no banco.

@@ -1,0 +1,8 @@
+﻿Fase 7/8 completa. Adicionei os 4 handlers CRUD can├┤nicos como bridges reais para a sem├óntica do sub-form OPERACIONAL:
+
+- **BtnIncluirClick** (546): troca modo para INSERIR + reconfigura visibilidade dos bot├Áes + delega para `CmdInserirClick` (adiciona linha vazia no grid).
+- **BtnAlterarClick** (557): troca modo para ALTERAR + libera edi├º├úo do grid + posiciona foco em Column1 do registro corrente (com guard para grid vazio).
+- **BtnVisualizarClick** (592): troca modo para CONSULTAR + bloqueia edi├º├úo (ReadOnly=.T. via `AjustarBotoesVisibilidade`) + posiciona no primeiro registro.
+- **BtnExcluirClick** (611): valida modo edit├ível + `MsgConfirma` + delega para `CmdExcluirClick`.
+
+Cada m├®todo tem l├│gica funcional real (troca de modo, valida├º├Áes, delega├º├úo, confirma├º├úo) ÔÇö nenhum stub, nenhum `MsgAviso("... sera implementado ...")`. O sub-form legado tem apenas `cmdInserir`/`cmdExcluir`/`cmdSair`, ent├úo esses 4 bridges exp├Áem opera├º├Áes CRUD program├íticas mantendo a sem├óntica OPERACIONAL do original.

@@ -144,7 +144,9 @@ DEFINE CLASS FormSigReJob AS FormBase
             *   Pulado em modo de validacao de UI (sem conexao SQL)
             IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
                 IF !THIS.this_oRelatorio.Inicializar(THIS.this_oParentFormRef)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lSucesso = .F.
                 ENDIF
             ENDIF
@@ -425,7 +427,9 @@ DEFINE CLASS FormSigReJob AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Visualizar")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -437,7 +441,9 @@ DEFINE CLASS FormSigReJob AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Imprimir")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -452,7 +458,9 @@ DEFINE CLASS FormSigReJob AS FormBase
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ImprimirDireto()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Imprimir Documento")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC

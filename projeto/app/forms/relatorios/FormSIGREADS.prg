@@ -82,7 +82,9 @@ DEFINE CLASS FormSIGREADS AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.CarregarParametrosPadrao()
+                    IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                     MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -91,13 +93,17 @@ DEFINE CLASS FormSIGREADS AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.CarregarTiposOperacao(THIS.this_oRelatorio.this_cCursorTipos)
+                    IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                     MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
                 *-- Carregar grupos de produto no grid Grdgrupo (novo SCX)
                 IF loc_lContinuar AND ;
                    !THIS.this_oRelatorio.CarregarGruposProduto(THIS.this_oRelatorio.this_cCursorGrupos)
+                    IF !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                     MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -447,6 +453,13 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Visible   = .T.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
             .CurrentControl = "Check1"
             .ControlSource  = loc_cCursor + ".Marca"
             .Header1.Caption = ""
@@ -555,6 +568,13 @@ DEFINE CLASS FormSIGREADS AS FormBase
             .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Visible   = .T.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
             .CurrentControl = "Check1"
             .ControlSource  = loc_cCursorGrp + ".Marca"
             .Header1.Caption = ""

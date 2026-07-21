@@ -1,0 +1,10 @@
+﻿All 7 Phase 8 methods are present at lines 2145ÔÇô2250. The SIGPRDIS migration is fully complete:
+
+- `FormParaBO()` / `BOParaForm()` ÔÇö transfer date filter state to/from BO
+- `BtnBuscarClick()` ÔÇö triggers filter + grid focus
+- `BtnCancelarClick()` ÔÇö confirmation dialog, resets state, returns to Page1
+- `HabilitarCampos()` ÔÇö enables/disables Page1 filter controls
+- `LimparCampos()` ÔÇö resets dates to today and reloads list
+- `AjustarBotoesPorModo()` ÔÇö routes to `HabilitarCampos` based on mode string
+
+Menu item "Distribui├º├úo de Produtos" (BAR 36 of popMovimentos) and the `AbrirFormsigprdis()` procedure were already in `menu.prg` from a prior session. `config.prg` auto-loads the BO and form via ADIR wildcards. No manual SET PROCEDURE entries were needed.

@@ -1,0 +1,22 @@
+﻿Phase 5 code is already fully applied to disk from the previous execution. Verified state:
+
+**`sigprnfeBO.prg`** (1534 lines) ÔÇö Phase 5 additions confirmed:
+- Property declarations `this_cArquivos` (line 22) and `this_cCnpj` (line 33)
+- `CarregarEmpresa` populates both from `SigCdEmp.pastas`/`SigCdEmp.cgcs` (lines 466ÔÇô467)
+- New method `CodIBGEUF(par_cEstas)` at line 1261 ÔÇö resolves IBGE UF code via SQLEXEC on `SigCdUfs`
+- New method `SelecionarInutilizadas(par_cEmps)` at line 1293 ÔÇö gap-analysis populates `nfAinu` cursor
+- New method `ProcessaInutilizadas(par_cEmps, par_cSeries, par_cCnpj, par_cNIni, par_cNFim)` at line 1403 ÔÇö full NF-e 4.00 inutilization XML flow (envio ÔåÆ retorno ÔåÆ parse cStat=102 ÔåÆ INSERT sigprnfe with stats='INU' + COMMIT)
+
+**`Formsigprnfe.prg`** (1752 lines) ÔÇö Phase 5 fixes confirmed:
+- `CmdInuClick` at line 1586 now calls `loc_oBO.SelecionarInutilizadas(loc_cEmps)` before checking `USED("nfAinu")`
+- Empty-company guard added (lines 1589ÔÇô1592)
+- `AlternarPagina(2)` moved inside success branch (line 1614)
+
+Static integrity checks pass:
+- No `TODO`/`FIXME`/`HACK`/`PLACEHOLDER` comments in either file
+- No stubs with `MsgAviso("...sera implementado...")` (grep returned no matches for `sera implementad`)
+- No empty procedures ÔÇö all `Btn*Click` handlers contain real logic tied to BO methods or navigation
+
+The 615-line `ConfigurarOperacoes()` (form lines 159ÔÇô774) is the OPERATIONAL-form equivalent of `ConfigurarPaginaDados()` and already contains all cntOperacoes controls from `layout.json` (17 Labels, 8 TextBoxes, ComboBox Regime, 4 CheckBoxes, cmd_4c_Inu, 6 OptionGroups). No further additions are needed.
+
+Phase 5 is complete on disk; the previous validation failure was not due to missing code in either file.

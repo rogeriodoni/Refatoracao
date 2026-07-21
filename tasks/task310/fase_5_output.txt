@@ -1,0 +1,7 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da.
+
+**O que foi feito:**
+
+1. **Removidos coment├írios obsoletos** de "fases" (`controles internos nas fases 4-8`, `Conteudo adicionado na Fase 4`) ÔÇö o form est├í completo
+2. **Adicionado `ConfigurarPaginaDados()`** documentado como no-op: este ├® um form OPERACIONAL plano sem Page2; todos os controles foram criados em `ConfigurarPaginaLista()`
+3. **Corrigido `GrdDadosAfterRowColChange`**: adicionado ramo `ELSEIF par_nColIndex = 1` que chama `ValidarContaNov()` quando o usu├írio sai da coluna 2 com ContaNov preenchida ÔÇö fechando a lacuna de paridade com o `Column2.Text1.Valid` do legado

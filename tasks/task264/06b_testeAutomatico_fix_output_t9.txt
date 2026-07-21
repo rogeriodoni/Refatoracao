@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada nos dois OptionGroups (`obj_4c_OptCalculo` e `obj_4c_OptDias`). O padr├úo era acessar `.Buttons(N)` via vari├ível local **fora** do `WITH` pai ÔÇö isso causa `BUTTONS is not an object` em VFP9. A corre├º├úo usa `WITH .Buttons(N)` **aninhado dentro** do `WITH` pai, que ├® o ├║nico padr├úo v├ílido (conforme Erro42 registrado em mem├│ria).

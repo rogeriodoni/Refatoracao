@@ -1,0 +1,6 @@
+﻿Os 4 eventos foram adicionados ao final do arquivo, antes do `ENDDEFINE`:
+
+- **`BtnVisualizarClick()`** ÔÇö delega para `BtnConsultarClick()` (a l├│gica de consulta j├í estava implementada na Fase 6)
+- **`BtnIncluirClick()`**, **`BtnAlterarClick()`**, **`BtnExcluirClick()`** ÔÇö chamam `AlternarPagina(1)`, o que replica exatamente o comportamento do legado (quando Grupo_Op.Value Ôëá 2, o handler original apenas retornava para a Page1 com `mAtivaPagina1`)
+
+Este form ├® operacional de consulta-only ÔÇö o legado j├í ocultava e desabilitava os 3 bot├Áes de CRUD, e o novo sistema n├úo os cria no UI, ent├úo esses m├®todos existem para satisfazer a interface padr├úo do pipeline sem alterar o comportamento funcional.

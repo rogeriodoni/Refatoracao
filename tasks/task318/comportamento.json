@@ -1,0 +1,314 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 11,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRPCP",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "lcSql = [Select DoppPads, DoppServs From SigCdPam ]\nThisForm.Podatamgr.Sqlexecute(lcsql,'zTmpparam')\nlcOperacao = zTmpParam.DoppPads\nlcServico  = zTmpParam.DoppServs\n\npFlg = .f.\n\nlcQuery = [Select Numps, Dopps, cIdChaves ] + ;\n\t\t\t[From SigCdNec ] + ;\n\t\t   [Where EmpDNps BetWeen ']+ _Empr + lcOperacao + Str(0,10) + [' And '] + _Empr + lcOperacao + [9999999999' And ] + ;\n\t\t   \t\t [ChkSubn = ?pFlg ] + ;\n   \t\t   [Order By Numps, Dopps, cIdChaves]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'OpPendent... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,CursorQuery",
+        "controlesReferenciados": "ChkSubn,ChkDests",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nDodefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor zTmppPcp (Priors n(6), nenvs n(10), Nops n(10), Emps c(3), Dopes c(20), Numes n(6),;\n\t\t\t\t\t\tContas c(10), Rclis c(40), PrazoEnts T, Cpros c(14), Qtds n(9,3), aPriors n(6))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP",
+      "evento": "Init",
+      "linhas": 81,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\tThisForm.Refresh\n\t\tThisForm.Draw\n\t\tThisForm.Show\n\n\t\tIf Not ThisForm.Processa()\n\t\t\tMessageBox('Erro no Processamento dos Dados...',0+48,'')\n\t\t\tReturn .f.\n\t\tEndif\n\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa,AfterRowColChange",
+        "controlesReferenciados": "cmb_Concilia",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Sair",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If MessageBox('Deseja Realmente abandonar Priorização',4+32+256,'') = 6\n\tThisForm.Release\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisform.LockScreen = .T.\n\nThisForm.Get_Cliente.Value = zTmpSelecao.Rclis\nThisForm.Get_Cliente.Refresh\n\nSelect zTmppPcp\nGo Top\nThisForm.GradeItem.Refresh\n\nlcArquivo4 = Sys(2023)+'\\SigPrPcp.jpg'\n\nThisForm.FigJpg.Visible = .F.\nThisForm.FigJpg.Picture = ''\n\nSelect zTmpSelecao\nThisForm.Text1.Value = zTmpSelecao.Emps + ' ' + Alltrim(zTmpSelecao.Dopes) + ' '+Str(zTmpselecao.Numes,6)\n\nThisform.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cliente",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Lastkey() = 9\n\tThisForm.GradeItem.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.GradeItem",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisform.LockScreen = .T.\nlcArquivo4 = Sys(2023)+'\\SigPrPcp.jpg'\n\nThisForm.FigJpg.Visible = .F.\nThisForm.FigJpg.Picture = ''\n\nlcQuery = [Select FigJpgs From SigCdPro Where Cpros= ']+zTmppPcp.Cpros+[']\n=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')\n\nIf Not IsEmpty(CrTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\tIf (StrToFile(lcFoto, lcArquivo4) > 0)\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Picture =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.GradeItem.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Lastkey() = 9\n\tThisForm.Grade.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Cmb_Concilia",
+      "evento": "InteractiveChange",
+      "linhas": 22,
+      "codigoOriginal": "Select zTmpSelecao\nSet Relation To \nSet Order To \nDo Case\n\tCase Alltrim(This.Value) = \"Prazo Entrega\"\n\t\tSet Order to Entrega\n\n\tCase Alltrim(This.Value) = \"Cliente\"\n\t\tSet Order to Cliente\n\n\tCase Alltrim(This.Value) = 'Operacao'\n\t\tSet Order To EmpDopNum\n\n\tCase Alltrim(This.Value) = 'Prioridade'\n\t\tSet Order To Prioridade\nEndCase\n\nSelect zTmpSelecao\nSet Relation To Emps + dopes + Str(numes,6) Into zTmppPcp\n\nThisForm.Grade.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Get_Cliente",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPCP.Salva",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "If MessageBox('Confirma Gravação dos Dados!!!',4+32+256) = 7\n\tReturn .f.\nEndIf\n\nSelect zTmpSelecao\nScan\n\tScatter Memvar\n\tWait Window 'Executando Gravação de Prioridades ' Nowait\n\tIf m.Priors = 0 And m.aPriors = 0\n\t\tLoop\n\tEndif\n\n\tlcEdn = m.Emps + m.Dopes + Str(m.Numes,6)\n\t\n\tlcSql = [Update SigMvCab Set Priors = ]+Str(zTmpSelecao.Priors)+[ Where EmpDopNums = ']+lcEdn+[']\n\tThisForm.Podatamgr.Sqlexecute(lcsql,'')\n\t\nEndScan\n\nWait Window 'Executando Gravação Fisica dos arquivos ' Nowait\nIf ThisForm.Po... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRPCP.Procedure",
+      "queryOriginal": "lcSql = [Select DoppPads, DoppServs From SigCdPam ]",
+      "tabelas": "SigCdPam",
+      "colunas": "DoppPads,DoppServs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRPCP.GradeItem.Procedure",
+      "queryOriginal": "lcQuery = [Select FigJpgs From SigCdPro Where Cpros= ']+zTmppPcp.Cpros+['] =ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "FigJpgs,Cpros,Cpros+[],SqlExecutelcQuery,CrTmpPro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRPCP.Salva.Click",
+      "queryOriginal": "\tlcSql = [Update SigMvCab Set Priors = ]+Str(zTmpSelecao.Priors)+[ Where EmpDopNums = ']+lcEdn+['] \tThisForm.Podatamgr.Sqlexecute(lcsql,'')",
+      "tabelas": "SigMvCab",
+      "colunas": "Priors",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam", "SigCdPro", "SigMvCab"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,16 @@
+﻿Arquivo criado corretamente em `C:\4c\projeto\app\forms\operacionais\FormSigPrScn.prg`.
+
+**Fase 3 entregue.** O que foi criado:
+
+| Elemento | Decis├úo |
+|---|---|
+| Heran├ºa | `FormBase` (padr├úo OPERACIONAL) |
+| Layout | Sem PageFrame ÔÇö di├ílogo direto 436├ù160, id├¬ntico ao legado |
+| `TitleBar=0`, `ControlBox=.F.` | Copiados do SCX (sem chrome de janela) |
+| `DataSession=2` | Preservado; `DODEFAULT()` no Init() garante que FormBase.Init() corrija SET DATE/CENTURY |
+| Cabe├ºalho | `cnt_4c_Sombra` + `lbl_4c_Sombra` (sombra preta) + `lbl_4c_Titulo` (branco) ÔÇö dimens├Áes e fontes exatas do legado |
+| Caption | Setado em runtime com CHR(231)+CHR(227) (├º├úo) |
+| Background | `gc_4c_CaminhoIcones + "new_background.jpg"` com guard `FILE()` (arquivo confirmado em vbmp/) |
+| BO | Instanciado em InicializarForm() ÔÇö SigPrScnBO j├í existe das Fases 1-2 |
+
+**Pr├│xima fase (4):** Adicionar Labels `lbl_4c_Label1`/`lbl_4c_Label2` e TextBoxes `txt_4c_USUARIO`/`txt_4c_SENHA` com propriedades exatas do legado (Arial 14pt bold, PasswordChar, InputMask, SpecialEffect).

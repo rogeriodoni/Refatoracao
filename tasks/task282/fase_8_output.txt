@@ -1,0 +1,15 @@
+﻿Fase 8 conclu├¡da. Aqui o resumo do que foi feito:
+
+**Corre├º├úo de bug:**
+- `CarregarGradeItens()`: removido `RETURN` dentro do bloco `TRY/CATCH` (Regra Cr├¡tica #1 do CLAUDE.md). Substitu├¡do por `IF/ELSE` ÔÇö quando `MontarCursorItens` retorna `.F.`, define `loc_lResultado = .T.` e pula a carga do grid; quando retorna `.T.`, executa toda a configura├º├úo do grid normalmente.
+
+**M├®todos adicionados (Fase 8):**
+- `BtnBuscarClick()` ÔÇö Procurar estava oculto no legado; recarrega a lista
+- `BtnSalvarClick()` ÔÇö alias para `BtnConfirmarClick` (form operacional de consulta)
+- `FormParaBO()` ÔÇö form ├® somente leitura; BO j├í foi carregado do `csTemporario`
+- `BOParaForm()` ÔÇö delega para `CarregarCamposOrigem()` que realiza a opera├º├úo completa
+- `HabilitarCampos()` ÔÇö sem efeito (form operacional somente leitura, todos os campos t├¬m `ReadOnly=.T.`)
+- `LimparCampos()` ÔÇö limpa todos os campos de texto, datas, memo e a imagem da Page2
+- `AjustarBotoesPorModo()` ÔÇö modo fixo, apenas `cmd_4c_Consultar` habilitado (conforme legado)
+
+**Integra├º├úo:** `config.prg` carrega automaticamente via `ADIR` todos os `*BO.prg` de `classes/` e todos os `Form*.prg` de `forms/cadastros/` ÔÇö nenhuma altera├º├úo manual necess├íria.

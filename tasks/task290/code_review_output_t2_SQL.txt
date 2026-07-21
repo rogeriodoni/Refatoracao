@@ -1,0 +1,39 @@
+﻿Analisei o form inteiro e o BO completo. Vou relatar o resultado da verifica├º├úo.
+
+## Resultado da Verifica├º├úo ÔÇö Pass SQL (15 Problemas)
+
+Ap├│s comparar o c├│digo migrado com os trechos originais do legado fornecidos no prompt, todos os 15 problemas detectados s├úo **falsos positivos** do validador. Nenhuma condi├º├úo WHERE precisa ser removida.
+
+**Raz├úo:** O validador extraiu as colunas "v├ílidas" do WHERE original apenas dos snippets vis├¡veis e truncados ÔÇö que cobrem os cursores `TmpOper`, `TmpTpGop`, `SigMvItn`, `SigMvIts`, `SigPrMtz` e `SigOpPic`. O WHERE da query principal `SigMvCab` estava **truncado** no original e n├úo apareceu na lista de refer├¬ncia do validador.
+
+---
+
+### An├ílise coluna por coluna
+
+| Coluna "inventada" | Tabela no migrado | Status | Linha BO |
+|---|---|---|---|
+| `DATAS` | `SigMvCab` | Ô£à Coluna real. Est├í no pr├│prio SELECT (linha 909). Filtro de per├¡odo de emiss├úo correto | 804ÔÇô807 |
+| `PRAZOENTS` | `SigMvCab` | Ô£à Coluna real. No SELECT (linha 909). Filtro de previs├úo de entrega correto | 816ÔÇô823 |
+| `GRUPOOS` | `SigMvCab` | Ô£à Coluna real (GrupoOs). No SELECT. Filtro por grupo de conta | 918 |
+| `GRUPODS` | `SigMvCab` | Ô£à Coluna real (GrupoDs). No SELECT. Filtro por grupo de destino | 921 |
+| `CONTAOS` | `SigMvCab` | Ô£à Coluna real (ContaOs). No SELECT. Filtro por conta de origem | 926 |
+| `CONTADS` | `SigMvCab` | Ô£à Coluna real (ContaDs). No SELECT. Filtro por conta de destino | 929 |
+| `GRVENDS` | `SigMvCab` | Ô£à Coluna real (GrVends). No SELECT. Filtro por grupo vendedor | 933 |
+| `VENDS` | `SigMvCab` | Ô£à Coluna real (Vends). No SELECT. Filtro por vendedor | 936 |
+| `NOPS` | `SigMvCab` | Ô£à Coluna real. `Nops = 0` filtra movimentos sem OP gerada ÔÇö essencial ao processo | 938 |
+| `DOPPS` | `SigCdOpd` | Ô£à Coluna real (Dopps = opera├º├úo pai). Query carrega `GruDests/ConDests` para a op├º├úo padr├úo | 791 |
+| `CIDCHAVES` | `SigOpPic` | Ô£à PK da tabela. Usado corretamente em UPDATE/DELETE/SELECT | 450, 479, 507 |
+| `CGRUS` | `SigCdGrp` | Ô£à Coluna real (CGrus). Busca grupo do produto para verificar GeraTubs | 1035 |
+| `ICLIS` | `SigCdCli` | Ô£à Coluna real. Lookup de nome do cliente (RClis) por c├│digo | 1207 |
+| `CEMPS` | `SigCdEmp` | Ô£à PK can├┤nica de SigCdEmp conforme Pattern #125. WHERE correto | Form linha 993 |
+| `CONTROLCOUNT` | N/A | Ô£à **N├úo ├® coluna SQL.** ├ë propriedade VFP (`loc_oCtrl.ControlCount`). Detectado erroneamente | Form linha 951 |
+
+---
+
+### Conclus├úo
+
+O c├│digo migrado est├í **correto**. Nenhuma das 15 condi├º├Áes WHERE ├® inventada ÔÇö todas correspondem a colunas reais das tabelas consultadas. O validador comparou com uma lista incompleta derivada de snippets truncados do legado (que cobriam apenas os cursores auxiliares, n├úo o WHERE principal de `SigMvCab`).
+
+Remover qualquer dessas condi├º├Áes **quebraria** a funcionalidade: `Nops = 0` ├® essencial para n├úo reprocessar movimentos j├í com OP; os filtros de data, conta e vendedor s├úo o prop├│sito central do form.
+
+**Nenhuma altera├º├úo necess├íria neste pass.**

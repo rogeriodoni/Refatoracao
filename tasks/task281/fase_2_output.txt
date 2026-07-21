@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da.
+
+**O que foi feito:**
+
+O BO era OPERACIONAL (n├úo CRUD), ent├úo os m├®todos skeleton `Inserir/Atualizar/ObterChavePrimaria` foram removidos e substitu├¡dos pelos m├®todos que o form realmente precisa:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Inicializa e chama `CarregarGrPadVens()` na constru├º├úo |
+| `CarregarGrPadVens()` | Carrega `grpadvens` de `SigCdPam` para valida├º├úo de Respons├ível via `fAcessoContab` |
+| `ValidarFiltros()` | Valida Empresa n├úo-vazia, Opera├º├úo n├úo-vazia e datas (replica consulta.Click do legado) |
+| `ExecutarConsulta()` | Query principal: monta WHERE din├ómico com todos os filtros, executa `SELECT a.* FROM SigMvCab a, SigCdOpe b`, cria cursor `csTemporario`, indexa por `EmpDopNums` e corrige NULLs em `prazoents` |
+| `CarregarCpfPorConta()` | Busca CPF em `SigCdCli` por `iclis` (usado ao selecionar Conta) |
+| `ValidarCpfCnpj()` | Valida CPF/CNPJ, busca conta vinculada em `SigCdCli` (replica Get_cpf.Valid do legado) |

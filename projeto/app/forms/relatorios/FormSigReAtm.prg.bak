@@ -76,8 +76,10 @@ DEFINE CLASS FormSigReAtm AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.InicializarDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao inicializar dados")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -216,7 +218,7 @@ DEFINE CLASS FormSigReAtm AS FormBase
             .Left            = 137
             .Width           = 65
             .Height          = 70
-            .Caption         = "Doc Excel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .FontName        = "Comic Sans MS"
             .FontBold        = .T.

@@ -1,0 +1,33 @@
+﻿## An├ílise dos Problemas
+
+Ap├│s verifica├º├úo completa do c├│digo e schema, ambos os flags s├úo **falsos positivos** do auto-checker. Aqui est├í a explica├º├úo detalhada:
+
+---
+
+### [SQL-FILTRO-INVENTADO] ÔÇö CEMPS em WHERE (Form linha 982)
+
+**Contexto real:** O `WHERE Cemps = ...` est├í em uma query **secund├íria de valida├º├úo de textbox** da UI ÔÇö `SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = EscaparSQL(...)`.
+
+**Por que ├® correto:**
+- `Cemps` ├® a **chave prim├íria de SigCdEmp** (confirmado na mem├│ria: "colunas can├┤nicas s├úo Cemps/Razas")
+- Esta query ├® c├│digo UI helper (valida├º├úo do campo empresa) ÔÇö inexistente no original SCX porque o original usava `SEEK(crSigMvCcr.Emps, 'crSigCdEmp', 'Cemps')`
+- O WHERE `Cemps = X` ├® a tradu├º├úo SQL exata do SEEK por tag Cemps
+
+**A query principal de SigMvCcr usa corretamente DATAS e EMPS** ÔÇö o auto-checker comparou coluna de queries diferentes.
+
+---
+
+### [SQL-FILTRO-INVENTADO] ÔÇö ICLIS em WHERE (BO linha 330)
+
+**Contexto real:** O `WHERE IClis = ...` est├í em uma query **dentro do SCAN loop**, buscando a conta cont├íbil no cliente: `SELECT TOP 1 IClis, CContabs FROM SigCdCli WHERE IClis = EscaparSQL(cursor_4c_Mv.Contas)`.
+
+**Por que ├® correto:**
+- `IClis` ├® a **chave prim├íria de SigCdCli** (confirmado em `ProcessarBloqueioBO.prg.bak:19: THIS.this_cCampoChave = "IClis"`)
+- O original usava SEEK equivalente: `SEEK(crSigMvCcr.Contas, 'crSigCdCli', 'IClis')`
+- O WHERE `IClis = cursor_4c_Mv.Contas` traduz esse SEEK para SQL ÔÇö **remover o WHERE retornaria TODOS os clientes**, quebrando a l├│gica
+
+---
+
+### Conclus├úo
+
+**Nenhuma altera├º├úo necess├íria.** O auto-checker cruzou incorretamente os nomes de coluna do WHERE principal de SigMvCcr (`DATAS`, `EMPS`) com os WHEREs de queries secund├írias de lookup (`SigCdEmp` e `SigCdCli`). Ambas as condi├º├Áes s├úo tradu├º├Áes SQL corretas de opera├º├Áes SEEK do c├│digo original ÔÇö remov├¬-las quebraria a funcionalidade.

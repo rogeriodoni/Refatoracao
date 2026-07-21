@@ -1,0 +1,20 @@
+﻿**FormSigPrRet.prg criado** (169 linhas) em `projeto/app/forms/operacionais/`.
+
+**O que foi implementado na Fase 3:**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | `RETURN DODEFAULT()` ÔÇö FormBase cuida do ciclo |
+| `InicializarForm()` | Ô£à | Cria BO, seta `Picture = new_background.jpg`, chama `ConfigurarPageFrame` + `TornarControlesVisiveis` |
+| `ConfigurarPageFrame()` | Ô£à | Cria `cnt_4c_Sombra` com `lbl_4c_LblSombra` + `lbl_4c_LblTitulo` diretamente no form |
+| `TornarControlesVisiveis()` | Ô£à | Itera `THIS.Controls` e seta `Visible = .T.` |
+| `Destroy()` | Ô£à | Libera BO + `DODEFAULT()` |
+
+**Decis├Áes t├®cnicas:**
+- **Sem PageFrame** ÔÇö forms OPERACIONAIS adicionam controles direto no form (padr├úo `FormSIGMDETQ`)
+- **AddObject fora de WITH aninhado** ÔÇö aplica corre├º├úo do Erro49/Pattern #140+#141 (sem nested WITH ap├│s AddObject)
+- **`TitleBar = 0` + `ControlBox = .F.`** ÔÇö copiados do original (sem barra de t├¡tulo do sistema)
+- **`THIS.Caption`** nas labels do cabe├ºalho ÔÇö din├ómico, igual ao legado (`ThisForm.Caption`)
+- **`gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"`** ÔÇö imagem de fundo verificada em `vbmp/`
+
+**Pr├│xima fase (4/8):** Adicionar o CommandGroup de a├º├úo (4 bot├Áes: Consulta/Arquivadas/Digita├º├úo/Encerrar) e a grade de filtros.

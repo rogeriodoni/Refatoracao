@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo. Fase 4 implementada corretamente.
+
+**O que foi adicionado:**
+
+- `ConfigurarControlesSenha()` ÔÇö cria `shp_4c_Shape1` (borda), `lbl_4c_Label3` ("Senha do Supervisor :"), `txt_4c_GetSenha` (desabilitado ÔÇö campo de cart├úo do legado), `txt_4c_Senha` (PasswordChar="\*", TabIndex=1) e `cnt_4c_Container1` com label de instru├º├úo "Digite a Senha\ndo Supervisor". BINDEVENT para KeyPress.
+
+- `ConfigurarBotaoCancelar()` ÔÇö cria `cmg_4c_Saida` com Buttons(1): Caption=`\<Cancelar`, Picture=`cadastro_cancelar_60.jpg`, **Cancel=.T.** (ESC dispara automaticamente). BINDEVENT para Click.
+
+- `TxtSenhaKeyPress` ÔÇö LPARAMETERS no topo, captura Enter(13): salva `this_cSenhaRetorno`, seta `this_lCancelado=.F.`, `THIS.Hide()`.
+
+- `BtnCancelarClick` ÔÇö limpa campo, seta `this_lCancelado=.T.`, `THIS.Hide()`. ESC tamb├®m dispara via `Cancel=.T.`.
+
+- `TornarControlesVisiveis()` ÔÇö itera Controls + sub-controls, seta `Visible=.T.`.
+
+- `InicializarForm()` ÔÇö atualizado para chamar os 3 novos m├®todos.
+
+**Por que `THIS.Hide()` e n├úo `THIS.Release()`:** o chamador precisa ler `loForm.this_cSenhaRetorno` e `loForm.this_lCancelado` ap├│s `loForm.Show()` retornar; Hide() desbloqueia Show() mantendo o objeto vivo.

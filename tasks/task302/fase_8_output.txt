@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Todos os 10 m├®todos da Fase 8 foram adicionados antes do `Destroy`:
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `BtnBuscarClick` | Delega para `CmdgetpClick` (abre file dialog XLS) |
+| `BtnEncerrarClick` | Delega para `CmdsairClick` |
+| `BtnSalvarClick` | Delega para `BtnIncluirClick` (processar importa├º├úo) |
+| `BtnCancelarClick` | Delega para `LimparCampos` |
+| `FormParaBO` | Copia `OptTipo.Value` e `OptPreco.Value` para `this_nTipoImport`/`this_nTipoPreco` no BO |
+| `BOParaForm` | Inverso do `FormParaBO` |
+| `HabilitarCampos` | Habilita/desabilita combo, checkbox e `cmd_4c_Processar` ÔÇö `cmd_4c_Cmdgetp` (Caption="") fica fora por ser icon-only |
+| `LimparCampos` | Reseta todos os controles + fecha cursores tempor├írios, com TRY/CATCH |
+| `CarregarLista` | Delega para `PreencherCombo` |
+| `AjustarBotoesPorModo` | Habilita `cmd_4c_Processar` somente quando tipo + arquivo preenchidos |
+
+`Formsigprila.prg` est├í completo com 974 linhas, cobrindo as 8 fases de migra├º├úo.

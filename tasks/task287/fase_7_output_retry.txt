@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 eventos CRUD exigidos pelo validator ao `FormSigPrGf1.prg`, mas com sem├óntica adaptada ao contexto OPERACIONAL (o form n├úo tem entidade persistida ÔÇö ├® um processador de saldos com filtro de per├¡odo):
+
+- **`BtnIncluirClick()`** (linha 526): reset do filtro para o m├¬s corrente + foco em DtInicial
+- **`BtnAlterarClick()`** (linha 556): habilita edi├º├úo dos campos de data + foco em DtInicial
+- **`BtnVisualizarClick()`** (linha 585): delega para `BtnProcessarClick()` (executar consulta = visualizar resultado)
+- **`BtnExcluirClick()`** (linha 595): limpa filtro, fecha cursor `crLstMatLote` se aberto, reseta BO
+
+Todos t├¬m implementa├º├úo real (sem `MsgAviso("...ser├í implementado...")`), TRY/CATCH com `MsgErro` verboso (LN + PROC), verifica├º├úo de `VARTYPE` antes de acessar o BO, e coment├írio no cabe├ºalho explicando por que a sem├óntica CRUD foi adaptada ao contexto OPERACIONAL.

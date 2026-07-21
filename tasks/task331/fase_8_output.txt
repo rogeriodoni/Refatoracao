@@ -1,0 +1,16 @@
+﻿**Fase 8 conclu├¡da.** O arquivo `FormSigPrSer.prg` agora tem 1362 linhas com todos os m├®todos da fase final:
+
+| M├®todo adicionado | Fun├º├úo |
+|---|---|
+| `CarregarLista()` | Alias para `CarregarDados()` ÔÇö compatibilidade com pipeline |
+| `FormParaBO()` | Transfere Empresa/Opera├º├úo/Numps do `cnt_4c_Operacao` para o BO |
+| `BOParaForm()` | Popula `cnt_4c_Operacao` a partir das propriedades do BO |
+| `HabilitarCampos()` | Mant├®m todos os campos como ReadOnly (popup somente-leitura) |
+| `LimparCampos()` | Zera campos de rodap├® (descri├º├Áes + totais) |
+| `AjustarBotoesPorModo()` | Garante `cmd_4c_Ok.Enabled = .T.` (├║nico bot├úo do popup) |
+| `BtnBuscarClick()` | Delega a `BtnAlterarClick()` (recarrega de xMfas) |
+| `BtnEncerrarClick()` | Delega a `CmdOkClick()` |
+| `BtnSalvarClick()` | Delega a `CmdOkClick()` (popup read-only, aceitar = fechar) |
+| `BtnCancelarClick()` | Delega a `CmdOkClick()` |
+
+O form n├úo precisa de entrada em `menu.prg` pois ├® um **popup filho** aberto diretamente pelo form pai via `CREATEOBJECT("FormSigPrSer", oParentForm)`. O `config.prg` j├í carrega automaticamente todos os `Form*.prg` da pasta `operacionais\`.

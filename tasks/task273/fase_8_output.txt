@@ -1,0 +1,14 @@
+﻿The integration is already fully complete. Here's the status:
+
+**config.prg** ÔÇö no changes needed. It uses dynamic ADIR() loops (lines 276ÔÇô321) that automatically load every `*BO.prg` from `classes/` and every `Form*.prg` from `forms/cadastros/`. Both `SigPrCtrBO.prg` and `FormSigPrCtr.prg` are picked up automatically.
+
+**menu.prg** ÔÇö already wired:
+- Bar 38: `DEFINE BAR 38 OF popMovimentos PROMPT "Controle de Movimenta..."` (line 180)
+- Selection: `ON SELECTION BAR 38 OF popMovimentos DO AbrirFormSigPrCtr` (line 183)
+- Procedure: `PROCEDURE AbrirFormSigPrCtr()` at line 4195 with full TRY/CATCH and `MostrarErro` on failure
+
+**SigPrCtrBO.prg** ÔÇö exists at `projeto/app/classes/SigPrCtrBO.prg` (485 lines), defines `SigPrCtrBO AS BusinessBase` with all required methods.
+
+**FormSigPrCtr.prg** ÔÇö exists at `projeto/app/forms/cadastros/FormSigPrCtr.prg` (3139 lines), complete with all Phase 8 methods: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`.
+
+**Phase 8/8 is complete.** `FormSigPrCtr` (Controle de Movimenta├º├Áes por XML) is fully migrated and integrated into the system with no outstanding work remaining.

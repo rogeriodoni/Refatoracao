@@ -1,0 +1,19 @@
+﻿All changes are complete. Here's a summary of everything that was fixed:
+
+**`sigprdisBO.prg`:**
+- `BuscarOperacoes`: Added `empds`, `contaos`, `grupods`, `contads` to the SQL SELECT (now provides all 8 fields needed for the CabOperas grid)
+- `BuscarItensOperacao`: Replaced `d.qtdos` with `d.locals` from `sigprdis` (fixes the broken Column5 binding)
+
+**`Formsigprdis.prg`:**
+- `ConfigurarSubPaginaOperacoes()`:
+  - Container renamed `cntOperacao` ÔåÆ `cnt_4c_Operacao` (per mapeamento.json)
+  - Label renamed `lbl_4c_Obs` ÔåÆ `lbl_4c__Obs`, added `FontBold=.T.`
+  - EditBox renamed `edt_4c_Obs` ÔåÆ `obj_4c_GetObs`
+  - Button caption fixed to `"Processar Distribui" + CHR(231) + CHR(227) + "o"`, added `Picture = gc_4c_CaminhoIcones + "geral_datas_60.jpg"`
+  - `pgf_4c_Operacoes` Page1 caption fixed to `"Movimenta" + CHR(231) + CHR(245) + "es"` (was "Opera├º├Áes")
+  - `grd_4c_CabOperas`: expanded from 6 ÔåÆ 8 columns, now shows all legacy fields (Emp O / Movimenta├º├úo / N┬░ / Emp D / Grupo Orig / Conta Orig / Grupo Dest / Conta Dest)
+  - `grd_4c_ItnOperas`: expanded from 5 ÔåÆ 6 columns, added `dpros` (Descri├º├úo) column, fixed `locals` binding
+- `BtnProcOperClick()`: updated references to `cnt_4c_Operacao` and `obj_4c_GetObs`
+- `AbrirBatchExistente()`: expanded grdCabOperas binding from 6 ÔåÆ 8 columns
+- `BtnSalvarClick()`: expanded grdCabOperas binding from 6 ÔåÆ 8 columns
+- `GrdCabOperasAfterRowColChange()`: expanded grdItnOperas binding from 5 ÔåÆ 6 columns, added `dpros` column

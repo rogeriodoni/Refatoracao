@@ -1,0 +1,17 @@
+﻿A Fase 8 est├í completa. Aqui est├í o resumo do que foi adicionado ao `Formsigprenv.prg`:
+
+**M├®todos adicionados:**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `FormParaBO()` | Mapeia `txt_4c_Etq_Ini`, `txt_4c_Etq_Qtd`, `Opt_Tipo`, `Opt_Impressora` e todos os spinners do container para o BO |
+| `BOParaForm()` | Restaura `Etq_Ini`, `Etq_Qtd` e ajustes dos spinners a partir do BO |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita os dois TextBoxes e o bot├úo Imprimir |
+| `LimparCampos()` | Reseta `Etq_Ini = 1`, `Etq_Qtd = 0` e limpa o cursor de impress├úo |
+| `CarregarLista()` | Stub que retorna `.T.` (sem grid de lista neste OPERACIONAL) |
+| `AjustarBotoesPorModo()` | Stub vazio (sem modos CRUD) |
+| `BtnBuscarClick()` | Chama `CarregarDados()` para recarregar tipos e impressoras |
+| `BtnSalvarClick()` | Encaminha para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` |
+
+O form j├í estava com `BtnEncerrarClick()` implementado desde a Fase 7. O config.prg j├í carrega automaticamente `sigprenvBO.prg` (via `*BO.prg`) e `Formsigprenv.prg` (via `operacionais\Form*.prg`), e o menu j├í tem a entrada configurada na barra 57 de `popMovimentos`.

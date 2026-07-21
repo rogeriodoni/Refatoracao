@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e do que j├í estava correto:
+
+- **[GRID-WITH] ConfigurarGrade()** ÔÇö `ColumnCount = 5` movido para **antes** do `WITH THIS.grd_4c_Dados`. Dentro do WITH o VFP9 n├úo cria os objetos `Column` imediatamente, causando "Unknown member COLUMN1". Os dois alertas do review referem-se ├á mesma ocorr├¬ncia no mesmo bloco.
+
+- **[CONTAINER-VISIVEL]** ÔÇö J├í estava correto: `CNT_4C_CABECALHO` j├í estava no `INLIST` das linhas 525-526, preservando o estado `Visible` do container e recursando nos seus filhos antes do `LOOP`. Nenhuma altera├º├úo necess├íria.

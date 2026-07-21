@@ -1,0 +1,18 @@
+﻿Os dois arquivos est├úo **completamente implementados**. Este form OPERACIONAL j├í tem todos os eventos necess├írios.
+
+A Fase 7 lista `BtnIncluirClick / BtnAlterarClick / BtnVisualizarClick / BtnExcluirClick`, mas esses s├úo eventos CRUD gen├®ricos que **n├úo se aplicam a este popup OPERACIONAL**. O `SIGPREOP` n├úo tem esses bot├Áes ÔÇö ├® um seletor modal, n├úo um cadastro.
+
+Os equivalentes corretos j├í est├úo implementados:
+
+| Evento legado | Implementado como |
+|---|---|
+| `cmdSair.Click` | `CmdConfirmarClick` Ô£ô |
+| `ck_Marca.Click` | `ChkMarcaClick` Ô£ô |
+| `Check1.Click` | `ChkSelecaoClick` Ô£ô |
+| `Check1.KeyPress` | `ChkSelecaoKeyPress` Ô£ô |
+| `grdOperacoes.AfterRowColChange` | `GrdAfterRowColChange` Ô£ô |
+
+**FormSigPrEop.prg** ÔÇö 602 linhas, totalmente funcional.  
+**SigPrEopBO.prg** ÔÇö 285 linhas, com `InicializarOperacoes`, `AlternarSelecao`, `MarcarDesmarcarTodos`, `PopularFilOper`.
+
+A migra├º├úo desta task est├í completa. O pr├│ximo passo (Fase 8) seria a integra├º├úo: registrar em `config.prg` e adicionar item no menu `popMovimentos`.

@@ -1,0 +1,3 @@
+﻿O c├│digo j├í est├í correto ÔÇö `ColumnCount` e `RecordSource` est├úo **fora** do WITH (linhas 616-617), e o WITH nas linhas 619-632 acessa apenas as colunas depois que elas foram criadas. N├úo h├í problema de [GRID-WITH] neste arquivo.
+
+O problema descrito n├úo existe neste c├│digo: `ColumnCount` e `RecordSource` s├úo atribu├¡dos via refer├¬ncia expl├¡cita (`loc_oGrid.ColumnCount` e `loc_oGrid.RecordSource`) antes do bloco `WITH loc_oGrid`. O arquivo est├í correto e n├úo precisa de altera├º├úo.

@@ -1,0 +1,13 @@
+﻿Fase 5 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**Mudan├ºas em `FormSigPrIbb.prg`:**
+
+1. **`InicializarForm()`** ÔÇö adicionada chamada `THIS.ConfigurarPaginaDados()` em ambos os ramos (modo `gb_4c_ValidandoUI` e modo normal), entre `ConfigurarPaginaLista()` e `MontarGrade()`/`TornarControlesVisiveis()`.
+
+2. **`ConfigurarPaginaLista()`** ÔÇö removidos `lbl_4c_Label3` e `obj_4c_GetLocals` (primeira metade do painel direito), que foram movidos para o novo m├®todo.
+
+3. **`ConfigurarPaginaDados()` (novo)** ÔÇö m├®todo PROTECTED que implementa a **primeira metade** do painel direito do form OPERACIONAL:
+   - `lbl_4c_Label3` ÔÇö Label "Local de Pagamento" (Top=211, Left=444)
+   - `obj_4c_GetLocals` ÔÇö EditBox com ControlSource condicional para `cursor_4c_Grade.CLocals`
+
+**Fase 6** adicionar├í a segunda metade: `lbl_4c_Label31`, `obj_4c_GetTxtCds` e `txt_4c_Total` (ainda em `ConfigurarPaginaLista()` temporariamente).

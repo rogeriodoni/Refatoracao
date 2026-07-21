@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. Adicionado `CarregarDoCursor(par_cCursorAlias)` que:
+
+- Aceita o nome do cursor como par├ómetro (default `"TmpDistrib"`)
+- Faz `SELECT (loc_cAlias)` antes de acessar os campos (padr├úo can├┤nico)
+- Mapeia todas as 15 colunas do TmpDistrib para as propriedades `this_*`
+- Trata `Retrabs` (INTEGER no cursor) corretamente para `this_lRetrabs` (LOGICAL)
+- `Inserir()`/`Atualizar()` n├úo foram adicionados pois este ├® um form OPERACIONAL somente-leitura ÔÇö n├úo h├í escrita no banco

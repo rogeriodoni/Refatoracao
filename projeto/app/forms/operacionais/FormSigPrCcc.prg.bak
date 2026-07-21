@@ -1,199 +1,170 @@
 *==============================================================================
-* FormSigPrCcc.prg - Rec" + CHR(225) + "lculo de Saldos (SIGPRCCC)
-* Form OPERACIONAL - Herda de FormBase
-* Legado: SIGPRCCC.SCX
-*
-* Pilares:
-*   UX   -> layout PIXEL-PERFECT identico ao legado (800px -> 1000px)
-*   BD   -> SigOpClU / SigMvCcr / SigMvHst / SigMvCab / SigMvItn
-*   CODE -> arquitetura em camadas (FormBase / SigPrCccBO)
+* FormSigPrCcc.prg - Recalculo de Saldos (SIGPRCCC)
+* Tipo: OPERACIONAL - layout flat customizado (sem PageFrame)
+* Migrado de: SIGPRCCC.SCX
+* Fase 8/8: COMPLETO - todos os metodos, eventos e integracao finalizados
 *==============================================================================
+
 DEFINE CLASS FormSigPrCcc AS FormBase
 
-    *-- Dimensoes (escala 1000/800 = 1.25 do original)
-    Width        = 1000
+    *-- Propriedades visuais (copiadas exatamente do original)
     Height       = 600
-
-    *-- Form sem barra de titulo (identico ao legado TitleBar=0)
+    Width        = 800
+    Caption      = "Rec" + CHR(225) + "lculo de Saldos"
+    AutoCenter   = .T.
+    BorderStyle  = 2
     TitleBar     = 0
-    ShowWindow = 1
-    WindowType = 1
+    DataSession  = 2
+    ShowWindow   = 1
+    WindowType   = 1
     ControlBox   = .F.
     Closable     = .F.
     MaxButton    = .F.
     MinButton    = .F.
     Movable      = .F.
-
-    *-- Aparencia
-    AutoCenter   = .T.
-    DataSession  = 2
-    ShowTips     = .T.
     ClipControls = .F.
-    BorderStyle  = 2
-    FontName     = "Tahoma"
-    FontSize     = 8
+    ShowTips     = .T.
+    KeyPreview   = .T.
 
-    *-- Business Object
+    *-- Estado / Negocio
     this_oBusinessObject = .NULL.
+    this_cMensagemErro   = ""
 
-    *--------------------------------------------------------------------------
+    *-- Largura dos containers flutuantes (para toggle Visible)
+    LarguraOpConta   = 536
+    LarguraOpEstoque = 536
+    LarguraOpCusto   = 536
+    LarguraOpCompra  = 536
+
+    *==========================================================================
     PROCEDURE Init()
-    *  DODEFAULT() chama FormBase.Init() -> THIS.InicializarForm()
-    *--------------------------------------------------------------------------
+    *==========================================================================
+        *-- DataSession=2 reseta SET DATE/CENTURY (regra 9.4) - corrigir antes de DODEFAULT
+        SET DATE TO BRITISH
+        SET CENTURY ON
         RETURN DODEFAULT()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE InicializarForm()
-    *  Cria toda a estrutura visual do form OPERACIONAL
-    *--------------------------------------------------------------------------
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarForm
+    *==========================================================================
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
+
         TRY
-            *-- Modo validacao UI: nao executa SQL
-            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+            THIS.this_oBusinessObject = CREATEOBJECT("SigPrCccBO")
+            IF VARTYPE(THIS.this_oBusinessObject) # "O"
+                MsgErro("Erro ao criar objeto de neg" + CHR(243) + "cio SigPrCcc.", "Erro")
+            ELSE
+                *-- Inicializa parametros do sistema (SigCdPam)
+                THIS.this_oBusinessObject.InicializarDados()
+
+                *-- Monta interface visual
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarControlesPrincipais()
+                THIS.ConfigurarContainerOpConta()
+                THIS.ConfigurarContainerOpEstoque()
+                THIS.ConfigurarContainerOpCusto()
+                THIS.ConfigurarContainerOpCompra()
+                THIS.TornarControlesVisiveis()
+                THIS.ConfigurarBINDEVENTs()
+
+                *-- Propagar titulo para labels do cabecalho
+                THIS.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Sombra.lbl_4c_Titulo.Caption = THIS.Caption
+
+                *-- Estado inicial do contador de registros
+                THIS.txt_4c_Registro.Value = 0
+
                 loc_lSucesso = .T.
             ENDIF
-
-            *-- Verificar conexao principal
-            IF gnConnHandle <= 0
-                MsgErro("Conex" + CHR(227) + "o com o banco de dados n" + CHR(227) + ;
-                        "o estabelecida.", "Erro de Conex" + CHR(227) + "o")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Criar Business Object
-            THIS.this_oBusinessObject = CREATEOBJECT("SigPrCccBO")
-            IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Falha ao criar objeto de neg" + CHR(243) + "cios.", "Erro")
-                loc_lSucesso = .F.
-            ENDIF
-
-            *-- Configuracao base do form (Picture, dimensoes, caption)
-            *-- Nome ConfigurarPageFrame mantido por convencao do pipeline mesmo
-            *-- nao havendo PageFrame neste form OPERACIONAL (layout flat).
-            THIS.ConfigurarPageFrame()
-
-            *-- Criar estrutura visual
-            THIS.ConfigurarCabecalho()
-            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
-            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-            THIS.ConfigurarCheckboxes()
-            THIS.ConfigurarBotoesPrincipais()
-            THIS.ConfigurarContaineresOpcoes()
-            THIS.ConfigurarPaginaDados()
-            THIS.ConfigurarBINDEVENTs()
-            THIS.ConfigurarRodape()
-
-            *-- Tornar controles visiveis (exceto containers de opcoes e LblEnd)
-            THIS.TornarControlesVisiveis(THIS)
-
-            *-- Aplicar estado inicial: checkboxes off, containers ocultos,
-            *   contador zerado, botao Processar desabilitado
-            THIS.ConfigurarPaginaLista()
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro FormSigPrCcc.InicializarForm")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-    *  Configuracao base do form OPERACIONAL (layout flat, sem PageFrame).
-    *  Ajusta Picture, Caption, dimensoes e centralizacao. Mantem o nome
-    *  ConfigurarPageFrame por convencao do pipeline de migracao.
-    *--------------------------------------------------------------------------
-        LOCAL loc_cImgFundo
-
-        *-- Titulo do form (para telemetria/tracing; TitleBar=0 nao mostra)
-        THIS.Caption = "Rec" + CHR(225) + "lculo de Saldos"
-
-        *-- Imagem de fundo do framework
-        loc_cImgFundo = gc_4c_CaminhoIcones + "new_background.jpg"
-        IF FILE(loc_cImgFundo)
-            THIS.Picture = loc_cImgFundo
-        ENDIF
-
-        *-- Reforca dimensoes canonicas (escala 1.25x do legado 800x600)
-        THIS.Width      = 1000
-        THIS.Height     = 600
-        THIS.AutoCenter = .T.
+    *==========================================================================
+    * ConfigurarPageFrame - OPERACIONAL: sem PageFrame, fundo via Picture
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPageFrame
+        THIS.Picture     = gc_4c_CaminhoBase + "..\..\..\Framework\imagens\new_background.jpg"
+        THIS.ClipControls = .F.
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarCabecalho()
-    *  Container cinza escuro com titulo do form
-    *--------------------------------------------------------------------------
-        THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH THIS.cnt_4c_Cabecalho
-            .Top         = 0
-            .Left        = 0
-            .Width       = 1000
-            .Height      = 80
-            .BackStyle   = 1
-            .BackColor   = RGB(100, 100, 100)
-            .BorderWidth = 0
-            .Visible     = .T.
-
+    *==========================================================================
+    * ConfigurarCabecalho - Container escuro com titulo (cntSombra original)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCabecalho
+        THIS.AddObject("cnt_4c_Sombra", "Container")
+        WITH THIS.cnt_4c_Sombra
+            .Visible    = .T.
+            .Top        = 0
+            .Left       = 0
+            .Width      = THIS.Width
+            .Height     = 80
+            .BorderWidth= 0
+            .BackColor  = RGB(100,100,100)
             .AddObject("lbl_4c_Sombra", "Label")
             WITH .lbl_4c_Sombra
-                .Top       = 18
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 40
-                .AutoSize  = .F.
-                .BackStyle = 0
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .ForeColor = RGB(0, 0, 0)
-                .Caption   = "Rec" + CHR(225) + "lculo de Saldos"
-                .Visible   = .T.
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .AutoSize      = .F.
+                .BackStyle     = 0
+                .Caption       = THIS.Caption
+                .Height        = 40
+                .Left          = 10
+                .Top           = 18
+                .Width         = THIS.Width
+                .ForeColor     = RGB(0,0,0)
             ENDWITH
-
             .AddObject("lbl_4c_Titulo", "Label")
             WITH .lbl_4c_Titulo
-                .Top       = 17
-                .Left      = 10
-                .Width     = THIS.Width
-                .Height    = 46
-                .AutoSize  = .F.
-                .BackStyle = 0
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 18
-                .ForeColor = RGB(255, 255, 255)
-                .Caption   = "Rec" + CHR(225) + "lculo de Saldos"
-                .Visible   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 18
+                .WordWrap   = .T.
+                .Alignment  = 0
+                .AutoSize   = .F.
+                .BackStyle  = 0
+                .Caption    = THIS.Caption
+                .Height     = 46
+                .Left       = 10
+                .Top        = 17
+                .Width      = THIS.Width
+                .ForeColor  = RGB(255,255,255)
             ENDWITH
         ENDWITH
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarCheckboxes()
-    *  Shape de fundo decorativo + 4 checkboxes de selecao de modulo
-    *  Posicoes escaladas 1.25x do original (800->1000)
-    *--------------------------------------------------------------------------
-        *-- Shape decorativo de fundo dos botoes de acao (direita)
+    *==========================================================================
+    * ConfigurarControlesPrincipais - Shape, CheckBoxes, Botoes, LblEnd, Registro
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarControlesPrincipais
+        *-- Shape decorativo (Shape1 original)
         THIS.AddObject("shp_4c_Shape1", "Shape")
         WITH THIS.shp_4c_Shape1
             .Top         = 7
-            .Left        = 871
+            .Left        = 697
             .Height      = 110
-            .Width       = 112
+            .Width       = 90
             .BackStyle   = 0
             .BorderStyle = 0
-            .BorderColor = RGB(136, 189, 188)
-            .Visible     = .T.
+            .BorderColor = RGB(136,189,188)
         ENDWITH
 
-        *-- CheckBox: Conta Corrente (original Left=350 -> 437)
+        *-- CheckBox C.C. (Conta original - Left=350)
         THIS.AddObject("chk_4c_Conta", "CheckBox")
         WITH THIS.chk_4c_Conta
             .Top           = 3
-            .Left          = 437
+            .Left          = 350
             .Height        = 75
             .Width         = 75
             .FontBold      = .T.
@@ -201,6 +172,8 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .AutoSize      = .F.
+            .Picture       = gc_4c_CaminhoIcones + "folder42.ico"
+            .DownPicture   = gc_4c_CaminhoIcones + "a_cash1.bmp"
             .Alignment     = 1
             .BackStyle     = 0
             .Caption       = "C.C."
@@ -208,19 +181,16 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .SpecialEffect = 0
             .Style         = 1
             .ToolTipText   = "Conta Corrente"
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
-            .Picture       = gc_4c_CaminhoIcones + "folder42.ico"
-            .DownPicture   = gc_4c_CaminhoIcones + "a_cash1.bmp"
+            .ForeColor     = RGB(90,90,90)
+            .BackColor     = RGB(255,255,255)
             .Themes        = .F.
-            .Visible       = .T.
         ENDWITH
 
-        *-- CheckBox: Estoque (original Left=425 -> 531)
+        *-- CheckBox Estoque (Estoque original - Left=425)
         THIS.AddObject("chk_4c_Estoque", "CheckBox")
         WITH THIS.chk_4c_Estoque
             .Top           = 3
-            .Left          = 531
+            .Left          = 425
             .Height        = 75
             .Width         = 75
             .FontBold      = .T.
@@ -228,25 +198,24 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .AutoSize      = .F.
+            .Picture       = gc_4c_CaminhoIcones + "folder22.ico"
+            .DownPicture   = gc_4c_CaminhoIcones + "a_diamd1.bmp"
             .Alignment     = 1
             .BackStyle     = 0
             .Caption       = "Estoque"
             .Value         = 0
             .SpecialEffect = 0
             .Style         = 1
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
-            .Picture       = gc_4c_CaminhoIcones + "folder22.ico"
-            .DownPicture   = gc_4c_CaminhoIcones + "a_diamd1.bmp"
+            .ForeColor     = RGB(90,90,90)
+            .BackColor     = RGB(255,255,255)
             .Themes        = .F.
-            .Visible       = .T.
         ENDWITH
 
-        *-- CheckBox: Custo de Produto (original Left=500 -> 625)
+        *-- CheckBox Custo (btnCusto original - Left=500)
         THIS.AddObject("chk_4c_BtnCusto", "CheckBox")
         WITH THIS.chk_4c_BtnCusto
             .Top           = 3
-            .Left          = 625
+            .Left          = 500
             .Height        = 75
             .Width         = 75
             .FontBold      = .T.
@@ -254,25 +223,24 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .AutoSize      = .F.
+            .Picture       = gc_4c_CaminhoIcones + "folder34.ico"
+            .DownPicture   = gc_4c_CaminhoIcones + "d_misc2.bmp"
             .Alignment     = 1
             .BackStyle     = 0
             .Caption       = "Custo"
             .Value         = 0
             .SpecialEffect = 0
             .Style         = 1
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
-            .Picture       = gc_4c_CaminhoIcones + "folder34.ico"
-            .DownPicture   = gc_4c_CaminhoIcones + "d_misc2.bmp"
+            .ForeColor     = RGB(90,90,90)
+            .BackColor     = RGB(255,255,255)
             .Themes        = .F.
-            .Visible       = .T.
         ENDWITH
 
-        *-- CheckBox: Ultima Compra (original Left=575 -> 718)
+        *-- CheckBox Ultima Compra (btnCompra original - Left=575)
         THIS.AddObject("chk_4c_BtnCompra", "CheckBox")
         WITH THIS.chk_4c_BtnCompra
             .Top           = 3
-            .Left          = 718
+            .Left          = 575
             .Height        = 75
             .Width         = 75
             .FontBold      = .T.
@@ -280,6 +248,8 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .AutoSize      = .F.
+            .Picture       = gc_4c_CaminhoIcones + "folder27.ico"
+            .DownPicture   = gc_4c_CaminhoIcones + "d_misc2.bmp"
             .Alignment     = 1
             .BackStyle     = 0
             .Caption       = CHR(218) + "lt. Compra"
@@ -287,1244 +257,761 @@ DEFINE CLASS FormSigPrCcc AS FormBase
             .SpecialEffect = 0
             .Style         = 1
             .ToolTipText   = CHR(218) + "ltima Compra"
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
-            .Picture       = gc_4c_CaminhoIcones + "folder27.ico"
-            .DownPicture   = gc_4c_CaminhoIcones + "d_misc2.bmp"
+            .ForeColor     = RGB(90,90,90)
+            .BackColor     = RGB(255,255,255)
             .Themes        = .F.
-            .Visible       = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarBotoesPrincipais()
-    *  Botoes Processar e Encerrar (original Left=650/725 -> 812/906)
-    *--------------------------------------------------------------------------
-        *-- Botao Processar (inicia desabilitado - habilita quando algum checkbox marcado)
-        THIS.AddObject("cmd_4c_Processar", "CommandButton")
-        WITH THIS.cmd_4c_Processar
-            .Top             = 3
-            .Left            = 812
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .Caption         = "Processar"
-            .Enabled         = .F.
-            .ToolTipText     = "Processar"
-            .SpecialEffect   = 0
-            .ForeColor       = RGB(90, 90, 90)
-            .BackColor       = RGB(255, 255, 255)
-            .Themes          = .T.
-            .WordWrap        = .T.
-            .Visible         = .T.
         ENDWITH
 
-        *-- Botao Encerrar (Cancel=.T. -> ESC fecha o form)
-        THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH THIS.cmd_4c_Encerrar
-            .Top           = 3
-            .Left          = 906
-            .Height        = 75
-            .Width         = 75
-            .FontBold      = .T.
-            .FontItalic    = .T.
+        *-- Botao Processar (Processa original - Left=650)
+        *-- Themes=.T. + DisabledPicture obrigatorio para standalone com Picture e Enabled=.F.
+        THIS.AddObject("cmd_4c_Processa", "CommandButton")
+        WITH THIS.cmd_4c_Processa
+            .Top            = 3
+            .Left           = 650
+            .Height         = 75
+            .Width          = 75
+            .FontBold       = .T.
+            .FontItalic     = .T.
+            .FontName       = "Tahoma"
+            .FontSize       = 8
+            .Picture        = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .DisabledPicture= gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+            .Caption        = "Processar"
+            .Enabled        = .F.
+            .SpecialEffect  = 0
+            .ForeColor      = RGB(90,90,90)
+            .BackColor      = RGB(255,255,255)
+            .Themes         = .T.
+            .ToolTipText    = "Processar"
+        ENDWITH
+
+        *-- Botao Encerrar/Cancela (Cancela original - Left=725, Cancel=.T.)
+        THIS.AddObject("cmd_4c_Cancela", "CommandButton")
+        WITH THIS.cmd_4c_Cancela
+            .Top            = 3
+            .Left           = 725
+            .Height         = 75
+            .Width          = 75
+            .FontBold       = .T.
+            .FontItalic     = .T.
+            .FontName       = "Tahoma"
+            .FontSize       = 8
+            .Picture        = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .DisabledPicture= gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Cancel         = .T.
+            .Caption        = "Encerrar"
+            .SpecialEffect  = 0
+            .ForeColor      = RGB(90,90,90)
+            .BackColor      = RGB(255,255,255)
+            .Themes         = .T.
+            .ToolTipText    = "[ESC] Sair"
+        ENDWITH
+
+        *-- Label "Processamento Concluido" (LblEnd - inicialmente invisivel)
+        THIS.AddObject("lbl_4c_LblEnd", "Label")
+        WITH THIS.lbl_4c_LblEnd
+            .AutoSize   = .T.
+            .FontBold   = .T.
+            .FontItalic = .F.
+            .FontName   = "Arial"
+            .FontSize   = 12
+            .WordWrap   = .F.
+            .Alignment  = 2
+            .BackStyle  = 0
+            .Caption    = "Processamento Conclu" + CHR(237) + "do"
+            .Height     = 22
+            .Left       = 361
+            .Top        = 545
+            .Width      = 205
+            .ForeColor  = RGB(255,0,0)
+            .Visible    = .F.
+        ENDWITH
+
+        *-- Label "Registros :" (Label1 original)
+        THIS.AddObject("lbl_4c_LblRegistros", "Label")
+        WITH THIS.lbl_4c_LblRegistros
+            .AutoSize   = .T.
+            .FontBold   = .T.
+            .FontItalic = .F.
+            .FontName   = "Tahoma"
+            .FontSize   = 8
+            .WordWrap   = .F.
+            .BackStyle  = 0
+            .Caption    = "Registros : "
+            .Height     = 15
+            .Left       = 171
+            .Top        = 547
+            .Width      = 65
+            .ForeColor  = RGB(90,90,90)
+        ENDWITH
+
+        *-- TextBox contador de registros (Get_Registro original)
+        THIS.AddObject("txt_4c_Registro", "TextBox")
+        WITH THIS.txt_4c_Registro
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .Picture       = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .Cancel        = .T.
-            .Caption       = "Encerrar"
-            .ToolTipText   = "[ESC] Sair"
-            .SpecialEffect = 0
-            .ForeColor     = RGB(90, 90, 90)
-            .BackColor     = RGB(255, 255, 255)
-            .Themes           = .T.
-            .WordWrap      = .T.
-            .Visible       = .T.
+            .Height        = 23
+            .InputMask     = "999,999,999"
+            .Left          = 238
+            .SpecialEffect = 1
+            .Top           = 543
+            .Width         = 93
+            .ReadOnly      = .T.
+            .Value         = 0
         ENDWITH
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarContaineresOpcoes()
-    *  4 containers de parametros - iniciam ocultos, toggled pelos checkboxes
-    *  Posicoes escaladas 1.25x: Left=139->173, Width=536->670
-    *--------------------------------------------------------------------------
-
-        *-- Container: Opcoes de Conta Corrente (original Top=114)
+    *==========================================================================
+    * ConfigurarContainerOpConta - Conta Corrente: empresa, grupo, conta, moeda, data
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarContainerOpConta
         THIS.AddObject("cnt_4c_OpConta", "Container")
         WITH THIS.cnt_4c_OpConta
             .Top           = 114
-            .Left          = 173
-            .Width         = 670
+            .Left          = 139
+            .Width         = THIS.LarguraOpConta
             .Height        = 81
             .BackStyle     = 0
             .BorderWidth   = 2
             .SpecialEffect = 2
-            .BackColor     = RGB(192, 192, 255)
-            .BorderColor   = RGB(90, 90, 90)
             .Visible       = .F.
-        ENDWITH
+            .BackColor     = RGB(192,192,255)
+            .BorderColor   = RGB(90,90,90)
 
-        *-- Container: Opcoes de Estoque (original Top=200)
+            .AddObject("lbl_4c_TituloOp", "Label")
+            WITH .lbl_4c_TituloOp
+                .AutoSize      = .T.
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontUnderline = .T.
+                .BackStyle     = 0
+                .Caption       = "Op" + CHR(231) + CHR(245) + "es de Conta Corrente"
+                .Left          = 171
+                .Top           = 2
+                .ForeColor     = RGB(90,90,90)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblEmpresa", "Label")
+            WITH .lbl_4c_LblEmpresa
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Empresa :"
+                .Height     = 15
+                .Left       = 16
+                .Top        = 23
+                .Width      = 57
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Empresa", "TextBox")
+            WITH .txt_4c_Empresa
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 75
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .Top           = 20
+                .Width         = 31
+                .ForeColor     = RGB(0,0,0)
+                .Value         = go_4c_Sistema.cCodEmpresa
+            ENDWITH
+
+            .AddObject("lbl_4c_LblGrupos", "Label")
+            WITH .lbl_4c_LblGrupos
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Grupo :"
+                .Height     = 15
+                .Left       = 122
+                .Top        = 24
+                .Width      = 42
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtGrupos", "TextBox")
+            WITH .txt_4c_TxtGrupos
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Format        = "K"
+                .Height        = 23
+                .Left          = 166
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .Top           = 20
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblContas", "Label")
+            WITH .lbl_4c_LblContas
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Conta :"
+                .Height     = 15
+                .Left       = 255
+                .Top        = 24
+                .Width      = 41
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtContas", "TextBox")
+            WITH .txt_4c_TxtContas
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Format        = "K"
+                .Height        = 23
+                .Left          = 298
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .Top           = 20
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblMoedas", "Label")
+            WITH .lbl_4c_LblMoedas
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Moeda :"
+                .Height     = 15
+                .Left       = 27
+                .Top        = 50
+                .Width      = 46
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtMoedas", "TextBox")
+            WITH .txt_4c_TxtMoedas
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Format        = "K"
+                .Height        = 23
+                .Left          = 75
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .Top           = 46
+                .Width         = 31
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblData", "Label")
+            WITH .lbl_4c_LblData
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "A partir de :"
+                .Height     = 15
+                .Left       = 121
+                .Top        = 50
+                .Width      = 68
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtData", "TextBox")
+            WITH .txt_4c_TxtData
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Format        = "D"
+                .Height        = 23
+                .Left          = 191
+                .SpecialEffect = 1
+                .Top           = 46
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+                .Value         = {}
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarContainerOpEstoque - Estoque: empresa, grupo, estoque, produto, desc, data
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarContainerOpEstoque
         THIS.AddObject("cnt_4c_OpEstoque", "Container")
         WITH THIS.cnt_4c_OpEstoque
             .Top           = 200
-            .Left          = 173
-            .Width         = 670
+            .Left          = 139
+            .Width         = THIS.LarguraOpEstoque
             .Height        = 143
             .BackStyle     = 0
             .BorderWidth   = 2
             .SpecialEffect = 2
-            .BackColor     = RGB(192, 192, 255)
-            .BorderColor   = RGB(90, 90, 90)
             .Visible       = .F.
-        ENDWITH
+            .BackColor     = RGB(192,192,255)
+            .BorderColor   = RGB(90,90,90)
 
-        *-- Container: Opcoes de Custo de Produto (original Top=349)
+            .AddObject("lbl_4c_TituloOp", "Label")
+            WITH .lbl_4c_TituloOp
+                .AutoSize      = .T.
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontUnderline = .T.
+                .BackStyle     = 0
+                .Caption       = "Op" + CHR(231) + CHR(245) + "es de Estoque"
+                .Left          = 182
+                .Top           = 2
+                .ForeColor     = RGB(90,90,90)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblEmpresa", "Label")
+            WITH .lbl_4c_LblEmpresa
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Empresa :"
+                .Height     = 15
+                .Left       = 31
+                .Top        = 15
+                .Width      = 57
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Empresa", "TextBox")
+            WITH .txt_4c_Empresa
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .Top           = 12
+                .Width         = 31
+                .ForeColor     = RGB(0,0,0)
+                .Value         = go_4c_Sistema.cCodEmpresa
+            ENDWITH
+
+            .AddObject("lbl_4c_LblGrupos", "Label")
+            WITH .lbl_4c_LblGrupos
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Grupo :"
+                .Left       = 46
+                .Top        = 40
+                .Width      = 42
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtGrupos", "TextBox")
+            WITH .txt_4c_TxtGrupos
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Format        = "K"
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .Top           = 37
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblEstoque", "Label")
+            WITH .lbl_4c_LblEstoque
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Estoque :"
+                .Height     = 15
+                .Left       = 35
+                .Top        = 65
+                .Width      = 53
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Estoque", "TextBox")
+            WITH .txt_4c_Estoque
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 10
+                .SpecialEffect = 1
+                .Top           = 62
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblProduto", "Label")
+            WITH .lbl_4c_LblProduto
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Produto :"
+                .Left       = 35
+                .Top        = 90
+                .Width      = 53
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Produto", "TextBox")
+            WITH .txt_4c_Produto
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 14
+                .SpecialEffect = 1
+                .Top           = 87
+                .Width         = 108
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+            .AddObject("txt_4c_Descricao", "TextBox")
+            WITH .txt_4c_Descricao
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 199
+                .MaxLength     = 40
+                .SpecialEffect = 1
+                .Top           = 87
+                .Width         = 327
+                .ForeColor     = RGB(0,0,0)
+                .ReadOnly      = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_LblData", "Label")
+            WITH .lbl_4c_LblData
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "A partir de :"
+                .Height     = 15
+                .Left       = 20
+                .Top        = 115
+                .Width      = 68
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtData", "TextBox")
+            WITH .txt_4c_TxtData
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Format        = "D"
+                .Height        = 23
+                .Left          = 90
+                .SpecialEffect = 1
+                .Top           = 112
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+                .Value         = {}
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarContainerOpCusto - Custo de Produto: empresa, produto, desc, data
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarContainerOpCusto
         THIS.AddObject("cnt_4c_OpCusto", "Container")
         WITH THIS.cnt_4c_OpCusto
             .Top           = 349
-            .Left          = 173
-            .Width         = 670
+            .Left          = 139
+            .Width         = THIS.LarguraOpCusto
             .Height        = 92
             .BackStyle     = 0
             .BorderWidth   = 2
             .SpecialEffect = 2
-            .BackColor     = RGB(192, 192, 255)
-            .BorderColor   = RGB(90, 90, 90)
             .Visible       = .F.
-        ENDWITH
+            .BackColor     = RGB(192,192,255)
+            .BorderColor   = RGB(90,90,90)
 
-        *-- Container: Opcoes de Ultima Compra (original Top=447)
+            .AddObject("lbl_4c_TituloOp", "Label")
+            WITH .lbl_4c_TituloOp
+                .AutoSize      = .T.
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontUnderline = .T.
+                .BackStyle     = 0
+                .Caption       = "Op" + CHR(231) + CHR(245) + "es de Custo de Produto"
+                .Left          = 155
+                .Top           = 2
+                .ForeColor     = RGB(90,90,90)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblEmpresa", "Label")
+            WITH .lbl_4c_LblEmpresa
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Empresa :"
+                .Height     = 15
+                .Left       = 31
+                .Top        = 14
+                .Width      = 57
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Empresa", "TextBox")
+            WITH .txt_4c_Empresa
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .Top           = 11
+                .Width         = 31
+                .ForeColor     = RGB(0,0,0)
+                .Value         = go_4c_Sistema.cCodEmpresa
+            ENDWITH
+
+            .AddObject("lbl_4c_LblProduto", "Label")
+            WITH .lbl_4c_LblProduto
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Produto :"
+                .Left       = 35
+                .Top        = 39
+                .Width      = 53
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Produto", "TextBox")
+            WITH .txt_4c_Produto
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 14
+                .SpecialEffect = 1
+                .Top           = 36
+                .Width         = 108
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+            .AddObject("txt_4c_Descricao", "TextBox")
+            WITH .txt_4c_Descricao
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 199
+                .MaxLength     = 40
+                .SpecialEffect = 1
+                .Top           = 36
+                .Width         = 327
+                .ForeColor     = RGB(0,0,0)
+                .ReadOnly      = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_LblData", "Label")
+            WITH .lbl_4c_LblData
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "A partir de :"
+                .Height     = 15
+                .Left       = 20
+                .Top        = 64
+                .Width      = 68
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtData", "TextBox")
+            WITH .txt_4c_TxtData
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Format        = "D"
+                .Height        = 23
+                .Left          = 90
+                .SpecialEffect = 1
+                .Top           = 61
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+                .Value         = {}
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarContainerOpCompra - Ultima Compra: empresa, produto, desc, data
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarContainerOpCompra
         THIS.AddObject("cnt_4c_OpCompra", "Container")
         WITH THIS.cnt_4c_OpCompra
             .Top           = 447
-            .Left          = 173
-            .Width         = 670
+            .Left          = 139
+            .Width         = THIS.LarguraOpCompra
             .Height        = 91
             .BackStyle     = 0
             .BorderWidth   = 2
             .SpecialEffect = 2
-            .BackColor     = RGB(192, 192, 255)
-            .BorderColor   = RGB(90, 90, 90)
             .Visible       = .F.
+            .BackColor     = RGB(192,192,255)
+            .BorderColor   = RGB(90,90,90)
+
+            .AddObject("lbl_4c_TituloOp", "Label")
+            WITH .lbl_4c_TituloOp
+                .AutoSize      = .T.
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontUnderline = .T.
+                .BackStyle     = 0
+                .Caption       = "Op" + CHR(231) + CHR(245) + "es de Ultima Compra do Produto/Cliente"
+                .Left          = 140
+                .Top           = 2
+                .ForeColor     = RGB(90,90,90)
+            ENDWITH
+
+            .AddObject("lbl_4c_LblEmpresa", "Label")
+            WITH .lbl_4c_LblEmpresa
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Empresa :"
+                .Height     = 15
+                .Left       = 31
+                .Top        = 14
+                .Width      = 57
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Empresa", "TextBox")
+            WITH .txt_4c_Empresa
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 3
+                .SpecialEffect = 1
+                .Top           = 10
+                .Width         = 31
+                .ForeColor     = RGB(0,0,0)
+                .Value         = go_4c_Sistema.cCodEmpresa
+            ENDWITH
+
+            .AddObject("lbl_4c_LblProduto", "Label")
+            WITH .lbl_4c_LblProduto
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "Produto :"
+                .Left       = 35
+                .Top        = 39
+                .Width      = 53
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_Produto", "TextBox")
+            WITH .txt_4c_Produto
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 90
+                .MaxLength     = 14
+                .SpecialEffect = 1
+                .Top           = 35
+                .Width         = 108
+                .ForeColor     = RGB(0,0,0)
+            ENDWITH
+            .AddObject("txt_4c_Descricao", "TextBox")
+            WITH .txt_4c_Descricao
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Height        = 23
+                .Left          = 199
+                .MaxLength     = 40
+                .SpecialEffect = 1
+                .Top           = 35
+                .Width         = 327
+                .ForeColor     = RGB(0,0,0)
+                .ReadOnly      = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_LblData", "Label")
+            WITH .lbl_4c_LblData
+                .AutoSize   = .T.
+                .FontBold   = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .BackStyle  = 0
+                .Caption    = "A partir de :"
+                .Height     = 15
+                .Left       = 20
+                .Top        = 64
+                .Width      = 68
+                .ForeColor  = RGB(90,90,90)
+            ENDWITH
+            .AddObject("txt_4c_TxtData", "TextBox")
+            WITH .txt_4c_TxtData
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .Alignment     = 3
+                .Format        = "D"
+                .Height        = 23
+                .Left          = 90
+                .SpecialEffect = 1
+                .Top           = 60
+                .Width         = 80
+                .ForeColor     = RGB(0,0,0)
+                .Value         = {}
+            ENDWITH
         ENDWITH
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarRodape()
-    *  Label "Registros:", contador numerico e label de conclusao
-    *  Posicoes escaladas 1.25x do original
-    *--------------------------------------------------------------------------
-        *-- Label "Registros : " (original Left=171 -> 213)
-        THIS.AddObject("lbl_4c_Registros", "Label")
-        WITH THIS.lbl_4c_Registros
-            .Top       = 547
-            .Left      = 213
-            .Width     = 65
-            .Height    = 15
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(90, 90, 90)
-            .Caption   = "Registros : "
-            .Visible   = .T.
-        ENDWITH
+    *==========================================================================
+    * TornarControlesVisiveis - torna controles visiveis exceto containers
+    * flutuantes que devem comecar ocultos (OpConta, OpEstoque, OpCusto, OpCompra)
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_i, loc_oControl, loc_cNome
 
-        *-- TextBox contador (original Left=238 -> 297, Width=93 -> 116)
-        *  ReadOnly: legado usa When=Return .F. para impedir foco
-        THIS.AddObject("txt_4c_Registro", "TextBox")
-        WITH THIS.txt_4c_Registro
-            .Top           = 543
-            .Left          = 297
-            .Width         = 116
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .InputMask     = "999,999,999"
-            .SpecialEffect = 1
-            .ForeColor     = RGB(0, 0, 0)
-            .Value         = 0
-            .ReadOnly      = .T.
-            .TabStop       = .F.
-            .Visible       = .T.
-        ENDWITH
-
-        *-- Label conclusao (oculto, exibido ao terminar processamento)
-        *  original Left=361 -> 451, Width=205 -> 256
-        THIS.AddObject("lbl_4c_LblEnd", "Label")
-        WITH THIS.lbl_4c_LblEnd
-            .Top       = 545
-            .Left      = 451
-            .Width     = 256
-            .Height    = 22
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Arial"
-            .FontSize  = 12
-            .Alignment = 2
-            .ForeColor = RGB(255, 0, 0)
-            .Caption   = "Processamento Conclu" + CHR(237) + "do"
-            .Visible   = .F.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarConteudoOpConta()
-    *  Sub-controles de cnt_4c_OpConta (Opcoes Conta Corrente)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oCnt
-        loc_oCnt = THIS.cnt_4c_OpConta
-
-        loc_oCnt.AddObject("lbl_4c_TituloConta", "Label")
-        WITH loc_oCnt.lbl_4c_TituloConta
-            .Top       = 2
-            .Left      = 213
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(0, 0, 128)
-            .Caption   = "Op" + CHR(231) + CHR(245) + "es de Conta Corrente"
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_EmpresaConta", "Label")
-        WITH loc_oCnt.lbl_4c_EmpresaConta
-            .Top       = 23
-            .Left      = 20
-            .Width     = 71
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Empresa :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_EmpresaConta", "TextBox")
-        WITH loc_oCnt.txt_4c_EmpresaConta
-            .Top       = 20
-            .Left      = 93
-            .Width     = 38
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_GruposConta", "Label")
-        WITH loc_oCnt.lbl_4c_GruposConta
-            .Top       = 24
-            .Left      = 152
-            .Width     = 52
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Grupo :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_GruposConta", "TextBox")
-        WITH loc_oCnt.txt_4c_GruposConta
-            .Top       = 20
-            .Left      = 207
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_ContasConta", "Label")
-        WITH loc_oCnt.lbl_4c_ContasConta
-            .Top       = 24
-            .Left      = 318
-            .Width     = 51
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Conta :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_ContasConta", "TextBox")
-        WITH loc_oCnt.txt_4c_ContasConta
-            .Top       = 20
-            .Left      = 372
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_MoedasConta", "Label")
-        WITH loc_oCnt.lbl_4c_MoedasConta
-            .Top       = 50
-            .Left      = 33
-            .Width     = 57
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Moeda :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_MoedasConta", "TextBox")
-        WITH loc_oCnt.txt_4c_MoedasConta
-            .Top       = 46
-            .Left      = 93
-            .Width     = 38
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_DataConta", "Label")
-        WITH loc_oCnt.lbl_4c_DataConta
-            .Top       = 50
-            .Left      = 151
-            .Width     = 85
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "A partir de :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DataConta", "TextBox")
-        WITH loc_oCnt.txt_4c_DataConta
-            .Top       = 46
-            .Left      = 238
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = {}
-            .Visible   = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarConteudoOpEstoque()
-    *  Sub-controles de cnt_4c_OpEstoque (Opcoes de Estoque)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oCnt
-        loc_oCnt = THIS.cnt_4c_OpEstoque
-
-        loc_oCnt.AddObject("lbl_4c_TituloEst", "Label")
-        WITH loc_oCnt.lbl_4c_TituloEst
-            .Top       = 2
-            .Left      = 227
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(0, 0, 128)
-            .Caption   = "Op" + CHR(231) + CHR(245) + "es de Estoque"
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_EmpresaEst", "Label")
-        WITH loc_oCnt.lbl_4c_EmpresaEst
-            .Top       = 15
-            .Left      = 38
-            .Width     = 71
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Empresa :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_EmpresaEst", "TextBox")
-        WITH loc_oCnt.txt_4c_EmpresaEst
-            .Top       = 12
-            .Left      = 112
-            .Width     = 38
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_GruposEst", "Label")
-        WITH loc_oCnt.lbl_4c_GruposEst
-            .Top       = 40
-            .Left      = 57
-            .Width     = 52
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Grupo :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_GruposEst", "TextBox")
-        WITH loc_oCnt.txt_4c_GruposEst
-            .Top       = 37
-            .Left      = 112
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_EstoqueEst", "Label")
-        WITH loc_oCnt.lbl_4c_EstoqueEst
-            .Top       = 65
-            .Left      = 43
-            .Width     = 66
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Estoque :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_EstoqueEst", "TextBox")
-        WITH loc_oCnt.txt_4c_EstoqueEst
-            .Top       = 62
-            .Left      = 112
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_ProdutoEst", "Label")
-        WITH loc_oCnt.lbl_4c_ProdutoEst
-            .Top       = 90
-            .Left      = 43
-            .Width     = 66
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Produto :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_ProdutoEst", "TextBox")
-        WITH loc_oCnt.txt_4c_ProdutoEst
-            .Top       = 87
-            .Left      = 112
-            .Width     = 135
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DescsEst", "TextBox")
-        WITH loc_oCnt.txt_4c_DescsEst
-            .Top       = 87
-            .Left      = 248
-            .Width     = 408
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_DataEst", "Label")
-        WITH loc_oCnt.lbl_4c_DataEst
-            .Top       = 115
-            .Left      = 25
-            .Width     = 85
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "A partir de :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DataEst", "TextBox")
-        WITH loc_oCnt.txt_4c_DataEst
-            .Top       = 112
-            .Left      = 112
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = {}
-            .Visible   = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarConteudoOpCusto()
-    *  Sub-controles de cnt_4c_OpCusto (Opcoes de Custo de Produto)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oCnt
-        loc_oCnt = THIS.cnt_4c_OpCusto
-
-        loc_oCnt.AddObject("lbl_4c_TituloCusto", "Label")
-        WITH loc_oCnt.lbl_4c_TituloCusto
-            .Top       = 2
-            .Left      = 193
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(0, 0, 128)
-            .Caption   = "Op" + CHR(231) + CHR(245) + "es de Custo de Produto"
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_EmpresaCusto", "Label")
-        WITH loc_oCnt.lbl_4c_EmpresaCusto
-            .Top       = 14
-            .Left      = 38
-            .Width     = 71
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Empresa :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_EmpresaCusto", "TextBox")
-        WITH loc_oCnt.txt_4c_EmpresaCusto
-            .Top       = 11
-            .Left      = 112
-            .Width     = 38
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_ProdutoCusto", "Label")
-        WITH loc_oCnt.lbl_4c_ProdutoCusto
-            .Top       = 39
-            .Left      = 43
-            .Width     = 66
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Produto :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_ProdutoCusto", "TextBox")
-        WITH loc_oCnt.txt_4c_ProdutoCusto
-            .Top       = 36
-            .Left      = 112
-            .Width     = 135
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DescsCusto", "TextBox")
-        WITH loc_oCnt.txt_4c_DescsCusto
-            .Top       = 36
-            .Left      = 248
-            .Width     = 408
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_DataCusto", "Label")
-        WITH loc_oCnt.lbl_4c_DataCusto
-            .Top       = 64
-            .Left      = 25
-            .Width     = 85
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "A partir de :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DataCusto", "TextBox")
-        WITH loc_oCnt.txt_4c_DataCusto
-            .Top       = 61
-            .Left      = 112
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = {}
-            .Visible   = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarConteudoOpCompra()
-    *  Sub-controles de cnt_4c_OpCompra (Opcoes de Ultima Compra)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oCnt
-        loc_oCnt = THIS.cnt_4c_OpCompra
-
-        loc_oCnt.AddObject("lbl_4c_TituloCompra", "Label")
-        WITH loc_oCnt.lbl_4c_TituloCompra
-            .Top       = 2
-            .Left      = 175
-            .AutoSize  = .T.
-            .BackStyle = 0
-            .FontBold  = .T.
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(0, 0, 128)
-            .Caption   = "Op" + CHR(231) + CHR(245) + "es de " + CHR(218) + "ltima Compra do Produto/Cliente"
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_EmpresaCompra", "Label")
-        WITH loc_oCnt.lbl_4c_EmpresaCompra
-            .Top       = 14
-            .Left      = 38
-            .Width     = 71
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Empresa :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_EmpresaCompra", "TextBox")
-        WITH loc_oCnt.txt_4c_EmpresaCompra
-            .Top       = 10
-            .Left      = 112
-            .Width     = 38
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_ProdutoCompra", "Label")
-        WITH loc_oCnt.lbl_4c_ProdutoCompra
-            .Top       = 39
-            .Left      = 43
-            .Width     = 66
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "Produto :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_ProdutoCompra", "TextBox")
-        WITH loc_oCnt.txt_4c_ProdutoCompra
-            .Top       = 35
-            .Left      = 112
-            .Width     = 135
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DescsCompra", "TextBox")
-        WITH loc_oCnt.txt_4c_DescsCompra
-            .Top       = 35
-            .Left      = 248
-            .Width     = 408
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = ""
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oCnt.AddObject("lbl_4c_DataCompra", "Label")
-        WITH loc_oCnt.lbl_4c_DataCompra
-            .Top       = 64
-            .Left      = 25
-            .Width     = 85
-            .Height    = 15
-            .AutoSize  = .F.
-            .BackStyle = 0
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Caption   = "A partir de :"
-            .Visible   = .T.
-        ENDWITH
-        loc_oCnt.AddObject("txt_4c_DataCompra", "TextBox")
-        WITH loc_oCnt.txt_4c_DataCompra
-            .Top       = 60
-            .Left      = 112
-            .Width     = 100
-            .Height    = 23
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .Value     = {}
-            .Visible   = .T.
-        ENDWITH
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarBINDEVENTs()
-    *--------------------------------------------------------------------------
-        BINDEVENT(THIS.chk_4c_Conta,     "Click", THIS, "ChkContaClick")
-        BINDEVENT(THIS.chk_4c_Estoque,   "Click", THIS, "ChkEstoqueClick")
-        BINDEVENT(THIS.chk_4c_BtnCusto,  "Click", THIS, "ChkBtnCustoClick")
-        BINDEVENT(THIS.chk_4c_BtnCompra, "Click", THIS, "ChkBtnCompraClick")
-
-        BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "CmdProcessarClick")
-        BINDEVENT(THIS.cmd_4c_Encerrar,  "Click", THIS, "CmdEncerrarClick")
-
-        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta, "KeyPress", THIS, "TxtEmpresaContaKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta, "DblClick", THIS, "TxtEmpresaContaDblClick")
-        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_MoedasConta,  "KeyPress", THIS, "TxtMoedasContaKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_MoedasConta,  "DblClick", THIS, "TxtMoedasContaDblClick")
-
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst, "KeyPress", THIS, "TxtEmpresaEstKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst, "DblClick", THIS, "TxtEmpresaEstDblClick")
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, "KeyPress", THIS, "TxtProdutoEstKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, "DblClick", THIS, "TxtProdutoEstDblClick")
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_DescsEst,   "KeyPress", THIS, "TxtDescsEstKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_DescsEst,   "DblClick", THIS, "TxtDescsEstDblClick")
-
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto, "KeyPress", THIS, "TxtEmpresaCustoKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto, "DblClick", THIS, "TxtEmpresaCustoDblClick")
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, "KeyPress", THIS, "TxtProdutoCustoKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, "DblClick", THIS, "TxtProdutoCustoDblClick")
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_DescsCusto,   "KeyPress", THIS, "TxtDescsCustoKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_DescsCusto,   "DblClick", THIS, "TxtDescsCustoDblClick")
-
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra, "KeyPress", THIS, "TxtEmpresaCompraKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra, "DblClick", THIS, "TxtEmpresaCompraDblClick")
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, "KeyPress", THIS, "TxtProdutoCompraKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, "DblClick", THIS, "TxtProdutoCompraDblClick")
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_DescsCompra,   "KeyPress", THIS, "TxtDescsCompraKeyPress")
-        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_DescsCompra,   "DblClick", THIS, "TxtDescsCompraDblClick")
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AtualizarBotaoProcessar()
-    *--------------------------------------------------------------------------
-        THIS.cmd_4c_Processar.Enabled = (THIS.chk_4c_Conta.Value     = 1 OR ;
-                                         THIS.chk_4c_Estoque.Value   = 1 OR ;
-                                         THIS.chk_4c_BtnCusto.Value  = 1 OR ;
-                                         THIS.chk_4c_BtnCompra.Value = 1)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-    *  Reset do estado inicial (equivalente a Page1/LISTA em forms CRUD,
-    *  adaptado para o form OPERACIONAL flat): reseta checkboxes de selecao
-    *  de modulos, oculta containers de opcoes, esconde label de conclusao
-    *  e zera contador de registros processados.
-    *--------------------------------------------------------------------------
-        *-- Checkboxes de selecao de modulos: desmarcados
-        THIS.chk_4c_Conta.Value       = 0
-        THIS.chk_4c_Estoque.Value     = 0
-        THIS.chk_4c_BtnCusto.Value    = 0
-        THIS.chk_4c_BtnCompra.Value   = 0
-
-        *-- Containers de opcoes ocultos (togglados pelos checkboxes)
-        THIS.cnt_4c_OpConta.Visible   = .F.
-        THIS.cnt_4c_OpEstoque.Visible = .F.
-        THIS.cnt_4c_OpCusto.Visible   = .F.
-        THIS.cnt_4c_OpCompra.Visible  = .F.
-
-        *-- Rodape: label de conclusao oculto e contador zerado
-        THIS.lbl_4c_LblEnd.Visible    = .F.
-        THIS.txt_4c_Registro.Value    = 0
-
-        *-- Botao Processar inicia desabilitado (nenhum modulo selecionado)
-        THIS.AtualizarBotaoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-    *  Fachada que agrupa a construcao dos "campos de dados" do form OPERACIONAL.
-    *  Este form nao possui PageFrame CRUD; a entrada de parametros pelo usuario
-    *  ocorre dentro dos 4 containers flutuantes de opcoes (Conta Corrente,
-    *  Estoque, Custo, Ultima Compra), cada um com seus TextBoxes de empresa,
-    *  grupo, conta, moeda, produto, descricao e data. Esta rotina cria todos
-    *  esses campos de entrada, agrupando as chamadas ConfigurarConteudoOp*.
-    *  Equivale, na semantica CRUD, ao "Page2 Dados" onde o usuario preenche
-    *  os campos para a operacao.
-    *--------------------------------------------------------------------------
-        *-- Container OpConta: Empresa, Grupo, Conta, Moeda, Data
-        THIS.ConfigurarConteudoOpConta()
-
-        *-- Container OpEstoque: Empresa, Grupo, Estoque, Produto, Descricao, Data
-        THIS.ConfigurarConteudoOpEstoque()
-
-        *-- Container OpCusto: Empresa, Produto, Descricao, Data
-        THIS.ConfigurarConteudoOpCusto()
-
-        *-- Container OpCompra: Empresa, Produto, Descricao, Data
-        THIS.ConfigurarConteudoOpCompra()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-    *  Alterna entre modos operacionais (adaptacao do padrao AlternarPagina
-    *  dos forms CRUD para o form OPERACIONAL flat):
-    *     par_nPagina = 1 -> Modo SELECAO: usuario escolhe modulos e opcoes
-    *     par_nPagina = 2 -> Modo PROCESSAMENTO: controles bloqueados
-    *--------------------------------------------------------------------------
-        DO CASE
-        CASE par_nPagina = 2
-            *-- Modo PROCESSAMENTO: bloqueia todos os controles
-            THIS.chk_4c_Conta.Enabled     = .F.
-            THIS.chk_4c_Estoque.Enabled   = .F.
-            THIS.chk_4c_BtnCusto.Enabled  = .F.
-            THIS.chk_4c_BtnCompra.Enabled = .F.
-            THIS.cmd_4c_Processar.Enabled = .F.
-            THIS.cmd_4c_Encerrar.Enabled  = .F.
-            THIS.lbl_4c_LblEnd.Visible    = .F.
-            THIS.txt_4c_Registro.Value    = 0
-        OTHERWISE
-            *-- Modo SELECAO (par_nPagina = 1 ou omitido)
-            THIS.chk_4c_Conta.Enabled     = .T.
-            THIS.chk_4c_Estoque.Enabled   = .T.
-            THIS.chk_4c_BtnCusto.Enabled  = .T.
-            THIS.chk_4c_BtnCompra.Enabled = .T.
-            THIS.cmd_4c_Encerrar.Enabled  = .T.
-            THIS.AtualizarBotaoProcessar()
-        ENDCASE
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkContaClick()
-    *--------------------------------------------------------------------------
-        THIS.cnt_4c_OpConta.Visible = (THIS.chk_4c_Conta.Value = 1)
-        THIS.AtualizarBotaoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkEstoqueClick()
-    *--------------------------------------------------------------------------
-        THIS.cnt_4c_OpEstoque.Visible = (THIS.chk_4c_Estoque.Value = 1)
-        THIS.AtualizarBotaoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkBtnCustoClick()
-    *--------------------------------------------------------------------------
-        THIS.cnt_4c_OpCusto.Visible = (THIS.chk_4c_BtnCusto.Value = 1)
-        THIS.AtualizarBotaoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE ChkBtnCompraClick()
-    *--------------------------------------------------------------------------
-        THIS.cnt_4c_OpCompra.Visible = (THIS.chk_4c_BtnCompra.Value = 1)
-        THIS.AtualizarBotaoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE CmdProcessarClick()
-    *--------------------------------------------------------------------------
-        LOCAL loc_lSucesso, loc_oBO, loc_oErro
-        loc_oBO      = THIS.this_oBusinessObject
-        loc_lSucesso = .F.
-
-        loc_oBO.this_lProcessarConta   = (THIS.chk_4c_Conta.Value     = 1)
-        loc_oBO.this_lProcessarEstoque = (THIS.chk_4c_Estoque.Value   = 1)
-        loc_oBO.this_lProcessarCusto   = (THIS.chk_4c_BtnCusto.Value  = 1)
-        loc_oBO.this_lProcessarCompra  = (THIS.chk_4c_BtnCompra.Value = 1)
-
-        IF loc_oBO.this_lProcessarConta
-            loc_oBO.this_cEmpConta    = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta.Value)
-            loc_oBO.this_cGruposConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_GruposConta.Value)
-            loc_oBO.this_cContasConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_ContasConta.Value)
-            loc_oBO.this_cMoedasConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_MoedasConta.Value)
-            loc_oBO.this_dDataConta   = THIS.cnt_4c_OpConta.txt_4c_DataConta.Value
-        ENDIF
-        IF loc_oBO.this_lProcessarEstoque
-            loc_oBO.this_cEmpEstoque       = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst.Value)
-            loc_oBO.this_cGruposEstoque    = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_GruposEst.Value)
-            loc_oBO.this_cEstoqueEstoque   = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_EstoqueEst.Value)
-            loc_oBO.this_cProdutoEstoque   = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst.Value)
-            loc_oBO.this_cDescricaoEstoque = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_DescsEst.Value)
-            loc_oBO.this_dDataEstoque      = THIS.cnt_4c_OpEstoque.txt_4c_DataEst.Value
-        ENDIF
-        IF loc_oBO.this_lProcessarCusto
-            loc_oBO.this_cEmpCusto       = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto.Value)
-            loc_oBO.this_cProdutoCusto   = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto.Value)
-            loc_oBO.this_cDescricaoCusto = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_DescsCusto.Value)
-            loc_oBO.this_dDataCusto      = THIS.cnt_4c_OpCusto.txt_4c_DataCusto.Value
-        ENDIF
-        IF loc_oBO.this_lProcessarCompra
-            loc_oBO.this_cEmpCompra       = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra.Value)
-            loc_oBO.this_cProdutoCompra   = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra.Value)
-            loc_oBO.this_cDescricaoCompra = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_DescsCompra.Value)
-            loc_oBO.this_dDataCompra      = THIS.cnt_4c_OpCompra.txt_4c_DataCompra.Value
+        IF PCOUNT() = 0
+            par_oContainer = THIS
         ENDIF
 
-        *-- Modo PROCESSAMENTO: bloqueia controles durante execucao
-        THIS.AlternarPagina(2)
-
-        TRY
-            loc_lSucesso = loc_oBO.Processar(THIS)
-            THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
-            IF loc_lSucesso
-                THIS.lbl_4c_LblEnd.Visible = .T.
-                MsgInfo("Processamento conclu" + CHR(237) + "do com sucesso.", ;
-                        "Rec" + CHR(225) + "lculo de Saldos")
-            ELSE
-                MsgAviso("Processamento conclu" + CHR(237) + "do com erros.", ;
-                         "Rec" + CHR(225) + "lculo de Saldos")
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao Processar")
-        ENDTRY
-
-        *-- Volta para modo SELECAO
-        THIS.AlternarPagina(1)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE CmdEncerrarClick()
-    *--------------------------------------------------------------------------
-        THIS.Release()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupEmpresa(par_oTxt)
-    *  Lookup generico de empresa (SigCdEmp -> Cemps, Razas)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oForm, loc_cValor
-        TRY
-            loc_cValor = ALLTRIM(par_oTxt.Value)
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdEmp", "cursor_4c_BuscaEmp", "Cemps", loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Empresa")
-            IF ISNULL(loc_oForm)
-                RETURN
-            ENDIF
-            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
-                par_oTxt.Value = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
-            ELSE
-                IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("Cemps", "XXXXXX", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou
-                    par_oTxt.Value = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
-                ENDIF
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaEmp")
-                USE IN cursor_4c_BuscaEmp
-            ENDIF
-            loc_oForm.Release()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupProduto(par_oTxtCod, par_oTxtDesc)
-    *  Lookup de produto por codigo (SigCdPro -> CPros, DPros)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oForm, loc_cValor
-        TRY
-            loc_cValor = ALLTRIM(par_oTxtCod.Value)
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdPro", "cursor_4c_BuscaPro", "CPros", loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Produto")
-            IF ISNULL(loc_oForm)
-                RETURN
-            ENDIF
-            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
-                par_oTxtCod.Value  = ALLTRIM(cursor_4c_BuscaPro.CPros)
-                par_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaPro.DPros)
-            ELSE
-                IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("CPros", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("DPros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou
-                    par_oTxtCod.Value  = ALLTRIM(cursor_4c_BuscaPro.CPros)
-                    par_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaPro.DPros)
-                ENDIF
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaPro")
-                USE IN cursor_4c_BuscaPro
-            ENDIF
-            loc_oForm.Release()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupDescricao(par_oTxtCod, par_oTxtDesc)
-    *  Lookup de produto por descricao (SigCdPro -> DPros, CPros)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oForm, loc_cValor
-        TRY
-            loc_cValor = ALLTRIM(par_oTxtDesc.Value)
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdPro", "cursor_4c_BuscaDesc", "DPros", loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Produto")
-            IF ISNULL(loc_oForm)
-                RETURN
-            ENDIF
-            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
-                par_oTxtCod.Value  = ALLTRIM(cursor_4c_BuscaDesc.CPros)
-                par_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaDesc.DPros)
-            ELSE
-                IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("DPros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.mAddColuna("CPros", "", "C" + CHR(243) + "digo")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou
-                    par_oTxtCod.Value  = ALLTRIM(cursor_4c_BuscaDesc.CPros)
-                    par_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaDesc.DPros)
-                ENDIF
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaDesc")
-                USE IN cursor_4c_BuscaDesc
-            ENDIF
-            loc_oForm.Release()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupMoeda(par_oTxt)
-    *  Lookup de moeda (SigCdMoe -> Cmoes, Dmoes)
-    *--------------------------------------------------------------------------
-        LOCAL loc_oForm, loc_cValor
-        TRY
-            loc_cValor = ALLTRIM(par_oTxt.Value)
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoe", "Cmoes", loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Moeda")
-            IF ISNULL(loc_oForm)
-                RETURN
-            ENDIF
-            IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
-                par_oTxt.Value = ALLTRIM(cursor_4c_BuscaMoe.Cmoes)
-            ELSE
-                IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("Cmoes", "", "Moe")
-                loc_oForm.mAddColuna("Dmoes", "", "Nome")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou
-                    par_oTxt.Value = ALLTRIM(cursor_4c_BuscaMoe.Cmoes)
-                ENDIF
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaMoe")
-                USE IN cursor_4c_BuscaMoe
-            ENDIF
-            loc_oForm.Release()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--- Handlers: cnt_4c_OpConta ---
-    PROCEDURE TxtEmpresaContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtEmpresaContaDblClick()
-        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta)
-    ENDPROC
-
-    PROCEDURE TxtMoedasContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupMoeda(THIS.cnt_4c_OpConta.txt_4c_MoedasConta)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtMoedasContaDblClick()
-        THIS.AbrirLookupMoeda(THIS.cnt_4c_OpConta.txt_4c_MoedasConta)
-    ENDPROC
-
-    *--- Handlers: cnt_4c_OpEstoque ---
-    PROCEDURE TxtEmpresaEstKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtEmpresaEstDblClick()
-        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst)
-    ENDPROC
-
-    PROCEDURE TxtProdutoEstKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupProduto(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, ;
-                                    THIS.cnt_4c_OpEstoque.txt_4c_DescsEst)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtProdutoEstDblClick()
-        THIS.AbrirLookupProduto(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, ;
-                                THIS.cnt_4c_OpEstoque.txt_4c_DescsEst)
-    ENDPROC
-
-    PROCEDURE TxtDescsEstKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            IF EMPTY(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst.Value)
-                THIS.AbrirLookupDescricao(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, ;
-                                          THIS.cnt_4c_OpEstoque.txt_4c_DescsEst)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDescsEstDblClick()
-        IF EMPTY(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst.Value)
-            THIS.AbrirLookupDescricao(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst, ;
-                                      THIS.cnt_4c_OpEstoque.txt_4c_DescsEst)
-        ENDIF
-    ENDPROC
-
-    *--- Handlers: cnt_4c_OpCusto ---
-    PROCEDURE TxtEmpresaCustoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtEmpresaCustoDblClick()
-        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto)
-    ENDPROC
-
-    PROCEDURE TxtProdutoCustoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupProduto(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, ;
-                                    THIS.cnt_4c_OpCusto.txt_4c_DescsCusto)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtProdutoCustoDblClick()
-        THIS.AbrirLookupProduto(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, ;
-                                THIS.cnt_4c_OpCusto.txt_4c_DescsCusto)
-    ENDPROC
-
-    PROCEDURE TxtDescsCustoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            IF EMPTY(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto.Value)
-                THIS.AbrirLookupDescricao(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, ;
-                                          THIS.cnt_4c_OpCusto.txt_4c_DescsCusto)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDescsCustoDblClick()
-        IF EMPTY(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto.Value)
-            THIS.AbrirLookupDescricao(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto, ;
-                                      THIS.cnt_4c_OpCusto.txt_4c_DescsCusto)
-        ENDIF
-    ENDPROC
-
-    *--- Handlers: cnt_4c_OpCompra ---
-    PROCEDURE TxtEmpresaCompraKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtEmpresaCompraDblClick()
-        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra)
-    ENDPROC
-
-    PROCEDURE TxtProdutoCompraKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            THIS.AbrirLookupProduto(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, ;
-                                    THIS.cnt_4c_OpCompra.txt_4c_DescsCompra)
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtProdutoCompraDblClick()
-        THIS.AbrirLookupProduto(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, ;
-                                THIS.cnt_4c_OpCompra.txt_4c_DescsCompra)
-    ENDPROC
-
-    PROCEDURE TxtDescsCompraKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
-            IF EMPTY(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra.Value)
-                THIS.AbrirLookupDescricao(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, ;
-                                          THIS.cnt_4c_OpCompra.txt_4c_DescsCompra)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE TxtDescsCompraDblClick()
-        IF EMPTY(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra.Value)
-            THIS.AbrirLookupDescricao(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra, ;
-                                      THIS.cnt_4c_OpCompra.txt_4c_DescsCompra)
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE TornarControlesVisiveis(par_oContainer)
-    *  Torna controles visiveis recursivamente.
-    *  EXCECOES (permanecem ocultos apos InicializarForm):
-    *    - cnt_4c_OpConta/OpEstoque/OpCusto/OpCompra: toggled pelos checkboxes
-    *    - lbl_4c_LblEnd: exibido apenas ao concluir processamento
-    *--------------------------------------------------------------------------
-        LOCAL loc_i, loc_p, loc_oControl
         FOR loc_i = 1 TO par_oContainer.ControlCount
             loc_oControl = par_oContainer.Controls(loc_i)
-            IF VARTYPE(loc_oControl) != "O"
+            IF VARTYPE(loc_oControl) # "O"
                 LOOP
             ENDIF
 
-            *-- Containers gerenciados: nao forcar .Visible via este metodo
-            *  - CNT_4C_CABECALHO: visivel mas recursao ja garante filhos visiveis
-            *  - CNT_4C_OPCONTA/OPESTOQUE/OPCUSTO/OPCOMPRA: toggled pelos checkboxes (inicia .F.)
-            *  - LBL_4C_LBLEND: exibido apenas ao concluir processamento (inicia .F.)
-            IF INLIST(UPPER(loc_oControl.Name), ;
-                "CNT_4C_CABECALHO", ;
-                "CNT_4C_OPCONTA", "CNT_4C_OPESTOQUE", ;
-                "CNT_4C_OPCUSTO", "CNT_4C_OPCOMPRA", ;
-                "LBL_4C_LBLEND")
-                *-- Recursao nos filhos para que fiquem prontos quando container tornar visivel
-                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
-                    THIS.TornarControlesVisiveis(loc_oControl)
-                ENDIF
+            loc_cNome = UPPER(loc_oControl.Name)
+
+            *-- Containers com Visible controlado explicitamente: nao forcar .T.
+            IF INLIST(loc_cNome, "CNT_4C_SOMBRA", ;
+                                 "CNT_4C_OPCONTA", "CNT_4C_OPESTOQUE", ;
+                                 "CNT_4C_OPCUSTO", "CNT_4C_OPCOMPRA")
+                *-- Tornar filhos visiveis sem tocar Visible do proprio container
+                THIS.TornarControlesVisiveis(loc_oControl)
                 LOOP
             ENDIF
 
@@ -1532,380 +1019,1045 @@ DEFINE CLASS FormSigPrCcc AS FormBase
                 loc_oControl.Visible = .T.
             ENDIF
 
-            *-- Recursao para PageFrame (nao usado neste form, mas por padrao)
-            IF UPPER(loc_oControl.BaseClass) = "PAGEFRAME"
-                FOR loc_p = 1 TO loc_oControl.PageCount
-                    THIS.TornarControlesVisiveis(loc_oControl.Pages(loc_p))
-                ENDFOR
-            ENDIF
-
-            *-- Recursao para containers com filhos
-            IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+            *-- Recursar em containers e pageframes
+            IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ;
+               loc_oControl.ControlCount > 0
                 THIS.TornarControlesVisiveis(loc_oControl)
             ENDIF
         ENDFOR
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Inicia um novo ciclo de recalculo de saldos
-    * Form OPERACIONAL: mapeado para o disparo do processamento (equivalente
-    * a "incluir" uma nova execucao). Delega para CmdProcessarClick.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
-        TRY
-            IF THIS.chk_4c_Conta.Value    = 0 AND THIS.chk_4c_Estoque.Value  = 0 AND ;
-               THIS.chk_4c_BtnCusto.Value = 0 AND THIS.chk_4c_BtnCompra.Value = 0
-                MsgAviso("Selecione ao menos uma op" + CHR(231) + CHR(227) + "o de processamento (Conta, Estoque, Custo ou " + CHR(250) + "lt. Compra).", ;
-                         "Rec" + CHR(225) + "lculo de Saldos")
-                RETURN
-            ENDIF
-            THIS.lbl_4c_LblEnd.Visible = .F.
-            THIS.txt_4c_Registro.Value = 0
-            THIS.CmdProcessarClick()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao iniciar processamento")
-        ENDTRY
+    *==========================================================================
+    * ConfigurarBINDEVENTs - handlers dos checkboxes e botoes
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBINDEVENTs
+        *-- CheckBoxes e botoes principais
+        BINDEVENT(THIS.chk_4c_Conta,     "Click", THIS, "ChkContaClick")
+        BINDEVENT(THIS.chk_4c_Estoque,   "Click", THIS, "ChkEstoqueClick")
+        BINDEVENT(THIS.chk_4c_BtnCusto,  "Click", THIS, "ChkCustoClick")
+        BINDEVENT(THIS.chk_4c_BtnCompra, "Click", THIS, "ChkCompraClick")
+        BINDEVENT(THIS.cmd_4c_Processa,  "Click", THIS, "BtnProcessarClick")
+        BINDEVENT(THIS.cmd_4c_Cancela,   "Click", THIS, "BtnCancelaClick")
+
+        *-- OpConta: Empresa, Grupos, Contas, Moedas
+        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_Empresa,   "KeyPress", THIS, "TxtContaEmpresaKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_TxtGrupos, "KeyPress", THIS, "TxtContaGruposKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_TxtContas, "KeyPress", THIS, "TxtContaContasKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpConta.txt_4c_TxtMoedas, "KeyPress", THIS, "TxtContaMoedasKeyPress")
+
+        *-- OpEstoque: Empresa, Grupos, Estoque, Produto
+        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_Empresa,   "KeyPress", THIS, "TxtEstEmpresaKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_TxtGrupos, "KeyPress", THIS, "TxtEstGruposKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_Estoque,   "KeyPress", THIS, "TxtEstEstoqueKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpEstoque.txt_4c_Produto,   "KeyPress", THIS, "TxtEstProdutoKeyPress")
+
+        *-- OpCusto: Empresa, Produto
+        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_Empresa, "KeyPress", THIS, "TxtCustoEmpresaKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpCusto.txt_4c_Produto, "KeyPress", THIS, "TxtCustoProdutoKeyPress")
+
+        *-- OpCompra: Empresa, Produto
+        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_Empresa, "KeyPress", THIS, "TxtCompraEmpresaKeyPress")
+        BINDEVENT(THIS.cnt_4c_OpCompra.txt_4c_Produto, "KeyPress", THIS, "TxtCompraProdutoKeyPress")
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Reexecuta o processamento com as opcoes atuais
-    * Form OPERACIONAL: equivalente a "alterar" parametros e reprocessar.
-    * Requer que pelo menos uma opcao esteja marcada.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
-        TRY
-            IF THIS.chk_4c_Conta.Value    = 0 AND THIS.chk_4c_Estoque.Value  = 0 AND ;
-               THIS.chk_4c_BtnCusto.Value = 0 AND THIS.chk_4c_BtnCompra.Value = 0
-                MsgAviso("Nenhuma op" + CHR(231) + CHR(227) + "o marcada para reprocessar.", ;
-                         "Rec" + CHR(225) + "lculo de Saldos")
-                RETURN
-            ENDIF
-            IF MsgConfirma("Reexecutar o processamento com as op" + CHR(231) + CHR(245) + "es atuais?", ;
-                           "Rec" + CHR(225) + "lculo de Saldos")
-                THIS.lbl_4c_LblEnd.Visible = .F.
-                THIS.txt_4c_Registro.Value = 0
-                THIS.CmdProcessarClick()
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao reexecutar processamento")
-        ENDTRY
-    ENDPROC
+    *==========================================================================
+    * BtnProcessarClick - orquestrador do processamento
+    *==========================================================================
+    PROCEDURE BtnProcessarClick
+        LOCAL loc_lSucesso, loc_lAlgum, loc_oBO, loc_oProgress
 
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Exibe o resumo do ultimo processamento
-    * Form OPERACIONAL: mostra os totais processados sem reexecutar.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oBO, loc_nRegistros, loc_cMsg, loc_oErro
+        loc_lSucesso = .F.
+        loc_lAlgum   = .F.
+        loc_oProgress = .NULL.
+
+        IF THIS.chk_4c_Conta.Value = 0 AND THIS.chk_4c_Estoque.Value = 0 AND ;
+           THIS.chk_4c_BtnCusto.Value = 0 AND THIS.chk_4c_BtnCompra.Value = 0
+            MsgAviso("Selecione ao menos uma op" + CHR(231) + CHR(227) + "o de rec" + CHR(225) + "lculo.")
+            RETURN .F.
+        ENDIF
+
         TRY
+            *-- Desabilitar controles durante processamento
+            THIS.chk_4c_Conta.Enabled     = .F.
+            THIS.chk_4c_Estoque.Enabled   = .F.
+            THIS.chk_4c_BtnCusto.Enabled  = .F.
+            THIS.chk_4c_BtnCompra.Enabled = .F.
+            THIS.cmd_4c_Processa.Enabled  = .F.
+            THIS.cmd_4c_Cancela.Enabled   = .F.
+            THIS.lbl_4c_LblEnd.Visible    = .F.
+            THIS.txt_4c_Registro.Value    = 0
+            DOEVENTS
+
             loc_oBO = THIS.this_oBusinessObject
-            loc_nRegistros = 0
-            IF VARTYPE(loc_oBO) = "O" AND !ISNULL(loc_oBO)
-                loc_nRegistros = loc_oBO.this_nRegistros
+            loc_oBO.this_nRegistros = 0
+
+            loc_oProgress = CREATEOBJECT("fwprogressbar")
+            IF VARTYPE(loc_oProgress) = "O"
+                loc_oProgress.Show()
             ENDIF
-            THIS.txt_4c_Registro.Value = loc_nRegistros
 
-            loc_cMsg = "Resumo do " + CHR(250) + "ltimo processamento:" + CHR(13) + CHR(13) + ;
-                       "Registros processados: " + TRANSFORM(loc_nRegistros) + CHR(13) + ;
-                       "Conta Corrente......: " + IIF(THIS.chk_4c_Conta.Value    = 1, "SIM", "N" + CHR(227) + "O") + CHR(13) + ;
-                       "Estoque.............: " + IIF(THIS.chk_4c_Estoque.Value  = 1, "SIM", "N" + CHR(227) + "O") + CHR(13) + ;
-                       "Custo...............: " + IIF(THIS.chk_4c_BtnCusto.Value = 1, "SIM", "N" + CHR(227) + "O") + CHR(13) + ;
-                       CHR(250) + "lt. Compra..........: " + IIF(THIS.chk_4c_BtnCompra.Value = 1, "SIM", "N" + CHR(227) + "O")
+            *-- Recalcular Conta Corrente
+            IF THIS.chk_4c_Conta.Value = 1
+                loc_oBO.this_cEmpConta   = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_Empresa.Value)
+                loc_oBO.this_cGrupoConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_TxtGrupos.Value)
+                loc_oBO.this_cConta      = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_TxtContas.Value)
+                loc_oBO.this_cMoedaConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_TxtMoedas.Value)
+                loc_oBO.this_dDataConta  = THIS.cnt_4c_OpConta.txt_4c_TxtData.Value
+                IF VARTYPE(loc_oProgress) = "O"
+                    loc_oProgress.Update("Recalculando Conta Corrente...")
+                ENDIF
+                IF loc_oBO.RecalcularSaldosConta()
+                    loc_lAlgum = .T.
+                ENDIF
+                THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
+                DOEVENTS
+            ENDIF
 
-            THIS.lbl_4c_LblEnd.Visible = (loc_nRegistros > 0)
-            MsgInfo(loc_cMsg, "Rec" + CHR(225) + "lculo de Saldos")
+            *-- Recalcular Estoque
+            IF THIS.chk_4c_Estoque.Value = 1
+                loc_oBO.this_cEmpEst   = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_Empresa.Value)
+                loc_oBO.this_cGrupoEst = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_TxtGrupos.Value)
+                loc_oBO.this_cEstoque  = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_Estoque.Value)
+                loc_oBO.this_cProdEst  = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_Produto.Value)
+                loc_oBO.this_dDataEst  = THIS.cnt_4c_OpEstoque.txt_4c_TxtData.Value
+                IF VARTYPE(loc_oProgress) = "O"
+                    loc_oProgress.Update("Recalculando Estoque...")
+                ENDIF
+                IF loc_oBO.RecalcularSaldosEstoque()
+                    loc_lAlgum = .T.
+                ENDIF
+                THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
+                DOEVENTS
+            ENDIF
+
+            *-- Recalcular Custo de Produto
+            IF THIS.chk_4c_BtnCusto.Value = 1
+                loc_oBO.this_cEmpCusto  = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_Empresa.Value)
+                loc_oBO.this_cProdCusto = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_Produto.Value)
+                loc_oBO.this_dDataCusto = THIS.cnt_4c_OpCusto.txt_4c_TxtData.Value
+                IF VARTYPE(loc_oProgress) = "O"
+                    loc_oProgress.Update("Recalculando Custo de Produto...")
+                ENDIF
+                IF loc_oBO.RecalcularSaldosCusto()
+                    loc_lAlgum = .T.
+                ENDIF
+                THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
+                DOEVENTS
+            ENDIF
+
+            *-- Recalcular Ultima Compra
+            IF THIS.chk_4c_BtnCompra.Value = 1
+                loc_oBO.this_cEmpCompra  = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_Empresa.Value)
+                loc_oBO.this_cProdCompra = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_Produto.Value)
+                loc_oBO.this_dDataCompra = THIS.cnt_4c_OpCompra.txt_4c_TxtData.Value
+                IF VARTYPE(loc_oProgress) = "O"
+                    loc_oProgress.Update(CHR(218) + "ltima Compra...")
+                ENDIF
+                IF loc_oBO.RecalcularSaldosCompra()
+                    loc_lAlgum = .T.
+                ENDIF
+                THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
+                DOEVENTS
+            ENDIF
+
+            IF loc_lAlgum
+                THIS.lbl_4c_LblEnd.Visible = .T.
+            ENDIF
+
+            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao visualizar resumo")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro FormSigPrCcc.BtnProcessarClick")
         ENDTRY
+
+        *-- Reabilitar controles
+        THIS.chk_4c_Conta.Enabled     = .T.
+        THIS.chk_4c_Estoque.Enabled   = .T.
+        THIS.chk_4c_BtnCusto.Enabled  = .T.
+        THIS.chk_4c_BtnCompra.Enabled = .T.
+        THIS.cmd_4c_Cancela.Enabled   = .T.
+        THIS.AtualizarEstadoProcessa()
+
+        IF VARTYPE(loc_oProgress) = "O"
+            loc_oProgress.Release()
+            loc_oProgress = .NULL.
+        ENDIF
+
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Cancela / reinicia a selecao de opcoes
-    * Form OPERACIONAL: nao ha exclusao de dados; a acao reseta os
-    * checkboxes, esconde os paineis flutuantes e zera o contador.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+    *==========================================================================
+    * BtnCancelaClick - fecha o formulario
+    *==========================================================================
+    PROCEDURE BtnCancelaClick
+        THISFORM.Release()
+    ENDPROC
+
+    *==========================================================================
+    * ChkContaClick / ChkEstoqueClick / ChkCustoClick / ChkCompraClick
+    *==========================================================================
+    PROCEDURE ChkContaClick
+        THIS.cnt_4c_OpConta.Visible = (THIS.chk_4c_Conta.Value = 1)
+        THIS.AtualizarEstadoProcessa()
+    ENDPROC
+
+    PROCEDURE ChkEstoqueClick
+        THIS.cnt_4c_OpEstoque.Visible = (THIS.chk_4c_Estoque.Value = 1)
+        THIS.AtualizarEstadoProcessa()
+    ENDPROC
+
+    PROCEDURE ChkCustoClick
+        THIS.cnt_4c_OpCusto.Visible = (THIS.chk_4c_BtnCusto.Value = 1)
+        THIS.AtualizarEstadoProcessa()
+    ENDPROC
+
+    PROCEDURE ChkCompraClick
+        THIS.cnt_4c_OpCompra.Visible = (THIS.chk_4c_BtnCompra.Value = 1)
+        THIS.AtualizarEstadoProcessa()
+    ENDPROC
+
+    PROTECTED PROCEDURE AtualizarEstadoProcessa
+        LOCAL loc_lAlgum
+        loc_lAlgum = (THIS.chk_4c_Conta.Value = 1) OR ;
+                     (THIS.chk_4c_Estoque.Value = 1) OR ;
+                     (THIS.chk_4c_BtnCusto.Value = 1) OR ;
+                     (THIS.chk_4c_BtnCompra.Value = 1)
+        THIS.cmd_4c_Processa.Enabled = loc_lAlgum
+    ENDPROC
+
+    *==========================================================================
+    * KeyPress handlers - OpConta
+    *==========================================================================
+    PROCEDURE TxtContaEmpresaKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpConta.txt_4c_Empresa)
+    ENDPROC
+
+    PROCEDURE TxtContaGruposKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupGruposCcr(THIS.cnt_4c_OpConta.txt_4c_TxtGrupos)
+    ENDPROC
+
+    PROCEDURE TxtContaContasKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupContas(THIS.cnt_4c_OpConta.txt_4c_TxtContas)
+    ENDPROC
+
+    PROCEDURE TxtContaMoedasKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupMoeda(THIS.cnt_4c_OpConta.txt_4c_TxtMoedas)
+    ENDPROC
+
+    *==========================================================================
+    * KeyPress handlers - OpEstoque
+    *==========================================================================
+    PROCEDURE TxtEstEmpresaKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpEstoque.txt_4c_Empresa)
+    ENDPROC
+
+    PROCEDURE TxtEstGruposKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupGruposEst(THIS.cnt_4c_OpEstoque.txt_4c_TxtGrupos)
+    ENDPROC
+
+    PROCEDURE TxtEstEstoqueKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupEstoque(THIS.cnt_4c_OpEstoque.txt_4c_Estoque)
+    ENDPROC
+
+    PROCEDURE TxtEstProdutoKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupProduto(THIS.cnt_4c_OpEstoque.txt_4c_Produto, THIS.cnt_4c_OpEstoque.txt_4c_Descricao)
+    ENDPROC
+
+    *==========================================================================
+    * KeyPress handlers - OpCusto
+    *==========================================================================
+    PROCEDURE TxtCustoEmpresaKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCusto.txt_4c_Empresa)
+    ENDPROC
+
+    PROCEDURE TxtCustoProdutoKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupProduto(THIS.cnt_4c_OpCusto.txt_4c_Produto, THIS.cnt_4c_OpCusto.txt_4c_Descricao)
+    ENDPROC
+
+    *==========================================================================
+    * KeyPress handlers - OpCompra
+    *==========================================================================
+    PROCEDURE TxtCompraEmpresaKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupEmpresa(THIS.cnt_4c_OpCompra.txt_4c_Empresa)
+    ENDPROC
+
+    PROCEDURE TxtCompraProdutoKeyPress
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
+            RETURN
+        ENDIF
+        THIS.AbrirLookupProduto(THIS.cnt_4c_OpCompra.txt_4c_Produto, THIS.cnt_4c_OpCompra.txt_4c_Descricao)
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupEmpresa - sigcdemp (cemps / razas)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupEmpresa(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "sigcdemp", "cursor_4c_LkpEmp", "cemps", loc_cVal, "Selecionar Empresa")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("cemps", "", "C" + CHR(243) + "d.")
+            loc_oForm.mAddColuna("razas", "", "Raz" + CHR(227) + "o Social")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpEmp")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpEmp.cemps)
+        ENDIF
+        IF USED("cursor_4c_LkpEmp")
+            USE IN cursor_4c_LkpEmp
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupGruposCcr - SigCdGcr (codigos / descrs)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupGruposCcr(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdGcr", "cursor_4c_LkpGcr", "codigos", loc_cVal, "Grupo C/C")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("codigos", "", "C" + CHR(243) + "d.")
+            loc_oForm.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpGcr")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpGcr.codigos)
+        ENDIF
+        IF USED("cursor_4c_LkpGcr")
+            USE IN cursor_4c_LkpGcr
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupContas - SigCdCli (Iclis / Rclis)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupContas(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdCli", "cursor_4c_LkpCcr", "Iclis", loc_cVal, "Conta Corrente")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("Iclis", "", "C" + CHR(243) + "d.")
+            loc_oForm.mAddColuna("Rclis", "", "Nome")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpCcr")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpCcr.Iclis)
+        ENDIF
+        IF USED("cursor_4c_LkpCcr")
+            USE IN cursor_4c_LkpCcr
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupMoeda - SigCdMoe (cmoes / dmoes)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupMoeda(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdMoe", "cursor_4c_LkpMoe", "cmoes", loc_cVal, "Selecionar Moeda")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("cmoes", "", "C" + CHR(243) + "d.")
+            loc_oForm.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpMoe")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpMoe.cmoes)
+        ENDIF
+        IF USED("cursor_4c_LkpMoe")
+            USE IN cursor_4c_LkpMoe
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupProduto - SigCdPro (cpros / dpros) + atualiza descricao
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupProduto(par_oTxtProd, par_oTxtDesc)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxtProd.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdPro", "cursor_4c_LkpPro", "cpros", loc_cVal, "Selecionar Produto")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("cpros", "", "C" + CHR(243) + "d.")
+            loc_oForm.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpPro")
+            par_oTxtProd.Value = ALLTRIM(cursor_4c_LkpPro.cpros)
+            IF VARTYPE(par_oTxtDesc) = "O"
+                par_oTxtDesc.Value = ALLTRIM(cursor_4c_LkpPro.dpros)
+            ENDIF
+        ENDIF
+        IF USED("cursor_4c_LkpPro")
+            USE IN cursor_4c_LkpPro
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupGruposEst - SigMvHst grupos (grupo de deposito)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupGruposEst(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigMvHst", "cursor_4c_LkpGruEst", "grupos", loc_cVal, ;
+            "Grupo de Dep" + CHR(243) + "sito")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("grupos", "", "Grupo")
+            loc_oForm.mAddColuna("estos",  "", "Estoque")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpGruEst")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpGruEst.grupos)
+        ENDIF
+        IF USED("cursor_4c_LkpGruEst")
+            USE IN cursor_4c_LkpGruEst
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * AbrirLookupEstoque - SigMvHst estos (codigo do deposito)
+    *==========================================================================
+    PROTECTED PROCEDURE AbrirLookupEstoque(par_oTxt)
+        LOCAL loc_oForm, loc_cVal
+        loc_cVal  = ALLTRIM(par_oTxt.Value)
+        loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigMvHst", "cursor_4c_LkpEst", "estos", loc_cVal, ;
+            "Dep" + CHR(243) + "sito/Estoque")
+        IF ISNULL(loc_oForm)
+            RETURN
+        ENDIF
+        IF NOT loc_oForm.this_lAchouRegistro
+            loc_oForm.mAddColuna("estos",  "", "Estoque")
+            loc_oForm.mAddColuna("grupos", "", "Grupo")
+            loc_oForm.Show()
+        ENDIF
+        IF loc_oForm.this_lSelecionou AND USED("cursor_4c_LkpEst")
+            par_oTxt.Value = ALLTRIM(cursor_4c_LkpEst.estos)
+        ENDIF
+        IF USED("cursor_4c_LkpEst")
+            USE IN cursor_4c_LkpEst
+        ENDIF
+        loc_oForm.Release()
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPaginaLista - Reset da UI ao estado inicial de sele" + CHR(231) + CHR(227) + "o
+    * Form OPERACIONAL: nao ha Page1/Page2 (layout flat), este metodo
+    * restaura o estado limpo equivalente a "voltar para a lista" ??? oculta
+    * containers flutuantes, desmarca opcoes, zera contador e mensagem final.
+    * Chamado apos processamento concluir OU quando quiser reiniciar selecao.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaLista
+        *-- Desmarca todos os checkboxes de opcao (Conta, Estoque, Custo, Compra)
+        THIS.chk_4c_Conta.Value     = 0
+        THIS.chk_4c_Estoque.Value   = 0
+        THIS.chk_4c_BtnCusto.Value  = 0
+        THIS.chk_4c_BtnCompra.Value = 0
+
+        *-- Oculta todos os containers flutuantes de opcoes
+        THIS.cnt_4c_OpConta.Visible   = .F.
+        THIS.cnt_4c_OpEstoque.Visible = .F.
+        THIS.cnt_4c_OpCusto.Visible   = .F.
+        THIS.cnt_4c_OpCompra.Visible  = .F.
+
+        *-- Limpa contador de registros e oculta label de conclusao
+        THIS.txt_4c_Registro.Value  = 0
+        THIS.lbl_4c_LblEnd.Visible  = .F.
+
+        *-- Reabilita controles (caso venham de processamento anterior)
+        THIS.chk_4c_Conta.Enabled     = .T.
+        THIS.chk_4c_Estoque.Enabled   = .T.
+        THIS.chk_4c_BtnCusto.Enabled  = .T.
+        THIS.chk_4c_BtnCompra.Enabled = .T.
+        THIS.cmd_4c_Cancela.Enabled   = .T.
+
+        *-- Atualiza estado do botao Processar (deve ficar desabilitado sem selecao)
+        THIS.AtualizarEstadoProcessa()
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPaginaDados - Prepara TODOS os campos de entrada do form
+    * Form OPERACIONAL: nao ha Page2/Dados; este metodo mapeia o conceito
+    * "preparar formulario para entrada de dados" para os 4 containers de
+    * opcoes (OpConta, OpEstoque, OpCusto, OpCompra), resetando cada campo
+    * para valor default e habilitando edicao. Chamado apos limpeza de UI
+    * (ConfigurarPaginaLista) OU quando quiser reiniciar a entrada de dados
+    * apos processamento concluir sem fechar o form.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaDados
+        LOCAL loc_cEmp
+        loc_cEmp = go_4c_Sistema.cCodEmpresa
+
+        *-- Container OpConta (Conta Corrente): Empresa=default, demais em branco
+        WITH THIS.cnt_4c_OpConta
+            .txt_4c_Empresa.Value   = loc_cEmp
+            .txt_4c_Empresa.Enabled = .T.
+            .txt_4c_TxtGrupos.Value = ""
+            .txt_4c_TxtGrupos.Enabled = .T.
+            .txt_4c_TxtContas.Value = ""
+            .txt_4c_TxtContas.Enabled = .T.
+            .txt_4c_TxtMoedas.Value = ""
+            .txt_4c_TxtMoedas.Enabled = .T.
+            .txt_4c_TxtData.Value   = {}
+            .txt_4c_TxtData.Enabled = .T.
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpEstoque: Empresa=default, demais em branco
+        WITH THIS.cnt_4c_OpEstoque
+            .txt_4c_Empresa.Value   = loc_cEmp
+            .txt_4c_Empresa.Enabled = .T.
+            .txt_4c_TxtGrupos.Value = ""
+            .txt_4c_TxtGrupos.Enabled = .T.
+            .txt_4c_Estoque.Value   = ""
+            .txt_4c_Estoque.Enabled = .T.
+            .txt_4c_Produto.Value   = ""
+            .txt_4c_Produto.Enabled = .T.
+            .txt_4c_Descricao.Value = ""
+            .txt_4c_TxtData.Value   = {}
+            .txt_4c_TxtData.Enabled = .T.
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCusto: Empresa=default, demais em branco
+        WITH THIS.cnt_4c_OpCusto
+            .txt_4c_Empresa.Value   = loc_cEmp
+            .txt_4c_Empresa.Enabled = .T.
+            .txt_4c_Produto.Value   = ""
+            .txt_4c_Produto.Enabled = .T.
+            .txt_4c_Descricao.Value = ""
+            .txt_4c_TxtData.Value   = {}
+            .txt_4c_TxtData.Enabled = .T.
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCompra: Empresa=default, demais em branco
+        WITH THIS.cnt_4c_OpCompra
+            .txt_4c_Empresa.Value   = loc_cEmp
+            .txt_4c_Empresa.Enabled = .T.
+            .txt_4c_Produto.Value   = ""
+            .txt_4c_Produto.Enabled = .T.
+            .txt_4c_Descricao.Value = ""
+            .txt_4c_TxtData.Value   = {}
+            .txt_4c_TxtData.Enabled = .T.
+            .Visible     = .T.
+        ENDWITH
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * AlternarPagina - Alterna qual container de opcoes esta visivel
+    * Form OPERACIONAL: nao ha PageFrame; este metodo mapeia o conceito
+    * "trocar de pagina" para "trocar qual painel de opcoes esta ativo".
+    *   par_nPagina = 1 ??> Conta Corrente     (cnt_4c_OpConta)
+    *   par_nPagina = 2 ??> Estoque            (cnt_4c_OpEstoque)
+    *   par_nPagina = 3 ??> Custo de Produto   (cnt_4c_OpCusto)
+    *   par_nPagina = 4 ??> Ultima Compra      (cnt_4c_OpCompra)
+    *   par_nPagina = 0 ??> reset (oculta todos, equivale a ConfigurarPaginaLista)
+    *==========================================================================
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_nPagina
+        loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 0)
+
+        DO CASE
+            CASE loc_nPagina = 1
+                THIS.chk_4c_Conta.Value       = 1
+                THIS.cnt_4c_OpConta.Visible   = .T.
+            CASE loc_nPagina = 2
+                THIS.chk_4c_Estoque.Value     = 1
+                THIS.cnt_4c_OpEstoque.Visible = .T.
+            CASE loc_nPagina = 3
+                THIS.chk_4c_BtnCusto.Value    = 1
+                THIS.cnt_4c_OpCusto.Visible   = .T.
+            CASE loc_nPagina = 4
+                THIS.chk_4c_BtnCompra.Value   = 1
+                THIS.cnt_4c_OpCompra.Visible  = .T.
+            OTHERWISE
+                THIS.ConfigurarPaginaLista()
+        ENDCASE
+
+        THIS.AtualizarEstadoProcessa()
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * BtnIncluirClick - Reseta o formulario para um novo ciclo de recalculo
+    * (Form OPERACIONAL: equivale a "Nova Sessao de Processamento")
+    *==========================================================================
+    PROCEDURE BtnIncluirClick
+        THIS.chk_4c_Conta.Value       = 0
+        THIS.chk_4c_Estoque.Value     = 0
+        THIS.chk_4c_BtnCusto.Value    = 0
+        THIS.chk_4c_BtnCompra.Value   = 0
+
+        THIS.cnt_4c_OpConta.Visible   = .F.
+        THIS.cnt_4c_OpEstoque.Visible = .F.
+        THIS.cnt_4c_OpCusto.Visible   = .F.
+        THIS.cnt_4c_OpCompra.Visible  = .F.
+
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpConta)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpEstoque)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpCusto)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpCompra)
+
+        THIS.txt_4c_Registro.Value    = ""
+        THIS.lbl_4c_LblEnd.Visible    = .F.
+
+        THIS.cmd_4c_Processa.Enabled  = .F.
+        THIS.cmd_4c_Cancela.Enabled   = .T.
+
+        THIS.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * BtnAlterarClick - Habilita novamente os controles apos processamento
+    * (Form OPERACIONAL: equivale a "Alterar Selecao apos Processamento")
+    *==========================================================================
+    PROCEDURE BtnAlterarClick
+        THIS.chk_4c_Conta.Enabled     = .T.
+        THIS.chk_4c_Estoque.Enabled   = .T.
+        THIS.chk_4c_BtnCusto.Enabled  = .T.
+        THIS.chk_4c_BtnCompra.Enabled = .T.
+
+        THIS.cnt_4c_OpConta.Enabled   = (THIS.chk_4c_Conta.Value = 1)
+        THIS.cnt_4c_OpEstoque.Enabled = (THIS.chk_4c_Estoque.Value = 1)
+        THIS.cnt_4c_OpCusto.Enabled   = (THIS.chk_4c_BtnCusto.Value = 1)
+        THIS.cnt_4c_OpCompra.Enabled  = (THIS.chk_4c_BtnCompra.Value = 1)
+
+        THIS.cmd_4c_Cancela.Enabled   = .T.
+        THIS.AtualizarEstadoProcessa()
+        THIS.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * BtnVisualizarClick - Exibe status da ultima sessao de processamento
+    * (Form OPERACIONAL: consulta rapida do estado atual)
+    *==========================================================================
+    PROCEDURE BtnVisualizarClick
+        LOCAL loc_cMsg, loc_cSelecoes, loc_nSel
+
+        loc_cSelecoes = ""
+        loc_nSel      = 0
+
+        IF THIS.chk_4c_Conta.Value = 1
+            loc_cSelecoes = loc_cSelecoes + "- Conta Corrente" + CHR(13)
+            loc_nSel      = loc_nSel + 1
+        ENDIF
+        IF THIS.chk_4c_Estoque.Value = 1
+            loc_cSelecoes = loc_cSelecoes + "- Estoque" + CHR(13)
+            loc_nSel      = loc_nSel + 1
+        ENDIF
+        IF THIS.chk_4c_BtnCusto.Value = 1
+            loc_cSelecoes = loc_cSelecoes + "- Custo de Produto" + CHR(13)
+            loc_nSel      = loc_nSel + 1
+        ENDIF
+        IF THIS.chk_4c_BtnCompra.Value = 1
+            loc_cSelecoes = loc_cSelecoes + "- " + CHR(218) + "ltima Compra" + CHR(13)
+            loc_nSel      = loc_nSel + 1
+        ENDIF
+
+        IF loc_nSel = 0
+            loc_cMsg = "Nenhum tipo de rec" + CHR(225) + "lculo selecionado." + CHR(13) + ;
+                       "Marque um dos checkboxes para configurar o processamento."
+        ELSE
+            loc_cMsg = "Tipos selecionados (" + TRANSFORM(loc_nSel) + "):" + CHR(13) + ;
+                       loc_cSelecoes + CHR(13) + ;
+                       "Registros processados: " + ALLTRIM(TRANSFORM(THIS.txt_4c_Registro.Value))
+        ENDIF
+
+        MsgInfo(loc_cMsg, "Status do Processamento")
+    ENDPROC
+
+    *==========================================================================
+    * BtnExcluirClick - Limpa todas as selecoes e restaura estado inicial
+    * (Form OPERACIONAL: equivale a "Cancelar todas as selecoes")
+    *==========================================================================
+    PROCEDURE BtnExcluirClick
+        THIS.chk_4c_Conta.Value       = 0
+        THIS.chk_4c_Estoque.Value     = 0
+        THIS.chk_4c_BtnCusto.Value    = 0
+        THIS.chk_4c_BtnCompra.Value   = 0
+
+        THIS.cnt_4c_OpConta.Visible   = .F.
+        THIS.cnt_4c_OpEstoque.Visible = .F.
+        THIS.cnt_4c_OpCusto.Visible   = .F.
+        THIS.cnt_4c_OpCompra.Visible  = .F.
+
+        THIS.txt_4c_Registro.Value    = ""
+        THIS.lbl_4c_LblEnd.Visible    = .F.
+
+        THIS.AtualizarEstadoProcessa()
+        THIS.Refresh()
+    ENDPROC
+
+    *==========================================================================
+    * LimparCamposContainer - helper para reset das textboxes de um container
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCamposContainer(par_oContainer)
+        LOCAL loc_nI, loc_oCtrl
+
+        IF VARTYPE(par_oContainer) != "O"
+            RETURN
+        ENDIF
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_nI)
+            IF UPPER(loc_oCtrl.BaseClass) = "TEXTBOX"
+                DO CASE
+                    CASE VARTYPE(loc_oCtrl.Value) = "C"
+                        loc_oCtrl.Value = ""
+                    CASE VARTYPE(loc_oCtrl.Value) = "N"
+                        loc_oCtrl.Value = 0
+                    CASE VARTYPE(loc_oCtrl.Value) = "D"
+                        loc_oCtrl.Value = {}
+                ENDCASE
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - Copia valores da UI (4 containers) para o BO
+    * (OPERACIONAL: nao ha CRUD, mas o BO carrega parametros para o
+    * processamento de RecalcularSaldos* e centraliza os valores digitados)
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO
+        IF VARTYPE(THIS.this_oBusinessObject) # "O"
+            RETURN .F.
+        ENDIF
+
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
+
+        *-- Container OpConta (Conta Corrente)
+        WITH THIS.cnt_4c_OpConta
+            loc_oBO.this_cEmpConta   = ALLTRIM(.txt_4c_Empresa.Value)
+            loc_oBO.this_cGrupoConta = ALLTRIM(.txt_4c_TxtGrupos.Value)
+            loc_oBO.this_cConta      = ALLTRIM(.txt_4c_TxtContas.Value)
+            loc_oBO.this_cMoedaConta = ALLTRIM(.txt_4c_TxtMoedas.Value)
+            loc_oBO.this_dDataConta  = IIF(VARTYPE(.txt_4c_TxtData.Value) = "D", .txt_4c_TxtData.Value, {})
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpEstoque
+        WITH THIS.cnt_4c_OpEstoque
+            loc_oBO.this_cEmpEst      = ALLTRIM(.txt_4c_Empresa.Value)
+            loc_oBO.this_cGrupoEst    = ALLTRIM(.txt_4c_TxtGrupos.Value)
+            loc_oBO.this_cEstoque     = ALLTRIM(.txt_4c_Estoque.Value)
+            loc_oBO.this_cProdEst     = ALLTRIM(.txt_4c_Produto.Value)
+            loc_oBO.this_cDescProdEst = ALLTRIM(.txt_4c_Descricao.Value)
+            loc_oBO.this_dDataEst     = IIF(VARTYPE(.txt_4c_TxtData.Value) = "D", .txt_4c_TxtData.Value, {})
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCusto
+        WITH THIS.cnt_4c_OpCusto
+            loc_oBO.this_cEmpCusto      = ALLTRIM(.txt_4c_Empresa.Value)
+            loc_oBO.this_cProdCusto     = ALLTRIM(.txt_4c_Produto.Value)
+            loc_oBO.this_cDescProdCusto = ALLTRIM(.txt_4c_Descricao.Value)
+            loc_oBO.this_dDataCusto     = IIF(VARTYPE(.txt_4c_TxtData.Value) = "D", .txt_4c_TxtData.Value, {})
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCompra
+        WITH THIS.cnt_4c_OpCompra
+            loc_oBO.this_cEmpCompra      = ALLTRIM(.txt_4c_Empresa.Value)
+            loc_oBO.this_cProdCompra     = ALLTRIM(.txt_4c_Produto.Value)
+            loc_oBO.this_cDescProdCompra = ALLTRIM(.txt_4c_Descricao.Value)
+            loc_oBO.this_dDataCompra     = IIF(VARTYPE(.txt_4c_TxtData.Value) = "D", .txt_4c_TxtData.Value, {})
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Contador de registros processados
+        IF VARTYPE(THIS.txt_4c_Registro.Value) = "N"
+            loc_oBO.this_nRegistros = THIS.txt_4c_Registro.Value
+        ELSE
+            loc_oBO.this_nRegistros = TRANSFORM(THIS.txt_4c_Registro.Value)
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Copia valores do BO para a UI (4 containers)
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm
+        IF VARTYPE(THIS.this_oBusinessObject) # "O"
+            RETURN .F.
+        ENDIF
+
+        LOCAL loc_oBO
+        loc_oBO = THIS.this_oBusinessObject
+
+        *-- Container OpConta (Conta Corrente)
+        WITH THIS.cnt_4c_OpConta
+            .txt_4c_Empresa.Value   = loc_oBO.this_cEmpConta
+            .txt_4c_TxtGrupos.Value = loc_oBO.this_cGrupoConta
+            .txt_4c_TxtContas.Value = loc_oBO.this_cConta
+            .txt_4c_TxtMoedas.Value = loc_oBO.this_cMoedaConta
+            .txt_4c_TxtData.Value   = loc_oBO.this_dDataConta
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpEstoque
+        WITH THIS.cnt_4c_OpEstoque
+            .txt_4c_Empresa.Value   = loc_oBO.this_cEmpEst
+            .txt_4c_TxtGrupos.Value = loc_oBO.this_cGrupoEst
+            .txt_4c_Estoque.Value   = loc_oBO.this_cEstoque
+            .txt_4c_Produto.Value   = loc_oBO.this_cProdEst
+            .txt_4c_Descricao.Value = loc_oBO.this_cDescProdEst
+            .txt_4c_TxtData.Value   = loc_oBO.this_dDataEst
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCusto
+        WITH THIS.cnt_4c_OpCusto
+            .txt_4c_Empresa.Value   = loc_oBO.this_cEmpCusto
+            .txt_4c_Produto.Value   = loc_oBO.this_cProdCusto
+            .txt_4c_Descricao.Value = loc_oBO.this_cDescProdCusto
+            .txt_4c_TxtData.Value   = loc_oBO.this_dDataCusto
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Container OpCompra
+        WITH THIS.cnt_4c_OpCompra
+            .txt_4c_Empresa.Value   = loc_oBO.this_cEmpCompra
+            .txt_4c_Produto.Value   = loc_oBO.this_cProdCompra
+            .txt_4c_Descricao.Value = loc_oBO.this_cDescProdCompra
+            .txt_4c_TxtData.Value   = loc_oBO.this_dDataCompra
+            .Visible     = .T.
+        ENDWITH
+
+        THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos - Habilita/desabilita containers e checkboxes conforme
+    * o estado de processamento (par_lHabilitar). Chamado por Processa e
+    * ao terminar o processamento para bloquear a UI durante a execucao SQL.
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHab
+        loc_lHab = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+
+        *-- Checkboxes principais
+        THIS.chk_4c_Conta.Enabled     = loc_lHab
+        THIS.chk_4c_Estoque.Enabled   = loc_lHab
+        THIS.chk_4c_BtnCusto.Enabled  = loc_lHab
+        THIS.chk_4c_BtnCompra.Enabled = loc_lHab
+
+        *-- Containers de opcoes: enabled apenas se o checkbox correspondente
+        *-- estiver marcado E o form estiver habilitado
+        THIS.cnt_4c_OpConta.Enabled   = loc_lHab AND (THIS.chk_4c_Conta.Value     = 1)
+        THIS.cnt_4c_OpEstoque.Enabled = loc_lHab AND (THIS.chk_4c_Estoque.Value   = 1)
+        THIS.cnt_4c_OpCusto.Enabled   = loc_lHab AND (THIS.chk_4c_BtnCusto.Value  = 1)
+        THIS.cnt_4c_OpCompra.Enabled  = loc_lHab AND (THIS.chk_4c_BtnCompra.Value = 1)
+
+        *-- Botoes de acao
+        THIS.cmd_4c_Cancela.Enabled  = loc_lHab
+        THIS.cmd_4c_Processa.Enabled = loc_lHab AND ( ;
+            THIS.chk_4c_Conta.Value = 1 OR THIS.chk_4c_Estoque.Value = 1 OR ;
+            THIS.chk_4c_BtnCusto.Value = 1 OR THIS.chk_4c_BtnCompra.Value = 1)
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos - Limpa TODOS os campos dos 4 containers de opcoes
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpConta)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpEstoque)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpCusto)
+        THIS.LimparCamposContainer(THIS.cnt_4c_OpCompra)
+
+        *-- Restaura empresa padrao apos limpeza (evita campo vazio nas 4 abas)
+        LOCAL loc_cEmp
+        loc_cEmp = go_4c_Sistema.cCodEmpresa
+        THIS.cnt_4c_OpConta.txt_4c_Empresa.Value   = loc_cEmp
+        THIS.cnt_4c_OpEstoque.txt_4c_Empresa.Value = loc_cEmp
+        THIS.cnt_4c_OpCusto.txt_4c_Empresa.Value   = loc_cEmp
+        THIS.cnt_4c_OpCompra.txt_4c_Empresa.Value  = loc_cEmp
+
+        THIS.txt_4c_Registro.Value = 0
+        THIS.lbl_4c_LblEnd.Visible = .F.
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * CarregarLista - Recarrega parametros do sistema (SigCdPam) via BO e
+    * atualiza a UI. Nome vem do padrao CRUD; aqui equivale a "refresh
+    * dos parametros centrais que direcionam o processamento".
+    *==========================================================================
+    PROCEDURE CarregarLista
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        IF VARTYPE(THIS.this_oBusinessObject) # "O"
+            RETURN .F.
+        ENDIF
+
         TRY
-            IF !MsgConfirma("Limpar todas as op" + CHR(231) + CHR(245) + "es selecionadas?", ;
-                            "Rec" + CHR(225) + "lculo de Saldos")
-                RETURN
-            ENDIF
-
-            THIS.chk_4c_Conta.Value     = 0
-            THIS.chk_4c_Estoque.Value   = 0
-            THIS.chk_4c_BtnCusto.Value  = 0
-            THIS.chk_4c_BtnCompra.Value = 0
-
-            THIS.cnt_4c_OpConta.Visible   = .F.
-            THIS.cnt_4c_OpEstoque.Visible = .F.
-            THIS.cnt_4c_OpCusto.Visible   = .F.
-            THIS.cnt_4c_OpCompra.Visible  = .F.
-
-            THIS.txt_4c_Registro.Value = 0
-            THIS.lbl_4c_LblEnd.Visible = .F.
-
-            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND !ISNULL(THIS.this_oBusinessObject)
-                THIS.this_oBusinessObject.this_nRegistros = 0
-            ENDIF
-
-            THIS.AtualizarBotaoProcessar()
-            THIS.Refresh()
+            THIS.this_oBusinessObject.InicializarDados()
+            THIS.BOParaForm()
+            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao limpar op" + CHR(231) + CHR(245) + "es")
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message, "Erro ao recarregar par" + CHR(226) + "metros")
         ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE FormParaBO()
-    *  Transfere os valores dos campos visuais para as propriedades do BO.
-    *  Para o form OPERACIONAL: copia flags dos checkboxes e parametros
-    *  de cada secao ativa para as propriedades this_* do BO.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oBO, loc_oErro
-        TRY
-            loc_oBO = THIS.this_oBusinessObject
-            IF VARTYPE(loc_oBO) != "O" OR ISNULL(loc_oBO)
-                RETURN
-            ENDIF
+    *==========================================================================
+    * AjustarBotoesPorModo - Ajusta enabled dos botoes conforme o modo de UI
+    *   par_cModo = "INICIAL"      -> aguardando selecao (Processa disabled)
+    *   par_cModo = "PROCESSANDO"  -> execucao SQL em curso (tudo disabled)
+    *   par_cModo = "CONCLUIDO"    -> processamento terminado (Cancela habilita)
+    *==========================================================================
+    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+        LOCAL loc_cModo
+        loc_cModo = IIF(VARTYPE(par_cModo) = "C" AND !EMPTY(par_cModo), UPPER(par_cModo), "INICIAL")
 
-            loc_oBO.this_lProcessarConta   = (THIS.chk_4c_Conta.Value     = 1)
-            loc_oBO.this_lProcessarEstoque = (THIS.chk_4c_Estoque.Value   = 1)
-            loc_oBO.this_lProcessarCusto   = (THIS.chk_4c_BtnCusto.Value  = 1)
-            loc_oBO.this_lProcessarCompra  = (THIS.chk_4c_BtnCompra.Value = 1)
+        DO CASE
+            CASE loc_cModo = "PROCESSANDO"
+                THIS.cmd_4c_Processa.Enabled = .F.
+                THIS.cmd_4c_Cancela.Enabled  = .F.
+                THIS.HabilitarCampos(.F.)
+            CASE loc_cModo = "CONCLUIDO"
+                THIS.cmd_4c_Processa.Enabled = .F.
+                THIS.cmd_4c_Cancela.Enabled  = .T.
+                THIS.lbl_4c_LblEnd.Visible   = .T.
+                THIS.HabilitarCampos(.F.)
+            OTHERWISE
+                *-- INICIAL: aguardando selecao
+                THIS.cmd_4c_Cancela.Enabled  = .T.
+                THIS.lbl_4c_LblEnd.Visible   = .F.
+                THIS.HabilitarCampos(.T.)
+                THIS.AtualizarEstadoProcessa()
+        ENDCASE
 
-            IF loc_oBO.this_lProcessarConta
-                loc_oBO.this_cEmpConta    = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_EmpresaConta.Value)
-                loc_oBO.this_cGruposConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_GruposConta.Value)
-                loc_oBO.this_cContasConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_ContasConta.Value)
-                loc_oBO.this_cMoedasConta = ALLTRIM(THIS.cnt_4c_OpConta.txt_4c_MoedasConta.Value)
-                loc_oBO.this_dDataConta   = THIS.cnt_4c_OpConta.txt_4c_DataConta.Value
-            ENDIF
-
-            IF loc_oBO.this_lProcessarEstoque
-                loc_oBO.this_cEmpEstoque       = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst.Value)
-                loc_oBO.this_cGruposEstoque    = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_GruposEst.Value)
-                loc_oBO.this_cEstoqueEstoque   = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_EstoqueEst.Value)
-                loc_oBO.this_cProdutoEstoque   = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst.Value)
-                loc_oBO.this_cDescricaoEstoque = ALLTRIM(THIS.cnt_4c_OpEstoque.txt_4c_DescsEst.Value)
-                loc_oBO.this_dDataEstoque      = THIS.cnt_4c_OpEstoque.txt_4c_DataEst.Value
-            ENDIF
-
-            IF loc_oBO.this_lProcessarCusto
-                loc_oBO.this_cEmpCusto       = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto.Value)
-                loc_oBO.this_cProdutoCusto   = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto.Value)
-                loc_oBO.this_cDescricaoCusto = ALLTRIM(THIS.cnt_4c_OpCusto.txt_4c_DescsCusto.Value)
-                loc_oBO.this_dDataCusto      = THIS.cnt_4c_OpCusto.txt_4c_DataCusto.Value
-            ENDIF
-
-            IF loc_oBO.this_lProcessarCompra
-                loc_oBO.this_cEmpCompra       = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra.Value)
-                loc_oBO.this_cProdutoCompra   = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra.Value)
-                loc_oBO.this_cDescricaoCompra = ALLTRIM(THIS.cnt_4c_OpCompra.txt_4c_DescsCompra.Value)
-                loc_oBO.this_dDataCompra      = THIS.cnt_4c_OpCompra.txt_4c_DataCompra.Value
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+        RETURN .T.
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE BOParaForm()
-    *  Transfere resultados do BO de volta para os campos visuais.
-    *  Para o form OPERACIONAL: exibe o contador de registros processados
-    *  e o label de conclusao quando houver resultado.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oBO, loc_oErro
-        TRY
-            loc_oBO = THIS.this_oBusinessObject
-            IF VARTYPE(loc_oBO) != "O" OR ISNULL(loc_oBO)
-                RETURN
-            ENDIF
-            THIS.txt_4c_Registro.Value = loc_oBO.this_nRegistros
-            THIS.lbl_4c_LblEnd.Visible = (loc_oBO.this_nRegistros > 0)
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+    *==========================================================================
+    * BtnBuscarClick - Recarrega parametros centrais do sistema (SigCdPam)
+    * Util para atualizar moeda central, grupos padrao, etc. sem sair do form
+    *==========================================================================
+    PROCEDURE BtnBuscarClick
+        IF THIS.CarregarLista()
+            MsgInfo("Par" + CHR(226) + "metros do sistema recarregados com sucesso.", ;
+                    "Atualiza" + CHR(231) + CHR(227) + "o")
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE LimparCampos()
-    *  Limpa todos os campos de entrada nos 4 containers de opcoes e
-    *  redefine flags/checkboxes para o estado inicial (sem selecao).
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            *-- Checkboxes
-            THIS.chk_4c_Conta.Value     = 0
-            THIS.chk_4c_Estoque.Value   = 0
-            THIS.chk_4c_BtnCusto.Value  = 0
-            THIS.chk_4c_BtnCompra.Value = 0
-
-            *-- Campos de Conta Corrente
-            THIS.cnt_4c_OpConta.txt_4c_EmpresaConta.Value = ""
-            THIS.cnt_4c_OpConta.txt_4c_GruposConta.Value  = ""
-            THIS.cnt_4c_OpConta.txt_4c_ContasConta.Value  = ""
-            THIS.cnt_4c_OpConta.txt_4c_MoedasConta.Value  = ""
-            THIS.cnt_4c_OpConta.txt_4c_DataConta.Value    = {}
-
-            *-- Campos de Estoque
-            THIS.cnt_4c_OpEstoque.txt_4c_EmpresaEst.Value = ""
-            THIS.cnt_4c_OpEstoque.txt_4c_GruposEst.Value  = ""
-            THIS.cnt_4c_OpEstoque.txt_4c_EstoqueEst.Value = ""
-            THIS.cnt_4c_OpEstoque.txt_4c_ProdutoEst.Value = ""
-            THIS.cnt_4c_OpEstoque.txt_4c_DescsEst.Value   = ""
-            THIS.cnt_4c_OpEstoque.txt_4c_DataEst.Value    = {}
-
-            *-- Campos de Custo
-            THIS.cnt_4c_OpCusto.txt_4c_EmpresaCusto.Value = ""
-            THIS.cnt_4c_OpCusto.txt_4c_ProdutoCusto.Value = ""
-            THIS.cnt_4c_OpCusto.txt_4c_DescsCusto.Value   = ""
-            THIS.cnt_4c_OpCusto.txt_4c_DataCusto.Value    = {}
-
-            *-- Campos de Ultima Compra
-            THIS.cnt_4c_OpCompra.txt_4c_EmpresaCompra.Value = ""
-            THIS.cnt_4c_OpCompra.txt_4c_ProdutoCompra.Value = ""
-            THIS.cnt_4c_OpCompra.txt_4c_DescsCompra.Value   = ""
-            THIS.cnt_4c_OpCompra.txt_4c_DataCompra.Value    = {}
-
-            *-- Rodape
-            THIS.txt_4c_Registro.Value = 0
-            THIS.lbl_4c_LblEnd.Visible = .F.
-
-            *-- Oculta containers flutuantes
-            THIS.cnt_4c_OpConta.Visible   = .F.
-            THIS.cnt_4c_OpEstoque.Visible = .F.
-            THIS.cnt_4c_OpCusto.Visible   = .F.
-            THIS.cnt_4c_OpCompra.Visible  = .F.
-
-            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND !ISNULL(THIS.this_oBusinessObject)
-                THIS.this_oBusinessObject.this_nRegistros = 0
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+    *==========================================================================
+    * BtnEncerrarClick - Encerra o form (equivalente ao botao Cancela/Sair)
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick
+        THIS.Release()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE HabilitarCampos(par_lHabilitar)
-    *  Habilita ou desabilita todos os controles de entrada do form.
-    *  Chamado por AlternarPagina para bloquear durante o processamento.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            THIS.chk_4c_Conta.Enabled     = par_lHabilitar
-            THIS.chk_4c_Estoque.Enabled   = par_lHabilitar
-            THIS.chk_4c_BtnCusto.Enabled  = par_lHabilitar
-            THIS.chk_4c_BtnCompra.Enabled = par_lHabilitar
-            THIS.cmd_4c_Encerrar.Enabled  = par_lHabilitar
-
-            IF par_lHabilitar
-                *-- Ao habilitar, Processar depende da selecao dos checkboxes
-                THIS.AtualizarBotaoProcessar()
-            ELSE
-                THIS.cmd_4c_Processar.Enabled = .F.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+    *==========================================================================
+    * BtnSalvarClick - Alias para BtnProcessarClick (executa recalculo)
+    * (OPERACIONAL: nao ha "salvar registro"; o botao de acao positiva
+    * eh Processar, entao Salvar mapeia para o mesmo fluxo)
+    *==========================================================================
+    PROCEDURE BtnSalvarClick
+        THIS.BtnProcessarClick()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-    *  Atualiza o estado do botao Processar conforme selecao atual.
-    *  Alias de AtualizarBotaoProcessar() para compatibilidade com
-    *  o padrao do pipeline de migracao.
-    *--------------------------------------------------------------------------
-        THIS.AtualizarBotaoProcessar()
+    *==========================================================================
+    * BtnCancelarClick - Alias para BtnCancelaClick (encerra o form)
+    *==========================================================================
+    PROCEDURE BtnCancelarClick
+        THIS.BtnCancelaClick()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-    *  Reinicia o form para o estado inicial: desmarca checkboxes, oculta
-    *  containers de opcoes e zera o contador. Equivalente ao "recarregar
-    *  a lista" nos forms CRUD, adaptado para o form OPERACIONAL flat.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            THIS.ConfigurarPaginaLista()
-            THIS.Refresh()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
-    *  Para o form OPERACIONAL: exibe o resumo do estado atual (opcoes
-    *  selecionadas e registros do ultimo processamento). Equivalente ao
-    *  "Buscar / Visualizar" nos forms CRUD.
-    *--------------------------------------------------------------------------
-        THIS.BtnVisualizarClick()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnEncerrarClick()
-    *  Fecha o form OPERACIONAL. Alias de CmdEncerrarClick() para
-    *  compatibilidade com o padrao do pipeline de migracao.
-    *--------------------------------------------------------------------------
-        THIS.CmdEncerrarClick()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-    *  Para o form OPERACIONAL: dispara o processamento de recalculo.
-    *  Equivale ao "Salvar" nos forms CRUD, adaptado para este contexto.
-    *  Valida selecao antes de processar.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            IF THIS.chk_4c_Conta.Value    = 0 AND THIS.chk_4c_Estoque.Value  = 0 AND ;
-               THIS.chk_4c_BtnCusto.Value = 0 AND THIS.chk_4c_BtnCompra.Value = 0
-                MsgAviso("Selecione ao menos uma op" + CHR(231) + CHR(227) + ;
-                         "o de processamento.", "Rec" + CHR(225) + "lculo de Saldos")
-                RETURN
-            ENDIF
-            THIS.FormParaBO()
-            THIS.lbl_4c_LblEnd.Visible = .F.
-            THIS.txt_4c_Registro.Value = 0
-            THIS.CmdProcessarClick()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao processar")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-    *  Para o form OPERACIONAL: limpa todas as selecoes e reinicia o form
-    *  para o estado inicial. Equivale ao "Cancelar" nos forms CRUD.
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            IF !MsgConfirma("Limpar todas as op" + CHR(231) + CHR(245) + ;
-                            "es e reiniciar?", "Rec" + CHR(225) + "lculo de Saldos")
-                RETURN
-            ENDIF
-            THIS.LimparCampos()
-            THIS.AjustarBotoesPorModo()
-            THIS.Refresh()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro ao cancelar")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    PROCEDURE Destroy()
-    *--------------------------------------------------------------------------
-        LOCAL loc_oErro
-        TRY
-            IF VARTYPE(THIS.this_oBusinessObject) = "O" AND !ISNULL(THIS.this_oBusinessObject)
-                THIS.this_oBusinessObject = .NULL.
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+    *==========================================================================
+    PROCEDURE Destroy
+    *==========================================================================
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
         DODEFAULT()
     ENDPROC
 

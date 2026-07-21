@@ -1,0 +1,20 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\sigproefBO.prg` criado com 414 linhas.
+
+O BO inclui:
+
+**Propriedades declaradas (this_\*):**
+- Identifica├º├úo: `this_cTabela = "SigOpFp"`, `this_cCampoChave = "Fpags"`
+- Configura├º├úo de hardware (SigCdPam): `this_nNcChequeps`, `this_nSistef`, `this_cNumIps`
+- Configura├º├úo sistema (SigCdPac): `this_cVerSitefs`
+- Impressora fiscal (SIGFIMPF): `this_cCImpFabs`, `this_cCnCaixas`
+- Estado operacional: `this_cOperacao`, `this_cNoCaixa`, `this_cNoFab`, `this_lCancelaVisivel`
+- Filtro de per├¡odo: `this_dDataInicial`, `this_dDataFinal`
+- Transa├º├úo corrente (14 campos do cursor `Transacao`): `this_cDopes`, `this_cCnNsus`, `this_nCnValors`, `this_dCnDtTrans`, `this_cStatus`, `this_cFPags`, `this_lCancel`, `this_nCupFis`, etc.
+
+**M├®todos implementados (al├®m de Init):**
+- `CarregarConfiguracao()` ÔÇö carrega SigCdPam + SigCdPac
+- `CarregarImpressoraFiscal(par_cNoFab)` ÔÇö carrega SIGFIMPF pelo n┬░ de fabrica├º├úo
+- `BuscarTransacoes(par_dDataInicial, par_dDataFinal)` ÔÇö equivalente ao `SqlTrans` original, monta o cursor `Transacao`
+- `CarregarPagamentoFP(par_cFPags)` ÔÇö busca `csSigOpFp` para cancelamento/reimpress├úo
+- `CancelarTransacao(...)` ÔÇö atualiza SigFiTef + SigMvPar
+- `CarregarTransacaoCorrente(par_cAlias)` ÔÇö preenche `this_*` com dados da linha selecionada no grid

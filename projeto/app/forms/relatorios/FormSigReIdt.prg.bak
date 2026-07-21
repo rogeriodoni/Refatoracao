@@ -579,7 +579,9 @@ DEFINE CLASS FormSigReIdt AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.Visualizar()
@@ -598,7 +600,9 @@ DEFINE CLASS FormSigReIdt AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.Imprimir()
@@ -617,7 +621,9 @@ DEFINE CLASS FormSigReIdt AS FormBase
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Documento")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.Documento()

@@ -1,0 +1,19 @@
+﻿Verifica├º├úo conclu├¡da. Os 4 problemas s├úo **todos falsos positivos** ÔÇö o validador comparou incorretamente. Resultado da verifica├º├úo contra o original (`task260/SigPrCar_form_codigo_fonte.txt`):
+
+---
+
+**[SQL-FILTRO-INVENTADO] PKCHAVES** ÔÇö **FALSO POSITIVO**
+Original linha 399: `a.pkChaves <> crSigPrCar.pkChaves` e linha 471: id├¬ntico. `pkChaves` aparece explicitamente no WHERE de verifica├º├úo de duplicidade do legado. A condi├º├úo no BO migrado (`WHERE RTRIM(pkchaves) != RTRIM(par_cPkChaveAtual)`) ├® fiel ao original.
+
+**[SQL-FILTRO-INVENTADO] CGRUS** ÔÇö **FALSO POSITIVO**
+Original linha 385: `[CGrus In ('] + crSigCdPro.CGrus + [', Space(3))]]` e linha 459: id├¬ntico. O filtro `cgrus IN (...)` ├® o filtro passado ao FormBuscaAuxiliar no legado para os pickers de Codigos e Descrs. As queries `BuscarCodigoExato`/`BuscarDescricaoExata` em SIGCRRAP com `AND cgrus IN (...)` s├úo fi├®is ao original.
+
+**[SQL-FILTRO-INVENTADO] DESCRS** ÔÇö **FALSO POSITIVO**
+Original linha 459: o picker da coluna 2 usa `'Descrs'` como campo de busca com filtro CGrus. A condi├º├úo `WHERE descrs = ...` em `BuscarDescricaoExata` (contra SIGCRRAP) ├® fiel ao original.
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT** ÔÇö **FALSO POSITIVO**
+`ControlCount` aparece no c├│digo nas linhas 207 e 222 como `par_oContainer.ControlCount` e `loc_oControl.ControlCount` ÔÇö **propriedade VFP de containers**, n├úo coluna SQL e nunca dentro de um WHERE SQL. O validador confundiu a string "ControlCount" em contexto VFP com uma coluna SQL.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `FormSigPrCar.prg` e `SigPrCarBO.prg` est├úo corretos ÔÇö todos os 4 itens flagrados correspondem a l├│gica presente no legado original ou s├úo propriedades VFP, n├úo colunas SQL inventadas.

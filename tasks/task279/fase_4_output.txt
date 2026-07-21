@@ -1,0 +1,14 @@
+﻿Estrutura limpa: 16 procedimentos, todos fechados corretamente, ENDDEFINE presente. O arquivo passou de 193 para 857 linhas.
+
+**Resumo do que foi adicionado na Fase 4:**
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `ConfigurarControlesOperacionais()` | Cria todos os controles do layout: `txt_4c_Etq_Ini`, `txt_4c_Etq_Qtd`, labels, `obj_4c_Opt_Tipo`, `obj_4c_Opt_Impressora`, `cnt_4c__Impressora` (com 4 spinners + `obj_4c_Opcao_imp`) |
+| `ConfigurarEventos()` | BINDEVENTs: Buttons(1)ÔåÆ`BtnImprimirClick`, Buttons(2)ÔåÆ`BtnEncerrarClick`, `Opt_Impressora`ÔåÆ`ObjOptImpressoraInteractiveChange` |
+| `CarregarDados()` | Chama BO (par├ómetros, tipos, impressoras), APrinters(), popula dinamicamente `Opt_Tipo` e `Opt_Impressora`, ajusta Height do form, inicializa cursor de impress├úo |
+| `AlternarPagina()` | Stub vazio (form OPERACIONAL sem PageFrame) |
+| `BtnImprimirClick()` | Valida quantidade > 0, confirma, chama `PrepararImpressao()`, coleta ajustes, chama `SigOpEtq()` com TRY/CATCH |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `ObjOptImpressoraInteractiveChange()` | Dispara `CarregarOpcaoImpressora()` para a impressora selecionada |
+| `CarregarOpcaoImpressora()` | Tenta buscar overrides em `SigCdMp`; fallback nos valores de `SigCdPam` j├í carregados no BO |

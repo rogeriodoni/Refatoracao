@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. `SigPrGf1BO.prg` est├í completo com os seguintes m├®todos adicionados:
+
+**`ValidarPeriodo()`** ÔÇö equivalente ao `mChkValid` do legado: valida Data Final n├úo vazia, Data Inicial Ôëñ Data Final, e per├¡odo Ôëñ 12 meses. Retorna `.T.`/`.F.` com `this_cMensagem` descritiva.
+
+**`ProcessarDados()`** ÔÇö equivalente ao `mProcessamento` do legado:
+- Busca nome da empresa em `SigCdEmp`
+- Executa SQL Server `BETWEEN` em `SigCdFea LEFT JOIN SigCdEmp` com per├¡odo formatado (data final com `23:59:59`)
+- Roda SELECT VFP local com `GROUP BY 1,2,3,4,5,6` para agregar `SUM(Falhas)` e `SUM(Pesoccbs)` por empresa/m├¬s ÔåÆ cursor `crRel1`
+- Usa `m.` prefix em todas refs de vari├íveis locais dentro do SELECT (rule #118)
+- Sem `RETURN` dentro do `TRY/CATCH` (rule #1) ÔÇö usa flag `loc_lContinuar`
+- Salva/restaura `SET DECIMALS/FIXED/EXACT` antes/ap├│s o SELECT
+
+**`CarregarDoCursor()`** ÔÇö mapeia colunas de `crRel1` para propriedades do BO.

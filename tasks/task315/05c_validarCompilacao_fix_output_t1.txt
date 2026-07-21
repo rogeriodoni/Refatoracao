@@ -1,0 +1,8 @@
+﻿Zero ocorr├¬ncias. Todas as corre├º├Áes foram aplicadas com sucesso.
+
+**Causa raiz:** O BO usava `"""` tentando embedar aspas duplas em strings ÔÇö sintaxe inv├ílida em VFP9. O parser interpretava `"""` como: string vazia `""` + `"` abrindo nova string sem fechar, gerando "Syntax error" nas linhas de valida├º├úo e "Function name is missing )" nas chamadas `MsgErro`/`MsgInfo`.
+
+**Corre├º├úo aplicada (10 pontos):**
+- 6 linhas de valida├º├úo em `Selecionar()` (linhas 454ÔÇô481): substitu├¡do `"""+ var +"""` ÔåÆ `CHR(34) + var + CHR(34)`
+- 2 `MsgErro` (GerarArquivoRJ/SP linhas 628/958): mesma substitui├º├úo para `loc_lcArq`
+- 2 `MsgInfo` (GerarArquivoRJ/SP linhas 886/1097): mesma substitui├º├úo para `loc_lcArq`

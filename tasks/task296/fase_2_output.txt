@@ -1,0 +1,16 @@
+﻿O arquivo foi completado corretamente com 625 linhas. A Fase 2/8 est├í conclu├¡da.
+
+**O que foi adicionado ao `SigPrHprBO.prg`:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarHistorico` | SELECT em SigMvHst com filtro empresa+grupo+conta+produto+per├¡odo; APPEND em cursor_4c_Historico via temp; recria ├¡ndices |
+| `CarregarDadosProduto` | SELECT em SigCdPro + SigCdUni; preenche `this_cCunis`, `this_cCunips`, `this_cCestos`, `this_lEhPeso` |
+| `CarregarDadosLinhaSelecionada` | Copia campos da linha corrente de cursor_4c_Historico para as props `this_*` |
+| `CarregarDocumento` | Detecta tipo via SigCdOpe ÔåÆ busca em SigMvCab (empdopnums) ou SigCdNec (empdnps) |
+| `CarregarDescricoesContabil` | Busca descrs em SigCdGcr (com `r`) + rclis em SigCdCli via SEEK |
+| `CarregarSubniveis` | SELECT em SigMvPec+SigCdOpe ÔåÆ INSERT em cursor_4c_Subniveis |
+| `AuditarRegistro` | UPDATE auditors + dtaudits=GETDATE() em SigMvHst |
+| `DesauditarRegistro` | UPDATE auditors=spaces + dtaudits=NULL |
+| `VerificarPermissaoAuditoria` | Supervisor (4CONTROL) sempre pode; outros s├│ em registros sem auditor ou pr├│prios |
+| `VerificarExistenciaDocumento` | COUNT em SigMvCab/SigCdNec; retorna "MOVCAB", "NEC" ou "" |

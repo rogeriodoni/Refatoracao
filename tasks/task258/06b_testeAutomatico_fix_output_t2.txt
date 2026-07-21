@@ -1,0 +1,3 @@
+﻿Fixed. The bug was on line 413: `BINDEVENT(THIS.txt_4c_OP, "KeyPress", THIS, "TxtOPLostFocus")` ÔÇö event name was `"KeyPress"` instead of `"LostFocus"`.
+
+When the automated test pressed any key in `txt_4c_OP`, VFP9 fired both KeyPress handlers: `TxtOPKeyPress` (correct, has `LPARAMETERS`) and `TxtOPLostFocus` (wrong ÔÇö no `LPARAMETERS` for KeyPress's 2 args), triggering a "Function argument value, type, or count is invalid" runtime error dialog that blocked VFP9 indefinitely.

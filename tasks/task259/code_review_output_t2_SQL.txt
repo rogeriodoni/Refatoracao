@@ -1,0 +1,27 @@
+﻿Encontrei todos os locais. Vou analisar cada um dos 4 problemas reportados:
+
+**CMOES** (linha 1841): `SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = ...` ÔÇö lookup de valida├º├úo de moeda no handler `TxtMoedaKeyPress`.
+
+**ICLIS** (linha 1677): `SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = ...` ÔÇö lookup de valida├º├úo de fornecedor no handler `TxtContaKeyPress`.
+
+**CODS** (linha 1933): `SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = ...` ÔÇö lookup de valida├º├úo de feitio no handler `TxtCFtiosKeyPress`.
+
+**CONTROLCOUNT** ÔÇö n├úo existe em nenhum arquivo do projeto (`grep` retornou zero resultados).
+
+---
+
+## Diagn├│stico: todos os 4 flags s├úo falsos positivos
+
+A ferramenta de revis├úo SQL comparou **todas** as condi├º├Áes `WHERE` do arquivo contra a lista de colunas do WHERE principal da query de produtos (`CGRUS, COLECOES, IFORS, MOEVS, MARGEMS, CPROS`...). Por├®m:
+
+- `CMoes`, `IClis` e `Cods` aparecem em **queries de lookup separadas** (valida├º├úo de campo em handlers KeyPress), **n├úo** no filtro principal da busca de produtos.
+- `CONTROLCOUNT` simplesmente n├úo existe no c├│digo.
+
+Essas 3 colunas s├úo v├ílidas nas suas respectivas tabelas:
+- `SigCdMoe.CMoes` ÔÇö chave prim├íria da tabela de moedas
+- `SigCdCli.IClis` ÔÇö chave prim├íria da tabela de clientes/fornecedores  
+- `SigPrFti.Cods` ÔÇö chave prim├íria da tabela de feitios
+
+O filtro principal de produtos no `SigPrAprBO.ProcessarReajuste()` (linhas 282ÔÇô314) est├í correto ÔÇö usa apenas as colunas `CGrus`, `Colecoes`, `IFors`, `MoeVs`, `Margems`, e `CPros`, todas presentes no original.
+
+**Nenhuma altera├º├úo ├® necess├íria.** N├úo h├í condi├º├Áes WHERE inventadas pela LLM neste form/BO ÔÇö os 4 detections s├úo artefatos do revisor comparando queries de lookup contra o WHERE da query principal.

@@ -1,0 +1,25 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi implementado:**
+
+`ConfigurarPaginaDados()` agora cria:
+- **Bot├Áes de a├º├úo** (cnt_4c_BotoesAcao): Confirmar (`cadastro_salvar_60.jpg`) + Cancelar, com BINDEVENTs para `BtnSalvarClick`/`BtnCancelarClick`
+- **Bot├úo Encerrar** (cnt_4c_Saida) com BINDEVENT para `BtnEncerrarClick`
+- **Todos os campos do cabe├ºalho** (primeira metade da Page2):
+  - `chk_4c_ChkInativos` (top=56, read-only)
+  - `txt_4c_Grupo` + `lbl_4c_Label1` "Grupo :" (top=74/78)
+  - `txt_4c_Usuars` + `lbl_4c_Label4` "Cria├º├úo do JOB :" (top=74/78)
+  - `txt_4c_DataIncs` + `lbl_4c_Label5` "Criado em :" (top=74/78)
+  - `txt_4c_IClis` + `lbl_4c_Label2` "JOB :" (top=100/104)
+  - `txt_4c_RClis` (top=100)
+  - `txt_4c_Razaos` + `lbl_4c_Label3` "Descritivo :" (top=126/130)
+  - `lbl_4c_Label6` "Lista de Usu├írios..." (top=183)
+
+**Novos m├®todos adicionados:**
+- `BOParaForm()` ÔÇö preenche os 7 campos do cabe├ºalho a partir das propriedades do BO
+- `HabilitarCampos()` ÔÇö controla o estado do bot├úo Confirmar (habilitado s├│ em ALTERAR)
+- `LimparCampos()` ÔÇö reseta todos os campos do cabe├ºalho
+- `BtnSalvarClick()` ÔÇö valida unicidade, chama `SalvarAcessos()`, volta para lista
+- `BtnCancelarClick()` ÔÇö limpa cursor e volta para lista
+
+**Bot├Áes atualizados** (BtnAlterarClick/BtnVisualizarClick/BtnIncluirClick) agora chamam `CarregarAcessos()` + `BOParaForm()` + `HabilitarCampos()` ao navegar para Page2. Fase 6 adicionar├í o grid `grd_4c_Dados` com as colunas de usu├írios e os bot├Áes de linha (btnInserir/btnExcluir).

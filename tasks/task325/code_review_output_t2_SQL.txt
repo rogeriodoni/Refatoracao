@@ -1,0 +1,27 @@
+﻿Verifica├º├úo conclu├¡da. Resumo dos resultados:
+
+---
+
+## Resultado: 11 Falsos Positivos Confirmados
+
+Ap├│s verificar cada coluna no schema real (`docs/schema.sql`), **todas as 11 condi├º├Áes WHERE s├úo v├ílidas e necess├írias**:
+
+| Coluna flagada | Tabela no c├│digo | Coluna real no schema | Resultado |
+|---|---|---|---|
+| `CEMPS` | `SigCdEmp` | `cemps char(3)` | Ô£à V├ílida |
+| `CODIGOS` | `SigCdGcr`, `SigCdPsg`, `SigPrLcl` | `codigos` em todas | Ô£à V├ílida |
+| `CONTAS` | `SIGCDGFC` | `contas char(10)` | Ô£à V├ílida |
+| `GRUPOS` | `SIGCDGFC` | `grupos char(10)` | Ô£à V├ílida |
+| `CGRUS` | `SigCdGrp` | `cgrus char(3)` (PK) | Ô£à V├ílida |
+| `DGRUS` | `SigCdGrp` | `dgrus char(20)` | Ô£à V├ílida |
+| `DESCRICAOS` | `SigCdPsg` | `descricaos char(20)` | Ô£à V├ílida |
+| `COLECOES` | `SIGCDCOL` | `colecoes char(10)` | Ô£à V├ílida |
+| `DESCS` | `SIGCDCOL` | `descs char(40)` | Ô£à V├ílida |
+| `LINHAS` | `SigCdLin` | `linhas char(10)` | Ô£à V├ílida |
+| `PROMOS` | `SigPrPmc` | `promos char(25)` | Ô£à V├ílida |
+
+### Por que o checker gerou falsos positivos?
+
+O checker comparou os WHEREs do c├│digo migrado contra o trecho de refer├¬ncia do original ÔÇö que s├│ mostra as queries de etiqueta (`WHERE CBars = ... OR cbars_old = ...`). O SCX original tinha dezenas de valida├º├Áes de lookup (empresa, grupo estoque, linha, cole├º├úo, etc.) convertidas de SEEK/INDEX VFP para SQLEXEC, cujos WHEREs n├úo aparecem no trecho de refer├¬ncia.
+
+**Nenhuma altera├º├úo feita.** Remover essas condi├º├Áes quebraria toda a l├│gica de valida├º├úo/lookup dos campos de filtro, violando a regra "NAO remover campos, funcionalidades ou lookups".

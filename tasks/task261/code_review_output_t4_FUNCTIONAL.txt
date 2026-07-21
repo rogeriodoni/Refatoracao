@@ -1,0 +1,16 @@
+﻿Ap├│s verificar o arquivo real, todos os 9 problemas listados no code review **j├í est├úo corrigidos** no arquivo atual em disco:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (linhas 1010-1016) j├í possui o `INLIST` com todos os 5 containers protegidos: `CNT_4C_SOMBRA`, `CNT_4C_OPCONTA`, `CNT_4C_OPESTOQUE`, `CNT_4C_OPCUSTO`, `CNT_4C_OPCOMPRA`. A recurs├úo nos filhos ├® chamada antes do `LOOP`, seguindo o padr├úo can├┤nico do feedback.
+
+**[LAYOUT-POSITION]** ÔÇö Todos os 8 problemas de posi├º├úo s├úo **falsos positivos** da ferramenta de valida├º├úo. Os valores no arquivo j├í batem com o SCX original:
+
+| Container | Top (original ÔåÆ arquivo) | Left (original ÔåÆ arquivo) |
+|---|---|---|
+| `cnt_4c_OpConta` | 114 ÔåÆ **114** Ô£ô | 139 ÔåÆ **139** Ô£ô |
+| `cnt_4c_OpEstoque` | 200 ÔåÆ **200** Ô£ô | 139 ÔåÆ **139** Ô£ô |
+| `cnt_4c_OpCusto` | 349 ÔåÆ **349** Ô£ô | 139 ÔåÆ **139** Ô£ô |
+| `cnt_4c_OpCompra` | 447 ÔåÆ **447** Ô£ô | 139 ÔåÆ **139** Ô£ô |
+
+A ferramenta confundiu as posi├º├Áes dos containers (`cnt_4c_OpConta.Top=114`) com as posi├º├Áes dos labels internos (`lbl_4c_TituloOp.Top=2` e `.Left=171/182`), gerando diferen├ºas fict├¡cias. Os checkboxes tamb├®m est├úo corretos: `chk_4c_Conta.Left=350` e `chk_4c_Estoque.Left=425`.
+
+Nenhuma altera├º├úo ├® necess├íria ÔÇö o arquivo `FormSigPrCcc.prg` j├í est├í em conformidade com todos os requisitos deste pass.

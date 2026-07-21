@@ -1,0 +1,17 @@
+﻿**Fase 2/8 conclu├¡da.** SIGPRCOTBO.prg agora tem 480 linhas com todos os m├®todos CRUD completos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor()` | Mapeia todos os 7 campos de SigCdCot para propriedades `this_*` |
+| `CarregarCotacoes(par_cMoeda)` | Carrega cota├º├Áes da moeda via SQLEXEC ÔåÆ cursor READWRITE com 2 ├¡ndices (CidChaves + Cotacaos) |
+| `InserirNovaCotacao(par_cMoeda)` | Verifica duplicidade com LOCATE (evita SEEK parcial com SET EXACT ON), insere no SQL e no cursor |
+| `ExcluirCotacaoAtual(par_cCidChave)` | DELETE no SQL + LOCATE+DELETE+PACK no cursor |
+| `SalvarAlteracoesCursor()` | Replica l├│gica do bot├úo "sair" do legado: limpa registros incompletos, depois UPDATE para todos v├ílidos |
+| `Inserir()` / `Atualizar()` | CRUD direto via `this_*` props |
+| `ExecutarExclusao()` | Chamado pelo BusinessBase.Excluir() |
+| `RegistrarAuditoria()` | INSERT em LogAuditoria com GETDATE() |
+
+**Decis├Áes t├®cnicas aplicadas:**
+- `RETURN .F.` movidos para **antes** do TRY (regra #1 cr├¡tica do VFP9)
+- `LOCATE FOR` em vez de `SEEK` no cursor para evitar falha do SEEK parcial com `SET EXACT ON` global (regra de INDEX composto)
+- `GETDATE()` para `dtalts` em `SalvarAlteracoesCursor` (regra #35 - nunca `FormatarDataSQL(DATETIME())`)

@@ -1,0 +1,911 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRLNC.SCX
+* Data/Hora: 17/07/2026 16:05:11
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRLNC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Desc_Gru
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Desc_Con
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: inserir
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: excluir
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Grupos
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Gradeoco
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRLNC.Pagina.Dados.Gradeoco.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRLNC.Pagina.Dados.Gradeoco.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRLNC.Pagina.Dados.Gradeoco.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRLNC.Pagina.Dados.Gradeoco.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Contas
+  Parent: SIGPRLNC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 146
+  Left = 95
+  Width = 511
+  Height = 299
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Lançamentos"
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGPRLNC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 480
+  Pagina.Lista.Grade.Left = 29
+  Pagina.Lista.Grade.Top = 101
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 25
+  Pagina.Lista.cntFiltros.Left = 503
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 844
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Get_Desc_Gru
+------------------------------------------------------------
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 382
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 127
+  Width = 360
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 13
+  Name = "Get_Desc_Gru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo : "
+  Left = 257
+  Top = 130
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta : "
+  Left = 257
+  Top = 155
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Get_Desc_Con
+------------------------------------------------------------
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 382
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 152
+  Width = 360
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 14
+  Name = "Get_Desc_Con"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.inserir
+------------------------------------------------------------
+  Top = 335
+  Left = 629
+  Height = 40
+  Width = 40
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 9
+  Picture = ..\framework\imagens\geral_selecionar_26.jpg
+  Caption = ""
+  TabIndex = 8
+  ToolTipText = "Inserir"
+  Visible = .T.
+  ForeColor = 0,128,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.excluir
+------------------------------------------------------------
+  Top = 375
+  Left = 629
+  Height = 40
+  Width = 40
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 9
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 9
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Get_Grupos
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigClLan.grupos"
+  Format = "K"
+  InputMask = ""
+  Left = 300
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 127
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  Name = "Get_Grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Gradeoco
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  Height = 403
+  Left = 300
+  Panel = 1
+  RecordSource = "csSigClLan"
+  RowHeight = 16
+  TabIndex = 7
+  Top = 181
+  Visible = .T.
+  Width = 324
+  Name = "Gradeoco"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = "csSigClLan.cocos"
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Visible = .T.
+  Column1.InputMask = ""
+  Column1.Name = "Column2"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = "csSigClLan.descs"
+  Column2.Width = 220
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ocorrência"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRLNC.Pagina.Dados.Get_Contas
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigClLan.contas"
+  Format = "K"
+  InputMask = ""
+  Left = 300
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 152
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 9
+  Name = "Get_Contas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRLNC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE inicdesc
+------------------------------------------------------------
+PROCEDURE inicdesc
+iGrupo = thisform.pagina.dados.get_Grupos.Value
+thisform.podatamgr.cursorquery('SigCdGcr','crTmpgccr','codigos',iGrupo)
+thisform.pagina.dados.get_Desc_Gru.Value = crTmpgccr.Descrs
+iContas = thisform.pagina.dados.get_Contas.Value
+thisform.podatamgr.cursorquery('SigCdCli','crTmpSigCdCli','iclis',iContas)
+thisform.pagina.dados.get_Desc_Con.Value = crTmpSigCdCli.rclis
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+If (.Not. Empty(ThisForm.Pagina.Dados.Get_Grupos.Value)) AND (Empty(ThisForm.Pagina.Dados.Get_Contas.Value))
+  sGruContas = ThisForm.Pagina.Dados.Get_Grupos.Value+ThisForm.Pagina.Dados.Get_Contas.Value
+  ThisForm.poDataMgr.LocateCursor('crSigClLan','grucontas',sGruContas)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+Create Cursor csSigClLan (Grupos c(10), Contas c(10), Cocos c(2), descs c(30) )
+Index On cocos tag cocos
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+lcQryLancamento = [Select * From SigClLan]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigClLan', 'cIdChaves', 'crSigClLan', '', ThisForm.Pagina.Lista.Grade, lcQryLancamento)
+				.pfSqlTabela(1).pColuna('Grupos', '', '', 'Grupos', 80, .t.)
+				.pfSqlTabela(1).pColuna('Contas','', '','Contas', 80, .t.)
+				.pfSqlTabela(1).pColuna('Cocos','', '','Operação', 80, .t.)
+		EndWith
+
+		=DoDefault()
+        Go Top
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+EndIf
+
+Select csSigClLan
+Zap
+
+gruconta = crSigClLan.grupos + crSigClLan.contas
+
+lcquery = [Select a.*, b.descs from SigClLan a, SigCcCco b where a.grucontas=']+gruconta+[' and a.cocos = b.cods]
+=Thisform.podatamgr.sqlexecute(lcquery,'CrTmpLanc')
+
+Select crtmplanc
+Scan
+	Scatter memvar
+	Select csSigClLan
+	Append Blank
+	Gather memvar
+EndScan
+
+Select csSigClLan
+
+thisform.pagina.dados.GradeOco.Refresh()
+ThisForm.Pagina.Dados.Refresh
+
+Do Case
+
+	Case Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+		thisform.pagina.dados.get_Grupos.setfocus	
+
+		thisform.pagina.dados.get_Desc_Gru.value = ''
+		thisform.pagina.dados.get_Desc_Con.value = ''
+      IF thisform.pcEscolha = 'PROCURAR'
+         thisform.pagina.dados.GradeOco.Enabled = .F.
+      ENDIF 	
+      
+	Case ThisForm.pcEscolha =  'ALTERAR'
+    	thisform.pagina.dados.GradeOco.Column2.SetFocus
+    	thisform.inicdesc()    	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+    	thisform.inicdesc()    	
+Endcase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha =  'PROCURAR'
+	If (.Not. Empty(ThisForm.Pagina.Dados.Get_Grupos.Value)) AND (Empty(ThisForm.Pagina.Dados.Get_Contas.Value))
+      =Messagebox('Atenção ! Para pesquisar é necessário escolher também a Conta.', 0+48, 'CreateObject')
+      Thisform.pagina.dados.Get_Contas.SetFocus
+      Return (.F.)	
+	EndIf
+    Thisform.pagina.dados.GradeOco.Enabled = .T.	
+ENDIF
+
+IF Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+   IF IsEmpty(Thisform.pagina.dados.Get_Grupos.Value)	
+      =MESSAGEBOX("Obrigatório Informar o Grupo" , 16, "Atenção")
+      Thisform.pagina.dados.Get_Grupos.SetFocus
+      RETURN
+   ENDIF    
+   IF IsEmpty(Thisform.pagina.dados.Get_Contas.Value)	
+      =MESSAGEBOX("Obrigatório Informar a Conta" , 16, "Atenção")
+      Thisform.pagina.dados.Get_Contas.SetFocus
+      RETURN
+   EndIf
+   lcgrucon = thisform.pagina.dados.get_grupos.Value + thisform.pagina.dados.get_contas.value
+   lcdelete = [delete from SigClLan where grucontas = ']+lcgrucon+[']
+   If thisform.podatamgr.sqlexecute(lcdelete,'') < 1
+		MessageBox('Favor Reiniciar o Processo!!!',0+48,'Erro Conexao')
+		Return 0
+   EndIf
+   
+   Select CrSigClLan
+   Dele
+   
+  Select csSigClLan
+  Scan
+  	If !Empty(csSigClLan.cocos)
+		Insert Into crSigClLan (Grupos, Contas, Cocos, cIdChaves, Grucontas) ;
+					   Values (csSigClLan.Grupos, csSigClLan.Contas, csSigClLan.Cocos, ;
+					   		   fUniqueIds(), csSigClLan.Grupos + csSigClLan.Contas)
+	Endif
+  EndScan
+ENDIF      
+
+=DoDefault()
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+IF ThisForm.pcEscolha =  'PROCURAR'
+   Thisform.pagina.dados.GradeOco.Enabled = .T.	
+ENDIF
+
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.Pagina.Lista.Activate
+	ThisForm.Pagina.Lista.Grade.SetFocus
+	ThisForm.mAtivapagina1
+Endif
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Get_Desc_Gru
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_grupos.value) AND ;
+       Inlist(ThisForm.pcEscolha, "PROCURAR"))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+fAcessoContab(Usuar,'C',this.value,Thisform.pagina.dados.get_grupos,Thisform.pagina.dados.get_desc_gru)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Get_Desc_Con
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_contas.value) AND ;
+       Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR"))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If not fAcessoContas(Usuar,Thisform.pagina.dados.get_grupos.value,'D',this.value,;
+		thisform.pagina.dados.get_contas,thisform.pagina.dados.get_desc_con)
+	Messagebox('Conta Inválida (Acesso Negado)!!',0+48,'')
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.inserir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+GruAux = thisform.pagina.dados.get_Grupos.value
+ContAux = thisform.pagina.dados.get_Contas.value 
+
+Insert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )
+
+thisform.pagina.dados.GradeOco.Refresh()
+thisform.pagina.dados.GradeOco.Column2.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+GruAux = thisform.pagina.dados.get_Grupos.value
+ContAux = thisform.pagina.dados.get_Contas.value 
+
+thisform.pagina.dados.SetFocus
+thisform.pagina.dados.GradeOco.Column2.SetFocus
+
+Delete
+go bottom
+IF EOF()
+	Insert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )
+ENDIF
+
+thisform.pagina.dados.GradeOco.Refresh() 
+thisform.pagina.dados.GradeOco.Column2.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Get_Grupos
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR"))
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+fAcessoContab(Usuar,'C',this.value,Thisform.pagina.dados.get_grupos,Thisform.pagina.dados.get_desc_gru)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Gradeoco
+* Classe: fwgrade (Base: grid)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+IF Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR")
+  This.ReadOnly = .F.
+Else
+  This.ReadOnly = .T.
+EndIf
+RETURN(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.CodAnt = This.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF This.Value = ThisForm.CodAnt
+   RETURN
+ENDIF
+   
+local lcod,lfan,codcor,xobj
+
+if not IsEmpty(this.value)
+
+	Ponteiro = Recno('csSigClLan')
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCcCco', ;
+						   'crListaRemota', 'Cods', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods', '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	This.Value = crListaRemota.Cods
+	sDescLista = crListaRemota.Descs
+	Use In crListaRemota
+
+    Select CsSigClLan
+	If Lastkey() = 27
+		Replace csSigClLan.Cocos with '  '
+	Else
+		Replace csSigClLan.Cocos with This.Value
+		Replace csSigClLan.descs with sDescLista
+	Endif
+	this.refresh
+	thisform.pagina.dados.GradeOco.Column1.Refresh()
+   Gruaux =	thisform.pagina.dados.Get_Grupos.Value	
+   Contaux = thisform.pagina.dados.Get_Contas.Value	
+   OcoAux = This.Value
+   Set Order to cocos
+   if Seek(this.value)
+	  Skip
+	  If cocos = This.Value
+	  	Go ponteiro
+		MessageBox( 'Já existe um registro com este grupo, conta e ocorrência ...', 48, '' )
+		thisform.pagina.dados.GradeOco.Column2.Text1.Value = ""
+       	thisform.pagina.dados.GradeOco.Column2.Refresh()
+		thisform.pagina.dados.GradeOco.Column1.Text1.Value = ""
+		thisform.pagina.dados.GradeOco.Column1.Refresh()
+       	Set Order To 
+        Return 0
+      ENDIF
+   Endif
+   GO Ponteiro
+EndIf
+Set Order To 
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRLNC.Pagina.Dados.Get_Contas
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR"))
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If not fAcessoContas(Usuar,Thisform.pagina.dados.get_grupos.value,'C',this.value,;
+		thisform.pagina.dados.get_contas,thisform.pagina.dados.get_desc_con)
+	Messagebox('Conta Inválida (Acesso Negado)!!',0+48,'')
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRLNC
+RESERVED3 (ClassInfo): codant
+*inicdesc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

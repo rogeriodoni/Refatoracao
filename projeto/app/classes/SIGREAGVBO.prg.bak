@@ -23,7 +23,7 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
     this_cArquivoFRX   = ""    && Caminho completo do arquivo .frx
     this_cTitulo       = ""    && Titulo principal do relatorio
     this_cSubTitulo    = ""    && Sub-titulo (Grupo de Venda selecionado)
-    this_cCursorDados  = "cursor_4c_Imprimir"    && Cursor principal para REPORT FORM
+    this_cCursorDados  = "crImprimir"    && Cursor principal para REPORT FORM (nome bate com FRX legado)
 
     *--------------------------------------------------------------------------
     * Init - Configura metadados do relatorio
@@ -283,28 +283,28 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
                        loc_lnZer AS Percentual ;
                   FROM crGroupImp2 ;
                  GROUP BY Colecoes, PrecoMedio, Promos, DtIncs ;
-                  INTO CURSOR cursor_4c_Imprimir READWRITE
+                  INTO CURSOR crImprimir READWRITE
 
-                SELECT cursor_4c_Imprimir
+                SELECT crImprimir
                 INDEX ON Colecoes + DTOS(DtIncs) + Ordem TAG Colecoes
 
                 *-- Define intervalos de datas por grupo de venda
                 loc_lcGrv = SPACE(10)
-                SELECT cursor_4c_Imprimir
+                SELECT crImprimir
                 SCAN
-                    IF (loc_lcGrv <> cursor_4c_Imprimir.Colecoes)
-                        loc_lcGrv = cursor_4c_Imprimir.Colecoes
-                        REPLACE DtInicial WITH CTOD("01/01/1900") IN cursor_4c_Imprimir
-                        REPLACE DtFinal   WITH DATE()              IN cursor_4c_Imprimir
-                        loc_ldDat = cursor_4c_Imprimir.DtFinal
+                    IF (loc_lcGrv <> crImprimir.Colecoes)
+                        loc_lcGrv = crImprimir.Colecoes
+                        REPLACE DtInicial WITH CTOD("01/01/1900") IN crImprimir
+                        REPLACE DtFinal   WITH DATE()              IN crImprimir
+                        loc_ldDat = crImprimir.DtFinal
                     ELSE
                         SKIP -1
-                        REPLACE DtFinal WITH IIF(EMPTY(DtIncs), CTOD("01/01/1900"), DtIncs) IN cursor_4c_Imprimir
-                        loc_ldDat = cursor_4c_Imprimir.DtFinal
+                        REPLACE DtFinal WITH IIF(EMPTY(DtIncs), CTOD("01/01/1900"), DtIncs) IN crImprimir
+                        loc_ldDat = crImprimir.DtFinal
                         SKIP +1
-                        REPLACE DtInicial WITH loc_ldDat IN cursor_4c_Imprimir
-                        REPLACE DtFinal   WITH DATE()    IN cursor_4c_Imprimir
-                        loc_ldDat = cursor_4c_Imprimir.DtFinal
+                        REPLACE DtInicial WITH loc_ldDat IN crImprimir
+                        REPLACE DtFinal   WITH DATE()    IN crImprimir
+                        loc_ldDat = crImprimir.DtFinal
                     ENDIF
                 ENDSCAN
 
@@ -333,16 +333,16 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
                 SELECT crMovimento
                 INDEX ON CPros + DTOS(Datas) TAG ProDat
 
-                *-- Acumula compras e vendas por produto/periodo em cursor_4c_Imprimir
+                *-- Acumula compras e vendas por produto/periodo em crImprimir
                 WAIT WINDOW "Processando Movimenta" + CHR(231) + CHR(227) + "o dos Produtos..." NOWAIT
-                SELECT cursor_4c_Imprimir
+                SELECT crImprimir
                 SCAN
-                    loc_lcDtI = DTOS(cursor_4c_Imprimir.DtInicial)
-                    loc_lcDtF = DTOS(cursor_4c_Imprimir.DtFinal)
+                    loc_lcDtI = DTOS(crImprimir.DtInicial)
+                    loc_lcDtF = DTOS(crImprimir.DtFinal)
 
                     SELECT CPros ;
                       FROM crSigCdPro ;
-                     WHERE Colecoes = cursor_4c_Imprimir.Colecoes ;
+                     WHERE Colecoes = crImprimir.Colecoes ;
                      ORDER BY CPros ;
                       INTO CURSOR crProdutos
                     SELECT crProdutos
@@ -356,7 +356,7 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
                         GO TOP IN crValores
                         IF !EOF("crValores")
                             REPLACE Compras WITH Compras + crValores.Compras, ;
-                                    Vendas  WITH Vendas  + crValores.Vendas  IN cursor_4c_Imprimir
+                                    Vendas  WITH Vendas  + crValores.Vendas  IN crImprimir
                         ENDIF
                         IF USED("crValores")
                             USE IN crValores
@@ -370,27 +370,27 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
 
                 *-- Calcula saldo inicial, final e percentual por grupo
                 loc_lcGrv = SPACE(10)
-                SELECT cursor_4c_Imprimir
+                SELECT crImprimir
                 SCAN
-                    IF (loc_lcGrv <> cursor_4c_Imprimir.Colecoes)
-                        loc_lcGrv = cursor_4c_Imprimir.Colecoes
-                        REPLACE SaldoFin   WITH Compras - Vendas IN cursor_4c_Imprimir
+                    IF (loc_lcGrv <> crImprimir.Colecoes)
+                        loc_lcGrv = crImprimir.Colecoes
+                        REPLACE SaldoFin   WITH Compras - Vendas IN crImprimir
                         REPLACE Percentual WITH IIF(Vendas = 0, 0, ;
                             IIF(SaldoIni + Compras = 0, 100, ;
-                                (Vendas / (SaldoIni + Compras)) * 100)) IN cursor_4c_Imprimir
+                                (Vendas / (SaldoIni + Compras)) * 100)) IN crImprimir
                     ELSE
                         SKIP -1
-                        loc_lnSal = cursor_4c_Imprimir.SaldoFin
+                        loc_lnSal = crImprimir.SaldoFin
                         SKIP +1
                         REPLACE SaldoIni WITH loc_lnSal, ;
-                                SaldoFin WITH loc_lnSal + (Compras - Vendas) IN cursor_4c_Imprimir
+                                SaldoFin WITH loc_lnSal + (Compras - Vendas) IN crImprimir
                         REPLACE Percentual WITH IIF(Vendas = 0, 0, ;
                             IIF(SaldoIni + Compras = 0, 100, ;
-                                (Vendas / (SaldoIni + Compras)) * 100)) IN cursor_4c_Imprimir
+                                (Vendas / (SaldoIni + Compras)) * 100)) IN crImprimir
                     ENDIF
                 ENDSCAN
 
-                SELECT cursor_4c_Imprimir
+                SELECT crImprimir
                 GO TOP
 
                 loc_lSucesso = .T.

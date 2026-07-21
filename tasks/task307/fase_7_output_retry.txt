@@ -1,0 +1,8 @@
+﻿All four expected methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) now exist in `FormSigPrItb.prg` with real functionality ÔÇö no MsgAviso stubs. Since this is an OPERACIONAL form (Integra├º├úo Cont├íbil Total), the CRUD-named methods were mapped to semantically-equivalent operations:
+
+- **BtnIncluirClick** (line 746) ÔÇö Descarta cursores atuais e reinicia inputs para nova integra├º├úo.
+- **BtnAlterarClick** (line 797) ÔÇö Reabre inputs mantendo estado e re-dispara `BtnProcessarClick`.
+- **BtnVisualizarClick** (line 729) ÔÇö Preview do relat├│rio `SigPrIct.frx` via helper can├┤nico.
+- **BtnExcluirClick** (line 822) ÔÇö Cancela opera├º├úo em andamento (ZAP nos cursores MovAux/SemConta/Cabecalho) sem tocar em SigPrMov.
+
+Todas as refer├¬ncias a propriedades do BO foram validadas (`this_lTemInconsistencias`, `this_cMensagemErro` existem; a inexistente `this_cCaminhoArquivo` foi removida).

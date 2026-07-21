@@ -6,7 +6,7 @@
     "status":  "PENDING",
     "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
     "criadoEm":  "2026-07-14T15:16:27",
-    "atualizadoEm":  "2026-07-14T15:16:30",
+    "atualizadoEm":  "2026-07-14T16:47:38",
     "etapas":  {
                    "01_moverArquivos":  {
                                             "status":  "COMPLETED",
@@ -78,66 +78,80 @@
                                                             ]
                                            },
                    "05_migracao":  {
-                                       "status":  "IN_PROGRESS",
+                                       "status":  "COMPLETED",
                                        "inicio":  "2026-07-14T15:16:30",
-                                       "fim":  null,
+                                       "fim":  "2026-07-14T16:11:36",
                                        "tentativas":  1,
                                        "maxTentativas":  3,
                                        "arquivosGerados":  [
 
                                                            ],
                                        "comentario":  "FormXXX.prg, XXXBO.prg",
-                                       "erro":  null
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrAopBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  23.99,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrAop.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  892
                                    },
                    "05b_corrigirAutomatico":  {
-                                                  "status":  "PENDING",
-                                                  "inicio":  null,
-                                                  "fim":  null,
-                                                  "tentativas":  0,
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-14T16:11:36",
+                                                  "fim":  "2026-07-14T16:11:40",
+                                                  "tentativas":  1,
                                                   "correcoesAplicadas":  0,
                                                   "erro":  null,
-                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes"
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrAop.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrAopBO.prg"
                                               },
                    "05c_validarCompilacao":  {
-                                                 "status":  "PENDING",
-                                                 "inicio":  null,
-                                                 "fim":  null,
-                                                 "tentativas":  0,
-                                                 "arquivosValidados":  0,
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-14T16:11:40",
+                                                 "fim":  "2026-07-14T16:11:41",
+                                                 "tentativas":  1,
                                                  "errosCompilacao":  [
 
                                                                      ],
                                                  "erro":  null,
-                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar"
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
                                              },
                    "06_testForm":  {
-                                       "status":  "PENDING",
-                                       "inicio":  null,
-                                       "fim":  null,
-                                       "tentativas":  0,
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-14T16:20:00",
+                                       "fim":  "2026-07-14T16:20:02",
+                                       "tentativas":  1,
                                        "maxTentativas":  5,
                                        "errosEncontrados":  [
 
                                                             ],
-                                       "erro":  null
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
                                    },
                    "06b_testeAutomatico":  {
-                                               "status":  "PENDING",
-                                               "inicio":  null,
-                                               "fim":  null,
-                                               "tentativas":  0,
-                                               "total":  0,
-                                               "passou":  0,
-                                               "falhou":  0,
-                                               "percentual":  0,
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-14T16:20:02",
+                                               "fim":  "2026-07-14T16:47:30",
+                                               "tentativas":  1,
                                                "erro":  null,
-                                               "comentario":  "NOVO - Testes CRUD automaticos"
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task258\\teste_resultado.json"
                                            },
                    "07_validarUI":  {
-                                        "status":  "PENDING",
-                                        "inicio":  null,
-                                        "fim":  null,
-                                        "tentativas":  0,
+                                        "status":  "FAILED",
+                                        "inicio":  "2026-07-14T16:47:31",
+                                        "fim":  "2026-07-14T16:47:38",
+                                        "tentativas":  1,
                                         "maxTentativas":  5,
                                         "problemas":  {
                                                           "erros":  0,
@@ -146,7 +160,13 @@
                                                           "total":  0
                                                       },
                                         "limiteProblemas":  10,
-                                        "erro":  null
+                                        "erro":  "UI Fidelity: 4 erros (limite 4), 13 diferencas visuais (limite 0), 128 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSigPrAop_20260714164738.html",
+                                        "diferencas":  13,
+                                        "erros":  4,
+                                        "totalProblemas":  145,
+                                        "avisos":  128
                                     },
                    "08_gerarTestManual":  {
                                               "status":  "PENDING",
@@ -170,6 +190,60 @@
                                              "tentativas":  1,
                                              "erro":  null,
                                              "fim":  "2026-07-14T15:16:29"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-14T16:11:40",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-14T16:11:40",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigPrAop_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrAop.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task258\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-14T16:11:41",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-14T16:12:22",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-14T16:12:22",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-14T16:19:02",
+                                          "passes":  3,
+                                          "problemas":  "Nenhum",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  0
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-14T16:19:02",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-14T16:20:00",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigPrAopBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPrAop.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-14T16:47:31",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-14T16:47:31",
+                                             "thresholdPx":  5,
+                                             "unmatched":  5,
+                                             "errors":  5,
+                                             "matched":  5,
+                                             "warnings":  10,
+                                             "reportFile":  "C:\\4c\\tasks\\task258\\layout_vs_prg_report.json"
                                          }
                },
     "metricas":  {

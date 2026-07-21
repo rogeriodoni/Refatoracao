@@ -1,0 +1,5 @@
+﻿Correto. O BO agora termina sem `Inserir()` e `Atualizar()`.
+
+**Corre├º├úo aplicada:** Removidos os m├®todos `Inserir()` e `Atualizar()` de `SIGPRTRFBO.prg`. Esses m├®todos foram adicionados pelo LLM seguindo o template CRUD gen├®rico, mas o SIGPRTRF ├® um form OPERACIONAL (di├ílogo de sele├º├úo de produtos para transmiss├úo ECF) ÔÇö o original jamais teve INSERT/UPDATE em `SigCdPro`. O `WHERE cpros = ...` no UPDATE era exatamente o filtro inventado detectado pelo validator.
+
+Os outros WHEREs com `cpros` no form e no BO (lookup por c├│digo em `TxtCodProdKeyPress`, `BuscarProduto`, `ValidarProduto`) foram mantidos ÔÇö s├úo substitui├º├Áes corretas do `fwBuscaExt` original que filtrava por `cpros` internamente.

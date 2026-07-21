@@ -1,0 +1,17 @@
+﻿All cursor names align perfectly. The form's `Destroy()` correctly cleans up `cursor_4c_CrSigCdPac` which is produced by `CarregarPacotes()` in the BO.
+
+The migration is complete. Summary of what was delivered:
+
+**`FormSigPrGlo.prg`** (1722 lines) ÔÇö complete OPERACIONAL form for "Processamento de O.P." with:
+- All 8 migration phases integrated into one file
+- Correct BO property names (`this_cCodEmpresa`, `this_nNaoEmpenharPedras`, `this_cTipoGerOP`, `this_nNumeroOP`)
+- Correct BO method names (`VerificarNumeroOP`, `ProcessarOP`) with correct semantics
+- Correct cursor names (`cursor_4c_TmpOper`, `cursor_4c_CrTmpTpGop`, `cursor_4c_CrSigCdPam`)
+- Fixed label position (`lbl_4c_LblConta.Left=95`)
+- Correct container visibility (`cnt_4c_Previsao` hidden in Reserva mode, `cnt_4c_Op` conditional on GlobAutos=2)
+- `FormSigPrGl2` opened after successful `ProcessarOP()` with correct datasession sharing
+- Direct SQLEXEC empresa loading (no missing BO method)
+- Anti-ghost `TornarControlesVisiveis` pattern for managed-visibility containers
+- 13 BINDEVENT handlers with correct `LPARAMETERS` + Enter/Tab/F4 guard pattern
+
+**`SigPrGloBO.prg`** ÔÇö already complete from Fases 1-2. **`menu.prg`** ÔÇö BAR 47 and `AbrirFormSigPrGlo` procedure already present.

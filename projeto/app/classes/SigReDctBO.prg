@@ -23,7 +23,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
     this_nImpCodBarra   = 0     && 1=Imprimir somente cod. de barras, 0=normal
 
     *-- Cursor de saida do relatorio (populado por PrepararDados)
-    this_cCursorDados   = "cursor_4c_Relatorio"
+    this_cCursorDados   = "CsRelatorio"
 
     *--------------------------------------------------------------------------
     * Init - Construtor
@@ -40,7 +40,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Monta cursor_4c_Relatorio e cursor_4c_Cabecalho
+    * PrepararDados - Monta CsRelatorio e dbCabecalho
     * Logica fiel ao PROCEDURE processamento do formulario original SIGREDCT
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
@@ -59,7 +59,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
 
             *-- Cursor principal do relatorio
             SET NULL ON
-            CREATE CURSOR cursor_4c_Relatorio (;
+            CREATE CURSOR CsRelatorio (;
                 cBars n(14), Cpros c(14), Dpros c(40), Nops n(10), cmats c(14), dMats c(40),;
                 qtd1s n(12,3), cUni1s c(3), Peso1s n(12,3), cUnip1s c(3),;
                 qtd2s n(12,3), cUni2s c(3), Qtds n(6), Quebras n(10),;
@@ -132,7 +132,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                     loc_nQtdB  = loc_nQtdB + cursor_4c_TmpEti.Qtds
                     loc_nOrdem = loc_nOrdem + 1
 
-                    INSERT INTO cursor_4c_Relatorio ;
+                    INSERT INTO CsRelatorio ;
                         (Nops, cbars, Cpros, Dpros, Ordem, Qtds, GrupoOs, ContaOs, Rclis, Quebras, QtdB, ImpCodBar) VALUES ;
                         (cursor_4c_TmpEti.Nops, cursor_4c_TmpEti.Cbars, cursor_4c_TmpEti.Cpros,;
                          cursor_4c_TmpProPrd.Dpros, loc_nOrdem, 1,;
@@ -156,7 +156,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                                 Peso1s  WITH cursor_4c_TmpNensi.Peso2s,;
                                 PesoFs  WITH cursor_4c_TmpNensi.Pesos,;
                                 Cestos  WITH cursor_4c_TmpProMat.Cestos ;
-                                IN cursor_4c_Relatorio
+                                IN CsRelatorio
 
                         SELECT cursor_4c_TmpNensi
                         SKIP
@@ -169,7 +169,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                 SCAN WHILE Nops = loc_nOp
                     loc_nOrdem = loc_nOrdem + 1
 
-                    INSERT INTO cursor_4c_Relatorio ;
+                    INSERT INTO CsRelatorio ;
                         (Nops, cbars, Cpros, Dpros, Ordem, GrupoOs, ContaOs, Rclis, Quebras, ImpCodBar) VALUES ;
                         (cursor_4c_TmpEti.Nops, 0, cursor_4c_TmpEti.Cpros, cursor_4c_TmpProPrd.Dpros,;
                          loc_nOrdem, cursor_4c_TmpCli.GrupoOs, cursor_4c_TmpCli.ContaOs,;
@@ -190,14 +190,14 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                             Peso1s  WITH cursor_4c_TmpNensi.Peso2s,;
                             cestos  WITH cursor_4c_TmpProMat.Cestos,;
                             PesoFs  WITH cursor_4c_TmpNensi.Pesos ;
-                            IN cursor_4c_Relatorio
+                            IN CsRelatorio
 
                 ENDSCAN
 
                 *-- Loop 3: composicao do produto (itens da grade de composicao)
                 SELECT cursor_4c_TmpCompo
                 SCAN
-                    SELECT cursor_4c_Relatorio
+                    SELECT CsRelatorio
                     SET ORDER TO NopMat
                     IF NOT SEEK(STR(loc_nOp, 10) + cursor_4c_TmpCompo.mats)
                         loc_cSql = "SELECT Dpros, cUnis, cUnips FROM SigCdPro " +;
@@ -205,7 +205,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                         loc_nResult = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_TmpProMat")
                         loc_nOrdem = loc_nOrdem + 1
 
-                        INSERT INTO cursor_4c_Relatorio ;
+                        INSERT INTO CsRelatorio ;
                             (Nops, cbars, Cpros, Dpros, Ordem, CMats, dMats, Grupoos, ContaOs, Rclis, Quebras) VALUES ;
                             (cursor_4c_TmpEti.Nops, 0, cursor_4c_TmpEti.Cpros, cursor_4c_TmpProPrd.Dpros,;
                              loc_nOrdem, cursor_4c_TmpCompo.Mats, cursor_4c_TmpProMat.Dpros,;
@@ -213,14 +213,14 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                              IIF(THIS.this_nImpTotal <> 1, cursor_4c_TmpEti.Nops, 0))
                     ENDIF
 
-                    SELECT cursor_4c_Relatorio
+                    SELECT CsRelatorio
                     SET ORDER TO NopMat
                     =SEEK(STR(loc_nOp, 10) + cursor_4c_TmpCompo.mats)
                     REPLACE qtd2s   WITH cursor_4c_TmpCompo.Qtds * loc_nQtdB,;
                             cuni2s  WITH cursor_4c_TmpCompo.UniCompos,;
                             cUnip2s WITH cursor_4c_TmpCompo.Cunips,;
                             Peso2s  WITH cursor_4c_TmpCompo.Pesos * loc_nQtdB ;
-                            IN cursor_4c_Relatorio
+                            IN CsRelatorio
 
                     SELECT cursor_4c_TmpCompo
                 ENDSCAN
@@ -229,16 +229,16 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
             *-- Linha de totalizacao (quando ImpTotal = 1)
             IF THIS.this_nImpTotal = 1
                 SELECT 9999999999 AS Nops, SUM(Qtds) AS Qtds, SUM(QtdB) AS Qtdb, SUM(Pesofs) AS PesoFs ;
-                    FROM cursor_4c_Relatorio ;
-                    INTO CURSOR cursor_4c_Selecao GROUP BY 1
+                    FROM CsRelatorio ;
+                    INTO CURSOR Selecao GROUP BY 1
 
-                SELECT cursor_4c_Relatorio
+                SELECT CsRelatorio
                 APPEND BLANK
-                REPLACE Nops   WITH cursor_4c_Selecao.Nops,;
-                        Qtds   WITH cursor_4c_Selecao.Qtds,;
-                        QtdB   WITH cursor_4c_Selecao.Qtdb,;
-                        PesoFs WITH cursor_4c_Selecao.Pesofs ;
-                        IN cursor_4c_Relatorio
+                REPLACE Nops   WITH Selecao.Nops,;
+                        Qtds   WITH Selecao.Qtds,;
+                        QtdB   WITH Selecao.Qtdb,;
+                        PesoFs WITH Selecao.Pesofs ;
+                        IN CsRelatorio
             ENDIF
 
             *-- Codigo de barras do documento (numero da operacao + numero do doc)
@@ -260,14 +260,14 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
 
             *-- Cursor de cabecalho para o relatorio
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho (;
+            CREATE CURSOR dbCabecalho (;
                 Titulo c(100), SubTitulo m, NomeEmpresa c(100), ImpCodBar c(20))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho (Titulo, SubTitulo, NomeEmpresa, ImpCodBar) ;
+            INSERT INTO dbCabecalho (Titulo, SubTitulo, NomeEmpresa, ImpCodBar) ;
                 VALUES (loc_cCab, loc_cSub, loc_cEmp, loc_cImpCodBarDoc)
 
             *-- Posicionar cursor principal para o relatorio
-            SELECT cursor_4c_Relatorio
+            SELECT CsRelatorio
             SET ORDER TO Nops
             GO TOP
 
@@ -349,9 +349,9 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
             IF THIS.this_nImpTotal = 1
-                THIS.ExecutarReportForm("SigReDct", "PREVIEW")
+                THIS.ExecutarReportForm("SigReDct", "PREVIEW", THIS.this_cCursorDados)
             ELSE
-                THIS.ExecutarReportForm("SigReDc3", "PREVIEW")
+                THIS.ExecutarReportForm("SigReDc3", "PREVIEW", THIS.this_cCursorDados)
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -372,9 +372,9 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
             IF THIS.this_nImpTotal = 1
-                THIS.ExecutarReportForm("SigReDct", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReDct", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ELSE
-                THIS.ExecutarReportForm("SigReDc3", "PRINTER_PROMPT")
+                THIS.ExecutarReportForm("SigReDc3", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -388,8 +388,8 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
     * PrepararEmail - Posiciona cursor para envio por email
     *--------------------------------------------------------------------------
     PROCEDURE PrepararEmail()
-        IF USED("cursor_4c_Relatorio")
-            SELECT cursor_4c_Relatorio
+        IF USED("CsRelatorio")
+            SELECT CsRelatorio
             GO TOP
         ENDIF
     ENDPROC

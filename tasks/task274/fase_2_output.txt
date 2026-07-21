@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `sigprdftBO.prg`:**
+
+| M├®todo | Origem | Responsabilidade |
+|--------|--------|-----------------|
+| `ObterChavePrimaria()` | Novo | Override obrigat├│rio ÔÇö retorna `""` (sem tabela) |
+| `CarregarDoCursor()` | Novo | Override obrigat├│rio ÔÇö stub `.T.` (operacional) |
+| `InicializarDLLs()` | `SIGPRDFT.Load` | Declara as 4 fun├º├Áes da `CliSiTef32I.DLL` com TRY/CATCH |
+| `ErroTef(par_nRetorno)` | `SIGPRDFT.errotef` | Mapeia c├│digos -1..-5 para mensagens e chama `RetornoFalha` |
+| `MontaRetorno(...)` | `SIGPRDFT.montaretorno` | Monta cursor `crSiTef` de sucesso, grava `IntPos.001` e `IntPos.STS` |
+| `RetornoFalha(...)` | `SIGPRDFT.retornofalha` | Monta cursor `crSiTef` de falha, grava os mesmos arquivos |
+| `ObterRetornoStr(...)` | `SIGPRDFT.Unload` | Retorna a string de resultado para o processo chamador |
+
+**Decis├Áes de migra├º├úo:**
+- `ltIdent` (PUBLIC num├®rico) ÔåÆ `this_cIdent` (string), convertido com `STR(VAL(THIS.this_cIdent), 10)` para preservar o formato de 10 chars com espa├ºos ├á esquerda
+- `ThisForm.Text1.Value` (parcelas) ÔåÆ `THIS.this_nParcelas` (BO state)
+- `ThisForm.pcBandeira` ÔåÆ `THIS.this_cBandeira`
+- `SET SAFETY OFF` adicionado antes de `COPY TO` (arquivos podem j├í existir no disco)

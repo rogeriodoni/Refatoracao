@@ -1,0 +1,16 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `Formsigprdft.prg` criado em `C:\4c\projeto\app\forms\operacionais\` com 325 linhas.
+
+**O que foi criado (Fase 3 - Estrutura Base):**
+- `DEFINE CLASS Formsigprdft AS FormBase` ÔÇö dimens├Áes 500├ù370, TitleBar=0, ControlBox=.F., KeyPreview=.T.
+- Propriedades migradas de `PUBLIC` do legado para props do form (`this_cBuffer`, `this_nProxCmd`, `this_nTipoCampo`, etc.) e props customizadas (`this_cBandeira`, `this_lKeyEsc`, `this_lAbandonou`, etc.)
+- `Init(par_sEndSiTef, par_nValPago, ...)` ÔÇö recebe 9 par├ómetros, cria BO, declara DLLs SiTef, inicializa estado, ent├úo chama `DODEFAULT()`
+- `InicializarForm()` ÔÇö layout flat sem PageFrame, carrega SQL, cria cabe├ºalho e bot├úo cancelar
+- `CarregarDadosOperacao()` ÔÇö carrega `crSigOpFp` e `crSigCdEmp` via SQLEXEC
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_Sombra` + `lbl_4c_Titulo` (largura adaptada para 500px)
+- `ConfigurarBotaoCancelar()` ÔÇö `obj_4c_SAIDA` CommandGroup com `Buttons(1)` (CANCELA) em WITH aninhado + BINDEVENT
+- `BtnCancelaClick()` ÔÇö cancela via `ContinuaFuncaoSiTefInterativo` + `RetornoFalha` + `Release()`
+- `KeyPress()` ÔÇö captura ESC com guard `this_lKeyEsc`
+- `TornarControlesVisiveis()` ÔÇö recursivo sem filtros (nenhum container flutuante neste form)
+- `Destroy()` ÔÇö libera BO e cursores
+
+**Pr├│ximas fases:** Fase 4 adicionar├í os controles do conte├║do (Shape2, Labels, TextBoxes, OptionGroup, Container1), Fases 5-6 os campos de entrada, Fases 7-8 os eventos SiTef completos (GetDigitos.GotFocus/Valid, GetDatas.Valid/GotFocus, etc.).

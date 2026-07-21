@@ -81,7 +81,9 @@ DEFINE CLASS Formsigrectc AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.CarregarCartoes()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -954,8 +956,10 @@ DEFINE CLASS Formsigrectc AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -965,8 +969,10 @@ DEFINE CLASS Formsigrectc AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -976,8 +982,10 @@ DEFINE CLASS Formsigrectc AS FormBase
     PROCEDURE BtnExcelClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.GerarExcel()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Gerar Excel")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1013,8 +1021,10 @@ DEFINE CLASS Formsigrectc AS FormBase
             THIS.FormParaRelatorio()
             IF VARTYPE(THIS.this_oRelatorio) = "O"
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao Gerar Relat" + CHR(243) + "rio")
+                    ENDIF
                 ENDIF
             ELSE
                 MsgErro("Objeto de relat" + CHR(243) + "rio n" + CHR(227) + "o inicializado", "Erro")

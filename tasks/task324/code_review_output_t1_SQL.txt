@@ -1,0 +1,9 @@
+﻿Os WHEREs em `sigprrcuBO.prg` usam apenas `CidChaves` e `LnKey` ÔÇö exatamente como o original. O problema detectado ├® um **falso positivo**: o code review confundiu a propriedade VFP9 `ControlCount` (usada em loops de controles de interface, ex: `FOR loc_nI = 1 TO container.ControlCount`) com uma coluna SQL inventada.
+
+Nenhum dos arquivos `sigprrcu` cont├®m `CONTROLCOUNT` em qualquer cl├íusula WHERE de SQL. Os SQLs gerados est├úo corretos:
+
+- `BuscarProdutosPendentes`: `SELECT 0 AS Flag, * FROM SigOpClC ORDER BY EmpCpros` ÔÇö sem WHERE, id├¬ntico ao original
+- `MarcarEmProcessamento`: `WHERE CidChaves = ...` ÔÇö correto
+- `RemoverDaFila`: `WHERE CidChaves = ...` ÔÇö correto
+
+**Nenhuma altera├º├úo necess├íria.** O pass SQL est├í limpo.

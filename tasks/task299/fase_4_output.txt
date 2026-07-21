@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A Fase 4/8 foi implementada com sucesso:
+
+**O que foi adicionado a `Formsigprico.prg`:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö Popula a Page1 com:
+   - Labels `lbl_4c_Sombra` e `lbl_4c_Titulo` no `cnt_4c_Cabecalho` (padr├úo can├┤nico, AutoSize=.F., Width=769)
+   - Bot├úo `cmd_4c_Encerrar` no `cnt_4c_Saida` (padr├úo can├┤nico: Left=5, Top=5, Width=75, Height=75, Caption="Encerrar")
+   - `cnt_4c_Botoes.Visible = .F.` ÔÇö correto para este form visual puro (sem CRUD)
+   - As 27 imagens do mapa visual, centralizadas na ├írea de conte├║do (offset Left=371, Top=257)
+
+2. **`AlternarPagina(par_nPagina)`** ÔÇö navega├º├úo de p├íginas m├¡nima
+
+3. **`BtnEncerrarClick()`** ÔÇö handler do bot├úo Encerrar via BINDEVENT
+
+4. **`InicializarForm()`** atualizado com chamada a `THIS.ConfigurarPaginaLista()`
+
+**Decis├úo de design:** Como o original ├® um form puramente visual (0 m├®todos/eventos, sem tabela, sem CRUD), omiti os 6 bot├Áes CRUD do `cnt_4c_Botoes` (que foi ocultado) ÔÇö isso respeita o **PILAR 1** de fidelidade ao legado, que n├úo tinha nenhum bot├úo de opera├º├úo.

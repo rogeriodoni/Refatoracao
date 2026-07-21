@@ -1,1372 +1,1498 @@
 *==============================================================================
-* FormSigPrGl2.prg
-* Form OPERACIONAL - Operacoes Selecionadas (Geracao de OPs)
-* Herda de: FormBase
-* Tipo: OPERACIONAL - Selecao e processamento de operacoes para Ordem de Producao
-* Original: SigPrGl2.SCX (SIGPRGL2)
+* FORMSIGPRGL2.PRG - Formulario Operacional: Operacoes Selecionadas
+* Tipo: OPERACIONAL (flat popup modal 800x600, sem PageFrame)
+* Migrado de SIGPRGL2.SCX
 *
-* Chamada (pelo form pai SigPrGl1 ou similar):
-*   loForm = CREATEOBJECT("FormSigPrGl2", loParentForm, THIS.DataSessionId,
-*                          lReservaAuto, nEmphPdr, lAutomatico, nNumeroOp)
+* Pilares:
+*   UX   -> layout identico ao legado (800x600 popup modal, TitleBar=0)
+*   BD   -> TmpCabec/TmpItens (cursores VFP da datasession do pai) + SQL Server via BO
+*   CODE -> arquitetura em camadas (FormBase / SigPrGl2BO)
+*
+* CHAMADA (a partir de form operacional pai):
+*   loForm = CREATEOBJECT("FormSigPrGl2", loFormPai, loFormPai.DataSessionId,
+*                          lReservaAuto, oConexao, nGerEmphPdr, lAutom, nNumeroOp)
 *   loForm.Show()
 *
-* par_oParentForm  : referencia ao form pai
-* par_nDataSession : DataSessionId do form pai (TmpCabec e TmpItens estao nessa sessao)
-* par_lReservaAuto : .T. = modo reserva automatica de estoque
-* par_nEmphPdr     : codigo de empresa padrao para geracao de OPs
-* par_lAutomatico  : .T. = processamento automatico (sem confirmacao manual)
-* par_nNumeroOp    : numero da OP preestabelecido (0 = auto-gerado)
+* PARAMETROS:
+*   par_oFormPai    - form pai (objeto) para re-habilitar ao encerrar
+*   par_nData       - DataSessionId do form pai (compartilhamento de TmpCabec/TmpItens)
+*   par_lReserva    - .T. se reserva automatica ativa
+*   par_oConexao    - conexao SQL Server (Framework connection object - poDataMgr)
+*   par_nEmphPdr    - empresa padrao do gerente
+*   par_lAutomatico - .T. se processamento automatico
+*   par_nNumeroDaOp - numero da OP a gerar (0 = novo)
 *==============================================================================
 
 DEFINE CLASS FormSigPrGl2 AS FormBase
 
-    *-- Identificacao
-    this_cTituloForm    = "Operacoes Selecionadas"
+    *-- Dimensoes originais do popup operacional (NAO escalonar para 1000)
+    Height       = 600
+    Width        = 800
+    BorderStyle  = 2
+    AutoCenter   = .T.
+    ShowTips     = .T.
+    TitleBar     = 0
+    ShowWindow = 1
+    ControlBox   = .F.
+    Closable     = .F.
+    MaxButton    = .F.
+    MinButton    = .F.
+    ClipControls = .F.
+    WindowType   = 1
+    DataSession  = 2
 
-    *-- DataSession=1: TmpCabec e TmpItens vivem na sessao compartilhada com o pai
-    DataSession         = 1
+    *-- Referencia ao form pai (para re-habilitar ao encerrar)
+    poFormPai     = .NULL.
+    *-- Parametros de contexto recebidos na abertura
+    plReserva     = .F.
+    pnEmphPdr     = 0
+    plAutomatico  = .F.
+    pnNumeroDaOp  = 0
+    *-- Conexao temporaria: armazenada em Init, consumida em InicializarForm
+    poConexaoTemp = .NULL.
 
-    *-- Parametros capturados em Init (antes de DODEFAULT/InicializarForm)
-    this_oParentForm    = .NULL.
-    this_nParentSession = 0
-    this_lReservaAuto   = .F.
-    this_nEmphPdr       = 0
-    this_lAutomatico    = .F.
-    this_nNumeroOp      = 0
-    this_cPorDestino    = ""
+    *==========================================================================
+    PROCEDURE Init
+    *==========================================================================
+        LPARAMETERS par_oFormPai, par_nData, par_lReserva, par_oConexao, ;
+                    par_nEmphPdr, par_lAutomatico, par_nNumeroDaOp
 
-    *-- Dimensoes e aparencia (SCX SIGPRGL2: 800x600)
-    Width       = 800
-    Height      = 600
-    AutoCenter  = .T.
-    BorderStyle = 2
-    TitleBar    = 0
-    ShowWindow  = 1
-    ControlBox  = .F.
-    MaxButton   = .F.
-    MinButton   = .F.
-    WindowType  = 1
-    ShowTips    = .T.
-    FontName    = "Tahoma"
-    FontSize    = 8
+        *-- Armazenar parametros ANTES de DODEFAULT() para que InicializarForm
+        *-- tenha acesso a conexao, ao form pai e demais contextos
+        IF VARTYPE(par_oFormPai) = "O"
+            THIS.poFormPai = par_oFormPai
+        ENDIF
 
-    *--------------------------------------------------------------------------
-    * Init - Captura parametros ANTES de InicializarForm (via DODEFAULT)
-    *--------------------------------------------------------------------------
-    PROCEDURE Init(par_oParentForm, par_nDataSession, par_lReservaAuto, ;
-                   par_nEmphPdr, par_lAutomatico, par_nNumeroOp)
-
-        THIS.this_cTituloForm = "Opera" + CHR(231) + CHR(245) + "es Selecionadas"
-
-        IF VARTYPE(par_oParentForm) = "O" AND !ISNULL(par_oParentForm)
-            THIS.this_oParentForm = par_oParentForm
-            IF VARTYPE(par_oParentForm.this_cPorDestino) = "C"
-                THIS.this_cPorDestino = par_oParentForm.this_cPorDestino
+        *-- Compartilhar datasession com form pai: TmpCabec/TmpItens vivem la
+        IF VARTYPE(par_nData) = "N" AND par_nData > 0
+            THIS.DataSessionId = par_nData
+        ELSE
+            IF VARTYPE(par_oFormPai) = "O"
+            THIS.DataSessionId = par_oFormPai.DataSessionId
             ENDIF
         ENDIF
-        IF VARTYPE(par_nDataSession) = "N"
-            THIS.this_nParentSession = par_nDataSession
-        ENDIF
-        IF VARTYPE(par_lReservaAuto) = "L"
-            THIS.this_lReservaAuto = par_lReservaAuto
-        ENDIF
-        IF VARTYPE(par_nEmphPdr) = "N"
-            THIS.this_nEmphPdr = par_nEmphPdr
-        ENDIF
-        IF VARTYPE(par_lAutomatico) = "L"
-            THIS.this_lAutomatico = par_lAutomatico
-        ENDIF
-        IF VARTYPE(par_nNumeroOp) = "N"
-            THIS.this_nNumeroOp = par_nNumeroOp
+
+        THIS.plReserva     = IIF(VARTYPE(par_lReserva)    = "L", par_lReserva,    .F.)
+        THIS.pnEmphPdr     = IIF(VARTYPE(par_nEmphPdr)    = "N", par_nEmphPdr,    0)
+        THIS.plAutomatico  = IIF(VARTYPE(par_lAutomatico) = "L", par_lAutomatico, .F.)
+        THIS.pnNumeroDaOp  = IIF(VARTYPE(par_nNumeroDaOp) = "N", par_nNumeroDaOp, 0)
+
+        IF VARTYPE(par_oConexao) = "O"
+            THIS.poConexaoTemp = par_oConexao
         ENDIF
 
         RETURN DODEFAULT()
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Activate - Ordena grade e atualiza visual ao ativar o form
-    *--------------------------------------------------------------------------
-    PROCEDURE Activate()
-        THIS.AplicarOrdem("")
-        IF USED("TmpCabec")
-            THIS.grd_4c_GradeOpe.Refresh()
-        ENDIF
-    ENDPROC
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarForm
+    *==========================================================================
+        LOCAL loc_lSucesso, loc_oConexao
 
-    *--------------------------------------------------------------------------
-    * InicializarForm - Chamado por FormBase.Init via DODEFAULT
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
 
         TRY
+            THIS.Caption = "Opera" + CHR(231) + CHR(245) + "es Selecionadas"
+
+            *-- Criar Business Object
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrGl2BO")
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Falha ao criar SigPrGl2BO.", "Erro")
-            ELSE
-                THIS.ConfigurarPageFrame()
-                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
-                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-                THIS.MontarLayout()
-                THIS.ConfigurarGrades()
-                THIS.ConfigurarPaginaDados()
-                THIS.RegistrarEventos()
-                THIS.AplicarOrdem("")
-                THIS.TornarControlesVisiveis(THIS)
-                loc_lSucesso = .T.
+                MsgErro("Falha ao criar SigPrGl2BO", "Erro SigPrGl2")
+                loc_lSucesso = .F.
             ENDIF
+
+            *-- Configurar contexto do BO com todos os parametros recebidos
+            loc_oConexao = THIS.poConexaoTemp
+            THIS.this_oBusinessObject.ConfigurarContexto( ;
+                THIS.poFormPai, ;
+                loc_oConexao, ;
+                loc_oConexao, ;
+                THIS.plReserva, ;
+                THIS.pnEmphPdr, ;
+                THIS.plAutomatico, ;
+                THIS.pnNumeroDaOp, ;
+                "" ;
+            )
+            THIS.poConexaoTemp = .NULL.
+
+            *-- Configurar imagem de fundo e shape decorativo do topo
+            THIS.ConfigurarPageFrame()
+
+            *-- Configurar cabecalho cinza (cntSombra do legado)
+            THIS.ConfigurarCabecalho()
+            THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+            THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+            *-- Configurar grade de operacoes e botoes de acao
+            THIS.ConfigurarPaginaLista()
+            THIS.ConfigurarBotoes()
+
+            *-- Configurar controles de detalhe (ObsOperacao, Cliente, GradeItens, ObsItens)
+            THIS.ConfigurarPaginaDados()
+
+            THIS.AlternarPagina(.T.)
+
+            *-- Tornar controles visiveis (AddObject cria com Visible=.F.)
+            THIS.TornarControlesVisiveis()
+
+            loc_lSucesso = .T.
+
         CATCH TO loc_oErro
-            MsgErro("Erro ao inicializar " + THIS.this_cTituloForm + ":" + CHR(13) + ;
-                    loc_oErro.Message, "Erro")
+            MsgErro("Erro ao inicializar FormSigPrGl2: " + loc_oErro.Message + ;
+                    " Ln=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " Proc=" + loc_oErro.Procedure, "Erro")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * MontarLayout - Cria todos os controles do form operacional
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE MontarLayout()
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPageFrame
+    *==========================================================================
+        LOCAL loc_cImgFundo
 
-        *-- Botao Processar (top=3, sobreposicao ao cabecalho cinza)
-        THIS.AddObject("cmd_4c_Processar", "CommandButton")
-        WITH THIS.cmd_4c_Processar
-            .Top             = 3
-            .Left            = 648
-            .Width           = 75
-            .Height          = 75
-            .Caption         = "\<Processar"
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
-            .Themes          = .T.
-        ENDWITH
+        *-- Form OPERACIONAL flat (sem PageFrame) - configura picture de fundo
+        *-- Mesma imagem do legado: new_background.jpg
+        loc_cImgFundo = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        IF FILE(loc_cImgFundo)
+            THIS.Picture = loc_cImgFundo
+        ENDIF
 
-        *-- Botao Cancelar/Encerrar
-        THIS.AddObject("cmd_4c_Cancelar", "CommandButton")
-        WITH THIS.cmd_4c_Cancelar
-            .Top             = 3
-            .Left            = 723
-            .Width           = 75
-            .Height          = 75
-            .Caption         = "Encerrar"
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Cancel          = .T.
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
-            .Themes          = .T.
-        ENDWITH
-
-        *-- EditBox: Observacao da Operacao (top=82, editavel)
-        THIS.AddObject("edt_4c_ObsOpe", "EditBox")
-        WITH THIS.edt_4c_ObsOpe
-            .Top         = 82
-            .Left        = 5
-            .Width       = 602
-            .Height      = 70
-            .NullDisplay = " "
-            .FontName    = "Tahoma"
-            .FontSize    = 8
-        ENDWITH
-
-        *-- Grade de Operacoes (top=155, 10 colunas)
-        THIS.AddObject("grd_4c_GradeOpe", "Grid")
-        WITH THIS.grd_4c_GradeOpe
-            .Top               = 155
-            .Left              = 5
-            .Width             = 789
-            .Height            = 156
-            .ColumnCount       = 10
-            .FontSize          = 8
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
-            .DeleteMark        = .F.
-            .RecordMark        = .F.
-            .RowHeight         = 17
-            .ScrollBars        = 2
-            .GridLineColor     = RGB(238,238,238)
-            .Panel             = 1
-        ENDWITH
-
-        *-- Configurar colunas da GradeOpe
-        WITH THIS.grd_4c_GradeOpe
-
-            *-- Col1: Flag (checkbox de selecao)
-            WITH .Column1
-                .Width     = 17
-                .Movable   = .F.
-                .Resizable = .F.
-                .Sparse    = .F.
-                WITH .Header1
-                    .Caption   = ""
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                .AddObject("chk_4c_Flag", "CheckBox")
-                WITH .chk_4c_Flag
-                    .Caption   = ""
-                    .Alignment = 0
-                    .Height    = 17
-                    .Width     = 60
-                ENDWITH
-                .CurrentControl = "chk_4c_Flag"
-            ENDWITH
-
-            *-- Col2: Movimentacao (Dopes) - cabecalho clicavel para ordenar
-            WITH .Column2
-                .Width     = 156
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Movimenta" + CHR(231) + CHR(227) + "o"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col3: Numero (Numes)
-            WITH .Column3
-                .Width     = 70
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "N" + CHR(250) + "mero"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col4: Emissao (Datas)
-            WITH .Column4
-                .Width     = 70
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Emiss" + CHR(227) + "o"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col5: Entrega (Entregas) - cabecalho clicavel para ordenar
-            WITH .Column5
-                .Width     = 70
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Entrega"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col6: Peso
-            WITH .Column6
-                .Width     = 90
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                .InputMask = "999,999.99"
-                WITH .Header1
-                    .Caption   = "Peso"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col7: Responsavel (Contav)
-            WITH .Column7
-                .Width     = 90
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Respons" + CHR(225) + "vel"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col8: Cliente (Conta)
-            WITH .Column8
-                .Width     = 90
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Cliente"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col9: Obs (indicador "*" se tem observacao)
-            WITH .Column9
-                .Width     = 44
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Obs"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontBold    = .T.
-                    .FontSize    = 12
-                    .Alignment   = 2
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col10: Doc. (Notas)
-            WITH .Column10
-                .Width     = 52
-                .Movable   = .F.
-                .Resizable = .F.
-                WITH .Header1
-                    .Caption   = "Doc."
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-        ENDWITH
-
-        *-- Label "Cliente :"
-        THIS.AddObject("lbl_4c_Cliente", "Label")
-        WITH THIS.lbl_4c_Cliente
-            .Top       = 317
-            .Left      = 5
-            .Width     = 42
-            .Height    = 15
-            .AutoSize  = .T.
-            .Caption   = "Cliente :"
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90,90,90)
-        ENDWITH
-
-        *-- TextBox do Cliente (somente leitura - exibe DConta)
-        THIS.AddObject("txt_4c_Cliente", "TextBox")
-        WITH THIS.txt_4c_Cliente
-            .Top           = 313
-            .Left          = 59
-            .Width         = 345
-            .Height        = 23
-            .SpecialEffect = 1
-            .ReadOnly      = .T.
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-        ENDWITH
-
-        *-- Grade de Itens (top=339, 8 colunas)
-        THIS.AddObject("grd_4c_GradeItens", "Grid")
-        WITH THIS.grd_4c_GradeItens
-            .Top               = 339
-            .Left              = 5
-            .Width             = 737
-            .Height            = 191
-            .ColumnCount       = 8
-            .FontSize          = 8
-            .AllowHeaderSizing = .F.
-            .AllowRowSizing    = .F.
-            .DeleteMark        = .F.
-            .RecordMark        = .F.
-            .RowHeight         = 17
-            .ScrollBars        = 2
-            .GridLineColor     = RGB(238,238,238)
-            .Panel             = 1
-        ENDWITH
-
-        *-- Configurar colunas da GradeItens
-        WITH THIS.grd_4c_GradeItens
-
-            *-- Col1: Produto (Cpros) - ColumnOrder=1 (default)
-            WITH .Column1
-                .Width     = 120
-                .Movable   = .F.
-                .Resizable = .F.
-                .ReadOnly  = .T.
-                WITH .Header1
-                    .Caption   = "Produto"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col2: Quantidade (Qtds) - ColumnOrder=5
-            WITH .Column2
-                .ColumnOrder = 5
-                .Width       = 90
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Quantidade"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col3: Saldo - ColumnOrder=6
-            WITH .Column3
-                .ColumnOrder = 6
-                .Width       = 118
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Saldo"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col4: Peso - ColumnOrder=7
-            WITH .Column4
-                .ColumnOrder = 7
-                .Width       = 100
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Peso"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col5: Obs (indicador) - ColumnOrder=8
-            WITH .Column5
-                .ColumnOrder = 8
-                .Width       = 44
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Obs"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontBold    = .T.
-                    .FontSize    = 12
-                    .Alignment   = 2
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col6: Cor (CodCors) - ColumnOrder=3
-            WITH .Column6
-                .ColumnOrder = 3
-                .Width       = 38
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Cor"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col7: Tam (CodTams) - ColumnOrder=4
-            WITH .Column7
-                .ColumnOrder = 4
-                .Width       = 38
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Tam"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            *-- Col8: Ref. Fornecedor (Reffs) - ColumnOrder=2
-            WITH .Column8
-                .ColumnOrder = 2
-                .Width       = 150
-                .Movable     = .F.
-                .Resizable   = .F.
-                .ReadOnly    = .T.
-                WITH .Header1
-                    .Caption   = "Ref. Fornecedor"
-                    .Alignment = 2
-                    .FontName  = "Verdana"
-                    .FontSize  = 8
-                    .ForeColor = RGB(36,84,155)
-                ENDWITH
-                WITH .Text1
-                    .FontSize    = 8
-                    .BorderStyle = 0
-                    .Margin      = 0
-                    .ReadOnly    = .T.
-                    .ForeColor   = RGB(0,0,0)
-                    .BackColor   = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-        ENDWITH
-
-        *-- Botao Desmarca Tudo (top=358, left=748, ao lado da GradeItens)
-        THIS.AddObject("cmd_4c_Apaga", "CommandButton")
-        WITH THIS.cmd_4c_Apaga
-            .Top             = 358
-            .Left            = 748
-            .Width           = 40
-            .Height          = 40
-            .Caption         = ""
-            .ToolTipText     = "Desmarca Tudo"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-            .FontName        = "Verdana"
-            .FontSize        = 8
-            .ForeColor       = RGB(36,84,155)
-            .BackColor       = RGB(255,255,255)
-            .Themes          = .T.
-        ENDWITH
-
-        *-- Botao Seleciona Tudo (top=400, left=748, ao lado da GradeItens)
-        THIS.AddObject("cmd_4c_SelTudo", "CommandButton")
-        WITH THIS.cmd_4c_SelTudo
-            .Top             = 400
-            .Left            = 748
-            .Width           = 40
-            .Height          = 40
-            .Caption         = ""
-            .ToolTipText     = "Seleciona Tudo"
-            .Picture         = gc_4c_CaminhoIcones + "geral_selecionar_26.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "geral_selecionar_26.jpg"
-            .FontName        = "Verdana"
-            .FontSize        = 8
-            .ForeColor       = RGB(36,84,155)
-            .BackColor       = RGB(255,255,255)
-            .Themes          = .T.
-        ENDWITH
-
-        *-- Label "Observacao do Item :"
-        THIS.AddObject("lbl_4c_ObsItens", "Label")
-        WITH THIS.lbl_4c_ObsItens
-            .Top       = 532
-            .Left      = 5
-            .Width     = 146
-            .Height    = 15
-            .AutoSize  = .F.
-            .Caption   = "Observa" + CHR(231) + CHR(227) + "o do Item : "
-            .FontBold  = .T.
-            .FontName  = "Verdana"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90,90,90)
-        ENDWITH
-
-        *-- EditBox de observacao dos itens (editavel, top=548)
-        THIS.AddObject("edt_4c_ObsItens", "EditBox")
-        WITH THIS.edt_4c_ObsItens
-            .Top         = 548
-            .Left        = 5
-            .Width       = 737
-            .Height      = 47
-            .NullDisplay = " "
-            .FontName    = "Tahoma"
-            .FontSize    = 8
-        ENDWITH
-
-        *-- Shape decorativo na area dos botoes de acao (topo-direita)
+        *-- Shape3 do legado: elemento decorativo no canto superior direito
+        *-- Top=7, Left=732, Width=60, Height=29, BackStyle=0, BorderStyle=0
         THIS.AddObject("shp_4c_Shape3", "Shape")
         WITH THIS.shp_4c_Shape3
             .Top         = 7
             .Left        = 732
-            .Width       = 60
             .Height      = 29
-            .BorderStyle = 1
-            .BorderWidth = 1
-            .FillStyle   = 1
-        ENDWITH
-
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarGrades - Define RecordSource e ControlSource das grades
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarGrades()
-
-        *-- GradeOperacoes vinculada a TmpCabec (somente se cursor existir)
-        IF USED("TmpCabec")
-            THIS.grd_4c_GradeOpe.RecordSource = "TmpCabec"
-            WITH THIS.grd_4c_GradeOpe
-                .Column1.ControlSource  = "TmpCabec.Flag"
-                .Column2.ControlSource  = "TmpCabec.Dopes"
-                .Column3.ControlSource  = "TmpCabec.Numes"
-                .Column4.ControlSource  = "TmpCabec.Datas"
-                .Column5.ControlSource  = "IIF(ISNULL(TmpCabec.Entregas), {}, TmpCabec.Entregas)"
-                .Column6.ControlSource  = "TmpCabec.Peso"
-                .Column7.ControlSource  = "TmpCabec.Contav"
-                .Column8.ControlSource  = "TmpCabec.Conta"
-                .Column9.ControlSource  = "IIF(EMPTY(TmpCabec.Obs), ' ', '*')"
-                .Column10.ControlSource = "TmpCabec.Notas"
-            ENDWITH
-
-            *-- Cliente (nome do cliente da operacao atual)
-            THIS.txt_4c_Cliente.ControlSource = "TmpCabec.DConta"
-
-            *-- Obs da operacao (editavel)
-            THIS.edt_4c_ObsOpe.ControlSource = "TmpCabec.Obs"
-        ENDIF
-
-        *-- GradeItens vinculada a TmpItens (somente se cursor existir)
-        IF USED("TmpItens")
-            THIS.grd_4c_GradeItens.RecordSource = "TmpItens"
-            WITH THIS.grd_4c_GradeItens
-                .Column1.ControlSource = "TmpItens.Cpros"
-                .Column2.ControlSource = "TmpItens.Qtds"
-                .Column3.ControlSource = "TmpItens.Saldo"
-                .Column4.ControlSource = "TmpItens.Peso"
-                .Column5.ControlSource = "IIF(EMPTY(TmpItens.Obs), ' ', '*')"
-                .Column6.ControlSource = "TmpItens.CodCors"
-                .Column7.ControlSource = "TmpItens.CodTams"
-                .Column8.ControlSource = "TmpItens.Reffs"
-            ENDWITH
-
-            *-- Obs dos itens (editavel)
-            THIS.edt_4c_ObsItens.ControlSource = "TmpItens.Obs"
-        ENDIF
-
-        *-- Posicionar TmpItens filtrado pelo primeiro registro de TmpCabec
-        IF USED("TmpItens") AND USED("TmpCabec")
-            SELECT TmpCabec
-            GO TOP
-            SELECT TmpItens
-            SET ORDER TO EmpDopNum
-            SET KEY TO TmpCabec.Emps + TmpCabec.Dopes + STR(TmpCabec.Numes, 6)
-            GO TOP
-        ENDIF
-
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * RegistrarEventos - BINDEVENT para todos os eventos interativos
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarEventos()
-
-        BINDEVENT(THIS.grd_4c_GradeOpe, "AfterRowColChange", THIS, "AoMudarLinhaOpe")
-        BINDEVENT(THIS.grd_4c_GradeOpe.Column2.Header1, "Click", THIS, "AoClicarCabMovi")
-        BINDEVENT(THIS.grd_4c_GradeOpe.Column5.Header1, "Click", THIS, "AoClicarCabEntrega")
-        BINDEVENT(THIS.grd_4c_GradeItens, "AfterRowColChange", THIS, "AoMudarLinhaItens")
-        BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "AoProcessar")
-        BINDEVENT(THIS.cmd_4c_Cancelar,  "Click", THIS, "AoCancelar")
-        BINDEVENT(THIS.cmd_4c_Apaga,     "Click", THIS, "AoApagar")
-        BINDEVENT(THIS.cmd_4c_SelTudo,   "Click", THIS, "AoSelTudo")
-
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AplicarOrdem - Ordena TmpCabec e atualiza cores dos cabecalhos das colunas
-    * par_cOrdem: "EMPDOPNUM" | "ENTREGA" | "" (usa ordem atual do BO)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AplicarOrdem(par_cOrdem)
-        LOCAL loc_cOrdAtual
-
-        THIS.this_oBusinessObject.OrdenarOperacoes(par_cOrdem)
-        loc_cOrdAtual = UPPER(THIS.this_oBusinessObject.this_cOrdConta)
-
-        WITH THIS.grd_4c_GradeOpe
-            .Column2.Header1.BackColor = IIF(loc_cOrdAtual = "EMPDOPNUM", RGB(220,255,220), RGB(192,192,192))
-            .Column5.Header1.BackColor = IIF(loc_cOrdAtual = "ENTREGA",   RGB(220,255,220), RGB(192,192,192))
+            .Width       = 60
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .BorderColor = RGB(136, 189, 188)
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * HANDLERS DE EVENTOS (PUBLIC - exigido por BINDEVENT)
+    PROTECTED PROCEDURE ConfigurarCabecalho
     *==========================================================================
+        LOCAL loc_nW
 
-    *--------------------------------------------------------------------------
-    * AoMudarLinhaOpe - AfterRowColChange da GradeOpe
-    * Filtra TmpItens para exibir itens da operacao selecionada
-    *--------------------------------------------------------------------------
-    PROCEDURE AoMudarLinhaOpe(par_nColIndex)
-        IF USED("TmpItens") AND USED("TmpCabec")
-            SELECT TmpItens
-            SET ORDER TO EmpDopNum
-            SET KEY TO TmpCabec.Emps + TmpCabec.Dopes + STR(TmpCabec.Numes, 6)
-            GO TOP
-            THIS.txt_4c_Cliente.Refresh()
-            THIS.edt_4c_ObsOpe.Refresh()
-            THIS.grd_4c_GradeItens.Refresh()
-            THIS.edt_4c_ObsItens.Refresh()
-        ENDIF
-    ENDPROC
+        loc_nW = THIS.Width
 
-    *--------------------------------------------------------------------------
-    * AoClicarCabMovi - Click no Header da Coluna 2 (Movimentacao)
-    * Ordena TmpCabec por EmpDopNum
-    *--------------------------------------------------------------------------
-    PROCEDURE AoClicarCabMovi()
-        IF USED("TmpCabec") AND UPPER(ORDER("TmpCabec")) <> "EMPDOPNUM"
-            THIS.AplicarOrdem("EMPDOPNUM")
-            SELECT TmpCabec
-            GO TOP
-            THIS.grd_4c_GradeOpe.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoClicarCabEntrega - Click no Header da Coluna 5 (Entrega)
-    * Ordena TmpCabec por data de entrega
-    *--------------------------------------------------------------------------
-    PROCEDURE AoClicarCabEntrega()
-        IF USED("TmpCabec") AND UPPER(ORDER("TmpCabec")) <> "ENTREGA"
-            THIS.AplicarOrdem("ENTREGA")
-            SELECT TmpCabec
-            GO TOP
-            THIS.grd_4c_GradeOpe.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoMudarLinhaItens - AfterRowColChange da GradeItens
-    * Atualiza editbox de observacao do item
-    *--------------------------------------------------------------------------
-    PROCEDURE AoMudarLinhaItens(par_nColIndex)
-        THIS.edt_4c_ObsItens.Refresh()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoProcessar - Click do botao Processar
-    * Chama BO.ProcessarOperacoes() e navega para o form seguinte
-    *--------------------------------------------------------------------------
-    PROCEDURE AoProcessar()
-        LOCAL loc_lSucesso, loc_oErro
-        LOCAL loc_oProxForm
-        loc_lSucesso = .F.
-
-        TRY
-            loc_lSucesso = THIS.this_oBusinessObject.ProcessarOperacoes( ;
-                THIS.this_lReservaAuto, ;
-                THIS.this_lAutomatico,  ;
-                THIS.this_nEmphPdr,     ;
-                THIS.this_nNumeroOp,    ;
-                THIS.this_cPorDestino   ;
-            )
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro AoProcessar")
-        ENDTRY
-
-        IF loc_lSucesso
-            THIS.Enabled = .F.
-            IF THIS.this_lReservaAuto
-                THIS.cmd_4c_Processar.Enabled = .F.
-            ENDIF
-
-            *-- Abrir form seguinte conforme flag do BO
-            IF THIS.this_oBusinessObject.this_lTemEstimado
-                *-- Ha estoque estimado: abre SigPrGlx (grade com estimados)
-                loc_oProxForm = CREATEOBJECT("FormSigPrGlx", THIS, THIS.DataSessionId, ;
-                                              THIS.this_lReservaAuto, THIS.this_nEmphPdr, ;
-                                              THIS.this_lAutomatico, THIS.this_nNumeroOp, ;
-                                              THIS.this_cPorDestino)
-            ELSE
-                *-- Sem estoque estimado: abre SigPrGlp (grade de geracao direta)
-                loc_oProxForm = CREATEOBJECT("FormSigPrGlp", THIS, THIS.DataSessionId, ;
-                                              THIS.this_lReservaAuto, THIS.this_nEmphPdr, ;
-                                              THIS.this_lAutomatico, THIS.this_nNumeroOp)
-            ENDIF
-
-            IF VARTYPE(loc_oProxForm) = "O"
-                loc_oProxForm.Show()
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoCancelar - Click do botao Encerrar
-    * Reabilita form pai e fecha este form
-    *--------------------------------------------------------------------------
-    PROCEDURE AoCancelar()
-        IF VARTYPE(THIS.this_oParentForm) = "O" AND !ISNULL(THIS.this_oParentForm)
-            THIS.this_oParentForm.Enabled = .T.
-        ENDIF
-        THIS.Release()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoApagar - Click do botao Desmarca Tudo
-    *--------------------------------------------------------------------------
-    PROCEDURE AoApagar()
-        IF USED("TmpCabec")
-            REPLACE ALL Flag WITH .F. IN TmpCabec
-            THIS.grd_4c_GradeOpe.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AoSelTudo - Click do botao Seleciona Tudo
-    *--------------------------------------------------------------------------
-    PROCEDURE AoSelTudo()
-        IF USED("TmpCabec")
-            REPLACE ALL Flag WITH .T. IN TmpCabec
-            THIS.grd_4c_GradeOpe.Refresh()
-        ENDIF
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Constroi o "frame" visual do form OPERACIONAL:
-    * cnt_4c_Cabecalho (cabecalho cinza) com labels de titulo.
-    * Forms OPERACIONAIS nao usam PageFrame CRUD; este metodo agrupa a
-    * estrutura fixa do topo, mantendo o nome padrao do pipeline multi-fase.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        LOCAL loc_oCab
+        *-- Container cabecalho cinza (cntSombra do legado)
+        *-- Top=0, Left=0, Width=800, Height=80, BackColor=RGB(100,100,100)
         THIS.AddObject("cnt_4c_Cabecalho", "Container")
-        loc_oCab = THIS.cnt_4c_Cabecalho
-        WITH loc_oCab
+        WITH THIS.cnt_4c_Cabecalho
             .Top         = 0
             .Left        = 0
-            .Width       = THIS.Width
+            .Width       = loc_nW
             .Height      = 80
-            .BackColor   = RGB(100, 100, 100)
             .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
-            .Visible     = .T.
-        ENDWITH
 
-        loc_oCab.AddObject("lbl_4c_Sombra", "Label")
-        WITH loc_oCab.lbl_4c_Sombra
-            .FontBold   = .T.
-            .FontName   = "Tahoma"
-            .FontSize   = 18
-            .AutoSize   = .F.
-            .WordWrap   = .T.
-            .Alignment  = 0
-            .BackStyle  = 0
-            .Caption    = "Opera" + CHR(231) + CHR(245) + "es Selecionadas"
-            .Height     = 40
-            .Left       = 10
-            .Top        = 18
-            .Width      = THIS.Width - 20
-            .ForeColor  = RGB(0, 0, 0)
-            .Visible    = .T.
-        ENDWITH
+            *-- Label sombra: ForeColor preto, efeito de profundidade
+            *-- Top=18, Left=10, Width=769, Height=40, FontSize=18
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .AutoSize  = .F.
+                .Width     = loc_nW - 31
+                .Height    = 40
+                .Top       = 18
+                .Left      = 10
+                .Caption   = ""
+                .FontName  = "Tahoma"
+                .FontSize  = 18
+                .FontBold  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(0, 0, 0)
+                .WordWrap  = .T.
+                .Alignment = 0
+            ENDWITH
 
-        loc_oCab.AddObject("lbl_4c_Titulo", "Label")
-        WITH loc_oCab.lbl_4c_Titulo
-            .FontBold    = .T.
-            .FontName    = "Tahoma"
-            .FontSize    = 18
-            .AutoSize    = .F.
-            .WordWrap    = .T.
-            .Alignment   = 0
-            .BackStyle   = 0
-            .Caption     = "Opera" + CHR(231) + CHR(245) + "es Selecionadas"
-            .Height      = 46
-            .Left        = 10
-            .Top         = 17
-            .Width       = THIS.Width - 20
-            .ForeColor   = RGB(255, 255, 255)
-            .ToolTipText = "T" + CHR(237) + "tulo do Relat" + CHR(243) + "rio"
-            .Visible     = .T.
+            *-- Label titulo: branco sobre fundo cinza
+            *-- Top=17, Left=10, Width=769, Height=46, FontSize=18
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .AutoSize  = .F.
+                .Width     = loc_nW - 31
+                .Height    = 46
+                .Top       = 17
+                .Left      = 10
+                .Caption   = ""
+                .FontName  = "Tahoma"
+                .FontSize  = 18
+                .FontBold  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(255, 255, 255)
+                .WordWrap  = .T.
+                .Alignment = 0
+            ENDWITH
         ENDWITH
+        THIS.cnt_4c_Cabecalho.Visible = .T.
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Configura a area de lista (equivalente a Page1
-    * em forms CRUD). Para este form OPERACIONAL, o layout completo e montado
-    * em MontarLayout/ConfigurarGrades; este metodo e o ponto de entrada
-    * nomeado para compatibilidade com o pipeline multi-fase.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        IF VARTYPE(THIS.grd_4c_GradeOpe) = "O" AND !ISNULL(THIS.grd_4c_GradeOpe)
-            THIS.ConfigurarGrades()
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis
+    *==========================================================================
+        LPARAMETERS par_oContainer
+        LOCAL loc_oContainer, loc_i, loc_oControl
+
+        IF VARTYPE(par_oContainer) = "O"
+            loc_oContainer = par_oContainer
+        ELSE
+            loc_oContainer = THIS
         ENDIF
-    ENDPROC
-    *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Propriedades visuais dos controles interativos:
-    *   - grd_4c_GradeOpe:    highlight e fonte
-    *   - edt_4c_ObsOpe:      aparencia e scrollbar
-    *   - grd_4c_GradeItens:  highlight e fonte
-    *   - edt_4c_ObsItens:    aparencia e scrollbar
-    *   - txt_4c_Cliente:     aparencia somente-leitura
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
 
-        *-- GradeOperacoes: highlight de linha selecionada e fonte
-        WITH THIS.grd_4c_GradeOpe
-            .HighlightBackColor = RGB(255, 255, 255)
-            .HighlightForeColor = RGB(15, 41, 104)
-            .HighlightStyle     = 2
-            .FontName = "Verdana"
-            .FontSize = 8
-        ENDWITH
-
-        *-- EditBox de Observacao da Operacao
-        WITH THIS.edt_4c_ObsOpe
-            .BackColor  = RGB(255, 255, 255)
-            .ForeColor  = RGB(90, 90, 90)
-            .ScrollBars = 2
-        ENDWITH
-
-        *-- GradeItens: highlight de linha selecionada e fonte
-        WITH THIS.grd_4c_GradeItens
-            .HighlightBackColor = RGB(255, 255, 255)
-            .HighlightForeColor = RGB(15, 41, 104)
-            .HighlightStyle     = 2
-            .FontName = "Verdana"
-            .FontSize = 8
-        ENDWITH
-
-        *-- EditBox de Observacao dos Itens
-        WITH THIS.edt_4c_ObsItens
-            .BackColor  = RGB(255, 255, 255)
-            .ForeColor  = RGB(90, 90, 90)
-            .ScrollBars = 2
-        ENDWITH
-
-        *-- TextBox Cliente: fundo levemente cinza para indicar somente-leitura
-        WITH THIS.txt_4c_Cliente
-            .BackColor = RGB(240, 240, 240)
-            .ForeColor = RGB(90, 90, 90)
-        ENDWITH
-
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Nao aplicavel para form OPERACIONAL (sem PageFrame CRUD)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
-        RETURN .T.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna controles visiveis recursivamente
-    *--------------------------------------------------------------------------
-    PROCEDURE TornarControlesVisiveis(par_oContainer)
-        LOCAL loc_nI, loc_oControl
-
-        FOR loc_nI = 1 TO par_oContainer.ControlCount
-            loc_oControl = par_oContainer.Controls(loc_nI)
-
-            IF VARTYPE(loc_oControl) = 'O' AND !ISNULL(loc_oControl)
-                IF PEMSTATUS(loc_oControl, 'Visible', 5)
-                    loc_oControl.Visible = .T.
-                ENDIF
-
-                IF UPPER(loc_oControl.BaseClass) = 'PAGEFRAME'
-                    LOCAL loc_nP
-                    FOR loc_nP = 1 TO loc_oControl.PageCount
-                        THIS.TornarControlesVisiveis(loc_oControl.Pages(loc_nP))
-                    ENDFOR
-                ENDIF
-
-                IF PEMSTATUS(loc_oControl, 'ControlCount', 5) AND loc_oControl.ControlCount > 0
+        FOR loc_i = 1 TO loc_oContainer.ControlCount
+            loc_oControl = loc_oContainer.Controls(loc_i)
+            IF VARTYPE(loc_oControl) = "O"
+                IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
                     THIS.TornarControlesVisiveis(loc_oControl)
+                ENDIF
+                IF PEMSTATUS(loc_oControl, "Visible", 5)
+                    loc_oControl.Visible = .T.
                 ENDIF
             ENDIF
         ENDFOR
     ENDPROC
 
     *==========================================================================
-    * EVENTOS PRINCIPAIS - Padrao esperado pelo pipeline multi-fase (Fase 7)
-    *
-    * Este form OPERACIONAL (SIGPRGL2 - Operacoes Selecionadas) NAO possui
-    * botoes CRUD tradicionais Incluir/Alterar/Visualizar/Excluir. O layout
-    * real tem: Processar, Encerrar, Selecionar Tudo e Desmarca Tudo.
-    *
-    * Para manter compatibilidade com o pipeline (e permitir que forms externos
-    * disparem acoes pelos nomes canonicos), estes handlers mapeiam:
-    *   BtnIncluirClick    -> AoProcessar (acao principal = gerar OPs)
-    *   BtnAlterarClick    -> AoSelTudo   (marcar todas para processar)
-    *   BtnVisualizarClick -> AoApagar    (desmarcar todas)
-    *   BtnExcluirClick    -> AoCancelar  (encerrar sem processar)
-    *
-    * Todos possuem logica REAL (delegacao explicita) - sem stubs.
+    PROTECTED PROCEDURE ConfigurarPaginaLista
     *==========================================================================
+        *-- Grade de selecao de operacoes (GradeOperacao) + botoes SelTudo/Apaga
+        LOCAL loc_oErro
 
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Processa as operacoes marcadas gerando as OPs
-    * Mapeia para o botao "Processar" do form OPERACIONAL
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        THIS.AoProcessar()
+        TRY
+            THIS.ConfigurarGradeOperacao()
+            THIS.ConfigurarBotoesSelecao()
+
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                BINDEVENT(THIS.grd_4c_GradeOperacao, "AfterRowColChange", ;
+                          THIS, "GrdOperacaoAfterRowColChange")
+                BINDEVENT(THIS.grd_4c_GradeOperacao.Column2.Header1, "Click", ;
+                          THIS, "HeaderMovimentacaoClick")
+                BINDEVENT(THIS.grd_4c_GradeOperacao.Column5.Header1, "Click", ;
+                          THIS, "HeaderEntregaClick")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarPaginaLista: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Marca todas as operacoes de TmpCabec para processamento
-    * Mapeia para o botao "Selecionar Tudo" do form OPERACIONAL
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        THIS.AoSelTudo()
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGradeOperacao
+    *==========================================================================
+        *-- GradeOperacao: Top=155, Left=5, Width=789, Height=156, 10 colunas
+        *-- Column1 = CheckBox (Flag), Columns 2-10 = campos de TmpCabec
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("grd_4c_GradeOperacao", "Grid")
+            WITH THIS.grd_4c_GradeOperacao
+                .Top               = 155
+                .Left              = 5
+                .Width             = 789
+                .Height            = 156
+                .ColumnCount       = 10
+                .FontName          = "Verdana"
+                .FontSize          = 8
+                .ForeColor         = RGB(90, 90, 90)
+                .BackColor         = RGB(255, 255, 255)
+                .GridLineColor     = RGB(238, 238, 238)
+                .HighlightBackColor = RGB(255, 255, 255)
+                .HighlightForeColor = RGB(15, 41, 104)
+                .HighlightStyle    = 2
+                .DeleteMark        = .F.
+                .RecordMark        = .F.
+                .RowHeight         = 17
+                .ScrollBars        = 2
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing    = .F.
+                .ReadOnly          = .T.
+                .Themes            = .F.
+
+                IF USED("TmpCabec")
+                    .RecordSource = "TmpCabec"
+                ENDIF
+
+                *-- Column1: CheckBox de selecao (Flag) - Width=17
+                WITH .Column1
+                    .Width     = 17
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .AddObject("Check1", "CheckBox")
+                    WITH .Check1
+                        .Caption   = ""
+                        .Value     = 0
+                        .Themes    = .F.
+                        .BackStyle = 0
+                    ENDWITH
+                    .CurrentControl = "Check1"
+                    .Sparse         = .F.
+                    .ReadOnly       = .F.
+                    .ControlSource  = "TmpCabec.Flag"
+                    .Header1.Caption   = ""
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column2: Dopes (Movimentacao) - Width=156, header verde = ord padrao
+                WITH .Column2
+                    .Width     = 156
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Dopes"
+                    ENDIF
+                    .Header1.Caption   = "Movimenta" + CHR(231) + CHR(227) + "o"
+                    .Header1.BackColor = RGB(220, 255, 220)
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column3: Numes (Numero) - Width=70
+                WITH .Column3
+                    .Width     = 70
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Numes"
+                    ENDIF
+                    .Header1.Caption   = "N" + CHR(250) + "mero"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column4: Datas (Emissao) - Width=70
+                WITH .Column4
+                    .Width     = 70
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Datas"
+                    ENDIF
+                    .Header1.Caption   = "Emiss" + CHR(227) + "o"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column5: Entregas - Width=70, IIF para data nula
+                WITH .Column5
+                    .Width     = 70
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "IIF(ISNULL(TmpCabec.Entregas), {}, TmpCabec.Entregas)"
+                    ENDIF
+                    .Header1.Caption   = "Entrega"
+                    .Header1.BackColor = RGB(192, 192, 192)
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column6: Peso - Width=90, InputMask numerico
+                WITH .Column6
+                    .Width     = 90
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    .InputMask = "999,999.99"
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Peso"
+                    ENDIF
+                    .Header1.Caption   = "Peso"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column7: Contav (Responsavel) - Width=90
+                WITH .Column7
+                    .Width     = 90
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Contav"
+                    ENDIF
+                    .Header1.Caption   = "Respons" + CHR(225) + "vel"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column8: Conta (codigo do cliente) - Width=90
+                *-- ORIGINAL: Column8 = TmpCabec.Conta (NAO DConta!)
+                WITH .Column8
+                    .Width     = 90
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Conta"
+                    ENDIF
+                    .Header1.Caption   = "Cliente"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column9: Obs indicator (*) - Width=44, FontBold, FontSize=12
+                WITH .Column9
+                    .Width     = 44
+                    .FontBold  = .T.
+                    .FontSize  = 12
+                    .Alignment = 2
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpCabec")
+                        .ControlSource = "IIF(EMPTY(TmpCabec.Obs), ' ', '*')"
+                    ENDIF
+                    .Header1.Caption   = "Obs"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column10: Notas (Doc.) - Width=52
+                WITH .Column10
+                    .Width     = 52
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    IF USED("TmpCabec")
+                        .ControlSource = "TmpCabec.Notas"
+                    ENDIF
+                    .Header1.Caption   = "Doc."
+                    .Header1.Alignment = 2
+                ENDWITH
+            ENDWITH
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarGradeOperacao: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Desmarca todas as operacoes de TmpCabec
-    * Mapeia para o botao "Desmarca Tudo" do form OPERACIONAL
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        THIS.AoApagar()
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaDados
+    *==========================================================================
+        *-- Controles de detalhe: ObsOperacao, Cliente, GradeItens, ObsItens
+        LOCAL loc_oErro
+
+        TRY
+            *-- ObsOperacao: observacao da operacao corrente (TmpCabec.Obs)
+            *-- Top=82, Left=5, Width=602, Height=70 (entre header e GradeOperacao)
+            THIS.AddObject("edt_4c_ObsOperacao", "EditBox")
+            WITH THIS.edt_4c_ObsOperacao
+                .Top         = 82
+                .Left        = 5
+                .Width       = 602
+                .Height      = 70
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .ForeColor   = RGB(90, 90, 90)
+                .BackColor   = RGB(255, 255, 255)
+                .ReadOnly    = .T.
+                .ScrollBars  = 2
+                .BorderStyle = 1
+                IF USED("TmpCabec")
+                    .ControlSource = "TmpCabec.Obs"
+                ENDIF
+            ENDWITH
+
+            *-- Label "Cliente :" (Label6 do legado)
+            *-- Top=317, Left=5, Width=42, Height=15, AutoSize=.T.
+            THIS.AddObject("lbl_4c_Label6", "Label")
+            WITH THIS.lbl_4c_Label6
+                .Top       = 317
+                .Left      = 5
+                .Width     = 42
+                .Height    = 15
+                .AutoSize  = .T.
+                .Caption   = "Cliente :"
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .ForeColor = RGB(90, 90, 90)
+                .BackStyle = 0
+            ENDWITH
+
+            *-- getCliente: nome do cliente da operacao corrente (TmpCabec.DConta)
+            *-- fwget no legado = display-only (When retorna .F.)
+            *-- Top=313, Left=59, Width=345, Height=23, SpecialEffect=1
+            THIS.AddObject("txt_4c_Cliente", "TextBox")
+            WITH THIS.txt_4c_Cliente
+                .Top           = 313
+                .Left          = 59
+                .Width         = 345
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .ForeColor     = RGB(90, 90, 90)
+                .BackColor     = RGB(255, 255, 255)
+                .ReadOnly      = .T.
+                .SpecialEffect = 1
+                IF USED("TmpCabec")
+                    .ControlSource = "TmpCabec.DConta"
+                ENDIF
+            ENDWITH
+
+            *-- Grade de itens da operacao corrente (GradeItens do legado)
+            THIS.ConfigurarGradeItens()
+
+            *-- Label "Observacao do Item : " (Txt_ObsItens do legado)
+            *-- Top=532, Left=5, Width=146, Height=15, FontBold=.T., FontName=Verdana
+            THIS.AddObject("lbl_4c_TxtObsItens", "Label")
+            WITH THIS.lbl_4c_TxtObsItens
+                .Top       = 532
+                .Left      = 5
+                .Width     = 146
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Verdana"
+                .FontSize  = 8
+                .FontBold  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+                .Caption   = "Observa" + CHR(231) + CHR(227) + "o do Item : "
+            ENDWITH
+
+            *-- ObsItens: observacao do item corrente (TmpItens.Obs)
+            *-- Top=548, Left=5, Width=737, Height=47
+            THIS.AddObject("edt_4c_ObsItens", "EditBox")
+            WITH THIS.edt_4c_ObsItens
+                .Top         = 548
+                .Left        = 5
+                .Width       = 737
+                .Height      = 47
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .ForeColor   = RGB(90, 90, 90)
+                .BackColor   = RGB(255, 255, 255)
+                .ReadOnly    = .T.
+                .ScrollBars  = 2
+                .BorderStyle = 1
+                IF USED("TmpItens")
+                    .ControlSource = "TmpItens.Obs"
+                ENDIF
+            ENDWITH
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarPaginaDados: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Encerra o form reabilitando o form pai (sem processar)
-    * Mapeia para o botao "Encerrar" do form OPERACIONAL
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        THIS.AoCancelar()
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarGradeItens
+    *==========================================================================
+        *-- GradeItens: Top=339, Left=5, Width=737, Height=191, 8 colunas
+        *-- Exibe itens (TmpItens) filtrados pela operacao corrente de TmpCabec
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("grd_4c_GradeItens", "Grid")
+            WITH THIS.grd_4c_GradeItens
+                .Top               = 339
+                .Left              = 5
+                .Width             = 737
+                .Height            = 191
+                .ColumnCount       = 8
+                .FontName          = "Verdana"
+                .FontSize          = 8
+                .ForeColor         = RGB(90, 90, 90)
+                .BackColor         = RGB(255, 255, 255)
+                .GridLineColor     = RGB(238, 238, 238)
+                .HighlightBackColor = RGB(255, 255, 255)
+                .HighlightForeColor = RGB(15, 41, 104)
+                .HighlightStyle    = 2
+                .DeleteMark        = .F.
+                .RecordMark        = .F.
+                .RowHeight         = 17
+                .ScrollBars        = 2
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing    = .F.
+                .ReadOnly          = .T.
+                .Themes            = .F.
+
+                IF USED("TmpItens")
+                    .RecordSource = "TmpItens"
+                ENDIF
+
+                *-- Column1: Cpros (Produto) - Width=120, ColumnOrder=1
+                WITH .Column1
+                    .Width     = 120
+                    .Movable   = .F.
+                    .Resizable = .F.
+                    .ReadOnly  = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.Cpros"
+                    ENDIF
+                    .Header1.Caption   = "Produto"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column2: Qtds (Quantidade) - Width=90, ColumnOrder=5
+                WITH .Column2
+                    .Width       = 90
+                    .ColumnOrder = 5
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.Qtds"
+                    ENDIF
+                    .Header1.Caption   = "Quantidade"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column3: Saldo (Saldo) - Width=118, ColumnOrder=6
+                WITH .Column3
+                    .Width       = 118
+                    .ColumnOrder = 6
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.Saldo"
+                    ENDIF
+                    .Header1.Caption   = "Saldo"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column4: Peso (Peso) - Width=100, ColumnOrder=7
+                WITH .Column4
+                    .Width       = 100
+                    .ColumnOrder = 7
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.Peso"
+                    ENDIF
+                    .Header1.Caption   = "Peso"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column5: Obs indicator (*) - Width=44, FontBold, ColumnOrder=8
+                WITH .Column5
+                    .Width       = 44
+                    .ColumnOrder = 8
+                    .FontBold    = .T.
+                    .FontSize    = 12
+                    .Alignment   = 2
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "IIF(EMPTY(TmpItens.Obs), ' ', '*')"
+                    ENDIF
+                    .Header1.Caption   = "Obs"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column6: CodCors (Cor) - Width=38, ColumnOrder=3
+                WITH .Column6
+                    .Width       = 38
+                    .ColumnOrder = 3
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.CodCors"
+                    ENDIF
+                    .Header1.Caption   = "Cor"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column7: CodTams (Tam) - Width=38, ColumnOrder=4
+                WITH .Column7
+                    .Width       = 38
+                    .ColumnOrder = 4
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.CodTams"
+                    ENDIF
+                    .Header1.Caption   = "Tam"
+                    .Header1.Alignment = 2
+                    .Header1.FontName  = "Verdana"
+                    .Header1.FontSize  = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+
+                *-- Column8: Reffs (Ref. Fornecedor) - Width=150, ColumnOrder=2
+                WITH .Column8
+                    .Width       = 150
+                    .ColumnOrder = 2
+                    .Movable     = .F.
+                    .Resizable   = .F.
+                    .ReadOnly    = .T.
+                    IF USED("TmpItens")
+                        .ControlSource = "TmpItens.Reffs"
+                    ENDIF
+                    .Header1.Caption   = "Ref. Fornecedor"
+                    .Header1.Alignment = 2
+                ENDWITH
+            ENDWITH
+
+            BINDEVENT(THIS.grd_4c_GradeItens, "AfterRowColChange", ;
+                      THIS, "GrdItensAfterRowColChange")
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarGradeItens: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarLista - Atualiza as grades com o estado atual dos cursores
-    * TmpCabec e TmpItens (recebidos do form pai - nao executa SQL propria)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_oErro
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoesSelecao
+    *==========================================================================
+        *-- cmd_4c_SelTudo (Top=400) e cmd_4c_Apaga (Top=358) ao lado de GradeItens
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cmd_4c_Apaga", "CommandButton")
+            WITH THIS.cmd_4c_Apaga
+                .Top             = 358
+                .Left            = 748
+                .Width           = 40
+                .Height          = 40
+                .Caption         = ""
+                .ToolTipText     = "Desmarcar Todos"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+                .Themes          = .T.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Apaga, "Click", THIS, "CmdApagaClick")
+
+            THIS.AddObject("cmd_4c_SelTudo", "CommandButton")
+            WITH THIS.cmd_4c_SelTudo
+                .Top             = 400
+                .Left            = 748
+                .Width           = 40
+                .Height          = 40
+                .Caption         = ""
+                .ToolTipText     = "Selecionar Todos"
+                .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+                .Themes          = .T.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_SelTudo, "Click", THIS, "CmdSelTudoClick")
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarBotoesSelecao: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoes
+    *==========================================================================
+        *-- cmd_4c_Processar (Left=648, Top=3) e cmd_4c_Cancelar (Left=723, Top=3)
+        *-- Equivalentes aos botoes Processar/Encerrar do legado SIGPRGL2
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AddObject("cmd_4c_Processar", "CommandButton")
+            WITH THIS.cmd_4c_Processar
+                .Top             = 3
+                .Left            = 648
+                .Width           = 75
+                .Height          = 75
+                .Caption         = "\<Processar"
+                .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .T.
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "CmdProcessarClick")
+
+            THIS.AddObject("cmd_4c_Cancelar", "CommandButton")
+            WITH THIS.cmd_4c_Cancelar
+                .Top             = 3
+                .Left            = 723
+                .Width           = 75
+                .Height          = 75
+                .Caption         = "Encerrar"
+                .Cancel          = .T.
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .T.
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+            ENDWITH
+            BINDEVENT(THIS.cmd_4c_Cancelar, "Click", THIS, "CmdCancelarClick")
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em ConfigurarBotoes: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE AlternarPagina
+    *==========================================================================
+        *-- Aplica ordenacao atual em TmpCabec e atualiza BackColor dos headers
+        *-- par_lTipo=.T. = atualizar visual dos headers alem de ordenar
+        LPARAMETERS par_lTipo
+        LOCAL loc_nRGB2, loc_nRGB5, loc_oErro
+
+        TRY
+            THIS.this_oBusinessObject.OrdenarGrade()
+
+            IF VARTYPE(par_lTipo) = "L" AND par_lTipo
+                loc_nRGB2 = RGB(192, 192, 192)
+                loc_nRGB5 = RGB(192, 192, 192)
+
+                DO CASE
+                    CASE UPPER(THIS.this_oBusinessObject.this_cOrdConta) = "EMPDOPNUM"
+                        loc_nRGB2 = RGB(220, 255, 220)
+                    CASE UPPER(THIS.this_oBusinessObject.this_cOrdConta) = "ENTREGA"
+                        loc_nRGB5 = RGB(220, 255, 220)
+                ENDCASE
+
+                IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                    WITH THIS.grd_4c_GradeOperacao
+                        .Column2.Header1.BackColor = loc_nRGB2
+                        .Column5.Header1.BackColor = loc_nRGB5
+                        .Refresh()
+                    ENDWITH
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em AlternarPagina: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE GrdOperacaoAfterRowColChange
+    *==========================================================================
+        *-- Filtra TmpItens para linha corrente de TmpCabec e atualiza controles
+        LPARAMETERS par_nColIndex
+        LOCAL loc_oErro
+
+        TRY
+            THIS.this_oBusinessObject.SincronizarItens()
+
+            IF VARTYPE(THIS.txt_4c_Cliente) = "O"
+                THIS.txt_4c_Cliente.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.edt_4c_ObsOperacao) = "O"
+                THIS.edt_4c_ObsOperacao.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.grd_4c_GradeItens) = "O"
+                THIS.grd_4c_GradeItens.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.edt_4c_ObsItens) = "O"
+                THIS.edt_4c_ObsItens.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em GrdOperacaoAfterRowColChange: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE HeaderMovimentacaoClick
+    *==========================================================================
+        *-- Ordena TmpCabec por EmpDopNum e atualiza BackColor dos headers
+        LOCAL loc_oErro
+
+        TRY
+            IF THIS.this_oBusinessObject.DefinirOrdemMovimentacao()
+                IF USED("TmpCabec")
+                    GO TOP IN TmpCabec
+                ENDIF
+                IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                    WITH THIS.grd_4c_GradeOperacao
+                        .Column2.Header1.BackColor = RGB(220, 255, 220)
+                        .Column5.Header1.BackColor = RGB(192, 192, 192)
+                        .Refresh()
+                    ENDWITH
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em HeaderMovimentacaoClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE HeaderEntregaClick
+    *==========================================================================
+        *-- Ordena TmpCabec por Entrega e atualiza BackColor dos headers
+        LOCAL loc_oErro
+
+        TRY
+            IF THIS.this_oBusinessObject.DefinirOrdemEntrega()
+                IF USED("TmpCabec")
+                    GO TOP IN TmpCabec
+                ENDIF
+                IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                    WITH THIS.grd_4c_GradeOperacao
+                        .Column2.Header1.BackColor = RGB(192, 192, 192)
+                        .Column5.Header1.BackColor = RGB(220, 255, 220)
+                        .Refresh()
+                    ENDWITH
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em HeaderEntregaClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CmdProcessarClick
+    *==========================================================================
+        *-- Processa operacoes selecionadas (Flag=.T.) via BO e fecha o form
+        LOCAL loc_oErro, loc_lProsseguir
+
+        loc_lProsseguir = .T.
+
+        TRY
+            IF !USED("TmpCabec") OR RECCOUNT("TmpCabec") = 0
+                MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o dispon" + ;
+                         CHR(237) + "vel para processar.", "Aviso")
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.ProcessarOperacoes()
+                    THIS.Release()
+                ELSE
+                    IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
+                        MsgAviso(THIS.this_oBusinessObject.this_cMensagemErro, "Aviso")
+                    ENDIF
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro ao processar opera" + CHR(231) + CHR(245) + "es: " + ;
+                    loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CmdCancelarClick
+    *==========================================================================
+        *-- Re-habilita form pai e fecha este form (sem processar)
+        LOCAL loc_oErro
+
+        TRY
+            THIS.Release()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em CmdCancelarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CmdSelTudoClick
+    *==========================================================================
+        *-- Marca Flag=.T. em todos os registros de TmpCabec e atualiza grid
+        LOCAL loc_oErro
+
+        TRY
+            THIS.this_oBusinessObject.SelecionarTodos()
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em CmdSelTudoClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CmdApagaClick
+    *==========================================================================
+        *-- Marca Flag=.F. em todos os registros de TmpCabec e atualiza grid
+        LOCAL loc_oErro
+
+        TRY
+            THIS.this_oBusinessObject.DesmarcarTodos()
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em CmdApagaClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE GrdItensAfterRowColChange
+    *==========================================================================
+        *-- Atualiza ObsItens ao navegar na grade de itens
+        LPARAMETERS par_nColIndex
+        LOCAL loc_oErro
+
+        TRY
+            IF VARTYPE(THIS.edt_4c_ObsItens) = "O"
+                THIS.edt_4c_ObsItens.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em GrdItensAfterRowColChange: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Activate
+    *==========================================================================
+        *-- Legado SIGPRGL2.Activate: mOrdemConta(.T.) + GradeOperacao.Refresh
+        *-- Re-aplica ordenacao e atualiza visual dos headers ao form ganhar foco
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AlternarPagina(.T.)
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em Activate: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnIncluirClick
+    *==========================================================================
+        *-- OPERACIONAL: "Incluir na selecao" = marcar todas operacoes (Flag=.T.)
+        *-- Delegado a CmdSelTudoClick, que replica logica do legado SelTudo.Click:
+        *--   Replace all Flag With .t. In TmpCabec + GradeOperacao.Refresh
+        LOCAL loc_oErro
+
+        TRY
+            THIS.CmdSelTudoClick()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnIncluirClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnAlterarClick
+    *==========================================================================
+        *-- OPERACIONAL: "Alterar" = alternar ordenacao da grade entre
+        *-- EmpDopNum (Movimentacao) e Entrega, replicando o toggle do legado
+        *-- Headers Click. Aplica ordem oposta a atual + atualiza BackColors.
+        LOCAL loc_oErro, loc_cOrdemAtual
+
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                RETURN
+            ENDIF
+
+            loc_cOrdemAtual = UPPER(NVL(THIS.this_oBusinessObject.this_cOrdConta, ""))
+
+            DO CASE
+                CASE loc_cOrdemAtual = "EMPDOPNUM"
+                    THIS.HeaderEntregaClick()
+                CASE loc_cOrdemAtual = "ENTREGA"
+                    THIS.HeaderMovimentacaoClick()
+                OTHERWISE
+                    THIS.HeaderMovimentacaoClick()
+            ENDCASE
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnAlterarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnVisualizarClick
+    *==========================================================================
+        *-- OPERACIONAL: "Visualizar" = re-sincronizar visualizacao completa.
+        *-- Re-aplica ordenacao (AlternarPagina) + re-sincroniza itens da
+        *-- operacao corrente (SincronizarItens) + refresh de todos os controles
+        *-- de detalhe (Cliente/ObsOperacao/GradeItens/ObsItens).
+        LOCAL loc_oErro
+
+        TRY
+            THIS.AlternarPagina(.T.)
+
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.this_oBusinessObject.SincronizarItens()
+            ENDIF
+
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.txt_4c_Cliente) = "O"
+                THIS.txt_4c_Cliente.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.edt_4c_ObsOperacao) = "O"
+                THIS.edt_4c_ObsOperacao.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.grd_4c_GradeItens) = "O"
+                THIS.grd_4c_GradeItens.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.edt_4c_ObsItens) = "O"
+                THIS.edt_4c_ObsItens.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnVisualizarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnExcluirClick
+    *==========================================================================
+        *-- OPERACIONAL: "Excluir da selecao" = desmarcar todas as operacoes
+        *-- (Flag=.F.). Delegado a CmdApagaClick, que replica logica do legado
+        *-- apaga.Click: Replace all Flag With .f. In TmpCabec + Refresh.
+        LOCAL loc_oErro
+
+        TRY
+            THIS.CmdApagaClick()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnExcluirClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CarregarLista
+    *==========================================================================
+        *-- Re-aplica ordenacao e atualiza grid de operacoes
+        *-- Equivalente ao ciclo Activate do legado: mOrdemConta(.T.) + Refresh
+        LOCAL loc_oErro, loc_lSucesso
+
         loc_lSucesso = .F.
 
         TRY
-            IF USED("TmpCabec") AND USED("TmpItens")
-                THIS.AplicarOrdem("")
-                SELECT TmpCabec
-                GO TOP
-                THIS.grd_4c_GradeOpe.Refresh()
-                THIS.AoMudarLinhaOpe(0)
-                THIS.HabilitarCampos()
-                loc_lSucesso = .T.
-            ELSE
-                MsgAviso("Cursores TmpCabec/TmpItens n" + CHR(227) + "o disponibilizados pelo form pai.", ;
-                         "Aviso")
+            THIS.AlternarPagina(.T.)
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
             ENDIF
+            loc_lSucesso = .T.
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro CarregarLista")
+            MsgErro("Erro em CarregarLista: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * FormParaBO - Sincroniza parametros do form para o BO antes de processar.
-    * Este form OPERACIONAL nao tem campos CRUD; transfere apenas os
-    * parametros de execucao capturados no Init.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oErro
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo
+    *==========================================================================
+        *-- Form OPERACIONAL nao tem modos CRUD (INCLUIR/ALTERAR/VISUALIZAR)
+        *-- Botoes Processar/Encerrar/SelTudo/Apaga permanecem sempre habilitados
+        *-- Exceto se o cursor TmpCabec estiver vazio: desabilitar Processar
+        LOCAL loc_lTemRegistros
 
-        TRY
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.this_lReserva    = THIS.this_lReservaAuto
-                THIS.this_oBusinessObject.this_lAutomatico = THIS.this_lAutomatico
-                THIS.this_oBusinessObject.this_nEmphPdr    = THIS.this_nEmphPdr
-                THIS.this_oBusinessObject.this_nNumeroDaOP = THIS.this_nNumeroOp
-                THIS.this_oBusinessObject.this_cPorDestino = THIS.this_cPorDestino
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro FormParaBO")
-        ENDTRY
+        IF USED("TmpCabec")
+            loc_lTemRegistros = RECCOUNT("TmpCabec") > 0
+        ELSE
+            loc_lTemRegistros = .F.
+        ENDIF
+
+        IF VARTYPE(THIS.cmd_4c_Processar) = "O"
+            THIS.cmd_4c_Processar.Enabled = loc_lTemRegistros
+        ENDIF
+        IF VARTYPE(THIS.cmd_4c_SelTudo) = "O"
+            THIS.cmd_4c_SelTudo.Enabled = loc_lTemRegistros
+        ENDIF
+        IF VARTYPE(THIS.cmd_4c_Apaga) = "O"
+            THIS.cmd_4c_Apaga.Enabled = loc_lTemRegistros
+        ENDIF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * BOParaForm - Atualiza controles visiveis com o estado atual dos cursores.
-    * Para este form OPERACIONAL o estado e gerenciado pelos cursores TmpCabec
-    * e TmpItens via ControlSource; basta refreshar os controles visuais.
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BOParaForm()
+    *==========================================================================
+    PROTECTED PROCEDURE FormParaBO
+    *==========================================================================
+        *-- Form OPERACIONAL: campos do form mapeiam estado de selecao/contexto
+        *-- O cursor TmpCabec e gerenciado diretamente pelo BO via datasession
+        *-- Esta procedure sincroniza o registro corrente do cursor com o BO
+        LOCAL loc_lSucesso, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF !USED("TmpCabec") OR RECCOUNT("TmpCabec") = 0
+                loc_lSucesso = .F.
+            ENDIF
+
+            SELECT TmpCabec
+            THIS.this_oBusinessObject.this_lFlag    = TmpCabec.Flag
+            THIS.this_oBusinessObject.this_cEmps    = NVL(TmpCabec.Emps,  "")
+            THIS.this_oBusinessObject.this_cDopes   = ALLTRIM(NVL(TmpCabec.Dopes, ""))
+            THIS.this_oBusinessObject.this_nNumes   = NVL(TmpCabec.Numes, 0)
+            THIS.this_oBusinessObject.this_dDatas   = NVL(TmpCabec.Datas, {})
+            THIS.this_oBusinessObject.this_dEntregas = NVL(TmpCabec.Entregas, {})
+            THIS.this_oBusinessObject.this_nPeso    = NVL(TmpCabec.Peso,  0)
+            THIS.this_oBusinessObject.this_cContav  = ALLTRIM(NVL(TmpCabec.Contav, ""))
+            THIS.this_oBusinessObject.this_cConta   = ALLTRIM(NVL(TmpCabec.Conta,  ""))
+            THIS.this_oBusinessObject.this_cDConta  = ALLTRIM(NVL(TmpCabec.DConta, ""))
+            THIS.this_oBusinessObject.this_cObs     = ALLTRIM(NVL(TmpCabec.Obs,    ""))
+            THIS.this_oBusinessObject.this_cNotas   = ALLTRIM(NVL(TmpCabec.Notas,  ""))
+            THIS.this_oBusinessObject.this_cJobs    = ALLTRIM(NVL(TmpCabec.Jobs,   ""))
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em FormParaBO: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    PROTECTED PROCEDURE BOParaForm
+    *==========================================================================
+        *-- Form OPERACIONAL: atualiza display dos controles de detalhe
+        *-- com base no estado atual do cursor TmpCabec/TmpItens
         LOCAL loc_oErro
 
         TRY
-            IF USED("TmpCabec")
-                THIS.grd_4c_GradeOpe.Refresh()
+            IF VARTYPE(THIS.txt_4c_Cliente) = "O"
                 THIS.txt_4c_Cliente.Refresh()
-                THIS.edt_4c_ObsOpe.Refresh()
             ENDIF
-            IF USED("TmpItens")
+            IF VARTYPE(THIS.edt_4c_ObsOperacao) = "O"
+                THIS.edt_4c_ObsOperacao.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.grd_4c_GradeItens) = "O"
                 THIS.grd_4c_GradeItens.Refresh()
+            ENDIF
+            IF VARTYPE(THIS.edt_4c_ObsItens) = "O"
                 THIS.edt_4c_ObsItens.Refresh()
             ENDIF
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro BOParaForm")
+            MsgErro("Erro em BOParaForm: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - Gerencia estado do botao Processar: habilitado apenas
-    * quando ha ao menos uma operacao marcada (Flag=.T.) em TmpCabec.
-    *--------------------------------------------------------------------------
-    PROCEDURE HabilitarCampos()
-        LOCAL loc_lTemSelecionado, loc_nI, loc_oErro
-        loc_lTemSelecionado = .F.
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarCampos
+    *==========================================================================
+        *-- Form OPERACIONAL: grids sao sempre ReadOnly (display-only)
+        *-- Apenas o CheckBox da Column1 de grd_4c_GradeOperacao aceita edicao
+        *-- Nao ha controles de edicao direta (campos de texto editaveis)
+        LPARAMETERS par_lHabilitar
+        LOCAL loc_lHabilitar, loc_oErro
+
+        IF VARTYPE(par_lHabilitar) = "L"
+            loc_lHabilitar = par_lHabilitar
+        ELSE
+            loc_lHabilitar = .T.
+        ENDIF
 
         TRY
-            IF USED("TmpCabec")
-                SELECT TmpCabec
-                GO TOP
-                SCAN FOR Flag
-                    loc_lTemSelecionado = .T.
-                    EXIT
-                ENDSCAN
+            *-- Column1 do grid de operacoes (CheckBox Flag): editavel quando habilitado
+            IF VARTYPE(THIS.grd_4c_GradeOperacao) = "O"
+                THIS.grd_4c_GradeOperacao.Column1.ReadOnly = !loc_lHabilitar
             ENDIF
-
+            *-- Botoes de acao
             IF VARTYPE(THIS.cmd_4c_Processar) = "O"
-                THIS.cmd_4c_Processar.Enabled = loc_lTemSelecionado
+                THIS.cmd_4c_Processar.Enabled = loc_lHabilitar
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro HabilitarCampos")
+            MsgErro("Erro em HabilitarCampos: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * LimparCampos - Desmarca todas as operacoes de TmpCabec e refresha
-    * os controles de observacao que possuem ControlSource vinculado.
-    *--------------------------------------------------------------------------
-    PROCEDURE LimparCampos()
+    *==========================================================================
+    PROTECTED PROCEDURE LimparCampos
+    *==========================================================================
+        *-- Form OPERACIONAL: "limpar" = desmarcar todas as operacoes (Flag=.F.)
+        *-- e posicionar grid no primeiro registro
         LOCAL loc_oErro
 
         TRY
             IF USED("TmpCabec")
                 REPLACE ALL Flag WITH .F. IN TmpCabec
-                THIS.grd_4c_GradeOpe.Refresh()
+                GO TOP IN TmpCabec
             ENDIF
-
-            IF VARTYPE(THIS.edt_4c_ObsOpe) = "O"
-                THIS.edt_4c_ObsOpe.Refresh()
+            IF USED("TmpItens")
+                SELECT TmpItens
+                SET KEY TO
+                GO TOP
             ENDIF
-            IF VARTYPE(THIS.edt_4c_ObsItens) = "O"
-                THIS.edt_4c_ObsItens.Refresh()
-            ENDIF
-            IF VARTYPE(THIS.txt_4c_Cliente) = "O"
-                THIS.txt_4c_Cliente.Refresh()
-            ENDIF
+            THIS.BOParaForm()
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro LimparCampos")
+            MsgErro("Erro em LimparCampos: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
         ENDTRY
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * AjustarBotoesPorModo - Para este form OPERACIONAL sem modos CRUD,
-    * delega para HabilitarCampos que gerencia o estado do botao Processar.
-    *--------------------------------------------------------------------------
-    PROCEDURE AjustarBotoesPorModo()
-        THIS.HabilitarCampos()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnBuscarClick - Reaplica ordenacao e atualiza a grade de operacoes.
-    * Equivalente ao "Buscar/Filtrar" para este form OPERACIONAL.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnBuscarClick()
-        THIS.CarregarLista()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnEncerrarClick - Encerra o form reabilitando o form pai
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnEncerrarClick()
-        THIS.AoCancelar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnSalvarClick - Para este form OPERACIONAL, "salvar" equivale a
-    * processar as operacoes marcadas e prosseguir para o proximo sub-form.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnSalvarClick()
-        THIS.AoProcessar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnCancelarClick - Encerra sem processar, reabilitando o form pai
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnCancelarClick()
-        THIS.AoCancelar()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Destroy
-    *--------------------------------------------------------------------------
-    PROCEDURE Destroy()
+    *==========================================================================
+    PROCEDURE BtnBuscarClick
+    *==========================================================================
+        *-- OPERACIONAL: "Buscar" = re-carregar/sincronizar visualizacao
+        *-- Aplica ordenacao atual e atualiza todos os controles de detalhe
         LOCAL loc_oErro
+
         TRY
-            IF VARTYPE(THIS.this_oParentForm) = 'O' AND !ISNULL(THIS.this_oParentForm)
-                IF PEMSTATUS(THIS.this_oParentForm, 'Enabled', 5)
-                    THIS.this_oParentForm.Enabled = .T.
-                ENDIF
+            THIS.CarregarLista()
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.this_oBusinessObject.SincronizarItens()
             ENDIF
-            THIS.this_oParentForm     = .NULL.
-            THIS.this_oBusinessObject = .NULL.
+            THIS.BOParaForm()
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro Destroy")
+            MsgErro("Erro em BtnBuscarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
         ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick
+    *==========================================================================
+        *-- Encerrar form sem processar (mesmo que CmdCancelarClick/Cancelar.Click)
+        LOCAL loc_oErro
+
+        TRY
+            THIS.CmdCancelarClick()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnEncerrarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnSalvarClick
+    *==========================================================================
+        *-- OPERACIONAL: "Salvar" = Processar operacoes selecionadas
+        *-- Delega a CmdProcessarClick (Processar.Click do legado)
+        LOCAL loc_oErro
+
+        TRY
+            THIS.CmdProcessarClick()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnSalvarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE BtnCancelarClick
+    *==========================================================================
+        *-- Cancelar/encerrar form sem processar
+        LOCAL loc_oErro
+
+        TRY
+            THIS.CmdCancelarClick()
+
+        CATCH TO loc_oErro
+            MsgErro("Erro em BtnCancelarClick: " + loc_oErro.Message + ;
+                    " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Destroy
+    *==========================================================================
+        *-- Re-habilitar form pai ao fechar
+        IF VARTYPE(THIS.poFormPai) = "O"
+            THIS.poFormPai.Enabled = .T.
+        ENDIF
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+
+        THIS.poFormPai     = .NULL.
+        THIS.poConexaoTemp = .NULL.
+
         DODEFAULT()
     ENDPROC
 

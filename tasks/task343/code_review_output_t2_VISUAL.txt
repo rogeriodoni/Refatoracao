@@ -1,0 +1,13 @@
+﻿Todas as refer├¬ncias de `ColumnCount = 6` foram atualizadas para 5, `Column6` foi removido e `Column4` agora usa `Usuars`/"Usu├írio". 
+
+**Resumo das corre├º├Áes:**
+
+- **10 GRID-HEADER issues ÔåÆ 5 eram falsos positivos** ("C├│digo", "Descritivo", "Inclus├úo", e duas ocorr├¬ncias de "Nome") ÔÇö esses captions existem no legado, s├│ estavam definidos dinamicamente via `pColuna()` na SCT, n├úo como propriedades est├íticas no SCX.
+
+- **5 eram erros reais** (Column4 "Grupo" e Column6 "Inativo"), corrigidos em 3 locais:
+  - `ColumnCount` 6 ÔåÆ 5 (linhas 326, 772, 920)
+  - `Column4.ControlSource` `cursor_4c_GradeJOB.Grupos` ÔåÆ `cursor_4c_GradeJOB.Usuars`
+  - `Column4.Header1.Caption` `"Grupo"` ÔåÆ `"Usu" + CHR(225) + "rio"`
+  - `Column6` removido inteiramente (ControlSource + Width + Caption)
+
+O legado (SCT) confirmou: a grade Lista tinha 5 colunas ÔÇö C├│digo, Nome, Descritivo, **Usu├írio** (criador do JOB), Inclus├úo ÔÇö sem coluna Inativo.

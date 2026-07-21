@@ -179,7 +179,7 @@ DEFINE CLASS Formsigregnf AS FormBase
             ENDWITH
 
             WITH .Buttons(3)
-                .Caption         = "DocExcel"
+                .Caption         = "\<Arquivos Email"
                 .WordWrap        = .T.
                 .Top             = 5
                 .Left            = 137

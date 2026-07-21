@@ -1,0 +1,24 @@
+﻿**Falsos positivos confirmados ÔÇö nenhuma altera├º├úo necess├íria.**
+
+An├ílise dos dois problemas reportados:
+
+**[SQL-FILTRO-INVENTADO] NREGIS em WHERE**
+O scanner detectou `Nregis` no c├│digo migrado, mas ele aparece apenas como:
+- `SELECT ... NRegis ... FROM SigMlItn` ÔÇö coluna no SELECT (correto, espelha `crSigMlItn.Nregis` do legado)
+- `.Column6.ControlSource = "cursor_4c_Itn.Nregis"` ÔÇö ControlSource do grid
+- `this_nNRegis = 0` e `NRegis = FormatarNumeroSQL(...)` ÔÇö propriedade do BO e INSERT
+
+**Nenhum WHERE com NRegis existe em nenhum dos dois arquivos.**
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT em WHERE**
+O scanner detectou `ControlCount`, mas ele aparece apenas como:
+- `FOR loc_i = 1 TO THIS.ControlCount` ÔÇö propriedade VFP9 de form/container para iterar controles
+- `PEMSTATUS(loc_oControl, "ControlCount", 5)` ÔÇö verifica├º├úo de exist├¬ncia da propriedade
+
+**N├úo ├® uma coluna SQL, ├® uma propriedade do objeto VFP9.**
+
+Os WHERE reais no c├│digo migrado s├úo:
+- `WHERE SelImp = 1` ÔÇö correto, equivale ao `SELIMP` do original
+- `WHERE Codigos = ` + EscaparSQL(loc_pCod) ÔÇö correto, equivale ao `WHERE Codigos = ?pCod` do legado
+
+O c├│digo est├í correto. Este pass SQL n├úo requer nenhuma altera├º├úo nos arquivos `FormSigPrMlu.prg` e `SigPrMluBO.prg`.

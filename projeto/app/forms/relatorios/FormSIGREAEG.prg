@@ -904,10 +904,7 @@ DEFINE CLASS FormSIGREAEG AS FormBase
                 loc_oPagina.txt_4c_CdGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.codigos)
                 loc_oPagina.txt_4c_DsGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.descrs)
             ELSE
-                MsgAviso("Grupo de Estoque n" + CHR(227) + "o encontrado.", ;
-                         "Grupo de Estoque")
-                loc_oPagina.txt_4c_CdGrEstoque.Value = ""
-                loc_oPagina.txt_4c_DsGrEstoque.Value = ""
+                *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaGrEstoque()
             ENDIF
             IF USED("cursor_4c_SigreaGcrVal")
@@ -985,10 +982,7 @@ DEFINE CLASS FormSIGREAEG AS FormBase
                 loc_oPagina.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.iclis)
                 loc_oPagina.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.rclis)
             ELSE
-                MsgAviso("Conta de Estoque n" + CHR(227) + "o encontrada.", ;
-                         "Conta de Estoque")
-                loc_oPagina.txt_4c_CdEstoque.Value = ""
-                loc_oPagina.txt_4c_DsEstoque.Value = ""
+                *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaEstoque()
             ENDIF
             IF USED("cursor_4c_SigreaCliVal")

@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Fase 2 conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado a `SigPrEtqBO.prg`:**
+
+1. **19 propriedades `this_cItem*` / `this_nItem*`** ÔÇö mapeiam todos os campos do cursor `cursor_4c_Etiquetas` (equivalente ao `dbImpressao` do legado): Cpros, DPros, DPro2s, Reffs, Qtds, QtdeEtiq, Obs, Pedido, PVens, PrecoDe, Parcelas, empos, empdopnums, citens, Pesos, CodTams, Cpros2, Cpros3, Cpros4.
+
+2. **`ObterChavePrimaria()`** ÔÇö atualizado para retornar `this_cItemCpros` (produto atual), tornando a auditoria significativa.
+
+3. **`CarregarDoCursor(par_cAlias)`** ÔÇö mapeia todas as 19 colunas do cursor via `SELECT (par_cAlias)` + campos diretos.
+
+4. **`ValidarDados()`** ÔÇö valida `this_cItemCpros` n├úo vazio e `this_nItemQtds > 0`.
+
+5. **`Inserir()`** ÔÇö `INSERT INTO cursor_4c_Etiquetas` com todos os 19 campos, chamando `RegistrarAuditoria("INCLUIR")`.
+
+6. **`Atualizar()`** ÔÇö `REPLACE` na linha corrente com todos os 19 campos, chamando `RegistrarAuditoria("ALTERAR")`.
+
+7. **`PrepararImpressao(...)`** ÔÇö orquestra a impress├úo: remove itens sem quantidade, reordena cursor (Produto/Nenhuma), monta `lcBop`, chama `SigOpEtq()`, limpa o cursor ap├│s sucesso.

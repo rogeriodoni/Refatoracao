@@ -1,0 +1,10 @@
+﻿4 corre├º├Áes aplicadas em `SIGPRINTBO.prg`:
+
+| Localiza├º├úo | Problema | Corre├º├úo |
+|---|---|---|
+| `ObterChavePrimaria()` | Retornava `this_cCidChaves` (n├úo ├® PK) | Retorna `this_cCodigo` (PK real = `cods`) |
+| `Buscar()` linha 55 | `OR descrs LIKE ...` inventado | Removido ÔÇö original filtra s├│ por `cods` |
+| `Atualizar()` WHERE | `WHERE cidchaves = ...` | `WHERE cods = ...` + removido `SET cods=...` (n├úo se atualiza PK) |
+| `ExecutarExclusao()` WHERE | `WHERE cidchaves = ...` | `WHERE cods = ...` |
+
+O `FormSIGPRINT.prg` n├úo precisa de altera├º├Áes ÔÇö os trechos relevantes referenciados no pass j├í usam `cursor_4c_Dados.cods` corretamente.

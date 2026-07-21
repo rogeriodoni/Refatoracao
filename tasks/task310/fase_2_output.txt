@@ -1,0 +1,15 @@
+﻿O arquivo foi gerado com 739 linhas. A Fase 2 est├í completa.
+
+**SigPrMdcBO.prg ÔÇö Fase 2/8 conclu├¡da.** O BO recebeu todos os m├®todos operacionais:
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `InicializarCursorContas()` | Cria `cursor_4c_Contas` com ├¡ndices Duplica/ContaAnt/ContaNov + registro inicial |
+| `ValidarArqDBF()` | Verifica exist├¬ncia do `ArqDBF.DBF` e seta `this_cArqDBFPath` |
+| `IncluirParConta()` | Append blank se linha corrente estiver preenchida |
+| `ExcluirParConta()` | Marca DELETE no registro corrente |
+| `ValidarParesContas(par_cMensagem)` | Valida todos os pares (vazios, iguais) ÔÇö retorna mensagem de erro por ref |
+| `ValidarCodigoConta(par_cConta)` | Confirma exist├¬ncia em SigCdCli via SQLEXEC |
+| `ImportarDeXLS(par_cArquivo)` | APPEND FROM XLS, valida SigCdCli, deduplica por TAG Duplica |
+| `TrocarContaRepresentantes()` | UPDATE SigCdCli.ContaVens em transa├º├úo SQL Server, retry interativo |
+| `ProcessarMudancaContas(par_lApagarContaAntiga, par_oForm)` | Loop principal sobre ArqDBF, trata 6 casos especiais (SIGMVCCR/SIGCDCLI/SIGMVHST/SIGCDCLH/SIGMVSLC/SIGMVEST), TRY/CATCH em fRecalculaS/P/C (n├úo portadas), progresso via `par_oForm.AtualizarProgresso()` |

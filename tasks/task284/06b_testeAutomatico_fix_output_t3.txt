@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Duas mudan├ºas:
+
+1. **Guard no in├¡cio do m├®todo**: `IF !PEMSTATUS(par_oContainer, "ControlCount", 5) ÔåÆ RETURN` ÔÇö protege quando o pr├│prio container passado n├úo tem `ControlCount` (ex: OptionGroup recebido via recurs├úo).
+
+2. **Guard antes da recurs├úo no INLIST**: `IF PEMSTATUS(loc_oControl, "ControlCount", 5)` antes de chamar `THIS.TornarControlesVisiveis(loc_oControl)` para `OBJ_4C_OPT_IMPRESSORA` ÔÇö OptionGroup n├úo tem `ControlCount`, ent├úo a recurs├úo ├® pulada para ele.
+
+A raiz do erro: `obj_4c_Opt_Impressora` ├® um `OptionGroup` (n├úo um `Container`), portanto n├úo exp├Áe `ControlCount`. O c├│digo tentava recursar nele sem verificar primeiro.

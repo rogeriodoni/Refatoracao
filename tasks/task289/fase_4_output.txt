@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- `InicializarForm` ÔÇö agora chama `ConfigurarPaginaLista()`, `ConfigurarBotoes()` e `AlternarPagina(.T.)` antes de `TornarControlesVisiveis()`
+
+- `ConfigurarPaginaLista()` ÔÇö orquestra a grade + bot├Áes de sele├º├úo + BINDEVENTs para `AfterRowColChange` e cliques dos headers de ordena├º├úo
+
+- `ConfigurarGradeOperacao()` ÔÇö cria `grd_4c_GradeOperacao` (Top=155, Width=789, Height=156) com 10 colunas: Column1=CheckBox com `Sparse=.F.` vinculado a `TmpCabec.Flag`, Columns 2-10 mapeados para os campos `Dopes/Numes/Datas/Entregas/Peso/Contav/DConta/Obs/Notas`
+
+- `ConfigurarBotoesSelecao()` ÔÇö cria `cmd_4c_Apaga` (Top=358) e `cmd_4c_SelTudo` (Top=400) com `Themes=.T.` + `.Picture` (├¡cones `cadastro_excluir_26.jpg` / `geral_marcar_26.jpg`)
+
+- `ConfigurarBotoes()` ÔÇö cria `cmd_4c_Processar` (Left=648) e `cmd_4c_Cancelar` (Left=723, com ├¡cone `cadastro_sair_60.jpg`)
+
+- `AlternarPagina(par_lTipo)` ÔÇö chama `BO.OrdenarGrade()` e atualiza BackColor dos headers (verde=ordem ativa, cinza=inativa)
+
+- Handlers p├║blicos: `GrdOperacaoAfterRowColChange`, `HeaderMovimentacaoClick`, `HeaderEntregaClick`, `CmdProcessarClick`, `CmdCancelarClick`, `CmdSelTudoClick`, `CmdApagaClick`

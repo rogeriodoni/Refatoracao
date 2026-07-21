@@ -1,0 +1,3 @@
+﻿**Causa raiz**: `WITH loc_oCmg.Buttons(1)` em bloco separado (ap├│s o `ENDWITH` do pai) causa "BUTTONS is not an object" no VFP9 ÔÇö o mesmo bug documentado no Erro42 para OptionGroup (feedback_optiongroup_buttons_with_aninhado.md). A solu├º├úo ├® nesting: `WITH .Buttons(1)` aninhado **dentro** do `WITH loc_oCmg ... ENDWITH`.
+
+**Fix aplicado**: `ConfigurarBotaoCancelar` linha 349 ÔÇö fechado o `ENDWITH` do `WITH loc_oCmg` foi removido; `WITH .Buttons(1)` agora fica aninhado antes do `ENDWITH` pai.

@@ -1,103 +1,219 @@
 *==============================================================================
-* SIGPRGF1BO.PRG
-* Business Object para Falha x Recuperacao por Mes
-* Origem: SigPrGf1.SCX
-* Consulta SigCdFea agrupada por empresa/mes e prepara cursor crRel1
-* para exibicao em FormSigPrGf2
+* SigPrGf1BO.prg - Business Object para Falha x Recuperacao por Mes
+* Herda de: BusinessBase
+* Form OPERACIONAL: selecao de periodo + processamento de SigCdFea
 *==============================================================================
-
 DEFINE CLASS SigPrGf1BO AS BusinessBase
 
-    *-- Parametros de entrada
-    this_dDataInicial  = {}    && getDtInicial - Data inicial do periodo (D)
-    this_dDataFinal    = {}    && getDtFinal   - Data final do periodo (D)
+    *-- Identificacao
+    this_cTabela          = "SigCdFea"
+    this_cCampoChave      = ""
 
-    *-- Contexto de empresa (preenchido no processamento)
-    this_cEmpresa      = ""    && Cemps da empresa corrente (C3)
-    this_cNomeEmpresa  = ""    && Razas da empresa corrente (C)
+    *-- Periodo de filtro
+    this_dDtInicial       = {}
+    this_dDtFinal         = {}
 
-    *-- Titulos do relatorio (montados em PrepararRelatorio)
-    this_cTitulo1      = ""    && "Falha X Recuperacao por Mes da Empresa XX - Nome" (C100)
-    this_cTitulo2      = ""    && "[De dd/mm/aa a dd/mm/aa]" (C)
+    *-- Empresa
+    this_cEmpresa         = ""
+    this_cNomeEmpresa     = ""
 
-    *-- Mensagem de retorno do processo (usada pelo form para MessageBox)
-    this_cMsgProcesso  = ""    && Resultado ou erro do processamento (C)
+    *-- Titulos gerados pelo processamento
+    this_cTitulo1         = ""
+    this_cTitulo2         = ""
+
+    *-- Nome do cursor de resultado produzido por ProcessarDados()
+    this_cCursorResultado = "crRel1"
+
+    *-- Mensagem de retorno para o form (equivalente a pcMsg legado)
+    this_cMensagem        = ""
 
     *--------------------------------------------------------------------------
-    * INIT - Configura BO sem tabela principal (form operacional puro)
+    * Init
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        THIS.this_cTabela     = ""
+        THIS.this_cTabela     = "SigCdFea"
         THIS.this_cCampoChave = ""
+        THIS.this_cEmpresa    = go_4c_Sistema.cCodEmpresa
+        RETURN DODEFAULT()
+    ENDPROC
 
-        THIS.this_dDataInicial = {}
-        THIS.this_dDataFinal   = {}
-        THIS.this_cEmpresa     = ""
-        THIS.this_cNomeEmpresa = ""
-        THIS.this_cTitulo1     = ""
-        THIS.this_cTitulo2     = ""
-        THIS.this_cMsgProcesso = ""
+    *--------------------------------------------------------------------------
+    * ValidarPeriodo - Valida datas de filtro (equivalente a mChkValid do legado)
+    * Retorna .T. se valido; seta this_cMensagem e retorna .F. se invalido
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarPeriodo()
+        LOCAL loc_nDifMeses
+
+        THIS.this_cMensagem = ""
+
+        IF EMPTY(THIS.this_dDtFinal)
+            THIS.this_cMensagem = "Data Final Inv" + CHR(225) + "lida!!!"
+            RETURN .F.
+        ENDIF
+
+        IF THIS.this_dDtFinal < THIS.this_dDtInicial
+            THIS.this_cMensagem = "Data Inicial Maior Que a Data Final!!!"
+            RETURN .F.
+        ENDIF
+
+        IF YEAR(THIS.this_dDtInicial) = YEAR(THIS.this_dDtFinal)
+            loc_nDifMeses = MONTH(THIS.this_dDtInicial) - MONTH(THIS.this_dDtFinal) + 1
+        ELSE
+            loc_nDifMeses = (12 - MONTH(THIS.this_dDtInicial)) + MONTH(THIS.this_dDtFinal) + 1
+        ENDIF
+
+        IF loc_nDifMeses > 12
+            THIS.this_cMensagem = "Per" + CHR(237) + "odo Ultrapassa Doze Meses!!!"
+            RETURN .F.
+        ENDIF
 
         RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Chave de auditoria composta pelo intervalo de datas
-    * Form operacional sem tabela principal, usa periodo como identificador
+    * ProcessarDados - Gera cursor crRel1 com dados agregados de SigCdFea
+    * Equivalente a mProcessamento do legado
+    * Retorna .T. se encontrou registros, .F. caso contrario ou em erro
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        LOCAL loc_cChave
-        loc_cChave = ""
+    PROCEDURE ProcessarDados()
+        LOCAL loc_lSucesso, loc_lContinuar
+        LOCAL loc_cSQL, loc_cNomeEmpresa
+        LOCAL loc_cDtIni, loc_cDtFim
+        LOCAL loc_cStrgMes, loc_cTitulo1, loc_cTitulo2, loc_cEmpresa
+        LOCAL loc_nSaveDecimals, loc_cSaveFixed, loc_cSaveExact
 
-        IF !EMPTY(THIS.this_dDataInicial)
-            loc_cChave = DTOS(THIS.this_dDataInicial)
-        ENDIF
-
-        IF !EMPTY(THIS.this_dDataFinal)
-            loc_cChave = loc_cChave + "-" + DTOS(THIS.this_dDataFinal)
-        ENDIF
-
-        IF !EMPTY(THIS.this_cEmpresa)
-            loc_cChave = ALLTRIM(THIS.this_cEmpresa) + "|" + loc_cChave
-        ENDIF
-
-        RETURN loc_cChave
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega parametros do cursor de entrada
-    * Cursor deve conter campos: DataInicial (D), DataFinal (D)
-    * Opcional: Emps (C3), Razas (C)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+        THIS.this_cMensagem = ""
 
         TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
+            *-- Buscar nome da empresa no SQL Server
+            loc_cNomeEmpresa = ""
+            IF SQLEXEC(gnConnHandle, ;
+                "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(THIS.this_cEmpresa), ;
+                "crSigCdEmpGf1") > 0
+                IF !EOF("crSigCdEmpGf1")
+                    SELECT crSigCdEmpGf1
+                    loc_cNomeEmpresa = ALLTRIM(NVL(crSigCdEmpGf1.Razas, ""))
+                ENDIF
+                USE IN crSigCdEmpGf1
+            ENDIF
+            THIS.this_cNomeEmpresa = loc_cNomeEmpresa
 
-                IF TYPE(par_cAliasCursor + ".DataInicial") != "U"
-                    THIS.this_dDataInicial = TratarNulo(DataInicial, "D")
+            *-- Formatar datas para SQL Server
+            loc_cDtIni = FormatarDataSQL(THIS.this_dDtInicial)
+            loc_cDtFim = "'" + DTOC(THIS.this_dDtFinal, 1) + " 23:59:59'"
+
+            *-- SQL de busca no SQL Server
+            loc_cSQL = "SELECT a.Emps, a.Datas, b.Cemps, b.Razas, a.Falhas, a.Pesoccbs" + ;
+                       " FROM SigCdFea a" + ;
+                       " LEFT JOIN SigCdEmp b ON b.Cemps = a.Cemps" + ;
+                       " WHERE a.Datas BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim + ;
+                       " AND a.Emps = " + EscaparSQL(THIS.this_cEmpresa)
+
+            IF USED("crTmpRelGf1")
+                USE IN crTmpRelGf1
+            ENDIF
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpRelGf1") < 1
+                THIS.this_cMensagem = "Falha na conex" + CHR(227) + "o ao buscar dados de SigCdFea."
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar AND EOF("crTmpRelGf1")
+                THIS.this_cMensagem = "Nenhum Registro Encontrado."
+                USE IN crTmpRelGf1
+                loc_lContinuar = .F.
+            ENDIF
+
+            IF loc_lContinuar
+                *-- Variaveis para o SELECT VFP local (usar m. prefix nas refs abaixo)
+                loc_cEmpresa  = ALLTRIM(THIS.this_cEmpresa)
+
+                *-- String de nomes de meses, 9 chars por mes (12 * 9 = 108 chars)
+                loc_cStrgMes  = "Janeiro  " + "Fevereiro" + "Mar" + CHR(231) + "o    " + ;
+                                "Abril    " + "Maio     " + "Junho    " + ;
+                                "Julho    " + "Agosto   " + "Setembro " + ;
+                                "Outubro  " + "Novembro " + "Dezembro "
+
+                loc_cTitulo1  = "Falha X Recupera" + CHR(231) + CHR(227) + ;
+                                "o por M" + CHR(234) + "s da Empresa "
+
+                IF EMPTY(THIS.this_dDtInicial) AND EMPTY(THIS.this_dDtFinal)
+                    loc_cTitulo2 = ""
+                ELSE
+                    IF THIS.this_dDtInicial = THIS.this_dDtFinal
+                        loc_cTitulo2 = " [Em " + DTOC(THIS.this_dDtInicial) + "]"
+                    ELSE
+                        IF EMPTY(THIS.this_dDtInicial)
+                            loc_cTitulo2 = " [At" + CHR(233) + " " + DTOC(THIS.this_dDtFinal) + "]"
+                        ELSE
+                            loc_cTitulo2 = " [De " + DTOC(THIS.this_dDtInicial) + ;
+                                           " " + CHR(224) + " " + DTOC(THIS.this_dDtFinal) + "]"
+                        ENDIF
+                    ENDIF
                 ENDIF
 
-                IF TYPE(par_cAliasCursor + ".DataFinal") != "U"
-                    THIS.this_dDataFinal = TratarNulo(DataFinal, "D")
+                THIS.this_cTitulo1 = loc_cTitulo1
+                THIS.this_cTitulo2 = loc_cTitulo2
+
+                IF USED("crRel1")
+                    USE IN crRel1
                 ENDIF
 
-                IF TYPE(par_cAliasCursor + ".Emps") != "U"
-                    THIS.this_cEmpresa = TratarNulo(Emps, "C")
+                *-- Salvar configuracoes SET para restaurar apos SELECT
+                loc_nSaveDecimals = SET("DECIMALS")
+                loc_cSaveFixed    = SET("FIXED")
+                loc_cSaveExact    = SET("EXACT")
+
+                SET DECIMALS TO 6
+                SET FIXED ON
+                SET EXACT ON
+
+                *-- SELECT VFP local: agrega dados de SigCdFea por empresa/mes
+                SELECT Emps AS Cemps, ;
+                       PADR(DTOS(Datas), 6) AS cAnomess, ;
+                       PADR(PADR(SUBSTR(m.loc_cStrgMes, (MONTH(Datas) * 9 - 8), 9), 3) + "./" + ;
+                            TRANSFORM(YEAR(Datas), "@L 9999"), 9) AS csTraNomes, ;
+                       PADR(m.loc_cTitulo1 + ALLTRIM(NVL(Cemps, "")) + ;
+                            " - " + ALLTRIM(NVL(Razas, "")), 100) AS cTitulo1s, ;
+                       m.loc_cTitulo2 AS ctitulo2s, ;
+                       PADR(ALLTRIM(m.loc_cEmpresa) + " - " + ;
+                            ALLTRIM(m.loc_cNomeEmpresa), 100) AS cEmpresas, ;
+                       VAL(STR(SUM(Falhas), 16, 2)) AS nFalhas, ;
+                       VAL(STR(SUM(Pesoccbs), 16, 2)) AS nPesoccbs ;
+                  FROM crTmpRelGf1 ;
+                 GROUP BY 1, 2, 3, 4, 5, 6 ;
+                  INTO CURSOR crRel1 READWRITE
+
+                SELECT crRel1
+                GO TOP
+
+                *-- Restaurar configuracoes SET
+                SET DECIMALS TO (loc_nSaveDecimals)
+                IF loc_cSaveFixed = "ON"
+                    SET FIXED ON
+                ELSE
+                    SET FIXED OFF
+                ENDIF
+                IF loc_cSaveExact = "ON"
+                    SET EXACT ON
+                ELSE
+                    SET EXACT OFF
                 ENDIF
 
-                IF TYPE(par_cAliasCursor + ".Razas") != "U"
-                    THIS.this_cNomeEmpresa = TratarNulo(Razas, "C")
-                ENDIF
+                USE IN crTmpRelGf1
 
-                loc_lSucesso = .T.
+                loc_lSucesso = !EOF("crRel1")
+                IF !loc_lSucesso
+                    THIS.this_cMensagem = "Nenhum Registro Encontrado."
+                ENDIF
             ENDIF
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro em ProcessarDados")
+            THIS.this_cMensagem = "Erro no processamento: " + loc_oErro.Message
             loc_lSucesso = .F.
         ENDTRY
 
@@ -105,252 +221,63 @@ DEFINE CLASS SigPrGf1BO AS BusinessBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - Executa a geracao do relatorio Falha X Recuperacao
-    * Wrapper de ProcessarDados com auditoria da execucao
-    * Retorna .T. se cursor crRel1 foi criado com registros
+    * CarregarDoCursor - Carrega propriedades BO a partir do cursor de resultado
     *--------------------------------------------------------------------------
-    PROCEDURE Inserir()
-        LOCAL loc_lSucesso
-
-        loc_lSucesso = .F.
-
-        IF !THIS.ValidarParametros()
-            RETURN .F.
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+            THIS.this_cEmpresa     = NVL(Cemps, "")
+            THIS.this_cTitulo1     = NVL(cTitulo1s, "")
+            THIS.this_cTitulo2     = NVL(ctitulo2s, "")
+            THIS.this_cNomeEmpresa = NVL(cEmpresas, "")
+            RETURN .T.
         ENDIF
-
-        loc_lSucesso = THIS.ProcessarDados()
-
-        IF loc_lSucesso
-            THIS.RegistrarAuditoria("GERAR")
-        ENDIF
-
-        RETURN loc_lSucesso
+        RETURN .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Atualizar - Reprocessa o relatorio com novos parametros de periodo
-    * Wrapper de ProcessarDados com auditoria de reexecucao
-    * Retorna .T. se cursor crRel1 foi recriado com registros
+    * ObterChavePrimaria - Form operacional sem chave primaria
     *--------------------------------------------------------------------------
-    PROCEDURE Atualizar()
-        LOCAL loc_lSucesso
-
-        loc_lSucesso = .F.
-
-        IF !THIS.ValidarParametros()
-            RETURN .F.
-        ENDIF
-
-        *-- Fecha cursor de resultado anterior para evitar dados stale
-        IF USED("crRel1")
-            USE IN crRel1
-        ENDIF
-
-        loc_lSucesso = THIS.ProcessarDados()
-
-        IF loc_lSucesso
-            THIS.RegistrarAuditoria("REPROCESSAR")
-        ENDIF
-
-        RETURN loc_lSucesso
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ""
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * RegistrarAuditoria - Registra execucao do relatorio em LogAuditoria
-    * Grava operacao, chave (empresa+periodo), usuario e timestamp
-    * Erros de auditoria nao bloqueiam a operacao principal
+    * Inserir - Form OPERACIONAL nao insere linhas em SigCdFea diretamente
+    * SigCdFea eh populada por outros processos do sistema (movimentacao de
+    * producao). Este BO apenas LE e agrega dados para o relatorio de
+    * "Falha X Recuperacao por Mes". Bloquear insercao evita gravacao acidental.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
-        LOCAL loc_cSQL, loc_oErro, loc_cTabelaLog
-
-        TRY
-            *-- Como form operacional nao tem tabela, usa identificador do relatorio
-            loc_cTabelaLog = "SigPrGf1"
-
-            loc_cSQL = "INSERT INTO LogAuditoria " + ;
-                       "(Tabela, Operacao, ChaveRegistro, Usuario, DataHora) " + ;
-                       "VALUES (" + ;
-                       EscaparSQL(loc_cTabelaLog) + ", " + ;
-                       EscaparSQL(ALLTRIM(par_cOperacao)) + ", " + ;
-                       EscaparSQL(THIS.ObterChavePrimaria()) + ", " + ;
-                       EscaparSQL(gc_4c_UsuarioLogado) + ", " + ;
-                       "GETDATE())"
-
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Audit")
-
-            IF USED("cursor_4c_Audit")
-                USE IN cursor_4c_Audit
-            ENDIF
-
-        CATCH TO loc_oErro
-            *-- Auditoria nunca bloqueia a operacao principal do relatorio
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ValidarParametros - Valida datas do periodo antes do processamento
-    * Popula this_cMsgProcesso com mensagem de erro se invalido
-    * Retorna .T. se valido, .F. caso contrario
-    *--------------------------------------------------------------------------
-    FUNCTION ValidarParametros()
-        LOCAL loc_lResultado
-        loc_lResultado = .T.
-
-        IF EMPTY(THIS.this_dDataFinal)
-            THIS.this_cMsgProcesso = "Data Final Inv" + CHR(225) + "lida!!!"
-            loc_lResultado = .F.
-        ENDIF
-
-        IF loc_lResultado AND THIS.this_dDataFinal < THIS.this_dDataInicial
-            THIS.this_cMsgProcesso = "Data Inicial Maior Que a Data Final!!!"
-            loc_lResultado = .F.
-        ENDIF
-
-        IF loc_lResultado
-            IF (YEAR(THIS.this_dDataInicial) = YEAR(THIS.this_dDataFinal) AND ;
-                (MONTH(THIS.this_dDataInicial) - MONTH(THIS.this_dDataFinal) + 1) > 12) OR ;
-               (YEAR(THIS.this_dDataInicial) != YEAR(THIS.this_dDataFinal) AND ;
-                ((12 - MONTH(THIS.this_dDataInicial)) + MONTH(THIS.this_dDataFinal) + 1) > 12)
-                THIS.this_cMsgProcesso = "Per" + CHR(237) + "odo Ultrapassa Doze Meses!!!"
-                loc_lResultado = .F.
-            ENDIF
-        ENDIF
-
-        RETURN loc_lResultado
+    FUNCTION Inserir()
+        THIS.this_cMensagem = "Form operacional: inser" + CHR(231) + CHR(227) + ;
+                              "o direta em SigCdFea n" + CHR(227) + "o " + ;
+                              "suportada. Utilize os m" + CHR(243) + "dulos de " + ;
+                              "movimenta" + CHR(231) + CHR(227) + "o de produ" + ;
+                              CHR(231) + CHR(227) + "o."
+        RETURN .F.
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * ProcessarDados - Consulta SigCdFea agrupada por mes e cria cursor crRel1
-    * Retorna .T. se crRel1 tem registros, .F. se vazio ou erro de conexao
-    * Popula: this_cEmpresa, this_cNomeEmpresa, this_cTitulo1, this_cTitulo2
+    * Atualizar - Form OPERACIONAL nao atualiza linhas de SigCdFea
+    * Bloqueia UPDATE por design: este BO consome dados agregados, nao mantem
+    * cadastro. Alteracoes em SigCdFea ocorrem via processos de producao.
     *--------------------------------------------------------------------------
-    FUNCTION ProcessarDados()
-        LOCAL loc_lResultado, loc_oErro
-        LOCAL loc_nDecimals, loc_cFixed, loc_cExact
-        LOCAL loc_cSQL, loc_nRet
-        LOCAL loc_cStrgMes, loc_cTitulo1, loc_cTitulo2
-        LOCAL loc_cEmpresa, loc_cNomeEmpresa
+    FUNCTION Atualizar()
+        THIS.this_cMensagem = "Form operacional: atualiza" + CHR(231) + CHR(227) + ;
+                              "o direta em SigCdFea n" + CHR(227) + "o " + ;
+                              "suportada. Utilize os m" + CHR(243) + "dulos de " + ;
+                              "movimenta" + CHR(231) + CHR(227) + "o de produ" + ;
+                              CHR(231) + CHR(227) + "o."
+        RETURN .F.
+    ENDFUNC
 
-        loc_lResultado  = .F.
-        loc_nDecimals   = SET("Decimals")
-        loc_cFixed      = SET("Fixed")
-        loc_cExact      = SET("Exact")
-
-        TRY
-            SET DECIMALS TO 6
-            SET FIXED ON
-            SET EXACT ON
-
-            *-- Obtem nome da empresa corrente
-            loc_cEmpresa = go_4c_Sistema.cCodEmpresa
-            loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmpresa)
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emp")
-
-            IF USED("cursor_4c_Emp") AND !EOF("cursor_4c_Emp")
-                loc_cNomeEmpresa = ALLTRIM(NVL(cursor_4c_Emp.Razas, ""))
-            ELSE
-                loc_cNomeEmpresa = ""
-            ENDIF
-
-            IF USED("cursor_4c_Emp")
-                USE IN cursor_4c_Emp
-            ENDIF
-
-            THIS.this_cEmpresa     = loc_cEmpresa
-            THIS.this_cNomeEmpresa = loc_cNomeEmpresa
-
-            *-- Monta titulos do relatorio
-            loc_cTitulo1 = "Falha X Recupera" + CHR(231) + CHR(227) + ;
-                           "o por M" + CHR(234) + "s da Empresa "
-
-            DO CASE
-                CASE EMPTY(THIS.this_dDataInicial) AND EMPTY(THIS.this_dDataFinal)
-                    loc_cTitulo2 = ""
-                CASE THIS.this_dDataInicial = THIS.this_dDataFinal
-                    loc_cTitulo2 = " [Em " + DTOC(THIS.this_dDataInicial) + "]"
-                CASE EMPTY(THIS.this_dDataInicial)
-                    loc_cTitulo2 = " [At" + CHR(233) + " " + DTOC(THIS.this_dDataFinal) + "]"
-                OTHERWISE
-                    loc_cTitulo2 = " [De " + DTOC(THIS.this_dDataInicial) + ;
-                                   " " + CHR(224) + " " + DTOC(THIS.this_dDataFinal) + "]"
-            ENDCASE
-
-            THIS.this_cTitulo1 = PADR(loc_cTitulo1 + ALLTRIM(loc_cEmpresa) + ;
-                                      " - " + ALLTRIM(loc_cNomeEmpresa), 100)
-            THIS.this_cTitulo2 = loc_cTitulo2
-
-            *-- Consulta SQL Server: SigCdFea com dados de Falha/Recuperacao por empresa
-            IF USED("cursor_4c_TmpRel")
-                USE IN cursor_4c_TmpRel
-            ENDIF
-
-            loc_cSQL = "SELECT a.Emps, a.Datas, b.Cemps, b.Razas, a.Falhas, a.Pesoccbs " + ;
-                       "FROM SigCdFea a " + ;
-                       "LEFT JOIN SigCdEmp b ON b.Cemps = a.Emps " + ;
-                       "WHERE a.Datas >= " + FormatarDataSQL(THIS.this_dDataInicial) + ;
-                       " AND a.Datas < DATEADD(day, 1, " + FormatarDataSQL(THIS.this_dDataFinal) + ")" + ;
-                       " AND a.Emps = " + EscaparSQL(loc_cEmpresa)
-
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpRel")
-
-            IF loc_nRet >= 1
-                *-- String auxiliar: nome de cada mes com 9 chars (CHR(231)=c cedilha em Marco)
-                loc_cStrgMes = "Janeiro  " + ;
-                               "Fevereiro" + ;
-                               "Mar" + CHR(231) + "o    " + ;
-                               "Abril    " + ;
-                               "Maio     " + ;
-                               "Junho    " + ;
-                               "Julho    " + ;
-                               "Agosto   " + ;
-                               "Setembro " + ;
-                               "Outubro  " + ;
-                               "Novembro " + ;
-                               "Dezembro "
-
-                *-- Agrega por empresa/mes em cursor crRel1 consumido por FormSigPrGf2
-                IF USED("crRel1")
-                    USE IN crRel1
-                ENDIF
-
-                SELECT Emps AS Cemps, ;
-                       PADR(DTOS(Datas), 6) AS cAnomess, ;
-                       PADR(PADR(SUBSTR(m.loc_cStrgMes, (MONTH(Datas) * 9 - 8), 9), 3) + ;
-                            "./" + TRANSFORM(YEAR(Datas), "@L 9999"), 9) AS csTraNomes, ;
-                       PADR(m.loc_cTitulo1 + ALLTRIM(NVL(Cemps, "")) + ;
-                            " - " + ALLTRIM(NVL(Razas, "")), 100) AS cTitulo1s, ;
-                       loc_cTitulo2 AS loc_cTitulo2, ;
-                       PADR(ALLTRIM(m.loc_cEmpresa) + " - " + ;
-                            ALLTRIM(m.loc_cNomeEmpresa), 100) AS cEmpresas, ;
-                       VAL(STR(SUM(Falhas), 16, 2)) AS nFalhas, ;
-                       VAL(STR(SUM(Pesoccbs), 16, 2)) AS nPesoccbs ;
-                  FROM cursor_4c_TmpRel ;
-                 GROUP BY 1, 2, 3, 4, 5, 6 ;
-                  INTO CURSOR crRel1 READWRITE
-
-                IF USED("cursor_4c_TmpRel")
-                    USE IN cursor_4c_TmpRel
-                ENDIF
-
-                SELECT crRel1
-                GO TOP
-
-                loc_lResultado = !EOF("crRel1")
-            ELSE
-                THIS.this_cMsgProcesso = "Favor Reinicializar o Processo!!!"
-            ENDIF
-
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        *-- Restaura configuracoes de ambiente
-        SET DECIMALS TO (loc_nDecimals)
-        SET FIXED &loc_cFixed.
-        SET EXACT &loc_cExact.
-
-        RETURN loc_lResultado
+    *--------------------------------------------------------------------------
+    * ExecutarExclusao - Form OPERACIONAL nao exclui linhas de SigCdFea
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION ExecutarExclusao()
+        THIS.this_cMensagem = "Form operacional: exclus" + CHR(227) + "o direta " + ;
+                              "em SigCdFea n" + CHR(227) + "o suportada."
+        RETURN .F.
     ENDFUNC
 
 ENDDEFINE

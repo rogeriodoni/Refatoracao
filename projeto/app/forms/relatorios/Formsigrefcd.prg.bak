@@ -611,7 +611,9 @@ DEFINE CLASS Formsigrefcd AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReFcD", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -633,7 +635,9 @@ DEFINE CLASS Formsigrefcd AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReFcD", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -654,7 +658,9 @@ DEFINE CLASS Formsigrefcd AS FormBase
                 IF THIS.this_oRelatorio.PrepararDados()
                     THIS.ExecutarReportForm("SigReFcD", "PRINTER", THIS.this_oRelatorio.this_cCursorDados)
                 ELSE
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

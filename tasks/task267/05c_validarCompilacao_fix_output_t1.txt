@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas:
+
+1. **`FormSIGPRCNB.prg` linha 1639** ÔÇö removido `NOERROR` (cl├íusula inv├ílida em atribui├º├úo de vari├ível VFP9, causava "Syntax error") e o bloco `IF TYPE()` subsequente que se tornou desnecess├írio.
+
+2. **`SIGPRCNBBO.prg` ÔÇö `BuscarConvenio()`** ÔÇö adicionado `arqcnabs` ao SELECT de `SIGCDCEB`. O campo existe na tabela (confirmado no schema) mas estava ausente do cursor, o que era a causa raiz do problema (o `NOERROR` era uma tentativa fr├ígil de contornar o campo faltante).

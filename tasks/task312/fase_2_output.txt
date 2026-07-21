@@ -1,0 +1,11 @@
+﻿Phase 3 is complete. `C:\4c\projeto\app\forms\operacionais\FormSIGPRMEI.prg` created with:
+
+- **500├ù147px compact dialog** (PILAR 1 fidelity), `TitleBar=0`, `AlwaysOnTop=.T.`, `DataSession=2`
+- **Init()** captures `par_lParametrizado` before `DODEFAULT()` so FormBase.Init() ÔåÆ InicializarForm() can read it
+- **InicializarForm()** (PROTECTED): creates `SIGPRMEIBO`, loads SigCdPam dirs into BO, sets Caption via CHR() codes, assembles all controls
+- **ConfigurarCabecalho()**: canonical gray header (cnt_4c_Cabecalho + lbl_4c_Sombra/Titulo, AutoSize=.F.)
+- **ConfigurarBotoes()**: two standalone buttons (Themes=.T. + DisabledPicture) at Left=340/420, BINDEVENT to public handlers
+- **ConfigurarLabels()**: lbl_4c_Info (identification, Top=96) + lbl_4c_Status (dynamic status, Top=114)
+- **BtnProcessarClick()**: DO WHILE loop calling `LerArquivos()` + `GravarArquivos()` on BO, INKEY(.5) wait, exits after single cycle in non-parametrizado mode or on ESC; calls QUIT if parametrizado
+- **Activate()**: auto-starts processing loop if `this_lParametrizado = .T.`
+- **TornarControlesVisiveis()**: defined locally (not in FormBase)

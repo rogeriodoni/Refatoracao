@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. A Fase 6 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormSigPrItb.prg`:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö 3 novos controles em `cnt_4c_Mvt1`:
+   - `lbl_4c_Empresa` ÔÇö label "Empresa :" (top=46, left=10, escalonado 1.25x)
+   - `txt_4c_Emp1` ÔÇö c├│digo da empresa (MaxLength=3, escalonado de getEmp1 original)
+   - `txt_4c_Dsemp1` ÔÇö descri├º├úo da empresa (MaxLength=40, escalonado de getDsemp1 original)
+
+2. **`ConfigurarEventos()`** ÔÇö 4 novos BINDEVENTs: KeyPress + DblClick para `txt_4c_Emp1` e `txt_4c_Dsemp1`
+
+3. **6 novos m├®todos de lookup** (todos PUBLIC):
+   - `TxtEmp1KeyPress` / `TxtEmp1DblClick` ÔÇö despacham para `AbrirLookupEmpresaCod()`
+   - `TxtDsemp1KeyPress` / `TxtDsemp1DblClick` ÔÇö despacham para `AbrirLookupEmpresaNome()`
+   - `AbrirLookupEmpresaCod()` ÔÇö match exato por Cemps ÔåÆ picker se falhar; popula ambos os campos
+   - `AbrirLookupEmpresaNome()` ÔÇö respeita o `When` original (s├│ opera com Emp1 vazio); starts-with ├║nico ÔåÆ picker se amb├¡guo; popula ambos os campos

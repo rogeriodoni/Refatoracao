@@ -1363,10 +1363,7 @@ DEFINE CLASS Formsigreegp AS FormBase
                 loc_oPagina.txt_4c__Cd_GrEstoque.Value = ALLTRIM(cursor_4c_SigCdGcr.codigos)
                 loc_oPagina.txt_4c__Ds_GrEstoque.Value = ALLTRIM(cursor_4c_SigCdGcr.descrs)
             ELSE
-                MsgAviso("Grupo de Estoque n" + CHR(227) + "o encontrado.", ;
-                    "Grupo de Estoque")
-                loc_oPagina.txt_4c__Cd_GrEstoque.Value = ""
-                loc_oPagina.txt_4c__Ds_GrEstoque.Value = ""
+                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaGrEstoque()
             ENDIF
         CATCH TO loc_oErro
@@ -1431,10 +1428,7 @@ DEFINE CLASS Formsigreegp AS FormBase
                 loc_oPagina.txt_4c__cd_estoque.Value = ALLTRIM(cursor_4c_SigreegpCliVal.iclis)
                 loc_oPagina.txt_4c__ds_estoque.Value = ALLTRIM(cursor_4c_SigreegpCliVal.rclis)
             ELSE
-                MsgAviso("Conta de Estoque n" + CHR(227) + "o encontrada.", ;
-                    "Conta de Estoque")
-                loc_oPagina.txt_4c__cd_estoque.Value = ""
-                loc_oPagina.txt_4c__ds_estoque.Value = ""
+                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaEstoque()
             ENDIF
             IF USED("cursor_4c_SigreegpCliVal")
@@ -1500,10 +1494,7 @@ DEFINE CLASS Formsigreegp AS FormBase
                 loc_oPagina.txt_4c__cd_grupo.Value = ALLTRIM(cursor_4c_SigreegpGrpVal.cgrus)
                 loc_oPagina.txt_4c__ds_grupo.Value = ALLTRIM(cursor_4c_SigreegpGrpVal.dgrus)
             ELSE
-                MsgAviso("Grupo de Produto n" + CHR(227) + "o encontrado.", ;
-                    "Grupo de Produto")
-                loc_oPagina.txt_4c__cd_grupo.Value = ""
-                loc_oPagina.txt_4c__ds_grupo.Value = ""
+                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaGrupo()
             ENDIF
             IF USED("cursor_4c_SigreegpGrpVal")
@@ -1625,10 +1616,7 @@ DEFINE CLASS Formsigreegp AS FormBase
                 loc_oPagina.txt_4c_Col.Value  = ALLTRIM(cursor_4c_SigreegpColVal.colecoes)
                 loc_oPagina.txt_4c_DCol.Value = ALLTRIM(cursor_4c_SigreegpColVal.descs)
             ELSE
-                MsgAviso("Grupo de Venda n" + CHR(227) + "o encontrado.", ;
-                    "Grupo de Venda")
-                loc_oPagina.txt_4c_Col.Value  = ""
-                loc_oPagina.txt_4c_DCol.Value = ""
+                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
                 THIS.AbrirBuscaGrupoVenda()
             ENDIF
             IF USED("cursor_4c_SigreegpColVal")
@@ -1825,8 +1813,10 @@ DEFINE CLASS Formsigreegp AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Relat" + CHR(243) + "rio")
+                ENDIF
                 RETURN
             ENDIF
             IF !USED("dbRelatorio") OR RECCOUNT("dbRelatorio") = 0

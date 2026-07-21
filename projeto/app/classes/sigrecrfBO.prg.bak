@@ -380,7 +380,7 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                    TO PRINT PROMPT NOCONSOLE
+                    TO PRINTER PROMPT NOCONSOLE
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro

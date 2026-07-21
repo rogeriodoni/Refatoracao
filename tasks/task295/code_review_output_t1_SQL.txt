@@ -1,0 +1,35 @@
+﻿Ap├│s verificar o c├│digo atual, posso analisar os dois alertas reportados:
+
+## An├ílise: Falsos Positivos do Validador
+
+### Alerta 1: `CPROS` em WHERE (linha 279 do BO)
+```foxpro
+"SELECT TOP 1 cgrus, cunis FROM SigCdPro " + ;
+"WHERE cpros = " + EscaparSQL(loc_cCPros)
+```
+
+### Alerta 2: `CGRUS` em WHERE (linha 296 do BO)
+```foxpro
+"SELECT TOP 1 tipoestos, embs FROM SigCdGrp " + ;
+"WHERE cgrus = " + EscaparSQL(loc_cCGrus)
+```
+
+**Ambos s├úo falsos positivos.** O validador comparou os WHERE do migrado com os fragmentos do original fornecidos, mas o original usava o mecanismo `DataMgr` com cursores pr├®-populados:
+
+```foxpro
+* Original (DataMgr pre-carregava crTmpPro com dados do produto):
+=Seek(crTmpPro.cUnis, [crSigCdEmb], [Cods])
+```
+
+O `crTmpPro` j├í tinha `cgrus` e `cunis` carregados pelo DataMgr internamente. A migra├º├úo **corretamente** substituiu esse mecanismo por queries SQLEXEC com WHERE na chave prim├íria de cada tabela:
+
+| Tabela | PK | WHERE migrado |
+|--------|----|---------------|
+| `SigCdPro` | `cpros` | `WHERE cpros = ...` Ô£ô |
+| `SigCdGrp` | `cgrus` | `WHERE cgrus = ...` Ô£ô |
+
+Remover esses WHERE retornaria **todos os registros** de `SigCdPro`/`SigCdGrp` sem filtro ÔÇö quebrando completamente a l├│gica de embalagem. Isso viola a regra "NAO alterar logica de negocio".
+
+**O "WHERE original usa: EMBS"** que o validador menciona refere-se ao campo `embs` que aparece no SELECT do `SigCdGrp` e ├® usado em VFP logic (`loc_nEmbs = 1`), n├úo como condi├º├úo WHERE SQL ÔÇö o validador interpretou incorretamente.
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** O c├│digo SQL est├í correto nos dois casos. Os WHERE com `CPROS` e `CGRUS` s├úo lookups por chave prim├íria equivalentes ao SEEK/DataMgr do legado.

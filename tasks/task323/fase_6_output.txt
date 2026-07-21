@@ -1,0 +1,21 @@
+﻿O form `FormSIGPRPRO.prg` para a **Fase 6/8 est├í completo**. 
+
+**Resumo da an├ílise:**
+
+Este form SIGPRPRO ├® um modal de consulta pura ÔÇö no original, todos os campos de entrada t├¬m `When = Return .F.` (impossibilitam foco/edi├º├úo), e o ├║nico bot├úo ativo ├® `Ok.Click` que apenas fecha. Por isso:
+
+- **Sem lookups** ÔåÆ nenhum BINDEVENT F4/F5 necess├írio
+- **Sem Save/Cancel** ÔåÆ n├úo ├® form CRUD, ├® visualiza├º├úo
+- **Tudo j├í implementado** na Phase 5 (avan├ºou Parts 1+2)
+
+Mapeamento completo original ÔåÆ migrado:
+| Original | Migrado |
+|----------|---------|
+| `cntSombra` + labels | `cnt_4c_Cabecalho` + `lbl_4c_Sombra/Titulo` |
+| `getCPros` (disabled) | `txt_4c_CPros` (Enabled=.F.) |
+| `getDPros` (disabled) | `txt_4c_DPros` (Enabled=.F., Format="K!") |
+| `GradeCarac` (Courier New) | `grd_4c_Dados` (col Caracteris, ReadOnly) |
+| `getComples` (When=.F.) | `txt_4c_Comples` (ReadOnly=.T.) |
+| `GetMemo` (When=.F.) | `edt_4c_Infos` (ReadOnly=.T.) |
+| `Ok.Click` ÔåÆ Release | `CmdOkClick` ÔåÆ THIS.Release() |
+| `GradeCarac.AfterRowColChange` | `GrdDadosAfterRowColChange(par_nColIndex)` |

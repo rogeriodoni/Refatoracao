@@ -1,0 +1,13 @@
+﻿O BO j├í estava completo desde a Fase 1 com todos os m├®todos CRUD. Corrigi o ├║nico problema encontrado: 3 `RETURN` dentro de bloco `TRY/CATCH` no m├®todo `SalvarOcorrencias` (linhas 323, 328, 362), substitu├¡dos pelo padr├úo flag `loc_lAbortar`. Tamb├®m movi as declara├º├Áes `LOCAL loc_cSQLIns` e `LOCAL loc_nResIns` para fora do loop `DO WHILE`.
+
+**Estado do SIGPRLNCBO.prg:**
+- `Init()` ÔÇö `this_cTabela` e `this_cCampoChave` corretos
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCidChaves`
+- `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos
+- `Buscar()` ÔÇö SELECT DISTINCT grupos/contas/grucontas
+- `BuscarOcorrencias()` ÔÇö SELECT com JOIN em SIGCCCCO para um grupo+conta
+- `BuscarDescricaoOcorrencia()` ÔÇö busca descri├º├úo de uma ocorr├¬ncia pelo c├│digo
+- `CarregarPorCodigo()` ÔÇö carrega por cidchaves (PK), reseta `this_lNovoRegistro = .F.`
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` ÔÇö CRUD com auditoria
+- `ExcluirPorGruContas()` ÔÇö remove todos lan├ºamentos de um grupo+conta
+- `SalvarOcorrencias()` ÔÇö salva lista de ocorr├¬ncias (limpa e re-insere), **corrigido** (sem RETURN em TRY)

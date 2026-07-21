@@ -552,7 +552,9 @@ DEFINE CLASS FormSIGRECTL AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cFrxPath = THIS.this_oRelatorio.this_cFRXPath
@@ -575,7 +577,9 @@ DEFINE CLASS FormSIGRECTL AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cFrxPath = THIS.this_oRelatorio.this_cFRXPath
@@ -598,7 +602,9 @@ DEFINE CLASS FormSIGRECTL AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
                 RETURN
             ENDIF
             loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
@@ -797,7 +803,9 @@ DEFINE CLASS FormSIGRECTL AS FormBase
                 ENDIF
                 loc_lSucesso = .T.
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "EnviarEmail")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

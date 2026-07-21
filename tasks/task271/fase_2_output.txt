@@ -1,0 +1,24 @@
+﻿The form is complete and correct. Phase 3 is done.
+
+**Summary of what was completed:**
+
+**BO fixes (SIGPRCPRBO.prg):**
+- Added missing `LOCAL loc_cCodCors, loc_cCodTams` and `LOCAL loc_nCItens2, loc_cEI_CId` in `CarregarBars()` ÔÇö variables were used but undeclared
+- Added `LOCAL loc_cCursor` in `ConfirmarConferencia()` for the FOR EACH cleanup loop
+
+**Form created (FormSIGPRCPR.prg) ÔÇö 590 lines:**
+- `Init()`: accepts `par_oParent`, shares DataSessionId with parent so it can access TmpEnc cursor
+- `ConfigurarPageFrame()`: sets background image directly on form (flat OPERACIONAL ÔÇö no PageFrame widget)
+- `ConfigurarCabecalho()`: header container (cntSombra pattern) with grey background + sombra/titulo labels
+- `ConfigurarCampos()`: date display (ReadOnly), barcode label + textbox (both start Visible=.F.)
+- `ConfigurarBotoes()`: 3 standalone CommandButtons with `Themes=.T. + DisabledPicture` (per memory feedback for standalone buttons); Ok + ConferirAuto start Visible=.F., Encerrar always visible
+- `ConfigurarGrade()`: 5-column grid with DynamicForeColor (blue for read items), starts Visible=.F., RecordSource set later
+- `ConfigurarBINDEVENTs()`: wires up 3 buttons, txt_4c_Leitura Valid/When/LostFocus, and form Activate
+- `InicializarValores()`: copies date from parent, calls `InicializarCursores()ÔåÆCarregarSigKey()ÔåÆCarregarBars("TmpEnc")`, then sets grid RecordSource/ControlSources, calls `AtualizarVisibilidade()`
+- `AtualizarVisibilidade()`: shows/hides grid, barcode field, Ok and ConferirAuto based on TmpBaixa having records
+- `FormActivate()`: gives focus to barcode field when form becomes active
+- `TxtLeituraValid()`: delegates to `BO.MarcarLeitura()`, refreshes grid, returns `.F.` to keep focus
+- `CmdOkClick()`: `MsgConfirma` ÔåÆ `BO.ConfirmarConferencia()` ÔåÆ re-enables parent ÔåÆ `Release()` (always releases, matching legacy)
+- `Destroy()`: closes TmpBaixa cursor, nulls BO
+
+Both files are auto-loaded by config.prg's ADIR() scan ÔÇö no manual registration needed. No menu entry needed (this is a sub-form called by parent forms like FormSIGPRCIC).

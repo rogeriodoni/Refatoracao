@@ -1105,7 +1105,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1115,7 +1117,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1138,7 +1142,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
             MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, ;
                 "Exporta" + CHR(231) + CHR(227) + "o Excel")
         ELSE
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Exportar Excel")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1167,7 +1173,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE BtnAlterarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1187,7 +1195,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE BtnBuscarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1204,7 +1214,9 @@ DEFINE CLASS Formsigrehtc AS FormBase
     PROCEDURE BtnSalvarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 

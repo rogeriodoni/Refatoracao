@@ -1,0 +1,14 @@
+﻿O problema detectado ├® um **falso positivo**. O `CONTROLCOUNT` encontrado pelo pass de review n├úo est├í em nenhuma cl├íusula SQL WHERE ÔÇö ele aparece apenas no m├®todo `TornarControlesVisiveis` como propriedade VFP9 padr├úo de containers para itera├º├úo:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          (linha 651)
+IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND ...    (linhas 658, 668)
+```
+
+O SQL real no BO (`CarregarEmailEmpresa`) usa exatamente `WHERE CEmps = ...`, que bate com o original legado:
+
+| Legado | Migrado |
+|--------|---------|
+| `Where CEmps = '` + `_EMPR` + `'` | `"WHERE CEmps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)` |
+
+Nenhuma corre├º├úo ├® necess├íria. O detector confundiu `ControlCount` (propriedade de objeto VFP9 usada para contar controles filhos de containers) com um nome de coluna SQL.

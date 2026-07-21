@@ -1,0 +1,3 @@
+﻿**Causa:** `SEEK(...)` no in├¡cio de uma instru├º├úo ├® amb├¡guo ÔÇö VFP9 interpreta como comando `SEEK <express├úo>` e falha ao parsear a v├¡rgula dentro dos par├¬nteses com "Function name is missing )."
+
+**Fix:** Prefixar com `= ` for├ºa o VFP9 a tratar `SEEK()` como chamada de fun├º├úo, descartando o retorno booleano. Apenas a linha 901 foi alterada; nenhuma l├│gica de neg├│cio foi tocada.

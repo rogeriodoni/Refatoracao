@@ -1,0 +1,373 @@
+*==============================================================================
+* SigPrSlpBO.prg - Business Object: Selecao Lista de Preco
+* Herda de: BusinessBase
+* Tabelas: SigCdLpc (listas de preco), SigCdLpi (itens da lista)
+* Tipo: OPERACIONAL - dialogo filho do form de pedido
+*==============================================================================
+
+DEFINE CLASS SigPrSlpBO AS BusinessBase
+
+    *-- Configuracao da tabela base
+    this_cTabela     = "SigCdLpi"
+    this_cCampoChave = "cidchaves"
+
+    *-- Cursores internos
+    this_cCursorListas = "cursor_4c_Listas"
+    this_cCursorItens  = "cursor_4c_Itens"
+
+    *-- Propriedades mapeadas para colunas de SigCdLpi
+    this_cCidchaves   = ""
+    this_cCgrus       = ""
+    this_nComiss      = 0
+    this_cCpros       = ""
+    this_cDpros       = ""
+    this_lFlagutabs   = .F.
+    this_cLprecos     = ""
+    this_cMoevs       = ""
+    this_nPvens       = 0
+    this_dVencis      = {}
+    this_dVencfs      = {}
+    this_cOrdems      = ""
+    this_cCcontroles  = ""
+    this_nEan13       = 0
+    this_nPcuss       = 0
+    this_cReffs       = ""
+    this_nPrecode     = 0
+
+    *--------------------------------------------------------------------------
+    * Init - Inicializa o BO
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        THIS.this_cTabela     = "SigCdLpi"
+        THIS.this_cCampoChave = "cidchaves"
+        DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarListasDisponiveis - Carrega SigCdLpc excluindo a lista atual
+    * par_cLPrecoExcluir: codigo da lista de preco atual (a ser excluida)
+    * Popula cursor_4c_Listas com colunas: lprecos
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarListasDisponiveis(par_cLPrecoExcluir)
+        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(THIS.this_cCursorListas)
+                USE IN (THIS.this_cCursorListas)
+            ENDIF
+
+            loc_cSQL = "SELECT lprecos FROM SigCdLpc " + ;
+                       "WHERE lprecos <> " + EscaparSQL(par_cLPrecoExcluir) + " " + ;
+                       "ORDER BY lprecos"
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorListas) > 0
+                SELECT (THIS.this_cCursorListas)
+                GO TOP
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Falha ao carregar listas de pre" + CHR(231) + "o.", "Erro")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarItensDaLista - Carrega SigCdLpi de uma lista especifica
+    * par_cLPrecos: codigo da lista de preco selecionada
+    * Popula cursor_4c_Itens com lMarcas=0 e todos os campos de SigCdLpi
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarItensDaLista(par_cLPrecos)
+        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(THIS.this_cCursorItens)
+                USE IN (THIS.this_cCursorItens)
+            ENDIF
+
+            loc_cSQL = "SELECT 0 AS lMarcas, a.cgrus, a.comiss, a.cpros, a.dpros, " + ;
+                       "a.flagutabs, a.lprecos, a.moevs, a.pvens, a.vencis, a.vencfs, " + ;
+                       "a.ordems, a.ccontroles, a.cidchaves, a.ean13, a.pcuss, " + ;
+                       "a.reffs, a.precode " + ;
+                       "FROM SigCdLpi a " + ;
+                       "WHERE a.lprecos = " + EscaparSQL(par_cLPrecos) + " " + ;
+                       "ORDER BY a.cpros"
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorItens) > 0
+                SELECT (THIS.this_cCursorItens)
+                GO TOP
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Falha ao carregar itens da lista de pre" + CHR(231) + "o.", "Erro")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AdicionarItensMarcados - Copia itens marcados para o cursor de destino
+    * par_cLPrecoAtual:        codigo da lista atual (destino)
+    * par_cCursorDestino:      nome do cursor VFP local do form pai (CrSigCdLpi)
+    * par_lAplicarArredond:    .T. se deve arredondar pvens (CompVenda <> "C")
+    * Retorna: numero de itens adicionados, -1 em caso de erro
+    *--------------------------------------------------------------------------
+    PROCEDURE AdicionarItensMarcados(par_cLPrecoAtual, par_cCursorDestino, par_lAplicarArredond)
+        LOCAL loc_nAdicionados, loc_oErro, loc_cLPrecoAtual, loc_lPodeExecutar
+
+        loc_nAdicionados    = 0
+        loc_lPodeExecutar   = .T.
+        loc_cLPrecoAtual    = ALLTRIM(par_cLPrecoAtual)
+
+        IF !USED(THIS.this_cCursorItens)
+            loc_lPodeExecutar = .F.
+            loc_nAdicionados  = -1
+        ENDIF
+        IF loc_lPodeExecutar AND !USED(par_cCursorDestino)
+            loc_lPodeExecutar = .F.
+            loc_nAdicionados  = -1
+        ENDIF
+
+        IF loc_lPodeExecutar
+            TRY
+                *-- Remove itens vazios do cursor destino (sem cpros)
+                DELETE FROM (par_cCursorDestino) WHERE EMPTY(cpros)
+
+                SELECT (THIS.this_cCursorItens)
+                GO TOP
+
+                SCAN
+                    IF cursor_4c_Itens.lMarcas = 1
+                        *-- Verifica se cpros ja existe no cursor destino
+                        IF !SEEK(cursor_4c_Itens.cpros, par_cCursorDestino, "CPros")
+                            SCATTER MEMVAR
+
+                            m.lMarcas   = 0
+                            m.lprecos   = loc_cLPrecoAtual
+                            m.cidchaves = fUniqueIds()
+                            m.vencis    = NVL(m.vencis, {})
+                            m.vencfs    = NVL(m.vencfs, {})
+
+                            IF par_lAplicarArredond
+                                m.pvens = ROUND(m.pvens, 2)
+                            ENDIF
+
+                            INSERT INTO (par_cCursorDestino) FROM MEMVAR
+                            loc_nAdicionados = loc_nAdicionados + 1
+
+                            SELECT (THIS.this_cCursorItens)
+                        ENDIF
+                    ENDIF
+                ENDSCAN
+
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "Erro")
+                loc_nAdicionados = -1
+            ENDTRY
+        ENDIF
+
+        RETURN loc_nAdicionados
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * MarcarTodos - Marca todos os itens do cursor de itens
+    *--------------------------------------------------------------------------
+    PROCEDURE MarcarTodos()
+        LOCAL loc_oErro
+
+        TRY
+            IF USED(THIS.this_cCursorItens)
+                SELECT (THIS.this_cCursorItens)
+                REPLACE ALL lMarcas WITH 1
+                GO TOP
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DesmarcarTodos - Desmarca todos os itens do cursor de itens
+    *--------------------------------------------------------------------------
+    PROCEDURE DesmarcarTodos()
+        LOCAL loc_oErro
+
+        TRY
+            IF USED(THIS.this_cCursorItens)
+                SELECT (THIS.this_cCursorItens)
+                REPLACE ALL lMarcas WITH 0
+                GO TOP
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCursores - Fecha os cursores abertos pelo BO
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCursores()
+        IF USED(THIS.this_cCursorListas)
+            USE IN (THIS.this_cCursorListas)
+        ENDIF
+        IF USED(THIS.this_cCursorItens)
+            USE IN (THIS.this_cCursorItens)
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - Carrega dados do cursor para as propriedades this_*
+    * par_cAliasCursor: nome do cursor com os dados de SigCdLpi
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+
+                THIS.this_cCidchaves  = TratarNulo(cidchaves, "C")
+                THIS.this_cCgrus      = TratarNulo(cgrus, "C")
+                THIS.this_nComiss     = TratarNulo(comiss, "N")
+                THIS.this_cCpros      = TratarNulo(cpros, "C")
+                THIS.this_cDpros      = TratarNulo(dpros, "C")
+
+                IF VARTYPE(flagutabs) = "N"
+                    IF VARTYPE(flagutabs) = "L"
+                        THIS.this_lFlagutabs = flagutabs
+                    ELSE
+                        IF VARTYPE(flagutabs) = "L"
+                            THIS.this_lFlagutabs = flagutabs
+                        ELSE
+                            IF VARTYPE(flagutabs) = "L"
+                                THIS.this_lFlagutabs = flagutabs
+                            ELSE
+                                IF VARTYPE(flagutabs) = "L"
+                                    THIS.this_lFlagutabs = flagutabs
+                                ELSE
+                                    IF VARTYPE(flagutabs) = "L"
+                                        THIS.this_lFlagutabs = flagutabs
+                                    ELSE
+                                        IF VARTYPE(flagutabs) = "L"
+                                            THIS.this_lFlagutabs = flagutabs
+                                        ELSE
+                                            IF VARTYPE(flagutabs) = "L"
+                                                THIS.this_lFlagutabs = flagutabs
+                                            ELSE
+                                                IF VARTYPE(flagutabs) = "L"
+                                                    THIS.this_lFlagutabs = flagutabs
+                                                ELSE
+                                                    IF VARTYPE(flagutabs) = "L"
+                                                        THIS.this_lFlagutabs = flagutabs
+                                                    ELSE
+                                                        THIS.this_lFlagutabs = (NVL(flagutabs, 0) = 1)
+                                                    ENDIF
+                                                ENDIF
+                                            ENDIF
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                ELSE
+                    THIS.this_lFlagutabs = NVL(flagutabs, .F.)
+                ENDIF
+
+                THIS.this_cLprecos    = TratarNulo(lprecos, "C")
+                THIS.this_cMoevs      = TratarNulo(moevs, "C")
+                THIS.this_nPvens      = TratarNulo(pvens, "N")
+                THIS.this_dVencis     = NVL(vencis, {})
+                THIS.this_dVencfs     = NVL(vencfs, {})
+                THIS.this_cOrdems     = TratarNulo(ordems, "C")
+                THIS.this_cCcontroles = TratarNulo(ccontroles, "C")
+                THIS.this_nEan13      = TratarNulo(ean13, "N")
+                THIS.this_nPcuss      = TratarNulo(pcuss, "N")
+                THIS.this_cReffs      = TratarNulo(reffs, "C")
+                THIS.this_nPrecode    = TratarNulo(precode, "N")
+
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterChavePrimaria - Retorna cidchaves do registro atual
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidchaves)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - INSERT em SigCdLpi
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_lSucesso, loc_cSQL, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF EMPTY(THIS.this_cCidchaves)
+                THIS.this_cCidchaves = fUniqueIds()
+            ENDIF
+
+            loc_cSQL = "INSERT INTO SigCdLpi (cgrus, comiss, cpros, dpros, flagutabs, " + ;
+                       "lprecos, moevs, pvens, vencis, vencfs, ordems, ccontroles, " + ;
+                       "cidchaves, ean13, pcuss, reffs, precode) VALUES (" + ;
+                       EscaparSQL(THIS.this_cCgrus) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nComiss, 2) + ", " + ;
+                       EscaparSQL(THIS.this_cCpros) + ", " + ;
+                       EscaparSQL(THIS.this_cDpros) + ", " + ;
+                       IIF(THIS.this_lFlagutabs, "1", "0") + ", " + ;
+                       EscaparSQL(THIS.this_cLprecos) + ", " + ;
+                       EscaparSQL(THIS.this_cMoevs) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nPvens, 6) + ", " + ;
+                       IIF(EMPTY(THIS.this_dVencis), "NULL", FormatarDataSQL(THIS.this_dVencis)) + ", " + ;
+                       IIF(EMPTY(THIS.this_dVencfs), "NULL", FormatarDataSQL(THIS.this_dVencfs)) + ", " + ;
+                       EscaparSQL(THIS.this_cOrdems) + ", " + ;
+                       EscaparSQL(THIS.this_cCcontroles) + ", " + ;
+                       EscaparSQL(THIS.this_cCidchaves) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nEan13, 0) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nPcuss, 6) + ", " + ;
+                       EscaparSQL(THIS.this_cReffs) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nPrecode, 5) + ")"
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Falha ao inserir item da lista de pre" + CHR(231) + "o."
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Limpa recursos ao destruir o BO
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        THIS.LimparCursores()
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

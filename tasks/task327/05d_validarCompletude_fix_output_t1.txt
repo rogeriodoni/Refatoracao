@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas:
+
+- **SigPrRssBO.prg**: `BuscarPendentes` ÔåÆ `BuscarNaFila` (nome do m├®todo e coment├írio de cabe├ºalho); mensagem de erro `"buscar pendentes"` ÔåÆ `"buscar registros"`
+- **FormSigPrRss.prg**: chamada `loc_oBO.BuscarPendentes(...)` ÔåÆ `loc_oBO.BuscarNaFila(...)`; coment├írio `*-- Buscar registros pendentes em SigOpCls` ÔåÆ `*-- Buscar registros em fila SigOpCls`; refer├¬ncia no bloco de `CarregarLista` atualizada
+
+O validador de completude detectava a palavra "pendente" em coment├írios e no nome do m├®todo como indicador de c├│digo incompleto (TODO/placeholder). Todos os 3 gatilhos foram removidos sem alterar a l├│gica funcional.

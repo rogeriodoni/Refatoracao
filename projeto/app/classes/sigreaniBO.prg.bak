@@ -11,7 +11,7 @@
 * Logica de PrepararDados:
 *   1. Extrai dia/mes e converte para MMDD para comparar com dmnascs/dmcasas/dmconjs
 *   2. Busca SigCdCli com aniversario/casamento/conjuge no intervalo MMDD
-*   3. Cria cursor_4c_Dados com estrutura identica ao CsRelatorio original
+*   3. Cria CsRelatorio com estrutura identica ao CsRelatorio original
 *   4. Para cada cliente: inclui linha de aniversario e linha de conjuge (se aplicavel)
 *   5. Busca SigCdCe e inclui socios (DtNasc1s-3s) e conjuges (DtnConj1-3)
 *   6. Ordena por MMDD+Iclis via INDEX TAG Impressao
@@ -24,8 +24,8 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
     this_dDtFinal           = {}
 
     *-- Cursores utilizados pelo relatorio
-    this_cCursorDados       = "cursor_4c_Dados"
-    this_cCursorCabecalho   = "cursor_4c_Cabecalho"
+    this_cCursorDados       = "CsRelatorio"
+    this_cCursorCabecalho   = "CsCabecalho"
 
     *-- Configuracao do relatorio
     this_cFRXPath           = ""
@@ -43,7 +43,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                 IF TYPE("gc_4c_CaminhoReports") = "U"
                     gc_4c_CaminhoReports = ""
                 ENDIF
-                THIS.this_cFRXPath   = gc_4c_CaminhoReports + "RelSigReAni.frx"
+                THIS.this_cFRXPath   = gc_4c_CaminhoReports + "SigReAni.frx"
                 THIS.this_cTituloRel = "Relat" + CHR(243) + "rio de Aniversariantes"
                 loc_lSucesso = .T.
             ENDIF
@@ -54,7 +54,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * PrepararDados - Monta cursor_4c_Dados e cursor_4c_Cabecalho para o relatorio
+    * PrepararDados - Monta CsRelatorio e CsCabecalho para o relatorio
     * Replica a logica do PROCEDURE processamento do SCX original:
     *   - Converte datas para MMDD e filtra por dmnascs/dmcasas/dmconjs
     *   - Processa clientes (aniversario + conjuge)
@@ -114,9 +114,9 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
 
             *-- Criar cursor de cabecalho do relatorio
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
+            CREATE CURSOR CsCabecalho (cb_empresa C(80), cb_titulo C(80), cb_periodo C(80))
             SET NULL OFF
-            INSERT INTO cursor_4c_Cabecalho (cb_empresa, cb_titulo, cb_periodo) ;
+            INSERT INTO CsCabecalho (cb_empresa, cb_titulo, cb_periodo) ;
                    VALUES (loc_lcCbEmpresa, ;
                            "Rela" + CHR(231) + CHR(227) + "o de Aniversariantes", ;
                            loc_lcCbPeriodo)
@@ -135,7 +135,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
 
             *-- Criar cursor de resultado com mesma estrutura do CsRelatorio original
             SET NULL ON
-            CREATE CURSOR cursor_4c_Dados (Emps C(3), mes N(2), dia N(2), Iclis C(10), ;
+            CREATE CURSOR CsRelatorio (Emps C(3), mes N(2), dia N(2), Iclis C(10), ;
                                            Rclis C(40), Endes C(60), Bairs C(40), ;
                                            Ceps C(9), Cidas C(30), Estas C(2), ;
                                            Tel1s C(20), Faxs C(20), Nascs D, ;
@@ -153,7 +153,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                    BETWEEN(MONTH(m.Nascs), loc_lnMIni, loc_lnMFin)
                     m.mes = MONTH(m.Nascs)
                     m.dia = DAY(m.Nascs)
-                    SELECT cursor_4c_Dados
+                    SELECT CsRelatorio
                     APPEND BLANK
                     GATHER MEMVAR
                 ENDIF
@@ -166,7 +166,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                     m.dia   = DAY(m.dtncons)
                     m.Rclis = m.conjuges
                     m.Nascs = m.dtncons
-                    SELECT cursor_4c_Dados
+                    SELECT CsRelatorio
                     APPEND BLANK
                     GATHER MEMVAR
                 ENDIF
@@ -211,7 +211,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                                 m.dia   = DAY(&loc_cDNasc.)
                                 m.Rclis = &loc_cNome.
                                 m.Nascs = &loc_cDNasc.
-                                SELECT cursor_4c_Dados
+                                SELECT CsRelatorio
                                 APPEND BLANK
                                 GATHER MEMVAR
                             ENDIF
@@ -240,7 +240,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                                 m.dia   = DAY(&loc_cDNasc.)
                                 m.Rclis = &loc_cNome.
                                 m.Nascs = &loc_cDNasc.
-                                SELECT cursor_4c_Dados
+                                SELECT CsRelatorio
                                 APPEND BLANK
                                 GATHER MEMVAR
                             ENDIF
@@ -260,7 +260,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
             ENDIF
 
             *-- Posicionar no inicio do cursor de resultado para o REPORT FORM
-            SELECT cursor_4c_Dados
+            SELECT CsRelatorio
             GO TOP
 
             loc_lSucesso = .T.
@@ -284,12 +284,18 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                 IF !FILE(THIS.this_cFRXPath)
                     THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
                                               CHR(227) + "o encontrado: " + THIS.this_cFRXPath
-                    loc_lSucesso = .F.
+                ELSE
+                    IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                        MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                 "Relat" + CHR(243) + "rio")
+                        THIS.LimparCursores()
+                    ELSE
+                        REPORT FORM (THIS.this_cFRXPath) TO PRINTER NOCONSOLE
+                        THIS.LimparCursores()
+                        THIS.this_cMensagemErro = ""
+                        loc_lSucesso = .T.
+                    ENDIF
                 ENDIF
-                REPORT FORM (THIS.this_cFRXPath) TO PRINTER NOCONSOLE
-                THIS.LimparCursores()
-                THIS.this_cMensagemErro = ""
-                loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Imprimir")
@@ -309,12 +315,18 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
                 IF !FILE(THIS.this_cFRXPath)
                     THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
                                               CHR(227) + "o encontrado: " + THIS.this_cFRXPath
-                    loc_lSucesso = .F.
+                ELSE
+                    IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+                        MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                                 "Relat" + CHR(243) + "rio")
+                        THIS.LimparCursores()
+                    ELSE
+                        REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE
+                        THIS.LimparCursores()
+                        THIS.this_cMensagemErro = ""
+                        loc_lSucesso = .T.
+                    ENDIF
                 ENDIF
-                REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE
-                THIS.LimparCursores()
-                THIS.this_cMensagemErro = ""
-                loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Visualizar")
@@ -365,7 +377,7 @@ DEFINE CLASS sigreaniBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * CarregarDoCursor - NAO APLICAVEL a Relatorios
     * Stub para compatibilidade com pipeline de validacao (Fase 2).
-    * BOs de Relatorio populam dados via PrepararDados() -> cursor_4c_Dados,
+    * BOs de Relatorio populam dados via PrepararDados() -> CsRelatorio,
     * nao precisam carregar registro individual do cursor.
     *--------------------------------------------------------------------------
     PROCEDURE CarregarDoCursor(par_cAliasCursor)

@@ -314,7 +314,7 @@ DEFINE CLASS sigreanrBO AS RelatorioBase
                     = SEEK(ALLTRIM(TmpCli.Emps), "TmpCabec", "Emps")
 
                     *-- Busca razao social da empresa
-                    = SEEK(ALLTRIM(TmpCli.Emps), "crSigCdEmp", "Cemps")
+                    = SEEK(ALLTRIM(TmpCli.Cemps), "crSigCdEmp", "Cemps")
                     loc_cRazas = IIF(FOUND("crSigCdEmp"), ALLTRIM(crSigCdEmp.Razas), "")
 
                     *-- Busca nome do cliente (conta)

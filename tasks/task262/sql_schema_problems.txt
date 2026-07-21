@@ -1,0 +1,21 @@
+[SQL-SCHEMA] Linha ~4841: Tabela 'SigCdCcp' NAO EXISTE no banco. Verificar nome correto no schema.sql ou codigo original.
+[SQL-SCHEMA] Linha ~4918: Tabela 'SigCdCcp' NAO EXISTE no banco. Verificar nome correto no schema.sql ou codigo original.
+[SQL-SCHEMA] Linha ~4992: Tabela 'SigCdCcp' NAO EXISTE no banco. Verificar nome correto no schema.sql ou codigo original.
+[SQL-SCHEMA] Linha ~5056: INSERT coluna 'empresa' NAO EXISTE na tabela 'logauditoria'
+
+ANALISE CONCLUIDA (2026-07-15):
+- Nome da tabela SigCdCcp esta CORRETO - identico ao legado (sigprccp_form_codigo_fonte.txt linha 3239:
+    lcQuery = [Select * From SigCdCcp Where Inativas <> 1])
+- Tabela existe em producao mas ausente do schema.sql (schema incompleto - snapshot 08/12/2025)
+- Colunas usadas confirmadas pelo legado: cIdChaves, codigo, Inativas, cfornecs, merci, mercf,
+  cgrui, cgruf, sgrui, sgruf, cunii, cunif, lini, linf, coli, colf, moedai, moedaf, opcmoedatp,
+  mrki, mrkf, enci, encf, variacao, feitio, opcsit, opcrecalc, reajuste, encargo, nmrk, opcpven, newmkp
+- FALSO POSITIVO do ValidadorSQLSchema: lacuna no schema.sql, nao erro de codigo
+- Mesma conclusao ja documentada em tasks/task159/sql_schema_problems.txt
+
+PROBLEMA 'empresa' em LogAuditoria (Linha ~5056):
+- JA CORRIGIDO na versao atual do BO (verificado em 2026-07-15)
+- RegistrarAuditoria usa apenas: (DataHora, Usuario, Tabela, Operacao, ChaveRegistro) - sem empresa
+- Nenhuma correcao necessaria nos arquivos do projeto
+
+STATUS FINAL: NENHUMA CORRECAO NECESSARIA - codigo esta correto

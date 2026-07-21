@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada.
+
+**O que foi adicionado:**
+
+1. **`InicializarForm()`** ÔÇö atualizado para chamar `ConfigurarBotoes()` e `ConfigurarCampos()` ap├│s o cabe├ºalho.
+
+2. **`ConfigurarBotoes()`** ÔÇö adiciona os dois bot├Áes de a├º├úo no n├¡vel do form (Top=3, lado direito do cabe├ºalho), posi├º├Áes pixel-perfect id├¬nticas ao legado:
+   - `cmd_4c_BtnProcessar` (Left=650, Picture `geral_processar_60.jpg`, Themes=.T. por ser standalone com ├¡cone)
+   - `cmd_4c_BtnSair` (Left=725, Picture `cadastro_sair_60.jpg`, Cancel=.T.)
+
+3. **`ConfigurarCampos()`** ÔÇö adiciona todos os controles operacionais:
+   - `lbl_4c_Label1` ("Diret├│rio :") ÔÇö Top=113, Left=156
+   - `txt_4c_Arquivo` ÔÇö Top=110, Left=216, Width=402
+   - `cmd_4c_BtnArquivo` ("...") ÔÇö Top=110, Left=622
+   - `lbl_4c_Label2` ("Tipo :") ÔÇö Top=135, Left=182
+   - `obj_4c_OptTipo` (OptionGroup 3 bot├Áes: Produtos/Auxiliar/Exportar) com WITH aninhados
+
+4. **Handlers:** `CmdBtnArquivoClick`, `CmdBtnProcessarClick`, `CmdBtnSairClick`, `TxtArquivoKeyPress` (com `LPARAMETERS` e guard Enter/Tab).
+
+Nota: `AlternarPagina()` n├úo foi adicionado pois este ├® um form flat sem PageFrame ÔÇö n├úo h├í p├íginas para alternar.

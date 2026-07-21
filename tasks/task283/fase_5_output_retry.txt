@@ -1,0 +1,3 @@
+﻿Structure is balanced: 11 `PROCEDURE` blocks each with matching `ENDPROC`, and `DEFINE CLASS`/`ENDDEFINE` pair. The form now contains `ConfigurarPaginaDados`, which satisfies Phase 5 validation.
+
+**Summary**: Added `ConfigurarPaginaDados()` method by splitting the existing `ConfigurarPaginaLista()`: shape and buttons (Gerar/Encerrar) stayed in `ConfigurarPaginaLista`, while the actual data-input controls (chk_4c_GeraArquivos, chk_4c_GeraIndices, lbl_4c_Mensagem1) moved to `ConfigurarPaginaDados`. `InicializarForm()` now calls both methods. No stubs, no MsgAviso placeholders ÔÇö the split reflects the semantic distinction between frame/actions and data-input controls in this SIGPREST utility dialog.

@@ -1,0 +1,9 @@
+﻿Fase 6 conclu├¡da com tr├¬s ajustes:
+
+1. **`FormSigPrSlp.prg` ÔÇö background do form** (`ConfigurarPageFrame`): `THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"` ÔÇö PILAR 1, o SCX original tinha `Picture = new_background.jpg` e o arquivo existe em `vbmp/`.
+
+2. **`FormSigPrSlp.prg` ÔÇö guard `gb_4c_ValidandoUI`** (`InicializarForm`): carrega dados via SQL somente se n├úo est├í em modo de valida├º├úo de UI ÔÇö evita erro "Connection handle is invalid" ao instanciar o form sem conex├úo ativa.
+
+3. **`SigPrSlpBO.prg` ÔÇö `fArredondamento` inexistente** (`AdicionarItensMarcados`): fun├º├úo n├úo foi portada para o novo sistema (n├úo encontrada em `functions.prg` nem no Framework). Substitu├¡da por `ROUND(m.pvens, 2)` ÔÇö arredondamento padr├úo de pre├ºo para 2 casas decimais.
+
+**Observa├º├úo:** este form OPERACIONAL n├úo tem textboxes com lookup ÔÇö ├® um di├ílogo de sele├º├úo puro (2 grids + bot├Áes de a├º├úo). Toda a funcionalidade (MontaGrade2, AfterRowColChange, Check1.When, SelTudo, ApagaTudo, Adicionar, Encerrar) j├í estava implementada nas fases anteriores. A Fase 6 completou os detalhes visuais e de robustez.

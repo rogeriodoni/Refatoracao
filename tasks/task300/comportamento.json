@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "File", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRICT",
+      "evento": "Procedure",
+      "linhas": 1453,
+      "codigoOriginal": "Private pDtI, pDtF, pLot, pNop, lcOrdMccr, lnRegMccr\n\nLocal loProgresso, tot, Cta, Cred, Deb, Hisc, Ano, Dtct, Empc, Totreg, NumAux, NomeAux, ValFecha, lcConexao, lcCpoMccr, ;\n\tValOcoTit\n\nIniPer = Thisform.Get_Datai.Value\nFinPer = Thisform.Get_Dataf.Value\n\nlcCpoMccr = [Emps, Nopers, Opers, Tipos, Grupos, Contas, SContas, Datas, Hists, Hist2s, Valors, Cotacaos, SValors, Valocurs, Nfs, EmpdopNums, Titulos, EspecieNfs, SGRUPOS, CONTEMS,empdopncs ]\n\n* Processo 1 :\nCreate Cursor Grupos (Codigos c(10)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute,GetDriver,GetDatabase",
+        "controlesReferenciados": "Get_Datai,Get_Dataf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "ThisForm.cntBotoes.Top  = ThisForm.btnReport.Top + 60\nThisForm.btnReport.Enabled = .t.\nThisForm.Get_DataI.Enabled = .t.\nThisForm.Get_DataF.Enabled = .t.\nThisForm.cntBotoes.Visible = .f.\n\nIf Messagebox('Confirma a Geração do Arquivo?', 4+32+256, '') = 6\n\n\t_pData = Thisform.get_DataF.Value\n\t\n\tSelect MovAux\n\tSet Order to EmpCont\n\tGo Top\n\t\n\tDataProc = Datas\n\tScan\n\t\tIf (MovAux.Datas <> DataProc)\n\t\t\tWait Window Nowait \"Gerando Arquivo Contábil : \" + EmpCont + \" - \" + MovAux.Datas\n\t\t\tDataProc = Datas\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DataI,Get_DataF",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Get_Datai.Value = Date()\n\t\t.Get_Dataf.Value = Date()\n\n\t\t.cntBotoes.Top  = ThisForm.btnReport.Top  + 60\n\t\t.cntBotoes.Left = ThisForm.btnReport.Left - 69\n\t\t.Get_DataI.Enabled = .t.\n\t\t.Get_DataF.Enabled = .t.\n\t\t.cntBotoes.Visible = .f.\n\n\t\t.Refresh\n\n\t\tlcQuery = [Select DirContabv, Gru... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Datai,Get_Dataf",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRICT",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor MovAux (AnoFis c(4), Datas c(8), Contas c(9), Debs c(12), Creds c(12), Docto c(10), Hists c(70), ;\n\t\t\t\t\t  EmpCont c(3), NumSeq c(6), Nums c(6), Lams c(6), Data d, Valor c(12), Cecus c(3), ;\n\t\t\t\t\t  Emps c(3), Transacaos c (10), Cpfs c(20), IClis c(10), Razaos c(50))\nIndex on EmpCont + Datas Tag EmpCont\nSet Order To\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.cntBotoes.btnReport",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "If (This.Value <> 2) && Se Não Clicou em Saída\n\tIf Empty(ThisForm.Get_DataI.value)\n\t\tMessagebox('Data Inicial Inválida!!!',0+48,'')\n\t\tThisForm.Get_DataI.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf Empty(ThisForm.Get_DataF.value)\n\t\tMessagebox('Data Final Inválida!!!',0+48,'')\n\t\tThisForm.Get_DataF.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf ThisForm.Get_DataF.value < ThisForm.Get_DataI.value\n\t\tMessagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')\n\t\tThisForm.Get_DataF.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf Mes... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DataI,Get_DataF",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.cntBotoes.btnReport",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Report Form SIGPRICT to Print Prompt NoConsole\n\nThisForm.Gravar\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.cntBotoes.btnReport",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Gravar\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.cntBotoes.btnReport",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Report Form SIGPRICT Preview\n\nThisForm.Gravar\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.btnReport",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "If (This.Value <> 2) && Se Não Clicou em Saída\n\tIf Empty(ThisForm.Get_DataI.value)\n\t\tMessagebox('Data Inicial Inválida!!!',0+48,'')\n\t\tThisForm.Get_DataI.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf Empty(ThisForm.Get_DataF.value)\n\t\tMessagebox('Data Final Inválida!!!',0+48,'')\n\t\tThisForm.Get_DataF.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf ThisForm.Get_DataF.value < ThisForm.Get_DataI.value\n\t\tMessagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')\n\t\tThisForm.Get_DataF.SetFocus\n\t\tReturn 0\n\tEndif\n\n\tIf Mes... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DataI,Get_DataF",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRICT.btnReport",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

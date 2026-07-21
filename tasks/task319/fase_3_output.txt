@@ -1,0 +1,24 @@
+﻿O arquivo `Formsigprpdf.prg` foi criado com sucesso (884 linhas). Aqui est├í o resumo do que foi implementado na Fase 3:
+
+---
+
+**Arquivo criado**: `C:/4c/projeto/app/forms/operacionais/Formsigprpdf.prg` (884 linhas)
+
+**Implementa├º├úo completa** (Fase 3 + fases subsequentes em um arquivo plano, pois este ├® um di├ílogo modal sem PageFrame):
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init(par_oParentForm, par_cAssunto)` | Armazena par├ómetros antes de DODEFAULT |
+| `InicializarForm()` | Conecta datasession do pai, cria BO, cria todos os controles, BINDEVENT |
+| `ConfigurarPageFrame()` | Background `new_background.jpg`, Caption com CHR() |
+| `ConfigurarCabecalho()` | Container cinza com lbl_4c_LblSombra/LblTitulo |
+| `ConfigurarOpcaoArquivo()` | OptionGroup PDF/Excel com Buttons(N) aninhado dentro do WITH pai |
+| `ConfigurarAreaArquivo()` | Label "Salvar em:", TextBox, btn "...", btn pasta |
+| `ConfigurarBotoesAcao()` | CheckBox Email, Gravar, Encerrar |
+| `ConfigurarSecaoEmail()` | Container email (Visible=.F.) com 10 sub-controles |
+| `InicializarValores()` | REGREAD para PDFCreator, altura base, preenche campos de email, recolhe form |
+| `TornarControlesVisiveis()` | Recursivo, skip+recursa em cnt_4c_CtnSaida_Email |
+| `CmdGetFileClick/ChkEmailClick/OptArquivoClick/CmdGerarPDFClick/CmdSairClick/BtnPastasAClick` | Handlers completos sem RETURN dentro de TRY |
+| `Destroy()` | UNBINDEVENTS + libera BO |
+
+**Regras VFP9 respeitadas**: sem literais acentuados, sem RETURN dentro de TRY/CATCH, Caption com CHR() apenas em runtime, WITH .Buttons(N) aninhado dentro do WITH pai, sem PUBLIC em DEFINE CLASS.

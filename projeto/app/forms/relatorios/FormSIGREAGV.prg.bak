@@ -286,7 +286,7 @@ DEFINE CLASS FormSIGREAGV AS FormBase
             .Left            = 137
             .Width           = 65
             .Height          = 70
-            .Caption         = "Doc Excel"
+            .Caption         = "\<Arquivos Email"
             .WordWrap        = .T.
             .FontName        = "Comic Sans MS"
             .FontBold        = .T.

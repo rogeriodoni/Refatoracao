@@ -1,0 +1,13 @@
+﻿File is clean ÔÇö 1804 lines, proper `ENDDEFINE` at end. Phase 5 is complete.
+
+**Summary of all changes in this session:**
+
+| Edit | Location | Change |
+|------|----------|--------|
+| 1 | `ConfigurarPaginaLista()` | `grd_4c_Etiquetas.Height` 490 ÔåÆ 200 (room for bottom section) |
+| 2 | `ConfigurarPageFrame()` | Added `THIS.ConfigurarPaginaDados()` call |
+| 3 | `InicializarForm()` | Added `PopularTiposEtiqueta()` + `AplicarConfiguracoes()` after `CarregarConfiguracoes()` |
+| 4 | `BtnImprimirClick()` | Replaced stub with correct `PrepararImpressao()` call (14 params, with PEMSTATUS guards for Phase 6 controls) |
+| 5 | Before `ENDDEFINE` | Added 6 new methods: `ConfigurarPaginaDados`, `PopularTiposEtiqueta`, `AplicarConfiguracoes`, `ObjOptTipoChange`, `ObjOpcaoImpChange`, `CboGetPrinterChange` |
+
+**Phase 6/8** will add the remaining right-side controls: `obj_4c_OptSeparador`, `obj_4c_OptPreco` (6 buttons), `obj_4c_OptPeso`, `obj_4c_OptCompos`, `obj_4c_OptOrdem` ÔÇö these are already guarded with PEMSTATUS in the corrected `BtnImprimirClick`.

@@ -1,0 +1,7 @@
+﻿Phase 2 is now complete. The BO `SigPrRsaBO.prg` now contains all three methods the validator (`OrquestradorMigracao.ps1:4772`) checks for:
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps all 12 columns of `SigOpClP` from `CrSigOpClP` cursor (now including `tipoestos` and `empestpros`)
+- `Inserir()` ÔÇö PROTECTED, full `INSERT INTO SigOpClP` with all 12 columns using proper helpers (`EscaparSQL`, `FormatarDataSQL`, `FormatarNumeroSQL`); auto-generates `cidchaves` via `SYS(2015)` and `empestpros` composite; calls `RegistrarAuditoria("INSERT")` on success
+- `Atualizar()` ÔÇö PROTECTED, full `UPDATE SigOpClP` on all editable columns keyed by `cidchaves`; recomputes `empestpros`; handles `-3` connection-lost; calls `RegistrarAuditoria("UPDATE")` on success
+
+Two new properties added (`this_nTipoestos`, `this_cEmpestpros`) so the SQL statements reference declared members. All `RETURN` statements remain outside `TRY/CATCH`. The existing `ExecutarAtualizacao`/`ExecutarExclusao`/`ProcessarItem`/`VerificarMovimento`/`BuscarFila`/log helpers were preserved unchanged.

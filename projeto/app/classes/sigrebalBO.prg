@@ -37,7 +37,7 @@ DEFINE CLASS sigrebalBO AS RelatorioBase
     this_cArquivoFRX     = ""
     this_cArquivoAcsFRX  = ""
     this_cTitulo         = ""
-    this_cCursorDados    = "cursor_4c_BalDados"
+    this_cCursorDados    = "cPlConta"    && Nome bate com FRX legado SigReBal (Create Cursor cPlconta)
     this_cMensagemErro   = ""
 
     *--------------------------------------------------------------------------

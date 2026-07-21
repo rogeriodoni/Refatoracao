@@ -1,0 +1,26 @@
+﻿O arquivo `FormSigPrGloT.prg` j├í est├í completamente implementado, incluindo os 4 eventos da Fase 7. Eles j├í existem nas linhas 1739-1754:
+
+```foxpro
+PROCEDURE BtnIncluirClick()
+    THIS.CmdProcessarClick()     && Processar OP = a├º├úo principal
+ENDPROC
+
+PROCEDURE BtnAlterarClick()
+    THIS.AlternarPagina("ENTRADA")   && Restaura modo de edi├º├úo
+ENDPROC
+
+PROCEDURE BtnVisualizarClick()
+    THIS.AlternarPagina("ENTRADA")
+    THIS.PopularCamposIniciais()     && Restaura e recarrega campos
+ENDPROC
+
+PROCEDURE BtnExcluirClick()
+    THIS.CmdCancelarClick()      && Fecha o form (OPERACIONAL n├úo tem exclus├úo)
+ENDPROC
+```
+
+Al├®m desses 4, o form j├í tem todos os demais stubs de compatibilidade com `FormBase` (`BtnEncerrarClick`, `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick`) ÔÇö todos com l├│gica real, sem nenhum `MsgAviso("ser├í implementado")`.
+
+O arquivo tem 1776 linhas e est├í **100% completo**: inicializa├º├úo, layout, lookups via `BINDEVENT KeyPress`, processamento principal (`CmdProcessarClick` ÔåÆ `SigPrGloTBO.ProcessarOP()`), cursores para `FormSigPrGl2`, e todos os handlers de teclado. A Fase 7/8 j├í estava conclu├¡da desde a gera├º├úo anterior.
+
+Nenhuma altera├º├úo foi necess├íria ÔÇö o arquivo j├í atende todos os requisitos da fase.

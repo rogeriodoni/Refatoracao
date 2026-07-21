@@ -1,2983 +1,2858 @@
-*==============================================================================
-* FormSigPrGlp.prg - Pr" + CHR(233) + "via da Globaliza" + CHR(231) + CHR(227) + "o / Reserva
-* Tipo: OPERACIONAL (layout flat, sem PageFrame)
-* Herda de: FormBase
-* Legado: SigPrGlp.SCX
+*==============================================================================*
+* FormSigPrGlp.prg - Formulario Operacional: Previa da Globalizacao
+*==============================================================================*
+* Tipo: OPERACIONAL (layout customizado com containers e multiplos grids)
+* Migrado de SIGPRGLP.SCX
 *
-* Parametros Init:
-*   par_oParentForm  - referencia ao form pai
-*   par_dData        - data (nao usada; datas vem do avo via par_oParentForm.ParentForm)
-*   par_lReserva     - .T. = modo Reserva Automatica; .F. = Globalizacao
-*   par_nEmphpdr     - codigo de empresa preferida para globalizacao
-*   par_lAutomatico  - modo automatico
-*   par_nNumerodaop  - numero da OP (0 = gerar automatico)
+* Pilares:
+*   UX   -> layout e comportamento identicos ao legado (1000x600)
+*   BD   -> cursores TmpFinal/TmpSaldo/TmpSaldG compartilhados via datasession pai
+*   CODE -> arquitetura em camadas (FormBase / SigPrGlpBO)
 *
-* Cursors esperados do form pai (datasession compartilhada):
-*   TmpFinal  - itens a globalizar/reservar
-*   TmpSaldo  - saldo disponivel por produto/cor/tam
-*   TmpSaldG  - saldo disponivel por grupo/conta/produto
-*   SelPedra  - requisicoes de componentes adicionais
-*   crSigCdPam, crSigCdPac - parametros do sistema
-*==============================================================================
+* CHAMADA:
+*   loForm = CREATEOBJECT("FormSigPrGlp", loFormPai, dData, lReserva, nEmphPdr, lAutom, nNumeroOp)
+*   loForm.Show()
+*==============================================================================*
 
 DEFINE CLASS FormSigPrGlp AS FormBase
 
-    *-- Dimensoes (legado: Width=1000, Height=600)
-    Width        = 1000
+    *-- Dimensoes identicas ao legado
     Height       = 600
+    Width        = 1000
+    BorderStyle  = 2
     AutoCenter   = .T.
     TitleBar     = 0
-    ShowWindow   = 1
-    WindowType   = 1
+    ShowWindow = 1
+    WindowType = 1
     ControlBox   = .F.
     Closable     = .F.
     MaxButton    = .F.
     MinButton    = .F.
-    BorderStyle  = 2
     ClipControls = .F.
-    FontName     = "Tahoma"
-    FontSize     = 8
+    DataSession  = 2
+    WindowState  = 0
+    KeyPreview   = .T.
+    ShowTips     = .T.
 
-    *-- Flags de modo de operacao
+    *-- Referencia ao form pai (datasession compartilhada)
+    poFormPai        = .NULL.
+    *-- Flags operacionais
     this_lReserva    = .F.
     this_lAutomatico = .F.
-    this_nEmphpdr    = 0
-    this_nNumerodaop = 0
-
-    *-- Referencia ao form pai
-    this_oParentForm = .NULL.
+    this_nNumeroDaOp = 0
+    this_nEmphPdr    = 0
+    this_dData       = {}
+    *-- Controle de edicao na coluna Produzir
+    this_nOldValue   = 0
 
     *==========================================================================
-    * Init - compartilha datasession do pai e repassa parametros
+    PROCEDURE Init
     *==========================================================================
-    PROCEDURE Init(par_oParentForm, par_dData, par_lReserva, par_nEmphpdr, par_lAutomatico, par_nNumerodaop)
-        IF VARTYPE(par_oParentForm) = "O"
-            THIS.DataSessionId = par_oParentForm.DataSessionId
+        LPARAMETERS par_loFormPai, par_dData, par_lReservaAuto, par_nEmphPdr, par_lAutom, par_nNumeroOp
+
+        IF VARTYPE(par_loFormPai) = "O"
+            THIS.poFormPai     = par_loFormPai
+            THIS.DataSessionId = par_loFormPai.DataSessionId
         ENDIF
-        THIS.this_lReserva    = IIF(VARTYPE(par_lReserva)    = "L", par_lReserva,    .F.)
-        THIS.this_lAutomatico = IIF(VARTYPE(par_lAutomatico) = "L", par_lAutomatico, .F.)
-        THIS.this_nEmphpdr    = IIF(VARTYPE(par_nEmphpdr)    = "N", par_nEmphpdr,    0)
-        THIS.this_nNumerodaop = IIF(VARTYPE(par_nNumerodaop) = "N", par_nNumerodaop, 0)
-        THIS.this_oParentForm = IIF(VARTYPE(par_oParentForm) = "O", par_oParentForm, .NULL.)
-        IF THIS.this_lReserva
-            THIS.Caption = "Pr" + CHR(233) + "via da Reserva Autom" + CHR(225) + "tica"
-        ELSE
-            THIS.Caption = "Pr" + CHR(233) + "via da Globaliza" + CHR(231) + CHR(227) + "o"
-        ENDIF
+
+        THIS.this_lReserva    = IIF(VARTYPE(par_lReservaAuto)="L", par_lReservaAuto, .F.)
+        THIS.this_nEmphPdr    = IIF(VARTYPE(par_nEmphPdr)="N",    par_nEmphPdr,    0)
+        THIS.this_lAutomatico = IIF(VARTYPE(par_lAutom)="L",      par_lAutom,      .F.)
+        THIS.this_nNumeroDaOp = IIF(VARTYPE(par_nNumeroOp)="N",   par_nNumeroOp,   0)
+        THIS.this_dData       = IIF(VARTYPE(par_dData)="D",       par_dData,       DATE())
+
         RETURN DODEFAULT()
     ENDPROC
 
     *==========================================================================
-    * Destroy
+    PROTECTED PROCEDURE InicializarForm
     *==========================================================================
-    PROCEDURE Destroy()
-        DODEFAULT()
-    ENDPROC
-
-    *==========================================================================
-    * InicializarForm - criado pelo FormBase.Init via DODEFAULT
-    *==========================================================================
-    PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso, loc_oErro
+        LOCAL loc_lSucesso, loc_nSal, loc_nEst, loc_nPrz
         loc_lSucesso = .F.
+        loc_nSal     = 0
+        loc_nEst     = 0
+        loc_nPrz     = 0
+
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("SigPrGlpBO")
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MsgErro("Falha ao criar SigPrGlpBO.", "Erro")
+                MsgErro("Falha ao criar SigPrGlpBO", "Erro")
             ELSE
                 WITH THIS.this_oBusinessObject
                     .this_lReserva    = THIS.this_lReserva
                     .this_lAutomatico = THIS.this_lAutomatico
-                    .this_nNumerodaop = THIS.this_nNumerodaop
-                    .this_cEmphpdr    = TRANSFORM(THIS.this_nEmphpdr)
-                    .this_oParentForm = THIS.this_oParentForm
+                    .this_nNumeroDaOp = THIS.this_nNumeroDaOp
+                    .this_nEmphPdr    = THIS.this_nEmphPdr
+                    .this_dData       = THIS.this_dData
+                    IF USED("CrSigCdPac")
+                        SELECT CrSigCdPac
+                        .this_cSigKey = TratarNulo(CrSigCdPac.sigKeys, "C")
+                    ENDIF
                 ENDWITH
+
+                IF THIS.this_lReserva
+                    THIS.Caption = "Pr" + CHR(233) + "via da Reserva Autom" + CHR(225) + "tica"
+                ELSE
+                    THIS.Caption = "Pr" + CHR(233) + "via da Globaliza" + CHR(231) + CHR(227) + "o"
+                ENDIF
+
                 THIS.ConfigurarPageFrame()
                 THIS.ConfigurarCabecalho()
                 THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
-                THIS.ConfigurarBotoesPrincipais()
-                THIS.ConfigurarGradeItens()
-                THIS.ConfigurarContainerInfo()
-                THIS.ConfigurarContainerDisponivel()
-                THIS.ConfigurarContainerEstoques()
-                THIS.ConfigurarContainerLinhas()
-                THIS.ConfigurarContainerRequisicoes()
-                THIS.ConfigurarTotais()
-                THIS.ConfigurarObsItens()
-                THIS.ConfigurarPaginaDados()
+
+                THIS.this_oBusinessObject.InicializarConexaoTemp()
+                THIS.this_oBusinessObject.CarregarParametros()
+                THIS.this_oBusinessObject.CarregarComposicao()
+                THIS.this_oBusinessObject.InicializarTmpSaldU()
+
+                IF USED("SelPedra")
+                    SELECT SelPedra
+                    IF RECCOUNT() = 0
+                        APPEND BLANK
+                    ENDIF
+                ENDIF
+
+                THIS.ConfigurarLayout()
+                THIS.CarregarDados()
                 THIS.TornarControlesVisiveis()
-                THIS.InicializarDados()
-                THIS.ConfigurarEventos()
-                THIS.AjustarBotaoPedras()
+
+                *-- Estado inicial do botao Pedras
+                THIS.cmd_4c_Pedras.Enabled = .F.
+                IF USED("crSigCdPam")
+                    SELECT crSigCdPam
+                    IF !EMPTY(crSigCdPam.DopEmphs) AND !EMPTY(crSigCdPam.DopReqcs) AND ;
+                       !EMPTY(crSigCdPam.DopPedcs) AND !EMPTY(crSigCdPam.DopComps) AND ;
+                       !THIS.this_lReserva
+                        THIS.cmd_4c_Pedras.Enabled = .T.
+                    ENDIF
+                ENDIF
+
+                IF USED("TmpFinal")
+                    SELECT TmpFinal
+                    SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
+                    GO TOP
+                    THIS.txt_4c_Tot_Qtd.Value = loc_nSal
+                    THIS.txt_4c_Tot_Est.Value = loc_nEst
+                    THIS.txt_4c_Tot_Prz.Value = loc_nPrz
+                ENDIF
+
+                THIS.Refresh
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            MsgErro("Erro ao inicializar: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
+            MsgErro("Erro ao inicializar FormSigPrGlp: " + loc_oErro.Message + ;
+                    " Ln=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " Proc=" + loc_oErro.Procedure, "Erro")
         ENDTRY
+
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * ConfigurarPageFrame - ancora de layout do form OPERACIONAL
-    *
-    * OPERACIONAL nao possui PageFrame (layout flat: containers direto no Form).
-    * Este metodo faz o papel equivalente ao ConfigurarPageFrame dos forms CRUD:
-    * define a imagem de fundo do Form antes de instanciar os containers filhos.
+    PROTECTED PROCEDURE ConfigurarPageFrame
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPageFrame()
-        THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+        LOCAL loc_cImg
+        loc_cImg = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        IF FILE(loc_cImg)
+            THIS.Picture = loc_cImg
+        ENDIF
     ENDPROC
 
     *==========================================================================
-    * ConfigurarCabecalho - equivale ao cntSombra legado
+    PROTECTED PROCEDURE ConfigurarCabecalho
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarCabecalho()
         THIS.AddObject("cnt_4c_Cabecalho", "Container")
         WITH THIS.cnt_4c_Cabecalho
-            .Top        = 0
-            .Left       = 0
-            .Width      = 1004
-            .Height     = 80
-            .BackStyle  = 1
-            .BackColor  = RGB(100,100,100)
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
+            .Visible     = .T.
+
             .AddObject("lbl_4c_Sombra", "Label")
             WITH .lbl_4c_Sombra
                 .AutoSize  = .F.
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
                 .FontBold  = .T.
                 .FontName  = "Tahoma"
                 .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
                 .BackStyle = 0
-                .Caption   = THISFORM.Caption
-                .Height    = 40
-                .Left      = 10
-                .Top       = 18
-                .Width     = THIS.Width
-                .ForeColor = RGB(0,0,0)
+                .ForeColor = RGB(0, 0, 0)
+                .Caption   = " "
             ENDWITH
+
             .AddObject("lbl_4c_Titulo", "Label")
             WITH .lbl_4c_Titulo
                 .AutoSize  = .F.
+                .Top       = 17
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
                 .FontBold  = .T.
                 .FontName  = "Tahoma"
                 .FontSize  = 18
-                .WordWrap  = .T.
-                .Alignment = 0
                 .BackStyle = 0
-                .Caption   = THISFORM.Caption
-                .Height    = 46
-                .Left      = 10
-                .Top       = 17
-                .Width     = THIS.Width
-                .ForeColor = RGB(255,255,255)
+                .ForeColor = RGB(255, 255, 255)
+                .Caption   = " "
             ENDWITH
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * ConfigurarBotoesPrincipais - 7 botoes da barra superior
+    PROTECTED PROCEDURE ConfigurarLayout
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarBotoesPrincipais()
-        LOCAL loc_lcIcones
-        loc_lcIcones = gc_4c_CaminhoIcones
+        LOCAL loc_cImgProcessar, loc_cImgCancelar, loc_cImgRelatorio
+        LOCAL loc_cImgDisp, loc_cImgLinhas, loc_cImgPedras, loc_cImgEstoque
 
-        THIS.AddObject("cmd_4c_Requisicoes", "CommandButton")
-        WITH THIS.cmd_4c_Requisicoes
-            .Top             = 3
-            .Left            = 472
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Requisi" + CHR(231) + CHR(245) + "es"
-            .Picture         = loc_lcIcones + "geral_datas_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_datas_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
-            .Enabled         = .F.
+        loc_cImgProcessar  = gc_4c_CaminhoIcones + "geral_executar_60.jpg"
+        loc_cImgCancelar   = gc_4c_CaminhoIcones + "cadastro_encerrar_60.jpg"
+        loc_cImgRelatorio  = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+        loc_cImgDisp       = gc_4c_CaminhoIcones + "geral_pesquisar_60.jpg"
+        loc_cImgLinhas     = gc_4c_CaminhoIcones + "geral_lista_60.jpg"
+        loc_cImgPedras     = gc_4c_CaminhoIcones + "geral_adicionar_60.jpg"
+        loc_cImgEstoque    = gc_4c_CaminhoIcones + "geral_estoque_60.jpg"
+
+        *-- Botao Disponiveis (622,3,75,75)
+        THIS.AddObject("cmd_4c_Disponivel", "CommandButton")
+        WITH THIS.cmd_4c_Disponivel
+            .Top         = 3
+            .Left        = 622
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Dispon" + CHR(237) + "veis"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgDisp)
+                .Picture         = loc_cImgDisp
+                .DisabledPicture = loc_cImgDisp
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_Disponivel, "Click", THIS, "BtnDisponiveiClick")
 
-        THIS.AddObject("cmd_4c_Estoques", "CommandButton")
-        WITH THIS.cmd_4c_Estoques
-            .Top             = 3
-            .Left            = 547
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Estoques"
-            .Picture         = loc_lcIcones + "geral_marcar_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_marcar_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
-            .Enabled         = .F.
+        *-- Botao Total/Linhas (697,3,75,75)
+        THIS.AddObject("cmd_4c_TotLinha", "CommandButton")
+        WITH THIS.cmd_4c_TotLinha
+            .Top         = 3
+            .Left        = 697
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Total/Linhas"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgLinhas)
+                .Picture         = loc_cImgLinhas
+                .DisabledPicture = loc_cImgLinhas
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_TotLinha, "Click", THIS, "BtnTotLinhaClick")
 
-        THIS.AddObject("cmd_4c_Disponiveis", "CommandButton")
-        WITH THIS.cmd_4c_Disponiveis
-            .Top             = 3
-            .Left            = 622
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Dispon" + CHR(237) + "veis"
-            .Picture         = loc_lcIcones + "geral_palete_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_palete_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
+        *-- Botao Pedras/Requisicoes (472,3,75,75)
+        THIS.AddObject("cmd_4c_Pedras", "CommandButton")
+        WITH THIS.cmd_4c_Pedras
+            .Top         = 3
+            .Left        = 472
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Requisi" + CHR(231) + CHR(245) + "es"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgPedras)
+                .Picture         = loc_cImgPedras
+                .DisabledPicture = loc_cImgPedras
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_Pedras, "Click", THIS, "BtnPedrasClick")
 
-        THIS.AddObject("cmd_4c_LinhasTot", "CommandButton")
-        WITH THIS.cmd_4c_LinhasTot
-            .Top             = 3
-            .Left            = 697
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Total/Linhas"
-            .Picture         = loc_lcIcones + "geral_grafico_pizza_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_grafico_pizza_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
+        *-- Botao SelEstoque (547,3,75,75)
+        THIS.AddObject("cmd_4c_SelEstoque", "CommandButton")
+        WITH THIS.cmd_4c_SelEstoque
+            .Top         = 3
+            .Left        = 547
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Estoques"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            .Enabled     = .F.
+            IF FILE(loc_cImgEstoque)
+                .Picture         = loc_cImgEstoque
+                .DisabledPicture = loc_cImgEstoque
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_SelEstoque, "Click", THIS, "BtnSelEstoqueClick")
 
-        THIS.AddObject("cmd_4c_Relatorio", "CommandButton")
-        WITH THIS.cmd_4c_Relatorio
-            .Top             = 3
-            .Left            = 772
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Relat" + CHR(243) + "rio"
-            .Picture         = loc_lcIcones + "geral_impressora_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_impressora_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
+        *-- Botao Relatorio (772,3,75,75)
+        THIS.AddObject("cmd_4c_BtnRelatorio", "CommandButton")
+        WITH THIS.cmd_4c_BtnRelatorio
+            .Top         = 3
+            .Left        = 772
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Relat" + CHR(243) + "rio"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgRelatorio)
+                .Picture         = loc_cImgRelatorio
+                .DisabledPicture = loc_cImgRelatorio
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_BtnRelatorio, "Click", THIS, "BtnRelatorioClick")
 
+        *-- Botao Processar (847,3,75,75)
         THIS.AddObject("cmd_4c_Processar", "CommandButton")
         WITH THIS.cmd_4c_Processar
-            .Top             = 3
-            .Left            = 847
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "\<Processar"
-            .Picture         = loc_lcIcones + "geral_processar_60.jpg"
-            .DisabledPicture = loc_lcIcones + "geral_processar_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
+            .Top         = 3
+            .Left        = 847
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "\<Processar"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgProcessar)
+                .Picture         = loc_cImgProcessar
+                .DisabledPicture = loc_cImgProcessar
+            ENDIF
         ENDWITH
+        BINDEVENT(THIS.cmd_4c_Processar, "Click", THIS, "BtnProcessarClick")
 
+        *-- Botao Sair/Cancelar (922,3,75,75)
         THIS.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH THIS.cmd_4c_Cancelar
-            .Top             = 3
-            .Left            = 922
-            .Height          = 75
-            .Width           = 75
-            .FontBold        = .T.
-            .FontItalic      = .T.
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .WordWrap        = .T.
-            .Caption         = "Encerrar"
-            .Cancel          = .T.
-            .Picture         = loc_lcIcones + "cadastro_sair_60.jpg"
-            .DisabledPicture = loc_lcIcones + "cadastro_sair_60.jpg"
-            .Themes          = .T.
-            .ForeColor       = RGB(90,90,90)
-            .BackColor       = RGB(255,255,255)
+            .Top         = 3
+            .Left        = 922
+            .Width       = 75
+            .Height      = 75
+            .Caption     = "Encerrar"
+            .FontBold    = .T.
+            .FontItalic  = .T.
+            .FontName    = "Tahoma"
+            .FontSize    = 8
+            .WordWrap    = .T.
+            .ForeColor   = RGB(90, 90, 90)
+            .BackColor   = RGB(255, 255, 255)
+            .Themes      = .T.
+            IF FILE(loc_cImgCancelar)
+                .Picture         = loc_cImgCancelar
+                .DisabledPicture = loc_cImgCancelar
+            ENDIF
         ENDWITH
-    ENDPROC
+        BINDEVENT(THIS.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
 
-    *==========================================================================
-    * ConfigurarGradeItens - grid principal TmpFinal (9 colunas)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarGradeItens()
-        THIS.AddObject("grd_4c_Itens", "Grid")
-        THIS.grd_4c_Itens.ColumnCount = 9
-        WITH THIS.grd_4c_Itens
-            .Top               = 125
-            .Left              = 11
-            .Height            = 224
-            .Width             = 708
-            .FontSize          = 8
+        *-- Grid principal GradeItens (Top=125, Left=11, Width=708, Height=224, 9 colunas)
+        THIS.AddObject("grd_4c_Dados", "Grid")
+        WITH THIS.grd_4c_Dados
+            .Top              = 125
+            .Left             = 11
+            .Width            = 708
+            .Height           = 224
+            .ColumnCount      = 9
             .AllowHeaderSizing = .F.
             .AllowRowSizing    = .F.
             .DeleteMark        = .F.
             .RecordMark        = .F.
-            .Panel             = 1
-            .RowHeight         = 17
-            .ScrollBars        = 2
-            .GridLineColor     = RGB(238,238,238)
+            .ScrollBars        = 3
+            .RowHeight         = 16
+            .GridLineColor     = RGB(238, 238, 238)
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            *-- Col1: Produto
             WITH .Column1
-                .Width              = 115
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "Produto"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 80
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Produto"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col2: Cor
             WITH .Column2
-                .ColumnOrder        = 2
-                .Width              = 38
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "Cor"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 40
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Cor"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col3: Movimentacao (Dopes)
             WITH .Column3
-                .ColumnOrder        = 4
-                .Width              = 150
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "Movimenta" + CHR(231) + CHR(227) + "o"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 80
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Movimenta" + CHR(231) + CHR(227) + "o"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col4: Codigo (Numes)
             WITH .Column4
-                .ColumnOrder        = 5
-                .Width              = 50
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "C" + CHR(243) + "digo"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 55
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "C" + CHR(243) + "digo"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col5: Quantidade (Saldo)
             WITH .Column5
-                .ColumnOrder        = 6
-                .Width              = 80
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "Quantidade"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontBold     = .T.
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 70
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Quantidade"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col6: Produzir (editavel)
             WITH .Column6
-                .ColumnOrder        = 8
-                .Width              = 80
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .F.
-                .BackColor          = RGB(221,252,255)
-                .Header1.Caption    = "Produzir"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontBold     = .T.
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(221,252,255)
+                .Width          = 70
+                .ReadOnly       = .F.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Produzir"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.FontBold = .T.
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
+                .Text1.FontBold    = .T.
+                .Text1.BorderStyle = 0
+                .Text1.Alignment   = 3
             ENDWITH
+            *-- Col7: Estoque
             WITH .Column7
-                .ColumnOrder        = 7
-                .Width              = 80
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .BackColor          = RGB(255,253,179)
-                .Header1.Caption    = "Estoque"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontBold     = .T.
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,253,179)
+                .Width          = 70
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Estoque"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col8: Obs
             WITH .Column8
-                .ColumnOrder        = 9
-                .Width              = 38
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Alignment          = 2
-                .Header1.Caption    = "Obs"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontBold     = .T.
-                .Text1.FontSize     = 8
-                .Text1.Alignment    = 2
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 30
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Obs"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
+            *-- Col9: Tam
             WITH .Column9
-                .ColumnOrder        = 3
-                .Width              = 38
-                .Movable            = .F.
-                .Resizable          = .F.
-                .ReadOnly           = .T.
-                .Header1.Caption    = "Tam"
-                .Header1.FontName   = "Verdana"
-                .Header1.FontSize   = 8
-                .Header1.Alignment  = 2
-                .Header1.ForeColor  = RGB(36,84,155)
-                .Text1.FontSize     = 8
-                .Text1.BorderStyle  = 0
-                .Text1.Margin       = 0
-                .Text1.ForeColor    = RGB(0,0,0)
-                .Text1.BackColor    = RGB(255,255,255)
+                .Width          = 30
+                .ReadOnly       = .T.
+                .Movable        = .F.
+                .Resizable      = .F.
+                .Header1.Caption = "Tam"
+                .Header1.FontName = "Verdana"
+                .Header1.FontSize = 8
+                .Header1.Alignment = 2
+                .Header1.ForeColor = RGB(36, 84, 155)
             ENDWITH
         ENDWITH
-    ENDPROC
+        BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GradeItensAfterRowColChange")
+        BINDEVENT(THIS.grd_4c_Dados.Column6.Text1, "When",      THIS, "GrdCol6TextWhen")
+        BINDEVENT(THIS.grd_4c_Dados.Column6.Text1, "Valid",     THIS, "GrdCol6TextValid")
+        BINDEVENT(THIS.grd_4c_Dados.Column6.Text1, "KeyPress", THIS, "GrdCol6TextLostFocus")
+        *-- Redirecionar foco das colunas somente-leitura para Column6 (editavel)
+        BINDEVENT(THIS.grd_4c_Dados.Column1.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column2.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column3.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column4.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column5.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column7.Text1, "GotFocus", THIS, "GrdColXGotFocus")
+        BINDEVENT(THIS.grd_4c_Dados.Column8.Text1, "GotFocus", THIS, "GrdColXGotFocus")
 
-    *==========================================================================
-    * ConfigurarContainerInfo - Container3: painel informativo sempre visivel
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerInfo()
-        THIS.AddObject("cnt_4c_Info", "Container")
-        WITH THIS.cnt_4c_Info
-            .Top         = 373
-            .Left        = 12
-            .Width       = 708
-            .Height      = 205
+        *-- Totais abaixo do grid (349,417-662)
+        THIS.AddObject("txt_4c_Tot_Qtd", "TextBox")
+        WITH THIS.txt_4c_Tot_Qtd
+            .Top          = 349
+            .Left         = 417
+            .Width        = 80
+            .Height       = 23
+            .ReadOnly     = .T.
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .SpecialEffect = 1
+            .Value        = 0
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Tot_Est", "TextBox")
+        WITH THIS.txt_4c_Tot_Est
+            .Top          = 349
+            .Left         = 498
+            .Width        = 81
+            .Height       = 23
+            .ReadOnly     = .T.
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .SpecialEffect = 1
+            .Value        = 0
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Tot_Prz", "TextBox")
+        WITH THIS.txt_4c_Tot_Prz
+            .Top          = 349
+            .Left         = 580
+            .Width        = 82
+            .Height       = 23
+            .ReadOnly     = .T.
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .SpecialEffect = 1
+            .Value        = 0
+        ENDWITH
+
+        *-- Label para observacao (726,369)
+        THIS.AddObject("lbl_4c_Txt_ObsItens", "Label")
+        WITH THIS.lbl_4c_Txt_ObsItens
+            .Top       = 369
+            .Left      = 726
+            .Width     = 134
+            .Height    = 15
+            .AutoSize  = .F.
+            .BackStyle = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .Caption   = "Observa" + CHR(231) + CHR(227) + "o do Item"
+        ENDWITH
+
+        *-- EditBox observacoes (732,361,266,205)
+        THIS.AddObject("obj_4c_ObsItens", "EditBox")
+        WITH THIS.obj_4c_ObsItens
+            .Top       = 361
+            .Left      = 732
+            .Width     = 266
+            .Height    = 205
+            .ReadOnly  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+        ENDWITH
+
+        *-- Imagem produto (726,125,266,204)
+        THIS.AddObject("img_4c_ImgFigJpg", "Image")
+        WITH THIS.img_4c_ImgFigJpg
+            .Top     = 125
+            .Left    = 726
+            .Width   = 266
+            .Height  = 204
+            .Visible = .F.
+        ENDWITH
+
+        *-- Container3: saldo/estoque (sempre visivel, Top=373, Left=12, Width=708, Height=205)
+        THIS.AddObject("cnt_4c_Container3", "Container")
+        WITH THIS.cnt_4c_Container3
+            .Top           = 373
+            .Left          = 12
+            .Width         = 708
+            .Height        = 205
+            .BackColor     = RGB(255, 255, 255)
             .SpecialEffect = 0
-            .BackStyle   = 1
-            .BackColor   = RGB(255,255,255)
-            .BorderWidth = 0
+            .BorderWidth   = 1
+            .Visible       = .T.
 
-            .AddObject("lbl_4c_TituloInfo", "Label")
-            WITH .lbl_4c_TituloInfo
-                .AutoSize  = .T.
+            .AddObject("lbl_4c_Label1", "Label")
+            WITH .lbl_4c_Label1
+                .Top       = 5
+                .Left      = 6
+                .Width     = 118
+                .Height    = 16
+                .AutoSize  = .F.
+                .BackStyle = 0
                 .FontBold  = .T.
                 .FontName  = "Tahoma"
-                .FontSize  = 9
-                .BackStyle = 0
+                .FontSize  = 8
+                .ForeColor = RGB(90, 90, 90)
                 .Caption   = "Estoque Dispon" + CHR(237) + "vel"
-                .Height    = 16
-                .Left      = 6
-                .Top       = 5
-                .Width     = 118
-                .ForeColor = RGB(90,90,90)
             ENDWITH
 
-            .AddObject("grd_4c_DispInfo", "Grid")
-            .grd_4c_DispInfo.ColumnCount = 6
-            WITH .grd_4c_DispInfo
-                .Top               = 24
-                .Left              = 6
-                .Height            = 148
-                .Width             = 444
-                .FontSize          = 8
+            .AddObject("grd_4c_Dados", "Grid")
+            WITH .grd_4c_Dados
+                .Top              = 24
+                .Left             = 6
+                .Width            = 444
+                .Height           = 148
+                .ColumnCount      = 6
                 .AllowHeaderSizing = .F.
                 .AllowRowSizing    = .F.
                 .DeleteMark        = .F.
                 .RecordMark        = .F.
-                .Panel             = 1
-                .RowHeight         = 16
                 .ScrollBars        = 2
-                .GridLineColor     = RGB(238,238,238)
+                .RowHeight         = 16
+                .GridLineColor     = RGB(238, 238, 238)
+                .FontSize          = 8
                 WITH .Column1
-                    .ColumnOrder        = 2
-                    .Width              = 74
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Grupo"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 70
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Grupo"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column2
-                    .ColumnOrder        = 3
-                    .Width              = 74
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Conta"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 70
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Conta"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column3
-                    .ColumnOrder        = 4
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Atual"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 60
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Atual"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column4
-                    .ColumnOrder        = 5
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Utilizado"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 60
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Utilizado"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column5
-                    .ColumnOrder        = 6
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .F.
-                    .BackColor          = RGB(255,253,179)
-                    .Header1.Caption    = "Dispon" + CHR(237) + "vel"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .F.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,253,179)
+                    .Width = 60
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Dispon" + CHR(237) + "vel"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column6
-                    .ColumnOrder        = 1
-                    .Width              = 30
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Emp"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 50
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Emp"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
             ENDWITH
 
-            .AddObject("txt_4c_DGrupoInfo", "TextBox")
-            WITH .txt_4c_DGrupoInfo
-                .Height        = 23
-                .Left          = 454
+            .AddObject("txt_4c__dgrupo", "TextBox")
+            WITH .txt_4c__dgrupo
+                .Top          = 106
+                .Left         = 454
+                .Width        = 247
+                .Height       = 23
+                .ReadOnly     = .T.
                 .SpecialEffect = 1
-                .Top           = 106
-                .Width         = 247
-                .ReadOnly      = .T.
-                .Value         = ""
+                .FontSize     = 8
             ENDWITH
 
-            .AddObject("txt_4c_DContaInfo", "TextBox")
-            WITH .txt_4c_DContaInfo
-                .Height        = 23
-                .Left          = 454
+            .AddObject("txt_4c__dconta", "TextBox")
+            WITH .txt_4c__dconta
+                .Top          = 147
+                .Left         = 454
+                .Width        = 247
+                .Height       = 23
+                .ReadOnly     = .T.
                 .SpecialEffect = 1
-                .Top           = 147
-                .Width         = 247
-                .ReadOnly      = .T.
-                .Value         = ""
+                .FontSize     = 8
             ENDWITH
 
-            .AddObject("txt_4c_TotQtdInfo", "TextBox")
-            WITH .txt_4c_TotQtdInfo
-                .Height        = 23
-                .InputMask     = "99,999.99"
-                .Left          = 188
+            .AddObject("txt_4c_Tot_Qtd", "TextBox")
+            WITH .txt_4c_Tot_Qtd
+                .Top          = 173
+                .Left         = 188
+                .Width        = 80
+                .Height       = 23
+                .ReadOnly     = .T.
                 .SpecialEffect = 1
-                .Top           = 173
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
+                .FontSize     = 8
+                .Value        = 0
             ENDWITH
 
-            .AddObject("txt_4c_TotEstInfo", "TextBox")
-            WITH .txt_4c_TotEstInfo
-                .Height        = 23
-                .InputMask     = "99,999.99"
-                .Left          = 269
+            .AddObject("txt_4c_Tot_Est", "TextBox")
+            WITH .txt_4c_Tot_Est
+                .Top          = 173
+                .Left         = 269
+                .Width        = 80
+                .Height       = 23
+                .ReadOnly     = .T.
                 .SpecialEffect = 1
-                .Top           = 173
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
+                .FontSize     = 8
+                .Value        = 0
             ENDWITH
 
-            .AddObject("txt_4c_TotPrzInfo", "TextBox")
-            WITH .txt_4c_TotPrzInfo
-                .Height        = 23
-                .InputMask     = "99,999.99"
-                .Left          = 350
+            .AddObject("txt_4c_Tot_Prz", "TextBox")
+            WITH .txt_4c_Tot_Prz
+                .Top          = 173
+                .Left         = 350
+                .Width        = 80
+                .Height       = 23
+                .ReadOnly     = .T.
                 .SpecialEffect = 1
-                .Top           = 173
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
+                .FontSize     = 8
+                .Value        = 0
             ENDWITH
 
-            .AddObject("lbl_4c_GrupoInfo", "Label")
-            WITH .lbl_4c_GrupoInfo
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
+            .AddObject("lbl_4c_Label2", "Label")
+            WITH .lbl_4c_Label2
+                .Top = 90
+                .Left = 454
+                .Width = 36
+                .Height = 15
+                .AutoSize = .F.
                 .BackStyle = 0
-                .Caption   = "Grupo"
-                .Height    = 15
-                .Left      = 454
-                .Top       = 90
-                .Width     = 36
-                .ForeColor = RGB(90,90,90)
+                .Caption = "Grupo"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
 
-            .AddObject("lbl_4c_ContaInfo", "Label")
-            WITH .lbl_4c_ContaInfo
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
+            .AddObject("lbl_4c_Label3", "Label")
+            WITH .lbl_4c_Label3
+                .Top = 131
+                .Left = 454
+                .Width = 35
+                .Height = 15
+                .AutoSize = .F.
                 .BackStyle = 0
-                .Caption   = "Conta"
-                .Height    = 15
-                .Left      = 454
-                .Top       = 131
-                .Width     = 35
-                .ForeColor = RGB(90,90,90)
+                .Caption = "Conta"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
         ENDWITH
-    ENDPROC
+        BINDEVENT(THIS.cnt_4c_Container3.grd_4c_Dados, "AfterRowColChange", THIS, "Cnt3GradeAfterRowColChange")
 
-    *==========================================================================
-    * ConfigurarContainerDisponivel - Container2: disponivel por produto
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerDisponivel()
-        LOCAL loc_lcIcones
-        loc_lcIcones = gc_4c_CaminhoIcones
-        THIS.AddObject("cnt_4c_Disponivel", "Container")
-        WITH THIS.cnt_4c_Disponivel
-            .Top         = 125
-            .Left        = 12
-            .Width       = 708
-            .Height      = 465
+        *-- Container1: totais por linha (Visible=.F., sobreposicao)
+        THIS.AddObject("cnt_4c_Container1", "Container")
+        WITH THIS.cnt_4c_Container1
+            .Top           = 125
+            .Left          = 12
+            .Width         = 708
+            .Height        = 465
+            .BackColor     = RGB(255, 255, 255)
+            .BackStyle     = 1
             .SpecialEffect = 0
-            .Visible     = .F.
-            .BackStyle   = 1
-            .BackColor   = RGB(255,255,255)
-            .BorderWidth = 0
+            .Visible       = .F.
 
-            .AddObject("lbl_4c_TituloDisp", "Label")
-            WITH .lbl_4c_TituloDisp
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 10
+            .AddObject("lbl_4c_Label1", "Label")
+            WITH .lbl_4c_Label1
+                .Top = 10
+                .Left = 259
+                .Width = 170
+                .Height = 18
+                .AutoSize = .F.
                 .BackStyle = 0
-                .Caption   = "Estoque Dispon" + CHR(237) + "vel"
-                .Height    = 18
-                .Left      = 610
-                .Top       = 10
-                .Width     = 123
-                .ForeColor = RGB(90,90,90)
+                .FontBold = .T.
+                .FontName = "Tahoma"
+                .FontSize = 10
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Pe" + CHR(231) + "as a produzir por linha"
             ENDWITH
 
-            .AddObject("cmd_4c_SairDisp", "CommandButton")
-            WITH .cmd_4c_SairDisp
-                .Top             = 3
-                .Left            = 620
-                .Height          = 75
-                .Width           = 75
-                .FontName        = "Tahoma"
-                .FontSize        = 8
-                .Picture         = loc_lcIcones + "cadastro_sair_60.jpg"
-                .DisabledPicture = loc_lcIcones + "cadastro_sair_60.jpg"
-                .Cancel          = .T.
-                .Caption         = "Sair"
-                .ForeColor       = RGB(90,90,90)
-                .BackColor       = RGB(255,255,255)
-                .Themes          = .T.
+            .AddObject("cmd_4c_CancelaLin", "CommandButton")
+            WITH .cmd_4c_CancelaLin
+                .Top = 3
+                .Left = 620
+                .Width = 75
+                .Height = 75
+                .Caption = "OK"
+                .FontBold = .T.
+                .FontItalic = .T.
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .BackColor = RGB(255, 255, 255)
+                .Themes = .F.
             ENDWITH
 
-            .AddObject("grd_4c_DispProd", "Grid")
-            .grd_4c_DispProd.ColumnCount = 5
-            WITH .grd_4c_DispProd
-                .Top               = 32
-                .Left              = 169
-                .Height            = 388
-                .Width             = 370
-                .FontSize          = 8
+            .AddObject("grd_4c_Dados", "Grid")
+            WITH .grd_4c_Dados
+                .Top = 32
+                .Left = 174
+                .Width = 359
+                .Height = 420
+                .ColumnCount = 4
                 .AllowHeaderSizing = .F.
-                .AllowRowSizing    = .F.
-                .DeleteMark        = .F.
-                .RecordMark        = .F.
-                .Panel             = 1
-                .RowHeight         = 16
-                .ScrollBars        = 2
-                .GridLineColor     = RGB(238,238,238)
+                .AllowRowSizing = .F.
+                .DeleteMark = .F.
+                .RecordMark = .F.
+                .ScrollBars = 2
+                .RowHeight = 16
+                .FontSize = 8
                 WITH .Column1
-                    .Width              = 108
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Produto"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Linha"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column2
-                    .ColumnOrder        = 2
-                    .Width              = 38
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Cor"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Quantidade"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column3
-                    .ColumnOrder        = 3
-                    .Width              = 38
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Tam"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Estoque"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
                 WITH .Column4
-                    .ColumnOrder        = 4
-                    .Width              = 75
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Disponivel"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Produzir"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
                 ENDWITH
-                WITH .Column5
-                    .ColumnOrder        = 5
-                    .Width              = 75
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .F.
-                    .Header1.Caption    = "Utilizar"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.Alignment    = 3
-                    .Text1.BorderStyle  = 0
-                    .Text1.Value        = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .F.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            .AddObject("lbl_4c_ProduzirDisp", "Label")
-            WITH .lbl_4c_ProduzirDisp
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Qtde " + CHR(224) + " Produzir :"
-                .Height    = 15
-                .Left      = 168
-                .Top       = 432
-                .Width     = 84
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("lbl_4c_UtilizarDisp", "Label")
-            WITH .lbl_4c_UtilizarDisp
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Qtde " + CHR(224) + " Utilizar :"
-                .Height    = 17
-                .Left      = 365
-                .Top       = 431
-                .Width     = 109
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("txt_4c_PedidaDisp", "TextBox")
-            WITH .txt_4c_PedidaDisp
-                .Height        = 23
-                .Left          = 268
-                .SpecialEffect = 1
-                .Top           = 428
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
-            ENDWITH
-
-            .AddObject("txt_4c_SelecDisp", "TextBox")
-            WITH .txt_4c_SelecDisp
-                .Height        = 23
-                .Left          = 458
-                .SpecialEffect = 1
-                .Top           = 428
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
             ENDWITH
         ENDWITH
-    ENDPROC
+        BINDEVENT(THIS.cnt_4c_Container1.cmd_4c_CancelaLin, "Click", THIS, "BtnCancelaLin1Click")
 
-    *==========================================================================
-    * ConfigurarContainerEstoques - Container5: disponivel por conta/grupo
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerEstoques()
-        LOCAL loc_lcIcones
-        loc_lcIcones = gc_4c_CaminhoIcones
-        THIS.AddObject("cnt_4c_Estoques", "Container")
-        WITH THIS.cnt_4c_Estoques
-            .Top         = 125
-            .Left        = 12
-            .Width       = 708
-            .Height      = 465
+        *-- Container2: disponivel por produto/cor/tam (Visible=.F.)
+        THIS.AddObject("cnt_4c_Container2", "Container")
+        WITH THIS.cnt_4c_Container2
+            .Top = 125
+            .Left = 12
+            .Width = 708
+            .Height = 465
+            .BackColor = RGB(255, 255, 255)
+            .BackStyle = 1
             .SpecialEffect = 0
-            .Visible     = .F.
-            .BackStyle   = 1
-            .BackColor   = RGB(255,255,255)
-            .BorderWidth = 0
-
-            .AddObject("lbl_4c_TituloEstq", "Label")
-            WITH .lbl_4c_TituloEstq
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 10
-                .BackStyle = 0
-                .Caption   = "Estoque Dispon" + CHR(237) + "vel"
-                .Height    = 18
-                .Left      = 284
-                .Top       = 10
-                .Width     = 123
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("cmd_4c_OkEstq", "CommandButton")
-            WITH .cmd_4c_OkEstq
-                .Top             = 3
-                .Left            = 620
-                .Height          = 75
-                .Width           = 75
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontName        = "Tahoma"
-                .FontSize        = 8
-                .WordWrap        = .T.
-                .Picture         = loc_lcIcones + "cadastro_salvar_60.jpg"
-                .DisabledPicture = loc_lcIcones + "cadastro_salvar_60.jpg"
-                .Cancel          = .T.
-                .Caption         = "OK"
-                .ForeColor       = RGB(90,90,90)
-                .BackColor       = RGB(255,255,255)
-                .Themes          = .T.
-            ENDWITH
-
-            .AddObject("grd_4c_DispEstq", "Grid")
-            .grd_4c_DispEstq.ColumnCount = 5
-            WITH .grd_4c_DispEstq
-                .Top               = 32
-                .Left              = 141
-                .Height            = 372
-                .Width             = 425
-                .FontSize          = 8
-                .AllowHeaderSizing = .F.
-                .AllowRowSizing    = .F.
-                .DeleteMark        = .F.
-                .RecordMark        = .F.
-                .RowHeight         = 16
-                .ScrollBars        = 2
-                .GridLineColor     = RGB(238,238,238)
-                WITH .Column1
-                    .ColumnOrder        = 2
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Grupo"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column2
-                    .ColumnOrder        = 3
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Conta"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column3
-                    .ColumnOrder        = 1
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Prioridade"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column4
-                    .ColumnOrder        = 4
-                    .Width              = 75
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Dispon" + CHR(237) + "vel"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column5
-                    .ColumnOrder        = 5
-                    .Width              = 75
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .F.
-                    .Header1.Caption    = "Utilizar"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.Alignment    = 3
-                    .Text1.BorderStyle  = 0
-                    .Text1.Value        = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .F.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-
-            .AddObject("lbl_4c_ProduzirEstq", "Label")
-            WITH .lbl_4c_ProduzirEstq
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Produzir :"
-                .Height    = 15
-                .Left      = 428
-                .Top       = 413
-                .Width     = 48
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("lbl_4c_UtilizarEstq", "Label")
-            WITH .lbl_4c_UtilizarEstq
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Utilizar :"
-                .Height    = 15
-                .Left      = 435
-                .Top       = 438
-                .Width     = 41
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("lbl_4c_GrupoEstq", "Label")
-            WITH .lbl_4c_GrupoEstq
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Grupo :"
-                .Height    = 15
-                .Left      = 93
-                .Top       = 413
-                .Width     = 38
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("lbl_4c_ContaEstq", "Label")
-            WITH .lbl_4c_ContaEstq
-                .AutoSize  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Conta :"
-                .Height    = 15
-                .Left      = 93
-                .Top       = 438
-                .Width     = 38
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("txt_4c_DGrupoEstq", "TextBox")
-            WITH .txt_4c_DGrupoEstq
-                .Height        = 23
-                .Left          = 141
-                .SpecialEffect = 1
-                .Top           = 409
-                .Width         = 277
-                .ReadOnly      = .T.
-                .Value         = ""
-            ENDWITH
-
-            .AddObject("txt_4c_DContaEstq", "TextBox")
-            WITH .txt_4c_DContaEstq
-                .Height        = 23
-                .Left          = 141
-                .SpecialEffect = 1
-                .Top           = 434
-                .Width         = 277
-                .ReadOnly      = .T.
-                .Value         = ""
-            ENDWITH
-
-            .AddObject("txt_4c_PedidaEstq", "TextBox")
-            WITH .txt_4c_PedidaEstq
-                .Height        = 23
-                .Left          = 486
-                .SpecialEffect = 1
-                .Top           = 409
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
-            ENDWITH
-
-            .AddObject("txt_4c_SelecEstq", "TextBox")
-            WITH .txt_4c_SelecEstq
-                .Height        = 23
-                .Left          = 486
-                .SpecialEffect = 1
-                .Top           = 434
-                .Width         = 80
-                .ReadOnly      = .T.
-                .Value         = 0
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarContainerLinhas - Container1: pecas por linha
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerLinhas()
-        LOCAL loc_lcIcones
-        loc_lcIcones = gc_4c_CaminhoIcones
-        THIS.AddObject("cnt_4c_Linhas", "Container")
-        WITH THIS.cnt_4c_Linhas
-            .Top         = 125
-            .Left        = 12
-            .Width       = 708
-            .Height      = 465
-            .SpecialEffect = 0
-            .Visible     = .F.
-            .BackStyle   = 1
-            .BackColor   = RGB(255,255,255)
-            .BorderWidth = 0
-
-            .AddObject("lbl_4c_TituloLin", "Label")
-            WITH .lbl_4c_TituloLin
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 10
-                .BackStyle = 0
-                .Caption   = "Pe" + CHR(231) + "as a produzir por linha"
-                .Height    = 18
-                .Left      = 259
-                .Top       = 10
-                .Width     = 170
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("cmd_4c_OkLinhas", "CommandButton")
-            WITH .cmd_4c_OkLinhas
-                .Top             = 3
-                .Left            = 620
-                .Height          = 75
-                .Width           = 75
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontName        = "Tahoma"
-                .FontSize        = 8
-                .WordWrap        = .T.
-                .Picture         = loc_lcIcones + "cadastro_salvar_60.jpg"
-                .DisabledPicture = loc_lcIcones + "cadastro_salvar_60.jpg"
-                .Cancel          = .T.
-                .Caption         = "OK"
-                .ForeColor       = RGB(90,90,90)
-                .BackColor       = RGB(255,255,255)
-                .Themes          = .T.
-            ENDWITH
-
-            .AddObject("grd_4c_LinhasAgg", "Grid")
-            .grd_4c_LinhasAgg.ColumnCount = 4
-            WITH .grd_4c_LinhasAgg
-                .Top               = 32
-                .Left              = 174
-                .Height            = 420
-                .Width             = 359
-                .FontSize          = 8
-                .AllowHeaderSizing = .F.
-                .AllowRowSizing    = .F.
-                .DeleteMark        = .F.
-                .RecordMark        = .F.
-                .ReadOnly          = .T.
-                .RowHeight         = 16
-                .ScrollBars        = 2
-                .GridLineColor     = RGB(238,238,238)
-                WITH .Column1
-                    .Width              = 84
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Sparse             = .F.
-                    .Header1.Caption    = "Linha"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontName     = "Arial"
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column2
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Sparse             = .F.
-                    .Header1.Caption    = "Quantidade"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.InputMask    = "999,999.99"
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column3
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Sparse             = .F.
-                    .Header1.Caption    = "Estoque"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontName     = "Arial"
-                    .Text1.FontSize     = 8
-                    .Text1.InputMask    = "999,999.99"
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column4
-                    .Width              = 80
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Sparse             = .F.
-                    .Header1.Caption    = "Produzir"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontName     = "Arial"
-                    .Text1.FontSize     = 8
-                    .Text1.InputMask    = "999,999.99"
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarContainerRequisicoes - Container4: componentes adicionais
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarContainerRequisicoes()
-        LOCAL loc_lcIcones
-        loc_lcIcones = gc_4c_CaminhoIcones
-        THIS.AddObject("cnt_4c_Requisicoes", "Container")
-        WITH THIS.cnt_4c_Requisicoes
-            .Top         = 125
-            .Left        = 12
-            .Width       = 708
-            .Height      = 465
-            .SpecialEffect = 0
-            .Visible     = .F.
-            .BackStyle   = 1
-            .BackColor   = RGB(255,255,255)
-            .BorderWidth = 0
-
-            .AddObject("lbl_4c_TituloReq", "Label")
-            WITH .lbl_4c_TituloReq
-                .AutoSize  = .T.
-                .FontBold  = .T.
-                .FontName  = "Tahoma"
-                .FontSize  = 10
-                .BackStyle = 0
-                .Caption   = "Requisi" + CHR(231) + CHR(227) + "o de componentes adicionais"
-                .Height    = 18
-                .Left      = 229
-                .Top       = 8
-                .Width     = 249
-                .ForeColor = RGB(90,90,90)
-            ENDWITH
-
-            .AddObject("cmd_4c_SairReq", "CommandButton")
-            WITH .cmd_4c_SairReq
-                .Top             = 3
-                .Left            = 620
-                .Height          = 75
-                .Width           = 75
-                .FontBold        = .T.
-                .FontItalic      = .T.
-                .FontName        = "Tahoma"
-                .FontSize        = 8
-                .Picture         = loc_lcIcones + "cadastro_sair_60.jpg"
-                .DisabledPicture = loc_lcIcones + "cadastro_sair_60.jpg"
-                .Cancel          = .T.
-                .Caption         = "Sair"
-                .ForeColor       = RGB(90,90,90)
-                .BackColor       = RGB(255,255,255)
-                .Themes          = .T.
-            ENDWITH
-
-            .AddObject("grd_4c_PedraReq", "Grid")
-            .grd_4c_PedraReq.ColumnCount = 5
-            WITH .grd_4c_PedraReq
-                .Top               = 32
-                .Left              = 9
-                .Height            = 420
-                .Width             = 605
-                .FontSize          = 8
-                .DeleteMark        = .F.
-                .RecordMark        = .F.
-                .RowHeight         = 16
-                .ScrollBars        = 2
-                .GridLineColor     = RGB(238,238,238)
-                WITH .Column1
-                    .Width              = 108
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .Header1.Caption    = "Produto"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column2
-                    .ColumnOrder        = 2
-                    .Width              = 249
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Descri" + CHR(231) + CHR(227) + "o"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column3
-                    .ColumnOrder        = 3
-                    .Width              = 30
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .T.
-                    .Header1.Caption    = "Uni"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontBold     = .T.
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ReadOnly     = .T.
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column4
-                    .ColumnOrder        = 4
-                    .Width              = 75
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .ReadOnly           = .F.
-                    .Header1.Caption    = "Qtde"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-                WITH .Column5
-                    .ColumnOrder        = 5
-                    .Width              = 108
-                    .Movable            = .F.
-                    .Resizable          = .F.
-                    .Header1.Caption    = "Produto"
-                    .Header1.FontName   = "Verdana"
-                    .Header1.FontSize   = 8
-                    .Header1.Alignment  = 2
-                    .Header1.ForeColor  = RGB(36,84,155)
-                    .Text1.FontSize     = 8
-                    .Text1.BorderStyle  = 0
-                    .Text1.Margin       = 0
-                    .Text1.ForeColor    = RGB(0,0,0)
-                    .Text1.BackColor    = RGB(255,255,255)
-                ENDWITH
-            ENDWITH
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarTotais - 3 textboxes de totais (Tot_Qtd, Tot_Est, Tot_Prz)
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarTotais()
-        THIS.AddObject("txt_4c_TotQtd", "TextBox")
-        WITH THIS.txt_4c_TotQtd
-            .Height        = 23
-            .InputMask     = "999,999.99"
-            .Left          = 417
-            .SpecialEffect = 1
-            .Top           = 349
-            .Width         = 80
-            .ReadOnly      = .T.
-            .Value         = 0
-        ENDWITH
-
-        THIS.AddObject("txt_4c_TotEst", "TextBox")
-        WITH THIS.txt_4c_TotEst
-            .Height        = 23
-            .InputMask     = "999,999.99"
-            .Left          = 498
-            .SpecialEffect = 1
-            .Top           = 349
-            .Width         = 81
-            .ReadOnly      = .T.
-            .Value         = 0
-        ENDWITH
-
-        THIS.AddObject("txt_4c_TotPrz", "TextBox")
-        WITH THIS.txt_4c_TotPrz
-            .Height        = 23
-            .InputMask     = "999,999.99"
-            .Left          = 580
-            .SpecialEffect = 1
-            .Top           = 349
-            .Width         = 82
-            .ReadOnly      = .T.
-            .Value         = 0
-        ENDWITH
-    ENDPROC
-
-    *==========================================================================
-    * ConfigurarObsItens - imagem do produto + area de observacoes
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarObsItens()
-        THIS.AddObject("img_4c_Figura", "Image")
-        WITH THIS.img_4c_Figura
-            .Stretch = 1
-            .Height  = 204
-            .Left    = 726
-            .Top     = 125
             .Visible = .F.
-            .Width   = 266
+
+            .AddObject("lbl_4c_Label1", "Label")
+            WITH .lbl_4c_Label1
+                .Top = 10
+                .Left = 284
+                .Width = 123
+                .Height = 18
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontBold = .T.
+                .FontName = "Tahoma"
+                .FontSize = 10
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Estoque Dispon" + CHR(237) + "vel"
+            ENDWITH
+
+            .AddObject("cmd_4c_CancelaDisp", "CommandButton")
+            WITH .cmd_4c_CancelaDisp
+                .Top = 3
+                .Left = 620
+                .Width = 75
+                .Height = 75
+                .Caption = "Sair"
+                .FontBold = .T.
+                .FontItalic = .T.
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .BackColor = RGB(255, 255, 255)
+                .Themes = .F.
+            ENDWITH
+
+            .AddObject("grd_4c_Dados", "Grid")
+            WITH .grd_4c_Dados
+                .Top = 32
+                .Left = 169
+                .Width = 370
+                .Height = 388
+                .ColumnCount = 5
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing = .F.
+                .DeleteMark = .F.
+                .RecordMark = .F.
+                .ScrollBars = 2
+                .RowHeight = 16
+                .FontSize = 8
+                WITH .Column1
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Produto"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column2
+                    .Width = 38
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Cor"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column3
+                    .Width = 24
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Tam"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column4
+                    .Width = 75
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Disponivel"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column5
+                    .Width = 75
+                    .ReadOnly = .F.
+                    .Header1.Caption = "Utilizar"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontBold = .T.
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                    .Text1.FontBold = .T.
+                    .Text1.BorderStyle = 0
+                    .Text1.Alignment = 3
+                    .Text1.Value = 0
+                ENDWITH
+            ENDWITH
+            BINDEVENT(THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1, "Valid", THIS, "Cnt2Col5TextValid")
+
+            .AddObject("lbl_4c_Label2", "Label")
+            WITH .lbl_4c_Label2
+                .Top = 432
+                .Left = 168
+                .Width = 84
+                .Height = 15
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Qtde " + CHR(224) + " Produzir :"
+            ENDWITH
+
+            .AddObject("lbl_4c_Label3", "Label")
+            WITH .lbl_4c_Label3
+                .Top = 431
+                .Left = 365
+                .Width = 109
+                .Height = 17
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Qtde " + CHR(224) + " Utilizar :"
+            ENDWITH
+
+            .AddObject("txt_4c_Qt_pedida", "TextBox")
+            WITH .txt_4c_Qt_pedida
+                .Top = 428
+                .Left = 268
+                .Width = 80
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+                .Value = 0
+            ENDWITH
+
+            .AddObject("txt_4c_Qt_Selec", "TextBox")
+            WITH .txt_4c_Qt_Selec
+                .Top = 428
+                .Left = 458
+                .Width = 80
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+                .Value = 0
+            ENDWITH
+        ENDWITH
+        BINDEVENT(THIS.cnt_4c_Container2.cmd_4c_CancelaDisp, "Click", THIS, "BtnCancelaDisp2Click")
+        *-- Redirecionar foco das colunas somente-leitura para Column5 (QtdDisp editavel)
+        BINDEVENT(THIS.cnt_4c_Container2.grd_4c_Dados.Column1.Text1, "GotFocus", THIS, "Cnt2GrdColXGotFocus")
+        BINDEVENT(THIS.cnt_4c_Container2.grd_4c_Dados.Column2.Text1, "GotFocus", THIS, "Cnt2GrdColXGotFocus")
+        BINDEVENT(THIS.cnt_4c_Container2.grd_4c_Dados.Column3.Text1, "GotFocus", THIS, "Cnt2GrdColXGotFocus")
+        BINDEVENT(THIS.cnt_4c_Container2.grd_4c_Dados.Column4.Text1, "GotFocus", THIS, "Cnt2GrdColXGotFocus")
+
+        *-- Container4: pedras/requisicoes adicionais (Visible=.F.)
+        THIS.AddObject("cnt_4c_Container4", "Container")
+        WITH THIS.cnt_4c_Container4
+            .Top = 125
+            .Left = 12
+            .Width = 708
+            .Height = 465
+            .BackColor = RGB(255, 255, 255)
+            .BackStyle = 1
+            .SpecialEffect = 0
+            .Visible = .F.
+
+            .AddObject("lbl_4c_Label1", "Label")
+            WITH .lbl_4c_Label1
+                .Top = 8
+                .Left = 229
+                .Width = 249
+                .Height = 18
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontBold = .T.
+                .FontName = "Tahoma"
+                .FontSize = 10
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Requisi" + CHR(231) + CHR(227) + "o de componentes adicionais"
+            ENDWITH
+
+            .AddObject("cmd_4c_CancelaDisp", "CommandButton")
+            WITH .cmd_4c_CancelaDisp
+                .Top = 3
+                .Left = 620
+                .Width = 75
+                .Height = 75
+                .Caption = "Sair"
+                .FontBold = .T.
+                .FontItalic = .T.
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .BackColor = RGB(255, 255, 255)
+                .Themes = .F.
+            ENDWITH
+
+            .AddObject("grd_4c_Dados", "Grid")
+            WITH .grd_4c_Dados
+                .Top = 32
+                .Left = 9
+                .Width = 605
+                .Height = 420
+                .ColumnCount = 5
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing = .F.
+                .DeleteMark = .F.
+                .RecordMark = .F.
+                .ScrollBars = 3
+                .RowHeight = 16
+                .FontSize = 8
+                WITH .Column1
+                    .Width = 80
+                    .ReadOnly = .F.
+                    .Header1.Caption = "Produto"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column2
+                    .Width = 200
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column3
+                    .Width = 40
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Uni"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column4
+                    .Width = 80
+                    .ReadOnly = .F.
+                    .Header1.Caption = "Qtde"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column5
+                    .Width = 80
+                    .ReadOnly = .F.
+                    .Header1.Caption = "Produto"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+            ENDWITH
+        ENDWITH
+        BINDEVENT(THIS.cnt_4c_Container4.cmd_4c_CancelaDisp, "Click", THIS, "BtnCancelaDisp4Click")
+        BINDEVENT(THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1, "Valid", THIS, "Cnt4Col1TextValid")
+        BINDEVENT(THIS.cnt_4c_Container4.grd_4c_Dados.Column4.Text1, "When",  THIS, "Cnt4Col4TextWhen")
+        BINDEVENT(THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1, "When",  THIS, "Cnt4Col5TextWhen")
+        BINDEVENT(THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1, "Valid", THIS, "Cnt4Col5TextValid")
+
+        *-- Container5: selecao de estoque por grupo/conta (Visible=.F.)
+        THIS.AddObject("cnt_4c_Container5", "Container")
+        WITH THIS.cnt_4c_Container5
+            .Top = 125
+            .Left = 12
+            .Width = 708
+            .Height = 465
+            .BackColor = RGB(255, 255, 255)
+            .BackStyle = 1
+            .SpecialEffect = 0
+            .Visible = .F.
+
+            .AddObject("lbl_4c_Label1", "Label")
+            WITH .lbl_4c_Label1
+                .Top = 10
+                .Left = 284
+                .Width = 123
+                .Height = 18
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontBold = .T.
+                .FontName = "Tahoma"
+                .FontSize = 10
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Estoque Dispon" + CHR(237) + "vel"
+            ENDWITH
+
+            .AddObject("cmd_4c_CancelaDisp", "CommandButton")
+            WITH .cmd_4c_CancelaDisp
+                .Top = 3
+                .Left = 620
+                .Width = 75
+                .Height = 75
+                .Caption = "OK"
+                .FontBold = .T.
+                .FontItalic = .T.
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .BackColor = RGB(255, 255, 255)
+                .Themes = .F.
+            ENDWITH
+
+            .AddObject("grd_4c_Dados", "Grid")
+            WITH .grd_4c_Dados
+                .Top = 32
+                .Left = 141
+                .Width = 425
+                .Height = 372
+                .ColumnCount = 5
+                .AllowHeaderSizing = .F.
+                .AllowRowSizing = .F.
+                .DeleteMark = .F.
+                .RecordMark = .F.
+                .ScrollBars = 2
+                .RowHeight = 16
+                .FontSize = 8
+                WITH .Column1
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Grupo"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column2
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Conta"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column3
+                    .Width = 80
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Prioridade"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column4
+                    .Width = 75
+                    .ReadOnly = .T.
+                    .Header1.Caption = "Dispon" + CHR(237) + "vel"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                ENDWITH
+                WITH .Column5
+                    .Width = 75
+                    .ReadOnly = .F.
+                    .Header1.Caption = "Utilizar"
+                    .Header1.FontName = "Verdana"
+                    .Header1.FontBold = .T.
+                    .Header1.FontSize = 8
+                    .Header1.ForeColor = RGB(36, 84, 155)
+                    .Text1.FontBold = .T.
+                    .Text1.BorderStyle = 0
+                    .Text1.Alignment = 3
+                    .Text1.Value = 0
+                ENDWITH
+            ENDWITH
+            BINDEVENT(THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1, "Valid", THIS, "Cnt5Col5TextValid")
+            BINDEVENT(THIS.cnt_4c_Container5.grd_4c_Dados, "AfterRowColChange", THIS, "Cnt5GradeAfterRowColChange")
+
+            .AddObject("lbl_4c_Label2", "Label")
+            WITH .lbl_4c_Label2
+                .Top = 413
+                .Left = 428
+                .Width = 48
+                .Height = 15
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Produzir :"
+            ENDWITH
+
+            .AddObject("lbl_4c_Label3", "Label")
+            WITH .lbl_4c_Label3
+                .Top = 438
+                .Left = 435
+                .Width = 41
+                .Height = 15
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Utilizar :"
+            ENDWITH
+
+            .AddObject("lbl_4c_Label4", "Label")
+            WITH .lbl_4c_Label4
+                .Top = 413
+                .Left = 93
+                .Width = 38
+                .Height = 15
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Grupo :"
+            ENDWITH
+
+            .AddObject("lbl_4c_Label5", "Label")
+            WITH .lbl_4c_Label5
+                .Top = 438
+                .Left = 93
+                .Width = 38
+                .Height = 15
+                .AutoSize = .F.
+                .BackStyle = 0
+                .FontSize = 8
+                .ForeColor = RGB(90, 90, 90)
+                .Caption = "Conta :"
+            ENDWITH
+
+            .AddObject("txt_4c__dgrupo", "TextBox")
+            WITH .txt_4c__dgrupo
+                .Top = 409
+                .Left = 141
+                .Width = 277
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+            ENDWITH
+
+            .AddObject("txt_4c__dconta", "TextBox")
+            WITH .txt_4c__dconta
+                .Top = 434
+                .Left = 141
+                .Width = 277
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+            ENDWITH
+
+            .AddObject("txt_4c_Qt_pedida", "TextBox")
+            WITH .txt_4c_Qt_pedida
+                .Top = 409
+                .Left = 486
+                .Width = 80
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+                .Value = 0
+            ENDWITH
+
+            .AddObject("txt_4c_Qt_Selec", "TextBox")
+            WITH .txt_4c_Qt_Selec
+                .Top = 434
+                .Left = 486
+                .Width = 80
+                .Height = 23
+                .ReadOnly = .T.
+                .SpecialEffect = 1
+                .FontSize = 8
+                .Value = 0
+            ENDWITH
+        ENDWITH
+        BINDEVENT(THIS.cnt_4c_Container5.cmd_4c_CancelaDisp, "Click", THIS, "BtnCancelaDisp5Click")
+
+        *-- Shape2: delineamento visual da area de data/info no topo (9,9,279,51)
+        THIS.AddObject("shp_4c_Shape2", "Shape")
+        WITH THIS.shp_4c_Shape2
+            .Top         = 9
+            .Left        = 9
+            .Width       = 279
+            .Height      = 51
+            .BackStyle   = 0
+            .BorderColor = RGB(255, 255, 255)
+            .BorderWidth = 2
+            .SpecialEffect = 0
         ENDWITH
 
-        THIS.AddObject("lbl_4c_ObsItens", "Label")
-        WITH THIS.lbl_4c_ObsItens
-            .AutoSize  = .T.
-            .FontBold  = .T.
-            .FontName  = "Verdana"
-            .FontSize  = 8
-            .BackStyle = 0
-            .Caption   = "Observa" + CHR(231) + CHR(227) + "o do Item"
-            .Height    = 15
-            .Left      = 726
-            .Top       = 369
-            .Width     = 134
-            .ForeColor = RGB(255,255,255)
-        ENDWITH
-
-        THIS.AddObject("edt_4c_Obs", "EditBox")
-        WITH THIS.edt_4c_Obs
-            .Height = 205
-            .Left   = 732
-            .Top    = 361
-            .Width  = 266
+        *-- Shape3: delineamento visual da area de numero/referencia (820,10,116,38)
+        THIS.AddObject("shp_4c_Shape3", "Shape")
+        WITH THIS.shp_4c_Shape3
+            .Top         = 10
+            .Left        = 820
+            .Width       = 116
+            .Height      = 38
+            .BackStyle   = 0
+            .BorderColor = RGB(255, 255, 255)
+            .BorderWidth = 2
+            .SpecialEffect = 0
         ENDWITH
     ENDPROC
 
     *==========================================================================
-    * ConfigurarPaginaDados - Fase 5/8: elementos decorativos complementares
+    * ConfigurarPaginaLista - Restaura a visao principal do form
     *
-    * Para form OPERACIONAL flat (sem PageFrame/Page2 de CRUD), este metodo
-    * adiciona elementos visuais secundarios sobrepostos ao layout principal.
-    * Fase 5 (primeira metade): Shape2 - decoracao superior esquerda do header.
-    *   Corresponde ao Shape2 do legado: top=9, left=9, 279x51
-    *   Posicionado sobre o cnt_4c_Cabecalho para criar destaque visual na
-    *   area de titulo/empresa, conforme o original SIGPRGLP.SCX.
+    * OPERACIONAL: nao ha PageFrame com Page1/Page2 como em CRUD. A "pagina
+    * lista" aqui eh o conjunto: grid principal (grd_4c_Dados / TmpFinal) +
+    * totais + Container3 (saldo por grupo/conta, sempre visivel). Os overlays
+    * (Container1/2/4/5) sao escondidos e as acoes principais reabilitadas.
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oErro
-        TRY
-            THIS.AddObject("shp_4c_Shape2", "Shape")
-            WITH THIS.shp_4c_Shape2
-                .Top           = 9
-                .Left          = 9
-                .Height        = 51
-                .Width         = 279
-                .SpecialEffect = 0
-                .BorderStyle   = 1
-                .BorderWidth   = 1
-                .BorderColor   = RGB(160,160,160)
-                .FillStyle     = 0
-                .FillColor     = RGB(80,80,80)
-                .BackStyle     = 0
-                .Curvature     = 5
-            ENDWITH
+    PROTECTED PROCEDURE ConfigurarPaginaLista
+        LOCAL loc_lPodeAcao
 
-            THIS.AddObject("shp_4c_Shape3", "Shape")
-            WITH THIS.shp_4c_Shape3
-                .Top           = 10
-                .Left          = 820
-                .Height        = 38
-                .Width         = 116
-                .SpecialEffect = 0
-                .BorderStyle   = 1
-                .BorderWidth   = 1
-                .BorderColor   = RGB(160,160,160)
-                .FillStyle     = 0
-                .FillColor     = RGB(80,80,80)
-                .BackStyle     = 0
-                .Curvature     = 3
-            ENDWITH
-        CATCH TO loc_oErro
-            MsgErro("Erro em ConfigurarPaginaDados: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
+        *-- Ocultar overlays flutuantes
+        IF PEMSTATUS(THIS, "cnt_4c_Container1", 5)
+            THIS.cnt_4c_Container1.Visible = .F.
+        ENDIF
+        IF PEMSTATUS(THIS, "cnt_4c_Container2", 5)
+            THIS.cnt_4c_Container2.Visible = .F.
+        ENDIF
+        IF PEMSTATUS(THIS, "cnt_4c_Container4", 5)
+            THIS.cnt_4c_Container4.Visible = .F.
+        ENDIF
+        IF PEMSTATUS(THIS, "cnt_4c_Container5", 5)
+            THIS.cnt_4c_Container5.Visible = .F.
+        ENDIF
 
-    *==========================================================================
-    * TornarControlesVisiveis - containers ocultos mantem filhos visiveis
-    *==========================================================================
-    PROTECTED PROCEDURE TornarControlesVisiveis()
-        LOCAL loc_i, loc_oCtrl, loc_cNome
-        FOR loc_i = 1 TO THIS.ControlCount
-            loc_oCtrl = THIS.Controls(loc_i)
-            loc_cNome = UPPER(loc_oCtrl.Name)
-            IF INLIST(loc_cNome, "CNT_4C_DISPONIVEL", "CNT_4C_ESTOQUES", "CNT_4C_LINHAS", "CNT_4C_REQUISICOES")
-                THIS.TornarSubControlesVisiveis(loc_oCtrl)
-                LOOP
-            ENDIF
-            IF UPPER(loc_oCtrl.BaseClass) = "CONTAINER"
-                THIS.TornarSubControlesVisiveis(loc_oCtrl)
-            ENDIF
-            loc_oCtrl.Visible = .T.
-        NEXT
-    ENDPROC
+        *-- Grid principal e Container3 (saldo) sempre acessiveis
+        IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+            THIS.grd_4c_Dados.Enabled = .T.
+            THIS.grd_4c_Dados.ZOrder
+        ENDIF
+        IF PEMSTATUS(THIS, "cnt_4c_Container3", 5)
+            THIS.cnt_4c_Container3.Enabled = .T.
+        ENDIF
 
-    PROTECTED PROCEDURE TornarSubControlesVisiveis(par_oContainer)
-        LOCAL loc_i, loc_oCtrl
-        FOR loc_i = 1 TO par_oContainer.ControlCount
-            loc_oCtrl = par_oContainer.Controls(loc_i)
-            loc_oCtrl.Visible = .T.
-            IF loc_oCtrl.BaseClass = "Container"
-                THIS.TornarSubControlesVisiveis(loc_oCtrl)
-            ENDIF
-        NEXT
-    ENDPROC
+        *-- Reabilitar botoes de acao principal
+        THIS.cmd_4c_Processar.Enabled  = .T.
+        THIS.cmd_4c_Cancelar.Enabled   = .T.
+        THIS.cmd_4c_TotLinha.Enabled   = .T.
+        THIS.cmd_4c_Disponivel.Enabled = .T.
+        THIS.cmd_4c_BtnRelatorio.Enabled = .T.
 
-    *==========================================================================
-    * InicializarDados - ControlSources, queries iniciais, totais
-    *==========================================================================
-    PROTECTED PROCEDURE InicializarDados()
-        LOCAL loc_lSucesso, loc_oErro, loc_nSal, loc_nEst, loc_nPrz, loc_lcQuery
-        loc_lSucesso = .F.
-        TRY
-            *-- ControlSources GradeItens (mapeamento exato do legado)
-            THIS.grd_4c_Itens.RecordSource = "TmpFinal"
-            WITH THIS.grd_4c_Itens
-                .Column1.ControlSource   = "TmpFinal.Cpros"
-                .Column2.ControlSource   = "TmpFinal.CodCors"
-                .Column3.ControlSource   = "TmpFinal.Dopes"
-                .Column4.ControlSource   = "TmpFinal.Numes"
-                .Column5.ControlSource   = "TmpFinal.Saldo"
-                .Column6.ControlSource   = "TmpFinal.Produzir"
-                .Column7.ControlSource   = "TmpFinal.Estoque"
-                .Column8.ControlSource   = "IIF(EMPTY(TmpFinal.Obsps),' ','*')"
-                .Column9.ControlSource   = "TmpFinal.CodTams"
-            ENDWITH
+        *-- Botao Pedras/SelEstoque respeitam regra de negocio
+        loc_lPodeAcao = .F.
+        IF USED("crSigCdPam")
+            SELECT crSigCdPam
+            loc_lPodeAcao = !EMPTY(crSigCdPam.DopEmphs) AND !EMPTY(crSigCdPam.DopReqcs) AND ;
+                            !EMPTY(crSigCdPam.DopPedcs) AND !EMPTY(crSigCdPam.DopComps) AND ;
+                            !THIS.this_lReserva
+        ENDIF
+        THIS.cmd_4c_Pedras.Enabled     = loc_lPodeAcao
+        THIS.cmd_4c_SelEstoque.Enabled = loc_lPodeAcao
 
-            *-- Se TransfRes vazio, grid somente leitura
-            IF USED("crSigCdPam") .AND. NOT EOF("crSigCdPam")
-                IF EMPTY(ALLTRIM(crSigCdPam.TransfRes))
-                    THIS.grd_4c_Itens.SetAll("ReadOnly", .T.)
-                ENDIF
-            ENDIF
-
-            *-- TmpSaldG para Container3
-            IF USED("TmpSaldG")
-                SELECT TmpSaldG
-                SET ORDER TO Cpros
-                IF USED("TmpFinal") .AND. NOT EOF("TmpFinal")
-                    SET KEY TO TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams
-                ENDIF
-                GO TOP
-            ENDIF
-
-            THIS.cnt_4c_Info.grd_4c_DispInfo.RecordSource = "TmpSaldG"
-            WITH THIS.cnt_4c_Info.grd_4c_DispInfo
-                .Column1.ControlSource   = "TmpSaldG.Grupos"
-                .Column2.ControlSource   = "TmpSaldG.Estos"
-                .Column3.ControlSource   = "TmpSaldG.Saldo"
-                .Column4.ControlSource   = "TmpSaldG.Saldo - TmpSaldG.Disps"
-                .Column5.ControlSource   = "TmpSaldG.Disps"
-                .Column6.ControlSource   = "TmpSaldG.Emps"
-                .SetAll("ReadOnly", .T.)
-            ENDWITH
-
-            *-- Cursor de rastreamento de selecao manual
-            IF NOT USED("TmpSaldU")
-                CREATE CURSOR TmpSaldU (Cpros C(14), KeySelm L)
-                INDEX ON Cpros TAG Cpros
-            ENDIF
-
-            *-- ControlSource do EditBox de observacoes
-            THIS.edt_4c_Obs.ControlSource = "TmpFinal.Obsps"
-
-            *-- Calcular totais iniciais
-            loc_nSal = 0
-            loc_nEst = 0
-            loc_nPrz = 0
-            IF USED("TmpFinal")
-                SELECT TmpFinal
-                SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
-                GO TOP
-            ENDIF
-            THIS.txt_4c_TotQtd.Value = loc_nSal
-            THIS.txt_4c_TotEst.Value = loc_nEst
-            THIS.txt_4c_TotPrz.Value = loc_nPrz
-
-            *-- Carregar SigCdTpc + SigCdCom -> crSigCdCom
-            IF NOT USED("crSigCdCom")
-                loc_lcQuery = "SELECT a.Tipos, a.Custos, b.CGrus " + ;
-                              "FROM SigCdTpc a, SigCdCom b " + ;
-                              "WHERE a.Tipos = b.Tipos"
-                IF SQLEXEC(gnConnHandle, loc_lcQuery, "crSigCdCom") > 0
-                    SELECT crSigCdCom
-                    INDEX ON Tipos + CGrus TAG Tipos
-                ELSE
-                    MsgErro("Falha ao carregar SigCdCom.", "Erro")
-                ENDIF
-            ENDIF
-
-            *-- SigKey do pacote (usado em GravaHistorico)
-            IF USED("CrSigCdPac") .AND. NOT EOF("CrSigCdPac")
-                THIS.this_oBusinessObject.this_cSigKey = CrSigCdPac.sigKeys
-            ENDIF
-
-            *-- SelPedra: garantir pelo menos um registro
-            IF USED("SelPedra") .AND. RECCOUNT("SelPedra") = 0
-                SELECT SelPedra
-                APPEND BLANK
-            ENDIF
-
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro("Erro ao inicializar dados: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *==========================================================================
-    * AjustarBotaoPedras - habilitar apenas se parametros completos
-    *==========================================================================
-    PROTECTED PROCEDURE AjustarBotaoPedras()
-        THIS.cmd_4c_Requisicoes.Enabled = .F.
-        IF USED("crSigCdPam") .AND. NOT EOF("crSigCdPam")
-            IF NOT EMPTY(ALLTRIM(crSigCdPam.DopEmphs)) .AND. ;
-               NOT EMPTY(ALLTRIM(crSigCdPam.DopReqcs)) .AND. ;
-               NOT EMPTY(ALLTRIM(crSigCdPam.DopPedcs)) .AND. ;
-               NOT EMPTY(ALLTRIM(crSigCdPam.DopComps)) .AND. ;
-               NOT THIS.this_lReserva
-                THIS.cmd_4c_Requisicoes.Enabled = .T.
-            ENDIF
+        *-- Focar grid principal na coluna editavel Produzir
+        IF THIS.grd_4c_Dados.Enabled
+            THIS.grd_4c_Dados.Refresh
+            THIS.grd_4c_Dados.Column6.SetFocus
         ENDIF
     ENDPROC
 
     *==========================================================================
-    * ConfigurarEventos - BINDEVENT para todos os eventos
+    * ConfigurarPaginaDados - Configura a area de detalhes do item corrente
+    *
+    * OPERACIONAL: nao ha PageFrame com Page2, mas o form tem uma "area de
+    * dados" logica composta por Container3 (saldo por grupo/conta do produto
+    * selecionado) + EditBox de observacao + totais Qtd/Est/Prz. Este metodo
+    * atualiza os bindings e valores exibidos para o registro corrente do grid
+    * principal (TmpFinal). E chamado apos mudanca de linha no grid principal.
     *==========================================================================
-    PROTECTED PROCEDURE ConfigurarEventos()
-        BINDEVENT(THIS.grd_4c_Itens,                                     "AfterRowColChange", THIS, "GradeItensAfterRowColChange")
-        BINDEVENT(THIS.grd_4c_Itens.Column6.Text1,                       "When",              THIS, "GradeItensColumn6When")
-        BINDEVENT(THIS.grd_4c_Itens.Column6.Text1,                       "Valid",             THIS, "GradeItensColumn6Valid")
-        BINDEVENT(THIS.grd_4c_Itens.Column6.Text1,                       "KeyPress",         THIS, "GradeItensColumn6LostFocus")
-        BINDEVENT(THIS.grd_4c_Itens.Column1.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column2.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column3.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column4.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column5.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column7.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column8.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.grd_4c_Itens.Column9.Text1,                       "GotFocus",          THIS, "GradeItensRedirFoco")
-        BINDEVENT(THIS.cnt_4c_Info.grd_4c_DispInfo,                      "AfterRowColChange", THIS, "GradeDispInfoAfterRowColChange")
-        BINDEVENT(THIS.cnt_4c_Estoques.grd_4c_DispEstq,                  "AfterRowColChange", THIS, "GradeDispEstqAfterRowColChange")
-        BINDEVENT(THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1,    "Valid",             THIS, "GradeDispEstqColumn5Valid")
-        BINDEVENT(THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1,  "Valid",             THIS, "GradeDispProdColumn5Valid")
-        BINDEVENT(THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column1.Text1, "GotFocus",          THIS, "GradeDispProdRedirFoco")
-        BINDEVENT(THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column2.Text1, "GotFocus",          THIS, "GradeDispProdRedirFoco")
-        BINDEVENT(THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column3.Text1, "GotFocus",          THIS, "GradeDispProdRedirFoco")
-        BINDEVENT(THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column4.Text1, "GotFocus",          THIS, "GradeDispProdRedirFoco")
-        BINDEVENT(THIS.cmd_4c_Disponiveis,                                "Click",             THIS, "CmdDisponiveisClick")
-        BINDEVENT(THIS.cmd_4c_LinhasTot,                                  "Click",             THIS, "CmdLinhasTotClick")
-        BINDEVENT(THIS.cmd_4c_Requisicoes,                                "Click",             THIS, "CmdRequisoesClick")
-        BINDEVENT(THIS.cmd_4c_Estoques,                                   "Click",             THIS, "CmdEstoquesClick")
-        BINDEVENT(THIS.cmd_4c_Relatorio,                                  "Click",             THIS, "CmdRelatorioClick")
-        BINDEVENT(THIS.cmd_4c_Processar,                                  "Click",             THIS, "CmdProcessarClick")
-        BINDEVENT(THIS.cmd_4c_Cancelar,                                   "Click",             THIS, "CmdCancelarClick")
-        BINDEVENT(THIS.cnt_4c_Estoques.cmd_4c_OkEstq,                    "Click",             THIS, "CancelarC5Click")
-        BINDEVENT(THIS.cnt_4c_Disponivel.cmd_4c_SairDisp,                "Click",             THIS, "CancelarC2Click")
-        BINDEVENT(THIS.cnt_4c_Requisicoes.cmd_4c_SairReq,                "Click",             THIS, "CancelarC4Click")
-        BINDEVENT(THIS.cnt_4c_Linhas.cmd_4c_OkLinhas,                    "Click",             THIS, "CancelarC1Click")
-        BINDEVENT(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.Text1, "Valid",             THIS, "GradePedra1Valid")
-        BINDEVENT(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1, "When",              THIS, "GradePedra5When")
-        BINDEVENT(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1, "Valid",             THIS, "GradePedra5Valid")
-        BINDEVENT(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1, "KeyPress",         THIS, "GradePedra5LostFocus")
-        BINDEVENT(THIS.img_4c_Figura,                                     "DblClick",          THIS, "ImgFiguraDblClick")
-    ENDPROC
+    PROTECTED PROCEDURE ConfigurarPaginaDados
+        LOCAL loc_nSaldo, loc_nEstoque, loc_nProduzir
 
-    *==========================================================================
-    * HANDLERS DE EVENTOS
-    *==========================================================================
+        loc_nSaldo    = 0
+        loc_nEstoque  = 0
+        loc_nProduzir = 0
 
-    PROCEDURE GradeItensAfterRowColChange(par_nColIndex)
-        LOCAL loc_lcArquivo, loc_lcFoto, loc_oErro
-        TRY
-            THIS.edt_4c_Obs.Refresh
-            THIS.lbl_4c_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item " + ALLTRIM(TmpFinal.CPros)
-
-            =SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
-
-            IF USED("TmpSaldG")
-                SELECT TmpSaldG
-                SET ORDER TO Cpros
-                SET KEY TO TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams
-                GO TOP
-            ENDIF
-
-            WITH THIS.cnt_4c_Info
-                .txt_4c_TotQtdInfo.Value = TmpSaldo.Saldo
-                .txt_4c_TotEstInfo.Value = TmpSaldo.Saldo - TmpSaldo.Disps
-                .txt_4c_TotPrzInfo.Value = TmpSaldo.Disps
-                .lbl_4c_TituloInfo.Caption = TmpFinal.Cpros + ;
-                    IIF(NOT EMPTY(TmpFinal.CodCors), " Cor:" + TmpFinal.CodCors, "") + ;
-                    IIF(NOT EMPTY(TmpFinal.CodTams), " Tam:" + TmpFinal.CodTams, "")
-
-                IF THIS.this_oBusinessObject.AtualizarInfoItem(par_nColIndex)
-                    .txt_4c_DGrupoInfo.Value = THIS.this_oBusinessObject.this_cDscGrupo
-                    .txt_4c_DContaInfo.Value = THIS.this_oBusinessObject.this_cDscConta
-                ENDIF
-                .grd_4c_DispInfo.Refresh
-                .Visible     = .T.
-            ENDWITH
-
-            *-- Imagem do produto
-            loc_lcArquivo = SYS(2023) + "\TempGlb.jpg"
-            CLEAR RESOURCES
-            THIS.img_4c_Figura.Picture = ""
-            THIS.img_4c_Figura.Visible = .F.
-            IF SQLEXEC(gnConnHandle, "SELECT FigJpgs FROM SigCdPro WHERE CPros = " + EscaparSQL(ALLTRIM(TmpFinal.CPros)), "crSigProFig") > 0
-                IF NOT EOF("crSigProFig")
-                    IF NOT EMPTY(crSigProFig.FigJpgs) .AND. NOT ISNULL(crSigProFig.FigJpgs)
-                        loc_lcFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(crSigProFig.FigJpgs, ;
-                            "data:image/png;base64,", ""), ;
-                            "data:image/jpeg;base64,", ""), ;
-                            "data:image/jpg;base64,", ""), 14)
-                        IF STRTOFILE(loc_lcFoto, loc_lcArquivo) > 0
-                            THIS.img_4c_Figura.Picture = loc_lcArquivo
-                            THIS.img_4c_Figura.Visible = .T.
-                        ENDIF
-                    ENDIF
-                ENDIF
-                USE IN crSigProFig
-            ENDIF
-
-            SELECT TmpFinal
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
-
-    PROCEDURE GradeItensRedirFoco()
-        THIS.grd_4c_Itens.Column6.Text1.SetFocus
-    ENDPROC
-
-    PROCEDURE GradeDispProdRedirFoco()
-        THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.SetFocus
-    ENDPROC
-
-    PROCEDURE GradeItensColumn6When()
-        LOCAL loc_oErro
-        THIS.this_oBusinessObject.this_nOldValue = THIS.grd_4c_Itens.Column6.Text1.Value
-        IF THIS.this_lReserva .AND. (TmpFinal.Estoque = 0)
-            TRY
-                IF SQLEXEC(gnConnHandle, "SELECT CGrus FROM SigCdPro WHERE CPros = " + EscaparSQL(ALLTRIM(TmpFinal.CPros)), "crTmpPro") > 0
-                    IF NOT EOF("crTmpPro")
-                        IF SQLEXEC(gnConnHandle, "SELECT TipoEstos FROM SigCdGrp WHERE CGrus = " + EscaparSQL(ALLTRIM(crTmpPro.CGrus)), "crTmpGru") > 0
-                            IF NOT EOF("crTmpGru")
-                                IF INLIST(crTmpGru.TipoEstos, 3, 4)
-                                    THIS.cmd_4c_Disponiveis.Enabled = .T.
-                                ENDIF
-                            ENDIF
-                            USE IN crTmpGru
-                        ENDIF
-                    ENDIF
-                    USE IN crTmpPro
-                ENDIF
-            CATCH TO loc_oErro
-                MsgErro(loc_oErro.Message, "Erro")
-            ENDTRY
-        ENDIF
-        RETURN .T.
-    ENDPROC
-
-    PROCEDURE GradeItensColumn6Valid()
-        LOCAL loc_lResultado, loc_nNovoValor, loc_xBaixa, loc_oErro
-        loc_lResultado = .T.
-        loc_nNovoValor = THIS.grd_4c_Itens.Column6.Text1.Value
-        TRY
-            IF NOT SEEK(TmpFinal.Cpros, "TmpSaldU", "Cpros")
-                INSERT INTO TmpSaldU (Cpros) VALUES (TmpFinal.Cpros)
-            ENDIF
-            IF loc_nNovoValor <> THIS.this_oBusinessObject.this_nOldValue .AND. TmpSaldU.KeySelm
-                IF NOT MsgConfirma("Produto com Sele" + CHR(231) + CHR(227) + "o Manual de estoque. " + CHR(13) + ;
-                    "O sistema ir" + CHR(225) + " acionar o modo autom" + CHR(225) + "tico. Deseja Continuar?")
-                    THIS.grd_4c_Itens.Column6.Text1.Value = THIS.this_oBusinessObject.this_nOldValue
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-            IF loc_lResultado
-                DO CASE
-                    CASE loc_nNovoValor = THIS.this_oBusinessObject.this_nOldValue
-                        *-- nenhuma mudanca
-                    CASE loc_nNovoValor < 0
-                        MsgAviso("A Quantidade a Produzir N" + CHR(227) + "o Pode Ser Um Valor Negativo!!!", "")
-                        THIS.grd_4c_Itens.Column6.Text1.Value = THIS.this_oBusinessObject.this_nOldValue
-                        loc_lResultado = .F.
-                    CASE loc_nNovoValor > TmpFinal.Saldo
-                        MsgAviso("A Quantidade a Produzir N" + CHR(227) + "o Pode Ser Maior Que a Quantidade Da Opera" + CHR(231) + CHR(227) + "o!!!", "")
-                        THIS.grd_4c_Itens.Column6.Text1.Value = TmpFinal.Saldo - TmpFinal.Estoque
-                        loc_lResultado = .F.
-                    CASE NOT SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo") .AND. ;
-                         (TmpFinal.Produzir <> TmpFinal.Saldo)
-                        MsgAviso("N" + CHR(227) + "o H" + CHR(225) + " Saldo Dispon" + CHR(237) + "vel Deste Produto No Estoque Para Reservar!!!", "")
-                        THIS.grd_4c_Itens.Column6.Text1.Value = TmpFinal.Saldo
-                        loc_lResultado = .F.
-                    OTHERWISE
-                        IF (TmpSaldo.Disps + TmpFinal.Estoque >= TmpFinal.Saldo - loc_nNovoValor)
-                            REPLACE TmpSaldo.Disps WITH TmpSaldo.Disps + TmpFinal.Estoque - (TmpFinal.Saldo - TmpFinal.Produzir) IN TmpSaldo
-                            REPLACE TmpFinal.Estoque WITH TmpFinal.Saldo - loc_nNovoValor IN TmpFinal
-                            REPLACE KeySelm WITH .F. IN TmpSaldU
-                            SELECT TmpSaldo
-                            loc_xBaixa = TmpSaldo.Saldo - TmpSaldo.Disps
-                            SELECT TmpSaldG
-                            SET ORDER TO Cpros
-                            =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams)
-                            REPLACE Disps WITH Saldo WHILE Cpros = TmpSaldo.Cpros .AND. ;
-                                CodCors = TmpSaldo.CodCors .AND. CodTams = TmpSaldo.CodTams
-                            =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams)
-                            SCAN WHILE Cpros = TmpSaldo.Cpros .AND. CodCors = TmpSaldo.CodCors .AND. ;
-                                CodTams = TmpSaldo.CodTams .AND. loc_xBaixa > 0
-                                IF TmpSaldG.Disps >= loc_xBaixa
-                                    REPLACE TmpSaldG.Disps WITH TmpSaldG.Disps - loc_xBaixa
-                                    loc_xBaixa = 0
-                                ELSE
-                                    loc_xBaixa = loc_xBaixa - TmpSaldG.Disps
-                                    REPLACE TmpSaldG.Disps WITH 0
-                                ENDIF
-                            ENDSCAN
-                        ELSE
-                            MsgAviso("N" + CHR(227) + "o H" + CHR(225) + " Saldo Dispon" + CHR(237) + "vel Deste Produto No Estoque Para Reservar!!!", "")
-                            THIS.grd_4c_Itens.Column6.Text1.Value = THIS.this_oBusinessObject.this_nOldValue
-                            loc_lResultado = .F.
-                        ENDIF
-                ENDCASE
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    PROCEDURE GradeItensColumn6LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF NOT INLIST(par_nKeyCode, 13, 9)
+        *-- Requer TmpFinal e TmpSaldG carregados
+        IF !USED("TmpFinal") OR !USED("TmpSaldG")
             RETURN
         ENDIF
-        LOCAL loc_nRecno, loc_nSal, loc_nEst, loc_nPrz, loc_oErro
-        TRY
-            SELECT TmpFinal
-            loc_nRecno = RECNO()
-            SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
-            GO loc_nRecno
-            THIS.txt_4c_TotQtd.Value = loc_nSal
-            THIS.txt_4c_TotEst.Value = loc_nEst
-            THIS.txt_4c_TotPrz.Value = loc_nPrz
-            THIS.txt_4c_TotQtd.Refresh
-            THIS.txt_4c_TotEst.Refresh
-            THIS.txt_4c_TotPrz.Refresh
-            THIS.Refresh
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+
+        *-- Reposicionar TmpSaldG conforme item corrente do grid principal
+        SELECT TmpSaldG
+        SET ORDER TO Cpros
+        SET KEY TO TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams
+        GO TOP
+
+        *-- Vincular Container3 grid ao cursor de saldo detalhado
+        THIS.cnt_4c_Container3.grd_4c_Dados.RecordSource = "TmpSaldG"
+        WITH THIS.cnt_4c_Container3.grd_4c_Dados
+            .Column1.ControlSource = "TmpSaldG.Grupos"
+            .Column2.ControlSource = "TmpSaldG.Estos"
+            .Column3.ControlSource = "TmpSaldG.Saldo"
+            .Column4.ControlSource = "TmpSaldG.Saldo - TmpSaldG.Disps"
+            .Column5.ControlSource = "TmpSaldG.Disps"
+            .Column6.ControlSource = "TmpSaldG.Emps"
+            .SetAll("ReadOnly", .T.)
+            .Refresh
+        ENDWITH
+
+        *-- Descricoes grupo/conta (buscadas via CursorQuery no AfterRowColChange)
+        IF USED("TmpGrupo")
+            THIS.cnt_4c_Container3.txt_4c__dgrupo.Value = TratarNulo(TmpGrupo.Descrs, "C")
+        ENDIF
+        IF USED("TmpConta")
+            THIS.cnt_4c_Container3.txt_4c__dconta.Value = TratarNulo(TmpConta.RClis, "C")
+        ENDIF
+
+        *-- Totais do item corrente (Saldo/Estoque/Produzir do TmpSaldo)
+        IF USED("TmpSaldo") AND SEEK(TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
+            loc_nSaldo    = NVL(TmpSaldo.Saldo, 0)
+            loc_nEstoque  = NVL(TmpSaldo.Saldo, 0) - NVL(TmpSaldo.Disps, 0)
+            loc_nProduzir = NVL(TmpSaldo.Disps, 0)
+        ENDIF
+        THIS.cnt_4c_Container3.txt_4c_Tot_Qtd.Value = loc_nSaldo
+        THIS.cnt_4c_Container3.txt_4c_Tot_Est.Value = loc_nEstoque
+        THIS.cnt_4c_Container3.txt_4c_Tot_Prz.Value = loc_nProduzir
+
+        *-- Rebind da EditBox de observacao ao item corrente
+        THIS.obj_4c_ObsItens.ControlSource = "TmpFinal.Obsps"
+        THIS.obj_4c_ObsItens.Refresh
+
+        *-- Rotulo dinamico da observacao
+        THIS.lbl_4c_Txt_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item " + ;
+                                            ALLTRIM(TratarNulo(TmpFinal.Cpros, "C"))
     ENDPROC
 
-    PROCEDURE GradeDispInfoAfterRowColChange(par_nColIndex)
-        LOCAL loc_oErro
-        TRY
-            IF THIS.this_oBusinessObject.AtualizarInfoContainer3(par_nColIndex)
-                THIS.cnt_4c_Info.txt_4c_DGrupoInfo.Value = THIS.this_oBusinessObject.this_cDscGrupo
-                THIS.cnt_4c_Info.txt_4c_DContaInfo.Value = THIS.this_oBusinessObject.this_cDscConta
+    *==========================================================================
+    * AlternarPagina - Alterna entre a visao principal e os overlays
+    *
+    * Parametros: par_nPagina
+    *   0 -> visao principal (grid + Container3) - via ConfigurarPaginaLista()
+    *   1 -> Container1 (Totais por Linha) - equivalente a BtnTotLinhaClick
+    *   2 -> Container2 (Disponibilidade)  - equivalente a BtnDisponiveiClick
+    *   3 -> Container3 permanece ativo (saldo por grupo/conta) - restaura lista
+    *   4 -> Container4 (Requisicoes)      - equivalente a BtnPedrasClick
+    *   5 -> Container5 (Selecao Estoque)  - equivalente a BtnSelEstoqueClick
+    *==========================================================================
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_nPag
+        loc_nPag = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 0)
+
+        DO CASE
+            CASE loc_nPag = 1
+                THIS.BtnTotLinhaClick()
+            CASE loc_nPag = 2
+                THIS.BtnDisponiveiClick()
+            CASE loc_nPag = 4
+                THIS.BtnPedrasClick()
+            CASE loc_nPag = 5
+                THIS.BtnSelEstoqueClick()
+            OTHERWISE
+                *-- Pagina 0 ou 3: restaurar visao principal
+                THIS.ConfigurarPaginaLista()
+        ENDCASE
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE CarregarDados
+    *==========================================================================
+        LOCAL loc_lReadOnly
+
+        *-- Grid principal: vincular ao TmpFinal
+        IF USED("TmpFinal")
+            THIS.grd_4c_Dados.RecordSource = "TmpFinal"
+            WITH THIS.grd_4c_Dados
+                .Column1.ControlSource = "TmpFinal.Cpros"
+                .Column2.ControlSource = "TmpFinal.CodCors"
+                .Column3.ControlSource = "TmpFinal.Dopes"
+                .Column4.ControlSource = "TmpFinal.Numes"
+                .Column5.ControlSource = "TmpFinal.Saldo"
+                .Column6.ControlSource = "TmpFinal.Produzir"
+                .Column7.ControlSource = "TmpFinal.Estoque"
+                .Column8.ControlSource = "IIF(EMPTY(TmpFinal.Obsps), ' ', '*')"
+                .Column9.ControlSource = "TmpFinal.CodTams"
+            ENDWITH
+
+            *-- Se nao ha operacao de transferencia, grid fica somente leitura
+            IF USED("crSigCdPam")
+                SELECT crSigCdPam
+                IF EMPTY(crSigCdPam.TransfRes)
+                    THIS.grd_4c_Dados.SetAll("ReadOnly", .T.)
+                ENDIF
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
+        ENDIF
 
-    PROCEDURE GradeDispEstqAfterRowColChange(par_nColIndex)
-        LOCAL loc_oErro
-        TRY
-            IF THIS.this_oBusinessObject.AtualizarInfoDisponivelConta(par_nColIndex)
-                THIS.cnt_4c_Estoques.txt_4c_DGrupoEstq.Value = THIS.this_oBusinessObject.this_cDscGrupo
-                THIS.cnt_4c_Estoques.txt_4c_DContaEstq.Value = THIS.this_oBusinessObject.this_cDscConta
+        *-- Container3: Grid saldo por grupo/conta (TmpSaldG)
+        IF USED("TmpSaldG") AND USED("TmpFinal")
+            SELECT TmpSaldG
+            SET ORDER TO Cpros
+            GO TOP
+            IF !EOF("TmpFinal")
+                SET KEY TO TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
+            GO TOP
+
+            THIS.cnt_4c_Container3.grd_4c_Dados.RecordSource = "TmpSaldG"
+            WITH THIS.cnt_4c_Container3.grd_4c_Dados
+                .Column1.ControlSource = "TmpSaldG.Grupos"
+                .Column2.ControlSource = "TmpSaldG.Estos"
+                .Column3.ControlSource = "TmpSaldG.Saldo"
+                .Column4.ControlSource = "TmpSaldG.Saldo - TmpSaldG.Disps"
+                .Column5.ControlSource = "TmpSaldG.Disps"
+                .Column6.ControlSource = "TmpSaldG.Emps"
+                .SetAll("ReadOnly", .T.)
+            ENDWITH
+        ENDIF
+
+        *-- ObsItens: vincula ao campo de observacao do item corrente
+        IF USED("TmpFinal")
+            THIS.obj_4c_ObsItens.ControlSource = "TmpFinal.Obsps"
+        ENDIF
     ENDPROC
 
-    PROCEDURE GradeDispEstqColumn5Valid()
-        LOCAL loc_lResultado, loc_nNovoValor, loc_nRegDisp, loc_nQtdUti, loc_oErro
-        loc_lResultado = .T.
-        loc_nNovoValor = THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Value
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis
+    *==========================================================================
+        LOCAL loc_nI, loc_oCtrl
+        FOR loc_nI = 1 TO THIS.ControlCount
+            loc_oCtrl = THIS.Controls(loc_nI)
+            *-- Overlays ocultos (Visible=.F.): processar sub-controles mas manter container oculto
+            IF INLIST(UPPER(loc_oCtrl.Name), ;
+                      "CNT_4C_CONTAINER1", ;
+                      "CNT_4C_CONTAINER2", ;
+                      "CNT_4C_CONTAINER4", ;
+                      "CNT_4C_CONTAINER5", ;
+                      "IMG_4C_IMGFIGJPG")
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarSubControlesVisiveis(loc_oCtrl)
+                ENDIF
+                LOOP
+            ENDIF
+            *-- Containers permanentemente visiveis: garantir Visible=.T. e processar filhos
+            IF INLIST(UPPER(loc_oCtrl.Name), "CNT_4C_CABECALHO", "CNT_4C_CONTAINER3")
+                IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                    loc_oCtrl.Visible = .T.
+                ENDIF
+                IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                    THIS.TornarSubControlesVisiveis(loc_oCtrl)
+                ENDIF
+                LOOP
+            ENDIF
+            IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                loc_oCtrl.Visible = .T.
+            ENDIF
+            IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                THIS.TornarSubControlesVisiveis(loc_oCtrl)
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    PROTECTED PROCEDURE TornarSubControlesVisiveis(par_oContainer)
+    *==========================================================================
+        LOCAL loc_nI, loc_oCtrl
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_nI)
+            IF PEMSTATUS(loc_oCtrl, "Visible", 5)
+                loc_oCtrl.Visible = .T.
+            ENDIF
+            IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+                THIS.TornarSubControlesVisiveis(loc_oCtrl)
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Destroy
+    *==========================================================================
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject.LiberarConexaoTemp()
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+    *==========================================================================
+    * HANDLERS DE EVENTOS DOS BOTOES PRINCIPAIS
+    *==========================================================================
+
+    PROCEDURE BtnDisponiveiClick
+        LOCAL loc_cCpro, loc_cCor
+
         TRY
-            IF loc_nNovoValor > TmpDisp.Disps
-                MsgAviso("A quantidade a utilizar n" + CHR(227) + "o pode ser maior que Qtde Dispon" + CHR(237) + "vel...", "")
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Value = 0
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Refresh
-                loc_lResultado = .F.
-            ELSE
-                IF loc_nNovoValor < 0
-                MsgAviso("A quantidade a utilizar n" + CHR(227) + "o pode ser menor que zero ...", "")
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Value = 0
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Refresh
-                loc_lResultado = .F.
-            ELSE
-                loc_nRegDisp = RECNO("TmpDisp")
-                SUM TmpDisp.Utilizar TO loc_nQtdUti
-                GO loc_nRegDisp IN TmpDisp
-                IF loc_nQtdUti > TmpFinal.Saldo - TmpFinal.Estoque
-                    MsgAviso("Qtde Selecionada n" + CHR(227) + "o pode ser maior que Qtde Solicitada...", "")
-                    THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Value = 0
-                    THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.Text1.Refresh
-                    loc_lResultado = .F.
+            IF USED("TmpFinal")
+                loc_cCpro = TmpFinal.Cpros
+                loc_cCor  = TmpFinal.CodCors
+
+                IF USED("TmpDisp")
+                    THIS.cnt_4c_Container2.grd_4c_Dados.RecordSource = ""
+                    USE IN TmpDisp
+                ENDIF
+
+                SELECT Cpros, CodCors, CodTams, Disps, 000000000.000 AS Utilizar ;
+                  FROM TmpSaldo ;
+                 WHERE Cpros = m.loc_cCpro AND CodCors = m.loc_cCor AND Disps > 0 ;
+                 ORDER BY Cpros, CodCors, CodTams ;
+                  INTO CURSOR TmpDisp READWRITE
+
+                THIS.grd_4c_Dados.Enabled = .F.
+
+                IF _Tally = 0
+                    MsgAviso("N" + CHR(227) + "o Existe Estoque Dispon" + CHR(237) + "vel Em Nenhum Tamanho!!!", "")
+                    THIS.BtnCancelaDisp2Click()
                 ELSE
-                    THIS.cnt_4c_Estoques.txt_4c_SelecEstq.Value = loc_nQtdUti
-                    THIS.cnt_4c_Estoques.txt_4c_SelecEstq.Refresh
-                ENDIF
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+                    THIS.cnt_4c_Container2.grd_4c_Dados.RecordSource = "TmpDisp"
+                    WITH THIS.cnt_4c_Container2.grd_4c_Dados
+                        .Column1.ControlSource = "TmpDisp.Cpros"
+                        .Column2.ControlSource = "TmpDisp.CodCors"
+                        .Column3.ControlSource = "TmpDisp.CodTams"
+                        .Column4.ControlSource = "TmpDisp.Disps"
+                        .Column5.ControlSource = "TmpDisp.Utilizar"
+                    ENDWITH
 
-    PROCEDURE GradeDispProdColumn5Valid()
-        LOCAL loc_lResultado, loc_nNovoValor, loc_nRegDisp, loc_nQtdUti, loc_oErro
-        loc_lResultado = .T.
-        loc_nNovoValor = THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.Value
-        TRY
-            IF loc_nNovoValor > TmpDisp.Disps
-                MsgAviso("A Qtde. a Utilizar N" + CHR(227) + "o Pode Ser Maior Que a Qtde. Disponivel!!!", "")
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.Value = 0
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.Refresh
-                loc_lResultado = .F.
-            ELSE
-                loc_nRegDisp = RECNO("TmpDisp")
-                SUM TmpDisp.Utilizar TO loc_nQtdUti
-                GO loc_nRegDisp IN TmpDisp
-                IF loc_nQtdUti > TmpFinal.Saldo
-                    MsgAviso("A Qtde. Selecionada N" + CHR(227) + "o Pode Ser Maior Que a Qtde. Pedida!!!", "")
-                    THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.Value = 0
-                    THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.Text1.Refresh
-                    loc_lResultado = .F.
-                ELSE
-                    THIS.cnt_4c_Disponivel.txt_4c_SelecDisp.Value = loc_nQtdUti
-                    THIS.cnt_4c_Disponivel.txt_4c_SelecDisp.Refresh
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+                    WITH THIS.cnt_4c_Container2
+                        .txt_4c_Qt_pedida.Value = TmpFinal.Saldo
+                        .txt_4c_Qt_Selec.Value  = 0
+                        .Visible     = .T.
+                    ENDWITH
 
-    *-- Disponivel.Click: abre Container2 com estoque por produto/cor/tam
-    PROCEDURE CmdDisponiveisClick()
-        LOCAL loc_oErro
-        TRY
-            THIS.this_oBusinessObject.BuscarDisponivel(TmpFinal.Cpros, TmpFinal.CodCors)
-            IF NOT USED("TmpDisp") .OR. RECCOUNT("TmpDisp") = 0
-                MsgAviso("N" + CHR(227) + "o Existe Estoque Dispon" + CHR(237) + "vel Em Nenhum Tamanho!!!", "")
-                THIS.CancelarC2Click()
-            ELSE
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.ColumnCount = 5
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.RecordSource = "TmpDisp"
-                WITH THIS.cnt_4c_Disponivel.grd_4c_DispProd
-                    .Column1.Width           = 80
-                    .Column2.Width           = 38
-                    .Column3.Width           = 24
-                    .Column4.Width           = 75
-                    .Column5.Width           = 75
-                    .Column1.Header1.Caption = "Produto"
-                    .Column2.Header1.Caption = "Cor"
-                    .Column3.Header1.Caption = "Tam"
-                    .Column4.Header1.Caption = "Disponivel"
-                    .Column5.Header1.Caption = "Utilizar"
-                    .Column1.ControlSource   = "TmpDisp.Cpros"
-                    .Column2.ControlSource   = "TmpDisp.CodCors"
-                    .Column3.ControlSource   = "TmpDisp.CodTams"
-                    .Column4.ControlSource   = "TmpDisp.Disps"
-                    .Column5.ControlSource   = "TmpDisp.Utilizar"
-                ENDWITH
-                THIS.cnt_4c_Disponivel.txt_4c_PedidaDisp.Value = TmpFinal.Saldo
-                THIS.grd_4c_Itens.Enabled        = .F.
-                THIS.cmd_4c_Processar.Enabled    = .F.
-                THIS.cmd_4c_Cancelar.Enabled     = .F.
-                THIS.cmd_4c_LinhasTot.Enabled    = .F.
-                THIS.cmd_4c_Disponiveis.Enabled  = .F.
-                THIS.cnt_4c_Info.Enabled         = .F.
-                THIS.cnt_4c_Disponivel.Visible   = .T.
-                THIS.cnt_4c_Disponivel.ZOrder(0)
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.Refresh
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.Column5.SetFocus
-                THIS.cnt_4c_Disponivel.grd_4c_DispProd.Refresh
+                    THIS.cmd_4c_Processar.Enabled  = .F.
+                    THIS.cmd_4c_Cancelar.Enabled   = .F.
+                    THIS.cmd_4c_TotLinha.Enabled   = .F.
+                    THIS.cmd_4c_Pedras.Enabled     = .F.
+                    THIS.cmd_4c_Disponivel.Enabled = .F.
+                    THIS.cnt_4c_Container3.Enabled = .F.
+                    THIS.cnt_4c_Container2.Visible = .T.
+                    THIS.cnt_4c_Container2.ZOrder
+                    THIS.cnt_4c_Container2.grd_4c_Dados.Refresh
+                    THIS.cnt_4c_Container2.grd_4c_Dados.Column5.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- TotLinha.Click: abre Container1 com total por linha de producao
-    PROCEDURE CmdLinhasTotClick()
-        LOCAL loc_oErro
+    PROCEDURE BtnTotLinhaClick
         TRY
-            THIS.this_oBusinessObject.BuscarPorLinhas()
-            THIS.cnt_4c_Linhas.grd_4c_LinhasAgg.ColumnCount = 4
-            THIS.cnt_4c_Linhas.grd_4c_LinhasAgg.RecordSource = "TmpLinha"
-            WITH THIS.cnt_4c_Linhas.grd_4c_LinhasAgg
+            IF USED("TmpLinha")
+                THIS.cnt_4c_Container1.grd_4c_Dados.RecordSource = ""
+                USE IN TmpLinha
+            ENDIF
+
+            SELECT Linhas, 0 AS Ordem, SUM(Saldo) AS Saldo, SUM(Estoque) AS Estoque, SUM(Produzir) AS Produzir ;
+              FROM TmpFinal ;
+             GROUP BY 1 ;
+             UNION ALL ;
+            SELECT PADR("TOTAIS", 10) AS Linhas, 1 AS Ordem, SUM(Saldo) AS Saldo, SUM(Estoque) AS Estoque, SUM(Produzir) AS Produzir ;
+              FROM TmpFinal ;
+             GROUP BY 1 ;
+              INTO CURSOR TmpLinha ;
+             ORDER BY 2, 1
+
+            THIS.cnt_4c_Container1.grd_4c_Dados.RecordSource = "TmpLinha"
+            WITH THIS.cnt_4c_Container1.grd_4c_Dados
                 .Column1.ControlSource = "TmpLinha.Linhas"
                 .Column2.ControlSource = "TmpLinha.Saldo"
                 .Column3.ControlSource = "TmpLinha.Estoque"
                 .Column4.ControlSource = "TmpLinha.Produzir"
-                .SetAll("DynamicFontBold",  "TmpLinha.Linhas=[TOTAIS]",                              "Column")
-                .SetAll("DynamicForeColor", "IIF(TmpLinha.Linhas=[TOTAIS],RGB(0,0,255),RGB(0,0,0))", "Column")
+                .SetAll("DynamicFontBold",  "TmpLinha.Linhas = [TOTAIS]", "Column")
+                .SetAll("DynamicForeColor", "IIF(TmpLinha.Linhas = [TOTAIS], RGB(0,0,255), RGB(0,0,0))", "Column")
             ENDWITH
-            THIS.cmd_4c_Processar.Enabled   = .F.
-            THIS.cmd_4c_Cancelar.Enabled    = .F.
-            THIS.cmd_4c_LinhasTot.Enabled   = .F.
-            THIS.cmd_4c_Requisicoes.Enabled = .F.
-            THIS.cmd_4c_Disponiveis.Enabled = .F.
-            THIS.grd_4c_Itens.Enabled       = .F.
-            THIS.cnt_4c_Info.Enabled        = .F.
-            THIS.cnt_4c_Linhas.Visible      = .T.
-            THIS.cnt_4c_Linhas.ZOrder(0)
-            THIS.cnt_4c_Linhas.grd_4c_LinhasAgg.Refresh
-            THIS.cnt_4c_Linhas.grd_4c_LinhasAgg.Column1.SetFocus
+
+            THIS.cmd_4c_Processar.Enabled  = .F.
+            THIS.cmd_4c_Cancelar.Enabled   = .F.
+            THIS.cmd_4c_TotLinha.Enabled   = .F.
+            THIS.cmd_4c_Pedras.Enabled     = .F.
+            THIS.cmd_4c_Disponivel.Enabled = .F.
+            THIS.grd_4c_Dados.Enabled      = .F.
+            THIS.cnt_4c_Container3.Enabled = .F.
+            THIS.cnt_4c_Container1.Visible = .T.
+            THIS.cnt_4c_Container1.ZOrder
+            THIS.cnt_4c_Container1.grd_4c_Dados.Refresh
+            THIS.cnt_4c_Container1.grd_4c_Dados.Column1.SetFocus
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- Pedras.Click: abre Container4 com requisicoes de componentes
-    PROCEDURE CmdRequisoesClick()
-        LOCAL loc_oErro
+    PROCEDURE BtnPedrasClick
         TRY
-            THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.ColumnCount = 5
-            THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.RecordSource = "SelPedra"
-            WITH THIS.cnt_4c_Requisicoes.grd_4c_PedraReq
+            IF USED("SelPedra")
+                THIS.cnt_4c_Container4.grd_4c_Dados.RecordSource = ""
+            ENDIF
+
+            THIS.cnt_4c_Container4.grd_4c_Dados.RecordSource = "SelPedra"
+            WITH THIS.cnt_4c_Container4.grd_4c_Dados
                 .Column1.ControlSource = "SelPedra.Cpros"
                 .Column2.ControlSource = "SelPedra.Dpros"
                 .Column3.ControlSource = "SelPedra.Cunis"
                 .Column4.ControlSource = "SelPedra.Qtds"
                 .Column5.ControlSource = "SelPedra.Cpro2s"
             ENDWITH
-            THIS.cmd_4c_Processar.Enabled    = .F.
-            THIS.cmd_4c_Cancelar.Enabled     = .F.
-            THIS.cmd_4c_LinhasTot.Enabled    = .F.
-            THIS.cmd_4c_Requisicoes.Enabled  = .F.
-            THIS.cmd_4c_Disponiveis.Enabled  = .F.
-            THIS.grd_4c_Itens.Enabled        = .F.
-            THIS.cnt_4c_Info.Enabled         = .F.
-            THIS.cnt_4c_Requisicoes.Visible  = .T.
-            THIS.cnt_4c_Requisicoes.ZOrder(0)
-            THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Refresh
-            THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.SetFocus
+
+            THIS.cmd_4c_Processar.Enabled  = .F.
+            THIS.cmd_4c_Cancelar.Enabled   = .F.
+            THIS.cmd_4c_TotLinha.Enabled   = .F.
+            THIS.cmd_4c_Pedras.Enabled     = .F.
+            THIS.cmd_4c_Disponivel.Enabled = .F.
+            THIS.grd_4c_Dados.Enabled      = .F.
+            THIS.cnt_4c_Container3.Enabled = .F.
+            THIS.cnt_4c_Container4.Visible = .T.
+            THIS.cnt_4c_Container4.ZOrder
+            THIS.cnt_4c_Container4.grd_4c_Dados.Refresh
+            THIS.cnt_4c_Container4.grd_4c_Dados.Column1.SetFocus
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- SelEstoque.Click: abre Container5 com disponivel por conta/grupo
-    PROCEDURE CmdEstoquesClick()
-        LOCAL loc_oErro
+    PROCEDURE BtnSelEstoqueClick
+        LOCAL loc_cCpro, loc_cCor, loc_cTam
+
         TRY
-            THIS.this_oBusinessObject.BuscarEstoqueDetalhado(TmpFinal.Cpros, TmpFinal.CodCors, TmpFinal.CodTams)
-            IF NOT USED("TmpDisp") .OR. RECCOUNT("TmpDisp") = 0
-                MsgAviso("N" + CHR(227) + "o existe Estoque Dispon" + CHR(237) + "vel !!!", "")
-                THIS.CancelarC5Click()
-            ELSE
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.ColumnCount = 5
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.RecordSource = "TmpDisp"
-                WITH THIS.cnt_4c_Estoques.grd_4c_DispEstq
-                    .Column1.Width           = 80
-                    .Column2.Width           = 80
-                    .Column3.Width           = 24
-                    .Column4.Width           = 75
-                    .Column5.Width           = 75
-                    .Column1.Header1.Caption = "Grupo"
-                    .Column2.Header1.Caption = "Conta"
-                    .Column3.Header1.Caption = "Prioridade"
-                    .Column4.Header1.Caption = "Disponivel"
-                    .Column5.Header1.Caption = "Utilizar"
-                    .Column1.ControlSource   = "TmpDisp.Grupos"
-                    .Column2.ControlSource   = "TmpDisp.Estos"
-                    .Column3.ControlSource   = "TmpDisp.Priors"
-                    .Column4.ControlSource   = "TmpDisp.Disps"
-                    .Column5.ControlSource   = "TmpDisp.Utilizar"
-                ENDWITH
-                THIS.cnt_4c_Estoques.lbl_4c_TituloEstq.Caption = ;
-                    "Estoque Dispon" + CHR(237) + "vel (" + TmpFinal.Cpros + " " + TmpFinal.CodCors + "/" + TmpFinal.CodTams + ")"
-                THIS.cnt_4c_Estoques.txt_4c_PedidaEstq.Value = TmpFinal.Saldo - TmpFinal.Estoque
-                THIS.cnt_4c_Estoques.txt_4c_SelecEstq.Value  = 0
-                THIS.cmd_4c_Processar.Enabled    = .F.
-                THIS.cmd_4c_Cancelar.Enabled     = .F.
-                THIS.cmd_4c_LinhasTot.Enabled    = .F.
-                THIS.cmd_4c_Disponiveis.Enabled  = .F.
-                THIS.cmd_4c_Estoques.Enabled     = .F.
-                THIS.cmd_4c_Requisicoes.Enabled  = .F.
-                THIS.cnt_4c_Info.Enabled         = .F.
-                THIS.cnt_4c_Estoques.Visible     = .T.
-                THIS.cnt_4c_Estoques.ZOrder(0)
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Refresh
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Column5.SetFocus
-                THIS.cnt_4c_Estoques.grd_4c_DispEstq.Refresh
+            IF USED("TmpFinal")
+                loc_cCpro = TmpFinal.Cpros
+                loc_cCor  = TmpFinal.CodCors
+                loc_cTam  = TmpFinal.CodTams
+
+                IF USED("TmpDisp")
+                    THIS.cnt_4c_Container5.grd_4c_Dados.RecordSource = ""
+                    USE IN TmpDisp
+                ENDIF
+
+                SELECT Priors, Grupos, Estos, Cpros, CodCors, CodTams, Disps, ;
+                       000000000.000 AS Utilizar ;
+                  FROM TmpSaldG ;
+                 WHERE Cpros = m.loc_cCpro AND CodCors = m.loc_cCor AND CodTams = m.loc_cTam AND Disps > 0 ;
+                  INTO CURSOR Resultado ORDER BY 1, 2, 3, 4
+                SELECT 0
+                USE DBF("Resultado") ALIAS TmpDisp AGAIN
+                USE IN Resultado
+
+                THIS.grd_4c_Dados.Enabled = .F.
+
+                IF _Tally = 0
+                    MsgAviso("N" + CHR(227) + "o existe Estoque Dispon" + CHR(237) + "vel !!!", "")
+                    THIS.BtnCancelaDisp5Click()
+                ELSE
+                    THIS.cnt_4c_Container5.grd_4c_Dados.RecordSource = "TmpDisp"
+                    WITH THIS.cnt_4c_Container5.grd_4c_Dados
+                        .Column1.ControlSource = "TmpDisp.Grupos"
+                        .Column2.ControlSource = "TmpDisp.Estos"
+                        .Column3.ControlSource = "TmpDisp.Priors"
+                        .Column4.ControlSource = "TmpDisp.Disps"
+                        .Column5.ControlSource = "TmpDisp.Utilizar"
+                    ENDWITH
+
+                    WITH THIS.cnt_4c_Container5
+                        .lbl_4c_Label1.Caption = "Estoque Dispon" + CHR(237) + "vel (" + ;
+                                                 ALLTRIM(loc_cCpro) + " " + ALLTRIM(loc_cCor) + ;
+                                                 "/" + ALLTRIM(loc_cTam) + ")"
+                        .txt_4c_Qt_pedida.Value = TmpFinal.Saldo - TmpFinal.Estoque
+                        .txt_4c_Qt_Selec.Value  = 0
+                        .Visible     = .T.
+                    ENDWITH
+
+                    THIS.cmd_4c_Processar.Enabled  = .F.
+                    THIS.cmd_4c_Cancelar.Enabled   = .F.
+                    THIS.cmd_4c_TotLinha.Enabled   = .F.
+                    THIS.cmd_4c_Disponivel.Enabled = .F.
+                    THIS.cmd_4c_SelEstoque.Enabled = .F.
+                    THIS.cmd_4c_Pedras.Enabled     = .F.
+                    THIS.cnt_4c_Container3.Enabled = .F.
+                    THIS.cnt_4c_Container5.Visible = .T.
+                    THIS.cnt_4c_Container5.ZOrder
+                    THIS.cnt_4c_Container5.grd_4c_Dados.Refresh
+                    THIS.cnt_4c_Container5.grd_4c_Dados.Column5.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- btnRelatorio.Click: gerar relatorio SigReGlp
-    PROCEDURE CmdRelatorioClick()
-        LOCAL loc_oErro
+    PROCEDURE BtnCancelarClick
         TRY
-            THIS.this_oBusinessObject.GerarRelatorio()
+            IF VARTYPE(THIS.poFormPai) = "O"
+                THIS.poFormPai.Enabled = .T.
+            ENDIF
+            THIS.Release
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- Processar.Click: executa globalizacao/reserva
-    PROCEDURE CmdProcessarClick()
-        LOCAL loc_dPrev, loc_dGera, loc_oPP, loc_nSal, loc_nEst, loc_nPrz, loc_oErro
-        loc_dPrev = {}
-        loc_dGera = {}
-        *-- Extrair datas do avo via PEMSTATUS para evitar CATCH silencioso
-        IF VARTYPE(THIS.this_oParentForm) = "O"
-            IF PEMSTATUS(THIS.this_oParentForm, "ParentForm", 5)
-                loc_oPP = THIS.this_oParentForm.ParentForm
-                IF VARTYPE(loc_oPP) = "O"
-                    IF PEMSTATUS(loc_oPP, "Cnt_Previsao", 5)
-                        IF PEMSTATUS(loc_oPP.Cnt_Previsao, "GetPrevisao", 5)
-                            loc_dPrev = loc_oPP.Cnt_Previsao.GetPrevisao.Value
+    PROCEDURE BtnProcessarClick
+        LOCAL loc_dPrevisao, loc_dGeracao, loc_lSucesso
+
+        loc_dPrevisao = DATE()
+        loc_dGeracao  = THIS.this_dData
+        loc_lSucesso  = .F.
+
+        TRY
+            *-- Tentar obter datas do formulario pai/av?
+            IF VARTYPE(THIS.poFormPai) = "O"
+                TRY
+                    IF VARTYPE(THIS.poFormPai.poFormPai) = "O"
+                        loc_dPrevisao = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetPrevisao.Value
+                        loc_dGeracao  = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetGeracao.Value
+                    ENDIF
+                CATCH
+                ENDTRY
+            ENDIF
+
+            WITH THIS.this_oBusinessObject
+                .this_lReserva    = THIS.this_lReserva
+                .this_lAutomatico = THIS.this_lAutomatico
+                .this_nNumeroDaOp = THIS.this_nNumeroDaOp
+                .this_dPrevisao   = loc_dPrevisao
+                .this_dGeracao    = loc_dGeracao
+            ENDWITH
+
+            loc_lSucesso = THIS.this_oBusinessObject.Processar(loc_dPrevisao, loc_dGeracao)
+
+            IF loc_lSucesso
+                MsgInfo("Processamento conclu" + CHR(237) + "do com sucesso!", "Informa" + CHR(231) + CHR(227) + "o")
+                IF VARTYPE(THIS.poFormPai) = "O"
+                    THIS.poFormPai.Enabled = .T.
+                ENDIF
+                THIS.Release
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnRelatorioClick
+        TRY
+            IF THIS.this_oBusinessObject.GerarRelatorio()
+                THIS.ExecutarReportForm("SigPrGlp", "PRINTER_PROMPT", "crImpressao")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * HANDLERS DE EVENTOS DOS CONTAINERS OVERLAY
+    *==========================================================================
+
+    PROCEDURE BtnCancelaLin1Click
+        WITH THIS
+            .cmd_4c_Processar.Enabled  = .T.
+            .cmd_4c_Cancelar.Enabled   = .T.
+            .cmd_4c_Pedras.Enabled     = .T.
+            .cmd_4c_TotLinha.Enabled   = .T.
+            .cmd_4c_Disponivel.Enabled = .T.
+            .cnt_4c_Container1.Visible = .F.
+            .cnt_4c_Container3.Enabled = .T.
+            .grd_4c_Dados.Enabled      = .T.
+            .grd_4c_Dados.ZOrder
+            .grd_4c_Dados.Refresh
+            .grd_4c_Dados.Column6.SetFocus
+        ENDWITH
+    ENDPROC
+
+    PROCEDURE BtnCancelaDisp2Click
+        LOCAL loc_nQtdUtil, loc_nQtUtil, loc_xBaixa
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpDisp") AND USED("TmpFinal")
+                SELECT TmpDisp
+                SUM Utilizar TO loc_nQtdUtil
+
+                IF loc_nQtdUtil > 0
+                    SELECT TmpDisp
+                    SCAN
+                        IF Utilizar = 0
+                            LOOP
                         ENDIF
-                        IF PEMSTATUS(loc_oPP.Cnt_Previsao, "GetGeracao", 5)
-                            loc_dGera = loc_oPP.Cnt_Previsao.GetGeracao.Value
+                        loc_nQtUtil = Utilizar
+                        =SEEK(TmpDisp.CPros + TmpDisp.CodCors + TmpDisp.CodTams, "TmpSaldo")
+                        SELECT TmpFinal
+                        REPLACE Produzir WITH TmpFinal.Produzir - m.loc_nQtUtil
+                        REPLACE Estoque  WITH TmpFinal.Saldo - TmpFinal.Produzir
+
+                        SELECT TmpSaldo
+                        REPLACE TmpSaldo.Disps WITH TmpSaldo.Disps - m.loc_nQtUtil
+
+                        IF !SEEK(TmpFinal.Cpros, "TmpSaldU", "Cpros")
+                            INSERT INTO TmpSaldU (Cpros) VALUES (TmpFinal.Cpros)
+                        ENDIF
+                        REPLACE KeySelm WITH .T. IN TmpSaldU
+
+                        SELECT TmpSaldG
+                        SET ORDER TO Cpros
+                        =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams)
+                        REPLACE TmpSaldG.Disps WITH TmpSaldG.Disps - m.loc_nQtUtil
+
+                        SELECT TmpDisp
+                    ENDSCAN
+                    =SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
+                ENDIF
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        WITH THIS
+            .cmd_4c_Processar.Enabled  = .T.
+            .cmd_4c_Cancelar.Enabled   = .T.
+            .cmd_4c_TotLinha.Enabled   = .T.
+            .cmd_4c_SelEstoque.Enabled = .T.
+            .cmd_4c_Pedras.Enabled     = .T.
+            .cmd_4c_Disponivel.Enabled = .T.
+            .cnt_4c_Container3.Enabled = .T.
+            .cnt_4c_Container2.Visible = .F.
+            .grd_4c_Dados.Enabled      = .T.
+            .grd_4c_Dados.ZOrder
+            .grd_4c_Dados.Refresh
+            .grd_4c_Dados.Column6.SetFocus
+        ENDWITH
+    ENDPROC
+
+    PROCEDURE BtnCancelaDisp4Click
+        WITH THIS
+            .cmd_4c_Processar.Enabled  = .T.
+            .cmd_4c_Cancelar.Enabled   = .T.
+            .cmd_4c_TotLinha.Enabled   = .T.
+            .cmd_4c_Pedras.Enabled     = .T.
+            .cmd_4c_Disponivel.Enabled = .T.
+            .cnt_4c_Container3.Enabled = .T.
+            .cnt_4c_Container4.Visible = .F.
+            .grd_4c_Dados.Enabled      = .T.
+            .grd_4c_Dados.ZOrder
+            .grd_4c_Dados.Refresh
+            .grd_4c_Dados.Column6.SetFocus
+        ENDWITH
+    ENDPROC
+
+    PROCEDURE BtnCancelaDisp5Click
+        LOCAL loc_nQtdUtil, loc_nQtUtil, loc_xBaixa
+
+        TRY
+            IF USED("TmpDisp") AND USED("TmpFinal")
+                SELECT TmpDisp
+                SUM Utilizar TO loc_nQtdUtil
+
+                IF loc_nQtdUtil > 0
+                    SELECT TmpDisp
+                    SCAN
+                        IF Utilizar = 0
+                            LOOP
+                        ENDIF
+                        loc_nQtUtil = Utilizar
+                        =SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
+
+                        SELECT TmpFinal
+                        REPLACE Produzir WITH TmpFinal.Produzir - m.loc_nQtUtil
+                        REPLACE Estoque  WITH TmpFinal.Saldo - TmpFinal.Produzir
+
+                        SELECT TmpSaldo
+                        REPLACE TmpSaldo.Disps WITH TmpSaldo.Disps - m.loc_nQtUtil
+
+                        IF !SEEK(TmpFinal.Cpros, "TmpSaldU", "Cpros")
+                            INSERT INTO TmpSaldU (Cpros) VALUES (TmpFinal.Cpros)
+                        ENDIF
+                        REPLACE KeySelm WITH .T. IN TmpSaldU
+
+                        SELECT TmpSaldG
+                        SET ORDER TO Cpros
+                        =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams + STR(TmpDisp.Priors, 2) + TmpDisp.Grupos + TmpDisp.Estos)
+                        REPLACE TmpSaldG.Disps WITH TmpSaldG.Disps - m.loc_nQtUtil
+
+                        SELECT TmpDisp
+                    ENDSCAN
+                    =SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        WITH THIS
+            .cmd_4c_Processar.Enabled  = .T.
+            .cmd_4c_Cancelar.Enabled   = .T.
+            .cmd_4c_TotLinha.Enabled   = .T.
+            .cmd_4c_Disponivel.Enabled = .T.
+            .cmd_4c_SelEstoque.Enabled = .T.
+            .cmd_4c_Pedras.Enabled     = .T.
+            .cnt_4c_Container3.Enabled = .T.
+            .cnt_4c_Container5.Visible = .F.
+            .grd_4c_Dados.Enabled      = .T.
+            .grd_4c_Dados.ZOrder
+            .grd_4c_Dados.Refresh
+            .grd_4c_Dados.Column6.SetFocus
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * HANDLERS DE EVENTOS DO GRID PRINCIPAL (GradeItens)
+    *==========================================================================
+
+    PROCEDURE GradeItensAfterRowColChange
+        LPARAMETERS par_nColIndex
+        LOCAL loc_cSQL, loc_lcArquivo, loc_lcFoto, loc_nSal, loc_nEst, loc_nPrz
+
+        TRY
+            IF !USED("TmpFinal") OR EOF("TmpFinal")
+                RETURN
+            ENDIF
+
+            THIS.obj_4c_ObsItens.Refresh
+            THIS.lbl_4c_Txt_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item " + ALLTRIM(TmpFinal.CPros)
+
+            =SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo")
+
+            SELECT TmpSaldG
+            SET ORDER TO Cpros
+            SET KEY TO TmpFinal.Cpros + TmpFinal.CodCors + TmpFinal.CodTams
+            GO TOP
+
+            WITH THIS.cnt_4c_Container3
+                IF USED("TmpSaldo") AND !EOF("TmpSaldo")
+                    .txt_4c_Tot_Qtd.Value = TmpSaldo.Saldo
+                    .txt_4c_Tot_Est.Value = TmpSaldo.Saldo - TmpSaldo.Disps
+                    .txt_4c_Tot_Prz.Value = TmpSaldo.Disps
+                ENDIF
+
+                .lbl_4c_Label1.Caption = ALLTRIM(TmpFinal.Cpros) + ;
+                    IIF(!EMPTY(TmpFinal.CodCors), " Cor:" + TmpFinal.CodCors, "") + ;
+                    IIF(!EMPTY(TmpFinal.CodTams), " Tam:" + TmpFinal.CodTams, "")
+
+                .grd_4c_Dados.Refresh
+                .Visible     = .T.
+            ENDWITH
+
+            *-- Foto do produto
+            loc_cSQL = "SELECT TOP 1 FigJpgs FROM SigCdPro WHERE CPros = '" + ;
+                       ALLTRIM(TmpFinal.CPros) + "'"
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "xTmpProFig") > 0
+                CLEAR RESOURCES
+                THIS.img_4c_ImgFigJpg.Picture = ""
+                THIS.img_4c_ImgFigJpg.Visible = .F.
+
+                IF !EMPTY(xTmpProFig.FigJpgs) AND !ISNULL(xTmpProFig.FigJpgs)
+                    loc_lcFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(xTmpProFig.FigJpgs, ;
+                                     "data:image/png;base64,", ""), ;
+                                     "data:image/jpeg;base64,", ""), ;
+                                     "data:image/jpg;base64,", ""), 14)
+                    loc_lcArquivo = SYS(2023) + "\TempGlb.jpg"
+                    IF STRTOFILE(loc_lcFoto, loc_lcArquivo) > 0
+                        THIS.img_4c_ImgFigJpg.Picture = loc_lcArquivo
+                        THIS.img_4c_ImgFigJpg.Visible = .T.
+                    ENDIF
+                ENDIF
+                IF USED("xTmpProFig")
+                    USE IN xTmpProFig
+                ENDIF
+            ENDIF
+
+            SELECT TmpFinal
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE GrdCol6TextWhen
+        LOCAL loc_lPermite
+        loc_lPermite = .T.
+
+        TRY
+            IF USED("TmpFinal")
+                THIS.this_nOldValue = THIS.grd_4c_Dados.Column6.Text1.Value
+
+                IF THIS.this_lReserva AND TmpFinal.Estoque = 0
+                    loc_cSQL = "SELECT TOP 1 CGrus FROM SigCdPro WHERE CPros = '" + ;
+                               ALLTRIM(TmpFinal.CPros) + "'"
+                    IF SQLEXEC(gnConnHandle, loc_cSQL, "xTempPro") > 0
+                        loc_cSQL = "SELECT TOP 1 TipoEstos FROM SigCdGrp WHERE CGrus = '" + ;
+                                   ALLTRIM(xTempPro.CGrus) + "'"
+                        IF SQLEXEC(gnConnHandle, loc_cSQL, "xTempGru") > 0
+                            IF INLIST(xTempGru.TipoEstos, 3, 4)
+                                THIS.cmd_4c_Disponivel.Enabled = .T.
+                            ENDIF
+                            IF USED("xTempGru")
+                                USE IN xTempGru
+                            ENDIF
+                        ENDIF
+                        IF USED("xTempPro")
+                            USE IN xTempPro
                         ENDIF
                     ENDIF
                 ENDIF
             ENDIF
-        ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lPermite
+    ENDPROC
+
+    PROCEDURE GrdCol6TextValid
+        LOCAL loc_lValido, loc_nNewValue, loc_nOld, loc_xBaixa
+
+        loc_lValido  = .T.
+        loc_nNewValue = THIS.grd_4c_Dados.Column6.Text1.Value
+        loc_nOld      = THIS.this_nOldValue
+
         TRY
-            IF THIS.this_oBusinessObject.Processar(loc_dPrev, loc_dGera)
-                THIS.grd_4c_Itens.Refresh
-                THIS.cnt_4c_Info.grd_4c_DispInfo.Refresh
-                IF USED("TmpFinal")
-                    SELECT TmpFinal
-                    SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
-                    THIS.txt_4c_TotQtd.Value = loc_nSal
-                    THIS.txt_4c_TotEst.Value = loc_nEst
-                    THIS.txt_4c_TotPrz.Value = loc_nPrz
+            IF !USED("TmpFinal") OR !USED("TmpSaldo")
+                loc_lResultado = .T.
+            ENDIF
+
+            IF !SEEK(TmpFinal.Cpros, "TmpSaldU", "Cpros")
+                INSERT INTO TmpSaldU (Cpros) VALUES (TmpFinal.Cpros)
+            ENDIF
+
+            IF loc_nNewValue <> loc_nOld AND TmpSaldU.KeySelm
+                IF MsgConfirma("Produto com Sele" + CHR(231) + CHR(227) + "o Manual de estoque. " + ;
+                               CHR(13) + "O sistema ir" + CHR(225) + " acionar o modo autom" + CHR(225) + "tico. Deseja Continuar?", "")
+                    *-- Continue
+                ELSE
+                    THIS.grd_4c_Dados.Column6.Text1.Value = loc_nOld
+                    loc_lValido = .F.
                 ENDIF
             ENDIF
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-    ENDPROC
 
-    *-- Cancelar.Click: fechar form sem processar
-    PROCEDURE CmdCancelarClick()
-        LOCAL loc_oErro
-        TRY
-            IF VARTYPE(THIS.this_oParentForm) = "O"
-                THIS.this_oParentForm.Enabled = .T.
+            IF loc_lValido
+                DO CASE
+                    CASE loc_nNewValue = loc_nOld
+                        *-- nada a fazer
+                    CASE loc_nNewValue < 0
+                        MsgAviso("A Quantidade a Produzir N" + CHR(227) + "o Pode Ser Um Valor Negativo!!!", "")
+                        THIS.grd_4c_Dados.Column6.Text1.Value = loc_nOld
+                    CASE loc_nNewValue > TmpFinal.Saldo
+                        MsgAviso("A Quantidade a Produzir N" + CHR(227) + "o Pode Ser Maior Que a Quantidade Da Opera" + CHR(231) + CHR(227) + "o!!!", "")
+                        THIS.grd_4c_Dados.Column6.Text1.Value = TmpFinal.Saldo - TmpFinal.Estoque
+                    CASE !SEEK(TmpFinal.CPros + TmpFinal.CodCors + TmpFinal.CodTams, "TmpSaldo") AND ;
+                         TmpFinal.Produzir <> TmpFinal.Saldo
+                        MsgAviso("N" + CHR(227) + "o H" + CHR(225) + " Saldo Dispon" + CHR(237) + "vel Deste Produto No Estoque Para Reservar!!!", "")
+                        THIS.grd_4c_Dados.Column6.Text1.Value = TmpFinal.Saldo
+                    OTHERWISE
+                        IF TmpSaldo.Disps + TmpFinal.Estoque >= TmpFinal.Saldo - loc_nNewValue
+                            REPLACE TmpSaldo.Disps   WITH TmpSaldo.Disps + TmpFinal.Estoque - (TmpFinal.Saldo - TmpFinal.Produzir) IN TmpSaldo
+                            REPLACE TmpFinal.Estoque WITH TmpFinal.Saldo - loc_nNewValue IN TmpFinal
+                            REPLACE KeySelm WITH .F. IN TmpSaldU
+
+                            SELECT TmpSaldo
+                            loc_xBaixa = Saldo - Disps
+                            SELECT TmpSaldG
+                            SET ORDER TO Cpros
+                            =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams)
+                            REPLACE Disps WITH Saldo WHILE Cpros = TmpSaldo.Cpros AND CodCors = TmpSaldo.CodCors AND CodTams = TmpSaldo.CodTams
+                            =SEEK(TmpSaldo.Cpros + TmpSaldo.CodCors + TmpSaldo.CodTams)
+                            SCAN WHILE Cpros = TmpSaldo.Cpros AND CodCors = TmpSaldo.CodCors AND CodTams = TmpSaldo.CodTams AND m.loc_xBaixa > 0
+                                IF TmpSaldG.Disps >= m.loc_xBaixa
+                                    REPLACE TmpSaldG.Disps WITH TmpSaldG.Disps - m.loc_xBaixa
+                                    m.loc_xBaixa = 0
+                                ELSE
+                                    m.loc_xBaixa = m.loc_xBaixa - TmpSaldG.Disps
+                                    REPLACE TmpSaldG.Disps WITH 0
+                                ENDIF
+                            ENDSCAN
+                        ELSE
+                            MsgAviso("N" + CHR(227) + "o H" + CHR(225) + " Saldo Dispon" + CHR(237) + "vel Deste Produto No Estoque Para Reservar!!!", "")
+                            THIS.grd_4c_Dados.Column6.Text1.Value = loc_nOld
+                        ENDIF
+                ENDCASE
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.Release
+
+        RETURN loc_lValido
     ENDPROC
 
-    *-- Container5 OK: confirmar selecao de estoque por conta/grupo
-    PROCEDURE CancelarC5Click()
-        LOCAL loc_nSal, loc_nEst, loc_nPrz, loc_oErro
+    PROCEDURE GrdCol6TextLostFocus
+        LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_nRecno, loc_nSal, loc_nEst, loc_nPrz
+
         TRY
-            THIS.this_oBusinessObject.ConfirmarDisponivelSimples()
             IF USED("TmpFinal")
                 SELECT TmpFinal
+                loc_nRecno = RECNO()
                 SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
-                THIS.txt_4c_TotQtd.Value = loc_nSal
-                THIS.txt_4c_TotEst.Value = loc_nEst
-                THIS.txt_4c_TotPrz.Value = loc_nPrz
+                GO loc_nRecno
+                THIS.txt_4c_Tot_Qtd.Value = loc_nSal
+                THIS.txt_4c_Tot_Est.Value = loc_nEst
+                THIS.txt_4c_Tot_Prz.Value = loc_nPrz
+                THIS.txt_4c_Tot_Qtd.Refresh
+                THIS.txt_4c_Tot_Est.Refresh
+                THIS.txt_4c_Tot_Prz.Refresh
+                THIS.Refresh
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.cmd_4c_Processar.Enabled    = .T.
-        THIS.cmd_4c_Cancelar.Enabled     = .T.
-        THIS.cmd_4c_LinhasTot.Enabled    = .T.
-        THIS.cmd_4c_Estoques.Enabled     = .T.
-        THIS.cmd_4c_Disponiveis.Enabled  = .T.
-        THIS.cnt_4c_Info.Enabled         = .T.
-        THIS.cnt_4c_Estoques.Visible     = .F.
-        THIS.grd_4c_Itens.Enabled        = .T.
-        THIS.grd_4c_Itens.ZOrder(0)
-        THIS.grd_4c_Itens.Refresh
-        THIS.grd_4c_Itens.Column6.SetFocus
     ENDPROC
 
-    *-- Container2 Sair: confirmar selecao de disponivel por produto
-    PROCEDURE CancelarC2Click()
-        LOCAL loc_oErro
+    *==========================================================================
+    * HANDLERS DOS GRIDS DE CONTAINERS OVERLAY
+    *==========================================================================
+
+    PROCEDURE Cnt5GradeAfterRowColChange
+        LPARAMETERS par_nColIndex
+        LOCAL loc_cSQL
+
+        *-- Lookups removidos (Iclis/SigCdCli e Codigos/SigCdGcr nao existem no legado original)
+    ENDPROC
+
+    PROCEDURE Cnt5Col5TextValid
+        LOCAL loc_lValido, loc_nVal, loc_nQtdUtil, loc_nRecno
+
+        loc_lValido = .T.
+
         TRY
-            THIS.this_oBusinessObject.ConfirmarDisponivel()
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
-        ENDTRY
-        THIS.cmd_4c_Processar.Enabled    = .T.
-        THIS.cmd_4c_Cancelar.Enabled     = .T.
-        THIS.cmd_4c_LinhasTot.Enabled    = .T.
-        THIS.cmd_4c_Requisicoes.Enabled  = .T.
-        THIS.cmd_4c_Disponiveis.Enabled  = .T.
-        THIS.cnt_4c_Info.Enabled         = .T.
-        THIS.cnt_4c_Disponivel.Visible   = .F.
-        THIS.grd_4c_Itens.Enabled        = .T.
-        THIS.grd_4c_Itens.ZOrder(0)
-        THIS.grd_4c_Itens.Refresh
-        THIS.grd_4c_Itens.Column6.SetFocus
-    ENDPROC
+            loc_nVal = THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Value
 
-    *-- Container4 Sair: fechar painel de requisicoes
-    PROCEDURE CancelarC4Click()
-        THIS.cmd_4c_Processar.Enabled    = .T.
-        THIS.cmd_4c_Cancelar.Enabled     = .T.
-        THIS.cmd_4c_LinhasTot.Enabled    = .T.
-        THIS.cmd_4c_Requisicoes.Enabled  = .T.
-        THIS.cmd_4c_Disponiveis.Enabled  = .T.
-        THIS.cnt_4c_Info.Enabled         = .T.
-        THIS.cnt_4c_Requisicoes.Visible  = .F.
-        THIS.grd_4c_Itens.Enabled        = .T.
-        THIS.grd_4c_Itens.ZOrder(0)
-        THIS.grd_4c_Itens.Refresh
-        THIS.grd_4c_Itens.Column6.SetFocus
-    ENDPROC
-
-    *-- Container1 OK: fechar painel de linhas
-    PROCEDURE CancelarC1Click()
-        THIS.cmd_4c_Processar.Enabled    = .T.
-        THIS.cmd_4c_Cancelar.Enabled     = .T.
-        THIS.cmd_4c_Requisicoes.Enabled  = .T.
-        THIS.cmd_4c_LinhasTot.Enabled    = .T.
-        THIS.cmd_4c_Disponiveis.Enabled  = .T.
-        THIS.cnt_4c_Linhas.Visible       = .F.
-        THIS.cnt_4c_Info.Enabled         = .T.
-        THIS.grd_4c_Itens.Enabled        = .T.
-        THIS.grd_4c_Itens.ZOrder(0)
-        THIS.grd_4c_Itens.Refresh
-        THIS.grd_4c_Itens.Column6.SetFocus
-    ENDPROC
-
-    *-- GradePedra Column1.Text1 Valid: lookup produto
-    PROCEDURE GradePedra1Valid()
-        LOCAL loc_lResultado, loc_lcValor, loc_oForm, loc_oErro
-        loc_lResultado = .T.
-        TRY
-            loc_lcValor = ALLTRIM(TRANSFORM(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.Text1.Value))
-            IF NOT EMPTY(loc_lcValor)
-                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CPros, DPros, Cunis FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_lcValor), "crProLookup") > 0
-                    IF NOT EOF("crProLookup")
-                        THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.Text1.Value = crProLookup.Cpros
-                        REPLACE SelPedra.Dpros WITH crProLookup.DPros, ;
-                                SelPedra.Cunis WITH crProLookup.Cunis IN SelPedra
-                        USE IN crProLookup
+            IF loc_nVal > TmpDisp.Disps
+                MsgAviso("A quantidade a utilizar n" + CHR(227) + "o pode ser maior que Qtde Disponivel...", "")
+                THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Value = 0
+                THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Refresh
+                loc_lValido = .F.
+            ELSE
+                IF loc_nVal < 0
+                    MsgAviso("A quantidade a utilizar n" + CHR(227) + "o pode ser menor que zero ...", "")
+                    THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Value = 0
+                    THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Refresh
+                    loc_lValido = .F.
+                ELSE
+                    loc_nRecno = RECNO("TmpDisp")
+                    SUM TmpDisp.Utilizar TO loc_nQtdUtil
+                    GO loc_nRecno IN TmpDisp
+                    IF USED("TmpFinal") AND loc_nQtdUtil > TmpFinal.Saldo - TmpFinal.Estoque
+                        MsgAviso("Qtde Selecionada n" + CHR(227) + "o pode ser maior que Qtde Solicitada...", "")
+                        THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Value = 0
+                        THIS.cnt_4c_Container5.grd_4c_Dados.Column5.Text1.Refresh
+                        loc_lValido = .F.
                     ELSE
-                        USE IN crProLookup
-                        IF SQLEXEC(gnConnHandle, "SELECT CPros, DPros FROM SigCdPro WHERE CPros LIKE " + EscaparSQL(loc_lcValor + "%"), "cursor_4c_BuscaPro") > 0
-                            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar")
-                            IF VARTYPE(loc_oForm) = "O"
-                                loc_oForm.this_cCursorDestino = "cursor_4c_BuscaPro"
-                                loc_oForm.mAddColuna("CPros", "", "C" + CHR(243) + "digo")
-                                loc_oForm.mAddColuna("DPros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                                loc_oForm.Show()
-                                IF loc_oForm.this_lSelecionou
-                                    THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.Text1.Value = cursor_4c_BuscaPro.Cpros
-                                    REPLACE SelPedra.Dpros WITH cursor_4c_BuscaPro.DPros, ;
-                                            SelPedra.Cunis WITH cursor_4c_BuscaPro.Cunis IN SelPedra
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                        IF USED("cursor_4c_BuscaPro")
-                            USE IN cursor_4c_BuscaPro
-                        ENDIF
+                        THIS.cnt_4c_Container5.txt_4c_Qt_Selec.Value = loc_nQtdUtil
+                        THIS.cnt_4c_Container5.txt_4c_Qt_Selec.Refresh
                     ENDIF
                 ENDIF
-                THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Refresh
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lValido
     ENDPROC
 
-    *-- GradePedra Column5.Text1 When: salva valor anterior
-    PROCEDURE GradePedra5When()
-        THIS.this_oBusinessObject.this_nAntValue = THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1.Value
-        RETURN NOT EMPTY(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column1.Text1.Value)
-    ENDPROC
+    PROCEDURE Cnt2Col5TextValid
+        LOCAL loc_lValido, loc_nVal, loc_nQtdUtil, loc_nRecno
 
-    *-- GradePedra Column5.Text1 Valid: lookup produto substituto
-    PROCEDURE GradePedra5Valid()
-        LOCAL loc_lResultado, loc_lcValor, loc_oForm, loc_oErro
-        loc_lResultado = .T.
+        loc_lValido = .T.
+
         TRY
-            loc_lcValor = ALLTRIM(TRANSFORM(THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1.Value))
-            IF NOT EMPTY(loc_lcValor)
-                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CPros, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_lcValor), "crProLookup2") > 0
-                    IF NOT EOF("crProLookup2")
-                        THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1.Value = crProLookup2.Cpros
-                        USE IN crProLookup2
-                    ELSE
-                        USE IN crProLookup2
-                        IF SQLEXEC(gnConnHandle, "SELECT CPros, DPros FROM SigCdPro WHERE CPros LIKE " + EscaparSQL(loc_lcValor + "%"), "cursor_4c_BuscaPro2") > 0
-                            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar")
-                            IF VARTYPE(loc_oForm) = "O"
-                                loc_oForm.this_cCursorDestino = "cursor_4c_BuscaPro2"
-                                loc_oForm.mAddColuna("CPros", "", "C" + CHR(243) + "digo")
-                                loc_oForm.mAddColuna("DPros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                                loc_oForm.Show()
-                                IF loc_oForm.this_lSelecionou
-                                    THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Column5.Text1.Value = cursor_4c_BuscaPro2.Cpros
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                        IF USED("cursor_4c_BuscaPro2")
-                            USE IN cursor_4c_BuscaPro2
-                        ENDIF
+            loc_nVal = THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1.Value
+
+            IF loc_nVal > TmpDisp.Disps
+                MsgAviso("A Qtde. a Utilizar N" + CHR(227) + "o Pode Ser Maior Que a Qtde. Disponivel!!!", "")
+                THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1.Value = 0
+                THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1.Refresh
+                loc_lValido = .F.
+            ELSE
+                loc_nRecno = RECNO("TmpDisp")
+                SUM TmpDisp.Utilizar TO loc_nQtdUtil
+                GO loc_nRecno IN TmpDisp
+                IF USED("TmpFinal") AND loc_nQtdUtil > TmpFinal.Saldo
+                    MsgAviso("A Qtde. Selecionada N" + CHR(227) + "o Pode Ser Maior Que a Qtde. Pedida!!!", "")
+                    THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1.Value = 0
+                    THIS.cnt_4c_Container2.grd_4c_Dados.Column5.Text1.Refresh
+                    loc_lValido = .F.
+                ELSE
+                    THIS.cnt_4c_Container2.txt_4c_Qt_Selec.Value = loc_nQtdUtil
+                    THIS.cnt_4c_Container2.txt_4c_Qt_Selec.Refresh
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lValido
+    ENDPROC
+
+    PROCEDURE Cnt4Col1TextValid
+        LOCAL loc_lValido, loc_cVal, loc_cSQL
+
+        loc_lValido = .T.
+
+        TRY
+            loc_cVal = ALLTRIM(THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT TOP 1 CPros, DPros, Cunis FROM SigCdPro WHERE CPros = '" + ;
+                           EscaparSQL(loc_cVal)
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "crListaRemota") > 0 AND RECCOUNT("crListaRemota") > 0
+                    THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1.Value = crListaRemota.CPros
+                    REPLACE SelPedra.Dpros WITH crListaRemota.DPros, ;
+                            SelPedra.Cunis WITH crListaRemota.Cunis IN SelPedra
+                ELSE
+                    *-- Abrir picker (FormBuscaAuxiliar)
+                    DO FormBuscaAuxiliar WITH gnConnHandle, "SigCdPro", "crListaRemota", "CPros", ;
+                                             loc_cVal, "Sele" + CHR(231) + CHR(227) + "o", 1000, ;
+                                             "CPros", "DPros"
+                    IF USED("crListaRemota") AND RECCOUNT("crListaRemota") > 0
+                        THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1.Value = crListaRemota.CPros
+                        REPLACE SelPedra.Dpros WITH crListaRemota.DPros, ;
+                                SelPedra.Cunis WITH crListaRemota.Cunis IN SelPedra
                     ENDIF
                 ENDIF
-                THIS.cnt_4c_Requisicoes.grd_4c_PedraReq.Refresh
+                IF USED("crListaRemota")
+                    USE IN crListaRemota
+                ENDIF
+                THIS.cnt_4c_Container4.grd_4c_Dados.Refresh
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
-            loc_lResultado = .F.
         ENDTRY
-        RETURN loc_lResultado
+
+        RETURN loc_lValido
     ENDPROC
 
-    *-- GradePedra Column5.Text1 KeyPress: avancar para proximo registro ao confirmar
-    PROCEDURE GradePedra5LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        IF NOT INLIST(par_nKeyCode, 13, 9)
+    *==========================================================================
+    PROCEDURE GrdColXGotFocus
+    *==========================================================================
+        IF VARTYPE(THIS.grd_4c_Dados) = "O" AND VARTYPE(THIS.grd_4c_Dados.Column6) = "O"
+            THIS.grd_4c_Dados.Column6.Text1.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Cnt2GrdColXGotFocus
+    *==========================================================================
+        LOCAL loc_oGrd
+        loc_oGrd = THIS.cnt_4c_Container2.grd_4c_Dados
+        IF VARTYPE(loc_oGrd) = "O" AND VARTYPE(loc_oGrd.Column5) = "O"
+            loc_oGrd.Column5.Text1.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Cnt4Col4TextWhen
+    *==========================================================================
+        RETURN !EMPTY(THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1.Value)
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Cnt4Col5TextWhen
+    *==========================================================================
+        RETURN !EMPTY(THIS.cnt_4c_Container4.grd_4c_Dados.Column1.Text1.Value)
+    ENDPROC
+
+    *==========================================================================
+    PROCEDURE Cnt4Col5TextValid
+    *==========================================================================
+        LOCAL loc_lValido, loc_cVal, loc_cSQL, loc_oBusca
+        loc_lValido = .T.
+
+        TRY
+            loc_cVal = ALLTRIM(THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT TOP 1 CPros, DPros FROM SigCdPro WHERE CPros = " + ;
+                           EscaparSQL(loc_cVal)
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "crListaPro2") > 0 AND RECCOUNT("crListaPro2") > 0
+                    THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1.Value = crListaPro2.CPros
+                    REPLACE SelPedra.Cpro2s WITH crListaPro2.CPros IN SelPedra
+                ELSE
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdPro", ;
+                                             "crListaPro2", "CPros", loc_cVal, ;
+                                             "Produto Substituto")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.mAddColuna("CPros", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("DPros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("crListaPro2") AND RECCOUNT("crListaPro2") > 0
+                            THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1.Value = crListaPro2.CPros
+                            REPLACE SelPedra.Cpro2s WITH crListaPro2.CPros IN SelPedra
+                        ELSE
+                            THIS.cnt_4c_Container4.grd_4c_Dados.Column5.Text1.Value = ""
+                            REPLACE SelPedra.Cpro2s WITH "" IN SelPedra
+                        ENDIF
+                        loc_oBusca = .NULL.
+                    ENDIF
+                ENDIF
+                IF USED("crListaPro2")
+                    USE IN crListaPro2
+                ENDIF
+            ELSE
+                REPLACE SelPedra.Cpro2s WITH "" IN SelPedra
+            ENDIF
+            THIS.cnt_4c_Container4.grd_4c_Dados.Refresh()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lValido
+    ENDPROC
+
+    *==========================================================================
+    * Cnt3GradeAfterRowColChange - Atualiza descricoes de grupo/conta ao mudar
+    * de linha no grid de saldo (Container3.grd_4c_Dados / TmpSaldG)
+    *==========================================================================
+    PROCEDURE Cnt3GradeAfterRowColChange
+        LPARAMETERS par_nColIndex
+        LOCAL loc_cSQL
+
+        *-- Lookups removidos (Iclis/SigCdCli e Codigos/SigCdGcr nao existem no legado original)
+    ENDPROC
+
+    *==========================================================================
+    * ExecutarReportForm - Helper canonico REPORT FORM com guard FILE()
+    * e isolamento SET POINT/SEPARATOR/REPORTBEHAVIOR 80
+    * par_cRelatorioBase : nome base do FRX (sem path, sem extensao)
+    * par_cModo          : "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    * par_cCursorDados   : alias do cursor de dados (opcional - verifica se vazio)
+    *==========================================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cArqFrx, loc_cOldPoint, loc_cOldSep, loc_oErro
+
+        par_cRelatorioBase = STRTRAN(UPPER(par_cRelatorioBase), ".FRX", "")
+        loc_cArqFrx = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF !FILE(loc_cArqFrx)
+            MsgErro("Relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                    loc_cArqFrx, "Relat" + CHR(243) + "rio")
             RETURN
         ENDIF
-        LOCAL loc_xPos, loc_oErro
-        TRY
-            SELECT SelPedra
-            loc_xPos = RECNO()
-            LOCATE FOR EMPTY(Cpros)
-            IF EOF()
-                APPEND BLANK
+
+        IF !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum dado para exibir.")
+                RETURN
             ENDIF
-            LOCATE FOR RECNO() = loc_xPos
-            KEYBOARD "{DNARROW}"
+        ENDIF
+
+        loc_cOldPoint = SET("POINT")
+        loc_cOldSep   = SET("SEPARATOR")
+
+        TRY
+            SET POINT TO "."
+            SET SEPARATOR TO ","
+            SET REPORTBEHAVIOR 80
+            DO CASE
+                CASE par_cModo = "PREVIEW"
+                    REPORT FORM (loc_cArqFrx) PREVIEW
+                CASE par_cModo = "PRINTER_PROMPT"
+                    REPORT FORM (loc_cArqFrx) TO PRINTER PROMPT
+                CASE par_cModo = "PRINTER"
+                    REPORT FORM (loc_cArqFrx) TO PRINTER
+                OTHERWISE
+                    REPORT FORM (loc_cArqFrx) PREVIEW
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro("Erro relat" + CHR(243) + "rio: " + loc_oErro.Message, "Relat" + CHR(243) + "rio")
+        ENDTRY
+
+        SET POINT TO (loc_cOldPoint)
+        SET SEPARATOR TO (loc_cOldSep)
+    ENDPROC
+
+    *==========================================================================
+    * EVENTOS PRINCIPAIS (CRUD-nomeados) - Form OPERACIONAL "Previa da Globalizacao"
+    * Este form nao possui botoes CRUD literais (Incluir/Alterar/Visualizar/Excluir),
+    * mas os handlers sao expostos como aliases das acoes operacionais equivalentes
+    * para uso por integradores externos (menus, chamadas automatizadas, testes).
+    *==========================================================================
+
+    PROCEDURE BtnIncluirClick
+        *-- INCLUIR (novo processamento): executa Processar (fluxo principal)
+        TRY
+            THIS.BtnProcessarClick()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
-    *-- img_4c_Figura DblClick: zoom da imagem
-    PROCEDURE ImgFiguraDblClick()
-        IF NOT EMPTY(THIS.img_4c_Figura.Picture)
-            MsgInfo(THIS.img_4c_Figura.Picture, "Zoom")
-        ENDIF
-    ENDPROC
+    PROCEDURE BtnAlterarClick
+        *-- ALTERAR (recalcular totais da grade principal a partir de TmpFinal)
+        LOCAL loc_nRecno, loc_nSal, loc_nEst, loc_nPrz, loc_oErro
 
-    *==========================================================================
-    * ConfigurarPaginaLista - equivalente OPERACIONAL da Page1 Lista dos CRUD
-    *
-    * Este form eh OPERACIONAL flat (sem PageFrame): a "pagina lista" corresponde
-    * a visao principal com barra de botoes superior + grade de itens central.
-    * Este metodo compoe as tres pecas equivalentes ao Page1 de um CRUD:
-    *   1) Barra de botoes principais (equivalente ao cnt_4c_Botoes CRUD)
-    *   2) Grade principal (equivalente ao grd_4c_Lista CRUD)
-    *   3) Container de totais + observacoes (rodape informativo)
-    * Retorna o container de botoes principais como "ancora" da lista, para que
-    * chamadores possam referenciar a barra CRUD-like sem precisar mudar layout.
-    *==========================================================================
-    PROTECTED PROCEDURE ConfigurarPaginaLista()
-        LOCAL loc_lSucesso, loc_oErro
-        loc_lSucesso = .F.
         TRY
-            *-- Barra de botoes principais (equivalente a cnt_4c_Botoes do CRUD)
-            IF NOT PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-                THIS.ConfigurarBotoesPrincipais()
-            ENDIF
-            *-- Grade principal (equivalente ao grid da Page1 do CRUD)
-            IF NOT PEMSTATUS(THIS, "grd_4c_Itens", 5)
-                THIS.ConfigurarGradeItens()
-            ENDIF
-            *-- Rodape com totais e observacoes
-            IF NOT PEMSTATUS(THIS, "txt_4c_TotQtd", 5)
-                THIS.ConfigurarTotais()
-            ENDIF
-            IF NOT PEMSTATUS(THIS, "edt_4c_Obs", 5)
-                THIS.ConfigurarObsItens()
-            ENDIF
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro("Erro ao configurar pagina lista: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
-
-    *==========================================================================
-    * AlternarPagina - navegacao entre "paginas" logicas do form OPERACIONAL
-    *
-    * Este form nao tem PageFrame fisico. As "paginas" sao containers flutuantes
-    * (Visible=.F. por default) que sobrepoem a visao principal:
-    *   par_nPagina = 1 -> Lista principal (esconde todos os containers)
-    *   par_nPagina = 2 -> Container Disponivel (estoque por produto/cor/tam)
-    *   par_nPagina = 3 -> Container Estoques (disponivel detalhado por conta)
-    *   par_nPagina = 4 -> Container Linhas (total por linha de producao)
-    *   par_nPagina = 5 -> Container Requisicoes (componentes adicionais)
-    *   par_nPagina = 6 -> Container Info (rodape com totais)
-    * Retorna .T. em sucesso, .F. em caso de parametro invalido ou erro.
-    *==========================================================================
-    PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_lResultado, loc_oErro
-        loc_lResultado = .F.
-        TRY
-            IF VARTYPE(par_nPagina) != "N" OR par_nPagina < 1 OR par_nPagina > 6
-                MsgAviso("P" + CHR(225) + "gina inv" + CHR(225) + "lida: " + TRANSFORM(par_nPagina), "Aviso")
-                loc_lResultado = .F.
-            ENDIF
-            *-- Sempre esconder todos os containers flutuantes primeiro
-            IF PEMSTATUS(THIS, "cnt_4c_Disponivel", 5)
-                THIS.cnt_4c_Disponivel.Visible  = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "cnt_4c_Estoques", 5)
-                THIS.cnt_4c_Estoques.Visible    = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "cnt_4c_Linhas", 5)
-                THIS.cnt_4c_Linhas.Visible      = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "cnt_4c_Requisicoes", 5)
-                THIS.cnt_4c_Requisicoes.Visible = .F.
-            ENDIF
-            DO CASE
-                CASE par_nPagina = 1
-                    *-- Retorno a visao principal: reabilitar botoes e grade
-                    IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-                        THIS.cmd_4c_Processar.Enabled   = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cmd_4c_Cancelar", 5)
-                        THIS.cmd_4c_Cancelar.Enabled    = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cmd_4c_LinhasTot", 5)
-                        THIS.cmd_4c_LinhasTot.Enabled   = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cmd_4c_Requisicoes", 5)
-                        THIS.cmd_4c_Requisicoes.Enabled = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cmd_4c_Disponiveis", 5)
-                        THIS.cmd_4c_Disponiveis.Enabled = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cmd_4c_Estoques", 5)
-                        THIS.cmd_4c_Estoques.Enabled    = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "cnt_4c_Info", 5)
-                        THIS.cnt_4c_Info.Enabled        = .T.
-                    ENDIF
-                    IF PEMSTATUS(THIS, "grd_4c_Itens", 5)
-                        THIS.grd_4c_Itens.Enabled       = .T.
-                        THIS.grd_4c_Itens.ZOrder(0)
-                        THIS.grd_4c_Itens.Refresh
-                    ENDIF
-                    THIS.AjustarBotaoPedras()
-                CASE par_nPagina = 2
-                    THIS.CmdDisponiveisClick()
-                CASE par_nPagina = 3
-                    THIS.CmdEstoquesClick()
-                CASE par_nPagina = 4
-                    THIS.CmdLinhasTotClick()
-                CASE par_nPagina = 5
-                    THIS.CmdRequisoesClick()
-                CASE par_nPagina = 6
-                    IF PEMSTATUS(THIS, "cnt_4c_Info", 5)
-                        THIS.cnt_4c_Info.Visible = .T.
-                        THIS.cnt_4c_Info.ZOrder(0)
-                    ENDIF
-            ENDCASE
-            loc_lResultado = .T.
-        CATCH TO loc_oErro
-            MsgErro("Erro ao alternar p" + CHR(225) + "gina: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnIncluirClick - Dispara a acao principal do formulario (Processar)
-    * Executa o processamento da Previa da Globalizacao, gerando OPs, movimentos
-    * de estoque, requisicoes de componentes e historicos derivados da grade.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
-        TRY
-            IF PEMSTATUS(THIS, "cmd_4c_Processar", 5) AND !THIS.cmd_4c_Processar.Enabled
-                MsgAviso("Processamento indispon" + CHR(237) + "vel no momento.", "Aviso")
-                loc_lResultado = .F.
-            ENDIF
-            THIS.CmdProcessarClick()
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnIncluirClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnAlterarClick - Retorna a visao principal e devolve o foco a grade de itens
-    * Fecha containers flutuantes (Disponivel/Estoques/Linhas/Requisicoes) e
-    * reabilita a edicao da coluna Produzir para ajuste manual das quantidades.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
-        TRY
-            THIS.AlternarPagina(1)
-            IF USED("cursor_4c_ItensFinal") AND RECCOUNT("cursor_4c_ItensFinal") > 0
-                SELECT cursor_4c_ItensFinal
-                GO TOP
-            ENDIF
-            IF PEMSTATUS(THIS, "grd_4c_Itens", 5) AND THIS.grd_4c_Itens.Visible
-                THIS.grd_4c_Itens.Refresh
-                IF THIS.grd_4c_Itens.ColumnCount >= 6
-                    THIS.grd_4c_Itens.Column6.Text1.SetFocus
-                ENDIF
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnAlterarClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnVisualizarClick - Reexibe o painel de informacoes do item corrente
-    * Traz o container cnt_4c_Info para o topo e atualiza os totais / totais por
-    * linha da linha atualmente selecionada na grade principal.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
-        TRY
-            THIS.AlternarPagina(6)
-            IF USED("cursor_4c_ItensFinal") AND RECCOUNT("cursor_4c_ItensFinal") > 0
-                SELECT cursor_4c_ItensFinal
-                THIS.GradeItensAfterRowColChange(1)
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnVisualizarClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BtnExcluirClick - Cancela o processamento e encerra o formulario
-    * Faz rollback da transacao aberta pelo Init e libera o form pai.
-    * Equivalente a acao do botao Cancelar (Sair) da barra superior.
-    *--------------------------------------------------------------------------
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
-        TRY
-            IF !MsgConfirma("Deseja realmente cancelar o processamento e sair?", "Confirma" + CHR(231) + CHR(227) + "o")
-                loc_lResultado = .F.
-            ENDIF
-            THIS.CmdCancelarClick()
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnExcluirClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-
-    *==========================================================================
-    * BtnBuscarClick - Retorna a visao principal (fecha paineis flutuantes)
-    *==========================================================================
-    PROCEDURE BtnBuscarClick()
-        LOCAL loc_oErro
-        TRY
-            THIS.AlternarPagina(1)
-            IF PEMSTATUS(THIS, "grd_4c_Itens", 5) AND THIS.grd_4c_Itens.Visible
-                THIS.grd_4c_Itens.Refresh
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnBuscarClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-    *==========================================================================
-    * BtnEncerrarClick - Encerra o formulario
-    *==========================================================================
-    PROCEDURE BtnEncerrarClick()
-        THIS.CmdCancelarClick()
-    ENDPROC
-
-    *==========================================================================
-    * BtnSalvarClick - Executa o processamento (equivalente ao Processar)
-    *==========================================================================
-    PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro
-        TRY
-            IF PEMSTATUS(THIS, "cmd_4c_Processar", 5) AND NOT THIS.cmd_4c_Processar.Enabled
-                MsgAviso("Processamento indispon" + CHR(237) + "vel no momento.", "Aviso")
-                loc_lResultado = .F.
-            ENDIF
-            THIS.CmdProcessarClick()
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnSalvarClick: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
-        ENDTRY
-    ENDPROC
-
-    *==========================================================================
-    * BtnCancelarClick - Cancela e encerra o formulario
-    *==========================================================================
-    PROCEDURE BtnCancelarClick()
-        THIS.CmdCancelarClick()
-    ENDPROC
-
-    *==========================================================================
-    * FormParaBO - Transferencia dos campos do form para o BO
-    * Para form OPERACIONAL, os dados fluem diretamente dos cursors compartilhados
-    * (TmpFinal, TmpSaldo, TmpSaldG, SelPedra). Este metodo atualiza apenas
-    * as propriedades de controle do BO.
-    *==========================================================================
-    PROTECTED PROCEDURE FormParaBO()
-        IF VARTYPE(THIS.this_oBusinessObject) != "O"
-            RETURN .F.
-        ENDIF
-        WITH THIS.this_oBusinessObject
-            .this_lReserva    = THIS.this_lReserva
-            .this_lAutomatico = THIS.this_lAutomatico
-            .this_nNumerodaop = THIS.this_nNumerodaop
-        ENDWITH
-        RETURN .T.
-    ENDPROC
-
-    *==========================================================================
-    * BOParaForm - Transferencia do BO para os campos do form
-    * Para form OPERACIONAL, os grids sao alimentados diretamente via
-    * RecordSource nos cursors compartilhados. Este metodo atualiza os
-    * totalizadores e labels exibidos na barra de informacoes.
-    *==========================================================================
-    PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_nSal, loc_nEst, loc_nPrz, loc_oErro
-        TRY
-            loc_nSal = 0
-            loc_nEst = 0
-            loc_nPrz = 0
             IF USED("TmpFinal")
+                SELECT TmpFinal
+                loc_nRecno = RECNO()
+                loc_nSal = 0
+                loc_nEst = 0
+                loc_nPrz = 0
+                SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
+                IF loc_nRecno <= RECCOUNT("TmpFinal") AND loc_nRecno > 0
+                    GO loc_nRecno IN TmpFinal
+                ENDIF
+
+                IF VARTYPE(THIS.txt_4c_Tot_Qtd) = "O"
+                    THIS.txt_4c_Tot_Qtd.Value = loc_nSal
+                    THIS.txt_4c_Tot_Qtd.Refresh()
+                ENDIF
+                IF VARTYPE(THIS.txt_4c_Tot_Est) = "O"
+                    THIS.txt_4c_Tot_Est.Value = loc_nEst
+                    THIS.txt_4c_Tot_Est.Refresh()
+                ENDIF
+                IF VARTYPE(THIS.txt_4c_Tot_Prz) = "O"
+                    THIS.txt_4c_Tot_Prz.Value = loc_nPrz
+                    THIS.txt_4c_Tot_Prz.Refresh()
+                ENDIF
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+                THIS.Refresh()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnVisualizarClick
+        *-- VISUALIZAR: emite o relatorio da previa (equivalente ao btnRelatorio)
+        TRY
+            THIS.BtnRelatorioClick()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick
+        *-- EXCLUIR (cancelar processamento em andamento): rollback + release
+        TRY
+            IF MsgConfirma("Cancelar o processamento atual?", "Confirma" + CHR(231) + CHR(227) + "o")
+                THIS.BtnCancelarClick()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnBuscarClick - Rebusca / reexibe os dados atuais
+    * Para form OPERACIONAL sem filtros editaveis pelo usuario, "Buscar"
+    * equivale a atualizar os totais e o binding do grid principal a partir
+    * dos cursores TmpFinal/TmpSaldo/TmpSaldG ja carregados pelo form pai.
+    *==========================================================================
+    PROCEDURE BtnBuscarClick
+        TRY
+            THIS.CarregarDados()
+            IF USED("TmpFinal")
+                LOCAL loc_nSal, loc_nEst, loc_nPrz
+                loc_nSal = 0
+                loc_nEst = 0
+                loc_nPrz = 0
                 SELECT TmpFinal
                 SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
                 GO TOP
+                THIS.txt_4c_Tot_Qtd.Value = loc_nSal
+                THIS.txt_4c_Tot_Est.Value = loc_nEst
+                THIS.txt_4c_Tot_Prz.Value = loc_nPrz
             ENDIF
-            IF PEMSTATUS(THIS, "txt_4c_TotQtd", 5)
-                THIS.txt_4c_TotQtd.Value = loc_nSal
-                THIS.txt_4c_TotEst.Value = loc_nEst
-                THIS.txt_4c_TotPrz.Value = loc_nPrz
-            ENDIF
-            IF PEMSTATUS(THIS, "grd_4c_Itens", 5)
-                THIS.grd_4c_Itens.Refresh
-            ENDIF
-            IF PEMSTATUS(THIS, "cnt_4c_Info", 5)
-                THIS.cnt_4c_Info.grd_4c_DispInfo.Refresh
+            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                THIS.grd_4c_Dados.Refresh()
             ENDIF
         CATCH TO loc_oErro
-            MsgErro("Erro em BOParaForm: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
+            MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
     *==========================================================================
-    * HabilitarCampos - Habilita/desabilita controles conforme o modo
-    * Para form OPERACIONAL, o controle de habilitacao e feito por operacao
-    * especifica (CmdDisponiveis, CmdEstoques, etc.). Este metodo gerencia o
-    * estado da barra principal de botoes conforme this_cModoAtual.
+    * BtnEncerrarClick - Encerra / fecha o form sem processar
+    * Equivalente ao botao Sair/Cancelar do legado.
     *==========================================================================
-    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHab
-        loc_lHab = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
-        IF PEMSTATUS(THIS, "grd_4c_Itens", 5)
-            THIS.grd_4c_Itens.Enabled      = loc_lHab
-        ENDIF
-        IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
-            THIS.cmd_4c_Processar.Enabled  = loc_lHab
-        ENDIF
-        IF PEMSTATUS(THIS, "cmd_4c_LinhasTot", 5)
-            THIS.cmd_4c_LinhasTot.Enabled  = loc_lHab
-        ENDIF
-        IF PEMSTATUS(THIS, "cmd_4c_Disponiveis", 5)
-            THIS.cmd_4c_Disponiveis.Enabled = loc_lHab
-        ENDIF
-        IF PEMSTATUS(THIS, "cmd_4c_Estoques", 5)
-            THIS.cmd_4c_Estoques.Enabled   = loc_lHab
-        ENDIF
-        IF loc_lHab
-            THIS.AjustarBotaoPedras()
-        ELSE
-            IF PEMSTATUS(THIS, "cmd_4c_Requisicoes", 5)
-                THIS.cmd_4c_Requisicoes.Enabled = .F.
+    PROCEDURE BtnEncerrarClick
+        TRY
+            IF VARTYPE(THIS.poFormPai) = "O"
+                THIS.poFormPai.Enabled = .T.
             ENDIF
-        ENDIF
+            THIS.Release
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
-    * LimparCampos - Limpa campos editaveis do form
-    * Para form OPERACIONAL, os cursors compartilhados sao zerados via ZAP
-    * no BO. O form apenas reseta os totalizadores e labels locais.
+    * BtnSalvarClick - Salva / confirma o processamento
+    * Para form OPERACIONAL "Previa da Globalizacao", salvar equivale a
+    * executar o processamento completo (botao Processar do legado).
     *==========================================================================
-    PROTECTED PROCEDURE LimparCampos()
-        IF PEMSTATUS(THIS, "txt_4c_TotQtd", 5)
-            THIS.txt_4c_TotQtd.Value = 0
-            THIS.txt_4c_TotEst.Value = 0
-            THIS.txt_4c_TotPrz.Value = 0
-        ENDIF
-        IF PEMSTATUS(THIS, "lbl_4c_ObsItens", 5)
-            THIS.lbl_4c_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item"
-        ENDIF
-        IF PEMSTATUS(THIS, "edt_4c_Obs", 5)
-            THIS.edt_4c_Obs.ControlSource = ""
-        ENDIF
-        IF PEMSTATUS(THIS, "img_4c_Figura", 5)
-            THIS.img_4c_Figura.Picture = ""
-            THIS.img_4c_Figura.Visible = .F.
-        ENDIF
-        IF PEMSTATUS(THIS, "cnt_4c_Info", 5)
-            THIS.cnt_4c_Info.txt_4c_TotQtdInfo.Value = 0
-            THIS.cnt_4c_Info.txt_4c_TotEstInfo.Value = 0
-            THIS.cnt_4c_Info.txt_4c_TotPrzInfo.Value = 0
-            THIS.cnt_4c_Info.txt_4c_DGrupoInfo.Value = ""
-            THIS.cnt_4c_Info.txt_4c_DContaInfo.Value = ""
-        ENDIF
+    PROCEDURE BtnSalvarClick
+        TRY
+            THIS.BtnProcessarClick()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
-    * CarregarLista - Recarrega a grade principal a partir dos cursors
-    * Para form OPERACIONAL, nao executa SQL proprio: releia os cursors
-    * compartilhados (TmpFinal, TmpSaldG) passados pelo form pai.
+    * CarregarLista - Alias canonico para CarregarDados (compatibilidade FormBase)
+    * Forms CRUD chamam CarregarLista; em OPERACIONAL delega para CarregarDados.
     *==========================================================================
-    PROCEDURE CarregarLista()
-        LOCAL loc_nSal, loc_nEst, loc_nPrz, loc_oErro
+    PROCEDURE CarregarLista
+        TRY
+            THIS.CarregarDados()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO - Transfere estado do form para o BO
+    * Em form OPERACIONAL as propriedades relevantes sao flags de contexto
+    * (lReserva, lAutomatico, nNumeroDaOp) e datas obtidas do form pai.
+    *==========================================================================
+    PROCEDURE FormParaBO
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                RETURN
+            ENDIF
+            WITH THIS.this_oBusinessObject
+                .this_lReserva    = THIS.this_lReserva
+                .this_lAutomatico = THIS.this_lAutomatico
+                .this_nNumeroDaOp = THIS.this_nNumeroDaOp
+                .this_nEmphPdr    = THIS.this_nEmphPdr
+                .this_dData       = THIS.this_dData
+
+                *-- Datas de previsao/geracao obtidas do form avo (se existir)
+                IF VARTYPE(THIS.poFormPai) = "O"
+                    TRY
+                        IF VARTYPE(THIS.poFormPai.poFormPai) = "O"
+                            .this_dPrevisao = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetPrevisao.Value
+                            .this_dGeracao  = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetGeracao.Value
+                        ENDIF
+                    CATCH
+                    ENDTRY
+                ENDIF
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm - Atualiza o form com dados/estado do BO
+    * Em form OPERACIONAL rebinda grids e atualiza totais a partir dos
+    * cursores calculados pelo BO (TmpFinal/TmpSaldo/TmpSaldG).
+    *==========================================================================
+    PROCEDURE BOParaForm
+        LOCAL loc_nSal, loc_nEst, loc_nPrz
         loc_nSal = 0
         loc_nEst = 0
         loc_nPrz = 0
+
         TRY
+            THIS.CarregarDados()
+
             IF USED("TmpFinal")
                 SELECT TmpFinal
                 SUM Saldo, Estoque, Produzir TO loc_nSal, loc_nEst, loc_nPrz
                 GO TOP
+                THIS.txt_4c_Tot_Qtd.Value = loc_nSal
+                THIS.txt_4c_Tot_Est.Value = loc_nEst
+                THIS.txt_4c_Tot_Prz.Value = loc_nPrz
             ENDIF
-            IF PEMSTATUS(THIS, "txt_4c_TotQtd", 5)
-                THIS.txt_4c_TotQtd.Value = loc_nSal
-                THIS.txt_4c_TotEst.Value = loc_nEst
-                THIS.txt_4c_TotPrz.Value = loc_nPrz
+
+            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                THIS.grd_4c_Dados.Refresh()
             ENDIF
-            IF PEMSTATUS(THIS, "grd_4c_Itens", 5)
-                THIS.grd_4c_Itens.Refresh
+            IF VARTYPE(THIS.cnt_4c_Container3) = "O"
+                THIS.cnt_4c_Container3.Refresh()
             ENDIF
-            IF USED("TmpSaldG") AND PEMSTATUS(THIS, "cnt_4c_Info", 5)
-                THIS.cnt_4c_Info.grd_4c_DispInfo.Refresh
-            ENDIF
+            THIS.Refresh()
         CATCH TO loc_oErro
-            MsgErro("Erro ao recarregar lista: " + loc_oErro.Message + ;
-                " [Ln:" + TRANSFORM(loc_oErro.LineNo) + "]", "Erro")
+            MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN .T.
     ENDPROC
 
     *==========================================================================
-    * AjustarBotoesPorModo - Ajusta habilitacao dos botoes conforme modo atual
-    * Para form OPERACIONAL, o "modo" e determinado pelo estado dos containers
-    * flutuantes (algum visivel = modo sub-painel; nenhum = modo principal).
+    * HabilitarCampos - Habilita ou desabilita controles conforme contexto
+    * par_lHabilitar : .T. = habilitar controles editaveis, .F. = somente leitura
+    * Para form OPERACIONAL o unico campo editavel pelo usuario e a coluna
+    * Produzir (Column6) do grid principal.
     *==========================================================================
-    PROCEDURE AjustarBotoesPorModo()
-        LOCAL loc_lModoPrincipal
-        loc_lModoPrincipal = .T.
-        IF PEMSTATUS(THIS, "cnt_4c_Disponivel", 5)
-            IF THIS.cnt_4c_Disponivel.Visible
-                loc_lModoPrincipal = .F.
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHab
+        loc_lHab = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+
+        TRY
+            *-- Coluna Produzir do grid principal
+            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                IF loc_lHab
+                    *-- Permitir edicao apenas se nao ha operacao TransfRes bloqueando
+                    IF USED("crSigCdPam")
+                        SELECT crSigCdPam
+                        IF EMPTY(crSigCdPam.TransfRes)
+                            THIS.grd_4c_Dados.SetAll("ReadOnly", .T.)
+                        ELSE
+                            THIS.grd_4c_Dados.Column6.ReadOnly = .F.
+                        ENDIF
+                    ELSE
+                        THIS.grd_4c_Dados.Column6.ReadOnly = .F.
+                    ENDIF
+                ELSE
+                    THIS.grd_4c_Dados.SetAll("ReadOnly", .T.)
+                ENDIF
             ENDIF
-        ENDIF
-        IF PEMSTATUS(THIS, "cnt_4c_Estoques", 5)
-            IF THIS.cnt_4c_Estoques.Visible
-                loc_lModoPrincipal = .F.
+
+            *-- Botoes de acao
+            THIS.AjustarBotoesPorModo()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos - Zera totais do form sem liberar cursores do form pai
+    * Em form OPERACIONAL os cursores pertencem ao form pai; este metodo
+    * apenas zera a exibicao de totais e limpa os overlays.
+    *==========================================================================
+    PROCEDURE LimparCampos
+        TRY
+            *-- Zerar totalizadores
+            IF VARTYPE(THIS.txt_4c_Tot_Qtd) = "O"
+                THIS.txt_4c_Tot_Qtd.Value = 0
             ENDIF
-        ENDIF
-        IF PEMSTATUS(THIS, "cnt_4c_Linhas", 5)
-            IF THIS.cnt_4c_Linhas.Visible
-                loc_lModoPrincipal = .F.
+            IF VARTYPE(THIS.txt_4c_Tot_Est) = "O"
+                THIS.txt_4c_Tot_Est.Value = 0
             ENDIF
-        ENDIF
-        IF PEMSTATUS(THIS, "cnt_4c_Requisicoes", 5)
-            IF THIS.cnt_4c_Requisicoes.Visible
-                loc_lModoPrincipal = .F.
+            IF VARTYPE(THIS.txt_4c_Tot_Prz) = "O"
+                THIS.txt_4c_Tot_Prz.Value = 0
             ENDIF
-        ENDIF
-        THIS.HabilitarCampos(loc_lModoPrincipal)
-        IF loc_lModoPrincipal
-            IF PEMSTATUS(THIS, "cmd_4c_Cancelar", 5)
-                THIS.cmd_4c_Cancelar.Enabled = .T.
+
+            *-- Zerar totalizadores do Container3 (saldo por grupo/conta)
+            IF VARTYPE(THIS.cnt_4c_Container3) = "O"
+                THIS.cnt_4c_Container3.txt_4c_Tot_Qtd.Value = 0
+                THIS.cnt_4c_Container3.txt_4c_Tot_Est.Value = 0
+                THIS.cnt_4c_Container3.txt_4c_Tot_Prz.Value = 0
+                THIS.cnt_4c_Container3.txt_4c__dgrupo.Value = ""
+                THIS.cnt_4c_Container3.txt_4c__dconta.Value = ""
             ENDIF
-            IF PEMSTATUS(THIS, "cmd_4c_Relatorio", 5)
-                THIS.cmd_4c_Relatorio.Enabled = .T.
+
+            *-- Limpar label de observacao
+            IF VARTYPE(THIS.lbl_4c_Txt_ObsItens) = "O"
+                THIS.lbl_4c_Txt_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item"
             ENDIF
-        ELSE
-            IF PEMSTATUS(THIS, "cmd_4c_Cancelar", 5)
-                THIS.cmd_4c_Cancelar.Enabled = .F.
+
+            *-- Ocultar overlays flutuantes
+            THIS.ConfigurarPaginaLista()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme contexto atual
+    * Em form OPERACIONAL o "modo" eh determinado pelo estado dos cursores:
+    *   - Sem TmpFinal    -> apenas Cancelar disponivel
+    *   - Com TmpFinal    -> todos os botoes operacionais disponiveis
+    *   - Overlay ativo   -> botoes principais desabilitados (gerenciado pelos
+    *                        handlers Btn*Click individuais)
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo
+        LOCAL loc_lTemDados, loc_lPodeAcao
+        loc_lTemDados = .F.
+        loc_lPodeAcao = .F.
+
+        TRY
+            *-- Verificar se ha dados carregados
+            IF USED("TmpFinal")
+                loc_lTemDados = RECCOUNT("TmpFinal") > 0
             ENDIF
-        ENDIF
+
+            *-- Verificar se operacao de pedras/selecao de estoque esta disponivel
+            IF loc_lTemDados AND USED("crSigCdPam")
+                SELECT crSigCdPam
+                loc_lPodeAcao = !EMPTY(crSigCdPam.DopEmphs) AND ;
+                                !EMPTY(crSigCdPam.DopReqcs) AND ;
+                                !EMPTY(crSigCdPam.DopPedcs) AND ;
+                                !EMPTY(crSigCdPam.DopComps) AND ;
+                                !THIS.this_lReserva
+            ENDIF
+
+            *-- Aplicar estado aos botoes
+            THIS.cmd_4c_Processar.Enabled    = loc_lTemDados
+            THIS.cmd_4c_Cancelar.Enabled     = .T.
+            THIS.cmd_4c_TotLinha.Enabled     = loc_lTemDados
+            THIS.cmd_4c_Disponivel.Enabled   = loc_lTemDados
+            THIS.cmd_4c_BtnRelatorio.Enabled = loc_lTemDados
+            THIS.cmd_4c_Pedras.Enabled       = loc_lPodeAcao
+            THIS.cmd_4c_SelEstoque.Enabled   = loc_lPodeAcao
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
     ENDPROC
 
 ENDDEFINE

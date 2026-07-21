@@ -1,0 +1,10 @@
+﻿Correto. Resumo das resolu├º├Áes:
+
+**Corrigido (1/5):**
+- **NUMES** (`SigPrGmiBO.prg` linha 479): UPDATE WHERE substitu├¡do de `emps + dopes + numes` por `WHERE empdopnums = EscaparSQL(loc_cEmpDopNums)` ÔÇö `empdopnums` j├í estava calculado, ├® o identificador can├┤nico do registro e consta na lista original de WHERE columns.
+
+**Falsos positivos do review (4/5 ÔÇö sem altera├º├úo necess├íria):**
+- **CONTROLCOUNT**: ├ë `loc_oControl.ControlCount` (propriedade VFP de container), **n├úo ├® SQL WHERE** ÔÇö parte do loop `TornarControlesVisiveis`.
+- **CEMPS**: `WHERE Cemps = ...` em lookup `SigCdEmp` ÔÇö coluna real e necess├íria (PK da tabela, confirmado em mem├│ria).
+- **CODIGOS**: `WHERE codigos = ...` em lookup `SigCdGcr` ÔÇö coluna real confirmada no `schema.sql` (`[codigos] char(10)`).
+- **ICLIS**: `WHERE IClis = ...` em lookup `SigCdCli` ÔÇö coluna real confirmada no `schema.sql` (PK `[sigcdcli_iclis]` em `[iclis]`).

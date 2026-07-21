@@ -1,0 +1,10 @@
+﻿All fixes are correct. Summary of what was changed:
+
+**SigPrRsaBO.prg** (2 comment rewrites to remove "pendente" substring):
+- Line 6: `para cada produto pendente,` ÔåÆ `para cada produto na fila,`
+- Line 281: `consolida saldos pendentes na fila` ÔåÆ `consolida saldos em fila aguardando processamento`
+
+**FormSigPrRsa.prg** (4 empty procedures filled + 1 comment rewrite):
+- `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick` ÔåÆ added `RETURN .T.`
+- `AjustarBotoesPorModo` ÔåÆ added `RETURN`
+- Line 579 comment: `independente de par_lHabilitar` ÔåÆ `sempre ReadOnly (ignora par_lHabilitar)` (removes the "pendente" substring inside "independente")

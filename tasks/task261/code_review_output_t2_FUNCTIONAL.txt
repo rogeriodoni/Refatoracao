@@ -1,0 +1,29 @@
+﻿Ap├│s leitura completa do arquivo, posso confirmar o estado real do c├│digo.
+
+**An├ílise dos 9 problemas detectados:**
+
+**[CONTAINER-VISIVEL]** ÔÇö J├í corrigido. O c├│digo atual nas linhas 1010-1016 j├í tem o INLIST correto:
+```foxpro
+IF INLIST(loc_cNome, "CNT_4C_SOMBRA", ;
+                     "CNT_4C_OPCONTA", "CNT_4C_OPESTOQUE", ;
+                     "CNT_4C_OPCUSTO", "CNT_4C_OPCOMPRA")
+    THIS.TornarControlesVisiveis(loc_oControl)
+    LOOP
+ENDIF
+```
+A recurs├úo ocorre ANTES do LOOP (filhos ficam vis├¡veis), mas o container em si n├úo recebe `.Visible = .T.` ÔÇö exatamente o comportamento correto.
+
+**[LAYOUT-POSITION] (8 issues)** ÔÇö S├úo todos falsos positivos do validador. O validador est├í lendo a posi├º├úo dos labels `lbl_4c_TituloOp` dentro de cada container e atribuindo esses valores ao container pai. Evid├¬ncia:
+
+| Container | Top/Left real no c├│digo | "Top=2, Left=X" reportado | Origem real |
+|-----------|------------------------|--------------------------|-------------|
+| cnt_4c_OpConta | Top=114, Left=139 Ô£ô | Top=2, Left=171 | `lbl_4c_TituloOp.Top=2, .Left=171` (relativo ao container) |
+| cnt_4c_OpEstoque | Top=200, Left=139 Ô£ô | Top=2, Left=182 | `lbl_4c_TituloOp.Top=2, .Left=182` (relativo ao container) |
+| cnt_4c_OpCusto | Top=349 Ô£ô | Top=2 | `lbl_4c_TituloOp.Top=2` (relativo ao container) |
+| cnt_4c_OpCompra | Top=447 Ô£ô | Top=2 | `lbl_4c_TituloOp.Top=2` (relativo ao container) |
+
+O validador est├í confundindo o `WITH .lbl_4c_TituloOp` aninhado dentro do `WITH THIS.cnt_4c_Op*` e atribuindo as propriedades relativas do label como se fossem do container.
+
+Quanto aos controles 'Conta' e 'Estoque' (CheckBoxes), o validador mapeou incorretamente para `cnt_4c_OpConta/OpEstoque` em vez de `chk_4c_Conta` (Left=350 Ô£ô) e `chk_4c_Estoque` (Left=425 Ô£ô).
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto em todos os 9 pontos reportados. Modific├í-lo seria desnecess├írio e arriscaria introduzir regress├Áes. O problema ├® do validador (leitura incorreta de WITH aninhados), n├úo do c├│digo migrado.

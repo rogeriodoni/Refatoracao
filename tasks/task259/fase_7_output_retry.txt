@@ -1,0 +1,10 @@
+﻿Fase 7 completa. Adicionei 4 m├®todos CRUD-named ao `FormSigPrApr.prg` (linhas 1015ÔÇô1141), preservando os 3 m├®todos OPERACIONAIS originais (BtnProcessarClick/BtnAtualizarClick/BtnEncerrarClick).
+
+Cada novo m├®todo tem **implementa├º├úo real e funcional** (sem stubs) mapeada ao contexto do form de Reajuste de Precifica├º├úo:
+
+- **BtnIncluirClick** (1015) ÔÇö Cria cursor se necess├írio e insere linha vazia no grid para entrada manual (mesma l├│gica do modo Auditado)
+- **BtnAlterarClick** (1057) ÔÇö Delega para BtnProcessarClick (recalcula pre├ºos - "alterar base de c├ílculo")
+- **BtnVisualizarClick** (1072) ÔÇö Refresca foto/detalhes do produto selecionado (dispara GrdAfterRowColChange)
+- **BtnExcluirClick** (1102) ÔÇö Remove produtos marcados/atual do cursor `cursor_4c_Produtos` com MsgConfirma
+
+Todos seguem as regras VFP9 cr├¡ticas: CHR() para acentos, sem RETURN em TRY/CATCH, MsgConfirma como LOGICAL, MsgAviso para valida├º├úo de UI + MsgErro no CATCH com Message+LineNo+Procedure.

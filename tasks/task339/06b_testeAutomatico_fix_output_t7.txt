@@ -1,0 +1,3 @@
+﻿Corrigido. O problema era na linha 293: `THIS.TornarControlesVisiveis(loc_oControl)` chamava o pr├│prio m├®todo passando um par├ómetro, mas o m├®todo n├úo tem `LPARAMETERS` ÔÇö o que gera "No PARAMETER statement is found." no VFP9.
+
+A corre├º├úo muda para `THIS.TornarSubControlesVisiveis(loc_oControl)`, que ├® o m├®todo correto para essa finalidade (j├í tem `LPARAMETERS par_oContainer` e percorre os filhos do container).

@@ -1,0 +1,24 @@
+﻿O arquivo j├í est├í completo (468 linhas). Verificando o conte├║do:
+
+- `BtnProcessarClick()` - implementado nas linhas 314-426 com o loop completo de processamento
+- `BtnEncerrarClick()` - implementado nas linhas 433-438
+- `TxtPrioridadeKeyPress()` - implementado nas linhas 443-455
+
+Este ├® um form **OPERACIONAL** (n├úo CRUD), ent├úo n├úo tem BtnIncluirClick/AlterarClick/VisualizarClick/ExcluirClick. A Fase 7/8 usa um template gen├®rico para CRUD, mas os "eventos principais" deste form s├úo exatamente os dois bot├Áes operacionais que j├í est├úo implementados.
+
+Comparando com o c├│digo original (`SIGPRRSA.OK.Click`), a migra├º├úo cobre todos os pontos:
+
+| Original | Migrado |
+|---|---|
+| SQL query `SigOpClP WHERE Priors=N` | `BuscarFila(this_nPrioridade)` no BO |
+| `Update SigOpClP Set Usuars=Usuars` | SQLEXEC direto no form (lock otimista) |
+| `fRecalculaP(emps,grupos,...)` + `fRecalculaP(.T.)` | `ProcessarItem()` no BO |
+| Commit/Rollback por item | Ô£ô id├¬ntico |
+| Verifica├º├úo SigMvEst + SigMvHst | `VerificarMovimento()` no BO |
+| DELETE FROM SigOpClP | `Excluir()` via BO |
+| `MouseSobreBotaoSair` + INKEY(.5,"M") | flag `this_lParar` + INKEY(.5,"M") (equivalente) |
+| Log Fortyus.Log (modo batch) | `IniciarLog()`/`GravarLog()` no BO |
+
+O `Scatter/Gather` para `CrSigPrSlP` do original estava comentado (`* llOk = Thisform.Podatamgr.Update(...)`) ÔÇö corretamente omitido na migra├º├úo.
+
+**A Fase 7/8 est├í conclu├¡da.** Tanto `FormSigPrRsa.prg` (468 linhas) quanto `SigPrRsaBO.prg` (387 linhas) est├úo completos e cobrem toda a funcionalidade do legado.

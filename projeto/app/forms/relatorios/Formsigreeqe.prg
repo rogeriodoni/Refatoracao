@@ -732,7 +732,9 @@ DEFINE CLASS Formsigreeqe AS FormBase
 
             IF loc_lContinuar
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -772,7 +774,9 @@ DEFINE CLASS Formsigreeqe AS FormBase
 
             IF loc_lContinuar
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -812,7 +816,9 @@ DEFINE CLASS Formsigreeqe AS FormBase
 
             IF loc_lContinuar
                 IF !THIS.this_oRelatorio.ImprimirDireto()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir Direto")
+                    ENDIF
                 ENDIF
             ENDIF
 

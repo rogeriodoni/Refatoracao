@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. O `Formale.prg` estava essencialmente completo das fases anteriores ÔÇö este form OPERACIONAL n├úo possui Page2, TextBoxes avulsos ou lookups F4/F5, ent├úo o template gen├®rico da Fase 6 n├úo se aplica na ├¡ntegra.
+
+**O que foi adicionado:** `AllowAutoColumnFit = 2` na grade, presente no SCX legado mas ausente na migra├º├úo.
+
+**Status completo do form:**
+- Grid de 7 colunas (TextBox ReadOnly, 4 CheckBox Sparse=.F., ComboBox Prioridade, EditBox Mensagem) Ô£à
+- OptionGroup de 5 tabelas com `OptTabelaInteractiveChange` ÔåÆ `FiltrarPorTabela()` Ô£à
+- `CarregarAlertas()` ÔåÆ 5 SQLEXECs + UNION ALL ÔåÆ `crSigCdAle` com INDEX TAG Tabelas Ô£à
+- `BtnConfirmarClick` ÔåÆ remove filtro ÔåÆ `SalvarAlertas()` (DELETE + re-INSERT por registro ativo) Ô£à
+- `CboGradeComboChange` mant├®m `priors` (num├®rico) em sincronia com `prioridade` (texto, ControlSource) Ô£à
+- `fUniqueIds()` dispon├¡vel em `functions.prg`, auto-carregado Ô£à
+- `Formale.prg` em `forms/operacionais/` + `aleBO.prg` em `classes/` ÔåÆ carregados automaticamente pelo config.prg via ADIR Ô£à
+- Sem entrada de menu necess├íria (form ├® dialog aberto por form pai com par├ómetros) Ô£à

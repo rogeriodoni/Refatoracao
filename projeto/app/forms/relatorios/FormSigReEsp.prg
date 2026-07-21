@@ -283,7 +283,7 @@ DEFINE CLASS FormSigReEsp AS FormBase
                 .Left            = 137
                 .Width           = 65
                 .Height          = 70
-                .Caption         = "DocExcel"
+                .Caption         = "\<Arquivos Email"
                 .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
                 .FontName        = "Comic Sans MS"
                 .FontBold        = .T.
@@ -340,7 +340,9 @@ DEFINE CLASS FormSigReEsp AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao visualizar")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -350,7 +352,9 @@ DEFINE CLASS FormSigReEsp AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -360,7 +364,9 @@ DEFINE CLASS FormSigReEsp AS FormBase
     PROCEDURE BtnDocExcelClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.ImprimirComPrompt()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao imprimir")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -460,6 +466,12 @@ DEFINE CLASS FormSigReEsp AS FormBase
             .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
             .Check1.Value   = 0
             .CurrentControl = "Check1"
             .ControlSource  = "crOperacoes.SelImp"
@@ -486,6 +498,12 @@ DEFINE CLASS FormSigReEsp AS FormBase
             .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
             .Check1.Value   = 0
             .CurrentControl = "Check1"
             .ControlSource  = "crOperacoes.SelImp2"
@@ -498,6 +516,12 @@ DEFINE CLASS FormSigReEsp AS FormBase
             .Sparse    = .F.
             .AddObject("Check1", "CheckBox")
             .Check1.Caption = ""
+            .Check1.Alignment = 0
+            .Check1.ReadOnly  = .F.
+            .Check1.Top       = 9
+            .Check1.Left      = 2
+            .Check1.Height    = 17
+            .Check1.Width     = 22
             .Check1.Value   = 0
             .CurrentControl = "Check1"
             .ControlSource  = "crOperacoes.SelImp3"

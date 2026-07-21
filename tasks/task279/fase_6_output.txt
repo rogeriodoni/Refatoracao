@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes foram aplicadas ao `Formsigprenv.prg`:
+
+**O que foi verificado:**
+- O form SIGPRENV original **n├úo possui lookups** (nenhum F4/F5, fwBuscaExt, sigacess) ÔÇö ├® um form de impress├úo de etiquetas puramente operacional
+- Todos os controles do SCX j├í estavam implementados nas fases anteriores (cntSombra, btnReport, Etq_Ini/Qtd, Opt_Tipo, Label Impressora, Opt_Impressora, Cnt_Impressora com spinners e Opcao_imp)
+- Sem `cnt_4c_BotoesAcao` ÔÇö correto para OPERACIONAL sem CRUD
+
+**O que foi corrigido:**
+1. **`BorderStyle = 2`** adicionado ├á defini├º├úo da classe (o original tem `BorderStyle = 2`)
+2. **`DisabledBackColor = RGB(255,255,255)`** adicionado ao `txt_4c_Etq_Ini` (fidelidade UI)
+3. **`MaxLength = 8`** adicionado ao `txt_4c_Etq_Qtd` (original tem `MaxLength = 8`)
+
+A pr├│xima fase (7/8) ser├í a integra├º├úo: adicionar ao `config.prg` e ao `menu.prg`.

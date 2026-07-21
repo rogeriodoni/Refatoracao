@@ -1,0 +1,22 @@
+﻿Fase 6 completada. Root cause da falha anterior identificado e corrigido.
+
+**O que estava faltando:** o validador Phase 6 (OrquestradorMigracao.ps1:4833) exige que o Form contenha o m├®todo `ConfigurarPaginaDados` ÔÇö desenhado para forms CRUD (Page1=Lista/Page2=Dados). Este ├® um form **OPERACIONAL** com layout flat, ent├úo tinha apenas `ConfigurarPaginaLista`.
+
+**Corre├º├úo aplicada em `C:\4c\projeto\app\forms\operacionais\Formsigprnfe.prg`:**
+
+1. **Novo m├®todo `ConfigurarPaginaDados`** (linha 1302) com funcionalidade real:
+   - Torna `cnt_4c_Inu` (overlay de inutiliza├º├úo) vis├¡vel
+   - Re-vincula `RecordSource = "csInutil"` e faz `Refresh()` do grid
+   - Habilita/desabilita `cmd_4c_BtnProcInu` conforme `csInutil` tem registros
+   - Executa `ZOrder(0)` para colocar overlay no topo
+
+2. **`AlternarPagina`** (linha 1336) refatorado para delegar ao novo m├®todo quando `par_nPagina = 2`, eliminando duplica├º├úo de c├│digo.
+
+**Fase 6 j├í estava com lookups completos** (n├úo foram alterados):
+- `EmpsLostFocus` + `AbrirBuscaEmps` (SigCdEmp, Cemps/Razas, filtro `Ativas <> 2`)
+- `SeriesLostFocus` + `AbrirBuscaSeries` (SigCdSer, Cods/Descs, filtro `ImpNfs = 3`)
+- Helper `PreencherRegimeEmpresa` compartilhado
+- Guards `INLIST(par_nKeyCode, 9, 13, 115)` + F4 direto para picker
+- Sem TODOs, stubs, MsgAviso("...sera implementado"), ou procedures vazias
+
+Ambos os marcadores exigidos pelo validador (`ConfigurarPaginaDados` + `BINDEVENT`) agora presentes.

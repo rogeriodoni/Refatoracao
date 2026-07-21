@@ -1,0 +1,5 @@
+﻿O c├│digo j├í est├í correto. O m├®todo `TornarControlesVisiveis` na linha 181 j├í inclui `"CNT_4C_CABECALHO"` no INLIST ÔÇö e a recurs├úo nos filhos ocorre ANTES do LOOP, ent├úo os filhos ficam vis├¡veis mas o container em si n├úo ├® for├ºado a `Visible=.T.`.
+
+O problema detectado pelo code review ├® um **falso positivo**: a prote├º├úo para `CNT_4C_CABECALHO` j├í est├í implementada corretamente no c├│digo gerado. Nenhuma altera├º├úo ├® necess├íria.
+
+Resumo: `TornarControlesVisiveis` (linhas 181-186) j├í filtra corretamente `CNT_4C_CABECALHO` ÔÇö recursa nos filhos mas pula o `loc_oControl.Visible = .T.` via LOOP. O arquivo `Formsigprmdp.prg` est├í sem problemas funcionais para corrigir neste pass.

@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da. O form SIGPREST ├® OPERACIONAL (n├úo CRUD), ent├úo seus "eventos principais" s├úo `BtnOKClick` e `BtnCancelaClick` ÔÇö que j├í existiam mas duplicavam toda a l├│gica do BO.
+
+**O que foi feito:**
+- `BtnOKClick`: refatorado de 162 linhas (l├│gica duplicada do BO) para 15 linhas que delegam corretamente ao `SIGPRESTBO.GerarEstrutura()`. O BO atualiza `this_cMensagem` e o form l├¬ para exibir na label de status.
+- `BtnCancelaClick`: simplificado para delegar ao `SIGPRESTBO.CarregarLogoTipo()` antes de liberar o form.
+
+Arquitetura 3-camadas correta: **Form (UI) ÔåÆ BO (l├│gica de neg├│cio) ÔåÆ DataAccess**. A Fase 8/8 (integra├º├úo com menu e config) pode prosseguir.

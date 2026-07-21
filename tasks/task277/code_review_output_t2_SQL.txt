@@ -1,0 +1,42 @@
+﻿A verifica├º├úo est├í completa. Analisando cada uma das tr├¬s flags:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### 1. WHERE com 'DOPES' ÔÇö Falso Positivo
+
+Todas as ocorr├¬ncias est├úo em `ImprimirDocumento()` no BO:
+```
+WHERE dopes = EscaparSQL(loc_cDopes)   ÔåÆ SigCdOpe, SigOpCdc, SigOpCdi, SigOpCdd
+```
+`Dopes` ├® a chave prim├íria dessas tabelas. A l├│gica de determinar o tipo de documento (boleto vs. NF) **exige** esse lookup. O original delegava para programas externos (`SigPrIdc`, `SigReIfx`) que internamente faziam essas mesmas queries ÔÇö o BO migrado apenas internalizou a l├│gica. **Nada a corrigir.**
+
+---
+
+### 2. WHERE com 'TRANSACAOS' ÔÇö Falso Positivo
+
+H├í duas ocorr├¬ncias no BO:
+
+| Localiza├º├úo | Uso | Conclus├úo |
+|---|---|---|
+| `CarregarDados()` linha 122 | `SELECT Transacaos FROM sigoplog WHERE progs = 'SIGPREMA'` | `TRANSACAOS` est├í no **SELECT**, n├úo no WHERE. O WHERE usa PROGS. Id├¬ntico ao original. |
+| `Atualizar()` linha 952-953 | `WHERE progs = 'SIGPREMA' AND transacaos = ...` | Condi├º├úo necess├íria para identificar o registro espec├¡fico no sigoplog. **Remover causaria UPDATE em todos os registros SIGPREMA** (corrup├º├úo de dados). |
+
+**Nada a corrigir.**
+
+---
+
+### 3. WHERE com 'CONTROLCOUNT' ÔÇö Falso Positivo
+
+`CONTROLCOUNT` n├úo existe em nenhuma condi├º├úo SQL. A flag veio de `Formsigprema.prg` linha 764:
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+Isso ├® acesso a uma **propriedade VFP** (`ControlCount` = n├║mero de controles num container), n├úo uma condi├º├úo SQL. O scanner do pass classificou incorretamente. **Nada a corrigir.**
+
+---
+
+## Conclus├úo
+
+Nenhuma das tr├¬s flags representa um filtro SQL inventado. Os arquivos `Formsigprema.prg` e `sigpremaBO.prg` est├úo corretos ÔÇö nenhuma altera├º├úo necess├íria para este pass SQL.

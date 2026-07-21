@@ -72,9 +72,9 @@ DEFINE CLASS sigreffiBO AS RelatorioBase
     this_cCursorMoeda     = "cursor_4c_Moeda"     && Tabela de moedas (crSigCdMoe no legado)
     this_cCursorCotacao   = "cursor_4c_Cotacao"   && Cotacoes (crSigCdCot no legado)
     this_cCursorRec       = "cursor_4c_Rec"       && Grupos de recebimento (crSigCdRec no legado)
-    this_cCursorCabecalho = "cursor_4c_Cabecalho" && Cabecalho do relatorio
-    this_cCursorRelatorio = "cursor_4c_Relatorio" && Dados principais (csRelatorio no legado)
-    this_cCursorDados     = "cursor_4c_Relatorio" && Alias padrao exigido por RelatorioBase
+    this_cCursorCabecalho = "csCabecalho"         && Cabecalho do relatorio (nome exigido pelo FRX)
+    this_cCursorRelatorio = "csRelatorio"         && Dados principais (nome exigido pelo FRX)
+    this_cCursorDados     = "csRelatorio"         && Alias padrao exigido por RelatorioBase
 
     *--------------------------------------------------------------------------
     * Propriedades auxiliares de processamento

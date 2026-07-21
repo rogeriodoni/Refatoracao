@@ -1,0 +1,15 @@
+﻿Encontrei a causa. O `ControlCount` nas linhas 144 e 150 est├í no m├®todo `TornarControlesVisiveis` ÔÇö ├® propriedade VFP9 de objeto, **n├úo uma condi├º├úo SQL WHERE**. Trata-se de um falso positivo do scanner.
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          (linha 144)
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0   (linha 150)
+```
+
+Ambas as linhas s├úo VFP9 puro: iteram controles de um container. N├úo h├í nenhuma cl├íusula `WHERE CONTROLCOUNT` nos arquivos `FormSIGPREST.prg` nem `SIGPRESTBO.prg`. O scanner confundiu a palavra-chave com uma coluna SQL inventada.
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo est├í correto ÔÇö o ├║nico SQL real nos arquivos ├®:
+- `CREATE TABLE ArqDBF FREE` / `INSERT INTO ArqDBF` (sem WHERE)
+- `CREATE TABLE ArqInd FREE` / `INSERT INTO ArqInd` (sem WHERE)  
+- `SQLEXEC(..., "SELECT Logos FROM SigCdPam", ...)` (sem WHERE)
+
+Todos correspondem ao original. O pass SQL-FILTRO-INVENTADO n├úo tem problemas reais a corrigir neste form.

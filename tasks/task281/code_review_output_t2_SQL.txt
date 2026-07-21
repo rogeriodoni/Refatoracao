@@ -1,0 +1,23 @@
+﻿Verifica├º├úo conclu├¡da. Todas as 7 colunas flagadas **existem no schema** com nomes corretos:
+
+| Coluna | Tabela usada no WHERE | Tipo no schema |
+|--------|-----------------------|----------------|
+| `IClis` | SigCdCli | char (PK) |
+| `Cpfs` | SigCdCli | char |
+| `Dopes` | SigCdOpe + SigMvCab | char(20) |
+| `CMoes` | SigCdMoe | char(3) PK |
+| `Grupos` | SigCdCli + SigMvCab | char(10) |
+| `Cemps` | SigCdEmp | char(3) |
+| `codigos` | SigCdGcr | char(10) |
+
+**Diagn├│stico: os 7 itens s├úo falsos positivos do validador.**
+
+O validador fez varredura de todos os `WHERE` no arquivo inteiro e comparou com o WHERE da query principal do original (`GRUPODS, CONTADS, EMPDS`). Mas as colunas flagadas aparecem em **queries de lookup/picker separadas**, n├úo na query principal `ExecutarConsulta`:
+
+- `IClis`, `Cpfs`, `Grupos` ÔåÆ queries `AbrirBuscaConta`, `ValidarCdConta`, etc. (SELECT em SigCdCli)
+- `Cemps` ÔåÆ queries `AbrirBuscaEmpresa`, `ValidarCdEmpresa` (SELECT em SigCdEmp)
+- `Dopes` ÔåÆ queries `AbrirBuscaOperacao`, `ValidarNmOperacao` (SELECT em SigCdOpe) + JOIN condition em ExecutarConsulta
+- `CMoes` ÔåÆ queries `AbrirBuscaMoeda`, `ValidarCdMoeda` (SELECT em SigCdMoe)
+- `codigos` ÔåÆ queries `AbrirBuscaGrupoContabil`, `ValidarCdGrupo` (SELECT em SigCdGcr)
+
+**Nenhuma altera├º├úo ├® necess├íria.** Remover qualquer um desses `WHERE` quebraria os pickers correspondentes (regra "NAO remover campos, funcionalidades ou lookups"). O c├│digo est├í correto ÔÇö as colunas existem no banco, nas tabelas certas, com os filtros esperados para cada opera├º├úo de busca.

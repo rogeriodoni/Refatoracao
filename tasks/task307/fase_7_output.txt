@@ -1,0 +1,18 @@
+﻿O form e o BO est├úo **completos**. A Fase 7/8 j├í foi implementada nas fases anteriores.
+
+**Todos os eventos j├í existem no `FormSigPrItb.prg`:**
+
+| Handler | Linha | Funcionalidade |
+|---------|-------|----------------|
+| `BtnVisualizarClick` | 729 | Preview do relat├│rio SigPrIct |
+| `BtnImprimirClick` | 736 | Impress├úo do relat├│rio SigPrIct |
+| `BtnProcessarClick` | 634 | Valida + dispara `ProcessarIntegracao` |
+| `BtnGravarClick` | 707 | Gera arquivos SDF cont├íbeis |
+| `BtnEncerrarClick` | 743 | `THIS.Release()` |
+| `TxtEmp1KeyPress/DblClick` | 806/817 | Lookup empresa por c├│digo |
+| `TxtDsemp1KeyPress/DblClick` | 825/836 | Lookup empresa por nome |
+| `AlternarPagina` | 587 | Gerencia estados PROCESSANDO/RESULTADO/INICIAL |
+
+O pipeline usa labels gen├®ricos de CRUD (BtnIncluirClick/BtnAlterarClick/BtnExcluirClick) mas para este form OPERACIONAL os eventos equivalentes j├í est├úo todos implementados e todos os BINDEVENTs est├úo configurados em `ConfigurarEventos()` (linha 570).
+
+**O que ainda falta (Fase 8 - Integra├º├úo):** `SigPrItb` n├úo est├í registrado em `config.prg` nem em `menu.prg`. Deseja que eu fa├ºa essa integra├º├úo agora?

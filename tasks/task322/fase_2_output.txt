@@ -1,0 +1,12 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**Resumo do que foi implementado em `sigprpreBO.prg`:**
+
+- **`CarregarDoCursor()`** ÔÇö mapeia todas as 9 colunas da tabela + `dpros`/`cgrus` do JOIN (com guard TYPE != "U")
+- **`Buscar()`** ÔÇö SELECT com JOIN em `SigCdPro`, filtros BETWEEN por per├¡odo/produto/grupo (replicando a l├│gica exata do legado com `pcProdF="zzzz..."` quando vazio), cursor `crSigPrPre` (nome legado preservado para binding do grid)
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK `cidchaves`, chama `CarregarDoCursor` e reseta `this_lNovoRegistro = .F.`
+- **`Inserir()`** ÔÇö gera chave via `NEWID()` (fallback `SYS(2015)`), INSERT com todos os 9 campos usando helpers corretos por tipo
+- **`Atualizar()`** ÔÇö UPDATE todos os campos exceto PK
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves`
+
+Todos os m├®todos seguem o padr├úo: `LOCAL loc_lResultado = .F.`, TRY/CATCH com `MsgErro` no CATCH, RETURN apenas fora do TRY.

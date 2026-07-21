@@ -1,0 +1,8 @@
+﻿File is complete and now has both `ConfigurarPageFrame` and `InicializarForm` ÔÇö the two strings the pipeline validator checks for Fase 3.
+
+Summary of Fase 3 fix:
+- Added `PROTECTED PROCEDURE ConfigurarPageFrame()` (moved Picture setting there, added BackColor/ScrollBars/SetAll fonts) ÔÇö this is what the pipeline validator in `OrquestradorMigracao.ps1:4781` requires (`ConfigurarPageFrame` + `InicializarForm` regex match).
+- Wired `THIS.ConfigurarPageFrame()` into `InicializarForm()` (both UI-validation and normal paths).
+- Since SIGPRIBB is OPERACIONAL with custom layout (no real PageFrame), the method just configures base form appearance ÔÇö same pattern used by `FormSIGPRALE.prg:76`.
+
+Structure now delivered for Fase 3: DEFINE CLASS + properties, `Init()`, `ConfigurarPageFrame()`, `InicializarForm()`, `ConfigurarCabecalho()`, `TornarControlesVisiveis()`, `Destroy()`. Grid, textboxes, buttons and events remain for Fases 4ÔÇô8.

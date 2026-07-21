@@ -1,0 +1,11 @@
+﻿The `CONTROLCOUNT` search found zero matches in either `SigPrGf1BO.prg` or `FormSigPrGf1.prg`. The occurrences in the broader project are all legitimate VFP9 object property references (`.ControlCount`) in unrelated files ÔÇö not SQL column conditions.
+
+Looking at the SQL in the BO, the WHERE clause is:
+```foxpro
+" WHERE a.Datas BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim + ;
+" AND a.Emps = " + EscaparSQL(THIS.this_cEmpresa)
+```
+
+This matches the original exactly ÔÇö filters only on `DATAS` and `EMPS`, which is correct.
+
+**Conclus├úo: false positive.** O problema `[SQL-FILTRO-INVENTADO]` reportado pelo pipeline n├úo se aplica a estes arquivos. Nenhuma condi├º├úo `CONTROLCOUNT` existe no SQL de `SigPrGf1BO.prg` ou `FormSigPrGf1.prg` ÔÇö as ├║nicas ocorr├¬ncias de `ControlCount` no projeto s├úo propriedades de objeto VFP9 em outros forms, sem rela├º├úo com SQL. Nenhuma altera├º├úo necess├íria.

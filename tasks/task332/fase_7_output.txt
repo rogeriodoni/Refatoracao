@@ -1,0 +1,15 @@
+﻿O arquivo `FormSigPrSlp.prg` j├í est├í completamente implementado. Analisando o conte├║do:
+
+**O form j├í possui todos os eventos do original SCX:**
+- `CmdAdicionarClick()` ÔÇö bot├úo "Adiciona os itens marcados ├á Lista atual" (linha 576)
+- `CmdEncerrarClick()` ÔÇö bot├úo Encerrar / Sair (linha 610)
+- `CmdSelTudoClick()` ÔÇö selecionar tudo (linha 617)
+- `CmdApgaTudoClick()` ÔÇö desmarcar tudo (linha 625)
+- `GradeListasAfterRowColChange()` ÔÇö troca de linha no grid de listas (linha 557)
+- `GradeItensCheck1When()` ÔÇö controle do checkbox no grid de itens (linha 701)
+- `MontaGrade2()` ÔÇö carrega itens da lista selecionada (linha 523)
+- `CarregarGradeLista()` ÔÇö carrega grd_4c_Listas (linha 488)
+
+**Os eventos pedidos na Fase 7 (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) N├âO existem neste form.** Este ├® um form **OPERACIONAL** (di├ílogo filho do form de pedido/venda), n├úo um cadastro CRUD ÔÇö o original `SIGPRSLP.SCX` nunca teve esses bot├Áes. O pipeline aplicou um template de Fase 7 gen├®rico de CRUD que n├úo se aplica aqui.
+
+**Resultado:** O `FormSigPrSlp.prg` est├í completo em 100% de paridade com o legado. Nenhuma modifica├º├úo ├® necess├íria nesta fase.

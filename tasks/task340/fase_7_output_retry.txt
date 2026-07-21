@@ -1,0 +1,8 @@
+﻿All 4 required Phase 7 methods are present in the form: `BtnIncluirClick` (line 656), `BtnAlterarClick` (681), `BtnVisualizarClick` (714), `BtnExcluirClick` (753). Each has a real implementation mapped to this OPERATIONAL form's actual VTX operations:
+
+- **BtnIncluirClick** ÔåÆ import Excel batch (auto-opens file picker if empty)
+- **BtnAlterarClick** ÔåÆ persist grade to `sigprvtx` via `ProcessarGrade` (DELETE + INSERT)
+- **BtnVisualizarClick** ÔåÆ reload cursor from persisted `sigprvtx` records via new `CarregarGrade` BO method
+- **BtnExcluirClick** ÔåÆ confirm + clear staging grade (does not delete from DB)
+
+I also added `CarregarGrade(par_cCursorGrade)` to `SIGPRVTXBO.prg` (line 194) so the form doesn't do SQL directly (respects the layered architecture ÔÇö PILAR 3). No stubs, no TODOs, all methods have real logic.

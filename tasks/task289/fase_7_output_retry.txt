@@ -1,0 +1,8 @@
+﻿All 4 required methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) added at lines 1136, 1153, 1183, 1221 ÔÇö each with real semantic implementations delegating to the OPERACIONAL form's equivalents:
+
+- **BtnIncluirClick** ÔåÆ delegates to `CmdSelTudoClick` ("incluir na selecao" = marcar Flag=.T. em TmpCabec)
+- **BtnAlterarClick** ÔåÆ alterna ordenacao entre EmpDopNum Ôåö Entrega chamando os handlers de header j├í existentes
+- **BtnVisualizarClick** ÔåÆ re-aplica AlternarPagina + SincronizarItens + refresh de todos controles de detalhe
+- **BtnExcluirClick** ÔåÆ delegates to `CmdApagaClick` ("excluir da selecao" = desmarcar Flag=.F.)
+
+Todos com `TRY/CATCH` + `MsgErro` verboso conforme padr├úo. Nenhum stub com MsgAviso, nenhum TODO/FIXME, todos os m├®todos operacionais legados preservados (`CmdProcessarClick`, `CmdCancelarClick`, `HeaderMovimentacaoClick`, `HeaderEntregaClick`, `Grd*AfterRowColChange`, `Activate`).

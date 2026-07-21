@@ -1,0 +1,9 @@
+﻿Fase 2 concluida. O `SIGPRPROBO.prg` agora contem os metodos CRUD completos:
+
+- **`ValidarDados()`** ÔÇö valida obrigatoriedade de `cpros`, `cidchaves` e `caracteris` antes de gravar; grava mensagem em `this_cMensagemErro` (via helper `MsgErro` para exception real).
+- **`Inserir()`** ÔÇö `INSERT INTO SigPrCrr (caracteris, cidchaves, compls, cpros, infos)` com `EscaparSQL` + `LEFT()` respeitando tamanhos schema (40/20/40/14/text); chama `RegistrarAuditoria("INSERT")` no sucesso.
+- **`Atualizar()`** ÔÇö `UPDATE SigPrCrr SET ... WHERE cidchaves = ...` (chave PK); mesma prote├º├úo de escape/truncamento; chama `RegistrarAuditoria("UPDATE")`.
+- **`ExecutarExclusao()`** ÔÇö `DELETE FROM SigPrCrr WHERE cidchaves = ...`; chama `RegistrarAuditoria("DELETE")`.
+- **`ObterChavePrimaria()`** ÔÇö promovida a `PROTECTED FUNCTION` com `ALLTRIM` para bater com override de `BusinessBase`.
+
+Todos os metodos seguem regras cr├¡ticas: `RETURN` fora de `TRY/CATCH` (flag `loc_lSucesso`), acentos por `CHR()`, `EscaparSQL` sem aspas extras, `CATCH` com `MsgErro` (nao silencioso). M├®todos `CarregarDoCursor`/`BuscarDadosProduto`/`BuscarCaracteristicas` da Fase 1 preservados.

@@ -1,0 +1,247 @@
+﻿{
+    "taskId":  "task275",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "PENDING",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-15T17:41:13",
+    "atualizadoEm":  "2026-07-15T21:02:03",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-15T17:41:13",
+                                            "fim":  "2026-07-15T17:41:13",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task275\\sigprdis.sct",
+                                            "baseName":  "sigprdis",
+                                            "scxFile":  "C:\\4c\\tasks\\task275\\sigprdis.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-15T17:41:13",
+                                          "fim":  "2026-07-15T17:41:13",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigprdis",
+                                          "txtFile":  "C:\\4c\\tasks\\task275\\sigprdis_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T17:41:13",
+                                              "fim":  "2026-07-15T17:41:14",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task275\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T17:41:15",
+                                              "fim":  "2026-07-15T17:41:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task275\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task275\\meta_prompt.md",
+                                              "boClass":  "sigprdisBO",
+                                              "formClass":  "Formsigprdis",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task275\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T17:41:23",
+                                              "fim":  "2026-07-15T17:41:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task275\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-15T17:41:23",
+                                               "fim":  "2026-07-15T17:41:24",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task275\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigprdis_esqueleto.prg",
+                                                                "sigprdisBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-15T17:41:24",
+                                       "fim":  "2026-07-15T20:34:46",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdis.prg",
+                                                               "C:\\4c\\projeto\\app\\classes\\sigprdisBO.prg"
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdisBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  174.32,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdis.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  5556
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-15T20:34:46",
+                                                  "fim":  "2026-07-15T20:34:58",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  41,
+                                                  "erro":  null,
+                                                  "comentario":  "36 correcoes em Formsigprdis.prg + 5 em sigprdisBO.prg + correcoes manuais pos-corrector",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdis.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdisBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-15T20:34:58",
+                                                 "fim":  "2026-07-15T20:34:59",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "Formsigprdis.prg + sigprdisBO.prg compilaram com sucesso",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-15T20:57:08",
+                                       "fim":  "2026-07-15T20:57:32",
+                                       "tentativas":  8,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+                                                                "PUBLIC PROCEDURE inside DEFINE CLASS (28 ocorrencias)",
+                                                                "RETURN inside TRY/CATCH em ImgFotoClick",
+                                                                "ConfigurarCabecalho ausente (metodo nao herdado)",
+                                                                "Alias CURSOR_4C_DADOS not found (DataSession=2)",
+                                                                "Property FONTNAME not found em pgf_4c_Pageframe1",
+                                                                "Parent object will not allow ControlSource em chk_4c_Marca",
+                                                                "Property FONTNAME not found em pgf_4c_Operacoes",
+                                                                "Property TORNARCONTROLESVISIVEIS not found"
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "FAILED",
+                                               "inicio":  "2026-07-15T20:57:32",
+                                               "fim":  "2026-07-15T21:02:03",
+                                               "tentativas":  2,
+                                               "total":  0,
+                                               "passou":  0,
+                                               "falhou":  0,
+                                               "percentual":  100,
+                                               "erro":  "Testes automaticos falharam apos 1 tentativa(s): Testes automaticos: 0% \u003c 100%. Falhas: Teste \u0027Instanciacao\u0027: CREATEOBJECT retornou valor nao-objeto",
+                                               "comentario":  "Form OPERACIONAL - botoes CRUD nao aplicaveis; form criou e abriu com sucesso (Width=1000, Height=600)"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "PENDING",
+                                        "inicio":  null,
+                                        "fim":  null,
+                                        "tentativas":  0,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-15T17:41:14",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-15T17:41:14",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task275\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-15T17:41:14",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-15T17:41:15"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-15T20:34:58",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  2,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-15T20:34:58",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigprdis_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdis.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task275\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-15T20:34:59",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  2,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-15T20:34:59",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-15T20:34:59",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-15T20:56:51",
+                                          "passes":  3,
+                                          "problemas":  "[GRID-SQL] Campo \u0027emps\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027dopes\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027numes\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027empds\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027grupos\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027contaos\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027grupods\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027contads\u0027 usado em ControlSource de cursor_4c_CabOpera mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027cpros\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027dpros\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027codcors\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027codtams\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027qtds\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027locals\u0027 usado em ControlSource de cursor_4c_ItensOper mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027nMarca\u0027 usado em ControlSource de cursor_4c_Estoques mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027emps\u0027 usado em ControlSource de cursor_4c_Estoques mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027grupos\u0027 usado em ControlSource de cursor_4c_Estoques mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027contas\u0027 usado em ControlSource de cursor_4c_Estoques mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027cpros\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027dpros\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027codcors\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027codtams\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027QtdEstoque\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027QtdSaida\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027QtdSaldo\u0027 usado em ControlSource de cursor_4c_Disponivel mas NAO aparece no SELECT SQL; [GRID-HEADER] Header Caption \u0027Data\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Empresa, Grupo, Conta, Código, Descrição, Cor, Tam, Estoque, Saldo, Distribuido, Local, Emp O, Movimentação, Emp D, Grupo Orig, Conta Orig, Grupo Dest, Conta Dest, Item, Uni, Quantidade, Unitário, Total. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Data\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Empresa, Grupo, Conta, Código, Descrição, Cor, Tam, Estoque, Saldo, Distribuido, Local, Emp O, Movimentação, Emp D, Grupo Orig, Conta Orig, Grupo Dest, Conta Dest, Item, Uni, Quantidade, Unitário, Total. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  27
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-15T20:56:51",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-15T20:57:08",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdisBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdis.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

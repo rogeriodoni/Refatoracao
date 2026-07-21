@@ -1,0 +1,280 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 4,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fLerFiscal", "fDecriptografar", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "sigproef",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "WITH Thisform\n\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpFp','FPags','crSigOpFp','FPags',.f.)\n\t\t.Requery('crSigOpFp')\n\tEndWith\n\n\t.poDatamgr.SqlExecute([Select ncchequeps,Sistef, NumIps From SigCdPam],\"crSigCdPam\")\n\t.poDatamgr.SqlExecute([Select VerSitefs From SigCdPac],\"crSigCdPac\")\n\n\t=fLerFiscal()\n\nEndwit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fLerFiscal,fDecriptografar",
+        "metodosFormChamados": "CursorQuery,cOperacao = PADR,Sqltrans",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "sigproef",
+      "evento": "KeyPress",
+      "linhas": 22,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nDo Case\n\n\tCase nKeyCode = -1  && F2\n\t\tNoDefault\n\t\tThisForm.Cnttransa.Gerencial.Click()\n\n\tCase nKeyCode = -2 && F3\n\t\tNoDefault\n\t\tThisForm.CntTransa.Ultimo.Click()\n\n\tCase nKeyCode = -3 && F4\n\t\tNoDefault\n\t\tThisForm.CntTransa.Reimprime.Click()\n\n\tCase nKeyCode = -4 And ThisForm.CntTransa.Cancela.Visible && F5\n\t\tNoDefault\n\t\tThisForm.CntTransa.Cancela.Click()\n\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef",
+      "evento": "Procedure",
+      "linhas": 67,
+      "codigoOriginal": "PARAMETERS lsTipTran, lsDataHora, lsCupom, lsCartao, lsNsu, lsAutoriza, lsFinaliza, lnValPago\n\nlsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,\"99999999999.99\")),\".\",\",\")\n\nDECLARE laCartao[11]\nlaCartao[1]=\"Outro, nao definido\"\nlaCartao[2]=\"Visa\"\nlaCartao[3]=\"Mastercard\"\nlaCartao[4]=\"Diners\"\nlaCartao[5]=\"American Express\"\nlaCartao[6]=\"Sollo\"\nlaCartao[7]=\"Sidecard (Redecard)\"\nlaCartao[8]=\"Private Label (Redecard)\"\nlaCartao[9]=\"Redeshop\"\nlaCartao[10]=\"\"\nlaCartao[11]=\"Fininvest\"\n\nCREATE CURSOR crSiTef... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef",
+      "evento": "Procedure",
+      "linhas": 149,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nWait Window 'Aguarde...' Nowait\n\nllDatai = Dtos(ThisForm.CntTransa.Cnt_periodo.Dt_Inicial.Value)\nllDataf = Dtos(ThisForm.CntTransa.Cnt_periodo.Dt_Final.Value)\nllDti   = fDtoSQL(ThisForm.CntTransa.Cnt_periodo.Dt_Inicial.Value)\nllDtf   = fDtoSQL(ThisForm.CntTransa.Cnt_periodo.Dt_Final.Value,\"23:59:59\")\n\nSet Talk Window\nSet Talk On\n\nWITH ThisForm.poDatamgr\n\tPRIVATE lcIdQuery\n\tlcIdQuery=SYS(2015)\n\tvSql=[Select Distinct a.Cemps, a.cDopes, a.cncupoms, a.cnIdents, a.cCupomNvs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return(IIF(USED(\"TRANSACAO\"),Transacao.cnnsus,\"\"))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Ok",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Release Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Cnt_periodo.Dt_inicial",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CntTransa.Cnt_periodo.Dt_Final.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Cnt_periodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value\n\tThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value = This.Value\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Cnt_periodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.SqlTrans",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Cnt_periodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < ThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value\n\tThisForm.CntTransa.Cnt_periodo.Dt_inicial.Value = This.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Cancela",
+      "evento": "Click",
+      "linhas": 47,
+      "codigoOriginal": "SELECT Transacao\nIf Eof()\n\tMessageBox('Nao Existem Transacoes Efetuadas',16,'')\n\tReturn\nEndif\nIF Transacao.cStatus = \"CNC\"\n\tMESSAGEBOX(\"Transacao Cancelada\",64)\n\tReturn \nEndIf\nIf Transacao.CupFis = 3\n\tIf MessageBox('Atenção! Esta é uma operação de Cupom Não Fiscal.'+Chr(13)+;\n\t\t\t'Deseja Realmente Continuar com o Cancelamento?',4+64+256,'') = 7\n\t\tReturn\n\tEndIf\nEndif\n\nlcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']\nThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")\nSELECT Transacao... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Reimprime",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "SELECT Transacao\nIf Eof()\n\tMessageBox('Nao Existem Transacoes Efetuadas',16,'')\n\tReturn\nEndif\nIF Transacao.cStatus = \"CNC\"\n\tMESSAGEBOX(\"Transacao Cancelada\",64)\n\tRETURN\nENDIF\n\nSELECT Transacao\nlcNSU=cnnsus\nlcData=DTOC(cndttrans)\nlcData=SUBSTR(lcData,1,2)+SUBSTR(lcData,4,2)+SUBSTR(lcData,7,4)\nSKIP\nlcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']\nThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")\n\nIf Alltrim(CrSigCdPac.VerSitefs) = '4.1'\n\tDO FORM SigPrOer WITH crSigCdPam.NumIps, crS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Gerencial",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Resposta=SigPrTef(crSigCdPam.NumIps,110,Transacao.cnValors,\"1\",crSigFiMpF.CnCaixas,,\"SW000001\",0)\nRelease Windows\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "sigproef.CntTransa.Ultimo",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "SELECT Transacao\nIf Eof()\n\tMessageBox('Nao Existem Transacoes Efetuadas',16,'')\n\tReturn\nEndif\nlcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+[']\nThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")\nSelect Transacao\nlcNSU=cnnsus\nlcData=DTOC(cndttrans)\nlcData=SUBSTR(lcData,1,2)+SUBSTR(lcData,4,2)+SUBSTR(lcData,7,4)\nSKIP\n\nIf Alltrim(CrSigCdPac.VerSitefs) = '4.1'\n\tDO FORM SigPrOer WITH crSigCdPam.NumIps, crSigFiMpF.CnCaixas, lcNSU, \"\", \"\", \"\", \"\", csSigOpFp.CodEstabs\nElse\n\tDO FORM SigTfSu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "sigproef.Init",
+      "queryOriginal": "\t.poDatamgr.SqlExecute([Select ncchequeps,Sistef, NumIps From SigCdPam],\"crSigCdPam\")",
+      "tabelas": "SigCdPam",
+      "colunas": "ncchequeps,Sistef,NumIps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigproef.Init",
+      "queryOriginal": "\t.poDatamgr.SqlExecute([Select VerSitefs From SigCdPac],\"crSigCdPac\")",
+      "tabelas": "SigCdPac",
+      "colunas": "VerSitefs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigproef.CntTransa.Cancela.Click",
+      "queryOriginal": "lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+['] ThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")",
+      "tabelas": "SigOpFp",
+      "colunas": "Fpags,FPags+[],SqlExecutelcSql,\"csSigOpFp\"",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigproef.CntTransa.Reimprime.Click",
+      "queryOriginal": "lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+['] ThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")",
+      "tabelas": "SigOpFp",
+      "colunas": "Fpags,FPags+[],SqlExecutelcSql,\"csSigOpFp\"",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "sigproef.CntTransa.Ultimo.Click",
+      "queryOriginal": "lcSql=[SELECT * From SigOpFp Where Fpags = ']+Transacao.FPags+['] ThisFOrm.poDatamgr.SqlExecute(lcSql,\"csSigOpFp\")",
+      "tabelas": "SigOpFp",
+      "colunas": "Fpags,FPags+[],SqlExecutelcSql,\"csSigOpFp\"",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam", "SigCdPac", "SigOpFp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

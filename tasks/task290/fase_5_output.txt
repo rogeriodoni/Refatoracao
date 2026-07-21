@@ -1,0 +1,22 @@
+﻿O form est├í **completo** com 1722 linhas. Para um form OPERACIONAL, a Fase 5 n├úo requer modifica├º├Áes:
+
+**Status da FormSigPrGlo.prg:**
+- `ConfigurarPaginaDados()` (linha 929) ├® stub vazio **por design** ÔÇö forms OPERACIONAIS s├úo flat sem Page2
+- Todos os campos visuais j├í foram implementados nas Fases 3-4 via `ConfigurarPaginaLista()` e seus sub-m├®todos:
+  - `ConfigurarCabecalho()` Ô£à
+  - `ConfigurarShape()` Ô£à
+  - `ConfigurarBotoes()` Ô£à
+  - `ConfigurarContainers()` (7 containers) Ô£à
+  - `ConfigurarCamposForm()` (todos labels/textboxes de data) Ô£à
+  - `ConfigurarContainerTipoOp()` Ô£à
+  - `ConfigurarContainerOperacao()` Ô£à
+  - `ConfigurarContainerConta()` Ô£à
+  - `ConfigurarContainerResponsavel()` Ô£à
+  - `ConfigurarContainerEmpresa()` Ô£à
+  - `ConfigurarContainerPrevisao()` Ô£à
+  - `ConfigurarContainerOp()` Ô£à
+- Todos os 12 handlers KeyPress Ô£à
+- `FormParaBO()`, `BOParaForm()`, `AlternarPagina()`, `LimparCampos()`, `PopularCamposIniciais()` Ô£à
+- Stubs de compatibilidade FormBase Ô£à
+
+**Fase 5 est├í conclu├¡da.** A instru├º├úo de fase usa template gen├®rico para CRUD, mas este form OPERACIONAL (layout flat, sem PageFrame de conte├║do) j├í tinha todos os elementos visuais completos ao fim da Fase 4. O `ConfigurarPaginaDados()` vazio com coment├írio explicativo na linha 927 ├® o estado correto.

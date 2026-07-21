@@ -929,7 +929,9 @@ DEFINE CLASS FormSIGRECPM AS FormBase
         loc_oPag.cnt_4c_Aguarde.Visible = .T.
         THIS.Refresh
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
         ENDIF
         loc_oPag.cnt_4c_Aguarde.Visible = .F.
     ENDPROC
@@ -941,7 +943,9 @@ DEFINE CLASS FormSIGRECPM AS FormBase
         loc_oPag.cnt_4c_Aguarde.Visible = .T.
         THIS.Refresh
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
+            ENDIF
         ENDIF
         loc_oPag.cnt_4c_Aguarde.Visible = .F.
     ENDPROC

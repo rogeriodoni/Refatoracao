@@ -1,0 +1,13 @@
+﻿Tudo integrado corretamente. Resumo do que foi criado:
+
+**`FormSigPrRss.prg`** (`C:/4c/projeto/app/forms/operacionais/`) ÔÇö 440 linhas, implementa├º├úo **completa** (n├úo parcial, pois este form operacional n├úo tem grid/textboxes):
+
+- **Layout fiel ao original**: 580├ù120px, TitleBar=0, DataSession=2, dois bot├Áes standalone (Processar + Encerrar) sobrepostos ao cntSombra
+- **Corre├º├Áes aplicadas**:
+  - `DataSession=2` ÔåÆ SET DATE TO BRITISH + SET CENTURY ON em Init() antes de DODEFAULT()
+  - AddObject de Labels fora de WITH aninhado (evita bug Erro47 ForeColor/Caption ignorados)
+  - `cmd_4c_Processar` com `Themes=.T.` + `DisabledPicture` (standalone com Enabled=.F. transi├º├úo)
+  - `loc_lQuit` capturado **antes** de `THIS.Release()` em modo batch (THIS j├í destru├¡do ap├│s Release)
+  - RETURN fora de TRY/CATCH
+- **L├│gica de processamento completa**: loop SigOpCls ÔåÆ MarcarProcessando ÔåÆ RecalcularSaldo ÔåÆ FinalizarRecalculo ÔåÆ COMMIT ÔåÆ VerificarMovimentos ÔåÆ GravarHistorico ÔåÆ DeletarDaFila ÔåÆ COMMIT/ROLLBACK ÔåÆ INKEY(0.5) ÔåÆ exit conditions (ESC/parametrizado/erroCnx/online)
+- **menu.prg**: BAR 101 "Rec├ílculo de Saldos CC (Fila)" + `AbrirFormSigPrRss()` adicionados

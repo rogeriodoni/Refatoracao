@@ -886,9 +886,9 @@ DEFINE CLASS SigReEspBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF THIS.this_lTpOpe
-                    THIS.ExecutarReportForm("SigReEs2", "PRINTER")
+                    THIS.ExecutarReportForm("SigReEs2", "PRINTER", THIS.this_cCursorDados)
                 ELSE
-                    THIS.ExecutarReportForm("SigReEsp", "PRINTER")
+                    THIS.ExecutarReportForm("SigReEsp", "PRINTER", THIS.this_cCursorDados)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF
@@ -908,9 +908,9 @@ DEFINE CLASS SigReEspBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF THIS.this_lTpOpe
-                    THIS.ExecutarReportForm("SigReEs2", "PRINTER_PROMPT")
+                    THIS.ExecutarReportForm("SigReEs2", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 ELSE
-                    THIS.ExecutarReportForm("SigReEsp", "PRINTER_PROMPT")
+                    THIS.ExecutarReportForm("SigReEsp", "PRINTER_PROMPT", THIS.this_cCursorDados)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF
@@ -930,9 +930,9 @@ DEFINE CLASS SigReEspBO AS RelatorioBase
         TRY
             IF THIS.PrepararDados()
                 IF THIS.this_lTpOpe
-                    THIS.ExecutarReportForm("SigReEs2", "PREVIEW")
+                    THIS.ExecutarReportForm("SigReEs2", "PREVIEW", THIS.this_cCursorDados)
                 ELSE
-                    THIS.ExecutarReportForm("SigReEsp", "PREVIEW")
+                    THIS.ExecutarReportForm("SigReEsp", "PREVIEW", THIS.this_cCursorDados)
                 ENDIF
                 loc_lSucesso = .T.
             ENDIF

@@ -1,0 +1,11 @@
+﻿Todos os outros pontos SQL est├úo guardados. A corre├º├úo est├í completa.
+
+**Causa raiz identificada:** `TesteAutomatico.prg` (linha 728-800) chama `CarregarLista()` externamente durante o teste `TesteCarregarDadosReais`. Isso disparava `CarregarItens()` ÔåÆ `BuscarItens()` ÔåÆ `SQLEXEC(0, ...)` com `gnConnHandle=0`, causando que o VFP9 tentasse conectar ao SQL Server via TCP ÔÇö bloqueando por 300s (timeout do SO).
+
+O coment├írio no TesteAutomatico (linha 115) documenta exatamente isso: *"Forms com gb_4c_ModoTeste=.T. pulam todas as queries SQL internamente"* ÔÇö mas `CarregarItens` n├úo tinha esse guard quando chamado externamente.
+
+**Corre├º├úo aplicada** em `Formsigprite.prg`, m├®todo `CarregarItens`:
+- Guard `gb_4c_ModoTeste` ÔåÆ retorna imediatamente no teste autom├ítico
+- Guard `gnConnHandle <= 0` ÔåÆ retorna se sem conex├úo (defesa adicional)
+
+O guard em `InicializarForm` j├í existia (`!gb_4c_ValidandoUI AND gnConnHandle > 0`), mas n├úo protegia chamadas externas. O BO n├úo precisou de altera├º├Áes pois todos os outros pontos SQL j├í estavam guardados.

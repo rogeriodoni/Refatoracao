@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SIGPRINTBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional por `cods` ou `descrs`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cods`, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (alias)` antes de acessar campos (padr├úo can├┤nico)
+- **`Inserir()`** ÔÇö gera `cidchaves` via `SYS(2015)` (equivalente ao `fUniqueIds()` do legado), INSERT + auditoria
+- **`Atualizar()`** ÔÇö UPDATE por `cidchaves` (PK real) + auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves` + auditoria
+- **`ValidarCodigo(par_cCodigo)`** ÔÇö verifica duplicidade de `cods` no INSERT
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidChaves` (corrigido da vers├úo anterior que retornava `this_cCodigo`)

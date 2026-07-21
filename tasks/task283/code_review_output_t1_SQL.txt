@@ -1,0 +1,21 @@
+﻿**Falso positivo confirmado.** O `ControlCount` detectado pelo validador SQL est├í na linha 148 do Form, dentro do m├®todo `TornarControlesVisiveis`:
+
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+Isso **n├úo ├® uma condi├º├úo SQL WHERE** ÔÇö ├® acesso ├á propriedade VFP9 `ControlCount` de um objeto de controle, usada para determinar se o controle tem filhos e recurs├úo ├® necess├íria. O validador confundiu a express├úo `loc_oControl.ControlCount > 0` com um filtro SQL inventado.
+
+**Por que n├úo deve ser removido:**
+- Remover quebra a recurs├úo de `TornarControlesVisiveis` ÔÇö containers aninhados nunca ficam `Visible = .T.`
+- `ControlCount` ├® propriedade nativa VFP9 de qualquer container/form/pageframe
+- N├úo existe nenhuma query SQL nos dois arquivos que use `ControlCount` como coluna
+
+**Verifica├º├úo dos loop counters originais (LNGERAARQ, LNCCAMPOS, LNGERAIND) no c├│digo migrado:**
+- `LNGERAARQ` ÔåÆ `loc_lnGeraArq` ÔÇö presente (linha do FOR do loop de arquivos)
+- `LNCCAMPOS` ÔåÆ `loc_lnCCampos` ÔÇö presente (loop interno de campos)  
+- `LNGERAIND` ÔåÆ `loc_lnGeraInd` ÔÇö presente (loop de ├¡ndices)
+
+Todos os tr├¬s foram corretamente migrados. Nenhuma condi├º├úo WHERE foi inventada.
+
+**Nenhuma altera├º├úo nos arquivos ├® necess├íria.** O problema [SQL-FILTRO-INVENTADO] ├® um falso positivo do analisador autom├ítico ÔÇö ele interpretou `loc_oControl.ControlCount > 0` (propriedade VFP9) como filtro SQL, quando na verdade ├® l├│gica de recurs├úo de UI. Os arquivos `FormSIGPREST.prg` e `SIGPRESTBO.prg` est├úo corretos.

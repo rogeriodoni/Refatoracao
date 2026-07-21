@@ -1,0 +1,13 @@
+﻿Fase 3/8 conclu├¡da. Criei `C:\4c\projeto\app\forms\cadastros\FormSigPrCtc.prg` (12.7 KB) com a estrutura base CRUD-style exigida pelo pipeline:
+
+**Estrutura entregue:**
+- `DEFINE CLASS FormSigPrCtc AS FormBase` com propriedades visuais (1000├ù600, DataSession=2, ControlBox=.F., TitleBar=0)
+- Propriedades operacionais preservadas: `this_oParentForm`, `this_cEmpDopNums`, `this_cEscolha`, `this_lHouveInsercao/Exclusao`
+- `Init()` com LPARAMETERS opcionais (compat├¡vel com chamada modal do form pai) que apenas delega para `DODEFAULT()`
+- `InicializarForm()` cria BO + chama Configurar* + propaga Caption + SET DATE BRITISH
+- `ConfigurarPageFrame()` com Page1(Lista)/Page2(Dados), Top=-29, Tabs=.F., Height=631 (+4 runtime = 635)
+- `ConfigurarPaginaLista()` com containers vazios: `cnt_4c_Cabecalho` (t├¡tulos), `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` can├┤nico (Left=917, W=90)
+- `ConfigurarPaginaDados()` com `cnt_4c_Cabecalho` e `cnt_4c_BotoesAcao` (Left=842) vazios
+- `Destroy()` limpa cursores locais e re-habilita form pai
+
+Removi o arquivo anterior em `operacionais/` (que causou a falha) para evitar duplica├º├úo. Grid, bot├Áes CRUD e TextBoxes ficam para Fases 4-6.

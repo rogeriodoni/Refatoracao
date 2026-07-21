@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada corretamente.
+
+**Resumo das a├º├Áes:**
+
+- **[CONTAINER-VISIVEL] CORRIGIDO** ÔÇö `TornarControlesVisiveis` agora tem guard `INLIST(LOWER(loc_oControl.Name), "cnt_4c_cabecalho")` com LOOP antes de `.Visible = .T.`, evitando que o m├®todo force `cnt_4c_Cabecalho` a vis├¡vel (o container j├í ├® gerenciado explicitamente em `ConfigurarCabecalho`).
+
+- **[LAYOUT-POSITION] lbl_4c_Label11 ÔÇö N├âO ALTERADO** ÔÇö O validator fez match incorreto por prefixo ("Label1" ÔåÆ "lbl_4c_Label11"). O controle `lbl_4c_Label1` j├í existe na posi├º├úo exata Top=396, Left=197 (Caption="Usu├írio:"), que ├® o match correto do SCX. Mover `lbl_4c_Label11` sobreporia com `lbl_4c_Label1` e quebraria o label "Grupo:" da coluna Destino, que est├í corretamente alinhado em Top=451, Left=557 (espelhando `lbl_4c_Label9` do lado Origem).

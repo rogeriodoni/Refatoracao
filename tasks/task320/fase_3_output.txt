@@ -1,0 +1,15 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrPpc.prg`.
+
+**O que foi feito na Fase 3:**
+
+- **DEFINE CLASS FormSigPrPpc AS FormBase** com propriedades visuais fi├®is ao legado: `Width=660`, `Height=300`, `TitleBar=0`, `ControlBox=.F.`, `DataSession=2`, `AutoCenter=.T.`, `BorderStyle=2`
+- **Init()** ÔÇö cria `SigPrPpcBO`, chama `DODEFAULT()` que aciona `FormBase.Init()` (inclui o fix de `SET DATE TO BRITISH`/`SET CENTURY ON` para `DataSession=2`)
+- **InicializarForm()** ÔÇö seta o `Picture` de fundo (`new_background.jpg`), chama `ConfigurarCabecalho()` e `TornarControlesVisiveis()`
+- **ConfigurarCabecalho()** ÔÇö `cnt_4c_Cabecalho` (cinza 100,100,100, largura total do form) com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco), ambos `AutoSize=.F.` conforme regra #98
+- **TornarControlesVisiveis()** ÔÇö percorre recursivamente todos os controles via `ControlCount`
+- **Destroy()** ÔÇö zera o BO e chama `DODEFAULT()`
+
+**Pr├│ximas fases via Edit:**
+- Fase 4: `ConfigurarBotoesOperacao()` ÔÇö CommandGroup `grp_operacao` (Consultar + Encerrar)
+- Fases 5-6: `ConfigurarFiltros()` ÔÇö labels e textboxes de Grupo, Conta, Opera├º├úo, Per├¡odo, Empresa
+- Fases 7-8: handlers de KeyPress (lookups) e `CmdConsultarClick()` + `CmdEncerrarClick()`

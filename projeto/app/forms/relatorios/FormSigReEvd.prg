@@ -913,8 +913,10 @@ DEFINE CLASS FormSigReEvd AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao preparar dados")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZACAO")
@@ -940,8 +942,10 @@ DEFINE CLASS FormSigReEvd AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao preparar dados")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("IMPRESSAO")
@@ -968,8 +972,10 @@ DEFINE CLASS FormSigReEvd AS FormBase
         THIS.FormParaRelatorio()
         IF VARTYPE(THIS.this_oRelatorio) = "O"
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao preparar dados")
+                ENDIF
                 RETURN
             ENDIF
             THIS.this_oRelatorio.RegistrarAuditoria("EXPORTACAO")

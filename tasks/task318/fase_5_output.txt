@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 5 foi aplicada com sucesso:
+
+**O que foi feito:**
+
+1. **Cabe├ºalho atualizado** de "Fase 3/8" para "Fase 5/8 (COMPLETO - form OPERACIONAL sem PageFrame)"
+
+2. **Novo m├®todo `ConfigurarPaginaDados()`** criado (linhas 470ÔÇô530) contendo os controles de exibi├º├úo de contexto da opera├º├úo selecionada (primeira metade dos controles auxiliares):
+   - `txt_4c_Info` ÔÇö caixa azul de identifica├º├úo da OP (`Text1` do legado)
+   - `lbl_4c_Cliente` ÔÇö label "Cliente" (`Say3` do legado)
+   - `txt_4c_Cliente` ÔÇö campo cliente somente leitura (`Get_Cliente` do legado)
+
+3. **`ConfigurarControlesAuxiliares()`** reduzido para conter apenas controles de filtros/ordena├º├úo (segunda metade, para Fase 6):
+   - `lbl_4c_Ordenacao`, `cbo_4c_Ordenacao`, `lbl_4c_TabDica`
+
+4. **`InicializarForm()`** atualizado para chamar `ConfigurarPaginaDados()` na sequ├¬ncia correta
+
+5. **`GrdItensAfterRowColChange()`** refatorado para delegar ao BO via `ObterImagemProduto()` ÔÇö elimina ~30 linhas de SQLEXEC duplicado no Form
+
+6. **`BtnConfirmarClick()`** simplificado para delegar ao BO via `GravarPrioridades()` ÔÇö elimina SQLEXEC/SQLCOMMIT/SQLROLLBACK direto no Form, que j├í est├úo encapsulados corretamente no BO

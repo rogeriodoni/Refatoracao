@@ -323,11 +323,29 @@ DEFINE CLASS FormBase AS Form
 
     *--------------------------------------------------------------------------
     * DESTROY - Destrutor
+    *
+    * FIX menu-shrinks (Erro58, 2026-07-21):
+    * Apos fechar qualquer form modal (WindowType=1 ShowWindow=1), VFP9 mantem
+    * cache visual dos popups de _MSYSMENU. Sintoma: CNTBAR reporta bars intactos
+    * (ex: popMovimentos=105) mas o popup renderiza apenas ~40 items com line-height
+    * maior, resultando em popup visualmente encolhido.
+    * Fix: RELEASE POPUP explicito (libera cache visual) + CriarMenuPrincipal
+    * (idempotente, redefine popups do zero). SEM o RELEASE, CriarMenuPrincipal
+    * sozinha nao restaura o rendering — os popups precisam ser destruidos antes.
+    * TRY/CATCH silencioso porque CriarMenuPrincipal pode nao estar no escopo em
+    * cenarios de teste automatizado ou em forms auxiliares (ex: FormBuscaAuxiliar).
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
         IF !ISNULL(THIS.this_oBusinessObject)
             THIS.this_oBusinessObject = .NULL.
         ENDIF
+
+        TRY
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal nao carregada no escopo (teste, form auxiliar) - silencioso
+        ENDTRY
     ENDPROC
 
 ENDDEFINE

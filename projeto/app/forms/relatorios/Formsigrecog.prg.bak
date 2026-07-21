@@ -597,8 +597,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnVisualizarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Visualizar Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -609,8 +611,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnImprimirClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Imprimir Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -621,8 +625,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnDocumentoClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.GerarExcel()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Gerar Documento do Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -644,8 +650,10 @@ DEFINE CLASS Formsigrecog AS FormBase
         IF !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Erro ao Gerar Relat" + CHR(243) + "rio")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -658,8 +666,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnAlterarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Imprimir Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1021,8 +1031,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnBuscarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Visualizar Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1033,8 +1045,10 @@ DEFINE CLASS Formsigrecog AS FormBase
     PROCEDURE BtnSalvarClick()
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Imprimir Relat" + CHR(243) + "rio")
+            ENDIF
         ENDIF
     ENDPROC
 

@@ -1,0 +1,628 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRCOT.SCX
+* Data/Hora: 15/07/2026 08:54:30
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCOT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCOT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCOT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCOT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: fwgrade_cotacao
+  Parent: SIGPRCOT
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRCOT.fwgrade_cotacao.data
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCOT.fwgrade_cotacao.data
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCOT.fwgrade_cotacao.cotacao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCOT.fwgrade_cotacao.cotacao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCOT.fwgrade_cotacao.hora
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCOT.fwgrade_cotacao.hora
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: inserir
+  Parent: SIGPRCOT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: delete
+  Parent: SIGPRCOT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: sair
+  Parent: SIGPRCOT
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 377
+  Width = 537
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cotação"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 90,90,90
+  incluir = 0
+  Name = "SIGPRCOT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Courier New"
+  AllowHeaderSizing = .T.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 283
+  Left = 133
+  LinkMaster = ""
+  ReadOnly = .F.
+  RecordSource = ""
+  RelationalExpr = ""
+  RowHeight = 20
+  ScrollBars = 2
+  TabIndex = 4
+  Top = 85
+  Width = 270
+  Name = "fwgrade_cotacao"
+  Column1.FontName = "Courier New"
+  Column1.ControlSource = ""
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.SelectOnEntry = .F.
+  Column1.Format = "K"
+  Column1.Name = "data"
+  Column2.FontName = "Courier New"
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 101
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.SelectOnEntry = .F.
+  Column2.Format = "K"
+  Column2.InputMask = "99999.9999999"
+  Column2.Name = "cotacao"
+  Column3.FontName = "Courier New"
+  Column3.ColumnOrder = 2
+  Column3.ControlSource = ""
+  Column3.Width = 55
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.InputMask = "99:99"
+  Column3.Name = "hora"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.data.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Data"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.data.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.cotacao.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Cotação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.cotacao.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.hora.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Hora"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.fwgrade_cotacao.hora.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.inserir
+------------------------------------------------------------
+  Top = 3
+  Left = 312
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 1
+  Name = "inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.delete
+------------------------------------------------------------
+  Top = 3
+  Left = 387
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 2
+  Name = "delete"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCOT.sair
+------------------------------------------------------------
+  Top = 3
+  Left = 462
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 5
+  Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCOT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters ThisParent, _DataSession
+
+ThisForm.ThisParent = ThisParent
+Set DataSession to _DataSession
+
+This.Caption = 'Cotação do ' + Alltrim(CrSigCdMoe.cmoes)
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Select * From CrSigCdCot Into Cursor TmpCot ReadWrite
+Index On cidchaves Tag CidChaves
+Index On cmoes + Dtos(datas) + horas Tag Cotacaos
+Go Bottom
+
+Zap In CrSigCdCot
+
+This.fwgrade_Cotacao.RecordSource = 'TmpCot'
+This.fwgrade_Cotacao.Data.ControlSource = 'TmpCot.datas'
+This.fwgrade_Cotacao.Cotacao.ControlSource = 'TmpCot.valos'
+This.fwgrade_Cotacao.Hora.ControlSource = 'TmpCot.horas'
+
+****************  Acesso dos Botões  *****************
+ThisForm.Inserir.Visible = fChecaAcesso('SIGPRCOT','INSERIR')
+ThisForm.Delete.Visible  = fChecaAcesso('SIGPRCOT','EXCLUIR')
+lnLeft = 13
+If ThisForm.Inserir.Visible
+	ThisForm.Inserir.Left = lnLeft
+	lnLeft = lnLeft + ThisForm.Inserir.Width
+EndIf
+If ThisForm.Delete.Visible
+	ThisForm.Delete.Left = lnLeft
+	lnLeft = lnLeft + ThisForm.Delete.Width
+EndIf
+******************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.fwgrade_cotacao
+* Classe: fwgrade (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+
+If Recno() <> ThisForm.Incluir
+	ThisForm.Incluir = 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+This.ReadOnly = .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.fwgrade_cotacao.data.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	Wait Window 'Informe a data da Cotação...' NoWait
+	Return 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Value) Or ThisForm.Incluir = Recno())
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.fwgrade_cotacao.cotacao.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select TmpCot
+Go Bottom
+ThisForm.fwgrade_Cotacao.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Value) Or ThisForm.Incluir = Recno())
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.fwgrade_cotacao.hora.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select TmpCot
+Set Order To Cotacaos
+_Data = This.Parent.Parent.Data.Text1.Value
+If Seek(CrSigCdMoe.cmoes + Dtos(_data) + This.Value)
+	Skip
+EndIf
+If cmoes + Dtos(datas) + horas = CrSigCdMoe.cmoes + Dtos(_data) + This.Value
+	Messagebox('Cotação já cadastrada !!!',0+48,'')
+	This.Value = '  :  '
+	Return 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Value) Or ThisForm.Incluir = Recno())
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.inserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpCot
+Set Order To Cotacaos
+Seek(CrSigCdMoe.cmoes + Dtos({}))
+If Eof()
+	Set Order To
+	lcMoes    = CrSigCdMoe.cmoes
+	ldDatas   = Date()
+	lcDatas   = fDtoSQL(ldDatas)
+	lcHoras   = Time()
+	lcIdChave = fUniqueIds()
+	ldDtAlts  = Date()
+	lcDtAlts  = fDtoSQL(ldDtAlts)
+	lcUsuars  = Usuar
+	Insert Into TmpCot (cmoes,datas,horas,cidchaves,dtalts,usuars) ;
+					Value (lcMoes,ldDatas,lcHoras,lcIdChave,ldDtAlts,lcUsuars)
+	ThisForm.Incluir = Recno()
+	Insert Into CrSigCdCot (cmoes,datas,horas,cidchaves,dtalts,usuars) ;
+					Value (lcMoes,ldDatas,lcHoras,lcIdChave,ldDtAlts,lcUsuars)
+EndIf
+
+ThisForm.fwgrade_Cotacao.Data.SetFocus
+ThisForm.fwgrade_Cotacao.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.delete
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpCot
+If !Eof()
+	lcIdChave = TmpCot.cidchaves
+	If ThisForm.ThisParent.poDataMgr.SqlExecute([Delete From SigCdCot Where cidchaves = ']+lcIdChave+[' ],'') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf
+	ThisForm.ThisParent.poDataMgr.Commit()
+	Select TmpCot
+	Delete
+	If Seek(lcIdChave,'CrSigCdCot','CidChaves')
+		Delete In CrSigCdCot
+	EndIf
+	Set Order To Cotacaos
+	Set Near On
+	Seek cmoes + Dtos(datas)
+	Set Near Off
+EndIf
+
+ThisForm.fwgrade_Cotacao.Data.SetFocus
+ThisForm.fwgrade_Cotacao.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCOT.sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpCot
+Scan
+	If Empty(TmpCot.datas) Or Empty(TmpCot.valos)
+		Delete
+		If Seek(TmpCot.cidchaves,'CrSigCdCot','CidChaves')
+			Delete In CrSigCdCot
+		EndIf
+	EndIf
+	Select TmpCot
+EndScan
+
+Select CrSigCdCot
+Go Top
+Scan
+	If Seek(CrSigCdCot.cidchaves,'TmpCot','CidChaves')
+		Replace CrSigCdCot.datas With TmpCot.datas
+		Replace CrSigCdCot.horas With TmpCot.horas	
+		Replace CrSigCdCot.valos With TmpCot.valos
+	EndIf
+EndScan
+
+ThisForm.ThisParent.poDataMgr.Update('CrSigCdCot')
+ThisForm.ThisParent.poDataMgr.Commit()
+
+Select CrSigCdMoe
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCOT
+RESERVED3 (ClassInfo): incluir
+thisparent
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

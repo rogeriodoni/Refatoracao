@@ -1,0 +1,26 @@
+﻿Arquivo criado e verificado. A Fase 3 est├í completa.
+
+**`FormSigPrItb.prg` criado** em `projeto/app/forms/operacionais/` com:
+
+**Estrutura base (5 containers + esqueleto):**
+| M├®todo | O que faz |
+|--------|-----------|
+| `Init()` | Delega para `FormBase.Init()` via `DODEFAULT()` |
+| `InicializarForm()` | Cria BO ÔåÆ cursor MovAux ÔåÆ interface ÔåÆ torna vis├¡vel ÔåÆ carrega dados |
+| `CriarCursorMovAux()` | Cria cursor `MovAux` com estrutura id├¬ntica ao `PROCEDURE Load` original (AnoFis/Datas/Contas/Debs/Creds/Docto/Hists/EmpCont + INDEX EmpCont+Datas) |
+| `ConfigurarInterface()` | Orquestra 5 sub-m├®todos de containers |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` 1000├ù100 cinza + `lbl_4c_Sombra`/`lbl_4c_Titulo` (shadow pattern) |
+| `ConfigurarContainerMvt1()` | `cnt_4c_Mvt1` 486├ù75 vazio (TextBoxes na Fase 5) |
+| `ConfigurarContainerBotoes()` | `cnt_4c_Botoes` 195├ù105 vazio (CommandGroup na Fase 4) |
+| `ConfigurarContainerSaida()` | `cnt_4c_Saida` Left=917 can├┤nico (cmd_4c_Encerrar na Fase 4) |
+| `ConfigurarContainerAguarde()` | `cnt_4c_Aguarde` Visible=.F. com labels "Aguarde..."/"Processando Dados..." |
+| `InicializarDados()` | Carrega `SigCdPam.DirContabv` ÔåÆ `this_oBusinessObject.this_cDirContab` |
+| `TornarControlesVisiveis()` | Recursivo; filtra `cnt_4c_Aguarde` (permanece oculto at├® processamento) |
+| `Destroy()` | Fecha `MovAux` + libera BO |
+
+**Decis├Áes de design:**
+- Form **flat** (sem PageFrame) ÔÇö OPERACIONAL n├úo segue padr├úo CRUD Page1/Page2
+- `TitleBar=0 + ControlBox=.F.` preservados do original (Pilar 1)
+- Escalonamento 1.25├ù (800ÔåÆ1000px / 229ÔåÆ300px)
+- `cnt_4c_Saida.Left=917` segue padr├úo can├┤nico (Regra #10)
+- `cnt_4c_Aguarde` tem filhos vis├¡veis mas container permanece `Visible=.F.` (pattern da Regra TornarControlesVisiveis com LOOP + recurs├úo antes)

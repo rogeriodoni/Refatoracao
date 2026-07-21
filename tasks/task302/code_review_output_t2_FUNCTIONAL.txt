@@ -1,0 +1,18 @@
+﻿O problema j├í est├í corrigido no c├│digo atual. A linha 612-613 j├í inclui `"CNT_4C_CABECALHO"` no INLIST:
+
+```foxpro
+IF INLIST(loc_cNome, "OBJ_4C_OPTTIPO", "OBJ_4C_OPTPRECO", ;
+        "LBL_4C_SAY5", "LBL_4C_SAY6", "CNT_4C_CABECALHO")
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oControl)
+    ENDIF
+    LOOP
+ENDIF
+```
+
+O comportamento est├í correto:
+- O LOOP impede que `cnt_4c_Cabecalho.Visible = .T.` seja for├ºado na linha 624
+- A recurs├úo antes do LOOP torna os filhos (`lbl_4c_Sombra`, `lbl_4c_Titulo`) vis├¡veis, que ├® o comportamento esperado
+- `cnt_4c_Cabecalho.Visible` j├í ├® `.T.` explicitamente na linha 140 via `ConfigurarCabecalho()`
+
+O ├║nico problema detectado neste pass (`[CONTAINER-VISIVEL]`) j├í est├í resolvido no c├│digo atual. Nenhuma altera├º├úo ├® necess├íria.

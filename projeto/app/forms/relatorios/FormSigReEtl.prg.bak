@@ -2352,8 +2352,10 @@ DEFINE CLASS FormSigReEtl AS FormBase
             ENDIF
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                         "Relat" + CHR(243) + "rio")
+                ENDIF
                 RETURN
             ENDIF
             IF !USED("CsImpressao") OR RECCOUNT("CsImpressao") = 0

@@ -717,8 +717,10 @@ DEFINE CLASS Formsigrefec AS FormBase
             THIS.FormParaRelatorio()
 
             IF !THIS.this_oRelatorio.Visualizar()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Visualizar")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -731,8 +733,10 @@ DEFINE CLASS Formsigrefec AS FormBase
             THIS.FormParaRelatorio()
 
             IF !THIS.this_oRelatorio.Imprimir()
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao Imprimir")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -764,7 +768,9 @@ DEFINE CLASS Formsigrefec AS FormBase
                     MsgAviso("Nenhum dado para exportar.", "Excel")
                 ENDIF
             ELSE
+                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Exportar")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC

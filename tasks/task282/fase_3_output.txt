@@ -1,0 +1,21 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:/4c/projeto/app/forms/cadastros/Formsigpres2.prg` foi criado com 277 linhas.
+
+**O que foi implementado:**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init(par_cChave, par_nDataSession, par_oParentForm)` | Ô£à | Aceita par├ómetros do form pai; define Caption/cDopes/oParentForm; chama DODEFAULT() |
+| `InicializarForm()` | Ô£à | Cria BO, carrega dados de `csTemporario` se dispon├¡vel, configura PageFrame, navega para Page1 |
+| `ConfigurarPageFrame()` | Ô£à | Top=-29, Tabs=.F., 2 Pages, background `new_background.jpg` |
+| `ConfigurarPaginaLista()` | Ô£à | `cnt_4c_Cabecalho` (Top=30, escuro), `cnt_4c_Botoes` (Top=28, Left=542), `cnt_4c_Saida` (Left=917 ÔÇö can├┤nico) |
+| `ConfigurarPaginaDados()` | Ô£à | `cnt_4c_Salva` (Top=33, Left=829) |
+| `Destroy()` | Ô£à | Limpa BO e refer├¬ncia ao form pai |
+| `TornarControlesVisiveis()` | Ô£à | Recursivo, itera Pages e Controls |
+| `FormatarGridLista()` | Ô£à | Fonte Tahoma 8 nas colunas |
+
+**Decis├Áes de arquitetura:**
+- `DataSession = 2` mantido (original) ÔÇö FormBase.Init() via DODEFAULT() aplica o fix de `SET DATE BRITISH`
+- Init aceita 3 par├ómetros compat├¡veis com o legado, mas `par_nDataSession` n├úo ├® usado (conex├úo global via `gnConnHandle`)
+- Carregamento de `csTemporario` protegido por `USED()` ÔÇö funciona mesmo se o cursor n├úo estiver dispon├¡vel
+
+Fase 4 adicionar├í: bot├Áes CRUD em `cnt_4c_Botoes`, bot├úo Encerrar em `cnt_4c_Saida`, bot├Áes Confirmar/Cancelar em `cnt_4c_Salva`, e o grid da Page1.

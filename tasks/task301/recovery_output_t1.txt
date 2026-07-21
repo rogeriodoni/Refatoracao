@@ -1,0 +1,10 @@
+﻿**Resumo das corre├º├Áes:**
+
+| Item | Status | A├º├úo |
+|------|--------|------|
+| `form1.Caption = "Form1"` (1 DIFEREN├çA bloqueante) | Ô£à J├í corrigido pelo autofix (linha 24) | Nenhuma a├º├úo adicional |
+| `dataenvironment` Top/Left/Width/Height (4 ERROS) | Ô£à Dentro do limite tolerado (4/4) | N├úo ├® poss├¡vel corrigir ÔÇö objeto interno VFP |
+| `form1.Combo1` properties (8 AVISOS) | Ô£à N├úo bloqueantes | Combo criado dinamicamente, expected |
+| `AlternarPagina` PROTECTED ÔåÆ PUBLIC | Ô£à **Corrigido agora** | Regra cr├¡tica VFP9: contrato do pipeline |
+
+O `Caption = "Form1"` j├í estava na linha 24 (adicionado pelo autofix anterior). A ├║nica corre├º├úo aplicada foi tornar `AlternarPagina` p├║blico. Com isso, uma re-execu├º├úo da etapa `07_validarUI` deve resultar em **0 diferen├ºas, 4 erros tolerados, 8 avisos n├úo-bloqueantes ÔåÆ PASS**.

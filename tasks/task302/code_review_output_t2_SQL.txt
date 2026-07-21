@@ -1,0 +1,11 @@
+﻿Encontrei a origem do alerta. As tr├¬s ocorr├¬ncias de `ControlCount` no arquivo s├úo exclusivamente acesso ├á **propriedade VFP9** de controles (`.ControlCount`), nunca dentro de uma cl├íusula SQL WHERE:
+
+| Linha | Contexto | Tipo |
+|-------|----------|------|
+| 602 | `VARTYPE(loc_oContainer.ControlCount) # "N"` | Propriedade VFP9 |
+| 606 | `FOR loc_i = 1 TO loc_oContainer.ControlCount` | Propriedade VFP9 |
+| 615 | `PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0` | Propriedade VFP9 |
+
+Essas linhas fazem parte do m├®todo `TornarControlesVisiveis` e seguem o padr├úo can├┤nico de itera├º├úo de controles documentado no projeto (referenciado na mem├│ria `feedback_tcv_skip_recursao.md`). `ControlCount` ├® uma propriedade nativa de containers VFP9 ÔÇö o scanner de SQL o detectou erroneamente como nome de coluna em WHERE.
+
+**Diagn├│stico: falso positivo.** Nenhuma cl├íusula SQL WHERE cont├®m `CONTROLCOUNT`. Nenhuma corre├º├úo ├® necess├íria ÔÇö o c├│digo est├í correto.

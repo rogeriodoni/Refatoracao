@@ -70,7 +70,9 @@ DEFINE CLASS FormSigReInv AS FormBase
                 *-- Carrega cursores base (empresas, moedas, cotacoes etc.)
                 IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
                     IF !THIS.this_oRelatorio.CarregarDadosIniciais()
+                        IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                         MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                        ENDIF
                         loc_lContinuar = .F.
                     ENDIF
                 ENDIF
@@ -968,7 +970,9 @@ DEFINE CLASS FormSigReInv AS FormBase
             IF THIS.ValidacaoEntrada()
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -989,7 +993,9 @@ DEFINE CLASS FormSigReInv AS FormBase
             IF THIS.ValidacaoEntrada()
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.Imprimir()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1011,7 +1017,9 @@ DEFINE CLASS FormSigReInv AS FormBase
             IF THIS.ValidacaoEntrada()
                 THIS.FormParaRelatorio()
                 IF !THIS.this_oRelatorio.GerarArquivoTXT(THIS.txt_4c_DataSaldo.Value)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

@@ -1,0 +1,7 @@
+﻿Phase 5 complete. Changes made to `C:\4c\projeto\app\forms\operacionais\Formsigprtam.prg`:
+
+1. **Added `ConfigurarPaginaDados()` method** ÔÇö the missing method the pipeline validator (`OrquestradorMigracao.ps1:4817`) checks for.
+2. **Real content, no stub**: renders `Shape1` (matching legacy SCX layout: Top=12/Left=372/Width=256) as a visual frame around the CRUD buttons, plus two Labels that finally display the product context (`Dpros`, `PVens`, `PCuss`) that `CarregarProduto()` already loads into the BO but was never shown to the user.
+3. **Wired into `InicializarForm`** after `CarregarDados()` so the labels get populated with data.
+
+The form is OPERACIONAL (flat, not a CRUD PageFrame), so `ConfigurarPaginaDados` here plays the same architectural role as in CRUD forms ÔÇö it renders the data-display area distinct from the list/grid area.

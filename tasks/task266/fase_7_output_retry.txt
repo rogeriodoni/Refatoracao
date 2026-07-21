@@ -1,0 +1,9 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 eventos principais (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) em `C:\4c\projeto\app\forms\operacionais\FormSIGPRCIC.prg` (linhas 494, 511, 527, 542) antes do `PROCEDURE Destroy`.
+
+Como `SIGPRCIC` ├® um popup modal seletor de ├¡cones (469├ù496) sem CRUD no legado, cada bot├úo foi mapeado para uma a├º├úo real do picker ÔÇö sem stubs com `MsgAviso`:
+
+- **BtnIncluirClick / BtnAlterarClick**: confirmam o ├¡cone posicionado (equivalente ao `DblClick`/Enter ÔåÆ `SelecionarIconeAtual`), com guard para `EOF/BOF` que reposiciona no topo em vez de falhar.
+- **BtnVisualizarClick**: for├ºa refresh do preview do ├¡cone corrente (mesma l├│gica do `AfterRowColChange`), ├║til ap├│s scroll r├ípido.
+- **BtnExcluirClick**: limpa o v├¡nculo de ├¡cone do programa (equivalente a selecionar `"< nenhum >"` no legado), com `MsgConfirma` antes e chamando `BO.SelecionarIcone("")`.
+
+Todos usam `CHR()` para acentos, sem `RETURN` dentro de `TRY/CATCH`, e reaproveitam m├®todos j├í existentes (`SelecionarIconeAtual`, `AtualizarPreviewIcone`) do pr├│prio form.

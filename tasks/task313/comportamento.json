@@ -1,0 +1,399 @@
+{
+  "resumo": {
+    "totalMetodos": 21,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 2,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fUniqueIds", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRMLU",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Lparameters pColuna\n\nThisForm.GridOrder = Iif(Type('pColuna')='N', pColuna, ThisForm.GridOrder)\n\nDo Case\n\tCase (ThisForm.GridOrder = 2)\n\t\t lcOrd = 'Codigos'\n\tCase (ThisForm.GridOrder = 3)\n\t\t lcOrd = 'Descs'\n\tCase (ThisForm.GridOrder = 4)\n\t\t lcOrd = 'UsuIns'\n\tCase (ThisForm.GridOrder = 5)\n\t\t lcOrd = 'DatIns'\nEndCase\n\nlnRec = Recno()\nSet Order To &lcOrd. In crSigMlItn\nIf (Reccount('crSigMlItn') > 0)\n\tGo lnRec In crSigMlItn\nEndIf\n\nWith Thisform.grdSelecoes\n\tFor I=1 To .ColumnCount\n\t\tlcNum = Alltrim... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "GridOrder = Iif,GridOrder=I, RGB",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU",
+      "evento": "Procedure",
+      "linhas": 44,
+      "codigoOriginal": "With ThisForm.GrdSelecoes\n\t.RecordSource = ''\n\n\tThisForm.poDataMgr.Requery('crSigMlItn')\n\n\tSelect crSigMlItn\n\tIndex On Codigos Tag Codigos\n\tIndex On Descs   Tag Descs  \n\tIndex On UsuIns  Tag UsuIns\n\tIndex On DatIns  Tag DatIns\n\n\tThisForm.AcertaGrades()\n\n\t.RecordSource \t   = 'crSigMlItn'\n\t.ColumnCount \t   = 6\n\t.DeleteMark \t   = .f.\n\t.RecordMark \t   = .f.\n\t.ReadOnly \t\t   = .f.\n\t.AllowHeaderSizing = .f.\n\t.AllowRowSizing    = .f.\n\n\t.Column1.ControlSource   = 'crSigMlItn.SelImp'\n\t.Column1.Movable\t\t =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,AcertaGrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "Local lcNew, lnTot\n\nPrivate pCod\n\nlcNew = Substr(Sys(2015),3,10)\nlnTot = 0\n\nSet Talk On\nSet Talk Window\n**********************************************************************************\nWait Window 'Aguarde!!! Selecionando Registros Para Unificação...' NoWait\n\nSelect * ;\n  From crSigMlCab ;\n Where Codigos = lcNew ;\n  Into Cursor csMalaDuplicada ReadWrite\n\nSelect Codigos ;\n  From crSigMlItn ;\n Where SelImp = 1 ;\n  Into Cursor csMalasSelecionadas\n\nlcUni = ''\nSelect csMalasSelecionadas\nScan\n\tpCod ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade,fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU",
+      "evento": "Init",
+      "linhas": 32,
+      "codigoOriginal": "Lparameters pCodigos\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pCod\n\n=fConfigGeral()\n\n=DoDefault()\n\npCod = ''\n\nlcQryMalc = 'Select 0 as SelImp, * From SigMlItn'\nlcQryMala = 'Select * From SigMlCab Where Codigos = ?pCod'\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', ThisForm.Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigMlItn', 'Codigos',   'crSigMlItn', '', '', lcQryMalc)\n\t\t.AddCursor('SigMlCab', 'cIdChaves', '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade,fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = Iif(crSigMlItn.SelImp=1, 0, 1)\n\nSelect crSigMlItn\nGather Memvar Fields SelImp\nThisForm.grdSelecoes.Refresh\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = Iif(crSigMlItn.SelImp=1, 0, 1)\n\tSelect crSigMlItn\n\tGather Memvar Fields SelImp\n\tThisForm.grdSelecoes.Refresh\n\n\tNoDefault\nEndif\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column2.Header1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AcertaGrades(2)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaGrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column3.Header1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AcertaGrades(3)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaGrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column4.Header1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AcertaGrades(4)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaGrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column5.Header1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.AcertaGrades(5)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaGrades",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.grdselecoes.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.cmdProcessar",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "ThisForm.grdselecoes.Refresh \nGo Top In crSigMlItn\nThisForm.grdselecoes.Refresh \n\nThis.Enabled = .f.\n\nSelect Codigos ;\n  From crSigMlItn ;\n Where (SelImp = 1) And ;\n \t   (NRegis > 0) ;\n  Into Cursor csTmp\n\nIf (Reccount('csTmp') < 1)\n\t=Messagebox('Nenhuma Mala Direta Com Registros Foi Selecionada Para Unificação!!!', 0+48, '')\n\tThisForm.grdSelecoes.SetFocus\n\tThis.Enabled = .t.\n\tReturn 0\nEndIf\n\nIf (Reccount('csTmp') = 1)\n\t=Messagebox('Apenas Uma Mala Direta Com Registros Foi Selecionada Para Ser U... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.Commandgroup2",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRMLU.cmdBtnGrade",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update crSigMlItn Set SelImp = This.Value\nThisForm.grdSelecoes.Refresh\n* Fim ****************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRMLU.Procedure",
+      "queryOriginal": "Select * ; From crSigMlCab ; Where Codigos = lcNew ; Into Cursor csMalaDuplicada ReadWrite",
+      "tabelas": "crSigMlCab",
+      "colunas": "Codigos,lcNew,csMalaDuplicada,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMLU.Procedure",
+      "queryOriginal": "Select Codigos ; From crSigMlItn ; Where SelImp = 1 ; Into Cursor csMalasSelecionadas",
+      "tabelas": "crSigMlItn",
+      "colunas": "SelImp,csMalasSelecionadas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMLU.Init",
+      "queryOriginal": "lcQryMalc = 'Select 0 as SelImp, * From SigMlItn'",
+      "tabelas": "SigMlItn",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMLU.Init",
+      "queryOriginal": "lcQryMala = 'Select * From SigMlCab Where Codigos = ?pCod'",
+      "tabelas": "SigMlCab",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMLU.cmdProcessar.Click",
+      "queryOriginal": "Select Codigos ; From crSigMlItn ; Where (SelImp = 1) And ; \t   (NRegis > 0) ; Into Cursor csTmp",
+      "tabelas": "crSigMlItn",
+      "colunas": "SelImp,NRegis,csTmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRMLU.cmdBtnGrade.Click",
+      "queryOriginal": "Update crSigMlItn Set SelImp = This.Value",
+      "tabelas": "crSigMlItn",
+      "colunas": "SelImp",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigMlCab", "crSigMlItn", "SigMlItn", "SigMlCab"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

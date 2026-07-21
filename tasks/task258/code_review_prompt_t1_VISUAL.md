@@ -1,0 +1,641 @@
+﻿# CODE REVIEW - PASS VISUAL: Visual Properties (alinhamento, titulos, tipos)
+
+## TAREFA OBRIGATORIA
+Corrigir TODOS os problemas listados abaixo. Este pass foca em: **Visual Properties (alinhamento, titulos, tipos)**.
+
+## PROBLEMAS DETECTADOS (2)
+- [TITULO-NAO-PROPAGADO] Form define Caption mas NAO propaga para lbl_4c_Sombra/lbl_4c_Titulo. O titulo na tela ficara incorreto (ex: 'Cadastro de Testes' ao inves do titulo real). CORRIGIR: No InicializarForm, APOS ConfigurarPageFrame, adicionar: THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption = THIS.Caption (e idem para lbl_4c_Titulo)
+- [FONTNAME-ERRADO] Linha 200: FontName 'Comic Sans MS' encontrado. Botoes devem usar 'Tahoma'. Substituir TODAS as ocorrencias.
+
+## INSTRUCOES DE CORRECAO
+### Foco deste pass: CORRECOES VISUAIS
+- [ALINHAMENTO] Botoes cmd_4c_* com Top diferente no mesmo grupo horizontal
+  - Identificar Top mais frequente no grupo, alinhar os desalinhados
+- [ALINHAMENTO-CONTAINER] Botoes no mesmo container cnt_4c_* com Top diferente
+- [TITULO-NAO-PROPAGADO] Caption do form nao propagado para lbl_4c_Sombra/lbl_4c_Titulo
+- [CHECKBOX-TIPO] CheckBox.Value tipo inconsistente (.F. vs 0/1)
+- [FONTNAME-ERRADO] FontName 'Comic Sans MS' encontrado - substituir por 'Tahoma'
+
+## REGRAS OBRIGATORIAS
+- Corrigir APENAS os problemas listados, NAO alterar logica de negocio
+- NAO remover campos, funcionalidades ou lookups
+- **PROIBIDO alterar propriedades visuais** (Width, Height, Top, Left, BackColor, ForeColor, FontName, FontSize) EXCETO se o problema eh especificamente de ALINHAMENTO
+- NUNCA juntar linhas com `;` numa linha unica
+- Usar Write tool para salvar os arquivos corrigidos nos mesmos caminhos
+
+
+## CODIGO ATUAL DOS ARQUIVOS
+
+### FORM (C:\4c\projeto\app\forms\operacionais\FormSigPrAop.prg) - TRECHOS RELEVANTES PARA PASS VISUAL (958 linhas total):
+
+*-- Linhas 117 a 160:
+117:     *---------------------------------------------------------------------------
+118:         THIS.AddObject("cnt_4c_Cabecalho", "Container")
+119:         WITH THIS.cnt_4c_Cabecalho
+120:             .Top         = 0
+121:             .Left        = 0
+122:             .Width       = THIS.Width
+123:             .Height      = 80
+124:             .BackStyle   = 1
+125:             .BackColor   = RGB(100, 100, 100)
+126:             .BorderWidth = 0
+127: 
+128:             .AddObject("lbl_4c_Sombra", "Label")
+129:             WITH .lbl_4c_Sombra
+130:                 .Top      = 18
+131:                 .Left     = 10
+132:                 .Width    = THIS.Width
+133:                 .Height   = 40
+134:                 .AutoSize = .F.
+135:                 .FontName = "Tahoma"
+136:                 .FontSize = 18
+137:                 .FontBold = .T.
+138:                 .BackStyle = 0
+139:                 .ForeColor = RGB(0, 0, 0)
+140:                 .Caption  = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
+141:             ENDWITH
+142: 
+143:             .AddObject("lbl_4c_Titulo", "Label")
+144:             WITH .lbl_4c_Titulo
+145:                 .Top      = 17
+146:                 .Left     = 10
+147:                 .Width    = THIS.Width
+148:                 .Height   = 46
+149:                 .AutoSize = .F.
+150:                 .FontName = "Tahoma"
+151:                 .FontSize = 18
+152:                 .FontBold = .T.
+153:                 .BackStyle = 0
+154:                 .ForeColor = RGB(255, 255, 255)
+155:                 .Caption  = "Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P."
+156:             ENDWITH
+157:         ENDWITH
+158:     ENDPROC
+159: 
+160:     *---------------------------------------------------------------------------
+
+*-- Linhas 170 a 207:
+170:             .SpecialEffect = 1
+171:             .AutoSize      = .T.
+172:             .Themes        = .F.
+173:             .Top           = 0
+174:             .Left          = 840
+175:             .Width         = 160
+176:             .Height        = 85
+177: 
+178:             WITH .Buttons(1)
+179:                 .Top        = 5
+180:                 .Left       = 5
+181:                 .Width      = 75
+182:                 .Height     = 75
+183:                 .FontBold   = .T.
+184:                 .FontItalic = .T.
+185:                 .Caption    = "\<Confirmar"
+186:                 .ForeColor  = RGB(90, 90, 90)
+187:                 .BackColor  = RGB(255, 255, 255)
+188:                 .Themes     = .F.
+189:                 .Picture    = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+190:                 .Enabled    = .F.
+191:             ENDWITH
+192: 
+193:             WITH .Buttons(2)
+194:                 .Top        = 5
+195:                 .Left       = 80
+196:                 .Width      = 75
+197:                 .Height     = 75
+198:                 .FontBold   = .T.
+199:                 .FontItalic = .T.
+200:                 .FontName   = "Comic Sans MS"
+201:                 .FontSize   = 8
+202:                 .Caption    = "Encerrar"
+203:                 .ForeColor  = RGB(90, 90, 90)
+204:                 .BackColor  = RGB(255, 255, 255)
+205:                 .Themes     = .F.
+206:                 .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+207:                 .Cancel     = .T.
+
+*-- Linhas 216 a 225:
+216:     *---------------------------------------------------------------------------
+217:         THIS.AddObject("grd_4c_Dados", "Grid")
+218:         WITH THIS.grd_4c_Dados
+219:             .Top           = 195
+220:             .Left          = 50
+221:             .Width         = 700
+222:             .Height        = 285
+223:             .ColumnCount   = 5
+224:             .FontName      = "Arial"
+225:             .FontSize      = 8
+
+*-- Linhas 243 a 251:
+243:                 .Movable       = .F.
+244:                 .Resizable     = .F.
+245:                 .ReadOnly      = .T.
+246:                 .Header1.Caption   = "Pedido"
+247:                 .Header1.FontName  = "Arial"
+248:                 .Header1.FontSize  = 8
+249:                 .Header1.FontBold  = .F.
+250:                 .Header1.Alignment = 2
+251:             ENDWITH
+
+*-- Linhas 259 a 267:
+259:                 .Movable       = .F.
+260:                 .Resizable     = .F.
+261:                 .ReadOnly      = .T.
+262:                 .Header1.Caption   = "Cor"
+263:                 .Header1.FontName  = "Arial"
+264:                 .Header1.FontSize  = 8
+265:                 .Header1.FontBold  = .F.
+266:                 .Header1.Alignment = 2
+267:             ENDWITH
+
+*-- Linhas 275 a 283:
+275:                 .Movable       = .F.
+276:                 .Resizable     = .F.
+277:                 .ReadOnly      = .T.
+278:                 .Header1.Caption   = "Tam"
+279:                 .Header1.FontName  = "Arial"
+280:                 .Header1.FontSize  = 8
+281:                 .Header1.FontBold  = .F.
+282:                 .Header1.Alignment = 2
+283:             ENDWITH
+
+*-- Linhas 293 a 301:
+293:                 .Movable       = .F.
+294:                 .Resizable     = .F.
+295:                 .ReadOnly      = .T.
+296:                 .Header1.Caption   = "Quantidade"
+297:                 .Header1.FontName  = "Arial"
+298:                 .Header1.FontSize  = 8
+299:                 .Header1.FontBold  = .F.
+300:                 .Header1.Alignment = 2
+301:             ENDWITH
+
+*-- Linhas 310 a 318:
+310:                 .Format        = "K"
+311:                 .Movable       = .F.
+312:                 .Resizable     = .F.
+313:                 .Header1.Caption   = "Qtd.Atual"
+314:                 .Header1.FontName  = "Arial"
+315:                 .Header1.FontSize  = 8
+316:                 .Header1.FontBold  = .F.
+317:                 .Header1.Alignment = 2
+318:             ENDWITH
+
+*-- Linhas 339 a 366:
+339:     *-- Nao contem PageFrame: os controles sao filhos diretos do form.
+340:     *---------------------------------------------------------------------------
+341:         *-- Label "O.P. :"
+342:         THIS.AddObject("lbl_4c_OP", "Label")
+343:         WITH THIS.lbl_4c_OP
+344:             .Top       = 108
+345:             .Left      = 70
+346:             .Width     = 45
+347:             .Height    = 18
+348:             .AutoSize  = .F.
+349:             .BackStyle = 0
+350:             .FontName  = "Tahoma"
+351:             .FontSize  = 9
+352:             .FontBold  = .T.
+353:             .ForeColor = RGB(0, 0, 0)
+354:             .Caption   = "O.P. :"
+355:         ENDWITH
+356: 
+357:         *-- TextBox Get_OP (numero da ordem de producao)
+358:         THIS.AddObject("txt_4c_OP", "TextBox")
+359:         WITH THIS.txt_4c_OP
+360:             .Top        = 105
+361:             .Left       = 120
+362:             .Width      = 120
+363:             .Height     = 23
+364:             .FontName   = "Tahoma"
+365:             .FontSize   = 9
+366:             .Alignment  = 1
+
+*-- Linhas 372 a 399:
+372:         ENDWITH
+373: 
+374:         *-- Label "Produto :"
+375:         THIS.AddObject("lbl_4c_Produto", "Label")
+376:         WITH THIS.lbl_4c_Produto
+377:             .Top       = 138
+378:             .Left      = 50
+379:             .Width     = 65
+380:             .Height    = 18
+381:             .AutoSize  = .F.
+382:             .BackStyle = 0
+383:             .FontName  = "Tahoma"
+384:             .FontSize  = 9
+385:             .FontBold  = .T.
+386:             .ForeColor = RGB(0, 0, 0)
+387:             .Caption   = "Produto :"
+388:         ENDWITH
+389: 
+390:         *-- TextBox Get_Produto (codigo do produto - somente leitura, preenchido apos validar OP)
+391:         THIS.AddObject("txt_4c_Produto", "TextBox")
+392:         WITH THIS.txt_4c_Produto
+393:             .Top        = 135
+394:             .Left       = 120
+395:             .Width      = 120
+396:             .Height     = 23
+397:             .FontName   = "Tahoma"
+398:             .FontSize   = 9
+399:             .Alignment  = 0
+
+*-- Linhas 423 a 432:
+423:         *-- EditBox de observacoes (Get_obss) - abaixo do grid (ReadOnly, so exibe)
+424:         THIS.AddObject("edt_4c_Obss", "EditBox")
+425:         WITH THIS.edt_4c_Obss
+426:             .Top              = 490
+427:             .Left             = 50
+428:             .Width            = 700
+429:             .Height           = 90
+430:             .FontName         = "Tahoma"
+431:             .FontSize         = 9
+432:             .BackColor        = RGB(255, 255, 255)
+
+
+### BO (C:\4c\projeto\app\classes\SigPrAopBO.prg):
+*******************************************************************************
+* SigPrAopBO.prg - Business Object: Alteracao de Quantidade da O.P.
+* Herda de BusinessBase
+* Tabela principal: SigOpPic
+*******************************************************************************
+
+DEFINE CLASS SigPrAopBO AS BusinessBase
+
+    *-- Identificacao da entidade
+    this_cTabela     = "SigOpPic"
+    this_cCampoChave = "Nops"
+
+    *-- Numero da Ordem de Producao atual
+    this_nNops     = 0
+
+    *-- Codigo do produto da OP
+    this_cCodPds   = ""
+
+    *-- Chave composta: cCodEmpresa + DoppPads + Str(Nops,10)
+    this_cEmpDNps  = ""
+
+    *-- Parametros carregados de SigCdPam
+    this_cDoppPads = ""
+    this_cMascNums = ""
+
+    *-- Nome do cursor de trabalho da divisao de OP (equivalente a Temp_DivOp)
+    this_cCursorDivOp = "cursor_4c_DivOp"
+
+    *---------------------------------------------------------------------------
+    PROCEDURE Init()
+    *---------------------------------------------------------------------------
+        THIS.this_cTabela     = "SigOpPic"
+        THIS.this_cCampoChave = "Nops"
+        DODEFAULT()
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE CarregarParametros()
+    *---------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro, loc_cSql
+        loc_lSucesso = .F.
+        TRY
+            IF USED("cursor_4c_SigCdPam")
+                USE IN cursor_4c_SigCdPam
+            ENDIF
+            loc_cSql = "SELECT TOP 1 DoppPads, MascNums FROM SigCdPam"
+            IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdPam") > 0
+                IF !EOF("cursor_4c_SigCdPam")
+                    SELECT cursor_4c_SigCdPam
+                    THIS.this_cDoppPads = NVL(ALLTRIM(DoppPads), "")
+                    THIS.this_cMascNums = NVL(ALLTRIM(MascNums), "")
+                    loc_lSucesso = .T.
+                ENDIF
+                USE IN cursor_4c_SigCdPam
+            ELSE
+                MsgErro("Erro ao carregar par" + CHR(226) + "metros do sistema.", "Erro")
+            ENDIF
+        CATCH TO loc_oErro
+            IF USED("cursor_4c_SigCdPam")
+                USE IN cursor_4c_SigCdPam
+            ENDIF
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE CarregarDivOp(par_nNops, par_cCursorDestino)
+    *---------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro, loc_cSql, loc_cEmpDNps
+        LOCAL loc_nItem, loc_cCodPds, loc_lChkSubn, loc_lOPValida
+        LOCAL loc_cDopes, loc_nNumes, loc_nQtds, loc_dDataes
+        LOCAL loc_mObss, loc_cCpros, loc_cCodCors, loc_cCodTams
+        LOCAL loc_nCitens, loc_cIdChaves
+
+        loc_lSucesso  = .F.
+        loc_lOPValida = .F.
+        loc_nItem     = 0
+        loc_cCodPds   = ""
+        loc_lChkSubn  = .F.
+
+        IF par_nNops = 0
+            RETURN .F.
+        ENDIF
+
+        TRY
+            *-- Monta chave EmpDNps: cCodEmpresa + DoppPads + Str(Nops,10)
+            loc_cEmpDNps = go_4c_Sistema.cCodEmpresa + THIS.this_cDoppPads + STR(par_nNops, 10)
+            THIS.this_cEmpDNps = loc_cEmpDNps
+            THIS.this_nNops    = par_nNops
+
+            *-- Valida OP em SigCdNec (verifica existencia e se nao foi encerrada)
+            IF USED("cursor_4c_SigCdNec")
+                USE IN cursor_4c_SigCdNec
+            ENDIF
+            loc_cSql = "SELECT TOP 1 EmpDNps, ChkSubn FROM SigCdNec " + ;
+                       "WHERE EmpDNps = " + EscaparSQL(loc_cEmpDNps)
+            IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdNec") > 0
+                IF !EOF("cursor_4c_SigCdNec")
+                    SELECT cursor_4c_SigCdNec
+                    loc_lChkSubn  = NVL(cursor_4c_SigCdNec.ChkSubn, .F.)
+                    loc_lOPValida = .T.
+                ENDIF
+                USE IN cursor_4c_SigCdNec
+
+                IF loc_lOPValida AND loc_lChkSubn
+                    MsgAviso("O.P. J" + CHR(225) + " Foi Encerrada!!!", "Aviso")
+                    loc_lOPValida = .F.
+                ENDIF
+
+                IF !loc_lOPValida AND !loc_lChkSubn AND par_nNops > 0
+                    MsgAviso("O.P. N" + CHR(227) + "o Localizada!!!", "Aviso")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao validar O.P.", "Erro")
+            ENDIF
+
+            IF loc_lOPValida
+                *-- Obtem codigo do produto via SigPdMvf
+                IF USED("cursor_4c_SigPdMvfLoad")
+                    USE IN cursor_4c_SigPdMvfLoad
+                ENDIF
+                loc_cSql = "SELECT TOP 1 CodPds FROM SigPdMvf " + ;
+                           "WHERE EmpDNps = " + EscaparSQL(loc_cEmpDNps)
+                IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigPdMvfLoad") > 0
+                    IF !EOF("cursor_4c_SigPdMvfLoad")
+                        SELECT cursor_4c_SigPdMvfLoad
+                        loc_cCodPds = NVL(ALLTRIM(cursor_4c_SigPdMvfLoad.CodPds), "")
+                    ENDIF
+                    USE IN cursor_4c_SigPdMvfLoad
+                ENDIF
+                THIS.this_cCodPds = loc_cCodPds
+
+                *-- Carrega itens de SigOpPic para o cursor de trabalho
+                IF USED("cursor_4c_SigOpPicLoad")
+                    USE IN cursor_4c_SigOpPicLoad
+                ENDIF
+                loc_cSql = "SELECT Nops, cIdChaves, Dopes, Numes, Qtds, DataEs, Obss, " + ;
+                           "Cpros, CodCors, CodTams, Citens " + ;
+                           "FROM SigOpPic " + ;
+                           "WHERE Nops = " + FormatarNumeroSQL(par_nNops, 0)
+                IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigOpPicLoad") > 0
+                    SELECT (par_cCursorDestino)
+                    ZAP
+
+                    SELECT cursor_4c_SigOpPicLoad
+                    GO TOP
+                    loc_nItem = 0
+                    SCAN
+                        loc_nItem     = loc_nItem + 1
+                        loc_cDopes    = NVL(cursor_4c_SigOpPicLoad.Dopes, "")
+                        loc_nNumes    = NVL(cursor_4c_SigOpPicLoad.Numes, 0)
+                        loc_nQtds     = NVL(cursor_4c_SigOpPicLoad.Qtds, 0)
+                        loc_dDataes   = cursor_4c_SigOpPicLoad.DataEs
+                        loc_mObss     = NVL(cursor_4c_SigOpPicLoad.Obss, "")
+                        loc_cCpros    = NVL(cursor_4c_SigOpPicLoad.Cpros, "")
+                        loc_cCodCors  = NVL(cursor_4c_SigOpPicLoad.CodCors, "")
+                        loc_cCodTams  = NVL(cursor_4c_SigOpPicLoad.CodTams, "")
+                        loc_nCitens   = NVL(cursor_4c_SigOpPicLoad.Citens, 0)
+                        loc_cIdChaves = NVL(ALLTRIM(cursor_4c_SigOpPicLoad.cIdChaves), "")
+
+                        INSERT INTO (par_cCursorDestino) ;
+                            (Dopes, Numes, Qtds, QtdDivs, Dataes, Obss, SeqDivs, ;
+                             Cpros, CodCors, CodTams, Citens, cIdChaves, Nops) ;
+                            VALUES (loc_cDopes, loc_nNumes, loc_nQtds, loc_nQtds, ;
+                                    loc_dDataes, loc_mObss, loc_nItem, ;
+                                    loc_cCpros, loc_cCodCors, loc_cCodTams, ;
+                                    loc_nCitens, loc_cIdChaves, par_nNops)
+                    ENDSCAN
+
+                    USE IN cursor_4c_SigOpPicLoad
+
+                    SELECT (par_cCursorDestino)
+                    IF RECCOUNT() > 0
+                        GO TOP
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao carregar itens de SigOpPic.", "Erro")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            IF USED("cursor_4c_SigCdNec")
+                USE IN cursor_4c_SigCdNec
+            ENDIF
+            IF USED("cursor_4c_SigPdMvfLoad")
+                USE IN cursor_4c_SigPdMvfLoad
+            ENDIF
+            IF USED("cursor_4c_SigOpPicLoad")
+                USE IN cursor_4c_SigOpPicLoad
+            ENDIF
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarDados()
+    *---------------------------------------------------------------------------
+        IF THIS.this_nNops = 0
+            RETURN .F.
+        ENDIF
+        IF !USED(THIS.this_cCursorDivOp) OR RECCOUNT(THIS.this_cCursorDivOp) = 0
+            RETURN .F.
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE Inserir()
+    *---------------------------------------------------------------------------
+        LOCAL loc_lSucesso, loc_oErro, loc_cSql, loc_lErroInLoop
+        LOCAL loc_nTotalQtds, loc_cCursorDiv, loc_nNops, loc_cChave
+        LOCAL loc_nCitens, loc_cDopes, loc_nNumes, loc_nQtdDivs, loc_nSeqDivs
+
+        loc_lSucesso    = .F.
+        loc_lErroInLoop = .F.
+        loc_nTotalQtds  = 0
+        loc_cCursorDiv  = THIS.this_cCursorDivOp
+        loc_nNops       = THIS.this_nNops
+
+        TRY
+            SQLEXEC(gnConnHandle, "BEGIN TRANSACTION")
+
+            *-- Carrega SigOpPic fresco para esta OP (sera o espelho local das operacoes)
+            IF USED("cursor_4c_SigOpPicSave")
+                USE IN cursor_4c_SigOpPicSave
+            ENDIF
+            loc_cSql = "SELECT Nops, cIdChaves, Dopes, Numes, SeqDivs, Qtds, Citens " + ;
+                       "FROM SigOpPic " + ;
+                       "WHERE Nops = " + FormatarNumeroSQL(loc_nNops, 0)
+            IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigOpPicSave") <= 0
+                MsgErro("Falha ao carregar SigOpPic para gravacao.", "Erro")
+                SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+            ELSE
+                *-- Passo 1: Zera SeqDivs de todos os itens da OP
+                SELECT cursor_4c_SigOpPicSave
+                GO TOP
+                SCAN WHILE !loc_lErroInLoop
+                    loc_cChave = NVL(ALLTRIM(cIdChaves), "")
+                    loc_cSql   = "UPDATE SigOpPic SET SeqDivs = 0 " + ;
+                                 "WHERE cIdChaves = " + EscaparSQL(loc_cChave)
+                    IF SQLEXEC(gnConnHandle, loc_cSql) <= 0
+                        MsgErro("Falha ao reinicializar O.P. Favor tentar novamente.", "Erro")
+                        loc_lErroInLoop = .T.
+                    ELSE
+                        REPLACE SeqDivs WITH 0 IN cursor_4c_SigOpPicSave
+                    ENDIF
+                ENDSCAN
+
+                *-- Passo 2: Atualiza Qtds/SeqDivs conforme cursor de trabalho
+                IF !loc_lErroInLoop AND USED(loc_cCursorDiv) AND RECCOUNT(loc_cCursorDiv) > 0
+                    SELECT (loc_cCursorDiv)
+                    GO TOP
+                    SCAN WHILE !loc_lErroInLoop
+                        loc_nCitens  = NVL(EVALUATE(loc_cCursorDiv + ".Citens"), 0)
+                        loc_cDopes   = NVL(ALLTRIM(EVALUATE(loc_cCursorDiv + ".Dopes")), "")
+                        loc_nNumes   = NVL(EVALUATE(loc_cCursorDiv + ".Numes"), 0)
+                        loc_nQtdDivs = NVL(EVALUATE(loc_cCursorDiv + ".QtdDivs"), 0)
+                        loc_nSeqDivs = NVL(EVALUATE(loc_cCursorDiv + ".SeqDivs"), 0)
+
+                        *-- Localiza linha correspondente em SigOpPicSave por Citens+Dopes+Numes
+                        SELECT cursor_4c_SigOpPicSave
+                        GO TOP
+                        SCAN FOR Nops = loc_nNops AND Citens = loc_nCitens
+                            IF NVL(ALLTRIM(Dopes), "") + STR(NVL(Numes, 0), 6) = ;
+                               loc_cDopes + STR(loc_nNumes, 6)
+                                loc_cChave = NVL(ALLTRIM(cIdChaves), "")
+                                loc_cSql   = "UPDATE SigOpPic SET " + ;
+                                             "Qtds = " + FormatarNumeroSQL(loc_nQtdDivs, 3) + ;
+                                             ", SeqDivs = " + FormatarNumeroSQL(loc_nSeqDivs, 0) + ;
+                                             " WHERE cIdChaves = " + EscaparSQL(loc_cChave)
+                                IF SQLEXEC(gnConnHandle, loc_cSql) <= 0
+                                    MsgErro("Falha ao atualizar SigOpPic. Favor reinicializar.", "Erro")
+                                    loc_lErroInLoop = .T.
+                                ELSE
+                                    REPLACE Qtds    WITH loc_nQtdDivs, ;
+                                            SeqDivs WITH loc_nSeqDivs ;
+                                            IN cursor_4c_SigOpPicSave
+                                ENDIF
+                                EXIT
+                            ENDIF
+                        ENDSCAN
+                        SELECT (loc_cCursorDiv)
+                    ENDSCAN
+                ENDIF
+
+                *-- Passo 3: Soma Qtds atualizadas e grava total em SigPdMvf
+                IF !loc_lErroInLoop
+                    SELECT cursor_4c_SigOpPicSave
+                    loc_nTotalQtds = 0
+                    SUM Qtds TO loc_nTotalQtds
+
+                    IF USED("cursor_4c_SigPdMvfSave")
+                        USE IN cursor_4c_SigPdMvfSave
+                    ENDIF
+                    loc_cSql = "SELECT TOP 1 cIdChaves FROM SigPdMvf " + ;
+                               "WHERE Nops = " + FormatarNumeroSQL(loc_nNops, 0)
+                    IF SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigPdMvfSave") > 0
+                        SELECT cursor_4c_SigPdMvfSave
+                        IF !EOF("cursor_4c_SigPdMvfSave")
+                            loc_cChave = NVL(ALLTRIM(cursor_4c_SigPdMvfSave.cIdChaves), "")
+                            loc_cSql   = "UPDATE SigPdMvf SET " + ;
+                                         "Qtds = " + FormatarNumeroSQL(loc_nTotalQtds, 3) + ;
+                                         " WHERE cIdChaves = " + EscaparSQL(loc_cChave)
+                            IF SQLEXEC(gnConnHandle, loc_cSql) <= 0
+                                MsgErro("Falha ao atualizar total em SigPdMvf.", "Erro")
+                                loc_lErroInLoop = .T.
+                            ENDIF
+                        ENDIF
+                        USE IN cursor_4c_SigPdMvfSave
+                    ENDIF
+                ENDIF
+
+                IF loc_lErroInLoop
+                    SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+                ELSE
+                    SQLEXEC(gnConnHandle, "COMMIT TRANSACTION")
+                    THIS.RegistrarAuditoria("U")
+                    loc_lSucesso = .T.
+                ENDIF
+
+                IF USED("cursor_4c_SigOpPicSave")
+                    USE IN cursor_4c_SigOpPicSave
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION")
+            IF USED("cursor_4c_SigOpPicSave")
+                USE IN cursor_4c_SigOpPicSave
+            ENDIF
+            IF USED("cursor_4c_SigPdMvfSave")
+                USE IN cursor_4c_SigPdMvfSave
+            ENDIF
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE Atualizar()
+    *---------------------------------------------------------------------------
+        RETURN THIS.Inserir()
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+    *---------------------------------------------------------------------------
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+            THIS.this_nNops = NVL(Nops, 0)
+            loc_lSucesso = .T.
+        ENDIF
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROCEDURE ObterChavePrimaria()
+    *---------------------------------------------------------------------------
+        RETURN TRANSFORM(THIS.this_nNops)
+    ENDPROC
+
+    *---------------------------------------------------------------------------
+    PROTECTED PROCEDURE RegistrarAuditoria(par_cOperacao)
+    *---------------------------------------------------------------------------
+        LOCAL loc_cSql, loc_oErro
+        TRY
+            loc_cSql = "INSERT INTO LogAuditoria (Tabela, Chave, Operacao, Usuario, DataHora) " + ;
+                       "VALUES (" + ;
+                       EscaparSQL("SigOpPic") + ", " + ;
+                       EscaparSQL(THIS.ObterChavePrimaria()) + ", " + ;
+                       EscaparSQL(par_cOperacao) + ", " + ;
+                       EscaparSQL(gc_4c_UsuarioLogado) + ", " + ;
+                       "GETDATE())"
+            SQLEXEC(gnConnHandle, loc_cSql)
+        CATCH TO loc_oErro
+            MsgErro("Erro ao registrar auditoria: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+ENDDEFINE
+

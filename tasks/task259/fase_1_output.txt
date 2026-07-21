@@ -1,0 +1,17 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrAprBO.prg` criado com:
+
+- **37 propriedades `this_*`** cobrindo todos os campos do formul├írio original:
+  - Filtros de sele├º├úo (GrupoInicio/Fim, Colecao, Conta, Promo)
+  - Tipo de reajuste (Opt_Tipo ÔåÆ this_nTipo = 1/2/3)
+  - Par├ómetros por tipo (Variacao%, MarkUp1/2, Fator)
+  - 6 moedas auxiliares (MoeCs, MoeCusFs, Moedas, MoeVs, CFtios, MoeCusto)
+  - 4 flags checkbox (Auditado, Limpar, IncCusts, Ignorar)
+  - 9 campos do cursor CrProdutos (espelham o grid)
+  - Par├ómetros do sistema (SigCdPam/SigCdPac)
+  - Estado do processamento (this_lProcessado, this_lAtualizado)
+
+- **`Init()`** com `this_cTabela = "SigCdPro"` e `this_cCampoChave = "CPros"`, com CATCH verboso conforme regra #9
+
+- **`ObterChavePrimaria()`** retornando `this_cCPros` para auditoria
+
+Pr├│xima fase: **Fase 2/8** ÔÇö completar o BO com `BuscarProdutos()`, `ProcessarReajuste()`, `CalcPreco()`, `CalcMarkpa()`, `BuscarCotacao()` e demais m├®todos.

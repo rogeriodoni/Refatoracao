@@ -246,6 +246,7 @@ DEFINE CLASS FormSigPdM13 AS FormBase
             .DisabledBackColor = RGB(255,255,255)
             .Value             = ""
             .Visible           = .T.
+            .MaxLength   = 3
         ENDWITH
 
         *-- Codigo da operacao (GetOperacao do legado)

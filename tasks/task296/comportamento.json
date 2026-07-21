@@ -1,0 +1,499 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 7,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fDtoSQL", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRHPR",
+      "evento": "Init",
+      "linhas": 164,
+      "codigoOriginal": "Lparameters pFrm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pDtI, pDtF\n\nLocal lcGO, lcCO, lcGD, lcCD, lcAce\n\nThisForm.poDataMgr = CreateObject([fSqlConector])\n\nlcAce = fChecaAcesso([SIGPRHPR],[AUDITORIA])\n\nThisForm.ParentForm = pFrm\n\nThisForm.Get_Data.Visible   = .f.\nThisForm.Say6.Visible       = .f.\nThisForm.GetGruOri.Value    = []\nThisForm.GetConOri.Value    = []\nThisForm.GetGruDes.Value    = []\nThisForm.GetConDes.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fDtoSQL",
+        "metodosFormChamados": "poDataMgr = CreateObject,Value       = Nvl",
+        "controlesReferenciados": "Get_Data,grd_historico,get_Auditors,Get_usuario",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor dbHistorico (Datas d (8), MascNum c(6), Dopes c(20), CUnis c(3), Qtds n(12,3), Opers c(1), SQtds n(12,3))\nIndex On Datas Tag Datas\n\nCreate Cursor crSubniveis (Emps c(3), Dopes c(20), Numes n(6))\nIndex on Emps tag Emps\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.sair",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .T.\n\nThisForm.poDataMgr.Release\n\nThisForm.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico",
+      "evento": "Procedure",
+      "linhas": 150,
+      "codigoOriginal": "LParameters nColIndex\nLocal lcGO, lcCO, lcGD, lcCD\n\nSelect CrSigMvHst\n\nlcProduto = CrSigMvHst.cpros\n\nWith ThisForm.poDataMgr\n\n\tIf Used(\"CrSigMvCab\")\n\t\tUse In CrSigMvCab\n\tEndIf\n\t\n\tIf ThisForm.poDataMgr.Cursorquery('SigCdOpe','CrOpe','Dopes',CrSigMvHst.Dopes,[Dopes])\n\t\n\t\tlnQueryOk = .SqlExecute([Select grupoos,contaos,grupods,contads,Notas From SigMvCab ]+;\n\t\t\t  [Where empdopnums = \"]+Iif(!IsEmpty(CrSigMvHst.empos),CrSigMvHst.empos,CrSigMvHst.emps)+;\n\t\t\t\t\tCrSigMvHst.dopes+Str(CrSigMvHst.numes,6)+[... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Cursorquery,Value = Nvl,Value       = Nvl,Value = Iif,SqlExecute",
+        "controlesReferenciados": "get_Auditors,get_DtAudits,Get_nota,Get_usuario,ChkAuditado",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.grd_historico.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetGruOri",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetConOri",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetDesGruOri",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetDesConOri",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetGruDes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetConDes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetDesGruDes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.GetDesConDes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.chkAuditado",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "Private lcDtHis\n\nWith ThisForm.poDataMgr\n\n\tIf This.Value = 1\n\t\tSelect CrSigMvHst\n\t\tReplace CrSigMvHst.auditors With Usuar\n\t\tlnQueryOk = .SqlExecute([Update SigMvHst Set auditors = \"]+Usuar+[\" Where cidchaves = \"]+CrSigMvHst.cidchaves+[\" ],\"\")\n\t\tIf lnQueryOk < 1\n\t\t\tMessageBox(\"Favor reinicializar o processo.\",16,\"Falha na Conexão\")\n\t\t\tThisForm.poDataMgr.RollBack()\n\t\t\tReturn(.F.)\n\t\tEndIf\n\n\t\tReplace CrSigMvHst.dtaudits With Date()\n\t\tldDtHis = Date()\n\t\tlcHrHis = Time()\n\t\tlcHrHis = Substr(lcHrHis,1,2... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RollBack,Commit",
+        "controlesReferenciados": "get_auditors,get_dtaudits,grd_historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_DtAudits",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_Data",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "This.Visible          = .F.\nThisForm.Say6.Visible = .F.\nThisForm.grd_historico.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_Data",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThis.Visible          = .F.\n\tThisForm.Say6.Visible = .F.\n\tReturn(.T.)\nEndIf\n\nSelect CrSigMvHst\nSet Near On\n=Seek(DTOS(This.Value),\"CrSigMvHst\",\"datas\")\nSet Near Off\n\nThisForm.grd_historico.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "grd_historico",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_Auditors",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_Usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Get_nota",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.Command1",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Get_Data.Visible = .T.\nThisForm.Say6.Visible     = .T.\nThisForm.Get_Data.Value  = DATE()\nThisForm.Get_Data.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value  = DATE",
+        "controlesReferenciados": "Get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.btnDocumento",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If !IsEmpty(CrSigMvHst.emps) And !IsEmpty(CrSigMvHst.dopes) And !IsEmpty(CrSigMvHst.numes)\n\tIf ThisForm.poDataMgr.ChkRegister('SigMvCab','EmpDopNums',Iif(!IsEmpty(CrSigMvHst.empos),CrSigMvHst.empos,CrSigMvHst.emps)+CrSigMvHst.dopes+Str(CrSigMvHst.numes,6))\n\t\tDo Form SigMvExp With CrSigMvHst.dopes,\"C\",CrSigMvHst.numes,Iif(!IsEmpty(CrSigMvHst.empos),CrSigMvHst.empos,CrSigMvHst.emps),.T.\n\tElse\n\t\tIf ThisForm.poDataMgr.ChkRegister('SigCdNec','EmpDnPs',CrSigMvHst.emps+CrSigMvHst.dopes+Str(CrSigMvHst.n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigMvCab',ChkRegister('SigCdNec'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRHPR.getObs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRHPR.grd_historico.Procedure",
+      "queryOriginal": "\t\tlnQueryOk = .SqlExecute([Select grupoos,contaos,grupods,contads,Notas From SigMvCab ]+; \t\t\t  [Where empdopnums = \"]+Iif(!IsEmpty(CrSigMvHst.empos),CrSigMvHst.empos,CrSigMvHst.emps)+; \t\t\t\t\tCrSigMvHst.dopes+Str(CrSigMvHst.numes,6)+[... [TRUNCADO]",
+      "tabelas": "SigMvCab",
+      "colunas": "grupoos,contaos,grupods,contads,Notas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRHPR.chkAuditado.Click",
+      "queryOriginal": "\t\tlnQueryOk = .SqlExecute([Update SigMvHst Set auditors = \"]+Usuar+[\" Where cidchaves = \"]+CrSigMvHst.cidchaves+[\" ],\"\") \t\tIf lnQueryOk < 1",
+      "tabelas": "SigMvHst",
+      "colunas": "auditors",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCab", "SigMvHst"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

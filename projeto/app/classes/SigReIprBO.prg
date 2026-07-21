@@ -25,7 +25,7 @@ DEFINE CLASS SigReIprBO AS RelatorioBase
     this_nOrdemDirecao     = 2
 
     *-- Configuracao do relatorio
-    this_cCursorDados      = "cursor_4c_MalaRelacao"
+    this_cCursorDados      = "Relacao"
     this_cCaminhoFRX       = ""
     this_cTituloRelatorio  = ""
     this_cSubtituloRelatorio = ""

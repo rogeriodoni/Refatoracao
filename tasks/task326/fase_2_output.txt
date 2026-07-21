@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. Resumo do que foi implementado na Fase 2:
+
+**`SigPrRsaBO.prg` ÔÇö m├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|---|---|---|
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia todos os campos de `CrSigOpClP` ÔåÆ propriedades `this_c*`/`this_d*`/`this_n*` |
+| `BuscarFila(par_nPrioridade)` | PUBLIC | `SELECT` de `SigOpClP` filtrado por `priors` ÔåÆ `CrSigOpClP` |
+| `ExecutarAtualizacao()` | PROTECTED | `UPDATE SigOpClP SET usuars = usuars WHERE cidchaves = ?` (marca como processando; detecta -3 = queda de conex├úo) |
+| `ExecutarExclusao()` | PROTECTED | `DELETE FROM SigOpClP WHERE cidchaves = ?` (remove da fila ap├│s sucesso) |
+| `ProcessarItem()` | PUBLIC | Chama `fRecalculaP(Emps,Grupos,Estos,Cpros,Datas,CodCors,CodTams)` + `fRecalculaP(.T.)` (padr├úo de SIGPRCPRBO) |
+| `VerificarMovimento()` | PUBLIC | Checa `SigMvEst`/`SigMvHst` ÔÇö retorna `.T.` se deve pular a exclus├úo |
+| `GravarLog(par_cMensagem)` | PUBLIC | `STRTOFILE` no `Fortyus.Log` (modo parametrizado/batch) |
+| `IniciarLog(par_cMensagem)` | PUBLIC | Cria cabe├ºalho no `Fortyus.Log` |
+| `RegistrarAuditoria(par_cOperacao)` | PROTECTED | Override ÔÇö INSERT em `LogAuditoria` com `GETDATE()` |
+
+**Novas propriedades**: 10 campos de `SigOpClP` (`this_cCidChaves`, `this_nPriors`, `this_cEmps`, `this_cGrupos`, `this_cEstos`, `this_cCpros`, `this_dDatas`, `this_cCodCors`, `this_cCodTams`, `this_cUsuars`).
+
+Todos os `RETURN` est├úo fora dos blocos `TRY/CATCH`. O Form (Fase 3+) usar├í `BuscarFila` + SCAN loop com `CarregarDoCursor` + `Atualizar()` + `ProcessarItem()` + `Excluir()`, atualizando `lbl_4c_Status` durante o loop.

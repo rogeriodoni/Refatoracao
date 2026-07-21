@@ -1,0 +1,14 @@
+﻿Todas as mudan├ºas est├úo corretas. Resumo da Fase 8:
+
+**Adicionado ao `FormSigPrCtc.prg`:**
+- `AjustarBotoesPorModo()` (linha 1316) ÔÇö habilita/desabilita Visualizar, Alterar, Excluir conforme se o cursor tem registros, e respeita `this_cEscolha` para Incluir/Excluir
+- Chamada a `AjustarBotoesPorModo()` ao final de `CarregarLista()` (linha 756)
+
+**Todos os m├®todos j├í estavam implementados das fases anteriores:** `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`.
+
+**Integra├º├úo no `menu.prg`:**
+- `DEFINE BAR 52/53` em `popMovimentos` com "Cota├º├Áes por Opera├º├Áes"
+- `ON SELECTION BAR 53` ÔåÆ `AbrirFormSigPrCtc`
+- Procedure `AbrirFormSigPrCtc()` com padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg n├úo precisou de altera├º├úo** ÔÇö usa ADIR() din├ómico que carrega automaticamente `*BO.prg` de `classes\` e `Form*.prg` de `cadastros\`.

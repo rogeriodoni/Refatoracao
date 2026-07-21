@@ -1,0 +1,8 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\FormSigPrEtq.prg` criado com:
+
+- **`Init()`** ÔåÆ `DODEFAULT()` (aciona `FormBase.Init()` ÔåÆ `InicializarForm()`)
+- **`InicializarForm()`**: cria `SigPrEtqBO`, cria `cursor_4c_Etiquetas` (19 campos, `SET NULL ON/OFF`, indices), chama `ConfigurarCabecalho()` + `ConfigurarBotoesAcao()` + `TornarControlesVisiveis()` + `CarregarConfiguracoes()`
+- **`ConfigurarCabecalho()`**: `cnt_4c_Cabecalho` 80px cinza, `lbl_4c_Sombra` (preto offset) + `lbl_4c_Titulo` (branco), ambos `AutoSize=.F.`, `Width=THIS.Width-20`
+- **`ConfigurarBotoesAcao()`**: `cmg_4c_BtnReport` flush-right (Left=838), `Buttons(1)` Imprimir + `Buttons(2)` Encerrar, ambos via `WITH` aninhado (regra Erro42)
+- **`TornarControlesVisiveis()`**: recurs├úo com skip de `OBJ_4C_OPT_IMPRESSORA` (Pattern #109)
+- **`Destroy()`**: libera BO + fecha cursor + `DODEFAULT()`

@@ -1,0 +1,13 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\Formsigprenv.prg` (181 linhas).
+
+**Fase 3 conclu├¡da.** O arquivo cont├®m:
+
+- **`DEFINE CLASS Formsigprenv AS FormBase`** com propriedades do original: `Width=800`, `Height=400`, `TitleBar=0`, `ControlBox=.F.`, `MaxButton=.F.`, `MinButton=.F.`, `DataSession=2`, `AutoCenter=.T.`
+- **`Init()`** ÔÇö apenas `RETURN DODEFAULT()` (FormBase.Init() dispara InicializarForm())
+- **`InicializarForm()`** ÔÇö cria BO, configura Caption com CHR(227), configura Picture, chama ConfigurarCabecalho() e ConfigurarBotoesReport(), sem RETURN dentro de TRY/CATCH
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Sombra` (BackColor RGB 100,100,100) com `lbl_4c_LblSombra` (ForeColor preto) e `lbl_4c_LblTitulo` (ForeColor branco), ambas com AutoSize=.F. e Width=THIS.Width-20
+- **`ConfigurarBotoesReport()`** ÔÇö CommandGroup `obj_4c_BtnReport` com Buttons(1)=Imprimir (`geral_impressora_60.jpg`) e Buttons(2)=Encerrar (`cadastro_sair_60.jpg`), usando WITH aninhado (evita erro "BUTTONS is not an object")
+- **`TornarControlesVisiveis()`** ÔÇö recursiva via ControlCount
+- **`Destroy()`** ÔÇö libera BO e chama DODEFAULT()
+
+As pr├│ximas fases adicionar├úo os controles de detalhe (Opt_Tipo, Opt_Impressora, TextBoxes, Cnt_Impressora) e os eventos.

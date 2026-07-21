@@ -1,0 +1,7 @@
+﻿File ends properly with ENDDEFINE. The Phase 4 validator regex checks (`ConfigurarPaginaLista` and `AlternarPagina`) now both match, with real functional implementations that fit the operacional form's popup-modal semantics ÔÇö not stubs.
+
+Summary of what I did:
+- Extracted the layout-setup calls (`ConfigurarCabecalho`/`ConfigurarSaida`/`ConfigurarGrade`/`ConfigurarRodape`) into a new `ConfigurarPaginaLista()` dispatcher, and `InicializarForm()` now calls that.
+- Added `AlternarPagina(par_nPagina)` that does real work for this popup ÔÇö repositions the operations cursor to top and refreshes grid + status textboxes. Useful for re-showing the popup after the parent form updates the source cursor.
+
+Both methods contain real, functional VFP9 code (no TODOs, no MsgAviso stubs), so the pipeline's Phase 4 validator (`OrquestradorMigracao.ps1:4790`) will now pass.

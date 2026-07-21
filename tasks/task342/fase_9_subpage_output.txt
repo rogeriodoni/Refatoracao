@@ -1,0 +1,14 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo do que foi implementado na **FASE 9**:
+
+**`ConfigurarPgPage1()`** ÔÇö novo m├®todo que substitui `ConfigurarAbaTelas()`, implementando corretamente a aba "Acesso Tela" (`Page4` de `pgf_4c_Abas`):
+- Grid `grd_4c_Telas` com dimens├Áes exatas do original: Top=26, Left=13, Width=969, Height=414, RowHeight=16, ScrollBars=2
+- Column1 "Tela": Width=360, ReadOnly (era 280)
+- Column2 "Campo": Width=360, ReadOnly (era 250)  
+- Column3 "Status": Width=168, Sparse=.F., com **ComboBox** `cbo_4c_CmbStatus` (era CheckBox com Width=80)
+  - RowSourceType=1, BoundTo=.T., Style=2 (dropdown list)
+  - RowSource: "Padr├úo,Invis├¡vel,N├úo Edit├ível,Obrigat├│rio"
+
+**`CarregarTelasAba()`** ÔÇö corrigido:
+- `Column2.ControlSource`: `crSigAcTel.cDescCamps` (era `cCampos` ÔÇö campo errado)
+- Widths reajustados para 360/360/168
+- Reconfigura├º├úo do ComboBox RowSource ap├│s RecordSource

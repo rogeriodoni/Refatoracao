@@ -1,0 +1,17 @@
+﻿Arquivo `Formsigprcpd.prg` criado em `C:\4c\projeto\app\forms\operacionais\` com 537 linhas.
+
+**O que foi entregue na Fase 3:**
+
+| Componente | Detalhes |
+|---|---|
+| `DEFINE CLASS Formsigprcpd AS FormBase` | Width=800, Height=600, TitleBar=0, DataSession=2 ÔÇö id├¬ntico ao legado |
+| `Init(pFase, pUnidade, pData, pCodigo)` | Armazena par├ómetros antes de DODEFAULT() |
+| `InicializarForm()` | Cria BO, chama configura├º├Áes, guard `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Fundo `new_background.jpg` (form flat, sem PageFrame CRUD) |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` cinza RGB(100,100,100) + lbl_4c_Sombra + lbl_4c_Titulo |
+| `ConfigurarContainer1()` | `cnt_4c_Container1` com Fase+Data (ReadOnly, laranja claro) |
+| `ConfigurarContainer2()` | `cnt_4c_Container2` com Cap+Utz+Sld + labels "Min" |
+| `ConfigurarBotaoEncerrar()` | `cmd_4c_Encerrar` Left=725, Top=4, Cancel=.T., Themes=.T. |
+| `TornarControlesVisiveis()` | Recursivo com skip para `img_4c_FigJpg` e `shp_4c_Shape4` |
+| `CarregarDados()` | Chama BO.CarregarDados() + popula containers; grid aguarda Fase 4 |
+| `CmdEncerrarClick()` + `Destroy()` | Release limpo, BO = .NULL. antes de DODEFAULT() |

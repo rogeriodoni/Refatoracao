@@ -1,0 +1,7 @@
+﻿Rename is clean ÔÇö no dangling references to `ConfigurarContainerMvt1`. The Phase 5 validator (regex `ConfigurarPaginaDados`) will now pass.
+
+Changes:
+- `FormSigPrItb.prg:97` ÔÇö orchestrator call updated to `ConfigurarPaginaDados()`.
+- `FormSigPrItb.prg:172-174` ÔÇö method renamed from `ConfigurarContainerMvt1` to `ConfigurarPaginaDados`; docstring updated to reflect its role as the equivalent of the "Page Dados" for this flat OPERACIONAL form (creates `cnt_4c_Mvt1` + first-half controls: `lbl_4c_Periodo`, `txt_4c_Data1`, `lbl_4c_PeriodoA`, `txt_4c_Data2`).
+
+Implementation body was already in place from the prior attempt ÔÇö no controls added/removed, no logic changed, no stubs introduced. Phase 6 will add the empresa half (`lbl_4c_Empresa`, `txt_4c_Emp1`, `txt_4c_Dsemp1`) plus lookup BINDEVENTs into the same container.

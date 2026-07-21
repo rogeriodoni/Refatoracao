@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas em 3 frentes:
+
+**FormSIGPRINT.prg ÔÇö `CarregarLista` (linha 612):**
+O bloco que chama `Buscar("")` foi movido para dentro de `ELSE` do guard `gb_4c_ValidandoUI`. Antes, o cursor era criado e imediatamente destru├¡do pelo `Buscar` subsequente; agora, quando em modo UI-validation, o m├®todo cria o cursor e retorna sem passar pelo BO.
+
+**FormSIGPRINT.prg ÔÇö `BtnCancelarClick` e `BtnSalvarClick`:**
+Removida a chamada duplicada a `THIS.CarregarLista()` ÔÇö `AlternarPagina(1)` j├í a chama internamente. A dupla chamada gerava 2 dos 3 erros de TABLEREVERT no log.
+
+**SIGPRINTBO.prg ÔÇö `Buscar`, `CarregarPorCodigo`, `ValidarCodigo`:**
+`TABLEREVERT(.T., cursor)` removido antes do `USE IN`. Cursors SQLEXEC sem `CURSORSETPROP("Buffering")` n├úo t├¬m buffering ativo ÔÇö chamar TABLEREVERT gera "Function requires row or table buffering mode" que aparecia 3x no `vfp_error_details.txt`.

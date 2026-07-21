@@ -1,0 +1,957 @@
+{
+  "resumo": {
+    "totalMetodos": 55,
+    "metodosComSQL": 17,
+    "metodosComValidacao": 32,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fCarregaGrade", "fConfigGeral", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters pCPros\n\nPrivate lcCPros\n\nlcCPros = pCPros\n\nThisForm.Pagina.Dados.GradeI.RecordSource = ''\n\nThisForm.poDataMgr.Requery('CrSigCdMax')\nSelect CrSigCdMax\nGo Top\n\nWith ThisForm.Pagina.Dados.GradeI\n\t.RecordSource = 'CrSigCdMax'\n\t.Column1.ControlSource = 'CrSigCdMax.emps'\n\t.Column2.ControlSource = 'CrSigCdMax.Qmaxs'\n\t.Column3.ControlSource = 'CrSigCdMax.codtams'\n\t.Column4.ControlSource = 'CrSigCdMax.codcores'\n\t.Column5.ControlSource = 'CrSigCdMax.Deptos'\n\t.Refresh\nEndWith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Local lnRegs, lnRegMaxs\n\nlnRegMaxs = 12\n\nInsert Into CrSigCdMax (cpros,cidchaves) Values (ThisForm.Pagina.Dados.Get_Produto.Value,fUniqueIds())\nSelect CrSigCdMax\nCount To lnRegs\nGo Top\n\nIf lnRegs > lnRegMaxs\n\tlnI = 10\nElse\n\tlnI = lnRegs\nEndIf\n\nWith ThisForm.Pagina.Dados.GradeI\n\t.Refresh\n\tDo While lnRegs > 0\n\t\t.ActivateCell(lnI,2)\n\t\tIf Empty(CrSigCdMax.emps)\n\t\t\t.ActivateCell(lnI,1)\n\t\t\tExit\n\t\tElse\n\t\t\tlnRegs = lnRegs - 1\n\t\t\t.DoScroll(1)\n\t\tEndIf\n\tEndDo\nEndWith",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "Select CrSigCdMax\nWith ThisForm.Pagina.Dados\n\t.Get_Produto.Value  = CsCabec.cpros\n\t.GetDPro.Value      = CsCabec.dpros\n\t.GetCgru.Value      = CsCabec.cgrus\n\t.GetDGru.Value      = CsCabec.dgrus\n\t.GetIFor.Value      = CsCabec.ifors\n\t.GetDFor.Value      = CsCabec.rclis\n\t.GetRefs.Value      = CsCabec.reffs\n\t.Opc_Situacao.Value = Iif(CsCabec.Situas = 2,2,1)\n\t.Get_Produto.Refresh\n\t.GetDPro.Refresh\n\t.GetCgru.Refresh\n\t.GetDGru.Refresh\n\t.GetIFor.Refresh\n\t.GetDFor.Refresh\n\t.GetRefs.Refresh\n\t.Opc_Situacao.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,lTemCor    = InList,lTemTam    = InList",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Init",
+      "linhas": 118,
+      "codigoOriginal": "LParameters _Acesso, pcForm, pcEsc, pcDPros, pcCGrus, pcIFors, pcReffs\n\nThisForm.pProduto = _Acesso\nIf Type([_Acesso]) = [C]\n\tThisForm.LockScreen = .t.\n\tThisForm.WindowType = 1\nEndif\n \nThisForm.pcExterno = []\nThisForm.pcCPros   = []\n\nIf Type([pcEsc]) = [C] And Type([_Acesso]) = [C]\n\tThisForm.pcExterno = pcEsc\n\tThisForm.pcCPros   = Padr(_Acesso, 14)\n\tThisForm.pcDPros   = pcDPros\n\tThisForm.pcCGrus   = pcCGrus \n\tThisForm.pcIFors   = pcIFors \n\tThisForm.pcReffs   = pcReffs \n\n\tThisForm.LockScreen = .f... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fCarregaGrade",
+        "metodosFormChamados": "pcCPros   = Padr,SqlExecute,Requery,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nlcCol = Str(ThisForm.Busca,1)\nThisForm.Pagina.Lista.Grade.SetFocus\nThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus\nThisForm.Pagina.Lista.Grade.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Update('CrSigCdMax')\nThisForm.poDataMgr.Commit()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "ThisForm.Pagina.Dados.Gradei.RecordSource = ''\n\nThisForm.poDataMgr.Requery('CrSigCdMax')\nSelect CrSigCdMax\nDelete From CrSigCdMax\nGo Top\n\nDelete From CrSigCdMax\nThisForm.poDataMgr.Update('CrSigCdMax')\nThisForm.poDataMgr.Commit()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Update('CrSigCdMax')\nThisForm.poDataMgr.Commit()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "Local lcGLinhas, lcGDescrs\n\nlcGCdPro = Alltrim(ThisForm.Pagina.Dados.Get_Produto.Value)\nlcGDsPro = Alltrim(ThisForm.Pagina.Dados.GetDPro.Value)\nlcGIfors = Alltrim(ThisForm.Pagina.Dados.GetIfor.Value)\nlcGReffs = Alltrim(ThisForm.Pagina.Dados.GetRefs.Value)\n\nSelect CrProdutos\nSet Near On\n\nDo Case\n\n\tCase !Empty(lcGCdPro)\n\t\tSet Order To CPros\n\t\tSeek lcGCdPro\n\t\tThisForm.Busca = 1\n\n\tCase !Empty(lcGDsPro)\n\t\tSet Order To DPros\n\t\tSeek lcGDsPro\n\t\tThisForm.Busca = 2\n\n\tCase !Empty(lcGIfors)\n\t\tSet Order To I... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Click",
+      "linhas": 145,
+      "codigoOriginal": "LParameters Opcao\n\nLocal llOk, lnRegs, lnRegMaxs\n\nIf Type('Opcao') = 'N'\n\tThis.Value = Opcao\nEndIf\n\nIf !DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn\nEndIf\n\nWith This.Parent.Parent.Dados\n\t.Get_Produto.Value  = ''\n\t.GetDpro.Value      = ''\n\t.GetIFor.Value      = ''\n\t.GetDFor.Value      = ''\n\t.GetCGru.Value      = ''\n\t.GetDGru.Value      = ''\n\t.GetRefs.Value      = ''\n\t.BtnExcluir.Visible = InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\t.Refresh\nEndWith\n\nThisForm.lTemCor = .F.\nThisForm.lTemTam... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcertaGrade,MRefreshGet,SqlExecute,pcCPros,fUniqueIds",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Click",
+      "linhas": 44,
+      "codigoOriginal": "Private lcCPros\n\nlcCPros = This.Parent.Parent.Get_Produto.Value\n\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\tIf Empty(lcCPros)\n\t\t\tMessagebox('Produto Inválido !!!',0+48,'')\n\t\t\tThis.Parent.Parent.Get_Produto.SetFocus\n\t\t\tReturn 0\n\t\tEndIf\n\tEndIf\n\t\n\tSelect CrSigCdMax\n\tGo Top\n\tScan\n\t\tIf Empty(CrSigCdMax.emps) \n\t\t\tDelete\n\t\tEndIf\n\tEndScan\n\t\n\tThis.Parent.Parent.GradeI.Refresh\n\tThis.Parent.Parent.GradeI.Column1.SetFocus\n\n\tSelect CrSigCdMax\n\tGo Top\n\t\n\tIf Eof()\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "=DoDefault()\n\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n\nIf Not Empty(ThisForm.pcExterno)\n\tThisForm.Release\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Return (Type([ThisForm.pProduto])<>[C]) Or Not Empty(ThisForm.pcExterno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pProduto])<>[C]) Or Not Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS cName, cClass \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.btnCopiar",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Zap In CsCopia\n\nWith ThisForm.Pagina\n\t.Dados.Enabled = .F.\n\tWith .Lista\n\t\t.BtnCopiar.Enabled = .F.\n\t\t.Grade.Enabled     = .F.\n\t\tWith .Grupo_Op\n\t\t\t.Enabled           = .F.\n\t\t\t.Inserir.Enabled   = .F.\n\t\t\t.Consultar.Enabled = .F.\n\t\t\t.Alterar.Enabled   = .F.\n\t\t\t.Excluir.Enabled   = .F.\n\t\t\t.Procurar.Enabled  = .F.\n\t\t\t.Listar.Enabled    = .F.\n\t\tEndWith\n\t\tWith .Grupo_Saida\n\t\t\t.Enabled      = .F.\n\t\t\t.Sair.Enabled = .F.\n\t\tEndWith\n\t\tWith .CntCopia\n\t\t\t.Visible             = .T.\n\t\t\t.CmdProcessa.Caption = '\\... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetEmpDs",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If fAcessoEmpresa(Usuar,'C',This.Value,This)\n\tIf This.Value = ThisForm.Pagina.Lista.CntCopia.GetEmpOs.Value\n\t\tMessageBox('Empresa Destino não pode ser igual a Empresa Origem !!!',48,'')\n\t\tThis.Value = ''\n\t\tReturn(.F.)\n\tEndIf\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetEmpDs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(ThisForm.Pagina.Lista.CntCopia.GetEmpOs.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetEmpOs",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "With ThisForm.Pagina.Lista.CntCopia.GetEmpDs \n\tIf !Empty(This.Value)\n\t\t.Enabled = .T.\n\tElse\n\t\t.Enabled = .F.\n\tEndIf\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetEmpOs",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,This))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetEmpOs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Pagina.Lista.CntCopia.GetEmpDs.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.cmdCopiar",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "Local lnCnt, lnTotal\n\nlcEmps = This.Parent.GetEmpDs.Value\nlnCnt  = 0\n\nSelect CsCopia\nCount To lnTotal\nGo Top\nScan\n\tIf CsCopia.marcas = 1 And CsCopia.existes = 0\n\t\tlnCnt = lnCnt + 1\n\t\tInsert Into CrSigCdMax (cpros,emps,Qmaxs,codtams,codcores,cidchaves,Deptos) ;\n\t\t\t\t\t\tValues (CsCopia.cpros,lcEmps,CsCopia.Qmaxs,;\n\t\t\t\t\t\t\t\tCsCopia.codtams,CsCopia.codcores,fUniqueIds(),CsCopia.Deptos)\n\tEndIf\nEndScan\n\nThisForm.poDataMgr.Update('CrSigCdMax')\nThisForm.poDataMgr.Commit()\n\nMessageBox('Foram copiados ' + Al... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.cmdSair",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "With ThisForm.Pagina\n\t.Dados.Enabled = .T.\n\tWith .Lista\n\t\t.CntCopia.Visible  = .F.\n\t\t.BtnCopiar.Enabled = ThisForm.AcCopiar\n\t\t.Grade.Enabled     = .T.\n\t\tWith .Grupo_Op\n\t\t\t.Enabled           = .T.\n\t\t\t.Inserir.Enabled   = .T.\n\t\t\t.Consultar.Enabled = .T.\n\t\t\t.Alterar.Enabled   = .T.\n\t\t\t.Excluir.Enabled   = .T.\n\t\t\t.Procurar.Enabled  = .T.\n\t\t\t.Listar.Enabled    = .T.\n\t\tEndWith\n\t\tWith .Grupo_Saida\n\t\t\t.Enabled      = .T.\n\t\t\t.Sair.Enabled = .T.\n\t\tEndWith\n\tEndWith\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetProduto",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If !Empty(This.Value)\n\tThisForm.Pagina.Lista.CntCopia.GrdItens.Column1.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetProduto",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tSelect CsCopia\n\tSet Near On\n\tSeek AllTrim(This.Value)\n\tSet Near Off\n\tThisForm.Pagina.Lista.CntCopia.GrdItens.Refresh\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GetProduto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.CmdProcessa.Caption = '\\<Reprocessar')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.cmdProcessa",
+      "evento": "Click",
+      "linhas": 73,
+      "codigoOriginal": "Private lcEmpO, lcEmpD\nLocal lcProd, lnRec, lnCnt, lnTotal\n\nIf This.Caption = '\\<Processar'\n\tWith ThisForm.Pagina.Lista.CntCopia\n\t\tlcEmpO = Padr(.GetEmpOs.Value,3)\n\t\tlcEmpD = Padr(.GetEmpDs.Value,3)\n\t\tlcProd = Padr(.GetProduto.Value,10)\n\tEndWith\n\n\tIf Empty(lcEmpO)\n\t\tMessageBox('Digite uma Empresa de Origem para realizar a Cópia !!!',0+48,'')\n\t\tThisForm.Pagina.Lista.CntCopia.GetEmpOs.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(lcEmpD)\n\t\tMessageBox('Digite uma Empresa de Destino para realizar a Cópia !!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.GrdItens.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(CsCopia.existes = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.Marcar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsCopia\nUpdate CsCopia Set Marcas = 1 Where existes = 0\nGo Top\nThisForm.Pagina.Lista.CntCopia.GrdItens.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Lista.cntCopia.Desmarcar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsCopia\nUpdate CsCopia Set Marcas = 0 Where existes = 0\nGo Top\nThisForm.Pagina.Lista.CntCopia.GrdItens.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.Opc_situacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getDgru",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.get_produto",
+      "evento": "Valid",
+      "linhas": 80,
+      "codigoOriginal": "If !Empty(This.Value) And ThisForm.pcEscolha = 'INSERIR'\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cpros','','Código')\n\t\tm.loLista.mAddColuna('dpros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tIf LastKey() <> 27 And Used('CrProds')\n\t\tThis.Value                = Evaluate('CrProds.cpros')\n\t\tThis.Parent.GetDPro.Value = Evaluate('CrProds.dpros')\n\t\tIf Used('TmpPr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute,AcertaGrade,MRefreshGet",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.get_produto",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha,'INSERIR','PROCURAR') And ! Type('ThisForm.pProduto') = 'C' And Empty(ThisForm.pcExterno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.btnExcluir",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "Local lnRecNo, lnRegMaxs\n\nlnRegMaxs = 12\nlcEmps = Space(3)\nSelect CrSigCdMax\nIf !Eof() And !Empty(CrSigCdMax.emps)\n\tlcEmps = CrSigCdMax.emps\nEndIf\n\nDelete From CrSigCdMax Where emps = lcEmps\n\nSelect CrSigCdMax\nGo Top\nIf Eof()\n\tInsert Into CrSigCdMax (cpros,cidchaves) Values (This.Parent.Get_Produto.Value,fUniqueIds())\n\tSkip\n\tSkip -1\nEndIf\n\nSelect CrSigCdMax\nCount To lnRegs\nGo Top\n\nIf lnRegs > lnRegMaxs\n\tlnI = 10\nElse\n\tlnI = lnRegs\nEndIf\n\nThisForm.LockScreen = .T.\nWith ThisForm.Pagina.Dados.Grade... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.btnExcluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And !Empty(ThisForm.Pagina.Dados.Get_Produto.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nColIndex\n\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tSelect CrSigCdMax\n\tWith ThisForm.Pagina.Dados.GradeI\n\t\t.Column3.Enabled = ThisForm.lTemTam\n\t\t.Column4.Enabled = ThisForm.lTemCor\n\t\t.Refresh\n\tEndWith\nElse\n\t=DoDefault()\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column1.text1",
+      "evento": "KeyPress",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nDo Case\n\n\tCase nKeyCode = 9\n\t\tNoDefault\n\t\tKeyBoard '{CTRL+TAB}'\n\n\tCase nKeyCode = 15\n\t\tNoDefault\n\t\tKeyBoard '{SHIT+TAB}'\n\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column1.text1",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "Local llRetorno\n\nllRetorno = .T.\nIf !Empty(This.Value)\n\tllRetorno = fAcessoEmpresa(Usuar,'C',This.Value,This)\nEndIf\nReturn(llRetorno)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column1.text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(CrSigCdMax.cpros) And Empty(This.Value) And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column2.text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value < 0 \n\tMessagebox('Quantidade Inválida !!!',0+48,'ERRO')\n\tThis.Value = 0\n\tReturn(.F.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column2.text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(CrSigCdMax.cpros) And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdTam','CrTamanhos','cods',This.Value,'Tamanhos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cods','XXXX','Cód')\n\t\tm.loLista.mAddColuna('descs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrTamanhos')\n\t\tThis.Value = Evaluate('CrTamanhos.cods')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\n\nlcTam = This.Value\nIf ThisForm.nTipoEstos = 3 And Empty(lcTam)\n\tM... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "nTipoEstos = 3 And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!Empty(CrSigCdMax.cpros) And !Empty(CrSigCdMax.emps) And Empty(This.Value) And ;\n\t\tInList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdCor','CrCores','cods',This.Value,'Cores',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cods','XXXX','Cód')\n\t\tm.loLista.mAddColuna('descs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrCores')\n\t\tThis.Value = Evaluate('CrCores.cods')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\n\nlcCor = This.Value\nIf ThisForm.nTipoEstos = 2 And Empty(lcCor)\n\tMessageBox('O... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "nTipoEstos = 2 And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column4.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return(!Empty(CrSigCdMax.emps) And !Empty(CrSigCdMax.cpros) And Iif(ThisForm.lTemCor,!Empty(CrSigCdMax.codtams),.T.) ;\n\tAnd Empty(This.Value) And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "lTemCor,!Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If !InList(LastKey(),4,5,19,24)\n\tThisForm.MNovaLinha()\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MNovaLinha",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdDpt','crSigCdDpt','codigos',This.Value,'Seleção',.T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('codigos','xxxxxxxxxx','Código',.T.)\n\t\tloLista.mAddColuna('Descricaos','xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','Descrição',.T.)\n\t\tloLista.Show()\n\tEndIf\n\tThis.value = Iif(LastKey()==27,'',crSigCdDpt.codigos)\nEndIf\nThis.Refresh\nReturn(.T.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.gradei.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!Empty(CrSigCdMax.cpros) And !Empty(CrSigCdMax.emps) And ;\n\t\tInList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getCgru",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getDpro",
+      "evento": "Valid",
+      "linhas": 76,
+      "codigoOriginal": "If !Empty(This.Value) And ThisForm.pcEscolha = 'INSERIR'\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('dpros','','Descrição')\n\t\tm.loLista.mAddColuna('cpros','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tIf LastKey() <> 27 And Used('CrProds')\n\t\tThis.Value                    = Evaluate('CrProds.dpros')\n\t\tThis.Parent.Get_Produto.Value = Evaluate('CrProds.cpros')\n\t\tIf Use... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute,AcertaGrade,MRefreshGet",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getDpro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return((InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')) And Empty(This.Parent.Get_Produto.Value)) And Empty(ThisForm.pcExterno)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getIfor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getDfor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCOM.Pagina.Dados.getRefs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCOM.Procedure",
+      "queryOriginal": "Insert Into CrSigCdMax (cpros,cidchaves) Values (ThisForm.Pagina.Dados.Get_Produto.Value,fUniqueIds())",
+      "tabelas": "CrSigCdMax",
+      "colunas": "cpros,cidchaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Procedure",
+      "queryOriginal": "Delete From CrSigCdMax",
+      "tabelas": "CrSigCdMax",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Procedure",
+      "queryOriginal": "Delete From CrSigCdMax",
+      "tabelas": "CrSigCdMax",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Pagina.Lista.cntCopia.cmdCopiar.Click",
+      "queryOriginal": "\t\tInsert Into CrSigCdMax (cpros,emps,Qmaxs,codtams,codcores,cidchaves,Deptos) ; \t\t\t\t\t\tValues (CsCopia.cpros,lcEmps,CsCopia.Qmaxs,; \t\t\t\t\t\t\t\tCsCopia.codtams,CsCopia.codcores,fUniqueIds(),CsCopia.Deptos)",
+      "tabelas": "CrSigCdMax",
+      "colunas": "cpros,emps,Qmaxs,codtams,codcores,cidchaves,Deptos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Pagina.Lista.cntCopia.Marcar.Click",
+      "queryOriginal": "Update CsCopia Set Marcas = 1 Where existes = 0",
+      "tabelas": "CsCopia",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Pagina.Lista.cntCopia.Desmarcar.Click",
+      "queryOriginal": "Update CsCopia Set Marcas = 0 Where existes = 0",
+      "tabelas": "CsCopia",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Pagina.Dados.btnExcluir.Click",
+      "queryOriginal": "Delete From CrSigCdMax Where emps = lcEmps",
+      "tabelas": "CrSigCdMax",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCOM.Pagina.Dados.btnExcluir.Click",
+      "queryOriginal": "\tInsert Into CrSigCdMax (cpros,cidchaves) Values (This.Parent.Get_Produto.Value,fUniqueIds())",
+      "tabelas": "CrSigCdMax",
+      "colunas": "cpros,cidchaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigCdMax", "CsCopia"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

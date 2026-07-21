@@ -22,7 +22,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
     this_nSelecao       = 0     && 1=Duplicatas, 2=Boletos Bancarios
 
     *-- Nomes dos cursores de trabalho
-    this_cCursorDados   = "cursor_4c_Dados"     && Equivalente a TmpNFis (grid)
+    this_cCursorDados   = "TmpNFis"     && Equivalente a TmpNFis (grid)
     this_cCursorOpFp    = "cursor_4c_OpFp"      && SigOpFp (FPags, ImpDups, ImpBols, ImpNotas)
     this_cCursorPam     = "cursor_4c_Pam"       && SigCdPam (MascNums)
     this_cCursorNfi     = "cursor_4c_NfiFiltro" && SigMvNfi JOIN SigMvPar filtrado
@@ -68,7 +68,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                 USE IN (THIS.this_cCursorDados)
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Dados ( ;
+            CREATE CURSOR TmpNFis ( ;
                 flag     L, ;
                 datas    D NULL, ;
                 nfis     C(6), ;
@@ -112,7 +112,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
 
     *--------------------------------------------------------------------------
     * PrepararDados - Processa NFs conforme filtros (equivalente Processar.Click)
-    * Popula cursor_4c_Dados com os registros filtrados e validados
+    * Popula TmpNFis com os registros filtrados e validados
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_cSQL, loc_nResult
@@ -146,7 +146,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
             ELSE
                 WAIT WINDOW "Aguarde!!! Selecionando Notas Fiscais..." NOWAIT
 
-                *-- Iterar sobre registros e popular cursor_4c_Dados
+                *-- Iterar sobre registros e popular TmpNFis
                 SELECT (THIS.this_cCursorNfi)
                 SCAN
                     *-- Capturar todos os valores necessarios antes de trocar de area
@@ -198,7 +198,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
 
                     *-- Inserir registro processado no cursor de dados
                     SELECT (THIS.this_cCursorDados)
-                    INSERT INTO cursor_4c_Dados ( ;
+                    INSERT INTO TmpNFis ( ;
                         flag, nfis, valor, datas, conta, digito, parcs, ;
                         vecto, totnotas, obs, emps, dopes, numes) ;
                     VALUES ( ;
@@ -264,14 +264,14 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                 ELSE
                     *-- Emissao de Boletos Bancarios
                     *-- Montar cursor cabecalho agrupado por NF
-                    IF USED("cursor_4c_MvCab")
-                        USE IN cursor_4c_MvCab
+                    IF USED("TprMvCab")
+                        USE IN TprMvCab
                     ENDIF
                     SELECT emps, dopes, numes, parcs ;
                         FROM (THIS.this_cCursorDados) ;
                         WHERE flag ;
                         GROUP BY emps, dopes, numes, parcs ;
-                        INTO CURSOR cursor_4c_MvCab READWRITE
+                        INTO CURSOR TprMvCab READWRITE
 
                     *-- Verificar configuracao de boleto bancario em SigCnFBl
                     loc_cSQL = "SELECT COUNT(*) AS qt FROM SigCnFBl WHERE fpags <> ' '"
@@ -289,11 +289,11 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                             DO FORM SigPrIbl WITH "", .NULL.
                         ELSE
                             *-- Com boleto bancario: imprimir por NF individualmente
-                            SELECT cursor_4c_MvCab
+                            SELECT TprMvCab
                             SCAN
-                                loc_cChave = cursor_4c_MvCab.emps + ;
-                                             cursor_4c_MvCab.dopes + ;
-                                             STR(cursor_4c_MvCab.numes, 6)
+                                loc_cChave = TprMvCab.emps + ;
+                                             TprMvCab.dopes + ;
+                                             STR(TprMvCab.numes, 6)
                                 DO FORM SigPrIbb WITH loc_cChave, .NULL.
                             ENDSCAN
                         ENDIF
@@ -301,8 +301,8 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
                         loc_lSucesso = .T.
                     ENDIF
 
-                    IF USED("cursor_4c_MvCab")
-                        USE IN cursor_4c_MvCab
+                    IF USED("TprMvCab")
+                        USE IN TprMvCab
                     ENDIF
                 ENDIF
 

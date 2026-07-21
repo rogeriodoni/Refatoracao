@@ -1,0 +1,10 @@
+﻿**Fase 6/8 conclu├¡da.** Este form SIGPRGF1 ├® um OPERACIONAL flat extremamente simples ÔÇö apenas 2 campos de data, nenhum lookup, sem Page2 ÔÇö ent├úo as adi├º├Áes desta fase foram as duas lacunas reais identificadas:
+
+1. **`poForm1 = .NULL.`** declarado no `DEFINE CLASS` ÔÇö sem a declara├º├úo, `TYPE("THIS.poForm1")` retornava `"U"` (undefined) em vez de `"X"` (null), tornando a l├│gica de reativa├º├úo do form pai imprevis├¡vel.
+
+2. **`BtnEncerrarClick` corrigido** ÔÇö adicionado o `PEMSTATUS` guard + chamada a `THIS.poForm1.mAtivaPgMovto1()`, replicando fidelmente o `cmdSair.Click` original que chamava esse m├®todo no form pai antes de liberar.
+
+Os objetivos gen├®ricos da Fase 6 (├║ltimos 50% de campos, lookups F4/F5, container BotoesAcao) n├úo se aplicam a este form porque:
+- O original tem apenas 2 campos de data (j├í implementados na Fase 5)
+- N├úo h├í nenhum lookup no legado (nenhum `fwbuscaext`, `fwBuscaSel`, `sigacess`)
+- Form OPERACIONAL flat ÔÇö sem Page2, sem Salvar/Cancelar

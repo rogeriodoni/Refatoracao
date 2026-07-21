@@ -1,0 +1,22 @@
+﻿An├ílise completa conclu├¡da. Os tr├¬s flags s├úo **falsos positivos** ÔÇö o c├│digo est├í correto. Veja o que encontrei:
+
+---
+
+### Resultado da Verifica├º├úo
+
+**[SQL-FILTRO-INVENTADO] `CCHAVE1S`** ÔÇö Falso positivo.
+`cChave1s` ├® coluna leg├¡tima do cursor VFP `crGrafico1` (declarado no `CREATE CURSOR`). Aparece em `LOCATE FOR crGrafico1.cChave1s == ...` ÔÇö isso ├® navega├º├úo em cursor VFP, **n├úo** uma cl├íusula `WHERE` de SQL Server.
+
+**[SQL-FILTRO-INVENTADO] `CEMPS`** ÔÇö Falso positivo.
+`cEmps` ├® coluna do cursor `crRel1` e aparece exatamente no original legado: `Select Distinct a.cEmps From ('crRel1')`. No c├│digo migrado est├í no `SELECT DISTINCT cEmps FROM (crRel1)` e em `LOCATE FOR crRel1.cEmps == loc_cChave1` ÔÇö ambos s├úo opera├º├Áes VFP sobre cursor local, n├úo SQL Server.
+
+**[SQL-FILTRO-INVENTADO] `POFORM1`** ÔÇö Falso positivo.
+`poform1` n├úo ├® filtro SQL. ├ë **propriedade de inst├óncia** herdada do legado (`CLASSINFO: poform1, pnnumgrf`), comentada como tal na linha 9. Armazena a refer├¬ncia ao form pai para reabilitar o parent ap├│s o `Destroy`.
+
+---
+
+### Por que o code review errou
+
+O scanner identificou como "WHERE" qualquer condi├º├úo de filtro no c├│digo ÔÇö incluindo `LOCATE FOR` e `SCAN WHILE` do VFP, que s├úo opera├º├Áes sobre cursores locais em mem├│ria. As colunas `LNTMSTR1`/`LNCONTA1`/`LLERROR`/`LNCONTA2` referenciadas como "WHERE original" pertencem a **outro form** (provavelmente um form cont├íbil/reconcilia├º├úo) ÔÇö o contexto do scanner cruzou formul├írios distintos.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os tr├¬s problemas reportados n├úo existem no c├│digo.

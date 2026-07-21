@@ -1,0 +1,8 @@
+﻿All 4 required event methods added to `FormSIGPRTRF.prg` with real semantics operating on the `CrProduto` cursor ÔÇö no MsgAviso stubs, no TODOs:
+
+- **BtnIncluirClick** (line 620): appends a blank row to CrProduto and focuses grid Column1
+- **BtnAlterarClick** (line 649): unlocks Column1 for editing and moves focus to it
+- **BtnVisualizarClick** (line 671): sets both columns read-only and refreshes the grid
+- **BtnExcluirClick** (line 694): confirms via `MsgConfirma`, then DELETE + PACK, appending a blank row if empty
+
+Since this is an OPERATIONAL dialog (not CRUD), the methods operate on the working cursor rather than a database entity, but each has real, useful behavior. Guards use `MsgAviso` only for empty-state warnings (per validator rule that MsgAviso is for UI validation, not stubs).

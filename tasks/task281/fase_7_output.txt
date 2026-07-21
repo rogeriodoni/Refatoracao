@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo. Todos os eventos j├í foram implementados nas fases anteriores. Vou resumir o status:
+
+**FormSigPrEs1.prg j├í est├í totalmente implementado** (1961 linhas). A Fase 7 n├úo tem nada para adicionar porque:
+
+1. **BtnConsultarClick()** ÔÇö j├í implementado (linha 1099). Replica a l├│gica completa do `SIGPRES1.sair.Click` original: valida empresa/opera├º├úo/per├¡odo, chama `ExecutarConsulta()`, registra auditoria e abre `SigPrEs2`.
+
+2. **BtnEncerrarClick()** ÔÇö j├í implementado (linha 1154). Fecha o form.
+
+3. **BtnIncluirClick / BtnAlterarClick / BtnVisualizarClick / BtnExcluirClick** ÔÇö **n├úo se aplicam** a este form OPERACIONAL. O template de Fase 7 foi gerado para forms CRUD (que t├¬m Page1/Page2 + 5 bot├Áes). Este form tem apenas "Consultar" e "Encerrar". Confirmado: `grep` no FormBase n├úo encontrou nenhuma chamada a esses m├®todos CRUD, portanto stubs vazios tamb├®m n├úo s├úo necess├írios.
+
+4. Todos os **handlers de lookup** (ValidarCdEmpresa, ValidarDsEmpresa, ValidarNmOperacao, ValidarCdGrupo, ValidarDsGrupo, ValidarCdConta, ValidarDsConta, ValidarCpf, ValidarCdResps, ValidarDsResps, ValidarCdMoeda, ValidarDsMoeda) j├í est├úo implementados e ligados via BINDEVENT em `ConfigurarBindEvents()`.
+
+**Observa├º├úo para a pr├│xima etapa**: `BtnConsultarClick()` usa `DO FORM SigPrEs2 WITH ...`. Quando `FormSigPrEs2` for migrado, essa linha precisar├í ser atualizada para `CREATEOBJECT("FormSigPrEs2")` + passagem de par├ómetros via propriedades do BO.
+
+O form est├í pronto para integra├º├úo (`config.prg` + `menu.prg`) e testes.

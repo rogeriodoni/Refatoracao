@@ -2132,7 +2132,9 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
                             THIS.CarregarLista()
                             THIS.AjustarBotoesPorModo()
                         ELSE
+                            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
                             MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Excluir")
+                            ENDIF
                         ENDIF
                     ELSE
                         MsgErro("Erro ao carregar movimento para exclus" + CHR(227) + "o.", "Erro")
@@ -2183,7 +2185,9 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
                 IF loc_lOk
                     THIS.AlternarPagina(1)
                 ELSE
+                    IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
                     MsgErro(THIS.this_oBusinessObject.this_cMensagemErro, "Erro ao Salvar")
+                    ENDIF
                 ENDIF
             ENDIF
 

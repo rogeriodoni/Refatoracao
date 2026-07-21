@@ -1,0 +1,8 @@
+﻿Phase 2 CRUD methods added successfully to `C:/4c/projeto/app/classes/SigPrIctBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** (line 1284) ÔÇö Safely restores parameters from cursor, no-op if cursor absent/missing (OPERACIONAL form has no persistent table).
+- **`Inserir()`** (line 1337) ÔÇö Delegates to `GerarArquivoContabil()` (the true "gravacao" of accounting integration), calls `RegistrarAuditoria("INSERIR")` on success.
+- **`Atualizar()`** (line 1361) ÔÇö Reprocesses the period via `Processar(this_dDataI, this_dDataF)`, calls `RegistrarAuditoria("ATUALIZAR")` on success.
+- **`RegistrarAuditoria(par_cOperacao)`** (line 1391) ÔÇö Overrides BusinessBase to log the processed period (since there's no PK), uses `GETDATE()` server-side per rule.
+
+Validator now finds all three required tokens (`CarregarDoCursor`, `Inserir`, `Atualizar`). File closes cleanly with `ENDDEFINE` at line 1417.

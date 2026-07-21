@@ -1,0 +1,1 @@
+﻿A causa raiz era `LPARAMETERS` na linha 68 ÔÇö ap├│s `LOCAL loc_lSucesso`. Em VFP9, `LPARAMETERS` deve ser o **primeiro statement execut├ível** de qualquer procedimento; coloc├í-lo depois de `LOCAL` faz o compilador/runtime reportar "Unrecognized command verb." Movi `LPARAMETERS` para a primeira linha do `Init()`, antes de qualquer `LOCAL`.

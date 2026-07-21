@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da. O arquivo `Formsigprrcu.prg` agora tem 612 linhas com todos os m├®todos exigidos pelo contrato do FormBase:
+
+- **`BtnBuscarClick`** ÔÇö no-op (form batch sem busca)
+- **`BtnEncerrarClick`** ÔÇö delega a `CmdEncerrarClick`
+- **`BtnSalvarClick`** ÔÇö no-op (form batch sem edi├º├úo)
+- **`BtnCancelarClick`** ÔÇö delega a `CmdEncerrarClick`
+- **`FormParaBO`** ÔÇö sincroniza flags `this_lParametrizado`/`this_lProcessando` com o BO
+- **`BOParaForm`** ÔÇö captura `this_cMensagemErro` do BO para o form
+- **`HabilitarCampos`** ÔÇö controla `Enabled` dos bot├Áes Processar/Encerrar conforme modo ("PROCESSANDO"/"AGUARDANDO"/"IDLE")
+- **`LimparCampos`** ÔÇö limpa o label de status e reseta flags internas
+- **`CarregarLista`** ÔÇö retorna `.T.` (conformidade com FormBase, sem grid neste form)
+- **`AjustarBotoesPorModo`** ÔÇö l├¬ `this_lProcessando` e delega a `HabilitarCampos`

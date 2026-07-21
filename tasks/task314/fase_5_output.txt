@@ -1,0 +1,26 @@
+﻿Everything is correctly wired. Let me do a final review of the complete implementation to check for any issues:
+
+**Summary of changes made:**
+
+**`sigprnfeBO.prg`** (+280 lines, 1254 ÔåÆ 1534):
+
+1. **`CarregarEmpresa`** (lines 456-499): Added two new property assignments from `SigCdEmp`:
+   - `this_cArquivos = ALLTRIM(NVL(pastas, ""))` ÔÇö NF-e folder path (fixes `EmpsLostFocus` in form which tries to display this)
+   - `this_cCnpj = ALLTRIM(STRTRAN(...(NVL(cgcs,""))...))` ÔÇö CNPJ cleaned (needed by `ProcessaInutilizadas`)
+
+2. **`CodIBGEUF(par_cEstas)`** ÔÇö Returns IBGE UF code from `SigCdUfs.UFIBGEs` via `SQLEXEC`. Used by `ProcessaInutilizadas` to build the inutilization XML.
+
+3. **`SelecionarInutilizadas(par_cEmps)`** ÔÇö Creates `nfAinu` cursor by:
+   - Running fake WHERE `stats='xxx'` SQL to get cursor schema
+   - Running UNION query (EMI + INU records from sigprnfe)
+   - Gap analysis loop: identifies unused note numbers between used ones, appends records to `nfAinu`
+
+4. **`ProcessaInutilizadas(par_cEmps, par_cSeries, par_cCnpj, par_cNIni, par_cNFim)`** ÔÇö Full inutilization flow:
+   - Loads company data + configures NF-e paths via `CarregarEmpresa`+`ChecarDirs`
+   - Builds NF-e 4.00 inutilization XML (`<inutNFe>`)
+   - Drops XML in `envio/` for UniNFe to process
+   - Waits up to 180s for response in `retorno/`
+   - Parses cStat=102 (approved) ÔåÆ INSERTs into `sigprnfe` with `stats='INU'` + COMMIT
+   - Shows result via `MsgInfo`/`MsgErro`
+
+**`Formsigprnfe.prg`** (line 1586, `CmdInuClick`): Fixed the bug where `nfAinu` was never loaded ÔÇö now calls `loc_oBO.SelecionarInutilizadas(loc_cEmps)` first, then checks `IF USED("nfAinu")`. Also added empty-company guard and moved `AlternarPagina(2)` inside the success branch only.

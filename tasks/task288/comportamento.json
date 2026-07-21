@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From", "For", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "Dataenvironment",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "        Create Cursor cGevcl (cChave1s c(70),gGrafico g,cLg1s c(150),cLg2s c(175),cLg3s c(150),cEmpresas c(50))\n        Index On cChave1s Tag cChave1s",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "Dataenvironment",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "        If Used('cGevcl')\n                Use In cGevcl\n        EndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2",
+      "evento": "Procedure",
+      "linhas": 252,
+      "codigoOriginal": "LParameters lnLinhaCmb1\nLocal Array laCorGrafico1(5)\nLocal lcEscape,lcChave1,lnTmStr1\n\n#Define TAB Chr(9)\n#Define CRLF CHR(13)+CHR(10)\n\nIf Not Used('crGrafico1')\n\tCreate Cursor crGrafico1 (gGrafico1s g(4), cChave1s c(100), cempresas c(254), ctitulo1s c(128))\nEndIf\n\nWith ThisForm\n\tm.lcEscape   = Set('Escape')\n\tm.lcPoint    = Set('Point')\n\tm.lcOldPoint = Set('Point')\n\tm.lcSepar    = Set('Separator')\n\tm.lcOldSepar = Set('Separator')\n\n\tSet Escape Off\n\n\tGetProStrg('Intl','sDecimal','',@m.lcPoint,254)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From,For",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "Lparameters loForm1\n\nLocal lnLeftIni1\n\nWith ThisForm\n\t.LockScreen = .t.\n\tm.loForm1 = Iif(Type('m.loForm1')=='O',m.loForm1,ThisForm)\n\t.SetAll('AutoSize',.t.,'Label')\n\t.SetAll('Format','K','TextBox')\n\t.SetAll('InputMask','','TextBox')\n\t.SetAll('MaxLength',0,'TextBox')\n\t.SetAll('BackStyle',1,'TextBox')\n\t.SetAll('Alignment',3,'TextBox')\n\t.SetAll('FontName','Courier New','TextBox')\n\t.SetAll('FontName','Courier New','ComboBox')\n\t.SetAll('FontSize',9,'TextBox')\n\t.SetAll('FontSize',9,'ComboBox')\n\t.FontN... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2.cmdgGrafico",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Local lnRecno1\n\nWith ThisForm\n\t.LockScreen = .t.\n\tm.lnRecno1 = RecNo('crGrafico1')\n\n\tSelect ('crGrafico1')\n\tReport Form SigPrGf1 Next 1 To Printer Prompt Noconsole\n\n\tIf BetWeen(m.lnRecno1,1,RecCount('crGrafico1'))\n\t\tGoTo m.lnRecno1 In ('crGrafico1')\n\tEndIf\n\t.cntGrf2.cmbChave1.SetFocus\n\t.Refresh\n\t.Draw\n\t.LockScreen = .f.\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2.cmdgGrafico",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "With ThisForm\n\t.LockScreen = .t.\n\t.cntGrf1.oleGrafico1.ControlSource = ''\n\n\tIf Used('crGrafico1')\n\t\tUse In ('crGrafico1')\n\tEndIf\n\n\t.Release\n\t.Refresh\n\t.LockScreen = .f.\n\n\tIf Type('ThisForm.poForm1')=='O'\n\t\t.poForm1.LockScreen = .t.\n\t\t.poForm1.Enabled = .t.\n\t\t.poForm1.LockScreen = .f.\n\tEndIf\t\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2.cntGrf2.cmbChave1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm\n\t.cntAguarde.Visible = .t.\n\t.Refresh\n\t.Draw\n\t.LockScreen = .t.\n\t.SetAll('Enabled',.f.,'Oleboundcontrol')\n\t.mGeraGrafico(.cntGrf2.cmbChave1.ListIndex)\n\t.cntGrf2.cmbChave1.SetFocus\n\t.cntAguarde.Visible = .f.\n\t.Refresh\n\t.Draw\n\t.LockScreen = .f.\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGF2.cntGrf2.cmbChave1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.SetAll('Enabled',.f.,'Oleboundcontrol')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

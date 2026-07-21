@@ -1,0 +1,12 @@
+﻿`FormSigPrHpr.prg` created at `C:\4c\projeto\app\forms\operacionais\FormSigPrHpr.prg`.
+
+Key decisions reflected in the file:
+- **OPERACIONAL flat layout** ÔÇö no PageFrame, all controls direct children of the form
+- **`RETURN DODEFAULT()`** in Init() after storing all params in `THIS.*` properties, ensuring `InicializarForm()` has access to them
+- **`CarregarHistorico()` already calls `CarregarDadosProduto()`** internally ÔÇö not called again from the form
+- **AuditarRegistro()/DesauditarRegistro()** already update BO properties and cursor via REPLACE ÔÇö UI reads directly from BO after the call
+- **Column8/Column9 Visible=.F.** by default, shown in `CarregarDados()` only when `this_lEhPeso=.T.`
+- **DynamicBackColor** set once in `ConfigurarGrdHistorico()`, evaluates `!EMPTY(auditors)` per row
+- **Canonical Encerrar**: `cnt_4c_Saida.Left=917, Width=90`, `cmd_4c_Encerrar Left=5, Top=5, Width=75, Height=75`
+- **SEEK with DTOS()** ÔÇö `datas` field is DateTime (T), index is `DTOS(datas)` ÔÇö seeking by date works correctly
+- All `RETURN` statements are outside TRY/CATCH blocks

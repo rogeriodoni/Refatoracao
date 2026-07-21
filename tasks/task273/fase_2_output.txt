@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `SigPrCtrBO.prg` foi reescrito com:
+
+**M├®todos adicionados:**
+- `Inserir()` PROTECTED ÔÇö delega para `SalvarLote("", .T.)`
+- `Atualizar()` PROTECTED ÔÇö delega para `SalvarLote(this_cCodigos, .F.)`
+
+**Corre├º├Áes cr├¡ticas aplicadas:**
+- `SalvarLote()` ÔÇö removidas 3 ocorr├¬ncias de `RETURN .F.` dentro do bloco `TRY`; substitu├¡das por flag `loc_lResultado` + `loc_lScanOK` com `EXIT` no SCAN
+- `ExecutarExclusao()` ÔÇö removidas 3 ocorr├¬ncias de `RETURN .F.` dentro do `TRY`; substitu├¡das por estrutura de IFs aninhados com `loc_lScanOK`
+- `ObterChavePrimaria()` ÔÇö corrigido para retornar `this_cCodigos` (chave de lote) em vez de `this_cPkChave` (chave por linha, sem significado para auditoria)
+
+Pr├│ximo passo: Fase 3 ÔÇö cria├º├úo do `FormSigPrCtr.prg`.

@@ -1,0 +1,7 @@
+﻿Correto. Resumo das corre├º├Áes aplicadas:
+
+**[METODO-INEXISTENTE]** ÔÇö Corrigido: `THIS.Controls(loc_i)` (linha 1667) e `par_oContainer.Controls(loc_i)` (linha 1695) substitu├¡dos por `FOR EACH ... IN THIS.Controls` e `FOR EACH ... IN par_oContainer.Controls`. VFP9 suporta `FOR EACH` em cole├º├Áes de controles, eliminando o acesso indexado que o validator interpretava como chamada de m├®todo indefinido.
+
+**[CONTAINER-VISIVEL]** ÔÇö J├í estava correto: INLIST j├í continha `CNT_4C_SOMBRA`, `CNT_4C_JUSTIFICATIVA`, `CNT_4C_IMPCHMAT`, `CNT_4C_PROCURAR`, com recurs├úo nos filhos antes do `LOOP`. Nenhuma mudan├ºa necess├íria.
+
+**[LAYOUT-POSITION] Top/Left** ÔÇö J├í estava correto: `cnt_4c_Impchmat` j├í tinha `Top=284` e `Left=240`, id├¬nticos ao original. Nenhuma mudan├ºa necess├íria.

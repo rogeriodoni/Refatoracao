@@ -92,7 +92,9 @@ DEFINE CLASS FormSigReIfv AS FormBase
             IF loc_lContinuar AND ;
                (TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI)
                 IF !THIS.this_oRelatorio.CarregarDadosAuxiliares()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                     MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
                     loc_lContinuar = .F.
                 ENDIF
             ENDIF
@@ -694,6 +696,13 @@ DEFINE CLASS FormSigReIfv AS FormBase
                 .Header1.Caption = ""
                 .AddObject("Check1", "CheckBox")
                 .Check1.Caption  = ""
+                .Check1.Alignment = 0
+                .Check1.ReadOnly  = .F.
+                .Check1.Visible   = .T.
+                .Check1.Top       = 9
+                .Check1.Left      = 2
+                .Check1.Height    = 17
+                .Check1.Width     = 22
                 .Check1.Value    = 0
                 .CurrentControl  = "Check1"
             ENDWITH
@@ -1700,7 +1709,9 @@ DEFINE CLASS FormSigReIfv AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1714,7 +1725,9 @@ DEFINE CLASS FormSigReIfv AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Imprimir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1728,7 +1741,9 @@ DEFINE CLASS FormSigReIfv AS FormBase
         ENDIF
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.PrepararDados()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            ENDIF
             RETURN
         ENDIF
         IF !USED("CsRelatorio")

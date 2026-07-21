@@ -1,0 +1,21 @@
+﻿An├ílise completa. Os tr├¬s alertas s├úo **falsos positivos** do validador autom├ítico. Explica├º├úo:
+
+**1. `CONTROLCOUNT` (Form linhas 591/597)**
+N├úo ├® condi├º├úo SQL. ├ë a propriedade VFP9 `.ControlCount` usada para iterar controles no m├®todo `TornarControlesVisiveis`. O validador confundiu o nome de uma propriedade VFP com uma coluna SQL.
+
+**2. `CODS` em WHERE (BO linha 266)**
+```foxpro
+" WHERE cods = " + EscaparSQL(par_cCodTams)
+```
+`cods` ├® a chave prim├íria v├ílida de `SigCdTam`. O original usava `SEEK`/`LOCATE` em cursor VFP local ÔÇö a tradu├º├úo SQL correta requer exatamente esse `WHERE cods = `. N├úo foi inventado; foi migrado corretamente.
+
+**3. `CIDCHAVES` em WHERE (BO linhas 437, 461)**
+```foxpro
+" WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)  ÔåÉ Atualizar()
+" WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)  ÔåÉ ExecutarExclusao()
+```
+O legado usa `TABLEUPDATE()`/`TABLEREVERT()` (tabelas bufferizadas VFP), onde o engine VFP rastreia a PK internamente. A nova arquitetura usa SQL expl├¡cito ÔÇö sem esse `WHERE cidchaves`, o UPDATE/DELETE afetaria **todos os registros** da tabela. Remover isso quebraria o sistema.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os tr├¬s itens flaggeados s├úo artefatos do algoritmo de compara├º├úo (ele comparou os WHEREs do SQL migrado contra os WHEREs do VFP original, que eram m├¡nimos por usarem buffered tables ÔÇö n├úo porque as condi├º├Áes fossem inventadas). O c├│digo est├í correto.

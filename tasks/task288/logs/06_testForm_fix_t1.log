@@ -1,0 +1,23 @@
+[2026-07-16 14:17:51] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-16 14:17:51] [INFO] Prompt File: C:\4c\tasks\task288\runtime_fix_prompt_06_testForm_t1.md
+[2026-07-16 14:17:51] [INFO] Output File: C:\4c\tasks\task288\06_testForm_fix_output_t1.txt
+[2026-07-16 14:17:51] [INFO] Model: sonnet
+[2026-07-16 14:17:51] [INFO] Timeout: 3600 segundos
+[2026-07-16 14:17:51] [INFO] Max Output Tokens: 128000
+[2026-07-16 14:17:51] [INFO] Context Files: 0 arquivo(s)
+[2026-07-16 14:17:51] [INFO] Invocando Claude CLI...
+[2026-07-16 14:17:51] [INFO] Prompt carregado: 70695 caracteres
+[2026-07-16 14:17:51] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-16 14:17:51] [INFO] Tamanho total do prompt: 70695 caracteres
+[2026-07-16 14:17:51] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-16 14:19:49] [INFO] Claude CLI finalizado em 118.3483901 segundos
+[2026-07-16 14:19:49] [INFO] Exit Code: 0
+[2026-07-16 14:19:49] [INFO] Output salvo em: C:\4c\tasks\task288\06_testForm_fix_output_t1.txt
+[2026-07-16 14:19:49] [INFO] Output size: 787 bytes
+[2026-07-16 14:19:49] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-16 14:19:49] [INFO] Preview do output:
+[2026-07-16 14:19:49] [INFO] The fix is correct. All other accesses to `obj_4c_OleGrafico1` already use `PEMSTATUS` guards, so they're safe even when the OLE hasn't been created yet (test mode with no data).
+
+**Root cause**: `AddObject("obj_4c_OleGrafico1", "OLEBoundControl")` without a ControlSource triggers the Windows COM "Insert Object" dialog ÔÇö a native OS dialog that `SYS(2335, 0)` cannot intercept ÔÇö causing the 300s timeout.
+
+**Fix**: The OLEBoundControl is now created lazily inside `GerarGrafico()` only when

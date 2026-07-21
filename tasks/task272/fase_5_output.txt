@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö expandido com:
+   - Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` com ├¡cones e BINDEVENTs
+   - `lbl_4c_LblMoeda` + `txt_4c_Cmoes` (Top=130/133, Left=150, Width=120, MaxLength=3)
+   - `lbl_4c_LblDescrs` + `txt_4c_Descrs` (Top=165/168, Left=150, Width=400, ReadOnly)
+   - Chamada `TornarControlesVisiveis(loc_oPagina)` ao final
+
+2. **`BtnVisualizarClick()`** ÔÇö atualizado para chamar `BOParaForm()` antes de navegar para Page2
+
+3. **Novos m├®todos:**
+   - `BtnSalvarClick()` ÔÇö valida Moeda, chama `FormParaBO()`, marca `this_lHouveInsercao`, volta para Page1
+   - `BtnCancelarClick()` ÔÇö volta para Page1 sem salvar, recarrega lista
+   - `BOParaForm()` ÔÇö l├¬ cursor_4c_LocalCtMoe e popula `txt_4c_Cmoes`, `txt_4c_Descrs`, `txt_4c_Valos` (com guard PEMSTATUS para `txt_4c_Valos` que ser├í criado na Fase 6)
+   - `FormParaBO()` ÔÇö transfere campos editados de volta para cursor_4c_LocalCtMoe

@@ -873,8 +873,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Atualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Visualizar")
+            ENDIF
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
                 loc_oPag.txt_4c_CdEmpresa.SetFocus()
@@ -900,8 +902,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Inserir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Imprimir")
+            ENDIF
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
                 loc_oPag.txt_4c_CdEmpresa.SetFocus()
@@ -955,8 +959,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Inserir()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Imprimir")
+            ENDIF
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
                 loc_oPag.txt_4c_CdEmpresa.SetFocus()
@@ -984,8 +990,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Atualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Visualizar")
+            ENDIF
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
                 loc_oPag.txt_4c_CdEmpresa.SetFocus()
@@ -1012,8 +1020,10 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         LOCAL loc_oPag
         THIS.FormParaRelatorio()
         IF !THIS.this_oRelatorio.Atualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
             MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                 "Erro ao Visualizar")
+            ENDIF
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPag.txt_4c_CdEmpresa.Value))
                 loc_oPag.txt_4c_CdEmpresa.SetFocus()

@@ -1,0 +1,24 @@
+﻿Fase 3/8 conclu├¡da. Aqui est├í o resumo do que foi entregue:
+
+---
+
+**Fase 3/8 ÔÇö FormSigPrMlu.prg criado** (`C:\4c\projeto\app\forms\operacionais\FormSigPrMlu.prg`, 784 linhas)
+
+**Estrutura do form OPERACIONAL (flat, sem PageFrame):**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `InicializarForm` | Cria BO, configura layout completo, carrega dados |
+| `ConfigurarCabecalho` | Container cinza (cnt_4c_Cabecalho) com lbl_4c_Sombra/Titulo |
+| `ConfigurarBotoes` | cmd_4c_Processar (Themes=.T.) + cnt_4c_Saida can├┤nico (Left=917) |
+| `ConfigurarCntNova` | Container com label + txt_4c_GetNova (MaxLength=20) |
+| `ConfigurarGrade` | grd_4c_Selecoes: 6 colunas ÔÇö CheckBox (Sparse=.F.), Codigo, Descricao, Usuario, DtEntrada, NRegis |
+| `ConfigurarBtnGrade` | cmd_4c_SelTudo/Apaga com icones 26px e Themes=.T. |
+| `MontarGrade` | Vincula cursor_4c_Itn ao grid ap├│s BuscarMalas |
+| `OrdenarGrade` | SET ORDER + destaque de header por coluna ativa |
+| `BtnProcessarClick` | Valida sele├º├Áes (ÔëÑ2 com NRegis>0, nome n├úo vazio), confirma, chama BO.ProcessarUnificacao |
+| `GrdChkMouseDown/KeyPress/Click` | Toggle SelImp individual + NODEFAULT |
+| `BtnSelecionarTudoClick/BtnDesmarcarTudoClick` | REPLACE ALL SelImp no cursor |
+| `Col2-Col5HeaderClick` | Ordena├º├úo por coluna |
+
+**Menu registrado** em `menu.prg`: BAR 85 "Unifica├º├úo de Mala Direta" + `AbrirFormSigPrMlu()` adicionados. O BO ├® auto-carregado pelo ADIR() de config.prg.

@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. O `FormSigPrIns.prg` est├í completo com todos os m├®todos exigidos pelo pipeline:
+
+- **`FormParaBO()`** ÔÇö popula as 3 propriedades do BO (`this_cCodServs`, `this_cDescServs`, `this_nVlServs`) a partir dos campos do form
+- **`BOParaForm()`** ÔÇö carrega os campos visuais a partir do BO (inverso do FormParaBO)
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö s├│ habilita/desabilita `txt_4c_Valor` (CodServ e DescServ s├úo sempre ReadOnly neste dialog)
+- **`LimparCampos()`** ÔÇö reseta CodServ para `""`, DescServ para `""` e Valor para `0`
+- **`CarregarLista()`** ÔÇö retorna `.T.` (n├úo aplic├ível: sem grid)
+- **`AjustarBotoesPorModo()`** ÔÇö no-op (sem modos CRUD)
+- **`BtnBuscarClick()`** ÔÇö no-op (sem busca)
+- **`BtnSalvarClick()`** ÔÇö delega para `BtnConfirmarClick()` (alias de contrato)
+- **`BtnEncerrarClick()`** ÔÇö delega para `BtnCancelarClick()` (fecha sem confirmar)

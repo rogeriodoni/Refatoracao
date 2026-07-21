@@ -1,0 +1,7 @@
+﻿As duas corre├º├Áes est├úo corretas:
+
+1. `Processar()` agora apenas seta `this_lTemDiferencas = .T.` ÔÇö o Form em `ChamarProcessar()` mostra o di├ílogo e abre `FormSigReDif`.
+
+2. `GerarArquivoContabil()` n├úo pergunta mais confirma├º├úo ÔÇö `ChamarGravar()` no Form j├í confirma antes de chamar o BO.
+
+**Resumo da Fase 6:** Para este form OPERACIONAL com layout flat (Width=800 ├ù Height=192), n├úo h├í "├║ltimos 50% de campos" nem lookups a implementar ÔÇö o original n├úo tem nenhum. Ambos os arquivos j├í estavam completos desde fases anteriores. Corrigi dois bugs de confirma├º├úo dupla no `SigPrIctBO.prg`: a `MsgConfirma` duplicada em `GerarArquivoContabil()` (o Form j├í confirma em `ChamarGravar()`) e o `MsgConfirma` indevido em `Processar()` (o Form controla esse fluxo via `this_lTemDiferencas`). A migra├º├úo est├í pronta para a pr├│xima fase.

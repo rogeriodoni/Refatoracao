@@ -1,0 +1,8 @@
+﻿Fase 4 conclu├¡da. O arquivo j├í estava completo do Phase 3 (grid GradeItens, todos os containers, bot├Áes e handlers), ent├úo a ├║nica corre├º├úo necess├íria foi o bug em `TornarControlesVisiveis`:
+
+**Bug corrigido**: O `LOOP` nos containers ocultos (Container1/2/4/5) pulava a recurs├úo, deixando os sub-controles com `Visible=.F.`. Quando esses containers eram tornados vis├¡veis pelos bot├Áes (`BtnTotLinhaClick`, `BtnDisponiveiClick`, etc.), os filhos apareciam como caixas em branco.
+
+**Fix aplicado** (padr├úo `feedback_tcv_skip_recursao.md`):
+- Antes do `LOOP`, chama `TornarSubControlesVisiveis()` para processar os filhos dos containers ocultos
+- Novo m├®todo `TornarSubControlesVisiveis()` recursivo para containers e sub-containers
+- Containers ocultos permanecem `Visible=.F.` mas seus filhos ficam com `Visible=.T.` prontos para quando forem exibidos

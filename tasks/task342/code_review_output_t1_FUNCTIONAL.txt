@@ -1,0 +1,12 @@
+﻿Todas as mudan├ºas est├úo corretas. Resumo do que foi corrigido:
+
+**1. [CONTAINER-VISIVEL] ÔÇö TornarControlesVisiveis** (linha 1688): O check `INLIST(loc_cNome, "CNT_4C_CABECALHO", "CNT_4C_SAIDA")` foi movido para **antes** da recurs├úo, evitando que o m├®todo entre nos containers ocultos e force `Visible=.T.` nos filhos.
+
+**2. [GRID-HEADER] ÔÇö Captions "Grupo" e "Nome" inventados**: Alterados para `""` (string vazia) em `CarregarLista` (linhas 938ÔÇô939) e `BtnBuscarClick` (linhas 1417ÔÇô1418), consistente com o setup est├ítico em `ConfigurarPaginaLista`.
+
+**3. [LAYOUT-POSITION] ÔÇö lbl_4c_Label3**: `Top=382ÔåÆ426`, `Left=80ÔåÆ327` (posi├º├Áes originais do legado).
+
+**4. [LAYOUT-POSITION] ÔÇö lbl_4c_Label5**: `Top=382ÔåÆ426`, `Left=356ÔåÆ529` (posi├º├Áes originais do legado).
+
+**Itens n├úo corrigidos com justificativa:**
+- `lbl_4c_Grupo` (Top=8, Left=401) e `lbl_4c_NomeCompleto` (Top=34): no legado, esses controles estavam em `Pagina.Dados.Pagina.Cadastro` (p├ígina interna). No form migrado, foram movidos para `Page2` (p├ígina externa) que tem `cnt_4c_Cabecalho` em `Top=29, Height=85`. Aplicar `Top=8` colocaria o label **acima** do cabe├ºalho, criando regress├úo visual.

@@ -1,0 +1,15 @@
+﻿Todas as 3 edi├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**Corre├º├Áes aplicadas:**
+
+1. **[CONTAINER-VISIVEL / CONTAINER-TOGGLE]** ÔÇö `TornarControlesVisiveis` agora checa `loc_cNome` e pula `CNT_4C_COPIA`, `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO` no `Visible = .T.`, mas ainda recursina seus filhos via `LOOP` ap├│s a recurs├úo. Isso elimina o workaround manual que re-ocultava `cnt_4c_Copia` ap├│s a chamada.
+
+2. **[CONTAINER-TOGGLE]** ÔÇö Removida a linha workaround `loc_oPagina.cnt_4c_Copia.Visible = .F.` em `ConfigurarPaginaLista` (agora desnecess├íria, pois o filtro do TCV garante que o container permane├ºa com o `Visible` original `.F.`).
+
+3. **[GRID-HEADER]** ÔÇö Headers do `grd_4c_Gradei` corrigidos para corresponder ao legado: `"Empresa"ÔåÆ"Emp"`, `"Qtde.M?x."ÔåÆ"Qtde. M?xima"`, `"Tam."ÔåÆ"Tamanho"`.
+
+**Problemas j├í corretamente implementados (sem altera├º├úo necess├íria):**
+- `BINDEVENT-PARAMS`: Todos os 3 handlers (`EmpOsLostFocus`, `QmaxsLostFocus`, `GradeICol5LostFocus`) j├í tinham `(par_nKeyCode, par_nShiftAltCtrl)` declarados
+- `INIT-DUPLICADO`: `Init()` s├│ chama `DODEFAULT()`, sem chamada extra a `InicializarForm()`
+- `GRID-WITH`: `RecordSource` e `ColumnCount` j├í est├úo fora dos blocos `WITH`
+- `LAYOUT-POSITION`: `obj_4c_Opc_situacao` tem `Top=100+29=129` e `Left=555` ÔÇö correto com compensa├º├úo do PageFrame; o review confundiu com `Buttons(1).Left=5`/`Top=5` (posi├º├úo relativa ao OptionGroup)

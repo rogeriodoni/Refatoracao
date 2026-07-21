@@ -1,0 +1,23 @@
+[2026-07-16 17:04:04] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-16 17:04:04] [INFO] Prompt File: C:\4c\tasks\task290\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-16 17:04:04] [INFO] Output File: C:\4c\tasks\task290\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-16 17:04:04] [INFO] Model: sonnet
+[2026-07-16 17:04:04] [INFO] Timeout: 3600 segundos
+[2026-07-16 17:04:04] [INFO] Max Output Tokens: 128000
+[2026-07-16 17:04:04] [INFO] Context Files: 0 arquivo(s)
+[2026-07-16 17:04:04] [INFO] Invocando Claude CLI...
+[2026-07-16 17:04:04] [INFO] Prompt carregado: 146856 caracteres
+[2026-07-16 17:04:04] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-16 17:04:04] [INFO] Tamanho total do prompt: 146856 caracteres
+[2026-07-16 17:04:04] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-16 17:06:18] [INFO] Claude CLI finalizado em 134.3896368 segundos
+[2026-07-16 17:06:18] [INFO] Exit Code: 0
+[2026-07-16 17:06:18] [INFO] Output salvo em: C:\4c\tasks\task290\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-16 17:06:18] [INFO] Output size: 841 bytes
+[2026-07-16 17:06:18] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-16 17:06:18] [INFO] Preview do output:
+[2026-07-16 17:06:18] [INFO] A corre+º+úo foi aplicada. `RETURN DODEFAULT()` ÔåÆ `DODEFAULT()` no `Init()` do form.
+
+**Causa raiz:** O ambiente de teste n+úo tem conex+úo DB (`gnConnHandle` inv+ílido), ent+úo `CarregarOperacoes()` falha via SQLEXEC. `InicializarForm()` retornava `.F.`, que era propagado pelo `RETURN DODEFAULT()` no `Init()` ÔÇö em VFP9 isso destr+¦i o objeto antes de retorn+í-lo ao caller, resultando em "CREATEOBJECT retornou valor nao-objeto".
+
+**Fix:** Remover o `RETURN` do `DODEFAULT()`. O `Init()` a

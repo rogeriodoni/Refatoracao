@@ -1,0 +1,19 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e o que foi deixado de lado com justificativa:
+
+---
+
+**Corre├º├Áes aplicadas (8 de 12 problemas):**
+
+| # | Problema | Corre├º├úo |
+|---|---|---|
+| 1 | `[CONTAINER-VISIVEL]` TornarControlesVisiveis for├ºava CNT_4C_CONTAINER1 | Adicionado INLIST guard + recurs├úo movida para antes do LOOP |
+| 2 | `[NAVEGACAO-PAGINA]` Receber sem carga de dados | Inserido `MontarContainer()` quando lista FTP est├í vazia |
+| 3-7 | `[GRID-HEADER]` 5 captions com espa├ºos extras | Removidos: `" Arquivo"ÔåÆ"Arquivo"`, `" Tamanho"ÔåÆ"Tamanho"`, `" Pasta Local "ÔåÆ"Pasta Local"`, `" Pasta Host"ÔåÆ"Pasta Host"`, `" Status"ÔåÆ"Status"` |
+
+**N├úo corrigidos (4 problemas) ÔÇö justificativa:**
+
+| Problema | Motivo |
+|---|---|
+| `[LAYOUT]` `cmd_4c_Cmdtransfere` Top/Left | A ferramenta de revis├úo fez match errado: SCX `cmdtran` (Left=99) mapeia para `cmd_4c_Cmdtran` (Left=103, diff=4px Ô£ô), n├úo para `cmd_4c_Cmdtransfere`. Mover o bot├úo de seta individual para Left=99 causaria sobreposi├º├úo com o bot├úo "Transfere" |
+| `[LAYOUT]` `cmd_4c_Cmdrecebe` Top/Left | Mesmo caso: SCX `cmdrec` (Left=174) ÔåÆ `cmd_4c_Cmdrec` (Left=183, diff=9px Ô£ô) |
+| `[LAYOUT]` `cmd_4c_Cmdsair` Left=917 | CLAUDE.md regra 10 define Left=917 como posi├º├úo can├┤nica para o bot├úo Encerrar e tem preced├¬ncia expl├¡cita sobre o legado |

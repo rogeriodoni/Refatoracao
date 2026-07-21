@@ -12,7 +12,8 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
     this_cTituloRelatorio   = ""
 
     *-- Cursor de saida do relatorio (UNION ALL de listpro1-4)
-    this_cCursorDados       = "cursor_4c_DadosCtc"
+    *-- Nome DEVE bater com alias usado no FRX legado
+    this_cCursorDados       = "listpro"
 
     *-- Filtros de periodo
     this_dDtInicial         = {}

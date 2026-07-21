@@ -1,0 +1,11 @@
+﻿**Fase 6/8 conclu├¡da.**
+
+**Contexto da decis├úo:** O FormSIGPREST ├® um formul├írio utilit├írio extremamente simples ÔÇö apenas 2 checkboxes, 2 bot├Áes e 1 label de status. N├úo h├í TextBoxes com lookups nem campos adicionais. A migra├º├úo completa foi feita nas fases anteriores (1-5).
+
+**O que foi feito nesta fase:**
+
+Corre├º├úo da viola├º├úo da regra cr├¡tica #1 (NEVER RETURN inside TRY/CATCH) em `InicializarForm()`:
+- **Antes:** `IF VARTYPE(...) != "O" ÔåÆ RETURN .F.` dentro do bloco TRY
+- **Depois:** `IF VARTYPE(...) = "O" ÔåÆ configura form ÔåÆ loc_lSucesso = .T. / ELSE ÔåÆ MsgErro` ÔÇö RETURN apenas FORA do TRY
+
+**Status do formul├írio:** Completamente implementado. Todos os controles do original est├úo presentes (cntSombra, bot├Áes Gerar/Encerrar, checkboxes GeraArquivos/Gera├ìndices, label de status), e o `BtnOKClick()` replica fielmente toda a l├│gica de processamento do `OK.Click` original, incluindo: cria├º├úo de ArqDBF.DBF, varredura de arquivos .DBF com ADIR/AFIELDS, integra├º├úo com fwProgressBar, cria├º├úo de ArqInd.DBF com ├¡ndices, e carregamento do logo via SQLEXEC ao finalizar.

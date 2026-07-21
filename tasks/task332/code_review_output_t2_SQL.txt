@@ -1,0 +1,5 @@
+﻿Arquivo limpo. Resumo do que foi feito:
+
+**CIDCHAVES** ÔÇö Removidos `Atualizar()` e `ExecutarExclusao()` do `SigPrSlpBO.prg`. Esses m├®todos eram dead code (nunca chamados por este di├ílogo OPERACIONAL de sele├º├úo) e continham `WHERE cidchaves = ...` que o validador flagou corretamente como inexistente no original. O original s├│ faz SELECT em SigCdLpi + opera├º├Áes em cursor VFP local.
+
+**LMARCAS** ÔÇö Falso positivo confirmado ap├│s inspe├º├úo. N├úo existe nenhum SQL `WHERE lMarcas` no c├│digo migrado. As ocorr├¬ncias s├úo VFP cursor commands: `COUNT FOR lMarcas = 1` (linhas 793/951 do form) e `IF cursor_4c_Itens.lMarcas = 1` (BO linha 150) ÔÇö equivalentes diretos do `If CsSigCdLpi.lMarcas = 1` do original. Nenhuma altera├º├úo necess├íria.

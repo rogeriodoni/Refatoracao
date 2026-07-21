@@ -1,0 +1,31 @@
+﻿An├ílise conclu├¡da. Todos os tr├¬s flags s├úo **falsos positivos** do validador autom├ítico. Explica├º├úo detalhada:
+
+---
+
+**1. `CONTROLCOUNT` (linhas 596, 602 do form)**
+
+N├úo ├® coluna SQL. ├ë a propriedade VFP9 `.ControlCount` de objetos container, usada no m├®todo `TornarControlesVisiveis` para recurs├úo em controles. Completamente separado de qualquer `WHERE`.
+
+**2. `CODS` (BO linha 266)**
+
+```foxpro
+" WHERE cods = " + EscaparSQL(par_cCodTams)
+```
+
+`cods` ├® a **PK de `SigCdTam`** ÔÇö tabela diferente de `sigprtam`. O m├®todo `BuscarDescricaoTamanho` faz um lookup leg├¡timo nessa tabela. No JOIN do `CarregarTamanhos` tamb├®m aparece como `b.cods = a.codtams` (condi├º├úo de JOIN, n├úo WHERE inventado). O original carregava `Space(40) as Descs` (descric├úo em branco); a migra├º├úo melhora isso com lookup real ÔÇö n├úo ├® filtro inventado.
+
+**3. `CIDCHAVES`**
+
+Tr├¬s usos distintos, todos leg├¡timos:
+- `LOCATE FOR ... cidchaves <> ...` ÔÇö opera├º├úo no **cursor local** VFP9, n├úo SQL Server  
+- `WHERE cidchaves = ...` em `Atualizar()` e `ExecutarExclusao()` ÔÇö a PK da tabela `sigprtam`; o original mesmo insere via `Insert Into crSigPrTam (cPros, **CidChaves**) Values (...)` confirmando que a coluna existe
+
+---
+
+**Conclus├úo: Nenhuma altera├º├úo necess├íria.**
+
+O validador comparou os nomes de colunas do c├│digo migrado contra os WHEREs do SQL original (que s├│ tinham `CPROS`), mas ignorou que:
+- `CIDCHAVES`/`CODS` s├úo PKs usadas em opera├º├Áes **diferentes** das queries originais (UPDATE/DELETE por PK vs. SELECT por `cpros`)  
+- `CONTROLCOUNT` ├® propriedade VFP9, n├úo coluna SQL
+
+Os tr├¬s arquivos est├úo corretos como est├úo. Nenhuma condi├º├úo WHERE foi inventada.

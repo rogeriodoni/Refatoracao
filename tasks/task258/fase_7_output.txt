@@ -1,0 +1,16 @@
+﻿Analisei o estado atual do form e do BO. Esta ├® uma forma **OPERACIONAL** ÔÇö n├úo tem bot├Áes Incluir/Alterar/Visualizar/Excluir. Os eventos principais equivalentes j├í est├úo implementados nas fases anteriores:
+
+| Legado | Novo | Status |
+|--------|------|--------|
+| `Salva.Click` | `BtnConfirmarClick()` (linha 538) | Ô£à Completo |
+| `Conf_Sair.Click` | `BtnEncerrarClick()` (linha 585) | Ô£à Completo |
+| `Get_OP.Valid` | `CarregarDivisoesOP()` (linha 495) | Ô£à Completo |
+| `Get_OP.When` | `TxtOPGotFocus()` (linha 465) | Ô£à Completo |
+| `Get_OP.LostFocus` | `TxtOPLostFocus()` (linha 483) | Ô£à Completo |
+| `Grade.AfterRowColChange` | `GrdDadosAfterRowColChange()` (linha 325) | Ô£à Completo |
+
+O BO tamb├®m est├í completo com `CarregarDivOp()`, `Inserir()` (transa├º├úo completa em 3 passos: zera SeqDivs, atualiza Qtds/SeqDivs, totaliza em SigPdMvf) e `CarregarParametros()`.
+
+**Fase 7/8 j├í est├í conclu├¡da.** O form OPERACIONAL n├úo tem os 4 bot├Áes CRUD ÔÇö esses eventos gen├®ricos do template da pipeline n├úo se aplicam aqui. O arquivo existente n├úo precisa de modifica├º├Áes; est├í funcional e com paridade 100% com o legado.
+
+O que resta ├® **Fase 8 (integra├º├úo)**: adicionar o form ao `config.prg` e criar o item de menu em `menu.prg`. Deseja prosseguir com isso?

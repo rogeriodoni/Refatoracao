@@ -1,0 +1,11 @@
+﻿Fase 5 conclu├¡da. Dois bugs cr├¡ticos corrigidos em `FormSigPrSnd.prg`:
+
+**`CmdExcelClick`** ÔÇö removidos dois `RETURN` dentro de `TRY`:
+- Fluxo "cursor vazio" convertido para bloco `ELSE` 
+- Fluxo "usu├írio cancelou PUTFILE" (`EMPTY(loc_cArquivo)`) convertido para `IF !EMPTY(...)`
+- `USE IN TmpPrSnd` duplicado no `CATCH` para garantir cleanup em caso de erro
+
+**`CmdGerSenClick`** ÔÇö removido `RETURN` dentro de `TRY`:
+- Flag `loc_lEntradaOk` controla se prossegue para `GerarSenhas()`
+
+**Nota sobre a fase:** Como o form ├® OPERACIONAL (flat, sem PageFrame CRUD), n├úo existe "Page2/Dados" ÔÇö todos os campos (`lbl_4c_QtdSen`, `txt_4c_Qtdsen`, `grd_4c_Dados`) j├í foram configurados em `ConfigurarPaginaLista()` nas fases anteriores. O `SigPrSndBO.prg` est├í completo com `GerarSenhas()`, `BuscarPendentes()`, `SenhaExisteSQL()` e demais m├®todos. As fases restantes (6-8) cobrem integra├º├úo em `config.prg` e `menu.prg`.

@@ -1,0 +1,14 @@
+﻿Sem viola├º├Áes das regras cr├¡ticas. A Fase 8 est├í completa.
+
+**Resumo do que foi feito:**
+
+A Fase 8 verificou que `Formsigprima.prg` (655 linhas) e `sigprimaBO.prg` (609 linhas) j├í estavam completamente implementados nas fases anteriores com todos os m├®todos necess├írios para o form OPERACIONAL flat:
+
+- `CmdBtnProcessarClick()` ÔÇö dispara Exportar (tipo=3) ou Processamento (tipos 1/2)
+- `CmdBtnSairClick()` ÔÇö fecha o form
+- `CmdBtnArquivoClick()` ÔÇö abre GETDIR para selecionar pasta
+- `TxtArquivoKeyPress()` ÔÇö valida diret├│rio em ENTER/TAB
+- `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()`, `BtnExcluirClick()` ÔÇö mapeamentos sem├ónticos OPERACIONAL
+- `Unload()` + `Destroy()` ÔÇö limpeza de recursos e CLEAR EVENTS em modo auto
+
+O que foi adicionado nesta fase: **integra├º├úo no menu.prg** ÔÇö entrada `DEFINE BAR 73 OF popMovimentos` com "Importa├º├úo de Imagens de Produtos" + `PROCEDURE AbrirFormsigprima()`. A auto-carga via `ADIR(*BO.prg)` e `ADIR(Form*.prg)` em config.prg j├í cobre o registro autom├ítico de ambos os arquivos.

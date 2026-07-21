@@ -1,0 +1,18 @@
+﻿O arquivo est├í estruturalmente correto. **Resumo da Fase 3/8 conclu├¡da:**
+
+**`C:\4c\projeto\app\forms\operacionais\FormSIGPRIBL.prg`** criado com 969 linhas contendo:
+
+- **Propriedades**: Width=1000, Height=400, TitleBar=0, ControlBox=.F. (form modal flutuante sem barra de t├¡tulo), `this_cChave1`, `this_xNform1`, `this_cFPagsSel`
+- **Init()**: `LPARAMETERS par_cChave1, par_cNform1` ÔåÆ guarda params + cria TprMvCab se necess├írio + `DODEFAULT()`
+- **InicializarForm()**: Caption via CHR(), Picture de fundo, chama `ConfigurarCabecalho()` + `ConfigurarInterface()` + `TornarControlesVisiveis()` + `AtualizaBoleto("")`
+- **ConfigurarCabecalho()**: cnt_4c_Cabecalho cinza (RGB 100,100,100), lbl_4c_LblSombra (preto offset) + lbl_4c_LblTitulo (branco) exatamente como o legado
+- **ConfigurarInterface()**: todos os controles ÔÇö Label2/3/31, txt_4c_FPags (MaxLength=12), txt_4c_Locals, obj_4c_GetTxtCds (EditBox), lbl_4c_LblAviso, obj_4c_CmdGImprimir (CommandGroup com Imprimir+Encerrar), com BINDEVENTs
+- **AtualizaBoleto()**: SQLEXEC em SigCnFBl, habilita/desabilita controles com PEMSTATUS guards
+- **TxtFPagsKeyPress()**: handler com LPARAMETERS, guard Enter(13)/Tab(9)/F4(115), busca exata + lookup
+- **CmdImprimirClick()**: l├│gica completa de impress├úo matricial ÔÇö APRINTERS, TprMvCab SCAN, SigMvCab/SigMvPar/SigOpCdc/SigMvNfi/SigCdCli queries, INSERT em Crdados, GrDetalhe, DO SigPrIbl
+- **CmdSaidaClick()**: confirma├º├úo de abandono com MsgConfirma + Release
+- **GrDetalhe()**: insere linha em TmpImprime (helper de impress├úo matricial)
+- **TornarControlesVisiveis()**: recurs├úo com PEMSTATUS
+- **Destroy()**: fecha cursores + reativa form pai + DODEFAULT()
+
+Tamb├®m corrigido `menu.prg` linha 4693: `FormSigPrIbb` ÔåÆ `FormSIGPRIBL` para bater com o nome da classe criada.

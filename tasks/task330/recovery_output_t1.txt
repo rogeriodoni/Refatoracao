@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. `Width = 800` ÔåÆ `Width = 500` na linha 10 de `Formsigprsen.prg`.
+
+**Resumo:**
+- **4 ERROS** (`Dataenvironment.Top/Left/Width/Height`): esperados na nova arquitetura (sem DataEnvironment VFP) ÔÇö estavam exatamente no limite permitido de 4, n├úo bloqueiam.
+- **1 DIFEREN├çA VISUAL bloqueante** (`SIGPRSEN.Width`): original=500, migrado tinha 800. Corrigido para `Width = 500`.
+- O `cnt_4c_Cabecalho.Width = THIS.Width` no c├│digo j├í usa refer├¬ncia din├ómica, ent├úo ajusta automaticamente para 500.

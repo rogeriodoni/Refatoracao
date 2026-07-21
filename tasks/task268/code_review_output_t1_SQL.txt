@@ -1,0 +1,28 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Aqui est├í o resumo do que foi feito e por qu├¬:
+
+---
+
+## Corre├º├Áes aplicadas em `sigprcomBO.prg`
+
+### GRID-SQL (5 issues resolvidos)
+
+**`CarregarCopiaParaCursor()`** ÔÇö adicionados aliases `AS` expl├¡citos nas colunas com prefixo de tabela:
+```
+o.cpros AS cpros, o.emps AS emps, o.qmaxs AS qmaxs,
+o.codtams AS codtams, o.codcores AS codcores, o.deptos AS deptos
+```
+O VFP9/ODBC pode criar colunas com nomes amb├¡guos quando se usa `o.coluna` sem alias. Com `AS` expl├¡cito, `cursor_4c_Copia.marcas`, `.qmaxs`, `.codtams`, `.codcores`, `.deptos` ficam garantidos.
+
+### SQL-FILTRO-INVENTADO (2 de 6 corrigidos)
+
+**`Buscar()` WHERE** ÔÇö removidos `dpros` e `reffs`:
+- **Removido**: `OR p.dpros LIKE ...` e `OR p.reffs LIKE ...`
+- **Mantido**: `p.cpros LIKE ...` (CPROS Ô£ô original) e `p.ifors LIKE ...` (ICLIS/IFORS Ô£ô original)
+- O original filtrava por c├│digo de produto e fornecedor, n├úo por descri├º├úo/refer├¬ncia textual.
+
+### Verificados como corretos ÔÇö sem altera├º├úo
+
+| Issue | Motivo para manter |
+|---|---|
+| `CIDCHAVES` em `ExecutarExclusao()` | Delete por PK ÔÇö padr├úo absoluto, n├úo ├® filtro inventado |
+| `CODTAMS`/`CODCORES`/`DEPTOS` em `CarregarCopiaParaCursor()` | Est├úo em cl├íusula `JOIN ON`, n├úo em `WHERE`; o original tamb├®m usa codtams+codcores como chave de matching na c├│pia |

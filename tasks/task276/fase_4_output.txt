@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. Resumo das altera├º├Áes:
+
+**FormSigPrDsc.prg** ÔÇö 2 m├®todos adicionados:
+- `ConfigurarPaginaLista()` (linha ~355): consolida `ConfigurarFiltros()` + `ConfigurarGrade()` em um ├║nico m├®todo ÔÇö equivalente OPERACIONAL ao "Page1" do padr├úo CRUD
+- `AlternarPagina()` (linha ~368): stub necess├írio pelo template de fase, sem efeito em forms OPERACIONAIS flat
+- `InicializarForm` refatorado para chamar `THIS.ConfigurarPaginaLista()` no lugar das duas chamadas separadas
+
+**SigPrDscBO.prg** ÔÇö bug cr├¡tico corrigido:
+- `ProcessarTraducoes()` linha 194: adicionado `loc_cDes = ALLTRIM(loc_cIni)` ap├│s calcular `loc_cIni`. Sem isso, `loc_cDes` ficava `""` para sempre e o `IF !EMPTY(loc_cDes)` nunca entrava ÔÇö nenhum produto era inserido em `cursor_4c_Produtos` e a grade ficava vazia ap├│s clicar "Selecionar".

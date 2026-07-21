@@ -79,7 +79,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     * PrepararDados - Monta cursores para o relatorio
     * Replica logica do procedimento 'processamento' do legado:
     *   1. Carrega nome da empresa para cabecalho
-    *   2. Cria cursor_4c_Cabecalho com titulo/subtitulo
+    *   2. Cria dbCabecalho com titulo/subtitulo
     *   3. Executa query principal em SigOpInc (joins SigCdNcf, SigCdCli)
     *   4. Transforma cursor: percentual (TmpInc) ou listagem (Selecao+index)
     *--------------------------------------------------------------------------
@@ -115,13 +115,13 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_cSub = loc_cSub + " - C" + CHR(243) + "digo : " + ALLTRIM(THIS.this_cCodigo)
             ENDIF
 
-            IF USED("cursor_4c_Cabecalho")
-                USE IN cursor_4c_Cabecalho
+            IF USED("dbCabecalho")
+                USE IN dbCabecalho
             ENDIF
             SET NULL ON
-            CREATE CURSOR cursor_4c_Cabecalho ;
+            CREATE CURSOR dbCabecalho ;
                 (Titulo C(100), SubTitulo C(100), NomeEmpresa C(100))
-            INSERT INTO cursor_4c_Cabecalho (Titulo, SubTitulo, NomeEmpresa) ;
+            INSERT INTO dbCabecalho (Titulo, SubTitulo, NomeEmpresa) ;
                 VALUES (loc_cCab, loc_cSub, loc_cEmp)
             SET NULL OFF
 
@@ -183,12 +183,12 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                            SUM(1) AS Qtds, ;
                            SUM(1 / loc_nWQtd * 100.00) AS Percs ;
                     FROM (THIS.this_cCursorDados) ;
-                    INTO CURSOR cursor_4c_TmpInc ;
+                    INTO CURSOR TmpInc ;
                     GROUP BY 1, 2, 3, 4 ;
                     ORDER BY 1, 2, 3, 4
                 ELSE
                     SET NULL ON
-                    CREATE CURSOR cursor_4c_TmpInc ;
+                    CREATE CURSOR TmpInc ;
                         (Cods C(10), DescTabs C(50), Grupos C(10), ;
                          Contas C(10), Qtds N(10,0), Percs N(10,2))
                     SET NULL OFF
@@ -204,10 +204,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                            Grupos + "/" + Contas + "-" + RClis) AS Quebra2, ;
                        IIF(fixos <> 2, DescTabs, Descs) AS DescTabs, * ;
                 FROM (THIS.this_cCursorDados) ;
-                INTO CURSOR cursor_4c_Selecao
+                INTO CURSOR Selecao ;
+                ORDER BY 1, 2, Datas, Nenvs
 
-                SELECT cursor_4c_Selecao
-                INDEX ON Quebra1 + Quebra2 + DTOS(Datas) + STR(Nenvs, 10) TAG Ordem
+                SELECT Selecao
                 GO TOP
 
             ENDIF
@@ -222,11 +222,59 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
         RETURN loc_lSucesso
     ENDPROC
 
+    *-- ============================================================
+    *-- ExecutarReportForm (Pattern #117)
+    *-- Guard FRX + guard cursor vazio + isolamento POINT/SEPARATOR/REPORTBEHAVIOR
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
     *--------------------------------------------------------------------------
     * Visualizar - Prepara dados e exibe relatorio em preview
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -235,10 +283,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) PREVIEW NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PREVIEW", loc_cCursor)
             THIS.RegistrarAuditoria("VISUALIZAR")
             loc_lSucesso = .T.
 
@@ -254,7 +302,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     * Imprimir - Prepara dados e imprime com dialogo de selecao de impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -263,10 +311,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) TO PRINTER PROMPT NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PRINTER_PROMPT", loc_cCursor)
             THIS.RegistrarAuditoria("IMPRIMIR")
             loc_lSucesso = .T.
 
@@ -282,7 +330,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     * Documento - Prepara dados e envia direto para impressora sem dialogo
     *--------------------------------------------------------------------------
     PROCEDURE Documento()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -291,10 +339,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) TO PRINTER NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PRINTER", loc_cCursor)
             THIS.RegistrarAuditoria("DOCUMENTO")
             loc_lSucesso = .T.
 
@@ -385,7 +433,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     *
     * Para relatorios, o fluxo correto eh:
     *   - PrepararDados() monta os cursores de saida via SQLEXEC sobre o
-    *     periodo filtrado (cursor_4c_Cabecalho, cursor_4c_TmpInc, cursor_4c_Selecao)
+    *     periodo filtrado (dbCabecalho, TmpInc, Selecao)
     *   - Imprimir() / Visualizar() / Documento() consomem esses cursores
     *     atraves dos .FRX SigReAu1 (listagem) / SigReAu2 (percentual)
     *--------------------------------------------------------------------------
@@ -418,14 +466,14 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
         IF USED("cursor_4c_SigOpInc")
             USE IN cursor_4c_SigOpInc
         ENDIF
-        IF USED("cursor_4c_TmpInc")
-            USE IN cursor_4c_TmpInc
+        IF USED("TmpInc")
+            USE IN TmpInc
         ENDIF
-        IF USED("cursor_4c_Selecao")
-            USE IN cursor_4c_Selecao
+        IF USED("Selecao")
+            USE IN Selecao
         ENDIF
-        IF USED("cursor_4c_Cabecalho")
-            USE IN cursor_4c_Cabecalho
+        IF USED("dbCabecalho")
+            USE IN dbCabecalho
         ENDIF
         DODEFAULT()
     ENDPROC

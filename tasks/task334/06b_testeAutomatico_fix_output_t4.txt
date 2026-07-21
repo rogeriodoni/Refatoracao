@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O problema era `WITH .Buttons(1)` aninhado dentro de `WITH loc_oCmg` ÔÇö em VFP9 isso gera "BUTTONS is not an object". A solu├º├úo ├® fechar o `WITH` pai primeiro e acessar `Buttons(1)` via refer├¬ncia expl├¡cita `loc_oCmg.Buttons(1)` em um `WITH` separado, que ├® o padr├úo seguro documentado (Patterns #140/#141).

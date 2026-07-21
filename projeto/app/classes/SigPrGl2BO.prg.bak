@@ -1,926 +1,1075 @@
 *==============================================================================
-* SigPrGl2BO.prg - Business Object: Geracao de Ordens de Producao
-* Herda de: BusinessBase
-* Tipo: OPERACIONAL (sem CRUD direto - processamento de OPs)
-* Tabelas usadas: SigCdCeg, SigMvEst, SigTempd, SigMvCab, SigMvItn,
-*                 SigMvIts, SigCdOpe, SigCdPro, SigOpPic, SigCdNec,
-*                 SigPdMvf, CrSigTempd (cursor do framework)
-* Cursores de entrada (recebidos do form pai):
-*   TmpCabec - Cabecalho das operacoes selecionadas
-*   TmpItens - Itens das operacoes selecionadas
-*   TmpOper  - Tabela de operacoes (tipos de movimentacao)
-*   CrSigCdPam, CrSigCdPac - Parametros do sistema
-*   CrSigTempd - Cursor temporario de estoques (do framework)
+* SIGPRGL2BO.PRG
+* Business Object para Operacoes Selecionadas (SIGPRGL2)
+* Herda de BusinessBase
+* Processa operacoes selecionadas e gera OPs
 *==============================================================================
+
 DEFINE CLASS SigPrGl2BO AS BusinessBase
 
-    *-- Entidade persistida: SigTempd (tabela de trabalho de sessoes de geracao de OPs)
-    this_cTabela     = "SigTempd"
-    this_cCampoChave = "CidChaves"
+    *-- Conexao e sessao
+    this_oConexao    = .NULL.   && poDataMgr - conexao principal
+    this_oConexao2   = .NULL.   && poDataMgr2 - conexao para update/commit
+    this_oFormPai    = .NULL.   && referencia ao form pai
 
-    *-- Estado da sessao de processamento (recebidos do form pai via Init)
-    this_lReserva    = .F.    && Flag: reserva automatica de estoque
-    this_lAutomatico = .F.    && Flag: processamento automatico (sem confirmacao)
-    this_nEmphPdr    = 0      && Empresa padrao para geracao de OPs
-    this_nNumeroDaOP = 0      && Numero da OP destino (passado do form pai)
-    this_cPorDestino = ""     && Codigo de destino (PorDestino do form pai)
-    this_cOrdConta   = ""     && Ordenacao atual do grid de operacoes
+    *-- Parametros recebidos na abertura
+    this_lReserva      = .F.    && reserva automatica
+    this_nEmphPdr      = 0      && empresa padrao do gerente
+    this_lAutomatico   = .F.    && processamento automatico
+    this_nNumeroDaOp   = 0      && numero da OP a gerar
+    this_cPorDestino   = ""     && por destino (de PorDestino do form pai)
 
-    *-- Propriedades da entidade SigTempd (registro de trabalho da sessao)
-    this_cCidChaves  = ""     && char(64) PK do registro SigTempd
-    this_cCidQuerys  = ""     && char(20) ID de sessao (agrupa varios cidchaves)
-    this_cGrupos     = ""     && char(10) Grupo de estoque
-    this_cContas     = ""     && char(10) Conta de estoque
-    this_cEmps       = ""     && char(3)  Empresa
-    this_nCodObs     = 0      && numeric(3,0) Prioridade do centro de estoque
+    *-- Estado de ordenacao do grid de operacoes
+    this_cOrdConta = ""         && 'EMPDOPNUM' ou 'ENTREGA'
+
+    *-- Estado do processamento
+    this_lProcessado              = .F.   && .T. apos Processar executado com sucesso
+    this_nContadorSelecionadas    = 0     && qtd de operacoes com Flag=.T.
+
+    *-- Dados do registro corrente do TmpCabec
+    this_lFlag     = .F.   && checkbox de selecao
+    this_cEmps     = ""    && empresa
+    this_cDopes    = ""    && tipo de operacao
+    this_nNumes    = 0     && numero da operacao
+    this_dDatas    = {}    && data de emissao
+    this_dEntregas = {}    && data de entrega
+    this_nPeso     = 0     && peso total
+    this_cContav   = ""    && codigo do responsavel
+    this_cConta    = ""    && codigo do cliente
+    this_cDConta   = ""    && descricao do cliente
+    this_cObs      = ""    && observacao da operacao
+    this_cNotas    = ""    && documento fiscal
+    this_cJobs     = ""    && codigo do JOB
+    this_cGrupoDs  = ""    && grupo de destino
+    this_cContaDs  = ""    && conta de destino
 
     *--------------------------------------------------------------------------
-    * Init - Construtor
+    * INIT
     *--------------------------------------------------------------------------
     PROCEDURE Init()
         LOCAL loc_lSucesso
+
         loc_lSucesso = .F.
 
         TRY
-            IF !DODEFAULT()
-                loc_lSucesso = .F.
-            ENDIF
+            THIS.this_cTabela     = "SigMvCab"
+            THIS.this_cCampoChave = "EmpDopNums"
 
-            THIS.this_cTabela     = "SigTempd"
-            THIS.this_cCampoChave = "CidChaves"
+            THIS.this_lEmEdicao       = .F.
+            THIS.this_lNovoRegistro   = .F.
+            THIS.this_lDadosAlterados = .F.
+            THIS.this_lProcessado     = .F.
+            THIS.this_cMensagemErro   = ""
 
             loc_lSucesso = .T.
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro")
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.Init")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
-    *-- Flag: .T. se processamento deve abrir SigPrGlx (com estimados), .F. para SigPrGlp
-    this_lTemEstimado = .F.
-
     *--------------------------------------------------------------------------
-    * ProcessarOperacoes - Processa operacoes selecionadas e prepara cursores
-    * para o proximo sub-form (SigPrGlx ou SigPrGlp).
-    * Parametros: par_lReserva     - flag reserva automatica
-    *             par_lAutomatico  - flag processamento automatico
-    *             par_nEmphPdr     - empresa padrao
-    *             par_nNumeroDaOP  - numero da OP destino
-    *             par_cPorDestino  - codigo de destino
-    * Retorno: .T. se ok, .F. se erro
+    * ConfigurarContexto - recebe parametros do form pai
     *--------------------------------------------------------------------------
-    PROCEDURE ProcessarOperacoes(par_lReserva, par_lAutomatico, par_nEmphPdr, par_nNumeroDaOP, par_cPorDestino)
-        LOCAL loc_lResultado, loc_oErro
-        LOCAL loc_cEmpresa, loc_cCidQuerys
-        LOCAL loc_nContador, loc_lcJob
-        LOCAL loc_cSQL
-        LOCAL loc_xBaixa, loc_nEstoque, loc_nProduzir, loc_nSaldo
-        LOCAL loc_lcEdn, loc_nItn
-        LOCAL loc_cPEdI, loc_cPEdF
-        LOCAL loc_lProduzirTudo, loc_llData
-        LOCAL loc_llFalse
+    PROCEDURE ConfigurarContexto(par_oFormPai, par_oConexao, par_oConexao2, ;
+                                  par_lReserva, par_nEmphPdr, par_lAutomatico, ;
+                                  par_nNumeroDaOp, par_cPorDestino)
+        LOCAL loc_lSucesso
 
-        loc_lResultado = .T.
-        loc_cEmpresa   = go_4c_Sistema.cCodEmpresa
+        loc_lSucesso = .F.
 
         TRY
-            *-- PASSO 1: Validar selecao e verificar Jobs iguais
+            THIS.this_oFormPai    = par_oFormPai
+            THIS.this_oConexao    = par_oConexao
+            THIS.this_oConexao2   = par_oConexao2
+            THIS.this_lReserva    = IIF(VARTYPE(par_lReserva)    = "L", par_lReserva,    .F.)
+            THIS.this_nEmphPdr    = IIF(VARTYPE(par_nEmphPdr)    = "N", par_nEmphPdr,    0)
+            THIS.this_lAutomatico = IIF(VARTYPE(par_lAutomatico) = "L", par_lAutomatico, .F.)
+            THIS.this_nNumeroDaOp = IIF(VARTYPE(par_nNumeroDaOp) = "N", par_nNumeroDaOp, 0)
+            THIS.this_cPorDestino = IIF(VARTYPE(par_cPorDestino) = "C", ALLTRIM(par_cPorDestino), "")
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.ConfigurarContexto")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * OrdenarGrade - aplica ordenacao em TmpCabec
+    *--------------------------------------------------------------------------
+    PROCEDURE OrdenarGrade()
+        LOCAL loc_lSucesso, loc_cOrdConta
+
+        loc_lSucesso  = .F.
+
+        TRY
+            loc_cOrdConta = UPPER(IIF(VARTYPE(THIS.this_cOrdConta) = "C", THIS.this_cOrdConta, ""))
+
+            IF USED("TmpCabec")
+                SELECT TmpCabec
+                IF !EMPTY(loc_cOrdConta) AND INLIST(loc_cOrdConta, "ENTREGA", "EMPDOPNUM")
+                    SET ORDER TO &loc_cOrdConta.
+                ELSE
+                    SET ORDER TO EmpDopNum
+                    THIS.this_cOrdConta = UPPER(ORDER("TmpCabec"))
+                ENDIF
+            ENDIF
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.OrdenarGrade")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DefinirOrdemMovimentacao - ordena TmpCabec por EmpDopNum
+    *--------------------------------------------------------------------------
+    PROCEDURE DefinirOrdemMovimentacao()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpCabec") AND UPPER(ORDER("TmpCabec")) <> "EMPDOPNUM"
+                SELECT TmpCabec
+                SET ORDER TO EmpDopNum
+                GO TOP
+                THIS.this_cOrdConta = UPPER(ORDER("TmpCabec"))
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.DefinirOrdemMovimentacao")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DefinirOrdemEntrega - ordena TmpCabec por Entrega
+    *--------------------------------------------------------------------------
+    PROCEDURE DefinirOrdemEntrega()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpCabec") AND UPPER(ORDER("TmpCabec")) <> "ENTREGA"
+                SELECT TmpCabec
+                SET ORDER TO Entrega
+                GO TOP
+                THIS.this_cOrdConta = UPPER(ORDER("TmpCabec"))
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.DefinirOrdemEntrega")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * SincronizarItens - filtra TmpItens para o registro corrente de TmpCabec
+    *--------------------------------------------------------------------------
+    PROCEDURE SincronizarItens()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpItens") AND USED("TmpCabec") AND !EOF("TmpCabec")
+                SELECT TmpItens
+                SET ORDER TO EmpDopNum
+                SET KEY TO TmpCabec.Emps + TmpCabec.Dopes + STR(TmpCabec.Numes, 6)
+                GO TOP
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.SincronizarItens")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * SelecionarTodos - marca Flag=.T. em todos os registros de TmpCabec
+    *--------------------------------------------------------------------------
+    PROCEDURE SelecionarTodos()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpCabec")
+                REPLACE ALL Flag WITH .T. IN TmpCabec
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.SelecionarTodos")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DesmarcarTodos - marca Flag=.F. em todos os registros de TmpCabec
+    *--------------------------------------------------------------------------
+    PROCEDURE DesmarcarTodos()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED("TmpCabec")
+                REPLACE ALL Flag WITH .F. IN TmpCabec
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.DesmarcarTodos")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarSelecao - verifica operacoes selecionadas (Flag=.T.) e mesmo JOB
+    * Retorna .T. se valido; .F. com mensagem em this_cMensagemErro
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarSelecao()
+        LOCAL loc_lSucesso, loc_nContador, loc_cJob
+
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro        = ""
+        THIS.this_nContadorSelecionadas = 0
+
+        TRY
+            IF !USED("TmpCabec")
+                THIS.this_cMensagemErro = "Cursor TmpCabec n" + CHR(227) + "o est" + CHR(225) + ;
+                                          " dispon" + CHR(237) + "vel"
+                loc_lSucesso = .F.
+            ENDIF
+
             SELECT TmpCabec
             SET ORDER TO EmpDopNum
 
             loc_nContador = 0
             GO TOP
-            loc_lcJob = ALLTRIM(NVL(TmpCabec.Jobs, ""))
+            loc_cJob = TmpCabec.Jobs
 
             SCAN FOR Flag
                 loc_nContador = loc_nContador + 1
-                IF ALLTRIM(NVL(TmpCabec.Jobs,"")) <> loc_lcJob
-                    MsgAviso("N" + CHR(227) + "o " + CHR(233) + " permitido gerar OPs de opera" + ;
-                             CHR(231) + CHR(245) + "es com Jobs diferentes.", "Aviso")
-                    loc_lResultado = .F.
-                    EXIT
+                IF loc_cJob <> TmpCabec.Jobs
+                    THIS.this_cMensagemErro = "N" + CHR(227) + "o " + CHR(233) + ;
+                        " permitido gerar OPs de opera" + CHR(231) + CHR(245) + ;
+                        "es com Jobs diferentes."
+                    loc_lSucesso = .F.
                 ENDIF
             ENDSCAN
 
-            IF loc_lResultado AND loc_nContador = 0
-                MsgAviso("Nenhuma Opera" + CHR(231) + CHR(227) + "o Foi Selecionada!", "Aviso")
-                loc_lResultado = .F.
+            THIS.this_nContadorSelecionadas = loc_nContador
+
+            IF loc_nContador = 0
+                THIS.this_cMensagemErro = "Nenhuma Opera" + CHR(231) + CHR(227) + "o Foi Selecionada!!!"
+                loc_lSucesso = .F.
             ENDIF
 
-            *-- PASSO 2: Preparar chave de sessao e buscar centros de estoque
-            IF loc_lResultado
-                loc_cCidQuerys = fUniqueIds()
-
-                loc_cSQL = "SELECT * FROM SigCdCeg WHERE TpCads <> 1"
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpCeg") < 1
-                    MsgErro("Falha na conex" + CHR(227) + "o (TmpCeg). Favor reinicializar o processo.", "Erro")
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-
-            *-- PASSO 3: Popular SigTempd com prioridades de estoque
-            IF loc_lResultado
-                loc_cSQL = "DELETE FROM SigTempd WHERE CidQuerys = '" + ALLTRIM(loc_cCidQuerys) + "'"
-                SQLEXEC(gnConnHandle, loc_cSQL)
-
-                SELECT TmpCeg
-                IF RECCOUNT("TmpCeg") > 0
-                    SCAN
-                        IF loc_lResultado
-                            loc_cSQL = "INSERT INTO SigTempd " + ;
-                                "(Grupos, Contas, CodObs, Emps, CidChaves, CidQuerys) VALUES (" + ;
-                                EscaparSQL(ALLTRIM(NVL(TmpCeg.Grupos,""))) + ", " + ;
-                                EscaparSQL(ALLTRIM(NVL(TmpCeg.Contas,""))) + ", " + ;
-                                FormatarNumeroSQL(NVL(TmpCeg.Priors, 0), 0) + ", " + ;
-                                EscaparSQL(ALLTRIM(NVL(TmpCeg.Emps,""))) + ", " + ;
-                                EscaparSQL(fUniqueIds()) + ", " + ;
-                                EscaparSQL(loc_cCidQuerys) + ")"
-                            IF SQLEXEC(gnConnHandle, loc_cSQL) < 1
-                                loc_lResultado = .F.
-                            ENDIF
-                        ENDIF
-                    ENDSCAN
-                ELSE
-                    IF USED("crSigCdPam")
-                        loc_cSQL = "INSERT INTO SigTempd " + ;
-                            "(Grupos, Contas, CodObs, Emps, CidChaves, CidQuerys) VALUES (" + ;
-                            EscaparSQL(ALLTRIM(NVL(crSigCdPam.GrupoEsts,""))) + ", " + ;
-                            EscaparSQL(ALLTRIM(NVL(crSigCdPam.ContaEsts,""))) + ", " + ;
-                            "1, " + ;
-                            EscaparSQL(ALLTRIM(loc_cEmpresa)) + ", " + ;
-                            EscaparSQL(fUniqueIds()) + ", " + ;
-                            EscaparSQL(loc_cCidQuerys) + ")"
-                        loc_lResultado = SQLEXEC(gnConnHandle, loc_cSQL) >= 1
-                    ENDIF
-                ENDIF
-
-                IF !loc_lResultado
-                    MsgErro("Falha ao gravar em SigTempd. Favor reinicializar o processo.", "Erro")
-                ENDIF
-            ENDIF
-
-            *-- PASSO 4: Buscar estoque disponivel via SigMvEst x SigTempd
-            IF loc_lResultado
-                loc_cSQL = "SELECT a.CPros, a.CodCors, a.CodTams, a.Grupos, a.Estos, " + ;
-                    "a.SQtds, a.Emps, b.CodObs AS Priors " + ;
-                    "FROM SigMvEst a, SigTempd b " + ;
-                    "WHERE a.Grupos = b.Grupos AND a.Estos = b.Contas " + ;
-                    "AND a.Emps = b.Emps AND a.Sqtds > 0 " + ;
-                    "UNION " + ;
-                    "SELECT a.CPros, a.CodCors, a.CodTams, a.Grupos, a.Estos, " + ;
-                    "a.SQtds, a.Emps, b.CodObs AS Priors " + ;
-                    "FROM SigMvEst a, SigTempd b " + ;
-                    "WHERE a.Grupos = b.Grupos AND b.Contas = '' " + ;
-                    "AND a.Emps = b.Emps AND a.Sqtds > 0"
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpEstoque") < 1
-                    MsgErro("Falha na conex" + CHR(227) + "o (TmpEstoque). Favor reinicializar.", "Erro")
-                    loc_lResultado = .F.
-                ENDIF
-            ENDIF
-
-            *-- PASSO 5: Limpar SigTempd desta sessao
-            IF loc_lResultado
-                loc_cSQL = "DELETE FROM SigTempd WHERE CidQuerys = '" + ALLTRIM(loc_cCidQuerys) + "'"
-                SQLEXEC(gnConnHandle, loc_cSQL)
-            ENDIF
-
-            *-- PASSO 6: Criar cursores de saldo TmpSaldo e TmpSaldg
-            IF loc_lResultado
-                SET NULL ON
-                CREATE CURSOR TmpSaldo (CPros C(14) NULL, CodCors C(4) NULL, CodTams C(4) NULL, ;
-                    Saldo N(12,3) NULL, Disps N(12,3) NULL, Fabrs N(12,3) NULL, DispFs N(12,3) NULL)
-                INDEX ON CPros + CodCors + CodTams TAG CPros
-
-                CREATE CURSOR TmpSaldg (Emps C(3) NULL, Grupos C(10) NULL, Estos C(10) NULL, ;
-                    CPros C(14) NULL, CodCors C(4) NULL, CodTams C(4) NULL, ;
-                    Saldo N(12,3) NULL, Disps N(12,3) NULL, Priors N(2,0) NULL, Reservs N(12,3) NULL)
-                INDEX ON CPros + CodCors + CodTams + STR(NVL(Priors,0),2) + Grupos + Estos + Emps TAG CPros
-                INDEX ON Emps + Grupos + Estos + CPros + CodCors + CodTams TAG GruEstPro
-                SET NULL OFF
-
-                SELECT TmpEstoque
-                SCAN
-                    SELECT TmpSaldo
-                    IF NOT SEEK(ALLTRIM(NVL(TmpEstoque.CPros,"")) + ;
-                                ALLTRIM(NVL(TmpEstoque.CodCors,"")) + ;
-                                ALLTRIM(NVL(TmpEstoque.CodTams,"")))
-                        INSERT INTO TmpSaldo (CPros, CodCors, CodTams, Saldo, Disps) ;
-                            VALUES (NVL(TmpEstoque.CPros,""), NVL(TmpEstoque.CodCors,""), ;
-                                    NVL(TmpEstoque.CodTams,""), 0, 0)
-                    ENDIF
-                    REPLACE Saldo WITH NVL(Saldo,0) + NVL(TmpEstoque.SQtds,0), ;
-                            Disps WITH NVL(Disps,0) + NVL(TmpEstoque.SQtds,0)
-
-                    INSERT INTO TmpSaldg (Grupos, Estos, CPros, CodCors, CodTams, ;
-                        Saldo, Disps, Priors, Emps) ;
-                        VALUES (NVL(TmpEstoque.Grupos,""), NVL(TmpEstoque.Estos,""), ;
-                                NVL(TmpEstoque.CPros,""), NVL(TmpEstoque.CodCors,""), ;
-                                NVL(TmpEstoque.CodTams,""), NVL(TmpEstoque.SQtds,0), ;
-                                NVL(TmpEstoque.SQtds,0), NVL(TmpEstoque.Priors,0), ;
-                                NVL(TmpEstoque.Emps,""))
-                ENDSCAN
-            ENDIF
-
-            *-- PASSO 7: Carregar operacao de transferencia e ajustar saldos por reservas
-            IF loc_lResultado AND USED("crSigCdPam") AND !EMPTY(ALLTRIM(crSigCdPam.TransfRes))
-                SQLEXEC(gnConnHandle, ;
-                    "SELECT * FROM SigCdOpe WHERE Dopes = '" + ALLTRIM(crSigCdPam.TransfRes) + "'", ;
-                    "crSigCdOpe")
-
-                IF USED("crSigCdOpe") AND !EOF("crSigCdOpe") AND NVL(crSigCdOpe.Estoqs, 0) <> 1
-                    loc_cPEdI = ALLTRIM(loc_cEmpresa) + ALLTRIM(crSigCdPam.TransfRes) + STR(0, 6)
-                    loc_cPEdF = ALLTRIM(loc_cEmpresa) + ALLTRIM(crSigCdPam.TransfRes) + STR(999999, 6)
-
-                    loc_cSQL = "SELECT EmpDopNums, GrupoOs, ContaOs, Emps, Dopes, Numes " + ;
-                        "FROM SigMvCab " + ;
-                        "WHERE EmpDopNums BETWEEN '" + ALLTRIM(loc_cPEdI) + "' AND '" + ;
-                        ALLTRIM(loc_cPEdF) + "' ORDER BY EmpDopNums"
-
-                    IF SQLEXEC(gnConnHandle, loc_cSQL, "TempEest") < 1
-                        MsgErro("Falha na conex" + CHR(227) + "o (TempEest). Favor reinicializar.", "Erro")
-                        loc_lResultado = .F.
-                    ENDIF
-                ENDIF
-            ENDIF
-
-            *-- PASSO 7b: Ajustar saldos removendo qtds de reservas em transferencia
-            IF loc_lResultado AND USED("TempEest") AND RECCOUNT("TempEest") > 0
-                SELECT TempEest
-                GO TOP
-                SCAN
-                    IF loc_lResultado
-                        loc_lcEdn = ALLTRIM(NVL(TempEest.EmpDopNums,""))
-
-                        IF SQLEXEC(gnConnHandle, ;
-                            "SELECT * FROM SigMvItn WHERE EmpDopNums = " + EscaparSQL(loc_lcEdn), ;
-                            "TempEestI") < 1
-                            MsgErro("Falha na conex" + CHR(227) + "o (TempEestI).", "Erro")
-                            loc_lResultado = .F.
-                        ENDIF
-
-                        IF loc_lResultado AND USED("TempEestI") AND RECCOUNT("TempEestI") > 0
-                            SELECT TempEestI
-                            SCAN
-                                IF loc_lResultado AND ;
-                                    (NVL(TempEestI.Qtds,0) - NVL(TempEestI.QtBaixas,0)) > 0
-
-                                    loc_nItn = NVL(TempEestI.CItens, 0)
-                                    loc_cSQL = "SELECT * FROM SigMvIts " + ;
-                                        "WHERE EmpDopNums = " + EscaparSQL(loc_lcEdn) + " " + ;
-                                        "AND CItens = " + FormatarNumeroSQL(loc_nItn, 0)
-
-                                    IF SQLEXEC(gnConnHandle, loc_cSQL, "TempEsti2") < 1
-                                        MsgErro("Falha na conex" + CHR(227) + "o (TempEsti2). " + ;
-                                                "Favor reinicializar.", "Erro")
-                                        loc_lResultado = .F.
-                                    ENDIF
-
-                                    IF loc_lResultado
-                                        SELECT TempEsti2
-                                        GO TOP
-                                        IF EOF("TempEsti2")
-                                            SELECT TmpSaldo
-                                            SET ORDER TO CPros
-                                            IF NOT SEEK(ALLTRIM(NVL(TempEestI.CPros,"")))
-                                                INSERT INTO TmpSaldo (CPros) ;
-                                                    VALUES (NVL(TempEestI.CPros,""))
-                                            ENDIF
-                                            REPLACE Saldo WITH NVL(Saldo,0) - ;
-                                                    (NVL(TempEestI.Qtds,0) - NVL(TempEestI.QtBaixas,0)), ;
-                                                    Disps WITH NVL(Disps,0) - ;
-                                                    (NVL(TempEestI.Qtds,0) - NVL(TempEestI.QtBaixas,0))
-
-                                            SELECT TmpSaldg
-                                            SET ORDER TO GruEstPro
-                                            IF !SEEK(ALLTRIM(NVL(TempEest.Emps,"")) + ;
-                                                     ALLTRIM(NVL(TempEest.GrupoOs,"")) + ;
-                                                     ALLTRIM(NVL(TempEest.ContaOs,"")) + ;
-                                                     ALLTRIM(NVL(TempEestI.CPros,"")))
-                                                INSERT INTO TmpSaldg (Emps, Grupos, Estos, CPros, Priors) ;
-                                                    VALUES (NVL(TempEest.Emps,""), NVL(TempEest.GrupoOs,""), ;
-                                                            NVL(TempEest.ContaOs,""), NVL(TempEestI.CPros,""), 99)
-                                            ENDIF
-                                            REPLACE Saldo WITH NVL(Saldo,0) - ;
-                                                    (NVL(TempEestI.Qtds,0) - NVL(TempEestI.QtBaixas,0)), ;
-                                                    Disps WITH NVL(Disps,0) - ;
-                                                    (NVL(TempEestI.Qtds,0) - NVL(TempEestI.QtBaixas,0))
-                                        ELSE
-                                            SELECT TempEsti2
-                                            SCAN
-                                                IF loc_lResultado
-                                                    loc_nSaldo = NVL(TempEsti2.Qtds,0) - NVL(TempEsti2.QtBaixas,0)
-                                                    SELECT TmpSaldo
-                                                    IF NOT SEEK(ALLTRIM(NVL(TempEsti2.CPros,"")) + ;
-                                                                ALLTRIM(NVL(TempEsti2.CodCors,"")) + ;
-                                                                ALLTRIM(NVL(TempEsti2.CodTams,"")))
-                                                        INSERT INTO TmpSaldo (CPros, CodCors, CodTams) ;
-                                                            VALUES (NVL(TempEsti2.CPros,""), ;
-                                                                    NVL(TempEsti2.CodCors,""), ;
-                                                                    NVL(TempEsti2.CodTams,""))
-                                                    ENDIF
-                                                    REPLACE Saldo WITH NVL(Saldo,0) - loc_nSaldo, ;
-                                                            Disps WITH NVL(Disps,0) - loc_nSaldo
-
-                                                    SELECT TmpSaldg
-                                                    SET ORDER TO GruEstPro
-                                                    IF !SEEK(ALLTRIM(NVL(TempEest.Emps,"")) + ;
-                                                             ALLTRIM(NVL(TempEest.GrupoOs,"")) + ;
-                                                             ALLTRIM(NVL(TempEest.ContaOs,"")) + ;
-                                                             ALLTRIM(NVL(TempEsti2.CPros,"")) + ;
-                                                             ALLTRIM(NVL(TempEsti2.CodCors,"")) + ;
-                                                             ALLTRIM(NVL(TempEsti2.CodTams,"")))
-                                                        INSERT INTO TmpSaldg ;
-                                                            (Emps, Grupos, Estos, CPros, CodCors, CodTams, Priors) ;
-                                                            VALUES (NVL(TempEest.Emps,""), ;
-                                                                    NVL(TempEest.GrupoOs,""), ;
-                                                                    NVL(TempEest.ContaOs,""), ;
-                                                                    NVL(TempEsti2.CPros,""), ;
-                                                                    NVL(TempEsti2.CodCors,""), ;
-                                                                    NVL(TempEsti2.CodTams,""), 99)
-                                                    ENDIF
-                                                    REPLACE Saldo WITH NVL(Saldo,0) - loc_nSaldo, ;
-                                                            Disps WITH NVL(Disps,0) - loc_nSaldo
-                                                ENDIF
-                                            ENDSCAN
-                                        ENDIF
-                                    ENDIF
-                                ENDIF
-                            ENDSCAN
-                        ENDIF
-                    ENDIF
-                ENDSCAN
-            ENDIF
-
-            *-- PASSO 8: Pre-carregar operacoes para lookup no scan principal
-            IF loc_lResultado
-                IF SQLEXEC(gnConnHandle, "SELECT * FROM SigCdOpe", "cursor_4c_TmpOpe") >= 1
-                    SELECT cursor_4c_TmpOpe
-                    INDEX ON Dopes TAG Dopes
-                ENDIF
-            ENDIF
-
-            *-- PASSO 9: Criar TmpFinal e calcular o que produzir por item
-            IF loc_lResultado
-                SET NULL ON
-                CREATE CURSOR TmpFinal (Emps C(3) NULL, Dopes C(20) NULL, Numes N(6,0) NULL, ;
-                    CPros C(14) NULL, Qtds N(10,3) NULL, Peso N(9,3) NULL, ;
-                    Saldo N(10,3) NULL, Estoque N(10,3) NULL, Produzir N(10,3) NULL, ;
-                    Obs M NULL, Obsps M NULL, Datas D NULL, Entregas D NULL, ;
-                    CodCors C(4) NULL, CodTams C(4) NULL, Linhas C(10) NULL, ;
-                    Citens N(10,0) NULL, Reffs C(40) NULL, Notas C(6) NULL, ;
-                    Dpros C(40) NULL, GrupoDs C(10) NULL, ContaDs C(10) NULL, ;
-                    KeySelM L NULL, Fabrs N(10,3) NULL, KeyPdes L NULL, Jobs C(10) NULL)
-                INDEX ON CPros + CodCors + CodTams TAG CPros
-                SET NULL OFF
-
-                SELECT TmpItens
-                SET KEY TO
-                SET ORDER TO CPros
-
-                SCAN
-                    IF loc_lResultado
-                        SELECT TmpCabec
-                        SET ORDER TO EmpDopNum
-                        SEEK ALLTRIM(NVL(TmpItens.Emps,"")) + ;
-                             ALLTRIM(NVL(TmpItens.Dopes,"")) + ;
-                             STR(NVL(TmpItens.Numes,0), 6)
-
-                        IF !Flag
-                            LOOP
-                        ENDIF
-
-                        IF NVL(TmpItens.Saldo,0) > 0
-                            loc_nEstoque  = 0
-                            loc_nProduzir = 0
-                            loc_lProduzirTudo = .F.
-
-                            *-- Verificar condicoes para usar estoque ou produzir tudo
-                            IF USED("crSigCdPam") AND EMPTY(ALLTRIM(crSigCdPam.TransfRes))
-                                loc_lProduzirTudo = .T.
-                            ENDIF
-
-                            IF !loc_lProduzirTudo AND USED("cursor_4c_TmpOpe")
-                                SELECT cursor_4c_TmpOpe
-                                SET ORDER TO Dopes
-                                IF SEEK(ALLTRIM(NVL(TmpItens.Dopes,"")))
-                                    IF NVL(cursor_4c_TmpOpe.ChkObs,0) <> 1 AND ;
-                                        !EMPTY(ALLTRIM(NVL(TmpItens.Obs,"")))
-                                        loc_lProduzirTudo = .T.
-                                    ENDIF
-                                    IF !loc_lProduzirTudo AND ;
-                                        NVL(cursor_4c_TmpOpe.Reservas,0) = 2 AND !par_lReserva
-                                        loc_lProduzirTudo = .T.
-                                    ENDIF
-                                ENDIF
-                            ENDIF
-
-                            IF !loc_lProduzirTudo
-                                SELECT TmpSaldo
-                                SET ORDER TO CPros
-                                IF !SEEK(ALLTRIM(NVL(TmpItens.CPros,"")) + ;
-                                         ALLTRIM(NVL(TmpItens.CodCors,"")) + ;
-                                         ALLTRIM(NVL(TmpItens.CodTams,"")))
-                                    loc_lProduzirTudo = .T.
-                                ELSE
-                                    IF NVL(TmpSaldo.Disps,0) < 0
-                                        loc_lProduzirTudo = .T.
-                                    ENDIF
-                                ENDIF
-                            ENDIF
-
-                            IF loc_lProduzirTudo
-                                loc_nProduzir = NVL(TmpItens.Saldo,0)
-                            ELSE
-                                *-- Ja posicionado em TmpSaldo pelo SEEK acima
-                                loc_nEstoque = NVL(TmpSaldo.Disps,0)
-                                IF NVL(TmpSaldo.Disps,0) >= NVL(TmpItens.Saldo,0)
-                                    REPLACE TmpSaldo.Disps WITH ;
-                                            NVL(TmpSaldo.Disps,0) - NVL(TmpItens.Saldo,0)
-                                ELSE
-                                    loc_nProduzir = NVL(TmpItens.Saldo,0) - NVL(TmpSaldo.Disps,0)
-                                    REPLACE TmpSaldo.Disps WITH 0
-                                ENDIF
-                            ENDIF
-
-                            IF SQLEXEC(gnConnHandle, ;
-                                "SELECT * FROM SigCdPro WHERE CPros = '" + ;
-                                ALLTRIM(NVL(TmpItens.CPros,"")) + "'", "crSigCdPro") < 1
-                                MsgErro("Falha ao buscar SigCdPro.", "Erro")
-                                loc_lResultado = .F.
-                            ENDIF
-
-                            IF loc_lResultado
-                                INSERT INTO TmpFinal ;
-                                    (Emps, Dopes, Numes, CPros, Qtds, Peso, Saldo, ;
-                                     Estoque, Produzir, Obsps, Obs, Datas, Entregas, ;
-                                     CodCors, CodTams, Linhas, Citens, Reffs, Notas, ;
-                                     Dpros, GrupoDs, ContaDs, Jobs) ;
-                                    VALUES ;
-                                    (NVL(TmpItens.Emps,""), NVL(TmpItens.Dopes,""), ;
-                                     NVL(TmpItens.Numes,0), NVL(TmpItens.CPros,""), ;
-                                     NVL(TmpItens.Qtds,0), NVL(TmpItens.Peso,0), ;
-                                     NVL(TmpItens.Saldo,0), ;
-                                     NVL(TmpItens.Saldo,0) - loc_nProduzir, ;
-                                     loc_nProduzir, ;
-                                     NVL(TmpItens.Obs,""), NVL(TmpCabec.Obs,""), ;
-                                     NVL(TmpCabec.Datas,{}), NVL(TmpCabec.Entregas,{}), ;
-                                     NVL(TmpItens.CodCors,""), NVL(TmpItens.CodTams,""), ;
-                                     NVL(TmpItens.Linhas,""), NVL(TmpItens.CItens,0), ;
-                                     NVL(crSigCdPro.Reffs,""), NVL(TmpItens.Notas,""), ;
-                                     NVL(TmpItens.Dpros,""), NVL(TmpCabec.Grupods,""), ;
-                                     NVL(TmpCabec.Contads,""), NVL(TmpCabec.Jobs,""))
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                ENDSCAN
-            ENDIF
-
-            *-- PASSO 10: Redistribuir diferenca de saldo entre grupos/estoques
-            IF loc_lResultado
-                SELECT TmpSaldo
-                SCAN
-                    IF NVL(TmpSaldo.Saldo,0) <> NVL(TmpSaldo.Disps,0)
-                        loc_xBaixa = NVL(TmpSaldo.Saldo,0) - NVL(TmpSaldo.Disps,0)
-                        SELECT TmpSaldg
-                        SET ORDER TO CPros
-                        =SEEK(ALLTRIM(NVL(TmpSaldo.CPros,"")) + ;
-                              ALLTRIM(NVL(TmpSaldo.CodCors,"")) + ;
-                              ALLTRIM(NVL(TmpSaldo.CodTams,"")))
-                        SCAN WHILE ALLTRIM(NVL(CPros,"")) = ALLTRIM(NVL(TmpSaldo.CPros,"")) AND ;
-                                    ALLTRIM(NVL(CodCors,"")) = ALLTRIM(NVL(TmpSaldo.CodCors,"")) AND ;
-                                    ALLTRIM(NVL(CodTams,"")) = ALLTRIM(NVL(TmpSaldo.CodTams,"")) AND ;
-                                    loc_xBaixa > 0
-                            IF NVL(TmpSaldg.Disps,0) >= loc_xBaixa
-                                REPLACE TmpSaldg.Disps WITH NVL(TmpSaldg.Disps,0) - loc_xBaixa
-                                loc_xBaixa = 0
-                            ELSE
-                                loc_xBaixa = loc_xBaixa - NVL(TmpSaldg.Disps,0)
-                                REPLACE TmpSaldg.Disps WITH 0
-                            ENDIF
-                        ENDSCAN
-                    ENDIF
-                ENDSCAN
-            ENDIF
-
-            *-- PASSO 11: Se ha fabricacao estimada (DopEsts), calcular TmpFinalG
-            IF loc_lResultado AND USED("crSigCdPac") AND !EMPTY(ALLTRIM(crSigCdPac.DopEsts))
-                THIS.this_lTemEstimado = .T.
-                loc_llFalse = .F.
-
-                SET NULL ON
-                CREATE CURSOR TmpFabr (Priors N(2,0) NULL, Nops N(10,0) NULL, Fases C(10) NULL, ;
-                    CPros C(14) NULL, CodCors C(4) NULL, CodTams C(4) NULL, ;
-                    Qtds N(10,3) NULL, Disps N(12,3) NULL, Reservs N(12,3) NULL)
-                INDEX ON CPros + CodCors + CodTams + STR(NVL(Priors,0),2) + STR(NVL(Nops,0),10) TAG CPros
-                SET NULL OFF
-
-                loc_cSQL = "SELECT a.Nops, a.CPros, a.CodCors, a.CodTams, SUM(a.Qtds) AS Qtds " + ;
-                    "FROM SigOpPic a, SigCdNec b " + ;
-                    "WHERE a.Dopes = '" + ALLTRIM(crSigCdPac.DopEsts) + "' " + ;
-                    "AND a.EmpDopNops = b.EmpDnps " + ;
-                    "AND b.Chksubn = " + IIF(loc_llFalse, "1", "0") + " " + ;
-                    "AND a.Emps = '" + ALLTRIM(loc_cEmpresa) + "' " + ;
-                    "GROUP BY a.Nops, a.CPros, a.CodCors, a.CodTams"
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpOpi") >= 1 AND ;
-                    USED("TmpOpi") AND RECCOUNT("TmpOpi") > 0
-
-                    SELECT TmpOpi
-                    SCAN
-                        IF loc_lResultado
-                            SELECT TmpSaldo
-                            SET ORDER TO CPros
-                            IF NOT SEEK(ALLTRIM(NVL(TmpOpi.CPros,"")) + ;
-                                        ALLTRIM(NVL(TmpOpi.CodCors,"")) + ;
-                                        ALLTRIM(NVL(TmpOpi.CodTams,"")))
-                                INSERT INTO TmpSaldo (CPros, CodCors, CodTams) ;
-                                    VALUES (NVL(TmpOpi.CPros,""), NVL(TmpOpi.CodCors,""), ;
-                                            NVL(TmpOpi.CodTams,""))
-                            ENDIF
-                            REPLACE Fabrs WITH NVL(Fabrs,0) + NVL(TmpOpi.Qtds,0), ;
-                                    DispFs WITH NVL(DispFs,0) + NVL(TmpOpi.Qtds,0)
-
-                            INSERT INTO TmpFabr (Nops, CPros, CodCors, CodTams, Qtds, Priors) ;
-                                VALUES (NVL(TmpOpi.Nops,0), NVL(TmpOpi.CPros,""), ;
-                                        NVL(TmpOpi.CodCors,""), NVL(TmpOpi.CodTams,""), ;
-                                        NVL(TmpOpi.Qtds,0), 0)
-
-                            loc_cSQL = "SELECT GrupoDs FROM SigPdMvf " + ;
-                                "WHERE Nops = " + FormatarNumeroSQL(NVL(TmpOpi.Nops,0), 0) + ;
-                                " ORDER BY CidChaves DESC"
-                            IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpMfas") >= 1 AND ;
-                                USED("TmpMfas") AND RECCOUNT("TmpMfas") > 0
-                                SELECT TmpMfas
-                                GO TOP
-                                REPLACE Fases WITH ALLTRIM(NVL(TmpMfas.GrupoDs,"")) IN TmpFabr
-                            ENDIF
-
-                            loc_nEstoque  = 0
-                            loc_nProduzir = 0
-
-                            SELECT TmpSaldo
-                            IF SEEK(ALLTRIM(NVL(TmpOpi.CPros,"")) + ;
-                                    ALLTRIM(NVL(TmpOpi.CodCors,"")) + ;
-                                    ALLTRIM(NVL(TmpOpi.CodTams,"")))
-
-                                SELECT TmpFinal
-                                IF SEEK(ALLTRIM(NVL(TmpOpi.CPros,"")) + ;
-                                        ALLTRIM(NVL(TmpOpi.CodCors,"")) + ;
-                                        ALLTRIM(NVL(TmpOpi.CodTams,"")), "TmpFinal", "CPros")
-
-                                    IF NVL(TmpSaldo.Fabrs,0) >= NVL(TmpFinal.Produzir,0)
-                                        loc_nEstoque  = NVL(TmpFinal.Produzir,0)
-                                        loc_nProduzir = 0
-                                        SELECT TmpSaldo
-                                        REPLACE DispFs WITH NVL(DispFs,0) - NVL(TmpFinal.Produzir,0)
-                                    ELSE
-                                        loc_nEstoque  = NVL(TmpSaldo.Fabrs,0)
-                                        loc_nProduzir = NVL(TmpFinal.Produzir,0) - NVL(TmpSaldo.Fabrs,0)
-                                        SELECT TmpSaldo
-                                        REPLACE DispFs WITH 0
-                                    ENDIF
-
-                                    REPLACE Produzir WITH loc_nProduzir, ;
-                                            Fabrs WITH loc_nEstoque IN TmpFinal
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                    ENDSCAN
-
-                    *-- Redistribuir diferenca de fabricacao
-                    SELECT TmpSaldo
-                    SCAN
-                        IF NVL(TmpSaldo.Fabrs,0) <> NVL(TmpSaldo.DispFs,0)
-                            loc_xBaixa = NVL(TmpSaldo.Fabrs,0) - NVL(TmpSaldo.DispFs,0)
-                            SELECT TmpFabr
-                            SET ORDER TO CPros
-                            =SEEK(ALLTRIM(NVL(TmpSaldo.CPros,"")) + ;
-                                  ALLTRIM(NVL(TmpSaldo.CodCors,"")) + ;
-                                  ALLTRIM(NVL(TmpSaldo.CodTams,"")))
-                            SCAN WHILE ALLTRIM(NVL(CPros,"")) = ALLTRIM(NVL(TmpSaldo.CPros,"")) AND ;
-                                        ALLTRIM(NVL(CodCors,"")) = ALLTRIM(NVL(TmpSaldo.CodCors,"")) AND ;
-                                        ALLTRIM(NVL(CodTams,"")) = ALLTRIM(NVL(TmpSaldo.CodTams,"")) AND ;
-                                        loc_xBaixa > 0
-                                IF (NVL(TmpFabr.Qtds,0) - NVL(TmpFabr.Disps,0)) >= loc_xBaixa
-                                    REPLACE TmpFabr.Disps WITH NVL(TmpFabr.Disps,0) + loc_xBaixa
-                                    loc_xBaixa = 0
-                                ELSE
-                                    loc_xBaixa = loc_xBaixa - (NVL(TmpFabr.Qtds,0) - NVL(TmpFabr.Disps,0))
-                                    REPLACE TmpFabr.Disps WITH NVL(TmpFabr.Qtds,0)
-                                ENDIF
-                            ENDSCAN
-                        ENDIF
-                    ENDSCAN
-
-                    *-- Criar TmpFinalG com agrupamentos
-                    SET NULL ON
-                    CREATE CURSOR TmpFinalG (Flag C(1) NULL, CPros C(14) NULL, ;
-                        CodCors C(4) NULL, CodTams C(4) NULL, Linhas C(10) NULL, ;
-                        Qtds N(10,3) NULL, Saldo N(10,3) NULL, Estoque N(10,3) NULL, ;
-                        Produzir N(10,3) NULL, Fabrs N(10,3) NULL, Produzir2 N(10,3) NULL, ;
-                        TotVenda N(10,3) NULL, QtdMins N(10,3) NULL, ;
-                        KeySelM L NULL, KeySelMP L NULL, UsuLibs C(10) NULL)
-                    INDEX ON CPros + CodCors + CodTams TAG CPros
-                    SET NULL OFF
-
-                    *-- Calcular vendas recentes se configurado
-                    IF NVL(crSigCdPac.nMeses, 0) > 0
-                        loc_llData = GOMONTH(DATE(), -INT(crSigCdPac.nMeses))
-                        loc_cSQL = "SELECT a.CPros, a.Qtds, b.Caixas, b.Copers, b.Opers, a.Opers " + ;
-                            "FROM SigMvItn a, SigCdOpe b, SigMvCab c " + ;
-                            "WHERE a.EmpDopNums = c.EmpDopNums " + ;
-                            "AND a.Emps = '" + ALLTRIM(loc_cEmpresa) + "' " + ;
-                            "AND c.Datas >= ?loc_llData " + ;
-                            "AND a.Dopes = b.Dopes AND b.TipoOps IN (4,5)"
-
-                        IF SQLEXEC(gnConnHandle, loc_cSQL, "LocalEest") >= 1
-                            SELECT CPros, ;
-                                SUM(Qtds * IIF((NVL(Caixas,0)=1 AND NVL(Copers,0)=1) OR ;
-                                    (NVL(Caixas,0)<>1 AND NVL(Opers,0)=1) OR ;
-                                    (NVL(Caixas,0)<>1 AND NVL(Opers,0)=3), 1, -1)) AS Qtds ;
-                                FROM LocalEest ;
-                                GROUP BY CPros ;
-                                INTO CURSOR Vendas READWRITE
-                            SELECT Vendas
-                            INDEX ON CPros TAG CPros
-                        ENDIF
-                    ENDIF
-
-                    *-- Popular TmpFinalG com agrupamentos
-                    SELECT CPros, CodCors, CodTams, Linhas, ;
-                        SUM(NVL(Qtds,0)) AS Qtds, SUM(NVL(Saldo,0)) AS Saldo, ;
-                        SUM(NVL(Estoque,0)) AS Estoque, SUM(NVL(Produzir,0)) AS Produzir, ;
-                        SUM(NVL(Fabrs,0)) AS Fabrs ;
-                        FROM TmpFinal ;
-                        INTO CURSOR Selecao ;
-                        GROUP BY CPros, CodCors, CodTams, Linhas
-
-                    SELECT Selecao
-                    SCAN
-                        IF loc_lResultado
-                            SCATTER MEMVAR
-                            m.Flag = "+"
-
-                            IF SQLEXEC(gnConnHandle, ;
-                                "SELECT QtMinFabs FROM SigCdPro WHERE CPros = '" + ;
-                                ALLTRIM(NVL(m.CPros,"")) + "'", "CrSigCdPro") < 1
-                                MsgErro("Falha ao buscar QtMinFabs de SigCdPro.", "Erro")
-                                loc_lResultado = .F.
-                            ENDIF
-
-                            IF loc_lResultado
-                                m.QtdMins = 0
-                                IF (NVL(crSigCdPac.GerPcps,0) = 2 AND !par_lReserva) OR ;
-                                    (NVL(crSigCdPac.GerPcps,0) <> 2 AND par_lReserva)
-                                    m.QtdMins = NVL(CrSigCdPro.QtMinFabs, 0)
-                                ENDIF
-
-                                m.TotVenda = 0
-                                IF USED("Vendas") AND ;
-                                    SEEK(ALLTRIM(NVL(m.CPros,"")), "Vendas", "CPros")
-                                    m.TotVenda = NVL(Vendas.Qtds, 0)
-                                ENDIF
-
-                                m.Produzir2 = IIF(m.QtdMins > 0 AND m.Produzir > 0 AND ;
-                                    m.Produzir < m.QtdMins, m.QtdMins - m.Produzir, 0)
-
-                                SELECT TmpFinalG
-                                APPEND BLANK
-                                GATHER MEMVAR
-                            ENDIF
-                        ENDIF
-                    ENDSCAN
-                ENDIF
-            ELSE
-                THIS.this_lTemEstimado = .F.
-            ENDIF
-
-            *-- Restaurar ordem de TmpItens para o form
-            IF loc_lResultado AND USED("TmpItens") AND USED("TmpCabec")
-                SELECT TmpItens
-                SET ORDER TO EmpDopNum
-                SET KEY TO ALLTRIM(NVL(TmpCabec.Emps,"")) + ;
-                           ALLTRIM(NVL(TmpCabec.Dopes,"")) + ;
-                           STR(NVL(TmpCabec.Numes,0), 6)
-                GO TOP
-            ENDIF
+            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
-                    " PROC=" + loc_oErro.Procedure, "Erro ProcessarOperacoes")
-            loc_lResultado = .F.
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.ValidarSelecao")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * OrdenarOperacoes - Aplica ordenacao no cursor TmpCabec e atualiza
-    * this_cOrdConta. O form usa this_cOrdConta para atualizar cores dos headers.
-    * Parametros: par_cOrdem - "EMPDOPNUM" ou "ENTREGA" (ou vazio para padrao)
-    * Retorno: .T. se ok
+    * ProcessarOperacoes - logica principal do botao Processar
+    * Calcula estoque disponivel, monta TmpFinal, abre form de continuidade
     *--------------------------------------------------------------------------
-    PROCEDURE OrdenarOperacoes(par_cOrdem)
-        LOCAL loc_lResultado, loc_oErro
-        LOCAL loc_cOrdem
+    PROCEDURE ProcessarOperacoes()
+        LOCAL loc_lSucesso, loc_cCidQuerys, loc_cQuery
+        LOCAL loc_pEdI, loc_pEdF, loc_pItn
+        LOCAL loc_nEstoque, loc_nProduzir, loc_nSaldo, loc_xBaixa
 
-        loc_lResultado = .T.
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
+        THIS.this_lProcessado   = .F.
 
         TRY
-            loc_cOrdem = UPPER(IIF(VARTYPE(par_cOrdem) = "C" AND !EMPTY(par_cOrdem), ;
-                                   par_cOrdem, THIS.this_cOrdConta))
-
-            IF USED("TmpCabec")
-                SELECT TmpCabec
-                IF !EMPTY(loc_cOrdem) AND INLIST(loc_cOrdem, "ENTREGA", "EMPDOPNUM")
-                    SET ORDER TO &loc_cOrdem.
-                ELSE
-                    SET ORDER TO EmpDopNum
-                ENDIF
-                THIS.this_cOrdConta = UPPER(ORDER("TmpCabec"))
+            *-- 1. Validar selecao
+            IF !THIS.ValidarSelecao()
+                loc_lSucesso = .F.
             ENDIF
 
+            *-- 2. IDs unicos para cursores temporarios no SQL Server
+            loc_cCidQuerys = fUniqueIds()
+
+            *-- 3. Carregar centros de estoque (SigCdCeg sem tipo 1)
+            loc_cQuery = "Select * From SigCdCeg Where TpCads <> 1"
+            IF SQLEXEC(gnConnHandle, loc_cQuery, "TmpCeg") < 1
+                MsgErro("Favor Reinicializar o Processo!!!", ;
+                        "Falha na Conex" + CHR(227) + "o (TmpCeg)")
+                loc_lSucesso = .F.
+            ENDIF
+
+            *-- 4. Popular CrSigTempd com dados de prioridade de estoque
+            IF USED("CrSigTempd")
+                USE IN CrSigTempd
+            ENDIF
+            SET NULL ON
+            CREATE CURSOR CrSigTempd (Grupos C(10), Contas C(10), CodObs N(3,0), ;
+                                      Emps C(3), CidChaves C(64), CidQuerys C(20))
+            SET NULL OFF
+
+            SELECT TmpCeg
+            IF RECCOUNT() > 0
+                SCAN
+                    SELECT CrSigTempd
+                    APPEND BLANK
+                    REPLACE Grupos    WITH TmpCeg.Grupos, ;
+                            Contas    WITH TmpCeg.Contas, ;
+                            CodObs    WITH TmpCeg.Priors, ;
+                            Emps      WITH TmpCeg.Emps, ;
+                            CidChaves WITH fUniqueIds(), ;
+                            CidQuerys WITH loc_cCidQuerys
+                ENDSCAN
+            ELSE
+                SELECT CrSigTempd
+                APPEND BLANK
+                REPLACE Grupos    WITH crSigCdPam.GrupoEsts, ;
+                        Contas    WITH crSigCdPam.ContaEsts, ;
+                        CodObs    WITH 1, ;
+                        Emps      WITH go_4c_Sistema.cCodEmpresa, ;
+                        CidChaves WITH fUniqueIds(), ;
+                        CidQuerys WITH loc_cCidQuerys
+            ENDIF
+
+            *-- 5. Persistir CrSigTempd no SQL Server
+            SELECT CrSigTempd
+            SCAN
+                loc_cQuery = "INSERT INTO SigTempd (Grupos, Contas, CodObs, Emps, " + ;
+                             "CidChaves, CidQuerys, Dpros) VALUES (" + ;
+                             EscaparSQL(CrSigTempd.Grupos)    + ", " + ;
+                             EscaparSQL(CrSigTempd.Contas)    + ", " + ;
+                             FormatarNumeroSQL(CrSigTempd.CodObs, 0) + ", " + ;
+                             EscaparSQL(CrSigTempd.Emps)      + ", " + ;
+                             EscaparSQL(CrSigTempd.CidChaves) + ", " + ;
+                             EscaparSQL(CrSigTempd.CidQuerys) + ", " + ;
+                             "' ')"
+                IF SQLEXEC(gnConnHandle, loc_cQuery) < 1
+                    MsgErro("Favor reinicializar o processo.", ;
+                            "Falha ao persistir SigTempd")
+                    loc_lSucesso = .F.
+                ENDIF
+            ENDSCAN
+
+            *-- 6. Carregar estoque disponivel (SigMvEst + SigTempd - UNION)
+            loc_cQuery = "Select a.*, b.CodObs as Priors From SigMvEst a, SigTempd b " + ;
+                         "Where a.Grupos = b.Grupos And a.Estos = b.Contas And " + ;
+                               "a.Emps = b.Emps And a.Sqtds > 0 " + ;
+                         "Union " + ;
+                         "Select a.*, b.CodObs as Priors From SigMvEst a, SigTempd b " + ;
+                         "Where a.Grupos = b.Grupos And b.Contas = '' And " + ;
+                               "a.Emps = b.Emps And a.Sqtds > 0"
+
+            IF USED("TmpEstoque")
+                USE IN TmpEstoque
+            ENDIF
+            IF SQLEXEC(gnConnHandle, loc_cQuery, "TmpEstoque") < 1
+                MsgErro("Favor Reinicializar o Processo!!!", ;
+                        "Falha na Conex" + CHR(227) + "o (TmpEstoque)")
+                loc_lSucesso = .F.
+            ENDIF
+
+            *-- Limpar registro temporario no SQL Server
+            SQLEXEC(gnConnHandle, "DELETE FROM SigTempD WHERE CidQuerys = " + EscaparSQL(loc_cCidQuerys))
+
+            *-- 7. Criar cursores de saldo disponivel
+            SET NULL ON
+            CREATE CURSOR TmpSaldo (CPros C(14), CodCors C(4), CodTams C(4), ;
+                                    Saldo N(12,3), Disps N(12,3), Fabrs N(12,3), DispFs N(12,3))
+            INDEX ON CPros + CodCors + CodTams TAG CPros
+            SET NULL OFF
+
+            SET NULL ON
+            CREATE CURSOR TmpSaldg (Emps C(3), Grupos C(10), Estos C(10), CPros C(14), ;
+                                    CodCors C(4), CodTams C(4), Saldo N(12,3), Disps N(12,3), ;
+                                    Priors N(2,0), Reservs N(12,3))
+            INDEX ON CPros + CodCors + CodTams + STR(Priors, 2) + Grupos + Estos + Emps TAG CPros
+            INDEX ON Emps + Grupos + Estos + CPros + CodCors + CodTams TAG GruEstPro
+            SET NULL OFF
+
+            *-- 8. Consolidar estoques por produto/cor/tam em TmpSaldo e TmpSaldg
+            SELECT TmpEstoque
+            SCAN
+                SELECT TmpSaldo
+                IF !SEEK(TmpEstoque.CPros + TmpEstoque.CodCors + TmpEstoque.CodTams)
+                    INSERT INTO TmpSaldo (CPros, CodCors, CodTams, Saldo, Disps) ;
+                               VALUES   (TmpEstoque.CPros, TmpEstoque.CodCors, ;
+                                         TmpEstoque.CodTams, 0, 0)
+                ENDIF
+                REPLACE Saldo WITH Saldo + TmpEstoque.Sqtds, ;
+                        Disps WITH Disps + TmpEstoque.Sqtds IN TmpSaldo
+
+                INSERT INTO TmpSaldg (Grupos, Estos, CPros, CodCors, CodTams, ;
+                                      Saldo, Disps, Priors, Emps) ;
+                           VALUES    (TmpEstoque.Grupos, TmpEstoque.Estos, ;
+                                      TmpEstoque.CPros, TmpEstoque.CodCors, TmpEstoque.CodTams, ;
+                                      TmpEstoque.Sqtds, TmpEstoque.Sqtds, ;
+                                      TmpEstoque.Priors, TmpEstoque.Emps)
+            ENDSCAN
+
+            *-- 9. Carregar operacao de transferencia de reservas (SigCdOpe)
+            IF USED("crSigCdOpe")
+                USE IN crSigCdOpe
+            ENDIF
+            SQLEXEC(gnConnHandle, "SELECT * FROM SigCdOpe WHERE Dopes = " + ;
+                    EscaparSQL(crSigCdPam.TransfRes), "crSigCdOpe")
+
+            *-- 10. Descontar estoques ja reservados em andamento
+            IF !EMPTY(crSigCdPam.TransfRes) AND !EOF("crSigCdOpe") AND (crSigCdOpe.Estoqs <> 1)
+                loc_pEdI = go_4c_Sistema.cCodEmpresa + crSigCdPam.TransfRes + STR(0, 6)
+                loc_pEdF = go_4c_Sistema.cCodEmpresa + crSigCdPam.TransfRes + STR(999999, 6)
+
+                loc_cQuery = "Select EmpDopNums, GrupoOs, ContaOs, Emps, Dopes, Numes " + ;
+                             "From SigMvCab " + ;
+                             "Where EmpDopNums Between " + EscaparSQL(loc_pEdI) + ;
+                             " And " + EscaparSQL(loc_pEdF) + ;
+                             " Order By EmpDopNums"
+
+                IF USED("TempEest")
+                    USE IN TempEest
+                ENDIF
+                IF SQLEXEC(gnConnHandle, loc_cQuery, "TempEest") < 1
+                    MsgErro("Favor Reinicializar o Processo!!!", ;
+                            "Falha na Conex" + CHR(227) + "o (TempEest)")
+                    loc_lSucesso = .F.
+                ENDIF
+
+                SELECT TempEest
+                SCAN
+                    loc_cEdn = TempEest.EmpDopNums
+                    IF USED("TempEestI")
+                        USE IN TempEestI
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT * FROM SigMvItn WHERE EmpDopNums = " + ;
+                            EscaparSQL(loc_cEdn), "TempEestI")
+
+                    SELECT TempEestI
+                    SCAN
+                        IF (Qtds - QtBaixas > 0)
+                            loc_pItn = TempEestI.CItens
+
+                            loc_cQuery = "Select * " + ;
+                                         "From SigMvIts " + ;
+                                         "Where EmpDopNums = " + EscaparSQL(loc_cEdn) + ;
+                                         " And CItens = " + FormatarNumeroSQL(loc_pItn, 0)
+
+                            IF USED("TempEsti2")
+                                USE IN TempEsti2
+                            ENDIF
+                            IF SQLEXEC(gnConnHandle, loc_cQuery, "TempEsti2") < 1
+                                MsgErro("Favor Reinicializar o Processo!!!", ;
+                                        "Falha na Conex" + CHR(227) + "o (TempEsti2)")
+                                loc_lSucesso = .F.
+                            ENDIF
+
+                            SELECT TempEsti2
+                            GO TOP
+
+                            IF EOF("TempEsti2")
+                                SELECT TmpSaldo
+                                IF !SEEK(TempEestI.CPros)
+                                    INSERT INTO TmpSaldo (CPros) VALUES (TempEestI.CPros)
+                                ENDIF
+                                REPLACE Saldo WITH Saldo - (TempEestI.Qtds - TempEestI.QtBaixas), ;
+                                        Disps WITH Disps - (TempEestI.Qtds - TempEestI.QtBaixas)
+
+                                SELECT TmpSaldg
+                                SET ORDER TO GruEstPro
+                                IF !SEEK(TempEest.Emps + TempEest.GrupoOs + ;
+                                         TempEest.ContaOs + TempEestI.CPros)
+                                    INSERT INTO TmpSaldg (Emps, Grupos, Estos, CPros, Priors) ;
+                                               VALUES   (TempEest.Emps, TempEest.GrupoOs, ;
+                                                         TempEest.ContaOs, TempEestI.CPros, 99)
+                                ENDIF
+                                REPLACE Saldo WITH Saldo - (TempEestI.Qtds - TempEestI.QtBaixas), ;
+                                        Disps WITH Disps - (TempEestI.Qtds - TempEestI.QtBaixas)
+                            ELSE
+                                SELECT TempEsti2
+                                SCAN
+                                    loc_nSaldo = TempEsti2.Qtds - TempEsti2.QtBaixas
+
+                                    SELECT TmpSaldo
+                                    IF !SEEK(TempEsti2.CPros + TempEsti2.CodCors + TempEsti2.CodTams)
+                                        INSERT INTO TmpSaldo (CPros, CodCors, CodTams) ;
+                                                   VALUES   (TempEsti2.CPros, ;
+                                                             TempEsti2.CodCors, TempEsti2.CodTams)
+                                    ENDIF
+                                    REPLACE Saldo WITH Saldo - loc_nSaldo, ;
+                                            Disps WITH Disps - loc_nSaldo
+
+                                    SELECT TmpSaldg
+                                    SET ORDER TO GruEstPro
+                                    IF !SEEK(TempEest.Emps + TempEest.GrupoOs + ;
+                                             TempEest.ContaOs + TempEsti2.CPros + ;
+                                             TempEsti2.CodCors + TempEsti2.CodTams)
+                                        INSERT INTO TmpSaldg (Emps, Grupos, Estos, ;
+                                                              CPros, CodCors, CodTams, Priors) ;
+                                                   VALUES   (TempEest.Emps, TempEest.GrupoOs, ;
+                                                             TempEest.ContaOs, TempEsti2.CPros, ;
+                                                             TempEsti2.CodCors, TempEsti2.CodTams, 99)
+                                    ENDIF
+                                    REPLACE Saldo WITH Saldo - loc_nSaldo, ;
+                                            Disps WITH Disps - loc_nSaldo
+                                ENDSCAN
+                            ENDIF
+                        ENDIF
+                    ENDSCAN
+                ENDSCAN
+            ENDIF
+
+            *-- 11. Montar TmpFinal com itens das operacoes selecionadas
+            SET NULL ON
+            CREATE CURSOR TmpFinal (Emps C(3), Dopes C(20), Numes N(6,0), CPros C(14), ;
+                                    Qtds N(10,3), Peso N(9,3), Saldo N(10,3), ;
+                                    Estoque N(10,3), Produzir N(10,3), ;
+                                    Obs M NULL, Obsps M NULL, ;
+                                    Datas D NULL, Entregas D NULL, ;
+                                    CodCors C(4), CodTams C(4), Linhas C(10), ;
+                                    Citens N(10,0), Reffs C(40), Notas C(6), ;
+                                    Dpros C(40), GrupoDs C(10), ContaDs C(10), ;
+                                    KeySelM L, Fabrs N(10,3), KeyPdes L, Jobs C(10))
+            INDEX ON CPros + CodCors + CodTams TAG CPros
+            SET NULL OFF
+
+            SELECT TmpItens
+            SET KEY TO
+            SET ORDER TO CPros
+
+            SCAN
+                SELECT TmpCabec
+                SEEK TmpItens.Emps + TmpItens.Dopes + STR(TmpItens.Numes, 6)
+                IF !Flag
+                    LOOP
+                ENDIF
+
+                SELECT TmpOper
+                SEEK TmpItens.Dopes
+
+                SELECT TmpItens
+                IF (Saldo > 0)
+                    loc_nEstoque  = 0
+                    loc_nProduzir = 0
+
+                    IF (TmpOper.ChkObs <> 1 AND !EMPTY(TmpItens.Obs)) OR ;
+                       !SEEK(TmpItens.CPros + TmpItens.CodCors + TmpItens.CodTams, "TmpSaldo") OR ;
+                       EMPTY(crSigCdPam.TransfRes) OR ;
+                       (TmpOper.Reservas = 2 AND !THIS.this_lReserva) OR ;
+                       TmpSaldo.Disps < 0
+                        loc_nProduzir = TmpItens.Saldo
+                    ELSE
+                        =SEEK(TmpItens.CPros + TmpItens.CodCors + TmpItens.CodTams, "TmpSaldo")
+                        loc_nEstoque = TmpSaldo.Disps
+                        IF (TmpSaldo.Disps >= TmpItens.Saldo)
+                            REPLACE TmpSaldo.Disps WITH TmpSaldo.Disps - TmpItens.Saldo
+                        ELSE
+                            loc_nProduzir = TmpItens.Saldo - TmpSaldo.Disps
+                            REPLACE TmpSaldo.Disps WITH 0
+                        ENDIF
+                    ENDIF
+
+                    IF USED("crSigCdPro")
+                        USE IN crSigCdPro
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPro WHERE CPros = " + ;
+                            EscaparSQL(TmpItens.CPros), "crSigCdPro")
+
+                    INSERT INTO TmpFinal (Emps, Dopes, Numes, CPros, Qtds, Peso, Saldo, ;
+                                          Estoque, Produzir, Obsps, Obs, Datas, Entregas, ;
+                                          CodCors, CodTams, Linhas, Citens, Reffs, Notas, ;
+                                          Dpros, GrupoDs, ContaDs, Jobs) ;
+                               VALUES   (TmpItens.Emps, TmpItens.Dopes, TmpItens.Numes, ;
+                                          TmpItens.CPros, TmpItens.Qtds, TmpItens.Peso, ;
+                                          TmpItens.Saldo, TmpItens.Saldo - loc_nProduzir, ;
+                                          loc_nProduzir, NVL(TmpItens.Obs, ""), ;
+                                          NVL(TmpCabec.Obs, ""), ;
+                                          NVL(TmpCabec.Datas, CTOD("")), ;
+                                          NVL(TmpCabec.Entregas, CTOD("")), ;
+                                          TmpItens.CodCors, TmpItens.CodTams, ;
+                                          TmpItens.Linhas, TmpItens.CItens, ;
+                                          crSigCdPro.Reffs, TmpItens.Notas, ;
+                                          TmpItens.Dpros, TmpCabec.GrupoDs, ;
+                                          TmpCabec.ContaDs, TmpCabec.Jobs)
+                ENDIF
+            ENDSCAN
+
+            *-- 12. Distribuir diferenca de saldo entre grupos (TmpSaldg)
+            SELECT TmpSaldo
+            SCAN
+                IF Saldo # Disps
+                    loc_xBaixa = Saldo - Disps
+                    SELECT TmpSaldg
+                    SET ORDER TO CPros
+                    =SEEK(TmpSaldo.CPros + TmpSaldo.CodCors + TmpSaldo.CodTams)
+                    SCAN WHILE CPros = TmpSaldo.CPros AND CodCors = TmpSaldo.CodCors AND ;
+                               CodTams = TmpSaldo.CodTams AND loc_xBaixa > 0
+                        IF TmpSaldg.Disps >= loc_xBaixa
+                            REPLACE TmpSaldg.Disps WITH TmpSaldg.Disps - loc_xBaixa
+                            loc_xBaixa = 0
+                        ELSE
+                            loc_xBaixa = loc_xBaixa - TmpSaldg.Disps
+                            REPLACE TmpSaldg.Disps WITH 0
+                        ENDIF
+                    ENDSCAN
+                ENDIF
+            ENDSCAN
+
+            *-- 13. Se DopEsts configurado: calcular estoque em fabricacao
+            IF !EMPTY(crSigCdPac.DopEsts)
+                THIS.ProcessarFabrico(loc_cCidQuerys)
+            ENDIF
+
+            *-- 14. Restaurar filtro de TmpItens para sincronismo com TmpCabec
+            SELECT TmpItens
+            SET ORDER TO EmpDopNum
+            SET KEY TO TmpCabec.Emps + TmpCabec.Dopes + STR(TmpCabec.Numes, 6)
+            GO TOP
+
+            THIS.this_lProcessado = .T.
+            loc_lSucesso = .T.
+
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro OrdenarOperacoes")
-            loc_lResultado = .F.
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.ProcessarOperacoes")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega registro SigTempd do cursor para propriedades
-    * Usado para reidratar sessao ativa da tabela de trabalho SigTempd.
-    * Parametro: par_cAliasCursor - alias do cursor contendo colunas de SigTempd
-    * Retorno: .T. se carregou registro valido, .F. se cursor vazio/inexistente
+    * ProcessarFabrico - calcula estoque em fabricacao e monta TmpFinalG
+    * Chamado internamente por ProcessarOperacoes quando DopEsts nao vazio
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ProcessarFabrico(par_cCidQuerys)
+        LOCAL loc_lSucesso, loc_cSql, loc_llFalse, loc_llData
+        LOCAL loc_nEstoque, loc_nProduzir, loc_xBaixa, loc_cEdn
+
+        loc_lSucesso = .F.
+        loc_llFalse  = .F.
+
+        TRY
+            SET NULL ON
+            CREATE CURSOR TmpFabr (Priors N(2,0), Nops N(10,0), Fases C(10), ;
+                                   CPros C(14), CodCors C(4), CodTams C(4), ;
+                                   Qtds N(10,3), Disps N(12,3), Reservs N(12,3))
+            INDEX ON CPros + CodCors + CodTams + STR(Priors, 2) + STR(Nops, 10) TAG CPros
+            SET NULL OFF
+
+            loc_cSql = "Select a.Nops, a.Cpros, a.CodCors, a.CodTams, sum(a.Qtds) as Qtds " + ;
+                       "From SigOpPic a, SigCdNec b " + ;
+                       "Where a.Dopes = " + EscaparSQL(crSigCdPac.DopEsts) + ;
+                       " And a.EmpDopNops = b.EmpDnps And b.Chksubn = 0" + ;
+                       " And a.Emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa) + ;
+                       " group by a.Nops, a.Cpros, a.CodCors, a.CodTams"
+
+            IF USED("TmpOpi")
+                USE IN TmpOpi
+            ENDIF
+            SQLEXEC(gnConnHandle, loc_cSql, "TmpOpi")
+
+            SELECT TmpOpi
+            SCAN
+                SELECT TmpSaldo
+                IF !SEEK(TmpOpi.CPros + TmpOpi.CodCors + TmpOpi.CodTams)
+                    INSERT INTO TmpSaldo (CPros, CodCors, CodTams) ;
+                               VALUES   (TmpOpi.CPros, TmpOpi.CodCors, TmpOpi.CodTams)
+                ENDIF
+                REPLACE Fabrs  WITH Fabrs  + TmpOpi.Qtds, ;
+                        DispFs WITH DispFs + TmpOpi.Qtds IN TmpSaldo
+
+                INSERT INTO TmpFabr (Nops, CPros, CodCors, CodTams, Qtds, Priors) ;
+                           VALUES   (TmpOpi.Nops, TmpOpi.CPros, TmpOpi.CodCors, ;
+                                     TmpOpi.CodTams, TmpOpi.Qtds, 0)
+
+                loc_cSql = "Select GrupoDs From SigPdMvf Where Nops = " + ;
+                           TRANSFORM(TmpOpi.Nops) + " Order by CidChaves Desc"
+                IF USED("TmpMfas")
+                    USE IN TmpMfas
+                ENDIF
+                SQLEXEC(gnConnHandle, loc_cSql, "TmpMfas")
+
+                SELECT TmpMfas
+                GO TOP
+                REPLACE Fases WITH TmpMfas.GrupoDs IN TmpFabr
+
+                loc_nEstoque  = 0
+                loc_nProduzir = 0
+
+                IF SEEK(TmpOpi.CPros + TmpOpi.CodCors + TmpOpi.CodTams, "TmpFinal", "CPros")
+                    IF TmpSaldo.Fabrs >= TmpFinal.Produzir
+                        loc_nEstoque  = TmpFinal.Produzir
+                        loc_nProduzir = 0
+                        REPLACE TmpSaldo.DispFs WITH TmpSaldo.DispFs - TmpFinal.Produzir IN TmpSaldo
+                    ELSE
+                        loc_nEstoque  = TmpSaldo.Fabrs
+                        loc_nProduzir = TmpFinal.Produzir - TmpSaldo.Fabrs
+                        REPLACE DispFs WITH 0 IN TmpSaldo
+                    ENDIF
+                    REPLACE Produzir WITH loc_nProduzir, ;
+                            Fabrs    WITH loc_nEstoque IN TmpFinal
+                ENDIF
+            ENDSCAN
+
+            *-- Distribuir fabricacao por grupo (TmpFabr)
+            SELECT TmpSaldo
+            SCAN
+                IF Fabrs # DispFs
+                    loc_xBaixa = Fabrs - DispFs
+                    SELECT TmpFabr
+                    SET ORDER TO CPros
+                    =SEEK(TmpSaldo.CPros + TmpSaldo.CodCors + TmpSaldo.CodTams)
+                    SCAN WHILE CPros = TmpSaldo.CPros AND CodCors = TmpSaldo.CodCors AND ;
+                               CodTams = TmpSaldo.CodTams AND loc_xBaixa > 0
+                        IF (TmpFabr.Qtds - TmpFabr.Disps) >= loc_xBaixa
+                            REPLACE TmpFabr.Disps WITH TmpFabr.Disps + loc_xBaixa IN TmpFabr
+                            loc_xBaixa = 0
+                        ELSE
+                            loc_xBaixa = loc_xBaixa - (TmpFabr.Qtds - TmpFabr.Disps)
+                            REPLACE TmpFabr.Disps WITH Qtds IN TmpFabr
+                        ENDIF
+                    ENDSCAN
+                ENDIF
+            ENDSCAN
+
+            *-- Montar TmpFinalG (agrupado por produto/cor/tam)
+            SET NULL ON
+            CREATE CURSOR TmpFinalG (Flag C(1), CPros C(14), CodCors C(4), CodTams C(4), ;
+                                     Linhas C(10), Qtds N(10,3), Saldo N(10,3), ;
+                                     Estoque N(10,3), Produzir N(10,3), Fabrs N(10,3), ;
+                                     Produzir2 N(10,3), TotVenda N(10,3), QtdMins N(10,3), ;
+                                     KeySelM L, KeySelMP L, UsuLibs C(10))
+            INDEX ON CPros + CodCors + CodTams TAG CPros
+            SET NULL OFF
+
+            SELECT CPros, CodCors, CodTams, Linhas, ;
+                   SUM(Qtds)     AS Qtds, ;
+                   SUM(Saldo)    AS Saldo, ;
+                   SUM(Estoque)  AS Estoque, ;
+                   SUM(Produzir) AS Produzir, ;
+                   SUM(Fabrs)    AS Fabrs ;
+            FROM TmpFinal ;
+            INTO CURSOR Selecao ;
+            GROUP BY CPros, CodCors, CodTams, Linhas
+
+            *-- Historico de vendas (se nMeses configurado)
+            IF crSigCdPac.nMeses > 0
+                loc_llData = GOMONTH(DATE(), -crSigCdPac.nMeses)
+
+                loc_cSql = "Select a.cpros, a.qtds, b.Caixas, b.copers, b.opers, a.opers " + ;
+                           "From SigMvItn a, SigCdOpe b, SigMvCab c " + ;
+                           "Where a.EmpDopNums = c.EmpDopNums And a.Emps = " + ;
+                           EscaparSQL(go_4c_Sistema.cCodEmpresa) + " And c.datas >= " + ;
+                           FormatarDataSQL(loc_llData) + ;
+                           " And a.dopes = b.dopes and b.tipoops in(4,5)"
+
+                IF USED("LocalEest")
+                    USE IN LocalEest
+                ENDIF
+                SQLEXEC(gnConnHandle, loc_cSql, "LocalEest")
+
+                SELECT CPros, ;
+                       SUM(Qtds * IIF((Caixas = 1 AND copers = 1) OR ;
+                                      (Caixas <> 1 AND Opers = 1) OR ;
+                                      (Caixas <> 1 AND Opers = 3), 1, -1)) AS Qtds ;
+                FROM LocalEest ;
+                GROUP BY CPros ;
+                INTO CURSOR Vendas READWRITE
+
+                SELECT Vendas
+                INDEX ON CPros TAG CPros
+            ENDIF
+
+            *-- Popular TmpFinalG
+            SELECT TmpFinalG
+            SCATTER MEMVAR BLANK
+
+            SELECT Selecao
+            SCAN
+                SCATTER MEMVAR
+                m.flag = "+"
+
+                loc_cSql = "Select QtMinFabs From SigCdPro Where Cpros = " + EscaparSQL(Selecao.CPros)
+                IF USED("CrSigCdPro")
+                    USE IN CrSigCdPro
+                ENDIF
+                SQLEXEC(gnConnHandle, loc_cSql, "CrSigCdPro")
+
+                m.QtdMins = 0
+                IF (crSigCdPac.GerPcps = 2 AND !THIS.this_lReserva) OR ;
+                   (crSigCdPac.GerPcps <> 2 AND THIS.this_lReserva)
+                    m.QtdMins = crSigCdPro.QtMinFabs
+                ENDIF
+
+                IF USED("Vendas") AND SEEK(m.CPros, "Vendas", "CPros")
+                    m.TotVenda = Vendas.Qtds
+                ELSE
+                    m.TotVenda = 0
+                ENDIF
+
+                m.Produzir2 = IIF(m.QtdMins > 0 AND m.Produzir > 0 AND ;
+                                  m.Produzir < m.QtdMins, ;
+                                  m.QtdMins - m.Produzir, 0)
+
+                SELECT TmpFinalG
+                APPEND BLANK
+                GATHER MEMVAR
+            ENDSCAN
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
+                    "Erro SigPrGl2BO.ProcessarFabrico")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarDoCursor - popula propriedades do BO com o registro corrente
+    * par_cAliasCursor: alias do cursor fonte (TmpCabec)
     *--------------------------------------------------------------------------
     PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado, loc_cAlias, loc_oErro
+        LOCAL loc_lSucesso
 
-        loc_lResultado = .F.
-        loc_cAlias     = IIF(VARTYPE(par_cAliasCursor) = "C" AND !EMPTY(par_cAliasCursor), ;
-                             par_cAliasCursor, "cursor_4c_SigTempd")
+        loc_lSucesso = .F.
 
         TRY
-            IF USED(loc_cAlias)
-                SELECT (loc_cAlias)
-                IF !EOF() AND !BOF()
-                    THIS.this_cCidChaves = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".CidChaves"), ""))
-                    THIS.this_cCidQuerys = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".CidQuerys"), ""))
-                    THIS.this_cGrupos    = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Grupos"), ""))
-                    THIS.this_cContas    = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Contas"), ""))
-                    THIS.this_cEmps      = ALLTRIM(NVL(EVALUATE(loc_cAlias + ".Emps"), ""))
-                    THIS.this_nCodObs    = NVL(EVALUATE(loc_cAlias + ".CodObs"), 0)
-                    loc_lResultado = .T.
-                ENDIF
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_lFlag     = NVL(Flag,     .F.)
+                THIS.this_cEmps     = ALLTRIM(NVL(Emps,     ""))
+                THIS.this_cDopes    = ALLTRIM(NVL(Dopes,    ""))
+                THIS.this_nNumes    = NVL(Numes,    0)
+                THIS.this_dDatas    = NVL(Datas,    {})
+                THIS.this_dEntregas = NVL(Entregas, {})
+                THIS.this_nPeso     = NVL(Peso,     0)
+                THIS.this_cContav   = ALLTRIM(NVL(Contav,   ""))
+                THIS.this_cConta    = ALLTRIM(NVL(Conta,    ""))
+                THIS.this_cDConta   = ALLTRIM(NVL(DConta,   ""))
+                THIS.this_cObs      = NVL(Obs,      "")
+                THIS.this_cNotas    = ALLTRIM(NVL(Notas,    ""))
+                THIS.this_cJobs     = ALLTRIM(NVL(Jobs,     ""))
+                THIS.this_cGrupoDs  = ALLTRIM(NVL(GrupoDs,  ""))
+                THIS.this_cContaDs  = ALLTRIM(NVL(ContaDs,  ""))
+                loc_lSucesso = .T.
             ENDIF
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro CarregarDoCursor")
-            loc_lResultado = .F.
+                    "Erro SigPrGl2BO.CarregarDoCursor")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna o CidChaves atual (PK da entidade SigTempd)
+    * ObterChavePrimaria - retorna chave no formato EmpDopNum (C(29))
     *--------------------------------------------------------------------------
-    PROCEDURE ObterChavePrimaria()
-        RETURN ALLTRIM(THIS.this_cCidChaves)
+    PROTECTED PROCEDURE ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cEmps) + ;
+               ALLTRIM(THIS.this_cDopes) + ;
+               STR(THIS.this_nNumes, 6)
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - INSERT em SigTempd para registrar entrada de sessao de OPs.
-    * Gera CidChaves/CidQuerys via fUniqueIds() se estiverem vazios.
-    * Utilizado no fluxo de geracao para persistir prioridades de estoque
-    * que serao consumidas no join com SigMvEst durante ProcessarOperacoes.
-    * Retorno: .T. sucesso, .F. erro (mensagem em this_cMensagemErro)
+    * Inserir - INSERT em SigMvCab com as propriedades correntes
+    * Executa auditoria apos gravacao bem-sucedida
     *--------------------------------------------------------------------------
-    PROCEDURE Inserir()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_lSucesso, loc_cSQL, loc_cChave, loc_nResultado
 
-        loc_lResultado = .F.
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
 
         TRY
-            *-- Gerar identificadores se ainda nao definidos
-            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
-                THIS.this_cCidChaves = fUniqueIds()
-            ENDIF
-            IF EMPTY(ALLTRIM(THIS.this_cCidQuerys))
-                THIS.this_cCidQuerys = fUniqueIds()
-            ENDIF
-            IF EMPTY(ALLTRIM(THIS.this_cEmps))
-                THIS.this_cEmps = go_4c_Sistema.cCodEmpresa
-            ENDIF
+            loc_cChave = ALLTRIM(THIS.this_cEmps) + ALLTRIM(THIS.this_cDopes) + ;
+                         STR(THIS.this_nNumes, 6)
 
-            loc_cSQL = "INSERT INTO SigTempd " + ;
-                "(CidChaves, CidQuerys, Grupos, Contas, CodObs, Emps, Dpros) VALUES (" + ;
-                EscaparSQL(ALLTRIM(THIS.this_cCidChaves)) + ", " + ;
-                EscaparSQL(ALLTRIM(THIS.this_cCidQuerys)) + ", " + ;
-                EscaparSQL(ALLTRIM(THIS.this_cGrupos)) + ", " + ;
-                EscaparSQL(ALLTRIM(THIS.this_cContas)) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nCodObs, 0) + ", " + ;
-                EscaparSQL(ALLTRIM(THIS.this_cEmps)) + ", " + ;
-                EscaparSQL("") + ")"
+            loc_cSQL = "INSERT INTO SigMvCab (" + ;
+                       "Emps, Dopes, Numes, EmpDopNums, " + ;
+                       "Datas, PrazoEnts, PbRus, " + ;
+                       "Vends, IClis, NEmps, " + ;
+                       "Notas, Jobs, GrupoDs, ContaDs, Obses" + ;
+                       ") VALUES (" + ;
+                       EscaparSQL(THIS.this_cEmps) + ", " + ;
+                       EscaparSQL(THIS.this_cDopes) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nNumes, 0) + ", " + ;
+                       EscaparSQL(loc_cChave) + ", " + ;
+                       FormatarDataSQL(THIS.this_dDatas) + ", " + ;
+                       FormatarDataSQL(THIS.this_dEntregas) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nPeso, 3) + ", " + ;
+                       EscaparSQL(THIS.this_cContav) + ", " + ;
+                       EscaparSQL(THIS.this_cConta) + ", " + ;
+                       EscaparSQL(THIS.this_cDConta) + ", " + ;
+                       EscaparSQL(THIS.this_cNotas) + ", " + ;
+                       EscaparSQL(THIS.this_cJobs) + ", " + ;
+                       EscaparSQL(THIS.this_cGrupoDs) + ", " + ;
+                       EscaparSQL(THIS.this_cContaDs) + ", " + ;
+                       EscaparSQL(THIS.this_cObs) + ")"
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
-                *-- Registra auditoria de insercao (herdado de BusinessBase)
-                THIS.RegistrarAuditoria("I")
-                loc_lResultado = .T.
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado > 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Falha ao inserir registro em SigTempd. " + ;
-                    "Favor reinicializar o processo."
+                THIS.this_cMensagemErro = "Falha ao inserir registro em SigMvCab"
             ENDIF
 
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
+            THIS.this_cMensagemErro = "Erro em Inserir: " + loc_oErro.Message + ;
+                                       " LN=" + TRANSFORM(loc_oErro.LineNo)
+            MsgErro(THIS.this_cMensagemErro, "Erro SigPrGl2BO.Inserir")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Atualizar - UPDATE em SigMvCab com as propriedades correntes
+    * Executa auditoria apos gravacao bem-sucedida
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_lSucesso, loc_cSQL, loc_cChave, loc_nResultado
+
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
+
+        TRY
+            loc_cChave = ALLTRIM(THIS.this_cEmps) + ALLTRIM(THIS.this_cDopes) + ;
+                         STR(THIS.this_nNumes, 6)
+
+            loc_cSQL = "UPDATE SigMvCab SET " + ;
+                       "Datas = "     + FormatarDataSQL(THIS.this_dDatas) + ", " + ;
+                       "PrazoEnts = " + FormatarDataSQL(THIS.this_dEntregas) + ", " + ;
+                       "PbRus = "     + FormatarNumeroSQL(THIS.this_nPeso, 3) + ", " + ;
+                       "Vends = "     + EscaparSQL(THIS.this_cContav) + ", " + ;
+                       "IClis = "     + EscaparSQL(THIS.this_cConta) + ", " + ;
+                       "NEmps = "     + EscaparSQL(THIS.this_cDConta) + ", " + ;
+                       "Notas = "     + EscaparSQL(THIS.this_cNotas) + ", " + ;
+                       "Jobs = "      + EscaparSQL(THIS.this_cJobs) + ", " + ;
+                       "GrupoDs = "   + EscaparSQL(THIS.this_cGrupoDs) + ", " + ;
+                       "ContaDs = "   + EscaparSQL(THIS.this_cContaDs) + ", " + ;
+                       "Obses = "     + EscaparSQL(THIS.this_cObs) + ", " + ;
+                       "DtAlts = GETDATE() " + ;
+                       "WHERE EmpDopNums = " + EscaparSQL(loc_cChave)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado > 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Falha ao atualizar registro em SigMvCab"
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = "Erro em Atualizar: " + loc_oErro.Message + ;
+                                       " LN=" + TRANSFORM(loc_oErro.LineNo)
+            MsgErro(THIS.this_cMensagemErro, "Erro SigPrGl2BO.Atualizar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarExclusao - DELETE em SigMvCab pela chave EmpDopNums
+    * Executa auditoria apos exclusao bem-sucedida
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarExclusao()
+        LOCAL loc_lSucesso, loc_cSQL, loc_cChave, loc_nResultado
+
+        loc_lSucesso = .F.
+        THIS.this_cMensagemErro = ""
+
+        TRY
+            loc_cChave = ALLTRIM(THIS.this_cEmps) + ALLTRIM(THIS.this_cDopes) + ;
+                         STR(THIS.this_nNumes, 6)
+
+            THIS.RegistrarAuditoria("DELETE")
+
+            loc_cSQL = "DELETE FROM SigMvCab " + ;
+                       "WHERE EmpDopNums = " + EscaparSQL(loc_cChave)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Falha ao excluir registro em SigMvCab"
+            ENDIF
+
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = "Erro em ExecutarExclusao: " + loc_oErro.Message + ;
+                                       " LN=" + TRANSFORM(loc_oErro.LineNo)
+            MsgErro(THIS.this_cMensagemErro, "Erro SigPrGl2BO.ExecutarExclusao")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * EncerrarForm - libera referencia ao form pai e restaura Enabled
+    *--------------------------------------------------------------------------
+    PROCEDURE EncerrarForm()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF VARTYPE(THIS.this_oFormPai) = "O" AND !ISNULL(THIS.this_oFormPai)
+                THIS.this_oFormPai.Enabled = .T.
+            ENDIF
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro Inserir SigTempd")
-            loc_lResultado = .F.
+                    "Erro SigPrGl2BO.EncerrarForm")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Atualizar - UPDATE em SigTempd para alterar registro de sessao ativa.
-    * Localiza pelo CidChaves atual e sobrescreve Grupos/Contas/CodObs/Emps.
-    * Retorno: .T. sucesso, .F. erro (mensagem em this_cMensagemErro)
+    * Destroy - limpa referencias ao destruir o BO
     *--------------------------------------------------------------------------
-    PROCEDURE Atualizar()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
-                THIS.this_cMensagemErro = "Chave prim" + CHR(225) + "ria vazia. " + ;
-                    "N" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + ;
-                    "vel atualizar SigTempd."
-            ELSE
-                loc_cSQL = "UPDATE SigTempd SET " + ;
-                    "Grupos    = " + EscaparSQL(ALLTRIM(THIS.this_cGrupos)) + ", " + ;
-                    "Contas    = " + EscaparSQL(ALLTRIM(THIS.this_cContas)) + ", " + ;
-                    "CodObs    = " + FormatarNumeroSQL(THIS.this_nCodObs, 0) + ", " + ;
-                    "Emps      = " + EscaparSQL(ALLTRIM(THIS.this_cEmps)) + ", " + ;
-                    "CidQuerys = " + EscaparSQL(ALLTRIM(THIS.this_cCidQuerys)) + " " + ;
-                    "WHERE CidChaves = " + EscaparSQL(ALLTRIM(THIS.this_cCidChaves))
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
-                    *-- Registra auditoria de alteracao (herdado de BusinessBase)
-                    THIS.RegistrarAuditoria("A")
-                    loc_lResultado = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Falha ao atualizar registro em SigTempd " + ;
-                        "(CidChaves=" + ALLTRIM(THIS.this_cCidChaves) + ")."
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
-                    "Erro Atualizar SigTempd")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - DELETE em SigTempd pelo CidChaves atual.
-    * Usado para limpar registros de sessao apos processamento concluido.
-    *--------------------------------------------------------------------------
-    PROCEDURE ExecutarExclusao()
-        LOCAL loc_lResultado, loc_cSQL, loc_oErro
-
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
-                THIS.this_cMensagemErro = "Chave prim" + CHR(225) + "ria vazia."
-            ELSE
-                loc_cSQL = "DELETE FROM SigTempd WHERE CidChaves = " + ;
-                    EscaparSQL(ALLTRIM(THIS.this_cCidChaves))
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL) >= 0
-                    THIS.RegistrarAuditoria("E")
-                    loc_lResultado = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Falha ao excluir SigTempd."
-                ENDIF
-            ENDIF
-
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro ExecutarExclusao SigTempd")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
+    PROCEDURE Destroy()
+        THIS.this_oConexao  = .NULL.
+        THIS.this_oConexao2 = .NULL.
+        THIS.this_oFormPai  = .NULL.
     ENDPROC
 
 ENDDEFINE

@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O `sigprsenBO.prg` agora tem os m├®todos de neg├│cio completos:
+
+- **`GerarSenha()`** ÔÇö chama `fGerPswDiario(VAL(SYS(1)), DATE(), 0)` (mesmo padr├úo de sigtosenBO.prg e SigPrSddBO.prg que j├í usam essa fun├º├úo na nova arquitetura), armazena resultado em `this_cSenha`.
+
+- **`EnviarEmail(par_cSenha)`** ÔÇö replica fielmente o `MandaEmail` do legado via CDO.Configuration + CDO.Message, usando as propriedades SMTP do BO. Em modo autom├ítico (`this_lAutomatico = .T.`), erros de SMTP s├úo silenciados.
+
+- **`Processar(par_lAutomatico)`** ÔÇö orquestra o fluxo completo: confirma├º├úo (s├│ no modo manual), gera├º├úo da senha, exibi├º├úo ao usu├írio (s├│ manual), envio por e-mail. Substitui o `processamento` do legado com tratamento de erro correto (RETURN fora do TRY/CATCH via `loc_lSucesso`, sem RETURN interno).

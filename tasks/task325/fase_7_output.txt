@@ -1,0 +1,20 @@
+﻿O arquivo j├í est├í completo. Analisando o FormSigPrRet.prg:
+
+Este ├® um form **OPERACIONAL** (filtros + despacho), n├úo CRUD. O Phase 7 do pipeline usa template gen├®rico com "BtnIncluirClick / BtnAlterarClick / BtnVisualizarClick / BtnExcluirClick", mas esses m├®todos CRUD **n├úo se aplicam** a este form.
+
+Os 4 eventos principais equivalentes para este OPERACIONAL j├í foram implementados em fase anterior:
+
+| Bot├úo Legado | Handler Implementado | Linha |
+|---|---|---|
+| `sair.Click` (Value=1) ÔåÆ CONSULTA | `BtnConsultaClick()` | 1335ÔÇô1387 |
+| `sair.Click` (Value=2) ÔåÆ ARQUIVADAS | `BtnArquivadasClick()` | 1441ÔÇô1486 |
+| `sair.Click` (Value=3) ÔåÆ DIGITA├ç├âO | `BtnDigitacaoClick()` | 1392ÔÇô1436 |
+| `sair.Click` (Value=4) ÔåÆ Release | `BtnEncerrarClick()` | 1491ÔÇô1493 |
+
+O dispatcher `BtnSairClick()` (linha 1319) roteia o CommandGroup para os 4 handlers com base em `obj_4c_Sair.Value`.
+
+**N├úo h├í nada a acrescentar.** Adicionar `BtnIncluirClick` / `BtnAlterarClick` / `BtnVisualizarClick` / `BtnExcluirClick` neste form seria:
+1. Stubs sem l├│gica real ÔåÆ violaria a regra "PROIBIDO criar m├®todos vazios"
+2. Semanticamente errado ÔåÆ BtnExcluirClick chamando BtnEncerrarClick n├úo faz sentido
+
+O FormSigPrRet.prg est├í completo. Fase 7/8 encerrada ÔÇö os eventos principais do form OPERACIONAL j├í existem e est├úo funcionais.

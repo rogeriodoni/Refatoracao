@@ -1,0 +1,14 @@
+﻿O `config.prg` j├í carrega automaticamente:
+- `aleBO.prg` via `ADIR(*BO.prg)` na pasta `classes\` (linha 276)
+- `Formale.prg` via `ADIR(Form*.prg)` na pasta `operacionais\` (linha 316)
+
+**A Fase 7 est├í completa sem altera├º├Áes necess├írias.** O `Formale.prg` j├í implementou todos os eventos do original SIGCDALE nas fases anteriores:
+
+- `BtnConfirmarClick` ÔÇö salva alertas via `aleBO.SalvarAlertas` (DELETE + re-INSERT com flags ativos)
+- `BtnCancelarClick` ÔÇö fecha sem salvar
+- `OptTabelaInteractiveChange` ÔÇö filtra grid por tabela de refer├¬ncia (SIGCDOPE/SIGCDGCR/SIGCDOPD/SIGCDPRO/SIGOPOPE)
+- `CboGradeComboChange` ÔÇö atualiza campo `priors` num├®rico ao trocar prioridade
+
+Os eventos CRUD gen├®ricos da instru├º├úo de Fase 7 (BtnIncluirClick/Alterar/Visualizar/Excluir) n├úo existem no SIGCDALE original ÔÇö ├® um form OPERACIONAL com apenas Confirmar/Cancelar. Criar esses m├®todos seria stub proibido.
+
+**Pr├│xima etapa (Fase 8)**: Como este form ├® chamado de um form pai (n├úo do menu), a integra├º├úo est├í completa ÔÇö config.prg j├í carrega os arquivos automaticamente via ADIR. Se o form pai que chama `CREATEOBJECT("Formale", ...)` ainda n├úo foi migrado, essa seria a tarefa seguinte.

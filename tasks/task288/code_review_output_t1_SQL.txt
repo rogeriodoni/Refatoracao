@@ -1,0 +1,9 @@
+﻿Ap├│s verifica├º├úo completa, os tr├¬s alertas s├úo **falsos positivos** do validador. Nenhuma corre├º├úo ├® necess├íria:
+
+**CCHAVE1S** ÔÇö Coluna `cChave1s` ├® definida pelo pr├│prio `CREATE CURSOR crGrafico1 (gGrafico1s G(4), cChave1s C(100), ...)` no BO. O c├│digo original legado tamb├®m usa `Insert Into crGrafico1 (cchave1s,...)`. Os `LOCATE FOR crGrafico1.cChave1s == ...` s├úo opera├º├Áes VFP locais em cursor de mem├│ria, **n├úo** WHERE do SQL Server.
+
+**CEMPS** ÔÇö Coluna `cEmps` vem do cursor `crRel1` do form pai. O c├│digo original tamb├®m usa `Select Distinct a.cEmps From ('crRel1') a`. As opera├º├Áes `LOCATE FOR crRel1.cEmps == ...` e `SCAN WHILE crRel1.cEmps == ...` s├úo opera├º├Áes VFP locais, **n├úo** WHERE do SQL Server.
+
+**POFORM1** ÔÇö N├úo existe em nenhuma linha dos arquivos `FormSigPrGf2.prg` ou `SigPrGf2BO.prg`. Falso positivo puro.
+
+O validador comparou opera├º├Áes VFP locais (LOCATE/SCAN sobre cursores em mem├│ria) com cl├íusulas WHERE de SQL Server de um contexto completamente diferente (LNTMSTR1, LNCONTA1, LLERROR, LNCONTA2 pertencem a outra query/form). Os arquivos est├úo corretos e nenhuma altera├º├úo ├® necess├íria neste pass.

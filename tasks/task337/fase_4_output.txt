@@ -1,0 +1,20 @@
+﻿FASE 4/8 conclu├¡da. O arquivo passou de 475 para 1245 linhas. Segue o que foi adicionado:
+
+**Edit 2** ÔÇö `THIS.ConfigurarEventos()` inserido em `InicializarForm()` ap├│s `InicializarEstadoTEF()`.
+
+**Edit 3** ÔÇö 13 m├®todos novos antes de `ENDDEFINE`:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `ConfigurarEventos` | PROTECTED | 9 BINDEVENTs (Click+When para 3 bot├Áes, KeyPress+Valid para TextBox) |
+| `CmdEncerrarClick` | PUBLIC | `THIS.Release()` |
+| `CmdTefAdmWhen` / `CmdTefAtvWhen` / `CmdCancelarWhen` | PUBLIC | Retorna `!EMPTY(txt_4c_Redetef.Value)` ÔÇö replica `TefAdm.When` legado |
+| `TxtRedetefKeyPress` | PUBLIC | LPARAMETERS guard + chama `TxtRedetefValid()` em Enter/Tab/F4 |
+| `TxtRedetefValid` | PUBLIC | `BuscarComprovantes` + SEEK + `AbrirBuscaRedetef` se n├úo encontrado |
+| `AbrirBuscaRedetef` | PROTECTED | `FormBuscaAuxiliar` para picker de Rede TEF |
+| `CmdTefAtvClick` | PUBLIC | SigFiTefReq ATV + limpeza IntPos.001/Tmp se n├úo ativo |
+| `CmdTefAdmClick` | PUBLIC | Admin TEF completo: ATV check ÔåÆ SigTef DBF scan ÔåÆ SigFiTefReq ADM ÔåÆ `ImprFiscalProc` |
+| `CmdCancelarClick` | PUBLIC | Cancel TEF: ATV check ÔåÆ BuscarTransacaoPorIdChaves ÔåÆ TefImpr CNC ÔåÆ RRelGerVinc loop ÔåÆ CNF/NCN |
+| `ProcCntTxt` | PROTECTED | SQLEXEC SigFiTra + atualiza labels do `cnt_4c_TefTxt` |
+| `ExcluirTef` | PROTECTED | Abre SigTef DBF local, SEEK por Ident, DELETE se encontrado |
+| `ImprFiscalProc` | PROTECTED | Loop FinFimVinc/RRelGerVinc com TefImpr CNF/NCN completo |

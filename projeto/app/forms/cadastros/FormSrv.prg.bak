@@ -3243,7 +3243,9 @@ DEFINE CLASS FormSrv AS FormBase
                         THIS.CarregarLista()
                         loc_lResultado = .T.
                     ELSE
+                        IF !EMPTY(THIS.this_oBusinessObject.ObterMensagemErro())
                         MsgErro(THIS.this_oBusinessObject.ObterMensagemErro())
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -3348,7 +3350,9 @@ DEFINE CLASS FormSrv AS FormBase
                     THIS.this_cModoAtual = "LISTA"
                     loc_lResultado = .T.
                 ELSE
+                    IF !EMPTY(THIS.this_oBusinessObject.ObterMensagemErro())
                     MsgErro(THIS.this_oBusinessObject.ObterMensagemErro())
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

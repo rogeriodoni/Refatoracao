@@ -1,0 +1,7 @@
+﻿All balanced. Phase 8 is now complete:
+
+- **Formsigprpdf.prg** now contains all 5 required methods: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`
+- Also added `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` per the phase spec
+- Since SIGPRPDF is an OPERACIONAL modal dialog (PDF/Email generator), the CRUD-style methods delegate to the existing operational logic: `BtnSalvarClick` ÔåÆ `CmdGerarPDFClick`, `BtnCancelarClick` ÔåÆ `CmdSairClick`, `CarregarLista` ÔåÆ `CarregarEmailEmpresa` + `BOParaForm`
+- `FormParaBO`/`BOParaForm` transfer all form field values Ôåö BO properties (arquivo, tipo, email De/Para/CC/Assunto/Corpo, envio flag)
+- Structure is balanced: 1 DEFINE/ENDDEFINE, 32 PROCEDURE/ENDPROC, 17 TRY/ENDTRY

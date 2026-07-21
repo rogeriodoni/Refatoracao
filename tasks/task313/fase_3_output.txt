@@ -1,0 +1,8 @@
+﻿As tr├¬s se├º├Áes corrigidas est├úo corretas. `FormSigPrMlu.prg` foi criado pelo pipeline com estrutura completa (Fases 3ÔÇô8) e corrigi os seguintes problemas:
+
+1. **WITH aninhado ap├│s AddObject** (padr├úo silenciosamente quebrado no VFP9): `ConfigurarCabecalho`, `ConfigurarBotoes` e `ConfigurarCntNova` ÔÇö trocado para `loc_o*.AddObject()` + `WITH loc_o*.filho` expl├¡cito
+2. **`cmd_4c_Encerrar.Picture`**: `cadastro_cancelar_60.jpg` ÔåÆ `cadastro_sair_60.jpg` (can├┤nico)
+3. **`cmd_4c_Encerrar.FontName`**: `"Tahoma"` ÔåÆ `"Comic Sans MS"` (can├┤nico para bot├Áes CRUD)
+4. **`cmd_4c_Processar.DisabledPicture`**: adicionado (obrigat├│rio para standalone com `Themes=.T.`)
+
+O Form est├í completo com: cabe├ºalho cinza, grid 6 colunas com CheckBox e Sparse=.F., bot├Áes Processar/Encerrar/SelTudo/Desmarcar, container Nome da Unifica├º├úo, e todos os handlers de eventos (toggle SelImp, ordena├º├úo por coluna, BtnProcessarClick que chama `SigPrMluBO.ProcessarUnificacao`).

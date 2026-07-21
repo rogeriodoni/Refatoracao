@@ -1,0 +1,6 @@
+﻿As duas corre├º├Áes est├úo corretas. `ColumnCount`, `RecordSourceType` e `RecordSource` foram movidos para **antes** do bloco `WITH` em ambas as procedures:
+
+- **`ConfigurarGrdCab`** (linhas 292ÔÇô294): `grd_4c_Cab.ColumnCount = 7`, `RecordSourceType = 1` e `RecordSource = "csCabec"` agora precedem o `WITH`, garantindo que `Column1`ÔÇô`Column7` j├í existam quando o bloco os acessa.
+- **`ConfigurarGrdIte`** (linhas 422ÔÇô424): mesma corre├º├úo para `grd_4c_Ite` com `RecordSource = "csItens"`.
+
+Os dois `WITH` agora s├│ cont├¬m propriedades visuais e `.ControlSource`, sem risco de `Unknown member COLUMN1`.

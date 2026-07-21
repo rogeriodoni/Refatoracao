@@ -1,0 +1,13 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi adicionado/modificado em `FormSIGPREST.prg`:
+
+**Refatorado:**
+- `BtnOKClick` ÔÇö agora delega para `FormParaBO()` + `HabilitarCampos(.F.)` + `GerarEstrutura` + `BOParaForm()` + `HabilitarCampos(.T.)`, eliminando l├│gica duplicada inline.
+
+**Adicionados (10 m├®todos):**
+- `BtnSalvarClick` / `BtnCancelarClick` / `BtnBuscarClick` / `BtnEncerrarClick` ÔÇö aliases de compatibilidade com o pipeline.
+- `FormParaBO` ÔÇö sincroniza `chk_4c_GeraArquivos.Value` e `chk_4c_GeraIndices.Value` ÔåÆ `this_lGeraArquivos`/`this_lGeraIndices` no BO.
+- `BOParaForm` ÔÇö reflete `this_lGeraArquivos`, `this_lGeraIndices` e `this_cMensagem` de volta aos controles.
+- `HabilitarCampos(par_lHabilitar)` ÔÇö controla `Enabled` dos dois checkboxes e ambos os bot├Áes.
+- `LimparCampos` ÔÇö restaura checkboxes para `Value = 1` e limpa a label de status.
+- `CarregarLista` ÔÇö stub que retorna `.T.` (sem grid neste di├ílogo).
+- `AjustarBotoesPorModo` ÔÇö stub vazio (sem modos CRUD neste utilit├írio).

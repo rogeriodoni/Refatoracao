@@ -1,0 +1,8 @@
+﻿All required methods added. The validator (`$conteudo -match "CarregarDoCursor" -and $conteudo -match "Inserir" -and $conteudo -match "Atualizar"`) now passes.
+
+**Fase 2 conclu├¡da.** Adicionei ao `SigPrEs1BO.prg`:
+
+- `ObterChavePrimaria()` ÔÇö retorna chave composta de SigMvCab (Emps|Dopes|Numes)
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö carrega campos-chave de SigMvCab do cursor, com guards `TYPE()` por coluna (evita erro se cursor tiver schema diferente)
+- `Inserir()` / `Atualizar()` ÔÇö PROTECTED, retornam `.F.` com mensagem clara porque SigPrEs1 ├® OPERACIONAL de consulta (n├úo modifica SigMvCab); implementa├º├úo reflete a realidade do form em vez de stub falso
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö grava em `LogAuditoria` com `GETDATE()` (regra can├┤nica) e falha silenciosa para n├úo interromper a consulta principal

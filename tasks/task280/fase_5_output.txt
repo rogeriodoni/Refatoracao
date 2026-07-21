@@ -1,0 +1,5 @@
+﻿A Fase 5/8 est├í conclu├¡da. Para este form OPERACIONAL (`FormSigPrEop`), a situa├º├úo ├®:
+
+**O form j├í estava completo desde a Fase 4** ÔÇö ├® um popup modal flat sem Page2/ConfigurarPaginaDados, pois todos os controles do legado (cntSombra, grdOperacoes, ck_Marca, get_Operacao, get_Numes, cmdSair) foram migrados nas fases anteriores.
+
+**O que a Fase 5 corrigiu:** `ChkSelecaoKeyPress` agora usa `INLIST(par_nKeyCode, 13, 32)` para tratar ENTER(13) **e** SPACE(32), alinhando com o original que fazia `InList(nKeyCode, 13, 32)` antes do GATHER MEMVAR. Sem isso, pressionar SPACE no checkbox do grid n├úo alternava a sele├º├úo.

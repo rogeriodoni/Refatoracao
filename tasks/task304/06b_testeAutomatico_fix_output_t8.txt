@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O problema estava em `ConfigurarCabecalho`:
+
+- **Causa:** `WITH loc_oCnt.lbl_4c_LblSombra` (express├úo composta no WITH) ÔÇö mesmo fora de qualquer WITH pai, VFP9 falha ao resolver `.ForeColor` quando o alvo do WITH ├® uma express├úo do tipo `localvar.filho`.
+- **Fix:** Adicionado `loc_oLbl` ao `LOCAL`, atribu├¡do `loc_oLbl = loc_oCnt.lbl_4c_LblSombra` (e depois `loc_oLbl = loc_oCnt.lbl_4c_LblTitulo`) antes de cada WITH, mudando para `WITH loc_oLbl`.
+
+A mem├│ria foi atualizada para refletir que `WITH loc_oCnt.filho` (forma composta) tamb├®m falha ÔÇö o fix can├┤nico exige vari├ível LOCAL separada para o filho.

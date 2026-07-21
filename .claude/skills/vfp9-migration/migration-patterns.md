@@ -4878,7 +4878,7 @@ ENDWITH
 
 **Bug**: FormSIGREADS.prg linhas 441-451 (`grd_4c_TipoOps` — Tipo de Operacao) + linhas 545-555 (`grd_4c_Grupos` — Grupo de Produto) — 2026-07-14, Erro41. Usuario nao conseguia marcar tipos de operacao nem grupos de produto individualmente, apenas via botoes SelTudo/Apaga. Fix aplicado: adicionado `.Sparse = .F.` + `.Alignment = 0` + `.Enabled = .T.` + removido `.Check1.Value = 0` que competia com ControlSource. Padrao canonico verificado contra `Formsigrepes.prg`.
 
-## 136. REPORT BtnVisualizarClick/BtnImprimirClick DEVEM guard `!EMPTY(cMensagemErro)` antes de MsgErro (FormSIGREADS 2026-07-14, Erro40)
+## 136. REPORT BtnVisualizarClick/BtnImprimirClick DEVEM guard `!EMPTY(cMensagemErro)` antes de MsgErro — cobre variantes `this_cMensagemErro` (property) E `ObterMensagemErro()` (method) (FormSIGREADS 2026-07-14 Erro40 + FormSigReAni 2026-07-17 Erro48)
 
 **Problema**: Apos migrar `ImprimirRelatorio` para o helper canonico `ExecutarReportForm` (Pattern #117), os handlers `BtnVisualizarClick`/`BtnImprimirClick` do form REPORT comecam a exibir um modal com titulo "Relatorio" e corpo VAZIO (apenas icone X vermelho) quando o cursor de dados esta vazio. O helper ja mostrou seu proprio MsgAviso "Nenhum registro encontrado...", entao o usuario ve DOIS modais em sequencia — o segundo em branco.
 
@@ -4909,7 +4909,7 @@ PROCEDURE BtnVisualizarClick()
 ENDPROC
 ```
 
-**Codigo CORRETO** (guard cMensagemErro):
+**Codigo CORRETO v1** (guard AND !EMPTY na condicao IF externa — funciona SEM ELSE branch):
 ```foxpro
 PROCEDURE BtnVisualizarClick()
     TRY
@@ -4924,19 +4924,48 @@ PROCEDURE BtnVisualizarClick()
 ENDPROC
 ```
 
+**Codigo CORRETO v2** (guard nested-IF — SEGURO com ELSE branches, cobre variante ObterMensagemErro):
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    TRY
+        THIS.FormParaRelatorio()
+        IF !THIS.this_oRelatorio.Visualizar()
+            IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
+            ENDIF
+        ELSE
+            THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZAR")   && ELSE branch preservado
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro")
+    ENDTRY
+ENDPROC
+```
+
+**IMPORTANTE — quando usar cada variante**:
+- **v1 (AND !EMPTY)**: use APENAS se o IF externo NAO tem ELSE branch. Se houver ELSE (ex: `RegistrarAuditoria` em sucesso), adicionar `AND !EMPTY(...)` na condicao quebra semantica — quando `Visualizar()` retorna `.F.` E `cMensagemErro` esta vazio, o ELSE branch dispara (Auditoria roda em FALHA — BUG).
+- **v2 (nested-IF)**: SEMPRE seguro. Preferido para novo codigo migrado. Wrap SO a MsgErro line, preservando estrutura do IF externo.
+
 **Regra**: sempre que uma chamada retorna `.F.` mas pode ter mostrado sua propria mensagem (helper com MsgAviso proprio), o caller deve verificar `!EMPTY(cMensagemErro)` antes de exibir seu proprio MsgErro. Alternativa arquitetural: convencionar que TODA rota que retorna `.F.` DEVE preencher `cMensagemErro` (mais explicit) — o helper Pattern #117 poderia setar `THIS.this_cMensagemErro = ""` no retorno .F. para deixar claro que "ja mostrei mensagem".
 
-**Auto-fix**: CorretorAutomatico Pattern #122 (`Corrigir-BtnReportGuardEmptyMsgErro`). Detecta o padrao:
-```
-IF !THIS.this_oRelatorio.<method>()
-    MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)
-ENDIF
-```
-Onde `<method>` esta em `("Atualizar"|"Inserir"|"ImprimirRelatorio"|"PrepararDados")`. Injeta guard `AND !EMPTY(...)` na condicao do IF. Idempotente. Preserva indentacao e handles com `TRY/CATCH` circundante.
+**Variantes de fonte da mensagem**: BOs REPORT usam DUAS APIs para expor a mensagem de erro:
+- Property: `THIS.this_oRelatorio.this_cMensagemErro` — acesso direto ao campo
+- Method:   `THIS.this_oRelatorio.ObterMensagemErro()` — acessor com parentheses (padrao encapsulado)
 
-**Padrao canonico**: FormSIGREADS.BtnVisualizarClick/BtnImprimirClick pos-fix (2026-07-14).
+Ambos DEVEM ser guardados. Pattern #122 v2 detecta ambos.
 
-**Bug**: FormSIGREADS.prg BtnVisualizarClick (linhas 1729-1743) e BtnImprimirClick (linhas 1748-1761) — 2026-07-14, Erro40. Cursor de dados vazio (filtros nao retornaram nada) disparava MsgAviso "Nenhum registro encontrado" do helper + MsgErro vazio do handler em sequencia. Fix per-callsite aplicado.
+**Auto-fix**: CorretorAutomatico Pattern #122 v2 (`Corrigir-BtnReportGuardEmptyMsgErro`). Detecta linhas MsgErro com AMBAS variantes:
+```
+MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ...)
+MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ...)
+```
+Wrap com nested-IF `IF !EMPTY(<mesma expr>) / MsgErro / ENDIF` (safe com ELSE). Idempotente: skip se linha anterior ja tem `IF !EMPTY(<expr>)` OU se IF externo ja tem `AND !EMPTY(<expr>)` (retrocompat com v1). Suporta MsgErro multi-linha (continuation com `;`).
+
+**Padrao canonico**: FormSIGREADS.BtnVisualizarClick/BtnImprimirClick pos-fix (2026-07-14, variante v1); FormSigReAni/FormSigReAac/FormSigReCgc/etc pos-fix (2026-07-17, variante v2).
+
+**Bugs**:
+- **Erro40** (FormSIGREADS 2026-07-14): variant this_cMensagemErro (property). BtnVisualizarClick (linhas 1729-1743) e BtnImprimirClick (linhas 1748-1761) — cursor vazio disparava MsgAviso do helper + MsgErro vazio do handler.
+- **Erro48** (FormSigReAni 2026-07-17): variant ObterMensagemErro() (method). Sweep global: 254 ocorrencias em 77 forms REPORT (67 multi-linha + 187 single-line) corrigidas via awk-based nested-IF wrapping. Pattern #122 v1 nao detectava essa variante — extensao para v2 cobre ambas.
 
 
 ## 137. SigCdEmp — colunas canonicas sao `Cemps`/`Razas`, NUNCA `Emps`/`emps`/`NComps`/`nemp` (FormSigReAiv + FormSIGREHCP 2026-07-16, Erro44)
@@ -5106,4 +5135,690 @@ Idempotente (segundo run nao altera nada). Safety: escopo estrito ao WITH do Tex
 - Pattern #125 (SigCdEmp colunas) — este Pattern #126 eh o complemento UI
 - `feedback_facessoempresa_nao_portada.md` — causa raiz upstream (fAcessoEmpresa nao portada, framework nao aplica MaxLength defaults)
 
+## 139. REPORT: CREATE CURSOR direto (multiplos cursores header+detail) — nomes DEVEM bater com FRX legado (Erro46 FormSigReAiv 2026-07-17)
+
+**Problema**: Refinement/reforco do Pattern #131. Aquele Pattern trata SELECT INTO CURSOR alias mismatch; ESTE Pattern trata o caso mais amplo — BOs REPORT que criam cursores via `CREATE CURSOR` direto (sem SELECT INTO) porque a logica original agrega registros manualmente com SCAN loop + REPLACE. FRX legado nao muda: continua referenciando os cursores pelos nomes que o legado criava. Se o gerador migrado renomeia para `cursor_4c_Xxx`, `REPORT FORM` estoura `Alias '<NOME_LEGADO>' is not found` em runtime.
+
+**Bug**: `FormSigReAiv` (Analise Entre Inventarios). FRX SigReAiv.frx referencia `Cabec.cnInvs1`/`Cabec.cnInvs2` (band Title, mostra codigos dos 2 inventarios) + `DBImp.cPros`/`DBImp.dPros`/`DBImp.Sobras`/`DBImp.Faltas` (band Detail, mostra produtos com diferenca). BO migrado criou `cursor_4c_Cabecalho` + `cursor_4c_DbImp` — REPORT FORM disparou `Alias 'CABEC' is not found.` (Erro46 2026-07-17).
+
+**Codigo ERRADO** (migrated com naming convention nova):
+```foxpro
+this_cCursorDados       = "cursor_4c_DbImp"       && FRX espera "DBImp"
+this_cCursorCabecalho   = "cursor_4c_Cabecalho"   && FRX espera "Cabec"
+
+CREATE CURSOR cursor_4c_Cabecalho (cnInvs1 N(10), cnInvs2 N(10))
+INSERT INTO cursor_4c_Cabecalho VALUES (loc_nInv1, loc_nInv2)
+
+CREATE CURSOR cursor_4c_DbImp (cPros C(14), dPros C(40), ...)
+
+SELECT cursor_4c_DbImp
+REPLACE ALL Sobras WITH cnInvs1 - cnInvs2 FOR cnInvs1 - cnInvs2 > 0
+```
+
+**Codigo CORRETO** (nomes legados preservados — cabec + detail):
+```foxpro
+this_cCursorDados       = "DBImp"    && bate com FRX
+this_cCursorCabecalho   = "Cabec"    && bate com FRX
+
+CREATE CURSOR Cabec (cnInvs1 N(10), cnInvs2 N(10))
+INSERT INTO Cabec VALUES (loc_nInv1, loc_nInv2)
+
+CREATE CURSOR DBImp (cPros C(14), dPros C(40), ...)
+
+SELECT DBImp
+REPLACE ALL Sobras WITH cnInvs1 - cnInvs2 FOR cnInvs1 - cnInvs2 > 0
+```
+
+**Regra unificada REPORT (SELECT INTO + CREATE CURSOR + memvars)**:
+1. **TODAS as formas de criar cursor** referenciado pelo FRX DEVEM usar o nome legado: `CREATE CURSOR <nome_legado>`, `SELECT ... INTO CURSOR <nome_legado>`, `SELECT <nome_legado>`, `USED("<nome_legado>")`, `USE IN <nome_legado>`, `INSERT INTO <nome_legado>`, `SCAN` sobre `<nome_legado>`, `REPLACE ALL` em `<nome_legado>`.
+2. **Relatorios com MULTIPLOS cursores** (padrao classico VFP6/7: 1 cursor Cabecalho para band Title + 1 cursor Detail para band Detail + eventualmente cursor de Rodape para band Summary): TODOS DEVEM ter nomes legados. Nao renomear NENHUM.
+3. **Como identificar todos os cursores esperados pelo FRX**: procurar no legado `_form_codigo_fonte.txt` da task por (a) `Create Cursor <X>` na PROCEDURE `processamento` (cursores criados localmente), (b) `Into Cursor <X>` (cursores criados via SELECT), (c) qualquer `Select <X>` que precede o `Report Form`. Cross-check com FRT/FRX: `grep -a -o -i "<nome>\." <nome>.frt`.
+4. **cursor_4c_* prefix** DEVE ser reservado para cursores INTERNOS que NAO sao consumidos pelo FRX. Ex: cursor de resultado bruto de SQLEXEC antes do processamento (`cursor_4c_SigIvTr` em SigReAivBO — legitimo, usado apenas para SCAN interno; NAO aparece no FRX).
+
+**Como identificar quando aplica**:
+- BO herda de `RelatorioBase`.
+- Metodo `PrepararDados` faz `CREATE CURSOR` (nao apenas SELECT INTO CURSOR).
+- FRX correspondente existe em `C:\4c\projeto\app\reports\` (foi copiado do legado).
+- Ao rodar teste manual + click Visualizar/Imprimir, erro `Alias 'XXX' is not found` — o XXX eh o nome legado esperado pelo FRX.
+
+**Como corrigir per-form**:
+1. Ler `_form_codigo_fonte.txt` da task correspondente — extrair TODOS os `Create Cursor` e `Into Cursor` da PROCEDURE `processamento`.
+2. No BO migrado, substituir cada `cursor_4c_<Xxx>` pelo nome legado exato (case-sensitive na definicao, case-insensitive em refs — mas manter case do legado por seguranca).
+3. Atualizar as properties `this_cCursorDados`/`this_cCursorCabecalho` para bater com os nomes legados.
+4. Limpar `.fxp` e testar.
+
+**Auto-fix**: NAO automavel de forma segura via CorretorAutomatico — a identificacao dos nomes esperados exige contexto do legado. Marcar como REGRA DE GERACAO (prompts REPORT + Phase B) e como CHECKLIST de teste manual.
+
+**Escopo**: ~37 BOs REPORT ainda usam `cursor_4c_*` como `this_cCursorDados` (sweep 2026-07-17 pos-Erro46). Fix per-form conforme usuario testa cada relatorio. Lista:
+```
+SIGREAGV, SIGREAUP, sigreani, sigrebct, sigrebal, SIGREAPR, SigReCgc,
+sigrecpe, sigrectc, SigReCsp, sigrecog, sigrecrp, SIGRECPM, sigrecmc,
+sigredoc, sigreche, SIGREDIR, SigReDct, SIGREDES, SigReEtl, SigReDdp,
+SIGRECTP, sigreegp, SIGREEGG, SigReEvd, sigreeun, sigreffi, SIGREFUN,
+sigreffn, SIGREGDP, SIGREIDC, sigreimp, sigrehtc, sigreimc, SigReIpr,
+SIGREIPS, SigReIr1
+```
+
+**Referencias correlatas**:
+- Pattern #131 (SELECT INTO CURSOR alias mismatch) — este Pattern #139 eh o refinement para CREATE CURSOR
+- `feedback_report_cursor_alias_frx_match.md` — memoria original (Erro33)
+- `docs/report_guide.md` — guia canonico REPORT
+
+## 140. REPORT: BOs pre-Pattern #117 com `REPORT FORM (THIS.this_cFRXPath)` DIRETO exigem TRIPLE guard (FRX + cursor + no-RETURN) (Erro47 FormSigReAni 2026-07-17)
+
+**Problema (triplo)**: BOs REPORT gerados ANTES do Pattern #117 ficar canonico usam property `this_cFRXPath` (atribuida em Init) + chamada direta `REPORT FORM (THIS.this_cFRXPath) NOCONSOLE {PREVIEW|TO PRINTER}` em Visualizar()/Imprimir(). Tres anti-padroes associados:
+
+**Bug 1 — FRX name mismatch (`Rel<Base>.frx`)**: BO invents `Rel<FormBase>.frx` como nome do FRX (ex: `RelSigReAni.frx`), mas o FRX legado em `C:\4install\FortyusMC\Fortyus\` tem naming direto sem prefixo (ex: `sigreani.frx`). REPORT FORM falha com "File does not exist" mesmo apos copia porque procura arquivo inexistente.
+
+**Bug 2 — Guard sem ELSE nem RETURN**: BO tem `IF !FILE(this_cFRXPath) / cMensagemErro = "..." / ENDIF / REPORT FORM ...` — o IF NAO pula o REPORT FORM (falta ELSE) e RETURN dentro de TRY/CATCH eh PROIBIDO (regra #1 CLAUDE.md). Sem ELSE, REPORT FORM executa com FRX ausente e dispara msgbox generica "File does not exist" ao inves da mensagem descritiva.
+
+**Bug 3 — Cursor vazio abre preview em branco**: BO nao testa `RECCOUNT(this_cCursorDados)` antes de REPORT FORM. Quando filtro retorna 0 registros, PrepararDados retorna .T. mesmo assim (cursor foi CRIADO com CREATE CURSOR + SQLEXEC mas ficou vazio), REPORT FORM roda e exibe preview EM BRANCO sem mensagem. Usuario nao sabe se filtrou errado ou se ha bug. UX quebrada. Refinement pos-teste do Erro47 (2026-07-17).
+
+**Codigo ERRADO** (sigreaniBO pre-fix — tres bugs juntos):
+```foxpro
+* Init
+THIS.this_cFRXPath = gc_4c_CaminhoReports + "RelSigReAni.frx"  && Bug 1: nome inventado
+
+* Visualizar (TRY/CATCH)
+IF THIS.PrepararDados()
+    IF !FILE(THIS.this_cFRXPath)
+        THIS.this_cMensagemErro = "Arquivo nao encontrado"     && guard sem efeito
+        loc_lSucesso = .F.
+    ENDIF
+    REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE          && Bug 2: executa mesmo sem FRX
+                                                                && Bug 3: preview em branco se cursor vazio
+    ...
+ENDIF
+```
+
+**Codigo CORRETO** (sigreaniBO pos-fix — TRIPLE guard):
+```foxpro
+* Init
+THIS.this_cFRXPath = gc_4c_CaminhoReports + "SigReAni.frx"     && nome bate com FRX legado copiado
+
+* Visualizar (TRY/CATCH — RETURN proibido, usar ELSE)
+IF THIS.PrepararDados()
+    IF !FILE(THIS.this_cFRXPath)
+        THIS.this_cMensagemErro = "Arquivo de relat" + CHR(243) + "rio n" + ;
+                                  CHR(227) + "o encontrado: " + THIS.this_cFRXPath
+    ELSE
+        IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0
+            MsgAviso("Nenhum registro encontrado para os filtros informados.", ;
+                     "Relat" + CHR(243) + "rio")
+            THIS.LimparCursores()
+            && NAO setar cMensagemErro — evita duplo modal (Pattern #122)
+        ELSE
+            REPORT FORM (THIS.this_cFRXPath) PREVIEW NOCONSOLE
+            THIS.LimparCursores()
+            THIS.this_cMensagemErro = ""
+            loc_lSucesso = .T.
+        ENDIF
+    ENDIF
+ENDIF
+```
+
+**Regra de GERACAO (prompts REPORT + Phase B)** — TRIPLE guard obrigatorio:
+1. **Nome do FRX**: SEMPRE checar `C:\4install\FortyusMC\Fortyus\<base>.frx` (case-insensitive) para o nome ORIGINAL do legado. Copiar para `C:\4c\projeto\app\reports\<PascalCase>.frx` (+ `.frt`) preservando o base — NUNCA inventar prefixos `Rel<X>.frx`, `Report<X>.frx`, etc.
+2. **Guard FRX obrigatorio**: TODO `REPORT FORM (THIS.this_cFRXPath)` DENTRO de TRY/CATCH DEVE estar em bloco `IF FILE(...) / <inner_guards> / ELSE / cMensagemErro = ... / ENDIF`. NUNCA usar `IF !FILE / ... / ENDIF / REPORT FORM` (guard sem efeito) NEM `RETURN` (proibido em TRY/CATCH).
+3. **Guard cursor vazio obrigatorio**: ANINHADO dentro do IF FILE, antes do REPORT FORM, DEVE testar `IF !USED(THIS.this_cCursorDados) OR RECCOUNT(THIS.this_cCursorDados) = 0 / MsgAviso("Nenhum registro encontrado...") / LimparCursores() / ELSE / REPORT FORM ... / ENDIF`. Cursor vazio abre preview em branco (UX quebrada). CRITICO: no ramo cursor-vazio NAO setar `cMensagemErro` — Pattern #122 (`feedback_btn_report_empty_msgerro_guard.md`) exige que handler use guard `AND !EMPTY(cMensagemErro)` antes de MsgErro para evitar duplo modal.
+4. **Padrao canonico preferido**: usar helper `ExecutarReportForm` (Pattern #117) que combina guard IF FILE + isolamento locale/REPORTBEHAVIOR 80 + guard cursor vazio ja embutido. Property-based (`REPORT FORM (THIS.this_cXxx)`) NAO eh detectada por Pattern #117 (blind spot: lookback so pega vars locais 8 linhas atras) — refatorar manualmente OU aplicar TRIPLE guard inline (regras 2+3).
+
+**Como identificar quando aplica**:
+- BO herda de `RelatorioBase`.
+- Metodos Visualizar/Imprimir tem `REPORT FORM (THIS.this_cFRXPath) ...` direto (sem chamada a `ExecutarReportForm`).
+- Grep: `grep -l 'REPORT FORM (THIS\.this_c' C:/4c/projeto/app/classes/*BO.prg`.
+
+**Escopo do sweep (2026-07-17 pos-Erro47)**: 4 BOs identificados com `REPORT FORM (THIS.this_cFRXPath)` direto:
+- `sigreaniBO.prg` — **FIXED** (Erro47, 2 bugs: nome + guard)
+- `SigReAivBO.prg` — ja tinha guard IF FILE/ELSE (OK)
+- `SIGRECTLBO.prg` — **FIXED** (sem guard, aplicado ELSE)
+- `SigReAacBO.prg` — **FIXED** (sem guard, aplicado ELSE)
+
+**Auto-fix**: Bug 1 (nome inventado) NAO automavel de forma segura — depende de correlacionar com legado. Bug 2 (guard sem ELSE) parcialmente automavel via detecao `REPORT FORM (THIS\.\w+)` sem `IF FILE()` precedente na mesma proc — mas com risco de falsos positivos (BOs modernos usam helper). Fix priorizado nos prompts + skill.
+
+**Referencias correlatas**:
+- Pattern #117 (`feedback_report_form_helper_canonico.md`) — helper canonico, mas nao cobre property-based
+- `feedback_report_cursor_alias_frx_match.md` — mesma familia (FRX legado + naming compatibility)
+- Regra #1 CLAUDE.md — NUNCA RETURN dentro de TRY/CATCH (usar ELSE ou flag)
+
+## 141. REPORT: WITH aninhado triplo (Container -> CommandGroup -> Buttons) causa botoes SEM Picture/Caption em runtime + `.Width = THIS.Width` em Buttons (Erro49 Formsigreanr 2026-07-17)
+
+**Problema**: Refinement/extensao do Pattern #140 do Erro47 (WITH aninhado Container/Label). Este Pattern trata o caso mais severo — **3 niveis de WITH aninhado** em `ConfigurarCabecalho`:
+
+```foxpro
+WITH loc_oCab                              && nivel 1 — Container
+    .AddObject("cmg_4c_Botoes", "CommandGroup")
+    WITH .cmg_4c_Botoes                    && nivel 2 — nested WITH em Container's WITH
+        .ButtonCount = 4
+        WITH .Buttons(1)                   && nivel 3 — nested WITH em CommandGroup's WITH
+            .Caption = "Visualizar"        && silenciosamente ignorado
+            .Picture = ...                 && silenciosamente ignorado
+            .Left    = 5                   && silenciosamente ignorado
+        ENDWITH
+    ENDWITH
+ENDWITH
+```
+
+VFP9 falha SILENCIOSAMENTE ao resolver propriedades das Buttons — sem exception, sem MsgErro. Runtime renderiza os 4 botoes como **retangulos vazios sem icone e sem caption**. UX quebrada — user nao sabe quais sao os botoes.
+
+**Bug adicional co-ocorrente — `.Width = THIS.Width` em CommandGroup e Buttons**: gerador frequentemente atribui `.Width = THIS.Width` (form width, tipicamente 800px) em multiplos niveis: Container (correto — Container spans full form), Labels (correto — text clipping via Width), MAS TAMBEM em CommandGroup (deveria ser 273 canonico) e em cada Button (deveria ser 65 canonico). Multiplicacao de erro: CommandGroup=800 + 4 Buttons=800 cada = overflow massivo. Visualmente os botoes ainda aparecem porque VFP9 clipa ao CommandGroup.Width, mas o layout eh degradado.
+
+**Codigo ERRADO** (Formsigreanr pre-fix — triplo aninhamento + Width errado):
+```foxpro
+PROTECTED PROCEDURE ConfigurarCabecalho()
+    LOCAL loc_oCab
+    THIS.AddObject("cnt_4c_Cabecalho", "Container")
+    loc_oCab = THIS.cnt_4c_Cabecalho
+
+    WITH loc_oCab
+        .Top = 0 / .Left = 0 / .Width = THIS.Width / .Height = 80 / ...
+
+        .AddObject("lbl_4c_Sombra", "Label")
+        WITH .lbl_4c_Sombra                          && Label — Pattern #140 (Erro47)
+            .Caption = "..." / .ForeColor = ...      && podem ficar sem efeito
+        ENDWITH
+
+        .AddObject("cmg_4c_Botoes", "CommandGroup")  && CommandGroup em WITH aninhado
+        WITH .cmg_4c_Botoes                          && nivel 2
+            .Width = THIS.Width                      && 800 (deveria 273)
+            .ButtonCount = 4
+            WITH .Buttons(1)                         && nivel 3 — Button props IGNORADAS
+                .Caption = "Visualizar"
+                .Picture = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                .Width = THIS.Width                  && 800 (deveria 65)
+            ENDWITH
+            ...
+        ENDWITH
+    ENDWITH
+ENDPROC
+```
+
+**Codigo CORRETO** (Formsigreanr pos-fix — pattern canonico do Erro47/49):
+```foxpro
+PROTECTED PROCEDURE ConfigurarCabecalho()
+    LOCAL loc_oCab, loc_oCmg
+    THIS.AddObject("cnt_4c_Cabecalho", "Container")
+    loc_oCab = THIS.cnt_4c_Cabecalho
+
+    *-- Configura Container (nivel 1 WITH, fechado ao terminar props do Container)
+    WITH loc_oCab
+        .Top = 0 / .Left = 0 / .Width = THIS.Width / .Height = 80 / ...
+    ENDWITH
+
+    *-- Adiciona filhos via caminho explicito (fora de qualquer WITH)
+    loc_oCab.AddObject("lbl_4c_Sombra", "Label")
+    WITH loc_oCab.lbl_4c_Sombra                      && nivel 1 explicito, seguro
+        .Caption = "..." / .ForeColor = ... / .Width = THIS.Width / ...
+    ENDWITH
+
+    loc_oCab.AddObject("lbl_4c_Titulo", "Label")
+    WITH loc_oCab.lbl_4c_Titulo
+        ...
+    ENDWITH
+
+    *-- CommandGroup via variavel local + WITH 1 nivel + Buttons collection accessor
+    loc_oCab.AddObject("cmg_4c_Botoes", "CommandGroup")
+    loc_oCmg = loc_oCab.cmg_4c_Botoes
+    WITH loc_oCmg                                    && nivel 1 explicito
+        .Top = 0 / .Left = 527 / .Width = 273 / .Height = 80 / .ButtonCount = 4 / ...
+
+        WITH .Buttons(1)                             && nivel 2 — collection accessor OK (nao eh AddObject)
+            .Caption = "Visualizar"
+            .Picture = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+            .Left = 5 / .Width = 65 / .Height = 70 / ...
+        ENDWITH
+        WITH .Buttons(2) ... ENDWITH                 && Lefts canonicos: 5, 71, 137, 203 (increment 66)
+        WITH .Buttons(3) ... ENDWITH
+        WITH .Buttons(4) ... ENDWITH
+    ENDWITH
+
+    BINDEVENT(loc_oCmg.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+    ...
+ENDPROC
+```
+
+**Regras**:
+1. **Nunca WITH aninhado em AddObject Container/Label/CommandGroup filho de Container**: apos AddObject, o WITH-aninhado (`WITH .filho`) NAO resolve propriedades. Sempre usar caminho explicito `WITH <parent>.<filho>` OU variavel local `loc_o<filho> = <parent>.<filho> / WITH loc_o<filho>`.
+2. **Excecao — Buttons(N) collection accessor**: `Buttons(N)` NAO eh AddObject; eh acessor de colecao ja existente. `WITH .Buttons(N)` dentro de `WITH loc_oCmg` (1 nivel de nesting) EH SEGURO — VFP9 resolve corretamente colecoes indexadas.
+3. **Widths canonicos framework frmrelatorio**: CommandGroup Width=273 (nao THIS.Width), Buttons Width=65 (nao THIS.Width), Left=527/529 (posicao canonica top-right), Buttons Lefts=5/71/137/203 (Height=70).
+4. **Widths corretos com THIS.Width**: Container spans full form (`.Width = THIS.Width`), Labels dentro do Container tambem (`.Width = THIS.Width` — text clipping), PageFrame (`.Width = THIS.Width + 2`). Preservar.
+5. **`.Width = THIS.Width` em CommandGroup/Button = SEMPRE errado**: substituir por valores canonicos.
+
+**Como identificar quando aplica**:
+- Form REPORT (herda de FormBase, associado a BO que herda RelatorioBase).
+- `ConfigurarCabecalho` (ou similar) contem `WITH loc_o<X> / .AddObject("cmg_4c_Botoes", "CommandGroup") / WITH .cmg_4c_Botoes / WITH .Buttons(N)` — triplo WITH aninhado.
+- Screenshot mostra botoes com bordas mas sem icones e sem texto.
+- Grep: `awk` scanning `WITH loc_o` -> `AddObject.*CommandGroup` -> `WITH .cmg_4c_` sequencial.
+
+**Escopo do sweep (2026-07-17 pos-Erro49)**: 9 forms REPORT identificados com triple-nesting (Formsigreanr + 8 abaixo), TODOS corrigidos:
+```
+Formsigreanr  Erro49 original     FIXED (manual)
+FormSIGRECMV                       FIXED (agent batch)
+FormSigReCmp  variantes Top/Left   FIXED
+Formsigreapp  Left=1026 form 1300  FIXED
+Formsigrecmm  Lefts=2/68/134/200   FIXED
+Formsigrecom                       FIXED
+Formsigrecop                       FIXED
+Formsigredoc                       FIXED
+Formsigreinr  Buttons(4)="Encerrar" FIXED
+```
+
+**Auto-fix**: NAO automavel de forma segura via CorretorAutomatico — refactoring estrutural preservando variantes (Left/Top/Widths per-form + Cancel/WordWrap/ToolTipText attributes + BINDEVENT method names variantes) exige contexto por-form. Marcar como REGRA DE GERACAO (prompts REPORT + Phase A) e como CHECKLIST de teste manual.
+
+**Referencias correlatas**:
+- Pattern #140 (WITH aninhado Container/Label — Erro47) — este Pattern #141 eh o refinement para CommandGroup + Buttons (nivel 3 de aninhamento)
+- `feedback_with_aninhado_addobj_forecolor.md` — memoria original Erro47
+- CLAUDE.md rule 9.4 (DataSession=2 reseta SET DATE/CENTURY) — regra separada mas mesmo contexto REPORT
+
+## 142. REPORT BO — `this_cCursorDados` OBRIGATORIO como property quando chamado via `THIS.ExecutarReportForm(base, modo, THIS.this_cCursorDados)` (Erro51, 6 BOs, 2026-07-21)
+
+**Problema**: BOs REPORT que adotaram o helper canonico `ExecutarReportForm` (Pattern #117) passam o 3o argumento (cursor guard) via `THIS.this_cCursorDados`. Este padrao pressupoe que a classe declare a property `this_cCursorDados = "<alias>"` no bloco de propriedades — **mas o gerador as vezes esquece de declarar**. Runtime VFP9 dispara imediatamente ao clicar Visualizar/Imprimir:
+
+```
+Property THIS_CCURSORDADOS is not found.
+```
+
+(Mensagem em uppercase — VFP9 uppercased identifier de `this_cCursorDados`.)
+
+**Screenshot tipico** (Erro51 — FormSIGREAEG "Analise de Estoque por Grande Grupo"): usuario preenche filtros de periodo, clica Visualizar, dialog "Visualizar" com icone X vermelho + "Property THIS_CCURSORDADOS is not found."/"OK".
+
+**Codigo ERRADO** (BO sem declaracao da property):
+```foxpro
+DEFINE CLASS SIGREAEGBO AS RelatorioBase
+    *-- Filtros do relatorio
+    this_cEmpresa       = ""
+    this_cDesEmpresa    = ""
+    this_dDtInicial     = {}
+    this_dDtFinal       = {}
+    *-- SEM this_cCursorDados
+
+    PROCEDURE Visualizar()
+        TRY
+            THIS.PrepararDados()
+            THIS.ExecutarReportForm("SigReAe1", "PREVIEW", THIS.this_cCursorDados)   && CRASH aqui
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Visualizar")
+        ENDTRY
+    ENDPROC
+ENDDEFINE
+```
+
+**Codigo CORRETO** (property declarada + case multi-FRX):
+```foxpro
+DEFINE CLASS SIGREAEGBO AS RelatorioBase
+    *-- Filtros do relatorio
+    this_cEmpresa       = ""
+    this_cDesEmpresa    = ""
+    this_dDtInicial     = {}
+    this_dDtFinal       = {}
+
+    *-- Cursor principal binding com SigReAe1.frx (SigReAe2.frx usa CsDiferenca)
+    this_cCursorDados   = "CsRelatorio"
+
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF !THIS.PrepararDados()
+                loc_lSucesso = .F.
+            ENDIF
+            THIS.ExecutarReportForm("SigReAe1", "PREVIEW", THIS.this_cCursorDados)
+            IF USED("CsDiferenca")
+                SELECT CsDiferenca
+                GO TOP
+                IF !EOF()
+                    IF MsgConfirma("Deseja Visualizar o Relat" + CHR(243) + "rio de Diverg" + CHR(234) + "ncias ?")
+                        *-- 2a FRX usa cursor diferente — passar LITERAL
+                        THIS.ExecutarReportForm("SigReAe2", "PREVIEW", "CsDiferenca")
+                    ENDIF
+                ENDIF
+            ENDIF
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Visualizar")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+ENDDEFINE
+```
+
+**Regra de determinacao do alias**:
+1. Ler `tasks/task<NNN>/<base>_form_codigo_fonte.txt` — procurar `PROCEDURE visualizacao` (ou equivalent).
+2. Identificar o `Select <alias>` + `Go Top` IMEDIATAMENTE ANTES de `Report Form <frx>`.
+3. Esse `<alias>` eh o `this_cCursorDados`.
+4. Se ha MULTIPLAS chamadas `Report Form` com aliases diferentes, escolher a PRINCIPAL para property + literal para as demais.
+
+**Escopo do sweep (2026-07-21 pos-Erro51)**: 6 BOs REPORT identificados via `grep -l "THIS.this_cCursorDados" *BO.prg` + verificacao de ausencia de declaracao, TODOS corrigidos:
+
+| BO | Alias declarado | FRXs | Observacao |
+|----|-----------------|------|------------|
+| `SIGREAEGBO.prg` | `CsRelatorio` | SigReAe1 + SigReAe2 | 2 FRXs — 2a chamada usa literal `"CsDiferenca"` |
+| `SIGREEQRBO.prg` | `csTempoGr` | SigReEqr | 1 FRX, cursor `csTempoGr` (Grupos) |
+| `SigReAtmBO.prg` | `TmpRelat` | SigReAt2 + SigReAt3 | 2 FRXs com mesmo cursor `TmpRelat` |
+| `SigReIpcBO.prg` | `TMPLANCA` | RelSigReIpc | Loop por operacao, cursor `TMPLANCA` |
+| `sigrecgrBO.prg` | `TmpRastro` | SigReCgr | Rastreabilidade — cursor `TmpRastro` |
+| `sigrefecBO.prg` | `crImpressao` | RelSigReFec | Fechamento financeiro — cursor `crImpressao` (Detalhe C(40)) |
+
+**Auto-fix**: CorretorAutomatico Pattern #142 (`Corrigir-ReportBOCursorDadosDeclarada`) — deteccao TRIVIAL, fix DEFENSIVO:
+
+- **Detecta**: BOs em `classes/*BO.prg` que contem `THIS.this_cCursorDados` (case-insensitive) mas NAO tem linha matching `^\s*this_cCursorDados\s*=` no corpo.
+- **Fix seguro (nao adivinha alias)**: injeta `this_cCursorDados = ""` (string vazia) apos a ultima property `this_` do `DEFINE CLASS <XxxBO> AS RelatorioBase`. Pattern #117 guard `IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)` trata string vazia como skip do check — REPORT FORM roda normalmente sem guard cursor-vazio, sem crash.
+- **WARNING obrigatorio no log do pipeline**: `[Pattern #142] <BO>.prg: this_cCursorDados injetado VAZIO — REVISAR e substituir por alias do cursor binding do FRX legado (ver PROCEDURE visualizacao)`.
+- **Trade-off aceito**: cursor vazio dispara preview em branco silencioso (regressao para pre-Erro30 guard). Melhor que crash + operador sabe que precisa revisar antes de release.
+- **Idempotente**: skip se ja declarada.
+
+**Alternativa considerada e rejeitada**: injecao de placeholder `"CURSOR_A_DEFINIR"` + FIXME comment. Rejeitada porque `!EMPTY("CURSOR_A_DEFINIR") == .T.` -> guard tenta `USED("CURSOR_A_DEFINIR")` -> `USED` retorna .F. -> `MsgAviso("Nenhum registro encontrado")` -> Visualizar RETURN sem preview. Usuario nao consegue nem preview + nao sabe que placeholder existe. String vazia eh menos disruptiva.
+
+**Como testar retroativo**: `Get-ChildItem C:\4c\projeto\app\classes\*BO.prg | Where-Object { (Select-String -Path $_ -Pattern 'THIS\.this_cCursorDados').Count -gt 0 -and (Select-String -Path $_ -Pattern '^\s*this_cCursorDados\s*=').Count -eq 0 }` deve retornar VAZIO apos sweep.
+
+**Referencias correlatas**:
+- Pattern #117 (`feedback_report_form_helper_canonico.md`) — helper canonico que EXIGE a property
+- Pattern #131/#139 (`feedback_report_cursor_alias_frx_match.md`) — mesma familia (FRX legado + naming compatibility). Este Pattern #142 eh sobre DECLARACAO da property; Pattern #131/#139 eh sobre CONVENCAO DE NOME (bater com FRX)
+- Padroes canonicos ja OK: `sigreanrBO.prg:33` (`this_cCursorDados = "TmpFinal"`), `SigReAacBO.prg:20` (`= "crDBImp"`)
+
+## 143. INDEX ON com chave composta grande FALHA sob `SET COLLATE TO "GENERAL"` — usar `ORDER BY` no SELECT (Erro53, SIGREAUPBO 2026-07-21)
+
+**Sintoma runtime**: `Invalid key length.` ao clicar Visualizar/Imprimir em relatorio; ocorre apos PrepararDados montar cursor auxiliar via SELECT INTO CURSOR e tentar criar INDEX ON com chave composta.
+
+**Causa raiz**: `config.prg:182` executa `SET COLLATE TO "GENERAL"` globalmente para permitir ordenacao correta com acentos portugueses. Efeito colateral documentado: sob COLLATE GENERAL, o limite maximo de chave CDX cai de **240 para ~120 bytes** (a colacao ponderada usa 2 bytes por caractere). Chaves compostas grandes que compilavam sob MACHINE estouram.
+
+**Exemplo real (SIGREAUPBO.prg:210 pre-fix)**:
+
+```foxpro
+SELECT IIF(loc_nQbr = 1, ;
+           Grupos + "/" + Contas + "-" + RClis, ;             && 10+1+10+1+50 = 72 chars
+           Cods + "-" + IIF(fixos <> 2, DescTabs, Descs)) AS Quebra1, ;
+       IIF(loc_nQbr = 1, ;
+           Cods + "-" + DescTabs, ;                             && 10+1+60 = 71 chars
+           Grupos + "/" + Contas + "-" + RClis) AS Quebra2, ;
+       IIF(fixos <> 2, DescTabs, Descs) AS DescTabs, * ;
+FROM (THIS.this_cCursorDados) ;
+INTO CURSOR Selecao
+
+SELECT Selecao
+INDEX ON Quebra1 + Quebra2 + DTOS(Datas) + STR(Nenvs, 10) TAG Ordem  && 72+72+8+10 = 162 chars = 324 bytes GENERAL
+GO TOP
+```
+
+Calculo: 162 chars × 2 bytes/char = **324 bytes > 240** → runtime crash.
+
+**Fix (recomendado — mais limpo)**: substituir INDEX ON por ORDER BY no proprio SELECT. Sort in-memory nao sofre o limite CDX; ordem de registros eh exatamente o que REPORT FORM precisa para trigger de bandas de grupo do FRX.
+
+```foxpro
+SELECT ... AS Quebra1, ... AS Quebra2, ..., * ;
+FROM (THIS.this_cCursorDados) ;
+INTO CURSOR Selecao ;
+ORDER BY 1, 2, Datas, Nenvs   && OK: ORDER BY nao tem limite 120/240 bytes
+
+SELECT Selecao
+GO TOP
+```
+
+**Fix alternativo (quando INDEX for realmente necessario para SEEK posterior)**:
+
+```foxpro
+LOCAL loc_cCollateOrig
+loc_cCollateOrig = SET("COLLATE")
+SET COLLATE TO "MACHINE"
+SELECT Selecao
+INDEX ON Quebra1 + Quebra2 + DTOS(Datas) + STR(Nenvs, 10) TAG Ordem
+SET COLLATE TO (loc_cCollateOrig)
+GO TOP
+```
+
+**Nao aplicar cegamente**: muitos INDEX ON com chaves pequenas (ex: `Emps + Dopes + STR(Numes, 6)` = 3+10+6 = 19 chars) sao SEGUROS e usados para SEEK. Regra: se o proposito eh apenas ordenar registros para REPORT FORM subsequente, PREFIRA ORDER BY. Se o proposito eh SEEK/LOCATE posterior, mantenha INDEX + isole COLLATE se necessario.
+
+**Auto-fix**: CorretorAutomatico Pattern #143 (`Corrigir-IndexOnCollateGeneralWarning`) — WARNING-only. Detecta `INDEX ON <expr>+<expr>+... TAG <tag>` dentro de `DEFINE CLASS ... AS RelatorioBase` com 3+ componentes concatenados e emite alerta amarelo:
+`[Pattern #143] Linha N: INDEX ON com K componentes (TAG X) - REVISAR (risco Invalid key length sob COLLATE GENERAL)`.
+Nao muta codigo porque (a) INDEX usado para SEEK precisa continuar como INDEX; (b) SUBSTR-truncar altera semantica de ordenacao; (c) detectar uso downstream (SEEK/LOCATE vs REPORT FORM) exige analise AST.
+
+**Sweep manual retroativo**: `grep -l -E 'INDEX ON.*\+.*\+.*TAG' projeto/app/classes/*.prg` retorna 52 BOs; a maioria eh SEGURA (chaves pequenas). Revisar apenas os BOs que apos migracao mostrem "Invalid key length." em teste manual.
+
+**Referencias correlatas**:
+- Pattern #124 (INDEX ON composto com SEEK parcial + SET EXACT ON) — familia relacionada mas com bug diferente
+
+## 144. REPORT FORM (loc_c<Var>) fora do helper canonico ExecutarReportForm — blind spot dos Patterns #117/#123 (Erro54, SIGREAUPBO 2026-07-21)
+
+**Sintoma runtime**: `File does not exist.` sem indicar qual FRX faltou ao clicar Visualizar; ou preview em branco se cursor vazio; ou asteriscos em campos numericos por conflito de locale FRX Fortyus.
+
+**Causa raiz**: BO REPORT tem `Visualizar/Imprimir/Documento` que fazem `REPORT FORM (loc_cVar) MODO NOCONSOLE` diretamente, sem:
+- guard `IF FILE(...)` + `MostrarErro` descritivo com path
+- guard cursor vazio (evita preview em branco)
+- isolamento `SET POINT="."/SEPARATOR=","/REPORTBEHAVIOR 80` (FRXs legados Fortyus foram desenhados em VFP6/7/8 modo 80 + POINT US; modo 90 default do VFP9 remede fontes em runtime e renderiza `*****` em numericos)
+
+**Exemplo real (SIGREAUPBO.prg:238-241 pre-fix)**:
+
+```foxpro
+PROCEDURE Visualizar()
+    ...
+    loc_cRelatorio = gc_4c_CaminhoReports + ;
+                     IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+
+    REPORT FORM (loc_cRelatorio) PREVIEW NOCONSOLE   && SEM guard, SEM isolamento, SEM cursor check
+    ...
+ENDPROC
+```
+
+**Por que Patterns #117 e #123 NAO pegam**:
+- **Pattern #117** exige atribuicao single-line com string literal simples: `<var> = gc_4c_CaminhoReports + "STRING"`. Rejeita multi-linha e IIF.
+- **Pattern #123** exige forma inline sem variavel: `REPORT FORM (gc_4c_CaminhoReports + "BASE") MODO`. Rejeita forma com variavel intermediaria.
+
+O padrao SIGREAUPBO (var intermediaria + IIF + line continuation `;`) cai fora dos dois regex → arquivo passa a pipeline sem helper injetado.
+
+**Fix manual** (template canonico em `SIGREAEGBO.prg:1192-1235`):
+
+```foxpro
+PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+    LOCAL loc_cFRX
+    loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+    IF NOT FILE(loc_cFRX)
+        MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+            loc_cFRX + CHR(13) + CHR(13) + ;
+            "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+        RETURN .F.
+    ENDIF
+
+    IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+        IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+            MsgAviso("Nenhum registro encontrado com os filtros informados.", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN .F.
+        ENDIF
+    ENDIF
+
+    LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+    loc_cPointOrig    = SET("POINT")
+    loc_cSepOrig      = SET("SEPARATOR")
+    loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+    SET POINT TO "."
+    SET SEPARATOR TO ","
+    SET REPORTBEHAVIOR 80
+
+    DO CASE
+        CASE par_cModo == "PREVIEW"
+            REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+        CASE par_cModo == "PRINTER_PROMPT"
+            REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+        CASE par_cModo == "PRINTER"
+            REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+    ENDCASE
+
+    SET POINT TO (loc_cPointOrig)
+    SET SEPARATOR TO (loc_cSepOrig)
+    SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+    RETURN .T.
+ENDPROC
+
+PROCEDURE Visualizar()
+    LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
+    loc_lSucesso = .F.
+
+    TRY
+        IF !THIS.PrepararDados()
+            loc_lSucesso = .F.
+        ENDIF
+
+        loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+        loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
+
+        THIS.ExecutarReportForm(loc_cRelatorio, "PREVIEW", loc_cCursor)
+        THIS.RegistrarAuditoria("VISUALIZAR")
+        loc_lSucesso = .T.
+    CATCH TO loc_oErro
+        THIS.this_cMensagemErro = loc_oErro.Message
+        MsgErro(loc_oErro.Message, "Erro")
+    ENDTRY
+
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+**Nota critica**: o 3o argumento `par_cCursorDados` deve ser o nome do cursor que o FRX consome. Nao eh sempre `THIS.this_cCursorDados` — em SIGREAUPBO, PrepararDados cria `Selecao` (modo listagem) ou `TmpInc` (modo percentual), enquanto `this_cCursorDados` guarda o cursor de dados brutos `cursor_4c_SigOpInc`. Consultar o legado (`tasks/task<NNN>/<base>_form_codigo_fonte.txt`) para identificar o cursor correto.
+
+**Auto-fix**: CorretorAutomatico Pattern #144 (`Corrigir-ReportFormLocVarIIFWarning`) — WARNING-only. Detecta `REPORT FORM (loc_c<Var>) MODO` fora do bloco `PROCEDURE ExecutarReportForm ... ENDPROC` em `AS RelatorioBase` e emite:
+`[Pattern #144] Linha N: REPORT FORM (loc_cX) fora do helper canonico - REVISAR e refatorar para THIS.ExecutarReportForm`.
+Nao auto-refactor porque: (a) decidir cursor correto exige leitura de PrepararDados; (b) multi-linha com `;` requer parser AST, nao regex confiavel; (c) substituicao errada quebra REPORT FORM silenciosamente.
+
+**FRX ausente eh problema correlato**: quando REPORT FORM falha com "File does not exist", verificar se o FRX legado foi copiado de `C:\4install\FortyusMC\Fortyus\*.frx` (+ `.frt`) para `C:\4c\projeto\app\reports\`. Pipeline nao copia FRXs automaticamente.
+
+**Referencias correlatas**:
+- Pattern #117 (`feedback_report_form_helper_canonico.md`) — helper canonico + macro `&var.` / `(var)` simples
+- Pattern #123 (`feedback_report_form_helper_canonico.md`) — forma inline concat sem variavel
+- Pattern #140 (`feedback_report_form_property_frx_path_guard.md`) — variante `THIS.this_cFRXPath`
+- `feedback_report_form_locale_isolation.md` — motivo do isolamento POINT/SEPARATOR/REPORTBEHAVIOR
+- `feedback_report_form_cursor_vazio_guard.md` — motivo do guard cursor vazio
+
+## 145. Menu popups (`_MSYSMENU`) encolhem visualmente apos fechar qualquer form modal — `FormBase.Destroy` deve fazer `RELEASE POPUP + CriarMenuPrincipal()` (Erro58, 2026-07-21)
+
+**Sintoma visual**: Ao fechar qualquer form modal (`WindowType=1 ShowWindow=1`), os popups do menu principal (`popArquivo`, `popCadastros`, `popMovimentos`, `popRelatorios`, `popFerramentas`, `popAjuda`) aparecem VISUALMENTE truncados na proxima abertura — items sumindo do meio para baixo, popup com line-height maior. Ex: `popMovimentos` que tem 105 bars mostra apenas os primeiros ~40 items.
+
+**Causa raiz (validada via instrumentacao)**: 
+
+`CNTBAR("popMovimentos") = 105` permanece estavel apos form.Destroy (bars estao definidas em memoria), mas o RENDERING do popup fica com cache stale — VFP9 renderiza com line-height maior e trunca visualmente pelo espaco vertical mesmo com espaco disponivel na tela. `CriarMenuPrincipal()` sozinha (que redefine `DEFINE POPUP` e re-adiciona bars) NAO resolve — VFP mantem o cache anterior. Comportamento nao-documentado ligado a como VFP9 manipula `_MSYSMENU` durante ciclo de vida de forms modais com `WindowType=1 ShowWindow=1`.
+
+**Debugging journey (para bugs similares)**:
+1. Instrumentei `CNTPAD("_MSYSMENU")` — mostrou 14 estavel (falso negativo — pads do topo intactos)
+2. Adicionei `CNTBAR` por popup — mostrou 105 estavel (falso negativo — bars definidas OK)
+3. Screenshots visuais foram a pista chave — bars existem mas RENDERING trunca
+4. Fix 1 (`CriarMenuPrincipal()` sozinha no Destroy): NAO resolveu — VFP manteve cache visual
+5. Fix 2 (`RELEASE POPUP` + `CriarMenuPrincipal()`): RESOLVEU — RELEASE POPUP destroi o cache antes de recriar
+
+**Fix definitivo em `FormBase.Destroy`** (classes/formbase.prg):
+
+```foxpro
+PROCEDURE Destroy()
+    IF !ISNULL(THIS.this_oBusinessObject)
+        THIS.this_oBusinessObject = .NULL.
+    ENDIF
+
+    TRY
+        RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+        CriarMenuPrincipal()
+    CATCH
+        *-- CriarMenuPrincipal nao carregada no escopo (teste, form auxiliar) - silencioso
+    ENDTRY
+ENDPROC
+```
+
+**Regra sistemica**: TODO form que herda `FormBase` DEVE chamar `DODEFAULT()` em qualquer override de `PROCEDURE Destroy`. Sem isso, o fix acima nao roda e o menu encolhe:
+
+```foxpro
+* CORRETO - Destroy custom com DODEFAULT()
+PROCEDURE Destroy()
+    IF USED("cursor_X")
+        USE IN cursor_X
+    ENDIF
+    DODEFAULT()   && CHAMA FormBase.Destroy — restaura popups do menu
+ENDPROC
+
+* ERRADO - sem DODEFAULT()
+PROCEDURE Destroy()
+    IF USED("cursor_X")
+        USE IN cursor_X
+    ENDIF
+ENDPROC   && Cadeia de heranca quebrada — popups vao encolher!
+```
+
+**Forms que NAO herdam FormBase** (raro — ex: `FormRelPlanoContas.prg` que herda `Form` direto): precisam do `RELEASE POPUP + CriarMenuPrincipal()` INLINE no proprio Destroy:
+
+```foxpro
+PROCEDURE Destroy()
+    * ... lógica custom ...
+    TRY
+        RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+        CriarMenuPrincipal()
+    CATCH
+    ENDTRY
+ENDPROC
+```
+
+**Auto-fix**: CorretorAutomatico Pattern #145 (`Corrigir-DestroySemDodefault`) detecta forms `AS FormBase` que sobrescrevem `PROCEDURE Destroy` sem `DODEFAULT()` e INJETA `DODEFAULT()` como ultima linha antes de `ENDPROC`. Idempotente (skip se ja tem). Auditoria em 2026-07-21 mostrou 233 forms com Destroy override — 232 ja com DODEFAULT, 1 corrigido manualmente.
+
+**Referencias**:
+- Pattern #145 em `.claude/skills/vfp9-migration/corretor-patterns.md`
+- Padrao canonico: `classes/formbase.prg:325-352`
+- Padrao canonico (nao-FormBase): `forms/relatorios/FormRelPlanoContas.prg:567-582`
+
+## 146. Grid Column CheckBox sem props explicitas `.Check1.ReadOnly/.Visible/.Alignment/.Top/.Left/.Height/.Width` nao responde a cliques (Erro59, Formsigreato 2026-07-21)
+
+**Sintoma runtime**: CheckBox em Grid Column renderiza visualmente com estado correto (checked/unchecked conforme cursor), MAS clicks do usuario nao mudam o estado. Usuario descreve: "checkbox desabilitado, nao consigo marcar/desmarcar". Grid rola normalmente, outras colunas funcionam, apenas o click no CheckBox nao tem efeito.
+
+**Causa raiz**: SCX legado sempre define ~7 propriedades explicitamente no CheckBox filho da Column (extraidas via SCX dump):
+
+```
+Top = 9
+Left = 2
+Height = 17
+Width = 22
+Alignment = 0
+Caption = ""
+Visible = .T.
+ReadOnly = .F.
+```
+
+Sem essas props, VFP9 renderiza CheckBox com defaults ambiguos em contexto Grid:
+- **`.ReadOnly` default indeterminado**: em contexto Grid VFP pode assumir ReadOnly=.T. mesmo com Column.ReadOnly=.F. Sem override explicito, cliques sao ignorados
+- **`.Top/.Left/.Height/.Width` ausentes**: CheckBox renderiza com dimensoes minimas nao suficientes para cobrir a area clicavel visualmente esperada; usuario tenta clicar no centro do "checkbox" e clica FORA da area realmente clicavel
+
+**Fix definitivo** (aplicar em toda Grid Column CheckBox):
+
+```foxpro
+WITH loc_oGrd.Column1
+    .Width          = 15
+    .Alignment      = 0
+    .Enabled        = .T.
+    .Sparse         = .F.
+    .AddObject("Check1", "CheckBox")
+    .Check1.Caption   = ""
+    .Check1.Alignment = 0
+    .Check1.ReadOnly  = .F.
+    .Check1.Visible   = .T.
+    .Check1.Top       = 9
+    .Check1.Left      = 2
+    .Check1.Height    = 17
+    .Check1.Width     = 22
+    .CurrentControl = "Check1"
+    .ControlSource  = "<cursor>.<campo_logical>"
+ENDWITH
+```
+
+**Sequencia OBRIGATORIA** (nao mudar ordem):
+1. Column props: Width, Alignment, Enabled, Sparse (Sparse=.F. obrigatorio — Pattern #121)
+2. AddObject Check1 CheckBox
+3. Check1 props: Caption ANTES das outras 7 (Alignment, ReadOnly, Visible, Top, Left, Height, Width)
+4. CurrentControl DEPOIS do AddObject
+5. ControlSource POR ULTIMO (binding two-way apos control existir)
+
+**Auto-fix**: CorretorAutomatico Pattern #146 (`Corrigir-GridCheckboxPropsExplicitas`) detecta bloco `WITH ...Column1 / .AddObject("Check1","CheckBox") / .Check1.Caption = ""` e verifica se cada uma das 7 props existe nas ~20 linhas seguintes ate ENDWITH; injeta as ausentes apos `.Check1.Caption`. Idempotente por prop (nao duplica se ja presente). Sweep 2026-07-21 corrigiu 16 blocos em 12 forms: Formpgr, FormSigPrApr, FormSigPrSlp, Formsigprccp, Formsigprema, FormSIGREADS (2 blocos), FormSigReCmp, FormSigReEsp (3 blocos), FormSigReFtp, FormSigReIfv, Formsigreipe, Formsigrepes (2 blocos).
+
+**NAO confundir com Pattern #121** (`Sparse = .F.` obrigatorio): Pattern #121 resolve "CheckBox renderiza APENAS na linha corrente, outras viram texto plano 0/1"; Pattern #146 resolve "CheckBox renderiza corretamente em TODAS as linhas mas nao responde a cliques". Ambos sao complementares — grid com checkbox precisa de AMBOS.
+
+**Padrao canonico proven pos-fix**: `Formsigreato.prg:834-856` (Column1 popup Operacoes Entrada), `FormSIGREADS.prg:449-459` (Column1 popup Tipos), `Formsigrepes.prg:3095-3104` (helper AdicionarColunaCheck).
+
+**Referencias**:
+- Pattern #146 em `.claude/skills/vfp9-migration/corretor-patterns.md`
+- Complementa Pattern #121 (Sparse=.F.)
+- Complementa Pattern #44 (Grid CurrentControl com AddObject previo)
+- Origem: Erro59 (2026-07-21, Formsigreato — user "checkbox desabilitado, nao consigo marcar/desmarcar")
 

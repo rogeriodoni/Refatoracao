@@ -1,515 +1,394 @@
 *==============================================================================
-* SigPrCtcBO.prg - Business Object para Cota" + CHR(231) + CHR(245) + "es por Opera" + CHR(231) + CHR(245) + "es
-* Herda de: BusinessBase
-* Tabela principal: SIGPRCTC
-* Lookup: SigCdMoe (CMoes / DMoes)
+* SigPrCtcBO.prg - Business Object para Cotacoes por Operacoes
+* Herda de BusinessBase
+* Tabela principal: sigprctc
+* PK: pkchaves (char 20)
+* Fase 1: Propriedades e Init()
 *==============================================================================
 
 DEFINE CLASS SigPrCtcBO AS BusinessBase
 
-    *-- Chave combinada de operacao (pcEmps + pcDopes + STR(pnNumes,6))
-    this_cEmpDopNums = ""
-
-    *-- Componentes individuais da chave de operacao
-    this_cEmps       = ""   && Codigo da empresa
-    this_cDopes      = ""   && Codigo da operacao
-    this_nNumes      = 0    && Numero da operacao
-
-    *-- Chave primaria do registro de cotacao (fUniqueIds)
-    this_cPkChaves   = ""
-
-    *-- Dados da cotacao (linha do grid)
-    this_cMoes       = ""   && Codigo da moeda (CMoes de SigCdMoe)
-    this_cDescMoes   = ""   && Descricao da moeda (DMoes de SigCdMoe, alias Descrs)
-    this_nValos      = 0    && Valor/cotacao (Valos)
-
-    *-- Controle de permissao
-    this_cEscolha    = ""   && Restricao de operacao (INSERIR / ALTERAR / VISUALIZAR)
-
-    *-- Flags de controle de alteracoes no grid (rastreamento de sessao)
-    this_lHouveExcl  = .F.  && .T. se houve exclusao na sessao atual
-    this_lHouveIns   = .F.  && .T. se houve insercao na sessao atual
+    *--------------------------------------------------------------------------
+    * Identificador composto da operacao (pcEmps + pcDopes + STR(pnNumes,6))
+    * Chave de agrupamento de todas as cotacoes da operacao
+    *--------------------------------------------------------------------------
+    this_cEmpDopNums = ""    && empdopnums char(29) - chave da operacao
 
     *--------------------------------------------------------------------------
-    * Init - Inicializa o Business Object
+    * Campos da linha corrente de sigprctc
     *--------------------------------------------------------------------------
+    this_cCmoes      = ""    && cmoes    char(3)       - codigo da moeda (FK SigCdMoe)
+    this_nValos      = 0     && valos    numeric(11,6) - cotacao da moeda
+    this_cPkChaves   = ""    && pkchaves char(20)      - chave primaria (PK)
+    this_dDtalts     = {}    && dtalts   datetime NULL - data/hora alteracao
+    this_cUsuars     = ""    && usuars   char(10)      - usuario que gravou
+
+    *--------------------------------------------------------------------------
+    * Campo auxiliar vindo do JOIN com SigCdMoe (nao persistido em sigprctc)
+    *--------------------------------------------------------------------------
+    this_cDescrs     = ""    && dmoes char(15) - descricao da moeda (SigCdMoe.dmoes)
+
+    *--------------------------------------------------------------------------
+    * Controle interno de estado da colecao
+    *--------------------------------------------------------------------------
+    this_lHouveInsercao  = .F.  && .T. se alguma linha foi inserida na sessao
+    this_lHouveExclusao  = .F.  && .T. se alguma linha foi removida na sessao
+
+    *==========================================================================
+    * Init - Configura tabela e chave primaria
+    *==========================================================================
     PROCEDURE Init()
-        DODEFAULT()
-        THIS.this_cTabela     = "SIGPRCTC"
-        THIS.this_cCampoChave = "pkChaves"
-        RETURN .T.
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_cTabela     = "sigprctc"
+            THIS.this_cCampoChave = "pkchaves"
+
+            loc_lSucesso = DODEFAULT()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro SigPrCtcBO.Init")
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna chave para registro de auditoria
-    *--------------------------------------------------------------------------
-    FUNCTION ObterChavePrimaria()
+    *==========================================================================
+    * ObterChavePrimaria - Retorna valor da chave primaria (auditoria)
+    *==========================================================================
+    PROCEDURE ObterChavePrimaria()
         RETURN THIS.this_cPkChaves
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * InicializarCursor - Cria cursor local para o grid de cotacoes
-    *--------------------------------------------------------------------------
-    PROCEDURE InicializarCursor()
-        IF USED("cursor_4c_CtMoe")
-            USE IN cursor_4c_CtMoe
-        ENDIF
-        SET NULL ON
-        CREATE CURSOR cursor_4c_CtMoe ( ;
-            EmpDopNums C(20), ;
-            cMoes      C(10), ;
-            Descrs     C(60), ;
-            Valos      N(14,7), ;
-            pkChaves   C(36)  ;
-        )
-        SET NULL OFF
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Buscar - Carrega cotacoes da operacao no cursor local (par_cFiltro = EmpDopNums)
-    *--------------------------------------------------------------------------
-    FUNCTION Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_nResultado, loc_lResultado
-        loc_lResultado = .F.
+    *==========================================================================
+    * CarregarDoCursor - Carrega propriedades de uma linha do cursor
+    *==========================================================================
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
 
         TRY
-            THIS.InicializarCursor()
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cEmpDopNums = TratarNulo(empdopnums, "C")
+                THIS.this_cCmoes      = TratarNulo(cmoes,      "C")
+                THIS.this_nValos      = TratarNulo(valos,      "N")
+                THIS.this_cPkChaves   = TratarNulo(pkchaves,   "C")
+                THIS.this_cDescrs     = TratarNulo(Descrs,     "C")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro CarregarDoCursor")
+        ENDTRY
 
-            IF !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = "SELECT a.EmpDopNums, a.cMoes, b.dMoes AS Descrs," + ;
-                           " a.Valos, a.pkChaves" + ;
-                           " FROM SIGPRCTC a" + ;
-                           " LEFT JOIN SigCdMoe b ON b.CMoes = a.cMoes" + ;
-                           " WHERE a.EmpDopNums = " + EscaparSQL(par_cFiltro)
+        RETURN loc_lSucesso
+    ENDPROC
 
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_CtMoeTemp")
-                    TABLEREVERT(.T., "cursor_4c_CtMoeTemp")
-                    USE IN cursor_4c_CtMoeTemp
-                ENDIF
+    *==========================================================================
+    * CarregarParaEdicao - Carrega cotacoes da operacao em cursor VFP local
+    * par_cEmpDopNums: chave da operacao (emps+dopes+numes, 29 chars)
+    * Cria cursor_4c_Dados para edicao em memoria
+    *==========================================================================
+    PROCEDURE CarregarParaEdicao(par_cEmpDopNums)
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult
+        loc_lSucesso = .F.
 
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtMoeTemp")
+        TRY
+            IF USED("cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+            IF USED("cursor_4c_CtMoeTemp")
+                USE IN cursor_4c_CtMoeTemp
+            ENDIF
 
-                IF loc_nResultado > 0
-                    SELECT cursor_4c_CtMoe
-                    SELECT cursor_4c_CtMoe
-                    ZAP
-                    IF RECCOUNT("cursor_4c_CtMoeTemp") > 0
-                        APPEND FROM DBF("cursor_4c_CtMoeTemp")
-                    ENDIF
-                    IF USED("cursor_4c_CtMoeTemp")
-                        USE IN cursor_4c_CtMoeTemp
-                    ENDIF
-                    GO TOP IN cursor_4c_CtMoe
-                    loc_lResultado = .T.
-                ELSE
-                    MsgErro("Erro ao carregar cota" + CHR(231) + CHR(245) + "es: " + ;
-                        CapturarErroSQL(), "Erro SQL")
-                ENDIF
+            SET NULL ON
+            CREATE CURSOR cursor_4c_Dados ;
+                (empdopnums C(29), cmoes C(3), valos N(11,6), pkchaves C(20), Descrs C(15))
+            SET NULL OFF
+
+            loc_cSQL = "SELECT a.empdopnums, a.cmoes, a.valos, a.pkchaves," + ;
+                       " ISNULL(b.dmoes,'') AS Descrs" + ;
+                       " FROM sigprctc a" + ;
+                       " LEFT JOIN SigCdMoe b ON b.cmoes = a.cmoes" + ;
+                       " WHERE a.empdopnums = " + EscaparSQL(ALLTRIM(par_cEmpDopNums))
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CtMoeTemp")
+
+            IF loc_nResult > 0 AND USED("cursor_4c_CtMoeTemp") AND RECCOUNT("cursor_4c_CtMoeTemp") > 0
+                SELECT cursor_4c_Dados
+                APPEND FROM DBF("cursor_4c_CtMoeTemp")
+            ENDIF
+
+            IF USED("cursor_4c_CtMoeTemp")
+                USE IN cursor_4c_CtMoeTemp
+            ENDIF
+
+            SELECT cursor_4c_Dados
+            GO TOP
+
+            THIS.this_lHouveInsercao = .F.
+            THIS.this_lHouveExclusao = .F.
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro CarregarParaEdicao")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * InserirLinhaLocal - Insere nova linha em branco no cursor local
+    * par_cEmpDopNums: chave da operacao para preencher o campo de agrupamento
+    *==========================================================================
+    PROCEDURE InserirLinhaLocal(par_cEmpDopNums)
+        LOCAL loc_lSucesso, loc_cPkChave
+        loc_lSucesso = .F.
+
+        TRY
+            IF !USED("cursor_4c_Dados")
+                MsgErro("Cursor de edi" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o iniciado.", "Erro")
             ELSE
-                loc_lResultado = .T.
+                SELECT cursor_4c_Dados
+                LOCATE FOR EMPTY(cmoes) AND !DELETED()
+                IF EOF()
+                    loc_cPkChave = LEFT(SYS(2015) + PADR(TRANSFORM(RECCOUNT("cursor_4c_Dados") + 1), 10, "0"), 20)
+                    INSERT INTO cursor_4c_Dados (empdopnums, cmoes, valos, pkchaves, Descrs) ;
+                        VALUES (ALLTRIM(par_cEmpDopNums), SPACE(3), 0, loc_cPkChave, SPACE(15))
+                    GO BOTTOM
+                ELSE
+                    GO RECNO()
+                ENDIF
+                THIS.this_lHouveInsercao = .T.
+                loc_lSucesso = .T.
             ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro InserirLinhaLocal")
         ENDTRY
 
-        RETURN loc_lResultado
-    ENDFUNC
+        RETURN loc_lSucesso
+    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * InserirLinha - Adiciona linha em branco no cursor local
-    *--------------------------------------------------------------------------
-    FUNCTION InserirLinha(par_cEmpDopNums)
-        LOCAL loc_lResultado, loc_cPk
-        loc_lResultado = .F.
-
-        TRY
-            IF !USED("cursor_4c_CtMoe")
-                THIS.InicializarCursor()
-            ENDIF
-
-            SELECT cursor_4c_CtMoe
-            LOCATE FOR EMPTY(ALLTRIM(cMoes))
-            IF EOF()
-                loc_cPk = FUniqueIds()
-                INSERT INTO cursor_4c_CtMoe (EmpDopNums, pkChaves, cMoes, Descrs, Valos) ;
-                    VALUES (par_cEmpDopNums, loc_cPk, " ", "", 0)
-            ENDIF
-
-            THIS.this_lHouveIns = .T.
-            loc_lResultado = .T.
-        CATCH TO loException
-            MsgErro("Erro ao inserir linha: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * ExcluirLinhaAtual - Marca linha atual como excluida no cursor local
-    *--------------------------------------------------------------------------
-    FUNCTION ExcluirLinhaAtual()
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
+    *==========================================================================
+    * ExcluirLinhaLocal - Remove linha corrente do cursor local (marca deleted)
+    *==========================================================================
+    PROCEDURE ExcluirLinhaLocal()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
 
         TRY
-            IF USED("cursor_4c_CtMoe") AND !EOF("cursor_4c_CtMoe")
-                SELECT cursor_4c_CtMoe
+            IF !USED("cursor_4c_Dados")
+                MsgErro("Cursor de edi" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o iniciado.", "Erro")
+            ELSE
+                IF !EOF("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
                 DELETE
                 SKIP
                 IF EOF()
                     SKIP -1
                 ENDIF
-                THIS.this_lHouveExcl = .T.
-                loc_lResultado = .T.
+                THIS.this_lHouveExclusao = .T.
+                loc_lSucesso = .T.
+                ENDIF
             ENDIF
-        CATCH TO loException
-            MsgErro("Erro ao excluir linha: " + loException.Message, "Erro")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ExcluirLinhaLocal")
         ENDTRY
 
-        RETURN loc_lResultado
-    ENDFUNC
+        RETURN loc_lSucesso
+    ENDPROC
 
-    *--------------------------------------------------------------------------
+    *==========================================================================
     * ValidarDuplicidade - Verifica se ha moedas duplicadas no cursor local
-    *--------------------------------------------------------------------------
-    FUNCTION ValidarDuplicidade()
-        LOCAL loc_lResultado
-        loc_lResultado = .T.
+    * Retorna .T. se valido (sem duplicatas), .F. se ha moedas repetidas
+    *==========================================================================
+    PROCEDURE ValidarDuplicidade()
+        LOCAL loc_lValido, loc_cMoesDup
+        loc_lValido  = .F.
+        loc_cMoesDup = ""
 
         TRY
-            IF USED("cursor_4c_CtMoe")
-                SELECT cMoes, SUM(1) AS TT ;
-                    FROM cursor_4c_CtMoe ;
-                    WHERE !DELETED() AND !EMPTY(ALLTRIM(cMoes)) ;
-                    GROUP BY cMoes ;
-                    INTO CURSOR cursor_4c_Totais NOFILTER
-
-                SELECT cursor_4c_Totais
-                SCAN
-                    IF TT > 1
-                        MsgErro("Moedas " + ALLTRIM(cMoes) + " Digitada em Duplicidade!!!!", ;
-                            "Aten" + CHR(231) + CHR(227) + "o")
-                        loc_lResultado = .F.
-                        EXIT
-                    ENDIF
-                ENDSCAN
-
+            IF !USED("cursor_4c_Dados")
+                MsgErro("Cursor de edi" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o iniciado.", "Erro")
+            ELSE
                 IF USED("cursor_4c_Totais")
                     USE IN cursor_4c_Totais
                 ENDIF
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro na valida" + CHR(231) + CHR(227) + "o: " + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
 
-        RETURN loc_lResultado
-    ENDFUNC
+                SELECT cmoes, SUM(1) AS tt FROM cursor_4c_Dados ;
+                    WHERE !DELETED() AND !EMPTY(ALLTRIM(cmoes)) ;
+                    GROUP BY cmoes ;
+                    INTO CURSOR cursor_4c_Totais
 
-    *--------------------------------------------------------------------------
-    * SalvarCotacoes - Persiste todas as cotacoes no SQL Server (DELETE + INSERT)
-    *--------------------------------------------------------------------------
-    FUNCTION SalvarCotacoes(par_cEmpDopNums)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResultado, loc_cInsSQL, loc_cPk
-        loc_lResultado = .F.
-
-        IF !THIS.ValidarDuplicidade()
-            RETURN .F.
-        ENDIF
-
-        TRY
-            IF USED("cursor_4c_StgCtc")
-                USE IN cursor_4c_StgCtc
-            ENDIF
-            SET NULL ON
-            CREATE CURSOR cursor_4c_StgCtc ( ;
-                EmpDopNums C(20), ;
-                cMoes      C(10), ;
-                pkChaves   C(36), ;
-                Valos      N(14,7) ;
-            )
-            SET NULL OFF
-
-            SELECT cursor_4c_CtMoe
-            SCAN FOR !DELETED() AND !EMPTY(ALLTRIM(cMoes))
-                loc_cPk = FUniqueIds()
-                INSERT INTO cursor_4c_StgCtc (EmpDopNums, cMoes, pkChaves, Valos) ;
-                    VALUES (par_cEmpDopNums, ALLTRIM(cMoes), loc_cPk, Valos)
-            ENDSCAN
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Trx")
-                TABLEREVERT(.T., "cursor_4c_Trx")
-                USE IN cursor_4c_Trx
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, "BEGIN TRANSACTION", "cursor_4c_Trx")
-            IF USED("cursor_4c_Trx")
-                USE IN cursor_4c_Trx
-            ENDIF
-
-            IF loc_nResultado >= 0
-                loc_cSQL = "DELETE FROM SIGPRCTC WHERE EmpDopNums = " + ;
-                    EscaparSQL(par_cEmpDopNums)
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_Del")
-                    TABLEREVERT(.T., "cursor_4c_Del")
-                    USE IN cursor_4c_Del
-                ENDIF
-
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Del")
-                IF USED("cursor_4c_Del")
-                    USE IN cursor_4c_Del
-                ENDIF
-
-                IF loc_nResultado >= 0
-                    loc_lResultado = .T.
-                    SELECT cursor_4c_StgCtc
+                IF USED("cursor_4c_Totais")
+                    SELECT cursor_4c_Totais
                     SCAN
-                        loc_cInsSQL = "INSERT INTO SIGPRCTC (EmpDopNums, cMoes, pkChaves, Valos)" + ;
-                            " VALUES (" + ;
-                            EscaparSQL(ALLTRIM(EmpDopNums)) + ", " + ;
-                            EscaparSQL(ALLTRIM(cMoes)) + ", " + ;
-                            EscaparSQL(ALLTRIM(pkChaves)) + ", " + ;
-                            FormatarNumeroSQL(Valos) + ")"
-                        *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                        IF USED("cursor_4c_Ins")
-                            TABLEREVERT(.T., "cursor_4c_Ins")
-                            USE IN cursor_4c_Ins
-                        ENDIF
-
-                        IF SQLEXEC(gnConnHandle, loc_cInsSQL, "cursor_4c_Ins") < 0
-                            MsgErro("Erro ao inserir cota" + CHR(231) + CHR(227) + "o: " + ;
-                                CapturarErroSQL(), "Erro SQL")
-                            loc_lResultado = .F.
-                            EXIT
-                        ENDIF
-                        IF USED("cursor_4c_Ins")
-                            USE IN cursor_4c_Ins
+                        IF tt > 1
+                            IF !EMPTY(loc_cMoesDup)
+                                loc_cMoesDup = loc_cMoesDup + ", "
+                            ENDIF
+                            loc_cMoesDup = loc_cMoesDup + ALLTRIM(cmoes)
                         ENDIF
                     ENDSCAN
+                    USE IN cursor_4c_Totais
+                ENDIF
+
+                IF !EMPTY(loc_cMoesDup)
+                    MsgErro("Moeda(s) digitada(s) em duplicidade: " + loc_cMoesDup, ;
+                            "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lValido = .F.
                 ELSE
-                    MsgErro("Erro ao excluir cota" + CHR(231) + CHR(245) + "es: " + ;
-                        CapturarErroSQL(), "Erro SQL")
-                ENDIF
-            ELSE
-                MsgErro("Erro ao iniciar transa" + CHR(231) + CHR(227) + "o: " + ;
-                    CapturarErroSQL(), "Erro SQL")
-            ENDIF
-
-            IF loc_lResultado
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_Cmt")
-                    TABLEREVERT(.T., "cursor_4c_Cmt")
-                    USE IN cursor_4c_Cmt
-                ENDIF
-
-                SQLEXEC(gnConnHandle, "COMMIT TRANSACTION", "cursor_4c_Cmt")
-                IF USED("cursor_4c_Cmt")
-                    USE IN cursor_4c_Cmt
-                ENDIF
-                THIS.RegistrarAuditoria("UPDATE")
-            ELSE
-                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                IF USED("cursor_4c_Rb")
-                    TABLEREVERT(.T., "cursor_4c_Rb")
-                    USE IN cursor_4c_Rb
-                ENDIF
-
-                SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION", "cursor_4c_Rb")
-                IF USED("cursor_4c_Rb")
-                    USE IN cursor_4c_Rb
+                    loc_lValido = .T.
                 ENDIF
             ENDIF
-
-            IF USED("cursor_4c_StgCtc")
-                USE IN cursor_4c_StgCtc
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro ao salvar: " + loException.Message, "Erro")
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_RbEx")
-                TABLEREVERT(.T., "cursor_4c_RbEx")
-                USE IN cursor_4c_RbEx
-            ENDIF
-
-            SQLEXEC(gnConnHandle, "ROLLBACK TRANSACTION", "cursor_4c_RbEx")
-            IF USED("cursor_4c_RbEx")
-                USE IN cursor_4c_RbEx
-            ENDIF
-            loc_lResultado = .F.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ValidarDuplicidade")
         ENDTRY
 
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * BuscarMoeda - Lookup na tabela SigCdMoe
-    *--------------------------------------------------------------------------
-    FUNCTION BuscarMoeda(par_cCodigo, par_cCursorDestino)
-        LOCAL loc_cSQL, loc_nResultado, loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            loc_cSQL = "SELECT CMoes, dMoes AS Descrs FROM SigCdMoe"
-            IF !EMPTY(ALLTRIM(par_cCodigo))
-                loc_cSQL = loc_cSQL + " WHERE CMoes = " + EscaparSQL(ALLTRIM(par_cCodigo))
-            ENDIF
-            loc_cSQL = loc_cSQL + " ORDER BY CMoes"
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, par_cCursorDestino)
-            loc_lResultado = (loc_nResultado > 0)
-
-            IF !loc_lResultado
-                MsgErro("Erro ao buscar moedas: " + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Carrega propriedades do BO a partir de um cursor
-    *--------------------------------------------------------------------------
-    PROTECTED FUNCTION CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
-                THIS.this_cPkChaves   = TratarNulo(pkChaves, "C")
-                THIS.this_cEmpDopNums = TratarNulo(EmpDopNums, "C")
-                THIS.this_cMoes       = TratarNulo(cMoes, "C")
-                THIS.this_nValos      = TratarNulo(Valos, "N")
-                loc_lResultado = .T.
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * Inserir - Insere um registro individual de cotacao no SQL Server
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_cSQL, loc_nResultado, loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            IF EMPTY(ALLTRIM(THIS.this_cPkChaves))
-                THIS.this_cPkChaves = FUniqueIds()
-            ENDIF
-
-            loc_cSQL = "INSERT INTO SIGPRCTC (EmpDopNums, cMoes, pkChaves, Valos)" + ;
-                       " VALUES (" + ;
-                       EscaparSQL(THIS.this_cEmpDopNums) + ", " + ;
-                       EscaparSQL(THIS.this_cMoes) + ", " + ;
-                       EscaparSQL(THIS.this_cPkChaves) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nValos) + ")"
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Ins")
-                TABLEREVERT(.T., "cursor_4c_Ins")
-                USE IN cursor_4c_Ins
-            ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ins")
-            IF USED("cursor_4c_Ins")
-                USE IN cursor_4c_Ins
-            ENDIF
-
-            IF loc_nResultado >= 0
-                THIS.RegistrarAuditoria("INSERT")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao inserir cota" + CHR(231) + CHR(227) + "o: " + ;
-                    CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
-        ENDTRY
-
-        RETURN loc_lResultado
+        RETURN loc_lValido
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Atualizar - Atualiza um registro individual de cotacao no SQL Server
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_cSQL, loc_nResultado, loc_lResultado
-        loc_lResultado = .F.
+    *==========================================================================
+    * BuscarMoeda - Busca moeda por codigo em SigCdMoe
+    * par_cCodigo: codigo da moeda (cmoes)
+    * Popula cursor_4c_BuscaMoeda; retorna .T. se encontrou codigo exato
+    *==========================================================================
+    PROCEDURE BuscarMoeda(par_cCodigo)
+        LOCAL loc_lEncontrou, loc_cSQL, loc_nResult
+        loc_lEncontrou = .F.
 
         TRY
-            loc_cSQL = "UPDATE SIGPRCTC SET" + ;
-                       " cMoes = " + EscaparSQL(THIS.this_cMoes) + "," + ;
-                       " Valos = " + FormatarNumeroSQL(THIS.this_nValos) + ;
-                       " WHERE pkChaves = " + EscaparSQL(THIS.this_cPkChaves)
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Upd")
-                TABLEREVERT(.T., "cursor_4c_Upd")
-                USE IN cursor_4c_Upd
+            IF USED("cursor_4c_BuscaMoeda")
+                USE IN cursor_4c_BuscaMoeda
             ENDIF
 
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Upd")
-            IF USED("cursor_4c_Upd")
-                USE IN cursor_4c_Upd
-            ENDIF
+            loc_cSQL = "SELECT cmoes, dmoes AS Descrs FROM SigCdMoe" + ;
+                       " WHERE cmoes LIKE " + EscaparSQL(ALLTRIM(par_cCodigo) + "%") + ;
+                       " ORDER BY cmoes"
 
-            IF loc_nResultado >= 0
-                THIS.RegistrarAuditoria("UPDATE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao atualizar cota" + CHR(231) + CHR(227) + "o: " + ;
-                    CapturarErroSQL(), "Erro SQL")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoeda")
+
+            IF loc_nResult > 0 AND USED("cursor_4c_BuscaMoeda") AND RECCOUNT("cursor_4c_BuscaMoeda") > 0
+                SELECT cursor_4c_BuscaMoeda
+                GO TOP
+                IF RECCOUNT("cursor_4c_BuscaMoeda") = 1 AND ;
+                   UPPER(ALLTRIM(cursor_4c_BuscaMoeda.cmoes)) == UPPER(ALLTRIM(par_cCodigo))
+                    THIS.this_cCmoes  = ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
+                    THIS.this_cDescrs = ALLTRIM(cursor_4c_BuscaMoeda.Descrs)
+                    loc_lEncontrou = .T.
+                ENDIF
             ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro BuscarMoeda")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lEncontrou
     ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - Remove um registro de cotacao do SQL Server por pkChaves
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_cSQL, loc_nResultado, loc_lResultado
-        loc_lResultado = .F.
+    *==========================================================================
+    * AtualizarDescricaoMoeda - Atualiza campo Descrs na linha corrente do cursor local
+    *==========================================================================
+    PROCEDURE AtualizarDescricaoMoeda(par_cDescrs)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "DELETE FROM SIGPRCTC WHERE pkChaves = " + ;
-                EscaparSQL(THIS.this_cPkChaves)
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Del")
-                TABLEREVERT(.T., "cursor_4c_Del")
-                USE IN cursor_4c_Del
+            IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                REPLACE Descrs WITH PADR(ALLTRIM(par_cDescrs), 15)
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Del")
-            IF USED("cursor_4c_Del")
-                USE IN cursor_4c_Del
-            ENDIF
-
-            IF loc_nResultado >= 0
-                THIS.RegistrarAuditoria("DELETE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao excluir cota" + CHR(231) + CHR(227) + "o: " + ;
-                    CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro: " + loException.Message, "Erro")
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro AtualizarDescricaoMoeda")
         ENDTRY
 
-        RETURN loc_lResultado
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * SalvarCotacoes - Persiste cotacoes no SQL Server (DELETE all + INSERT validas)
+    * par_cEmpDopNums: chave da operacao
+    * Logica: deleta todos da operacao, re-insere linhas validas do cursor local
+    *==========================================================================
+    PROCEDURE SalvarCotacoes(par_cEmpDopNums)
+        LOCAL loc_lSucesso, loc_nResult, loc_cSQL, loc_nLinha, loc_cPkChave
+        loc_lSucesso = .F.
+
+        TRY
+            IF !THIS.ValidarDuplicidade()
+                *-- mensagem ja exibida por ValidarDuplicidade
+            ELSE
+                IF !USED("cursor_4c_Dados")
+                MsgErro("Cursor de edi" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o iniciado.", "Erro")
+            ELSE
+                *-- Passo 1: Remove todos os registros da operacao no SQL Server
+                loc_cSQL = "DELETE FROM sigprctc WHERE empdopnums = " + ;
+                           EscaparSQL(ALLTRIM(par_cEmpDopNums))
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Del")
+                IF USED("cursor_4c_Del")
+                    USE IN cursor_4c_Del
+                ENDIF
+
+                IF loc_nResult < 0
+                    MsgErro("Erro ao excluir cota" + CHR(231) + CHR(245) + "es anteriores:" + ;
+                            CHR(13) + CapturarErroSQL(), "Erro SQL")
+                ELSE
+                    *-- Passo 2: Re-insere todas as linhas validas do cursor local
+                    SELECT cursor_4c_Dados
+                    GO TOP
+                    loc_lSucesso = .T.
+                    loc_nLinha   = 0
+
+                    SCAN WHILE loc_lSucesso
+                        IF DELETED()
+                            LOOP
+                        ENDIF
+                        IF EMPTY(ALLTRIM(cmoes))
+                            LOOP
+                        ENDIF
+
+                        loc_nLinha   = loc_nLinha + 1
+                        loc_cPkChave = LEFT(SYS(2015) + PADR(TRANSFORM(loc_nLinha), 10, "0"), 20)
+
+                        loc_cSQL = "INSERT INTO sigprctc (empdopnums, cmoes, valos, pkchaves, dtalts, usuars)" + ;
+                                   " VALUES (" + ;
+                                   EscaparSQL(ALLTRIM(par_cEmpDopNums)) + "," + ;
+                                   EscaparSQL(ALLTRIM(cmoes)) + "," + ;
+                                   FormatarNumeroSQL(valos) + "," + ;
+                                   EscaparSQL(loc_cPkChave) + "," + ;
+                                   "GETDATE()," + ;
+                                   EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ;
+                                   ")"
+
+                        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ins")
+                        IF USED("cursor_4c_Ins")
+                            USE IN cursor_4c_Ins
+                        ENDIF
+
+                        IF loc_nResult < 0
+                            MsgErro("Erro ao inserir cota" + CHR(231) + CHR(227) + "o da moeda " + ;
+                                    ALLTRIM(cmoes) + ":" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                            loc_lSucesso = .F.
+                        ENDIF
+                    ENDSCAN
+
+                    IF loc_lSucesso
+                        THIS.RegistrarAuditoria("SALVAR_COTACOES")
+                    ENDIF
+                ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
+                    " PROC=" + loc_oErro.Procedure, "Erro SalvarCotacoes")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

@@ -1,0 +1,6 @@
+﻿The two methods the pipeline validator expects are now present in `FormSIGPRIBL.prg`:
+
+- **`ConfigurarPaginaLista()`** (line 135): Delegates to `ConfigurarPageFrame()` with a guard to prevent duplicate `AddObject` calls if the form's flat controls are already built.
+- **`AlternarPagina(par_nPagina)`** (line 146): Re-runs `AtualizaBoleto(this_cFPagsSel)` + `THIS.Refresh()` ÔÇö the meaningful "page switch" equivalent for this modal boleto-printing dialog.
+
+Both have real behavior (not empty stubs, no `MsgAviso("...sera implementado...")`, no TODOs), respecting the OPERACIONAL nature of the form (no real PageFrame Page1/Page2).

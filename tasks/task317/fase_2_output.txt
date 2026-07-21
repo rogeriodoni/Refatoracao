@@ -1,0 +1,17 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `sigproerBO.prg`:**
+
+| M├®todo | Equivalente legado |
+|--------|-------------------|
+| `ObterChavePrimaria()` | ÔÇö (OPERACIONAL, sem entidade CRUD) |
+| `ValidarDados()` | ÔÇö (retorna `.T.`, sem valida├º├úo CRUD) |
+| `CarregarDadosEmpresa()` | `Init` ÔåÆ `AddCursor('SigCdEmp')` + l├│gica de `lsIdTerminal` |
+| `IniciarProtocolo()` | `Init` ÔåÆ `ConfiguraIntSiTefInterativo` + `IniciaFuncaoSiTefInterativo` |
+| `ExecutarCicloSiTef()` | `GetSenha.GotFocus` / `SENHA.GotFocus` ÔÇö loop at├® `TipoCampo=500` |
+| `ProcessarRespostaGetSenha()` | `GetSenha.LostFocus` ÔÇö envia dados cart├úo, acumula cupom |
+| `ProcessarRespostaSenha()` | `SENHA.LostFocus` ÔÇö trata tipos 515/516/llVias, acumula cupom |
+| `MontaRetorno()` | `PROCEDURE montaretorno` ÔÇö grava `IntPos.001` + `IntPos.STS` OK |
+| `RetornoFalha()` | `PROCEDURE retornofalha` ÔÇö grava `IntPos.001` + `IntPos.STS` FF/05 |
+
+Decis├Áes importantes: vari├íveis locais para os par├ómetros `@` da DLL (propriedades de objeto n├úo podem ser passadas por refer├¬ncia diretamente em VFP9); `fConverteStr` substitu├¡da por `ALLTRIM(Cemps)` via SQLEXEC em `SigCdEmp`; `_Empr` substitu├¡do por `go_4c_Sistema.cCodEmpresa`.

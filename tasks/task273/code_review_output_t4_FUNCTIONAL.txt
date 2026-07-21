@@ -1,0 +1,10 @@
+﻿Corrigido. Resumo do que foi feito e por qu├¬ os outros foram ignorados:
+
+**Fix aplicado:**
+- `TornarControlesVisiveis` (linha ~1585): adicionada recurs├úo `THIS.TornarControlesVisiveis(loc_oObjeto)` antes do `LOOP` para containers na lista de exce├º├úo. O `LOOP` anterior pulava a recurs├úo, deixando os filhos de `CNT_4C_CABECALHO` com `Visible=.F.` permanentemente.
+
+**Falsos positivos confirmados:**
+- `[OPTIONGROUP-LEFT]` ├ù 2: `opt_4c_Custo.Buttons(2)` tem `.Left = 98` (linha 688) e `opt_4c_Fil.Buttons(3)` tem `.Left = 132` (linha 836). O scanner confundiu a ordem dos ├¡ndices.
+- `[METODO-INEXISTENTE] ObterNodeValue`: m├®todo implementado como `PROTECTED FUNCTION` na linha 2781 ÔÇö `FUNCTION` e `PROCEDURE` s├úo equivalentes em `DEFINE CLASS`.
+- `[GRID-WITH] loc_cConta`: ├® `DO FORM FormSigCdCli WITH loc_cConta` (passagem de par├ómetro VFP), n├úo bloco `WITH...ENDWITH`.
+- `[GRID-WITH] loc_nTot`: ├® `REPLACE ... Total WITH loc_nTot` (sintaxe `REPLACE` de VFP), n├úo bloco `WITH...ENDWITH`.

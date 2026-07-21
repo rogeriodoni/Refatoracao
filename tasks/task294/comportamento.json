@@ -1,0 +1,314 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 12,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoContas", "fAcessoContab", "fwBuscaSel", "fDtoSQL", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRGMI",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "lcQryEest = [Select * From SigMvCab]\nlcQryEesti = [Select * From SigMvItn]\nlcQrySigCdLin = [Select descs,linhas,pedidos From SigCdLin Order By descs,linhas,pedidos ]\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', , lcQryEest)\n\t\t\t.AddCursor('SigMvItn', 'c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Date",
+        "controlesReferenciados": "Get_Datai",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGMI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque,,,ThisForm.podatamgr.pnIdConn)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_cd_estoque.Value = ''\n\t\tThisForm.get_cd_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.get_cd_estoque.Value = ''\n\tThisForm.get_cd_estoque.Refresh\n\treturn(.t.)\nendif\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_cd_estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque,ThisForm.get_cd_estoque.value,ThisForm.podatamgr.pnIdConn)\nElse\n\tThisForm.get_Ds_GrEstoque.value = ''\n\tThisForm.get_Ds_GrEstoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Ds_GrEstoque,get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque,,,ThisForm.podatamgr.pnIdConn)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_ds_estoque.Value = ''\n\t\tThisForm.get_ds_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.get_ds_estoque.Value = ''\n\tThisForm.get_ds_estoque.Refresh\n\treturn(.t.)\nendif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque,ThisForm.get_cd_estoque.value,ThisForm.podatamgr.pnIdConn)\nElse\n\tThisForm.get_Cd_GrEstoque.value = ''\n\tThisForm.get_Cd_GrEstoque.refresh\nendif\nreturn(.t.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Ds_GrEstoque,get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(ThisForm.get_cd_grestoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Get_DLinha",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\tSelect crSigCdLin\n\tSet Order to Descs\n\tIf !Seek( This.Value )\n\t\tloBrow = CreateObject( 'fwBuscaSel', 'crSigCdLin', 'Descs', This.Value, 'Linhas de Produção' )\n\t\tloBrow.AddColuna( 'Descs', '', 'Descrição', .t., 'Descs' )\n\t\tloBrow.AddColuna( 'Linhas', '', 'Código', .t., 'Linhas' )\n\t\tloBrow.Show\n\t\tIf Lastkey() # 27\n\t\t\tThis.Parent.Get_Linha.Value = crSigCdLin.Linhas\n\t\t\tThis.Parent.Get_dLinha.Value = crSigCdLin.Descs\n\t\tElse\n\t\t\tThis.Parent.Get_Linha.Value = ''\n\t\t\tThis.Parent... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Linha,Get_dLinha",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Get_DLinha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( ThisForm.Get_Linha.Value ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Linha",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Get_Linha",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\tSelect crSigCdLin\n\tSet Order to Linhas\n\tIf !Seek( This.Value )\n\t\tloBrow = CreateObject( 'fwBuscaSel', 'crSigCdLin', 'Linhas', This.Value, 'Linhas de Produção' )\n\t\tloBrow.AddColuna( 'Linhas', '', 'Código', .t., 'Linhas' )\n\t\tloBrow.AddColuna( 'Descs', '', 'Descrição', .t., 'Descs' )\n\t\tloBrow.Show\n\t\tIf Lastkey() # 27\n\t\t\tThis.Parent.Get_Linha.Value = crSigCdLin.Linhas\n\t\t\tThis.Parent.Get_dLinha.Value = crSigCdLin.Descs\n\t\tElse\n\t\t\tThis.Parent.Get_Linha.Value = ''\n\t\t\tThis.Pare... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Linha,Get_dLinha",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Get_negativo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(This.Value, \"S\",\"N\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Cancela",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.Processa",
+      "evento": "Click",
+      "linhas": 241,
+      "codigoOriginal": "Private lcGrupo, lcEmpresa, lcConta, lcLinha, lcOperacao, lcFornece, Chave\nLocal lnItens, lnNumero\n\nlcEmpresa = ThisForm.Get_cd_Empresa.Value\nlcGrupo   = ThisForm.Get_cd_GrEstoque.Value\nlcConta   = ThisForm.Get_cd_Estoque.Value\nlcLinha   = ThisForm.Get_Linha.Value\nlcNega    = ThisForm.Get_negativo.Value\nldData    = fDtoSQL(ThisForm.Get_Datai.Value)\n\nIf IsEmpty( lcEmpresa )\n\tMessagebox( 'É obrigatório informar a Empresa...', 32, '' )\n\tThisForm.Get_cd_Empresa.SetFocus\n\tReturn\nEndif\n\nIf IsEmpty( lc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_cd_Empresa,Get_cd_GrEstoque,Get_cd_Estoque,Get_Linha,Get_negativo,Get_Datai",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(ThisForm.get_cd_empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGMI.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRGMI.Init",
+      "queryOriginal": "lcQryEest = [Select * From SigMvCab]",
+      "tabelas": "SigMvCab",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRGMI.Init",
+      "queryOriginal": "lcQryEesti = [Select * From SigMvItn]",
+      "tabelas": "SigMvItn",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRGMI.Init",
+      "queryOriginal": "lcQrySigCdLin = [Select descs,linhas,pedidos From SigCdLin Order By descs,linhas,pedidos ]",
+      "tabelas": "SigCdLin",
+      "colunas": "descs,linhas,pedidos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCab", "SigMvItn", "SigCdLin"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

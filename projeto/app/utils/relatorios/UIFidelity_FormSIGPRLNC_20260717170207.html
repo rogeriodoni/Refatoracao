@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - FormSIGPRLNC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: FormSIGPRLNC | Data: 17/07/2026 17:02:07</p>
+        </div>        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero">132</div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero">4</div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero">128</div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero">0</div>
+            </div>
+        </div><div class="conteudo">
+  <h2>Detalhes das Diferencas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Objeto</th>
+        <th>Propriedade</th>
+        <th>Valor Original</th>
+        <th>Valor Migrado</th>
+        <th>Linha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>146</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>102</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>95</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>103</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>511</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>104</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>299</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>105</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.cntSombra.Width</strong></td>
+        <td><code>1100</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>124</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grade.Height</strong></td>
+        <td><code>480</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>126</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grade.Left</strong></td>
+        <td><code>29</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>127</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grade.Top</strong></td>
+        <td><code>101</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>128</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grade.Width</strong></td>
+        <td><code>940</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>129</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Inserir.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>132</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Inserir.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>133</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Consultar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>135</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Consultar.Left</strong></td>
+        <td><code>80</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>136</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Alterar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>138</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Alterar.Left</strong></td>
+        <td><code>155</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>139</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Excluir.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>141</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Excluir.Left</strong></td>
+        <td><code>230</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>142</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.procurar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>144</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.procurar.Left</strong></td>
+        <td><code>305</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>145</td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Height</strong></td>
+        <td><code>85</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>147</td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Left</strong></td>
+        <td><code>544</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>148</td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Top</strong></td>
+        <td><code>-1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>149</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_op.Width</strong></td>
+        <td><code>385</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.SAIR.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>152</td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.SAIR.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>153</td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Left</strong></td>
+        <td><code>919</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>155</td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Top</strong></td>
+        <td><code>-1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>156</td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Top</strong></td>
+        <td><code>25</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>158</td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Left</strong></td>
+        <td><code>503</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>159</td>
+      </tr>
+      <tr>
+        <td>30</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Lista.Picture</strong></td>
+        <td><code>..\framework\imagens\new_background.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>161</td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Salva.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>164</td>
+      </tr>
+      <tr>
+        <td>32</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Salva.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>165</td>
+      </tr>
+      <tr>
+        <td>33</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Cancelar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>167</td>
+      </tr>
+      <tr>
+        <td>34</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Cancelar.Left</strong></td>
+        <td><code>80</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>168</td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Left</strong></td>
+        <td><code>844</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>170</td>
+      </tr>
+      <tr>
+        <td>36</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Top</strong></td>
+        <td><code>-3</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>171</td>
+      </tr>
+      <tr>
+        <td>37</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Dados.Picture</strong></td>
+        <td><code>..\framework\imagens\new_background.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>175</td>
+      </tr>
+      <tr>
+        <td>38</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC</code></td>
+        <td><strong>Pagina.Width</strong></td>
+        <td><code>1003</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>177</td>
+      </tr>
+      <tr>
+        <td>39</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>186</td>
+      </tr>
+      <tr>
+        <td>40</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>187</td>
+      </tr>
+      <tr>
+        <td>41</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>382</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>188</td>
+      </tr>
+      <tr>
+        <td>42</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>189</td>
+      </tr>
+      <tr>
+        <td>43</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>127</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>191</td>
+      </tr>
+      <tr>
+        <td>44</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>360</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>192</td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Gru</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>193</td>
+      </tr>
+      <tr>
+        <td>46</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>202</td>
+      </tr>
+      <tr>
+        <td>47</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>203</td>
+      </tr>
+      <tr>
+        <td>48</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Grupo : </code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>204</td>
+      </tr>
+      <tr>
+        <td>49</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>257</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>205</td>
+      </tr>
+      <tr>
+        <td>50</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>130</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>206</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>208</td>
+      </tr>
+      <tr>
+        <td>52</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>216</td>
+      </tr>
+      <tr>
+        <td>53</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>217</td>
+      </tr>
+      <tr>
+        <td>54</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Conta : </code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>218</td>
+      </tr>
+      <tr>
+        <td>55</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>257</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>219</td>
+      </tr>
+      <tr>
+        <td>56</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>155</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>220</td>
+      </tr>
+      <tr>
+        <td>57</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Say3</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>222</td>
+      </tr>
+      <tr>
+        <td>58</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>232</td>
+      </tr>
+      <tr>
+        <td>59</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>233</td>
+      </tr>
+      <tr>
+        <td>60</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>382</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>234</td>
+      </tr>
+      <tr>
+        <td>61</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>235</td>
+      </tr>
+      <tr>
+        <td>62</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>152</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>237</td>
+      </tr>
+      <tr>
+        <td>63</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>360</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>238</td>
+      </tr>
+      <tr>
+        <td>64</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Desc_Con</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>239</td>
+      </tr>
+      <tr>
+        <td>65</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>335</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>248</td>
+      </tr>
+      <tr>
+        <td>66</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>629</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>249</td>
+      </tr>
+      <tr>
+        <td>67</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>250</td>
+      </tr>
+      <tr>
+        <td>68</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>251</td>
+      </tr>
+      <tr>
+        <td>69</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>252</td>
+      </tr>
+      <tr>
+        <td>70</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Arial</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>253</td>
+      </tr>
+      <tr>
+        <td>71</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>254</td>
+      </tr>
+      <tr>
+        <td>72</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Picture</strong></td>
+        <td><code>..\framework\imagens\geral_selecionar_26.jpg</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>255</td>
+      </tr>
+      <tr>
+        <td>73</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>256</td>
+      </tr>
+      <tr>
+        <td>74</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,128,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>260</td>
+      </tr>
+      <tr>
+        <td>75</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>261</td>
+      </tr>
+      <tr>
+        <td>76</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.inserir</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>262</td>
+      </tr>
+      <tr>
+        <td>77</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>375</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>269</td>
+      </tr>
+      <tr>
+        <td>78</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>629</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>270</td>
+      </tr>
+      <tr>
+        <td>79</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>271</td>
+      </tr>
+      <tr>
+        <td>80</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>272</td>
+      </tr>
+      <tr>
+        <td>81</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>273</td>
+      </tr>
+      <tr>
+        <td>82</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Arial</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>274</td>
+      </tr>
+      <tr>
+        <td>83</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>275</td>
+      </tr>
+      <tr>
+        <td>84</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_excluir_26.jpg</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>276</td>
+      </tr>
+      <tr>
+        <td>85</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>277</td>
+      </tr>
+      <tr>
+        <td>86</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>255,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>281</td>
+      </tr>
+      <tr>
+        <td>87</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>282</td>
+      </tr>
+      <tr>
+        <td>88</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.excluir</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>283</td>
+      </tr>
+      <tr>
+        <td>89</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>293</td>
+      </tr>
+      <tr>
+        <td>90</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>300</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>294</td>
+      </tr>
+      <tr>
+        <td>91</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>295</td>
+      </tr>
+      <tr>
+        <td>92</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>127</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>297</td>
+      </tr>
+      <tr>
+        <td>93</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>298</td>
+      </tr>
+      <tr>
+        <td>94</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Grupos</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>299</td>
+      </tr>
+      <tr>
+        <td>95</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>309</td>
+      </tr>
+      <tr>
+        <td>96</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>310</td>
+      </tr>
+      <tr>
+        <td>97</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>403</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>311</td>
+      </tr>
+      <tr>
+        <td>98</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>300</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>312</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>RowHeight</strong></td>
+        <td><code>16</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>315</td>
+      </tr>
+      <tr>
+        <td>100</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>181</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>317</td>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>324</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>319</td>
+      </tr>
+      <tr>
+        <td>102</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column1.FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>321</td>
+      </tr>
+      <tr>
+        <td>103</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>322</td>
+      </tr>
+      <tr>
+        <td>104</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column1.Width</strong></td>
+        <td><code>70</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>325</td>
+      </tr>
+      <tr>
+        <td>105</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column1.InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>329</td>
+      </tr>
+      <tr>
+        <td>106</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column2.FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>331</td>
+      </tr>
+      <tr>
+        <td>107</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>332</td>
+      </tr>
+      <tr>
+        <td>108</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco</code></td>
+        <td><strong>Column2.Width</strong></td>
+        <td><code>220</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>334</td>
+      </tr>
+      <tr>
+        <td>109</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>345</td>
+      </tr>
+      <tr>
+        <td>110</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Header1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>346</td>
+      </tr>
+      <tr>
+        <td>111</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>347</td>
+      </tr>
+      <tr>
+        <td>112</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Ocorrência</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>348</td>
+      </tr>
+      <tr>
+        <td>113</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>355</td>
+      </tr>
+      <tr>
+        <td>114</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>356</td>
+      </tr>
+      <tr>
+        <td>115</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>357</td>
+      </tr>
+      <tr>
+        <td>116</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>361</td>
+      </tr>
+      <tr>
+        <td>117</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>362</td>
+      </tr>
+      <tr>
+        <td>118</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>369</td>
+      </tr>
+      <tr>
+        <td>119</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Header1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>370</td>
+      </tr>
+      <tr>
+        <td>120</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>371</td>
+      </tr>
+      <tr>
+        <td>121</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Descrição</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>372</td>
+      </tr>
+      <tr>
+        <td>122</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>379</td>
+      </tr>
+      <tr>
+        <td>123</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>380</td>
+      </tr>
+      <tr>
+        <td>124</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>381</td>
+      </tr>
+      <tr>
+        <td>125</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>386</td>
+      </tr>
+      <tr>
+        <td>126</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>387</td>
+      </tr>
+      <tr>
+        <td>127</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>397</td>
+      </tr>
+      <tr>
+        <td>128</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>300</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>398</td>
+      </tr>
+      <tr>
+        <td>129</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>399</td>
+      </tr>
+      <tr>
+        <td>130</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>152</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>401</td>
+      </tr>
+      <tr>
+        <td>131</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>402</td>
+      </tr>
+      <tr>
+        <td>132</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRLNC.Pagina.Dados.Get_Contas</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>403</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>

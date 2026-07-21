@@ -1,0 +1,9 @@
+﻿Conclu├¡do. Resumo do que foi feito:
+
+**9 issues SQL-FILTRO-INVENTADO ÔåÆ todos falsos positivos ap├│s verifica├º├úo no schema.sql:**
+- `DPROS`, `EAN13`, `CBARS`, `CUNIS`, `EMPDOPNUMS`, `DOPES`, `NUMES` ÔÇö colunas existem nas respectivas tabelas (`SigCdPro`, `SigCdUni`, `SigMvItn`, `SigCdOpe`) confirmadas no schema
+- `CONTROLCOUNT` ÔÇö propriedade VFP (`par_oContainer.ControlCount`), n├úo coluna SQL; ferramenta leu errado
+- `'6'` ÔÇö n├úo existe como WHERE SQL em nenhum lugar nos arquivos; outro falso positivo
+
+**Corre├º├úo real aplicada (SQL-COLUNA detectado durante verifica├º├úo):**
+- `PecoDe` ÔåÆ `PrecoDe` em 4 locais do form (`FormSigPrEtq.prg` linhas 998, 1004, 1139, 1173): o nome real da coluna no SQL Server ├® `precode` ÔÇö `PecoDe` (6 letras, sem 'r') causaria `"Invalid column name 'PecoDe'"` em runtime no `CarregarPrecoProduto` e no `CmdBtnCarregarClick`, fazendo `PrecoDe` ficar sempre 0 na grid.

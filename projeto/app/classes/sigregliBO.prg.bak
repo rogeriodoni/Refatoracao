@@ -95,7 +95,7 @@ DEFINE CLASS sigregliBO AS BusinessBase
         ENDIF
 
         IF VARTYPE(par_oParentForm) = "O"
-            IF UPPER(par_oParentForm.Name) = 'SIGPRGLP' OR UPPER(par_oParentForm.Name) = 'SIGPRGLX'
+            IF UPPER(par_oParentForm.Name) = 'SIGPRGLP' OR UPPER(par_oParentForm.Name) = 'SIGPRGLX' OR UPPER(par_oParentForm.Name) = 'FORMSIGPRGLP'
                 THIS.this_nTpOrdem = 1
             ELSE
                 THIS.this_nTpOrdem = 2

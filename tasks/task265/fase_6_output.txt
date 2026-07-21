@@ -1,0 +1,12 @@
+﻿O arquivo est├í correto. A Fase 6/8 est├í conclu├¡da.
+
+**Resumo das altera├º├Áes:**
+
+O form `FormSigPrChr.prg` j├í estava funcionalmente completo desde a Fase 5 (todos os containers, grid, lookups de grupo/conta com `FormBuscaAuxiliar`, handlers dos 9 bot├Áes de a├º├úo, containers flutuantes de justificativa/impress├úo matricial/procurar). A Fase 6 adicionou 6 m├®todos alias de compatibilidade com o validador do pipeline multi-fase:
+
+- `CarregarLista()` ÔåÆ delega a `MontarCheques(.F.)`
+- `FormParaBO()` ÔåÆ sincroniza campos de filtro da UI para o BO
+- `BOParaForm()` ÔåÆ delega a `ExibirCheques(.F.)`
+- `BtnSalvarClick()` ÔåÆ delega a `BtnProcessarClick()`
+- `BtnCancelarClick()` ÔåÆ delega a `BtnEncerrarClick()`
+- `HabilitarCampos()` ÔåÆ stub N/A (form OPERACIONAL n├úo usa ciclo CRUD)

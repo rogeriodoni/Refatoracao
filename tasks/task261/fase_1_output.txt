@@ -1,0 +1,14 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrCccBO.prg` criado com:
+
+- `this_cTabela = "SigOpClU"` / `this_cCampoChave = "CidChaves"`
+- **5 se├º├Áes de propriedades** mapeadas do c├│digo fonte original:
+  - `this_cEmpConta/GrupoConta/Conta/MoedaConta/dDataConta` ÔÇö OpConta (recalcula SigMvCcr)
+  - `this_cEmpEst/GrupoEst/Estoque/ProdEst/DescProdEst/dDataEst` ÔÇö OpEstoque (recalcula SigMvHst)
+  - `this_cEmpCusto/ProdCusto/DescProdCusto/dDataCusto` ÔÇö OpCusto (recalcula custo em SigCdPro)
+  - `this_cEmpCompra/ProdCompra/DescProdCompra/dDataCompra` ÔÇö OpCompra (atualiza SigOpClU/SigCdCli/SigCdPro)
+  - `this_cMoeCentral/GrupoRecs/GrupoPags/ContaRecs/ContaPags` ÔÇö par├ómetros de SigCdPam
+- `this_nRegistros` / `this_lProcessando` ÔÇö controle de estado
+- `Init()` com TRY/CATCH, seta tabela/chave, chama DODEFAULT()
+- `ObterChavePrimaria()` PROTECTED (sem chave l├│gica neste form operacional)
+
+Pr├│xima fase (2/8) ir├í adicionar os m├®todos de neg├│cio: `InicializarDados()`, `ProcessarContaCorrente()`, `ProcessarEstoque()`, `ProcessarCusto()` e `ProcessarUltimaCompra()`.

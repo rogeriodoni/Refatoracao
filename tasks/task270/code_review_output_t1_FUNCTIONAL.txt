@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada:
+
+**[CONTAINER-VISIVEL]** ÔÇö `"cnt_4c_cabecalho"` adicionado ao INLIST de `TornarControlesVisiveis` (linha ~479). O container gerencia sua pr├│pria visibilidade via `THIS.cnt_4c_Cabecalho.Visible = .T.` no final de `ConfigurarCabecalho()`, ent├úo n├úo deve ser tocado pelo m├®todo recursivo. A recurs├úo nos filhos (`lbl_4c_Sombra`, `lbl_4c_Titulo`) continua ocorrendo normalmente porque acontece ANTES do check do INLIST.
+
+**[LAYOUT-POSITION]** ÔÇö Os tr├¬s problemas de posi├º├úo j├í estavam corretos no arquivo atual: `cnt_4c_Container1.Top=104`, `cnt_4c_Container2.Top=104`, `cnt_4c_Container2.Left=288`. O code review foi executado sobre uma vers├úo anterior do arquivo.

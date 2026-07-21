@@ -1,0 +1,7 @@
+﻿As tr├¬s altera├º├Áes est├úo corretas:
+
+1. **Header** atualizado de "Fase 3/8" para "Fase 5/8"
+2. **`InicializarForm()`** agora chama `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaVencimentos()`
+3. **`ConfigurarPaginaDados()`** adicionado (linha 719) configurando `Page2.BackStyle=1` e `BackColor=RGB(212,208,200)` ÔÇö c├│digo real, n├úo stub
+
+**Contexto da decis├úo de design:** Para este form OPERACIONAL (calculadora plana 600├ù300), todos os 35 controles do original cabem em Page1 do PageFrame. Page2 com caption "Vencimentos" existe no PageFrame mas nunca ├® exibida (sem abas, sem navega├º├úo para ela). O m├®todo `ConfigurarPaginaDados()` garante que Page2 tenha fundo consistente caso seja acessada programaticamente, sem duplicar controles j├í presentes em Page1 nem alterar a UX do original.

@@ -1,0 +1,18 @@
+﻿All edits are verified. Here's a summary of everything completed in this Phase 6 session:
+
+**BO fixes (sigprcomBO.prg):**
+- Edit 1 (previous session): `CarregarMaxPorProduto` ÔåÆ SQLEXEC to temp + CREATE CURSOR local for editable grid
+- Edit 2: `CarregarCopiaParaCursor` guard changed to allow empty `par_cCPros`; SQL WHERE now uses optional cpros filter via IIF
+
+**Form fixes (Formsigprcom.prg):**
+- Edit 1a: Added `txt_4c_Ifor`, `txt_4c_Dfor`, `txt_4c_Refs`, `cmd_4c_BtnExcluir`, and `grd_4c_Gradei` (5-column, Sparse=.F., RecordSource+ColumnCount outside WITH) to `ConfigurarPaginaDados`
+- Edit 1b: Added 7 BINDEVENTs for the new controls (click, AfterRowColChange, LostFocus, KeyPress handlers)
+- Edit 2: `LimparCampos` now clears txt_4c_Ifor/Dfor/Refs and grid RecordSource
+- Edit 3: `CarregarInfoProduto` ÔÇö `p.tipestos` ÔåÆ `p.varias`; populates 3 new fields; calls `CarregarGradeMaximos`
+- Edit 4: `BtnIncluirClick` ÔÇö now calls `LimparCampos()` + `CarregarGradeMaximos("")` before navigating
+- Edit 5/6: `BtnVisualizarClick` / `BtnAlterarClick` ÔÇö now call `CarregarInfoProduto` before navigating
+- Edit 7: `BtnSalvarClick` ÔÇö `SalvarMaximos` ÔåÆ `SalvarGradeMax`
+- Edit 8: `BtnProcessarCopiaClick` ÔÇö param order corrected to `(cpros, empOs, empDs)`
+- Edit 9: `BtnConfirmarCopiaClick` ÔÇö corrected to `CopiarMaxEntreEmpresas(empDs, "cursor_4c_Copia")`
+- Edit 10: `AlternarPagina` ÔÇö calls `AjustarCamposPorModo()` when entering Page2
+- Edit 11: Added 13 new methods: `AjustarCamposPorModo`, `CarregarGradeMaximos`, `GradeINovaLinha`, `GradeIAfterRowColChange`, `QmaxsLostFocus`, `TamKeyPress`, `AbrirLookupTamanho`, `CorKeyPress`, `AbrirLookupCor`, `DptKeyPress`, `AbrirLookupDepto`, `GradeICol5LostFocus`, `BtnExcluirGradeClick`
