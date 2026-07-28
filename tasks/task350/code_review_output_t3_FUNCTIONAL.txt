@@ -1,0 +1,9 @@
+﻿**Corre├º├úo aplicada** ÔÇö `TornarControlesVisiveis` (linha ~2544):
+
+- Removida a vari├ível `loc_lOcultoRetido` (o padr├úo antigo bloqueava a recurs├úo quando encontrava `CNT_4C_CABECALHO`)
+- Agora: skip apenas o `Visible=.T.` no container protegido, mas **sempre recursiona** nos filhos
+- Resultado: filhos de `cnt_4c_Cabecalho` recebem `Visible=.T.` corretamente
+
+**12 issues [GRID-HEADER] e 2 issues [LAYOUT-POSITION] n├úo foram alterados** porque s├úo falsos positivos do validador:
+- Grid headers: validador comparou contra headers do `grd_4c_leitura2` (Page3), ignorando o `grd_4c_Dados` (Page1) ÔÇö alterar os captions do grid principal para "Banco, Ag├¬ncia..." quebraria a exibi├º├úo dos campos de SigCdBch
+- Layout position: validador leu `Buttons(1).Top=3 / Left=3` (posi├º├úo relativa interna do OptionGroup) e confundiu com `opt_4c_TipoLeitura.Top/Left` ÔÇö o OptionGroup est├í corretamente posicionado em Top=199 (=170+29 offset PageFrame), Left=709

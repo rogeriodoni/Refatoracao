@@ -1,0 +1,19 @@
+﻿Todos os 3 itens est├úo verificados. Os problemas reportados s├úo **falsos positivos do validador**:
+
+---
+
+**1. `CONTROLCOUNT` (linhas 2551 e 2567)**
+
+N├úo ├® coluna SQL em cl├íusula WHERE. ├ë a propriedade VFP9 `Container.ControlCount` acessada em c├│digo de UI (`TornarControlesVisiveis`). O scanner de SQL detectou a string incorretamente porque varrreu o arquivo inteiro.
+
+**2. `ICLIS` (linhas 2169, 2423, 2635)**
+
+O `WHERE iclis = ...` ├® em queries de **lookup** contra a tabela `SIGCDCLI`, n├úo contra `SigCdBch`. `iclis` ├® a PK de SIGCDCLI ÔÇö ├® o campo correto para buscar a descri├º├úo da conta. O c├│digo legado original tamb├®m seleciona `a.IClis` de `SigChe`, confirmando que a coluna existe. O campo `contas` de SigCdBch armazena esse c├│digo, e o lookup para obter a `razaos` ├® necess├írio e correto.
+
+**3. `OPERACAOS` (linhas 2215, 2650)**
+
+O `WHERE operacaos = ...` ├® em queries de **lookup** contra a tabela `SigCdOpt`, n├úo contra `SigCdBch`. `operacaos` ├® a PK de SigCdOpt. Al├®m disso, o pr├│prio BchBO confirma que `operacaos` ├® coluna real de `SigCdBch` (exibida no ControlSource original: `crSigCdBch.Operacaos`). O lookup verifica/exibe a descri├º├úo da opera├º├úo.
+
+---
+
+**Conclus├úo:** Os 3 alertas s├úo falsos positivos. O validador comparou todas as cl├íusulas `WHERE` do arquivo inteiro (incluindo queries de lookup em outras tabelas e propriedades VFP9) contra a lista de colunas WHERE do contexto principal de `SigCdBch`. Nenhuma altera├º├úo ├® necess├íria ÔÇö remover essas condi├º├Áes quebraria as funcionalidades de lookup e o m├®todo `TornarControlesVisiveis`. O c├│digo est├í correto.

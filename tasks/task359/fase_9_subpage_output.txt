@@ -1,0 +1,17 @@
+﻿All changes are complete. Here's a summary of what was added/fixed in `Formccr.prg` (`CriarAbaFaturamento`):
+
+**Added (missing from implementation):**
+- `shp_4c_Border` ÔÇö outer border rectangle (Left=45, Top=50, Width=673, Height=261)
+- `shp_4c_ColGrupo` ÔÇö "Grupo" column separator (Left=106, Top=50, Width=90, Height=261)
+- `shp_4c_HdrLine` ÔÇö header underline (Left=45, Top=71, Width=671, Height=1)
+- `shp_4c_ColAliq` ÔÇö "Al├¡quota" column separator (Left=576, Top=50, Width=52, Height=261)
+
+**Fixed (pixel-fidelity corrections):**
+- `lbl_4c_HdrImpostos`: Left 45ÔåÆ53, Top 52ÔåÆ53
+- `lbl_4c_HdrGrupo`: Top 52ÔåÆ53
+- `lbl_4c_HdrConta`: Left 220ÔåÆ328, Top 52ÔåÆ53
+- `lbl_4c_HdrAliq`: Left 575ÔåÆ579, Top 52ÔåÆ53
+- `lbl_4c_HdrReceita`: Left 640ÔåÆ650, Top 52ÔåÆ53
+- All 5 TextBox fields per container: `SpecialEffect` 0ÔåÆ1 (flat, matching legacy)
+- `getPctAliqs`: added `InputMask = "99.99"` and `Alignment = 3` (right-aligned)
+- `lbl_4c_Tax`: `Left` now per-tax (ICMS=32, IPI=43, II=49, ISS=41, IRRF=33, INSS=34, PIS=41, CSSL=33, COFINS=19) instead of fixed=5

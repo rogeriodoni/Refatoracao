@@ -1,0 +1,5 @@
+﻿O fix foi aplicado. O problema era simples: `DataSession = 2` faz o form rodar numa sess├úo privada (sess├úo 2), ent├úo qualquer `CREATE CURSOR` executado dentro dos m├®todos do form fica nessa sess├úo privada. O `TesteAutomatico.prg` verifica `USED("cursor_4c_Dados")` na sess├úo 1 (sess├úo do tester) e n├úo encontra o cursor.
+
+**Causa raiz**: `FormBAL.prg` tinha `DataSession = 2`, diferente de outros forms CRUD (como `FormAli`) que n├úo t├¬m essa propriedade.
+
+**Corre├º├úo**: Removida a linha `DataSession = 2`. Com isso, o `CREATE CURSOR cursor_4c_Dados` em `CarregarLista()` fica na sess├úo 1 e o teste consegue encontr├í-lo com `USED("cursor_4c_Dados")`. O `SET DATE TO BRITISH / SET CENTURY ON` j├í estava em `InicializarForm()` para compensar o reset de datas ÔÇö continua funcionando corretamente.

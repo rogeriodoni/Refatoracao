@@ -1,0 +1,19 @@
+﻿O FormCargo.prg est├í com 3226 linhas e ENDDEFINE na ├║ltima linha. A Fase 3 j├í estava completa e, na verdade, todas as 8 fases do pipeline foram executadas anteriormente para task354. 
+
+**Resumo do estado encontrado:**
+
+- **CargoBO.prg** ÔÇö 558 linhas, completo (fases 1-2 Ô£ô)
+- **FormCargo.prg** ÔÇö 3226 linhas, completo com todos os m├®todos obrigat├│rios (fases 3-8 Ô£ô):
+  - `Init()`, `InicializarForm()`, `ConfigurarPageFrame()` Ô£ô
+  - `ConfigurarPaginaLista()` com grid + 5 bot├Áes CRUD + Encerrar Ô£ô
+  - `ConfigurarPaginaDados()` com todos os ~90 campos do layout.json + 2 grids Ô£ô
+  - `CarregarLista()`, `AlternarPagina()` Ô£ô
+  - Todos os `Btn*Click` handlers Ô£ô
+  - Lookups para Grupo, Conta, Moeda, Categoria Ô£ô
+  - `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` Ô£ô
+  - `TornarControlesVisiveis()`, `FormatarGridLista()` Ô£ô
+  - `Destroy()` com limpeza dos cursores Ô£ô
+- **menu.prg** ÔÇö `AbrirFormCargo()` e `ON SELECTION BAR 1 OF popCadastros` j├í integrados Ô£ô
+- **config.prg** ÔÇö carrega automaticamente via `ADIR(*BO.prg)` e `ADIR(Form*.prg)` Ô£ô
+
+**Corre├º├úo aplicada:** `cmd_4c_Cancelar.Caption` corrigido de `"Encerrar"` para `"Cancelar"` (bug can├┤nico do framework_frmcadastro_layout.md).

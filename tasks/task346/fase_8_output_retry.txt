@@ -1,0 +1,14 @@
+﻿All 10 required Phase 8 methods are now present in `FormAli.prg`:
+
+- `BtnBuscarClick()` ÔÇö line 923
+- `BtnEncerrarClick()` ÔÇö line 945
+- `BtnSalvarClick()` ÔÇö line 1010 (added, alias to `BtnConfirmarClick` since `cmd_4c_Confirmar` is bound to `BtnConfirmarClick`)
+- `BtnCancelarClick()` ÔÇö line 1017
+- `FormParaBO()` ÔÇö line 1029 (complete: all 6 UI-exposed fields ÔÇö `codigos`, `descrs`, `opautos`, `opsaidas`, `fpagsautos`, `pefins`)
+- `BOParaForm()` ÔÇö line 1052 (complete: same 6 fields)
+- `HabilitarCampos()` ÔÇö line 1094
+- `LimparCampos()` ÔÇö line 1075
+- `CarregarLista()` ÔÇö line 694
+- `AjustarBotoesPorModo()` ÔÇö line 1115
+
+Fase 8 finalizada: adicionei o m├®todo `BtnSalvarClick()` que faltava (delega para `BtnConfirmarClick`, j├í que o bot├úo can├┤nico ├® `cmd_4c_Confirmar` com Caption "Confirmar"). Os demais m├®todos j├í haviam sido gerados nas fases anteriores. `FormParaBO`/`BOParaForm` cobrem os 6 campos expostos na UI (`reincids` n├úo tem controle no SCX original, portanto n├úo ├® mapeado ÔÇö mantido consistente com o `layout.json`).

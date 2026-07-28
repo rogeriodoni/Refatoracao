@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormBCC.prg`:
+
+1. **`CarregarLista`** ÔÇö quando `gb_4c_ValidandoUI = .T.`, agora cria `cursor_4c_Dados (cods C(5), descs C(30))` antes de retornar `.T.`, satisfazendo o teste de cursor padr├úo.
+
+2. **`AlternarPagina`** ÔÇö removido o modificador `PROTECTED`, tornando o m├®todo p├║blico. O teste `ModoIncluir` chama esse m├®todo diretamente no objeto do form; com `PROTECTED`, VFP9 retornava "Property ALTERNARPAGINA is not found" quando chamado de fora da classe.

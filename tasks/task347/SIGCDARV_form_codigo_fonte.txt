@@ -1,0 +1,797 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDARV.SCX
+* Data/Hora: 21/07/2026 18:01:20
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDARV
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Cod
+  Parent: SIGCDARV.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_descs
+  Parent: SIGCDARV.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDARV.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_formula
+  Parent: SIGCDARV.Pagina.Dados
+  Class: fweditbox
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TempMet
+  Parent: SIGCDARV.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_TempTub
+  Parent: SIGCDARV.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Get_TempAmb
+  Parent: SIGCDARV.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_perc
+  Parent: SIGCDARV.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_TempAgu
+  Parent: SIGCDARV.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label6
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label7
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label8
+  Parent: SIGCDARV.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = (prompt())
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDARV"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 336
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 423
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.TabIndex = 1
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.TabIndex = 2
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Código :"
+  Left = 61
+  Top = 171
+  TabIndex = 10
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Descrição :"
+  Left = 45
+  Top = 198
+  TabIndex = 16
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontSize = 10
+  WordWrap = .T.
+  Caption = "BCERAS = Base + Cera"
+  Height = 18
+  Left = 61
+  Top = 369
+  Width = 150
+  TabIndex = 20
+  ForeColor = 255,0,0
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontSize = 10
+  Caption = "Para montar a fórmula tem que usar os seguintes campos :"
+  Left = 61
+  Top = 349
+  TabIndex = 23
+  ForeColor = 255,0,0
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say3
+------------------------------------------------------------
+  Caption = "Fórmula :"
+  Left = 55
+  Top = 227
+  TabIndex = 13
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.get_Cod
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.codigos"
+  Left = 116
+  TabIndex = 1
+  Top = 168
+  Width = 80
+  ZOrderSet = 4
+  Name = "get_Cod"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.get_descs
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.descs"
+  Left = 116
+  TabIndex = 2
+  Top = 192
+  Width = 290
+  ZOrderSet = 4
+  Name = "get_descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontSize = 10
+  WordWrap = .T.
+  Caption = "BASES = Base"
+  Height = 18
+  Left = 61
+  Top = 389
+  Width = 93
+  TabIndex = 19
+  ForeColor = 255,0,0
+  ZOrderSet = 3
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontSize = 10
+  WordWrap = .T.
+  Caption = "Ex: (((BCERAS - BASES) * 15,3) - 40)/5"
+  Height = 18
+  Left = 61
+  Top = 409
+  Width = 268
+  TabIndex = 11
+  ForeColor = 255,0,0
+  ZOrderSet = 3
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.get_formula
+------------------------------------------------------------
+  Height = 100
+  Left = 115
+  TabIndex = 3
+  Top = 228
+  Width = 290
+  ControlSource = "crSigCdArv.formulas"
+  Name = "get_formula"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Fundição"
+  Height = 15
+  Left = 435
+  Top = 208
+  Width = 61
+  TabIndex = 22
+  ForeColor = 36,84,155
+  BackColor = 210,210,210
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Get_TempMet
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.TempMets"
+  Format = "K"
+  Height = 23
+  Left = 465
+  MaxLength = 15
+  TabIndex = 5
+  Top = 242
+  Width = 115
+  Name = "Get_TempMet"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Get_TempTub
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.TempTubs"
+  Format = "K"
+  Height = 23
+  Left = 615
+  MaxLength = 15
+  TabIndex = 6
+  Top = 242
+  Width = 115
+  Name = "Get_TempTub"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Temperatura Metal"
+  Height = 15
+  Left = 465
+  Top = 226
+  Width = 110
+  TabIndex = 12
+  ForeColor = 36,84,155
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Temperatura Tubo"
+  Height = 15
+  Left = 615
+  Top = 226
+  Width = 108
+  TabIndex = 14
+  ForeColor = 231,254,253
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Revestimento"
+  Height = 15
+  Left = 435
+  Top = 272
+  Width = 91
+  TabIndex = 15
+  ForeColor = 36,84,155
+  BackColor = 210,210,210
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Get_TempAmb
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.TempAmbs"
+  Format = "K"
+  Height = 23
+  Left = 465
+  MaxLength = 15
+  TabIndex = 7
+  Top = 304
+  Width = 115
+  Name = "Get_TempAmb"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.get_perc
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.Percs"
+  Height = 21
+  InputMask = "999.99"
+  Left = 514
+  Margin = 0
+  TabIndex = 4
+  Top = 166
+  Width = 52
+  ZOrderSet = 18
+  Name = "get_perc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Get_TempAgu
+------------------------------------------------------------
+  ControlSource = "crSigCdArv.Tempagus"
+  Format = "K"
+  Height = 23
+  Left = 615
+  MaxLength = 15
+  TabIndex = 8
+  Top = 304
+  Width = 115
+  Name = "Get_TempAgu"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Temperatura Ambiente"
+  Height = 15
+  Left = 465
+  Top = 288
+  Width = 134
+  TabIndex = 18
+  ForeColor = 36,84,155
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Temperatura Água"
+  Height = 15
+  Left = 615
+  Top = 288
+  Width = 109
+  TabIndex = 21
+  ForeColor = 231,254,253
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Metal Novo :"
+  Height = 15
+  Left = 435
+  Top = 170
+  Width = 74
+  TabIndex = 17
+  ForeColor = 36,84,155
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDARV.Pagina.Dados.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "%"
+  Height = 15
+  Left = 570
+  Top = 170
+  Width = 14
+  TabIndex = 17
+  ForeColor = 36,84,155
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDARV
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+        lcQryArv = [Select * From SigCdArv]
+		With .poDataMgr
+			.AddCursor('SigCdArv', 'codigos', 'crSigCdArv', '', ThisForm.Pagina.Lista.Grade, lcQryArv)
+			.pfSqlTabela(1).pColuna('Codigos', '', '', 'Códigos', 80, .T.)
+			.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 290, .F.)
+		EndWith
+
+		=DoDefault()
+        Go Top
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+If .Not. Empty(ThisForm.Pagina.Dados.Get_Cod.Value)
+	ThisForm.poDataMgr.LocateCursor('csSigCdArv','Codigos',ThisForm.Pagina.Dados.Get_Cod.Value)
+	ThisForm.Pagina.Lista.Grade.Column1.SetFocus()
+EndIf
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigCdArv
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Cod.SetFocus()
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.get_Descs.SetFocus()
+Other
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus()
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty( ThisForm.Pagina.Dados.Get_Cod.Value )
+		Messagebox( 'Código não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Cod.SetFocus()
+		Return
+	Endif
+	If ThisForm.poDataMgr.ChkRegister('SigCdArv','codigos',ThisForm.Pagina.Dados.Get_Cod.Value)
+		MessageBox( 'Tipo de Árvore já cadastrada!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Cod.SetFocus
+		Return
+	Endif
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivapagina1()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1()
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.get_Cod
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(!Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' ))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.get_descs
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN(!Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' ))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.Get_TempMet
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.Get_TempTub
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.Get_TempAmb
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDARV.Pagina.Dados.Get_TempAgu
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

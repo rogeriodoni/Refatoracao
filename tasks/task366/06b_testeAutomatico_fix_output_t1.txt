@@ -1,0 +1,7 @@
+﻿Nenhuma ocorr├¬ncia restante. As corre├º├Áes aplicadas foram:
+
+1. **Causa raiz do crash** ÔÇö 4 ocorr├¬ncias de `THIS.Parent.Width - 20` substitu├¡das por `THIS.Width`. `THIS.Parent` ├® null quando o form ├® instanciado via `CREATEOBJECT()` sem `Show()`, causando `PARENT is not an object` ÔåÆ `CREATEOBJECT retornou valor nao-objeto`.
+
+2. **Bug can├┤nico** ÔÇö `cmd_4c_Encerrar.Left = 917` e `.Width = 90` corrigidos para `Left = 5`, `Width = 75` (padr├úo can├┤nico do sistema).
+
+3. **Bug em BOParaForm** ÔÇö 3 linhas de checkbox com constru├º├úo malformada `loc_oBO.this_nFrtipis .Value = IIF(...)` corrigidas para `IIF(loc_oBO.this_nFrtipis = 1, 1, 0)` (teriam causado crash na primeira abertura de registro).

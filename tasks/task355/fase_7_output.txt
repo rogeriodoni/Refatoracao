@@ -1,0 +1,14 @@
+﻿Ambos os arquivos est├úo completos. Analisando:
+
+**CatBO.prg** - confirmado:
+- `cidchaves` ├® a PK t├®cnica (UUID via `fUniqueIds`)
+- `Buscar()` inclui `cidchaves` no SELECT ÔÇö o cursor `cursor_4c_Dados` **tem** esse campo
+- Todos os m├®todos CRUD implementados corretamente
+
+**FormCat.prg** - os 4 eventos da Fase 7 j├í foram implementados em fases anteriores:
+- `BtnIncluirClick()` (linha 755) ÔÇö chama `NovoRegistro()`, seta `this_cModoAtual = "INCLUIR"` **antes** de `HabilitarCampos()` Ô£ô
+- `BtnVisualizarClick()` (linha 770) ÔÇö l├¬ `cidchaves` do cursor (campo existe), chama `CarregarPorCodigo()` Ô£ô
+- `BtnAlterarClick()` (linha 797) ÔÇö chama `CarregarPorCodigo()` + `EditarRegistro()`, seta modo antes de habilitar Ô£ô
+- `BtnExcluirClick()` (linha 828) ÔÇö usa `MsgConfirma()` como l├│gico (`IF loc_lConfirma`), chama `Excluir()` p├║blico Ô£ô
+
+Todos os problemas cr├¡ticos documentados est├úo cobertos (Problema 18, 19, 50, 57). A Fase 7/8 j├í est├í completa ÔÇö os eventos foram inclu├¡dos durante a Fase 6 (campos restantes e lookups).

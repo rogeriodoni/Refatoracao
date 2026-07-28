@@ -1,0 +1,3483 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdBch.SCX
+* Data/Hora: 21/07/2026 21:27:46
+* Total de registros: 80
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDBCH
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Leitura
+  Parent: SIGCDBCH.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Fecha
+  Parent: SIGCDBCH.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Codigo
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Oper
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDConta
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Operacao
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DataInicial
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DataFinal
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetGrupo
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDGrupo
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetConta
+  Parent: SIGCDBCH.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape2
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: ShpLeitura
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape4
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_Codigo
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Operacao
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDConta
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetConta
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDGrupo
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DataFinal
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DataInicial
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetGrupo
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Oper
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Valor
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Vecto
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradeLeitura
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say13
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: ShpComm
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: shape
+  BaseClass: shape
+
+Objeto: TipoLeitura
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Comm_Ini
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Comm_Fim
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cancela
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Salva
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Excluir
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Get_Bco
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Age
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Num
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Conta
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: AvisoPortaM
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: image
+  BaseClass: image
+
+Objeto: AvisoPortaP
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: image
+  BaseClass: image
+
+Objeto: AvisoPortaS
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: image
+  BaseClass: image
+
+Objeto: AvisoPortaT
+  Parent: SIGCDBCH.Pagina.Leitura
+  Class: image
+  BaseClass: image
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 63
+  Left = 37
+  Width = 464
+  Height = 282
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Balanço de Cheques"
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDBCH"
+  Pagina.ErasePage = .T.
+  Pagina.PageCount = 3
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 461
+  Pagina.Lista.Grade.Left = 33
+  Pagina.Lista.Grade.Top = 129
+  Pagina.Lista.Grade.Width = 941
+  Pagina.Lista.Grade.ZOrderSet = 2
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Comment = ""
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.AutoSize = .T.
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 25
+  Pagina.Lista.cntFiltros.Left = 479
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 7
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 82
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 840
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 2
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Page3.Caption = "Leitura"
+  Pagina.Page3.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Page3.Name = "Leitura"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Lista.Leitura
+------------------------------------------------------------
+  Top = 83
+  Left = 31
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_etiqueta_60.jpg
+  Caption = "Leitura"
+  ToolTipText = "[F8] Leitura"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 5
+  Themes = .F.
+  Name = "Leitura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Lista.Fecha
+------------------------------------------------------------
+  Top = 83
+  Left = 152
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "Encerrar"
+  ToolTipText = "[F9] Encerrar"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 6
+  Themes = .F.
+  Name = "Fecha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Get_Codigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCdBch.Codigos"
+  Height = 25
+  InputMask = "9999"
+  Left = 327
+  MaxLength = 4
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 143
+  Width = 60
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 3
+  Name = "Get_Codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 283
+  Top = 147
+  Visible = .T.
+  Width = 42
+  TabIndex = 11
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say5
+------------------------------------------------------------
+  Caption = "Operação :"
+  Height = 15
+  Left = 269
+  Top = 201
+  Width = 56
+  TabIndex = 13
+  ZOrderSet = 5
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Tipo :"
+  Height = 15
+  Left = 296
+  Top = 174
+  Visible = .T.
+  Width = 29
+  TabIndex = 12
+  ZOrderSet = 6
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Get_Oper
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCdBch.Operacaos"
+  Height = 25
+  InputMask = "!!!!!!!!!!!!!!!"
+  Left = 327
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 197
+  Width = 130
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "Get_Oper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.GetDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 409
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 305
+  Width = 320
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "GetDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Cmb_Operacao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  RowSourceType = 1
+  RowSource = "1ª. Entrada,Pendentes,Devolvidos,Todos"
+  ControlSource = "crSigCdBch.Tipos"
+  Height = 25
+  Left = 327
+  Margin = 2
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 170
+  Width = 130
+  ZOrderSet = 7
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Cmb_Operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Término :"
+  Height = 15
+  Left = 278
+  Top = 255
+  Visible = .T.
+  Width = 47
+  TabIndex = 15
+  ZOrderSet = 8
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Início :"
+  Height = 15
+  Left = 291
+  Top = 228
+  Visible = .T.
+  Width = 34
+  TabIndex = 14
+  ZOrderSet = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Height = 15
+  Left = 287
+  Top = 282
+  Width = 38
+  TabIndex = 16
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Height = 15
+  Left = 287
+  Top = 309
+  Width = 38
+  TabIndex = 17
+  ZOrderSet = 11
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Get_DataInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  StrictDateEntry = 0
+  ControlSource = "crSigCdBch.DataInis"
+  Format = "E"
+  Height = 25
+  InputMask = "99/99/9999"
+  Left = 327
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 224
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "Get_DataInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.Get_DataFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  StrictDateEntry = 0
+  ControlSource = "crSigCdBch.DataFims"
+  Format = "E"
+  Height = 25
+  InputMask = "99/99/9999"
+  Left = 327
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 251
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "Get_DataFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.GetGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCdBch.Grupos"
+  Height = 25
+  Left = 327
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 278
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "GetGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.GetDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 409
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 278
+  Width = 320
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "GetDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Dados.GetConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCdBch.Contas"
+  Height = 25
+  Left = 327
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 305
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "GetConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Shape2
+------------------------------------------------------------
+  Top = 164
+  Left = 167
+  Height = 154
+  Width = 509
+  BackStyle = 0
+  Visible = .T.
+  BorderColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.ShpLeitura
+------------------------------------------------------------
+  Top = 316
+  Left = 167
+  Height = 192
+  Width = 192
+  BackStyle = 0
+  Visible = .T.
+  BorderColor = 90,90,90
+  ZOrderSet = 1
+  Name = "ShpLeitura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Shape4
+------------------------------------------------------------
+  Top = 164
+  Left = 674
+  Height = 154
+  Width = 158
+  BackStyle = 0
+  Visible = .T.
+  BorderColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Codigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.Codigos"
+  Format = ""
+  Height = 25
+  InputMask = "9999"
+  Left = 175
+  MaxLength = 4
+  TabIndex = 1
+  Top = 184
+  Width = 60
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "Get_Codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Código"
+  Height = 15
+  Left = 175
+  Top = 169
+  Visible = .T.
+  Width = 35
+  TabIndex = 23
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say1
+------------------------------------------------------------
+  Caption = "Operação"
+  Height = 15
+  Left = 356
+  Top = 169
+  Width = 49
+  TabIndex = 26
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Tipo"
+  Height = 15
+  Left = 246
+  Top = 169
+  Visible = .T.
+  Width = 22
+  TabIndex = 25
+  ZOrderSet = 6
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Cmb_Operacao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 1
+  RowSource = "1a. Entrada,Pendentes,Devolvidos,Todos"
+  ControlSource = "crSigCdBCh.Tipos"
+  Height = 25
+  Left = 246
+  Margin = 2
+  TabIndex = 2
+  Top = 184
+  Width = 100
+  ZOrderSet = 7
+  ForeColor = 0,0,0
+  Name = "Cmb_Operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Término"
+  Height = 15
+  Left = 587
+  Top = 169
+  Visible = .T.
+  Width = 40
+  TabIndex = 28
+  ZOrderSet = 8
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Início"
+  Height = 15
+  Left = 497
+  Top = 169
+  Visible = .T.
+  Width = 27
+  TabIndex = 27
+  ZOrderSet = 9
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo"
+  Height = 15
+  Left = 175
+  Top = 219
+  Width = 31
+  TabIndex = 29
+  ZOrderSet = 10
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta"
+  Height = 15
+  Left = 175
+  Top = 269
+  Width = 31
+  TabIndex = 30
+  ZOrderSet = 11
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GetDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 256
+  MaxLength = 40
+  TabIndex = 9
+  Top = 284
+  Width = 240
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "GetDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GetConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.Contas"
+  Format = "K"
+  Height = 25
+  Left = 175
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 8
+  Top = 284
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "GetConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GetDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 256
+  MaxLength = 20
+  TabIndex = 7
+  Top = 234
+  Width = 160
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "GetDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_DataFinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.DataFims"
+  Format = "K"
+  Height = 25
+  Left = 587
+  MaxLength = 10
+  TabIndex = 5
+  Top = 184
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "Get_DataFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_DataInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.DataInis"
+  Format = "K"
+  Height = 25
+  Left = 497
+  MaxLength = 10
+  TabIndex = 4
+  Top = 184
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "Get_DataInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GetGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.Grupos"
+  Format = "K"
+  Height = 25
+  Left = 175
+  MaxLength = 10
+  TabIndex = 6
+  Top = 234
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "GetGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Oper
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdBCh.Operacaos"
+  Height = 25
+  InputMask = "!!!!!!!!!!!!!!!"
+  Left = 356
+  TabIndex = 3
+  Top = 184
+  Width = 130
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "Get_Oper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Valor :"
+  Height = 15
+  Left = 218
+  Top = 452
+  Visible = .T.
+  Width = 33
+  TabIndex = 35
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Vencimento :"
+  Height = 15
+  Left = 187
+  Top = 478
+  Visible = .T.
+  Width = 64
+  TabIndex = 36
+  ZOrderSet = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Valor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  Value = 1
+  Height = 25
+  InputMask = "9,999,999.99"
+  Left = 253
+  TabIndex = 16
+  Top = 448
+  Width = 100
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "Get_Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Vecto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 253
+  TabIndex = 17
+  Top = 474
+  Width = 83
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "Get_Vecto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Arial"
+  FontSize = 8
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 192
+  Left = 357
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 10
+  Top = 316
+  Width = 475
+  ZOrderSet = 22
+  RightToLeft = .T.
+  Name = "GradeLeitura"
+  Column1.FontName = "Arial"
+  Column1.FontSize = 8
+  Column1.Alignment = 2
+  Column1.Width = 40
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Arial"
+  Column2.FontSize = 8
+  Column2.Alignment = 2
+  Column2.Width = 50
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Arial"
+  Column3.FontSize = 8
+  Column3.Alignment = 2
+  Column3.Width = 95
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Arial"
+  Column4.FontSize = 8
+  Column4.Alignment = 2
+  Column4.Width = 65
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.Width = 58
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Arial"
+  Column6.FontSize = 8
+  Column6.Width = 140
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Format = "999,999,999.99"
+  Column6.InputMask = "999,999,999.99"
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Banco"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column1.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Value = "   "
+  ControlSource = "TEMPCHQ.BANCOS"
+  Format = "999"
+  InputMask = "999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column2.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Agência"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column2.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Value = "    "
+  ControlSource = "TEMPCHQ.AGENCIAS"
+  Format = "9999"
+  InputMask = "9999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column3.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nº Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column3.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Value = "          "
+  ControlSource = "TEMPCHQ.NCONTAS"
+  Format = "9999999999"
+  InputMask = "9999999999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column4.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nº Cheque"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column4.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Value = "      "
+  ControlSource = "TEMPCHQ.NCHEQUES"
+  Format = "999999"
+  InputMask = "999999"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column5.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column5.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = {}
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column6.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.GradeLeitura.Column6.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TEMPCHQ.VALORS"
+  Enabled = .T.
+  Format = "999,999,999.99"
+  InputMask = "999,999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say13
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Cheque"
+  Height = 15
+  Left = 175
+  Top = 322
+  Visible = .T.
+  Width = 39
+  TabIndex = 24
+  ZOrderSet = 4
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Shape3
+------------------------------------------------------------
+  Top = 216
+  Left = 705
+  Height = 36
+  Width = 95
+  BackStyle = 0
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.ShpComm
+------------------------------------------------------------
+  Top = 256
+  Left = 684
+  Height = 55
+  Width = 138
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "ShpComm"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 537
+  Height = 110
+  Width = 251
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.TipoLeitura
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  Value = 1
+  Height = 41
+  Left = 709
+  SpecialEffect = 1
+  Top = 170
+  Width = 78
+  TabIndex = 11
+  BorderColor = 90,90,90
+  Themes = .F.
+  Name = "TipoLeitura"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Leitura"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Re-Leitura"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 21
+  Option2.Width = 68
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Comm_Ini
+------------------------------------------------------------
+  Top = 261
+  Left = 689
+  Height = 45
+  Width = 64
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\b_on.bmp
+  Caption = "In. \<Leitura"
+  TabIndex = 21
+  ToolTipText = "Iniciar Leitura"
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Comm_Ini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Comm_Fim
+------------------------------------------------------------
+  Top = 261
+  Left = 753
+  Height = 45
+  Width = 64
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\b_off.bmp
+  Caption = "\<Desligar"
+  TabIndex = 22
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Comm_Fim"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Cancela
+------------------------------------------------------------
+  Top = 2
+  Left = 923
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "\<Cancelar"
+  TabIndex = 20
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Salva
+------------------------------------------------------------
+  Top = 2
+  Left = 848
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Gravar"
+  TabIndex = 19
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Salva"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Excluir
+------------------------------------------------------------
+  Top = 2
+  Left = 773
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  TabIndex = 18
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Bco
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 253
+  MaxLength = 3
+  TabIndex = 12
+  Top = 344
+  Width = 35
+  ForeColor = 0,0,0
+  Name = "Get_Bco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Age
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 253
+  MaxLength = 4
+  TabIndex = 13
+  Top = 370
+  Width = 45
+  ForeColor = 0,0,0
+  Name = "Get_Age"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Num
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 253
+  MaxLength = 6
+  TabIndex = 15
+  Top = 422
+  Width = 50
+  ForeColor = 0,0,0
+  Name = "Get_Num"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Get_Conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 253
+  MaxLength = 10
+  TabIndex = 14
+  Top = 396
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say8
+------------------------------------------------------------
+  Caption = "Banco :"
+  Left = 213
+  Top = 348
+  Visible = .T.
+  TabIndex = 31
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say9
+------------------------------------------------------------
+  Caption = "Agência :"
+  Height = 15
+  Left = 204
+  Top = 374
+  Visible = .T.
+  Width = 47
+  TabIndex = 32
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say11
+------------------------------------------------------------
+  Caption = "Número :"
+  Height = 15
+  Left = 205
+  Top = 426
+  Visible = .T.
+  Width = 46
+  TabIndex = 34
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.Say12
+------------------------------------------------------------
+  Caption = "Conta :"
+  Height = 15
+  Left = 213
+  Top = 400
+  Visible = .T.
+  Width = 38
+  TabIndex = 33
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.AvisoPortaM
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alpham.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 731
+  Top = 221
+  Width = 25
+  ColorSource = 4
+  ToolTipText = "Sem Leitora de Cheques"
+  Name = "AvisoPortaM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.AvisoPortaP
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alphap.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 768
+  Top = 221
+  Width = 25
+  ColorSource = 4
+  ToolTipText = "Leitora de Cheques Serial"
+  Name = "AvisoPortaP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.AvisoPortaS
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alphas.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 711
+  Top = 221
+  Width = 25
+  ColorSource = 4
+  ToolTipText = "Leitora de Cheques Serial"
+  Name = "AvisoPortaS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCH.Pagina.Leitura.AvisoPortaT
+------------------------------------------------------------
+  Picture = ..\vbmp\b_alphat.bmp
+  Stretch = 0
+  BackStyle = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Height = 25
+  Left = 751
+  Top = 221
+  Width = 25
+  ColorSource = 4
+  ToolTipText = "Leitora de Cheques por Teclado"
+  Name = "AvisoPortaT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDBCH
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE grava
+------------------------------------------------------------
+PROCEDURE grava
+LParameters pCodigos, pForms, pArqs, pCursor, pExcluir
+
+Private pcCodigos, pcForms, pcArqs, pcCursor, plExcluir
+
+pcCodigos = pCodigos
+pcForms   = pForms
+pcArqs    = pArqs
+pcCursor  = pCursor
+plExcluir = pExcluir
+
+llOk = .T.
+
+If ThisForm.poDataMg2.Requery('CrSigCdGrl') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Requery SigCdGrl)')
+	llOk = .F.
+Else
+	Select CrSigCdGrl
+	Index On Arqs + Progs + Str(Codigos,6) Tag Arqs
+	Go Top
+EndIf
+
+loBarraGrv = CreateObject('fwprogressbar','Atualizando Arquivos...',2)
+loBarraGrv.Show
+
+Select (pcCursor)
+Go Top
+Scan
+	loBarraGrv.Update(.T.,'SigCdBch...')
+	lnRegs = Reccount(pcCursor)
+	If lnRegs > 0
+		If llOk
+			Select CrSigCdGrl
+			Go Top
+			If !Seek(pcArqs + pcForms + Str(pcCodigos,6),'CrSigCdGrl','Arqs')
+				m.Emps      = _Empr
+				m.Codigos   = pcCodigos
+				m.Arqs      = pcArqs
+				m.Progs     = pcForms
+				m.AtuRegs   = 0
+				m.Datas     = Datetime()
+				m.CIdChaves = fUniqueIds()
+				Insert Into CrSigCdGrl From MemVar
+			EndIf
+			Replace Regs With lnRegs In CrSigCdGrl
+			lnAtuRegs = (CrSigCdGrl.AtuRegs + 1)
+			lcCursor  = 'Cg' + Alltrim(pcCursor)
+			Select (pcCursor)
+			Go Top
+			If lnAtuRegs > lnRegs
+				Go Bottom
+				Skip
+			Else
+				Go lnAtuRegs
+			EndIf
+			lnCnt = 0
+			Do While !Eof()
+				Scan While !Eof() And lnCnt < 100
+					loBarraGrv.Rodape.Caption = 'Atualizando Registros... ' + Alltrim(Str(((Recno() / lnRegs) * 100),3)) + ' %'
+					Scatter MemVar Memo
+					Insert Into (lcCursor) From MemVar
+					lnCnt = lnCnt + 1
+					Select (pcCursor)
+				EndScan
+				If !ThisForm.poDataMg2.Update(lcCursor)
+					llOk = .F.
+					MessageBox('Favor reinicializar o processo!!!',16,'Falha na Conexão (Update - ' + lcCursor + ')')
+				Else
+					Select (lcCursor)
+					lnAtualizados = Reccount()
+					Select CrSigCdGrl
+					Replace AtuRegs With AtuRegs + lnAtualizados , ;
+							Datas With Datetime() In CrSigCdGrl
+					lnCnt = 0
+					If !ThisForm.poDataMg2.Update('CrSigCdGrl')
+						llOk = .F.
+						MessageBox('Favor reinicializar o processo!!!',16,'Falha na Conexão (Update - CrSigCdGrl')
+					Else
+						If ThisForm.poDataMg2.Commit() < 1
+							llOk = .F.
+						Else
+							Zap In (lcCursor)
+						EndIf
+					EndIf
+				EndIf
+				Select (pcCursor)
+			EndDo
+		EndIf
+	EndIf
+EndScan
+loBarraGrv.Complete(.T.)
+
+If plExcluir
+	lnRegs   = Reccount(pcCursor)
+	lcCursor = 'Cg' + Alltrim(pcCursor)
+	
+	loBarraExc = CreateObject('fwprogressbar','Atualizando Arquivos...',lnRegs)
+	loBarraExc.Show
+	
+	Set Deleted Off
+
+	Select (pcCursor)
+	Go Top
+	Scan
+		loBarraExc.Update(.T.)
+		If Deleted()
+			Scatter MemVar Memo
+			Insert Into (lcCursor) From MemVar
+		EndIf
+		Select (pcCursor)
+	EndScan
+	loBarraExc.Complete(.T.)
+	
+	Set Deleted On
+	
+	Select (lcCursor)
+	Delete From (lcCursor)
+	
+	If !ThisForm.poDataMg2.Update(lcCursor)
+		llOk = .F.
+		MessageBox('Favor reinicializar o processo!!!',16,'Falha na Conexão (Delete - ' + lcCursor + ')')
+	Else
+		If ThisForm.poDataMg2.Commit() < 1
+			llOk = .F.
+		Else
+			Zap In (lcCursor)
+		EndIf
+	EndIf
+EndIf
+
+Return(llOk)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE inchequeserial
+------------------------------------------------------------
+PROCEDURE inchequeserial
+Local lcBanco, lcAgencias, lcContas, lcNumeros
+
+If InList(ThisForm.TipoLeitora,'S','P') And !ThisForm.IniciaLeitura
+	Return
+EndIf
+
+ThisForm.Leitor = .F.
+ThisForm.ReadComm.Leitura()
+ThisForm.LeituraSerial= ThisForm.ReadComm.Campo
+
+If Atc('?',ThisForm.ReadComm.Campo) <> 0 Or Empty(ThisForm.LeituraSerial)
+	If !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError
+		ThisForm.ReadComm.Ole_Comm.PortOpen = .T.
+	EndIf
+	ThisForm.ReadComm.Ole_Comm.OutPut = 'WEBCD'
+	Wait Window 'Erro na Leitura do Cheque <Tecle Enter>...'
+	Wait Clear
+	ThisForm.LeituraSerial = ''
+	With ThisForm.Pagina.Leitura
+		.Get_Bco.Value   = ''
+		.Get_Age.Value   = ''
+		.Get_Conta.Value = ''
+		.Get_Num.Value   = ''
+		.Get_Bco.SetFocus
+	EndWith
+	ThisForm.Leitor = .F.
+	Return
+EndIf
+KeyBoard '{ENTER}'
+
+ThisForm.Pagina.Leitura.Get_Bco.Valid
+If ThisForm.Leitor
+	With ThisForm.Pagina.Leitura
+		lcBanco    = .Get_Bco.Value
+		lcAgencias = .Get_Age.Value
+		lcContas   = .Get_Conta.Value
+		lcNumeros  = .Get_Num.Value
+	EndWith
+	
+	If !ThisForm.VerifCheq(lcBanco,lcAgencias,lcContas,lcNumeros)
+		ThisForm.LeituraSerial = ''
+		With ThisForm.Pagina.Leitura
+			.Get_Bco.Value   = ''
+			.Get_Age.Value   = ''
+			.Get_Conta.Value = ''
+			.Get_Num.Value   = ''
+			.Get_Bco.SetFocus
+		EndWith
+	Else
+		ThisForm.Pagina.Leitura.Get_Num.SetFocus
+	EndIf		
+EndIf
+ThisForm.Leitor = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE verifcheq
+------------------------------------------------------------
+PROCEDURE verifcheq
+LParameters lcBanco, lcAgencia, lcConta, lcNumero
+
+lcTipo   = Str(ThisForm.Pagina.Leitura.TipoLeitura.Value,1)
+lcCheque = lcBanco + lcAgencia + lcConta + lcNumero
+lcMsg = ''
+If !fChkDigitos(lcBanco) Or !fChkDigitos(lcAgencia) Or !fChkDigitos(lcConta) Or !fChkDigitos(lcNumero)
+	lcMsg = 'Leitura de Cheque Incorreta !!!'
+Else
+	Select Historico
+	Set Order To TpCheque &&Cheque
+	If Seek(lcTipo + lcCheque)
+		lcMsg = 'Cheque já lançado !!! <ENTER> para continuar...'
+	Else
+		Select Balanco
+		Set Order To Cheque
+		=Seek(lcCheque)
+		If Eof('Balanco')
+			If !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError
+				ThisForm.ReadComm.Ole_Comm.PortOpen = .T.
+			EndIf
+			ThisForm.ReadComm.Ole_Comm.OutPut = 'WEBCD'
+			Wait Window 'Cheque não Cadastrado !!! <ENTER> para continuar...'
+		EndIf
+	EndIf
+EndIf
+If !Empty(lcMsg)
+	Wait Window lcMsg
+	Return(.F.)
+Else
+	Wait Window 'Passe o Cheque pela Leitora, ou ' + Chr(13) + '<ENTER> para Digitar...' NoWait
+	Return(.T.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Acesso
+
+Local lnTpLeCheques
+
+Private lnCodigos
+
+ThisForm.AcLeitura = fChecaAcesso('SIGCDBCH','LEITURA')
+ThisForm.AcEncerra = fChecaAcesso('SIGCDBCH','ENCERRA')
+
+lcQryBal = [Select * From SigCqBal Where Codigos = ?lnCodigos ]
+lcQryHis = [Select * From SigCqHis Where Codigos = ?lnCodigos ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','SigCdBch')
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdBch','Codigos'  ,'CrSigCdBch','Codigos'  ,ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna('Codigos'  , '', '', 'Código'  , 80, .T.)
+			.pfSqlTabela(1).pColuna('DataInis' , '', '', 'Início'  , 80, .F.)
+			.pfSqlTabela(1).pColuna('DataFims' , '', '', 'Final'   , 80, .F.)
+			.pfSqlTabela(1).pColuna('Tipos'    , '', '', 'Tipo'    , 80, .F.)
+			.pfSqlTabela(1).pColuna('Grupos'   , '', '', 'Grupo'   , 80, .F.)
+			.pfSqlTabela(1).pColuna('Contas'   , '', '', 'Conta'   , 80, .F.)
+			.pfSqlTabela(1).pColuna('Operacaos', '', '', 'Operação',130, .F.)
+		EndWith
+		ThisForm.Refresh
+	Else
+		Messagebox('Impossível Efetuar Conexão com Servidor de Banco de Dados !!!',48,'Create Object 1')
+		Return(.F.)
+	EndIf
+
+	.poDataMg2 = CreateObject('fSqlConector','SigCdBch')
+	lcQGrLog  = [Select * From SigCdGrl ]+;
+				[Where Emps = ?_Empr And Codigos = ?pcCodigos And Progs = ?pcForms And Arqs = ?pcArqs ]
+	If (.poDataMg2.pnIdconn > 0)
+		With .poDataMg2
+			.AddCursor('SigCqBal','CIdChaves','Balanco'    ,'CIdChaves','',lcQryBal)
+			.AddCursor('SigCqHis','CIdChaves','Historico'  ,'CIdChaves','',lcQryHis)
+			.AddCursor('SigCqBal','CIdChaves','CgBalanco'  ,'CIdChaves','',lcQryBal)
+			.AddCursor('SigCqHis','CIdChaves','CgHistorico','CIdChaves','',lcQryHis)
+			.AddCursor('SigCdGrl','CIdChaves','CrSigCdGrl' ,''         ,'',lcQGrLog)
+		EndWith
+		ThisForm.Refresh
+	Else
+		Messagebox('Impossível Efetuar Conexão com Servidor de Banco de Dados !!!',48,'Create Object 2')
+		Return(.F.)
+	EndIf
+
+	=DoDefault(_Acesso)
+EndWith
+
+With ThisForm.Pagina.Lista.Grade
+	.Column2.ControlSource = [Nvl(CrSigCdBch.DataInis,'')]
+	.Column3.ControlSource = [Nvl(CrSigCdBch.DataFims,'')]
+	.Column4.ControlSource = ;
+	'Iif(CrSigCdBch.Tipos = 1,[1ª.Entrada],Iif(CrSigCdBch.Tipos = 2,[Pendentes],Iif(CrSigCdBch.Tipos = 3,[Devolvidos],[Todos])))'
+EndWith
+
+Create Cursor TmpLocal (Locals c(6),Leitura n(8,2),ReLeitura n(8,2))
+Index On Locals Tag Locals
+
+If Not fLerSettings('CrSigSyCom',ThisForm.Podatamgr )
+	Return 0
+Endif
+Select * From crSigSyCom Where Tipos = 'Leitora cheques' Into Cursor CrCfCom
+
+TpLeChq = CrCfCom.TpLeChqs
+
+If Empty(CrCfCom.TpLeChqs)
+	TpLeChq = 'T'
+EndIf
+ThisForm.TipoLeitora   = TpLeChq
+ThisForm.LeituraSerial = ''
+
+lnTpLeCheques = 0
+If InList(TpLeChq,'S','P')
+	lnTpLeCheques = Iif(TpLeChq = 'S',1,2)
+	ThisForm.ReadComm.Configura(CrCfCom.Portas,CrCfCom.Dtrs,CrCfCom.Rtss,CrCfCom.Hands,CrCfCom.Settings,CrCfCom.InBufs,;
+								CrCfCom.OutBufs,CrCfCom.InModes,CrCfCom.InLens)
+	If TpLeChq = 'S'
+		ThisForm.ReadComm.TamBuffer = 33
+		ThisForm.ReadComm.pTimeOut  = 15
+		ThisForm.AcIniComm = .f.
+		ThisForm.AcFimComm = .f.
+	Else
+		ThisForm.ReadComm.TamBuffer = 36
+		ThisForm.ReadComm.pTimeOut  = 3
+		ThisForm.AcIniComm = .t.
+		ThisForm.AcFimComm = .t.
+	EndIf
+	If ThisForm.ReadComm.PortaError
+		ThisForm.ReadComm.Enabled   = .F.
+		lnTpLeCheques = 3
+	EndIf
+EndIf
+
+With ThisForm.Pagina.Leitura
+	.AvisoPortaT.Visible = (lnTpLeCheques = 0)
+	.AvisoPortaS.Visible = (lnTpLeCheques = 1)
+	.AvisoPortaP.Visible = (lnTpLeCheques = 2)
+	.AvisoPortaM.Visible = (lnTpLeCheques = 3)
+EndWith
+
+ThisForm.Pagina.Leitura.Enabled          = ThisForm.AcLeitura
+ThisForm.Pagina.Lista.Leitura.Visible    = ThisForm.AcLeitura
+ThisForm.Pagina.Lista.Fecha.Visible      = ThisForm.AcEncerra
+ThisForm.Pagina.Leitura.Comm_Ini.Enabled = ThisForm.AcIniComm
+ThisForm.Pagina.Leitura.Comm_Fim.Enabled = ThisForm.AcFimComm
+
+ThisForm.Pagina.Lista.Grade.SetAll('DynamicForeColor','Iif(CrSigCdBch.Encerras,RGB(0,0,255),Iif(!CrSigCdBch.Grvs,RGB(255,0,0),RGB(0,0,0)))','Column')
+Select CrSigCdBch
+Go Bottom
+
+ThisForm.mAtivaPagina1
+
+ThisForm.LockScreen = .T.
+=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+ThisForm.LockScreen = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode,nShiftAltCtrl
+
+=DoDefault(nKeyCode,nShiftAltCtrl)
+
+Do Case
+
+	Case nKeyCode = -7 And This.Pagina.ActivePage = 1   && [F8]
+		This.Pagina.Lista.Leitura.Click
+
+	Case nKeyCode = -8 And This.Pagina.ActivePage = 1   && [F9]
+		This.Pagina.Lista.Fecha.Click
+
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+With ThisForm.Pagina.Lista.Grade
+	.Column2.ControlSource = [Nvl(CrSigCdBch.DataInis,'')]
+	.Column3.ControlSource = [Nvl(CrSigCdBch.DataFims,'')]
+	.Column4.ControlSource = ;
+	'Iif(CrSigCdBch.Tipos = 1,[1ª.Entrada],Iif(CrSigCdBch.Tipos = 2,[Pendentes],Iif(CrSigCdBch.Tipos = 3,[Devolvidos],[Todos])))'
+EndWith
+
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Private lnCodigos
+
+lnCodigos = CrSigCdBch.Codigos
+
+ThisForm.Pagina.Leitura.GradeLeitura.RecordSource = ''
+
+ThisForm.poDataMg2.Requery('Balanco')
+ThisForm.poDataMg2.Requery('Historico')
+
+With ThisForm.Pagina.Leitura.GradeLeitura
+	.RecordSource = 'Historico'
+	.Column1.ControlSource = 'Historico.Bancos'
+	.Column2.ControlSource = 'Historico.Agencias'
+	.Column3.ControlSource = 'Historico.NContas'
+	.Column4.ControlSource = 'Historico.NCheques'
+	.Column5.ControlSource = [Nvl(Historico.Vencs,'')]
+	.Column6.ControlSource = 'Historico.Valors'
+EndWith
+
+Select Balanco
+Delete From Balanco
+
+Select Historico
+Delete From Historico
+
+Wait Window 'Aguarde! Atualizando Fisicamente os Arquivos...' NoWait
+
+llOk = ThisForm.poDataMg2.Update('Balanco')
+If llOk
+	llOk = ThisForm.poDataMg2.Update('Historico')
+EndIf
+
+If llOk
+	ThisForm.poDataMg2.Commit()
+Else
+	ThisForm.poDataMg2.RollBack()
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Update - Excluir)')
+	Return(.F.)
+EndIf
+
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Local lnCodigos, lcGrupo, lcConta, lcOpeCh, lcCond
+
+With ThisForm.Pagina.Dados
+	lnCodigos = .Get_Codigo.Value
+	lcGrupo   = .GetGrupo.Value
+	lcConta   = .GetConta.Value
+	lcOpeCh   = .Get_Oper.Value
+	lnTipo    = .Cmb_Operacao.Value
+EndWith
+
+lcWhere = ''
+
+Do Case
+	Case lnTipo = 1 And Empty(lcOpeCh)
+		lcWhere = [And b.Tipos = 'DB' And b.Ordens = 1 ]
+	Case lnTipo = 2 And Empty(lcOpeCh)
+		lcWhere = [And b.Tipos = 'DB' And b.Devolvidos <> 'S' ]
+	Case lnTipo = 3 And Empty(lcOpeCh)
+		lcWhere = [And b.Tipos = 'DB' And b.Devolvidos = 'S' ]
+	Case !Empty(lcOpeCh)
+		lcWhere = ''
+	Other
+		lcWhere = [And b.Tipos = 'DB' ]
+Endcase
+
+Wait Window 'Aguarde! Selecionando Cheques...' NoWait
+If Used('Balanco')
+	Zap In Balanco
+EndIf
+
+lStrQuery = [Select a.Bancos,a.Agencias,a.NContas,a.NCheques,a.Nums,a.UMovs,a.Valors,a.Vencs,a.GrClis,a.IClis,]+;
+				[0 As Lidos,0 As Relidos ]+;
+			[From SigChe a, SigCdOpt b ]+;
+			[Where a.Umovs = b.Operacaos ] + Iif(Empty(lcWhere),'',lcWhere)+;
+				Iif(Empty(lcGrupo),'',[And a.Grupos = ']+lcGrupo+[' ])+;
+				Iif(Empty(lcConta),'',[And a.Contas = ']+lcConta+[' ])+;
+				Iif(Empty(lcOpeCh),'',[And a.Umovs = ']+lcOpeCh+[' ])
+
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsBalanco') < 1
+	MessageBox('Favor renicializar o processo !!!',16,'Falha na Conexão (CsBalanco)')
+	Return(.F.)
+EndIf
+
+Wait Clear
+
+loBarra = CreateObject('fwprogressbar','Aguarde! Atualizando o Balanço...',Reccount('CsBalanco'))
+loBarra.Show
+
+Select CsBalanco
+Go Top
+Scan
+	loBarra.Update(.T.)
+	Scatter MemVar
+	m.Codigos   = lnCodigos
+	m.CIdChaves = fUniqueIds()
+	Insert Into Balanco From MemVar
+EndScan
+loBarra.Complete(.T.)
+
+lnOk = 1
+llOk = ThisForm.poDataMgr.Update('CrSigCdBch')
+If llOk
+	lnOk = ThisForm.poDataMgr.Commit()
+Else
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Update SigCqBal)')
+	Return(.F.)
+EndIf
+If lnOk > 0
+	llOk = ThisForm.Grava(lnCodigos,ThisForm.Name,'SigCqBal','Balanco',.F.)
+	If llOk
+		Select CrSigCdBch
+		Replace Grvs With .T. In CrSigCdBch
+	Else
+		MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Grava - Inserir)')
+		Return(.F.)
+	EndIf
+Else
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Commit - Inserir)')
+	Return(.F.)
+EndIf
+
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+ThisForm.poDataMg2.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+
+If !DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return
+EndIf
+
+This.Parent.Parent.Leitura.Enabled = .F.
+
+*-[ Posiciona o Cursor no primeiro campo de acordo com a opção ]-*
+With This.Parent.Parent.Dados
+	.GetDGrupo.Value = ''
+	.GetDConta.Value = ''
+
+	If ThisForm.pcEscolha <> 'INSERIR'
+		If ThisForm.poDataMgr.CursorQuery('SigCdGcr','CrSigCdGcr','Codigos',.GetGrupo.Value,'Codigos,Descrs')
+			.GetDGrupo.Value = CrSigCdGcr.Descrs
+		EndIf
+		If ThisForm.poDataMgr.CursorQuery('SigCdCli','CrSigCdCli','IClis',.GetConta.Value,'IClis,RClis')
+			.GetDConta.Value = CrSigCdCli.RClis
+		EndIf
+		.Get_DataInicial.Value = Nvl(CrSigCdBch.DataInis,'')
+		.Get_DataFinal.Value   = Nvl(CrSigCdBch.DataFims,'')
+	Else
+		.Get_DataInicial.Value = Date()
+		.Get_DataFinal.Value   = Date()
+	EndIf
+
+	Do Case
+		
+		Case InList(ThisForm.pcEscolha,'ALTERAR','EXCLUIR') And CrSigCdBch.Encerras
+			MessageBox('Inventário já encerrado !!!',48,'')
+			ThisForm.mAtivaPagina1
+			Return
+
+		Case ThisForm.pcEscolha = 'ALTERAR'
+			.Get_DataInicial.SetFocus
+
+		Case ThisForm.pcEscolha = 'INSERIR'
+			Replace Codigos With fGerUniqueKey('BALANCO CHEQUE') ,;
+					Grvs    With .F. In CrSigCdBch
+			.Cmb_Operacao.SetFocus
+
+		Case ThisForm.pcEscolha = 'PROCURAR'
+			.Get_Codigo.SetFocus
+
+		Case InList(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')
+			.Grupo_Salva.Salva.SetFocus
+
+	EndCase
+EndWith
+
+Select CrSigCdBch
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	If !Empty(CrSigCdBch.Grupos) And ;
+		!ThisForm.poDataMgr.CursorQuery('SigCdGcr','','Codigos',CrSigCdBch.Grupos,'Codigos')
+		Messagebox('Grupo Inválido !!!',16,'')
+		This.Parent.Parent.GetGrupo.SetFocus
+		Return 0
+	EndIf
+	If !Empty(CrSigCdBch.Contas) And !ThisForm.poDataMgr.CursorQuery('SigCdCli','','IClis',CrSigCdBch.Contas,'IClis')
+		Messagebox('Conta Inválida !!!',16,'')
+		This.Parent.Parent.GetConta.SetFocus
+		Return(.F.)
+	EndIf
+EndIf
+
+=DoDefault()
+
+This.Parent.Parent.Parent.Leitura.Enabled = ThisForm.AcLeitura
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+lnCodigos = CrSigCdBch.Codigos
+
+=DoDefault()
+
+If ThisForm.plCancelar
+	If ThisForm.pcEscolha = 'INSERIR'
+		=fCanUniqueKey(lnCodigos,'BALANCO CHEQUE')
+	EndIf
+	This.Parent.Parent.Parent.Leitura.Enabled = ThisForm.AcLeitura
+	ThisForm.mAtivaPagina1
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Leitura.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Leitura.Click
+This.Parent.Lista.Leitura.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Lista.Leitura
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private lnCodigos
+
+Select CrSigCdBch
+If Eof()
+	Return(.T.)
+EndIf
+
+If CrSigCdBch.Encerras
+	Messagebox('Inventário Já Encerrado !!!',48,'')
+	Return(.T.)
+EndIf
+
+ThisForm.pcEscolha = 'INSERIR'
+lnCodigos = CrSigCdBch.Codigos
+
+This.Parent.Parent.Leitura.GradeLeitura.RecordSource = ''
+ThisForm.poDataMg2.Requery('Balanco')
+ThisForm.poDataMg2.Requery('Historico')
+
+Select Balanco
+Index On Bancos + Agencias + NContas + NCheques Tag Cheque
+Go Top
+
+Select Historico
+Index On Bancos + Agencias + NContas + NCheques Tag Cheque
+Index On Str(Tipos,1) + Bancos + Agencias + NContas + NCheques Tag TpCheque
+Index On Str(Tipos,1) + Dtos(Datas) + Substr(Ttoc(Datas),12,8) Tag TipoData
+Go Top
+
+Select Historico
+Set Key To '1'
+Go Top
+Go Bottom
+
+This.Parent.Enabled = .F.
+
+With This.Parent.Parent
+	.ActivePage                = 3
+	.Dados.Grupo_Salva.Visible = .F.
+EndWith
+
+With This.Parent.Parent.Leitura
+	.Enabled = .T.
+	.Get_Valor.Value = 0
+	.Get_Vecto.Value = {}
+	.Refresh
+
+	With .GradeLeitura
+		.RecordSource = 'Historico'
+		.Column1.ControlSource = 'Historico.Bancos'
+		.Column2.ControlSource = 'Historico.Agencias'
+		.Column3.ControlSource = 'Historico.NContas'
+		.Column4.ControlSource = 'Historico.NCheques'
+		.Column5.ControlSource = [Nvl(Historico.Vencs,'')]
+		.Column6.ControlSource = 'Historico.Valors'
+	EndWith
+	
+	ThisForm.LockScreen = .T.
+	=fCarregaGrade(This.Parent.Parent.Leitura.GradeLeitura)
+	ThisForm.LockScreen = .F.
+	
+	With This.Parent.Parent.Leitura
+		.Get_DataInicial.Value = Nvl(CrSigCdBch.DataInis,'')
+		.Get_DataFinal.Value   = Nvl(CrSigCdBch.DataFims,'')
+		.Refresh
+	EndWith
+	
+	If InList(ThisForm.TipoLeitora,'S','P')
+		If !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError
+			ThisForm.ReadComm.Ole_Comm.PortOpen = .T.
+		EndIf
+		ThisForm.ReadComm.Ole_Comm.OutPut = 'WE'
+		.Comm_Ini.Visible = .T.
+		.Comm_Fim.Visible = .T.
+		.ShpComm.Visible  = .T.
+	Else
+		.Comm_Ini.Visible = .F.
+		.Comm_Fim.Visible = .F.
+		.ShpComm.Visible  = .F.
+	EndIf
+	ThisForm.IniciaLeitura = .F.
+	.GradeLeitura.SetAll('DynamicForeColor','Iif(Historico.Valors = 0,RGB(255,0,0),RGB(0,0,0))','Column')
+	ThisForm.Refresh
+
+	.Get_Bco.SetFocus
+
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Lista.Fecha
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrSigCdBch
+If Eof()
+	Return
+EndIf
+If CrSigCdBch.Encerras
+	MessageBox('Balanço Já Encerrado !!!',48,'')
+	Return
+EndIf
+If Messagebox('Este Balanço será finalizado, não podendo ser efetuada mais nenhuma leitura...' + Chr(13) +;
+	'Deseja encerrar o Balanço ???',4+32+256,'ATENÇÃO') = 6
+	Select CrSigCdBch
+	Replace DataFims With DateTime(),;
+			Encerras With .T. In CrSigCdBch
+	ThisForm.poDataMgr.Update('CrSigCdBch')
+	ThisForm.poDataMgr.Commit()
+EndIf
+This.Parent.Grade.Column1.SetFocus
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.Get_Codigo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.Get_Oper
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdOpt','CrOperacao','Operacaos',This.Value,'Operações',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('Operacaos','XXXXXXXXXXXXXXX'     ,'Código')
+		m.loLista.mAddColuna('Descrs'   ,'XXXXXXXXXXXXXXXXXXXX','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrOperacao')
+		This.Value = Evaluate('CrOperacao.Operacaos')
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.GetDConta
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+llRet = .T.
+With ThisForm.Pagina.Dados
+	Grupo = .GetGrupo.Value
+	If !Empty(This.Value)
+		If !fAcessoContas(Usuar,Grupo,'D',This.Value,.GetConta,.GetDConta)
+			MessageBox('Acesso Negado !!!',0+48,'')
+			This.Value = ''
+			This.Refresh
+			.GetConta.Value = ''
+			.GetConta.Refresh
+			llRet = .F.
+		EndIf
+	Else
+		.GetConta.Value = ''
+		.GetConta.Refresh
+	EndIf
+EndWith
+Return(llRet)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR' And Empty(This.Parent.GetConta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.Cmb_Operacao
+* Classe: fwcombo (Base: combobox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.Get_DataInicial
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(!IsEmpty(This.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.Get_DataFinal
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(!IsEmpty(This.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.GetGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRet
+
+llRet = .T.
+
+With ThisForm.Pagina.Dados
+	If !Empty(This.Value)
+		llRet = fAcessoContab(Usuar,'C',This.Value,.GetGrupo,.GetDGrupo,.GetConta.Value)
+	Else
+		.GetDGrupo.Value = ''
+		.GetDGrupo.Refresh
+	EndIf
+EndWith
+Return(llRet)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.GetDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRet
+
+llRet = .T.
+
+With ThisForm.Pagina.Dados
+	If !Empty(This.Value)
+		llRet = fAcessoContab(Usuar,'D',This.Value,.GetGrupo,.GetDGrupo,.GetConta.Value)
+	Else
+		.GetGrupo.Value = ''
+		.GetGrupo.Refresh
+	EndIf
+EndWith
+Return(llRet)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR' And Empty(This.Parent.GetGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Dados.GetConta
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRet
+
+llRet = .T.
+
+With ThisForm.Pagina.Dados
+	Grupo = .GetGrupo.Value
+	If !Empty(This.Value)
+		If !fAcessoContas(Usuar,Grupo,'C',This.Value,.GetConta,.GetDConta)
+			MessageBox('Acesso Negado !!!',0+48,'')
+			This.Value = ''
+			This.Refresh
+			.GetDConta.Value = ''
+			.GetDConta.Refresh
+			llRet = .F.
+		EndIf
+	Else
+		.GetDConta.Value = ''
+		.GetDConta.Refresh
+	EndIf
+EndWith
+Return(llRet)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Codigo
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Cmb_Operacao
+* Classe: fwcombo (Base: combobox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.GetDConta
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.GetConta
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.GetDGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_DataFinal
+* Classe: textbox (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_DataInicial
+* Classe: textbox (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.GetGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Oper
+* Classe: fwget (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Valor
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Vecto
+* Classe: fwget (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.TipoLeitura
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 62
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Parent.Get_Bco.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+=DoDefault()
+Select Historico
+Set Order To TipoData
+Set Key To Str(This.Value,1)
+Go Bottom
+ThisForm.Refresh
+This.Parent.GradeLeitura.SetFocus
+This.Parent.GradeLeitura.Refresh
+This.Parent.Get_Bco.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Comm_Ini
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 63
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !ThisForm.IniciaLeitura
+	ThisForm.IniciaLeitura = .T.
+	If InList(ThisForm.TipoLeitora,'P','S')
+		ThisForm.ReadComm.Ole_Comm.OutPut = 'WE'
+	EndIf
+Else
+	ThisForm.Inicialeitura = .F.
+	If InList(ThisForm.TipoLeitora,'P','S')
+		ThisForm.ReadComm.Ole_Comm.OutPut = 'WE'
+	EndIf
+EndIf
+This.Parent.Get_Bco.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Comm_Fim
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If InList(ThisForm.TipoLeitora,'P','S')
+	ThisForm.ReadComm.Ole_Comm.OutPut = 'N'
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Cancela
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 65
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If MessageBox('Deseja Cancelar ???',4+32+256,'') = 6
+	With This.Parent
+		.Parent.Dados.Grupo_Salva.Visible = .T.
+		.Parent.Lista.Enabled             = .T.
+	EndWith
+	ThisForm.mAtivaPagina1
+Else
+	Return 0
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Salva
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 66
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If MessageBox('Deseja Gravar os Dados Digitados ???',4+32+256,'LEITURA') <> 6
+	Return
+Endif
+
+lnCodigos = This.Parent.Get_Codigo.Value
+
+loBarraHis = CreateObject('fwprogressbar','Aguarde! Verificando Histórico...',Reccount('Historico'))
+loBarraHis.Show
+
+Select Historico
+Set Order To
+Go Top
+Scan
+	loBarraHis.Update(.T.)
+	If Seek(Historico.Bancos + Historico.Agencias + Historico.NContas + Historico.NCheques,'Balanco','Cheque')
+		If Historico.Tipos = 1
+			lcUpdate = [Update SigCqBal Set Lidos = 1 Where CIdChaves = ']+Balanco.CIdChaves+[' ]
+		Else
+			lcUpdate = [Update SigCqBal Set Relidos = 1 Where CIdChaves = ']+Balanco.CIdChaves+[' ]
+		EndIf
+		If ThisForm.poDataMgr.SqlExecute(lcUpdate,'') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Update SigCqBal)')
+			Return(.F.)
+		EndIf
+	EndIf
+EndScan
+loBarraHis.Complete(.T.)
+
+llOk = ThisForm.Grava(lnCodigos,ThisForm.Name,'SigCqHis','Historico',.T.)
+If !llOk
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Grava - Salva)')
+	Return(.F.)
+EndIf
+
+Wait Clear
+
+With This.Parent.Parent
+	.Dados.Grupo_Salva.Visible = .T.
+	.Lista.Enabled             = .T.
+EndWith
+
+ThisForm.mAtivaPagina1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 67
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select Historico
+If !Eof('Historico')
+	lnRegHis = Recno('Historico')
+	lcBuscaChq = Historico.Bancos + Historico.Agencias + Historico.NContas + Historico.NCheques
+	lnTipos    = Historico.Tipos
+	Select Historico
+	Delete
+	=Seek(lcBuscaChq,'Balanco','Cheque')
+	Select Balanco
+	If lnTipos = 1
+		Replace Balanco.Lidos   With 0
+	Else
+		Replace Balanco.ReLidos With 0
+	EndIf
+	Select Historico
+	Go lnRegHis
+	This.Parent.GradeLeitura.Refresh
+	ThisForm.Refresh
+	This.Parent.Get_Bco.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Bco
+* Classe: fwget (Base: textbox)
+* Registro: 68
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+If ThisForm.TipoLeitora = 'P'
+	If ThisForm.Inicialeitura
+		ThisForm.ReadComm.Ole_Comm.OutPut = 'WEU'
+		=ChrSaw(.3)
+		=ThisForm.ReadComm.Ole_Comm.Input
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If ThisForm.Leitor
+	lcBanco   = This.Value
+	lcAgencia = This.Parent.Get_Age.Value
+	lcConta   = This.Parent.Get_Conta.Value
+	lcNumero  = This.Parent.Get_Num.Value
+	
+	If !ThisForm.VerifCheq(lcBanco,lcAgencia,lcConta,lcNumero)
+		This.Parent.Get_Bco.SetFocus
+	Else
+		This.Parent.Get_Num.SetFocus
+	EndIf		
+Else
+	This.Parent.Get_Bco.SetFocus
+EndIf
+ThisForm.Leitor = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcLeitor = ''
+If !ThisForm.Leitor
+	If InList(ThisForm.TipoLeitora,'S','P')
+		If ThisForm.IniciaLeitura
+			If Empty(ThisForm.LeituraSerial)
+				If !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError
+					ThisForm.ReadComm.Ole_Comm.PortOpen = .T.
+				EndIf
+				Wait Window 'Passe o cheque pela leitora !!!' NoWait
+			Else
+				If Asc(Left(ThisForm.LeituraSerial,1)) = 2
+					lcLeitor = Substr(ThisForm.LeituraSerial,2,Len(ThisForm.LeituraSerial) - 1)
+				Else
+					lcLeitor = ThisForm.LeituraSerial
+				EndIf
+				ThisForm.LeituraSerial = ''
+			EndIf
+		EndIf
+	Else
+		lcLeitor = This.Value
+		lnContar = 0
+		Do While !InList(LastKey(),27,13,3,5,18,24,148) And Len(lcLeitor) < 33
+			lnTecla = Lastkey()
+			lnContar = lnContar + 1
+			Read
+			If lnContar > 1 And lnTecla > 0
+				lcLeitor = lcLeitor + Chr(lnTecla)
+			EndIf
+		EndDo
+	EndIf
+	If Len(lcLeitor) >= 33
+		With This.Parent
+			.Get_Bco.Value   = Substr(lcLeitor,2,3)
+			.Get_Age.Value   = Substr(lcLeitor,5,4)
+			.Get_Conta.Value = Substr(lcLeitor,23,10)
+			.Get_Num.Value   = Substr(lcLeitor,14,6)
+			.Get_Bco.Refresh
+			.Get_Age.Refresh
+			.Get_Conta.Refresh
+			.Get_Num.Refresh
+		EndWith
+		ThisForm.Leitor = .T.
+	Else
+		ThisForm.Leitor = .F.
+	EndIf
+	If !Empty(This.Value)
+		If !fChkDigitos(This.Value)
+			MessageBox('Banco Inválido !!!',48,'ATENÇÃO')
+			Return(.F.)
+		EndIf
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If InList(ThisForm.TipoLeitora,'S','P')
+	If !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError
+		ThisForm.ReadComm.Ole_Comm.PortOpen = .T.
+	EndIf
+	Wait Window 'Passe o Cheque pela Leitora !!!' NoWait
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Age
+* Classe: fwget (Base: textbox)
+* Registro: 69
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value) And !fChkDigitos(This.Value)
+	MessageBox('Agência Inválida !!!',48,'ATENÇÃO')
+	Return(.F.)
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(!Empty(This.Parent.Get_Bco.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Num
+* Classe: fwget (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Lastkey() <> 5
+	With This.Parent
+		If ThisForm.VerifCheq(.Get_Bco.Value,.Get_Age.Value,.Get_Conta.Value,.Get_Num.Value)
+			m.Codigos   = CrSigCdBch.Codigos
+			m.Bancos    = .Get_Bco.Value
+			m.Agencias  = .Get_Age.Value
+			m.NContas   = .Get_Conta.Value
+			m.NCheques  = .Get_Num.Value
+			m.Valors    = Iif(!Eof('Balanco'),Balanco.Valors,0)
+			m.Vencs     = Iif(!Eof('Balanco'),Balanco.Vencs,Null)
+			m.Datas     = Datetime()
+			m.Usuarios  = Usuar
+			m.Tipos     = .TipoLeitura.Value
+			m.CIdChaves = fUniqueIds()
+			Insert Into Historico From MemVar
+
+			.Get_Valor.Value = m.Valors
+			.Get_Vecto.Value = Nvl(m.Vencs,'')
+
+			.Get_Bco.Value   = ''
+			.Get_Age.Value   = ''
+			.Get_Num.Value   = ''
+			.Get_Conta.Value = ''
+
+		EndIf
+
+		Select Historico
+		Set Order To TipoData
+		Set Key To Str(.TipoLeitura.Value,1)
+		Go Bottom
+
+		.Refresh
+		.Get_Bco.SetFocus
+	EndWith
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value) And Lastkey() <> 5 And !fChkDigitos(This.Value)
+	MessageBox('Número do Cheque Inválido !!!',48,'ATENÇÃO')
+	Return(.F.)
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(!Empty(This.Parent.Get_Bco.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCH.Pagina.Leitura.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 71
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (!Empty(This.Value) And !fChkDigitos(This.Value))
+	MessageBox('Conta Inválida !!!',48,'ATENÇÃO')
+	Return(.F.)
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(!Empty(This.Parent.Get_Bco.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDBCH
+RESERVED3 (ClassInfo): acencerra
+acfimcomm
+acinicomm
+acleitura
+inicialeitura
+leitor
+leituraserial
+podatamg2
+tipoleitora
+*grava 
+*inchequeserial 
+*verifcheq 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 61
+================================================================================

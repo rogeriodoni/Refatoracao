@@ -1,0 +1,22 @@
+﻿task354 (SIGCDCAR ÔåÆ FormCargo) migration is now complete through Phase 8. Here's what was accomplished:
+
+**Files generated:**
+- `projeto/app/classes/CargoBO.prg` ÔÇö 559 lines, full BO with 38 properties, sub-table CRUD for SIGCRRCC + sigcarct
+- `projeto/app/forms/cadastros/FormCargo.prg` ÔÇö 3226 lines, complete CRUD form
+
+**FormCargo coverage:**
+- Page1 Lista: 2-column grid (Cargo + Descri├º├úo) + 5 CRUD buttons
+- Page2 Dados: 26 TextBoxes, 6 binary OptionGroups (Sim/N├úo), 1 tri-button OptionGroup (tpcomis: Venda/Caixa/O.S.)
+- Sub-grade Acesso Financeiro (grd_4c_AcessoFinan, 4 cols) with F4 lookups on grupos/contas/moedas
+- Sub-grade Categorias (grd_4c_Categorias, 3 cols) with F4 lookup auto-filling descs
+- Row insert/delete buttons for both sub-grids (APPEND BLANK + PACK pattern)
+- BtnBuscarBaseClick: template copy mechanism (copies existing cargo as basis for new)
+- CarregarGrades(), InicializarCursoresGrid(), CarregarSubTabela* properly wired
+
+**Auto-corrections applied:** 2 (GRID-COLUMNCOUNT-ANTES-RECORDSOURCE at lines 2269 and 2282)
+
+**Menu:** `AbrirFormCargo` already existed at Bar 1 of popCadastros ÔÇö no changes needed.
+
+**Remaining steps requiring runtime:** compile validation (05c), form open test (06), automated CRUD test (06b), UI validation (07). These need the VFP9 application running.
+
+Manual test checklist: `SolicitacaoTesteManual/task354_sigcdcar.md`

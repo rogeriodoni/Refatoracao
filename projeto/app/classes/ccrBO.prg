@@ -1,1049 +1,744 @@
-*=============================================================================
-* ccrBO.prg - Business Object para Grupos de Contas Corrente
+*==============================================================================
+* ccrBO.prg - Business Object para Grupos de Contas Correntes (SigCdGcr)
 * Herda de BusinessBase
-* Tabela: SigCdGcr | Chave: Codigos
-* Join: SigCdCss (Classes -> classes, Descrs as DClasses)
-*=============================================================================
+* Tabela: SigCdGcr  |  PK: codigos
+*==============================================================================
 
 DEFINE CLASS ccrBO AS BusinessBase
 
     *--------------------------------------------------------------------------
-    * Propriedades - Identificacao principal
+    * IDENTIFICACAO - PK e Descricao
     *--------------------------------------------------------------------------
-    this_cCodigos     = ""           && Codigos    - PK (C)
-    this_cDescrs      = ""           && Descrs     - Descricao (C)
-    this_cInterno     = ""           && Interno    - Codigo interno (C)
-    this_cDigito      = ""           && Digito     - Digito verificador (C, visivel se TpCods=1)
-    this_cClasses     = ""           && Classes    - FK SigCdCss.classes (C)
-    this_cDClasses    = ""           && DClasses   - Alias de SigCdCss.Descrs (nao salvo no BD)
-    this_nTpCods      = 1            && TpCods     - Tipo: 1=Empresa, 2=C/C (N)
-    this_nTpEmps      = 1            && TpEmps     - Tipo empresa: 1=Empresa, 2=C/C (N, visivel se TpCods=1)
-    this_nTpCads      = 1            && TpCads     - Tipo cadastro (N)
+    this_cCodigos         = ""   && codigos char(10) PK
+    this_cDescrs          = ""   && descrs char(40)
+    this_cDgcods          = ""   && dgcods char(1) - digito
+    this_cInternos        = ""   && internos char(20) - codigo interno
+    this_cClasses         = ""   && classes char(10) - FK SigCdCss
+    this_cDClasses        = ""   && DClasses virtual (JOIN SigCdCss.Descrs)
 
     *--------------------------------------------------------------------------
-    * Campo de configuracao codificada - 40 posicoes
+    * TIPO/MODO
     *--------------------------------------------------------------------------
-    this_cCfgCdGcr    = ""           && CfgCdGcr  - Configuracoes codificadas (C,40)
-
-    *--------------------------------------------------------------------------
-    * Configuracoes decodificadas de CfgCdGcr - Aba Geral
-    * (1=Sim, 2=Nao para OptionGroups com 2 botoes)
-    *--------------------------------------------------------------------------
-    this_nOptComple   = 2            && Opt_Comple   - Complemento
-    this_nOptPessoais = 2            && Opt_Pessoais - Dados Pessoais
-    this_nOptRefBancs = 2            && Opt_RefBancs - Ref. Bancarias
-    this_nOptFollowUp = 2            && Opt_FollowUp - Follow-Up
-    this_nOptFiscais  = 2            && Opt_Fiscais  - Dados Fiscais
-    this_nOptContabs  = 2            && Opt_Contabs  - Dados Contabeis
-    this_nOptEmpresa  = 2            && Opt_Empresa  - Dados da Empresa
-    this_nOptCaract   = 2            && Opt_Caracteris - Caracteristicas
-    this_nOptPerfil   = 2            && fwoption2    - Perfil
-    this_nOptCargos   = 2            && Opt_Cargo    - Cargos
-    this_nOptRespos   = 2            && Opt_Respos   - Possui Responsavel
-    this_nOptLimCre   = 1            && Opt_LimCre   - Limite Credito (1=Sim, 2=Nao, 3=Sim-Saldo)
-    this_nOptComi     = 2            && Opt_Comi     - Comissao
-    this_nOptDadosCom = 2            && Opt_DadosCom - Dados Comerciais
-    this_nOptChkLimCr = 2            && opt_ChkLimCr - Checa Limite Credito
-    this_nOptColetor  = 2            && Opt_Coletor  - Grupo Padrao (11 opcoes)
-    this_nOptPreCad   = 2            && optPreCad    - Pre Cadastro
+    this_nTpcods          = 0    && tpcods numeric(1,0) - tipo codificacao
+    this_nTpemps          = 0    && tpemps numeric(1,0) - tipo empresa
+    this_nTpcads          = 0    && tpcads numeric(1,0) - tipo cadastro
 
     *--------------------------------------------------------------------------
-    * Campos Geral - diretos
+    * ABA GERAL - Opcoes de obrigatoriedade cadastral
     *--------------------------------------------------------------------------
-    this_cGrupoGeral  = ""           && Get_grupo (Geral) - Grupo contabilidade (C)
-    this_nVrlimc      = 0            && Get_vrlimc  - Valor Limite Credito (N)
-    this_cCdMoeda     = ""           && get_cd_moeda - Codigo Moeda Comissao (C)
-    this_cDsMoeda     = ""           && get_ds_moeda - Descricao Moeda (nao salvo, derivado de lookup)
-    this_nMolimc      = 0            && get_molimc  - Moeda Limite Credito (N)
-    this_cRodRelCC    = ""           && getRodRelCC - Rodape Relatorio Conta Corrente (M)
-
-    *--------------------------------------------------------------------------
-    * Configuracoes decodificadas de CfgCdGcr - Aba Cadastro/Financeiro
-    *--------------------------------------------------------------------------
-    this_nObrMails    = 2            && getObrMails  - E-mail Obrigatorio
-    this_nObrNome     = 2            && getObrNome   - Nome Obrigatorio
-    this_nVincPgRcs   = 2            && optVincPgRcs - Vincula Conta PG/RC
-    this_nObrSit      = 2            && getObrSit    - Situacao Obrigatoria
-    this_nObrTlm      = 2            && getObrTlm    - Telemarketing Obrigatorio
-    this_nObrCla      = 2            && getObrCla    - Classificacao Obrigatoria
-    this_nObrSeg      = 2            && getObrSeg    - Segmento Obrigatorio
-    this_nObrIbge     = 2            && getObrIbge   - Cod IBGE Obrigatorio
-    this_nFpublSobr   = 2            && Optfpublsobr - F.Publicidade Obrigatoria
-    this_nNascObrig   = 2            && Fwoption8    - Data Nascimento Obrigatoria
-    this_nCpfObrig    = 1            && Opt_CPFObrig - CPF/CNPJ Obrigatorio (1=Nao, 2=Sim, 3=SIM-Dupla, 4=Nao-Dupla)
-    this_nCepObrig    = 1            && Opt_CEPObrig - CEP Obrigatorio (1=Nao, 2=Sim, 3=Sim-buscar)
-    this_nRgObrig     = 2            && fwoption2    - RG/IE Obrigatorio
-    this_nMFotos      = 2            && Opt_MFotos   - Mostrar Foto
-    this_nObservacao  = 1            && fwoption1(Cad) - Observacao (1=Nao Mostrar, 2=Sempre, 3=Mostrar Botao)
-    this_nCpfFixo     = 1            && optCpffixo   - CPF/CNPJ Fixo (1=CPF, 2=CNPJ, 3=Ambos)
-    this_nCaracCad    = 2            && optCarac     - Caracteristica (Cadastro)
-    this_nAceJob      = 2            && optAceJob    - Acesso Job
-    this_nCCustoTit   = 2            && Opt_CCusto   - Habilita Centro de Custos nos Titulos
-    this_nLogAlt      = 2            && Fwoption6    - Log de Alteracoes
-    this_nInfSenha    = 2            && Fwoption7    - Informar Senha na Alteracao
-    this_nCntVinc     = 2            && Fwoption4    - Conta Vinculada ao Grupo
-    this_nDupEnd      = 2            && Fwoption5    - Verifica Duplicidade de Endereco
-    this_nRestEnd     = 2            && Fwoption9(Cad) - Verifica Restricao de Endereco
-    this_nIntegCont   = 1            && Opt_Integ    - Integracao Contabil (1=Nao, 2=Sim, 3=SemContraPartida)
-    this_nPadPreench  = 1            && Fwoption3    - Padrao de Preenchimento (1=Nenhum, 2=Pagamentos, 3=Recebimentos, 4=Ambos)
-    this_nVincContas  = 2            && optVincPgRcs - Vincula as Contas no Pag/Rec
-    this_nTitBaixado  = 2            && OptTitBaixado - Visualizar Titulos nao Baixados
-    this_nCalcIMeds   = 2            && optCalcIMeds - Calc. I.Medias
-    this_nSitPdrIdx   = 1            && getSituas    - Situacao Padrao (indice)
+    this_nComplems        = 0    && complems numeric(1,0) - Complemento
+    this_nPessoais        = 0    && pessoais numeric(1,0) - Dados Pessoais
+    this_nRefbancs        = 0    && refbancs numeric(1,0) - Ref. Bancarias
+    this_nFollowups       = 0    && followups numeric(1,0) - Follow-Up
+    this_nFiscais         = 0    && fiscais numeric(1,0) - Dados Fiscais
+    this_nContabs         = 0    && contabs numeric(1,0) - Dados Contabeis
+    this_nEmpresas        = 0    && empresas numeric(1,0) - Dados da Empresa
+    this_nCaracteris      = 0    && caracteris numeric(1,0) - Caracteristicas
+    this_nRespos          = 0    && respos numeric(1,0) - Possui Responsavel
+    this_nLimcres         = 0    && limcres numeric(1,0) - Limite de Credito
+    this_nComis           = 0    && comis numeric(1,0) - Comissao
+    this_nDadcoms         = 0    && dadcoms numeric(1,0) - Dados Comerciais
+    this_nCargos          = 0    && cargos numeric(1,0) - Cargos
+    this_nChklimcrds      = 0    && chklimcrds numeric(1,0) - Checa Limite Credito
+    this_nColetors        = 0    && coletors numeric(2,0) - Coletor (11 opcoes)
+    this_nPrecad          = 0    && precad numeric(1,0) - Pre-Cadastro (LEAD)
 
     *--------------------------------------------------------------------------
-    * Campos Cadastro - diretos
+    * ABA GERAL - Grupo padrao contabil / Limite de credito / Moeda
     *--------------------------------------------------------------------------
-    this_cContint     = ""           && Getcontint - Conta Corrente Interna (C)
-    this_cSituas      = ""           && getSituas  - Codigo Situacao Padrao (C)
-
-    *--------------------------------------------------------------------------
-    * Campos Estoque / Industria - opcoes
-    *--------------------------------------------------------------------------
-    this_nOptLimEsto  = 2            && Opt_LimEsto  - Limite de Estoque
-    this_nOptVerEst   = 2            && Opt_VerEst   - Avalia Estoque
-    this_nOptEstPAcab = 2            && Opt_EstPAcab - Estoque Produto Acabado
-    this_nOptChkLimEst= 2            && opt_ChkLimest - Checa Limite de Estoque
-    this_nOptCCustoEst= 2            && Opt_CCusto(Est) - Centro de Custos
-    this_nOptSaldo    = 1            && Opt_Saldo    - Calculo de Saldo (1=Online, 2=Background)
-    this_nOptRelevante= 2            && Opt_Relevante - Empresa Relevante
-    this_nOptBlqConGV = 2            && Opt_BlqConGV - Bloqueia Consulta Vendas
-    this_nOptPatrim   = 2            && Opt_Patrim   - Patrimonial por Etiqueta
-    this_nOpTipoInvs  = 1            && OpTipoInvs   - Inventario (1=Proprio, 2=ProprioPoder3p, 3=NosMeio3p)
-    this_nOptGBals    = 2            && Opt_GBals    - Balanco Fabrica (1=Sim, 2=Nao)
-    this_nOptUnifBal  = 1            && Opt_UnifBal  - Balanco Unificado
-    this_nOptFalPers  = 2            && Opt_FalPers  - Balanco Falhas/Perdas
-    this_nOptBlqDivOp = 2            && Opt_BlqDivOp - Bloqueia Divisao de OF
-    this_nGetOsPend   = 2            && Get_OsPend   - OS Pendente Dt.Entrega
-    this_nObjDupTit   = 2            && ObjDupTit    - Checa Duplicidade de Titulo
-    this_nOpCompagru  = 1            && op_compagru  - Agrupa Componentes (1=Sim, 2=Nao, 3=MaterialPrincipal)
-    this_nFwoption1Est= 1            && Fwoption1(Est) - Controle de Lote (1=Sim, 2=Nao, 3=Multiplos)
+    this_cGrupolms        = ""   && grupolms char(10) - Grupo Padrao Contabil
+    this_nVrlimcre        = 0    && vrlimcre numeric(11,2) - Valor Limite Credito
+    this_cMolimcre        = ""   && molimcre char(3) - Moeda Limite Credito
+    this_cCommoedas       = ""   && commoedas char(3) - Moeda Comissao
+    this_cRodrelcc        = ""   && rodrelcc text - Rodape Relatorio Conta Corrente
 
     *--------------------------------------------------------------------------
-    * Campos Estoque / Industria - diretos
+    * ABA CADASTRO - Obrigatoriedades de preenchimento
     *--------------------------------------------------------------------------
-    this_nDdR         = 0            && get_ddr      - Dias Bloqueio Retroativo (N)
-    this_nDdF         = 0            && get_ddf      - Dias Bloqueio Futuro (N)
-    this_cGrupoEst    = ""           && Get_grupo(Est) - Grupo Dif. Balanco (C)
-    this_nDifPeso     = 0            && Get_DifPeso  - Diferenca de Peso (N)
-    this_cSinal       = ""           && Get_Sinal    - Sinal combo (+/-/P/Q) (C)
-    this_cTfalhas     = ""           && Get_tfalhas  - Tipo Falhas (P ou Q) (C)
-    this_nChkTrfPeso  = 1            && Chk_TrfPeso  - Transfere Peso (5 opcoes)
-    this_cGetAgrupa   = ""           && Get_Agrupa   - Agrupamento (C)
-    this_cGrupoFalha  = ""           && GetGrupoFalha - Grupo de Falha (C)
-    this_cContaFalha  = ""           && GetContaFalha - Conta de Falha (C)
-    this_cDsContaFalha= ""           && getDsContas(Est) - Descricao Conta Falha (nao salvo)
-    this_cContaPdr    = ""           && getContaPdr  - Conta Padrao (C)
-    this_cDsContaPdr  = ""           && getDsContaPdr - Descricao Conta Padrao (nao salvo)
+    this_cCfgcdgcr        = ""   && cfgcdgcr char(40) - Config flags empacotados
 
-    *-- Resumo de Composicao (Container1 com 3 checkboxes)
-    this_lCheck1      = .F.          && Check1 - Os
-    this_lCheck2      = .F.          && Check2 - Alianca
-    this_lCheck3      = .F.          && Check3 - Fundicao
+    *-- Posicoes do CfgCdGcr (armazenados em cfgcdgcr):
+    *-- Pos 1: ObrMails, Pos 2: ObrNome, Pos 3: VincPgRcs, Pos 4: ObrSit
+    *-- Pos 5: Cpffixo, Pos 6: Carac, Pos 7: AceJob
+
+    this_cDescsit         = ""   && descsit char(16) - Situacao Padrao
+    this_nCpfobrigs       = 0    && cpfobrigs numeric(1,0) - CPF/CNPJ Obrigatorio
+    this_nRgobrigs        = 0    && rgobrigs numeric(1,0) - RG/IE Obrigatorio
+    this_nMfotos          = 0    && mfotos numeric(1,0) - Mostrar Foto
+    this_nObservas        = 0    && observas numeric(1,0) - Observacao
+    this_nInfcads         = 0    && infcads numeric(1,0) - Info Cadastrais
+    this_nCalcimeds       = 0    && calcimeds numeric(1,0) - Calc. Imediato
+    this_cDesccalcimeds   = ""   && desccalcimeds char(16) - Desc Calc Imediato
+    this_nFpublsobr       = 0    && fpublsobr numeric(1,0) - Func.Publico Obrig.
+    this_cDescfpubls      = ""   && descfpubls char(16) - Desc Func.Publico
+    this_nInfsenha        = 0    && infsenha numeric(1,0) - Info Senha
+    this_nLogalt          = 0    && logalt numeric(1,0) - Log Alteracao
+
+    *-- Endereco
+    this_nEndobr          = 0    && endobr numeric(1,0) - Endereco Obrigatorio
+    this_nNumobr          = 0    && numobr numeric(1,0) - Numero Obrigatorio
+    this_nBairroobr       = 0    && bairroobr numeric(1,0) - Bairro Obrigatorio
+    this_nCidasobr        = 0    && cidasobr numeric(1,0) - Cidade Obrigatoria
+    this_nCepobris        = 0    && cepobris numeric(1,0) - CEP Obrigatorio
+    this_nPaisesobr       = 0    && paisesobr numeric(1,0) - Pais Obrigatorio
+    this_nChkendds        = 0    && chkendds numeric(1,0) - Checa Duplic. Endereco
+    this_nChkendrs        = 0    && chkendrs numeric(1,0) - Checa Restric. Endereco
+
+    *-- Telefone e outros dados pessoais
+    this_nTel1obr         = 0    && tel1obr numeric(1,0) - Telefone 1 Obrigatorio
+    this_nTel2obr         = 0    && tel2obr numeric(1,0) - Telefone 2 Obrigatorio
+    this_nNascobr         = 0    && nascobr numeric(1,0) - Nascimento Obrigatorio
+    this_nSexobr          = 0    && sexobr numeric(1,0) - Sexo Obrigatorio
+    this_nDtnascobr       = 0    && dtnascobr numeric(1,0) - Data Nasc. Obrigatoria
+    this_nDtespobr        = 0    && dtespobr numeric(1,0) - Data Espera Obrigatoria
+    this_nObrtelefone     = 0    && Obrtelefone numeric(1,0) - Telefone Obrigatorio
+    this_cDesctlm         = ""   && desctlm char(16) - Desc Telemarketing
+    this_cDesccla         = ""   && desccla char(16) - Desc Classificacao
+    this_cDescseg         = ""   && descseg char(16) - Desc Segmento
+
+    *-- Financeiro no Cadastro
+    this_cContconts       = ""   && contconts char(9) - Conta Interna
+    this_nIntconts        = 0    && intconts numeric(1,0) - Integracao Contabil
+    this_nPadpgrecs       = 0    && padpgrecs numeric(1,0) - Padrao Preenchimento
+    this_nCtvinculas      = 0    && ctvinculas numeric(1,0) - Vincula Contas PG/RC
+    this_nTitbaixado      = 0    && titbaixado numeric(1,0) - Visualiza Tit.nao Baixados
+    this_cContapdr        = ""   && contapdr char(10) - Conta Padrao
+    this_nCcustotit       = 0    && ccustotit numeric(1,0) - C.Custo por Titulo
+
+    *-- Alerta Cadastro
+    this_nDefhideshow     = 0    && defhideshow numeric(1,0) - Emitir Mensagem Alerta
+    this_nCtainatv        = 0    && ctainatv numeric(1,0) - Conta Inativa
 
     *--------------------------------------------------------------------------
-    * Campos fiscais codificados - CfgFisXXs
-    * Cada campo fiscal armazena: Grupo + Conta + Aliquota + Receita (encoded)
+    * ABA ESTOQUE
     *--------------------------------------------------------------------------
+    this_nEstoques        = 0    && estoques numeric(1,0) - Avalia Estoque
+    this_nLimestoqs       = 0    && limestoqs numeric(1,0) - Limite de Estoque
+    this_nVerests         = 0    && verests numeric(1,0) - Verifica Estoque
+    this_nEmprelevs       = 0    && emprelevs numeric(1,0) - Empresa Relevante
+    this_nBlqcongvs       = 0    && blqcongvs numeric(1,0) - Bloqueia Consulta GV
+    this_nCalcsalds       = 0    && calcsalds numeric(1,0) - Calculo de Saldo
+    this_nChklimests      = 0    && chklimests numeric(1,0) - Checa Limite Estoque
+    this_nPatrietqs       = 0    && patrietqs numeric(1,0) - Patrimonial por Etiqueta
+    this_nCcustos         = 0    && ccustos numeric(1,0) - Centro de Custos
+    this_nGerbals         = 0    && gerbals numeric(1,0) - Gerar Balanco
+    this_nUnifbals        = 0    && unifbals numeric(1,0) - Balanco Unificado
+    this_nBalfalpers      = 0    && balfalpers numeric(1,0) - Balanco Falhas/Perdas
+    this_nBlqdivops       = 0    && blqdivops numeric(1,0) - Bloqueia Divisao OF
+    this_nInvisivel       = 0    && invisivel numeric(1,0) - Grupo nao Selecionavel
+    this_nDdfutus         = 0    && ddfutus numeric(5,0) - Dias Bloqueio Futuro
+    this_nDdretros        = 0    && ddretros numeric(5,0) - Dias Bloqueio Retroativo
+    this_nDdsems          = 0    && ddsems numeric(1,0) - Dias em Semanas
+    this_nHordd           = 0    && hordd numeric(4,2) - Hora DD
+    this_nTipoinvs        = 0    && tipoinvs numeric(1,0) - Tipo Inventario
 
-    *-- ICMS (CfgFisICs)
-    this_cGrupoICMS   = ""           && getCdGrupos - Grupo ICMS
-    this_cContaICMS   = ""           && getCdContas - Conta ICMS
-    this_cDsContaICMS = ""           && getDsContas - Descricao Conta ICMS (nao salvo)
-    this_nPctICMS     = 0            && getPctAliqs - Aliquota ICMS (N)
-    this_cRecICMS     = ""           && getReceitas - Receita ICMS (C)
+    *-- Industria / Fabrica
+    this_nTrfpesas        = 0    && trfpesas numeric(1,0) - Transfere Peso
+    this_nDifpesags       = 0    && difpesags numeric(9,3) - Diferenca de Peso
+    this_nSinals          = 0    && sinals numeric(1,0) - Sinal (+/-)
+    this_cPqs             = ""   && pqs char(1) - P ou Q (tipo falha)
+    this_nCompagrus       = 0    && compagrus numeric(1,0) - Agrupa Componentes
+    this_cAgrupas         = ""   && agrupas char(10) - Agrupamento
+    this_nFichatecs       = 0    && fichatecs numeric(1,0) - Ficha Tecnica
+    this_cOsalfuns        = ""   && osalfuns char(3) - Os/Alianca/Fundicao flags
+    this_cGrufals         = ""   && grufals char(10) - Grupo Falha/Diferenca Balanco
+    this_nOspends         = 0    && ospends numeric(1,0) - OS Pendente Dt.Entrega
+    this_nChktits         = 0    && chktits numeric(1,0) - Checa Duplicidade Titulo
+    this_nTpprecos        = 0    && tpprecos numeric(1,0) - Tipo de Preco
+    this_cContafalha      = ""   && contafalha char(10) - Conta Falha
+    this_cGrupofalha      = ""   && grupofalha char(10) - Grupo Falha
+    this_nCtrlotes        = 0    && ctrlotes numeric(1,0) - Controle de Lote
 
-    *-- IPI (CfgFisIPs)
-    this_cGrupoIPI    = ""
-    this_cContaIPI    = ""
-    this_cDsContaIPI  = ""
-    this_nPctIPI      = 0
-    this_cRecIPI      = ""
+    *--------------------------------------------------------------------------
+    * ABA FATURAMENTO - Configuracoes fiscais por imposto
+    * Formato empacotado: grupo(10)+conta(10)+descricao(40)+aliq(9.4)+receita(8)
+    *--------------------------------------------------------------------------
+    this_cCfgfisics       = ""   && cfgfisics char(50) - ICMS
+    this_cCfgfisips       = ""   && cfgfisips char(50) - IPI
+    this_cCfgfisiis       = ""   && cfgfisiis char(50) - II
+    this_cCfgfisiss       = ""   && cfgfisiss char(50) - ISS
+    this_cCfgfisirs       = ""   && cfgfisirs char(50) - IRRF
+    this_cCfgfisins       = ""   && cfgfisins char(50) - INSS
+    this_cCfgfispis       = ""   && cfgfispis char(50) - PIS
+    this_cCfgfiscss       = ""   && cfgfiscss char(50) - CSSL
+    this_cCfgfiscos       = ""   && cfgfiscos char(50) - COFINS
 
-    *-- II (CfgFisIIs)
-    this_cGrupoII     = ""
-    this_cContaII     = ""
-    this_cDsContaII   = ""
-    this_nPctII       = 0
-    this_cRecII       = ""
-
-    *-- ISS (CfgFisISs)
-    this_cGrupoISS    = ""
-    this_cContaISS    = ""
-    this_cDsContaISS  = ""
-    this_nPctISS      = 0
-    this_cRecISS      = ""
-
-    *-- IRRF (CfgFisIRs)
-    this_cGrupoIRRF   = ""
-    this_cContaIRRF   = ""
-    this_cDsContaIRRF = ""
-    this_nPctIRRF     = 0
-    this_cRecIRRF     = ""
-
-    *-- INSS (CfgFisINs)
-    this_cGrupoINSS   = ""
-    this_cContaINSS   = ""
-    this_cDsContaINSS = ""
-    this_nPctINSS     = 0
-    this_cRecINSS     = ""
-
-    *-- PIS (CfgFisPIs)
-    this_cGrupoPIS    = ""
-    this_cContaPIS    = ""
-    this_cDsContaPIS  = ""
-    this_nPctPIS      = 0
-    this_cRecPIS      = ""
-
-    *-- CSSL (CfgFisCSs)
-    this_cGrupoCSL    = ""
-    this_cContaCSL    = ""
-    this_cDsContaCSL  = ""
-    this_nPctCSL      = 0
-    this_cRecCSL      = ""
-
-    *-- COFINS (CfgFisCOs)
-    this_cGrupoCOF    = ""
-    this_cContaCOF    = ""
-    this_cDsContaCOF  = ""
-    this_nPctCOF      = 0
-    this_cRecCOF      = ""
-
+    *==========================================================================
+    * INIT
     *==========================================================================
     PROCEDURE Init()
-    *==========================================================================
         DODEFAULT()
-        THIS.this_cTabela     = "SigCdGcr"
-        THIS.this_cCampoChave = "Codigos"
+        THIS.this_cTabela      = "SigCdGcr"
+        THIS.this_cCampoChave  = "codigos"
         RETURN .T.
     ENDPROC
 
     *==========================================================================
-    PROCEDURE ObterChavePrimaria()
+    * ObterChavePrimaria - Retorna valor da PK para auditoria
     *==========================================================================
-    *-- Retorna o valor da chave primaria para o sistema de auditoria
+    PROTECTED PROCEDURE ObterChavePrimaria()
         RETURN THIS.this_cCodigos
     ENDPROC
 
     *==========================================================================
-    PROCEDURE Buscar(par_cFiltro)
+    * Buscar - Carrega lista de grupos de contas correntes no cursor_4c_Dados
     *==========================================================================
-    *-- Busca registros para a grade da lista (Codigos, Descrs, Internos, TpCods, DClasses)
+    PROCEDURE Buscar(par_cFiltro)
         LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
-                IF !USED("cursor_4c_Dados")
-                    SET NULL ON
-                    CREATE CURSOR cursor_4c_Dados (Codigos C(10), Descrs C(40), Internos C(20), TpCods N(1,0), DClasses C(40))
-                    SET NULL OFF
-                ENDIF
+            IF EMPTY(par_cFiltro)
+                loc_cSQL = "SELECT a.codigos, a.descrs, a.classes, ISNULL(b.Descrs,'') AS DClasses" + ;
+                           " FROM SigCdGcr a" + ;
+                           " LEFT JOIN SigCdCss b ON a.Classes = b.Classes" + ;
+                           " ORDER BY a.codigos"
+            ELSE
+                loc_cSQL = "SELECT a.codigos, a.descrs, a.classes, ISNULL(b.Descrs,'') AS DClasses" + ;
+                           " FROM SigCdGcr a" + ;
+                           " LEFT JOIN SigCdCss b ON a.Classes = b.Classes" + ;
+                           " WHERE RTRIM(a.codigos) LIKE " + EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%") + ;
+                           " OR RTRIM(a.descrs) LIKE " + EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%") + ;
+                           " ORDER BY a.codigos"
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+            IF loc_nResultado >= 0
                 loc_lSucesso = .T.
             ELSE
-                loc_cSQL = "SELECT a.Codigos, a.Descrs, a.Internos, a.TpCods, b.Descrs AS DClasses" + ;
-                           " FROM SigCdGcr a" + ;
-                           " LEFT JOIN SigCdCss b ON a.Classes = b.Classes"
-                IF !EMPTY(par_cFiltro)
-                    loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro
-                ENDIF
-                loc_cSQL = loc_cSQL + " ORDER BY a.Codigos"
-
-                IF USED("cursor_4c_Dados")
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResultado >= 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        APPEND FROM DBF("cursor_4c_DadosTmp")
-                        USE IN cursor_4c_DadosTmp
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar grupos CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
-                ELSE
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResultado >= 0
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar grupos CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
-                ENDIF
+                MsgErro("Erro ao buscar grupos de contas correntes:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-        CATCH TO loException
-            MostrarErro("Erro ao buscar:" + CHR(13) + loException.Message, "ccrBO.Buscar")
+        CATCH TO loc_oErro
+            MsgErro("Erro ao buscar grupos de contas correntes:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    PROCEDURE CarregarPorCodigo(par_cCodigo)
+    * CarregarPorCodigo - Carrega um registro pelo codigo (PK)
     *==========================================================================
-    *-- Carrega todos os campos de SigCdGcr + DClasses do JOIN para o BO
+    PROCEDURE CarregarPorCodigo(par_cCodigos)
         LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "SELECT a.*, b.Descrs AS DClasses" + ;
+            loc_cSQL = "SELECT a.*, ISNULL(b.Descrs,'') AS DClasses" + ;
                        " FROM SigCdGcr a" + ;
                        " LEFT JOIN SigCdCss b ON a.Classes = b.Classes" + ;
-                       " WHERE a.codigos = " + EscaparSQL(par_cCodigo)
+                       " WHERE RTRIM(a.codigos) = " + EscaparSQL(ALLTRIM(par_cCodigos))
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
-
-            IF loc_nResultado >= 0
-                IF RECCOUNT("cursor_4c_Carrega") > 0
-                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
-                    THIS.this_lNovoRegistro = .F.
-                ELSE
-                    MsgAviso("Grupo de Conta Corrente n" + CHR(227) + "o encontrado!")
-                ENDIF
-                IF USED("cursor_4c_Carrega")
-                    USE IN cursor_4c_Carrega
-                ENDIF
-            ELSE
-                MostrarErro("Erro ao carregar grupo CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_Carrega") > 0
+                loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                THIS.this_lNovoRegistro = .F.
             ENDIF
-        CATCH TO loException
-            MostrarErro("Erro ao carregar:" + CHR(13) + loException.Message, "ccrBO.CarregarPorCodigo")
+
+            IF USED("cursor_4c_Carrega")
+                USE IN cursor_4c_Carrega
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar grupo de contas correntes:" + CHR(13) + loc_oErro.Message, "Erro")
+            IF USED("cursor_4c_Carrega")
+                USE IN cursor_4c_Carrega
+            ENDIF
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
+    *==========================================================================
+    * CarregarDoCursor - Mapeia campos do cursor para propriedades do BO
     *==========================================================================
     PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
-    *==========================================================================
-    *-- Mapeia todos os campos do cursor para propriedades do BO
-        LOCAL loc_lSucesso, loc_cOsalfuns, loc_nSinal
+        LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
-        TRY
-            IF USED(par_cAliasCursor)
-                SELECT (par_cAliasCursor)
-
-                *-- Identificacao
-                THIS.this_cCodigos  = TratarNulo(Codigos,  "C")
-                THIS.this_cDescrs   = TratarNulo(Descrs,   "C")
-                THIS.this_cInterno  = TratarNulo(Internos, "C")
-                THIS.this_cDigito   = TratarNulo(DgCods,   "C")
-                THIS.this_cClasses  = TratarNulo(Classes,  "C")
-                THIS.this_cDClasses = TratarNulo(DClasses, "C")
-                THIS.this_nTpCods   = TratarNulo(TpCods,   "N")
-                THIS.this_nTpEmps   = TratarNulo(TpEmps,   "N")
-                THIS.this_nTpCads   = TratarNulo(TpCads,   "N")
-                THIS.this_cCfgCdGcr = TratarNulo(CfgCdGcr, "C")
-
-                *-- Opcoes Aba Geral (colunas individuais em SigCdGcr)
-                THIS.this_nOptGBals    = TratarNulo(GerBals,   "N")
-                THIS.this_nOptCargos   = TratarNulo(Cargos,    "N")
-                THIS.this_nOptColetor  = TratarNulo(Coletors,  "N")
-                THIS.this_nOptComi     = TratarNulo(Comis,     "N")
-                THIS.this_nOptDadosCom = TratarNulo(DadComs,   "N")
-                THIS.this_nOptFiscais  = TratarNulo(Fiscais,   "N")
-                THIS.this_nOptFollowUp = TratarNulo(FollowUps, "N")
-                THIS.this_nOptLimCre   = TratarNulo(LimCres,   "N")
-                THIS.this_nOptPessoais = TratarNulo(Pessoais,  "N")
-                THIS.this_nOptRefBancs = TratarNulo(RefBancs,  "N")
-                THIS.this_nOptRespos   = TratarNulo(Respos,    "N")
-                THIS.this_nOptComple   = TratarNulo(Complems,  "N")
-                THIS.this_nOptContabs  = TratarNulo(Contabs,   "N")
-                THIS.this_nOptEmpresa  = TratarNulo(Empresas,  "N")
-                THIS.this_nOptCaract   = TratarNulo(Caracteris,"N")
-                THIS.this_nOptChkLimCr = TratarNulo(ChkLimCrds,"N")
-                THIS.this_nOptPreCad   = TratarNulo(PreCad,    "N")
-
-                *-- Campos diretos Aba Geral
-                THIS.this_cGrupoGeral  = TratarNulo(GruFals,   "C")  && grufals -> Get_grupo Geral
-                THIS.this_cContint     = TratarNulo(ContConts, "C")  && Conta Corrente Interna
-                THIS.this_nVrlimc      = TratarNulo(VrLimCre,  "N")
-                THIS.this_cCdMoeda     = TratarNulo(ComMordas, "C")  && Moeda Comissao
-                THIS.this_cRodRelCC    = IIF(ISNULL(RodRelCC), '', RodRelCC)
-
-                *-- Decodificar CfgCdGcr para campos Cadastro sem coluna propria
-                THIS.DecodificarCfgCdGcr()
-
-                *-- Sobrepor com colunas individuais Cadastro/Financeiro (mais confiaveis)
-                THIS.this_nFpublSobr   = TratarNulo(FpublSobr, "N")
-                THIS.this_nNascObrig   = TratarNulo(DtNascObr, "N")
-                THIS.this_nCpfObrig    = TratarNulo(CpfObrigs, "N")
-                THIS.this_nCepObrig    = TratarNulo(CepObris,  "N")
-                THIS.this_nRgObrig     = TratarNulo(RgObrigs,  "N")
-                THIS.this_nMFotos      = TratarNulo(MFotos,    "N")
-                THIS.this_nObservacao  = TratarNulo(Observas,  "N")
-                THIS.this_nCaracCad    = TratarNulo(InfCads,   "N")
-                THIS.this_nCCustoTit   = TratarNulo(CcustoTit, "N")
-                THIS.this_nLogAlt      = TratarNulo(LogAlt,    "N")
-                THIS.this_nInfSenha    = TratarNulo(InfSenha,  "N")
-                THIS.this_nCntVinc     = TratarNulo(CtVinculas,"N")
-                THIS.this_nDupEnd      = TratarNulo(ChkEndDs,  "N")
-                THIS.this_nRestEnd     = TratarNulo(ChkEndRs,  "N")
-                THIS.this_nIntegCont   = TratarNulo(IntConts,  "N")
-                THIS.this_nPadPreench  = TratarNulo(PadPgRecs, "N")
-                THIS.this_nTitBaixado  = TratarNulo(TitBaixado,"N")
-                THIS.this_nCalcIMeds   = TratarNulo(CalcIMeds, "N")
-                THIS.this_cSituas      = ""  && Carregado via lookup na UI
-
-                *-- Opcoes Estoque/Industria
-                THIS.this_nOptLimEsto  = TratarNulo(LimEstoqs, "N")
-                THIS.this_nOptVerEst   = TratarNulo(VerEsts,   "N")
-                THIS.this_nOptEstPAcab = TratarNulo(Estoques,  "N")
-                THIS.this_nOptChkLimEst= TratarNulo(ChkLimEsts,"N")
-                THIS.this_nOptCCustoEst= TratarNulo(CCustos,   "N")
-                THIS.this_nOptSaldo    = TratarNulo(CalcSalds, "N")
-                THIS.this_nOptRelevante= TratarNulo(EmpreLevs, "N")
-                THIS.this_nOptBlqConGV = TratarNulo(BlqConGVs, "N")
-                THIS.this_nOptPatrim   = TratarNulo(PatriEtqs, "N")
-                THIS.this_nOpTipoInvs  = TratarNulo(TipoInvs,  "N")
-                THIS.this_nOptUnifBal  = TratarNulo(UnifBals,  "N")
-                THIS.this_nOptFalPers  = TratarNulo(BalFalPers,"N")
-                THIS.this_nOptBlqDivOp = TratarNulo(BlqDivOps, "N")
-                THIS.this_nGetOsPend   = TratarNulo(OsPends,   "N")
-                THIS.this_nObjDupTit   = TratarNulo(ChkTits,   "N")
-                THIS.this_nOpCompagru  = TratarNulo(CompaGrus, "N")
-                THIS.this_nFwoption1Est= TratarNulo(CtrlLotes, "N")
-
-                *-- Campos diretos Estoque
-                THIS.this_nDdR         = TratarNulo(DdRetros,  "N")
-                THIS.this_nDdF         = TratarNulo(DdFutus,   "N")
-                THIS.this_cGrupoEst    = TratarNulo(GrupoLms,  "C")  && grupolms -> Grupo Dif. Balanco
-                THIS.this_nDifPeso     = TratarNulo(DifPesAgs, "N")
-                THIS.this_cTfalhas     = TratarNulo(Pqs,       "C")
-                THIS.this_nChkTrfPeso  = TratarNulo(TrfPesas,  "N")
-                THIS.this_cGetAgrupa   = TratarNulo(Agrupas,   "C")
-                THIS.this_cGrupoFalha  = TratarNulo(GrupoFalha,"C")
-                THIS.this_cContaFalha  = TratarNulo(ContaFalha,"C")
-                THIS.this_cContaPdr    = TratarNulo(ContaPdr,  "C")
-
-                *-- Sinal: numeric(1,0) -> char (+/-/P/Q)
-                loc_nSinal = TratarNulo(Sinals, "N")
-                THIS.this_cSinal = IIF(loc_nSinal=2, '-', IIF(loc_nSinal=3, 'P', IIF(loc_nSinal=4, 'Q', '+')))
-
-                *-- Checkboxes Os/Alianca/Fundicao (osalfuns C(3): '1'=marcado, '0'=desmarcado)
-                loc_cOsalfuns = PADR(TratarNulo(OsAlFuns, "C"), 3)
-                THIS.this_lCheck1 = (SUBSTR(loc_cOsalfuns, 1, 1) = '1')
-                THIS.this_lCheck2 = (SUBSTR(loc_cOsalfuns, 2, 1) = '1')
-                THIS.this_lCheck3 = (SUBSTR(loc_cOsalfuns, 3, 1) = '1')
-
-                *-- Campos Faturamento/Fiscal (decodificar CfgFis* - 50 chars cada)
-                THIS.DecodificarFiscal("IC", TratarNulo(CfgFisICs, "C"))
-                THIS.DecodificarFiscal("IP", TratarNulo(CfgFisIPs, "C"))
-                THIS.DecodificarFiscal("II", TratarNulo(CfgFisIIs, "C"))
-                THIS.DecodificarFiscal("IS", TratarNulo(CfgFisISs, "C"))
-                THIS.DecodificarFiscal("IR", TratarNulo(CfgFisIRs, "C"))
-                THIS.DecodificarFiscal("IN", TratarNulo(CfgFisINs, "C"))
-                THIS.DecodificarFiscal("PI", TratarNulo(CfgFisPIs, "C"))
-                THIS.DecodificarFiscal("CS", TratarNulo(CfgFisCSs, "C"))
-                THIS.DecodificarFiscal("CO", TratarNulo(CfgFisCOs, "C"))
-
-                loc_lSucesso = .T.
-            ENDIF
-        CATCH TO loException
-            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "ccrBO.CarregarDoCursor")
-            loc_lSucesso = .F.
-        ENDTRY
+        IF USED(par_cAliasCursor)
+            SELECT (par_cAliasCursor)
+            THIS.this_cCodigos         = TratarNulo(codigos, "C")
+            THIS.this_cDescrs          = TratarNulo(descrs, "C")
+            THIS.this_cDgcods          = TratarNulo(dgcods, "C")
+            THIS.this_cInternos        = TratarNulo(internos, "C")
+            THIS.this_cClasses         = TratarNulo(classes, "C")
+            THIS.this_cDClasses        = TratarNulo(DClasses, "C")
+            THIS.this_nTpcods          = TratarNulo(tpcods, "N")
+            THIS.this_nTpemps          = TratarNulo(tpemps, "N")
+            THIS.this_nTpcads          = TratarNulo(tpcads, "N")
+            THIS.this_nComplems        = TratarNulo(complems, "N")
+            THIS.this_nPessoais        = TratarNulo(pessoais, "N")
+            THIS.this_nRefbancs        = TratarNulo(refbancs, "N")
+            THIS.this_nFollowups       = TratarNulo(followups, "N")
+            THIS.this_nFiscais         = TratarNulo(fiscais, "N")
+            THIS.this_nContabs         = TratarNulo(contabs, "N")
+            THIS.this_nEmpresas        = TratarNulo(empresas, "N")
+            THIS.this_nCaracteris      = TratarNulo(caracteris, "N")
+            THIS.this_nRespos          = TratarNulo(respos, "N")
+            THIS.this_nLimcres         = TratarNulo(limcres, "N")
+            THIS.this_nComis           = TratarNulo(comis, "N")
+            THIS.this_nDadcoms         = TratarNulo(dadcoms, "N")
+            THIS.this_nCargos          = TratarNulo(cargos, "N")
+            THIS.this_nChklimcrds      = TratarNulo(chklimcrds, "N")
+            THIS.this_nColetors        = TratarNulo(coletors, "N")
+            THIS.this_nPrecad          = TratarNulo(precad, "N")
+            THIS.this_cGrupolms        = TratarNulo(grupolms, "C")
+            THIS.this_nVrlimcre        = TratarNulo(vrlimcre, "N")
+            THIS.this_cMolimcre        = TratarNulo(molimcre, "C")
+            THIS.this_cCommoedas       = TratarNulo(commoedas, "C")
+            THIS.this_cRodrelcc        = TratarNulo(rodrelcc, "C")
+            THIS.this_cCfgcdgcr        = TratarNulo(cfgcdgcr, "C")
+            THIS.this_cDescsit         = TratarNulo(descsit, "C")
+            THIS.this_nCpfobrigs       = TratarNulo(cpfobrigs, "N")
+            THIS.this_nRgobrigs        = TratarNulo(rgobrigs, "N")
+            THIS.this_nMfotos          = TratarNulo(mfotos, "N")
+            THIS.this_nObservas        = TratarNulo(observas, "N")
+            THIS.this_nInfcads         = TratarNulo(infcads, "N")
+            THIS.this_nCalcimeds       = TratarNulo(calcimeds, "N")
+            THIS.this_cDesccalcimeds   = TratarNulo(desccalcimeds, "C")
+            THIS.this_nFpublsobr       = TratarNulo(fpublsobr, "N")
+            THIS.this_cDescfpubls      = TratarNulo(descfpubls, "C")
+            THIS.this_nInfsenha        = TratarNulo(infsenha, "N")
+            THIS.this_nLogalt          = TratarNulo(logalt, "N")
+            THIS.this_nEndobr          = TratarNulo(endobr, "N")
+            THIS.this_nNumobr          = TratarNulo(numobr, "N")
+            THIS.this_nBairroobr       = TratarNulo(bairroobr, "N")
+            THIS.this_nCidasobr        = TratarNulo(cidasobr, "N")
+            THIS.this_nCepobris        = TratarNulo(cepobris, "N")
+            THIS.this_nPaisesobr       = TratarNulo(paisesobr, "N")
+            THIS.this_nChkendds        = TratarNulo(chkendds, "N")
+            THIS.this_nChkendrs        = TratarNulo(chkendrs, "N")
+            THIS.this_nTel1obr         = TratarNulo(tel1obr, "N")
+            THIS.this_nTel2obr         = TratarNulo(tel2obr, "N")
+            THIS.this_nNascobr         = TratarNulo(nascobr, "N")
+            THIS.this_nSexobr          = TratarNulo(sexobr, "N")
+            THIS.this_nDtnascobr       = TratarNulo(dtnascobr, "N")
+            THIS.this_nDtespobr        = TratarNulo(dtespobr, "N")
+            THIS.this_nObrtelefone     = TratarNulo(Obrtelefone, "N")
+            THIS.this_cDesctlm         = TratarNulo(desctlm, "C")
+            THIS.this_cDesccla         = TratarNulo(desccla, "C")
+            THIS.this_cDescseg         = TratarNulo(descseg, "C")
+            THIS.this_cContconts       = TratarNulo(contconts, "C")
+            THIS.this_nIntconts        = TratarNulo(intconts, "N")
+            THIS.this_nPadpgrecs       = TratarNulo(padpgrecs, "N")
+            THIS.this_nCtvinculas      = TratarNulo(ctvinculas, "N")
+            THIS.this_nTitbaixado      = TratarNulo(titbaixado, "N")
+            THIS.this_cContapdr        = TratarNulo(contapdr, "C")
+            THIS.this_nCcustotit       = TratarNulo(ccustotit, "N")
+            THIS.this_nDefhideshow     = TratarNulo(defhideshow, "N")
+            THIS.this_nCtainatv        = TratarNulo(ctainatv, "N")
+            THIS.this_nEstoques        = TratarNulo(estoques, "N")
+            THIS.this_nLimestoqs       = TratarNulo(limestoqs, "N")
+            THIS.this_nVerests         = TratarNulo(verests, "N")
+            THIS.this_nEmprelevs       = TratarNulo(emprelevs, "N")
+            THIS.this_nBlqcongvs       = TratarNulo(blqcongvs, "N")
+            THIS.this_nCalcsalds       = TratarNulo(calcsalds, "N")
+            THIS.this_nChklimests      = TratarNulo(chklimests, "N")
+            THIS.this_nPatrietqs       = TratarNulo(patrietqs, "N")
+            THIS.this_nCcustos         = TratarNulo(ccustos, "N")
+            THIS.this_nGerbals         = TratarNulo(gerbals, "N")
+            THIS.this_nUnifbals        = TratarNulo(unifbals, "N")
+            THIS.this_nBalfalpers      = TratarNulo(balfalpers, "N")
+            THIS.this_nBlqdivops       = TratarNulo(blqdivops, "N")
+            THIS.this_nInvisivel       = TratarNulo(invisivel, "N")
+            THIS.this_nDdfutus         = TratarNulo(ddfutus, "N")
+            THIS.this_nDdretros        = TratarNulo(ddretros, "N")
+            THIS.this_nDdsems          = TratarNulo(ddsems, "N")
+            THIS.this_nHordd           = TratarNulo(hordd, "N")
+            THIS.this_nTipoinvs        = TratarNulo(tipoinvs, "N")
+            THIS.this_nTrfpesas        = TratarNulo(trfpesas, "N")
+            THIS.this_nDifpesags       = TratarNulo(difpesags, "N")
+            THIS.this_nSinals          = TratarNulo(sinals, "N")
+            THIS.this_cPqs             = TratarNulo(pqs, "C")
+            THIS.this_nCompagrus       = TratarNulo(compagrus, "N")
+            THIS.this_cAgrupas         = TratarNulo(agrupas, "C")
+            THIS.this_nFichatecs       = TratarNulo(fichatecs, "N")
+            THIS.this_cOsalfuns        = TratarNulo(osalfuns, "C")
+            THIS.this_cGrufals         = TratarNulo(grufals, "C")
+            THIS.this_nOspends         = TratarNulo(ospends, "N")
+            THIS.this_nChktits         = TratarNulo(chktits, "N")
+            THIS.this_nTpprecos        = TratarNulo(tpprecos, "N")
+            THIS.this_cContafalha      = TratarNulo(contafalha, "C")
+            THIS.this_cGrupofalha      = TratarNulo(grupofalha, "C")
+            THIS.this_nCtrlotes        = TratarNulo(ctrlotes, "N")
+            THIS.this_cCfgfisics       = TratarNulo(cfgfisics, "C")
+            THIS.this_cCfgfisips       = TratarNulo(cfgfisips, "C")
+            THIS.this_cCfgfisiis       = TratarNulo(cfgfisiis, "C")
+            THIS.this_cCfgfisiss       = TratarNulo(cfgfisiss, "C")
+            THIS.this_cCfgfisirs       = TratarNulo(cfgfisirs, "C")
+            THIS.this_cCfgfisins       = TratarNulo(cfgfisins, "C")
+            THIS.this_cCfgfispis       = TratarNulo(cfgfispis, "C")
+            THIS.this_cCfgfiscss       = TratarNulo(cfgfiscss, "C")
+            THIS.this_cCfgfiscos       = TratarNulo(cfgfiscos, "C")
+            loc_lSucesso = .T.
+        ENDIF
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ValidarDados()
-    *==========================================================================
-    *-- Valida campos obrigatorios antes de salvar
-        LOCAL loc_lValido, loc_cSQL, loc_nResultado
-        loc_lValido = .T.
-
-        IF EMPTY(THIS.this_cCodigos)
-            MsgAviso("C" + CHR(243) + "digo obrigat" + CHR(243) + "rio!")
-            loc_lValido = .F.
-        ENDIF
-
-        IF loc_lValido AND EMPTY(THIS.this_cDescrs)
-            MsgAviso("Descri" + CHR(231) + CHR(227) + "o obrigat" + CHR(243) + "ria!")
-            loc_lValido = .F.
-        ENDIF
-
-        *-- Verificar duplicidade de codigo em novo registro
-        IF loc_lValido AND THIS.this_lNovoRegistro
-            TRY
-                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdGcr WHERE codigos = " + EscaparSQL(THIS.this_cCodigos)
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkDup")
-                IF loc_nResultado >= 0
-                    SELECT cursor_4c_ChkDup
-                    IF qtd > 0
-                        MsgAviso("C" + CHR(243) + "digo j" + CHR(225) + " cadastrado!")
-                        loc_lValido = .F.
-                    ENDIF
-                    USE IN cursor_4c_ChkDup
-                ENDIF
-            CATCH TO loException
-                MostrarErro("Erro ao verificar duplicidade:" + CHR(13) + loException.Message, "ccrBO.ValidarDados")
-                loc_lValido = .F.
-            ENDTRY
-        ENDIF
-
-        RETURN loc_lValido
-    ENDPROC
-
+    * Inserir - INSERT na tabela SigCdGcr
     *==========================================================================
     PROTECTED PROCEDURE Inserir()
-    *==========================================================================
-    *-- INSERT INTO SigCdGcr com todos os campos obrigatorios
-        LOCAL loc_lSucesso, loc_nResultado, loc_cSQL, loc_cVals
-        LOCAL loc_nSinal_n, loc_cOsalfuns
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            *-- Codificar CfgCdGcr antes de salvar
-            THIS.CodificarCfgCdGcr()
-
-            *-- Calcular valores especiais
-            loc_nSinal_n  = IIF(THIS.this_cSinal='+', 1, IIF(THIS.this_cSinal='-', 2, IIF(THIS.this_cSinal='P', 3, IIF(THIS.this_cSinal='Q', 4, 1))))
-            loc_cOsalfuns = IIF(THIS.this_lCheck1,'1','0') + IIF(THIS.this_lCheck2,'1','0') + IIF(THIS.this_lCheck3,'1','0')
-
-            *-- Montar lista de valores (mesma ordem das colunas)
-            loc_cVals = EscaparSQL(THIS.this_cCodigos)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cDescrs)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cInterno)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cDigito)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cClasses)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nTpCods, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nTpEmps, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nTpCads, 0)
-            *-- Opcoes Geral
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptGBals, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptCargos, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCepObrig, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptColetor, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptComi, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCpfObrig, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptDadosCom, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptFiscais, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptFollowUp, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptLimCre, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptPessoais, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptRefBancs, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptRespos, 0)
-            *-- Campos diretos e opcoes mistas
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nMFotos, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cGrupoGeral)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cContint)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nIntegCont, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptContabs, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptEmpresa, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptEstPAcab, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptSaldo, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptUnifBal, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptComple, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptRelevante, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptFalPers, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptLimEsto, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptBlqDivOp, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptCCustoEst, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nDdF, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nDdR, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptVerEst, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptBlqConGV, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOpTipoInvs, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptCaract, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nObservacao, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptChkLimCr, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptChkLimEst, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCaracCad, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(loc_cOsalfuns)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptPatrim, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nRgObrig, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCalcIMeds, 0)
-            *-- Colunas sem controle no formulario atual
-            loc_cVals = loc_cVals + ", 0"  && ddsems
-            loc_cVals = loc_cVals + ", 0"  && hordd
-            loc_cVals = loc_cVals + ", 0"  && tpprecos
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cCdMoeda)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nObjDupTit, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nGetOsPend, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOpCompagru, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nChkTrfPeso, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nDifPeso, 3)
-            loc_cVals = loc_cVals + ", 0"  && fichatecs
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cTfalhas)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(loc_nSinal_n, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cGrupoEst)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cGetAgrupa)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cRodRelCC)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nPadPreench, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nDupEnd, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nRestEnd, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nFwoption1Est, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(PADR(THIS.this_cCfgCdGcr, 40))
-            *-- CfgFis* (Fiscal - 9 tipos)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("CO"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("CS"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("IC"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("II"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("IN"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("IP"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("IR"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("IS"))
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.CodificarFiscal("PI"))
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nTitBaixado, 0)
-            loc_cVals = loc_cVals + ", '   '"  && molimcre C(3) - this_nMolimc e N; incompatibilidade de tipo da fase 1
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nVrlimc, 2)
-            *-- Colunas com DEFAULT mas que devem ser salvas explicitamente
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCCustoTit, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nLogAlt, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nFpublSobr, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nInfSenha, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nOptPreCad, 0)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nNascObrig, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cGrupoFalha)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cContaFalha)
-            loc_cVals = loc_cVals + ", " + FormatarNumeroSQL(THIS.this_nCntVinc, 0)
-            loc_cVals = loc_cVals + ", " + EscaparSQL(THIS.this_cContaPdr)
-            *-- Campos de descricao (calculados/display - salvar vazios)
-            loc_cVals = loc_cVals + ", '', '', '', '', '', ''"
-            *-- Colunas mais recentes sem controle no formulario (default 0)
-            loc_cVals = loc_cVals + ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
-
             loc_cSQL = "INSERT INTO SigCdGcr (" + ;
-                "codigos, descrs, internos, dgcods, classes, tpcods, tpemps, tpcads, " + ;
-                "gerbals, cargos, cepobris, coletors, comis, cpfobrigs, dadcoms, " + ;
-                "fiscais, followups, limcres, pessoais, refbancs, respos, " + ;
-                "mfotos, grufals, contconts, intconts, contabs, empresas, estoques, " + ;
-                "calcsalds, unifbals, complems, emprelevs, balfalpers, " + ;
-                "limestoqs, blqdivops, ccustos, ddfutus, ddretros, verests, blqcongvs, " + ;
-                "tipoinvs, caracteris, observas, chklimcrds, chklimests, infcads, " + ;
-                "osalfuns, patrietqs, rgobrigs, calcimeds, " + ;
-                "ddsems, hordd, tpprecos, commoedas, chktits, ospends, " + ;
-                "compagrus, trfpesas, difpesags, fichatecs, pqs, sinals, " + ;
-                "grupolms, agrupas, rodrelcc, padpgrecs, chkendds, chkendrs, ctrlotes, " + ;
-                "cfgcdgcr, " + ;
-                "cfgfiscos, cfgfiscss, cfgfisics, cfgfisiis, cfgfisins, " + ;
-                "cfgfisips, cfgfisirs, cfgfisiss, cfgfispis, " + ;
-                "titbaixado, molimcre, vrlimcre, " + ;
-                "ccustotit, logalt, fpublsobr, infsenha, precad, dtnascobr, " + ;
-                "grupofalha, contafalha, ctvinculas, contapdr, " + ;
-                "desccalcimeds, descsit, descfpubls, desctlm, desccla, descseg, " + ;
-                "bairroobr, cidasobr, ctainatv, endobr, invisivel, nascobr, numobr, " + ;
-                "paisesobr, sexobr, tel1obr, tel2obr, defhideshow, dtespobr, Obrtelefone" + ;
-                ") VALUES (" + loc_cVals + ")"
+                       "codigos,descrs,dgcods,internos,classes," + ;
+                       "tpcods,tpemps,tpcads,complems,pessoais," + ;
+                       "refbancs,followups,fiscais,contabs,empresas," + ;
+                       "caracteris,respos,limcres,comis,dadcoms," + ;
+                       "cargos,chklimcrds,coletors,precad,grupolms," + ;
+                       "vrlimcre,molimcre,commoedas,rodrelcc,cfgcdgcr," + ;
+                       "descsit,cpfobrigs,rgobrigs,mfotos,observas," + ;
+                       "infcads,calcimeds,desccalcimeds,fpublsobr,descfpubls," + ;
+                       "infsenha,logalt,endobr,numobr,bairroobr," + ;
+                       "cidasobr,cepobris,paisesobr,chkendds,chkendrs," + ;
+                       "tel1obr,tel2obr,nascobr,sexobr,dtnascobr," + ;
+                       "dtespobr,obrtelefone,desctlm,desccla,descseg," + ;
+                       "contconts,intconts,padpgrecs,ctvinculas,titbaixado," + ;
+                       "contapdr,ccustotit,defhideshow,ctainatv,estoques," + ;
+                       "limestoqs,verests,emprelevs,blqcongvs,calcsalds," + ;
+                       "chklimests,patrietqs,ccustos,gerbals,unifbals," + ;
+                       "balfalpers,blqdivops,invisivel,ddfutus,ddretros," + ;
+                       "ddsems,hordd,tipoinvs,trfpesas,difpesags," + ;
+                       "sinals,pqs,compagrus,agrupas,fichatecs," + ;
+                       "osalfuns,grufals,ospends,chktits,tpprecos," + ;
+                       "contafalha,grupofalha,ctrlotes," + ;
+                       "cfgfisics,cfgfisips,cfgfisiis,cfgfisiss,cfgfisirs," + ;
+                       "cfgfisins,cfgfispis,cfgfiscss,cfgfiscos" + ;
+                       ") VALUES (" + ;
+                       EscaparSQL(THIS.this_cCodigos) + "," + ;
+                       EscaparSQL(THIS.this_cDescrs) + "," + ;
+                       EscaparSQL(THIS.this_cDgcods) + "," + ;
+                       EscaparSQL(THIS.this_cInternos) + "," + ;
+                       EscaparSQL(THIS.this_cClasses) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTpcods) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTpemps) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTpcads) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nComplems) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nPessoais) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nRefbancs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nFollowups) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nFiscais) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nContabs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nEmpresas) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCaracteris) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nRespos) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nLimcres) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nComis) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDadcoms) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCargos) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nChklimcrds) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nColetors) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nPrecad) + "," + ;
+                       EscaparSQL(THIS.this_cGrupolms) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nVrlimcre) + "," + ;
+                       EscaparSQL(THIS.this_cMolimcre) + "," + ;
+                       EscaparSQL(THIS.this_cCommoedas) + "," + ;
+                       EscaparSQL(THIS.this_cRodrelcc) + "," + ;
+                       EscaparSQL(THIS.this_cCfgcdgcr) + "," + ;
+                       EscaparSQL(THIS.this_cDescsit) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCpfobrigs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nRgobrigs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nMfotos) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nObservas) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nInfcads) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCalcimeds) + "," + ;
+                       EscaparSQL(THIS.this_cDesccalcimeds) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nFpublsobr) + "," + ;
+                       EscaparSQL(THIS.this_cDescfpubls) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nInfsenha) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nLogalt) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nEndobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nNumobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nBairroobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCidasobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCepobris) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nPaisesobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nChkendds) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nChkendrs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTel1obr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTel2obr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nNascobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nSexobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDtnascobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDtespobr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nObrtelefone) + "," + ;
+                       EscaparSQL(THIS.this_cDesctlm) + "," + ;
+                       EscaparSQL(THIS.this_cDesccla) + "," + ;
+                       EscaparSQL(THIS.this_cDescseg) + "," + ;
+                       EscaparSQL(THIS.this_cContconts) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nIntconts) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nPadpgrecs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCtvinculas) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTitbaixado) + "," + ;
+                       EscaparSQL(THIS.this_cContapdr) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCcustotit) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDefhideshow) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCtainatv) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nEstoques) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nLimestoqs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nVerests) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nEmprelevs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nBlqcongvs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCalcsalds) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nChklimests) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nPatrietqs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCcustos) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nGerbals) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nUnifbals) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nBalfalpers) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nBlqdivops) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nInvisivel) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDdfutus) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDdretros) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDdsems) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nHordd) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTipoinvs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTrfpesas) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nDifpesags) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nSinals) + "," + ;
+                       EscaparSQL(THIS.this_cPqs) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCompagrus) + "," + ;
+                       EscaparSQL(THIS.this_cAgrupas) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nFichatecs) + "," + ;
+                       EscaparSQL(THIS.this_cOsalfuns) + "," + ;
+                       EscaparSQL(THIS.this_cGrufals) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nOspends) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nChktits) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nTpprecos) + "," + ;
+                       EscaparSQL(THIS.this_cContafalha) + "," + ;
+                       EscaparSQL(THIS.this_cGrupofalha) + "," + ;
+                       FormatarNumeroSQL(THIS.this_nCtrlotes) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisics) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisips) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisiis) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisiss) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisirs) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfisins) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfispis) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfiscss) + "," + ;
+                       EscaparSQL(THIS.this_cCfgfiscos) + ;
+                       ")"
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
             IF loc_nResultado >= 0
                 THIS.RegistrarAuditoria("INSERT")
                 loc_lSucesso = .T.
             ELSE
-                MostrarErro("Erro ao inserir grupo CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MsgErro("Erro ao inserir grupo de contas correntes:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-
-        CATCH TO loException
-            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "ccrBO.Inserir")
+        CATCH TO loc_oErro
+            MsgErro("Erro ao inserir grupo de contas correntes:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE Atualizar()
+    * Atualizar - UPDATE na tabela SigCdGcr
     *==========================================================================
-    *-- UPDATE SigCdGcr com todos os campos (exceto PK)
-        LOCAL loc_lSucesso, loc_nResultado, loc_cSQL, loc_cSet
-        LOCAL loc_nSinal_n, loc_cOsalfuns
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            *-- Codificar CfgCdGcr antes de salvar
-            THIS.CodificarCfgCdGcr()
-
-            *-- Calcular valores especiais
-            loc_nSinal_n  = IIF(THIS.this_cSinal='+', 1, IIF(THIS.this_cSinal='-', 2, IIF(THIS.this_cSinal='P', 3, IIF(THIS.this_cSinal='Q', 4, 1))))
-            loc_cOsalfuns = IIF(THIS.this_lCheck1,'1','0') + IIF(THIS.this_lCheck2,'1','0') + IIF(THIS.this_lCheck3,'1','0')
-
-            *-- Montar clausula SET
-            loc_cSet = " descrs     = " + EscaparSQL(THIS.this_cDescrs)
-            loc_cSet = loc_cSet + ", internos   = " + EscaparSQL(THIS.this_cInterno)
-            loc_cSet = loc_cSet + ", dgcods     = " + EscaparSQL(THIS.this_cDigito)
-            loc_cSet = loc_cSet + ", classes    = " + EscaparSQL(THIS.this_cClasses)
-            loc_cSet = loc_cSet + ", tpcods     = " + FormatarNumeroSQL(THIS.this_nTpCods, 0)
-            loc_cSet = loc_cSet + ", tpemps     = " + FormatarNumeroSQL(THIS.this_nTpEmps, 0)
-            loc_cSet = loc_cSet + ", tpcads     = " + FormatarNumeroSQL(THIS.this_nTpCads, 0)
-            *-- Opcoes Geral
-            loc_cSet = loc_cSet + ", gerbals    = " + FormatarNumeroSQL(THIS.this_nOptGBals, 0)
-            loc_cSet = loc_cSet + ", cargos     = " + FormatarNumeroSQL(THIS.this_nOptCargos, 0)
-            loc_cSet = loc_cSet + ", cepobris   = " + FormatarNumeroSQL(THIS.this_nCepObrig, 0)
-            loc_cSet = loc_cSet + ", coletors   = " + FormatarNumeroSQL(THIS.this_nOptColetor, 0)
-            loc_cSet = loc_cSet + ", comis      = " + FormatarNumeroSQL(THIS.this_nOptComi, 0)
-            loc_cSet = loc_cSet + ", cpfobrigs  = " + FormatarNumeroSQL(THIS.this_nCpfObrig, 0)
-            loc_cSet = loc_cSet + ", dadcoms    = " + FormatarNumeroSQL(THIS.this_nOptDadosCom, 0)
-            loc_cSet = loc_cSet + ", fiscais    = " + FormatarNumeroSQL(THIS.this_nOptFiscais, 0)
-            loc_cSet = loc_cSet + ", followups  = " + FormatarNumeroSQL(THIS.this_nOptFollowUp, 0)
-            loc_cSet = loc_cSet + ", limcres    = " + FormatarNumeroSQL(THIS.this_nOptLimCre, 0)
-            loc_cSet = loc_cSet + ", pessoais   = " + FormatarNumeroSQL(THIS.this_nOptPessoais, 0)
-            loc_cSet = loc_cSet + ", refbancs   = " + FormatarNumeroSQL(THIS.this_nOptRefBancs, 0)
-            loc_cSet = loc_cSet + ", respos     = " + FormatarNumeroSQL(THIS.this_nOptRespos, 0)
-            loc_cSet = loc_cSet + ", complems   = " + FormatarNumeroSQL(THIS.this_nOptComple, 0)
-            loc_cSet = loc_cSet + ", contabs    = " + FormatarNumeroSQL(THIS.this_nOptContabs, 0)
-            loc_cSet = loc_cSet + ", empresas   = " + FormatarNumeroSQL(THIS.this_nOptEmpresa, 0)
-            loc_cSet = loc_cSet + ", caracteris = " + FormatarNumeroSQL(THIS.this_nOptCaract, 0)
-            loc_cSet = loc_cSet + ", chklimcrds = " + FormatarNumeroSQL(THIS.this_nOptChkLimCr, 0)
-            loc_cSet = loc_cSet + ", precad     = " + FormatarNumeroSQL(THIS.this_nOptPreCad, 0)
-            *-- Campos diretos Geral
-            loc_cSet = loc_cSet + ", mfotos     = " + FormatarNumeroSQL(THIS.this_nMFotos, 0)
-            loc_cSet = loc_cSet + ", grufals    = " + EscaparSQL(THIS.this_cGrupoGeral)
-            loc_cSet = loc_cSet + ", contconts  = " + EscaparSQL(THIS.this_cContint)
-            loc_cSet = loc_cSet + ", intconts   = " + FormatarNumeroSQL(THIS.this_nIntegCont, 0)
-            loc_cSet = loc_cSet + ", vrlimcre   = " + FormatarNumeroSQL(THIS.this_nVrlimc, 2)
-            loc_cSet = loc_cSet + ", commoedas  = " + EscaparSQL(THIS.this_cCdMoeda)
-            loc_cSet = loc_cSet + ", rodrelcc   = " + EscaparSQL(THIS.this_cRodRelCC)
-            *-- Cadastro/Financeiro diretos
-            loc_cSet = loc_cSet + ", observas   = " + FormatarNumeroSQL(THIS.this_nObservacao, 0)
-            loc_cSet = loc_cSet + ", rgobrigs   = " + FormatarNumeroSQL(THIS.this_nRgObrig, 0)
-            loc_cSet = loc_cSet + ", ccustotit  = " + FormatarNumeroSQL(THIS.this_nCCustoTit, 0)
-            loc_cSet = loc_cSet + ", logalt     = " + FormatarNumeroSQL(THIS.this_nLogAlt, 0)
-            loc_cSet = loc_cSet + ", fpublsobr  = " + FormatarNumeroSQL(THIS.this_nFpublSobr, 0)
-            loc_cSet = loc_cSet + ", infsenha   = " + FormatarNumeroSQL(THIS.this_nInfSenha, 0)
-            loc_cSet = loc_cSet + ", dtnascobr  = " + FormatarNumeroSQL(THIS.this_nNascObrig, 0)
-            loc_cSet = loc_cSet + ", ctvinculas = " + FormatarNumeroSQL(THIS.this_nCntVinc, 0)
-            loc_cSet = loc_cSet + ", chkendds   = " + FormatarNumeroSQL(THIS.this_nDupEnd, 0)
-            loc_cSet = loc_cSet + ", chkendrs   = " + FormatarNumeroSQL(THIS.this_nRestEnd, 0)
-            loc_cSet = loc_cSet + ", padpgrecs  = " + FormatarNumeroSQL(THIS.this_nPadPreench, 0)
-            loc_cSet = loc_cSet + ", titbaixado = " + FormatarNumeroSQL(THIS.this_nTitBaixado, 0)
-            loc_cSet = loc_cSet + ", calcimeds  = " + FormatarNumeroSQL(THIS.this_nCalcIMeds, 0)
-            loc_cSet = loc_cSet + ", infcads    = " + FormatarNumeroSQL(THIS.this_nCaracCad, 0)
-            *-- Estoque opcoes
-            loc_cSet = loc_cSet + ", estoques   = " + FormatarNumeroSQL(THIS.this_nOptEstPAcab, 0)
-            loc_cSet = loc_cSet + ", calcsalds  = " + FormatarNumeroSQL(THIS.this_nOptSaldo, 0)
-            loc_cSet = loc_cSet + ", unifbals   = " + FormatarNumeroSQL(THIS.this_nOptUnifBal, 0)
-            loc_cSet = loc_cSet + ", emprelevs  = " + FormatarNumeroSQL(THIS.this_nOptRelevante, 0)
-            loc_cSet = loc_cSet + ", balfalpers = " + FormatarNumeroSQL(THIS.this_nOptFalPers, 0)
-            loc_cSet = loc_cSet + ", limestoqs  = " + FormatarNumeroSQL(THIS.this_nOptLimEsto, 0)
-            loc_cSet = loc_cSet + ", blqdivops  = " + FormatarNumeroSQL(THIS.this_nOptBlqDivOp, 0)
-            loc_cSet = loc_cSet + ", ccustos    = " + FormatarNumeroSQL(THIS.this_nOptCCustoEst, 0)
-            loc_cSet = loc_cSet + ", ddfutus    = " + FormatarNumeroSQL(THIS.this_nDdF, 0)
-            loc_cSet = loc_cSet + ", ddretros   = " + FormatarNumeroSQL(THIS.this_nDdR, 0)
-            loc_cSet = loc_cSet + ", verests    = " + FormatarNumeroSQL(THIS.this_nOptVerEst, 0)
-            loc_cSet = loc_cSet + ", blqcongvs  = " + FormatarNumeroSQL(THIS.this_nOptBlqConGV, 0)
-            loc_cSet = loc_cSet + ", tipoinvs   = " + FormatarNumeroSQL(THIS.this_nOpTipoInvs, 0)
-            loc_cSet = loc_cSet + ", chklimests = " + FormatarNumeroSQL(THIS.this_nOptChkLimEst, 0)
-            loc_cSet = loc_cSet + ", patrietqs  = " + FormatarNumeroSQL(THIS.this_nOptPatrim, 0)
-            loc_cSet = loc_cSet + ", ospends    = " + FormatarNumeroSQL(THIS.this_nGetOsPend, 0)
-            loc_cSet = loc_cSet + ", chktits    = " + FormatarNumeroSQL(THIS.this_nObjDupTit, 0)
-            loc_cSet = loc_cSet + ", compagrus  = " + FormatarNumeroSQL(THIS.this_nOpCompagru, 0)
-            loc_cSet = loc_cSet + ", ctrlotes   = " + FormatarNumeroSQL(THIS.this_nFwoption1Est, 0)
-            *-- Estoque diretos
-            loc_cSet = loc_cSet + ", grupolms   = " + EscaparSQL(THIS.this_cGrupoEst)
-            loc_cSet = loc_cSet + ", difpesags  = " + FormatarNumeroSQL(THIS.this_nDifPeso, 3)
-            loc_cSet = loc_cSet + ", pqs        = " + EscaparSQL(THIS.this_cTfalhas)
-            loc_cSet = loc_cSet + ", sinals     = " + FormatarNumeroSQL(loc_nSinal_n, 0)
-            loc_cSet = loc_cSet + ", trfpesas   = " + FormatarNumeroSQL(THIS.this_nChkTrfPeso, 0)
-            loc_cSet = loc_cSet + ", agrupas    = " + EscaparSQL(THIS.this_cGetAgrupa)
-            loc_cSet = loc_cSet + ", grupofalha = " + EscaparSQL(THIS.this_cGrupoFalha)
-            loc_cSet = loc_cSet + ", contafalha = " + EscaparSQL(THIS.this_cContaFalha)
-            loc_cSet = loc_cSet + ", contapdr   = " + EscaparSQL(THIS.this_cContaPdr)
-            loc_cSet = loc_cSet + ", osalfuns   = " + EscaparSQL(loc_cOsalfuns)
-            *-- CfgCdGcr + CfgFis*
-            loc_cSet = loc_cSet + ", cfgcdgcr   = " + EscaparSQL(PADR(THIS.this_cCfgCdGcr, 40))
-            loc_cSet = loc_cSet + ", cfgfiscos  = " + EscaparSQL(THIS.CodificarFiscal("CO"))
-            loc_cSet = loc_cSet + ", cfgfiscss  = " + EscaparSQL(THIS.CodificarFiscal("CS"))
-            loc_cSet = loc_cSet + ", cfgfisics  = " + EscaparSQL(THIS.CodificarFiscal("IC"))
-            loc_cSet = loc_cSet + ", cfgfisiis  = " + EscaparSQL(THIS.CodificarFiscal("II"))
-            loc_cSet = loc_cSet + ", cfgfisins  = " + EscaparSQL(THIS.CodificarFiscal("IN"))
-            loc_cSet = loc_cSet + ", cfgfisips  = " + EscaparSQL(THIS.CodificarFiscal("IP"))
-            loc_cSet = loc_cSet + ", cfgfisirs  = " + EscaparSQL(THIS.CodificarFiscal("IR"))
-            loc_cSet = loc_cSet + ", cfgfisiss  = " + EscaparSQL(THIS.CodificarFiscal("IS"))
-            loc_cSet = loc_cSet + ", cfgfispis  = " + EscaparSQL(THIS.CodificarFiscal("PI"))
-
-            loc_cSQL = "UPDATE SigCdGcr SET" + loc_cSet + ;
-                       " WHERE codigos = " + EscaparSQL(THIS.this_cCodigos)
+            loc_cSQL = "UPDATE SigCdGcr SET" + ;
+                       " descrs=" + EscaparSQL(THIS.this_cDescrs) + "," + ;
+                       " dgcods=" + EscaparSQL(THIS.this_cDgcods) + "," + ;
+                       " internos=" + EscaparSQL(THIS.this_cInternos) + "," + ;
+                       " classes=" + EscaparSQL(THIS.this_cClasses) + "," + ;
+                       " tpcods=" + FormatarNumeroSQL(THIS.this_nTpcods) + "," + ;
+                       " tpemps=" + FormatarNumeroSQL(THIS.this_nTpemps) + "," + ;
+                       " tpcads=" + FormatarNumeroSQL(THIS.this_nTpcads) + "," + ;
+                       " complems=" + FormatarNumeroSQL(THIS.this_nComplems) + "," + ;
+                       " pessoais=" + FormatarNumeroSQL(THIS.this_nPessoais) + "," + ;
+                       " refbancs=" + FormatarNumeroSQL(THIS.this_nRefbancs) + "," + ;
+                       " followups=" + FormatarNumeroSQL(THIS.this_nFollowups) + "," + ;
+                       " fiscais=" + FormatarNumeroSQL(THIS.this_nFiscais) + "," + ;
+                       " contabs=" + FormatarNumeroSQL(THIS.this_nContabs) + "," + ;
+                       " empresas=" + FormatarNumeroSQL(THIS.this_nEmpresas) + "," + ;
+                       " caracteris=" + FormatarNumeroSQL(THIS.this_nCaracteris) + "," + ;
+                       " respos=" + FormatarNumeroSQL(THIS.this_nRespos) + "," + ;
+                       " limcres=" + FormatarNumeroSQL(THIS.this_nLimcres) + "," + ;
+                       " comis=" + FormatarNumeroSQL(THIS.this_nComis) + "," + ;
+                       " dadcoms=" + FormatarNumeroSQL(THIS.this_nDadcoms) + "," + ;
+                       " cargos=" + FormatarNumeroSQL(THIS.this_nCargos) + "," + ;
+                       " chklimcrds=" + FormatarNumeroSQL(THIS.this_nChklimcrds) + "," + ;
+                       " coletors=" + FormatarNumeroSQL(THIS.this_nColetors) + "," + ;
+                       " precad=" + FormatarNumeroSQL(THIS.this_nPrecad) + "," + ;
+                       " grupolms=" + EscaparSQL(THIS.this_cGrupolms) + "," + ;
+                       " vrlimcre=" + FormatarNumeroSQL(THIS.this_nVrlimcre) + "," + ;
+                       " molimcre=" + EscaparSQL(THIS.this_cMolimcre) + "," + ;
+                       " commoedas=" + EscaparSQL(THIS.this_cCommoedas) + "," + ;
+                       " rodrelcc=" + EscaparSQL(THIS.this_cRodrelcc) + "," + ;
+                       " cfgcdgcr=" + EscaparSQL(THIS.this_cCfgcdgcr) + "," + ;
+                       " descsit=" + EscaparSQL(THIS.this_cDescsit) + "," + ;
+                       " cpfobrigs=" + FormatarNumeroSQL(THIS.this_nCpfobrigs) + "," + ;
+                       " rgobrigs=" + FormatarNumeroSQL(THIS.this_nRgobrigs) + "," + ;
+                       " mfotos=" + FormatarNumeroSQL(THIS.this_nMfotos) + "," + ;
+                       " observas=" + FormatarNumeroSQL(THIS.this_nObservas) + "," + ;
+                       " infcads=" + FormatarNumeroSQL(THIS.this_nInfcads) + "," + ;
+                       " calcimeds=" + FormatarNumeroSQL(THIS.this_nCalcimeds) + "," + ;
+                       " desccalcimeds=" + EscaparSQL(THIS.this_cDesccalcimeds) + "," + ;
+                       " fpublsobr=" + FormatarNumeroSQL(THIS.this_nFpublsobr) + "," + ;
+                       " descfpubls=" + EscaparSQL(THIS.this_cDescfpubls) + "," + ;
+                       " infsenha=" + FormatarNumeroSQL(THIS.this_nInfsenha) + "," + ;
+                       " logalt=" + FormatarNumeroSQL(THIS.this_nLogalt) + "," + ;
+                       " endobr=" + FormatarNumeroSQL(THIS.this_nEndobr) + "," + ;
+                       " numobr=" + FormatarNumeroSQL(THIS.this_nNumobr) + "," + ;
+                       " bairroobr=" + FormatarNumeroSQL(THIS.this_nBairroobr) + "," + ;
+                       " cidasobr=" + FormatarNumeroSQL(THIS.this_nCidasobr) + "," + ;
+                       " cepobris=" + FormatarNumeroSQL(THIS.this_nCepobris) + "," + ;
+                       " paisesobr=" + FormatarNumeroSQL(THIS.this_nPaisesobr) + "," + ;
+                       " chkendds=" + FormatarNumeroSQL(THIS.this_nChkendds) + "," + ;
+                       " chkendrs=" + FormatarNumeroSQL(THIS.this_nChkendrs) + "," + ;
+                       " tel1obr=" + FormatarNumeroSQL(THIS.this_nTel1obr) + "," + ;
+                       " tel2obr=" + FormatarNumeroSQL(THIS.this_nTel2obr) + "," + ;
+                       " nascobr=" + FormatarNumeroSQL(THIS.this_nNascobr) + "," + ;
+                       " sexobr=" + FormatarNumeroSQL(THIS.this_nSexobr) + "," + ;
+                       " dtnascobr=" + FormatarNumeroSQL(THIS.this_nDtnascobr) + "," + ;
+                       " dtespobr=" + FormatarNumeroSQL(THIS.this_nDtespobr) + "," + ;
+                       " obrtelefone=" + FormatarNumeroSQL(THIS.this_nObrtelefone) + "," + ;
+                       " desctlm=" + EscaparSQL(THIS.this_cDesctlm) + "," + ;
+                       " desccla=" + EscaparSQL(THIS.this_cDesccla) + "," + ;
+                       " descseg=" + EscaparSQL(THIS.this_cDescseg) + "," + ;
+                       " contconts=" + EscaparSQL(THIS.this_cContconts) + "," + ;
+                       " intconts=" + FormatarNumeroSQL(THIS.this_nIntconts) + "," + ;
+                       " padpgrecs=" + FormatarNumeroSQL(THIS.this_nPadpgrecs) + "," + ;
+                       " ctvinculas=" + FormatarNumeroSQL(THIS.this_nCtvinculas) + "," + ;
+                       " titbaixado=" + FormatarNumeroSQL(THIS.this_nTitbaixado) + "," + ;
+                       " contapdr=" + EscaparSQL(THIS.this_cContapdr) + "," + ;
+                       " ccustotit=" + FormatarNumeroSQL(THIS.this_nCcustotit) + "," + ;
+                       " defhideshow=" + FormatarNumeroSQL(THIS.this_nDefhideshow) + "," + ;
+                       " ctainatv=" + FormatarNumeroSQL(THIS.this_nCtainatv) + "," + ;
+                       " estoques=" + FormatarNumeroSQL(THIS.this_nEstoques) + "," + ;
+                       " limestoqs=" + FormatarNumeroSQL(THIS.this_nLimestoqs) + "," + ;
+                       " verests=" + FormatarNumeroSQL(THIS.this_nVerests) + "," + ;
+                       " emprelevs=" + FormatarNumeroSQL(THIS.this_nEmprelevs) + "," + ;
+                       " blqcongvs=" + FormatarNumeroSQL(THIS.this_nBlqcongvs) + "," + ;
+                       " calcsalds=" + FormatarNumeroSQL(THIS.this_nCalcsalds) + "," + ;
+                       " chklimests=" + FormatarNumeroSQL(THIS.this_nChklimests) + "," + ;
+                       " patrietqs=" + FormatarNumeroSQL(THIS.this_nPatrietqs) + "," + ;
+                       " ccustos=" + FormatarNumeroSQL(THIS.this_nCcustos) + "," + ;
+                       " gerbals=" + FormatarNumeroSQL(THIS.this_nGerbals) + "," + ;
+                       " unifbals=" + FormatarNumeroSQL(THIS.this_nUnifbals) + "," + ;
+                       " balfalpers=" + FormatarNumeroSQL(THIS.this_nBalfalpers) + "," + ;
+                       " blqdivops=" + FormatarNumeroSQL(THIS.this_nBlqdivops) + "," + ;
+                       " invisivel=" + FormatarNumeroSQL(THIS.this_nInvisivel) + "," + ;
+                       " ddfutus=" + FormatarNumeroSQL(THIS.this_nDdfutus) + "," + ;
+                       " ddretros=" + FormatarNumeroSQL(THIS.this_nDdretros) + "," + ;
+                       " ddsems=" + FormatarNumeroSQL(THIS.this_nDdsems) + "," + ;
+                       " hordd=" + FormatarNumeroSQL(THIS.this_nHordd) + "," + ;
+                       " tipoinvs=" + FormatarNumeroSQL(THIS.this_nTipoinvs) + "," + ;
+                       " trfpesas=" + FormatarNumeroSQL(THIS.this_nTrfpesas) + "," + ;
+                       " difpesags=" + FormatarNumeroSQL(THIS.this_nDifpesags) + "," + ;
+                       " sinals=" + FormatarNumeroSQL(THIS.this_nSinals) + "," + ;
+                       " pqs=" + EscaparSQL(THIS.this_cPqs) + "," + ;
+                       " compagrus=" + FormatarNumeroSQL(THIS.this_nCompagrus) + "," + ;
+                       " agrupas=" + EscaparSQL(THIS.this_cAgrupas) + "," + ;
+                       " fichatecs=" + FormatarNumeroSQL(THIS.this_nFichatecs) + "," + ;
+                       " osalfuns=" + EscaparSQL(THIS.this_cOsalfuns) + "," + ;
+                       " grufals=" + EscaparSQL(THIS.this_cGrufals) + "," + ;
+                       " ospends=" + FormatarNumeroSQL(THIS.this_nOspends) + "," + ;
+                       " chktits=" + FormatarNumeroSQL(THIS.this_nChktits) + "," + ;
+                       " tpprecos=" + FormatarNumeroSQL(THIS.this_nTpprecos) + "," + ;
+                       " contafalha=" + EscaparSQL(THIS.this_cContafalha) + "," + ;
+                       " grupofalha=" + EscaparSQL(THIS.this_cGrupofalha) + "," + ;
+                       " ctrlotes=" + FormatarNumeroSQL(THIS.this_nCtrlotes) + "," + ;
+                       " cfgfisics=" + EscaparSQL(THIS.this_cCfgfisics) + "," + ;
+                       " cfgfisips=" + EscaparSQL(THIS.this_cCfgfisips) + "," + ;
+                       " cfgfisiis=" + EscaparSQL(THIS.this_cCfgfisiis) + "," + ;
+                       " cfgfisiss=" + EscaparSQL(THIS.this_cCfgfisiss) + "," + ;
+                       " cfgfisirs=" + EscaparSQL(THIS.this_cCfgfisirs) + "," + ;
+                       " cfgfisins=" + EscaparSQL(THIS.this_cCfgfisins) + "," + ;
+                       " cfgfispis=" + EscaparSQL(THIS.this_cCfgfispis) + "," + ;
+                       " cfgfiscss=" + EscaparSQL(THIS.this_cCfgfiscss) + "," + ;
+                       " cfgfiscos=" + EscaparSQL(THIS.this_cCfgfiscos) + ;
+                       " WHERE codigos=" + EscaparSQL(THIS.this_cCodigos)
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
             IF loc_nResultado >= 0
                 THIS.RegistrarAuditoria("UPDATE")
                 loc_lSucesso = .T.
             ELSE
-                MostrarErro("Erro ao atualizar grupo CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MsgErro("Erro ao atualizar grupo de contas correntes:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
-
-        CATCH TO loException
-            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "ccrBO.Atualizar")
+        CATCH TO loc_oErro
+            MsgErro("Erro ao atualizar grupo de contas correntes:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE ExecutarExclusao()
+    * ExecutarExclusao - DELETE da tabela SigCdGcr com verificacao de dependencias
     *==========================================================================
-    *-- Verifica dependencias e exclui registro de SigCdGcr
-        LOCAL loc_lSucesso, loc_nResultado, loc_cSQL, loc_cCodigo, loc_lDependencias
-        loc_lSucesso    = .F.
-        loc_lDependencias = .F.
+    PROTECTED PROCEDURE ExecutarExclusao()
+        LOCAL loc_cSQL, loc_cCodigo, loc_nCount, loc_nResultado, loc_lSucesso, loc_lBloqueado
+        loc_lSucesso  = .F.
+        loc_lBloqueado = .F.
+        loc_cCodigo   = EscaparSQL(ALLTRIM(THIS.this_cCodigos))
 
         TRY
-            loc_cCodigo = THIS.this_cCodigos
-
-            *-- Verificar dependencias em SigMvCcr
-            IF !loc_lDependencias
-                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigMvCcr WHERE Grupos = " + EscaparSQL(loc_cCodigo)
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkDep") >= 0
-                    SELECT cursor_4c_ChkDep
-                    loc_lDependencias = (qtd > 0)
-                    USE IN cursor_4c_ChkDep
+            IF !loc_lBloqueado
+                loc_cSQL = "SELECT COUNT(*) AS cnt FROM SigMvCcr WHERE RTRIM(Grupos) = " + loc_cCodigo
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Chk") >= 0
+                    SELECT cursor_4c_Chk
+                    loc_nCount = cursor_4c_Chk.cnt
+                    USE IN cursor_4c_Chk
+                    IF loc_nCount > 0
+                        loc_lBloqueado = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
-            *-- Verificar dependencias em SigCdCli
-            IF !loc_lDependencias
-                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdCli WHERE Grupos = " + EscaparSQL(loc_cCodigo)
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkDep") >= 0
-                    SELECT cursor_4c_ChkDep
-                    loc_lDependencias = (qtd > 0)
-                    USE IN cursor_4c_ChkDep
+            IF !loc_lBloqueado
+                loc_cSQL = "SELECT COUNT(*) AS cnt FROM SigCdCli WHERE RTRIM(Grupos) = " + loc_cCodigo
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Chk") >= 0
+                    SELECT cursor_4c_Chk
+                    loc_nCount = cursor_4c_Chk.cnt
+                    USE IN cursor_4c_Chk
+                    IF loc_nCount > 0
+                        loc_lBloqueado = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
-            *-- Verificar dependencias em SigMvCab
-            IF !loc_lDependencias
-                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigMvCab WHERE Grupos = " + EscaparSQL(loc_cCodigo)
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkDep") >= 0
-                    SELECT cursor_4c_ChkDep
-                    loc_lDependencias = (qtd > 0)
-                    USE IN cursor_4c_ChkDep
+            IF !loc_lBloqueado
+                loc_cSQL = "SELECT COUNT(*) AS cnt FROM SigMvCab WHERE RTRIM(Grupos) = " + loc_cCodigo
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Chk") >= 0
+                    SELECT cursor_4c_Chk
+                    loc_nCount = cursor_4c_Chk.cnt
+                    USE IN cursor_4c_Chk
+                    IF loc_nCount > 0
+                        loc_lBloqueado = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
-            IF loc_lDependencias
-                MsgAviso("Aten" + CHR(231) + CHR(227) + "o!!! Existem L" + CHR(97) + "n" + CHR(231) + "amentos Efetuados Neste Grupo!!!")
+            IF loc_lBloqueado
+                MsgAviso("Aten" + CHR(231) + CHR(227) + "o!!! Existem Lan" + CHR(231) + "amentos Efetuados Neste Grupo!!!" + CHR(13) + ;
+                        "Exclua Todos os Lan" + CHR(231) + "amentos Antes de Excluir o Grupo!!!", "ERRO!!!")
             ELSE
-                loc_cSQL = "DELETE FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cCodigo)
+                loc_cSQL = "DELETE FROM SigCdGcr WHERE codigos = " + loc_cCodigo
                 loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
                 IF loc_nResultado >= 0
                     THIS.RegistrarAuditoria("DELETE")
                     loc_lSucesso = .T.
                 ELSE
-                    MostrarErro("Erro ao excluir grupo CCR:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    MsgErro("Erro ao excluir grupo de contas correntes:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
-
-        CATCH TO loException
-            MostrarErro("Erro ao excluir:" + CHR(13) + loException.Message, "ccrBO.ExecutarExclusao")
+        CATCH TO loc_oErro
+            IF USED("cursor_4c_Chk")
+                USE IN cursor_4c_Chk
+            ENDIF
+            MsgErro("Erro ao excluir grupo de contas correntes:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
 
         RETURN loc_lSucesso
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE DecodificarCfgCdGcr()
-    *==========================================================================
-    *-- Decodifica o campo CfgCdGcr (40 posicoes) para propriedades individuais
-    *-- Cada posicao armazena 1 digito: valor do OptionGroup (1, 2, 3, etc.)
-    *-- Posicoes conhecidas (legado): 1=ObrMails, 2=ObrNome, 3=VincPgRcs, 4=ObrSit,
-    *-- 5=ObrTlm, 6=ObrCla, 7=ObrSeg, 8=ObrIbge, 9=CpfFixo, 10=CaracCad,
-    *-- 11=AceJob, 12=VincContas
-        LOCAL loc_cCfg, loc_nVal
-        loc_cCfg = PADR(THIS.this_cCfgCdGcr, 40)
-
-        *-- Posicao 1: E-mail Obrigatorio
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 1, 1)))
-        THIS.this_nObrMails  = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 2: Nome Obrigatorio
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 2, 1)))
-        THIS.this_nObrNome   = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 3: Vincula Conta PG/RC
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 3, 1)))
-        THIS.this_nVincPgRcs = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 4: Situacao Obrigatoria
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 4, 1)))
-        THIS.this_nObrSit    = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 5: Telemarketing Obrigatorio
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 5, 1)))
-        THIS.this_nObrTlm    = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 6: Classificacao Obrigatoria
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 6, 1)))
-        THIS.this_nObrCla    = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 7: Segmento Obrigatorio
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 7, 1)))
-        THIS.this_nObrSeg    = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 8: Cod IBGE Obrigatorio
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 8, 1)))
-        THIS.this_nObrIbge   = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 9: CPF/CNPJ Fixo (1=CPF, 2=CNPJ, 3=Ambos)
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 9, 1)))
-        THIS.this_nCpfFixo   = IIF(loc_nVal < 1, 1, loc_nVal)
-
-        *-- Posicao 10: Caracteristica no Cadastro
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 10, 1)))
-        THIS.this_nCaracCad  = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 11: Acesso Job
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 11, 1)))
-        THIS.this_nAceJob    = IIF(loc_nVal < 1, 2, loc_nVal)
-
-        *-- Posicao 12: Vincula Contas no Pag/Rec
-        loc_nVal = INT(VAL(SUBSTR(loc_cCfg, 12, 1)))
-        THIS.this_nVincContas= IIF(loc_nVal < 1, 2, loc_nVal)
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE CodificarCfgCdGcr()
-    *==========================================================================
-    *-- Codifica propriedades individuais no campo CfgCdGcr (40 posicoes)
-        LOCAL loc_cResult
-        loc_cResult = REPLICATE('0', 40)
-
-        loc_cResult = STUFF(loc_cResult, 1,  1, STR(THIS.this_nObrMails,  1))
-        loc_cResult = STUFF(loc_cResult, 2,  1, STR(THIS.this_nObrNome,   1))
-        loc_cResult = STUFF(loc_cResult, 3,  1, STR(THIS.this_nVincPgRcs, 1))
-        loc_cResult = STUFF(loc_cResult, 4,  1, STR(THIS.this_nObrSit,    1))
-        loc_cResult = STUFF(loc_cResult, 5,  1, STR(THIS.this_nObrTlm,    1))
-        loc_cResult = STUFF(loc_cResult, 6,  1, STR(THIS.this_nObrCla,    1))
-        loc_cResult = STUFF(loc_cResult, 7,  1, STR(THIS.this_nObrSeg,    1))
-        loc_cResult = STUFF(loc_cResult, 8,  1, STR(THIS.this_nObrIbge,   1))
-        loc_cResult = STUFF(loc_cResult, 9,  1, STR(THIS.this_nCpfFixo,   1))
-        loc_cResult = STUFF(loc_cResult, 10, 1, STR(THIS.this_nCaracCad,  1))
-        loc_cResult = STUFF(loc_cResult, 11, 1, STR(THIS.this_nAceJob,    1))
-        loc_cResult = STUFF(loc_cResult, 12, 1, STR(THIS.this_nVincContas,1))
-
-        THIS.this_cCfgCdGcr = loc_cResult
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE DecodificarFiscal(par_cTipo, par_cEncoded)
-    *==========================================================================
-    *-- Decodifica campo CfgFis* (50 chars) para propriedades do tipo fiscal
-    *-- Formato: Grupo(10) + Conta(10) + Pct(8,4 decimais) + Receita(10) + padding(12)
-        LOCAL loc_cEncoded, loc_cGrupo, loc_cConta, loc_nPct, loc_cReceita
-        loc_cEncoded = PADR(IIF(ISNULL(par_cEncoded), '', par_cEncoded), 50)
-        loc_cGrupo   = ALLTRIM(SUBSTR(loc_cEncoded, 1,  10))
-        loc_cConta   = ALLTRIM(SUBSTR(loc_cEncoded, 11, 10))
-        loc_nPct     = VAL(ALLTRIM(SUBSTR(loc_cEncoded, 21, 8)))
-        loc_cReceita = ALLTRIM(SUBSTR(loc_cEncoded, 29, 10))
-
-        DO CASE
-        CASE par_cTipo = "IC"
-            THIS.this_cGrupoICMS = loc_cGrupo
-            THIS.this_cContaICMS = loc_cConta
-            THIS.this_nPctICMS   = loc_nPct
-            THIS.this_cRecICMS   = loc_cReceita
-        CASE par_cTipo = "IP"
-            THIS.this_cGrupoIPI  = loc_cGrupo
-            THIS.this_cContaIPI  = loc_cConta
-            THIS.this_nPctIPI    = loc_nPct
-            THIS.this_cRecIPI    = loc_cReceita
-        CASE par_cTipo = "II"
-            THIS.this_cGrupoII   = loc_cGrupo
-            THIS.this_cContaII   = loc_cConta
-            THIS.this_nPctII     = loc_nPct
-            THIS.this_cRecII     = loc_cReceita
-        CASE par_cTipo = "IS"
-            THIS.this_cGrupoISS  = loc_cGrupo
-            THIS.this_cContaISS  = loc_cConta
-            THIS.this_nPctISS    = loc_nPct
-            THIS.this_cRecISS    = loc_cReceita
-        CASE par_cTipo = "IR"
-            THIS.this_cGrupoIRRF = loc_cGrupo
-            THIS.this_cContaIRRF = loc_cConta
-            THIS.this_nPctIRRF   = loc_nPct
-            THIS.this_cRecIRRF   = loc_cReceita
-        CASE par_cTipo = "IN"
-            THIS.this_cGrupoINSS = loc_cGrupo
-            THIS.this_cContaINSS = loc_cConta
-            THIS.this_nPctINSS   = loc_nPct
-            THIS.this_cRecINSS   = loc_cReceita
-        CASE par_cTipo = "PI"
-            THIS.this_cGrupoPIS  = loc_cGrupo
-            THIS.this_cContaPIS  = loc_cConta
-            THIS.this_nPctPIS    = loc_nPct
-            THIS.this_cRecPIS    = loc_cReceita
-        CASE par_cTipo = "CS"
-            THIS.this_cGrupoCSL  = loc_cGrupo
-            THIS.this_cContaCSL  = loc_cConta
-            THIS.this_nPctCSL    = loc_nPct
-            THIS.this_cRecCSL    = loc_cReceita
-        CASE par_cTipo = "CO"
-            THIS.this_cGrupoCOF  = loc_cGrupo
-            THIS.this_cContaCOF  = loc_cConta
-            THIS.this_nPctCOF    = loc_nPct
-            THIS.this_cRecCOF    = loc_cReceita
-        ENDCASE
-    ENDPROC
-
-    *==========================================================================
-    PROTECTED PROCEDURE CodificarFiscal(par_cTipo)
-    *==========================================================================
-    *-- Codifica propriedades do tipo fiscal em string de 50 chars
-    *-- Formato: Grupo(10) + Conta(10) + Pct(8,4 decimais) + Receita(10) + padding(12)
-        LOCAL loc_cGrupo, loc_cConta, loc_nPct, loc_cReceita, loc_cResult
-        loc_cGrupo   = ""
-        loc_cConta   = ""
-        loc_nPct     = 0
-        loc_cReceita = ""
-
-        DO CASE
-        CASE par_cTipo = "IC"
-            loc_cGrupo   = THIS.this_cGrupoICMS
-            loc_cConta   = THIS.this_cContaICMS
-            loc_nPct     = THIS.this_nPctICMS
-            loc_cReceita = THIS.this_cRecICMS
-        CASE par_cTipo = "IP"
-            loc_cGrupo   = THIS.this_cGrupoIPI
-            loc_cConta   = THIS.this_cContaIPI
-            loc_nPct     = THIS.this_nPctIPI
-            loc_cReceita = THIS.this_cRecIPI
-        CASE par_cTipo = "II"
-            loc_cGrupo   = THIS.this_cGrupoII
-            loc_cConta   = THIS.this_cContaII
-            loc_nPct     = THIS.this_nPctII
-            loc_cReceita = THIS.this_cRecII
-        CASE par_cTipo = "IS"
-            loc_cGrupo   = THIS.this_cGrupoISS
-            loc_cConta   = THIS.this_cContaISS
-            loc_nPct     = THIS.this_nPctISS
-            loc_cReceita = THIS.this_cRecISS
-        CASE par_cTipo = "IR"
-            loc_cGrupo   = THIS.this_cGrupoIRRF
-            loc_cConta   = THIS.this_cContaIRRF
-            loc_nPct     = THIS.this_nPctIRRF
-            loc_cReceita = THIS.this_cRecIRRF
-        CASE par_cTipo = "IN"
-            loc_cGrupo   = THIS.this_cGrupoINSS
-            loc_cConta   = THIS.this_cContaINSS
-            loc_nPct     = THIS.this_nPctINSS
-            loc_cReceita = THIS.this_cRecINSS
-        CASE par_cTipo = "PI"
-            loc_cGrupo   = THIS.this_cGrupoPIS
-            loc_cConta   = THIS.this_cContaPIS
-            loc_nPct     = THIS.this_nPctPIS
-            loc_cReceita = THIS.this_cRecPIS
-        CASE par_cTipo = "CS"
-            loc_cGrupo   = THIS.this_cGrupoCSL
-            loc_cConta   = THIS.this_cContaCSL
-            loc_nPct     = THIS.this_nPctCSL
-            loc_cReceita = THIS.this_cRecCSL
-        CASE par_cTipo = "CO"
-            loc_cGrupo   = THIS.this_cGrupoCOF
-            loc_cConta   = THIS.this_cContaCOF
-            loc_nPct     = THIS.this_nPctCOF
-            loc_cReceita = THIS.this_cRecCOF
-        OTHERWISE
-            RETURN SPACE(50)
-        ENDCASE
-
-        *-- Montar string de 50 chars: Grupo(10)+Conta(10)+Pct(8)+Receita(10)+padding(12)
-        loc_cResult = PADR(loc_cGrupo,   10) + ;
-                      PADR(loc_cConta,   10) + ;
-                      STR(loc_nPct,   8, 4)  + ;
-                      PADR(loc_cReceita, 10) + ;
-                      SPACE(12)
-
-        RETURN PADR(loc_cResult, 50)
     ENDPROC
 
 ENDDEFINE

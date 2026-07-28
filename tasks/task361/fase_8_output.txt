@@ -1,0 +1,11 @@
+﻿Fase 8 completa. Resumo do que foi feito:
+
+**FormCeg.prg** ÔÇö j├í estava quase completo desde fases anteriores. Adicionei o m├®todo ausente:
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita Visualizar/Alterar/Excluir na Page1 conforme disponibilidade de registros
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 42 OF popCadastros` ÔÇö item "Prioridade de Estoque/Globaliza├º├úo" no menu Cadastros
+- `ON SELECTION BAR 42 OF popCadastros DO AbrirFormCeg` ÔÇö vincula├º├úo da a├º├úo
+- `AbrirFormCeg()` ÔÇö procedimento com padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria: o ADIR() carrega `*BO.prg` e `Form*.prg` automaticamente, portanto CegBO.prg e FormCeg.prg j├í ser├úo detectados.

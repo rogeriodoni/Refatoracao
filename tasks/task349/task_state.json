@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task349",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-21T21:02:24",
+    "atualizadoEm":  "2026-07-21T21:27:45",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-21T21:02:24",
+                                            "fim":  "2026-07-21T21:02:24",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task349\\SIGCDBCC.sct",
+                                            "baseName":  "SIGCDBCC",
+                                            "scxFile":  "C:\\4c\\tasks\\task349\\SIGCDBCC.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-21T21:02:24",
+                                          "fim":  "2026-07-21T21:02:25",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDBCC",
+                                          "txtFile":  "C:\\4c\\tasks\\task349\\SIGCDBCC_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:02:25",
+                                              "fim":  "2026-07-21T21:02:25",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task349\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:02:26",
+                                              "fim":  "2026-07-21T21:02:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task349\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task349\\meta_prompt.md",
+                                              "boClass":  "BCCBO",
+                                              "formClass":  "FormBCC",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task349\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:02:34",
+                                              "fim":  "2026-07-21T21:02:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task349\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T21:02:35",
+                                               "fim":  "2026-07-21T21:02:35",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task349\\esqueletos",
+                                               "arquivos":  [
+                                                                "BCCBO_esqueleto.prg",
+                                                                "FormBCC_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T21:02:35",
+                                       "fim":  "2026-07-21T21:23:20",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\BCCBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  10.47,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBCC.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  338
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-21T21:23:20",
+                                                  "fim":  "2026-07-21T21:23:22",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBCC.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\BCCBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-21T21:23:23",
+                                                 "fim":  "2026-07-21T21:23:24",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T21:24:27",
+                                       "fim":  "2026-07-21T21:25:07",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T21:25:07",
+                                               "fim":  "2026-07-21T21:27:44",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task349\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-21T21:27:44",
+                                        "fim":  "2026-07-21T21:27:45",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormBCC_20260721212745.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  50,
+                                        "avisos":  50
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:27:45",
+                                              "fim":  "2026-07-21T21:27:45",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task349_SIGCDBCC.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-21T21:02:25",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-21T21:02:26",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task349\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-21T21:02:26",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T21:02:26"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-21T21:23:22",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-21T21:23:23",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormBCC_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBCC.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task349\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-21T21:23:24",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-21T21:23:24",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-21T21:23:24",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-21T21:24:10",
+                                          "passes":  1,
+                                          "problemas":  "Nenhum",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  0
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-21T21:24:10",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-21T21:24:27",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\BCCBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBCC.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-21T21:27:44",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T21:27:44",
+                                             "thresholdPx":  5,
+                                             "unmatched":  0,
+                                             "errors":  0,
+                                             "matched":  4,
+                                             "warnings":  4,
+                                             "reportFile":  "C:\\4c\\tasks\\task349\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

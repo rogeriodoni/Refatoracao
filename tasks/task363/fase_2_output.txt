@@ -1,0 +1,13 @@
+﻿CESBO.prg completo. Fase 2 conclu├¡da com os seguintes m├®todos adicionados:
+
+**M├®todos implementados:**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cChaveUnica` para auditoria
+- `CarregarDoCursor()` ÔÇö mapeia os 5 campos (`cidchaves`, `clacods`, `clagrupos`, `clacontas`, `setors`) do cursor para propriedades
+- `Buscar()` ÔÇö SELECT com `cidchaves` inclu├¡do (necess├írio para o Form identificar o registro ao clicar Alterar/Excluir)
+- `CarregarPorCodigo()` ÔÇö carrega por `cidchaves` (a PK real)
+- `VerificarDuplicata()` ÔÇö reproduz o `ChkRegister('SigCdCle')` do legado: valida combina├º├úo ├║nica de `clacods + clagrupos + clacontas`
+- `Inserir()` ÔÇö gera `cidchaves` via `fUniqueIds()`, valida grupo obrigat├│rio e duplicata antes de inserir
+- `Atualizar()` ÔÇö UPDATE por `cidchaves` (s├│ atualiza `clagrupos`, `clacontas`, `setors` ÔÇö `clacods` ├® fixo ao alterar, conforme `When` do legado)
+- `ExecutarExclusao()` ÔÇö DELETE por `cidchaves`
+
+Todos seguem o padr├úo can├┤nico: sem RETURN dentro de TRY/CATCH, CHR() para acentos, CATCH com MsgErro, cleanup de cursores.

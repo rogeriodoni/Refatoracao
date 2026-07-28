@@ -1,0 +1,14 @@
+﻿All remaining `cidchaves` references are legitimate ÔÇö they belong to `SigCdCaf` (the `GerarCidChavesCAF` method and the `INSERT INTO SigCdCaf` statement), which the original code also uses for `cidchaves`. The invalid `WHERE cidchaves = ...` conditions in `SigOpPic` UPDATE statements have been removed.
+
+**Summary of changes to `CAFBO.prg`:**
+
+1. **`ValidarOP`** (line 249): Removed `cidchaves` from `SELECT` ÔÇö it was fetched but never used in that method.
+
+2. **`AtualizarOpsCancelamento`**: 
+   - SELECT now fetches `cpros` instead of `cidchaves`
+   - Local variable renamed `loc_cCpros` (was `loc_cCidChaves`)
+   - UPDATE WHERE changed from `WHERE cidchaves = EscaparSQL(...)` to `WHERE nops = FormatarNumeroSQL(par_nNops) AND cpros = EscaparSQL(loc_cCpros)`
+
+3. **`RestaurarOpsCancelamento`**: Same pattern ÔÇö `cidchaves` ÔåÆ `cpros` in SELECT and UPDATE WHERE.
+
+The row-level targeting logic (partial deduction of `qtdtubos` across multiple rows per nop) is preserved ÔÇö only the identifier used in the UPDATE WHERE was changed from the invented `cidchaves` to the correct composite key `nops + cpros` that the original code's data model supports.

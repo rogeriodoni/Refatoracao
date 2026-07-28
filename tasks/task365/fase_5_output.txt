@@ -1,0 +1,17 @@
+﻿O arquivo cresceu de 485 para 1086 linhas. Fase 5 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **Grid corrigido** (bug da Fase 4): expandido de 5 para 10 colunas conforme o original ÔÇö adicionadas `cfops`, `issqn`, `itemls`, `codtrib`, `natope` com headers e widths corretos.
+
+2. **`ConfigurarPaginaDados()` completada** com os primeiros 50% dos campos:
+   - Bot├Áes **Confirmar** (cadastro_salvar_60.jpg) e **Cancelar** com BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`
+   - 14 campos: `txt_4c_Cgru`+`txt_4c_Dgru` (Grupo), `txt_4c_Estado`, `txt_4c_Icm`, `txt_4c_Tpicm`, `txt_4c_TpTrib`, `txt_4c_Sittricm`+`txt_4c_Dsittricm` ÔÇö com labels correspondentes e compensa├º├úo +29px
+
+3. **6 handlers de lookup** adicionados (todos PUBLIC para funcionar com BINDEVENT):
+   - `ValidarGrupo` ÔåÆ SigCdGrp por Cgrus
+   - `ValidarGrupoDesc` ÔåÆ SigCdGrp por Dgrus (busca inversa)
+   - `ValidarEstado` ÔåÆ SigCdUfs por estados
+   - `ValidarTpTrib` ÔåÆ SigPrTri por Tipos
+   - `ValidarSittricm` ÔåÆ SigCdIcm por Codigos
+   - `ValidarDsittricm` ÔåÆ SigCdIcm por Descricaos (ativo s├│ quando Sittricm vazio)

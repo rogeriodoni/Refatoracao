@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task352",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-22T00:52:12",
+    "atualizadoEm":  "2026-07-22T01:38:08",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-22T00:52:12",
+                                            "fim":  "2026-07-22T00:52:12",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task352\\SIGCDCAD.sct",
+                                            "baseName":  "SIGCDCAD",
+                                            "scxFile":  "C:\\4c\\tasks\\task352\\SIGCDCAD.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-22T00:52:12",
+                                          "fim":  "2026-07-22T00:52:13",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDCAD",
+                                          "txtFile":  "C:\\4c\\tasks\\task352\\SIGCDCAD_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T00:52:13",
+                                              "fim":  "2026-07-22T00:52:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task352\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T00:52:14",
+                                              "fim":  "2026-07-22T00:52:22",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task352\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task352\\meta_prompt.md",
+                                              "boClass":  "CADBO",
+                                              "formClass":  "FormCAD",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task352\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T00:52:22",
+                                              "fim":  "2026-07-22T00:52:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task352\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-22T00:52:23",
+                                               "fim":  "2026-07-22T00:52:23",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task352\\esqueletos",
+                                               "arquivos":  [
+                                                                "CADBO_esqueleto.prg",
+                                                                "FormCAD_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-22T00:52:23",
+                                       "fim":  "2026-07-22T01:23:06",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\CADBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  13.67,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAD.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  449
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-22T01:23:06",
+                                                  "fim":  "2026-07-22T01:23:09",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAD.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\CADBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-22T01:23:09",
+                                                 "fim":  "2026-07-22T01:23:11",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-22T01:26:10",
+                                       "fim":  "2026-07-22T01:26:52",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-22T01:26:52",
+                                               "fim":  "2026-07-22T01:36:38",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  4,
+                                               "resultFile":  "C:\\4c\\tasks\\task352\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-22T01:36:39",
+                                        "fim":  "2026-07-22T01:38:08",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormCAD_20260722013808.html",
+                                        "diferencas":  1,
+                                        "erros":  0,
+                                        "totalProblemas":  62,
+                                        "avisos":  61
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T01:38:08",
+                                              "fim":  "2026-07-22T01:38:08",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task352_SIGCDCAD.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-22T00:52:13",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-22T00:52:14",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task352\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-22T00:52:14",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-22T00:52:14"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-22T01:23:09",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-22T01:23:09",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormCAD_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAD.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task352\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-22T01:23:11",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-22T01:23:11",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-22T01:23:11",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-22T01:25:53",
+                                          "passes":  2,
+                                          "problemas":  "Nenhum",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  0
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-22T01:25:53",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-22T01:26:10",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\CADBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAD.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-22T01:36:38",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-22T01:36:39",
+                                             "thresholdPx":  5,
+                                             "unmatched":  2,
+                                             "errors":  2,
+                                             "matched":  2,
+                                             "warnings":  2,
+                                             "reportFile":  "C:\\4c\\tasks\\task352\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

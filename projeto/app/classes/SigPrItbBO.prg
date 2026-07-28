@@ -81,7 +81,19 @@ DEFINE CLASS SigPrItbBO AS BusinessBase
                                 IF VARTYPE(Autos) = "L"
                                     THIS.this_lAutos = Autos
                                 ELSE
-                                    THIS.this_lAutos = (NVL(Autos, 0) = 1)
+                                    IF VARTYPE(Autos) = "L"
+                                        THIS.this_lAutos = Autos
+                                    ELSE
+                                        IF VARTYPE(Autos) = "L"
+                                            THIS.this_lAutos = Autos
+                                        ELSE
+                                            IF VARTYPE(Autos) = "L"
+                                                THIS.this_lAutos = Autos
+                                            ELSE
+                                                THIS.this_lAutos = (NVL(Autos, 0) = 1)
+                                            ENDIF
+                                        ENDIF
+                                    ENDIF
                                 ENDIF
                             ENDIF
                         ENDIF

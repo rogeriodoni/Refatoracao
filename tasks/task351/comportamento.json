@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDBLQ",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.Get_Codigo.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdBlq], [Codigos], ThisForm.Pagina.Dados.Get_Codigo.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdBlq], [cIdChaves], [crSigCdBlq], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([codigos],  [], [], [Codigo],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([dtInicial],  [], [], [Data Inicial],   074, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([dtFinal], [], [], [Data Final], 074, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([UsuIncs],  [], [], [Usuario],   080, .t.)\n\t\t\t.pfSqlTabel... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\nDo Case\n\tCase ThisForm.pcEscolha = 'INSERIR'\n\t\n\t\tReplace Codigos With fGerUniqueKey('BLOQUEIO'),;\n\t\t\t\tCidChaves With fUniqueIds() ,;\n\t\t\t\tUsuIncs With Usuar ,;\n\t\t\t\tDtIncs With Datetime() In CrSigCdBlq\n\t\t\t\t\n\t\tThis.Parent.Parent.Dados.get_codigo.Refresh\t\t\n\t\tThis.Parent.Parent.Dados.GetDtinicial.SetFocus\n\t\t \n\tCase InList(ThisForm.pcEscolha, [PROCURAR])\n\t\t ThisForm.Pagina.Dados.codigos.SetFocus\n\t\t \n\tCase InList(T... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.Get_Codigo.Value)\n\t\t=Messagebox([Código Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.getDtInicial.Value)\n\t\t=Messagebox([Data Inicial Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getDtInicial.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf Empty(ThisForm.Pagina.Dados.getDtFinal.Value)\n\t\t=Messagebox([Data Final Inválida!!!], 48, [... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "Get_Codigo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.Getdtinicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.getdtfinal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.Get_Codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.Get_DtIncs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.Get_Usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.getDataAlts",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDBLQ.Pagina.Dados.getUsuaAlts",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

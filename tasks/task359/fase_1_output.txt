@@ -1,0 +1,10 @@
+﻿Phase 2 is complete. `ccrBO.prg` is now 744 lines with all 6 data access methods added:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECTs `codigos/descrs/classes/DClasses` with JOIN to `SigCdCss`, supports LIKE filter on code or description
+- **`CarregarPorCodigo(par_cCodigos)`** ÔÇö SELECTs `a.*, DClasses` with JOIN, calls `CarregarDoCursor`, sets `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö PROTECTED, maps all 112 schema columns + `DClasses` via `TratarNulo()`
+- **`Inserir()`** ÔÇö PROTECTED, INSERT with all 112 columns using correct helper per type (`EscaparSQL`/`FormatarNumeroSQL`)
+- **`Atualizar()`** ÔÇö PROTECTED, UPDATE all non-PK columns, WHERE `codigos = X`
+- **`ExecutarExclusao()`** ÔÇö PROTECTED, checks `SigMvCcr`, `SigCdCli`, `SigMvCab` dependency counts before DELETE; no RETURN inside TRY per critical rule #1
+
+Next step is Phase 3/8: creating `Formccr.prg` with the PageFrame structure (Page1 Lista + Page2 Dados).

@@ -1,0 +1,20 @@
+﻿A Fase 4 j├í est├í implementada. O `task_state.json` confirma que a etapa `05_migracao` foi conclu├¡da em 2026-07-21T19:05:00, incluindo todas as 8 sub-fases internas, com compila├º├úo sem erros (`05c_validarCompilacao: COMPLETED`, `errosCompilacao: []`).
+
+O arquivo `FormBAL.prg` j├í cont├®m:
+- `ConfigurarPaginaLista()` ÔÇö linhas 120ÔÇô507: grid de 8 colunas + 5 bot├Áes de a├º├úo (Leitura, Fecha, Consulta, Exporta, Etiqueta) + bot├Áes de ordena├º├úo + container Encerrar
+- `CarregarLista()` ÔÇö linha 2935: carrega `cursor_4c_Dados` com colunas codigos/dtbases/datainis/datafims/encerras/grupos/contas/usuars
+- `AlternarPagina()` ÔÇö linha 2972: alterna entre as 3 pages
+
+**Estado atual do pipeline (task_state.json):**
+
+| Etapa | Status |
+|-------|--------|
+| 05_migracao | Ô£à COMPLETED |
+| 05b_corrigirAutomatico | Ô£à COMPLETED (42 corre├º├Áes) |
+| 05c_validarCompilacao | Ô£à COMPLETED (0 erros) |
+| 06_testForm | ÔÅ│ PENDING |
+| 06b_testeAutomatico | ÔÅ│ PENDING |
+| 07_validarUI | ÔÅ│ PENDING |
+| 08_gerarTestManual | ÔÅ│ PENDING |
+
+O pr├│ximo passo ├® o teste manual (etapa 06). O arquivo `SolicitacaoTesteManual/task348_SIGCDBAL.md` j├í est├í criado (vis├¡vel no `git status`). Deseja que eu revise algum aspecto do c├│digo antes do teste, ou avance para outra tarefa?

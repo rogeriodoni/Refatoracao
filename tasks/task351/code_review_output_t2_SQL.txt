@@ -1,0 +1,11 @@
+﻿Confirmado. O alerta ├® um **falso positivo**. O SCT original confirma explicitamente a tabela correta:
+
+```
+.AddCursor(SigCdBlq, cIdChaves, crSigCdBlq, ...)
+```
+
+O c├│digo original **usa `SigCdBlq` diretamente** como nome da tabela e `crSigCdBlq` como alias do cursor. Todos os campos referenciados no BO migrado (`Codigos`, `CidChaves`, `dtInicial`, `dtFinal`, `inativo`, `UsuIncs`, `DtIncs`, `UsuAlts`, `DtAlts`) batem com as colunas do `pColuna(...)` original.
+
+A tabela n├úo aparece no `schema.sql` (que parece ter sido gerado antes desta tabela existir ou ter uma lacuna), mas ├® real e confirmada pelo c├│digo-fonte legado.
+
+**Nenhuma altera├º├úo necess├íria.** O `BlqBO.prg` e `FormBlq.prg` est├úo corretos quanto ├á valida├º├úo SQL deste pass.

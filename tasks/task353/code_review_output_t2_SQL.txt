@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. Removido o filtro `AND cpros = EscaparSQL(loc_cCpros)` de ambos os UPDATE em `AtualizarOpsCancelamento` (linha 375-378) e `RestaurarOpsCancelamento` (linha 449-452). Os UPDATE agora filtram apenas por `nops`, alinhado com o legado que usava `DataMgr.Update('crSigOpPic')` ÔÇö cujo WHERE impl├¡cito era s├│ a PK `nops`, sem filtro adicional por `cpros`.

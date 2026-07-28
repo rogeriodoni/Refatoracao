@@ -1,0 +1,9 @@
+﻿Fix aplicado. Resumo do que foi feito e por qu├¬:
+
+**[GRID-WITH] ÔÇö ├Ünico fix real neste arquivo:**
+
+- `RecordSource` estava sendo atribu├¡do na linha 2996 **antes** de configurar Column1/Column2 ÔÇö em VFP9, quando RecordSource ├® setado num grid que j├í tem ColumnCount, ele pode resetar as colunas, fazendo que o acesso a `.Column1` logo em seguida falhe com "Unknown member COLUMN1"
+- Removido o `ColumnCount = 2` duplicado que existia ap├│s o RecordSource
+- `RecordSource` movido para **depois** de toda a configura├º├úo de colunas (ControlSource, Width, Header captions, DynamicForeColor)
+
+**Os 25 problemas [LAYOUT-POSITION]** j├í est├úo com valores corretos no c├│digo atual ÔÇö todos os OptionGroups t├¬m Top/Left corretos no bloco `WITH` do pr├│prio controle. O validador foi rodado numa vers├úo anterior onde os grupos estavam em Top=0/Left=0 e reportou os valores dos `.Buttons(N)` (que t├¬m Top=0 relativos ao OptionGroup pai) como posi├º├úo do controle ÔÇö false positives por parsing de WITH aninhado.

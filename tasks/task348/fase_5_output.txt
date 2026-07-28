@@ -1,0 +1,19 @@
+﻿A migra├º├úo do SIGCDBAL est├í completamente pronta. O pipeline j├í gerou tudo:
+
+**Status atual: CONCLU├ìDO**
+
+- `BALBO.prg` ÔÇö 643 linhas geradas
+- `FormBAL.prg` ÔÇö 4465 linhas geradas, 42 corre├º├Áes autom├íticas aplicadas, **compila├º├úo com sucesso**
+- Documento de teste manual: `SolicitacaoTesteManual/task348_SIGCDBAL.md`
+
+A sess├úo anterior havia parado de ler o arquivo na linha ~1599 (meio do `obj_4c_OptFilBarra`), mas o arquivo j├í estava completo desde ent├úo. Confirmei que todos os componentes esperados est├úo presentes:
+
+- `ConfigurarPaginaDados()` ÔÇö completa (linhas ~550ÔÇô1892): todos os TextBoxes, OptionGroups, CheckBoxes, EditBox, os dois Grids com CheckBox (`grd_4c_GGrupo` + `grd_4c_Grupos`), bot├Áes Marcar/Desmarcar
+- `ConfigurarPaginaLeitura()` ÔÇö completa (linhas 1897ÔÇô2930): interface de leitura com grade, pain├®is, bot├Áes Gravar/Cancelar/TotalLocal/Ocorr├¬ncia/Imagem/LocalGravado
+- Todos os handlers de eventos, lookups F4, `FormParaBO()`/`BOParaForm()`, `CarregarGrades()`, `Destroy()` com `DODEFAULT()`
+
+**Pr├│ximos passos pendentes** (requerem execu├º├úo da aplica├º├úo VFP9):
+- `06_testForm` ÔÇö teste funcional manual
+- `06b_testeAutomatico` ÔÇö testes CRUD autom├íticos
+- `07_validarUI` ÔÇö valida├º├úo de fidelidade visual
+- Roteiro de teste dispon├¡vel em `SolicitacaoTesteManual/task348_SIGCDBAL.md`

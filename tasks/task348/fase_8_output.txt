@@ -1,0 +1,9 @@
+﻿Phase 8 complete. Added the 5 missing methods before `ENDDEFINE`:
+
+- **`AjustarBotoesPorModo()`** ÔÇö enables/disables Page1 action buttons based on `this_cModoAtual` (NOVO/EDICAO vs. others)
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö generic delegate to `HabilitarCamposDados()`
+- **`LimparCampos()`** ÔÇö generic delegate to `LimparCamposDados()`
+- **`BtnSalvarClick()`** ÔÇö alias for `BtnConfirmarClick()` (the actual save handler at line 3710)
+- **`BtnBuscarClick()`** ÔÇö reloads lista via `CarregarLista()` (this is an OPERACIONAL form with no dedicated search button, so buscar = refresh)
+
+The existing methods (`BtnEncerrarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`) were already fully implemented in prior phases and required no changes.

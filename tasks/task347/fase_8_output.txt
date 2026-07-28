@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormARV.prg** ÔÇö adicionado `AjustarBotoesPorModo()` (├║nico m├®todo faltante da Fase 8): habilita/desabilita `cmd_4c_Confirmar` baseado no modo atual (INCLUIR/ALTERAR = habilitado; VISUALIZAR = desabilitado), sempre mantendo `cmd_4c_Cancelar` habilitado.
+
+**menu.prg** ÔÇö tr├¬s adi├º├Áes:
+- `DEFINE BAR 28 OF popCadastros` ÔÇö "Tipos de ├ürvore"
+- `ON SELECTION BAR 28 OF popCadastros DO AbrirFormARV`
+- `PROCEDURE AbrirFormARV()` no final do arquivo (padr├úo can├┤nico: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**config.prg** ÔÇö n├úo precisou de altera├º├úo: o ADIR() din├ómico carrega automaticamente `ARVBO.prg` (em `classes/`) e `FormARV.prg` (em `forms/cadastros/`).

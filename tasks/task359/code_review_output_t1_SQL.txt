@@ -1,0 +1,6 @@
+﻿Dois filtros corrigidos em `Formccr.prg`:
+
+- **Linha 6398-6399** (`SituacaoLostFocus`): removido `AND autos <> 2` do SQLEXEC contra `SigCdCst`.
+- **Linha 6428** (`AbrirBuscaSituacao`): removido filtro `"autos <> 2"` do `FormBuscaAuxiliar`.
+
+O `CONTROLCOUNT` detectado pelo pass n├úo ├® coluna SQL ÔÇö ├® propriedade VFP9 usada em loops de controles (`FOR loc_nI = 1 TO par_oContainer.ControlCount`), portanto n├úo requer corre├º├úo.

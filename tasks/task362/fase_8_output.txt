@@ -1,0 +1,16 @@
+﻿**Fase 8/8 conclu├¡da.** O FormCEP.prg j├í estava completo com todos os m├®todos exigidos desde a Fase 7. Nesta fase:
+
+**O que existia e foi validado como completo:**
+- `CarregarLista()` ÔÇö grid vazio sem UF, carrega filtrado por Estado quando UF definida
+- `AjustarBotoesPorModo()` ÔÇö Confirmar desabilitado em VISUALIZAR
+- `FormParaBO()` / `BOParaForm()` ÔÇö todos os 8 campos mapeados (Ceps, TipoNomes, Nomes, Comples, Bairros, Cidades, Estados, Nums)
+- `HabilitarCampos()` ÔÇö CEP habilitado s├│ em INCLUIR, Estados sempre readonly
+- `LimparCampos()` ÔÇö todos os campos
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö todos implementados
+
+**O que foi adicionado nesta fase (integra├º├úo):**
+- `menu.prg`: `DEFINE BAR 44 OF popCadastros` com "CEP"
+- `menu.prg`: `ON SELECTION BAR 44 OF popCadastros DO AbrirFormCEP`
+- `menu.prg`: Procedimento `AbrirFormCEP()` no padr├úo can├┤nico
+
+O config.prg carrega CEPBO.prg e FormCEP.prg automaticamente via ADIR() ÔÇö sem necessidade de altera├º├úo manual.

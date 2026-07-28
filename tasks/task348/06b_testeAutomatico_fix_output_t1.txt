@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema era que o guard `IF gb_4c_ValidandoUI` apenas setava `loc_lResultado = .T.` mas continuava executando o `Buscar("")` (que chama `SQLEXEC` sem conex├úo). A corre├º├úo reestrutura com `ELSE` para que em modo de teste:
+
+1. Fecha `cursor_4c_Dados` se j├í existia
+2. Cria cursor vazio com a estrutura correta (os 9 campos usados pelo grid)
+3. Retorna `.T.` sem tentar acessar o banco

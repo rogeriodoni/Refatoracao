@@ -427,7 +427,19 @@ DEFINE CLASS sigpremaBO AS BusinessBase
                                                                 IF VARTYPE(crSigOpCdi.chkInvs) = "L"
                                                                     loc_lInvAtivo = crSigOpCdi.chkInvs
                                                                 ELSE
-                                                                    loc_lInvAtivo = (NVL(crSigOpCdi.chkInvs, 0) = 1)
+                                                                    IF VARTYPE(crSigOpCdi.chkInvs) = "L"
+                                                                        loc_lInvAtivo = crSigOpCdi.chkInvs
+                                                                    ELSE
+                                                                        IF VARTYPE(crSigOpCdi.chkInvs) = "L"
+                                                                            loc_lInvAtivo = crSigOpCdi.chkInvs
+                                                                        ELSE
+                                                                            IF VARTYPE(crSigOpCdi.chkInvs) = "L"
+                                                                                loc_lInvAtivo = crSigOpCdi.chkInvs
+                                                                            ELSE
+                                                                                loc_lInvAtivo = (NVL(crSigOpCdi.chkInvs, 0) = 1)
+                                                                            ENDIF
+                                                                        ENDIF
+                                                                    ENDIF
                                                                 ENDIF
                                                             ENDIF
                                                         ENDIF

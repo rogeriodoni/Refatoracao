@@ -1,0 +1,220 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "lcQryCat = [Select * From SigCdCat ]\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdCat', 'cIdChaves', 'crSigCdCat', '', ThisForm.Pagina.Lista.Grade, lcQryCat)\n\t\t\t.pfSqlTabela(1).pColuna('Cods', '', '', 'Códigos', 52, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('descs', '', '', 'Descrição', 115, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('gdegrps', '', '', 'Gde. Grp', 50, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('prazos', '', '', 'Pra... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Set Near On\nIF !IsEmpty(thisform.pagina.dados.get_Cods.value)\n   SET ORDER TO TAG \"Cods\" IN crSigCdCat\n   Seek thisform.pagina.dados.get_Cods.value\nENDIF\n\nIF !IsEmpty(thisform.pagina.dados.get_Descs.value)\n   SET ORDER TO TAG \"Descs\" IN crSigCdCat\n   Seek thisform.pagina.dados.get_Descs.value\nENDIF\nSet Near Off\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cods,get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigCdCat\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )\n\t\tthisform.pagina.dados.get_Cods.setfocus\t\n\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tthisform.pagina.dados.get_Descs.setfocus\t\n\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n\nSelect crSigCdCat\nThisForm.Pagina.Dados.Refres... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cods,get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "lcCodigo = ThisForm.pagina.dados.get_Cods.Value\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\tReplace cIdChaves With fUniqueIds() in crSigCdCat\nEndif\n\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cods",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT.Pagina.Dados.Get_Cods",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "IF Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' )\n   RETURN(.F.)\nENDIF",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT.Pagina.Dados.Get_Desc2s",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT.Pagina.Dados.Get_Descs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAT.Pagina.Dados.getGdeGrp",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Grandes Grupos de Produtos', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n\t\tThis.Value = ''\n\tElse\n\t\tThis.Value = crListaRemota.Codigos\n\tEndif\n\tUse In crListaRemota\n\tthis.refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCAT.Init",
+      "queryOriginal": "lcQryCat = [Select * From SigCdCat ]",
+      "tabelas": "SigCdCat",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCat"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

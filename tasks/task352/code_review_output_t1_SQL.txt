@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `CADBO.prg`:
+
+1. **`Buscar` com filtro** (linha 116-118): removido `OR descads LIKE ...` ÔÇö o original filtrava apenas por `CODCADS`.
+2. **`Atualizar`** (linha 261): `WHERE pkchaves = ...` ÔåÆ `WHERE tipocads = ... AND codcads = ...`, alinhado com o padr├úo do original.
+3. **`ExecutarExclusao`** (linha 287): mesma corre├º├úo do `Atualizar`.
+
+O `FormCAD.prg` n├úo precisou de altera├º├Áes ÔÇö os `ControlSource` (`codcads`, `descads`) s├úo colunas do SELECT e est├úo corretos.

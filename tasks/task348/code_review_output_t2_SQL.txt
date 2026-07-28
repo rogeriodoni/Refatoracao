@@ -1,0 +1,24 @@
+﻿Confirmei os tr├¬s casos reportados. Veja o que o validator encontrou em cada um:
+
+**1. `CURSOR_4C_TOTA`** ÔåÆ linha 3409: `INTO CURSOR cursor_4c_Totais READWRITE`  
+**2. `I`** ÔåÆ linha 4781: `FOR i = 1 TO par_oContainer.ControlCount`  
+**3. `CONTROLCOUNT`** ÔåÆ linha 4786: `IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0`
+
+---
+
+**Todos os tr├¬s s├úo falsos positivos.** O analisador de SQL foi confundido por c├│digo VFP9 leg├¡timo:
+
+| Alerta | C├│digo real | Contexto real |
+|--------|-------------|---------------|
+| `CURSOR_4C_TOTA` | `INTO CURSOR cursor_4c_Totais READWRITE` | Destino de um `SELECT...INTO CURSOR` local VFP, n├úo uma cl├íusula WHERE |
+| `I` | `FOR i = 1 TO par_oContainer.ControlCount` | Vari├ível de loop VFP, n├úo coluna SQL |
+| `CONTROLCOUNT` | `PEMSTATUS(loc_oControl, "ControlCount", 5)` | String literal passada para PEMSTATUS, n├úo coluna SQL |
+
+**Nenhuma das tr├¬s ocorr├¬ncias est├í em uma cl├íusula `WHERE` de SQL.** Nenhuma foi inventada pela LLM como filtro ÔÇö s├úo constru├º├Áes VFP9 padr├úo (cursor local, FOR loop, PEMSTATUS check).
+
+Alterar esse c├│digo seria incorreto e quebraria a funcionalidade:
+- Remover `cursor_4c_Totais` quebraria a contagem de leituras em `AtualizarTotalLeitura()` (linha 3403)
+- Remover o loop `FOR i` quebraria `TornarControlesVisiveis()` (linha 4774)
+- Remover o check `ControlCount` quebraria a recurs├úo de visibilidade de controles
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `FormBAL.prg` e `BALBO.prg` est├úo corretos para este pass SQL.

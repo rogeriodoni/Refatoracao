@@ -1,0 +1,15 @@
+﻿Todos os `RETURN` est├úo fora de TRY/CATCH. Fase 4 conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado em `FormCec.prg`:**
+
+- **`ConfigurarPaginaLista()`** agora completa: 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar com ├¡cones can├┤nicos e BINDEVENT), bot├úo Encerrar em `cnt_4c_Saida`, e `grd_4c_Lista` com 3 colunas (Emps/Razas/Tipos), propriedades visuais completas (Verdana/8, GridLines=3, ReadOnly=.T.)
+
+- **`InicializarForm()`** agora chama `CarregarLista()` ap├│s configurar as pages (com guard `gb_4c_ValidandoUI`)
+
+- **`CarregarLista()`** ÔÇö chama `CecBO.Buscar("")`, configura RecordSource/ControlSource/Width/Header1.Caption e chama `FormatarGridLista()`
+
+- **`FormatarGridLista()`** ÔÇö SetAll Tahoma/8 nas colunas
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö troca ActivePage, recarrega lista ao voltar para Page1
+
+- **Handlers CRUD** ÔÇö `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick`, todos PUBLIC para funcionar com BINDEVENT, usando `cursor_4c_Dados.cIdChaves` para navegar pelos registros

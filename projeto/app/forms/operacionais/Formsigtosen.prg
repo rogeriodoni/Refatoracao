@@ -1069,7 +1069,7 @@ DEFINE CLASS Formsigtosen AS FormBase
             ELSE
                 *-- SET SYSMENU TO DEFAULT restaura pads default VFP (7) + implicitamente
                 *-- faz SET SYSMENU ON. CriarMenuPrincipal soma os pads do app (7) resultando
-                *-- em 14 pads — mesmo estado do startup. Sem TO DEFAULT, o SET SYSMENU TO
+                *-- em 14 pads ? mesmo estado do startup. Sem TO DEFAULT, o SET SYSMENU TO
                 *-- da linha 57 apagou os defaults e ficaram apenas os 7 pads do app.
                 SET SYSMENU TO DEFAULT
                 CriarMenuPrincipal()

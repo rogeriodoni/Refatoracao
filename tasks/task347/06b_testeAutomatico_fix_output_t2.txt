@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `SQLEXEC(gnConnHandle, ...)` com handle inv├ílido lan├ºa uma **exce├º├úo VFP9** (n├úo retorna valor negativo), ent├úo o fluxo ia direto para o CATCH ÔÇö onde o cursor n├úo era criado. O bloco ELSE (que criava o cursor) s├│ ├® alcan├ºado quando SQLEXEC retorna valor negativo sem exce├º├úo.
+
+**Fix**: adicionado `CREATE CURSOR cursor_4c_Dados` no bloco CATCH de `Buscar()`, espelhando o que j├í existia no ELSE. Agora mesmo sem conex├úo ao banco, o cursor padr├úo ├® criado e o teste `CarregarLista` passa.

@@ -1,0 +1,17 @@
+﻿Fase 5 conclu├¡da com sucesso. O arquivo `FormBlq.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+
+1. **Bot├Áes Confirmar/Cancelar** dentro do `cnt_4c_Salva` (com BINDEVENT para `BtnSalvarClick` e `BtnCancelarClick`)
+2. **`lbl_4c_Codigo`** ÔÇö label "C├│digo :" (top=170, left=390)
+3. **`txt_4c_Codigo`** ÔÇö campo c├│digo (top=166, left=435, width=82, ReadOnly=.T. ÔÇö auto-gerado no INSERT)
+4. **`chk_4c_Check1`** ÔÇö checkbox "Inativo" (top=170, left=542, Enabled=.F. at├® HabilitarCampos)
+5. **`lbl_4c_Periodo`** ÔÇö label "Per├¡odo :" (top=196, left=387)
+6. **`lbl_4c_Ate`** ÔÇö label "At├®" (top=196, left=508)
+7. **`txt_4c_Dtinicial`** ÔÇö data inicial (top=192, left=435, width=66, Enabled=.F. at├® HabilitarCampos)
+8. **`txt_4c_Dtfinal`** ÔÇö data final (top=192, left=530, width=66, Enabled=.F. at├® HabilitarCampos)
+
+**Observa├º├Áes importantes para a pr├│xima fase:**
+- `txt_4c_Codigo` fica `ReadOnly=.T.` por padr├úo (c├│digo ├® auto-gerado pelo BO no INSERT via `fGerUniqueKey('BLOQUEIO')`)
+- Os campos de data e o checkbox ficam `Enabled=.F.` ÔÇö `HabilitarCampos()` os ativar├í conforme o modo
+- A segunda metade dos campos (auditoria: `lbl_4c_Label20`, `shp_4c_Shape3`, `lbl_4c_Label24`, `lbl_4c_Label25`, `txt_4c_DtIncs`, `txt_4c_DataAlts`, `txt_4c_Usuario`, `txt_4c_UsuaAlts`) fica para a Fase 6

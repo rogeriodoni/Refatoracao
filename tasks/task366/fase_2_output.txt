@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da com sucesso.
+
+**cfoBO.prg** agora cont├®m todos os m├®todos CRUD:
+
+| M├®todo | Status |
+|--------|--------|
+| `CarregarDoCursor()` | 74 campos mapeados com `TratarNulo()` |
+| `Inserir()` | INSERT com todos os 74 campos, usando `EscaparSQL`/`FormatarNumeroSQL` |
+| `Atualizar()` | UPDATE com 73 campos (exclui PK `codigos`) |
+| `ExecutarExclusao()` | DELETE por `codigos` + auditoria |
+| `Buscar()` | SELECT `codigos, descricaos, desc2s, operacaos, situas` com ZAP+APPEND para proteger Grid |
+| `CarregarPorCodigo()` | SELECT completo com todos os 74 campos + `this_lNovoRegistro = .F.` |
+| `ObterChavePrimaria()` | Retorna `this_cCodigos` |
+| `ValidarDados()` | Valida `codigos` e `descricaos` obrigat├│rios |
+
+Padr├Áes aplicados: sem RETURN dentro de TRY/CATCH, SQL fragmentado com `;` para evitar limite de linha, prote├º├úo do cursor do Grid via ZAP+APPEND, guard `gnConnHandle <= 0` no Buscar para modo ValidarUIFidelity.

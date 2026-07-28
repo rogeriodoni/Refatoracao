@@ -1,0 +1,449 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDCAD.SCX
+* Data/Hora: 22/07/2026 00:52:13
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCAD
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodCads
+  Parent: SIGCDCAD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesCads
+  Parent: SIGCDCAD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblCodCads
+  Parent: SIGCDCAD.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGCDCAD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAD
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastros Gerais"
+  tipocads = .F.
+  Name = "SIGCDCAD"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 6
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 17
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAD.Pagina.Dados.getCodCads
+------------------------------------------------------------
+  ControlSource = "crSigCdCad.CodCads"
+  Format = "K!"
+  Height = 24
+  Left = 349
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 153
+  Width = 150
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "getCodCads"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAD.Pagina.Dados.getDesCads
+------------------------------------------------------------
+  ControlSource = "crSigCdCad.DesCads"
+  Format = "K!"
+  Height = 24
+  Left = 349
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 180
+  Width = 290
+  ZOrderSet = 7
+  Name = "getDesCads"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAD.Pagina.Dados.lblCodCads
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 23
+  Left = 78
+  Top = 154
+  Width = 268
+  ForeColor = 90,90,90
+  Name = "lblCodCads"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAD.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Descrição :"
+  Left = 291
+  Top = 185
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCAD
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBus
+
+If Not Empty(ThisForm.Pagina.Dados.getCodCads.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdCad], [CodCads], ThisForm.Pagina.Dados.getCodCads.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_consultar
+------------------------------------------------------------
+PROCEDURE msv_consultar
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pTip, pTam
+Private pIds
+
+pIds = Replicate(Chr(254), 20)
+
+lcQryCdCad = [Select * From SigCdCad Where TipoCads = ?pIds]
+
+With ThisForm
+	.Name      = 'SIGCDCAD'		&& mena - trocado para liberar os botoes Alltrim(Upper(pTip))
+	.TipoCads  = Alltrim(Upper(pTip))
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	.Caption   = Proper(.TipoCads)
+	
+	* Aqui podem entrar algumas excessões 
+	If (Padr(Upper(.TipoCads), 20) = Padr([APONTAMTO], 20))
+		.Caption = [Avaliação]
+	EndIf
+	
+	pIds = .TipoCads
+
+	If (Type([pTam])<>[N]) Or Not Between(pTam, 1, 20) 
+		pTam = 20
+	EndIf
+		
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdCad], [pkChaves], [crSigCdCad], [], ThisForm.Pagina.Lista.Grade, lcQryCdCad)
+			.pfSqlTabela(1).pColuna([CodCads], [], [], [Código], (pTam * 7) + 10, .t.)
+			.pfSqlTabela(1).pColuna([DesCads], [], [], [Descrição], 300, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Dados.lblCodCads.Value = Alltrim(.Caption) + [ :]
+		.Pagina.Dados.getCodCads.MaxLength = pTam
+		.Pagina.Dados.getCodCads.Width = (pTam * 7) + 10
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+ENDWITH
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+Private pIds
+
+pIds = ThisForm.TipoCads
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+If (ThisForm.pcEscolha = [INSERIR])
+	Replace TipoCads With pIds, ;
+			pkChaves With fUniqueIds(), ;
+			Usuars   With Usuar, ;
+			DtIncs   With Datetime() In crSigCdCad
+EndIf
+
+If (ThisForm.pcEscolha = [ALTERAR])
+	Replace UsuAlts With Usuar, ;
+			DtAlts  With Datetime() In crSigCdCad
+EndIf
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		ThisForm.Pagina.Dados.getCodCads.SetFocus
+
+	Case (ThisForm.pcEscolha = [ALTERAR])
+		ThisForm.Pagina.Dados.getDesCads.SetFocus
+
+	Case Inlist(ThisForm.pcEscolha, [EXCLUIR], [CONSULTAR])
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If (ThisForm.pcEscolha = [INSERIR])
+	If Empty(crSigCdCad.CodCads)
+		=Messagebox([O Código Não Pode Ficar Em Branco!!!], 48, [Atenção!!!]) 
+		ThisForm.Pagina.Dados.getCodCads.SetFocus
+		Return .f.
+	EndIf
+	
+	lcQuery = [Select * ] + ;
+			    [From SigCdCad ] + ;
+			   [Where TipoCads = '] + Padr(ThisForm.TipoCads, 20) + [' And ] + ;
+			   		 [CodCads = '] + crSigCdCad.CodCads + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+		Return .f.
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus])
+		=Messagebox([O Código Já Está Cadastrado!!!], 48, [Atenção!!!]) 
+		ThisForm.Pagina.Dados.getCodCads.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCAD.Pagina.Dados.getCodCads
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDCAD
+RESERVED3 (ClassInfo): tipocads
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

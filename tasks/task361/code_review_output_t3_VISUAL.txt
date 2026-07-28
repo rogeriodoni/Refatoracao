@@ -1,0 +1,27 @@
+﻿Analisei o arquivo completo FormCeg.prg (todas as 1572 linhas) procurando o padr├úo GRID-WITH descrito no problema detectado.
+
+**Resultado da an├ílise:**
+
+O padr├úo problem├ítico descrito ÔÇö "bloco WITH define .RecordSource E acessa .Column dentro do mesmo WITH" ÔÇö **n├úo existe no c├│digo atual**. O arquivo j├í est├í na forma correta:
+
+**ConfigurarPaginaLista (linhas 343-380):**
+```foxpro
+loc_oGrid.ColumnCount = 5        ÔåÉ ANTES do WITH (correto)
+WITH loc_oGrid
+    .Top = 117
+    ...
+    .RecordMark = .F.             ÔåÉ RecordMark (N├âO RecordSource)
+    .GridLines = 3
+    .Visible = .T.
+ENDWITH                           ÔåÉ SEM RecordSource, SEM Column access
+loc_oGrid.Column1.Width = 70     ÔåÉ DEPOIS do ENDWITH (correto)
+loc_oGrid.Column2.Width = 120
+...
+loc_oGrid.Column1.Header1.Caption = "Prioridade"
+```
+
+**CarregarLista e BtnBuscarClick:** ambas usam refer├¬ncias expl├¡citas (`loc_oGrid.RecordSource`, `loc_oGrid.Column*.ControlSource`) sem nenhum WITH block.
+
+A detec├º├úo [GRID-WITH] aparenta ser um **falso positivo** ÔÇö possivelmente o analisador confundiu `.RecordMark` (linha 360) com `.RecordSource`, ou a detec├º├úo foi gerada contra uma vers├úo anterior do arquivo antes da corre├º├úo ser aplicada.
+
+O arquivo n├úo requer modifica├º├úo: a solu├º├úo recomendada pelo pass (`.ColumnCount` antes do WITH, sem `.RecordSource` dentro do WITH, colunas acessadas via refer├¬ncia expl├¡cita ap├│s ENDWITH) j├í est├í implementada corretamente. Nenhuma altera├º├úo necess├íria no `CegBO.prg` tampouco.

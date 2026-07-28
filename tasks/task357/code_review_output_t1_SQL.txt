@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada em FormCco.prg linha 1165:**
+
+- **DESCS removido**: `OR descs LIKE ...` eliminado do filtro de pesquisa. Agora pesquisa apenas por `codigos`, alinhado com o original legado que usa `CODIGOS` no WHERE mas nunca `DESCS`.
+
+- **CIDCHAVES mantido** (CcoBO.prg): Todos os usos de `WHERE cIdChaves = ...` s├úo necess├írios ÔÇö SELECT/UPDATE/DELETE por PK (linhas 155, 583, 614) e exclus├úo de auto-conflito nas valida├º├Áes de duplicidade e faixa (linhas 367, 409). O validador detecta corretamente que o original usava cursores locais (sem WHERE por PK no SQL), mas na arquitetura migrada em camadas esses usos s├úo obrigat├│rios. Remov├¬-los quebraria o CRUD.

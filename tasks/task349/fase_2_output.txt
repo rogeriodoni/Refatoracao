@@ -1,0 +1,10 @@
+﻿BCCBO.prg completo com todos os m├®todos CRUD adicionados:
+
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar `cods`/`descs` (padr├úo can├┤nico, evita erro de sintaxe)
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com ORDER BY cods em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, chama `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`
+- **`Inserir()`** (PROTECTED) ÔÇö INSERT com `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE com `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE com `RegistrarAuditoria("DELETE")`
+
+Todos os m├®todos seguem as regras: sem RETURN dentro de TRY/CATCH, CATCH nunca silencioso, helpers SQL corretos (`EscaparSQL`, `CapturarErroSQL`).

@@ -1,0 +1,15 @@
+﻿A migra├º├úo da task353 (SIGCDCAF ÔåÆ FormCAF) est├í **100% completa**. Todas as fases anteriores (1-7) j├í implementaram tudo que a Fase 8 exigia:
+
+**FormCAF.prg** (1493 linhas) ÔÇö todos os m├®todos presentes:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` Ô£à
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` Ô£à
+- `CarregarLista()`, `AjustarBotoesPorModo()` Ô£à
+- Eventos espec├¡ficos: `ValidarNop()`, `ConfirmarQtd()`, `ApagaItemClick()` Ô£à
+- `Destroy()` com limpeza de cursores Ô£à
+
+**Integra├º├úo j├í feita:**
+- `config.prg` ÔÇö carrega automaticamente via `ADIR(*BO.prg)` e `ADIR(Form*.prg)`, n├úo precisa de entrada manual
+- `menu.prg` linha 135 ÔÇö `ON SELECTION BAR 36 OF popCadastros DO AbrirFormCAF`
+- `menu.prg` linha 5838 ÔÇö `PROCEDURE AbrirFormCAF()` com padr├úo can├┤nico (VARTYPE + Show() sem par├ómetro)
+
+**CAFBO.prg** (712 linhas) ÔÇö implementa├º├úo completa com Inserir, Atualizar, ExecutarExclusao, Buscar, CarregarPorCodigo, ValidarOP, e l├│gica de restaura├º├úo de SigOpPic Ô£à

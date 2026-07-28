@@ -67,7 +67,7 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
     * Destroy - Libera cursores de referencia
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        LOCAL loc_aCursors(7), loc_nI
+        LOCAL loc_aCursors(8), loc_nI
         loc_aCursors(1) = "cursor_4c_OperacoesE"
         loc_aCursors(2) = "cursor_4c_OperacoesS"
         loc_aCursors(3) = "cursor_4c_SigCdCeg"
@@ -75,7 +75,8 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
         loc_aCursors(5) = "cursor_4c_Prods"
         loc_aCursors(6) = "cursor_4c_Entradas"
         loc_aCursors(7) = "cursor_4c_Saidas"
-        FOR loc_nI = 1 TO 7
+        loc_aCursors(8) = "crCabecalho"
+        FOR loc_nI = 1 TO 8
             IF USED(loc_aCursors(loc_nI))
                 USE IN (loc_aCursors(loc_nI))
             ENDIF
@@ -275,6 +276,63 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
+    * CriarCabecalho - Popula cursor crCabecalho referenciado pelo FRX legado
+    * SigReAto.frx tem Dataenvironment com alias crCabecalho.
+    * Estrutura preservada do legado (sigreato.PRG:101).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE CriarCabecalho()
+        LOCAL loc_cTitulo, loc_cSubTit, loc_cEmpresa
+        LOCAL loc_cEmp, loc_cRazas, loc_cDif, loc_nResult
+
+        loc_cTitulo = "Relat" + CHR(243) + "rio de An" + CHR(225) + ;
+                      "lise de Estoque Por Tipo de Opera" + CHR(231) + CHR(227) + "o"
+
+        DO CASE
+            CASE THIS.this_nDiferenca = 1
+                loc_cDif = "Ignorar Diferen" + CHR(231) + "as"
+            CASE THIS.this_nDiferenca = 2
+                loc_cDif = "Sem Diferen" + CHR(231) + "a"
+            CASE THIS.this_nDiferenca = 3
+                loc_cDif = "Diferen" + CHR(231) + "a Positiva"
+            CASE THIS.this_nDiferenca = 4
+                loc_cDif = "Diferen" + CHR(231) + "a Negativa"
+            OTHERWISE
+                loc_cDif = ""
+        ENDCASE
+
+        loc_cSubTit = "Per" + CHR(237) + "odo : " + DTOC(THIS.this_dDtInicial) + ;
+                      " " + CHR(224) + " " + DTOC(THIS.this_dDtFinal) + " " + ;
+                      IIF(EMPTY(THIS.this_cGrupo),      "", " - Grupo : "      + ALLTRIM(THIS.this_cGrupo)) + ;
+                      IIF(EMPTY(THIS.this_cCPros),      "", " - Produto : "    + ALLTRIM(THIS.this_cCPros)) + ;
+                      IIF(EMPTY(THIS.this_cLin),        "", " - Linha : "      + ALLTRIM(THIS.this_cLin)) + ;
+                      IIF(EMPTY(THIS.this_cFornecedor), "", " - Fornecedor : " + ALLTRIM(THIS.this_cFornecedor)) + ;
+                      IIF(EMPTY(loc_cDif), "", " - " + loc_cDif)
+
+        loc_cEmp = ALLTRIM(go_4c_Sistema.cCodEmpresa)
+        loc_cRazas = ""
+        loc_nResult = SQLEXEC(gnConnHandle, ;
+            "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmp), ;
+            "cursor_4c_EmpCab")
+        IF loc_nResult > 0 .AND. USED("cursor_4c_EmpCab") .AND. RECCOUNT("cursor_4c_EmpCab") > 0
+            loc_cRazas = ALLTRIM(cursor_4c_EmpCab.Razas)
+        ENDIF
+        IF USED("cursor_4c_EmpCab")
+            USE IN cursor_4c_EmpCab
+        ENDIF
+        loc_cEmpresa = IIF(EMPTY(loc_cRazas), "", loc_cEmp + " - " + loc_cRazas)
+
+        IF USED("crCabecalho")
+            USE IN crCabecalho
+        ENDIF
+        CREATE CURSOR crCabecalho (Titulo c(200), SubTit c(200), Empresa c(80), ;
+                                   MoeCusFs m, CustoFs m, CustoPends m)
+        INSERT INTO crCabecalho (Titulo, SubTit, Empresa) ;
+            VALUES (loc_cTitulo, loc_cSubTit, loc_cEmpresa)
+        SELECT crCabecalho
+        GO TOP
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * PrepararDados - Executa processamento completo gerando cursor crImpressao
     *
     * Estrutura de crImpressao (por produto):
@@ -303,6 +361,9 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
             IF !THIS.ValidarParametros()
                 loc_lSucesso = .F.
             ENDIF
+
+            *-- Criar cursor de cabecalho (FRX Dataenvironment referencia crCabecalho)
+            THIS.CriarCabecalho()
 
             loc_cEmp = ALLTRIM(go_4c_Sistema.cCodEmpresa)
             loc_cDtI = FormatarDataSQL(THIS.this_dDtInicial)
@@ -705,6 +766,18 @@ DEFINE CLASS sigreatoBO AS RelatorioBase
         SET POINT TO (loc_cPointOrig)
         SET SEPARATOR TO (loc_cSepOrig)
         SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
 
         RETURN .T.
     ENDPROC

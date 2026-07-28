@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormCec.prg` criado com 214 linhas.
+
+**Fase 3/8 entregue ÔÇö estrutura base do FormCec:**
+
+- `DEFINE CLASS FormCec AS FormBase` com propriedades visuais can├┤nicas (600├ù1000, WindowType=1, Themes=.F., ControlBox=.F.)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` com TRY/CATCH (n├úo chama InicializarForm diretamente)
+- `InicializarForm()` ÔÇö define Caption com CHR() para acentos, cria CecBO, chama os 3 ConfigurarPagina*, define ActivePage=1
+- `ConfigurarPageFrame()` ÔÇö PageFrame Top=-29, Tabs=.F., 2 pages com Picture de fundo
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo usando refer├¬ncia expl├¡cita, n├úo WITH aninhado), `cnt_4c_Botoes` (Left=542, can├┤nico), `cnt_4c_Saida` (Left=917, can├┤nico)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_Salva` (Top=33, Left=842)
+- `TornarControlesVisiveis()` ÔÇö recursivo, cobre PageFrame e containers
+- `Destroy()` ÔÇö limpa BO, chama DODEFAULT()
+
+Fases seguintes adicionar├úo: grid+bot├Áes CRUD (Fase 4), campos TextBox/Label/ComboBox (Fases 5-6), eventos BINDEVENT (Fases 7-8).

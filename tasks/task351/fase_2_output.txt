@@ -1,0 +1,22 @@
+﻿O BlqBO.prg j├í est├í completo desde a Fase 1. Verificando o conte├║do:
+
+**Fase 2 j├í conclu├¡da** ÔÇö o arquivo criado na Fase 1 j├í cont├®m todos os m├®todos CRUD exigidos:
+
+| M├®todo | Status | Linha |
+|--------|--------|-------|
+| `ObterChavePrimaria()` | Ô£à Implementado | 32-34 |
+| `CarregarDoCursor()` | Ô£à Implementado | 39-59 |
+| `Buscar()` | Ô£à Implementado | 64-95 |
+| `CarregarPorCodigo()` | Ô£à Implementado | 100-128 |
+| `Inserir()` | Ô£à Com `RegistrarAuditoria("INSERT")` | 133-171 |
+| `Atualizar()` | Ô£à Com `RegistrarAuditoria("UPDATE")` | 176-208 |
+| `ExecutarExclusao()` | Ô£à Com `RegistrarAuditoria("DELETE")` | 213-238 |
+
+Pontos validados contra o c├│digo fonte:
+- `fGerUniqueKey("BLOQUEIO")` e `fUniqueIds()` usados no `Inserir()` ÔÇö correto, espelhando o legado
+- `gc_4c_UsuarioLogado` no lugar do `Usuar` legado ÔÇö correto
+- Colunas `Codigos`, `CidChaves`, `dtInicial`, `dtFinal`, `inativo`, `UsuIncs`, `DtIncs`, `UsuAlts`, `DtAlts` ÔÇö todas conferem com o `ControlSource` do SCX original
+- `this_cCampoChave = "Codigos"` e `this_cTabela = "SigCdBlq"` ÔÇö corretos
+- Nenhum `RETURN` dentro de `TRY/CATCH` ÔÇö padr├úo correto aplicado em todos os m├®todos
+
+O BlqBO.prg est├í completo e pronto para a Fase 3 (cria├º├úo do FormBlq.prg).

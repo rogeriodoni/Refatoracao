@@ -777,7 +777,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moec = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moec = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.Moepcs)
                     loc_nQtdeqs = 1
@@ -785,7 +785,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moepc = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moepc = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.Moedas)
                     loc_nQtdeqs = 1
@@ -793,7 +793,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moedac = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                    loc_Moedac = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
                     =SEEK(crSigCdPro.CGrus, "crSigCdGrp", "CGrus")
                     STORE 0 TO loc_lnTQtde, loc_lnTotal, loc_lnTFtio
@@ -878,7 +878,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                 loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                                 loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_Moem = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                            loc_Moem = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
                             loc_cMoedas = ALLTRIM(CrCompoPro.Moevs)
                             loc_nQtdeqs = 1
@@ -886,7 +886,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                 loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                                 loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_Moev = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                            loc_Moev = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
                             IF EMPTY(ALLTRIM(crSigPrCpo.Moeds))
                                 SELECT crSigPrCpo
@@ -920,7 +920,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                                     ENDIF
-                                    loc_CotMcf = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                                    loc_CotMcf = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
 
                                     loc_cMoedas = ALLTRIM(CrCompoPro.Moevs)
                                     loc_nQtdeqs = 1
@@ -928,7 +928,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                                     ENDIF
-                                    loc_CotMpv = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                                    loc_CotMpv = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
                                     loc_MarkCv = ROUND(IIF(crSigPrCpo.VlrCvs = 0, 0, ;
                                         (CrCompoPro.Pvens * loc_CotMpv / loc_CotMcf) / ;
                                         crSigPrCpo.VlrCvs), 6)
@@ -953,7 +953,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                                 loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                                 loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                             ENDIF
-                            loc_Moem = fCarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
+                            loc_Moem = THIS.CarregarCambio(loc_cMoedas, DATETIME()) * loc_nQtdeqs
                         ENDIF
 
                         IF loc_lnTpRecal <> 2
@@ -1265,7 +1265,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moec = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moec = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.Moepcs)
                     loc_nQtdeqs = 1
@@ -1273,7 +1273,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moep = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moep = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.Moevs)
                     loc_nQtdeqs = 1
@@ -1281,7 +1281,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moev = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moev = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.MoeCusfs)
                     loc_nQtdeqs = 1
@@ -1289,7 +1289,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moecf = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moecf = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.Moedas)
                     loc_nQtdeqs = 1
@@ -1297,7 +1297,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moedac = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moedac = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_cMoedas = ALLTRIM(crSigCdPro.mFtios)
                     loc_nQtdeqs = 1
@@ -1305,7 +1305,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
                         loc_cMoedas = ALLTRIM(crSigCdMoe.Moeqs)
                         loc_nQtdeqs = IIF(crSigCdMoe.Qtdeqs = 0, 1, crSigCdMoe.Qtdeqs)
                     ENDIF
-                    loc_Moeft = fCarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
+                    loc_Moeft = THIS.CarregarCambio(loc_cMoedas, DATE()) * loc_nQtdeqs
 
                     loc_MarkCv = ROUND(IIF(loc_lnTotCv = 0, 0, loc_lnTotpCv / loc_lnTotCv), 6)
 
@@ -2037,5 +2037,56 @@ DEFINE CLASS sigprccpBO AS BusinessBase
             *-- Auditoria nao deve interromper fluxo principal
         ENDTRY
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarCambio - Retorna cotacao da moeda na data informada
+    * Equivalente a fCarregarCambio() do sistema legado (nao portado).
+    * Usa cursores crSigCdCot + crSigCdMoe carregados em InicializarCursores.
+    * Aceita D ou T como data.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION CarregarCambio(par_cMoeda, par_xData)
+        LOCAL loc_nCotacao, loc_cMoeda, loc_dData, loc_oErro
+        loc_nCotacao = 0
+        loc_cMoeda   = ALLTRIM(par_cMoeda)
+
+        DO CASE
+            CASE VARTYPE(par_xData) == "T"
+                loc_dData = TTOD(par_xData)
+            CASE VARTYPE(par_xData) == "D"
+                loc_dData = par_xData
+            OTHERWISE
+                loc_dData = DATE()
+        ENDCASE
+        IF EMPTY(loc_dData)
+            loc_dData = DATE()
+        ENDIF
+
+        IF EMPTY(loc_cMoeda)
+            RETURN 1
+        ENDIF
+
+        TRY
+            IF USED("crSigCdMoe")
+                SELECT crSigCdMoe
+                SET ORDER TO CMoes
+                IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas <> 0
+                    IF USED("crSigCdCot")
+                        SELECT crSigCdCot
+                        SET ORDER TO CMoeData DESCENDING
+                        SET NEAR ON
+                        SEEK loc_cMoeda + DTOS(loc_dData)
+                        SET NEAR OFF
+                        IF !EOF() AND ALLTRIM(crSigCdCot.CMoes) = loc_cMoeda
+                            loc_nCotacao = crSigCdCot.Valos
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            SET NEAR OFF
+        ENDTRY
+
+        RETURN IIF(loc_nCotacao = 0, 1, loc_nCotacao)
+    ENDFUNC
 
 ENDDEFINE

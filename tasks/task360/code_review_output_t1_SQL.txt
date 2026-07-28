@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas em `CecBO.prg`:
+
+- **Linha 70** e **linha 103**: `INNER JOIN SigCdEmp b ON a.Cemps = b.cEmps` ÔåÆ `a.Emps = b.cEmps`
+
+O schema confirma que `SIGFICHC` tem coluna `emps` (n├úo `cemps`), e que `cidchaves` ├® a PK real ÔÇö o alerta `CIDCHAVES` ├® falso positivo, pois `WHERE a.cIdChaves = ...` usa a PK leg├¡tima da tabela.

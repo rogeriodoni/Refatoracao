@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+`ConfigurarPaginaDados()` ÔÇö 4 campos com posi├º├Áes compensadas (+29px pelo PageFrame):
+| Campo | Objeto | Top | Left | Width | MaxLength |
+|-------|--------|-----|------|-------|-----------|
+| CEP | `txt_4c_CEPS` | 174 | 275 | 80 | 9 |
+| Tipo | `txt_4c_TipoNomes` | 200 | 275 | 80 | 15 |
+| Endere├ºo | `txt_4c_Nomes` | 226 | 275 | 430 | 72 |
+| Complemento | `txt_4c_Comples` | 253 | 275 | 430 | 72 |
+
+**M├®todos implementados para esses 4 campos:**
+- `FormParaBO()` ÔÇö l├¬ os 4 `txt_4c_*` e seta `this_oBusinessObject.this_c*`
+- `BOParaForm()` ÔÇö inverso
+- `HabilitarCampos()` ÔÇö CEP s├│ habilitado em INCLUIR (fiel ao `getCEPS.When` original); demais em INCLUIR/ALTERAR
+- `LimparCampos()` ÔÇö zera os 4 campos
+
+**Pr├│xima fase (6/8):** adicionar os 4 campos restantes ÔÇö Bairro, Cidade (com lookup `fwBuscaExt` em `SigCdMun`), UF (read-only) e N├║mero ÔÇö e completar `FormParaBO/BOParaForm/HabilitarCampos/LimparCampos` para eles.

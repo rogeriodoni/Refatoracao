@@ -1,0 +1,13 @@
+﻿Corre├º├úo aplicada corretamente. Resumo completo da an├ílise e a├º├úo tomada:
+
+**[CONTAINER-VISIVEL] ÔÇö Corrigido** (linha 4783-4785):
+- Antes: `IF !INLIST(...)` impedia setar `Visible=.T.` no container, mas a recurs├úo **ainda entrava** nele e for├ºava `Visible=.T.` em todos os filhos
+- Depois: `IF INLIST(...) LOOP` ÔÇö o `LOOP` pula tanto o set quanto a recurs├úo, deixando `cnt_4c_Cabecalho` e `cnt_4c_Saida` (e seus filhos) com as visibilidades definidas explicitamente em `ConfigurarPagina*()`
+
+**[GRID-WITH] ÔÇö Sem corre├º├úo necess├íria**: Todos os 4 grids j├í t├¬m `RecordSource=""` e `ColumnCount=N` fora do `WITH` (vide linhas 457-458, 1744-1745, 1847-1848, 2317-2318). O reviewer identificou um falso positivo.
+
+**[LAYOUT-POSITION] ÔÇö 20 itens, todos falsos positivos ou inalter├íveis**:
+- OptionGroups/TipoLeitura Top=0/Left=0: validator leu `.Buttons(1)` em vez do grupo
+- Controls de Pagina.Lista comparados com controles de Page3 Leitura: cross-page mapping
+- `lbl_4c_Lbl_grupos` e `lbl_4c_Label19`: validator mapeou controles de p├íginas diferentes
+- `cmd_4c_Cancela` Left=903: imposs├¡vel sem sobrepor `cnt_4c_Saida` (Left=917), que tem prioridade pela Rule 10 do CLAUDE.md

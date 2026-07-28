@@ -1,0 +1,12 @@
+﻿The FormCargo migration (task354/SIGCDCAR) is fully complete. Here's the verification summary:
+
+**Integration confirmed:**
+- `menu.prg`: Has `DEFINE BAR 1 OF popCadastros PROMPT "Cargos"`, `ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo`, and a full `AbrirFormCargo()` procedure
+- `config.prg`: Auto-loads `CargoBO.prg` via `*BO.prg` glob and `FormCargo.prg` via `Form*.prg` in `cadastros\` ÔÇö no manual entries needed
+
+**Artifacts:**
+- `FormCargo.prg` ÔÇö 3226+ lines, all Phase 8 methods fully implemented
+- `CargoBO.prg` ÔÇö 559 lines, complete with cascade delete (sigcarct ÔåÆ SIGCRRCC ÔåÆ SIGCDCRG)
+- `SolicitacaoTesteManual/task354_sigcdcar.md` ÔÇö manual test checklist generated
+
+**Ready for manual testing.** Delete `FormCargo.fxp` and `CargoBO.fxp` before opening the app, then access via menu **Cadastros ÔåÆ Cargos**.

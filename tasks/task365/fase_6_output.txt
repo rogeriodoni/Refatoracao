@@ -1,0 +1,9 @@
+﻿All three additions are in place. Phase 7/8 is complete.
+
+**Phase 7/8 Summary:**
+- `DEFINE BAR 47 OF popCadastros` ÔÇö "ICMS - Cupom Fiscal" added to menu (line 125)
+- `ON SELECTION BAR 47 OF popCadastros DO AbrirFormcfi` wired up (line 164)
+- `AbrirFormcfi()` procedure added at end of menu.prg (line 6116)
+- No changes needed to `config.prg` ÔÇö it uses ADIR() dynamic loading, so `cfiBO.prg` and `Formcfi.prg` are auto-discovered
+
+**Phase 8/8** would be validation: delete `.fxp` compiled files and test the form in the running application. Since that requires the VFP9 runtime, the migration code is now complete and ready for runtime testing.

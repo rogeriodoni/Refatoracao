@@ -1,0 +1,220 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "=fConfigGeral()\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n        lcQryArv = [Select * From SigCdArv]\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdArv', 'codigos', 'crSigCdArv', '', ThisForm.Pagina.Lista.Grade, lcQryArv)\n\t\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Códigos', 80, .T.)\n\t\t\t.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 290, .F.)\n\t\tEndWith\n\n\t\t=DoDefault()\n        Go Top\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFocus()\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If .Not. Empty(ThisForm.Pagina.Dados.Get_Cod.Value)\n\tThisForm.poDataMgr.LocateCursor('csSigCdArv','Codigos',ThisForm.Pagina.Dados.Get_Cod.Value)\n\tThisForm.Pagina.Lista.Grade.Column1.SetFocus()\nEndIf\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor,SetFocus",
+        "controlesReferenciados": "Get_Cod",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigCdArv\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Cod.SetFocus()\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.get_Descs.SetFocus()\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus()\nEndcase\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "Get_Cod,get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( ThisForm.Pagina.Dados.Get_Cod.Value )\n\t\tMessagebox( 'Código não pode ficar em branco!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Cod.SetFocus()\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdArv','codigos',ThisForm.Pagina.Dados.Get_Cod.Value)\n\t\tMessageBox( 'Tipo de Árvore já cadastrada!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Cod.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\n=DoDefault()\n\nThisForm.mAtivapagina1()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus,ChkRegister,mAtivapagina1",
+        "controlesReferenciados": "Get_Cod,ChkRegister('SigCdArv'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1()\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mAtivapagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.get_Cod",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN(!Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.get_descs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN(!Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.Get_TempMet",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.Get_TempTub",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.Get_TempAmb",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDARV.Pagina.Dados.Get_TempAgu",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDARV.Init",
+      "queryOriginal": "lcQryArv = [Select * From SigCdArv]",
+      "tabelas": "SigCdArv",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdArv"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

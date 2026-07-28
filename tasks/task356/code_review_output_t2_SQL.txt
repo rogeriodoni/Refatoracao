@@ -1,0 +1,29 @@
+﻿Analisei ambos os arquivos completos. Ambos os problemas reportados s├úo **falsos positivos** do revisor autom├ítico:
+
+---
+
+**[SQL-FILTRO-INVENTADO] `CONTROLCOUNT`** ÔÇö Falso positivo.
+
+`ControlCount` aparece nas linhas 1249 e 1263 do FormCCJ.prg dentro de `TornarControlesVisiveis()`:
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+...
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+├ë uma **propriedade VFP9 de containers** (quantidade de controles filhos), n├úo uma coluna SQL. O revisor confundiu o texto com uma cl├íusula WHERE.
+
+---
+
+**[SQL-FILTRO-INVENTADO] `ICLIS`** ÔÇö Falso positivo.
+
+`iclis` aparece em `BuscarContaPorCodigo` (CCJBO.prg:253):
+```foxpro
+loc_cSQL = "SELECT iclis, rclis" + ;
+           " FROM sigcdcli" + ;
+           " WHERE iclis = " + EscaparSQL(par_cConta)
+```
+`iclis` ├® a **PK de `sigcdcli`** ÔÇö exatamente a mesma coluna que o legado usa no JOIN: `join sigcdcli b on a.contas = b.iclis`. O m├®todo ├® um lookup v├ílido para validar um c├│digo de conta, n├úo um filtro inventado.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os dois arquivos est├úo corretos. O revisor autom├ítico incorretamente identificou uma propriedade VFP9 (`ControlCount`) e uma consulta de lookup leg├¡tima (`WHERE iclis = ...` na PK de `sigcdcli`) como filtros SQL inventados.

@@ -1,0 +1,24 @@
+﻿Vou analisar o c├│digo para verificar se a condi├º├úo `WHERE cIdChaves` ├® realmente inventada ou necess├íria.
+
+Ap├│s analisar o c├│digo fornecido, este ├® um **falso positivo** do checker automatizado.
+
+**An├ílise:**
+
+O flag foi disparado porque o checker comparou TODOS os `WHERE` do BO migrado com o ├║nico SQL original (`lcQryCep = [Select * From Cep Where Estados = ?pUFs]`) e encontrou `WHERE cIdChaves = ...` que n├úo estava no original.
+
+**Por├®m:**
+- `cidchaves` ├® a **chave prim├íria real** da tabela `cep`, confirmado pelo pr├│prio BO: `this_cCampoChave = "cidchaves"` (linha Init)
+- Os `WHERE cIdChaves = ...` aparecem em **opera├º├Áes CRUD por PK** ÔÇö `CarregarPorCodigo`, `Atualizar`, `ExecutarExclusao` ÔÇö que s├úo necess├írios na nova arquitetura
+- O original usava navega├º├úo nativa VFP9 (sem WHERE para localizar registros), mas a arquitetura migrada precisa filtrar por PK via SQL Server
+- O `Buscar()` usa corretamente `WHERE Estados = ...` quando h├í filtro de UF, id├¬ntico ao original
+
+**Conclus├úo:** Nenhuma altera├º├úo ├® necess├íria. Os WHEREs com `cIdChaves` s├úo corretos e essenciais:
+
+| M├®todo | WHERE | Finalidade |
+|--------|-------|------------|
+| `Buscar(par_cFiltro)` | `WHERE Estados = ...` | Corresponde ao original Ô£ô |
+| `CarregarPorCodigo` | `WHERE cIdChaves = ...` | Carregar registro por PK Ô£ô |
+| `Atualizar` | `WHERE cIdChaves = ...` | UPDATE por PK Ô£ô |
+| `ExecutarExclusao` | `WHERE cIdChaves = ...` | DELETE por PK Ô£ô |
+
+Remover os `WHERE cIdChaves = ...` das opera├º├Áes CRUD quebraria completamente a funcionalidade ÔÇö todos os UPDATEs e DELETEs afetariam toda a tabela sem filtro. O c├│digo est├í correto como est├í.

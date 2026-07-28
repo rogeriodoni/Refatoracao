@@ -151,6 +151,7 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             IF THIS.this_nTipoRelatorio = 1
                 REPORT FORM (THIS.this_cArqRelReduzido) PREVIEW NOCONSOLE
@@ -174,6 +175,7 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             IF THIS.this_nTipoRelatorio = 1
                 REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER PROMPT NOCONSOLE
@@ -197,6 +199,7 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             IF THIS.this_nTipoRelatorio = 1
                 REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER

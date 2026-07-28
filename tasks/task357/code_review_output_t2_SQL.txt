@@ -1,0 +1,42 @@
+﻿Verifica├º├úo conclu├¡da. Aqui est├í meu resultado:
+
+---
+
+## Resultado da Verifica├º├úo: SQL-FILTRO-INVENTADO (`cIdChaves` em WHERE)
+
+**Diagn├│stico: FALSO POSITIVO ÔÇö nenhuma altera├º├úo necess├íria.**
+
+### Evid├¬ncia do schema (`docs/schema.sql`):
+
+```sql
+CREATE TABLE [dbo].[SIGCDCLC](
+    [codigos]     [char](30)     NOT NULL,
+    [descs]       [char](30)     NOT NULL,
+    [faixafs]     [numeric](11,2) NOT NULL,
+    [faixais]     [numeric](11,2) NOT NULL,
+    [grupos]      [char](10)     NOT NULL,
+    [cidchaves]   [char](20)     NOT NULL,   ÔåÉ coluna real, PK
+    [emps]        [char](3)      NOT NULL,
+    [prioridades] [decimal](2,0) NOT NULL,
+    [prioridade]  [numeric](2,0) NOT NULL,
+    [clcstatus]   [numeric](1,0) NOT NULL,
+ CONSTRAINT [sigcdclc_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+```
+
+### Conclus├úo:
+
+`cidchaves` **├® a chave prim├íria real** de `SigCdClc`, confirmada pelo `CONSTRAINT PRIMARY KEY`. A ferramenta de code review a apontou como "inventada" porque o c├│digo legado original utilizava `crSigCdClc.cIdChaves` apenas como **valor** (passado para `SigCdCmt.fkChaves`), sem us├í-la diretamente como filtro WHERE em SELECT/UPDATE/DELETE ÔÇö pois o legado usa navega├º├úo por cursor em vez de lookup por PK.
+
+Todas as ocorr├¬ncias de `WHERE cIdChaves = ...` no c├│digo migrado s├úo **arquiteturalmente necess├írias** para o novo padr├úo CRUD:
+
+| M├®todo | Uso | V├ílido |
+|--------|-----|--------|
+| `CarregarPorCodigo` | `WHERE cIdChaves = par` | Ô£ô Lookup por PK |
+| `VerificarDuplicidade` | `AND NOT cIdChaves = par` | Ô£ô Auto-exclus├úo na valida├º├úo |
+| `VerificarFaixaSobreposta` | `AND NOT cIdChaves = par` | Ô£ô Auto-exclus├úo na valida├º├úo |
+| `Atualizar` | `WHERE cIdChaves = THIS.this_cIdChaves` | Ô£ô UPDATE por PK |
+| `ExecutarExclusao` | `WHERE cIdChaves = THIS.this_cIdChaves` | Ô£ô DELETE por PK |
+
+Remover qualquer dessas condi├º├Áes quebraria a capacidade de visualizar, editar ou excluir registros espec├¡ficos. **Os arquivos n├úo requerem modifica├º├úo neste pass.**
+
+> **Nota extra** (fora do escopo SQL-FILTRO): o schema confirma que `codigos` ├® `char(30)` e `descs` ├® `char(30)`, mas o BO usa `LEFT(..., 80)` e `LEFT(..., 220)` respectivamente ÔÇö esses s├úo candidatos a corre├º├úo num pass de SQL-COLUNA futuro.

@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task362",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-24T21:42:05",
+    "atualizadoEm":  "2026-07-24T22:32:43",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-24T21:42:05",
+                                            "fim":  "2026-07-24T21:42:05",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task362\\SIGCDCEP.sct",
+                                            "baseName":  "SIGCDCEP",
+                                            "scxFile":  "C:\\4c\\tasks\\task362\\SIGCDCEP.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-24T21:42:05",
+                                          "fim":  "2026-07-24T21:42:05",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDCEP",
+                                          "txtFile":  "C:\\4c\\tasks\\task362\\SIGCDCEP_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-24T21:42:05",
+                                              "fim":  "2026-07-24T21:42:06",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task362\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-24T21:42:06",
+                                              "fim":  "2026-07-24T21:42:15",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task362\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task362\\meta_prompt.md",
+                                              "boClass":  "CEPBO",
+                                              "formClass":  "FormCEP",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task362\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-24T21:42:15",
+                                              "fim":  "2026-07-24T21:42:15",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task362\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-24T21:42:15",
+                                               "fim":  "2026-07-24T21:42:16",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task362\\esqueletos",
+                                               "arquivos":  [
+                                                                "CEPBO_esqueleto.prg",
+                                                                "FormCEP_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-24T21:42:16",
+                                       "fim":  "2026-07-24T22:11:09",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\CEPBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  27.04,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCEP.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  957
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-24T22:11:09",
+                                                  "fim":  "2026-07-24T22:11:14",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCEP.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\CEPBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-24T22:11:14",
+                                                 "fim":  "2026-07-24T22:11:15",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-24T22:24:47",
+                                       "fim":  "2026-07-24T22:25:30",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-24T22:25:30",
+                                               "fim":  "2026-07-24T22:32:42",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task362\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-24T22:32:42",
+                                        "fim":  "2026-07-24T22:32:43",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormCEP_20260724223243.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  167,
+                                        "avisos":  167
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-24T22:32:43",
+                                              "fim":  "2026-07-24T22:32:43",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task362_SIGCDCEP.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-24T21:42:06",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-24T21:42:06",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task362\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-24T21:42:06",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-24T21:42:06"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-24T22:11:14",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-24T22:11:14",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormCEP_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCEP.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task362\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-24T22:11:15",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-24T22:11:16",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-24T22:11:16",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-24T22:24:15",
+                                          "passes":  4,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ESTADOS",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  1
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-24T22:24:15",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-24T22:24:47",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\CEPBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCEP.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-24T22:32:42",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-24T22:32:42",
+                                             "thresholdPx":  5,
+                                             "unmatched":  11,
+                                             "errors":  11,
+                                             "matched":  9,
+                                             "warnings":  9,
+                                             "reportFile":  "C:\\4c\\tasks\\task362\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

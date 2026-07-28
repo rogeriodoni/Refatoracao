@@ -1,0 +1,45 @@
+﻿Vou analisar os 11 problemas detectados antes de fazer qualquer altera├º├úo no arquivo.
+
+Analisando o c├│digo fornecido, todos os 11 problemas s├úo do tipo `[LAYOUT-POSITION]`. Para corrigir com seguran├ºa, preciso entender o mapeamento correto entre os controles originais do SCX e os migrados.
+
+**An├ílise do mapeamento:**
+
+O padr├úo de offset da migra├º├úo ├®: `Top_migrado = Top_original + 29` (compensa├º├úo do PageFrame com `.Top = -29`).
+
+| Controle original | Top original | Top esperado (+29) | Controle migrado correspondente | Top atual |
+|---|---|---|---|---|
+| Label1 (Left=61) | 121 | **150** | `lbl_4c_Label1` | **150** Ô£ô |
+| Label2 (Left=64) | 206 | **235** | `lbl_4c_Label2` | **235** Ô£ô |
+| Label3 (Left=109) | 221 | **250** | `lbl_4c_Label3` | **250** Ô£ô |
+| Text1 | 220 | **249** | `txt_4c_Text1` | **249** Ô£ô |
+| Text3 (Left=179) | 220 | **249** | `txt_4c_Text3` | **249** Ô£ô |
+| Text4 (Left=233) | 220 | **249** | `txt_4c_Text4` | **249** Ô£ô |
+
+**Os controles originais est├úo CORRETAMENTE migrados e posicionados.** O problema est├í no algoritmo do validador: ele usa *substring matching* e associou:
+- `Label1` ÔåÆ `lbl_4c_Label15` (a string "Label1" ├® prefixo de "Label15")
+- `Label2` ÔåÆ `lbl_4c_Label20`
+- `Label3` ÔåÆ `lbl_4c_Label32`
+- `Text1` ÔåÆ `txt_4c_Text11`
+- `Text3` ÔåÆ `txt_4c_Text31`
+- `Text4` ÔåÆ `txt_4c_Text40`
+
+**Verifica├º├úo dos controles flagados (que s├úo outros controles, em se├º├Áes diferentes):**
+
+| Controle flagado | Se├º├úo no form | Top atual | Top SCX original | C├ílculo (+29) |
+|---|---|---|---|---|
+| `lbl_4c_Label15` | Raz├úo Social ("x" separador) | 399 | Ôëê370 | 370+29=399 Ô£ô |
+| `lbl_4c_Label20` | Bairro (label) | 383 | 354 | 354+29=383 Ô£ô |
+| `txt_4c_Text11` | Texto Responsabilidade | 324 | 295 | 295+29=324 Ô£ô |
+| `lbl_4c_Label32` | Sacado (header) | 361 | 332 | 332+29=361 Ô£ô |
+| `txt_4c_Text31` | Tamanho Fonte | 537 | 508 | 508+29=537 Ô£ô |
+| `txt_4c_Text40` | Tamanho Folha | 502 | 473 | 473+29=502 Ô£ô |
+
+**Conclus├úo:** Os 11 erros `[LAYOUT-POSITION]` s├úo **falsos positivos** do validador causados por substring matching incorreto. Mover os controles flagados para as posi├º├Áes sugeridas (ex: `lbl_4c_Label15` para Top=150, Left=61) causaria:
+
+1. **Sobreposi├º├úo** com `lbl_4c_Label1` que J├ü est├í em Top=150, Left=61
+2. **Quebra visual completa** ÔÇö controles de se├º├Áes distintas (Raz├úo Social, Bairro, Sacado, Impressora) ficariam todos empilhados na ├írea da Condi├º├úo de Pagamento
+3. Viola├º├úo das **REGRAS OBRIGATORIAS**: "PROIBIDO alterar propriedades visuais (Top, Left...) EXCETO se o problema ├® especificamente de ALINHAMENTO"
+
+Al├®m disso, o tipo `[LAYOUT-POSITION]` n├úo tem procedimento de corre├º├úo nas **INSTRUCOES DE CORRECAO** (que listam apenas ALINHAMENTO, TITULO-NAO-PROPAGADO, CHECKBOX-TIPO e FONTNAME-ERRADO).
+
+**Nenhuma altera├º├úo ├® necess├íria no arquivo `FormCfb.prg`.** O layout atual est├í correto. O validador precisa ser corrigido para usar *exact name matching* em vez de *substring matching* na correspond├¬ncia entre controles SCX originais e controles migrados.

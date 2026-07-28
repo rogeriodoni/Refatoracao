@@ -164,6 +164,7 @@ DEFINE CLASS SIGREHCPBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
+                RETURN 
             ENDIF
             loc_cArquivo = THIS.ObterCaminhoRelatorio()
             SET POINT TO [,]
@@ -188,6 +189,7 @@ DEFINE CLASS SIGREHCPBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
+                RETURN 
             ENDIF
             loc_cArquivo = THIS.ObterCaminhoRelatorio()
             SET POINT TO [,]

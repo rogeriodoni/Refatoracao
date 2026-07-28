@@ -1,0 +1,12 @@
+﻿O arquivo j├í est├í completo para a Fase 7. Todos os 4 eventos principais j├í foram implementados em fases anteriores:
+
+- **BtnIncluirClick()** ÔÇö linhas 702ÔÇô713: chama `NovoRegistro()`, define modo, limpa e habilita campos, vai para Page2
+- **BtnVisualizarClick()** ÔÇö linhas 718ÔÇô740: carrega por c├│digo, modo VISUALIZAR, desabilita campos, vai para Page2
+- **BtnAlterarClick()** ÔÇö linhas 745ÔÇô768: carrega por c├│digo, chama `EditarRegistro()`, modo ALTERAR, habilita campos, vai para Page2
+- **BtnExcluirClick()** ÔÇö linhas 773ÔÇô806: pede confirma├º├úo, chama `Excluir()`, recarrega lista
+
+Todos seguem o padr├úo correto: sem RETURN dentro de TRY/CATCH, TRY com flag `loc_lResultado`, CATCH com `MsgErro` expl├¡cito.
+
+O `FormCAD.prg` tamb├®m j├í cont├®m os eventos complementares (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`), os m├®todos auxiliares (`TornarControlesVisiveis`, `FormatarGridLista`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`), e toda a estrutura visual (PageFrame, Grid, bot├Áes com ├¡cones).
+
+**Fase 7 j├í conclu├¡da.** Nenhuma modifica├º├úo necess├íria ÔÇö o arquivo est├í pronto para a Fase 8 (integra├º├úo com `config.prg` e `menu.prg`).

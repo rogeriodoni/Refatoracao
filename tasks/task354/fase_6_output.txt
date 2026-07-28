@@ -1,0 +1,11 @@
+﻿Phase 6 is complete. Here's what was added to `FormCargo.prg`:
+
+1. **Line 1418** ÔÇö `BINDEVENT(loc_oPg2.txt_4c_Acomis, "LostFocus", THIS, "ValidarAcomis")` in `ConfigurarPaginaDados()`
+
+2. **Line 2165** ÔÇö `BINDEVENT(loc_oGridCat.Column3.Text1, "KeyPress", THIS, "ValidarTipoCategoria")` in `ConfigurarPaginaDados()`
+
+3. **Lines 3211ÔÇô3227** ÔÇö `PROCEDURE ValidarAcomis()`: checks `txt_4c_Acomis.Value < 0`, shows MsgAviso and resets to 0 if negative
+
+4. **Lines 3229ÔÇô3270** ÔÇö `PROCEDURE ValidarTipoCategoria(par_nKeyCode, par_nShiftAltCtrl)`: F4/F5 opens `FormBuscaAuxiliar` on `sigcarct` searching by `tipo` field; on selection, does `REPLACE tipo ... IN cursor_4c_Categorias` and refreshes the grid
+
+The file closes cleanly at line 3293 with `ENDDEFINE`.

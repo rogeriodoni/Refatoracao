@@ -1,0 +1,10 @@
+﻿CEPBO.prg est├í completo com todos os m├®todos CRUD. Resumo do que foi adicionado na Fase 2:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT na tabela `Cep` com filtro opcional por `Estados` (UF), ordem por `Ceps`
+- **`CarregarPorCodigo(par_cCidChaves)`** ÔÇö SELECT por PK `cIdChaves`; reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todos os 11 campos do cursor para propriedades do BO com `SELECT (alias)` antes dos acessos (sem prefixo de alias)
+- **`Inserir()`** ÔÇö gera UUID via `LEFT(NEWID(), 20)` do SQL Server, depois INSERT completo com todos os campos
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos edit├íveis WHERE `cIdChaves`
+- **`ExecutarExclusao()`** ÔÇö DELETE WHERE `cIdChaves` com auditoria
+
+Todos os m├®todos seguem o padr├úo can├┤nico: flag `loc_lSucesso`, sem RETURN dentro de TRY/CATCH, CATCH com MsgErro n├úo-silencioso, e `RegistrarAuditoria()` em INSERT/UPDATE/DELETE.

@@ -1,0 +1,396 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCEC",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "LParameters lcAcesso\n\nSqlChec = [Select a.*, b.Razas From SigFiChc a Inner Join SigCdEmp b on a.Emps = b.cEmps]\n\nWITH Thisform\n\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigFiChc','cIdChaves','crSigFiChc','Emps,Tipos',ThisForm.pagina.lista.grade, SqlChec)\n\t\t.pfSqlTabela(1).pColuna('Emps','','','Emp.',50,.t.)\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Declare laChec[2,2]\nlaChec[1,1]=\"Emps\" \nlaChec[1,2]=ThisForm.Pagina.Dados.GetEmpresa.Value\nlaChec[2,1]=\"Tipos\"\nlaChec[2,2]=ThisForm.Pagina.Dados.cmbTCons.Value\n\nThisForm.poDataMgr.LocateCursor('crSigFiChc',@laChec)\n\n*Select crSigFiChc\n*Locate for Emps = ThisForm.Pagina.Dados.GetEmpresa.Value And Tipos = ThisForm.Pagina.Dados.cmbTCons.Value\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf Type( 'lnOpcao' ) = 'N'\n\tThis.Value = lnOpcao\nEndif\n\nIf !dodefault( lnOpcao )\n\tThisform.mAtivapagina1\n\tReturn\nEndif\n\nIf InList(ThisForm.pcEscolha,\"INSERIR\",\"PROCURAR\")\n\tThisForm.Pagina.Dados.GetEmpresa.SetFocus\nEndIf\n\nIf InList(ThisForm.pcEscolha,\"ALTERAR\")\n\tIf crSigFiChc.Tipos = \"CHEQUE PRE\" \n\t\tThisForm.Pagina.Dados.GetContrato.SetFocus\n\tElse\n\t\tThisForm.Pagina.Dados.GetLogon.SetFocus\n\tEndif\nEndIf\n\nIf InList(ThisForm.pcEscolha,\"EXCLUIR\",\"CONSULTAR\")\n\tThisForm.Pagina.Dados... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC",
+      "evento": "Click",
+      "linhas": 93,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\")\n\n\tIf Empty(ThisForm.Pagina.Dados.CmbTCons.Value)\n\t\tMessageBox(\"Tipo da Consulta Invalida\",16,\"\")\n\t\tThisForm.Pagina.Dados.CmbTCons.SetFocus\n\t\tReturn\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.GetEmpresa.Value)\n\t\tMessageBox(\"Empresa Invalida\",16,\"\")\n\t\tThisForm.Pagina.Dados.GetEmpresa.SetFocus\n\t\tReturn\n\tEndIf\n\n\tIf ThisForm.Pagina.Dados.CmbTCons.Value = \"CHEQUE PRE\" \n\n\t\tIf Empty(ThisForm.Pagina.Dados.GetContrato.Value)\n\t\t\tMessageBox(\"Contrato Invalido\",... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "DoDefault()\n\nThisForm.mAtivapagina1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetContrato",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value = \"CHEQUE PRE\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetRede",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value = \"CHEQUE PRE\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetLoja",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value = \"CHEQUE PRE\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetLogon",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value <> \"CHEQUE PRE\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetSenha",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value <> \"CHEQUE PRE\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Pagina.Dados.getEmpresa,ThisForm.Pagina.Dados.getDesEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.getEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"PROCURAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetValMin",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.getDesEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.value,ThisForm.Pagina.Dados.getEmpresa,ThisForm.Pagina.Dados.getDesEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.getDesEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Pagina.Dados.getEmpresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetValFix",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.cmbTCons",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"PROCURAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetIp",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetPorta",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.fwget1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If ! InList(This.Value, '  ', 'CP', 'CH')\n\tMessageBox('Tipo de Consulta Invalida, Informar CP ou CH !!!', 16, '')\n\tReturn .f.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.fwget1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.cmbTCons.Value = \"SERASA\" AND InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetUsuProxy",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEC.pagina.dados.GetSenProxy",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcescolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCEC.Init",
+      "queryOriginal": "SqlChec = [Select a.*, b.Razas From SigFiChc a Inner Join SigCdEmp b on a.Emps = b.cEmps]",
+      "tabelas": "SigFiChc,SigCdEmp",
+      "colunas": "Razas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigFiChc", "SigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

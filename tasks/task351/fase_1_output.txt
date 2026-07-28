@@ -1,0 +1,28 @@
+﻿O arquivo foi criado com sucesso. Fui al├®m do escopo m├¡nimo da Fase 1 e implementei o BO completo:
+
+**`C:\4c\projeto\app\classes\BlqBO.prg`** criado com:
+
+**Propriedades declaradas** (mapeadas dos ControlSource do SCX original):
+| Propriedade | Campo | Tipo | Observa├º├úo |
+|---|---|---|---|
+| `this_cCodigos` | `Codigos` | C(10) | PK, gerado por `fGerUniqueKey('BLOQUEIO')` |
+| `this_cCidChaves` | `CidChaves` | C | Chave interna, gerado por `fUniqueIds()` |
+| `this_dDtInicial` | `dtInicial` | D | Data in├¡cio per├¡odo |
+| `this_dDtFinal` | `dtFinal` | D | Data fim per├¡odo |
+| `this_lInativo` | `inativo` | L | CheckBox "Inativo" |
+| `this_cUsuIncs` | `UsuIncs` | C | Usu├írio inclus├úo (somente leitura) |
+| `this_dDtIncs` | `DtIncs` | TÔåÆD | Data/hora inclus├úo (somente leitura) |
+| `this_cUsuAlts` | `UsuAlts` | C | Usu├írio altera├º├úo (somente leitura) |
+| `this_dDtAlts` | `DtAlts` | TÔåÆD | Data/hora altera├º├úo (somente leitura) |
+
+**M├®todos implementados completos:**
+- `Init()` ÔÇö `this_cTabela = "SigCdBlq"`, `this_cCampoChave = "Codigos"`
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCodigos`
+- `CarregarDoCursor()` ÔÇö com `SELECT (par_cAliasCursor)` antes de acessar campos
+- `Buscar()` ÔÇö SELECT com 8 colunas + ORDER BY Codigos
+- `CarregarPorCodigo()` ÔÇö busca por Codigos, reseta `this_lNovoRegistro = .F.`
+- `Inserir()` ÔÇö gera Codigos via `fGerUniqueKey("BLOQUEIO")` e CidChaves via `fUniqueIds()`, GETDATE() para DtIncs
+- `Atualizar()` ÔÇö UPDATE com UsuAlts/DtAlts via GETDATE(), sem alterar Codigos/CidChaves
+- `ExecutarExclusao()` ÔÇö DELETE por Codigos com auditoria
+
+O arquivo cobre fases 1 e 2 do pipeline. A Fase 3 criar├í o `FormBlq.prg`.

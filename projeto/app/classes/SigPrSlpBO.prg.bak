@@ -272,7 +272,19 @@ DEFINE CLASS SigPrSlpBO AS BusinessBase
                                                     IF VARTYPE(flagutabs) = "L"
                                                         THIS.this_lFlagutabs = flagutabs
                                                     ELSE
-                                                        THIS.this_lFlagutabs = (NVL(flagutabs, 0) = 1)
+                                                        IF VARTYPE(flagutabs) = "L"
+                                                            THIS.this_lFlagutabs = flagutabs
+                                                        ELSE
+                                                            IF VARTYPE(flagutabs) = "L"
+                                                                THIS.this_lFlagutabs = flagutabs
+                                                            ELSE
+                                                                IF VARTYPE(flagutabs) = "L"
+                                                                    THIS.this_lFlagutabs = flagutabs
+                                                                ELSE
+                                                                    THIS.this_lFlagutabs = (NVL(flagutabs, 0) = 1)
+                                                                ENDIF
+                                                            ENDIF
+                                                        ENDIF
                                                     ENDIF
                                                 ENDIF
                                             ENDIF

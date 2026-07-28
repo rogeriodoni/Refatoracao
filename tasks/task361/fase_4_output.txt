@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormCeg.prg`:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö completo com:
+  - `cnt_4c_Botoes` com 5 bot├Áes CRUD (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, posi├º├Áes can├┤nicas e `BINDEVENT`
+  - `cnt_4c_Saida` com bot├úo Encerrar (Left=917, posi├º├úo can├┤nica)
+  - `grd_4c_Lista` com `ColumnCount=5`, larguras, cabe├ºalhos e propriedades visuais
+
+- **`ConfigurarPaginaDados()`** ÔÇö ampliado com bot├Áes Confirmar/Cancelar em `cnt_4c_BotoesAcao` (wired via `BINDEVENT`)
+
+- **`CarregarLista()`** ÔÇö implementa├º├úo completa: desconecta `RecordSource` antes do `SQLEXEC` (evita destrui├º├úo de colunas), redefine `ControlSource` e `Header1.Caption` ap├│s `RecordSource`
+
+- **`AlternarPagina()`** ÔÇö navega entre Page1/Page2, restaura modo LISTA ao voltar
+
+- **Todos os handlers de bot├úo**: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+
+- **Helpers com guards `PEMSTATUS`**: `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos` ÔÇö funcionam sem Page2 agora, prontos para expans├úo na Fase 5

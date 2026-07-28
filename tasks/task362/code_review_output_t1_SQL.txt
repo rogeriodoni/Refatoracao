@@ -1,0 +1,33 @@
+﻿Tenho todos os dados necess├írios para a an├ílise. Vou verificar o resultado:
+
+**`SigCdUfs` tem `[UFIBGEs] [numeric](2, 0) NOT NULL`** (linha 8974 do schema)
+**`SigCdMun` tem `[ufibges] [numeric](2, 0) NOT NULL`** (linha 5205 do schema)
+
+---
+
+## Resultado da Verifica├º├úo ÔÇö Ambos os flags s├úo falsos positivos
+
+### [SQL-FILTRO-INVENTADO] CIDCHAVES
+
+`cIdChaves` / `cidchaves` ├® a **chave prim├íria da tabela `cep`** (definida em `CEPBO.Init()`: `THIS.this_cCampoChave = "cidchaves"`).
+
+Aparece em WHERE apenas em opera├º├Áes CRUD por PK:
+- `CarregarPorCodigo`: `WHERE cIdChaves = ...` ÔÇö correto, busca registro individual
+- `Atualizar`: `WHERE cIdChaves = ...` ÔÇö correto, UPDATE por PK
+- `ExecutarExclusao`: `WHERE cIdChaves = ...` ÔÇö correto, DELETE por PK
+
+O `Buscar()` (query de lista) usa corretamente `WHERE Estados = ...`. O validator comparou **todos os WHERE do arquivo** contra o WHERE da query de lista do legado, mas opera├º├Áes CRUD por PK s├úo parte da nova arquitetura e n├úo existem no legado VFP (que usava SEEK em DBF). **N├úo h├í nada a remover.**
+
+---
+
+### [SQL-FILTRO-INVENTADO] UFIBGES
+
+`UFIBGES` **existe em ambas as tabelas relevantes**:
+- `SigCdUfs.[UFIBGEs]` ÔÇö schema linha 8974 ÔÇö de onde o cursor ├® preenchido (linha 1222, 1229 do Form)
+- `SigCdMun.[ufibges]` ÔÇö schema linha 5205 ÔÇö alvo do WHERE na linha 1422 do Form
+
+O fluxo est├í correto: picker de UF l├¬ `SigCdUfs` ÔåÆ captura `UFIBGES` ÔåÆ usa para filtrar `SigCdMun` (cidades da UF selecionada). O coment├írio no c├│digo (`original: laFil[UFIBGES]=CodUFs`) confirma que o original tamb├®m usava UFIBGES. **N├úo h├í nada a remover.**
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os dois problemas detectados s├úo falsos positivos ÔÇö o validador cruzou todos os WHERE do arquivo contra o ├║nico WHERE de refer├¬ncia do legado (`lcQryCep = Select * From Cep Where Estados = ?pUFs`), mas esse ├® s├│ a query de lista; as demais queries (CRUD por PK, lookup de munic├¡pios) t├¬m condi├º├Áes WHERE leg├¡timas e corretas.

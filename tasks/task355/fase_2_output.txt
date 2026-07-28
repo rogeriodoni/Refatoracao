@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O CatBO.prg agora est├í completo com todos os m├®todos CRUD:
+
+- **ObterChavePrimaria()** ÔÇö retorna `cidchaves` para auditoria
+- **Buscar(par_cFiltro)** ÔÇö SELECT com as 5 colunas exibidas no grid (cidchaves, cods, descs, gdegrps, prazos), ordenado por `cods`
+- **CarregarPorCodigo(par_cCidchaves)** ÔÇö carrega registro completo pelo UUID PK; reseta `this_lNovoRegistro = .F.`
+- **CarregarDoCursor()** ÔÇö mapeia todos os 6 campos com `SELECT (alias)` + `TratarNulo`; sem sintaxe inv├ílida `(alias).campo`
+- **Inserir()** ÔÇö gera UUID com `fUniqueIds()` antes do INSERT; usa `LEFT()` para respeitar tamanhos do schema (cods=6, descs=15, desc2s=40, gdegrps=3)
+- **Atualizar()** ÔÇö UPDATE por `cidchaves`; inclui todos os campos edit├íveis
+- **ExecutarExclusao()** ÔÇö DELETE por `cidchaves`; auditoria em todos os 3 m├®todos

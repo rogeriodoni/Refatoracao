@@ -1,0 +1,12 @@
+﻿Fase 5/8 aplicada com sucesso. O arquivo `FormCat.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+
+1. **`cnt_4c_Cabecalho`** ÔÇö container cinza escuro (Top=31, RGB 53,53,53) com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (texto branco), usando Pattern #140 (WITH expl├¡cito por caminho completo para evitar ForeColor silencioso).
+
+2. **Primeiros 50% dos campos** (3 de 5 TextBoxes + 3 Labels):
+   - `lbl_4c_Label1` + `txt_4c_Codigo` ÔÇö posi├º├Áes 229/226, MaxLength=6 (cods char(6))
+   - `lbl_4c_Label2` + `txt_4c_Descricao` ÔÇö posi├º├Áes 253/250, MaxLength=15 (descs char(15))
+   - `lbl_4c_Label5` + `txt_4c_Desc2s` ÔÇö posi├º├Áes 277/274, MaxLength=40 (desc2s char(40))
+
+Todas as posi├º├Áes compensadas com +29 (PageFrame.Top=-29). A Fase 6/8 deve adicionar os campos restantes: `txt_4c_GdeGrp` (com lookup SigCdGpr via `fwBuscaExt`) + `txt_4c_Prazo` + labels Say13/Say3/Say4.

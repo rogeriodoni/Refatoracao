@@ -1,0 +1,10 @@
+﻿O alerta ├® um **falso positivo**. A evid├¬ncia do SCT memo original confirma a tabela correta:
+
+```
+crSigCdBlq     ÔåÉ cursor alias VFP para: SELECT ... FROM SigCdBlq INTO CURSOR crSigCdBlq
+SigCdBlq       ÔåÉ nome da tabela real, aparece explicitamente no c├│digo legado
+```
+
+O padr├úo VFP ├® `crNomeTabela` para o alias do cursor ÔÇö o validador localizou `crSigCdBlq` no ControlSource mas n├úo reconheceu `SigCdBlq` como substring do alias. O BO migrado usa `SigCdBlq` corretamente em todos os `SELECT/INSERT/UPDATE/DELETE`.
+
+**Nenhuma corre├º├úo necess├íria** ÔÇö `BlqBO.prg` e `FormBlq.prg` est├úo corretos para este pass SQL.

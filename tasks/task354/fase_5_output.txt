@@ -1,0 +1,22 @@
+﻿The SIGCDCAR (Cargos) migration is fully complete. Here's the confirmed integration status:
+
+**FormCargo.prg** ÔÇö 3227 lines, all methods implemented:
+- `ConfigurarPaginaLista()` ÔÇö grid with ccargs/dcargs, all CRUD buttons
+- `ConfigurarPaginaDados()` ÔÇö all 27+ fields, 7 OptionGroups, 2 sub-grids (AcessoFinan + Categorias)
+- `FormParaBO()` / `BOParaForm()` ÔÇö full data binding
+- `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()` ÔÇö complete
+- All lookup handlers (BuscarGrupoFinan, ValidarGrupoGrade, ValidarContaGrade, ValidarMoedaGrade, ValidarCategoriaGrade) ÔÇö complete
+- `Destroy()` ÔÇö nullifies BO, closes cursors, calls `DODEFAULT()`
+
+**CargoBO.prg** ÔÇö fully implemented:
+- All 30+ properties, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`
+- Sub-table savers: `SalvarSubTabelaAcessoFinan()`, `SalvarSubTabelaCategorias()` with `fUniqueIds()` and transactions
+
+**menu.prg** ÔÇö integrated:
+- Line 44: `DEFINE BAR 1 OF popCadastros PROMPT "Cargos"`
+- Line 109: `ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo`
+- Line 888: `PROCEDURE AbrirFormCargo()` ÔÇö full implementation
+
+**config.prg** ÔÇö auto-loads via `ADIR()` on lines 276/296: `*BO.prg` and `Form*.prg` patterns cover both files automatically. No manual registration needed.
+
+The pipeline (task354) already completed all 8 phases for SIGCDCAR before this session began. Phase 5 and all subsequent phases were already implemented ÔÇö no edits were needed or made. The form is ready for manual testing per `SolicitacaoTesteManual/task354_sigcdcar.md`.

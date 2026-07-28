@@ -219,6 +219,7 @@ DEFINE CLASS sigredcoBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
+                RETURN loc_lResultado
             ENDIF
             loc_cFRX = THIS.ObterNomeFRX()
             FOR loc_nCnt = 1 TO THIS.this_nQbols
@@ -270,6 +271,7 @@ DEFINE CLASS sigredcoBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
+                RETURN loc_lResultado
             ENDIF
             loc_cFRX = THIS.ObterNomeFRX()
             REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE

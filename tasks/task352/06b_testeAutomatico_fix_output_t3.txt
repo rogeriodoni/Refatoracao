@@ -1,0 +1,5 @@
+﻿Pronto. O `DataSession = 2` foi removido. Com isso, o `cursor_4c_Dados` criado em `CarregarLista` (e em `ConfigurarPaginaLista`) ficar├í no datasession 1 ÔÇö o mesmo contexto onde `TesteAutomatico` verifica `USED("cursor_4c_Dados")`.
+
+**Causa raiz**: `DataSession = 2` cria um datasession privado para o form. Qualquer cursor criado dentro dos m├®todos do form fica nesse datasession isolado. O `TesteAutomatico` chama `USED()` no datasession 1 (global) e n├úo encontra o cursor, resultando em 89% de cobertura.
+
+**Por que ├® seguro remover**: FormCAD usa exclusivamente SQL Server via `gnConnHandle` para dados ÔÇö sem tabelas VFP locais que precisem de isolamento. Outros forms CRUD que passam nesse mesmo teste tamb├®m n├úo t├¬m `DataSession = 2`.

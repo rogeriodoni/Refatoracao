@@ -1,0 +1,21 @@
+﻿Verified ÔÇö Phase 8 is already complete. All required methods are implemented and wired correctly in `FormCCJ.prg`:
+
+**CRUD handlers (Page1)** ÔÇö lines 1000, 1111, 1125, 1153, 1182, 1214:
+- `BtnEncerrarClick`, `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`
+
+**Save handlers (Page2)** ÔÇö lines 1007, 1042:
+- `BtnConfirmarClick` (Salvar can├┤nico), `BtnCancelarClick`
+
+**Auxiliares** ÔÇö lines 949, 1093, 1274, 1311, 1338, 1377:
+- `CarregarLista`, `AjustarBotoesPorModo`, `HabilitarCampos`, `LimparCampos`, `BOParaForm`, `FormParaBO`
+
+**Cobertura completa BOÔåöForm**:
+- Persistentes: `this_cContas`, `this_dDataBase`, `this_nFator` (bidireccionais); `this_nTotal`/`this_nTotLiq` via `AtualizarTotais()` a partir do cursor
+- Transientes: `this_cDContas`, `this_nQtde`, `this_nMedia`, `this_nTiposDias` (todos mapeados)
+
+**Integra├º├úo menu** (menu.prg:109-110, 142, 5902):
+- `DEFINE BAR 38` (separador) + `DEFINE BAR 39` "C├ílculo de Juros"
+- `ON SELECTION BAR 39 DO AbrirFormCCJ`
+- `PROCEDURE AbrirFormCCJ()` com padr├úo can├┤nico (`VARTYPE` + `Show()` sem par├ómetro)
+
+**Zero TODOs/stubs/placeholders** ÔÇö grep confirmado. Header linha 2: `Fase 8/8: COMPLETO (consolidado)`. Fase 8 finalizada.

@@ -1,0 +1,12 @@
+﻿Fase 5/8 conclu├¡da. O `FormCeg.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Grupo` + `txt_4c_Grupo` (Top=219/221, Left=183/139, Width=80) ÔÇö com BINDEVENT LostFocusÔåÆValidarGrupo e KeyPressÔåÆTeclaGrupo
+- `lbl_4c_Conta` + `txt_4c_Conta` (Top=250/253, Left=183/139, Width=80) ÔÇö com BINDEVENT LostFocusÔåÆValidarConta e KeyPressÔåÆTeclaConta
+- `lbl_4c_Priors` + `txt_4c_Priors` (Top=279/281, Left=183/120, Width=24, InputMask="99", MaxLength=2)
+
+**Novos m├®todos de lookup:**
+- `ValidarGrupo()` / `TeclaGrupo(par_nKeyCode, par_nShiftAltCtrl)` / `AbrirBuscaGrupo(par_cValor)` ÔÇö F4 abre FormBuscaAuxiliar em SigCdGcr (Codigos/Descrs)
+- `ValidarConta()` / `TeclaConta(par_nKeyCode, par_nShiftAltCtrl)` / `AbrirBuscaConta(par_cGrupo, par_cValor)` ÔÇö F4 abre FormBuscaAuxiliar em SigCdCli (Iclis/Rclis)
+
+**Corre├º├úo em `BtnSalvarClick()`:** valida├º├úo agora l├¬ diretamente dos controles do form (via PEMSTATUS guard) em vez de do BO antes de FormParaBO, tornando-a compat├¡vel com fases 5 e 6.

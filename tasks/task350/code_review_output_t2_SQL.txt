@@ -1,0 +1,10 @@
+﻿Os cursores antigos `cursor_4c_VerifBal` e `cursor_4c_VerifDup` foram completamente removidos. Corre├º├Áes conclu├¡das.
+
+**Resumo das 4 mudan├ºas aplicadas em `FormBch.prg`:**
+
+| Se├º├úo | Problema | Corre├º├úo |
+|-------|----------|----------|
+| `CarregarGradeLeitura` | `cursor_4c_Historico` n├úo tinha `cidchaves`; SELECT omitia a coluna PK | Adicionado `cidchaves C(20)` ao CREATE CURSOR e `cidchaves` ao SELECT FROM SigCqHis |
+| `BtnGravarLeituraClick` | UPDATE SigCqBal usava `WHERE Bancos/Agencias/NContas/NCheques` (inventados) | Pr├®-carrega SigCqBal (WHERE codigos apenas), usa LOCATE local para obter `cidchaves`, faz UPDATE `WHERE CIdChaves` |
+| `BtnExcluirHistoricoClick` | DELETE SigCqHis e UPDATE SigCqBal usavam WHERE nos campos inventados | DELETE agora usa `WHERE CIdChaves` do cursor local; UPDATE SigCqBal usa LOCATE em cursor local para obter cidchaves, ent├úo `WHERE CIdChaves` |
+| `NumGetLostFocus` | SELECT/COUNT em SigCqBal/SigCqHis com WHERE Bancos/etc; INSERT em SigCqHis sem `cidchaves` (NOT NULL, sem default) | Usa cursor local para verificar cheque (LOCATE), LOCATE em `cursor_4c_Historico` para dup-check; gera `cidchaves` via `LEFT(NEWID(),20)` e inclui no INSERT |

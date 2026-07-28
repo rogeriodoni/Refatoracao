@@ -1,0 +1,28 @@
+﻿O `cfiBO.prg` j├í est├í **completo**. Todos os m├®todos CRUD da Fase 2/8 estavam implementados desde a Fase 1. Verifica├º├úo contra o schema confirma que os nomes de colunas est├úo corretos:
+
+**Schema SIGCDCFI** (14 colunas):
+- `cidchaves` char(20) PK ÔåÆ `this_cCidchaves` Ô£à
+- `ests` char(2) ÔåÆ `this_cEsts` Ô£à
+- `grupos` char(3) ÔåÆ `this_cGrupos` Ô£à
+- `icms` numeric(5,2) ÔåÆ `this_nIcms` Ô£à
+- `tpicms` char(1) ÔåÆ `this_cTpicms` Ô£à
+- `tptribs` char(4) ÔåÆ `this_cTptribs` Ô£à
+- `ordicms` numeric(2,0) ÔåÆ `this_nOrdicms` Ô£à
+- `sittricms` char(3) ÔåÆ `this_cSittricms` Ô£à
+- `cfops` char(10) ÔåÆ `this_cCfops` Ô£à
+- `codtrib` char(20) ÔåÆ `this_cCodtrib` Ô£à
+- `issqn` numeric(5,2) ÔåÆ `this_nIssqn` Ô£à
+- `itemls` char(5) ÔåÆ `this_cItemls` Ô£à
+- `natope` char(2) ÔåÆ `this_cNatope` Ô£à
+- `clfiscals` char(10) ÔåÆ `this_cClfiscals` Ô£à
+
+**M├®todos presentes e corretos:**
+- `Inserir()` ÔÇö INSERT completo, gera PK via `SYS(2015)`, chama `RegistrarAuditoria("INSERT")` Ô£à
+- `Atualizar()` ÔÇö UPDATE completo, chama `RegistrarAuditoria("UPDATE")` Ô£à
+- `ExecutarExclusao()` ÔÇö DELETE por cidchaves, chama `RegistrarAuditoria("DELETE")` Ô£à
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCidchaves` Ô£à
+- `VerificarDuplicidade()` ÔÇö valida unicidade por grupos+ests+clfiscals (exatamente como o legado) Ô£à
+- `CarregarDoCursor()` ÔÇö todas as 13 colunas mapeadas com `SELECT (par_cAliasCursor)` Ô£à
+- `Buscar()` e `CarregarPorCodigo()` Ô£à
+
+A Fase 2/8 est├í conclu├¡da. O `cfiBO.prg` est├í pronto para ser usado pelo `Formcfi.prg` na Fase 3.

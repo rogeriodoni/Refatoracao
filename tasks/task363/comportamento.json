@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCES",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local laCampos(3,2)\n\nm.laCampos(1,1) = 'clacods'\nm.laCampos(1,2) = thisform.pagina.dados.get_codigo.value\nm.laCampos(2,1) = 'clagrupos'\nm.laCampos(2,2) = thisform.pagina.dados.get_grupo.value\nm.laCampos(3,1) = 'clacontas'\nm.laCampos(3,2) = thisform.pagina.dados.get_conta.value\nThisForm.poDataMgr.LocateCursor('crSigCdCle',@m.laCampos)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_codigo,get_grupo,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCle','cidchaves','crSigCdCle','clacods,clagrupos,clacontas',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('clacods','','','Código',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('clagrupos','','','Grupo',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('clacontas','','','Contas',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('setors','','','Setor',80,.t.)\n\t\t.AddCursor('SigCdGcr','codigos','crSigCdGcr','','')\n\t\t.Ad... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Conta.SetFocus\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Codigo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "Local laCampos(3,2)\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( thisform.pagina.dados.get_grupo.value )\n\t\tMessagebox( 'Grupo não pode ficar em branco!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_grupo.SetFocus\n\t\tReturn\n\tEndif\n\tm.laCampos(1,1) = 'clacods'\n\tm.laCampos(1,2) = thisform.pagina.dados.get_codigo.value\n\tm.laCampos(2,1) = 'clagrupos'\n\tm.laCampos(2,2) = thisform.pagina.dados.get_grupo.value\n\tm.laCampos(3,1) = 'clacontas'\n\tm.laCampos(3,2) = thisform.pagina.dados.get_conta.value\n\n\tIf ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_grupo,get_codigo,get_conta,ChkRegister('SigCdCle'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "select crSigCdCle\n=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.Get_Grupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.parent.get_grupo.value = Iif(LastKey()==27,Space(15),crSigCdGcr.codigos)\n\tThis.Refresh\n\tm.llRet... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.get_Conta",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\nretorno=.t.\n\ngrupo=this.parent.get_grupo.value\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCli','crSigCdCli','iclis',This.Value,'Contas',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('iclis','','Código')\n\t\tm.loLista.mAddColuna('rclis',Replicate('x',60),'Descrição')\n\t\tm.loLista.mAddColuna('grupos','','Grupo')\n\t\tm.loLista.mAddColuna('Inativas ', .f., .f... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.Get_Setor",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return( !thisform.pcEscolha $ 'EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCES.Pagina.Dados.Get_Setor",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.parent.get_Setor.value = Iif(LastKey()==27,Space(15),crSigCdGcr.codigos)\n\tThis.Refresh\n\tm.llRet... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Setor",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. O arquivo `FormCAD.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Descricao` ÔÇö label "Descri├º├úo :" (Top=214, Left=291, alinhado ├á direita para o campo em Left=349)
+- `txt_4c_DesCads` ÔÇö campo descri├º├úo (Top=209, Left=349, Width=290, MaxLength=40)
+
+**4 m├®todos implementados completamente:**
+- `FormParaBO()` ÔÇö transfere `txt_4c_CodCads` e `txt_4c_DesCads` ÔåÆ BO com PADR() para tamanho correto
+- `BOParaForm()` ÔÇö preenche campos a partir do BO ap├│s carregar registro
+- `HabilitarCampos()` ÔÇö implementa a regra do legado (`getCodCads.When`): c├│digo s├│ edit├ível em modo INCLUIR, descri├º├úo edit├ível em INCLUIR e ALTERAR
+- `LimparCampos()` ÔÇö zera ambos os campos ao incluir novo registro
+
+**`BtnSalvarClick()` aprimorado:** valida├º├úo completa ÔÇö c├│digo obrigat├│rio (n├úo pode ficar em branco) e verifica├º├úo de duplicidade no banco antes de salvar em modo INCLUIR.

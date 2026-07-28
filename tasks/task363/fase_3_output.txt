@@ -1,0 +1,21 @@
+﻿**Fase 3/8 conclu├¡da.** `FormCES.prg` criado com 382 linhas em `projeto/app/forms/cadastros/`.
+
+**O que foi entregue:**
+
+| Elemento | Detalhes |
+|---|---|
+| `DEFINE CLASS FormCES` | Height=600, Width=1000, Caption com CHR(), WindowType=1 |
+| `Init()` | Apenas `DODEFAULT()` via TRY/CATCH |
+| `InicializarForm()` | Cria CESBO, configura p├íginas, respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Top=-29, Tabs=.F., 2 Pages com Picture |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (cinza + labels), `cnt_4c_Botoes` (vazio ÔÇö Fase 4), `cnt_4c_Saida` + `cmd_4c_Encerrar` (can├┤nico Left=917, Width=75) |
+| `ConfigurarPaginaDados()` | `cnt_4c_Salva` + `cmd_4c_Confirmar` + `cmd_4c_Cancelar` (can├┤nico) |
+| `CarregarLista()` | Chama `Buscar("")`, grid ser├í conectado na Fase 4 |
+| `AlternarPagina()` | Alterna ActivePage + recarrega lista ao voltar |
+| `BtnEncerrarClick()` | `THIS.Release()` ÔÇö completo |
+| `BtnCancelarClick()` | Seta modo + `AlternarPagina(1)` ÔÇö completo |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrames e Containers |
+| `FormatarGridLista()` | SetAll Tahoma/8 |
+| `Destroy()` | Limpa BO + DODEFAULT() |
+
+**Pr├│xima fase:** Fase 4 ÔÇö Grid + bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Alterar, Excluir, Visualizar, Buscar).

@@ -1,0 +1,338 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDBCC.SCX
+* Data/Hora: 21/07/2026 21:02:24
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDBCC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDBCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDBCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCods
+  Parent: SIGCDBCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescs
+  Parent: SIGCDBCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCC
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = "Cadastro de Bandeiras de Cartão de Crédito"
+  Name = "SIGCDBCC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Left = 35
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 97
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 336
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 419
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCC.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 187
+  Top = 170
+  TabIndex = 1
+  ForeColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCC.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 171
+  Top = 197
+  TabIndex = 4
+  ForeColor = 36,84,155
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCC.Pagina.Dados.getCods
+------------------------------------------------------------
+  ControlSource = "CrSigCdCrt.Cods"
+  Height = 24
+  Left = 239
+  MaxLength = 5
+  TabIndex = 2
+  Top = 166
+  Width = 45
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBCC.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "CrSigCdCrt.Descs"
+  Height = 24
+  Left = 239
+  TabIndex = 5
+  Top = 193
+  Width = 220
+  ZOrderSet = 6
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDBCC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdCrt], [Cods], [crSigCdCrt], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Cods],  [], [], [Código],    080, .t.)
+			.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 150, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.getCods.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdCrt], [Cods], ThisForm.Pagina.Dados.getCods.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters lnOpcao
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+Do Case
+	Case InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		 ThisForm.Pagina.Dados.getCods.SetFocus
+		 
+	Case InList(ThisForm.pcEscolha, [ALTERAR])
+		 ThisForm.Pagina.Dados.getDescs.SetFocus
+
+	Otherwise
+		 ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(ThisForm.Pagina.Dados.getCods.Value)
+		=Messagebox([Código Inválido!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getCods.SetFocus
+		Return .f.
+	EndIf
+	If Empty(ThisForm.Pagina.Dados.getDescs.Value)
+		=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+		Return .f.
+	EndIf
+	If (ThisForm.pcEscolha = [INSERIR])
+		lcQuery = [Select Cods ] + ;
+				    [From SigCdCrt ] + ;
+				   [Where Cods = '] + Padr(ThisForm.Pagina.Dados.getCods.Value, 5) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus 1)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=Messagebox([Código Já Cadastrado!!!], 48, [Atenção!!!])
+			ThisForm.Pagina.Dados.getCods.SetFocus
+			Return .f.
+		EndIf
+	EndIf
+EndIf
+=DoDefault()
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBCC.Pagina.Dados.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDBCC
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

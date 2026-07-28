@@ -1,0 +1,15 @@
+﻿O `RETURN .F.` na linha 324 est├í **fora** do TRY (├® valida├º├úo de par├ómetro antes do TRY) ÔÇö isso est├í correto. Estrutura balanceada.
+
+Fase 3/8 conclu├¡da. O arquivo `C:/4c/projeto/app/forms/cadastros/FormCfb.prg` foi criado com **437 linhas** e cont├®m:
+
+- **DEFINE CLASS FormCfb AS FormBase** com todas as propriedades visuais (Height=600, Width=1000, Caption com acentos via CHR(), WindowType=1, etc.)
+- **Init()** ÔÇö apenas `DODEFAULT()` (correto, sem chamar InicializarForm diretamente)
+- **InicializarForm()** ÔÇö cria CfbBO, chama ConfigurarPageFrame, propaga Caption nos labels, guarda `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame com Top=-29, Tabs=.F., 2 pages com Picture
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio, Fase 4), cnt_4c_Saida com cmd_4c_Encerrar can├┤nico (Left=917, Width=75)
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesAcao com cmd_4c_Confirmar/cmd_4c_Cancelar
+- **CarregarLista()** ÔÇö chama Buscar(""), grid configurado na Fase 4
+- **AlternarPagina()** ÔÇö troca de p├ígina e recarrega lista
+- **BtnSalvarClick()** ÔÇö com bloqueio de INSERT (comportamento legado preservado)
+- **BtnCancelarClick(), BtnEncerrarClick()**
+- **TornarControlesVisiveis(), FormatarGridLista(), Destroy()**

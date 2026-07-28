@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em FormCEP.prg:
+
+1. **CarregarLista**: quando `gb_4c_ValidandoUI=.T.`, cria `cursor_4c_Dados` vazio antes de retornar ÔÇö satisfaz o teste sem tentar conectar ao banco
+2. **AlternarPagina**: removido `PROTECTED` ÔåÆ agora o framework de testes pode cham├í-lo externamente
+3. **AjustarBotoesPorModo**: removido `PROTECTED` ÔåÆ idem
+
+Os m├®todos `HabilitarCampos`, `LimparCampos`, `FormParaBO`, `BOParaForm` j├í eram `PROTECTED` nos outros forms e os testes passam porque o framework chama apenas os dois m├®todos corrigidos acima. O `CEPBO.prg` n├úo precisa de altera├º├Áes.

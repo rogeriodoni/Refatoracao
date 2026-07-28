@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormAli.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI = .T.`, agora cria `cursor_4c_Dados` com a estrutura correta (codigos/descrs/opautos/fpagsautos/opsaidas/pefins) em vez de apenas retornar `.T.` sem cursor.
+
+2. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` para tornar o m├®todo acess├¡vel externamente pelo framework de testes (m├®todos s├úo PUBLIC por default em VFP9; `PROTECTED` bloqueava o acesso causando "Property not found").

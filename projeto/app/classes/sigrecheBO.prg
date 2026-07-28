@@ -544,6 +544,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
             ENDIF
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             REPORT FORM (THIS.this_cArquivoFrx) TO PRINTER PROMPT NOCONSOLE
             IF USED("CsCabecalho")
@@ -572,6 +573,7 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
             ENDIF
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             REPORT FORM (THIS.this_cArquivoFrx) PREVIEW NOCONSOLE
             IF USED("CsCabecalho")

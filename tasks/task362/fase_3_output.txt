@@ -1,0 +1,19 @@
+﻿Verifica├º├úo conclu├¡da. O arquivo tem 840 linhas com todos os 19 m├®todos esperados na estrutura correta.
+
+**Fase 3/8 conclu├¡da** ÔÇö `FormCEP.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormCEP.prg`.
+
+**O que foi criado:**
+- `DEFINE CLASS FormCEP AS FormBase` com Height=700, Width=1000, DataSession=2
+- `Init()` ÔåÆ apenas `DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔåÆ cria CEPBO, ConfigurarPageFrame, guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame Top=-29, 2 pages com imagem de fundo
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho + cnt_4c_Botoes (5 bot├Áes CRUD) + cnt_4c_Saida (Encerrar can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_Cabecalho + cnt_4c_BotoesAcao (Confirmar/Cancelar)
+- `TornarControlesVisiveis()` e `FormatarGridLista()` ÔÇö completos
+- `CarregarLista()` ÔÇö grid vazio quando UF n├úo selecionada (comportamento original: `pUFs=Chr(254)*2`)
+- `BtnBuscarClick()` ÔåÆ abre picker UF via FormBuscaAuxiliar em SigCdUfs (com Estados/Descrs/UFIBGES)
+- Todos os `Btn*Click` handlers e `AlternarPagina()` funcionais
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` ÔÇö assinaturas prontas para Fase 5-6
+- `Destroy()` ÔÇö limpa BO e cursor
+
+**Pr├│xima fase (4/8):** adicionar grid de CEPs e label/campo de filtro UF em `ConfigurarPaginaLista()`.

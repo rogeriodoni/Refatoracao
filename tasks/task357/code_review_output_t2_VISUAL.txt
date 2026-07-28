@@ -1,0 +1,12 @@
+﻿Todas as 21 ocorr├¬ncias (7 headers ├ù 3 lugares) foram corrigidas. Resumo das mudan├ºas:
+
+| Header (antes) | Header (depois) | Base legado |
+|---|---|---|
+| "Empresa" | **"Emp"** | `pColuna('Emps','','','Emp',30)` |
+| "Descri" + CHR(231) + CHR(227) + "o" | **"Descri" + CHR(231) + CHR(245) + "es"** | `'Descri├º├Áes'` |
+| "Prior." | **"P"** | `pColuna('Prioridades','','','P',27)` |
+| "Faixa De" | **"Faixa Inicial"** | `pColuna('faixais','','','Faixa Inicial',101)` |
+| "Faixa At" + CHR(233) | **"Faixa Final"** | `pColuna('faixafs','','','Faixa Final',101)` |
+| "Selecio." | **"Selecionavel"** | label legado "Selecionavel nos Cadastros :" |
+
+Os headers agora s├úo id├¬nticos aos do legado (extra├¡dos do `.pColuna()` no `Init` do SCX `SigCdCco`). A Column8 (ClcStatus/Selecionavel) n├úo existia no grid legado, mas mantida com header derivado do label legado por ser funcionalidade do sistema novo.

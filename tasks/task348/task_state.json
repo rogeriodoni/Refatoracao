@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task348",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-21T18:35:02",
+    "atualizadoEm":  "2026-07-21T21:02:24",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-21T18:35:02",
+                                            "fim":  "2026-07-21T18:35:02",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task348\\SIGCDBAL.sct",
+                                            "baseName":  "SIGCDBAL",
+                                            "scxFile":  "C:\\4c\\tasks\\task348\\SIGCDBAL.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-21T18:35:02",
+                                          "fim":  "2026-07-21T18:35:02",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDBAL",
+                                          "txtFile":  "C:\\4c\\tasks\\task348\\SIGCDBAL_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T18:35:02",
+                                              "fim":  "2026-07-21T18:35:03",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task348\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T18:35:04",
+                                              "fim":  "2026-07-21T18:35:12",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task348\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task348\\meta_prompt.md",
+                                              "boClass":  "BALBO",
+                                              "formClass":  "FormBAL",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task348\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T18:35:12",
+                                              "fim":  "2026-07-21T18:35:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task348\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T18:35:13",
+                                               "fim":  "2026-07-21T18:35:13",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+                                                                       "BALBO_esqueleto.prg",
+                                                                       "FormBAL_esqueleto.prg"
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task348\\esqueletos",
+                                               "arquivos":  [
+                                                                "BALBO_esqueleto.prg",
+                                                                "FormBAL_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T18:35:13",
+                                       "fim":  "2026-07-21T20:07:05",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "projeto/app/classes/BALBO.prg",
+                                                               "projeto/app/forms/cadastros/FormBAL.prg"
+                                                           ],
+                                       "comentario":  "FormBAL.prg (4476 linhas) + BALBO.prg (643 linhas) gerados",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\BALBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  267.77,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBAL.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  9685
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-21T20:07:05",
+                                                  "fim":  "2026-07-21T20:07:39",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  42,
+                                                  "erro":  null,
+                                                  "comentario":  "38 correcoes CorretorAutomatico + 4 correcoes manuais (BOPARAFORM_CHECKBOX/loc_lValido)",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBAL.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\BALBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-21T20:07:39",
+                                                 "fim":  "2026-07-21T20:07:41",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "BALBO.prg e FormBAL.prg compilaram com sucesso",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T20:52:29",
+                                       "fim":  "2026-07-21T20:53:14",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T20:53:14",
+                                               "fim":  "2026-07-21T21:02:20",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  3,
+                                               "resultFile":  "C:\\4c\\tasks\\task348\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-21T21:02:22",
+                                        "fim":  "2026-07-21T21:02:24",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormBAL_20260721210224.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  1429,
+                                        "avisos":  1429
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:02:24",
+                                              "fim":  "2026-07-21T21:02:24",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task348_SIGCDBAL.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-21T18:35:03",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-21T18:35:03",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task348\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-21T18:35:03",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T18:35:04"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-21T20:07:39",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-21T20:07:39",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormBAL_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBAL.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task348\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-21T20:07:41",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-21T20:07:41",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-21T20:07:41",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-21T20:49:49",
+                                          "passes":  5,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_SAIDA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-WITH] Bloco WITH ENDWITH define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: ENDWITH.RecordSource).; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CURSOR_4C_TOTA\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CODIGOS, CONTAS, GRUPOS, CPROS, 1, DELETAR, CODBARRAS, DATAS, ESTOS, CODTAMS, CODCORS, OPERS, CBARS, 0, LNCNT, GGRUPOS, IFORS, CGRUS, MERCS, LINHAS, SGRUS, COLECOES, CUNIS, OBSPES, LNPRECOFS, PVENS, NMARCAS, LCWHELOC, LOCALIZAS, DTBALS, SQTDS, ETIQS, CIDQUERYS, PARCS, DIGITENS, CAIXAS, TIPOS, TPBARRAS, ICLIS, ACEBALS, SALDOPS, PESOLIDO, LOCALIS, LNQTDE, NPOS, CTPARQS, MTPRIMAS, CESTOS, TRTPORPESO, PCESCOLHA, CBARS_OLD, LNOKBTN, BARINDIVS, EAN13, AGRUPAS, TIPOESTOS, AUTOS, CIDCHAVES; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027I\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CODIGOS, CONTAS, GRUPOS, CPROS, 1, DELETAR, CODBARRAS, DATAS, ESTOS, CODTAMS, CODCORS, OPERS, CBARS, 0, LNCNT, GGRUPOS, IFORS, CGRUS, MERCS, LINHAS, SGRUS, COLECOES, CUNIS, OBSPES, LNPRECOFS, PVENS, NMARCAS, LCWHELOC, LOCALIZAS, DTBALS, SQTDS, ETIQS, CIDQUERYS, PARCS, DIGITENS, CAIXAS, TIPOS, TPBARRAS, ICLIS, ACEBALS, SALDOPS, PESOLIDO, LOCALIS, LNQTDE, NPOS, CTPARQS, MTPRIMAS, CESTOS, TRTPORPESO, PCESCOLHA, CBARS_OLD, LNOKBTN, BARINDIVS, EAN13, AGRUPAS, TIPOESTOS, AUTOS, CIDCHAVES; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CODIGOS, CONTAS, GRUPOS, CPROS, 1, DELETAR, CODBARRAS, DATAS, ESTOS, CODTAMS, CODCORS, OPERS, CBARS, 0, LNCNT, GGRUPOS, IFORS, CGRUS, MERCS, LINHAS, SGRUS, COLECOES, CUNIS, OBSPES, LNPRECOFS, PVENS, NMARCAS, LCWHELOC, LOCALIZAS, DTBALS, SQTDS, ETIQS, CIDQUERYS, PARCS, DIGITENS, CAIXAS, TIPOS, TPBARRAS, ICLIS, ACEBALS, SALDOPS, PESOLIDO, LOCALIS, LNQTDE, NPOS, CTPARQS, MTPRIMAS, CESTOS, TRTPORPESO, PCESCOLHA, CBARS_OLD, LNOKBTN, BARINDIVS, EAN13, AGRUPAS, TIPOESTOS, AUTOS, CIDCHAVES; [LAYOUT-POSITION] Controle \u0027Estoque\u0027 (parent: SIGCDBAL.Pagina.Lista): Top original=124 vs migrado \u0027txt_4c_Estoque\u0027 Top=457 (diff=333px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Estoque\u0027 (parent: SIGCDBAL.Pagina.Lista): Left original=227 vs migrado \u0027txt_4c_Estoque\u0027 Left=112 (diff=115px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Local\u0027 (parent: SIGCDBAL.Pagina.Lista): Top original=124 vs migrado \u0027cmd_4c_TotalLocal\u0027 Top=41 (diff=83px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Local\u0027 (parent: SIGCDBAL.Pagina.Lista): Left original=369 vs migrado \u0027cmd_4c_TotalLocal\u0027 Left=303 (diff=66px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Grupo\u0027 (parent: SIGCDBAL.Pagina.Lista): Top original=124 vs migrado \u0027txt_4c_GGrupoFinal\u0027 Top=279 (diff=155px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Grupo\u0027 (parent: SIGCDBAL.Pagina.Lista): Left original=531 vs migrado \u0027txt_4c_GGrupoFinal\u0027 Left=443 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027GGrupo\u0027 (parent: SIGCDBAL.Pagina.Lista): Top original=124 vs migrado \u0027txt_4c_GGrupoFinal\u0027 Top=279 (diff=155px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027GGrupo\u0027 (parent: SIGCDBAL.Pagina.Lista): Left original=599 vs migrado \u0027txt_4c_GGrupoFinal\u0027 Left=443 (diff=156px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Command1\u0027 (parent: SIGCDBAL.Pagina.Lista): Top original=83 vs migrado \u0027cmd_4c_Command1\u0027 Top=378 (diff=295px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Command1\u0027 (parent: SIGCDBAL.Pagina.Lista): Left original=371 vs migrado \u0027cmd_4c_Command1\u0027 Left=924 (diff=553px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_grupos\u0027 (parent: SIGCDBAL.Pagina.Dados): Top original=98 vs migrado \u0027lbl_4c_Lbl_grupos\u0027 Top=187 (diff=89px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_grupos\u0027 (parent: SIGCDBAL.Pagina.Dados): Left original=293 vs migrado \u0027lbl_4c_Lbl_grupos\u0027 Left=23 (diff=270px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Agrupa\u0027 (parent: SIGCDBAL.Pagina.Dados): Top original=453 vs migrado \u0027obj_4c_Opt_Agrupa\u0027 Top=0 (diff=453px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Agrupa\u0027 (parent: SIGCDBAL.Pagina.Dados): Left original=330 vs migrado \u0027obj_4c_Opt_Agrupa\u0027 Left=0 (diff=330px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optFilBarra\u0027 (parent: SIGCDBAL.Pagina.Dados): Top original=469 vs migrado \u0027obj_4c_OptFilBarra\u0027 Top=0 (diff=469px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optFilBarra\u0027 (parent: SIGCDBAL.Pagina.Dados): Left original=330 vs migrado \u0027obj_4c_OptFilBarra\u0027 Left=0 (diff=330px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDBAL.Pagina.Dados): Top original=313 vs migrado \u0027lbl_4c_Label19\u0027 Top=205 (diff=108px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDBAL.Pagina.Dados): Left original=683 vs migrado \u0027lbl_4c_Label19\u0027 Left=284 (diff=399px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027TipoLeitura\u0027 (parent: SIGCDBAL.Pagina.Leitura): Top original=251 vs migrado \u0027obj_4c_TipoLeitura\u0027 Top=0 (diff=251px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGCDBAL.Pagina.Leitura): Left original=903 vs migrado \u0027cmd_4c_Cancela\u0027 Left=743 (diff=160px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  25
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-21T20:49:49",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-21T20:52:29",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\BALBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBAL.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-21T21:02:20",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T21:02:22",
+                                             "thresholdPx":  5,
+                                             "unmatched":  8,
+                                             "errors":  9,
+                                             "matched":  139,
+                                             "warnings":  151,
+                                             "reportFile":  "C:\\4c\\tasks\\task348\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  5119,
+                     "correcoesAutomaticas":  42,
+                     "testesAutomaticos":  0
+                 }
+}

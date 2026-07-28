@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. Fase 6/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **ConfigurarPaginaDados()** ÔÇö 5 novos controles:
+   - `lbl_4c_Empresa` + `txt_4c_Emps` (MaxLength=3, DisabledBackColor/ForeColor do legado) com BINDEVENT LostFocus+KeyPress
+   - `txt_4c_DEmps` (MaxLength=40) com BINDEVENT LostFocus+KeyPress
+   - `lbl_4c_TpCad` ("Tipo :")
+   - `opt_4c_TpCad` ÔÇö OptionGroup com 3 bot├Áes configurados via WITH aninhado (sem `.Value` individual ÔÇö apenas `OptionGroup.Value=2` para default Globaliza├º├úo), captions com hotkeys `\<P`/`\<G` e CHR() para acentos
+
+2. **HabilitarCampos()** ÔÇö bloco adicionado para `txt_4c_DEmps` com l├│gica correta: habilitado apenas quando `par_lHabilitar=.T.` AND `txt_4c_Emps` est├í vazio (replicando o `When = InList AND Empty(Get_Emps)` do legado)
+
+3. **6 novos m├®todos de lookup** ÔÇö `ValidarEmps`, `TeclaEmps`, `AbrirBuscaEmps` (busca SigCdEmp por Cemps, preenche ambos os campos) e `ValidarDEmps`, `TeclaDEmps`, `AbrirBuscaDEmps` (busca por Razas, preenche ambos os campos na ordem inversa)

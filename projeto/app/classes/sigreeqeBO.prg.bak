@@ -490,7 +490,7 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
                 ENDIF
 
                 *-- Valor unitario convertido para moeda local
-                loc_nUnits = m.PVens * fCarregarCambio(m.MoeVs, DATE())
+                loc_nUnits = m.PVens * THIS.CarregarCambio(m.MoeVs, DATE())
 
                 *-- Verificar desconto na tabela por tipo (produto, finp, grupo, linha, colecao, moeda, uni, cftio, sgru)
                 IF USED("cursor_4c_TabDi")
@@ -694,6 +694,46 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
     PROCEDURE ObterMensagemErro()
         RETURN THIS.this_cMensagemErro
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarCambio - Retorna cotacao da moeda na data informada
+    * Equivalente a fCarregarCambio() do sistema legado (nao portado).
+    * Usa cursores cursor_4c_SigCdCot + cursor_4c_SigCdMoe carregados em
+    * CarregarReferencias/InicializarDados.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION CarregarCambio(par_cMoeda, par_dData)
+        LOCAL loc_nCotacao, loc_cMoeda, loc_dData, loc_oErro
+        loc_nCotacao = 0
+        loc_cMoeda   = ALLTRIM(par_cMoeda)
+        loc_dData    = IIF(EMPTY(par_dData), DATE(), par_dData)
+
+        IF EMPTY(loc_cMoeda)
+            RETURN 1
+        ENDIF
+
+        TRY
+            IF USED("cursor_4c_SigCdCot")
+                SELECT cursor_4c_SigCdCot
+                SET ORDER TO CMoeData
+                SET NEAR ON
+                SEEK loc_cMoeda + DTOS(loc_dData)
+                SET NEAR OFF
+                IF !EOF() AND ALLTRIM(cursor_4c_SigCdCot.CMoes) = loc_cMoeda
+                    loc_nCotacao = cursor_4c_SigCdCot.Valos
+                ELSE
+                    SKIP -1
+                    IF !BOF() AND ALLTRIM(cursor_4c_SigCdCot.CMoes) = loc_cMoeda AND ;
+                            cursor_4c_SigCdCot.Datas <= loc_dData
+                        loc_nCotacao = cursor_4c_SigCdCot.Valos
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            SET NEAR OFF
+        ENDTRY
+
+        RETURN IIF(loc_nCotacao = 0, 1, loc_nCotacao)
+    ENDFUNC
 
     *--------------------------------------------------------------------------
     * LimparCursoresIntermedios - Fecha todos os cursores temporarios

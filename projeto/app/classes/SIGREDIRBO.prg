@@ -237,6 +237,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
             loc_lSucesso = .T.
@@ -256,6 +257,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
             loc_lSucesso = .T.
@@ -275,6 +277,7 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
+                RETURN loc_lSucesso
             ENDIF
             REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
             loc_lSucesso = .T.

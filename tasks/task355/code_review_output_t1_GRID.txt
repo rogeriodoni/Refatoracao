@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada na linha 899 de `FormCat.prg`:
+
+Ap├│s `loc_oGrid.RecordSource = "cursor_4c_Dados"`, VFP faz auto-bind pela ordem dos campos do cursor ÔÇö as colunas recebem os campos na sequ├¬ncia de declara├º├úo, ignorando qualquer `ControlSource` definido anteriormente. O fix adiciona um bloco `WITH` que redefine explicitamente `.ControlSource` de todas as 4 colunas logo ap├│s o `RecordSource`, seguindo o mesmo padr├úo j├í usado no bloco de carregamento inicial (linhas 699-719).

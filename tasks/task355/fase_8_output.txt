@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. Resumo das altera├º├Áes feitas:
+
+**FormCat.prg**
+- Corrigido c├│digo de tecla F4: `28` ÔåÆ `115` (linha 1137), alinhado com o padr├úo de todos os outros forms do sistema (FormCor, Formccr, etc.)
+
+**menu.prg**
+- Adicionado `DEFINE BAR 37 OF popCadastros PROMPT "Categorias de Produto"` com MESSAGE adequada
+- Adicionado `ON SELECTION BAR 37 OF popCadastros DO AbrirFormCat`
+- Adicionado procedimento `AbrirFormCat()` com o padr├úo can├┤nico: `VARTYPE(loForm) = "O"`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro()` com detalhes de linha e procedure
+
+O FormCat.prg j├í tinha todos os m├®todos da Fase 8 implementados nas fases anteriores (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`). O config.prg n├úo precisou de altera├º├úo pois usa ADIR() para auto-carregar todos os `*BO.prg` e `Form*.prg`.

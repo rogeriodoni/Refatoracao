@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O que foi feito:
+
+1. **Moveu `ColumnCount = 3` e `RecordSource =`** para antes de qualquer atribui├º├úo de `ControlSource`/`Header` ÔÇö porque ├® o `.RecordSource =` que dispara o auto-bind do VFP.
+
+2. **Re-definiu `.ControlSource` de todas as 3 colunas** ap├│s o `RecordSource`, incluindo `Column3.ControlSource = "cursor_4c_Dados.situas"` (coluna usada pelo `DynamicForeColor` que antes ficava sem binding expl├¡cito).
+
+3. **Re-definiu todos os `Header1.Caption`** ap├│s o `RecordSource` (incluindo `Column3.Header1.Caption = ""`), pois o auto-bind reseta os captions para o nome do campo.

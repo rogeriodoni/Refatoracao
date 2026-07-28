@@ -1,0 +1,5 @@
+﻿**Fase 7/8 conclu├¡da.** Os 4 eventos principais (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í estavam implementados de fases anteriores. O que fiz foi corrigir um bug real encontrado durante a revis├úo:
+
+**Bug corrigido em `BtnSalvarClick()`:** No modo `EXCLUIR`, o bot├úo Confirmar ca├¡a direto nas valida├º├Áes de campos obrigat├│rios (Tipo, Empresa, etc.) e bloqueava a exclus├úo. Adicionei dois blocos antes das valida├º├Áes:
+- Modo `EXCLUIR` ÔåÆ pede confirma├º├úo e chama `Excluir()` (PUBLIC do BusinessBase), depois volta ├á lista
+- Modo `VISUALIZAR` ÔåÆ apenas volta ├á lista sem tentar salvar

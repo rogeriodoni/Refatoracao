@@ -514,8 +514,8 @@ DEFINE CLASS Formsigrecgp AS FormBase
                 .Width     = 161
                 .Height    = 17
                 .Caption   = "Composi" + CHR(231) + CHR(227) + ;
-                .WordWrap        = .T.
                              "o Espec" + CHR(237) + "fica 1"
+                .WordWrap  = .T.
                 .FontName  = "Comic Sans MS"
                 .FontSize  = 8
                 .BackStyle = 0
@@ -531,8 +531,8 @@ DEFINE CLASS Formsigrecgp AS FormBase
                 .Width     = 165
                 .Height    = 17
                 .Caption   = "Composi" + CHR(231) + CHR(227) + ;
-                .WordWrap        = .T.
                              "o Espec" + CHR(237) + "fica 2"
+                .WordWrap  = .T.
                 .FontName  = "Comic Sans MS"
                 .FontSize  = 8
                 .BackStyle = 0

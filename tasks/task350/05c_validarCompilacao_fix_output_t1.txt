@@ -1,0 +1,15 @@
+﻿Corre├º├Áes aplicadas com sucesso. O problema era que o VFP9 n├úo suporta o separador `:` para comandos inline dentro de `IF...ENDIF` no contexto de `DEFINE CLASS`. Todas as ocorr├¬ncias foram expandidas para o formato multi-linha correto:
+
+**Padr├úo inv├ílido (causava "Command contains unrecognized phrase/keyword"):**
+```foxpro
+IF USED("cursor") : USE IN cursor : ENDIF
+```
+
+**Corrigido para:**
+```foxpro
+IF USED("cursor")
+    USE IN cursor
+ENDIF
+```
+
+Foram corrigidos 11 blocos no total em: `AjustarBotoesPorModo`, `ValidOper`, `ValidGrupo`, `ValidDGrupo`, `ValidConta`, `ValidDConta`, `PopularCamposLeitura`, `CarregarGradeLeitura`, `LimparCamposLeitura`, `NumGetLostFocus` e `Destroy`. Os erros de "Nesting error" no CATCH/ENDTRY eram cascata causados pelos IFs inv├ílidos que confundiam o parser.

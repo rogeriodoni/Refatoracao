@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e correto. Aqui est├í o resumo do que foi feito na Fase 4:
+
+**Modifica├º├Áes em `FormARV.prg`:**
+
+1. **`InicializarForm()`** ÔÇö adicionado `CarregarLista()` com guard `gb_4c_ValidandoUI` ap├│s configurar o PageFrame
+
+2. **`ConfigurarPaginaLista()`** ÔÇö expandida com:
+   - 5 bot├Áes em `cnt_4c_Botoes`: Incluir (Left=5), Visualizar (80), Alterar (155), Excluir (230), Buscar (305)
+   - `cmd_4c_Encerrar` can├┤nico em `cnt_4c_Saida` (Left=917, bot├úo 75├ù75)
+   - `grd_4c_Lista` (Top=117, Left=26, Width=890, Height=498, FontName=Verdana, GridLines=3)
+   - ColumnCount=2 e Headers "C├│digos"/"Descri├º├úo" fora do WITH (Problema 36)
+   - BINDEVENT para os 5 bot├Áes + DblClick no grid ÔåÆ BtnVisualizarClick
+
+3. **Novos m├®todos** (13 adicionados):
+   - `CarregarLista()` ÔÇö Buscar() + RecordSource/ControlSource/Headers + FormatarGridLista
+   - `AlternarPagina(par_nPagina)` ÔÇö ActivePage + CarregarLista se voltando ├á Page1
+   - `FormatarGridLista()`, `HabilitarCampos()`, `LimparCampos()` ÔÇö com PEMSTATUS guards para campos Page2 ainda n├úo existentes
+   - `FormParaBO()`, `BOParaForm()` ÔÇö mapeamento completo usando nomes exatos do ARVBO (`this_cCodigos`, `this_cTempagus`, etc.)
+   - `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö CRUD completo com valida├º├Áes do legado (incluindo check duplicado via SQL antes de inserir)
+   - `BtnSalvarClick`, `BtnCancelarClick` ÔÇö para receber BINDEVENT da Page2 na Fase 5

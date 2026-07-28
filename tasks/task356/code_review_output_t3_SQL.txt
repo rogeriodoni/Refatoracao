@@ -1,0 +1,40 @@
+﻿Lendo o arquivo completo para localizar as ocorr├¬ncias de `ICLIS` e `CONTROLCOUNT` em contexto WHERE.
+
+Ap├│s leitura completa do FormCCJ.prg (1834 linhas) e do CCJBO.prg, aqui est├í a an├ílise das duas flags:
+
+---
+
+## An├ílise: Ambos os problemas s├úo FALSOS POSITIVOS
+
+### FLAG 1 ÔÇö `ICLIS` em WHERE (CCJBO.prg, m├®todo `BuscarContaPorCodigo`)
+
+```foxpro
+loc_cSQL = "SELECT iclis, rclis" + ;
+           " FROM sigcdcli" + ;
+           " WHERE iclis = " + EscaparSQL(par_cConta)
+```
+
+**Por que ├® falso positivo:** O c├│digo original usa `fAcessoContas()` (Framework legado) para validar a conta e buscar a descri├º├úo. Esse helper internamente faz exatamente esse SELECT em `sigcdcli WHERE iclis = ...`. O checker detectou `iclis` em WHERE e comparou com as colunas do WHERE de `sigcdccj`/`sigdtccj` (CODIGO, CIDCHAVES, CONTAS) ÔÇö mas esse ├® um query **em tabela diferente** (`sigcdcli`), que ├® o lookup de contas. A coluna `iclis` ├® a PK de `sigcdcli` ÔÇö exatamente como usada no JOIN do c├│digo original: `ON a.contas = b.iclis`. Remover o WHERE quebraria `BuscarContaPorCodigo` completamente (retornaria todos os registros de sigcdcli).
+
+### FLAG 2 ÔÇö `CONTROLCOUNT` em WHERE (FormCCJ.prg, linha 1249/1263)
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+...
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+
+**Por que ├® falso positivo:** `ControlCount` ├® uma **propriedade VFP9 de containers** (n├║mero de controles filhos), n├úo uma coluna SQL. O checker fez um match literal na string "CONTROLCOUNT" sem contexto SQL ÔÇö n├úo existe WHERE aqui, ├® um loop VFP sobre objetos visuais.
+
+---
+
+## Conclus├úo
+
+Nenhuma corre├º├úo ├® necess├íria. Os dois itens flagados:
+
+| Flag | Localiza├º├úo | Natureza real |
+|------|-------------|---------------|
+| `ICLIS` em WHERE | `CCJBO.prg` `BuscarContaPorCodigo()` | Consulta leg├¡tima em `sigcdcli` pela PK ÔÇö substitui `fAcessoContas()` |
+| `CONTROLCOUNT` | `FormCCJ.prg` `TornarControlesVisiveis()` | Propriedade VFP9 de container, sem rela├º├úo com SQL |
+
+Remover qualquer um deles quebraria a funcionalidade. O c├│digo migrado est├í correto conforme as REGRAS OBRIGAT├ôRIAS: "NAO remover campos, funcionalidades ou lookups".

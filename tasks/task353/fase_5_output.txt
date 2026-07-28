@@ -1,0 +1,20 @@
+﻿A migra├º├úo do task353 (SIGCDCAF ÔåÆ FormCAF) j├í est├í **totalmente completa**. O pipeline multi-fase rodou tudo em uma ├║nica sess├úo (etapa 05_migracao conclu├¡da ├ás 02:12:00).
+
+## Status atual ÔÇö task353 SIGCDCAF
+
+| Arquivo | Estado |
+|---------|--------|
+| `projeto/app/classes/CAFBO.prg` | Ô£à Completo (712 linhas) |
+| `projeto/app/forms/cadastros/FormCAF.prg` | Ô£à Completo (1492 linhas) |
+| `menu.prg` ÔÇö DEFINE BAR 36 + AbrirFormCAF() | Ô£à Integrado |
+| `config.prg` | Ô£à Carregamento din├ómico cobre ambos os arquivos |
+
+**Fase 5/8 j├í foi executada pelo pipeline** ÔÇö o `ConfigurarPaginaDados()` j├í existe completo com todos os campos (linhas 379ÔÇô822 do FormCAF.prg): `txt_4c_Codigos`, `txt_4c_Datas`, `txt_4c_Usuarios`, `txt_4c_Nop`, `txt_4c_QtTb`, `txt_4c_Qtd`, `txt_4c_Pecas`, `grd_4c_Dados` (4 colunas), `cmd_4c_ApagaItem`, `obj_4c_Obs`.
+
+## Etapas pendentes (manuais no VFP9)
+
+- `05c_validarCompilacao` ÔÇö compilar no VFP9 e verificar erros
+- `06_testForm` ÔÇö abrir pelo menu e testar INCLUIR/ALTERAR/EXCLUIR/VISUALIZAR
+- `07_validarUI` ÔÇö executar ValidarUIFidelity
+
+O arquivo de solicita├º├úo de teste manual j├í foi gerado em `SolicitacaoTesteManual/task353_SIGCDCAF.md`.

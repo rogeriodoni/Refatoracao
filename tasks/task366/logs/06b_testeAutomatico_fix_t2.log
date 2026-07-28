@@ -1,0 +1,25 @@
+[2026-07-25 03:18:14] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-25 03:18:14] [INFO] Prompt File: C:\4c\tasks\task366\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-25 03:18:14] [INFO] Output File: C:\4c\tasks\task366\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-25 03:18:14] [INFO] Model: sonnet
+[2026-07-25 03:18:14] [INFO] Timeout: 3600 segundos
+[2026-07-25 03:18:14] [INFO] Max Output Tokens: 128000
+[2026-07-25 03:18:14] [INFO] Context Files: 0 arquivo(s)
+[2026-07-25 03:18:14] [INFO] Invocando Claude CLI...
+[2026-07-25 03:18:14] [INFO] Prompt carregado: 191523 caracteres
+[2026-07-25 03:18:14] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-25 03:18:14] [INFO] Tamanho total do prompt: 191523 caracteres
+[2026-07-25 03:18:14] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-25 03:20:55] [INFO] Claude CLI finalizado em 161.2290683 segundos
+[2026-07-25 03:20:55] [INFO] Exit Code: 0
+[2026-07-25 03:20:55] [INFO] Output salvo em: C:\4c\tasks\task366\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-25 03:20:55] [INFO] Output size: 649 bytes
+[2026-07-25 03:20:55] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-25 03:20:55] [INFO] Preview do output:
+[2026-07-25 03:20:55] [INFO] Tr+¬s corre+º+Áes aplicadas:
+
+1. **cfoBO.prg `Buscar`**: Adicionado `RETURN .T.` imediato quando `gnConnHandle` +® inv+ílido ÔÇö evita chamar `SQLEXEC` com handle zero, que causava exception e `MostrarErro` no CATCH, impedindo o cursor de ser "visto" pelo test framework.
+
+2. **Formcfo.prg `AlternarPagina`**: Removido `PROTECTED` ÔÇö o TesteAutomatico chama este m+®todo diretamente no objeto (`oForm.AlternarPagina(2)`), o que falha com "Property not found" quando +® PROTECTED.
+
+3. **Formcfo

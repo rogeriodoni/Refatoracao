@@ -1,0 +1,25 @@
+﻿Encontrei o conte├║do do SCX legado no layout.json da task353. Agora posso comparar os headers com precis├úo:
+
+**Headers legado encontrados no SCX (SigCdCnf Grade):**
+```
+pColuna('codigos', '', '', 'C├│digos', 55, .T.)
+pColuna('datas',   '', '', 'Datas', 80, .F.)
+pColuna('usuars',  '', '', 'usuars', 80, .F.)
+pColuna('obss',    '', '', 'Observa├º├Áes', 500, .F.)
+```
+
+**Headers no c├│digo migrado (linhas 366-369 e 859-862):**
+```
+.Column1.Header1.Caption = "C" + CHR(243) + "digos"          ÔåÆ C├│digos Ô£ô
+.Column2.Header1.Caption = "Datas"                            ÔåÆ Datas Ô£ô
+.Column3.Header1.Caption = "usuars"                           ÔåÆ usuars Ô£ô
+.Column4.Header1.Caption = "Observa" + CHR(231) + CHR(245) + "es" ÔåÆ Observa├º├Áes Ô£ô
+```
+
+**Todos os 8 problemas s├úo falsos positivos.** O c├│digo migrado ├® **id├¬ntico ao legado** ÔÇö incluindo o `usuars` em min├║sculas, que ├® exatamente o caption usado no SCX original.
+
+O review tool gerou falsos alertas porque:
+1. S├│ encontrou os headers do grid `GradeNop` (Page2: O.P., Produto, Qtde Tubo, Qtde Canc.)
+2. Comparou os headers do `Grade` (Page1: C├│digos, Datas, usuars, Observa├º├Áes) contra esses, sem reconhecer que s├úo grids diferentes
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö os headers j├í est├úo corretos e fi├®is ao legado (PILAR 1 atendido).

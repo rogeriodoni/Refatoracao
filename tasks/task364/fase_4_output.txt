@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**Resumo do que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** completada com:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes`: Incluir (bloqueado), Alterar, Visualizar, Excluir, Buscar
+  - Grid `grd_4c_Lista` (Top=117, Width=950, 3 colunas: FPags, Descrs, TemDados)
+  - `BINDEVENT` para todos os bot├Áes
+
+- **`CarregarLista()`** completada com binding real ao cursor `cursor_4c_Dados` e reconfigura├º├úo de headers ap├│s `RecordSource`
+
+- **Novos m├®todos de eventos:**
+  - `BtnIncluirClick()` ÔÇö exibe mensagem bloqueando inser├º├úo (fiel ao legado)
+  - `BtnAlterarClick()` ÔÇö carrega registro ou prepara novo, navega para Page2
+  - `BtnVisualizarClick()` ÔÇö modo somente leitura
+  - `BtnExcluirClick()` ÔÇö valida se tem configura├º├úo, confirma e exclui
+  - `BtnBuscarClick()` ÔÇö filtra via INPUTBOX + rebind do grid
+
+- **M├®todos auxiliares:** `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` ÔÇö com guards `PEMSTATUS` para Page2 que ainda n├úo tem os campos criados (Fases 5-6)

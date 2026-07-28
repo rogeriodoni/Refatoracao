@@ -1,8 +1,11 @@
 *==============================================================================
-* FormCargo.prg - Formulario de Cadastro de Cargos
-* Data: 2026-03-22
-* Tabela: SigCdCrg | PK: ccargs | Secundaria: SigCrRcc
-* Legado: SIGCDCAR.SCX (frmcadastro)
+* FormCargo.prg
+* Formulario de Cadastro de Cargos (SIGCDCRG)
+*
+* Tabela principal: SIGCDCRG (ccargs PK)
+* Sub-tabelas: SIGCRRCC (acesso financeiro), sigcarct (categorias)
+* Tipo: CRUD (frmcadastro)
+* BO: CargoBO
 *==============================================================================
 
 DEFINE CLASS FormCargo AS FormBase
@@ -18,260 +21,282 @@ DEFINE CLASS FormCargo AS FormBase
     Closable    = .F.
     MaxButton   = .F.
     TitleBar    = 0
-    ClipControls = .F.
     Themes      = .F.
     BorderStyle = 2
-    FontName    = "Tahoma"
-    ForeColor   = RGB(90, 90, 90)
 
-    *-- Propriedades do formulario
+    *-- Propriedades de estado
     this_oBusinessObject = .NULL.
-    this_cMensagemErro   = ""    && OBRIGATORIO - nao herdado de FormBase
-
-    *-- Guard para LostFocus de lookups
-    this_cUltimoValidarGrupoValidado       = ""
-    this_cUltimoGradeCol1LostFocusValidado = ""
-    this_cUltimoGradeCol2LostFocusValidado = ""
-    this_cUltimoGradeCol4LostFocusValidado = ""
+    this_cModoAtual      = "LISTA"
 
     *--------------------------------------------------------------------------
-    * Init
+    * Init - APENAS retorna DODEFAULT (FormBase.Init chama InicializarForm)
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        RETURN DODEFAULT()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            loc_lResultado = DODEFAULT()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.Init")
+        ENDTRY
+
+        RETURN loc_lResultado
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * InicializarForm - Configuracao inicial do formulario
+    * InicializarForm - Configura estrutura completa
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE InicializarForm()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
 
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("CargoBO")
 
-            IF ISNULL(THIS.this_oBusinessObject)
-                MostrarErro("Erro ao criar Business Object CargoBO", "Erro Cr" + CHR(237) + "tico")
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Falha ao criar CargoBO", "Erro")
             ELSE
-                *-- Criar cursor placeholder para grade SigCrRcc (Page2)
-                IF USED("cursor_4c_Rcc")
-                    USE IN cursor_4c_Rcc
-                ENDIF
-                SET NULL ON
-                CREATE CURSOR cursor_4c_Rcc (Grupos C(20), Contas C(20), Valors N(15,2), Moedas C(10), Cargos C(10), CidChaves C(36))
-                APPEND BLANK
-                SET NULL OFF
-
                 THIS.ConfigurarPageFrame()
-                THIS.ConfigurarPaginaLista()
-                THIS.ConfigurarPaginaDados()
-                THIS.ConfigurarGradeEventos()
+
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
                 THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
 
-                *-- Pula CarregarLista() em modo de validacao UI
-                IF NOT (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
-                    IF !THIS.CarregarLista()
-                        *-- Falha nao impede abertura
-                    ENDIF
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    THIS.CarregarLista()
                 ENDIF
 
-                THIS.pgf_4c_Paginas.Visible = .T.
                 THIS.pgf_4c_Paginas.Visible = .T.
                 THIS.pgf_4c_Paginas.ActivePage = 1
                 THIS.this_cModoAtual = "LISTA"
-                loc_lSucesso = .T.
+                loc_lResultado = .T.
             ENDIF
-
-        CATCH TO loException
-            THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
-            MostrarErro("Erro ao inicializar FormCargo:" + CHR(13) + THIS.this_cMensagemErro, "Erro")
-            loc_lSucesso = .F.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.InicializarForm")
         ENDTRY
 
-        RETURN loc_lSucesso
+        RETURN loc_lResultado
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPageFrame - Configura PageFrame principal
-    * Legado: Pagina Width=1003, PageFrame.Top=-29 (oculta abas)
+    * ConfigurarPageFrame - Cria PageFrame com Page1 (Lista) e Page2 (Dados)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oPgf
         THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        loc_oPgf = THIS.pgf_4c_Paginas
 
-        WITH THIS.pgf_4c_Paginas
+        WITH loc_oPgf
+            .PageCount = 2
             .Top       = -29
             .Left      = 0
-            .Width     = 1003
-            .Height    = 629
-            .PageCount = 2
+            .Width     = THIS.Width
+            .Height    = THIS.Height + 29
             .Tabs      = .F.
             .Visible   = .T.
-
-            .Page1.Caption  = "Lista"
-            .Page1.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page1.BackColor = RGB(255, 255, 255)
-
-            .Page2.Caption  = "Dados"
-            .Page2.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page2.BackColor = RGB(255, 255, 255)
+            .Page1.Caption   = "Lista"
+            .Page1.BackColor = RGB(100, 100, 100)
+            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+            .Page2.Caption   = "Dados"
+            .Page2.BackColor = RGB(100, 100, 100)
+            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
         ENDWITH
+
+        THIS.ConfigurarPaginaLista()
+        THIS.ConfigurarPaginaDados()
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaLista - Configura Page1 (Lista)
-    * Compensacao +29: Top original 0 -> 29
-    * Grade: Left=30, Top=103 -> 132, Width=938, Height=470
+    * ConfigurarPaginaLista - Page1: cabecalho, botoes CRUD, grid lista
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaLista()
-        LOCAL loc_oPagina
-        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+        LOCAL loc_oPg1, loc_oCab, loc_oBotoes, loc_oSaida
+        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
 
-        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
-        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-
-        *-- Container de cabecalho (cntSombra: Top=2 -> 31)
-        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
-        WITH loc_oPagina.cnt_4c_Cabecalho
+        *-- Cabecalho cinza
+        loc_oPg1.AddObject("cnt_4c_Cabecalho", "Container")
+        loc_oCab = loc_oPg1.cnt_4c_Cabecalho
+        WITH loc_oCab
             .Top         = 31
             .Left        = 0
-            .Width       = 1003
+            .Width       = THIS.Width
             .Height      = 80
-            .BackStyle   = 0
+            .BackColor   = RGB(100, 100, 100)
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
 
-        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
-        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
-            .Caption   = "Cadastro de Cargos"
-            .Top       = 20
-            .Left      = 20
-            .Width     = 300
-            .Height    = 30
+        loc_oCab.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oCab.lbl_4c_Sombra
+            .AutoSize  = .F.
+            .Caption   = THIS.Caption
+            .Top       = 15
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 40
             .FontName  = "Tahoma"
-            .FontSize  = 14
+            .FontSize  = 16
             .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
         ENDWITH
 
-        *-- Container de botoes CRUD (Grupo_op: Left=544, Top=0 -> 29)
-        loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
-        WITH loc_oPagina.cnt_4c_Botoes
+        loc_oCab.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oCab.lbl_4c_Titulo
+            .AutoSize  = .F.
+            .Caption   = THIS.Caption
+            .Top       = 18
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 46
+            .FontName  = "Tahoma"
+            .FontSize  = 16
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Container botoes CRUD
+        loc_oPg1.AddObject("cnt_4c_Botoes", "Container")
+        loc_oBotoes = loc_oPg1.cnt_4c_Botoes
+        WITH loc_oBotoes
             .Top         = 29
-            .Left        =  542
+            .Left        = 542
             .Width       = 390
             .Height      = 85
-            .BackStyle   = 0
+            .BackColor   = RGB(53, 53, 53)
+            .BackStyle   = 1
             .BorderWidth = 0
             .Visible     = .T.
         ENDWITH
 
-        *-- Botao Incluir (Inserir: Left=5)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+        loc_oBotoes.AddObject("cmd_4c_Incluir", "CommandButton")
+        WITH loc_oBotoes.cmd_4c_Incluir
             .Caption         = "Incluir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 5
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
 
-        *-- Botao Visualizar (Consultar: Left=80)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
+        loc_oBotoes.AddObject("cmd_4c_Visualizar", "CommandButton")
+        WITH loc_oBotoes.cmd_4c_Visualizar
             .Caption         = "Visualizar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 80
             .Width           = 75
             .Height          = 75
-            .Left            = 80
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
 
-        *-- Botao Alterar (Left=155)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
+        loc_oBotoes.AddObject("cmd_4c_Alterar", "CommandButton")
+        WITH loc_oBotoes.cmd_4c_Alterar
             .Caption         = "Alterar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 155
             .Width           = 75
             .Height          = 75
-            .Left            = 155
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
 
-        *-- Botao Excluir (Left=230)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
+        loc_oBotoes.AddObject("cmd_4c_Excluir", "CommandButton")
+        WITH loc_oBotoes.cmd_4c_Excluir
             .Caption         = "Excluir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 230
             .Width           = 75
             .Height          = 75
-            .Left            = 230
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
 
-        *-- Botao Buscar (Procurar: Left=305)
-        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar
+        loc_oBotoes.AddObject("cmd_4c_Buscar", "CommandButton")
+        WITH loc_oBotoes.cmd_4c_Buscar
             .Caption         = "Buscar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 305
             .Width           = 75
             .Height          = 75
-            .Left            = 305
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
 
-        *-- Container de saida (Grupo_Saida: Left=919, Top=0 -> 29)
-        loc_oPagina.AddObject("cnt_4c_Saida", "Container")
-        WITH loc_oPagina.cnt_4c_Saida
+        BINDEVENT(loc_oBotoes.cmd_4c_Incluir,    "Click", THIS, "BtnIncluirClick")
+        BINDEVENT(loc_oBotoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oBotoes.cmd_4c_Alterar,    "Click", THIS, "BtnAlterarClick")
+        BINDEVENT(loc_oBotoes.cmd_4c_Excluir,    "Click", THIS, "BtnExcluirClick")
+        BINDEVENT(loc_oBotoes.cmd_4c_Buscar,     "Click", THIS, "BtnBuscarClick")
+
+        *-- Container Encerrar (canonico: Left=917, Width=90)
+        loc_oPg1.AddObject("cnt_4c_Saida", "Container")
+        loc_oSaida = loc_oPg1.cnt_4c_Saida
+        WITH loc_oSaida
             .Top         = 29
             .Left        = 917
             .Width       = 90
@@ -281,80 +306,80 @@ DEFINE CLASS FormCargo AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        loc_oPagina.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar
+        loc_oSaida.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH loc_oSaida.cmd_4c_Encerrar
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 5
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
 
-        *-- Container de filtros (cntFiltros - vazio)
-        loc_oPagina.AddObject("cnt_4c_Filtros", "Container")
-        WITH loc_oPagina.cnt_4c_Filtros
-            .Top         = 29
-            .Left        = 5
-            .Width       = 530
-            .Height      = 85
-            .BackStyle   = 0
-            .BorderWidth = 0
-            .Visible     = .T.
+        BINDEVENT(loc_oSaida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+
+        *-- Grid lista: ccargs (Cargo) + dcargs (Descricao)
+        loc_oPg1.AddObject("grd_4c_Lista", "Grid")
+        loc_oPg1.grd_4c_Lista.RecordSource = ""
+        loc_oPg1.grd_4c_Lista.ColumnCount  = 2
+
+        WITH loc_oPg1.grd_4c_Lista
+            .Top                     = 117
+            .Left                    = 12
+            .Width                   = 890
+            .Height                  = 480
+            .FontName                = "Verdana"
+            .FontSize                = 8
+            .ForeColor               = RGB(90, 90, 90)
+            .BackColor               = RGB(255, 255, 255)
+            .GridLineColor           = RGB(238, 238, 238)
+            .HighlightBackColor      = RGB(255, 255, 255)
+            .HighlightForeColor      = RGB(15, 41, 104)
+            .HighlightStyle          = 2
+            .DeleteMark              = .F.
+            .RecordMark              = .F.
+            .RowHeight               = 16
+            .ScrollBars              = 2
+            .GridLines               = 3
+            .ReadOnly                = .T.
+            .Visible                 = .T.
+            .Column1.Width           = 100
+            .Column2.Width           = 760
+            .Column1.ReadOnly        = .T.
+            .Column2.ReadOnly        = .T.
+            .Column1.Header1.Caption = "Cargo"
+            .Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
         ENDWITH
 
-        *-- Grade de lista (Grade: Left=30, Top=103 -> 132, Width=938, Height=470)
-        *-- 2 colunas: cCargs(Cargo), dCargs(Descricao)
-        loc_oPagina.AddObject("grd_4c_Lista", "Grid")
-        WITH loc_oPagina.grd_4c_Lista
-            .Top               = 132
-            .Left              = 30
-            .Width             = 938
-            .Height            = 470
-            .ReadOnly          = .T.
-            .DeleteMark        = .F.
-            .RecordMark        = .F.
-            .ScrollBars        = 3
-            .GridLines         = 3
-            .GridLineColor     = RGB(192, 192, 192)
-            .ColumnCount       = 2
-            .AllowHeaderSizing = .T.
-            .FontName          = "Tahoma"
-            .ForeColor         = RGB(90, 90, 90)
-            .Visible           = .T.
-        ENDWITH
-
-        THIS.TornarControlesVisiveis(loc_oPagina)
+        THIS.TornarControlesVisiveis(loc_oPg1)
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ConfigurarPaginaDados - Configura Page2 (Dados)
-    * Compensacao +29 em TODOS os controles (Top_original + 29)
-    * Legado: todos os controles em SIGCDCAR.Pagina.Dados.*
+    * ConfigurarPaginaDados - Page2: todos os campos, grids e botoes
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oPagina
-        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        LOCAL loc_oPg2, loc_oBotoesAcao, loc_oGridAcesso, loc_oGridCat
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
-        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
-        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-
-        *======================================================================
-        *-- Container de botoes Salvar/Cancelar (Grupo_Salva: Left=838, Top=7 -> 36)
-        *======================================================================
-        loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
-        WITH loc_oPagina.cnt_4c_BotoesDados
-            .Top         = 36
-            .Left        = 838
+        *-- Botoes Confirmar/Cancelar
+        loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
+        loc_oBotoesAcao = loc_oPg2.cnt_4c_BotoesAcao
+        WITH loc_oBotoesAcao
+            .Top         = 33
+            .Left        = 842
             .Width       = 160
             .Height      = 85
             .BackStyle   = 0
@@ -362,2510 +387,2915 @@ DEFINE CLASS FormCargo AS FormBase
             .Visible     = .T.
         ENDWITH
 
-        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Salvar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Salvar
-            .Caption         = "Salvar"
+        loc_oBotoesAcao.AddObject("cmd_4c_Confirmar", "CommandButton")
+        WITH loc_oBotoesAcao.cmd_4c_Confirmar
+            .Caption         = "Confirmar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
             .Width           = 75
             .Height          = 75
-            .Left            = 5
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Salvar, "Click", THIS, "BtnSalvarClick")
 
-        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Cancelar", "CommandButton")
-        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar
+        loc_oBotoesAcao.AddObject("cmd_4c_Cancelar", "CommandButton")
+        WITH loc_oBotoesAcao.cmd_4c_Cancelar
             .Caption         = "Encerrar"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
+            .Top             = 5
+            .Left            = 80
             .Width           = 75
             .Height          = 75
-            .Left            = 80
-            .Top             = 5
-            .FontName        = "Tahoma"
-            .FontSize        = 8
-            .Themes          = .F.
-            .SpecialEffect   = 0
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
             .Visible         = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
+
+        BINDEVENT(loc_oBotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
+        BINDEVENT(loc_oBotoesAcao.cmd_4c_Cancelar,  "Click", THIS, "BtnCancelarClick")
 
         *======================================================================
-        *-- LINHA 1 (Top original ~33/37)
-        *-- Cargo: Say1 Left=168 Top=37->66 | txt_4c_Cargo Left=210 Top=33->62 Width=80
-        *-- cmdGarqicone: Left=294 Top=32->61 Width=25 Height=25
-        *-- Senha: Say5 Left=549 Top=37->66 | txt_4c_Senha Left=592 Top=33->62 Width=20
+        * LINHA 1: Cargo + Senha
         *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label1", "Label")
-        WITH loc_oPagina.lbl_4c_Label1
+        loc_oPg2.AddObject("lbl_4c_LbCargo", "Label")
+        WITH loc_oPg2.lbl_4c_LbCargo
             .Caption   = "Cargo :"
-            .Left      = 168
-            .Top       = 66
-            .Width     = 41
+            .Top       = 51
+            .Left      = 212
+            .Width     = 38
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .FontBold  = .F.
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_Cargo", "TextBox")
-        WITH loc_oPagina.txt_4c_Cargo
+        loc_oPg2.AddObject("txt_4c_Ccargs", "TextBox")
+        WITH loc_oPg2.txt_4c_Ccargs
             .Value         = ""
-            .Left          = 210
-            .Top           = 62
+            .Top           = 47
+            .Left          = 252
             .Width         = 80
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Cargo, "KeyPress", THIS, "txt_4c_Cargo_KeyPress")
-
-        *-- Botao "..." para busca de cargo (cmdGarqicone: Left=294, Top=32->61)
-        loc_oPagina.AddObject("obj_4c_CmdGarqicone", "CommandGroup")
-        WITH loc_oPagina.obj_4c_CmdGarqicone
-            .ButtonCount   = 1
-            .AutoSize      = .F.
-            .Height        = 25
-            .Left          = 294
-            .Top           = 61
-            .Width         = 25
+            .ForeColor     = RGB(90, 90, 90)
             .BackColor     = RGB(255, 255, 255)
-            .SpecialEffect = 1
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 10
             .Visible       = .T.
-            WITH .Buttons(1)
-                .Caption       = "..."
-                .Top           = 0
-                .Left          = 0
-                .Height        = 25
-                .Width         = 25
-                .FontBold      = .T.
-                .SpecialEffect = 1
-                .BackColor     = RGB(255, 255, 255)
-                .Themes        = .F.
-            ENDWITH
         ENDWITH
-        BINDEVENT(loc_oPagina.obj_4c_CmdGarqicone, "Click", THIS, "BtnGarqiconeClick")
 
-        loc_oPagina.AddObject("lbl_4c_Label5", "Label")
-        WITH loc_oPagina.lbl_4c_Label5
+        *-- Botao busca template (cmdGarqicone: abre picker p/ copiar cargo base)
+        loc_oPg2.AddObject("cmd_4c_BuscarBase", "CommandButton")
+        WITH loc_oPg2.cmd_4c_BuscarBase
+            .Caption         = ""
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_26.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_procurar_26.jpg"
+            .PicturePosition = 0
+            .Top             = 47
+            .Left            = 335
+            .Width           = 22
+            .Height          = 22
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .T.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Visible         = .T.
+        ENDWITH
+
+        BINDEVENT(loc_oPg2.cmd_4c_BuscarBase, "Click", THIS, "BtnBuscarBaseClick")
+
+        loc_oPg2.AddObject("lbl_4c_LbSenha", "Label")
+        WITH loc_oPg2.lbl_4c_LbSenha
             .Caption   = "Senha :"
-            .Left      = 549
-            .Top       = 66
-            .Width     = 42
+            .Top       = 50
+            .Left      = 578
+            .Width     = 40
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_Senha", "TextBox")
-        WITH loc_oPagina.txt_4c_Senha
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 62
+        loc_oPg2.AddObject("txt_4c_Nivels", "TextBox")
+        WITH loc_oPg2.txt_4c_Nivels
+            .Value         = ""
+            .Top           = 46
+            .Left          = 619
             .Width         = 20
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
             .MaxLength     = 1
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label8", "Label")
-        WITH loc_oPagina.lbl_4c_Label8
+        loc_oPg2.AddObject("lbl_4c_LbSenhaSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbSenhaSN
             .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 66
+            .Top       = 50
+            .Left      = 642
             .Width     = 35
             .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 2 (Top original ~58/62)
-        *-- Descricao: Say2 Left=151 Top=62->91 | txt_4c_Descr Left=210 Top=58->87 Width=155
-        *-- Altera Cotacao: Say12 Left=507 Top=62->91 | txt_4c_Altcot Left=592 Top=58->87
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label2", "Label")
-        WITH loc_oPagina.lbl_4c_Label2
-            .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Left      = 151
-            .Top       = 91
-            .Width     = 58
-            .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_Descr", "TextBox")
-        WITH loc_oPagina.txt_4c_Descr
+        *======================================================================
+        * LINHA 2: Descricao + Altera Cotacao
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbDescr", "Label")
+        WITH loc_oPg2.lbl_4c_LbDescr
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
+            .Top       = 76
+            .Left      = 195
+            .Width     = 55
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Dcargs", "TextBox")
+        WITH loc_oPg2.txt_4c_Dcargs
             .Value         = ""
-            .Left          = 210
-            .Top           = 87
+            .Top           = 72
+            .Left          = 252
             .Width         = 155
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 20
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label12", "Label")
-        WITH loc_oPagina.lbl_4c_Label12
+        loc_oPg2.AddObject("lbl_4c_LbAltCot", "Label")
+        WITH loc_oPg2.lbl_4c_LbAltCot
             .Caption   = "Altera Cota" + CHR(231) + CHR(227) + "o :"
-            .Left      = 507
-            .Top       = 91
+            .Top       = 75
+            .Left      = 536
+            .Width     = 82
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Altcots", "TextBox")
+        WITH loc_oPg2.txt_4c_Altcots
+            .Value         = ""
+            .Top           = 71
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbAltCotSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbAltCotSN
+            .Caption   = "(S/N)"
+            .Top       = 75
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 3: Limite Desconto + Libera Limite
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbLimDesc", "Label")
+        WITH loc_oPg2.lbl_4c_LbLimDesc
+            .Caption   = "Limite Desconto :"
+            .Top       = 101
+            .Left      = 166
             .Width     = 84
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_Altcot", "TextBox")
-        WITH loc_oPagina.txt_4c_Altcot
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 87
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label13", "Label")
-        WITH loc_oPagina.lbl_4c_Label13
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 91
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 3 (Top original ~83/87)
-        *-- Limite Desconto: Say3 Left=122 Top=87->116 | txt_4c_Limdesc Left=210 Top=83->112 Width=108
-        *--   txt_4c_Desc Left=320 Top=83->112 Width=45 | Say7 "%" Left=368 Top=87->116
-        *-- Libera Limite: Say14 Left=520 Top=87->116 | txt_4c_Limite Left=592 Top=83->112
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label3", "Label")
-        WITH loc_oPagina.lbl_4c_Label3
-            .Caption   = "Limite Desconto :"
-            .Left      = 122
-            .Top       = 116
-            .Width     = 87
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_Limdesc", "TextBox")
-        WITH loc_oPagina.txt_4c_Limdesc
+        loc_oPg2.AddObject("txt_4c_Limdescs", "TextBox")
+        WITH loc_oPg2.txt_4c_Limdescs
             .Value         = 0
-            .Left          = 210
-            .Top           = 112
+            .Top           = 97
+            .Left          = 252
             .Width         = 108
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999,999,999.99"
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "99999999.99"
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_Desc", "TextBox")
-        WITH loc_oPagina.txt_4c_Desc
+        loc_oPg2.AddObject("txt_4c_Descpors", "TextBox")
+        WITH loc_oPg2.txt_4c_Descpors
             .Value         = 0
-            .Left          = 320
-            .Top           = 112
+            .Top           = 97
+            .Left          = 362
             .Width         = 45
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999999"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label7", "Label")
-        WITH loc_oPagina.lbl_4c_Label7
-            .Caption   = "%"
-            .Left      = 368
-            .Top       = 116
-            .Width     = 15
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label14", "Label")
-        WITH loc_oPagina.lbl_4c_Label14
-            .Caption   = "Libera Limite :"
-            .Left      = 520
-            .Top       = 116
-            .Width     = 71
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_Limite", "TextBox")
-        WITH loc_oPagina.txt_4c_Limite
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 112
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label15", "Label")
-        WITH loc_oPagina.lbl_4c_Label15
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 116
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 4 (Top original ~108/112)
-        *-- Limite Acrescimo: Say4 Left=119 Top=112->141 | txt_4c_LimAcre Left=210 Top=108->137 Width=108
-        *--   txt_4c_Acre Left=320 Top=108->137 Width=45 | Say10 "%" Left=368 Top=112->141
-        *-- Cancela Item Cupom: Say21 Left=454 Top=112->141 | txt_4c_CancItem Left=592 Top=108->137
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label4", "Label")
-        WITH loc_oPagina.lbl_4c_Label4
-            .Caption   = "Limite Acr" + CHR(233) + "scimo :"
-            .Left      = 119
-            .Top       = 141
-            .Width     = 90
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_LimAcre", "TextBox")
-        WITH loc_oPagina.txt_4c_LimAcre
-            .Value         = 0
-            .Left          = 210
-            .Top           = 137
-            .Width         = 108
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999,999,999.99"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_Acre", "TextBox")
-        WITH loc_oPagina.txt_4c_Acre
-            .Value         = 0
-            .Left          = 320
-            .Top           = 137
-            .Width         = 45
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999999"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label10", "Label")
-        WITH loc_oPagina.lbl_4c_Label10
-            .Caption   = "%"
-            .Left      = 368
-            .Top       = 141
-            .Width     = 15
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label21", "Label")
-        WITH loc_oPagina.lbl_4c_Label21
-            .Caption   = "Cancela Item Cupom Fiscal:"
-            .Left      = 454
-            .Top       = 141
-            .Width     = 137
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_CancItem", "TextBox")
-        WITH loc_oPagina.txt_4c_CancItem
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 137
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label22", "Label")
-        WITH loc_oPagina.lbl_4c_Label22
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 141
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 5 (Top original ~133/137)
-        *-- Lib.Pagamentos: Say25 Left=83 Top=137->166 | txt_4c_VlPag Left=210 Top=133->162 Width=108
-        *--   Say26 "(R$)" Left=323 Top=137->166
-        *-- Excluir Cond.Pagto: Say23 Left=447 Top=137->166 | txt_4c_LibFpag Left=592 Top=133->162
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label25", "Label")
-        WITH loc_oPagina.lbl_4c_Label25
-            .Caption   = "Liberar Pagamentos at" + CHR(233) + " :"
-            .Left      = 83
-            .Top       = 166
-            .Width     = 126
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_VlPag", "TextBox")
-        WITH loc_oPagina.txt_4c_VlPag
-            .Value         = 0
-            .Left          = 210
-            .Top           = 162
-            .Width         = 108
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999,999,999.99"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label26", "Label")
-        WITH loc_oPagina.lbl_4c_Label26
-            .Caption   = "(R$)"
-            .Left      = 323
-            .Top       = 166
-            .Width     = 30
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label23", "Label")
-        WITH loc_oPagina.lbl_4c_Label23
-            .Caption   = "Excluir Condi" + CHR(231) + CHR(227) + "o Pagto (ecf):"
-            .Left      = 447
-            .Top       = 166
-            .Width     = 144
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_LibFpag", "TextBox")
-        WITH loc_oPagina.txt_4c_LibFpag
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 162
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label24", "Label")
-        WITH loc_oPagina.lbl_4c_Label24
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 166
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 6 (Top original ~158/162)
-        *-- Lib.Cotacoes: Say30 Left=97 Top=162->191 | txt_4c_VlLibCots Left=210 Top=158->187 Width=108
-        *--   Say31 "(R$)" Left=323 Top=162->191
-        *-- Lib.Saldo Insuf: Say28 Left=462 Top=162->191 | txt_4c_SdInsu Left=592 Top=158->187
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label30", "Label")
-        WITH loc_oPagina.lbl_4c_Label30
-            .Caption   = "Liberar Cota" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
-            .Left      = 97
-            .Top       = 191
-            .Width     = 112
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_VlLibCots", "TextBox")
-        WITH loc_oPagina.txt_4c_VlLibCots
-            .Value         = 0
-            .Left          = 210
-            .Top           = 187
-            .Width         = 108
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999,999,999.99"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label31", "Label")
-        WITH loc_oPagina.lbl_4c_Label31
-            .Caption   = "(R$)"
-            .Left      = 323
-            .Top       = 191
-            .Width     = 30
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label28", "Label")
-        WITH loc_oPagina.lbl_4c_Label28
-            .Caption   = "Libera Saldo Insuficiente :"
-            .Left      = 462
-            .Top       = 191
-            .Width     = 129
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_SdInsu", "TextBox")
-        WITH loc_oPagina.txt_4c_SdInsu
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 187
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label29", "Label")
-        WITH loc_oPagina.lbl_4c_Label29
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 191
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 7 (Top original ~183/187)
-        *-- Lib.Movimentacoes: Say32 Left=68 Top=187->216 | txt_4c_VlLibOps Left=210 Top=183->212 Width=108
-        *--   Say33 "(R$)" Left=323 Top=187->216
-        *-- Lib.Cond.Pagto: Say16 Left=468 Top=187->216 | txt_4c_Libfpg Left=592 Top=183->212
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label32", "Label")
-        WITH loc_oPagina.lbl_4c_Label32
-            .Caption   = "Liberar Movimenta" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
-            .Left      = 68
-            .Top       = 216
-            .Width     = 141
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_VlLibOps", "TextBox")
-        WITH loc_oPagina.txt_4c_VlLibOps
-            .Value         = 0
-            .Left          = 210
-            .Top           = 212
-            .Width         = 108
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999,999,999.99"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label33", "Label")
-        WITH loc_oPagina.lbl_4c_Label33
-            .Caption   = "(R$)"
-            .Left      = 323
-            .Top       = 216
-            .Width     = 30
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label16", "Label")
-        WITH loc_oPagina.lbl_4c_Label16
-            .Caption   = "Liberar Condi" + CHR(231) + CHR(227) + "o Pagto :"
-            .Left      = 468
-            .Top       = 216
-            .Width     = 123
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_Libfpg", "TextBox")
-        WITH loc_oPagina.txt_4c_Libfpg
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 212
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label34", "Label")
-        WITH loc_oPagina.lbl_4c_Label34
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 216
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 8 (Top original ~208/212)
-        *-- Variacao Cotacao: Say11 Left=113 Top=212->241 | txt_4c_Valcot Left=210 Top=208->237 Width=52
-        *--   Say20 "(%)" Left=267 Top=212->241
-        *-- Lib.Multiplos Opers: Say48 Left=404 Top=212->241 | txt_4c_LibOpers Left=592 Top=208->237
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label11", "Label")
-        WITH loc_oPagina.lbl_4c_Label11
-            .Caption   = "Varia" + CHR(231) + CHR(227) + "o Cota" + CHR(231) + CHR(227) + "o :"
-            .Left      = 113
-            .Top       = 241
-            .Width     = 96
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_Valcot", "TextBox")
-        WITH loc_oPagina.txt_4c_Valcot
-            .Value         = 0
-            .Left          = 210
-            .Top           = 237
-            .Width         = 52
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
             .InputMask     = "999.99"
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label20", "Label")
-        WITH loc_oPagina.lbl_4c_Label20
+        loc_oPg2.AddObject("lbl_4c_LbDescPct", "Label")
+        WITH loc_oPg2.lbl_4c_LbDescPct
             .Caption   = "(%)"
-            .Left      = 267
-            .Top       = 241
-            .Width     = 21
+            .Top       = 101
+            .Left      = 410
+            .Width     = 25
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label48", "Label")
-        WITH loc_oPagina.lbl_4c_Label48
-            .Caption   = "Liberar M" + CHR(250) + "ltiplos Opers no Rec./Pag. :"
-            .Left      = 404
-            .Top       = 241
-            .Width     = 187
+        loc_oPg2.AddObject("lbl_4c_LbLibLim", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibLim
+            .Caption   = "Libera Limite :"
+            .Top       = 100
+            .Left      = 549
+            .Width     = 68
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_LibOpers", "TextBox")
-        WITH loc_oPagina.txt_4c_LibOpers
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 237
+        loc_oPg2.AddObject("txt_4c_Limites", "TextBox")
+        WITH loc_oPg2.txt_4c_Limites
+            .Value         = ""
+            .Top           = 96
+            .Left          = 619
             .Width         = 20
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
             .MaxLength     = 1
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label49", "Label")
-        WITH loc_oPagina.lbl_4c_Label49
+        loc_oPg2.AddObject("lbl_4c_LbLibLimSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibLimSN
             .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 241
+            .Top       = 100
+            .Left      = 642
             .Width     = 35
             .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
         *======================================================================
-        *-- LINHA 9 (Top original ~233/237)
-        *-- Grupo Financeiro: Say38 Left=116 Top=237->266 | txt_4c__Grupo Left=210 Top=233->262 Width=80
-        *-- Lib.Mov.Estoque: Say35 Left=412 Top=237->266 | txt_4c_LibOpe Left=592 Top=233->262
+        * LINHA 4: Limite Acrescimo + Cancela Item Cupom
         *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label38", "Label")
-        WITH loc_oPagina.lbl_4c_Label38
-            .Caption   = "Grupo Financeiro :"
-            .Left      = 116
-            .Top       = 266
+        loc_oPg2.AddObject("lbl_4c_LbLimAcre", "Label")
+        WITH loc_oPg2.lbl_4c_LbLimAcre
+            .Caption   = "Limite Acr" + CHR(233) + "scimo :"
+            .Top       = 126
+            .Left      = 163
+            .Width     = 87
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Limacres", "TextBox")
+        WITH loc_oPg2.txt_4c_Limacres
+            .Value         = 0
+            .Top           = 122
+            .Left          = 252
+            .Width         = 108
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "99999999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Acrepors", "TextBox")
+        WITH loc_oPg2.txt_4c_Acrepors
+            .Value         = 0
+            .Top           = 122
+            .Left          = 362
+            .Width         = 45
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbAcrePct", "Label")
+        WITH loc_oPg2.lbl_4c_LbAcrePct
+            .Caption   = "(%)"
+            .Top       = 126
+            .Left      = 410
+            .Width     = 25
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbCancItem", "Label")
+        WITH loc_oPg2.lbl_4c_LbCancItem
+            .Caption   = "Cancela Item Cupom Fiscal:"
+            .Top       = 125
+            .Left      = 483
+            .Width     = 135
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Cancitens", "TextBox")
+        WITH loc_oPg2.txt_4c_Cancitens
+            .Value         = ""
+            .Top           = 121
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbCancSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbCancSN
+            .Caption   = "(S/N)"
+            .Top       = 125
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 5: Liberar Pagamentos + Excluir Cond Pagto
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbVlPag", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlPag
+            .Caption   = "Liberar Pagamentos at" + CHR(233) + " :"
+            .Top       = 151
+            .Left      = 127
+            .Width     = 123
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Vllibpgs", "TextBox")
+        WITH loc_oPg2.txt_4c_Vllibpgs
+            .Value         = 0
+            .Top           = 147
+            .Left          = 252
+            .Width         = 108
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "99999999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbVlPagRS", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlPagRS
+            .Caption   = "(R$)"
+            .Top       = 151
+            .Left      = 365
+            .Width     = 30
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibFpag", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibFpag
+            .Caption   = "Excluir Condi" + CHR(231) + CHR(227) + "o Pagto (ecf):"
+            .Top       = 150
+            .Left      = 476
+            .Width     = 142
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libfpags", "TextBox")
+        WITH loc_oPg2.txt_4c_Libfpags
+            .Value         = ""
+            .Top           = 146
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibFpagSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibFpagSN
+            .Caption   = "(S/N)"
+            .Top       = 150
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 6: Liberar Cotacoes + Libera Saldo Insuficiente
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbVlCot", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlCot
+            .Caption   = "Liberar Cota" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
+            .Top       = 176
+            .Left      = 141
+            .Width     = 109
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Vllibcots", "TextBox")
+        WITH loc_oPg2.txt_4c_Vllibcots
+            .Value         = 0
+            .Top           = 172
+            .Left          = 252
+            .Width         = 108
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "99999999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbVlCotRS", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlCotRS
+            .Caption   = "(R$)"
+            .Top       = 176
+            .Left      = 365
+            .Width     = 30
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbSdIns", "Label")
+        WITH loc_oPg2.lbl_4c_LbSdIns
+            .Caption   = "Libera Saldo Insuficiente :"
+            .Top       = 175
+            .Left      = 491
+            .Width     = 127
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libsdins", "TextBox")
+        WITH loc_oPg2.txt_4c_Libsdins
+            .Value         = ""
+            .Top           = 171
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbSdInsSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbSdInsSN
+            .Caption   = "(S/N)"
+            .Top       = 175
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 7: Liberar Movimentacoes + Liberar Cond Pagto
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbVlOps", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlOps
+            .Caption   = "Liberar Movimenta" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
+            .Top       = 201
+            .Left      = 112
+            .Width     = 138
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Vllibopes", "TextBox")
+        WITH loc_oPg2.txt_4c_Vllibopes
+            .Value         = 0
+            .Top           = 197
+            .Left          = 252
+            .Width         = 108
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "99999999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbVlOpsRS", "Label")
+        WITH loc_oPg2.lbl_4c_LbVlOpsRS
+            .Caption   = "(R$)"
+            .Top       = 201
+            .Left      = 365
+            .Width     = 30
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibFpgs", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibFpgs
+            .Caption   = "Liberar Condi" + CHR(231) + CHR(227) + "o Pagto :"
+            .Top       = 200
+            .Left      = 497
+            .Width     = 121
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libfpgs", "TextBox")
+        WITH loc_oPg2.txt_4c_Libfpgs
+            .Value         = ""
+            .Top           = 196
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibFpgsSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibFpgsSN
+            .Caption   = "(S/N)"
+            .Top       = 200
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 8: Variacao Cotacao + Liberar Movs Estoque
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbVarCot", "Label")
+        WITH loc_oPg2.lbl_4c_LbVarCot
+            .Caption   = "Varia" + CHR(231) + CHR(227) + "o Cota" + CHR(231) + CHR(227) + "o :"
+            .Top       = 226
+            .Left      = 157
             .Width     = 93
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c__Grupo", "TextBox")
-        WITH loc_oPagina.txt_4c__Grupo
-            .Value         = ""
-            .Left          = 210
-            .Top           = 262
-            .Width         = 80
-            .Height        = 23
+        loc_oPg2.AddObject("txt_4c_Varcots", "TextBox")
+        WITH loc_oPg2.txt_4c_Varcots
+            .Value         = 0
+            .Top           = 222
+            .Left          = 252
+            .Width         = 52
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "999.99"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c__Grupo, "KeyPress", THIS, "ValidarGrupo")
 
-        loc_oPagina.AddObject("lbl_4c_Label35", "Label")
-        WITH loc_oPagina.lbl_4c_Label35
+        loc_oPg2.AddObject("lbl_4c_LbVarCotPct", "Label")
+        WITH loc_oPg2.lbl_4c_LbVarCotPct
+            .Caption   = "(%)"
+            .Top       = 226
+            .Left      = 309
+            .Width     = 25
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibOpes", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibOpes
             .Caption   = "Liberar Movimenta" + CHR(231) + CHR(245) + "es de Estoque :"
-            .Left      = 412
-            .Top       = 266
+            .Top       = 225
+            .Left      = 441
+            .Width     = 177
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libopes", "TextBox")
+        WITH loc_oPg2.txt_4c_Libopes
+            .Value         = ""
+            .Top           = 221
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibOpesSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibOpesSN
+            .Caption   = "(S/N)"
+            .Top       = 225
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 9: Grupo Financeiro + Libera Excluir Mov Producao
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbGrupo", "Label")
+        WITH loc_oPg2.lbl_4c_LbGrupo
+            .Caption   = "Grupo Financeiro :"
+            .Top       = 251
+            .Left      = 160
+            .Width     = 90
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Grcomis", "TextBox")
+        WITH loc_oPg2.txt_4c_Grcomis
+            .Value         = ""
+            .Top           = 247
+            .Left          = 252
+            .Width         = 80
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 10
+            .Visible       = .T.
+        ENDWITH
+
+        BINDEVENT(loc_oPg2.txt_4c_Grcomis, "KeyPress", THIS, "BuscarGrupoFinan")
+
+        loc_oPg2.AddObject("lbl_4c_LbLibExprd", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibExprd
+            .Caption   = "Libera Excluir Movimenta" + CHR(231) + CHR(227) + "o de Produ" + CHR(231) + CHR(227) + "o :"
+            .Top       = 250
+            .Left      = 410
+            .Width     = 208
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libexprd", "TextBox")
+        WITH loc_oPg2.txt_4c_Libexprd
+            .Value         = ""
+            .Top           = 246
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibExprdSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibExprdSN
+            .Caption   = "(S/N)"
+            .Top       = 250
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * LINHA 10: Fator Comissao (tipo S/N + valor %)
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbFcomis", "Label")
+        WITH loc_oPg2.lbl_4c_LbFcomis
+            .Caption   = "Fator de Comiss" + CHR(227) + "o :"
+            .Top       = 275
+            .Left      = 519
+            .Width     = 99
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Fcomis", "TextBox")
+        WITH loc_oPg2.txt_4c_Fcomis
+            .Value         = ""
+            .Top           = 271
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbFcomisSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbFcomisSN
+            .Caption   = "(S/N)"
+            .Top       = 275
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Acomis", "TextBox")
+        WITH loc_oPg2.txt_4c_Acomis
+            .Value         = 0
+            .Top           = 271
+            .Left          = 680
+            .Width         = 52
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "9999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        BINDEVENT(loc_oPg2.txt_4c_Acomis, "KeyPress", THIS, "ValidarAcomis")
+
+        loc_oPg2.AddObject("lbl_4c_LbAcomisPct", "Label")
+        WITH loc_oPg2.lbl_4c_LbAcomisPct
+            .Caption   = "(%)"
+            .Top       = 275
+            .Left      = 737
+            .Width     = 25
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *======================================================================
+        * OPTION GROUPS - Esquerda (2 botoes: Sim/Nao)
+        *======================================================================
+
+        *-- Libera Produtos Bloqueados (libleilaos)
+        loc_oPg2.AddObject("lbl_4c_LbLibleilaos", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibleilaos
+            .Caption   = "Libera Produtos Bloqueados :"
+            .Top       = 276
+            .Left      = 108
+            .Width     = 138
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_Libleilaos", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Libleilaos
+            .ButtonCount = 2
+            .Top         = 272
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Libera Duplicidade (libdupends)
+        loc_oPg2.AddObject("lbl_4c_LbLibdupends", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibdupends
+            .Caption   = "Libera Duplicidade :"
+            .Top       = 296
+            .Left      = 155
+            .Width     = 91
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_Libdupends", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Libdupends
+            .ButtonCount = 2
+            .Top         = 292
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *======================================================================
+        * LINHA 11: Comissao + Tipo Comissao (direita)
+        *======================================================================
+        loc_oPg2.AddObject("lbl_4c_LbComis", "Label")
+        WITH loc_oPg2.lbl_4c_LbComis
+            .Caption   = "Comiss" + CHR(227) + "o :"
+            .Top       = 299
+            .Left      = 563
+            .Width     = 55
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Comis", "TextBox")
+        WITH loc_oPg2.txt_4c_Comis
+            .Value         = 0
+            .Top           = 295
+            .Left          = 619
+            .Width         = 52
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbComisPct", "Label")
+        WITH loc_oPg2.lbl_4c_LbComisPct
+            .Caption   = "(%)"
+            .Top       = 299
+            .Left      = 675
+            .Width     = 25
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbTpComis", "Label")
+        WITH loc_oPg2.lbl_4c_LbTpComis
+            .Caption   = "Tipo : "
+            .Top       = 296
+            .Left      = 719
+            .Width     = 32
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Tipo Comissao (3 botoes: Venda, Caixa, O.S.)
+        loc_oPg2.AddObject("opt_4c_Tpcomis", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Tpcomis
+            .ButtonCount = 3
+            .Top         = 292
+            .Left        = 749
+            .Width       = 141
+            .Height      = 21
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 1
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "Venda"
+                .Left      = 2
+                .Top       = 2
+                .Width     = 44
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "Caixa"
+                .Left      = 48
+                .Top       = 2
+                .Width     = 44
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(3)
+                .Caption   = "O.S."
+                .Left      = 94
+                .Top       = 2
+                .Width     = 44
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Libera Variacao de Custo (custoprod)
+        loc_oPg2.AddObject("lbl_4c_LbCustoprod", "Label")
+        WITH loc_oPg2.lbl_4c_LbCustoprod
+            .Caption   = "Libera Varia" + CHR(231) + CHR(227) + "o de Custo :"
+            .Top       = 317
+            .Left      = 122
+            .Width     = 124
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_Custoprod", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Custoprod
+            .ButtonCount = 2
+            .Top         = 313
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Variacao Mov Dupla (varmovdup)
+        loc_oPg2.AddObject("lbl_4c_LbVarMovDup", "Label")
+        WITH loc_oPg2.lbl_4c_LbVarMovDup
+            .Caption   = "Varia" + CHR(231) + CHR(227) + "o Mov. Dupla :"
+            .Top       = 326
+            .Left      = 510
+            .Width     = 108
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Varmovdup", "TextBox")
+        WITH loc_oPg2.txt_4c_Varmovdup
+            .Value         = 0
+            .Top           = 320
+            .Left          = 619
+            .Width         = 52
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbVarMovDupPct", "Label")
+        WITH loc_oPg2.lbl_4c_LbVarMovDupPct
+            .Caption   = "(%)"
+            .Top       = 324
+            .Left      = 676
+            .Width     = 25
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Libera Valor Max Malote (libValMMax)
+        loc_oPg2.AddObject("lbl_4c_LbLibValmmax", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibValmmax
+            .Caption   = "Libera Valor Max. Malote :"
+            .Top       = 338
+            .Left      = 123
+            .Width     = 123
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_LibValmmax", "OptionGroup")
+        WITH loc_oPg2.opt_4c_LibValmmax
+            .ButtonCount = 2
+            .Top         = 334
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Liberar Variacao Mov Dupla (libvmovdup)
+        loc_oPg2.AddObject("lbl_4c_LbLibVMovDup", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibVMovDup
+            .Caption   = "Liberar Varia" + CHR(231) + CHR(227) + "o Mov. Dupla :"
+            .Top       = 350
+            .Left      = 474
+            .Width     = 144
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("txt_4c_Libvmovdup", "TextBox")
+        WITH loc_oPg2.txt_4c_Libvmovdup
+            .Value         = ""
+            .Top           = 346
+            .Left          = 619
+            .Width         = 20
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
+            .SpecialEffect = 0
+            .MaxLength     = 1
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("lbl_4c_LbLibVMovDupSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibVMovDupSN
+            .Caption   = "(S/N)"
+            .Top       = 350
+            .Left      = 642
+            .Width     = 35
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Liberar Titulos Iguais (libduptits)
+        loc_oPg2.AddObject("lbl_4c_LbLibduptits", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibduptits
+            .Caption   = "Liberar T" + CHR(237) + "tulos Iguais :"
+            .Top       = 356
+            .Left      = 142
+            .Width     = 104
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_Libduptits", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Libduptits
+            .ButtonCount = 2
+            .Top         = 352
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Libera Prazo de Entrega (libprzes)
+        loc_oPg2.AddObject("lbl_4c_LbLibprzes", "Label")
+        WITH loc_oPg2.lbl_4c_LbLibprzes
+            .Caption   = "Libera Prazo de Entrega :"
+            .Top       = 377
+            .Left      = 126
+            .Width     = 120
+            .Height    = 17
+            .AutoSize  = .F.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("opt_4c_Libprzes", "OptionGroup")
+        WITH loc_oPg2.opt_4c_Libprzes
+            .ButtonCount = 2
+            .Top         = 373
+            .Left        = 247
+            .Width       = 89
+            .Height      = 22
+            .AutoSize    = .F.
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 2
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "\<Sim"
+                .Left      = 2
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "\<N" + CHR(227) + "o"
+                .Left      = 46
+                .Top       = 3
+                .Width     = 40
+                .Height    = 17
+                .AutoSize  = .F.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Libera Consulta de Todos Subniveis (ConsSubn)
+        loc_oPg2.AddObject("lbl_4c_LbConsSubn", "Label")
+        WITH loc_oPg2.lbl_4c_LbConsSubn
+            .Caption   = "Libera Consulta de Todos Subniveis :"
+            .Top       = 375
+            .Left      = 439
             .Width     = 179
             .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Alignment = 1
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_LibOpe", "TextBox")
-        WITH loc_oPagina.txt_4c_LibOpe
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 262
+        loc_oPg2.AddObject("txt_4c_ConsSubn", "TextBox")
+        WITH loc_oPg2.txt_4c_ConsSubn
+            .Value         = ""
+            .Top           = 371
+            .Left          = 619
             .Width         = 20
-            .Height        = 23
+            .Height        = 21
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label36", "Label")
-        WITH loc_oPagina.lbl_4c_Label36
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 266
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 10 (Top original ~258/262/263)
-        *-- Lib.Alt.Conta Senha: Say44 Left=395 Top=262->291 | txt_4c_LibAltCli Left=592 Top=258->287
-        *-- Lib.Produtos Bloqueados: Say37 Left=64 Top=263->292 | opt_libleilao Left=206 Top=259->288
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label44", "Label")
-        WITH loc_oPagina.lbl_4c_Label44
-            .Caption   = "Liberar Altera" + CHR(231) + CHR(227) + "o de Conta com Senha :"
-            .Left      = 395
-            .Top       = 291
-            .Width     = 196
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_LibAltCli", "TextBox")
-        WITH loc_oPagina.txt_4c_LibAltCli
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 287
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label45", "Label")
-        WITH loc_oPagina.lbl_4c_Label45
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 291
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label37", "Label")
-        WITH loc_oPagina.lbl_4c_Label37
-            .Caption   = "Libera Produtos Bloqueados :"
-            .Left      = 64
-            .Top       = 292
-            .Width     = 141
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *-- OptionGroup: opt_libleilao (libleilaos: Sim/Nao) Left=206, Top=259->288
-        loc_oPagina.AddObject("obj_4c_OptLibleilao", "OptionGroup")
-        WITH loc_oPagina.obj_4c_OptLibleilao
-            .ButtonCount   = 2
-            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .BackColor     = RGB(255, 255, 255)
+            .BorderStyle   = 1
             .SpecialEffect = 0
-            .Height        = 22
-            .Left          = 206
-            .Top           = 288
-            .Width         = 89
-            .Value         = 2
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "Sim"
-                .Left      = 4
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "N" + CHR(227) + "o"
-                .Left      = 47
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 11 (Top original ~279/283/287)
-        *-- Lib.Duplicidade: Say40 Left=111 Top=283->312 | Fwoption1 Left=206 Top=279->308
-        *-- Lib.Excluir Mov.Producao: Say46 Left=381 Top=287->316 | txt_4c_LibExPrd Left=592 Top=283->312
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label40", "Label")
-        WITH loc_oPagina.lbl_4c_Label40
-            .Caption      = "Libera Duplicidade :"
-            .Left         = 111
-            .Top          = 312
-            .Width        = 94
-            .Height       = 17
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .BackStyle    = 0
-            .ForeColor    = RGB(90, 90, 90)
-            .ToolTipText  = "Este flag permite liberar endere" + CHR(231) + "os duplicados no cadastro de contas e endere" + CHR(231) + "o de entrega."
-            .Visible      = .T.
-        ENDWITH
-
-        *-- OptionGroup: Fwoption1 (libDupEnds: Sim/Nao) Left=206, Top=279->308
-        loc_oPagina.AddObject("obj_4c_Fwoption1", "OptionGroup")
-        WITH loc_oPagina.obj_4c_Fwoption1
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .SpecialEffect = 0
-            .Height        = 22
-            .Left          = 206
-            .Top           = 308
-            .Width         = 89
-            .Value         = 2
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "Sim"
-                .Left      = 4
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "N" + CHR(227) + "o"
-                .Left      = 47
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label46", "Label")
-        WITH loc_oPagina.lbl_4c_Label46
-            .Caption   = "Libera Excluir Movimenta" + CHR(231) + CHR(227) + "o de Produ" + CHR(231) + CHR(227) + "o :"
-            .Left      = 381
-            .Top       = 316
-            .Width     = 210
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_LibExPrd", "TextBox")
-        WITH loc_oPagina.txt_4c_LibExPrd
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 312
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
             .MaxLength     = 1
             .Visible       = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label47", "Label")
-        WITH loc_oPagina.lbl_4c_Label47
+        loc_oPg2.AddObject("lbl_4c_LbConsSubnSN", "Label")
+        WITH loc_oPg2.lbl_4c_LbConsSubnSN
             .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 316
+            .Top       = 375
+            .Left      = 642
             .Width     = 35
             .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 12 (Top original ~300/304/308/312)
-        *-- Lib.Saldo Tanque: Say43 Left=25 Top=304->333 | Fwoption4 Left=206 Top=300->329
-        *-- Lib.Var.Peso: Say50 Left=461 Top=312->341 | txt_4c_LibVarPeso Left=592 Top=308->337
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label43", "Label")
-        WITH loc_oPagina.lbl_4c_Label43
-            .Caption      = "Libera Saldo Insuficiente No Tanque :"
-            .Left         = 25
-            .Top          = 333
-            .Width        = 180
-            .Height       = 17
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .BackStyle    = 0
-            .ForeColor    = RGB(90, 90, 90)
-            .ToolTipText  = "Este flag permite liberar endere" + CHR(231) + "os duplicados no cadastro de contas e endere" + CHR(231) + "o de entrega."
-            .Visible      = .T.
-        ENDWITH
-
-        *-- OptionGroup: Fwoption4 (libSldTqe: Sim/Nao) Left=206, Top=300->329
-        loc_oPagina.AddObject("obj_4c_Fwoption4", "OptionGroup")
-        WITH loc_oPagina.obj_4c_Fwoption4
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .SpecialEffect = 0
-            .Height        = 22
-            .Left          = 206
-            .Top           = 329
-            .Width         = 89
-            .Value         = 2
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "Sim"
-                .Left      = 4
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "N" + CHR(227) + "o"
-                .Left      = 47
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label50", "Label")
-        WITH loc_oPagina.lbl_4c_Label50
-            .Caption   = "Liberar Varia" + CHR(231) + CHR(227) + "o de Peso :"
-            .Left      = 461
-            .Top       = 341
-            .Width     = 130
-            .Height    = 17
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("txt_4c_LibVarPeso", "TextBox")
-        WITH loc_oPagina.txt_4c_LibVarPeso
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 337
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label51", "Label")
-        WITH loc_oPagina.lbl_4c_Label51
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 341
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
             .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
         ENDWITH
 
         *======================================================================
-        *-- LINHA 13 (Top original ~327/333/337)
-        *-- Say27 "Liberar Pagamentos por Centro de Custo" Left=48 Top=327->356 (BOLD)
-        *-- (LibTroca removido - coluna nao existe no schema)
+        * SUB-GRADE: Acesso Financeiro (SIGCRRCC)
         *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label27", "Label")
-        WITH loc_oPagina.lbl_4c_Label27
+        loc_oPg2.AddObject("lbl_4c_LbGradeAcesso", "Label")
+        WITH loc_oPg2.lbl_4c_LbGradeAcesso
             .Caption   = "Liberar Pagamentos por Centro de Custo"
-            .Left      = 48
-            .Top       = 356
+            .Top       = 403
+            .Left      = 66
             .Width     = 231
             .Height    = 15
-            .AutoSize  = .T.
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .Alignment = 2
-            .BackStyle = 0
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
+        loc_oPg2.AddObject("grd_4c_AcessoFinan", "Grid")
+        loc_oPg2.grd_4c_AcessoFinan.RecordSource = ""
+        loc_oPg2.grd_4c_AcessoFinan.ColumnCount  = 4
+
+        loc_oGridAcesso = loc_oPg2.grd_4c_AcessoFinan
+        WITH loc_oGridAcesso
+            .Top                     = 419
+            .Left                    = 66
+            .Width                   = 310
+            .Height                  = 205
+            .FontName                = "Verdana"
+            .FontSize                = 8
+            .ForeColor               = RGB(90, 90, 90)
+            .BackColor               = RGB(255, 255, 255)
+            .GridLineColor           = RGB(238, 238, 238)
+            .HighlightBackColor      = RGB(255, 255, 255)
+            .HighlightForeColor      = RGB(15, 41, 104)
+            .HighlightStyle          = 2
+            .DeleteMark              = .F.
+            .RecordMark              = .F.
+            .RowHeight               = 16
+            .ScrollBars              = 3
+            .GridLines               = 3
+            .ReadOnly                = .F.
+            .Visible                 = .T.
+            .Column1.Width           = 70
+            .Column2.Width           = 85
+            .Column3.Width           = 90
+            .Column4.Width           = 55
+            .Column1.Header1.Caption = "Grupo"
+            .Column2.Header1.Caption = "Conta"
+            .Column3.Header1.Caption = "Valor"
+            .Column4.Header1.Caption = "Moeda"
+        ENDWITH
+
+        BINDEVENT(loc_oGridAcesso.Column1.Text1, "KeyPress", THIS, "ValidarGrupoGrade")
+        BINDEVENT(loc_oGridAcesso.Column2.Text1, "KeyPress", THIS, "ValidarContaGrade")
+        BINDEVENT(loc_oGridAcesso.Column4.Text1, "KeyPress", THIS, "ValidarMoedaGrade")
+
+        *-- Botoes Inserir/Excluir linhas da grade de acesso
+        loc_oPg2.AddObject("cmd_4c_InserirAcesso", "CommandButton")
+        WITH loc_oPg2.cmd_4c_InserirAcesso
+            .Caption         = "Inserir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+            .PicturePosition = 13
+            .Top             = 482
+            .Left            = 380
+            .Width           = 45
+            .Height          = 45
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .FontBold        = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+
+        loc_oPg2.AddObject("cmd_4c_ExcluirAcesso", "CommandButton")
+        WITH loc_oPg2.cmd_4c_ExcluirAcesso
+            .Caption         = "Excluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+            .PicturePosition = 13
+            .Top             = 528
+            .Left            = 380
+            .Width           = 45
+            .Height          = 45
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .FontBold        = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+
+        BINDEVENT(loc_oPg2.cmd_4c_InserirAcesso, "Click", THIS, "BtnInserirAcessoClick")
+        BINDEVENT(loc_oPg2.cmd_4c_ExcluirAcesso, "Click", THIS, "BtnExcluirAcessoClick")
 
         *======================================================================
-        *-- GRADE SigCrRcc (Grade: Left=48, Top=342->371, Width=310, Height=256)
-        *-- 4 colunas: Grupo(80), Conta(80), Valor(80), Moeda(35)
+        * SUB-GRADE: Categorias (sigcarct + sigcdctg)
         *======================================================================
-        loc_oPagina.AddObject("grd_4c_Dados", "Grid")
-        WITH loc_oPagina.grd_4c_Dados
-            .DeleteMark    = .F.
-            .GridLines     = 3
-            .GridLineWidth = 1
-            .GridLineColor = RGB(192, 192, 192)
-            .HeaderHeight  = 20
-            .Height        = 256
-            .Left          = 48
-            .ScrollBars    = 2
-            .Top           = 371
-            .Width         = 310
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .Visible       = .T.
-            .RecordMark   = .F.
-        ENDWITH
-
-        *-- ColumnCount e RecordSource FORA do WITH (evita "Unknown member COLUMN1")
-        loc_oPagina.grd_4c_Dados.ColumnCount = 4
-        loc_oPagina.grd_4c_Dados.RecordSource = "cursor_4c_Rcc"
-
-        *-- Headers
-        WITH loc_oPagina.grd_4c_Dados.Column1
-            .Width = 80
-            .Header1.Caption   = "Grupo"
-            .Header1.Alignment = 2
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.ForeColor = RGB(90, 90, 90)
-        ENDWITH
-        loc_oPagina.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Rcc.Grupos"
-
-        WITH loc_oPagina.grd_4c_Dados.Column2
-            .Width = 80
-            .Header1.Caption   = "Conta"
-            .Header1.Alignment = 2
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.ForeColor = RGB(90, 90, 90)
-        ENDWITH
-        loc_oPagina.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Rcc.Contas"
-
-        WITH loc_oPagina.grd_4c_Dados.Column3
-            .Width = 80
-            .Header1.Caption   = "Valor"
-            .Header1.Alignment = 2
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.ForeColor = RGB(90, 90, 90)
-        ENDWITH
-        loc_oPagina.grd_4c_Dados.Column3.ControlSource = "cursor_4c_Rcc.Valors"
-
-        WITH loc_oPagina.grd_4c_Dados.Column4
-            .Width = 35
-            .Header1.Caption   = "Moeda"
-            .Header1.Alignment = 2
-            .Header1.FontName  = "Tahoma"
-            .Header1.FontSize  = 8
-            .Header1.ForeColor = RGB(90, 90, 90)
-        ENDWITH
-        loc_oPagina.grd_4c_Dados.Column4.ControlSource = "cursor_4c_Rcc.Moedas"
-
-        *-- Botao Inserir linha na grade (inserir: Left=366, Top=413->442, H=45, W=45)
-        loc_oPagina.AddObject("cmd_4c_AdicionarLinha", "CommandButton")
-        WITH loc_oPagina.cmd_4c_AdicionarLinha
-            .Caption       = ""
-            .Picture       = gc_4c_CaminhoIcones + "geral_selecionar_26.jpg"
-            .Top           = 442
-            .Left          = 366
-            .Height        = 45
-            .Width         = 45
-            .FontBold      = .T.
-            .FontName      = "Arial"
-            .FontSize      = 9
-            .ToolTipText   = "Inserir"
-            .ForeColor     = RGB(0, 128, 0)
-            .BackColor     = RGB(255, 255, 255)
-            .Themes        = .F.
-            .SpecialEffect = 0
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_AdicionarLinha, "Click", THIS, "BtnAdicionarLinhaClick")
-
-        *-- Botao Excluir linha da grade (excluir: Left=366, Top=457->486, H=45, W=45)
-        loc_oPagina.AddObject("cmd_4c_RemoverLinha", "CommandButton")
-        WITH loc_oPagina.cmd_4c_RemoverLinha
-            .Caption       = ""
-            .Picture       = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-            .Top           = 486
-            .Left          = 366
-            .Height        = 45
-            .Width         = 45
-            .FontBold      = .T.
-            .FontName      = "Arial"
-            .FontSize      = 9
-            .ToolTipText   = "Excluir"
-            .ForeColor     = RGB(255, 0, 0)
-            .BackColor     = RGB(255, 255, 255)
-            .Themes        = .F.
-            .SpecialEffect = 0
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.cmd_4c_RemoverLinha, "Click", THIS, "BtnRemoverLinhaClick")
-
-        *======================================================================
-        *-- LINHA 15 (Top original ~358/362)
-        *-- Fator Comissao: Say18 Left=490 Top=362->391 | txt_4c_FComis Left=592 Top=358->387
-        *--   Say19 "(S/N)" Left=616 Top=362->391
-        *--   txt_4c_AComis Left=653 Top=358->387 Width=52 | Say17 "(%)" Left=711 Top=362->391
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label18", "Label")
-        WITH loc_oPagina.lbl_4c_Label18
-            .Caption   = "Fator de Comiss" + CHR(227) + "o :"
-            .Left      = 490
-            .Top       = 391
-            .Width     = 101
-            .Height    = 17
+        loc_oPg2.AddObject("lbl_4c_LbGradeCat", "Label")
+        WITH loc_oPg2.lbl_4c_LbGradeCat
+            .Caption   = "Categorias"
+            .Top       = 403
+            .Left      = 509
+            .Width     = 63
+            .Height    = 15
+            .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .BackStyle = 0
+            .FontBold  = .T.
             .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
             .Visible   = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_FComis", "TextBox")
-        WITH loc_oPagina.txt_4c_FComis
-            .Value         = "N"
-            .Left          = 592
-            .Top           = 387
-            .Width         = 20
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .MaxLength     = 1
-            .Visible       = .T.
+        loc_oPg2.AddObject("grd_4c_Categorias", "Grid")
+        loc_oPg2.grd_4c_Categorias.RecordSource = ""
+        loc_oPg2.grd_4c_Categorias.ColumnCount  = 3
+
+        loc_oGridCat = loc_oPg2.grd_4c_Categorias
+        WITH loc_oGridCat
+            .Top                     = 419
+            .Left                    = 509
+            .Width                   = 310
+            .Height                  = 205
+            .FontName                = "Verdana"
+            .FontSize                = 8
+            .ForeColor               = RGB(90, 90, 90)
+            .BackColor               = RGB(255, 255, 255)
+            .GridLineColor           = RGB(238, 238, 238)
+            .HighlightBackColor      = RGB(255, 255, 255)
+            .HighlightForeColor      = RGB(15, 41, 104)
+            .HighlightStyle          = 2
+            .DeleteMark              = .F.
+            .RecordMark              = .F.
+            .RowHeight               = 16
+            .ScrollBars              = 3
+            .GridLines               = 3
+            .ReadOnly                = .F.
+            .Visible                 = .T.
+            .Column1.Width           = 60
+            .Column2.Width           = 170
+            .Column3.Width           = 75
+            .Column1.Header1.Caption = "Categoria"
+            .Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            .Column3.Header1.Caption = "Validar"
+            .Column2.ReadOnly        = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("lbl_4c_Label19", "Label")
-        WITH loc_oPagina.lbl_4c_Label19
-            .Caption   = "(S/N)"
-            .Left      = 616
-            .Top       = 391
-            .Width     = 35
-            .Height    = 17
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
+        BINDEVENT(loc_oGridCat.Column1.Text1, "KeyPress", THIS, "ValidarCategoriaGrade")
+        BINDEVENT(loc_oGridCat.Column3.Text1, "KeyPress", THIS, "ValidarTipoCategoria")
+
+        *-- Botoes Inserir/Excluir linhas da grade de categorias
+        loc_oPg2.AddObject("cmd_4c_InserirCat", "CommandButton")
+        WITH loc_oPg2.cmd_4c_InserirCat
+            .Caption         = "Inserir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+            .PicturePosition = 13
+            .Top             = 482
+            .Left            = 380
+            .Width           = 45
+            .Height          = 45
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .FontBold        = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
-        loc_oPagina.AddObject("txt_4c_AComis", "TextBox")
-        WITH loc_oPagina.txt_4c_AComis
-            .Value         = 0
-            .Left          = 653
-            .Top           = 387
-            .Width         = 52
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999.99"
-            .Visible       = .T.
-        ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_AComis, "KeyPress", THIS, "ValidarAComis")
-
-        loc_oPagina.AddObject("lbl_4c_Label17", "Label")
-        WITH loc_oPagina.lbl_4c_Label17
-            .Caption   = "(%)"
-            .Left      = 711
-            .Top       = 391
-            .Width     = 21
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
+        loc_oPg2.AddObject("cmd_4c_ExcluirCat", "CommandButton")
+        WITH loc_oPg2.cmd_4c_ExcluirCat
+            .Caption         = "Excluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+            .PicturePosition = 13
+            .Top             = 528
+            .Left            = 823
+            .Width           = 45
+            .Height          = 45
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .FontBold        = .T.
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
         ENDWITH
 
-        *======================================================================
-        *-- LINHA 16 (Top original ~382/383/386)
-        *-- Comissao: Say6 Left=534 Top=386->415 | txt_4c_Comi Left=592 Top=382->411 Width=52
-        *--   Say9 "(%)" Left=649 Top=386->415
-        *--   Say39 "Tipo : " Left=694 Top=386->415 | tp_Comis Left=722 Top=383->412 W=141 H=21
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label6", "Label")
-        WITH loc_oPagina.lbl_4c_Label6
-            .Caption   = "Comiss" + CHR(227) + "o :"
-            .Left      = 534
-            .Top       = 415
-            .Width     = 57
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .FontBold  = .F.
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
+        BINDEVENT(loc_oPg2.cmd_4c_InserirCat, "Click", THIS, "BtnInserirCatClick")
+        BINDEVENT(loc_oPg2.cmd_4c_ExcluirCat, "Click", THIS, "BtnExcluirCatClick")
 
-        loc_oPagina.AddObject("txt_4c_Comi", "TextBox")
-        WITH loc_oPagina.txt_4c_Comi
-            .Value         = 0
-            .Left          = 592
-            .Top           = 411
-            .Width         = 52
-            .Height        = 23
-            .FontName      = "Tahoma"
-            .FontSize      = 8
-            .SpecialEffect = 1
-            .Alignment     = 3
-            .InputMask     = "999.99"
-            .Visible       = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label9", "Label")
-        WITH loc_oPagina.lbl_4c_Label9
-            .Caption   = "(%)"
-            .Left      = 649
-            .Top       = 415
-            .Width     = 21
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label39", "Label")
-        WITH loc_oPagina.lbl_4c_Label39
-            .Caption   = "Tipo : "
-            .Left      = 694
-            .Top       = 415
-            .Width     = 32
-            .Height    = 17
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .BackStyle = 0
-            .ForeColor = RGB(90, 90, 90)
-            .Visible   = .T.
-        ENDWITH
-
-        *-- OptionGroup: tp_Comis (Tpcomis: %/Tab.Desconto) Left=722, Top=383->412, W=141, H=21
-        loc_oPagina.AddObject("obj_4c_TpComis", "OptionGroup")
-        WITH loc_oPagina.obj_4c_TpComis
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .BorderStyle   = 0
-            .SpecialEffect = 0
-            .Height        = 21
-            .Left          = 722
-            .Top           = 412
-            .Width         = 141
-            .Value         = 1
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "%"
-                .Left      = 4
-                .Top       = 2
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontName  = "Tahoma"
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "Tab.Desconto"
-                .Left      = 36
-                .Top       = 2
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        *======================================================================
-        *-- LINHA 17 (Top original ~405/409/426/430)
-        *-- Lib.Titulos Iguais: Say41 Left=480 Top=409->438 | Fwoption2 Left=587 Top=405->434
-        *-- Lib.Prazo Entrega: Say42 Left=464 Top=430->459 | Fwoption3 Left=587 Top=426->455
-        *======================================================================
-        loc_oPagina.AddObject("lbl_4c_Label41", "Label")
-        WITH loc_oPagina.lbl_4c_Label41
-            .Caption      = "Liberar T" + CHR(237) + "tulos Iguais :"
-            .Left         = 480
-            .Top          = 438
-            .Width        = 106
-            .Height       = 17
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .BackStyle    = 0
-            .ForeColor    = RGB(90, 90, 90)
-            .ToolTipText  = "Permite salvar t" + CHR(237) + "tulos com a mesma conta / vencimento  / valor."
-            .Visible      = .T.
-        ENDWITH
-
-        *-- OptionGroup: Fwoption2 (libDupTits: Sim/Nao) Left=587, Top=405->434
-        loc_oPagina.AddObject("obj_4c_Fwoption2", "OptionGroup")
-        WITH loc_oPagina.obj_4c_Fwoption2
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .SpecialEffect = 0
-            .Height        = 22
-            .Left          = 587
-            .Top           = 434
-            .Width         = 89
-            .Value         = 2
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "Sim"
-                .Left      = 4
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "N" + CHR(227) + "o"
-                .Left      = 47
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        loc_oPagina.AddObject("lbl_4c_Label42", "Label")
-        WITH loc_oPagina.lbl_4c_Label42
-            .Caption      = "Libera Prazo de Entrega :"
-            .Left         = 464
-            .Top          = 459
-            .Width        = 122
-            .Height       = 17
-            .FontName     = "Tahoma"
-            .FontSize     = 8
-            .BackStyle    = 0
-            .ForeColor    = RGB(90, 90, 90)
-            .ToolTipText  = "Permite lan" + CHR(231) + "ar prazo de entrega fora do m" + CHR(237) + "nimo e m" + CHR(225) + "ximo configurado na movimenta" + CHR(231) + CHR(227) + "o"
-            .Visible      = .T.
-        ENDWITH
-
-        *-- OptionGroup: Fwoption3 (libPrzes: Sim/Nao) Left=587, Top=426->455
-        loc_oPagina.AddObject("obj_4c_Fwoption3", "OptionGroup")
-        WITH loc_oPagina.obj_4c_Fwoption3
-            .ButtonCount   = 2
-            .BackStyle     = 0
-            .SpecialEffect = 0
-            .Height        = 22
-            .Left          = 587
-            .Top           = 455
-            .Width         = 89
-            .Value         = 2
-            .Visible       = .T.
-            WITH .Buttons(1)
-                .Alignment = 0
-                .BackStyle = 0
-                .Caption   = "Sim"
-                .Left      = 4
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-            WITH .Buttons(2)
-                .FontSize  = 8
-                .BackStyle = 0
-                .Caption   = "N" + CHR(227) + "o"
-                .Left      = 47
-                .Top       = 3
-                .AutoSize  = .T.
-                .ForeColor = RGB(90, 90, 90)
-                .Themes    = .F.
-            ENDWITH
-        ENDWITH
-
-        THIS.TornarControlesVisiveis(loc_oPagina)
+        THIS.TornarControlesVisiveis(loc_oPg2)
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * TornarControlesVisiveis - Torna todos os controles visiveis em uma pagina
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE TornarControlesVisiveis(par_oPagina)
-        LOCAL loc_nI
-        FOR loc_nI = 1 TO par_oPagina.ControlCount
-            par_oPagina.Controls(loc_nI).Visible = .T.
-        NEXT
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * AlternarPagina - Alterna entre Page1 (lista) e Page2 (dados)
-    *--------------------------------------------------------------------------
-    PROCEDURE AlternarPagina(par_nPagina)
-        THIS.pgf_4c_Paginas.ActivePage = par_nPagina
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ConfigurarGradeEventos - Configura BINDEVENTs LostFocus nas colunas da grade
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ConfigurarGradeEventos()
-        LOCAL loc_oGrade
-        loc_oGrade = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
-        BINDEVENT(loc_oGrade.Column1.Text1, "KeyPress", THIS, "GradeCol1LostFocus")
-        BINDEVENT(loc_oGrade.Column2.Text1, "KeyPress", THIS, "GradeCol2LostFocus")
-        BINDEVENT(loc_oGrade.Column4.Text1, "KeyPress", THIS, "GradeCol4LostFocus")
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * HabilitarCampos - Habilita/desabilita campos conforme modo atual
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE HabilitarCampos()
-        LOCAL loc_oPag2, loc_lEditar, loc_lIncluir
-        loc_oPag2    = THIS.pgf_4c_Paginas.Page2
-        loc_lEditar  = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR", "BUSCAR")
-        loc_lIncluir = (THIS.this_cModoAtual = "INCLUIR")
-
-        *-- Campo Cargo: editavel apenas em INCLUIR e BUSCAR
-        loc_oPag2.txt_4c_Cargo.Enabled         = (INLIST(THIS.this_cModoAtual, "INCLUIR", "BUSCAR"))
-        loc_oPag2.obj_4c_CmdGarqicone.Enabled  = (INLIST(THIS.this_cModoAtual, "INCLUIR", "BUSCAR"))
-
-        *-- Demais campos de dados: editaveis em INCLUIR e ALTERAR
-        loc_oPag2.txt_4c_Descr.Enabled         = loc_lEditar
-        loc_oPag2.txt_4c_Senha.Enabled         = loc_lEditar
-        loc_oPag2.txt_4c_Altcot.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_Limdesc.Enabled       = loc_lEditar
-        loc_oPag2.txt_4c_Desc.Enabled          = loc_lEditar
-        loc_oPag2.txt_4c_Limite.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_LimAcre.Enabled       = loc_lEditar
-        loc_oPag2.txt_4c_Acre.Enabled          = loc_lEditar
-        loc_oPag2.txt_4c_CancItem.Enabled      = loc_lEditar
-        loc_oPag2.txt_4c_VlPag.Enabled         = loc_lEditar
-        loc_oPag2.txt_4c_LibFpag.Enabled       = loc_lEditar
-        loc_oPag2.txt_4c_VlLibCots.Enabled     = loc_lEditar
-        loc_oPag2.txt_4c_SdInsu.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_VlLibOps.Enabled      = loc_lEditar
-        loc_oPag2.txt_4c_Libfpg.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_Valcot.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_LibOpers.Enabled      = loc_lEditar
-        loc_oPag2.txt_4c__Grupo.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_LibOpe.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_LibAltCli.Enabled     = loc_lEditar
-        loc_oPag2.obj_4c_OptLibleilao.Enabled  = loc_lEditar
-        loc_oPag2.obj_4c_Fwoption1.Enabled     = loc_lEditar
-        loc_oPag2.txt_4c_LibExPrd.Enabled      = loc_lEditar
-        loc_oPag2.obj_4c_Fwoption4.Enabled     = loc_lEditar
-        loc_oPag2.txt_4c_LibVarPeso.Enabled    = loc_lEditar
-
-        loc_oPag2.txt_4c_FComis.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_AComis.Enabled        = loc_lEditar
-        loc_oPag2.txt_4c_Comi.Enabled          = loc_lEditar
-        loc_oPag2.obj_4c_TpComis.Enabled       = loc_lEditar
-        loc_oPag2.obj_4c_Fwoption2.Enabled     = loc_lEditar
-        loc_oPag2.obj_4c_Fwoption3.Enabled     = loc_lEditar
-
-        *-- Grade e botoes grade: habilitados em INCLUIR e ALTERAR (nao em BUSCAR)
-        LOCAL loc_lGrade
-        loc_lGrade = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-        loc_oPag2.grd_4c_Dados.ReadOnly           = !loc_lGrade
-        loc_oPag2.cmd_4c_AdicionarLinha.Enabled   = loc_lGrade
-        loc_oPag2.cmd_4c_RemoverLinha.Enabled     = loc_lGrade
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * LimparCampos - Limpa todos os campos do formulario (Page2)
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oPag2
-        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
-
-        loc_oPag2.txt_4c_Cargo.Value         = ""
-        loc_oPag2.txt_4c_Descr.Value         = ""
-        loc_oPag2.txt_4c_Senha.Value         = "N"
-        loc_oPag2.txt_4c_Altcot.Value        = "N"
-        loc_oPag2.txt_4c_Limdesc.Value       = 0
-        loc_oPag2.txt_4c_Desc.Value          = 0
-        loc_oPag2.txt_4c_Limite.Value        = "N"
-        loc_oPag2.txt_4c_LimAcre.Value       = 0
-        loc_oPag2.txt_4c_Acre.Value          = 0
-        loc_oPag2.txt_4c_CancItem.Value      = "N"
-        loc_oPag2.txt_4c_VlPag.Value         = 0
-        loc_oPag2.txt_4c_LibFpag.Value       = "N"
-        loc_oPag2.txt_4c_VlLibCots.Value     = 0
-        loc_oPag2.txt_4c_SdInsu.Value        = "N"
-        loc_oPag2.txt_4c_VlLibOps.Value      = 0
-        loc_oPag2.txt_4c_Libfpg.Value        = "N"
-        loc_oPag2.txt_4c_Valcot.Value        = 0
-        loc_oPag2.txt_4c_LibOpers.Value      = "N"
-        loc_oPag2.txt_4c__Grupo.Value        = ""
-        loc_oPag2.txt_4c_LibOpe.Value        = "N"
-        loc_oPag2.txt_4c_LibAltCli.Value     = "N"
-        loc_oPag2.obj_4c_OptLibleilao.Value  = 2
-        loc_oPag2.obj_4c_Fwoption1.Value     = 2
-        loc_oPag2.txt_4c_LibExPrd.Value      = "N"
-        loc_oPag2.obj_4c_Fwoption4.Value     = 2
-        loc_oPag2.txt_4c_LibVarPeso.Value    = "N"
-
-        loc_oPag2.txt_4c_FComis.Value        = "N"
-        loc_oPag2.txt_4c_AComis.Value        = 0
-        loc_oPag2.txt_4c_Comi.Value          = 0
-        loc_oPag2.obj_4c_TpComis.Value       = 1
-        loc_oPag2.obj_4c_Fwoption2.Value     = 2
-        loc_oPag2.obj_4c_Fwoption3.Value     = 2
-
-        *-- Limpar grade RCC
-        IF USED("cursor_4c_Rcc")
-            SELECT cursor_4c_Rcc
-            ZAP
-        ENDIF
-        loc_oPag2.grd_4c_Dados.ColumnCount = 4
-        loc_oPag2.grd_4c_Dados.RecordSource = "cursor_4c_Rcc"
-        loc_oPag2.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Rcc.Grupos"
-        loc_oPag2.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Rcc.Contas"
-        loc_oPag2.grd_4c_Dados.Column3.ControlSource = "cursor_4c_Rcc.Valors"
-        loc_oPag2.grd_4c_Dados.Column4.ControlSource = "cursor_4c_Rcc.Moedas"
-        loc_oPag2.grd_4c_Dados.Refresh()
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * FormParaBO - Transfere dados do form para o Business Object
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oPag2, loc_oBO
-        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
-        loc_oBO   = THIS.this_oBusinessObject
-
-        loc_oBO.this_cCargo      = UPPER(ALLTRIM(loc_oPag2.txt_4c_Cargo.Value))
-        loc_oBO.this_cDescricao  = ALLTRIM(loc_oPag2.txt_4c_Descr.Value)
-        loc_oBO.this_cSenha      = UPPER(ALLTRIM(loc_oPag2.txt_4c_Senha.Value))
-        loc_oBO.this_cAltCots    = UPPER(ALLTRIM(loc_oPag2.txt_4c_Altcot.Value))
-        loc_oBO.this_nLimDesc    = loc_oPag2.txt_4c_Limdesc.Value
-        loc_oBO.this_nDescPor    = loc_oPag2.txt_4c_Desc.Value
-        loc_oBO.this_cLimites    = UPPER(ALLTRIM(loc_oPag2.txt_4c_Limite.Value))
-        loc_oBO.this_nLimAcre    = loc_oPag2.txt_4c_LimAcre.Value
-        loc_oBO.this_nAcrePor    = loc_oPag2.txt_4c_Acre.Value
-        loc_oBO.this_cCancItens  = UPPER(ALLTRIM(loc_oPag2.txt_4c_CancItem.Value))
-        loc_oBO.this_nVlLibPgs   = loc_oPag2.txt_4c_VlPag.Value
-        loc_oBO.this_cLibFpags   = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibFpag.Value))
-        loc_oBO.this_nVlLibCots  = loc_oPag2.txt_4c_VlLibCots.Value
-        loc_oBO.this_cLibSdIns   = UPPER(ALLTRIM(loc_oPag2.txt_4c_SdInsu.Value))
-        loc_oBO.this_nVlLibOpes  = loc_oPag2.txt_4c_VlLibOps.Value
-        loc_oBO.this_cLibFpgs    = UPPER(ALLTRIM(loc_oPag2.txt_4c_Libfpg.Value))
-        loc_oBO.this_nVarCots    = loc_oPag2.txt_4c_Valcot.Value
-        loc_oBO.this_cLibOpers   = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibOpers.Value))
-        loc_oBO.this_cGrComis    = ALLTRIM(loc_oPag2.txt_4c__Grupo.Value)
-        loc_oBO.this_cLibOpes    = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibOpe.Value))
-        loc_oBO.this_cLibAltCli  = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibAltCli.Value))
-        loc_oBO.this_nLibLeilao  = loc_oPag2.obj_4c_OptLibleilao.Value
-        loc_oBO.this_nLibDupEnds = loc_oPag2.obj_4c_Fwoption1.Value
-        loc_oBO.this_cLibExPrd   = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibExPrd.Value))
-        loc_oBO.this_nLibSldTqe  = loc_oPag2.obj_4c_Fwoption4.Value
-        loc_oBO.this_cLibVarPeso = UPPER(ALLTRIM(loc_oPag2.txt_4c_LibVarPeso.Value))
-
-        loc_oBO.this_cFComis     = UPPER(ALLTRIM(loc_oPag2.txt_4c_FComis.Value))
-        loc_oBO.this_nAComis     = loc_oPag2.txt_4c_AComis.Value
-        loc_oBO.this_nComis      = loc_oPag2.txt_4c_Comi.Value
-        loc_oBO.this_nTpComis    = loc_oPag2.obj_4c_TpComis.Value
-        loc_oBO.this_nLibDupTits = loc_oPag2.obj_4c_Fwoption2.Value
-        loc_oBO.this_nLibPrzes   = loc_oPag2.obj_4c_Fwoption3.Value
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * BOParaForm - Transfere dados do Business Object para o form
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPag2, loc_oBO
-        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
-        loc_oBO   = THIS.this_oBusinessObject
-
-        loc_oPag2.txt_4c_Cargo.Value         = ALLTRIM(loc_oBO.this_cCargo)
-        loc_oPag2.txt_4c_Descr.Value         = ALLTRIM(loc_oBO.this_cDescricao)
-        loc_oPag2.txt_4c_Senha.Value         = ALLTRIM(loc_oBO.this_cSenha)
-        loc_oPag2.txt_4c_Altcot.Value        = ALLTRIM(loc_oBO.this_cAltCots)
-        loc_oPag2.txt_4c_Limdesc.Value       = loc_oBO.this_nLimDesc
-        loc_oPag2.txt_4c_Desc.Value          = loc_oBO.this_nDescPor
-        loc_oPag2.txt_4c_Limite.Value        = ALLTRIM(loc_oBO.this_cLimites)
-        loc_oPag2.txt_4c_LimAcre.Value       = loc_oBO.this_nLimAcre
-        loc_oPag2.txt_4c_Acre.Value          = loc_oBO.this_nAcrePor
-        loc_oPag2.txt_4c_CancItem.Value      = ALLTRIM(loc_oBO.this_cCancItens)
-        loc_oPag2.txt_4c_VlPag.Value         = loc_oBO.this_nVlLibPgs
-        loc_oPag2.txt_4c_LibFpag.Value       = ALLTRIM(loc_oBO.this_cLibFpags)
-        loc_oPag2.txt_4c_VlLibCots.Value     = loc_oBO.this_nVlLibCots
-        loc_oPag2.txt_4c_SdInsu.Value        = ALLTRIM(loc_oBO.this_cLibSdIns)
-        loc_oPag2.txt_4c_VlLibOps.Value      = loc_oBO.this_nVlLibOpes
-        loc_oPag2.txt_4c_Libfpg.Value        = ALLTRIM(loc_oBO.this_cLibFpgs)
-        loc_oPag2.txt_4c_Valcot.Value        = loc_oBO.this_nVarCots
-        loc_oPag2.txt_4c_LibOpers.Value      = ALLTRIM(loc_oBO.this_cLibOpers)
-        loc_oPag2.txt_4c__Grupo.Value        = ALLTRIM(loc_oBO.this_cGrComis)
-        loc_oPag2.txt_4c_LibOpe.Value        = ALLTRIM(loc_oBO.this_cLibOpes)
-        loc_oPag2.txt_4c_LibAltCli.Value     = ALLTRIM(loc_oBO.this_cLibAltCli)
-        loc_oPag2.obj_4c_OptLibleilao.Value  = loc_oBO.this_nLibLeilao
-        loc_oPag2.obj_4c_Fwoption1.Value     = loc_oBO.this_nLibDupEnds
-        loc_oPag2.txt_4c_LibExPrd.Value      = ALLTRIM(loc_oBO.this_cLibExPrd)
-        loc_oPag2.obj_4c_Fwoption4.Value     = loc_oBO.this_nLibSldTqe
-        loc_oPag2.txt_4c_LibVarPeso.Value    = ALLTRIM(loc_oBO.this_cLibVarPeso)
-
-        loc_oPag2.txt_4c_FComis.Value        = ALLTRIM(loc_oBO.this_cFComis)
-        loc_oPag2.txt_4c_AComis.Value        = loc_oBO.this_nAComis
-        loc_oPag2.txt_4c_Comi.Value          = loc_oBO.this_nComis
-        loc_oPag2.obj_4c_TpComis.Value       = loc_oBO.this_nTpComis
-        loc_oPag2.obj_4c_Fwoption2.Value     = loc_oBO.this_nLibDupTits
-        loc_oPag2.obj_4c_Fwoption3.Value     = loc_oBO.this_nLibPrzes
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarLista - Carrega dados no grid da lista (Page1)
+    * CarregarLista - Busca cargos e carrega grid da Page1
     *--------------------------------------------------------------------------
     PROCEDURE CarregarLista()
-        LOCAL loc_lSucesso, loc_oGrade
-        loc_lSucesso = .F.
+        LOCAL loc_lResultado, loc_oGrid
+        loc_lResultado = .F.
+
         TRY
-            IF THIS.this_oBusinessObject.Buscar("")
-                loc_oGrade = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-                loc_oGrade.ColumnCount = 2
-                loc_oGrade.RecordSource = "cursor_4c_Dados"
-                loc_oGrade.Column1.ControlSource = "cursor_4c_Dados.ccargs"
-                loc_oGrade.Column2.ControlSource = "cursor_4c_Dados.dcargs"
-                loc_oGrade.Refresh()
-                loc_lSucesso = .T.
+            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                SET NULL ON
+                CREATE CURSOR cursor_4c_Dados (ccargs C(10), dcargs C(20))
+                SET NULL OFF
+                loc_lResultado = .T.
             ELSE
-                THIS.this_cMensagemErro = THIS.this_oBusinessObject.this_cMensagemErro
-            ENDIF
-        CATCH TO loEx
-            THIS.this_cMensagemErro = "Linha " + TRANSFORM(loEx.LineNo) + ": " + loEx.Message
-        ENDTRY
-        RETURN loc_lSucesso
-    ENDPROC
+                IF THIS.this_oBusinessObject.Buscar("")
+                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
+                        loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
-    *--------------------------------------------------------------------------
-    * CarregarRcc - Carrega registros SigCrRcc para o cargo atual
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarRcc(par_cCargo)
-        LOCAL loc_nRet, loc_cSQL, loc_oGrade
-        TRY
-            loc_cSQL = "SELECT Grupos, Contas, Valors, Moedas, Cargos, CidChaves " + ;
-                       "FROM SigCrRcc WHERE Cargos = " + EscaparSQL(ALLTRIM(par_cCargo)) + ;
-                       " ORDER BY Grupos, Contas"
-            IF USED("cursor_4c_RccTemp")
-                USE IN cursor_4c_RccTemp
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_RccTemp")
-            IF loc_nRet > 0
-                IF USED("cursor_4c_Rcc")
-                    SELECT cursor_4c_Rcc
-                    ZAP
-                    APPEND FROM DBF("cursor_4c_RccTemp")
-                ENDIF
-                IF USED("cursor_4c_RccTemp")
-                    USE IN cursor_4c_RccTemp
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_RccTemp")
-                    USE IN cursor_4c_RccTemp
-                ENDIF
-            ENDIF
+                        loc_oGrid.ColumnCount  = 2
+                        loc_oGrid.RecordSource = "cursor_4c_Dados"
+                        loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.ccargs"
+                        loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.dcargs"
 
-            *-- Garantir pelo menos uma linha em branco
-            IF RECCOUNT("cursor_4c_Rcc") = 0
-                SELECT cursor_4c_Rcc
-                APPEND BLANK
-            ENDIF
+                        loc_oGrid.Column1.Width = 100
+                        loc_oGrid.Column2.Width = 760
 
-            loc_oGrade = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
-            loc_oGrade.ColumnCount = 4
-            loc_oGrade.RecordSource = "cursor_4c_Rcc"
-            loc_oGrade.Column1.ControlSource = "cursor_4c_Rcc.Grupos"
-            loc_oGrade.Column1.Header1.Caption = "Grupo"
-            loc_oGrade.Column2.ControlSource = "cursor_4c_Rcc.Contas"
-            loc_oGrade.Column2.Header1.Caption = "Conta"
-            loc_oGrade.Column3.ControlSource = "cursor_4c_Rcc.Valors"
-            loc_oGrade.Column3.Header1.Caption = "Valor"
-            loc_oGrade.Column4.ControlSource = "cursor_4c_Rcc.Moedas"
-            loc_oGrade.Column4.Header1.Caption = "Moeda"
-            loc_oGrade.Refresh()
-        CATCH TO loEx
-            THIS.this_cMensagemErro = "Linha " + TRANSFORM(loEx.LineNo) + ": " + loEx.Message
-            IF USED("cursor_4c_RccTemp")
-                USE IN cursor_4c_RccTemp
-            ENDIF
-        ENDTRY
-    ENDPROC
+                        loc_oGrid.Column1.ReadOnly = .T.
+                        loc_oGrid.Column2.ReadOnly = .T.
 
-    *==========================================================================
-    * HANDLERS DE BOTOES (LISTA)
-    *==========================================================================
+                        loc_oGrid.Column1.Header1.Caption = "Cargo"
+                        loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
 
-    PROCEDURE BtnIncluirClick()
-        THIS.this_oBusinessObject.PrepararNovo()
-        THIS.this_cModoAtual = "INCLUIR"
-        THIS.LimparCampos()
-        THIS.HabilitarCampos()
-        THIS.AlternarPagina(2)
-        THIS.pgf_4c_Paginas.Page2.txt_4c_Cargo.SetFocus()
-    ENDPROC
-
-    PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cCargo
-        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-            MsgAviso("Nenhum registro selecionado.")
-            RETURN
-        ENDIF
-        loc_cCargo = ALLTRIM(cursor_4c_Dados.ccargs)
-        IF EMPTY(loc_cCargo)
-            MsgAviso("Selecione um cargo na lista.")
-            RETURN
-        ENDIF
-        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargo)
-            THIS.this_cModoAtual = "VISUALIZAR"
-            THIS.BOParaForm()
-            THIS.CarregarRcc(loc_cCargo)
-            THIS.HabilitarCampos()
-            THIS.AlternarPagina(2)
-        ELSE
-            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
-            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE BtnAlterarClick()
-        LOCAL loc_cCargo
-        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-            MsgAviso("Nenhum registro selecionado.")
-            RETURN
-        ENDIF
-        loc_cCargo = ALLTRIM(cursor_4c_Dados.ccargs)
-        IF EMPTY(loc_cCargo)
-            MsgAviso("Selecione um cargo na lista.")
-            RETURN
-        ENDIF
-        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargo)
-            THIS.this_cModoAtual = "ALTERAR"
-            THIS.BOParaForm()
-            THIS.CarregarRcc(loc_cCargo)
-            THIS.HabilitarCampos()
-            THIS.AlternarPagina(2)
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Descr.SetFocus()
-        ELSE
-            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
-            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE BtnExcluirClick()
-        LOCAL loc_cCargo, loc_nResp
-        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-            MsgAviso("Nenhum registro selecionado.")
-            RETURN
-        ENDIF
-        loc_cCargo = ALLTRIM(cursor_4c_Dados.ccargs)
-        IF EMPTY(loc_cCargo)
-            MsgAviso("Selecione um cargo na lista.")
-            RETURN
-        ENDIF
-        loc_nResp = MsgConfirma("Confirma a exclus" + CHR(227) + "o do cargo " + loc_cCargo + "?")
-        IF loc_nResp
-            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargo)
-                IF THIS.this_oBusinessObject.ExecutarExclusao()
-                    MsgInfo("Cargo exclu" + CHR(237) + "do com sucesso.")
-                    THIS.CarregarLista()
-                ELSE
-                    IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
-                    MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+                        THIS.FormatarGridLista(loc_oGrid)
                     ENDIF
-                ENDIF
-            ELSE
-                IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
-                MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+                    loc_lResultado = .T.
                 ENDIF
             ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.CarregarLista")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarGrades - Conecta cursores das sub-tabelas aos grids de Page2
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarGrades()
+        LOCAL loc_oPg2, loc_oGridAcesso, loc_oGridCat
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        TRY
+            *-- Grid acesso financeiro
+            IF PEMSTATUS(loc_oPg2, "grd_4c_AcessoFinan", 5)
+                loc_oGridAcesso = loc_oPg2.grd_4c_AcessoFinan
+                IF USED("cursor_4c_AcessoFinan")
+                    loc_oGridAcesso.ColumnCount = 4
+                    loc_oGridAcesso.RecordSource = "cursor_4c_AcessoFinan"
+                    loc_oGridAcesso.Column1.ControlSource = "cursor_4c_AcessoFinan.grupos"
+                    loc_oGridAcesso.Column2.ControlSource = "cursor_4c_AcessoFinan.contas"
+                    loc_oGridAcesso.Column3.ControlSource = "cursor_4c_AcessoFinan.valors"
+                    loc_oGridAcesso.Column4.ControlSource = "cursor_4c_AcessoFinan.moedas"
+                    loc_oGridAcesso.Column1.Header1.Caption = "Grupo"
+                    loc_oGridAcesso.Column2.Header1.Caption = "Conta"
+                    loc_oGridAcesso.Column3.Header1.Caption = "Valor"
+                    loc_oGridAcesso.Column4.Header1.Caption = "Moeda"
+                    loc_oGridAcesso.Refresh
+                ENDIF
+            ENDIF
+
+            *-- Grid categorias
+            IF PEMSTATUS(loc_oPg2, "grd_4c_Categorias", 5)
+                loc_oGridCat = loc_oPg2.grd_4c_Categorias
+                IF USED("cursor_4c_Categorias")
+                    loc_oGridCat.ColumnCount = 3
+                    loc_oGridCat.RecordSource = "cursor_4c_Categorias"
+                    loc_oGridCat.Column1.ControlSource = "cursor_4c_Categorias.categoria"
+                    loc_oGridCat.Column2.ControlSource = "cursor_4c_Categorias.descs"
+                    loc_oGridCat.Column3.ControlSource = "cursor_4c_Categorias.tipo"
+                    loc_oGridCat.Column1.Header1.Caption = "Categoria"
+                    loc_oGridCat.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                    loc_oGridCat.Column3.Header1.Caption = "Validar"
+                    loc_oGridCat.Refresh
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.CarregarGrades")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Alterna entre Lista (1) e Dados (2)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF VARTYPE(par_nPagina) = "N" AND par_nPagina >= 1 AND par_nPagina <= 2
+                THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+                IF par_nPagina = 1
+                    THIS.CarregarLista()
+                ENDIF
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.AlternarPagina")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - Torna controles visiveis recursivamente
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto, loc_nP
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oObjeto) = "O"
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+
+                IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormatarGridLista - Formata visual do grid da lista
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        WITH par_oGrid
+            .FontName = "Tahoma"
+            .FontSize = 8
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnIncluirClick - Prepara form para inclusao de novo cargo
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            THIS.this_oBusinessObject.NovoRegistro()
+            THIS.LimparCampos()
+            THIS.this_cModoAtual = "INCLUIR"
+            THIS.HabilitarCampos(.T.)
+            THIS.AjustarBotoesPorModo()
+            THIS.this_oBusinessObject.InicializarCursoresGrid()
+            THIS.CarregarGrades()
+            THIS.AlternarPagina(2)
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnIncluirClick")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Abre registro selecionado em modo somente leitura
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cCcargs, loc_lResultado
+        loc_lResultado = .F.
+
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Nenhum registro selecionado.", "Visualizar")
+            RETURN .F.
         ENDIF
+
+        SELECT cursor_4c_Dados
+        loc_cCcargs = ALLTRIM(cursor_4c_Dados.ccargs)
+
+        TRY
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCcargs)
+                THIS.BOParaForm()
+                THIS.this_cModoAtual = "VISUALIZAR"
+                THIS.HabilitarCampos(.F.)
+                THIS.AjustarBotoesPorModo()
+                THIS.CarregarGrades()
+                THIS.AlternarPagina(2)
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnVisualizarClick")
+        ENDTRY
+
+        RETURN loc_lResultado
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * BtnAlterarClick - Abre registro selecionado para edicao
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_cCcargs, loc_lResultado
+        loc_lResultado = .F.
+
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Nenhum registro selecionado.", "Alterar")
+            RETURN .F.
+        ENDIF
+
+        SELECT cursor_4c_Dados
+        loc_cCcargs = ALLTRIM(cursor_4c_Dados.ccargs)
+
+        TRY
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCcargs)
+                THIS.this_oBusinessObject.EditarRegistro()
+                THIS.BOParaForm()
+                THIS.this_cModoAtual = "ALTERAR"
+                THIS.HabilitarCampos(.T.)
+                THIS.AjustarBotoesPorModo()
+                THIS.CarregarGrades()
+                THIS.AlternarPagina(2)
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnAlterarClick")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirClick - Exclui cargo selecionado apos confirmacao
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_cCcargs, loc_lResultado
+        loc_lResultado = .F.
+
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgAviso("Nenhum registro selecionado.", "Excluir")
+            RETURN .F.
+        ENDIF
+
+        SELECT cursor_4c_Dados
+        loc_cCcargs = ALLTRIM(cursor_4c_Dados.ccargs)
+
+        IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCcargs)
+            RETURN .F.
+        ENDIF
+
+        IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o do cargo " + loc_cCcargs + "?", "Excluir")
+            RETURN .F.
+        ENDIF
+
+        TRY
+            IF THIS.this_oBusinessObject.Excluir()
+                MsgInfo("Cargo exclu" + CHR(237) + "do com sucesso!")
+                THIS.CarregarLista()
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnExcluirClick")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnBuscarClick - Vai para Page2 no modo BUSCAR
+    *--------------------------------------------------------------------------
     PROCEDURE BtnBuscarClick()
-        THIS.this_cModoAtual = "BUSCAR"
-        THIS.LimparCampos()
-        THIS.HabilitarCampos()
-        THIS.AlternarPagina(2)
-        THIS.pgf_4c_Paginas.Page2.txt_4c_Cargo.SetFocus()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            THIS.this_oBusinessObject.NovoRegistro()
+            THIS.LimparCampos()
+            THIS.this_cModoAtual = "BUSCAR"
+            THIS.HabilitarCampos(.T.)
+            THIS.AjustarBotoesPorModo()
+            THIS.AlternarPagina(2)
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnBuscarClick")
+        ENDTRY
+
+        RETURN loc_lResultado
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Fecha o formulario
+    *--------------------------------------------------------------------------
     PROCEDURE BtnEncerrarClick()
         THIS.Release()
     ENDPROC
 
-    *==========================================================================
-    * HANDLERS DE BOTOES (DADOS)
-    *==========================================================================
-
-    PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPag2, loc_cCargo, loc_cFiltro
-        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
-
-        *-- Modo BUSCAR: apenas filtra lista
-        IF THIS.this_cModoAtual = "BUSCAR"
-            loc_cFiltro = ALLTRIM(loc_oPag2.txt_4c_Cargo.Value)
-            IF THIS.this_oBusinessObject.Buscar(loc_cFiltro)
-                LOCAL loc_oGrade
-                loc_oGrade = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
-                loc_oGrade.ColumnCount = 2
-                loc_oGrade.RecordSource = "cursor_4c_Dados"
-                loc_oGrade.Column1.ControlSource = "cursor_4c_Dados.ccargs"
-                loc_oGrade.Column2.ControlSource = "cursor_4c_Dados.dcargs"
-                loc_oGrade.Refresh()
-            ENDIF
-            THIS.this_cModoAtual = "LISTA"
-            THIS.AlternarPagina(1)
-            RETURN
-        ENDIF
-
-        *-- Modo VISUALIZAR: apenas volta
-        IF THIS.this_cModoAtual = "VISUALIZAR"
-            THIS.AlternarPagina(1)
-            RETURN
-        ENDIF
-
-        *-- Modos INCLUIR / ALTERAR: validar e salvar
-        loc_cCargo = UPPER(ALLTRIM(loc_oPag2.txt_4c_Cargo.Value))
-        IF EMPTY(loc_cCargo)
-            MsgAviso("C" + CHR(243) + "digo do Cargo obrigat" + CHR(243) + "rio.")
-            loc_oPag2.txt_4c_Cargo.SetFocus()
-            RETURN
-        ENDIF
-        IF EMPTY(ALLTRIM(loc_oPag2.txt_4c_Descr.Value))
-            MsgAviso("Descri" + CHR(231) + CHR(227) + "o obrigat" + CHR(243) + "ria.")
-            loc_oPag2.txt_4c_Descr.SetFocus()
-            RETURN
-        ENDIF
-
-        *-- Verificar duplicidade em INCLUIR
-        IF THIS.this_cModoAtual = "INCLUIR"
-            LOCAL loc_nRet, loc_cSQL
-            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdCrg WHERE ccargs = " + EscaparSQL(loc_cCargo)
-            IF USED("cursor_4c_DupCheck")
-                USE IN cursor_4c_DupCheck
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DupCheck")
-            IF loc_nRet > 0 AND cursor_4c_DupCheck.qtd > 0
-                IF USED("cursor_4c_DupCheck")
-                    USE IN cursor_4c_DupCheck
-                ENDIF
-                MsgAviso("Cargo " + loc_cCargo + " j" + CHR(225) + " cadastrado.")
-                loc_oPag2.txt_4c_Cargo.SetFocus()
-                RETURN
-            ENDIF
-            IF USED("cursor_4c_DupCheck")
-                USE IN cursor_4c_DupCheck
-            ENDIF
-        ENDIF
-
-        THIS.FormParaBO()
-        IF THIS.this_oBusinessObject.Salvar()
-            MsgInfo("Cargo salvo com sucesso.")
-            THIS.CarregarLista()
-            THIS.this_cModoAtual = "LISTA"
-            THIS.AlternarPagina(1)
-        ELSE
-            IF !EMPTY(THIS.this_oBusinessObject.this_cMensagemErro)
-            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
-            ENDIF
-        ENDIF
-    ENDPROC
-
-    PROCEDURE BtnCancelarClick()
-        THIS.this_cModoAtual = "LISTA"
-        THIS.AlternarPagina(1)
-    ENDPROC
-
-    *-- Botao "..." para lookup de cargo (busca por codigo semelhante)
-    PROCEDURE BtnGarqiconeClick()
-        LOCAL loc_oPag2, loc_cValorAtual, loc_oBusca
-        loc_oPag2      = THIS.pgf_4c_Paginas.Page2
-        loc_cValorAtual = ALLTRIM(loc_oPag2.txt_4c_Cargo.Value)
-
-        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdCrg", "cursor_4c_Busca", "ccargs", loc_cValorAtual, ;
-            "Busca de Cargos", .F.)
-
-        IF VARTYPE(loc_oBusca) = "O"
-            IF loc_oBusca.this_lSelecionou
-                IF USED("cursor_4c_Busca") AND RECCOUNT("cursor_4c_Busca") > 0
-                    LOCAL loc_cCargoSel
-                    loc_cCargoSel = ALLTRIM(cursor_4c_Busca.ccargs)
-                    *-- Carregar o cargo selecionado
-                    IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargoSel)
-                        THIS.BOParaForm()
-                        THIS.CarregarRcc(loc_cCargoSel)
-                        *-- Restaurar codigo no campo (BOParaForm ja faz isso)
-                        loc_oPag2.txt_4c_Descr.SetFocus()
-                    ENDIF
-                ENDIF
-            ELSE
-                IF !loc_oBusca.this_lAchouRegistro OR EMPTY(loc_cValorAtual)
-                    loc_oBusca.mAddColuna("ccargs", "", "Cargo")
-                    loc_oBusca.mAddColuna("dcargs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Busca")
-                        LOCAL loc_cCargoSel2
-                        loc_cCargoSel2 = ALLTRIM(cursor_4c_Busca.ccargs)
-                        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargoSel2)
-                            THIS.BOParaForm()
-                            THIS.CarregarRcc(loc_cCargoSel2)
-                            loc_oPag2.txt_4c_Descr.SetFocus()
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-            loc_oBusca.Release()
-        ENDIF
-
-        IF USED("cursor_4c_Busca")
-            USE IN cursor_4c_Busca
-        ENDIF
-    ENDPROC
-
-    *-- Tecla pressionada no campo Cargo (F4=keycode 28 no VFP)
-    PROCEDURE txt_4c_Cargo_KeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 28  && F4 em VFP9
-            THIS.AbrirLookupCargo()
-        ENDIF
-        IF INLIST(par_nKeyCode, 115, 116)  && F4=115, F5=116 (alternativos)
-            THIS.AbrirLookupCargo()
-        ENDIF
-    ENDPROC
-
     *--------------------------------------------------------------------------
-    * AbrirLookupCargo - Abre FormBuscaAuxiliar para SigCdCrg
+    * BtnConfirmarClick - Salva cargo (ou localiza em modo BUSCAR)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupCargo()
-        LOCAL loc_oPag2, loc_cValorAtual, loc_oBusca
-        loc_oPag2       = THIS.pgf_4c_Paginas.Page2
-        loc_cValorAtual = ALLTRIM(loc_oPag2.txt_4c_Cargo.Value)
+    PROCEDURE BtnConfirmarClick()
+        LOCAL loc_oPg2, loc_cCodBusca, loc_lResultado
+        loc_lResultado = .F.
 
-        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-            "SigCdCrg", "cursor_4c_Busca", "ccargs", loc_cValorAtual, ;
-            "Busca de Cargos", .F.)
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
-        IF VARTYPE(loc_oBusca) = "O"
-            IF loc_oBusca.this_lSelecionou
-                IF USED("cursor_4c_Busca") AND RECCOUNT("cursor_4c_Busca") > 0
-                    loc_oPag2.txt_4c_Cargo.Value = ALLTRIM(cursor_4c_Busca.ccargs)
-                ENDIF
-            ELSE
-                IF !loc_oBusca.this_lAchouRegistro OR EMPTY(loc_cValorAtual)
-                    loc_oBusca.mAddColuna("ccargs", "", "Cargo")
-                    loc_oBusca.mAddColuna("dcargs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Busca")
-                        loc_oPag2.txt_4c_Cargo.Value = ALLTRIM(cursor_4c_Busca.ccargs)
-                    ENDIF
-                ENDIF
-            ENDIF
-            loc_oBusca.Release()
+        *-- Validacoes antes do TRY (RETURN valido aqui)
+        IF PEMSTATUS(loc_oPg2, "txt_4c_Ccargs", 5) AND ;
+           EMPTY(ALLTRIM(loc_oPg2.txt_4c_Ccargs.Value)) AND ;
+           THIS.this_cModoAtual = "INCLUIR"
+            MsgAviso("O c" + CHR(243) + "digo do cargo " + CHR(233) + " obrigat" + CHR(243) + "rio.", "")
+            loc_oPg2.txt_4c_Ccargs.SetFocus
+            RETURN .F.
         ENDIF
 
-        IF USED("cursor_4c_Busca")
-            USE IN cursor_4c_Busca
-        ENDIF
-    ENDPROC
-
-    *==========================================================================
-    * HANDLERS DA GRADE SigCrRcc
-    *==========================================================================
-
-    PROCEDURE BtnAdicionarLinhaClick()
-        SELECT cursor_4c_Rcc
-        APPEND BLANK
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.ColumnCount = 4
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.RecordSource = "cursor_4c_Rcc"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Rcc.Grupos"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column1.Header1.Caption = "Grupo"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Rcc.Contas"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column2.Header1.Caption = "Conta"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column3.ControlSource = "cursor_4c_Rcc.Valors"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column3.Header1.Caption = "Valor"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column4.ControlSource = "cursor_4c_Rcc.Moedas"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Column4.Header1.Caption = "Moeda"
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-    ENDPROC
-
-    PROCEDURE BtnRemoverLinhaClick()
-        SELECT cursor_4c_Rcc
-        IF EOF() OR BOF()
-            RETURN
-        ENDIF
-        DELETE
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-    ENDPROC
-
-    *==========================================================================
-    * VALIDACOES LostFocus na GRADE
-    *==========================================================================
-
-    *-- LostFocus Coluna 1 (Grupo Financeiro): valida SigCdGcr
-    PROCEDURE GradeCol1LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_cSQL, loc_nRet
-        IF !USED("cursor_4c_Rcc")
-            RETURN
-        ENDIF
-        SELECT cursor_4c_Rcc
-        loc_cValor = ALLTRIM(NVL(Grupos, ""))
-        IF EMPTY(loc_cValor)
-            RETURN
-        ENDIF
-        IF loc_cValor = THIS.this_cUltimoGradeCol1LostFocusValidado
-            RETURN
-        ENDIF
-        THIS.this_cUltimoGradeCol1LostFocusValidado = loc_cValor
-
-        *-- Verificar via fAcessoContab se disponivel, senao lookup direto
-        IF TYPE("fAcessoContab") = "U"
-            *-- Validar via SigCdGcr diretamente
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr WHERE CAST(codigos AS VARCHAR(30)) = " + EscaparSQL(loc_cValor)
-            IF USED("cursor_4c_GrupoVal")
-                USE IN cursor_4c_GrupoVal
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoVal")
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_GrupoVal") > 0
-                REPLACE cursor_4c_Rcc.Grupos WITH ALLTRIM(cursor_4c_GrupoVal.codigos)
-                IF USED("cursor_4c_GrupoVal")
-                    USE IN cursor_4c_GrupoVal
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_GrupoVal")
-                    USE IN cursor_4c_GrupoVal
-                ENDIF
-                *-- Abrir lookup
-                LOCAL loc_oBusca
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_BuscaGrupo", "codigos", loc_cValor, ;
-                    "Grupos Financeiros", .F.)
-                IF VARTYPE(loc_oBusca) = "O"
-                    IF loc_oBusca.this_lSelecionou
-                        IF USED("cursor_4c_BuscaGrupo") AND RECCOUNT("cursor_4c_BuscaGrupo") > 0
-                            REPLACE cursor_4c_Rcc.Grupos WITH ALLTRIM(cursor_4c_BuscaGrupo.codigos)
-                            THIS.this_cUltimoGradeCol1LostFocusValidado = ALLTRIM(cursor_4c_BuscaGrupo.codigos)
-                        ENDIF
-                    ELSE
-                        IF !loc_oBusca.this_lAchouRegistro OR EMPTY(loc_cValor)
-                            loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-                            loc_oBusca.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                            loc_oBusca.Show()
-                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrupo")
-                                REPLACE cursor_4c_Rcc.Grupos WITH ALLTRIM(cursor_4c_BuscaGrupo.codigos)
-                                THIS.this_cUltimoGradeCol1LostFocusValidado = ALLTRIM(cursor_4c_BuscaGrupo.codigos)
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                    loc_oBusca.Release()
-                ENDIF
-                IF USED("cursor_4c_BuscaGrupo")
-                    USE IN cursor_4c_BuscaGrupo
-                ENDIF
-            ENDIF
-        ELSE
-            *-- fAcessoContab disponivel - chamar funcao legada
-            fAcessoContab(gc_4c_UsuarioLogado, "C", loc_cValor, @cursor_4c_Rcc.Grupos, "")
+        IF PEMSTATUS(loc_oPg2, "txt_4c_Dcargs", 5) AND ;
+           EMPTY(ALLTRIM(loc_oPg2.txt_4c_Dcargs.Value)) AND ;
+           !INLIST(THIS.this_cModoAtual, "BUSCAR", "VISUALIZAR")
+            MsgAviso("A descri" + CHR(231) + CHR(227) + "o " + CHR(233) + " obrigat" + CHR(243) + "ria.", "")
+            loc_oPg2.txt_4c_Dcargs.SetFocus
+            RETURN .F.
         ENDIF
 
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-        THIS.VerificarDuplicaGrade(1)
-    ENDPROC
-
-    *-- LostFocus Coluna 2 (Conta): valida via fAcessoContas ou lookup SigReCtb
-    PROCEDURE GradeCol2LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_cGrupo, loc_cSQL, loc_nRet
-        IF !USED("cursor_4c_Rcc")
-            RETURN
-        ENDIF
-        SELECT cursor_4c_Rcc
-        loc_cValor = ALLTRIM(NVL(Contas, ""))
-        loc_cGrupo = ALLTRIM(NVL(Grupos, ""))
-        IF EMPTY(loc_cValor)
-            RETURN
-        ENDIF
-        IF loc_cValor = THIS.this_cUltimoGradeCol2LostFocusValidado
-            RETURN
-        ENDIF
-        THIS.this_cUltimoGradeCol2LostFocusValidado = loc_cValor
-
-        IF TYPE("fAcessoContas") = "U"
-            *-- Sem fAcessoContas - validar via SigReCtb diretamente
-            loc_cSQL = "SELECT contas, descs FROM SigReCtb WHERE CAST(contas AS VARCHAR(30)) = " + EscaparSQL(loc_cValor)
-            IF !EMPTY(loc_cGrupo)
-                loc_cSQL = loc_cSQL + " AND GrpCon = " + EscaparSQL(loc_cGrupo)
-            ENDIF
-            IF USED("cursor_4c_ContaVal")
-                USE IN cursor_4c_ContaVal
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaVal")
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_ContaVal") > 0
-                REPLACE cursor_4c_Rcc.Contas WITH ALLTRIM(cursor_4c_ContaVal.contas)
-                IF USED("cursor_4c_ContaVal")
-                    USE IN cursor_4c_ContaVal
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_ContaVal")
-                    USE IN cursor_4c_ContaVal
-                ENDIF
-                LOCAL loc_oBuscaConta
-                loc_oBuscaConta = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigReCtb", "cursor_4c_BuscaConta", "contas", loc_cValor, ;
-                    "Contas Cont" + CHR(225) + "beis", .F.)
-                IF VARTYPE(loc_oBuscaConta) = "O"
-                    IF loc_oBuscaConta.this_lSelecionou
-                        IF USED("cursor_4c_BuscaConta") AND RECCOUNT("cursor_4c_BuscaConta") > 0
-                            REPLACE cursor_4c_Rcc.Contas WITH ALLTRIM(cursor_4c_BuscaConta.contas)
-                            THIS.this_cUltimoGradeCol2LostFocusValidado = ALLTRIM(cursor_4c_BuscaConta.contas)
-                        ENDIF
-                    ELSE
-                        IF !loc_oBuscaConta.this_lAchouRegistro OR EMPTY(loc_cValor)
-                            loc_oBuscaConta.mAddColuna("contas", "", "Conta")
-                            loc_oBuscaConta.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                            loc_oBuscaConta.Show()
-                            IF loc_oBuscaConta.this_lSelecionou AND USED("cursor_4c_BuscaConta")
-                                REPLACE cursor_4c_Rcc.Contas WITH ALLTRIM(cursor_4c_BuscaConta.contas)
-                                THIS.this_cUltimoGradeCol2LostFocusValidado = ALLTRIM(cursor_4c_BuscaConta.contas)
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                    loc_oBuscaConta.Release()
-                ENDIF
-                IF USED("cursor_4c_BuscaConta")
-                    USE IN cursor_4c_BuscaConta
-                ENDIF
-            ENDIF
-        ELSE
-            *-- fAcessoContas disponivel - chamar funcao legada
-            fAcessoContas(gc_4c_UsuarioLogado, loc_cGrupo, "C", loc_cValor, @cursor_4c_Rcc.Contas, "", gnConnHandle, DATE(), .NULL., "R")
-        ENDIF
-
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-        THIS.VerificarDuplicaGrade(2)
-    ENDPROC
-
-    *-- LostFocus Coluna 4 (Moeda): valida SigCdMoe
-    PROCEDURE GradeCol4LostFocus(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_cSQL, loc_nRet
-        IF !USED("cursor_4c_Rcc")
-            RETURN
-        ENDIF
-        SELECT cursor_4c_Rcc
-        loc_cValor = ALLTRIM(NVL(Moedas, ""))
-        IF EMPTY(loc_cValor)
-            RETURN
-        ENDIF
-        IF loc_cValor = THIS.this_cUltimoGradeCol4LostFocusValidado
-            RETURN
-        ENDIF
-        THIS.this_cUltimoGradeCol4LostFocusValidado = loc_cValor
-
-        loc_cSQL = "SELECT cmoes, dmoes FROM SigCdMoe WHERE CAST(cmoes AS VARCHAR(20)) = " + EscaparSQL(loc_cValor)
-        IF USED("cursor_4c_MoedaVal")
-            USE IN cursor_4c_MoedaVal
-        ENDIF
-        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MoedaVal")
-        IF loc_nRet > 0 AND RECCOUNT("cursor_4c_MoedaVal") > 0
-            REPLACE cursor_4c_Rcc.Moedas WITH ALLTRIM(cursor_4c_MoedaVal.cmoes)
-            THIS.this_cUltimoGradeCol4LostFocusValidado = ALLTRIM(cursor_4c_MoedaVal.cmoes)
-            IF USED("cursor_4c_MoedaVal")
-                USE IN cursor_4c_MoedaVal
-            ENDIF
-        ELSE
-            IF USED("cursor_4c_MoedaVal")
-                USE IN cursor_4c_MoedaVal
-            ENDIF
-            LOCAL loc_oBuscaMoeda
-            loc_oBuscaMoeda = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoeda", "cmoes", loc_cValor, ;
-                "Moedas", .F.)
-            IF VARTYPE(loc_oBuscaMoeda) = "O"
-                IF loc_oBuscaMoeda.this_lSelecionou
-                    IF USED("cursor_4c_BuscaMoeda") AND RECCOUNT("cursor_4c_BuscaMoeda") > 0
-                        REPLACE cursor_4c_Rcc.Moedas WITH ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
-                        THIS.this_cUltimoGradeCol4LostFocusValidado = ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
-                    ENDIF
-                ELSE
-                    IF !loc_oBuscaMoeda.this_lAchouRegistro OR EMPTY(loc_cValor)
-                        loc_oBuscaMoeda.mAddColuna("cmoes", "", "Moeda")
-                        loc_oBuscaMoeda.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBuscaMoeda.Show()
-                        IF loc_oBuscaMoeda.this_lSelecionou AND USED("cursor_4c_BuscaMoeda")
-                            REPLACE cursor_4c_Rcc.Moedas WITH ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
-                            THIS.this_cUltimoGradeCol4LostFocusValidado = ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
-                        ENDIF
-                    ENDIF
-                ENDIF
-                loc_oBuscaMoeda.Release()
-            ENDIF
-            IF USED("cursor_4c_BuscaMoeda")
-                USE IN cursor_4c_BuscaMoeda
-            ENDIF
-        ENDIF
-
-        THIS.pgf_4c_Paginas.Page2.grd_4c_Dados.Refresh()
-        THIS.VerificarDuplicaGrade(4)
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * VerificarDuplicaGrade - Verifica se ha linhas duplicadas (Grupo+Conta) no cursor_4c_Rcc
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE VerificarDuplicaGrade(par_nColuna)
-        LOCAL loc_nRet, loc_cSQL
-        IF !USED("cursor_4c_Rcc")
-            RETURN
-        ENDIF
         TRY
-            *-- Verificar duplicatas por Grupos+Contas usando cursor local
-            IF USED("cursor_4c_DupGrade")
-                USE IN cursor_4c_DupGrade
+            IF THIS.this_cModoAtual = "BUSCAR"
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Ccargs", 5)
+                    loc_cCodBusca = ALLTRIM(loc_oPg2.txt_4c_Ccargs.Value)
+                ELSE
+                    loc_cCodBusca = ""
+                ENDIF
+                THIS.this_cModoAtual = "LISTA"
+                THIS.AlternarPagina(1)
+                IF USED("cursor_4c_Dados") AND !EMPTY(loc_cCodBusca)
+                    SELECT cursor_4c_Dados
+                    LOCATE FOR ALLTRIM(cursor_4c_Dados.ccargs) = loc_cCodBusca
+                    IF !FOUND()
+                        LOCATE FOR UPPER(ALLTRIM(cursor_4c_Dados.dcargs)) = UPPER(loc_cCodBusca)
+                    ENDIF
+                ENDIF
+                loc_lResultado = .T.
+            ELSE
+                IF THIS.FormParaBO()
+                    IF THIS.this_oBusinessObject.Salvar()
+                        MsgInfo("Cargo salvo com sucesso!")
+                        THIS.this_cModoAtual = "LISTA"
+                        THIS.AlternarPagina(1)
+                        loc_lResultado = .T.
+                    ENDIF
+                ENDIF
             ENDIF
-            SELECT Grupos, Contas, COUNT(*) AS qtd ;
-                FROM cursor_4c_Rcc ;
-                WHERE !EMPTY(ALLTRIM(Grupos)) AND !EMPTY(ALLTRIM(Contas)) ;
-                GROUP BY Grupos, Contas ;
-                HAVING COUNT(*) > 1 ;
-                INTO CURSOR cursor_4c_DupGrade
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnConfirmarClick")
+        ENDTRY
 
-            IF RECCOUNT("cursor_4c_DupGrade") > 0
-                MsgAviso("Existe combina" + CHR(231) + CHR(227) + "o de Grupo/Conta duplicada na grade.")
-            ENDIF
+        RETURN loc_lResultado
+    ENDPROC
 
-            IF USED("cursor_4c_DupGrade")
-                USE IN cursor_4c_DupGrade
-            ENDIF
-        CATCH TO loEx
-            IF USED("cursor_4c_DupGrade")
-                USE IN cursor_4c_DupGrade
-            ENDIF
+    *--------------------------------------------------------------------------
+    * BtnSalvarClick - Alias canonico para BtnConfirmarClick
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSalvarClick()
+        RETURN THIS.BtnConfirmarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Cancela e volta para lista
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        TRY
+            THIS.this_cModoAtual = "LISTA"
+            THIS.AlternarPagina(1)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnCancelarClick")
         ENDTRY
     ENDPROC
 
-    *==========================================================================
-    * VALIDACOES (LostFocus) - campos fora da grade
-    *==========================================================================
+    *--------------------------------------------------------------------------
+    * BtnBuscarBaseClick - Abre picker para copiar cargo existente como modelo
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarBaseClick()
+        IF THIS.this_cModoAtual != "INCLUIR"
+            RETURN
+        ENDIF
 
-    *-- Validacao do campo Grupo Financeiro (get_Grupo) na linha principal
-    PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPag2, loc_cValor, loc_cSQL, loc_nRet
-        loc_oPag2  = THIS.pgf_4c_Paginas.Page2
-        loc_cValor = UPPER(ALLTRIM(loc_oPag2.txt_4c__Grupo.Value))
+        LOCAL loc_oPg2, loc_cValor, loc_oBusca, loc_cCargoSelecionado
+        loc_oPg2   = THIS.pgf_4c_Paginas.Page2
+        loc_cValor = ALLTRIM(loc_oPg2.txt_4c_Ccargs.Value)
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SIGCDCRG", "cursor_4c_BuscaCargoBase", "ccargs", loc_cValor, ;
+                "Selecionar Cargo Base")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("ccargs", "", "Cargo")
+                    loc_oBusca.mAddColuna("dcargs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCargoBase")
+                    SELECT cursor_4c_BuscaCargoBase
+                    loc_cCargoSelecionado = ALLTRIM(cursor_4c_BuscaCargoBase.ccargs)
+
+                    IF !EMPTY(loc_cCargoSelecionado)
+                        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCargoSelecionado)
+                            THIS.BOParaForm()
+                            *-- Limpa o codigo para o usuario digitar o novo
+                            loc_oPg2.txt_4c_Ccargs.Value = ""
+                            THIS.CarregarGrades()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnBuscarBaseClick")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaCargoBase")
+            USE IN cursor_4c_BuscaCargoBase
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnInserirAcessoClick - Adiciona linha na grade de acesso financeiro
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnInserirAcessoClick()
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_AcessoFinan")
+            RETURN
+        ENDIF
+
+        TRY
+            SELECT cursor_4c_AcessoFinan
+            APPEND BLANK
+            THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan.Refresh
+            THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan.Column1.SetFocus
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnInserirAcessoClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirAcessoClick - Remove linha da grade de acesso financeiro
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirAcessoClick()
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_AcessoFinan")
+            RETURN
+        ENDIF
+
+        SELECT cursor_4c_AcessoFinan
+        IF BOF() OR EOF()
+            RETURN
+        ENDIF
+
+        TRY
+            DELETE
+            PACK
+            THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan.Refresh
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnExcluirAcessoClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnInserirCatClick - Adiciona linha na grade de categorias
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnInserirCatClick()
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_Categorias")
+            RETURN
+        ENDIF
+
+        TRY
+            SELECT cursor_4c_Categorias
+            APPEND BLANK
+            THIS.pgf_4c_Paginas.Page2.grd_4c_Categorias.Refresh
+            THIS.pgf_4c_Paginas.Page2.grd_4c_Categorias.Column1.SetFocus
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnInserirCatClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirCatClick - Remove linha da grade de categorias
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirCatClick()
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_Categorias")
+            RETURN
+        ENDIF
+
+        SELECT cursor_4c_Categorias
+        IF BOF() OR EOF()
+            RETURN
+        ENDIF
+
+        TRY
+            DELETE
+            PACK
+            THIS.pgf_4c_Paginas.Page2.grd_4c_Categorias.Refresh
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BtnExcluirCatClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Transfere valores do form para o BO
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oPg2, loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+            THIS.this_oBusinessObject.this_cCcargs      = ALLTRIM(loc_oPg2.txt_4c_Ccargs.Value)
+            THIS.this_oBusinessObject.this_cDcargs      = ALLTRIM(loc_oPg2.txt_4c_Dcargs.Value)
+            THIS.this_oBusinessObject.this_nLimdescs    = loc_oPg2.txt_4c_Limdescs.Value
+            THIS.this_oBusinessObject.this_nDescpors    = loc_oPg2.txt_4c_Descpors.Value
+            THIS.this_oBusinessObject.this_nLimacres    = loc_oPg2.txt_4c_Limacres.Value
+            THIS.this_oBusinessObject.this_nAcrepors    = loc_oPg2.txt_4c_Acrepors.Value
+            THIS.this_oBusinessObject.this_nVllibpgs    = loc_oPg2.txt_4c_Vllibpgs.Value
+            THIS.this_oBusinessObject.this_nVllibcots   = loc_oPg2.txt_4c_Vllibcots.Value
+            THIS.this_oBusinessObject.this_nVllibopes   = loc_oPg2.txt_4c_Vllibopes.Value
+            THIS.this_oBusinessObject.this_nVarcots     = loc_oPg2.txt_4c_Varcots.Value
+            THIS.this_oBusinessObject.this_cGrcomis     = ALLTRIM(loc_oPg2.txt_4c_Grcomis.Value)
+            THIS.this_oBusinessObject.this_nAcomis      = loc_oPg2.txt_4c_Acomis.Value
+            THIS.this_oBusinessObject.this_nComis       = loc_oPg2.txt_4c_Comis.Value
+            THIS.this_oBusinessObject.this_nVarmovdup   = loc_oPg2.txt_4c_Varmovdup.Value
+            THIS.this_oBusinessObject.this_cNivels      = ALLTRIM(loc_oPg2.txt_4c_Nivels.Value)
+            THIS.this_oBusinessObject.this_cAltcots     = ALLTRIM(loc_oPg2.txt_4c_Altcots.Value)
+            THIS.this_oBusinessObject.this_cLimites     = ALLTRIM(loc_oPg2.txt_4c_Limites.Value)
+            THIS.this_oBusinessObject.this_cCancitens   = ALLTRIM(loc_oPg2.txt_4c_Cancitens.Value)
+            THIS.this_oBusinessObject.this_cLibfpags    = ALLTRIM(loc_oPg2.txt_4c_Libfpags.Value)
+            THIS.this_oBusinessObject.this_cLibsdins    = ALLTRIM(loc_oPg2.txt_4c_Libsdins.Value)
+            THIS.this_oBusinessObject.this_cLibfpgs     = ALLTRIM(loc_oPg2.txt_4c_Libfpgs.Value)
+            THIS.this_oBusinessObject.this_cLibopes     = ALLTRIM(loc_oPg2.txt_4c_Libopes.Value)
+            THIS.this_oBusinessObject.this_cLibexprd    = ALLTRIM(loc_oPg2.txt_4c_Libexprd.Value)
+            THIS.this_oBusinessObject.this_cFcomis      = ALLTRIM(loc_oPg2.txt_4c_Fcomis.Value)
+            THIS.this_oBusinessObject.this_cLibvmovdup  = ALLTRIM(loc_oPg2.txt_4c_Libvmovdup.Value)
+            THIS.this_oBusinessObject.this_cConsSubn    = ALLTRIM(loc_oPg2.txt_4c_ConsSubn.Value)
+            THIS.this_oBusinessObject.this_nLibleilaos  = loc_oPg2.opt_4c_Libleilaos.Value
+            THIS.this_oBusinessObject.this_nLibdupends  = loc_oPg2.opt_4c_Libdupends.Value
+            THIS.this_oBusinessObject.this_nCustoprod   = loc_oPg2.opt_4c_Custoprod.Value
+            THIS.this_oBusinessObject.this_nLibValmmax  = loc_oPg2.opt_4c_LibValmmax.Value
+            THIS.this_oBusinessObject.this_nLibduptits  = loc_oPg2.opt_4c_Libduptits.Value
+            THIS.this_oBusinessObject.this_nLibprzes    = loc_oPg2.opt_4c_Libprzes.Value
+            THIS.this_oBusinessObject.this_nTpcomis     = loc_oPg2.opt_4c_Tpcomis.Value
+
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.FormParaBO")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Transfere valores do BO para o form
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPg2, loc_lResultado, loc_nTpcomis
+        loc_lResultado = .F.
+
+        TRY
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+            loc_oPg2.txt_4c_Ccargs.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cCcargs)
+            loc_oPg2.txt_4c_Dcargs.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cDcargs)
+            loc_oPg2.txt_4c_Limdescs.Value  = THIS.this_oBusinessObject.this_nLimdescs
+            loc_oPg2.txt_4c_Descpors.Value  = THIS.this_oBusinessObject.this_nDescpors
+            loc_oPg2.txt_4c_Limacres.Value  = THIS.this_oBusinessObject.this_nLimacres
+            loc_oPg2.txt_4c_Acrepors.Value  = THIS.this_oBusinessObject.this_nAcrepors
+            loc_oPg2.txt_4c_Vllibpgs.Value  = THIS.this_oBusinessObject.this_nVllibpgs
+            loc_oPg2.txt_4c_Vllibcots.Value = THIS.this_oBusinessObject.this_nVllibcots
+            loc_oPg2.txt_4c_Vllibopes.Value = THIS.this_oBusinessObject.this_nVllibopes
+            loc_oPg2.txt_4c_Varcots.Value   = THIS.this_oBusinessObject.this_nVarcots
+            loc_oPg2.txt_4c_Grcomis.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cGrcomis)
+            loc_oPg2.txt_4c_Acomis.Value    = THIS.this_oBusinessObject.this_nAcomis
+            loc_oPg2.txt_4c_Comis.Value     = THIS.this_oBusinessObject.this_nComis
+            loc_oPg2.txt_4c_Varmovdup.Value = THIS.this_oBusinessObject.this_nVarmovdup
+            loc_oPg2.txt_4c_Nivels.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cNivels)
+            loc_oPg2.txt_4c_Altcots.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cAltcots)
+            loc_oPg2.txt_4c_Limites.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cLimites)
+            loc_oPg2.txt_4c_Cancitens.Value = ALLTRIM(THIS.this_oBusinessObject.this_cCancitens)
+            loc_oPg2.txt_4c_Libfpags.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cLibfpags)
+            loc_oPg2.txt_4c_Libsdins.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cLibsdins)
+            loc_oPg2.txt_4c_Libfpgs.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cLibfpgs)
+            loc_oPg2.txt_4c_Libopes.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cLibopes)
+            loc_oPg2.txt_4c_Libexprd.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cLibexprd)
+            loc_oPg2.txt_4c_Fcomis.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cFcomis)
+            loc_oPg2.txt_4c_Libvmovdup.Value = ALLTRIM(THIS.this_oBusinessObject.this_cLibvmovdup)
+            loc_oPg2.txt_4c_ConsSubn.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cConsSubn)
+
+            *-- OptionGroups binarios (0 no BO = Nao = 2 no form)
+            loc_oPg2.opt_4c_Libleilaos.Value = IIF(THIS.this_oBusinessObject.this_nLibleilaos = 1, 1, 2)
+            loc_oPg2.opt_4c_Libdupends.Value = IIF(THIS.this_oBusinessObject.this_nLibdupends = 1, 1, 2)
+            loc_oPg2.opt_4c_Custoprod.Value  = IIF(THIS.this_oBusinessObject.this_nCustoprod  = 1, 1, 2)
+            loc_oPg2.opt_4c_LibValmmax.Value = IIF(THIS.this_oBusinessObject.this_nLibValmmax = 1, 1, 2)
+            loc_oPg2.opt_4c_Libduptits.Value = IIF(THIS.this_oBusinessObject.this_nLibduptits = 1, 1, 2)
+            loc_oPg2.opt_4c_Libprzes.Value   = IIF(THIS.this_oBusinessObject.this_nLibprzes   = 1, 1, 2)
+
+            *-- Tipo comissao (1-3, default 1)
+            loc_nTpcomis = THIS.this_oBusinessObject.this_nTpcomis
+            loc_oPg2.opt_4c_Tpcomis.Value = IIF(loc_nTpcomis >= 1 AND loc_nTpcomis <= 3, loc_nTpcomis, 1)
+
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BOParaForm")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Limpa valores dos campos da Page2
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        TRY
+            loc_oPg2.txt_4c_Ccargs.Value    = ""
+            loc_oPg2.txt_4c_Dcargs.Value    = ""
+            loc_oPg2.txt_4c_Limdescs.Value  = 0
+            loc_oPg2.txt_4c_Descpors.Value  = 0
+            loc_oPg2.txt_4c_Limacres.Value  = 0
+            loc_oPg2.txt_4c_Acrepors.Value  = 0
+            loc_oPg2.txt_4c_Vllibpgs.Value  = 0
+            loc_oPg2.txt_4c_Vllibcots.Value = 0
+            loc_oPg2.txt_4c_Vllibopes.Value = 0
+            loc_oPg2.txt_4c_Varcots.Value   = 0
+            loc_oPg2.txt_4c_Grcomis.Value   = ""
+            loc_oPg2.txt_4c_Acomis.Value    = 0
+            loc_oPg2.txt_4c_Comis.Value     = 0
+            loc_oPg2.txt_4c_Varmovdup.Value = 0
+            loc_oPg2.txt_4c_Nivels.Value    = ""
+            loc_oPg2.txt_4c_Altcots.Value   = ""
+            loc_oPg2.txt_4c_Limites.Value   = ""
+            loc_oPg2.txt_4c_Cancitens.Value = ""
+            loc_oPg2.txt_4c_Libfpags.Value  = ""
+            loc_oPg2.txt_4c_Libsdins.Value  = ""
+            loc_oPg2.txt_4c_Libfpgs.Value   = ""
+            loc_oPg2.txt_4c_Libopes.Value   = ""
+            loc_oPg2.txt_4c_Libexprd.Value  = ""
+            loc_oPg2.txt_4c_Fcomis.Value    = ""
+            loc_oPg2.txt_4c_Libvmovdup.Value = ""
+            loc_oPg2.txt_4c_ConsSubn.Value  = ""
+            loc_oPg2.opt_4c_Libleilaos.Value = 2
+            loc_oPg2.opt_4c_Libdupends.Value = 2
+            loc_oPg2.opt_4c_Custoprod.Value  = 2
+            loc_oPg2.opt_4c_LibValmmax.Value = 2
+            loc_oPg2.opt_4c_Libduptits.Value = 2
+            loc_oPg2.opt_4c_Libprzes.Value   = 2
+            loc_oPg2.opt_4c_Tpcomis.Value    = 1
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.LimparCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita ou desabilita campos da Page2
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPg2, loc_lCodHabilitar
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        TRY
+            *-- Codigo do cargo: apenas em INCLUIR e BUSCAR
+            loc_lCodHabilitar = INLIST(THIS.this_cModoAtual, "INCLUIR", "BUSCAR")
+            loc_oPg2.txt_4c_Ccargs.Enabled     = loc_lCodHabilitar
+            loc_oPg2.cmd_4c_BuscarBase.Enabled = (THIS.this_cModoAtual = "INCLUIR")
+
+            *-- Demais campos
+            loc_oPg2.txt_4c_Dcargs.Enabled     = par_lHabilitar
+            loc_oPg2.txt_4c_Limdescs.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Descpors.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Limacres.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Acrepors.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Vllibpgs.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Vllibcots.Enabled  = par_lHabilitar
+            loc_oPg2.txt_4c_Vllibopes.Enabled  = par_lHabilitar
+            loc_oPg2.txt_4c_Varcots.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Grcomis.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Acomis.Enabled     = par_lHabilitar
+            loc_oPg2.txt_4c_Comis.Enabled      = par_lHabilitar
+            loc_oPg2.txt_4c_Varmovdup.Enabled  = par_lHabilitar
+            loc_oPg2.txt_4c_Nivels.Enabled     = par_lHabilitar
+            loc_oPg2.txt_4c_Altcots.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Limites.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Cancitens.Enabled  = par_lHabilitar
+            loc_oPg2.txt_4c_Libfpags.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Libsdins.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Libfpgs.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Libopes.Enabled    = par_lHabilitar
+            loc_oPg2.txt_4c_Libexprd.Enabled   = par_lHabilitar
+            loc_oPg2.txt_4c_Fcomis.Enabled     = par_lHabilitar
+            loc_oPg2.txt_4c_Libvmovdup.Enabled = par_lHabilitar
+            loc_oPg2.txt_4c_ConsSubn.Enabled   = par_lHabilitar
+            loc_oPg2.opt_4c_Libleilaos.Enabled = par_lHabilitar
+            loc_oPg2.opt_4c_Libdupends.Enabled = par_lHabilitar
+            loc_oPg2.opt_4c_Custoprod.Enabled  = par_lHabilitar
+            loc_oPg2.opt_4c_LibValmmax.Enabled = par_lHabilitar
+            loc_oPg2.opt_4c_Libduptits.Enabled = par_lHabilitar
+            loc_oPg2.opt_4c_Libprzes.Enabled   = par_lHabilitar
+            loc_oPg2.opt_4c_Tpcomis.Enabled    = par_lHabilitar
+
+            *-- Sub-grids: ReadOnly nos modos nao-edicao
+            IF PEMSTATUS(loc_oPg2, "grd_4c_AcessoFinan", 5)
+                loc_oPg2.grd_4c_AcessoFinan.ReadOnly = !par_lHabilitar
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "grd_4c_Categorias", 5)
+                loc_oPg2.grd_4c_Categorias.ReadOnly = !par_lHabilitar
+            ENDIF
+
+            *-- Botoes das sub-grades
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_InserirAcesso", 5)
+                loc_oPg2.cmd_4c_InserirAcesso.Enabled = par_lHabilitar
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_ExcluirAcesso", 5)
+                loc_oPg2.cmd_4c_ExcluirAcesso.Enabled = par_lHabilitar
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_InserirCat", 5)
+                loc_oPg2.cmd_4c_InserirCat.Enabled = par_lHabilitar
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "cmd_4c_ExcluirCat", 5)
+                loc_oPg2.cmd_4c_ExcluirCat.Enabled = par_lHabilitar
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.HabilitarCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Habilita/desabilita botoes conforme modo
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_oBotoesAcao
+        loc_oBotoesAcao = THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesAcao
+
+        TRY
+            loc_oBotoesAcao.cmd_4c_Confirmar.Enabled = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR", "BUSCAR")
+            loc_oBotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.AjustarBotoesPorModo")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BuscarGrupoFinan - Lookup Grupo Financeiro (SigCdGcr) via F4/Enter/Tab
+    *--------------------------------------------------------------------------
+    PROCEDURE BuscarGrupoFinan(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        LOCAL loc_oPg2, loc_cValor, loc_oBusca
+        loc_oPg2   = THIS.pgf_4c_Paginas.Page2
+        loc_cValor = ALLTRIM(loc_oPg2.txt_4c_Grcomis.Value)
 
         IF EMPTY(loc_cValor)
             RETURN
         ENDIF
-        IF loc_cValor == THIS.this_cUltimoValidarGrupoValidado
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGcr", "cursor_4c_BuscaGcr", "Codigos", loc_cValor, ;
+                "Grupo Financeiro")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr")
+                    SELECT cursor_4c_BuscaGcr
+                    loc_oPg2.txt_4c_Grcomis.Value = ALLTRIM(cursor_4c_BuscaGcr.Codigos)
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.BuscarGrupoFinan")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaGcr")
+            USE IN cursor_4c_BuscaGcr
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarGrupoGrade - Lookup SigCdGcr para coluna Grupos da grade acesso
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarGrupoGrade(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
             RETURN
         ENDIF
 
-        IF TYPE("fAcessoContab") = "U"
-            *-- Sem fAcessoContab - validar diretamente
-            loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr WHERE CAST(codigos AS VARCHAR(30)) = " + EscaparSQL(loc_cValor)
-            IF USED("cursor_4c_GrupoMainVal")
-                USE IN cursor_4c_GrupoMainVal
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrupoMainVal")
-            IF loc_nRet > 0 AND RECCOUNT("cursor_4c_GrupoMainVal") > 0
-                loc_oPag2.txt_4c__Grupo.Value = ALLTRIM(cursor_4c_GrupoMainVal.codigos)
-                THIS.this_cUltimoValidarGrupoValidado = ALLTRIM(cursor_4c_GrupoMainVal.codigos)
-                IF USED("cursor_4c_GrupoMainVal")
-                    USE IN cursor_4c_GrupoMainVal
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_GrupoMainVal")
-                    USE IN cursor_4c_GrupoMainVal
-                ENDIF
-                *-- Abrir busca
-                LOCAL loc_oBGrp
-                loc_oBGrp = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_BuscaGrpMain", "codigos", loc_cValor, ;
-                    "Grupos Financeiros", .F.)
-                IF VARTYPE(loc_oBGrp) = "O"
-                    IF loc_oBGrp.this_lSelecionou
-                        IF USED("cursor_4c_BuscaGrpMain") AND RECCOUNT("cursor_4c_BuscaGrpMain") > 0
-                            loc_oPag2.txt_4c__Grupo.Value = ALLTRIM(cursor_4c_BuscaGrpMain.codigos)
-                            THIS.this_cUltimoValidarGrupoValidado = ALLTRIM(cursor_4c_BuscaGrpMain.codigos)
-                        ENDIF
-                    ELSE
-                        IF !loc_oBGrp.this_lAchouRegistro OR EMPTY(loc_cValor)
-                            loc_oBGrp.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-                            loc_oBGrp.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                            loc_oBGrp.Show()
-                            IF loc_oBGrp.this_lSelecionou AND USED("cursor_4c_BuscaGrpMain")
-                                loc_oPag2.txt_4c__Grupo.Value = ALLTRIM(cursor_4c_BuscaGrpMain.codigos)
-                                THIS.this_cUltimoValidarGrupoValidado = ALLTRIM(cursor_4c_BuscaGrpMain.codigos)
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                    loc_oBGrp.Release()
-                ENDIF
-                IF USED("cursor_4c_BuscaGrpMain")
-                    USE IN cursor_4c_BuscaGrpMain
-                ENDIF
-            ENDIF
-        ELSE
-            *-- fAcessoContab disponivel
-            LOCAL loc_cRetGrp
-            loc_cRetGrp = fAcessoContab(gc_4c_UsuarioLogado, "C", loc_cValor, loc_oPag2.txt_4c__Grupo, "")
-            IF !EMPTY(ALLTRIM(loc_cRetGrp))
-                loc_oPag2.txt_4c__Grupo.Value = ALLTRIM(loc_cRetGrp)
-                THIS.this_cUltimoValidarGrupoValidado = ALLTRIM(loc_cRetGrp)
-            ENDIF
-        ENDIF
-    ENDPROC
+        LOCAL loc_oGrid, loc_cValor, loc_oBusca
+        loc_oGrid  = THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan
+        loc_cValor = ALLTRIM(loc_oGrid.Column1.Text1.Value)
 
-    *-- Validacao do campo AComis (Get_AComis): valor nao pode ser negativo
-    PROCEDURE ValidarAComis(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPagina, loc_nVal
-        loc_oPagina = THIS.pgf_4c_Paginas.Page2
-        loc_nVal    = loc_oPagina.txt_4c_AComis.Value
-        IF loc_nVal < 0
-            MsgAviso("Valor Inv" + CHR(225) + "lido.")
-            loc_oPagina.txt_4c_AComis.Value = 0
-            loc_oPagina.txt_4c_AComis.SetFocus()
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGcr", "cursor_4c_BuscaGcr2", "Codigos", loc_cValor, ;
+                "Grupo Financeiro")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr2")
+                    SELECT cursor_4c_BuscaGcr2
+                    REPLACE grupos WITH ALLTRIM(cursor_4c_BuscaGcr2.Codigos) IN cursor_4c_AcessoFinan
+                    loc_oGrid.Column1.Text1.Value = ALLTRIM(cursor_4c_BuscaGcr2.Codigos)
+                    loc_oGrid.Refresh
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarGrupoGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaGcr2")
+            USE IN cursor_4c_BuscaGcr2
         ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * Destroy - Liberacao de recursos
+    * ValidarContaGrade - Lookup conta financeira para coluna Contas da grade
+    * Nota: contas referencia tabela de contas financeiras (verificar FK)
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarContaGrade(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        LOCAL loc_oGrid, loc_cValor, loc_cGrupo, loc_oBusca
+        loc_oGrid  = THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan
+        loc_cValor = ALLTRIM(loc_oGrid.Column2.Text1.Value)
+        loc_cGrupo = ALLTRIM(loc_oGrid.Column1.Text1.Value)
+
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGcr", "cursor_4c_BuscaConta", "Codigos", loc_cValor, ;
+                "Conta Financeira")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaConta")
+                    SELECT cursor_4c_BuscaConta
+                    REPLACE contas WITH ALLTRIM(cursor_4c_BuscaConta.Codigos) IN cursor_4c_AcessoFinan
+                    loc_oGrid.Column2.Text1.Value = ALLTRIM(cursor_4c_BuscaConta.Codigos)
+                    loc_oGrid.Refresh
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarContaGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaConta")
+            USE IN cursor_4c_BuscaConta
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarMoedaGrade - Lookup SigCdMoe para coluna Moedas da grade acesso
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarMoedaGrade(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        LOCAL loc_oGrid, loc_cValor, loc_oBusca
+        loc_oGrid  = THIS.pgf_4c_Paginas.Page2.grd_4c_AcessoFinan
+        loc_cValor = ALLTRIM(loc_oGrid.Column4.Text1.Value)
+
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdMoe", "cursor_4c_BuscaMoe", "CMoes", loc_cValor, ;
+                "Moeda")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("CMoes", "", "Moeda")
+                    loc_oBusca.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
+                    SELECT cursor_4c_BuscaMoe
+                    REPLACE moedas WITH ALLTRIM(cursor_4c_BuscaMoe.CMoes) IN cursor_4c_AcessoFinan
+                    loc_oGrid.Column4.Text1.Value = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
+                    loc_oGrid.Refresh
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarMoedaGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaMoe")
+            USE IN cursor_4c_BuscaMoe
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarCategoriaGrade - Lookup SigCdCtg para coluna Categoria da grade
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarCategoriaGrade(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115)
+            RETURN
+        ENDIF
+
+        LOCAL loc_oGridCat, loc_cValor, loc_oBusca
+        loc_oGridCat = THIS.pgf_4c_Paginas.Page2.grd_4c_Categorias
+        loc_cValor   = ALLTRIM(loc_oGridCat.Column1.Text1.Value)
+
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdCtg", "cursor_4c_BuscaCtg", "Cods", loc_cValor, ;
+                "Categoria")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Cods",  "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCtg")
+                    SELECT cursor_4c_BuscaCtg
+                    REPLACE categoria WITH ALLTRIM(cursor_4c_BuscaCtg.Cods), ;
+                            descs     WITH ALLTRIM(cursor_4c_BuscaCtg.Descs) ;
+                        IN cursor_4c_Categorias
+                    loc_oGridCat.Column1.Text1.Value = ALLTRIM(cursor_4c_BuscaCtg.Cods)
+                    loc_oGridCat.Column2.Text1.Value = ALLTRIM(cursor_4c_BuscaCtg.Descs)
+                    loc_oGridCat.Refresh
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarCategoriaGrade")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaCtg")
+            USE IN cursor_4c_BuscaCtg
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarAcomis - Valida que o percentual de comissao nao eh negativo
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarAcomis(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        TRY
+            IF loc_oPg2.txt_4c_Acomis.Value < 0
+                MsgAviso("O percentual de comiss" + CHR(227) + "o n" + CHR(227) + "o pode ser negativo.", "Aten" + CHR(231) + CHR(227) + "o")
+                loc_oPg2.txt_4c_Acomis.Value = 0
+                loc_oPg2.txt_4c_Acomis.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarAcomis")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarTipoCategoria - Lookup Tipo na grade de categorias via F4/F5
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarTipoCategoria(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9, 115, 116)
+            RETURN
+        ENDIF
+
+        IF !INLIST(par_nKeyCode, 115, 116)
+            RETURN
+        ENDIF
+
+        LOCAL loc_oGridCat, loc_cValor, loc_oBusca
+        loc_oGridCat = THIS.pgf_4c_Paginas.Page2.grd_4c_Categorias
+        loc_cValor   = ALLTRIM(loc_oGridCat.Column3.Text1.Value)
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "sigcarct", "cursor_4c_BuscaTipo", "tipo", loc_cValor, ;
+                "Tipo de Categoria")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("tipo", "", "Tipo")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaTipo")
+                    SELECT cursor_4c_BuscaTipo
+                    REPLACE tipo WITH ALLTRIM(cursor_4c_BuscaTipo.tipo) ;
+                        IN cursor_4c_Categorias
+                    loc_oGridCat.Column3.Text1.Value = ALLTRIM(cursor_4c_BuscaTipo.tipo)
+                    loc_oGridCat.Refresh
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.ValidarTipoCategoria")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaTipo")
+            USE IN cursor_4c_BuscaTipo
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera recursos e cursores
     *--------------------------------------------------------------------------
     PROCEDURE Destroy()
-        IF USED("cursor_4c_Dados")
-            USE IN cursor_4c_Dados
-        ENDIF
-        IF USED("cursor_4c_Rcc")
-            USE IN cursor_4c_Rcc
-        ENDIF
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.this_oBusinessObject = .NULL.
+            ENDIF
+            IF USED("cursor_4c_AcessoFinan")
+                USE IN cursor_4c_AcessoFinan
+            ENDIF
+            IF USED("cursor_4c_Categorias")
+                USE IN cursor_4c_Categorias
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormCargo.Destroy")
+        ENDTRY
+
         DODEFAULT()
     ENDPROC
 

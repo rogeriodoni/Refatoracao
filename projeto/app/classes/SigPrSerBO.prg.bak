@@ -264,7 +264,19 @@ DEFINE CLASS SigPrSerBO AS BusinessBase
                             IF VARTYPE(Retrabs) = "L"
                                 THIS.this_lRetrabs = Retrabs
                             ELSE
-                                THIS.this_lRetrabs = (NVL(Retrabs, 0) = 1)
+                                IF VARTYPE(Retrabs) = "L"
+                                    THIS.this_lRetrabs = Retrabs
+                                ELSE
+                                    IF VARTYPE(Retrabs) = "L"
+                                        THIS.this_lRetrabs = Retrabs
+                                    ELSE
+                                        IF VARTYPE(Retrabs) = "L"
+                                            THIS.this_lRetrabs = Retrabs
+                                        ELSE
+                                            THIS.this_lRetrabs = (NVL(Retrabs, 0) = 1)
+                                        ENDIF
+                                    ENDIF
+                                ENDIF
                             ENDIF
                         ENDIF
                     ENDIF

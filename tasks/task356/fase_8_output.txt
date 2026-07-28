@@ -1,0 +1,13 @@
+﻿Tudo no lugar. Fase 8 conclu├¡da:
+
+**FormCCJ.prg:**
+- Header atualizado para "Fase 8/8: COMPLETO"
+- `AjustarBotoesPorModo()` implementado (linha 1093) ÔÇö desabilita Confirmar em modo VISUALIZAR
+- Chamadas inseridas em `BtnIncluirClick` (1118), `BtnVisualizarClick` (1145) e `BtnAlterarClick` (1174)
+
+**menu.prg:**
+- `DEFINE BAR 38` (separador) e `DEFINE BAR 39` ("C├ílculo de Juros") adicionados ao `popCadastros`
+- `ON SELECTION BAR 39` vinculado a `AbrirFormCCJ`
+- `PROCEDURE AbrirFormCCJ()` adicionada ao final (linha 5902), seguindo o padr├úo can├┤nico com `VARTYPE` + `Show()` sem par├ómetro
+
+O formul├írio agora est├í acess├¡vel via menu `Cadastros ÔåÆ C├ílculo de Juros`. O config.prg j├í carrega automaticamente `CCJBO.prg` e `FormCCJ.prg` via `ADIR(*BO.prg)` e `ADIR(Form*.prg)`.

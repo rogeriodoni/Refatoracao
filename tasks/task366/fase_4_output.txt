@@ -1,0 +1,15 @@
+﻿26 PROCEDURE / 26 ENDPROC ÔÇö perfectly balanced. Phase 6 is complete. Here's a summary of what was implemented:
+
+**Phase 6 changes to `Formcfo.prg`:**
+
+1. **Buttons added to `cnt_4c_Salva`** (lines 448-486): `cmd_4c_Salvar` (Left=5) and `cmd_4c_Cancelar` (Left=83), each 75├ù75 with icons `cadastro_salvar_60.jpg`/`cadastro_cancelar_60.jpg`, BINDEVENT to `BtnSalvarClick`/`BtnCancelarClick`.
+
+2. **`FormParaBO()` completed** (lines 3228ÔÇô3334): All 80+ BO properties assigned from form controls. Key conversions: numeric combos use `VAL(ALLTRIM(...))`, checkboxes use `IIF(.Value, 1, 0)`, OptionGroup situas maps `Value=1ÔåÆ0/Value=2ÔåÆ1`, ctissqn OptionGroup uses `Value - 1`, Sim/N├úo OptionGroups use `IIF(.Value=1, 1, 0)`.
+
+3. **`BOParaForm()` completed** (lines 3336ÔÇô3441): Reverse direction. Numeric combos use `LTRIM(STR(val, 1))`, checkboxes use `=(val=1)`, OptionGroup situas maps `situas=0ÔåÆ1/situas=1ÔåÆ2`, ctissqn uses `val+1`, Sim/N├úo OptionGroups use `IIF(val=1, 1, 2)`.
+
+4. **`BtnSalvarClick()`** (lines 3444ÔÇô3494): Validates c├│digo not blank, checks for duplicate in INCLUIR mode using `EscaparSQL()`, calls `FormParaBO()` then `this_oBusinessObject.Salvar()`. Uses `loc_lProsseguir` flag ÔÇö no RETURN inside TRY/CATCH.
+
+5. **`BtnCancelarClick()`** (lines 3498ÔÇô3501): Returns to Page1 (lista).
+
+**Next: Phase 7/8** ÔÇö Validations (BINDEVENT handlers for Valid events on CST fields, account fields, etc.)

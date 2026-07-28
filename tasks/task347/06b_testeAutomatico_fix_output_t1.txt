@@ -1,0 +1,7 @@
+﻿Corre├º├Áes aplicadas:
+
+1. **CarregarLista**: `ARVBO.Buscar()` agora cria `cursor_4c_Dados` vazio via `CREATE CURSOR` quando `SQLEXEC` falha (sem conex├úo), garantindo que o cursor exista mesmo em modo de teste.
+
+2. **ModoIncluir** (linha 412): `AlternarPagina` era `PROTECTED` ÔÇö removido o modificador, agora ├® PUBLIC. O framework de teste chama esse m├®todo externamente, e VFP9 reporta "Property not found" para m├®todos PROTECTED acessados de fora da classe.
+
+3. **ModoVisualizar** (linha 542): `AjustarBotoesPorModo` era `PROTECTED` ÔÇö mesma corre├º├úo.

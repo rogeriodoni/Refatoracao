@@ -1,0 +1,555 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDCES.SCX
+* Data/Hora: 24/07/2026 22:32:44
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCES
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGCDCES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDCES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Conta
+  Parent: SIGCDCES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Setor
+  Parent: SIGCDCES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Classificação de Estoque"
+  Name = "SIGCDCES"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 487
+  Pagina.Lista.Grade.Left = 30
+  Pagina.Lista.Grade.Top = 98
+  Pagina.Lista.Grade.Width = 939
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 28
+  Pagina.Lista.cntFiltros.Left = 481
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 4
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 79
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 844
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 5
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.TabIndex = 1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 415
+  Top = 215
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 411
+  Top = 190
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Get_Grupo
+------------------------------------------------------------
+  ControlSource = "crSigCdCle.clagrupos"
+  Left = 455
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 211
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "crSigCdCle.clacods"
+  Height = 23
+  Left = 455
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 186
+  Width = 132
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 415
+  Top = 241
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.get_Conta
+------------------------------------------------------------
+  ControlSource = "crSigCdCle.clacontas"
+  Left = 455
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 236
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Setor :"
+  Left = 418
+  Top = 265
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCES.Pagina.Dados.Get_Setor
+------------------------------------------------------------
+  ControlSource = "crSigCdCle.setors"
+  Left = 455
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 261
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "Get_Setor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCES
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local laCampos(3,2)
+
+m.laCampos(1,1) = 'clacods'
+m.laCampos(1,2) = thisform.pagina.dados.get_codigo.value
+m.laCampos(2,1) = 'clagrupos'
+m.laCampos(2,2) = thisform.pagina.dados.get_grupo.value
+m.laCampos(3,1) = 'clacontas'
+m.laCampos(3,2) = thisform.pagina.dados.get_conta.value
+ThisForm.poDataMgr.LocateCursor('crSigCdCle',@m.laCampos)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdCle','cidchaves','crSigCdCle','clacods,clagrupos,clacontas',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('clacods','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('clagrupos','','','Grupo',80,.t.)
+		.pfSqlTabela(1).pColuna('clacontas','','','Contas',80,.t.)
+		.pfSqlTabela(1).pColuna('setors','','','Setor',80,.t.)
+		.AddCursor('SigCdGcr','codigos','crSigCdGcr','','')
+		.AddCursor('SigCdCli','iclis','crSigCdCli','','')
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Conta.SetFocus
+Other
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+
+Local laCampos(3,2)
+
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty( thisform.pagina.dados.get_grupo.value )
+		Messagebox( 'Grupo não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.Get_grupo.SetFocus
+		Return
+	Endif
+	m.laCampos(1,1) = 'clacods'
+	m.laCampos(1,2) = thisform.pagina.dados.get_codigo.value
+	m.laCampos(2,1) = 'clagrupos'
+	m.laCampos(2,2) = thisform.pagina.dados.get_grupo.value
+	m.laCampos(3,1) = 'clacontas'
+	m.laCampos(3,2) = thisform.pagina.dados.get_conta.value
+
+	If ThisForm.poDataMgr.ChkRegister('SigCdCle',@m.laCampos)
+		Messagebox( 'Codigo, Grupo e Conta já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+		Return
+	Endif
+	Select CrSigCdCle
+	Replace cidchaves with fUniqueIds()
+
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+select crSigCdCle
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCES.Pagina.Dados.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.Show()
+	EndIf
+
+	this.parent.get_grupo.value = Iif(LastKey()==27,Space(15),crSigCdGcr.codigos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCES.Pagina.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCES.Pagina.Dados.get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+retorno=.t.
+
+grupo=this.parent.get_grupo.value
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCli','crSigCdCli','iclis',This.Value,'Contas',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('iclis','','Código')
+		m.loLista.mAddColuna('rclis',Replicate('x',60),'Descrição')
+		m.loLista.mAddColuna('grupos','','Grupo')
+		m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		m.loLista.Show()
+	EndIf
+	lcod = CrSigCdCli.iclis
+	If !fAcessoContas(Usuar,Grupo,'C',lcod)
+		Messagebox('Acesso Negado !!',0+48,'')
+		lnom = ''
+		lcod = ''
+    	m.llRetorno = .f.
+    Else
+    	m.llRetorno = .t.
+	Endif
+
+	this.parent.get_conta.value = Iif(LastKey()==27,Space(15),crSigCdCli.iclis)
+	This.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCES.Pagina.Dados.Get_Setor
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( !thisform.pcEscolha $ 'EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.Show()
+	EndIf
+
+	This.parent.get_Setor.value = Iif(LastKey()==27,Space(15),crSigCdGcr.codigos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

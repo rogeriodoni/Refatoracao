@@ -1,0 +1,17 @@
+﻿Arquivo criado. Fase 1/8 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\BchBO.prg`** criado com:
+
+- **9 propriedades** mapeadas diretamente do schema `SIGCDBCH`:
+  - `this_nCodigos = 0` (PK, numeric 6,0)
+  - `this_cOperacaos = ""` (char 15)
+  - `this_dDataInis = {}` / `this_dDataFims = {}` (datetime)
+  - `this_lEncerras = .F.` / `this_lGrvs = .F.` (bit)
+  - `this_nTipos = 0` (numeric 1,0)
+  - `this_cGrupos = ""` / `this_cContas = ""` (char 10)
+
+- **Init()** configurando `this_cTabela = "SigCdBch"` e `this_cCampoChave = "Codigos"` com TRY/CATCH
+
+- **ObterChavePrimaria()** retornando `TRANSFORM(this_nCodigos)` para auditoria
+
+M├®todos de Fase 2 (`CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo`) ser├úo adicionados na pr├│xima fase.

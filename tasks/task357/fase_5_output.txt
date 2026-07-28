@@ -1,0 +1,16 @@
+﻿All procedure boundaries are clean ÔÇö every `PROCEDURE`/`PROTECTED PROCEDURE` has a matching `ENDPROC`, and the class ends with `ENDDEFINE`. The structure is correct.
+
+**Fase 6/8 completa.** Here's what was added:
+
+**ConfigurarPaginaDados() ÔÇö novos controles:**
+- `lbl_4c_Empresa` + `txt_4c_Emps` (Left=139, Top=127, Width=34, MaxLength=3) com BINDEVENTs F3/LostFocus
+- `lbl_4c_FaixaDe` + `txt_4c_FaixaI` (Left=327, Top=127, Width=108, InputMask="9999999999.99")
+- `lbl_4c_FaixaAte` + `txt_4c_FaixaF` (Left=461, Top=127, Width=115, InputMask="9999999999.99")
+- `grd_4c_Motivos` (Left=98, Top=160, Width=706, Height=464, RecordSource="crMotivos"):
+  - Column1 (Codigos, Width=94, ReadOnly=.T., Header="Motivo")
+  - Column2 (Descrs, Width=379, ReadOnly=.T., Header="Descri├º├úo")
+  - Column3 (Tipos, Width=210, ReadOnly=.F., Sparse=.F., Header="Tipo") com OptionGroup `opt_4c_Tipos` (Inserir/Excluir/Nenhum) adicionado via path expl├¡cito fora do WITH
+
+**Novos m├®todos:** `TxtEmpsKeyPress`, `ValidarEmps`, `AbrirBuscaEmps` (lookup SigCdEmp com colunas Cemps/Razas)
+
+**M├®todos atualizados:** `BOParaForm`, `FormParaBO`, `HabilitarCampos`, `LimparCampos` ÔÇö todos agora cobrem os 8 campos completos de Page2.

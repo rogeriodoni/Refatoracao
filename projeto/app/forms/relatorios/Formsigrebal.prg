@@ -57,6 +57,9 @@ DEFINE CLASS Formsigrebal AS FormBase
             IF loc_lSucesso
                 THIS.this_oRelatorio = CREATEOBJECT("sigrebalBO")
 
+                *-- Fundo canonico dos forms REPORT (padrao FormSigReAtm etc)
+                THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
                 THIS.ConfigurarCabecalho()
                 THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
                 THIS.ConfigurarBotoes()
@@ -166,7 +169,7 @@ DEFINE CLASS Formsigrebal AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
             .PicturePosition = 13
             .Themes          = .F.
             .BackColor       = RGB(255, 255, 255)
@@ -185,7 +188,7 @@ DEFINE CLASS Formsigrebal AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_imprimir_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
             .PicturePosition = 13
             .Themes          = .F.
             .BackColor       = RGB(255, 255, 255)
@@ -205,7 +208,7 @@ DEFINE CLASS Formsigrebal AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excel_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
             .PicturePosition = 13
             .Themes          = .F.
             .BackColor       = RGB(255, 255, 255)
@@ -225,7 +228,7 @@ DEFINE CLASS Formsigrebal AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
             .PicturePosition = 13
             .Themes          = .F.
             .BackColor       = RGB(255, 255, 255)

@@ -1,0 +1,14 @@
+﻿Arquivo criado corretamente. Fase 1 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\ccpBO.prg`** criado com:
+
+- **32 propriedades** cobrindo todos os campos do formul├írio SIGCDCCP:
+  - `this_cCodigo` (PK char)
+  - `this_lInativa` (flag l├│gico)
+  - Filtros de intervalo (in├¡cio/fim): Fornecedor, Unidade, Linha, Cole├º├úo, Grupo, Moeda, Grande Grupo, Subgrupo, Markup, Encargo
+  - Par├ómetros de c├ílculo: Reajuste, Novo Markup, Varia├º├úo, Feitio, Encargo, Novo MKP
+  - 4 OptionGroups: OpcSit (1-3), OpcRecalc (1-8), Opcpven (1-2), OpcMoedaTp (1-2)
+- **`Init()`** com `this_cTabela = "SigCdCcp"` e `this_cCampoChave = "Codigo"` usando os nomes corretos do BusinessBase
+- **`ObterChavePrimaria()`** retornando `this_cCodigo` para o sistema de auditoria
+
+Os m├®todos de dados (Buscar, CarregarDoCursor, Inserir, Atualizar, ExecutarExclusao) vir├úo na Fase 2.
