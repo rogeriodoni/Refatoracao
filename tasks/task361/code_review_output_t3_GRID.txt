@@ -1,0 +1,3 @@
+﻿Ambas as corre├º├Áes aplicadas em `FormCeg.prg`:
+
+- **Linha 756** (CarregarLista) e **linha 945** (BtnBuscarClick): Removido o `ColumnCount = 3` esp├║rio que destru├¡a as colunas 4 e 5 antes do bind, e movido o `RecordSource` para ANTES das atribui├º├Áes de `ControlSource`. Agora o VFP auto-bind n├úo sobrescreve as defini├º├Áes porque elas s├úo feitas ap├│s o `RecordSource`.

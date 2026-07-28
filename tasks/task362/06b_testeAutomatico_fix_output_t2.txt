@@ -1,0 +1,3 @@
+﻿Removido `DataSession = 2` de `FormCEP.prg`. O cursor `cursor_4c_Dados` agora ser├í criado no datasession 1 (compartilhado), tornando-o vis├¡vel para o teste `USED("cursor_4c_Dados")`.
+
+**Causa raiz**: `DataSession = 2` cria um datasession privado para o form ÔÇö m├®todos chamados externamente via vari├ível executam nesse datasession isolado. O teste verifica `USED()` do datasession 1 e n├úo encontra o cursor. Nenhum outro CRUD form usa `DataSession = 2`, ent├úo este foi adicionado incorretamente na migra├º├úo de FormCEP.

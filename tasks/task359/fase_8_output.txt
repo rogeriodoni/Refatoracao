@@ -1,0 +1,11 @@
+﻿All CATCH blocks have proper MsgErro calls. Phase 8 is complete.
+
+**What was done:**
+
+The file was already far more complete than the summary indicated ÔÇö Phases 6/7 had already implemented most Phase 8 methods. Two genuine bugs were found and fixed:
+
+1. **`LimparAbaFaturamento()`** (lines 5358-5391) ÔÇö was broken: used `Controls(loc_nI + 5)` as an approximate index offset, but never actually cleared any fields. Fixed to use `THIS.ObterIndiceControle()` (already present in the class) and explicitly clear all 5 fields per fiscal container (`getCdGrupos`, `getCdContas`, `getDsContas`, `getPctAliqs`, `getReceitas`).
+
+2. **`HabilitarCampos()`** (lines 5396-5421) ÔÇö was minimal: only set `txt_4c_Codigo.ReadOnly`. Enhanced to also apply `ReadOnly` based on `loc_lEdicao` (INCLUIR/ALTERAR) to `txt_4c_Digito`, `txt_4c_Descr`, `txt_4c_Interno`, and `txt_4c_Classes`.
+
+**Integration**: `config.prg` auto-loads via `ADIR()` (no manual registration needed), and `menu.prg` already has `AbrirFormccr` bound to `popCadastros` bar 18.

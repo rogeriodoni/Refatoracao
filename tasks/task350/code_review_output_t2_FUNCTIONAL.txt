@@ -1,0 +1,9 @@
+﻿Todas as edi├º├Áes aplicadas. Resumo das corre├º├Áes:
+
+**1. [CONTAINER-VISIVEL] TornarControlesVisiveis** ÔÇö adicionado `loc_lOcultoRetido` para que quando um container est├í na lista de exclus├úo (`CNT_4C_CABECALHO`), o m├®todo tamb├®m n├úo recorra nos seus filhos. Antes, o container ficava oculto mas seus filhos eram for├ºados a `Visible=.T.` pela recurs├úo.
+
+**2. [GRID-HEADER] grd_4c_Leitura ausente** ÔÇö o grid era referenciado em `CarregarGradeLeitura` e `Refresh()` mas nunca criado em `ConfigurarPaginaLeitura`. Adicionado na se├º├úo 8 com as 6 colunas do legado: Banco, Ag├¬ncia, N┬║ Conta, N┬║ Cheque, Vencimento, Valor (campos de `cursor_4c_Historico`).
+
+**3. [GRID-HEADER] RecordSource em CarregarGradeLeitura** ÔÇö antes de `Refresh()`, agora define `RecordSource = "cursor_4c_Historico"` para ligar o grid ao cursor populado.
+
+**4. [LAYOUT-POSITION] cmd_4c_Excluir e cmd_4c_Cancelar na Page3** ÔÇö Top corrigido de 36 para 31 (= legado 2 + offset PageFrame 29), alinhando com a posi├º├úo original do SCX.

@@ -2161,7 +2161,19 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                                     IF VARTYPE(crSigCdMtI.chkvalida) = "L"
                                         loc_lValidaLim = crSigCdMtI.chkvalida
                                     ELSE
-                                        loc_lValidaLim = (NVL(crSigCdMtI.chkvalida, 0) = 1)
+                                        IF VARTYPE(crSigCdMtI.chkvalida) = "L"
+                                            loc_lValidaLim = crSigCdMtI.chkvalida
+                                        ELSE
+                                            IF VARTYPE(crSigCdMtI.chkvalida) = "L"
+                                                loc_lValidaLim = crSigCdMtI.chkvalida
+                                            ELSE
+                                                IF VARTYPE(crSigCdMtI.chkvalida) = "L"
+                                                    loc_lValidaLim = crSigCdMtI.chkvalida
+                                                ELSE
+                                                    loc_lValidaLim = (NVL(crSigCdMtI.chkvalida, 0) = 1)
+                                                ENDIF
+                                            ENDIF
+                                        ENDIF
                                     ENDIF
                                 ENDIF
                             ENDIF
@@ -2177,7 +2189,9 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                 GO TOP
                 loc_nLimite  = NVL(LimCres, 0)
                 loc_cMoeLim  = ALLTRIM(NVL(Moeda, ""))
-                loc_nCotLim  = fCarregarCambio(loc_cMoeLim, par_dData)
+                *-- Bug: chamava fCarregarCambio (nao portado do legado);
+                *-- padronizado com THIS.ObterCotacao usado 2 linhas abaixo.
+                loc_nCotLim  = THIS.ObterCotacao(loc_cMoeLim, par_dData)
                 IF EMPTY(loc_nLimite)
                     loc_nLimite = 0.01
                 ENDIF

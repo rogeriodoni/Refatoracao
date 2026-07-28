@@ -1,0 +1,28 @@
+﻿O arquivo foi criado com sucesso. Verifica├º├úo confirma 30 tokens estruturais (14 PROCEDUREs + 14 ENDPROCs + 1 DEFINE CLASS + 1 ENDDEFINE).
+
+**FormBch.prg - Fase 3 criado em** `C:\4c\projeto\app\forms\cadastros\FormBch.prg`
+
+Estrutura entregue:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Retorna DODEFAULT() |
+| `InicializarForm()` | Cria BchBO, chama ConfigurarPageFrame, carrega lista |
+| `ConfigurarPageFrame()` | PageFrame 3 p├íginas (Lista/Dados/Leitura), Top=-29, Tabs=.F. |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (labels), cnt_4c_Botoes (vazio), cnt_4c_Saida + cmd_4c_Encerrar |
+| `ConfigurarPaginaDados()` | cnt_4c_Salva (vazio) |
+| `ConfigurarPaginaLeitura()` | cnt_4c_BotoesLeitura (vazio) |
+| `CarregarLista()` | Chama BchBO.Buscar, vincula grd_4c_Dados se existir |
+| `AlternarPagina()` | Alterna entre 3 p├íginas com DO CASE |
+| `BtnEncerrarClick()` | THIS.Release() |
+| `FormParaBO()` / `BOParaForm()` | Com guards VARTYPE (campos chegam nas Fases 5-6) |
+| `TornarControlesVisiveis()` | Recurs├úo com suporte a PageFrame |
+| `FormatarGridLista()` | SetAll Verdana 8pt |
+| `Destroy()` | Fecha cursores Balanco/Historico, libera BO, DODEFAULT() |
+
+**Pontos-chave da implementa├º├úo:**
+- `DataSession = 2` (sess├úo privada ÔÇö FormBase.Init via DODEFAULT corrige SET DATE/CENTURY)
+- `Caption` com CHR(231) para "├º" (sem literal acentuado no .PRG)
+- Compensa├º├úo +29px em todos os Top (PageFrame.Top = -29)
+- Containers da Leitura preparados para os bot├Áes Gravar/Excluir/Cancelar da Fase 4
+- Sem TODOs nem stubs ÔÇö todos os m├®todos t├¬m l├│gica funcional para o escopo da Fase 3

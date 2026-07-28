@@ -1,0 +1,264 @@
+﻿{
+    "taskId":  "task350",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-21T21:27:45",
+    "atualizadoEm":  "2026-07-22T00:02:35",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-21T21:27:45",
+                                            "fim":  "2026-07-21T21:27:45",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task350\\SigCdBch.sct",
+                                            "baseName":  "SigCdBch",
+                                            "scxFile":  "C:\\4c\\tasks\\task350\\SigCdBch.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-21T21:27:45",
+                                          "fim":  "2026-07-21T21:27:46",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdBch",
+                                          "txtFile":  "C:\\4c\\tasks\\task350\\SigCdBch_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:27:46",
+                                              "fim":  "2026-07-21T21:27:46",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task350\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:27:47",
+                                              "fim":  "2026-07-21T21:27:55",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task350\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task350\\meta_prompt.md",
+                                              "boClass":  "BchBO",
+                                              "formClass":  "FormBch",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task350\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-21T21:27:55",
+                                              "fim":  "2026-07-21T21:27:56",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task350\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T21:27:56",
+                                               "fim":  "2026-07-21T21:27:56",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task350\\esqueletos",
+                                               "arquivos":  [
+                                                                "BchBO_esqueleto.prg",
+                                                                "FormBch_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T21:27:56",
+                                       "fim":  "2026-07-21T22:46:00",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\BchBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  91.37,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBch.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  3483
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-21T22:46:00",
+                                                  "fim":  "2026-07-21T22:46:13",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBch.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\BchBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-21T22:46:13",
+                                                 "fim":  "2026-07-21T22:50:27",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-21T23:48:38",
+                                       "fim":  "2026-07-21T23:49:19",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-21T23:49:19",
+                                               "fim":  "2026-07-22T00:02:33",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  5,
+                                               "resultFile":  "C:\\4c\\tasks\\task350\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-22T00:02:34",
+                                        "fim":  "2026-07-22T00:02:35",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormBch_20260722000235.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  589,
+                                        "avisos":  589
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T00:02:35",
+                                              "fim":  "2026-07-22T00:02:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task350_SigCdBch.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-21T21:27:46",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-21T21:27:47",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task350\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-21T21:27:47",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-21T21:27:47"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-21T22:46:13",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-21T22:46:13",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormBch_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBch.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task350\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-21T22:50:27",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-21T22:50:27",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-21T22:50:27",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-21T23:48:21",
+                                          "passes":  11,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Início\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Término\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Tipo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Grupo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Conta\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Início\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Término\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Tipo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Grupo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Conta\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Banco, Agência, Nº Conta, Nº Cheque, Vencimento, Valor. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ICLIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: PLEXCLUIR, LNCNT, CODIGOS, EMPS, PROGS, ARQS, TIPOS, ORDENS, DEVOLVIDOS, UMOVS, GRUPOS, CONTAS, CIDCHAVES, LCBANCO, LNTECLA; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027OPERACAOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: PLEXCLUIR, LNCNT, CODIGOS, EMPS, PROGS, ARQS, TIPOS, ORDENS, DEVOLVIDOS, UMOVS, GRUPOS, CONTAS, CIDCHAVES, LCBANCO, LNTECLA; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: PLEXCLUIR, LNCNT, CODIGOS, EMPS, PROGS, ARQS, TIPOS, ORDENS, DEVOLVIDOS, UMOVS, GRUPOS, CONTAS, CIDCHAVES, LCBANCO, LNTECLA; [LAYOUT-POSITION] Controle \u0027TipoLeitura\u0027 (parent: SIGCDBCH.Pagina.Leitura): Top original=170 vs migrado \u0027opt_4c_TipoLeitura\u0027 Top=3 (diff=167px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027TipoLeitura\u0027 (parent: SIGCDBCH.Pagina.Leitura): Left original=709 vs migrado \u0027opt_4c_TipoLeitura\u0027 Left=3 (diff=706px, tolerancia=30px)",
+                                          "tentativas":  5,
+                                          "problemasRestantes":  18
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-21T23:48:21",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-21T23:48:38",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\BchBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormBch.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-22T00:02:33",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-22T00:02:34",
+                                             "thresholdPx":  5,
+                                             "unmatched":  38,
+                                             "errors":  38,
+                                             "matched":  26,
+                                             "warnings":  29,
+                                             "reportFile":  "C:\\4c\\tasks\\task350\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

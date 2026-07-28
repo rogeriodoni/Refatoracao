@@ -2016,7 +2016,19 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                                                                                                                                             IF VARTYPE(Imagem) = "L"
                                                                                                                                                                 THIS.this_lImagem = Imagem
                                                                                                                                                             ELSE
-                                                                                                                                                                THIS.this_lImagem = (NVL(Imagem, 0) = 1)
+                                                                                                                                                                IF VARTYPE(Imagem) = "L"
+                                                                                                                                                                    THIS.this_lImagem = Imagem
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(Imagem) = "L"
+                                                                                                                                                                        THIS.this_lImagem = Imagem
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(Imagem) = "L"
+                                                                                                                                                                            THIS.this_lImagem = Imagem
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lImagem = (NVL(Imagem, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
                                                                                                                                                             ENDIF
                                                                                                                                                         ENDIF
                                                                                                                                                     ENDIF
@@ -2163,7 +2175,19 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                                                                                                                                             IF VARTYPE(ItensPendentes) = "L"
                                                                                                                                                                 THIS.this_lItensPendentes = ItensPendentes
                                                                                                                                                             ELSE
-                                                                                                                                                                THIS.this_lItensPendentes = (NVL(ItensPendentes, 0) = 1)
+                                                                                                                                                                IF VARTYPE(ItensPendentes) = "L"
+                                                                                                                                                                    THIS.this_lItensPendentes = ItensPendentes
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(ItensPendentes) = "L"
+                                                                                                                                                                        THIS.this_lItensPendentes = ItensPendentes
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(ItensPendentes) = "L"
+                                                                                                                                                                            THIS.this_lItensPendentes = ItensPendentes
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            THIS.this_lItensPendentes = (NVL(ItensPendentes, 0) = 1)
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
                                                                                                                                                             ENDIF
                                                                                                                                                         ENDIF
                                                                                                                                                     ENDIF

@@ -1,0 +1,763 @@
+{
+  "resumo": {
+    "totalMetodos": 42,
+    "metodosComSQL": 16,
+    "metodosComValidacao": 17,
+    "totalQueries": 10,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt", "fAcessoContas", "fAcessoContab", "fwBuscaInt", "For Upper"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Init",
+      "linhas": 58,
+      "codigoOriginal": "LParameters lcAcesso\n\nThisForm.Busca=1\n\nlcQueryCat = [select a.*, b.descs from sigcarct a join sigcdctg b on a.categoria = b.cods]\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCrg','cCargs','crSigCdCrg','cCargs',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('cCargs','','','Cargo',80,.t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nlcCol = Padr(ThisForm.Busca,1)\nThisForm.Pagina.Lista.Grade.SetFocus\nThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus\nThisForm.Pagina.Lista.Grade.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "Local llOks\nllOks = .t.\n\nlcDelete = [Delete From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+[']\nIf ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Delete - SigCrRcc)')\n\tllOks = .f.\nEndif\nIf llOks And Not ThisForm.poDataMgr.Update('crSigCrRcc')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCrRcc)')\n\tllOks = .f.\nEndIf\n\nIf llOks \n\tlcDelete = [Delete From SigCarCt Where Cargo = ']+CrSig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "Local llOks\nllOks = .t.\n\nlcDelete = [Delete From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+[']\nIf ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Delete - SigCrRcc)')\n\tllOks = .f.\nEndIf\n\nIf llOks\n\tlcDelete = [Delete From SigCarCt Where Cargo = ']+CrSigCdCrg.ccargs+[']\n\tIf ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Delete - SigCarCt)')\n\t\tllOks = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Local llOks\nllOks = .t.\n\nIf Not ThisForm.poDataMgr.Update('crSigCrRcc')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCrRcc)')\n\tllOks = .f.\nEndIf\n\nIf llOks\n\tIf Not ThisForm.poDataMgr.Update('crSigCarCt')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCarCt)')\n\t\tllOks = .f.\n\tEndIf\nEndIf \n\nIf llOks\n\t=DoDefault()\nElse\n\tThisForm.poDataMgr.Rollback()\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "IF ! EMPTY(ThisForm.Pagina.dados.Get_Cargo.Value)\n\tSELECT crSigCdCrg\n\tSET Order to cCargs\n\tSET Near on\n\tSEEK ThisForm.Pagina.dados.Get_Cargo.Value\n\tSET NEAR OFF \n\tThisForm.Busca=1\nEndif\nIF ! EMPTY(ThisForm.Pagina.dados.Get_descr.Value)\n\tSELECT crSigCdCrg\n\tSET Order to dCargs\n\tSET Near on\n\tSEEK ThisForm.Pagina.dados.Get_Descr.Value\n\tSET NEAR OFF \n\tThisForm.Busca=2\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cargo,Get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Click",
+      "linhas": 68,
+      "codigoOriginal": "lparameters opcao\n\nselect crSigCdCrg\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\n\nSelect xCarcc\nZap\n\nlcSql = [Select * From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+[']\n=ThisForm.PodataMgr.SqlExecute(lcsql,'TmpCarcc')\nSelect TmpCarcc\nScan\n\tSelect xCarcc\n\tAppend Blank\n\treplace Grupos with TmpCarcc.grupos,;\n\t\t\tContas with tmpcarcc.contas,;\n\t\t\tvalors with tmpcarcc.valors,;\n\t\t\tMoedas with tmpcarcc.Moedas\nEndScan\nSelect xCarcc\nIf Reccount() = 0\n\tAppend Blank\nEndIf\n\nThisForm.Pagin... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "GET_CARGO,GET_DESCR",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Click",
+      "linhas": 62,
+      "codigoOriginal": "LOCAL REC\n\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And IsEmpty(THISFORM.PAGINA.DADOS.GET_CARGO.VALUE)\n\tMESSAGEBOX('Código Inválido',0+48,'')\n\tTHISFORM.PAGINA.DADOS.GET_CARGO.SETFOCUS\n\tRETURN\nENDIF\n\nIF thisform.pcEscolha='INSERIR' And ThisForm.podatamgr.ChkRegister('SigCdCrg', 'cCargs', crSigCdCrg.ccargs)\n\tMESSAGEBOX('Código já cadastrado ! ',0+48,'')\n\tTHISFORM.PAGINA.DADOS.GET_CARGO.SETFOCUS\n\tRETURN\nEndIf\n\nIf InList(ThisForm.pcescolha,'INSERIR','ALTERAR')\n\n\tSelect xCategoria\n\tSelect Ca... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_CARGO,ChkRegister('SigCdCrg'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAR",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "dodefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Get_cargo",
+      "evento": "When",
+      "linhas": 8,
+      "codigoOriginal": "LOCAL RET\n\nRET=.f.\n*RET=GET::WHEN()\nIF INLIST(Thisform.pcEscolha,'INSERIR','PROCURAR')\n\tRET=.T.\nENDIF\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.cmdGarqicone",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha='INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.cmdGarqicone",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "LOCAL xBrow, lcCargo\n\nlcCargo = ThisForm.Pagina.Dados.Get_CARGO.Value\n\nxBrow = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCrg','csSigCdCrg','cCargs','','Cargos',.t.,'cCargs')\nxBrow.mAddColuna('cCargs','','Cargo',.t.)\nxBrow.Show\t\t\n\nSELECT csSigCdCrg\nScatter memvar\n\nSELECT crSigCdCrg\nGATHER memvar\n\nSelect xCarcc\nZap\n\nlcSql = [Select * From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+[']\n=ThisForm.PodataMgr.SqlExecute(lcsql,'TmpCarcc')\nSelect TmpCarcc\nScan\n\tSelect xCarcc\n\tAppend B... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_CARGO,Get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Get_AComis",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Valor Inválido.',48,'')\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.inserir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect XCarcc\nLocate For Grupos=' ' Or Contas=' ' Or valors<=0 Or Moedas=' '\nIf Eof()\n\tAppend Blank\nEndif\nThisform.Pagina.Dados.Grade.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.excluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select XCarcc\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\nDelete\nThisForm.pagina.Dados.Grade.Refresh\nThisForm.Pagina.Dados.Grade.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Grupo/Conta/Moeda já lançado!!!',0+32,'')\n\tSelect xCarCc\n\treplace Grupos with ' '\n\tThisForm.Pagina.Dados.Grade.Column1.SetFocus\nEndIf\nSelect xCarcc\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.Codigos\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas  having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Grupo/Conta/Moeda já lançado!!!',0+32,'')\n\tSelect xCarCc\n\treplace Contas with ' '\n\tThisForm.Pagina.Dados.Grade.Column2.SetFocus\nEndIf\nSelect xCarcc\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local lcGrupo\nlcGrupo = This.Parent.Parent.Column1.Text1.Value\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, .F., .F., lcGrupo)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column4.Text1",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Grupo/Conta/Moeda já lançado!!!',0+32,'')\n\tSelect xCarCc\n\treplace Moedas with ' '\n\tThisForm.Pagina.Dados.Grade.Column4.SetFocus\nEndIf\nSelect xCarcc\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Moeda')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.CMoes)\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *****************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.get_Grupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This,'')\nElse\n\tThis.value = ''\nEndIf\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Command1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Command1",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect XCategoria\nLocate For Categoria=' '\nIf Eof()\n\tAppend Blank\nEndif\nThisform.Pagina.Dados.GradeCat.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Command2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.Command2",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select Categoria\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\nDelete\nThisForm.pagina.Dados.GradeCat.Refresh\nThisForm.Pagina.Dados.GradeCat.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCtg', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.Cods\n\tThis.parent.parent.Column2.Text1.Value = CrListaRemota.Descs\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\n\tThis.parent.parent.Column2.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "This.Tag = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value) And (Alltrim(This.Tag) <> Alltrim(This.Value))\n\tSelect crTabTipo\n\tGo Top In crTabTipo\n\tLocate For Upper(Codigos) = Upper(Padr(This.Value, 100))\n\tIf Eof([crTabTipo])\n\t\tloLista = CreateObject([fwbuscaint], [crTabTipo], [Codigos], This.Value, [Seleção], .t.)\n\t\tloLista.mAddColuna([Codigos], [], [Código],    .t.)\n\t\tloLista.Show()\n\tEndIf\n\tIf (LastKey() = 27)\n\t\tReplace Tipo With [] In xCategoria\n\tElse\n\t\tReplace Tipo With crTabTipo.Codigos In xCategoria\n\tEndIf\nEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,For Upper",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAR.Pagina.Dados.gradeCat.Column3.Combo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCAR.Init",
+      "queryOriginal": "lcQueryCat = [select a.*, b.descs from sigcarct a join sigcdctg b on a.categoria = b.cods]",
+      "tabelas": "sigcarct,sigcdctg",
+      "colunas": "descs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Procedure",
+      "queryOriginal": "lcDelete = [Delete From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+['] If ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0",
+      "tabelas": "SigCrRcc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Procedure",
+      "queryOriginal": "\tlcDelete = [Delete From SigCarCt Where Cargo = ']+CrSig... [TRUNCADO]",
+      "tabelas": "SigCarCt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Procedure",
+      "queryOriginal": "lcDelete = [Delete From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+['] If ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0",
+      "tabelas": "SigCrRcc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Procedure",
+      "queryOriginal": "\tlcDelete = [Delete From SigCarCt Where Cargo = ']+CrSigCdCrg.ccargs+['] \tIf ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 0",
+      "tabelas": "SigCarCt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Click",
+      "queryOriginal": "lcSql = [Select * From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+['] =ThisForm.PodataMgr.SqlExecute(lcsql,'TmpCarcc')",
+      "tabelas": "SigCrRcc",
+      "colunas": "Cargos,ccargs+[],SqlExecutelcsql,TmpCarcc",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Pagina.Dados.cmdGarqicone.Click",
+      "queryOriginal": "lcSql = [Select * From SigCrRcc Where Cargos = ']+CrSigCdCrg.ccargs+['] =ThisForm.PodataMgr.SqlExecute(lcsql,'TmpCarcc')",
+      "tabelas": "SigCrRcc",
+      "colunas": "Cargos,ccargs+[],SqlExecutelcsql,TmpCarcc",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Pagina.Dados.Grade.Column1.Text1.LostFocus",
+      "queryOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas having sum(1) > 1",
+      "tabelas": "xCarcc",
+      "colunas": "grupos,contas,Moedas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Pagina.Dados.Grade.Column2.Text1.LostFocus",
+      "queryOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas  having sum(1) > 1",
+      "tabelas": "xCarcc",
+      "colunas": "grupos,contas,Moedas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCAR.Pagina.Dados.Grade.Column4.Text1.LostFocus",
+      "queryOriginal": "Select grupos,contas,Moedas from xCarcc into cursor Duplica group by grupos,contas,Moedas having sum(1) > 1",
+      "tabelas": "xCarcc",
+      "colunas": "grupos,contas,Moedas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["sigcarct", "sigcdctg", "SigCrRcc", "xCarcc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

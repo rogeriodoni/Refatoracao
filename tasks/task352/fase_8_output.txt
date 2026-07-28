@@ -1,0 +1,17 @@
+﻿Tudo correto. Vou confirmar o estado final dos arquivos da fase 8:
+
+**Resumo da Fase 8 ÔÇö conclu├¡da:**
+
+**FormCAD.prg** ÔÇö j├í estava completo desde fases anteriores com todos os m├®todos exigidos pela Fase 8:
+- `BtnBuscarClick()`, `BtnEncerrarClick()` Ô£à
+- `BtnSalvarClick()`, `BtnCancelarClick()` Ô£à
+- `FormParaBO()`, `BOParaForm()` com todos os campos Ô£à
+- `HabilitarCampos()`, `LimparCampos()` Ô£à
+- `CarregarLista()`, `AjustarBotoesPorModo()` Ô£à
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria: j├í carrega `*BO.prg` e `Form*.prg` dinamicamente via ADIR(), ent├úo `CADBO.prg` e `FormCAD.prg` s├úo carregados automaticamente.
+
+**menu.prg** ÔÇö adicionados:
+- `DEFINE BAR 34` "Cadastros Gerais" em `popCadastros` (com separador BAR 33)
+- `ON SELECTION BAR 34 OF popCadastros DO AbrirFormCAD`
+- `PROCEDURE AbrirFormCAD(par_cTipoCads, par_nMaxCodCads)` aceita par├ómetros opcionais ÔÇö do menu abre sem TipoCads, mas pode ser chamada programaticamente com `AbrirFormCAD("CARGO", 10)` etc.

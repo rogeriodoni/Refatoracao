@@ -1,0 +1,13 @@
+﻿**Fase 3/8 conclu├¡da.** `FormCCJ.prg` criado com 419 linhas em `C:\4c\projeto\app\forms\cadastros\`.
+
+**O que foi criado:**
+- `DEFINE CLASS FormCCJ AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="C├ílculo de Juros")
+- `Init()` ÔÇö apenas `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria CCJBO, chama `ConfigurarPageFrame`, carrega lista, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö PageFrame com Top=-29, 2 p├íginas com imagem de fundo
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (sombra + t├¡tulo), `cnt_4c_Botoes` (shell vazio, bot├Áes CRUD na Fase 4), `cnt_4c_Saida` + `cmd_4c_Encerrar` can├┤nico (Left=917)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` com `cmd_4c_Confirmar` e `cmd_4c_Cancelar` + BINDEVENTs
+- `CarregarLista()` ÔÇö chama `CCJBO.Buscar("")` (binding no grid na Fase 4)
+- `AlternarPagina()`, `BtnEncerrarClick()`, `BtnConfirmarClick()`, `BtnCancelarClick()`, `TornarControlesVisiveis()`, `Destroy()` ÔÇö todos completos e funcionais
+
+**Pr├│ximas fases:** Fase 4 adiciona `grd_4c_Lista` e bot├Áes CRUD dentro de `cnt_4c_Botoes`.

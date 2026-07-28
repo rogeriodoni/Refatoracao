@@ -446,6 +446,73 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
     * Visualizacao - Exibe preview do documento na tela (REPORT FORM PREVIEW)
     * Apos o preview, imprime termo de garantia se dckTermos = 1
     *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117 / #147)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- par_cCursorDados: opcional. Se informado e cursor estiver vazio,
+    *--   mostra MsgAviso e retorna .F. sem abrir preview vazio.
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
     PROCEDURE Visualizacao()
         LOCAL loc_lSucesso, loc_nCnt
         loc_lSucesso = .F.
@@ -456,7 +523,7 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                     SELECT (THIS.this_cCursorDados)
                     GO TOP
                 ENDIF
-                REPORT FORM SigReDc2 PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReDc2", "PREVIEW")
             NEXT
             THIS.impGarantia()
             loc_lSucesso = .T.
@@ -483,9 +550,9 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                     GO TOP
                 ENDIF
                 IF INLIST(THIS.this_nTpImpressao, 2, 4)
-                    REPORT FORM SigReDc2 TO PRINTER NOCONSOLE
+                    THIS.ExecutarReportForm("SigReDc2", "PRINTER")
                 ELSE
-                    REPORT FORM SigReDc2 TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReDc2", "PRINTER_PROMPT")
                 ENDIF
             NEXT
             THIS.impGarantia()
@@ -562,7 +629,7 @@ DEFINE CLASS sigredcuBO AS RelatorioBase
                             SELECT (THIS.this_cCursorDados)
                             GO TOP
                         ENDIF
-                        REPORT FORM SigReDc3 TO PRINTER NOCONSOLE
+                        THIS.ExecutarReportForm("SigReDc3", "PRINTER")
                     ENDIF
                 ENDIF
                 IF USED("cursor_4c_SigRedcuGar")

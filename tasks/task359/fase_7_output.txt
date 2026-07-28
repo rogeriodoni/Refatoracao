@@ -1,0 +1,9 @@
+﻿All 3 fixes are in place. The corrections were:
+
+1. **`BtnIncluirClick`** ÔÇö Added `THIS.this_oBusinessObject.NovoRegistro()` as the first call, which sets `this_lEmEdicao = .T.` and `this_lNovoRegistro = .T.` so `Salvar()` knows to INSERT.
+
+2. **`BtnAlterarClick`** ÔÇö Added `THIS.this_oBusinessObject.EditarRegistro()` after `CarregarPorCodigo()`, which sets `this_lEmEdicao = .T.` so `Salvar()` passes its guard check.
+
+3. **`BtnConfirmarClick`** ÔÇö Replaced the two direct calls to PROTECTED `Inserir()`/`Atualizar()` with the single public `THIS.this_oBusinessObject.Salvar()`, which dispatches internally based on `this_lNovoRegistro`.
+
+Phase 7/8 is complete. The form now correctly follows the BusinessBase pattern: `NovoRegistro()`ÔåÆINCLUIR, `CarregarPorCodigo()`+`EditarRegistro()`ÔåÆALTERAR, both converge on `Salvar()` in `BtnConfirmarClick`.

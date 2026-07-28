@@ -1,0 +1,21 @@
+[2026-07-21 18:33:14] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-21 18:33:14] [INFO] Prompt File: C:\4c\tasks\task347\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-21 18:33:14] [INFO] Output File: C:\4c\tasks\task347\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-21 18:33:14] [INFO] Model: sonnet
+[2026-07-21 18:33:14] [INFO] Timeout: 3600 segundos
+[2026-07-21 18:33:14] [INFO] Max Output Tokens: 128000
+[2026-07-21 18:33:14] [INFO] Context Files: 0 arquivo(s)
+[2026-07-21 18:33:14] [INFO] Invocando Claude CLI...
+[2026-07-21 18:33:14] [INFO] Prompt carregado: 67776 caracteres
+[2026-07-21 18:33:14] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-21 18:33:14] [INFO] Tamanho total do prompt: 67776 caracteres
+[2026-07-21 18:33:14] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-21 18:34:10] [INFO] Claude CLI finalizado em 56.2785899 segundos
+[2026-07-21 18:34:10] [INFO] Exit Code: 0
+[2026-07-21 18:34:10] [INFO] Output salvo em: C:\4c\tasks\task347\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-21 18:34:10] [INFO] Output size: 610 bytes
+[2026-07-21 18:34:10] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-21 18:34:10] [INFO] Preview do output:
+[2026-07-21 18:34:10] [INFO] Corre+º+úo aplicada. O problema era que `SQLEXEC(gnConnHandle, ...)` com handle inv+ílido lan+ºa uma **exce+º+úo VFP9** (n+úo retorna valor negativo), ent+úo o fluxo ia direto para o CATCH ÔÇö onde o cursor n+úo era criado. O bloco ELSE (que criava o cursor) s+¦ +® alcan+ºado quando SQLEXEC retorna valor negativo sem exce+º+úo.
+
+**Fix**: adicionado `CREATE CURSOR cursor_4c_Dados` no bloco CATCH de `Buscar()`, espelhando o que j+í existia no ELSE. Agora mesmo sem conex+úo ao banco, o cursor pad

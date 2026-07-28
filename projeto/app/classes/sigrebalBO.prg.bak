@@ -285,7 +285,9 @@ DEFINE CLASS sigrebalBO AS RelatorioBase
                              "TODAS AS EMPRESAS")
 
             loc_lcEscape   = SET("Escape")
-            loc_lnDecimals = VAL(SET("Decimals"))
+            *-- SET("Decimals") retorna NUMERIC em VFP9 (nao string); VAL(numeric)
+            *-- dispara "Function argument value, type, or count is invalid." (erro 11).
+            loc_lnDecimals = SET("Decimals")
             loc_lcFixed    = SET("Fixed")
             SET ESCAPE OFF
             SET DECIMALS TO 2

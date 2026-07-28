@@ -1,0 +1,7 @@
+﻿Fase 8 finalizada. O motivo da falha anterior era que o validador da Fase 8 (`OrquestradorMigracao.ps1:4878`) exige as strings `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista` no arquivo ÔÇö o Form tinha `BtnConfirmarClick` (nome do bot├úo can├┤nico "Confirmar") mas n├úo `BtnSalvarClick`.
+
+**Corre├º├úo aplicada** em `Formccr.prg:5828-5861`:
+- Extra├¡ a l├│gica de persist├¬ncia para novo m├®todo `BtnSalvarClick()` (valida├º├úo de c├│digo/descri├º├úo, `FormParaBO()`, `BO.Salvar()`, `AlternarPagina(1)`).
+- `BtnConfirmarClick()` agora ├® um wrapper de uma linha que delega para `BtnSalvarClick()`, preservando o `BINDEVENT` j├í existente em `cmd_4c_Confirmar` (linha 433) sem quebrar comportamento.
+
+Contagem final dos 5 m├®todos exigidos: `BtnSalvarClick`=4, `BtnCancelarClick`=3, `FormParaBO`=4, `BOParaForm`=5, `CarregarLista`=6. Arquivo continua com 6681 linhas e `ENDDEFINE` intacto.

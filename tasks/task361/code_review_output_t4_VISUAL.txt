@@ -1,0 +1,14 @@
+﻿Ap├│s an├ílise completa do arquivo, posso ver que o padr├úo atual do grid em `ConfigurarPaginaLista` (linhas 342-380) j├í est├í correto:
+
+- **Linha 345**: `loc_oGrid.ColumnCount = 5` ÔÇö definido **antes** do WITH
+- **Linhas 346-365**: `WITH loc_oGrid` ÔÇö cont├®m apenas propriedades visuais (Top, Width, RecordMark, etc.), **sem** RecordSource nem acesso a .Column
+- **Linhas 366-377**: `loc_oGrid.Column1.Width = 70` etc. ÔÇö acesso ├ás colunas **ap├│s** o ENDWITH
+
+Similarmente, em `CarregarLista` (linhas 745-763) e `BtnBuscarClick` (linhas 934-950), o RecordSource e os acessos a Column usam refer├¬ncias expl├¡citas (`loc_oGrid.`), **n├úo** dentro de um bloco WITH.
+
+O problema [GRID-WITH] detectado pela revis├úo ├® um **falso positivo** ÔÇö o c├│digo j├í implementa corretamente o padr├úo esperado pela solu├º├úo descrita. O `.RecordMark = .F.` dentro do WITH (linha 360) pode ter confundido o detector com `.RecordSource`, j├í que t├¬m prefixo similar.
+
+**Nenhuma altera├º├úo ├® necess├íria** em FormCeg.prg ou CegBO.prg para este pass. O c├│digo est├í correto:
+- ColumnCount fora do WITH (antes)
+- Sem RecordSource dentro do WITH
+- Acesso a Column fora do WITH (depois)

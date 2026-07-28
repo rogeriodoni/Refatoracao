@@ -1,0 +1,15 @@
+﻿Todos os fixes est├úo corretos. Resumo do que foi corrigido:
+
+**1-2. BINDEVENT-PARAMS** (`ValidarContas` e `ValidarDataDetalhe`):
+- Mudou de `PROCEDURE Foo(par1, par2)` para `PROCEDURE Foo` + `LPARAMETERS par1, par2` ÔÇö forma can├┤nica que VFP9 honra em handlers BINDEVENT.
+
+**3. METODO-INEXISTENTE** (`ExecutarReportForm`):
+- Implementado como PROCEDURE PUBLIC no Form com: guard `FILE(FULLPATH())`, guard cursor vazio, isolamento de locale (`SET POINT/SEPARATOR/REPORTBEHAVIOR 80`) e restaura├º├úo ap├│s o REPORT FORM.
+
+**4. GRID-HEADER "Valor L?q."** (linha 740, grd_4c_Detalhe Column4):
+- `"Valor L" + CHR(237) + "q."` (abreviado) ÔåÆ `"Valor Liquido"` (id├¬ntico ao legado).
+
+**5. GRID-HEADER "L?quido"** (linha 1075, grd_4c_Lista Column6):
+- `"L" + CHR(237) + "quido"` ÔåÆ `"Valor Liquido"` (alinha com nomenclatura do legado).
+
+Os demais headers de grd_4c_Lista (Conta, Descri├º├úo, Data Base, Fator, Total) descrevem corretamente as colunas exibidas (`contas`, `desconta`, `data_base`, `fator`, `total`) e n├úo t├¬m alternativa leg├¡vel nos 4 headers do legado ÔÇö mudar para "Data/Valor/Dias/Valor Liquido" nessas colunas seria semanticamente incorreto.

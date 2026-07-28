@@ -1,0 +1,16 @@
+﻿Estrutura validada: todos os PROCEDURE/ENDPROC pareados, TRY/CATCH/ENDTRY corretos, `RETURN .T.` do guard `gb_4c_ValidandoUI` est├í **fora** do TRY (linha 198 vs TRY na linha 201).
+
+**Fase 3 entregue** ÔÇö `C:\4c\projeto\app\forms\cadastros\Formcfi.prg` (267 linhas) com:
+
+| Elemento | Status |
+|----------|--------|
+| `DEFINE CLASS Formcfi AS FormBase` | Ô£ô propriedades visuais 1000├ù600 |
+| `Init()` | Ô£ô apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£ô cria BO, chama ConfigurarPageFrame, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Ô£ô PageFrame Top=-29, Tabs=.F., 2 pages |
+| `ConfigurarPaginaLista()` | Ô£ô cnt_4c_Cabecalho (lbl_4c_Sombra/Titulo), cnt_4c_Botoes, cnt_4c_Saida |
+| `ConfigurarPaginaDados()` | Ô£ô cnt_4c_BotoesAcao |
+| `CarregarLista()` | Ô£ô chama `BO.Buscar("")`; RecordSource/colunas ficam na Fase 4 |
+| `FormatarGridLista()` | Ô£ô FontName=Verdana, FontSize=8 |
+| `TornarControlesVisiveis()` | Ô£ô recursivo com suporte a PageFrame |
+| `Destroy()` | Ô£ô limpa BO + cursor_4c_Dados + DODEFAULT() |

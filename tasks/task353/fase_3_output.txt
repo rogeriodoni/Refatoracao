@@ -1,0 +1,9 @@
+﻿**Fase 3 conclu├¡da.** Resumo do que foi encontrado e corrigido:
+
+O arquivo `FormCAF.prg` j├í existia com implementa├º├úo **completa** (1493 linhas, todas as 8 fases em uma execu├º├úo anterior do pipeline). Corrigi 3 bugs cr├¡ticos:
+
+1. **`Caption = "..." + CHR(231) + ...` em DEFINE CLASS** ÔÇö sintaxe inv├ílida em VFP9 (propriedades de classe n├úo aceitam express├Áes com fun├º├Áes). Corrigido: `Caption = "Cancelamento de OP da Fundicao"` no DEFINE CLASS + `THIS.Caption = "Cancelamento de OP da Fundi" + CHR(231) + CHR(227) + "o"` no in├¡cio de `InicializarForm()`.
+
+2. **`cmd_4c_Cancelar.Caption = "Encerrar"`** ÔÇö caption errado no bot├úo de cancelamento. Corrigido para `"Cancelar"`.
+
+3. **Integra├º├úo com o sistema**: j├í presente ÔÇö `menu.prg` tem `DEFINE BAR 36` e `AbrirFormCAF()`, e `config.prg` usa `ADIR()` que carrega automaticamente `CAFBO.prg` e `FormCAF.prg` sem necessidade de altera├º├úo.

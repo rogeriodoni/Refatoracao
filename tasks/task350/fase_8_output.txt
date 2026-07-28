@@ -1,0 +1,8 @@
+﻿All edits verified. `FormBch.prg` is now complete and correct:
+
+- **Edit 1** (previous session): `BtnGravarLeituraClick` ÔÇö replaced `RETURN` inside TRY with `loc_lContinuar = .F.` flag pattern
+- **Edit 2**: `BtnExcluirHistoricoClick` ÔÇö removed `RETURN` after DELETE failure, wrapped UPDATE + `CarregarGradeLeitura` in `ELSE` block
+- **Edit 3**: `NumGetLostFocus` ÔÇö moved VARTYPE/EMPTY guards before `TRY`, introduced `loc_lContinuar` flag for the two SQL-dependent early exits (cheque not found, duplicate check)
+- **Edit 4**: `PopularCamposLeitura` ÔÇö added `loc_cOperacaos` capture in `WITH` block and `SQLEXEC` lookup against `SigCdOpt` to populate `txt_4c_OperAbDisp`; CATCH also closes `cursor_4c_DescOpt`
+
+No `RETURN` statements remain inside any `TRY/CATCH` block. The file `C:\4c\projeto\app\forms\cadastros\FormBch.prg` is fully functional for Phase 8/8 of the FormBch migration.

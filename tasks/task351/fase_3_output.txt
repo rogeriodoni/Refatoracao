@@ -1,0 +1,13 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormBlq.prg` criado com 253 linhas.
+
+**O que foi criado:**
+- `DEFINE CLASS FormBlq AS FormBase` com propriedades visuais exatas (600├ù1000, Caption com CHR(237))
+- `Init()` ÔÇö apenas `DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔÇö cria `BlqBO`, chama `ConfigurarPageFrame`, propaga Caption para labels, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, 2 pages com background `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio, Left=538), `cnt_4c_Saida` (can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_Salva` (Left=812, Top=53 com compensa├º├úo)
+- `TornarControlesVisiveis()` ÔÇö recursivo completo
+- `Destroy()` ÔÇö libera BO e chama `DODEFAULT()`
+
+**Compensa├º├Áes aplicadas:** `cntSombra.Top=1 + 29 = 30`, `Grupo_op.Top=-1 + 29 = 28`, `Grupo_Salva.Top=24 + 29 = 53`. Fase 4 adicionar├í grid e bot├Áes CRUD nos containers criados.

@@ -887,36 +887,88 @@ DEFINE CLASS sigreappBO AS RelatorioBase
     ENDPROC
 
     *--------------------------------------------------------------------------
+    * ExecutarReportForm (Pattern #117/#123)
+    * Executa REPORT FORM apenas se o FRX existir; isola locale/REPORTBEHAVIOR
+    * para nao renderizar asteriscos em campos numericos de FRXs legados.
+    * par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo)
+        LOCAL loc_cFRX, loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX, "Erro")
+            RETURN .F.
+        ENDIF
+
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterFRXBase - Decide qual FRX usar de acordo com o tipo de analise
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterFRXBase()
+        LOCAL loc_lPagRec, loc_cFRX
+        loc_lPagRec = (THIS.this_nPagamentos = 1) OR (THIS.this_nRecebimentos = 1)
+        IF (THIS.this_nOptAnaSi = 3)
+            loc_cFRX = "SigReAp4"
+        ELSE
+            IF !loc_lPagRec
+                loc_cFRX = IIF(THIS.this_nOptAnaSi = 1, "SigReAp1", "SigReAp2")
+            ELSE
+                loc_cFRX = "SigReAp3"
+            ENDIF
+        ENDIF
+        RETURN loc_cFRX
+    ENDPROC
+
+    *--------------------------------------------------------------------------
     * Visualizar - Prepara dados e exibe relatorio em preview na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_lPagRec
+        LOCAL loc_lSucesso
 
         loc_lSucesso = .F.
 
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            IF THIS.PrepararDados()
+                THIS.ExecutarReportForm(THIS.ObterFRXBase(), "PREVIEW")
+                THIS.RegistrarAuditoria("VISUALIZAR")
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_lPagRec = (THIS.this_nPagamentos = 1) OR (THIS.this_nRecebimentos = 1)
-
-            IF (THIS.this_nOptAnaSi = 3)
-                REPORT FORM SigReAp4 PREVIEW NOCONSOLE
-            ELSE
-                IF !loc_lPagRec
-                    IF (THIS.this_nOptAnaSi = 1)
-                        REPORT FORM SigReAp1 PREVIEW NOCONSOLE
-                    ELSE
-                        REPORT FORM SigReAp2 PREVIEW NOCONSOLE
-                    ENDIF
-                ELSE
-                    REPORT FORM SigReAp3 PREVIEW NOCONSOLE
-                ENDIF
-            ENDIF
-
-            THIS.RegistrarAuditoria("VISUALIZAR")
-            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -930,33 +982,16 @@ DEFINE CLASS sigreappBO AS RelatorioBase
     * Imprimir - Prepara dados e imprime com dialogo de selecao de impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_lPagRec
+        LOCAL loc_lSucesso
 
         loc_lSucesso = .F.
 
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            IF THIS.PrepararDados()
+                THIS.ExecutarReportForm(THIS.ObterFRXBase(), "PRINTER_PROMPT")
+                THIS.RegistrarAuditoria("IMPRIMIR")
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_lPagRec = (THIS.this_nPagamentos = 1) OR (THIS.this_nRecebimentos = 1)
-
-            IF (THIS.this_nOptAnaSi = 3)
-                REPORT FORM SigReAp4 TO PRINTER PROMPT NOCONSOLE
-            ELSE
-                IF !loc_lPagRec
-                    IF (THIS.this_nOptAnaSi = 1)
-                        REPORT FORM SigReAp1 TO PRINTER PROMPT NOCONSOLE
-                    ELSE
-                        REPORT FORM SigReAp2 TO PRINTER PROMPT NOCONSOLE
-                    ENDIF
-                ELSE
-                    REPORT FORM SigReAp3 TO PRINTER PROMPT NOCONSOLE
-                ENDIF
-            ENDIF
-
-            THIS.RegistrarAuditoria("IMPRIMIR")
-            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -970,33 +1005,16 @@ DEFINE CLASS sigreappBO AS RelatorioBase
     * ImprimirSemDialogo - Prepara dados e imprime diretamente (sem dialogo)
     *--------------------------------------------------------------------------
     PROCEDURE ImprimirSemDialogo()
-        LOCAL loc_lSucesso, loc_lPagRec
+        LOCAL loc_lSucesso
 
         loc_lSucesso = .F.
 
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            IF THIS.PrepararDados()
+                THIS.ExecutarReportForm(THIS.ObterFRXBase(), "PRINTER")
+                THIS.RegistrarAuditoria("IMPRIMIR")
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_lPagRec = (THIS.this_nPagamentos = 1) OR (THIS.this_nRecebimentos = 1)
-
-            IF (THIS.this_nOptAnaSi = 3)
-                REPORT FORM SigReAp4 TO PRINTER NOCONSOLE
-            ELSE
-                IF !loc_lPagRec
-                    IF (THIS.this_nOptAnaSi = 1)
-                        REPORT FORM SigReAp1 TO PRINTER NOCONSOLE
-                    ELSE
-                        REPORT FORM SigReAp2 TO PRINTER NOCONSOLE
-                    ENDIF
-                ELSE
-                    REPORT FORM SigReAp3 TO PRINTER NOCONSOLE
-                ENDIF
-            ENDIF
-
-            THIS.RegistrarAuditoria("IMPRIMIR")
-            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message

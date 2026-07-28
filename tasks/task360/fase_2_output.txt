@@ -1,0 +1,9 @@
+﻿CecBO.prg est├í completo. Fase 2 conclu├¡da com os seguintes m├®todos adicionados:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com INNER JOIN em SigCdEmp para trazer Razas; filtro opcional por Emps
+- **`CarregarPorCodigo(par_cIdChaves)`** ÔÇö SELECT pela PK cIdChaves com JOIN; seta `this_lNovoRegistro = .F.`
+- **`VerificarDuplicidade()`** ÔÇö verifica se j├í existe Emps+Tipos antes de inserir (usado pelo form no BtnSalvarClick)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todos os 16 campos do cursor para as propriedades do BO usando `SELECT (alias)` + acesso direto (sem parenteses em vari├ível)
+- **`Inserir()`** ÔÇö gera cIdChaves via `fUniqueIds()`, faz INSERT com todos os 15 campos da tabela, registra auditoria
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos edit├íveis (exceto cIdChaves/Emps/Tipos que s├úo chave funcional n├úo edit├ível em ALTERAR), WHERE por cIdChaves
+- **`ExecutarExclusao()`** ÔÇö DELETE por cIdChaves com auditoria

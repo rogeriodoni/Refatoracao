@@ -204,10 +204,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                            Grupos + "/" + Contas + "-" + RClis) AS Quebra2, ;
                        IIF(fixos <> 2, DescTabs, Descs) AS DescTabs, * ;
                 FROM (THIS.this_cCursorDados) ;
-                INTO CURSOR Selecao
+                INTO CURSOR Selecao ;
+                ORDER BY 1, 2, Datas, Nenvs
 
                 SELECT Selecao
-                INDEX ON Quebra1 + Quebra2 + DTOS(Datas) + STR(Nenvs, 10) TAG Ordem
                 GO TOP
 
             ENDIF
@@ -222,11 +222,71 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
         RETURN loc_lSucesso
     ENDPROC
 
+    *-- ============================================================
+    *-- ExecutarReportForm (Pattern #117)
+    *-- Guard FRX + guard cursor vazio + isolamento POINT/SEPARATOR/REPORTBEHAVIOR
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
     *--------------------------------------------------------------------------
     * Visualizar - Prepara dados e exibe relatorio em preview
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -235,10 +295,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) PREVIEW NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PREVIEW", loc_cCursor)
             THIS.RegistrarAuditoria("VISUALIZAR")
             loc_lSucesso = .T.
 
@@ -254,7 +314,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     * Imprimir - Prepara dados e imprime com dialogo de selecao de impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -263,10 +323,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) TO PRINTER PROMPT NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PRINTER_PROMPT", loc_cCursor)
             THIS.RegistrarAuditoria("IMPRIMIR")
             loc_lSucesso = .T.
 
@@ -282,7 +342,7 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
     * Documento - Prepara dados e envia direto para impressora sem dialogo
     *--------------------------------------------------------------------------
     PROCEDURE Documento()
-        LOCAL loc_lSucesso, loc_cRelatorio
+        LOCAL loc_lSucesso, loc_cRelatorio, loc_cCursor
 
         loc_lSucesso = .F.
 
@@ -291,10 +351,10 @@ DEFINE CLASS SIGREAUPBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
 
-            loc_cRelatorio = gc_4c_CaminhoReports + ;
-                             IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cRelatorio = IIF(THIS.this_nPercent = 1, "SigReAu2", "SigReAu1")
+            loc_cCursor    = IIF(THIS.this_nPercent = 1, "TmpInc", "Selecao")
 
-            REPORT FORM (loc_cRelatorio) TO PRINTER NOCONSOLE
+            THIS.ExecutarReportForm(loc_cRelatorio, "PRINTER", loc_cCursor)
             THIS.RegistrarAuditoria("DOCUMENTO")
             loc_lSucesso = .T.
 

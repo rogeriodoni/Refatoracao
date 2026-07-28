@@ -1,0 +1,10 @@
+﻿A Fase 6/8 est├í conclu├¡da. O arquivo `FormBCC.prg` foi atualizado com os campos faltantes da Page2:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Label2` ÔÇö Label "Descri├º├úo :" (Say2 original: Top=197+29=226, Left=171, Verdana 8, ForeColor RGB(36,84,155))
+- `txt_4c_Descricao` ÔÇö TextBox para descri├º├úo (getDescs original: Top=193+29=222, Left=239, Width=220, Height=24, TabIndex=5)
+
+**Observa├º├Áes sobre esta migra├º├úo:**
+- SIGCDBCC ├® um formul├írio simples com apenas 2 campos (C├│digo e Descri├º├úo), sem nenhum lookup (n├úo h├í F4/F5/fwbuscaext/sigacess no c├│digo original)
+- O `cnt_4c_BotoesAcao` (Confirmar/Cancelar) j├í estava na Fase 5
+- Todos os m├®todos (FormParaBO, BOParaForm, LimparCampos, HabilitarCampos, BtnSalvarClick) j├í referenciavam `txt_4c_Descricao` corretamente ÔÇö agora o controle existe de fato

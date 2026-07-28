@@ -1,0 +1,1018 @@
+{
+  "resumo": {
+    "totalMetodos": 61,
+    "metodosComSQL": 12,
+    "metodosComValidacao": 28,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "From", "fChecaAcesso", "fLerSettings", "fConfigGeral", "fGerUniqueKey", "fCanUniqueKey", "fCarregaGrade", "fwBuscaExt", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 130,
+      "codigoOriginal": "LParameters pCodigos, pForms, pArqs, pCursor, pExcluir\n\nPrivate pcCodigos, pcForms, pcArqs, pcCursor, plExcluir\n\npcCodigos = pCodigos\npcForms   = pForms\npcArqs    = pArqs\npcCursor  = pCursor\nplExcluir = pExcluir\n\nllOk = .T.\n\nIf ThisForm.poDataMg2.Requery('CrSigCdGrl') < 1\n\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Requery SigCdGrl)')\n\tllOk = .F.\nElse\n\tSelect CrSigCdGrl\n\tIndex On Arqs + Progs + Str(Codigos,6) Tag Arqs\n\tGo Top\nEndIf\n\nloBarraGrv = CreateObject('fwprogres... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds,From",
+        "metodosFormChamados": "Requery,Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Local lcBanco, lcAgencias, lcContas, lcNumeros\n\nIf InList(ThisForm.TipoLeitora,'S','P') And !ThisForm.IniciaLeitura\n\tReturn\nEndIf\n\nThisForm.Leitor = .F.\nThisForm.ReadComm.Leitura()\nThisForm.LeituraSerial= ThisForm.ReadComm.Campo\n\nIf Atc('?',ThisForm.ReadComm.Campo) <> 0 Or Empty(ThisForm.LeituraSerial)\n\tIf !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError\n\t\tThisForm.ReadComm.Ole_Comm.PortOpen = .T.\n\tEndIf\n\tThisForm.ReadComm.Ole_Comm.OutPut = 'WEBCD'\n\tWait Window 'Erro na Lei... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Leitura,Campo) <> 0 Or Empty,VerifCheq",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Conta,Get_Num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "LParameters lcBanco, lcAgencia, lcConta, lcNumero\n\nlcTipo   = Str(ThisForm.Pagina.Leitura.TipoLeitura.Value,1)\nlcCheque = lcBanco + lcAgencia + lcConta + lcNumero\nlcMsg = ''\nIf !fChkDigitos(lcBanco) Or !fChkDigitos(lcAgencia) Or !fChkDigitos(lcConta) Or !fChkDigitos(lcNumero)\n\tlcMsg = 'Leitura de Cheque Incorreta !!!'\nElse\n\tSelect Historico\n\tSet Order To TpCheque &&Cheque\n\tIf Seek(lcTipo + lcCheque)\n\t\tlcMsg = 'Cheque já lançado !!! <ENTER> para continuar...'\n\tElse\n\t\tSelect Balanco\n\t\tSet Order To... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(lcBanco,ChkDigitos(lcAgencia,ChkDigitos(lcConta,ChkDigitos(lcNumero",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Init",
+      "linhas": 118,
+      "codigoOriginal": "LParameters _Acesso\n\nLocal lnTpLeCheques\n\nPrivate lnCodigos\n\nThisForm.AcLeitura = fChecaAcesso('SIGCDBCH','LEITURA')\nThisForm.AcEncerra = fChecaAcesso('SIGCDBCH','ENCERRA')\n\nlcQryBal = [Select * From SigCqBal Where Codigos = ?lnCodigos ]\nlcQryHis = [Select * From SigCqHis Where Codigos = ?lnCodigos ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','SigCdBch')\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdBch','Codigos'  ,'CrSigCdBch','Codigos'  ,ThisForm.Pagina.Lis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fLerSettings",
+        "metodosFormChamados": "AcLeitura = fChecaAcesso,AcEncerra = fChecaAcesso,Configura,SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "KeyPress",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nKeyCode,nShiftAltCtrl\n\n=DoDefault(nKeyCode,nShiftAltCtrl)\n\nDo Case\n\n\tCase nKeyCode = -7 And This.Pagina.ActivePage = 1   && [F8]\n\t\tThis.Pagina.Lista.Leitura.Click\n\n\tCase nKeyCode = -8 And This.Pagina.ActivePage = 1   && [F9]\n\t\tThis.Pagina.Lista.Fecha.Click\n\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "With ThisForm.Pagina.Lista.Grade\n\t.Column2.ControlSource = [Nvl(CrSigCdBch.DataInis,'')]\n\t.Column3.ControlSource = [Nvl(CrSigCdBch.DataFims,'')]\n\t.Column4.ControlSource = ;\n\t'Iif(CrSigCdBch.Tipos = 1,[1ª.Entrada],Iif(CrSigCdBch.Tipos = 2,[Pendentes],Iif(CrSigCdBch.Tipos = 3,[Devolvidos],[Todos])))'\nEndWith\n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 41,
+      "codigoOriginal": "Private lnCodigos\n\nlnCodigos = CrSigCdBch.Codigos\n\nThisForm.Pagina.Leitura.GradeLeitura.RecordSource = ''\n\nThisForm.poDataMg2.Requery('Balanco')\nThisForm.poDataMg2.Requery('Historico')\n\nWith ThisForm.Pagina.Leitura.GradeLeitura\n\t.RecordSource = 'Historico'\n\t.Column1.ControlSource = 'Historico.Bancos'\n\t.Column2.ControlSource = 'Historico.Agencias'\n\t.Column3.ControlSource = 'Historico.NContas'\n\t.Column4.ControlSource = 'Historico.NCheques'\n\t.Column5.ControlSource = [Nvl(Historico.Vencs,'')]\n\t.Colu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 82,
+      "codigoOriginal": "Local lnCodigos, lcGrupo, lcConta, lcOpeCh, lcCond\n\nWith ThisForm.Pagina.Dados\n\tlnCodigos = .Get_Codigo.Value\n\tlcGrupo   = .GetGrupo.Value\n\tlcConta   = .GetConta.Value\n\tlcOpeCh   = .Get_Oper.Value\n\tlnTipo    = .Cmb_Operacao.Value\nEndWith\n\nlcWhere = ''\n\nDo Case\n\tCase lnTipo = 1 And Empty(lcOpeCh)\n\t\tlcWhere = [And b.Tipos = 'DB' And b.Ordens = 1 ]\n\tCase lnTipo = 2 And Empty(lcOpeCh)\n\t\tlcWhere = [And b.Tipos = 'DB' And b.Devolvidos <> 'S' ]\n\tCase lnTipo = 3 And Empty(lcOpeCh)\n\t\tlcWhere = [And b.Tip... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Update,Commit,Grava",
+        "controlesReferenciados": "Get_Codigo,Get_Oper,Cmb_Operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nThisForm.poDataMg2.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "LParameters Opcao\n\nIf !DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn\nEndIf\n\nThis.Parent.Parent.Leitura.Enabled = .F.\n\n*-[ Posiciona o Cursor no primeiro campo de acordo com a opção ]-*\nWith This.Parent.Parent.Dados\n\t.GetDGrupo.Value = ''\n\t.GetDConta.Value = ''\n\n\tIf ThisForm.pcEscolha <> 'INSERIR'\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdGcr','CrSigCdGcr','Codigos',.GetGrupo.Value,'Codigos,Descrs')\n\t\t\t.GetDGrupo.Value = CrSigCdGcr.Descrs\n\t\tEndIf\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdCli',... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_DataInicial,Get_DataFinal,Cmb_Operacao,Get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf !Empty(CrSigCdBch.Grupos) And ;\n\t\t!ThisForm.poDataMgr.CursorQuery('SigCdGcr','','Codigos',CrSigCdBch.Grupos,'Codigos')\n\t\tMessagebox('Grupo Inválido !!!',16,'')\n\t\tThis.Parent.Parent.GetGrupo.SetFocus\n\t\tReturn 0\n\tEndIf\n\tIf !Empty(CrSigCdBch.Contas) And !ThisForm.poDataMgr.CursorQuery('SigCdCli','','IClis',CrSigCdBch.Contas,'IClis')\n\t\tMessagebox('Conta Inválida !!!',16,'')\n\t\tThis.Parent.Parent.GetConta.SetFocus\n\t\tReturn(.F.)\n\tEndIf\nEndIf\n\n=DoDefault()\n\nThis.Par... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "lnCodigos = CrSigCdBch.Codigos\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\t=fCanUniqueKey(lnCodigos,'BALANCO CHEQUE')\n\tEndIf\n\tThis.Parent.Parent.Parent.Leitura.Enabled = ThisForm.AcLeitura\n\tThisForm.mAtivaPagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Lista.Leitura.Click",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Lista.Leitura",
+      "evento": "Click",
+      "linhas": 87,
+      "codigoOriginal": "Private lnCodigos\n\nSelect CrSigCdBch\nIf Eof()\n\tReturn(.T.)\nEndIf\n\nIf CrSigCdBch.Encerras\n\tMessagebox('Inventário Já Encerrado !!!',48,'')\n\tReturn(.T.)\nEndIf\n\nThisForm.pcEscolha = 'INSERIR'\nlnCodigos = CrSigCdBch.Codigos\n\nThis.Parent.Parent.Leitura.GradeLeitura.RecordSource = ''\nThisForm.poDataMg2.Requery('Balanco')\nThisForm.poDataMg2.Requery('Historico')\n\nSelect Balanco\nIndex On Bancos + Agencias + NContas + NCheques Tag Cheque\nGo Top\n\nSelect Historico\nIndex On Bancos + Agencias + NContas + NChe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "Get_Valor,Get_Vecto,Get_DataInicial,Get_DataFinal,Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Lista.Fecha",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Select CrSigCdBch\nIf Eof()\n\tReturn\nEndIf\nIf CrSigCdBch.Encerras\n\tMessageBox('Balanço Já Encerrado !!!',48,'')\n\tReturn\nEndIf\nIf Messagebox('Este Balanço será finalizado, não podendo ser efetuada mais nenhuma leitura...' + Chr(13) +;\n\t'Deseja encerrar o Balanço ???',4+32+256,'ATENÇÃO') = 6\n\tSelect CrSigCdBch\n\tReplace DataFims With DateTime(),;\n\t\t\tEncerras With .T. In CrSigCdBch\n\tThisForm.poDataMgr.Update('CrSigCdBch')\n\tThisForm.poDataMgr.Commit()\nEndIf\nThis.Parent.Grade.Column1.SetFocus\nThisForm.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_Codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_Oper",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdOpt','CrOperacao','Operacaos',This.Value,'Operações',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Operacaos','XXXXXXXXXXXXXXX'     ,'Código')\n\t\tm.loLista.mAddColuna('Descrs'   ,'XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrOperacao')\n\t\tThis.Value = Evaluate('CrOperacao.Operacaos')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_Oper",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetDConta",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "llRet = .T.\nWith ThisForm.Pagina.Dados\n\tGrupo = .GetGrupo.Value\n\tIf !Empty(This.Value)\n\t\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,.GetConta,.GetDConta)\n\t\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\t\tThis.Value = ''\n\t\t\tThis.Refresh\n\t\t\t.GetConta.Value = ''\n\t\t\t.GetConta.Refresh\n\t\t\tllRet = .F.\n\t\tEndIf\n\tElse\n\t\t.GetConta.Value = ''\n\t\t.GetConta.Refresh\n\tEndIf\nEndWith\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR' And Empty(This.Parent.GetConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'INSERIR' And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Cmb_Operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_DataInicial",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(!IsEmpty(This.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_DataInicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_DataFinal",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(!IsEmpty(This.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.Get_DataFinal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetGrupo",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Local llRet\n\nllRet = .T.\n\nWith ThisForm.Pagina.Dados\n\tIf !Empty(This.Value)\n\t\tllRet = fAcessoContab(Usuar,'C',This.Value,.GetGrupo,.GetDGrupo,.GetConta.Value)\n\tElse\n\t\t.GetDGrupo.Value = ''\n\t\t.GetDGrupo.Refresh\n\tEndIf\nEndWith\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetDGrupo",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Local llRet\n\nllRet = .T.\n\nWith ThisForm.Pagina.Dados\n\tIf !Empty(This.Value)\n\t\tllRet = fAcessoContab(Usuar,'D',This.Value,.GetGrupo,.GetDGrupo,.GetConta.Value)\n\tElse\n\t\t.GetGrupo.Value = ''\n\t\t.GetGrupo.Refresh\n\tEndIf\nEndWith\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR' And Empty(This.Parent.GetGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'INSERIR' And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetConta",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local llRet\n\nllRet = .T.\n\nWith ThisForm.Pagina.Dados\n\tGrupo = .GetGrupo.Value\n\tIf !Empty(This.Value)\n\t\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,.GetConta,.GetDConta)\n\t\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\t\tThis.Value = ''\n\t\t\tThis.Refresh\n\t\t\t.GetDConta.Value = ''\n\t\t\t.GetDConta.Refresh\n\t\t\tllRet = .F.\n\t\tEndIf\n\tElse\n\t\t.GetDConta.Value = ''\n\t\t.GetDConta.Refresh\n\tEndIf\nEndWith\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Dados.GetConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Cmb_Operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.GetDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.GetConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.GetDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_DataFinal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_DataInicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.GetGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Oper",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Vecto",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.TipoLeitura",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Get_Bco.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.TipoLeitura",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "=DoDefault()\nSelect Historico\nSet Order To TipoData\nSet Key To Str(This.Value,1)\nGo Bottom\nThisForm.Refresh\nThis.Parent.GradeLeitura.SetFocus\nThis.Parent.GradeLeitura.Refresh\nThis.Parent.Get_Bco.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Comm_Ini",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If !ThisForm.IniciaLeitura\n\tThisForm.IniciaLeitura = .T.\n\tIf InList(ThisForm.TipoLeitora,'P','S')\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WE'\n\tEndIf\nElse\n\tThisForm.Inicialeitura = .F.\n\tIf InList(ThisForm.TipoLeitora,'P','S')\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WE'\n\tEndIf\nEndIf\nThis.Parent.Get_Bco.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Comm_Fim",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If InList(ThisForm.TipoLeitora,'P','S')\n\tThisForm.ReadComm.Ole_Comm.OutPut = 'N'\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Cancela",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If MessageBox('Deseja Cancelar ???',4+32+256,'') = 6\n\tWith This.Parent\n\t\t.Parent.Dados.Grupo_Salva.Visible = .T.\n\t\t.Parent.Lista.Enabled             = .T.\n\tEndWith\n\tThisForm.mAtivaPagina1\nElse\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Salva",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "If MessageBox('Deseja Gravar os Dados Digitados ???',4+32+256,'LEITURA') <> 6\n\tReturn\nEndif\n\nlnCodigos = This.Parent.Get_Codigo.Value\n\nloBarraHis = CreateObject('fwprogressbar','Aguarde! Verificando Histórico...',Reccount('Historico'))\nloBarraHis.Show\n\nSelect Historico\nSet Order To\nGo Top\nScan\n\tloBarraHis.Update(.T.)\n\tIf Seek(Historico.Bancos + Historico.Agencias + Historico.NContas + Historico.NCheques,'Balanco','Cheque')\n\t\tIf Historico.Tipos = 1\n\t\t\tlcUpdate = [Update SigCqBal Set Lidos = 1 Whe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Grava",
+        "controlesReferenciados": "Get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Excluir",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Select Historico\nIf !Eof('Historico')\n\tlnRegHis = Recno('Historico')\n\tlcBuscaChq = Historico.Bancos + Historico.Agencias + Historico.NContas + Historico.NCheques\n\tlnTipos    = Historico.Tipos\n\tSelect Historico\n\tDelete\n\t=Seek(lcBuscaChq,'Balanco','Cheque')\n\tSelect Balanco\n\tIf lnTipos = 1\n\t\tReplace Balanco.Lidos   With 0\n\tElse\n\t\tReplace Balanco.ReLidos With 0\n\tEndIf\n\tSelect Historico\n\tGo lnRegHis\n\tThis.Parent.GradeLeitura.Refresh\n\tThisForm.Refresh\n\tThis.Parent.Get_Bco.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Bco",
+      "evento": "GotFocus",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.TipoLeitora = 'P'\n\tIf ThisForm.Inicialeitura\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WEU'\n\t\t=ChrSaw(.3)\n\t\t=ThisForm.ReadComm.Ole_Comm.Input\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Bco",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "If ThisForm.Leitor\n\tlcBanco   = This.Value\n\tlcAgencia = This.Parent.Get_Age.Value\n\tlcConta   = This.Parent.Get_Conta.Value\n\tlcNumero  = This.Parent.Get_Num.Value\n\t\n\tIf !ThisForm.VerifCheq(lcBanco,lcAgencia,lcConta,lcNumero)\n\t\tThis.Parent.Get_Bco.SetFocus\n\tElse\n\t\tThis.Parent.Get_Num.SetFocus\n\tEndIf\t\t\nElse\n\tThis.Parent.Get_Bco.SetFocus\nEndIf\nThisForm.Leitor = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "VerifCheq",
+        "controlesReferenciados": "Get_Age,Get_Conta,Get_Num,Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Bco",
+      "evento": "Valid",
+      "linhas": 53,
+      "codigoOriginal": "lcLeitor = ''\nIf !ThisForm.Leitor\n\tIf InList(ThisForm.TipoLeitora,'S','P')\n\t\tIf ThisForm.IniciaLeitura\n\t\t\tIf Empty(ThisForm.LeituraSerial)\n\t\t\t\tIf !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError\n\t\t\t\t\tThisForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\t\t\tEndIf\n\t\t\t\tWait Window 'Passe o cheque pela leitora !!!' NoWait\n\t\t\tElse\n\t\t\t\tIf Asc(Left(ThisForm.LeituraSerial,1)) = 2\n\t\t\t\t\tlcLeitor = Substr(ThisForm.LeituraSerial,2,Len(ThisForm.LeituraSerial) - 1)\n\t\t\t\tElse\n\t\t\t\t\tlcLeitor = ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LeituraSerial,2,Len",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Conta,Get_Num,ChkDigitos(This",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Bco",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "If InList(ThisForm.TipoLeitora,'S','P')\n\tIf !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError\n\t\tThisForm.ReadComm.Ole_Comm.PortOpen = .T.\n\tEndIf\n\tWait Window 'Passe o Cheque pela Leitora !!!' NoWait\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Age",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !Empty(This.Value) And !fChkDigitos(This.Value)\n\tMessageBox('Agência Inválida !!!',48,'ATENÇÃO')\n\tReturn(.F.)\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(This",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Age",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(This.Parent.Get_Bco.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Num",
+      "evento": "LostFocus",
+      "linhas": 36,
+      "codigoOriginal": "If Lastkey() <> 5\n\tWith This.Parent\n\t\tIf ThisForm.VerifCheq(.Get_Bco.Value,.Get_Age.Value,.Get_Conta.Value,.Get_Num.Value)\n\t\t\tm.Codigos   = CrSigCdBch.Codigos\n\t\t\tm.Bancos    = .Get_Bco.Value\n\t\t\tm.Agencias  = .Get_Age.Value\n\t\t\tm.NContas   = .Get_Conta.Value\n\t\t\tm.NCheques  = .Get_Num.Value\n\t\t\tm.Valors    = Iif(!Eof('Balanco'),Balanco.Valors,0)\n\t\t\tm.Vencs     = Iif(!Eof('Balanco'),Balanco.Vencs,Null)\n\t\t\tm.Datas     = Datetime()\n\t\t\tm.Usuarios  = Usuar\n\t\t\tm.Tipos     = .TipoLeitura.Value\n\t\t\tm.CIdChav... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "VerifCheq",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Conta,Get_Num,Get_Valor,Get_Vecto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Num",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !Empty(This.Value) And Lastkey() <> 5 And !fChkDigitos(This.Value)\n\tMessageBox('Número do Cheque Inválido !!!',48,'ATENÇÃO')\n\tReturn(.F.)\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(This",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Num",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(This.Parent.Get_Bco.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Conta",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If (!Empty(This.Value) And !fChkDigitos(This.Value))\n\tMessageBox('Conta Inválida !!!',48,'ATENÇÃO')\n\tReturn(.F.)\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(This",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDBCH.Pagina.Leitura.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(This.Parent.Get_Bco.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDBCH.Init",
+      "queryOriginal": "lcQryBal = [Select * From SigCqBal Where Codigos = ?lnCodigos ]",
+      "tabelas": "SigCqBal",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDBCH.Init",
+      "queryOriginal": "lcQryHis = [Select * From SigCqHis Where Codigos = ?lnCodigos ]",
+      "tabelas": "SigCqHis",
+      "colunas": "Codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDBCH.Pagina.Leitura.Salva.Click",
+      "queryOriginal": "\t\t\tlcUpdate = [Update SigCqBal Set Lidos = 1 Whe... [TRUNCADO]",
+      "tabelas": "SigCqBal",
+      "colunas": "Lidos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCqBal", "SigCqHis"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

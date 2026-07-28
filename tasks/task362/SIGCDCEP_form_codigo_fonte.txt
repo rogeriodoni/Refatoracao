@@ -1,0 +1,957 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDCEP.SCX
+* Data/Hora: 24/07/2026 21:42:05
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCEP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCEP.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCEP.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEstados
+  Parent: SIGCDCEP.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCEPS
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTipoNomes
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNomes
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getBairros
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCidades
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEstados
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getComples
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNums
+  Parent: SIGCDCEP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP
+------------------------------------------------------------
+  Height = 700
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de CEP"
+  codufs = .F.
+  pctpsaida = .F.
+  podataori = .F.
+  Name = "SIGCDCEP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 481
+  Pagina.Lista.Grade.Left = 11
+  Pagina.Lista.Grade.TabIndex = 6
+  Pagina.Lista.Grade.Top = 128
+  Pagina.Lista.Grade.Width = 972
+  Pagina.Lista.Grade.ZOrderSet = 1
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 542
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.TabIndex = 5
+  Pagina.Lista.Grupo_op.ZOrderSet = 4
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 7
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 5
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 85
+  Pagina.Lista.cntFiltros.Left = 11
+  Pagina.Lista.cntFiltros.Width = 912
+  Pagina.Lista.cntFiltros.Height = 39
+  Pagina.Lista.cntFiltros.BackStyle = 0
+  Pagina.Lista.cntFiltros.TabIndex = 1
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 836
+  Pagina.Dados.Grupo_Salva.Top = -4
+  Pagina.Dados.Grupo_Salva.Width = 161
+  Pagina.Dados.Grupo_Salva.TabIndex = 18
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Height = 735
+  Pagina.TabIndex = 1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Lista.Say7
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Filtrar Pela UF :"
+  Left = 71
+  Top = 96
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Lista.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  Caption = "NOTA: Devido a grande quantidade de dados, o processo de filtro pode levar alguns minutos."
+  Height = 15
+  Left = 214
+  Top = 96
+  Width = 518
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Lista.getEstados
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  Left = 160
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 92
+  Width = 25
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getEstados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 242
+  Top = 175
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "CEP :"
+  Left = 243
+  Top = 149
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getCEPS
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.CEPS"
+  Format = "K!"
+  Height = 23
+  InputMask = "99999-999"
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 145
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getCEPS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "(Ex.: R, AV, TV, AL)"
+  Left = 359
+  Top = 175
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getTipoNomes
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.TipoNomes"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 171
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getTipoNomes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Endereço :"
+  Left = 217
+  Top = 201
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getNomes
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Nomes"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 197
+  Width = 430
+  ForeColor = 0,0,0
+  Name = "getNomes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Bairro :"
+  Left = 234
+  Top = 254
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getBairros
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Bairros"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 250
+  Width = 220
+  ForeColor = 0,0,0
+  Name = "getBairros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cidade :"
+  Left = 229
+  Top = 281
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getCidades
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Cidades"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 277
+  Width = 430
+  ForeColor = 0,0,0
+  Name = "getCidades"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "UF :"
+  Left = 249
+  Top = 308
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getEstados
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Estados"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 304
+  Width = 24
+  ForeColor = 0,0,0
+  Name = "getEstados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Complemento :"
+  Left = 197
+  Top = 228
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getComples
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Comples"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 224
+  Width = 430
+  ForeColor = 0,0,0
+  Name = "getComples"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Número :"
+  Left = 225
+  Top = 334
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCEP.Pagina.Dados.getNums
+------------------------------------------------------------
+  ControlSource = "crSigCdCEP.Nums"
+  Format = "K!"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 17
+  Top = 330
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getNums"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCEP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBus
+
+If Not Empty(ThisForm.Pagina.Dados.getCEPS.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdCep], [Ceps], ThisForm.Pagina.Dados.getCeps.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Private pUFs
+
+pUFs = ThisForm.Pagina.Lista.getEstados.Value
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+parameters pAut, pUf, pCodUf
+
+Private pUFs
+
+pUFs = Replicate(Chr(254), 2)
+
+lcQryCep = [Select * From Cep Where Estados = ?pUFs]
+
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], [cep])
+	.poDataOri = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0) And (.poDataOri.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([Cep], [cIdChaves], [crSigCdCep], [], ThisForm.Pagina.Lista.Grade, lcQryCep)
+			.pfSqlTabela(1).pColuna([Ceps], [], [], [CEP], 80, .t.)
+			.pfSqlTabela(1).pColuna([TipoNomes], [], [], [Tipo], 80, .t.)
+			.pfSqlTabela(1).pColuna([Nomes], [], [], [Endereço], 250, .t.)
+			.pfSqlTabela(1).pColuna([Cidades], [], [], [Cidade], 150, .t.)
+			.pfSqlTabela(1).pColuna([Estados], [], [], [UF], 24, .t.)
+		EndWith
+
+		ThisForm.pcTpSaida = '0'	&& mena 01/10/2016 - seta saida normal
+
+		.CodUFs = 0
+		
+		IF pAut
+			= DoDefault()
+			thisform.WindowType = 1
+			ThisForm.pcTpSaida = '1'	&& seta saida automatica
+			ThisForm.pcEscolha = [INSERIR]
+			thisform.pagina.lista.getEstados.Value = pUf 
+			thisform.codUfs = pCodUf
+			thisform.pagina.lista.grupo_Op.Click(1)
+		else		
+			=DoDefault()
+			.Pagina.Lista.Grade.Column1.SetFocus
+		ENDIF
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+ENDWITH
+
+
+
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+
+Private pUFs
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+* Checando se Preencheu o Grupo de UF
+If Empty(ThisForm.Pagina.Lista.getEstados.Value)
+	=MessageBox([A UF Não Foi Preenchida!!!], 0+48, [Atenção!!!])
+	ThisForm.mAtivaPagina1
+	Return .f.
+Else
+	ThisForm.Pagina.Dados.getEstados.Value = ThisForm.Pagina.Lista.getEstados.Value
+EndIf
+
+If (ThisForm.pcEscolha = [INSERIR])
+	Replace cIdChaves With fUniqueIds() In crSigCdCep
+EndIf
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		ThisForm.Pagina.Dados.getCEPS.SetFocus 
+
+	Case (ThisForm.pcEscolha = [ALTERAR])
+		ThisForm.Pagina.Dados.getNomes.SetFocus 
+
+	Otherwise
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local lcCEP
+
+lcCEP = ThisForm.Pagina.Dados.getCEPS.Value 
+
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(crSigCdCep.Ceps)
+		=Messagebox([O CEP Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) 
+		ThisForm.Pagina.Dados.getCeps.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(crSigCdCep.TipoNomes)
+		=Messagebox([O Tipo de Endereço Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) 
+		ThisForm.Pagina.Dados.getTipoNomes.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(crSigCdCep.Nomes)
+		=Messagebox([O Endereço Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) 
+		ThisForm.Pagina.Dados.getNomes.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(crSigCdCep.Cidades)
+		=Messagebox([A Cidade Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) 
+		ThisForm.Pagina.Dados.getCidades.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(crSigCdCep.Estados)
+		=Messagebox([A UF Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) 
+		ThisForm.Pagina.Dados.getEstados.SetFocus
+		Return 0
+	Endif
+EndIf
+
+=DoDefault()
+
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(crSigCdCep.cbarceps)
+		=fBarCepSedex(crSigCdCep.Ceps)	
+	Endif
+Endif
+
+*** mena 01/10/2016 - verifica se saida automatica ou normal  ***
+If ThisForm.pcTpSaida == '0'	&& saida normal
+	ThisForm.mAtivaPagina1()
+Else 
+	This.Parent.Parent.Parent.Lista.Grupo_Saida.Sair.Click && fecha o formulario...
+*!*	thisform.Release()
+EndIf 
+
+*!*ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+*** mena 01/10/2016 - verifica se saida automatica ou normal  ***
+
+=DoDefault()
+If ThisForm.plCancelar
+	If ThisForm.pcTpSaida == '0'	&& saida normal
+		ThisForm.mAtivaPagina1
+	ELSE
+		thisform.WindowType = 0
+		thisform.Release()
+	ENDIF
+EndIf
+
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Lista.getEstados
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataOri.pnIdConn, [SigCdUfs], ;
+						   [crListaRemota], [Estados], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Estados], [], [UF])
+		loLista.mAddColuna([Descrs],  [], [Descrição])
+		loLista.mAddColuna([UFIBGES], [], [IBGE])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Pagina.Lista.getEstados.Value = Iif(Lastkey()=27, [], crListaRemota.Estados)
+
+	ThisForm.CodUFs = Iif(Lastkey()=27, 0, crListaRemota.UFIBGES)
+	Use In crListaRemota
+EndIf
+ThisForm.Pagina.Lista.getEstados.Refresh
+
+If (Padr(This.Tag, 2) <> Padr(This.Value, 2))
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 2)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getCEPS
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getTipoNomes
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getNomes
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getBairros
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getCidades
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLst
+
+If Not Empty(This.Value)
+	Declare laFil[1,2]
+	laFil[1,1] = [UFIBGES]
+	laFil[1,2] = ThisForm.CodUFs
+
+	loLst = CreateObject([fwBuscaExt], ThisForm.poDataOri.pnIdConn, [SigCdMun], ;
+						 [crListaRemota], [Descs], This.Value, [Seleção], .t., [Descs], @laFil)
+
+	If Not loLst.plAchouRegistro
+		loLst.mAddColuna([Descs], [], [Descrição])
+		loLst.Show()
+	EndIf
+	
+	ThisForm.Pagina.Dados.getCidades.Value = Upper(Iif(Lastkey()=27, [], crListaRemota.Descs))
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getEstados
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getComples
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCEP.Pagina.Dados.getNums
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDCEP
+RESERVED3 (ClassInfo): codufs
+pctpsaida
+podataori
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

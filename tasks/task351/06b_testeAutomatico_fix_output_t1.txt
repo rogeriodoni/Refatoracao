@@ -1,0 +1,1 @@
+﻿Fixed. The bug was `.ForeColor = RGB(90, 90, 90)` on `shp_4c_Shape3` in `ConfigurarPaginaDados()`. VFP9 `Shape` objects don't have a `ForeColor` property ÔÇö only `BorderColor` and `FillColor`. The redundant `.ForeColor` line was removed; the `.BorderColor` line below it already sets the correct visual color.

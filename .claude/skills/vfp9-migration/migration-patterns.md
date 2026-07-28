@@ -5822,3 +5822,775 @@ ENDWITH
 - Complementa Pattern #44 (Grid CurrentControl com AddObject previo)
 - Origem: Erro59 (2026-07-21, Formsigreato — user "checkbox desabilitado, nao consigo marcar/desmarcar")
 
+## 147. REPORT FORM `<BaseName>` BARE (sem path/parens/macro) — helper canonico ExecutarReportForm cobre 3a variante (Erro62, sigreappBO 2026-07-24)
+
+**Sintoma**: Ao clicar Visualizar em `FormSigReApp` (Relatorio de Analise a Pagar / Receber), aparece dialog de erro "File does not exist" (sem indicar qual arquivo). No BO migrado, procedure `Visualizar()` emite:
+
+```foxpro
+REPORT FORM SigReAp4 PREVIEW NOCONSOLE   && &lt;&lt;&lt; BARE — sem path, sem parens, sem macro
+```
+
+Os FRXs vivem em `projeto/app/reports/` (`SigReAp1.frx`, `SigReAp2.frx`, `SigReAp3.frx`, `SigReAp4.frx`), mas o VFP9 procura no CWD do processo (normalmente `projeto/app/start`) ou no `SET PATH` — ambos NAO incluem `projeto/app/reports/` por default. FRX nao encontrado → runtime "File does not exist" sem indicar path.
+
+**Causa raiz**: Blind spot dos Patterns #117/#123/#144 que exigem a variavel intermediaria (`REPORT FORM &var.`, `REPORT FORM (var)`, `REPORT FORM (THIS.this_cFRXPath)`). A forma BARE (`REPORT FORM <BaseName> PREVIEW`) — mais comum no legado Framework antigo — passava despercebida. Legado funcionava porque `SET DEFAULT TO` do main.prg apontava para a pasta que tinha os FRXs; sistema migrado nao replica essa estrategia (FRXs foram organizados em `reports/`).
+
+**Regra**: Toda chamada `REPORT FORM` em BO REPORT (Visualizar/Imprimir/ImprimirSemDialogo/Documento) DEVE usar o helper canonico `THIS.ExecutarReportForm(base, modo)`. As TRES variantes proibidas de emitir direto:
+
+```foxpro
+REPORT FORM SigReAp4 PREVIEW NOCONSOLE                 && (c) BARE  (Pattern #147)
+REPORT FORM &loc_cReportPath. PREVIEW NOCONSOLE        && (a) MACRO (Pattern #117)
+REPORT FORM (loc_cFrxPath) PREVIEW NOCONSOLE           && (b) PARENS (Pattern #117)
+```
+
+Todas viram:
+
+```foxpro
+THIS.ExecutarReportForm("SigReAp4", "PREVIEW")
+```
+
+**Bug de fluxo correlato: `IF !PrepararDados() / loc_lSucesso = .F. / ENDIF` cai direto no REPORT FORM**:
+
+O template gerado pelo LLM tinha padrao errado — quando `PrepararDados()` falhava, apenas marcava `loc_lSucesso = .F.` e caia direto no `REPORT FORM` (fall-through silencioso). Refatoracao correta usa guard POSITIVO:
+
+```foxpro
+* ERRADO (fall-through):
+TRY
+    IF !THIS.PrepararDados()
+        loc_lSucesso = .F.        && sem RETURN nem ELSE — REPORT FORM roda igual
+    ENDIF
+    REPORT FORM SigReAp4 PREVIEW NOCONSOLE   && executa mesmo com PrepararDados falho
+    ...
+CATCH ...
+
+* CORRETO (guard positivo):
+TRY
+    IF THIS.PrepararDados()
+        THIS.ExecutarReportForm(THIS.ObterFRXBase(), "PREVIEW")
+        THIS.RegistrarAuditoria("VISUALIZAR")
+        loc_lSucesso = .T.
+    ENDIF
+CATCH ...
+```
+
+**Nota**: `RETURN .F.` dentro de TRY seria mais claro, mas viola Rule #1 (NUNCA RETURN dentro de TRY/CATCH). Usar `IF ... ENDIF` positivo.
+
+**Auto-fix**: CorretorAutomatico Pattern #147 (`Corrigir-ReportFormBareSemPath`) — detecta linha `^\s*REPORT FORM <base> <MODE>` (identificador simples, sem `.`, sem `(`, sem `&`) e substitui pelo helper canonico. Reusa o mesmo bloco helper do Pattern #117 (injeta se ausente). Skip:
+- Linhas dentro do proprio helper (contem `loc_cFRX`)
+- Continuacoes `;`
+- Linhas com macro embutida `&<var>.` (ex: `REPORT FORM SigReIiv TO PRINTER &loc_lcPmt. NOCONSOLE`) — revisao manual
+- `<base>` com menos de 4 chars (heuristica anti-falso-positivo)
+
+**Sweep retroativo 2026-07-24**: 8 BOs identificados com o anti-padrao bare (200+ ocorrencias):
+- `sigrecgpBO` (10 ocorrencias — 5 FRXs x 2 modos)
+- `sigredcuBO` (4)
+- `sigrefcdBO` (2)
+- `sigregliBO` (32 — 8+ FRXs para o Livro Diario / Razao / Extrato)
+- `sigreifxBO` (3)
+- `SigReIivBO` (2 non-macro; 2 com `&loc_lcPmt.` embutida ficam em WARNING)
+- `sigreinrBO` (34 — muitas continuacoes `;`)
+- `SigReIr1BO` (10 com continuacoes)
+
+**Padrao canonico proven pos-fix**: `sigreappBO.prg` (2026-07-24, Visualizar/Imprimir/ImprimirSemDialogo apos refactor):
+
+```foxpro
+PROCEDURE Visualizar()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        IF THIS.PrepararDados()
+            THIS.ExecutarReportForm(THIS.ObterFRXBase(), "PREVIEW")
+            THIS.RegistrarAuditoria("VISUALIZAR")
+            loc_lSucesso = .T.
+        ENDIF
+    CATCH TO loc_oErro
+        THIS.this_cMensagemErro = loc_oErro.Message
+        MsgErro(loc_oErro.Message, "Erro")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+
+* Helper que decide o FRX conforme filtros:
+PROTECTED PROCEDURE ObterFRXBase()
+    LOCAL loc_lPagRec, loc_cFRX
+    loc_lPagRec = (THIS.this_nPagamentos = 1) OR (THIS.this_nRecebimentos = 1)
+    IF (THIS.this_nOptAnaSi = 3)
+        loc_cFRX = "SigReAp4"
+    ELSE
+        IF !loc_lPagRec
+            loc_cFRX = IIF(THIS.this_nOptAnaSi = 1, "SigReAp1", "SigReAp2")
+        ELSE
+            loc_cFRX = "SigReAp3"
+        ENDIF
+    ENDIF
+    RETURN loc_cFRX
+ENDPROC
+```
+
+**Referencias**:
+- Pattern #147 em `.claude/skills/vfp9-migration/corretor-patterns.md`
+- Complementa Pattern #117 (macro/parens) e Pattern #144 (WARNING para forma IIF/multi-linha)
+- Refina `feedback_report_form_helper_canonico.md` cobrindo variante bare
+- Origem: Erro62 (2026-07-24, FormSigReApp/sigreappBO Visualizar — "SQL: Column 'CEMPS' is not found" + "File does not exist" ao clicar Visualizar)
+
+## 148. Helper `ExecutarReportForm` DEVE terminar com `RELEASE POPUP + CriarMenuPrincipal()` — Erro63 menu-shrinks apos fechar preview
+
+**Sintoma (Erro63, 2026-07-24, FormSIGREAPR)**: Usuario seleciona filtros de Grupo/Produto/Linha, clica Visualizar, preview do REPORT FORM abre, usuario fecha preview — menu principal fica ENCOLHIDO. `popMovimentos` que tem 105 bars renderiza apenas ~40 items com line-height maior. Mesmo sintoma visual do Erro58 (2026-07-21) mas por caminho diferente.
+
+**Causa raiz**: O comando `REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE` abre o preview built-in do VFP9 (`_MREPORT` toolbar). Durante o preview, VFP9 modifica `_MSYSMENU` para exibir a barra de ferramentas do preview. Quando o preview fecha, VFP9 NAO restaura completamente o cache visual dos popups do `_MSYSMENU` — mesma stale-render que ocorre apos `form.Destroy` em modais (Erro58). `FormBase.Destroy` nao pode resolver porque o form REPORT nem foi fechado — apenas o preview.
+
+**Fix**: adicionar `RELEASE POPUP + CriarMenuPrincipal()` no FINAL do helper `ExecutarReportForm` (apos `SET REPORTBEHAVIOR` restore, antes do `RETURN .T.`):
+
+```foxpro
+PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+    LOCAL loc_cFRX, loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+    loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+    IF NOT FILE(loc_cFRX)
+        MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+            loc_cFRX, "Erro")
+        RETURN .F.
+    ENDIF
+
+    * ... guard cursor + SET isolation ...
+
+    DO CASE
+        CASE par_cModo == "PREVIEW"
+            REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+        CASE par_cModo == "PRINTER_PROMPT"
+            REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+        CASE par_cModo == "PRINTER"
+            REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+    ENDCASE
+
+    SET POINT TO (loc_cPointOrig)
+    SET SEPARATOR TO (loc_cSepOrig)
+    SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+    *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+    *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+    *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+    *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+    TRY
+        RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+        CriarMenuPrincipal()
+    CATCH
+        *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+    ENDTRY
+
+    RETURN .T.
+ENDPROC
+```
+
+**Sweep 2026-07-24**: 32 BOs REPORT com helper `ExecutarReportForm` receberam o menu-restore (sigreappBO + 8 recentes + 23 antigos). Pattern #117/#123/#147 helperBloco template atualizado — futuras injecoes ja incluem o bloco.
+
+**REFINAMENTO CRITICO (2026-07-24, mesmo dia)**: user reportou que apos fechar o form pos-preview, o menu vinha com "menos telas" (menos pads). Causa: `CriarMenuPrincipal()` recria apenas os 6 pads da app (Arquivo/Cadastros/Movimentos/Relatorios/Ferramentas/Ajuda); os 7 pads default do VFP (Edit/View/Format/Tools/Program/Window/Help) que `_MREPORT` do preview removeu ficam PERDIDOS. Fix: adicionar `SET SYSMENU TO DEFAULT` ANTES de `RELEASE POPUP` — restaura os 7 defaults + faz implicitamente `SET SYSMENU ON`; depois `CriarMenuPrincipal` soma os 6 da app = 13 pads = mesmo estado do startup. Padrao proven: `Formsigtosen.prg:1074` (mesma logica ja aplicada em outro contexto). Bloco final:
+
+```foxpro
+TRY
+    SET SYSMENU TO DEFAULT
+    RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+    CriarMenuPrincipal()
+CATCH
+    *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+ENDTRY
+```
+
+Sweep v2 (2026-07-24) aplicou o refinamento em: 32 BOs REPORT (helper) + `FormBase.Destroy` + `FormRelPlanoContas.Destroy` (inline non-FormBase) + 3 helperBloco templates do CorretorAutomatico.
+
+**Nao aplicavel**: (a) modo `PRINTER` sem PROMPT (nao abre toolbar); (b) modo `PRINTER_PROMPT` (dialog de impressora nao afeta `_MSYSMENU`). Mas por simplicidade e defesa em profundidade, o bloco roda para TODOS os modos.
+
+**Referencias**:
+- Complementa Pattern #145 (`Corrigir-DestroySemDodefault`) — Erro58 mesmo sintoma via form.Destroy
+- Refina `feedback_menu_shrinks_form_destroy.md` cobrindo segunda rota de corrupcao
+- Templates canonicos: `sigreappBO.prg` (pos-fix Erro63), `SIGREAEGBO.prg` (com fix retroativo do sweep)
+- Origem: Erro63 (2026-07-24, FormSIGREAPR Visualizar — user reportou "aconteceu novamente o problema do menu ser substituido pelo menu menor")
+
+
+## 149. REPORT BO DEVE popular cursor `crCabecalho` quando FRX legado o referencia no Dataenvironment (Erro64 sigreatoBO 2026-07-28)
+
+**Sintoma (Erro64, 2026-07-28, FormSIGREATO — "Relatorio de Analise de Estoque Por Tipo de Operacao")**: Usuario seleciona periodo, marca operacoes de Entrada e Saida, clica Visualizar. Modal aparece: `Alias 'CRCABECALHO' is not found.` — REPORT FORM aborta antes de renderizar. Titulo do modal: `Erro ao visualizar relatorio`.
+
+**Causa raiz**: FRXs Fortyus legados frequentemente incluem `crCabecalho` no Dataenvironment como cursor auxiliar (paralelo ao cursor de dados principal) para renderizar cabecalho estruturado: titulo do relatorio, subtitulo com filtros aplicados, empresa formatada, campos de custo/moeda opcionais. O BO migrado criava apenas o cursor de dados (`crImpressao`), mas nunca populava `crCabecalho`. No legado (`sigreato.PRG:83-106`), `Processamento` chama `CriarCabecalho` como PRIMEIRA acao:
+
+```foxpro
+Procedure CriarCabecalho(pObj as Object) as Void
+    Local lcTit, lcSub, lcDep
+    lcTit = [Relatorio de Analise de Estoque Por Tipo de Operacao]
+    lcSub = [Periodo : ] + Dtoc(pObj.DataInicial) + [ a ] + Dtoc(pObj.DataFinal) + ;
+            Iif(Empty(pObj.Grupo), [], [ - Grupo : ] + Alltrim(pObj.Grupo)) + ...
+    This.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+    lcDep = Iif(Eof('crSigCdEmp'), '', _Empr + ' - ' + Alltrim(crSigCdEmp.Razas))
+    Create Cursor crCabecalho (Titulo c(200), SubTit c(200), Empresa c(80), ;
+                               MoeCusFs m(4), CustoFs m(4), CustoPends m(4))
+    Insert Into crCabecalho (Titulo, SubTit, Empresa) Values (lcTit, lcSub, lcDep)
+EndProc
+```
+
+Verificar quais aliases o FRX espera (o FRT tem strings ASCII embutidas):
+
+```bash
+grep -a -i "cr[A-Z][a-z]*" projeto/app/reports/SigReAto.frt
+# → crCabecalho, Cabecalho, dataenvironment, ...
+```
+
+Se `crCabecalho` (ou variantes como `crCabec`, `crHeader`) aparecer, o BO DEVE criar o cursor antes do REPORT FORM.
+
+### Fix canonico
+
+```foxpro
+*--------------------------------------------------------------------------
+* CriarCabecalho - Popula cursor crCabecalho referenciado pelo FRX legado
+* SigReAto.frx tem Dataenvironment com alias crCabecalho.
+* Estrutura preservada do legado (sigreato.PRG:101).
+*--------------------------------------------------------------------------
+PROTECTED PROCEDURE CriarCabecalho()
+    LOCAL loc_cTitulo, loc_cSubTit, loc_cEmpresa
+    LOCAL loc_cEmp, loc_cRazas, loc_cDif, loc_nResult
+
+    loc_cTitulo = "Relat" + CHR(243) + "rio de An" + CHR(225) + ;
+                  "lise de Estoque Por Tipo de Opera" + CHR(231) + CHR(227) + "o"
+
+    DO CASE
+        CASE THIS.this_nDiferenca = 1
+            loc_cDif = "Ignorar Diferen" + CHR(231) + "as"
+        CASE THIS.this_nDiferenca = 2
+            loc_cDif = "Sem Diferen" + CHR(231) + "a"
+        CASE THIS.this_nDiferenca = 3
+            loc_cDif = "Diferen" + CHR(231) + "a Positiva"
+        CASE THIS.this_nDiferenca = 4
+            loc_cDif = "Diferen" + CHR(231) + "a Negativa"
+        OTHERWISE
+            loc_cDif = ""
+    ENDCASE
+
+    loc_cSubTit = "Per" + CHR(237) + "odo : " + DTOC(THIS.this_dDtInicial) + ;
+                  " " + CHR(224) + " " + DTOC(THIS.this_dDtFinal) + " " + ;
+                  IIF(EMPTY(THIS.this_cGrupo),      "", " - Grupo : "      + ALLTRIM(THIS.this_cGrupo)) + ;
+                  IIF(EMPTY(THIS.this_cCPros),      "", " - Produto : "    + ALLTRIM(THIS.this_cCPros)) + ;
+                  IIF(EMPTY(THIS.this_cLin),        "", " - Linha : "      + ALLTRIM(THIS.this_cLin)) + ;
+                  IIF(EMPTY(THIS.this_cFornecedor), "", " - Fornecedor : " + ALLTRIM(THIS.this_cFornecedor)) + ;
+                  IIF(EMPTY(loc_cDif), "", " - " + loc_cDif)
+
+    loc_cEmp = ALLTRIM(go_4c_Sistema.cCodEmpresa)
+    loc_cRazas = ""
+    loc_nResult = SQLEXEC(gnConnHandle, ;
+        "SELECT Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmp), ;
+        "cursor_4c_EmpCab")
+    IF loc_nResult > 0 .AND. USED("cursor_4c_EmpCab") .AND. RECCOUNT("cursor_4c_EmpCab") > 0
+        loc_cRazas = ALLTRIM(cursor_4c_EmpCab.Razas)
+    ENDIF
+    IF USED("cursor_4c_EmpCab")
+        USE IN cursor_4c_EmpCab
+    ENDIF
+    loc_cEmpresa = IIF(EMPTY(loc_cRazas), "", loc_cEmp + " - " + loc_cRazas)
+
+    IF USED("crCabecalho")
+        USE IN crCabecalho
+    ENDIF
+    CREATE CURSOR crCabecalho (Titulo c(200), SubTit c(200), Empresa c(80), ;
+                               MoeCusFs m, CustoFs m, CustoPends m)
+    INSERT INTO crCabecalho (Titulo, SubTit, Empresa) ;
+        VALUES (loc_cTitulo, loc_cSubTit, loc_cEmpresa)
+    SELECT crCabecalho
+    GO TOP
+ENDPROC
+
+PROTECTED PROCEDURE PrepararDados()
+    LOCAL loc_lSucesso, loc_oErro
+    loc_lSucesso = .F.
+
+    TRY
+        IF !THIS.ValidarParametros()
+            loc_lSucesso = .F.
+        ENDIF
+
+        *-- Criar cursor de cabecalho (FRX Dataenvironment referencia crCabecalho)
+        THIS.CriarCabecalho()
+
+        *-- ... resto do processamento (SELECTs, CREATE CURSOR crImpressao, ...)
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro em PrepararDados")
+    ENDTRY
+
+    RETURN loc_lSucesso
+ENDPROC
+
+PROCEDURE Destroy()
+    LOCAL loc_aCursors(N), loc_nI
+    loc_aCursors(N) = "crCabecalho"   && ADICIONAR ao array de cleanup
+    FOR loc_nI = 1 TO N
+        IF USED(loc_aCursors(loc_nI))
+            USE IN (loc_aCursors(loc_nI))
+        ENDIF
+    ENDFOR
+    DODEFAULT()
+ENDPROC
+```
+
+### Estrutura canonica do cursor (por FRX)
+
+- **Legacy padrao (compartilhado por varios FRXs Fortyus)**: `Titulo c(200), SubTit c(200), Empresa c(80), MoeCusFs m, CustoFs m, CustoPends m` — os 3 campos memo podem estar vazios (usados por relatorios com blocos de custo agregado; para relatorios simples, apenas Titulo/SubTit/Empresa sao preenchidos).
+- **Variante EEV/AGV (SIGREEVVBO)**: `Empresa c(80), Titulo c(80), SubTitulo c(80), Faixa c(80), MedFaixa n(10,2), MedGeral n(10,2)` — estrutura menor sem campos memo.
+- **Regra**: se o BO variante ja existe (mesmo grupo de reports), copiar sua estrutura; caso contrario, usar estrutura legacy padrao (200/200/80/m/m/m).
+
+### Variantes de nome
+
+Alem de `crCabecalho`, ha variantes menos frequentes:
+- `crCabec` (raro)
+- `crHeader` (raro, reports mais recentes)
+- Via property: `THIS.this_cCursorCabecalho = "crCabecalho"` + `CREATE CURSOR (THIS.this_cCursorCabecalho) ...` (padrao `sigreimpBO.prg:347-361`)
+
+Sempre verificar o FRT com `grep -a` para identificar o nome exato usado no Dataenvironment.
+
+### Contra-exemplos (NAO fazer)
+
+```foxpro
+* ERRADO: assumir que cursor de dados substitui o cabecalho
+PROTECTED PROCEDURE PrepararDados()
+    CREATE CURSOR crImpressao (...)   && cria dados mas nao crCabecalho
+    * ... popular ...
+    RETURN .T.
+ENDPROC
+* → REPORT FORM falha com "Alias 'CRCABECALHO' is not found."
+
+* ERRADO: criar crCabecalho sem popular
+CREATE CURSOR crCabecalho (Titulo c(200), SubTit c(200), Empresa c(80))
+* → preview abre com header em branco (campos vazios renderizam como espacos)
+
+* ERRADO: campos memo ausentes quando FRX espera
+CREATE CURSOR crCabecalho (Titulo c(200), SubTit c(200), Empresa c(80))
+* → alguns FRXs referenciam .MoeCusFs / .CustoFs em Print When — falha se ausente
+```
+
+### Sweep 2026-07-28
+
+Auditados 21 FRXs em `projeto/app/reports/` que contem `crCabecalho` no FRT:
+`SigReAac, SigReAgv, SigReAp1, SigReAp2, SigReAp3, SigReAp4, SigReAto, SigReAtu, SigReCtl, SigReDpc, SigReEvv, SigReHfi, SigReIfi, SigReIft, SigReIfx, SigReIp1, SigReIp2, SigReJb1, SigRevf3, SigRevfc, SigRevfs`.
+
+BOs correspondentes verificados: apenas `sigreatoBO.prg` estava faltando `crCabecalho` (fix aplicado). Demais BOs (`sigreimpBO`, `sigreifxBO`, `SIGREEVVBO`, `sigreappBO`, `SigReJobBO`, `SIGRECTPBO`, `SIGRECTLBO`, `SIGREAGVBO`, `SigReAacBO`) ja criam via `CREATE CURSOR crCabecalho` direto OU via `CREATE CURSOR (THIS.this_cCursorCabecalho)`.
+
+### Auto-fix (WARNING-only)
+
+CorretorAutomatico Pattern #149 (`Corrigir-ReportBOCabecalhoAusente`) detecta BO `AS RelatorioBase` que:
+1. Contem chamada `ExecutarReportForm("<Base>", ...)` OU `REPORT FORM <Base>` OU `REPORT FORM (...)` com literal
+2. `projeto/app/reports/<Base>.frt` existe e contem a string ASCII `crCabecalho` (case-insensitive)
+3. BO NAO contem nenhuma referencia a `crCabecalho` (nem `CREATE CURSOR crCabecalho`, nem `this_cCursorCabecalho`, nem `INSERT INTO crCabecalho`)
+
+Emite WARNING amarelo indicando os FRXs que exigem `crCabecalho` e nao muta o codigo — a implementacao correta requer conhecer os filtros do form (que variam por relatorio) e nao pode ser gerada automaticamente por regex.
+
+### Referencias
+
+- Padrao canonico legacy: `C:\4install\FortyusMC\Fortyus\sigreato.PRG:83-106`
+- Padrao canonico migrado: `projeto/app/classes/sigreatoBO.prg:CriarCabecalho` (pos-Erro64)
+- Templates alternativos: `SIGREEVVBO.prg:127-130`, `sigreimpBO.prg:347-361`
+- Complementa `feedback_report_cursor_alias_frx_match.md` (cursor de dados) — este pattern cobre cursor auxiliar de cabecalho
+- Origem: Erro64 (2026-07-28, FormSIGREATO Visualizar — "Alias 'CRCABECALHO' is not found.")
+
+## 150. `fCarregarCambio()` NAO PORTADA — todo BO que converte moeda precisa metodo local `CarregarCambio` (Erro65 SigReAtmBO 2026-07-28)
+
+### Problema
+
+Funcao legada `fCarregarCambio(pMoe, pDia)` do framework Fortyus (`SIGFUNCS.PRG:5156`) **NUNCA foi portada** para `projeto/app/utils/functions.prg`. Chamadas diretas de BOs migrados quebram em runtime, mas o erro NAO eh "File 'fcarregarcambio.prg' does not exist" como esperado — VFP9 mascara e dispara **"Data type mismatch"** via CATCH de `PrepararDados`, dificultando localizar a raiz.
+
+### Codigo ERRADO
+
+```foxpro
+IF ALLTRIM(CrSigCdPro.Moecs) <> loc_cMoeda
+    loc_nValorCalc = fCarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
+                     fCarregarCambio(loc_cMoeda, DATE())
+ELSE
+    loc_nValorCalc = CrSigCdPro.Pcuss * CrSigCdNec.Qtds
+ENDIF
+```
+
+Runtime: `Erro em PrepararDados: Data type mismatch.`
+
+### Codigo CORRETO
+
+1. Adicionar `PROTECTED FUNCTION CarregarCambio` local ao BO:
+
+```foxpro
+PROTECTED FUNCTION CarregarCambio(par_cMoeda, par_xData)
+    LOCAL loc_nCotacao, loc_cMoeda, loc_dData, loc_oErro
+    loc_nCotacao = 0
+    loc_cMoeda   = ALLTRIM(par_cMoeda)
+    DO CASE
+        CASE VARTYPE(par_xData) == "T"
+            loc_dData = TTOD(par_xData)
+        CASE VARTYPE(par_xData) == "D"
+            loc_dData = par_xData
+        OTHERWISE
+            loc_dData = DATE()
+    ENDCASE
+    IF EMPTY(loc_cMoeda)
+        RETURN 1
+    ENDIF
+    TRY
+        IF USED("crSigCdMoe")
+            SELECT crSigCdMoe
+            SET ORDER TO CMoes
+            IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas <> 0
+                IF USED("crSigCdCot")
+                    SELECT crSigCdCot
+                    SET ORDER TO CMoeData DESCENDING
+                    SET NEAR ON
+                    SEEK loc_cMoeda + DTOS(loc_dData)
+                    SET NEAR OFF
+                    IF !EOF() AND ALLTRIM(crSigCdCot.CMoes) = loc_cMoeda
+                        loc_nCotacao = crSigCdCot.Valos
+                    ENDIF
+                ENDIF
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        SET NEAR OFF
+    ENDTRY
+    RETURN IIF(loc_nCotacao = 0, 1, loc_nCotacao)
+ENDFUNC
+```
+
+2. Substituir todas as chamadas:
+
+```foxpro
+IF ALLTRIM(CrSigCdPro.Moecs) <> loc_cMoeda
+    loc_nValorCalc = THIS.CarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
+                     THIS.CarregarCambio(loc_cMoeda, DATE())
+ELSE
+    loc_nValorCalc = CrSigCdPro.Pcuss * CrSigCdNec.Qtds
+ENDIF
+```
+
+### Regras Complementares
+
+- **Nome do cursor varia por BO**: usar `crSigCdCot`/`crSigCdMoe` (padrao SigReAtmBO/SigReInvBO/sigprccpBO/sigrebalBO) OU `cursor_4c_SigCdCot`/`cursor_4c_SigCdMoe` (padrao sigreeqeBO). Confirmar em `InicializarDados`/`InicializarCursores` do proprio BO antes de escrever o metodo.
+- **Se BO ja tem `THIS.ObterCotacao`** (padrao sigprilaBO com cache TmpCot/TmpTotal): reusar, NAO duplicar. Substituicao: `fCarregarCambio(x,y)` → `THIS.ObterCotacao(x,y)`.
+- **`SEEK(...) AND crSigCdMoe.Cotas`**: NUNCA `AND <numeric>` direto — sempre `AND crSigCdMoe.Cotas <> 0` (ver #151).
+
+### BOs ja com metodo local (Referencia)
+
+`SigReAtmBO:857`, `SigReInvBO:205`, `sigrebalBO:218`, `sigredtvBO:188`, `sigreegpBO:787`, `sigrefcxBO:2586`, `SigReIfvBO:366`, `SigReIr1BO:1586`, `sigreeqeBO:701`, `sigprccpBO:2043`. Ver tambem `sigrecsmBO:553` (variante `CarregarCambioCSM`) e `sigprilaBO:2238` (variante `ObterCotacao`).
+
+### Sweep 2026-07-28 (Erro65)
+
+4 BOs corrigidos: `SigReAtmBO` (2 sites+metodo), `sigprccpBO` (14 sites+metodo), `sigreeqeBO` (1 site+metodo), `sigprilaBO` (1 site→ObterCotacao ja existente).
+
+### Auto-Fix
+
+CorretorAutomatico Pattern **#150** — detecta `fCarregarCambio(` em BOs, substitui por `THIS.CarregarCambio(` E emite WARNING para adicionar o metodo local manualmente (nao auto-gera porque nome do cursor varia).
+
+### Referencias
+
+- Memoria detalhada: `feedback_fcarregarcambio_nao_portada.md`
+- Complementa: `feedback_fwprogressbar_nao_portada.md` (mesmo padrao — funcao global do framework legado sem porte)
+- Origem: Erro65 (2026-07-28, FormSigReAtm Visualizar — "Data type mismatch")
+
+## 151. `CheckBox.Value` (numerico 0/1) NUNCA atribuir direto a prop LOGICAL do BO (dispara "Data type mismatch" em AND) (Erro65 FormSigReAtm 2026-07-28)
+
+### Problema
+
+`CheckBox.Value` no VFP9 eh **numerico** (0 = desmarcado, 1 = marcado). Se atribuido direto a uma property declarada `.F.`/`.T.` (logical) em `FormParaBO`/`FormParaRelatorio`, a property vira NUMERICA apos a primeira atribuicao.
+
+Depois, se o BO usar essa property em contexto **`<logical> AND <prop>`**, VFP9 dispara **erro 9 "Data type mismatch"** — NAO "Operator/operand type mismatch" (erro 1817) como se esperaria. O erro eh enganoso e dificil de localizar sem `loc_oErro.LineNo` no CATCH.
+
+### Codigo ERRADO
+
+Em `FormXxx.prg` (FormParaBO/FormParaRelatorio):
+
+```foxpro
+PROTECTED PROCEDURE FormParaRelatorio()
+    LOCAL loc_oCnt
+    loc_oCnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Local
+    WITH THIS.this_oRelatorio
+        .this_lDestino  = loc_oCnt.chk_4c_Destino.Value    && numerico!
+        .this_lProdutos = loc_oCnt.chk_4c_Produtos.Value   && numerico!
+    ENDWITH
+ENDPROC
+```
+
+Em `XxxBO.prg` (property e uso):
+
+```foxpro
+this_lDestino  = .F.       && declarada logical
+this_lProdutos = .F.       && declarada logical
+* ...
+IF !EMPTY(CrSigCdNec.Nops) AND THIS.this_lProdutos    && FALHA! <L> AND <N>
+```
+
+Runtime: `Erro em PrepararDados: Data type mismatch.` (sem contexto de linha se CATCH nao expuser LineNo)
+
+### Codigo CORRETO
+
+Em `FormXxx.prg` — converter numerico para logico:
+
+```foxpro
+PROTECTED PROCEDURE FormParaRelatorio()
+    LOCAL loc_oCnt
+    loc_oCnt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Local
+    WITH THIS.this_oRelatorio
+        .this_lDestino  = (loc_oCnt.chk_4c_Destino.Value = 1)
+        .this_lProdutos = (loc_oCnt.chk_4c_Produtos.Value = 1)
+    ENDWITH
+ENDPROC
+```
+
+Em `XxxBO.prg` — reciproca: em condicoes AND, nunca escrever `AND <numeric>` direto:
+
+```foxpro
+* ERRADO:
+IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas
+* CERTO:
+IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas <> 0
+```
+
+### Regra Correlata: CATCH DEVE incluir LineNo + Procedure
+
+Sem isso, "Data type mismatch" eh impossivel de localizar em PrepararDados/Processar (que tem centenas de linhas). Template canonico:
+
+```foxpro
+CATCH TO loc_oErro
+    WAIT CLEAR
+    THIS.this_cMensagemErro = loc_oErro.Message
+    MsgErro(loc_oErro.Message + CHR(13) + ;
+        "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+        "Procedure: " + loc_oErro.Procedure, "Erro em PrepararDados")
+ENDTRY
+```
+
+### Motivo
+
+VFP9 tem type coercion inconsistente. `IF <numeric>` funciona (0=false, ≠0=true) — por isso `IF loc_lDestino` nao falha mesmo com prop numerica. Mas `<logical> AND <numeric>` NAO funciona — o AND exige ambos operandos lógicos. Assim uma FormParaBO "correta em aparencia" quebra so quando o BO tem uma condicao composta em algum ramo (geralmente escondido dentro de SCAN, ex: `IF !EMPTY(x) AND THIS.this_lProdutos`).
+
+Nota didatica: `IIF(<prop_l>, 1, 0)` que existe em `BOParaForm` tambem falharia se prop virasse numerica — mas nunca chega a ser executado antes do FormPara* corromper a prop. Conversao explicita no FormPara previne ambos.
+
+### Sweep 2026-07-28 (Erro65)
+
+4 forms / 5 sites corrigidos: `FormSigReAtm:1454-1455` (this_lDestino, this_lProdutos), `FormBlq:820` (this_lInativo), `Formsigregli:1824,1825,1827` (this_lNome, this_l2Linhas, this_lDatager), `FormSIGRECTL:515` (this_lImpTempo).
+
+### Auto-Fix
+
+CorretorAutomatico Pattern **#151** — detecta `.this_l\w+\s*=\s*\S+\.chk_\w+\.Value$` em Forms e envolve com `(... = 1)`.
+
+### Referencias
+
+- Memoria detalhada: `feedback_checkbox_value_logical_prop.md`
+- Relacionado: `#22 CheckBox .Value SEMPRE NUMERICO` (regra base de CheckBox), `#150 fCarregarCambio nao portada` (co-descoberta no mesmo Erro65)
+- Origem: Erro65 (2026-07-28, FormSigReAtm Visualizar — "Data type mismatch" que na verdade tinha 2 causas raiz combinadas mascaradas pelo mesmo CATCH)
+
+## 152. `VAL(SET("Decimals"))` dispara VFP9 erro 11 — `SET("Decimals")` retorna NUMERIC (Erro66 sigrebalBO 2026-07-28)
+
+### Problema
+
+A funcao `SET()` em VFP9 retorna tipos **DIFERENTES** conforme a opcao consultada:
+
+| SET option | Return type |
+|------------|-------------|
+| `SET("Escape")` | CHARACTER ("ON"/"OFF") |
+| `SET("Fixed")` | CHARACTER ("ON"/"OFF") |
+| `SET("Century")` | CHARACTER ("ON"/"OFF") |
+| `SET("Talk")` | CHARACTER ("ON"/"OFF") |
+| `SET("Date")` | CHARACTER ("BRITISH"/"AMERICAN"/etc) |
+| `SET("Path")` | CHARACTER |
+| `SET("Point")` | CHARACTER |
+| `SET("Separator")` | CHARACTER |
+| `SET("Order")` | CHARACTER (tag name) |
+| **`SET("Decimals")`** | **NUMERIC** (2, 4, 6, etc — quantidade de casas decimais) |
+| **`SET("REPORTBEHAVIOR")`** | **NUMERIC** (80 ou 90) |
+
+Bug tipico: migrador ao salvar/restaurar contexto usa `VAL()` reflexivamente em todos os SETs (assumindo character-return). `VAL()` espera **CHARACTER** como argumento; passar NUMERIC dispara **VFP9 erro 11 "Function argument value, type, or count is invalid."** imediatamente.
+
+O erro eh especialmente insidioso porque:
+- Reproduz 100% (todo primeiro click em Visualizar/Imprimir quebra)
+- Mensagem generica nao aponta a linha exata sem CATCH com `LineNo`
+- Analista assume que outros SETs numericos foram salvos com `VAL()` sem quebrar — mas eh porque nunca sao chamados no mesmo path
+
+### Codigo ERRADO
+
+```foxpro
+PROCEDURE PrepararDados()
+    LOCAL loc_lcEscape, loc_lnDecimals, loc_lcFixed
+
+    loc_lcEscape   = SET("Escape")               && OK: retorna "ON"/"OFF" string
+    loc_lnDecimals = VAL(SET("Decimals"))         && ERRO! SET("Decimals") ja eh numeric
+    loc_lcFixed    = SET("Fixed")                && OK: retorna "ON"/"OFF" string
+
+    SET ESCAPE OFF
+    SET DECIMALS TO 2
+    SET FIXED ON
+    * ... processamento ...
+ENDPROC
+```
+
+Runtime: `Erro em PrepararDados: Function argument value, type, or count is invalid.`
+
+### Codigo CORRETO
+
+```foxpro
+PROCEDURE PrepararDados()
+    LOCAL loc_lcEscape, loc_lnDecimals, loc_lcFixed
+
+    loc_lcEscape   = SET("Escape")               && string
+    loc_lnDecimals = SET("Decimals")             && numeric direto (SEM VAL)
+    loc_lcFixed    = SET("Fixed")                && string
+
+    SET ESCAPE OFF
+    SET DECIMALS TO 2
+    SET FIXED ON
+    * ... processamento ...
+
+    *-- Restaurar:
+    SET ESCAPE &loc_lcEscape.                    && macro OK com string
+    SET DECIMALS TO loc_lnDecimals               && "SET DECIMALS TO" aceita numeric direto
+    SET FIXED &loc_lcFixed.
+ENDPROC
+```
+
+### Regras Gerais
+
+- **NUNCA envolver com VAL()**: `SET("Decimals")`, `SET("REPORTBEHAVIOR")`, `SET("Century TO")` (com 2o arg), `SET("Currency", n)` (com 2o arg)
+- **Restaurar SET numerico**: use `TO <var_numeric>` direto (`SET DECIMALS TO loc_nDec`) — NAO precisa macro
+- **Restaurar SET character**: use macro `&<var>.` (`SET ESCAPE &loc_cEsc.`) OU forma bareword se conhecido em compile-time
+- **Se em duvida**: `? VARTYPE(SET("XXX"))` no VFP command window mostra o tipo real
+
+### Auto-Fix
+
+CorretorAutomatico Pattern **#152** — regex substitui `VAL\s*\(\s*SET\s*\(\s*["']DECIMALS["']\s*\)\s*\)` (case-insensitive) por `SET("Decimals")`. Idempotente. Sem falso positivo (padrao muito especifico).
+
+### Sweep 2026-07-28 (Erro66)
+
+1 site corrigido: `sigrebalBO.prg:288`. Sweep global encontrou apenas essa ocorrencia — padrao raro mas insidioso.
+
+### Referencias
+
+- Memoria detalhada: `feedback_set_decimals_val_wrap_erro11.md`
+- Relacionado: `#151 CheckBox.Value logical` (mesmo tipo de gotcha VFP mask — "Data type mismatch" mascarando causa real)
+- Origem: Erro66 (2026-07-28, sigrebalBO PrepararDados — "Function argument value, type, or count is invalid" imediato ao clicar Visualizar)
+
+## 153. REPORT `Visualizar`/`Imprimir` — fall-through `IF !PrepararDados()` sem RETURN cai em REPORT FORM com cursor vazio (Erro68 SigReCgcBO 2026-07-28)
+
+### Problema
+
+Padrao migrado tipico:
+
+```foxpro
+FUNCTION Visualizar()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        IF !THIS.PrepararDados()
+            loc_lSucesso = .F.       && seta flag mas NAO interrompe
+        ENDIF                         && sem ELSE/RETURN
+        REPORT FORM (...) PREVIEW NOCONSOLE   && cai aqui SEMPRE
+        loc_lSucesso = .T.
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Visualizar")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+Quando `PrepararDados()` retorna `.F.` (cursor vazio, filtros sem match, erro SQL, FRX ausente detectado antes...), o `IF ! ... ENDIF` seta a flag mas **NAO interrompe o fluxo** — cai direto em `REPORT FORM`. Sintomas variam por causa raiz:
+- **Cursor vazio**: preview em branco sem mensagem para o usuario (que espera "Nenhum registro encontrado...")
+- **FRX ausente**: `File does not exist.` generico via CATCH (Erro67 pattern)
+- **Cursor nao criado por erro SQL previo**: `Alias not found` cascateado
+
+**Correlato conhecido**: Erro62 (`feedback_report_form_helper_canonico.md`) descreveu o mesmo padrao em `sigreappBO`.
+
+### Codigo ERRADO
+
+Reproducao exata do Erro68 (`SigReCgcBO:219-233` pre-fix):
+
+```foxpro
+FUNCTION Visualizar()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        IF !THIS.PrepararDados()
+            loc_lSucesso = .F.
+        ENDIF
+        REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+        loc_lSucesso = .T.
+    CATCH TO loc_oErro
+        THIS.this_cMensagemErro = loc_oErro.Message
+        MsgErro(loc_oErro.Message, "Visualizar")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+### Fix MINIMO (auto-fix seguro)
+
+Injetar `RETURN loc_l<Flag>` dentro do IF, antes do ENDIF:
+
+```foxpro
+FUNCTION Visualizar()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        IF !THIS.PrepararDados()
+            loc_lSucesso = .F.
+            RETURN loc_lSucesso    && injetado — early exit
+        ENDIF
+        REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+        loc_lSucesso = .T.
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Visualizar")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+Trivial, sem falso positivo, preserva o REPORT FORM raw. Nao resolve os outros bugs (cursor-empty msg, FRX check, locale), mas **elimina a causa raiz do fall-through**.
+
+### Fix IDEAL (manual — nao automavel)
+
+Refatorar para fluxo positivo + helper canonico:
+
+```foxpro
+FUNCTION Visualizar()
+    LOCAL loc_lSucesso, loc_oErro
+    loc_lSucesso = .F.
+    TRY
+        IF THIS.PrepararDados()    && fluxo POSITIVO
+            loc_lSucesso = THIS.ExecutarReportForm("SigReCgc", "PREVIEW", THIS.this_cCursorDados)
+        ENDIF
+    CATCH TO loc_oErro
+        THIS.this_cMensagemErro = loc_oErro.Message
+        MsgErro(loc_oErro.Message, "Visualizar")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+Requer:
+1. **Injetar `PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)`** no BO se ausente (template canonico em `SigReAtmBO.prg:857` ou `SigReCgcBO.prg` pos-Erro68 — inclui guard FRX + guard cursor-vazio com `MsgAviso("Nenhum registro encontrado com os filtros informados.")` + locale isolation + menu restore).
+2. **Normalizar o argumento base**: extrair o nome do FRX (sem path/extensao) a partir do `REPORT FORM (...)` — trivial em alguns casos (`REPORT FORM (THIS.this_cArquivoFRX)` com literal "SigReXxx.frx"), complexo em outros (`ObterNomeFRX()` dinamico, `IF THIS.this_nTipoRelatorio = 1 ... ELSE ...` com 2 FRXs).
+
+### Regras Complementares
+
+- **Verificar se `PrepararDados()` ja retorna .F. em cursor vazio**: alguns BOs retornam .T. mesmo sem registros — nesse caso o fix minimo nao ajuda; precisa refactor completo com helper.
+- **Multi-FRX condicional**: se `Visualizar` tem `IF THIS.this_nTipoRelatorio = 1 / REPORT FORM A / ELSE / REPORT FORM B / ENDIF`, o fix minimo (RETURN) protege ambos; refactor completo exige 2 chamadas separadas a `ExecutarReportForm`.
+
+### Auto-Fix
+
+CorretorAutomatico Pattern **#153**:
+- Regex multi-linha detecta `IF !THIS.PrepararDados() / loc_l\w+ = .F. / ENDIF` imediatamente seguido de `REPORT FORM` (janela de +3 linhas).
+- Injeta `RETURN <flag>` antes do ENDIF preservando indentacao.
+- Idempotente (skip se ja tem `RETURN` na linha anterior ao ENDIF).
+- Emite WARNING amarelo listando os metodos que ganhariam mais valor refatorando para helper.
+
+### Sweep 2026-07-28 (Erro68)
+
+1 BO ja corrigido manualmente (padrao IDEAL): `SigReCgcBO` (Visualizar + Imprimir refatorados para helper canonico).
+
+4 BOs identificados no sweep (9 metodos, receberao fix minimo automatico):
+- `sigrecheBO` — Imprimir, Visualizar
+- `sigredcoBO` — Visualizar (usa `THIS.ObterNomeFRX()` dinamico — WARNING refactor)
+- `SIGREDIRBO` — Imprimir, ImprimirComPrompt, Visualizar
+- `SigReFtpBO` — Visualizar, Imprimir, ImprimirDireto (multi-FRX condicional — WARNING refactor)
+
+### Referencias
+
+- Memoria detalhada: `feedback_report_visualizar_fallthrough_prepara.md`
+- Complementa: `#147 REPORT FORM bare` (Erro62 — mesmo padrao de fluxo defeituoso; fix menor overlap), `#117 ExecutarReportForm helper canonico` (template do fix ideal)
+- Origem: Erro68 (2026-07-28, FormSigReCgc Visualizar — clicar Visualizar sem selecionar filtros nao mostrava mensagem "nenhum registro")
+

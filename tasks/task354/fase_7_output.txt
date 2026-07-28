@@ -1,0 +1,8 @@
+﻿O FormCargo.prg (3293 linhas) e o CargoBO.prg (558 linhas) j├í cont├¬m todos os m├®todos das fases 1-7 com implementa├º├úo completa. Os 4 eventos da fase 7 j├í existem:
+
+- `BtnIncluirClick()` ÔÇö linha 2361: chama `NovoRegistro()`, `LimparCampos()`, `InicializarCursoresGrid()`, `CarregarGrades()`, `AlternarPagina(2)`
+- `BtnVisualizarClick()` ÔÇö linha 2385: l├¬ cursor selecionado, chama `CarregarPorCodigo()`, `BOParaForm()`, `HabilitarCampos(.F.)`, `CarregarGrades()`, `AlternarPagina(2)`
+- `BtnAlterarClick()` ÔÇö linha 2417: idem mas com `EditarRegistro()`, `HabilitarCampos(.T.)`
+- `BtnExcluirClick()` ÔÇö linha 2450: confirma via `MsgConfirma()`, chama `Excluir()` do BO, recarrega lista
+
+A Fase 7/8 j├í est├í implementada. O arquivo FormCargo.prg est├í completo com todos os 35 m├®todos, incluindo os eventos principais solicitados.

@@ -1,0 +1,12 @@
+﻿Todos os `RETURN` aparecem AP├ôS o `ENDTRY` correspondente. O arquivo est├í correto.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormCAD.prg` criado com:
+
+- **DEFINE CLASS FormCAD AS FormBase** ÔÇö propriedades visuais completas (`Height=600`, `Width=1000`, `DataSession=2`, etc.)
+- **Init(par_cTipoCads, par_nMaxCodCads)** ÔÇö configura `this_cTipoCads`, `this_nMaxCodCads` e `Caption` din├ómico (com exce├º├úo "APONTAMTO" ÔåÆ "Avalia├º├úo") antes de chamar `DODEFAULT()`
+- **InicializarForm()** ÔÇö cria CADBO, propaga TipoCads ao BO, monta PageFrame + containers, chama CarregarLista()
+- **ConfigurarPageFrame()** ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, 2 Pages com background
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542, vazio ÔÇö Fase 4 adiciona bot├Áes), `cnt_4c_Saida` (Left=917 can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (Left=842 can├┤nico, vazio ÔÇö Fase 4 adiciona Confirmar/Cancelar)
+- **CarregarLista()** ÔÇö chama `Buscar("")` sem vincular grid (grid criado na Fase 4)
+- **FormatarGridLista()**, **TornarControlesVisiveis()**, **Destroy()** ÔÇö implementa├º├Áes completas

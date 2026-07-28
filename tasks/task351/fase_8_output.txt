@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormBlq.prg** ÔÇö j├í estava completo com todos os m├®todos da Fase 8 implementados nas fases anteriores:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()` ÔÇö todos os campos mapeados
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**Integra├º├Áes realizadas agora:**
+1. **menu.prg** ÔÇö Adicionado `DEFINE BAR 32 OF popCadastros` com "Bloqueios por Per├¡odo"
+2. **menu.prg** ÔÇö Adicionado `ON SELECTION BAR 32 OF popCadastros DO AbrirFormBlq`
+3. **menu.prg** ÔÇö Adicionada procedure `AbrirFormBlq()` no padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+4. **BlqBO.prg** ÔÇö Corrigido bug: `TRANSFORM(..., "@L 9999999999")` substitu├¡do por `fGerMascara(fGerUniqueKey("BLOQUEIO"))` que gera corretamente "0000000001" com zero-padding
+
+**config.prg** n├úo requer altera├º├úo ÔÇö usa `ADIR()` para carregar automaticamente todos os `*BO.prg` e `Form*.prg`.

@@ -238,7 +238,23 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
                                                                                                                                                             IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
                                                                                                                                                                 THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
                                                                                                                                                             ELSE
-                                                                                                                                                                THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                                                IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                                    THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                                ELSE
+                                                                                                                                                                    IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                                        THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                                    ELSE
+                                                                                                                                                                        IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                                            THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                                        ELSE
+                                                                                                                                                                            IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                                                THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                                            ELSE
+                                                                                                                                                                                THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                                                            ENDIF
+                                                                                                                                                                        ENDIF
+                                                                                                                                                                    ENDIF
+                                                                                                                                                                ENDIF
                                                                                                                                                             ENDIF
                                                                                                                                                         ENDIF
                                                                                                                                                     ENDIF
@@ -490,7 +506,23 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
                                                                                                                                         IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
                                                                                                                                             THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
                                                                                                                                         ELSE
-                                                                                                                                            THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                            IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                            ELSE
+                                                                                                                                                IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                    THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                ELSE
+                                                                                                                                                    IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                        THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                    ELSE
+                                                                                                                                                        IF VARTYPE(CsSigCdBal.trtporpeso) = "L"
+                                                                                                                                                            THIS.this_lTrataPeso = CsSigCdBal.trtporpeso
+                                                                                                                                                        ELSE
+                                                                                                                                                            THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)
+                                                                                                                                                        ENDIF
+                                                                                                                                                    ENDIF
+                                                                                                                                                ENDIF
+                                                                                                                                            ENDIF
                                                                                                                                         ENDIF
                                                                                                                                     ENDIF
                                                                                                                                 ENDIF
@@ -1609,6 +1641,73 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
     *--------------------------------------------------------------------------
     * Imprimir - Prepara dados e envia relatorio para impressora
     *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117 / #147)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- par_cCursorDados: opcional. Se informado e cursor estiver vazio,
+    *--   mostra MsgAviso e retorna .F. sem abrir preview vazio.
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
     PROCEDURE Imprimir()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
@@ -1668,14 +1767,14 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
 
             CASE loc_nTp = 2
                 IF par_lImprimir
-                    REPORT FORM SigReBrg TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReBrg", "PRINTER_PROMPT")
                 ELSE
                     REPORT FORM SigReBrg NOCONSOLE PREVIEW
                 ENDIF
 
             CASE loc_nTp = 3
                 IF par_lImprimir
-                    REPORT FORM SigReBla TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReBla", "PRINTER_PROMPT")
                 ELSE
                     REPORT FORM SigReBla NOCONSOLE PREVIEW
                 ENDIF
@@ -1683,13 +1782,13 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
             CASE loc_nTp = 4
                 IF THIS.this_nDescricao = 1
                     IF par_lImprimir
-                        REPORT FORM SigReBlc TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReBlc", "PRINTER_PROMPT")
                     ELSE
                         REPORT FORM SigReBlc NOCONSOLE PREVIEW
                     ENDIF
                 ELSE
                     IF par_lImprimir
-                        REPORT FORM SigReBle TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReBle", "PRINTER_PROMPT")
                     ELSE
                         REPORT FORM SigReBle NOCONSOLE PREVIEW
                     ENDIF

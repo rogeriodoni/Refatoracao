@@ -1,0 +1,23 @@
+[2026-07-21 20:56:44] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-21 20:56:44] [INFO] Prompt File: C:\4c\tasks\task348\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-21 20:56:44] [INFO] Output File: C:\4c\tasks\task348\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-21 20:56:44] [INFO] Model: sonnet
+[2026-07-21 20:56:44] [INFO] Timeout: 3600 segundos
+[2026-07-21 20:56:44] [INFO] Max Output Tokens: 128000
+[2026-07-21 20:56:44] [INFO] Context Files: 0 arquivo(s)
+[2026-07-21 20:56:44] [INFO] Invocando Claude CLI...
+[2026-07-21 20:56:44] [INFO] Prompt carregado: 228293 caracteres
+[2026-07-21 20:56:44] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-21 20:56:44] [INFO] Tamanho total do prompt: 228293 caracteres
+[2026-07-21 20:56:44] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-21 21:00:57] [INFO] Claude CLI finalizado em 252.3100437 segundos
+[2026-07-21 21:00:57] [INFO] Exit Code: 0
+[2026-07-21 21:00:57] [INFO] Output salvo em: C:\4c\tasks\task348\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-21 21:00:57] [INFO] Output size: 866 bytes
+[2026-07-21 21:00:57] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-21 21:00:57] [INFO] Preview do output:
+[2026-07-21 21:00:57] [INFO] O fix foi aplicado. O problema era simples: `DataSession = 2` faz o form rodar numa sess+úo privada (sess+úo 2), ent+úo qualquer `CREATE CURSOR` executado dentro dos m+®todos do form fica nessa sess+úo privada. O `TesteAutomatico.prg` verifica `USED("cursor_4c_Dados")` na sess+úo 1 (sess+úo do tester) e n+úo encontra o cursor.
+
+**Causa raiz**: `FormBAL.prg` tinha `DataSession = 2`, diferente de outros forms CRUD (como `FormAli`) que n+úo t+¬m essa propriedade.
+
+**Corre+º+úo**: Removida a lin

@@ -1,0 +1,11 @@
+﻿All 4 fixes are confirmed correct. Here's the complete summary of what was applied in this session continuation:
+
+**Fix 9 ÔÇö `CarregarGradeLeitura()` [GRID-SQLEXEC]**: Replaced direct `SQLEXEC(..., "cursor_4c_Historico")` (which destroys `grd_4c_Dados` column objects) with the temp cursor pattern: SQLEXEC into `cursor_4c_HistoricoTemp`, then ZAP+APPEND on subsequent calls (preserving column definitions) or SELECT INTO + full column setup on first call, then USE IN temp.
+
+**Fix 10 ÔÇö `chk_4c_Chk_RepeteObs` [LAYOUT-POSITION]**: Corrected `Left=203` ÔåÆ `Left=679` to match the legacy SCX position.
+
+**Fix 11 ÔÇö `cmd_4c_BtnExcluir` [LAYOUT-POSITION]**: Corrected `Left=678` ÔåÆ `Left=754` to match the legacy SCX position.
+
+**Fix 12 ÔÇö `Destroy()` [CLEANUP]**: Added cleanup blocks for `cursor_4c_GGruposTemp`, `cursor_4c_GruposProdTemp`, and `cursor_4c_HistoricoTemp` alongside the existing cursor releases.
+
+All 37 reported problems from the CODE REVIEW pass are now addressed. FormBAL.prg is complete.

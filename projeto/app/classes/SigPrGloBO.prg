@@ -219,7 +219,19 @@ DEFINE CLASS SigPrGloBO AS BusinessBase
                                                         IF VARTYPE(Divs) = "L"
                                                             THIS.this_lDivs = Divs
                                                         ELSE
-                                                            THIS.this_lDivs = (NVL(Divs, 0) = 1)
+                                                            IF VARTYPE(Divs) = "L"
+                                                                THIS.this_lDivs = Divs
+                                                            ELSE
+                                                                IF VARTYPE(Divs) = "L"
+                                                                    THIS.this_lDivs = Divs
+                                                                ELSE
+                                                                    IF VARTYPE(Divs) = "L"
+                                                                        THIS.this_lDivs = Divs
+                                                                    ELSE
+                                                                        THIS.this_lDivs = (NVL(Divs, 0) = 1)
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
                                                         ENDIF
                                                     ENDIF
                                                 ENDIF
@@ -264,7 +276,19 @@ DEFINE CLASS SigPrGloBO AS BusinessBase
                                                         IF VARTYPE(Imprs) = "L"
                                                             THIS.this_lImprs = Imprs
                                                         ELSE
-                                                            THIS.this_lImprs = (NVL(Imprs, 0) = 1)
+                                                            IF VARTYPE(Imprs) = "L"
+                                                                THIS.this_lImprs = Imprs
+                                                            ELSE
+                                                                IF VARTYPE(Imprs) = "L"
+                                                                    THIS.this_lImprs = Imprs
+                                                                ELSE
+                                                                    IF VARTYPE(Imprs) = "L"
+                                                                        THIS.this_lImprs = Imprs
+                                                                    ELSE
+                                                                        THIS.this_lImprs = (NVL(Imprs, 0) = 1)
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
                                                         ENDIF
                                                     ENDIF
                                                 ENDIF
@@ -309,7 +333,19 @@ DEFINE CLASS SigPrGloBO AS BusinessBase
                                                         IF VARTYPE(Iimprs) = "L"
                                                             THIS.this_lIimprs = Iimprs
                                                         ELSE
-                                                            THIS.this_lIimprs = (NVL(Iimprs, 0) = 1)
+                                                            IF VARTYPE(Iimprs) = "L"
+                                                                THIS.this_lIimprs = Iimprs
+                                                            ELSE
+                                                                IF VARTYPE(Iimprs) = "L"
+                                                                    THIS.this_lIimprs = Iimprs
+                                                                ELSE
+                                                                    IF VARTYPE(Iimprs) = "L"
+                                                                        THIS.this_lIimprs = Iimprs
+                                                                    ELSE
+                                                                        THIS.this_lIimprs = (NVL(Iimprs, 0) = 1)
+                                                                    ENDIF
+                                                                ENDIF
+                                                            ENDIF
                                                         ENDIF
                                                     ENDIF
                                                 ENDIF

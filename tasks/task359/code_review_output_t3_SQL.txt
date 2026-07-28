@@ -1,0 +1,23 @@
+﻿Ap├│s busca exaustiva nos dois arquivos, posso confirmar que este ├® um **falso positivo** do sistema de review autom├ítico.
+
+**O que o review detectou:** A propriedade VFP9 `.ControlCount` (n├║mero de controles em um container) usada em loops como:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount  && linha 5790, 6780
+loc_oCnt = par_oPg.Controls(par_oPg.ControlCount)  && linha 5123
+```
+
+**O que o review pensou ser:** Uma coluna SQL `CONTROLCOUNT` inventada em cl├íusula WHERE.
+
+**O que existe de fato nos WHERE SQL** (todos leg├¡timos):
+
+| Arquivo | SQL WHERE | Coluna usada |
+|---------|-----------|--------------|
+| `ccrBO.prg:686` | `SigMvCcr WHERE RTRIM(Grupos) = ` | GRUPOS Ô£ô |
+| `ccrBO.prg:698` | `SigCdCli WHERE RTRIM(Grupos) = ` | GRUPOS Ô£ô |
+| `ccrBO.prg:710` | `SigMvCab WHERE RTRIM(Grupos) = ` | GRUPOS Ô£ô |
+| `ccrBO.prg:725` | `DELETE WHERE codigos = ` | CODIGOS Ô£ô |
+| `Formccr.prg:5614` | `SigCdMoe WHERE RTRIM(Cmoes)=` | v├ílido Ô£ô |
+| `Formccr.prg:5765` | `SigCdCli WHERE RTRIM(IClis)=` | ICLIS Ô£ô |
+
+N├úo h├í nenhuma condi├º├úo WHERE inventada nos arquivos. O `.ControlCount` que o review detectou ├® puramente um acesso a propriedade VFP9 (sem rela├º├úo com SQL) e **n├úo deve ser alterado**. Nenhuma corre├º├úo necess├íria neste pass.

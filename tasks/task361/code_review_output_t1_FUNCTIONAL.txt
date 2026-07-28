@@ -1,0 +1,7 @@
+﻿5 corre├º├Áes aplicadas em `FormCeg.prg`:
+
+1. **ValidarGrupo** ÔåÆ `PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö evita "No PARAMETER statement is found" no KeyPress.
+2. **ValidarConta** ÔåÆ mesma corre├º├úo.
+3. **ValidarEmps** ÔåÆ mesma corre├º├úo.
+4. **ValidarDEmps** ÔåÆ mesma corre├º├úo.
+5. **GRID-WITH** ÔåÆ acessos a `.Column1ÔÇô5` (.Width, .Header1.Caption, .Alignment) movidos para **fora** do bloco `WITH loc_oGrid ... ENDWITH`, usando refer├¬ncia expl├¡cita `loc_oGrid.Column*`. Evita "Unknown member COLUMN1" que ocorre quando VFP9 ainda n├úo criou as colunas dentro do contexto WITH.

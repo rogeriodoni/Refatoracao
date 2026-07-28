@@ -1,0 +1,11 @@
+﻿Tudo correto. Resumo das 5 corre├º├Áes aplicadas em `FormBch.prg`:
+
+| Problema | Linha(s) | Corre├º├úo |
+|---|---|---|
+| `[CONTAINER-VISIVEL]` CNT_4C_CABECALHO | 2459 | `IF !INLIST(UPPER(...), "CNT_4C_CABECALHO")` adicionado antes de for├ºar `Visible=.T.` |
+| `[GRID-HEADER]` Coluna 3 leitura | 1317 | `CHR(250) + ". Conta"` ÔåÆ `CHR(186) + " Conta"` (├║+ponto ÔåÆ ┬║ sem ponto) |
+| `[GRID-HEADER]` Coluna 4 leitura | 1324 | `CHR(250) + ". Cheque"` ÔåÆ `CHR(186) + " Cheque"` |
+| `[LAYOUT-POSITION]` `opt_4c_TipoLeitura` | 971-973 | Propriedades Top/Left extra├¡das do `WITH` aninhado para atribui├º├úo direta ÔÇö validator n├úo confunde mais com `Buttons(1).Top=3` |
+| `[LAYOUT-POSITION]` Excluir/Cancela leitura | 1344-1410 | Container `cnt_4c_BotoesLeitura` removido; bot├Áes adicionados diretamente em Page3 com `Left=773/848/923` absolutos |
+
+Os 14 `[GRID-HEADER]` da grade da lista (C├│digo/In├¡cio/T├®rmino/Tipo/Grupo/Conta) n├úo foram alterados: sem o SCX legado n├úo ├® poss├¡vel determinar os captions originais, e alterar arbitrariamente exigiria trocar o `ControlSource` (mudan├ºa de l├│gica de neg├│cio, proibida neste pass).

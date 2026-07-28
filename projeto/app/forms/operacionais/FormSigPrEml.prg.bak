@@ -261,7 +261,7 @@ DEFINE CLASS FormSigPrEml AS FormBase
                 .Top         = 5
                 .Left        = 917
                 .Height      = 75
-                .Width       = 75
+                .Width       = 90
                 .FontBold    = .T.
                 .FontItalic  = .T.
                 .FontName    = "Tahoma"

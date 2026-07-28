@@ -1,0 +1,18 @@
+﻿The structure is clean ÔÇö all `RETURN` statements are outside `TRY/CATCH`, and the CATCH blocks have proper `MsgErro` calls with cursor cleanup.
+
+Phase 6 is complete. Here's what was implemented:
+
+**Phase 5** (campos Page2):
+- `txt_4c_Codigo` (readonly PK), `cbo_4c_Operacao` (ComboBox tipos 1-4, BoundColumn=0), `txt_4c_Oper` (opera├º├úo), `txt_4c_DataInicial`/`DataFinal` (datas, InputMask @D), `txt_4c_Grupo`/`txt_4c_DGrupo` (grupo + desc), `txt_4c_Conta`/`txt_4c_DConta` (conta + desc)
+- All labels with correct positions (+29 PageFrame compensation)
+
+**Phase 6** (lookups e valida├º├Áes):
+- 5 BINDEVENT Valid handlers wired in `ConfigurarPaginaDados()`
+- `ValidOper` ÔåÆ lookup `SigCdOpt.operacaos` via FormBuscaAuxiliar
+- `ValidGrupo` ÔåÆ lookup `SigCdGcr.codigos`, preenche `txt_4c_DGrupo` com `descrs`
+- `ValidDGrupo` ÔåÆ busca reversa `SigCdGcr` (ativo s├│ quando Grupo vazio)
+- `ValidConta` ÔåÆ lookup `SIGCDCLI.iclis`, preenche `txt_4c_DConta` com `razaos`
+- `ValidDConta` ÔåÆ busca reversa `SIGCDCLI` (ativo s├│ quando Conta vazia)
+- `BOParaForm()` atualizado para buscar `descrs`/`razaos` ao carregar registro existente
+
+O pr├│ximo passo ├® **Fase 7/8**: Page3 (Leitura de Cheques) ÔÇö grade `grd_4c_Dados` da leitura, campos `txt_4c_Bco`/`txt_4c_Age`/`txt_4c_Conta`/`txt_4c_Num`/`txt_4c_Valor`/`txt_4c_Vecto`, `OptionGroup` TipoLeitura, e implementa├º├úo completa de `BtnGravarLeituraClick`/`BtnExcluirHistoricoClick` com SQL em `SigCqBal`/`SigCqHis`.

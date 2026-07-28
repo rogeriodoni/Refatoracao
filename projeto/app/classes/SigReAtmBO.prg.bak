@@ -547,7 +547,8 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
                     IF loc_nAgru = 1
                         loc_cPed   = PADR(ALLTRIM(CrSigCdNec.DopPs) + "-" + STR(CrSigCdNec.NumPs,10), 31)
                         loc_nEnv   = CrSigCdNec.Nenvs
-                        loc_ldData = CrSigCdNec.Datas
+                        *-- SQL Server SigCdNec.datas eh DATETIME (T); TmpRelat.Datas eh D ? TTOD converte
+                        loc_ldData = IIF(VARTYPE(CrSigCdNec.Datas) == "T", TTOD(CrSigCdNec.Datas), CrSigCdNec.Datas)
                     ELSE
                         loc_cPed   = PADR(" ", 31)
                         loc_nEnv   = 0
@@ -687,8 +688,8 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
                     SELECT TmpRelat
                     REPLACE Qtde WITH Qtde + CrSigCdNec.Qtds
                     IF ALLTRIM(CrSigCdPro.Moecs) <> loc_cMoeda
-                        loc_nValorCalc = fCarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
-                                         fCarregarCambio(loc_cMoeda, DATE())
+                        loc_nValorCalc = THIS.CarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
+                                         THIS.CarregarCambio(loc_cMoeda, DATE())
                     ELSE
                         loc_nValorCalc = CrSigCdPro.Pcuss * CrSigCdNec.Qtds
                     ENDIF
@@ -721,8 +722,8 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
                         SELECT TmpRelat
                         REPLACE Qtde WITH Qtde + CrSigCdNec.Qtds
                         IF ALLTRIM(CrSigCdPro.Moecs) <> loc_cMoeda
-                            loc_nValorCalc = fCarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
-                                             fCarregarCambio(loc_cMoeda, DATE())
+                            loc_nValorCalc = THIS.CarregarCambio(ALLTRIM(CrSigCdPro.Moecs), DATE()) / ;
+                                             THIS.CarregarCambio(loc_cMoeda, DATE())
                         ELSE
                             loc_nValorCalc = CrSigCdPro.Pcuss * CrSigCdNec.Qtds
                         ENDIF
@@ -839,11 +840,53 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
 
         CATCH TO loc_oErro
             WAIT CLEAR
-            MsgErro(loc_oErro.Message, "Erro em PrepararDados")
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro em PrepararDados")
         ENDTRY
 
         RETURN loc_lSucesso
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarCambio - Retorna cotacao da moeda na data informada
+    * Equivalente a fCarregarCambio() do sistema legado (nao portado).
+    * Usa cursores crSigCdCot + crSigCdMoe carregados em InicializarDados.
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION CarregarCambio(par_cMoeda, par_dData)
+        LOCAL loc_nCotacao, loc_cMoeda, loc_dData, loc_oErro
+        loc_nCotacao = 0
+        loc_cMoeda   = ALLTRIM(par_cMoeda)
+        loc_dData    = IIF(EMPTY(par_dData), DATE(), par_dData)
+
+        IF EMPTY(loc_cMoeda)
+            RETURN 1
+        ENDIF
+
+        TRY
+            IF USED("crSigCdMoe")
+                SELECT crSigCdMoe
+                SET ORDER TO CMoes
+                IF SEEK(loc_cMoeda) AND crSigCdMoe.Cotas <> 0
+                    IF USED("crSigCdCot")
+                        SELECT crSigCdCot
+                        SET ORDER TO CMoeData DESCENDING
+                        SET NEAR ON
+                        SEEK loc_cMoeda + DTOS(loc_dData)
+                        SET NEAR OFF
+                        IF !EOF() AND ALLTRIM(crSigCdCot.CMoes) = loc_cMoeda
+                            loc_nCotacao = crSigCdCot.Valos
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            SET NEAR OFF
+        ENDTRY
+
+        RETURN IIF(loc_nCotacao = 0, 1, loc_nCotacao)
+    ENDFUNC
 
     *--------------------------------------------------------------------------
     * Visualizar - Prepara dados e exibe relatorio em preview
@@ -901,6 +944,18 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
         SET POINT TO (loc_cPointOrig)
         SET SEPARATOR TO (loc_cSepOrig)
         SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
 
         RETURN .T.
     ENDPROC

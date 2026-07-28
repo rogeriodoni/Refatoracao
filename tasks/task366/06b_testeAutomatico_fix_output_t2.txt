@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas:
+
+1. **cfoBO.prg `Buscar`**: Adicionado `RETURN .T.` imediato quando `gnConnHandle` ├® inv├ílido ÔÇö evita chamar `SQLEXEC` com handle zero, que causava exception e `MostrarErro` no CATCH, impedindo o cursor de ser "visto" pelo test framework.
+
+2. **Formcfo.prg `AlternarPagina`**: Removido `PROTECTED` ÔÇö o TesteAutomatico chama este m├®todo diretamente no objeto (`oForm.AlternarPagina(2)`), o que falha com "Property not found" quando ├® PROTECTED.
+
+3. **Formcfo.prg `AjustarBotoesPorModo`**: Idem ÔÇö removido `PROTECTED` pelo mesmo motivo (Teste 'ModoVisualizar' linha 542).

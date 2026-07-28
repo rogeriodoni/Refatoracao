@@ -512,7 +512,9 @@ DEFINE CLASS FormSIGRECTL AS FormBase
         WITH THIS.this_oRelatorio
             .this_nMes      = loc_oPg.txt_4c_Mes.Value
             .this_nAno      = loc_oPg.txt_4c_Ano.Value
-            .this_lImpTempo = loc_oPg.chk_4c_ImpTempo.Value
+            *-- CheckBox.Value eh numerico (0/1); converter para logico pois
+            *-- prop this_lImpTempo eh logical (evita "Data type mismatch" no BO)
+            .this_lImpTempo = (loc_oPg.chk_4c_ImpTempo.Value = 1)
         ENDWITH
     ENDPROC
 

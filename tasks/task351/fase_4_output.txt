@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **5 bot├Áes CRUD** no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö cada um com `Picture`, `PicturePosition=13`, fontes Comic Sans MS, e `BINDEVENT` vinculando ao handler correspondente.
+
+2. **Bot├úo Encerrar** no `cnt_4c_Saida` (padr├úo can├┤nico: Left=5, Top=5, Width=75, Height=75, Caption="Encerrar").
+
+3. **Grid `grd_4c_Lista`** (Top=117, Left=26, Width=890, Height=490) com 5 colunas (C├│digo, Data Inicial, Data Final, Usu├írio, Inativo) ÔÇö `RecordSource` e `ColumnCount` definidos **antes** do `WITH` para evitar o problema do Erro36.
+
+4. **`FormatarGridLista()`** (PROTECTED) ÔÇö aplica Verdana 8 a todas as colunas.
+
+5. **`CarregarLista()`** (PUBLIC) ÔÇö busca via BO, seta `RecordSource` + `ControlSource` de cada coluna, redefine `Header1.Caption` ap├│s `RecordSource` (evitando reset de cabe├ºalhos), e respeita `gb_4c_ValidandoUI`.
+
+6. **`AlternarPagina()`** (PROTECTED) ÔÇö troca `ActivePage` e chama `CarregarLista()` ao retornar para Page1.
+
+7. **`InicializarForm()`** atualizado para chamar `CarregarLista()` ao final (com guard `gb_4c_ValidandoUI`).

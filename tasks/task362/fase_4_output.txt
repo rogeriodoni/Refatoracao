@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Todas as edi├º├Áes da Fase 4 foram aplicadas com sucesso:
+
+**O que foi adicionado em `ConfigurarPaginaLista()`:**
+- `lbl_4c_FiltrarUF` ÔÇö label "Filtrar Pela UF :" (top=125, left=71)
+- `txt_4c_Estados` ÔÇö TextBox UF com MaxLength=2 e BINDEVENT LostFocusÔåÆ`ValidarEstadosLista`
+- `lbl_4c_NotaFiltro` ÔÇö nota sobre performance do filtro (top=125, left=214)
+- `grd_4c_Lista` ÔÇö Grid com 6 colunas (top=157, 972├ù481), RecordSource e ColumnCount fora do WITH conforme Problema 36
+
+**`CarregarLista()` atualizado:**
+- `SET NULL ON/OFF` ao redor do `CREATE CURSOR` vazio (Problema 35)
+- Bloco de wiring do grid: RecordSource ÔåÆ ControlSource ├ù 6 ÔåÆ Header1.Caption ├ù 6 (re-setar ap├│s RecordSource conforme Problema 32) ÔåÆ Width ÔåÆ FormatarGridLista ÔåÆ Refresh
+
+**`ValidarEstadosLista()` adicionado:**
+- Guard de valor inalterado (`this_cUltimoEstadoValidado`) para evitar picker em todo LostFocus (Problema 45)
+- Se UF n├úo encontrada exatamente, abre FormBuscaAuxiliar para picker
+- Seta `this_cCodUFs` (IBGE) para uso posterior no lookup de cidades em Page2
+
+**Propriedade `this_cCodUFs = ""`** adicionada na classe.

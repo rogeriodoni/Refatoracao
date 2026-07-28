@@ -1,0 +1,316 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fBarCepSedex", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBus\n\nIf Not Empty(ThisForm.Pagina.Dados.getCEPS.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdCep], [Ceps], ThisForm.Pagina.Dados.getCeps.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pUFs\n\npUFs = ThisForm.Pagina.Lista.getEstados.Value\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "parameters pAut, pUf, pCodUf\n\nPrivate pUFs\n\npUFs = Replicate(Chr(254), 2)\n\nlcQryCep = [Select * From Cep Where Estados = ?pUFs]\n\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], [cep])\n\t.poDataOri = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0) And (.poDataOri.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([Cep], [cIdChaves], [crSigCdCep], [], ThisForm.Pagina.Lista.Grade, lcQryCep)\n\t\t\t.pfSqlTabela(1).pColuna([Ceps], [], [], [CEP], 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "LParameters Opcao\n\nPrivate pUFs\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\n* Checando se Preencheu o Grupo de UF\nIf Empty(ThisForm.Pagina.Lista.getEstados.Value)\n\t=MessageBox([A UF Não Foi Preenchida!!!], 0+48, [Atenção!!!])\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nElse\n\tThisForm.Pagina.Dados.getEstados.Value = ThisForm.Pagina.Lista.getEstados.Value\nEndIf\n\nIf (ThisForm.pcEscolha = [INSERIR])\n\tReplace cIdChaves With fUniqueIds() In crSigCdCep\nEndIf\n\nDo Case\n\tCase Inlist(ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "Local lcCEP\n\nlcCEP = ThisForm.Pagina.Dados.getCEPS.Value \n\nIf InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(crSigCdCep.Ceps)\n\t\t=Messagebox([O CEP Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) \n\t\tThisForm.Pagina.Dados.getCeps.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(crSigCdCep.TipoNomes)\n\t\t=Messagebox([O Tipo de Endereço Não Pode Ficar Em Branco!!!], 48, [Erro!!!]) \n\t\tThisForm.Pagina.Dados.getTipoNomes.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(crSigCdCep.Nomes)\n\t\t=Messagebox([O Endereço Não ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fBarCepSedex",
+        "metodosFormChamados": "mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "*** mena 01/10/2016 - verifica se saida automatica ou normal  ***\n\n=DoDefault()\nIf ThisForm.plCancelar\n\tIf ThisForm.pcTpSaida == '0'\t&& saida normal\n\t\tThisForm.mAtivaPagina1\n\tELSE\n\t\tthisform.WindowType = 0\n\t\tthisform.Release()\n\tENDIF\nEndIf\n\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Lista.getEstados",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Lista.getEstados",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataOri.pnIdConn, [SigCdUfs], ;\n\t\t\t\t\t\t   [crListaRemota], [Estados], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Estados], [], [UF])\n\t\tloLista.mAddColuna([Descrs],  [], [Descrição])\n\t\tloLista.mAddColuna([UFIBGES], [], [IBGE])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Pagina.Lista.getEstados.Value = Iif(Lastkey()=27, [], crListaRemota.Estados)\n\n\tThisForm.CodUFs = Iif(Lastkey()... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Iif,CodUFs = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Lista.getEstados",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Padr(This.Value, 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getCEPS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getTipoNomes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getNomes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getBairros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getCidades",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getCidades",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLst\n\nIf Not Empty(This.Value)\n\tDeclare laFil[1,2]\n\tlaFil[1,1] = [UFIBGES]\n\tlaFil[1,2] = ThisForm.CodUFs\n\n\tloLst = CreateObject([fwBuscaExt], ThisForm.poDataOri.pnIdConn, [SigCdMun], ;\n\t\t\t\t\t\t [crListaRemota], [Descs], This.Value, [Seleção], .t., [Descs], @laFil)\n\n\tIf Not loLst.plAchouRegistro\n\t\tloLst.mAddColuna([Descs], [], [Descrição])\n\t\tloLst.Show()\n\tEndIf\n\t\n\tThisForm.Pagina.Dados.getCidades.Value = Upper(Iif(Lastkey()=27, [], crListaRemota.Descs))\n\tUse In crListaRemota\nEndIf\nThis.Refre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getEstados",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getComples",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCEP.Pagina.Dados.getNums",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCEP.Init",
+      "queryOriginal": "lcQryCep = [Select * From Cep Where Estados = ?pUFs]",
+      "tabelas": "Cep",
+      "colunas": "Estados",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Cep"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

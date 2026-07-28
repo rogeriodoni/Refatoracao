@@ -2008,6 +2008,13 @@ DEFINE CLASS Formpgr AS FormBase
         *-- CRITICO: Cursor placeholder com campo L ANTES do grid com CheckBox
         .AddObject("Check1", "CheckBox")
         .Check1.Caption = ""
+        .Check1.Alignment = 0
+        .Check1.ReadOnly  = .F.
+        .Check1.Visible   = .T.
+        .Check1.Top       = 9
+        .Check1.Left      = 2
+        .Check1.Height    = 17
+        .Check1.Width     = 22
         *-- Sem isso: "Data type mismatch" ao definir Column1.CurrentControl="Check1"
         SET NULL ON
         CREATE CURSOR cursor_4c_Pendencias ;

@@ -230,7 +230,7 @@ DEFINE CLASS FormSigReAtm AS FormBase
             .SpecialEffect   = 0
             .MousePointer    = 15
             .Themes          = .F.
-            .Picture         = gc_4c_CaminhoIcones + "geral_excel_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
             .Visible         = .T.
         ENDWITH
         WITH THIS.cmg_4c_Botoes.Buttons(4)
@@ -1451,8 +1451,11 @@ DEFINE CLASS FormSigReAtm AS FormBase
             .this_nEnvelope = loc_oCnt.txt_4c_Envelope.Value
             .this_nNop      = loc_oCnt.txt_4c_Nop.Value
             .this_nAgru     = loc_oCnt.opt_4c_Agru.Value
-            .this_lDestino  = loc_oCnt.chk_4c_Destino.Value
-            .this_lProdutos = loc_oCnt.chk_4c_Produtos.Value
+            *-- CheckBox.Value eh numerico (0/1); converter para logico
+            *-- pois BO usa em contexto AND (linha 561) ? logico AND numerico
+            *-- dispara "Data type mismatch" no VFP9 strict mode.
+            .this_lDestino  = (loc_oCnt.chk_4c_Destino.Value = 1)
+            .this_lProdutos = (loc_oCnt.chk_4c_Produtos.Value = 1)
         ENDWITH
     ENDPROC
 

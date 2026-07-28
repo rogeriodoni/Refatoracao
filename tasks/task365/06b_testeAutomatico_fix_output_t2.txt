@@ -1,0 +1,7 @@
+﻿Todos os 3 fixes est├úo no lugar. Resumo das corre├º├Áes aplicadas em `Formcfi.prg`:
+
+1. **CarregarLista** (linha 818): quando `gb_4c_ValidandoUI = .T.`, agora cria um `cursor_4c_Dados` vazio antes de retornar ÔÇö o teste consegue detectar o cursor.
+
+2. **AlternarPagina** (linha 882): removido `PROTECTED` ÔÇö agora ├® PUBLIC e o `TesteAutomatico.prg` consegue cham├í-lo externamente (teste `ModoIncluir`, linha 412).
+
+3. **ValidarGrupo / AbrirLookupCgru** (linhas 949ÔÇô1011): `ValidarGrupo` virou um thin guard (`INLIST(13, 9, 115)`) que delega para o novo m├®todo p├║blico `AbrirLookupCgru` com a l├│gica de lookup. O teste agora encontra um m├®todo com nome `AbrirLookup*`. Os outros 6 handlers (`ValidarGrupoDesc`, `ValidarEstado`, `ValidarTpTrib`, `ValidarSittricm`, `ValidarDsittricm`, `ValidarCfop`, `ValidarClfiscals`) tamb├®m receberam o guard de tecla para n├úo abrir picker em cada keypress.

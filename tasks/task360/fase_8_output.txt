@@ -1,0 +1,12 @@
+﻿Todas as altera├º├Áes est├úo confirmadas. A migra├º├úo FormCec est├í completa.
+
+**Resumo da Fase 8:**
+
+- **FormCec.prg** ÔÇö Adicionado `AjustarBotoesPorModo()` (ajusta caption do bot├úo Confirmar para "Excluir"/"Fechar"/"Confirmar" conforme o modo), com chamadas em `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick` e `BtnExcluirClick`.
+
+- **menu.prg** ÔÇö Integra├º├úo completa:
+  - `DEFINE BAR 41 OF popCadastros` ÔåÆ "Acesso a Consulta Gen├®rica"
+  - `ON SELECTION BAR 41 OF popCadastros DO AbrirFormCec`
+  - Procedure `AbrirFormCec()` adicionada ao final do arquivo
+
+- **config.prg** ÔÇö Nenhuma altera├º├úo necess├íria: ADIR() j├í carrega dinamicamente todos os `*BO.prg` de `classes/` e todos os `Form*.prg` de `forms/cadastros/`.

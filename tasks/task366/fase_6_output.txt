@@ -1,0 +1,11 @@
+﻿The file is complete and correct. FASE 6 is done. Here's what was added:
+
+**BINDEVENT block** (lines 2975ÔÇô2983): 8 event bindings for the 4 lookup fields ÔÇö KeyPress (F4/F5) and DblClick for each of `txt_4c_CfoST60`, `txt_4c_CfoST`, `txt_4c_Cfdest`, `txt_4c_Sittricm`.
+
+**12 new PUBLIC methods** (lines 3614ÔÇô3789):
+- `CfoST60LookupKeyPress` / `CfoST60LookupDblClick` / `AbrirLookupCfoST60` ÔåÆ SigCdCfo, fills `cfost60s`
+- `CfoSTLookupKeyPress` / `CfoSTLookupDblClick` / `AbrirLookupCfoST` ÔåÆ SigCdCfo, fills `cfosts`
+- `CfdestLookupKeyPress` / `CfdestLookupDblClick` / `AbrirLookupCfdest` ÔåÆ SigCdCfo, fills `coddests`
+- `SittricmLookupKeyPress` / `SittricmLookupDblClick` / `AbrirLookupSittricm` ÔåÆ SigCdIcm, fills `sittribs`
+
+Each AbrirLookupXxx follows the exact canonical pattern from BtnBuscarClick: `CREATEOBJECT ÔåÆ mAddColuna ÔåÆ Show(1) ÔåÆ check this_lSelecionou + USED ÔåÆ read cursor ÔåÆ Release()` with cursor cleanup in the finally guard.

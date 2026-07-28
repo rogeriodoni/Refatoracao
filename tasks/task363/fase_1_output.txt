@@ -1,0 +1,6 @@
+﻿Fase 1 conclu├¡da. `CESBO.prg` criado em `C:\4c\projeto\app\classes\` com:
+
+- **5 propriedades** mapeadas diretamente do schema `SIGCDCLE`: `this_cChaveUnica` (cidchaves/PK), `this_cCodigo` (clacods), `this_cGrupo` (clagrupos), `this_cConta` (clacontas), `this_cSetor` (setors)
+- **Init()** configurando `this_cTabela = "SigCdCle"` e `this_cCampoChave = "cidchaves"` (a PK real da tabela, gerada por `fUniqueIds`)
+
+**Nota importante para as pr├│ximas fases**: a PK ├® `cidchaves` (gerada pelo sistema), mas `clacods` ├® o ├¡ndice de busca. O m├®todo `Inserir()` dever├í chamar `fUniqueIds()` para preencher `cidchaves`, e `CarregarPorCodigo()` dever├í buscar por `clacods` (n├úo pela PK). O `ObterChavePrimaria()` retorna `this_cChaveUnica`.

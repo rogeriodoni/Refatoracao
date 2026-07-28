@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**[BINDEVENT-PARAMS]** ÔÇö `ValidarAcomis` j├í tinha `(par_nKeyCode, par_nShiftAltCtrl)` declarados na assinatura do m├®todo ÔÇö sem altera├º├úo necess├íria.
+
+**[NULL-CURSOR]** ÔÇö Adicionado `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Dados` em `CarregarLista()` (linha 2227).
+
+**[GRID-HEADER] "Cargo" ├ù 2** ÔÇö Trocado por `"C" + CHR(243) + "digo"` em dois locais:
+- `ConfigurarPaginaLista()` linha 363 (setup est├ítico do grid)
+- `CarregarLista()` linha 2247 (carga din├ómica)
+
+**[GRID-HEADER] "Tipo"** ÔÇö Trocado por `"Validar"` em dois locais:
+- `ConfigurarPaginaDados()` linha 2160 (setup est├ítico do grid)
+- `CarregarGrades()` linha 2299 (carga din├ómica)
+
+**[LAYOUT-POSITION]** ÔÇö `cmd_4c_InserirCat.Left` corrigido de 823 para 380, alinhando com o valor original do legado.

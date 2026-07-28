@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormCAD.prg`:
+
+1. **CarregarLista** ÔÇö `CREATE CURSOR cursor_4c_Dados (codcads C(20), descads C(40))` inserido em `ConfigurarPaginaLista()` antes de `RecordSource`, resolvendo o erro `Alias 'CURSOR_4C_DADOS' is not found` que ocorre quando `gb_4c_ValidandoUI=.T.` pula a carga do banco.
+
+2. **ModoIncluir / AlternarPagina** ÔÇö removido `PROTECTED` de `AlternarPagina`. Em VFP9, m├®todos PROTECTED s├úo invis├¡veis para chamadores externos ÔÇö `TesteAutomatico.prg` recebia `"Property ALTERNARPAGINA is not found"` por isso.
+
+3. **ModoVisualizar / AjustarBotoesPorModo** ÔÇö removido `PROTECTED` de `AjustarBotoesPorModo` pelo mesmo motivo.

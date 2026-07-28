@@ -1,0 +1,12 @@
+﻿Phase 6/8 is complete. All 7 edits are in ÔÇö the file is 2490 lines and closes correctly with `ENDDEFINE`.
+
+**What was added in this session:**
+
+- **BOParaForm()**: Loads all Sacado fields (Text15ÔÇôText28) and Impressora/Fonte fields (Text29ÔÇô31, Text40) from BO ÔåÆ form on edit/view open
+- **HabilitarCampos()**: Enables/disables Text15ÔÇô28, Text29, Text30, Text31, Text40 based on mode
+- **LimparCampos()**: Resets Sacado fields to 0 and Impressora/Fonte string fields to "" / numeric to 0
+- **Text29LostFocus()**: Validates typed printer name via `APRINTERS()`, opens `GetPrinter()` picker if not found in system list
+- **Text30LostFocus()**: Validates typed font via `AFONT()`, opens `GetFont()` picker if invalid, then parses `"FontName,Size,Style"` return to update both Text30 and Text31
+- **Text40LostFocus()**: Opens `GetPaperSize()` picker when field is empty on exit, stores `SUBSTR(result, 11)` (description portion) in field and BO property
+
+FormCfb.prg is now functionally complete ÔÇö all 40+ page-2 controls are wired in all four directions (create UI, read BOÔåÆform, write formÔåÆBO, enable/clear). Next phase (7/8) would be final integration testing or any remaining pipeline steps.

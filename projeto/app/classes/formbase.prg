@@ -341,6 +341,13 @@ DEFINE CLASS FormBase AS Form
         ENDIF
 
         TRY
+            *-- SET SYSMENU TO DEFAULT restaura os pads default do VFP (Edit/View/
+            *-- Tools/Program/Window/Help) que podem ter sido removidos por
+            *-- REPORT FORM PREVIEW ou por form modal com SET SYSMENU TO/OFF.
+            *-- Sem isso, CriarMenuPrincipal recria apenas os 6 pads da app,
+            *-- deixando menu com "menos telas" que o startup. Padrao proven:
+            *-- Formsigtosen.prg:1074 (Erro63 refinamento 2026-07-24).
+            SET SYSMENU TO DEFAULT
             RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
             CriarMenuPrincipal()
         CATCH

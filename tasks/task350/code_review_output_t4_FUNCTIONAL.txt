@@ -1,0 +1,17 @@
+﻿As 3 corre├º├Áes est├úo aplicadas corretamente. Segue o resumo do que foi feito:
+
+---
+
+**An├ílise dos 15 problemas listados:**
+
+- **[CONTAINER-VISIVEL]** ÔÇö J├í estava corrigido. O `INLIST` bloqueando `CNT_4C_CABECALHO` j├í existia na linha 2556. Nenhuma mudan├ºa necess├íria.
+- **[GRID-HEADER] x12** ÔÇö Falsos positivos. O validador comparou os cabe├ºalhos do grid da Page1 (LISTA: C├│digo, In├¡cio, T├®rmino, Tipo, Grupo, Conta) contra os headers da Page3 (LEITURA: Banco, Ag├¬ncia, etc.). S├úo grids diferentes ÔÇö ambos corretos.
+- **[LAYOUT-POSITION] x2** ÔÇö Falso positivo. O `opt_4c_TipoLeitura` tem `Top=199, Left=709` (legado 170+29 offset = 199 Ô£ô). O validador leu `Buttons(1).Top=3` (posi├º├úo relativa interna) ao inv├®s do OptionGroup.
+
+**Corre├º├Áes efetivamente realizadas (bugs reais detectados durante an├ílise):**
+
+1. **Nome do grid** ÔÇö `grd_4c_leitura2` ÔåÆ `grd_4c_Leitura` (linhas 1409ÔÇô1410). O `CarregarGradeLeitura` referenciava `grd_4c_Leitura` mas o objeto tinha nome diferente, causando grid de leitura sempre vazio.
+
+2. **CarregarGradeLeitura** ÔÇö Corrigido para usar `ColumnCount=6` (estava com `3`) e rebind completo de todas as 6 colunas + cabe├ºalhos ap├│s definir `RecordSource`, seguindo o mesmo padr├úo de `CarregarLista()`.
+
+3. **OptionButton.Value** ÔÇö Removido `.Value=1` de `Buttons(1)` e `.Value=0` de `Buttons(2)`. Conforme regra da mem├│ria: VFP9 trata qualquer valor n├úo-zero em `Buttons(N).Value` como "selecionado", causando todos os radios aparecendo marcados. O `OptionGroup.Value=1` (j├í existente) ├® suficiente para o default.

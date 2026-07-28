@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormARV.prg` criado com sucesso (249 linhas).
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+- `DEFINE CLASS FormARV AS FormBase` com propriedades visuais completas (600├ù1000, Caption="Tipos de ├ürvore", modal, sem titlebar)
+- `Init()` ÔÇö apenas `DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔÇö cria ARVBO, chama `ConfigurarPageFrame()`, propaga Caption para labels, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö pgf_4c_Paginas com Top=-29, Tabs=.F., 2 p├íginas com imagem de fundo
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes (vazio, Fase 4), cnt_4c_Saida (vazio, Fase 4)
+- `ConfigurarPaginaDados()` ÔÇö cnt_4c_Salva (vazio, Fases 7-8)
+- `TornarControlesVisiveis()` ÔÇö implementa├º├úo completa com recurs├úo em PageFrames
+- `Destroy()` ÔÇö libera BO + DODEFAULT()
+
+**Pr├│xima fase (4/8):** Grid `grd_4c_Lista` + 5 bot├Áes CRUD em cnt_4c_Botoes + cmd_4c_Encerrar em cnt_4c_Saida, mais CarregarLista() e AlternarPagina().

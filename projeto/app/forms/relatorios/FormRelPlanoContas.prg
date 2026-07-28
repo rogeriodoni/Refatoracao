@@ -575,6 +575,7 @@ DEFINE CLASS FormRelPlanoContas AS FormBase
         *-- o fix via DODEFAULT(). Sem isso, popups do _MSYSMENU renderizam
         *-- truncados apos este form fechar (cache visual stale do VFP9).
         TRY
+            SET SYSMENU TO DEFAULT
             RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
             CriarMenuPrincipal()
         CATCH

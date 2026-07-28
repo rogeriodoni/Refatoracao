@@ -1,0 +1,9 @@
+﻿Tudo correto. Resumo das corre├º├Áes:
+
+**CIDCHAVES** ÔÇö falso positivo. `WHERE cIdChaves = ...` em `CarregarPorCodigo`/`Atualizar`/`ExecutarExclusao` ├® lookup pela PK da tabela `cep`, necess├írio para CRUD. N├úo alterado.
+
+**UFIBGES** ÔÇö bug real corrigido. `SigCdUfs` **n├úo tem coluna `ufibges`** (schema confirmado), ent├úo:
+- Removido `mAddColuna("UFIBGES", "", "IBGE")` dos dois pickers de UF (linhas 1226 e 1277 originais)
+- Removido `loc_cCodUF = ALLTRIM(cursor_4c_BuscaUf.UFIBGES)` ÔÇö acessaria coluna inexistente
+- Removida property `this_cCodUFs` e todas as atribui├º├Áes (`= loc_cCodUF`, `= ""`)
+- Simplificado `AbrirLookupCidades` para sempre usar `SELECT Descs FROM SigCdMun ORDER BY Descs` (o filtro condicional nunca atuava pois `this_cCodUFs` nunca era preenchido)

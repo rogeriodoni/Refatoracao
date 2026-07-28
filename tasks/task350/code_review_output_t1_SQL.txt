@@ -1,0 +1,27 @@
+﻿An├ílise completa dos 7 problemas flagados. Todos s├úo **falsos positivos**. Veja a justificativa:
+
+---
+
+## An├ílise: 7 [SQL-FILTRO-INVENTADO] ÔÇö Todos Falsos Positivos
+
+### CONTROLCOUNT (problema 7)
+**N├úo ├® SQL.** As linhas 2463 e 2477 usam `.ControlCount` como **propriedade VFP de objeto** (`par_oContainer.ControlCount`, `loc_oControl.ControlCount`). O validador varreu o texto e confundiu com coluna SQL. Nenhuma mudan├ºa necess├íria.
+
+### BANCOS, AGENCIAS, NCONTAS, NCHEQUES (problemas 1-4)
+Usados em WHERE de `UPDATE SigCqBal` (linhas 1779-1791) e `DELETE/SELECT SigCqHis`. 
+
+O c├│digo original usava `CIdChaves` no WHERE do SigCqBal ap├│s um SEEK VFP no cursor Balanco. O cursor Balanco era populado de `SELECT * FROM SigCqBal WHERE Codigos = ?lnCodigos`, e o SEEK usava justamente `Bancos + Agencias + NContas + NCheques` como chave ÔÇö confirmando que essas colunas **existem em SigCqBal** e identificam univocamente cada linha. 
+
+A abordagem migrada (composite key direto no WHERE) ├® funcionalmente id├¬ntica ├á original (buscar CIdChaves via SEEK + UPDATE por CIdChaves). Remover essas condi├º├Áes do WHERE causaria UPDATE/DELETE em **todos os cheques do balanceo** ÔÇö catastr├│fico.
+
+### ICLIS (problema 5)
+Usado em `SELECT razaos FROM SIGCDCLI WHERE iclis = X` (linhas 2081, 2335, 2545) ÔÇö lookup de descri├º├úo do cliente pela PK. O original tinha esse lookup impl├¡cito no fluxo VFP. Remover o WHERE retornaria todos os registros de SIGCDCLI.
+
+### OPERACAOS (problema 6)
+Usado em `SELECT operacaos FROM SigCdOpt WHERE operacaos = X` (linha 2127, verifica├º├úo de exist├¬ncia) e `SELECT descrs FROM SigCdOpt WHERE operacaos = X` (linha 2560, lookup de descri├º├úo). Ambos usam a PK de SigCdOpt. Igualmente necess├írios.
+
+---
+
+**Causa-raiz dos falsos positivos:** O validador extraiu a lista de colunas WHERE do query principal de SigCdBch (que usa PLEXCLUIR, LNCNT, CODIGOS... CIDCHAVES) e aplicou esse mesmo conjunto a **todos os SQL** do arquivo ÔÇö incluindo queries contra SigCqBal, SigCqHis, SIGCDCLI e SigCdOpt, que t├¬m suas pr├│prias colunas v├ílidas.
+
+**Nenhuma altera├º├úo ser├í feita.** Modificar qualquer um desses WHERE quebraria a l├│gica de neg├│cio (regra obrigat├│ria do pass: "NAO alterar logica de negocio"). O c├│digo est├í correto.

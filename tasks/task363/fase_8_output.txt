@@ -1,0 +1,10 @@
+﻿Tudo correto. Fase 8/8 conclu├¡da. Resumo do que foi feito:
+
+**FormCES.prg** ÔÇö `AjustarBotoesPorModo()` adicionado (linha 1163): habilita `cmd_4c_Confirmar` apenas nos modos INCLUIR/ALTERAR, `cmd_4c_Cancelar` sempre habilitado. Header atualizado para "Fase 8/8 - COMPLETO".
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 45 OF popCadastros` com prompt "Classifica├º├úo de Estoque" (linha 121)
+- `ON SELECTION BAR 45 OF popCadastros DO AbrirFormCES` (linha 158)
+- `PROCEDURE AbrirFormCES()` no final do arquivo (linha 6056), padr├úo can├┤nico com `VARTYPE`, `Show()` sem par├ómetro, sem `Release()` expl├¡cito
+
+A integra├º├úo com config.prg ├® autom├ítica via ADIR() ÔÇö CESBO.prg est├í em `classes/` e FormCES.prg em `forms/cadastros/`, ambos carregados dinamicamente na inicializa├º├úo.

@@ -1,0 +1,26 @@
+﻿O arquivo est├í correto. Fase 5 implementada com sucesso. Aqui est├í o resumo do que foi feito:
+
+**Fase 5/8 conclu├¡da** ÔÇö `FormCfb.prg` atualizado com:
+
+1. **`ConfigurarPaginaDados()`** expandida com os primeiros 50% dos campos da Page2:
+   - `shp_4c_Shape2` ÔÇö separador no topo (top=167)
+   - **Se├º├úo Condi├º├úo de Pagamento**: `lbl_Label1` + `txt_4c_FPags` + `txt_4c_DPags` (read-only)
+   - `shp_4c_Shape7` ÔÇö separador (top=230)
+   - **Se├º├úo Cabe├ºalho**: `lbl_Label28` + 5 pares linha├ùcoluna (Local Pgto / Vencimento / Data Doc / N┬║ Doc / Valor Doc) ÔåÆ `txt_Text1` a `txt_Text10`
+   - `shp_4c_Shape6` ÔÇö separador (top=304)
+   - **Se├º├úo Texto Responsabilidade**: `lbl_Label29` + Texto + N┬║ Colunas + N┬║ Linhas ÔåÆ `txt_Text11` a `txt_Text14`
+   - `shp_4c_Shape3` ÔÇö separador fronteira com Fase 6 (top=378)
+
+2. **`FormParaBO()`** ÔÇö mapeia os 14 textboxes para propriedades do BO
+
+3. **`BOParaForm()`** ÔÇö preenche os 14 textboxes + `txt_4c_DPags` a partir do BO
+
+4. **`HabilitarCampos()`** ÔÇö habilita/desabilita os 14 textboxes (FPags/DPags sempre read-only)
+
+5. **`LimparCampos()`** ÔÇö zera os 14 campos num├®ricos
+
+6. **`CarregarLista()`** ÔÇö corrigido `RETURN .T.` dentro do `TRY` (era viola├º├úo da regra #1)
+
+7. **`BtnAlterarClick()`** e **`BtnVisualizarClick()`** ÔÇö agora capturam `Descrs` do cursor para preencher `txt_4c_DPags` via `BOParaForm`
+
+Fase 6 adicionar├í: Sacado (Text15ÔÇôText28) + Impressora/Fonte (Text29ÔÇôText31) + Tamanho Folha (Text40).

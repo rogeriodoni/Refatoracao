@@ -268,6 +268,73 @@ DEFINE CLASS sigregliBO AS BusinessBase
     *--------------------------------------------------------------------------
     * ProcRelacao - Relacao de OP/OS (Tipo=1 Ordem2=0, ou Tipo=5)
     *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117 / #147)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- par_cCursorDados: opcional. Se informado e cursor estiver vazio,
+    *--   mostra MsgAviso e retorna .F. sem abrir preview vazio.
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
+        *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
+        *-- popups renderizam encolhidos apos preview fechar. Mesmo fix do
+        *-- FormBase.Destroy (Erro58) precisa rodar no path REPORT PREVIEW.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
+    ENDPROC
+
     PROCEDURE ProcRelacao(par_cSaida)
         LOCAL pSqi, pSqf
         LOCAL loc_Nop, loc_Pedido, loc_Resumo, loc_Barra, loc_cPedido, loc_Seq
@@ -520,15 +587,15 @@ DEFINE CLASS sigregliBO AS BusinessBase
             ELSE
                 IF par_cSaida = 'V'
                     IF loc_Barra
-                        REPORT FORM SigReGlb PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlb", "PREVIEW")
                     ELSE
-                        REPORT FORM SigReGlr PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlr", "PREVIEW")
                     ENDIF
                 ELSE
                     IF loc_Barra
-                        REPORT FORM SigReGlb TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlb", "PRINTER_PROMPT")
                     ELSE
-                        REPORT FORM SigReGlr TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlr", "PRINTER_PROMPT")
                     ENDIF
                 ENDIF
 
@@ -536,9 +603,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
                     SELECT TmpRes
                     GO TOP
                     IF par_cSaida = 'V'
-                        REPORT FORM SigPrGlp PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigPrGlp", "PREVIEW")
                     ELSE
-                        REPORT FORM SigPrGlp TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigPrGlp", "PRINTER_PROMPT")
                     ENDIF
                 ENDIF
             ENDIF
@@ -746,15 +813,15 @@ DEFINE CLASS sigregliBO AS BusinessBase
 
             IF par_cSaida = 'V'
                 IF loc_Barra
-                    REPORT FORM SigReGlb PREVIEW NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGlb", "PREVIEW")
                 ELSE
-                    REPORT FORM SigReGlr PREVIEW NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGlr", "PREVIEW")
                 ENDIF
             ELSE
                 IF loc_Barra
-                    REPORT FORM SigReGlb TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGlb", "PRINTER_PROMPT")
                 ELSE
-                    REPORT FORM SigReGlr TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGlr", "PRINTER_PROMPT")
                 ENDIF
             ENDIF
 
@@ -762,9 +829,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
                 SELECT TmpRes
                 GO TOP
                 IF par_cSaida = 'V'
-                    REPORT FORM SigPrGlp PREVIEW NOCONSOLE
+                    THIS.ExecutarReportForm("SigPrGlp", "PREVIEW")
                 ELSE
-                    REPORT FORM SigPrGlp TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigPrGlp", "PRINTER_PROMPT")
                 ENDIF
             ENDIF
         ENDIF
@@ -1012,25 +1079,25 @@ DEFINE CLASS sigregliBO AS BusinessBase
             SET ORDER TO Nops ASCENDING
             IF par_cSaida = 'V'
                 IF THIS.this_nBoleto = 1
-                    REPORT FORM SigReGlg PREVIEW NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGlg", "PREVIEW")
                 ELSE
                     IF THIS.this_nBoleto = 2
-                    REPORT FORM SigReGle PREVIEW NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGle", "PREVIEW")
                     ENDIF
                 ENDIF
             ELSE
                 IF THIS.this_nBoleto = 1
                     IF EMPTY(THIS.this_cPcPrinterBol)
-                        REPORT FORM SigReGlg TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlg", "PRINTER_PROMPT")
                     ELSE
                         loc_lcPrinterBol = THIS.this_cPcPrinterBol
                         SET PRINTER TO NAME (loc_lcPrinterBol)
-                        REPORT FORM SigReGlg TO PRINTER NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlg", "PRINTER")
                         SET PRINTER TO
                     ENDIF
                 ELSE
                     IF THIS.this_nBoleto = 2
-                    REPORT FORM SigReGle TO PRINTER PROMPT NOCONSOLE
+                    THIS.ExecutarReportForm("SigReGle", "PRINTER_PROMPT")
                 ELSE
                     IF THIS.this_nBoleto = 3
                     SELECT DbImpressao
@@ -1522,29 +1589,29 @@ DEFINE CLASS sigregliBO AS BusinessBase
             IF par_cSaida = 'V'
                 DO CASE
                     CASE THIS.this_nBoleto = 1
-                        REPORT FORM SigReGlh PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlh", "PREVIEW")
                     CASE THIS.this_nBoleto = 4
                         REPLACE ALL Prod2Linhas WITH (THIS.this_l2Linhas = 1)
                         GO TOP
-                        REPORT FORM SigReGln PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGln", "PREVIEW")
                     OTHERWISE
-                        REPORT FORM SigReGlu PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlu", "PREVIEW")
                 ENDCASE
             ELSE
                 DO CASE
                     CASE THIS.this_nBoleto = 1
                         IF EMPTY(THIS.this_cPcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINTER PROMPT NOCONSOLE
+                            THIS.ExecutarReportForm("SigReGlh", "PRINTER_PROMPT")
                         ELSE
                             loc_lcPrinterBol = THIS.this_cPcPrinterBol
                             SET PRINTER TO NAME (loc_lcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINTER NOCONSOLE
+                            THIS.ExecutarReportForm("SigReGlh", "PRINTER")
                             SET PRINTER TO
                         ENDIF
                     CASE THIS.this_nBoleto = 4
-                        REPORT FORM SigReGln TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGln", "PRINTER_PROMPT")
                     OTHERWISE
-                        REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlu", "PRINTER_PROMPT")
                 ENDCASE
             ENDIF
         ENDIF
@@ -1816,9 +1883,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
             MsgAviso("Nenhuma Sequ" + CHR(234) + "ncia Foi Selecionada Para Impress" + CHR(227) + "o!!!", "")
         ELSE
             IF par_cSaida = 'V'
-                REPORT FORM SigReGla PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReGla", "PREVIEW")
             ELSE
-                REPORT FORM SigReGla TO PRINTER PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReGla", "PRINTER_PROMPT")
             ENDIF
         ENDIF
 
@@ -2138,29 +2205,29 @@ DEFINE CLASS sigregliBO AS BusinessBase
             IF par_cSaida = 'V'
                 DO CASE
                     CASE THIS.this_nBoleto = 1
-                        REPORT FORM SigReGlh PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlh", "PREVIEW")
                     CASE THIS.this_nBoleto = 4
                         REPLACE ALL Prod2Linhas WITH (THIS.this_l2Linhas = 1)
                         GO TOP
-                        REPORT FORM SigReGln PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGln", "PREVIEW")
                     OTHERWISE
-                        REPORT FORM SigReGlu PREVIEW NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlu", "PREVIEW")
                 ENDCASE
             ELSE
                 DO CASE
                     CASE THIS.this_nBoleto = 1
                         IF EMPTY(THIS.this_cPcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINTER PROMPT NOCONSOLE
+                            THIS.ExecutarReportForm("SigReGlh", "PRINTER_PROMPT")
                         ELSE
                             loc_lcPrinterBol = THIS.this_cPcPrinterBol
                             SET PRINTER TO NAME (loc_lcPrinterBol)
-                            REPORT FORM SigReGlh TO PRINTER NOCONSOLE
+                            THIS.ExecutarReportForm("SigReGlh", "PRINTER")
                             SET PRINTER TO
                         ENDIF
                     CASE THIS.this_nBoleto = 4
-                        REPORT FORM SigReGln TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGln", "PRINTER_PROMPT")
                     OTHERWISE
-                        REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
+                        THIS.ExecutarReportForm("SigReGlu", "PRINTER_PROMPT")
                 ENDCASE
             ENDIF
         ENDIF
@@ -2426,9 +2493,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
             MsgAviso("Nenhuma Sequ" + CHR(234) + "ncia Foi Selecionada Para Impress" + CHR(227) + "o!!!", "")
         ELSE
             IF par_cSaida = 'V'
-                REPORT FORM SigReGlL PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReGlL", "PREVIEW")
             ELSE
-                REPORT FORM SigReGlL TO PRINTER PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReGlL", "PRINTER_PROMPT")
             ENDIF
         ENDIF
 
@@ -2677,9 +2744,9 @@ DEFINE CLASS sigregliBO AS BusinessBase
             MsgAviso("Nenhuma Sequ" + CHR(234) + "ncia Foi Selecionada Para Impress" + CHR(227) + "o!!!", "")
         ELSE
             IF par_cSaida = 'V'
-                REPORT FORM SigReGlu PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReGlu", "PREVIEW")
             ELSE
-                REPORT FORM SigReGlu TO PRINTER PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReGlu", "PRINTER_PROMPT")
             ENDIF
         ENDIF
 

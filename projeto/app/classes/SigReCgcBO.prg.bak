@@ -197,14 +197,12 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     * Equivale a PROCEDURE impressao do original
     *--------------------------------------------------------------------------
     FUNCTION Imprimir()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            IF THIS.PrepararDados()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReCgc", "PRINTER_PROMPT", THIS.this_cCursorDados)
             ENDIF
-            REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Imprimir")
@@ -217,14 +215,12 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     * Equivale a PROCEDURE visualizacao do original
     *--------------------------------------------------------------------------
     FUNCTION Visualizar()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_oErro
         loc_lSucesso = .F.
         TRY
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
+            IF THIS.PrepararDados()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReCgc", "PREVIEW", THIS.this_cCursorDados)
             ENDIF
-            REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Visualizar")
@@ -354,6 +350,71 @@ DEFINE CLASS SigReCgcBO AS RelatorioBase
     PROCEDURE Destroy()
         THIS.LimparCursores()
         DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarReportForm (Pattern #117 helper canonico)
+    * - Guard IF FILE(FRX) -> MostrarErro descritivo com o path faltante
+    * - Guard cursor vazio -> MsgAviso "Nenhum registro encontrado..." (Erro68)
+    * - Isolamento locale (POINT/SEPARATOR/REPORTBEHAVIOR 80) durante REPORT FORM
+    * - Restauracao de menu apos preview (Erro63 menu-shrinks)
+    * par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    * par_cCursorDados: opcional; se vazio/inexistente, mostra aviso e retorna .F.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30/Erro68)
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu apos preview (Erro63): REPORT FORM PREVIEW abre toolbar
+        *-- propria que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar,
+        *-- popups renderizam encolhidos apos preview fechar.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
     ENDPROC
 
 ENDDEFINE

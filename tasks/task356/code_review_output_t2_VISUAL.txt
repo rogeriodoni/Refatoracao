@@ -1,0 +1,5 @@
+﻿Feito. Resultado da an├ílise:
+
+**5 problemas listados ÔåÆ Falsos positivos.** Os headers Conta, Descri├º├úo, Data Base, Fator, Total j├í estavam corretos ÔÇö o legado define exatamente esses valores via `pColuna` no framework (m├®todo `pfSqlTabela.pColuna`). O code review tool n├úo conseguiu extra├¡-los porque est├úo no c├│digo din├ómico, n├úo como propriedades `Header1.Caption` no bin├írio SCX.
+
+**Problema real encontrado ÔåÆ Corrigido.** Column6 da `grd_4c_Lista` estava como `"Valor Liquido"` mas o legado define `pColuna('TotLiq', '', '', 'Compra', ...)`. A linha 1075 foi corrigida para `"Compra"`.

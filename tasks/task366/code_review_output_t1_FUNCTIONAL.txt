@@ -1,0 +1,16 @@
+﻿Todas as corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**cfoBO.prg** ÔÇö [NULL-CURSOR]:
+- `SET NULL ON` / `SET NULL OFF` envolvendo `CREATE CURSOR cursor_4c_Dados` (linha 460ÔÇô463)
+- `SET NULL ON` / `SET NULL OFF` envolvendo `APPEND FROM DBF(...)` (linha 482ÔÇô484)
+
+**Formcfo.prg** ÔÇö BOParaForm (bug cr├¡tico de runtime):
+- 4 linhas com `(loc_oBO.this_nXxx .Value = IIF(...))` causavam "Unknown member VALUE" ao tentar acessar `.Value` em um valor num├®rico. Corrigidas para `IIF(loc_oBO.this_nXxx = 1, 1, 0)` direto.
+
+**Formcfo.prg** ÔÇö `cmd_4c_Encerrar.Left`:
+- Era `917` dentro do container `cnt_4c_Saida` (bot├úo invis├¡vel, ~917px al├®m da borda do container de 90px). Corrigido para `5` conforme padr├úo can├┤nico.
+
+Sobre os outros problemas listados:
+- **BINDEVENT-PARAMS**: Handlers `ContFrtLostFocus/ContSeg/ContDa` j├í declaram `(par_nKeyCode, par_nShiftAltCtrl)` corretamente ÔÇö sem altera├º├úo necess├íria.
+- **GRID-WITH**: `CarregarLista()` j├í usa refer├¬ncias diretas (`loc_oGrid.ColumnCount`, `loc_oGrid.Column1...`) fora de WITH ÔÇö sem problema real.
+- **LAYOUT-POSITION** (24 issues): Todos os OptionGroups j├í t├¬m `.Top` e `.Left` corretos no c├│digo (ex: `obj_4c_OptAgrupas` tem `.Top = 79`, `.Left = 638`); `cbo_4c_Combo2` com `Top=27, Left=642` est├í correto para coordenadas relativas dentro do PageFrame aninhado ÔÇö o diff reportado ├® o sistema de coordenadas SCX (absoluto no form) vs novo (relativo ├á Page).

@@ -1,0 +1,19 @@
+﻿Ap├│s ler os arquivos completos, posso confirmar a situa├º├úo:
+
+**Todos os 7 erros s├úo falsos positivos do validador.**
+
+**An├ílise:**
+
+**cursor_4c_AcessoFinan** ÔÇö definido em CargoBO.prg com todos os campos necess├írios:
+- `CarregarSubTabelaAcessoFinan()` linha 207: `SELECT grupos, contas, valors, moedas FROM SIGCRRCC`
+- `InicializarCursoresGrid()` linha 263: `CREATE CURSOR cursor_4c_AcessoFinan (grupos C(10), contas C(10), valors N(13,2), moedas C(3))`
+
+**cursor_4c_Categorias** ÔÇö definido em CargoBO.prg com todos os campos necess├írios:
+- `CarregarSubTabelaCategorias()` linha 236: `SELECT a.categoria, ISNULL(b.descs, '') AS descs, a.tipo, a.cargo`
+- `InicializarCursoresGrid()` linha 270: `CREATE CURSOR cursor_4c_Categorias (categoria C(6), descs C(30), tipo C(10), cargo C(10))`
+
+**FormCargo.prg** usa esses cursores corretamente em `CarregarGrades()` (linhas 2276ÔÇô2296).
+
+**Por que o validador errou:** O validador escaneia os ControlSources no arquivo do Form e tenta encontrar as defini├º├Áes dos cursores no mesmo arquivo. Como as defini├º├Áes est├úo no arquivo `CargoBO.prg` (arquitetura BO separada do Form), o validador n├úo as encontra e reporta os campos como ausentes. Os "LINHAS SQL/CONTROLSOURCE DO CODIGO ORIGINAL" mostrados no prompt s├úo do legado SCX (cursores `xCarcc`/`xCategoria` criados via arrays), o que confirmou a confus├úo do validador.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo est├í correto ÔÇö os campos `grupos`, `contas`, `valors`, `moedas`, `categoria`, `descs` e `tipo` est├úo presentes tanto nos SELECTs SQL quanto nos CREATE CURSORs do BO, e o Form os consome corretamente via ControlSource. Alterar o c├│digo para "satisfazer" o validador implicaria duplicar defini├º├Áes de cursor no Form, o que violaria a arquitetura de camadas e a instru├º├úo "NAO alterar logica de negocio".

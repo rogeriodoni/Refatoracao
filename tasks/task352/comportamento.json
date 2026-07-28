@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBus\n\nIf Not Empty(ThisForm.Pagina.Dados.getCodCads.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdCad], [CodCads], ThisForm.Pagina.Dados.getCodCads.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pIds\n\npIds = ThisForm.TipoCads\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pIds\n\npIds = ThisForm.TipoCads\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pIds\n\npIds = ThisForm.TipoCads\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pIds\n\npIds = ThisForm.TipoCads\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Private pIds\n\npIds = ThisForm.TipoCads\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Init",
+      "linhas": 44,
+      "codigoOriginal": "Lparameters pTip, pTam\nPrivate pIds\n\npIds = Replicate(Chr(254), 20)\n\nlcQryCdCad = [Select * From SigCdCad Where TipoCads = ?pIds]\n\nWith ThisForm\n\t.Name      = 'SIGCDCAD'\t\t&& mena - trocado para liberar os botoes Alltrim(Upper(pTip))\n\t.TipoCads  = Alltrim(Upper(pTip))\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\t.Caption   = Proper(.TipoCads)\n\t\n\t* Aqui podem entrar algumas excessões \n\tIf (Padr(Upper(.TipoCads), 20) = Padr([APONTAMTO], 20))\n\t\t.Caption = [Avaliação]\n\tEndIf\n\t\n\tpIds = .TipoCads... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "LParameters Opcao\nPrivate pIds\n\npIds = ThisForm.TipoCads\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\nIf (ThisForm.pcEscolha = [INSERIR])\n\tReplace TipoCads With pIds, ;\n\t\t\tpkChaves With fUniqueIds(), ;\n\t\t\tUsuars   With Usuar, ;\n\t\t\tDtIncs   With Datetime() In crSigCdCad\nEndIf\n\nIf (ThisForm.pcEscolha = [ALTERAR])\n\tReplace UsuAlts With Usuar, ;\n\t\t\tDtAlts  With Datetime() In crSigCdCad\nEndIf\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, [INSERIR], [PROCURAR])\n\t\tThisForm.Pagina.Dad... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "If (ThisForm.pcEscolha = [INSERIR])\n\tIf Empty(crSigCdCad.CodCads)\n\t\t=Messagebox([O Código Não Pode Ficar Em Branco!!!], 48, [Atenção!!!]) \n\t\tThisForm.Pagina.Dados.getCodCads.SetFocus\n\t\tReturn .f.\n\tEndIf\n\t\n\tlcQuery = [Select * ] + ;\n\t\t\t    [From SigCdCad ] + ;\n\t\t\t   [Where TipoCads = '] + Padr(ThisForm.TipoCads, 20) + [' And ] + ;\n\t\t\t   \t\t [CodCads = '] + crSigCdCad.CodCads + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCAD",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCAD.Pagina.Dados.getCodCads",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCAD.Init",
+      "queryOriginal": "lcQryCdCad = [Select * From SigCdCad Where TipoCads = ?pIds]",
+      "tabelas": "SigCdCad",
+      "colunas": "TipoCads",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCad"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

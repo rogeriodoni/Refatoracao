@@ -1,0 +1,9 @@
+﻿That `"Encerrar"` at line 311 is correct ÔÇö it's `cmd_4c_Encerrar` (the canonical close button). No issue there.
+
+All fixes applied to `Formccr.prg`:
+
+1. **Line 411** ÔÇö `cmd_4c_Cancelar.Caption` corrected from `"Encerrar"` ÔåÆ `"Cancelar"`
+2. **Line 619** ÔÇö `BINDEVENT(txt_4c_Classes, "KeyPress" ÔåÆ "LostFocus", THIS, "ClassesLostFocus")`
+3. **Lines 1650/1653** ÔÇö Same wrong-event pattern for `txt_4c__cd_moeda` and `txt_4c__molimc`, both corrected from `"KeyPress"` ÔåÆ `"LostFocus"`
+
+The file is 6315 lines, Phase 8/8 complete, with no legacy-forbidden patterns (`fAcessoContab`, `MostrarAviso`, `ISEMPTY`, `PUBLIC FUNCTION`, `_EMPR`) found.

@@ -1,0 +1,19 @@
+﻿Correto ÔÇö `RecordSource` e `ColumnCount` definidos **fora** do WITH antes de acessar `Column1`. Implementa├º├úo da Fase 4 conclu├¡da.
+
+Resumo do que foi adicionado ao `FormCAD.prg`:
+
+**ConfigurarPaginaLista()** ÔÇö completa:
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, `Comic Sans MS`, `Themes=.F.`, `PicturePosition=13`
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (can├┤nico: Left=917, Width=90, bot├úo 75├ù75)
+- `grd_4c_Lista` com 2 colunas (`codcads`/`descads`), `RecordSource` + `ColumnCount` definidos **antes** do WITH (Problema 36)
+- BINDEVENTs para todos os bot├Áes + DblClick no grid
+
+**ConfigurarPaginaDados()** ÔÇö agora cria os bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` com BINDEVENTs
+
+**Novos m├®todos**:
+- `AlternarPagina()` ÔÇö navega entre Page1/Page2, recarrega lista ao voltar
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita bot├Áes por modo (INCLUIR/ALTERAR/VISUALIZAR)
+- `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`, `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö l├│gica completa
+- `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö prontos para Fase 5
+
+**Regras cr├¡ticas respeitadas**: sem RETURN dentro de TRY/CATCH, CHR() para acentos, todos os handlers s├úo `PROCEDURE` (PUBLIC, sem PROTECTED) para funcionar com BINDEVENT.

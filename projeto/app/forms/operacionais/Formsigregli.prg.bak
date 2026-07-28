@@ -1821,10 +1821,12 @@ DEFINE CLASS Formsigregli AS FormBase
             .this_nBoleto     = THIS.cnt_4c_Etiquetas.obj_4c_Get_Boleto.Value
             .this_nProcesso   = THIS.cnt_4c_Etiquetas.obj_4c_Get_Processo.Value
             .this_nComplemto  = THIS.cnt_4c_Etiquetas.obj_4c_Get_Complemto.Value
-            .this_lNome       = THIS.cnt_4c_Etiquetas.chk_4c_Chknome.Value
-            .this_l2Linhas    = THIS.cnt_4c_Etiquetas.chk_4c_Chk2Linhas.Value
+            *-- CheckBox.Value eh numerico (0/1); converter para logico pois
+            *-- props this_l* sao logical (evita "Data type mismatch" em AND no BO)
+            .this_lNome       = (THIS.cnt_4c_Etiquetas.chk_4c_Chknome.Value = 1)
+            .this_l2Linhas    = (THIS.cnt_4c_Etiquetas.chk_4c_Chk2Linhas.Value = 1)
             .this_nOptDescs   = THIS.cnt_4c_Etiquetas.obj_4c_OptDescs.Value
-            .this_lDatager    = THIS.cnt_4c_Etiquetas.chk_4c_ChkDatager.Value
+            .this_lDatager    = (THIS.cnt_4c_Etiquetas.chk_4c_ChkDatager.Value = 1)
 
             .this_nRelPedido   = THIS.cnt_4c_Relacao.obj_4c_Get_Pedido.Value
             .this_nResumo      = THIS.cnt_4c_Relacao.obj_4c_Get_Resumo.Value

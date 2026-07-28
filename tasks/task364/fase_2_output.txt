@@ -1,0 +1,12 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da.
+
+**CfbBO.prg atualizado** com os seguintes m├®todos CRUD adicionados (460 linhas no total):
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT `SigOpFp LEFT JOIN SIGCNFBL` com coluna `TemDados` (indica se config existe), filtro opcional por FPags ou Descrs
+- **`CarregarPorCodigo(par_cFPags)`** ÔÇö Carrega config pelo `fpags` (chave de neg├│cio), seta `this_lNovoRegistro = .F.` quando encontrado
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö Mapeia todos os 40 campos de SIGCNFBL para propriedades do BO via `SELECT (alias)` + `TratarNulo`
+- **`Inserir()`** ÔÇö INSERT com `LEFT(NEWID(), 20)` para `cidchaves`, `GETDATE()` para `ddatas`, `TIME()` para `choras`, empresa/usu├írio do contexto global
+- **`Atualizar()`** ÔÇö UPDATE SET todos os campos WHERE `fpags` (n├úo cidchaves, pois ├® a chave de neg├│cio)
+- **`ExecutarExclusao()`** ÔÇö DELETE WHERE `fpags` com auditoria
+
+Pr├│xima fase (3/8): cria├º├úo do `FormCfb.prg`.

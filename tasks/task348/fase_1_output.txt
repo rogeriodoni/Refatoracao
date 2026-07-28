@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\BALBO.prg` foi criado com:
+
+- **37 propriedades** mapeando todas as colunas de `SIGCDBAL` (schema verificado)
+  - PK: `this_cCidchaves` (cidchaves char(20) ÔÇö chave prim├íria real, n├úo `codigos`)
+  - Datas: 4 campos datetime
+  - Bits: `this_lEncerras`, `this_lTratas` como logical
+  - Filtros de range: locais, fornecedores, produtos, grupos, subgrupos, unidades, cole├º├Áes, pre├ºo
+  - Memos/XML: `this_cMfilggrp`, `this_cMfilgrupo`, `this_cObs`
+- **`Init()`** configurando `this_cTabela = "SIGCDBAL"` e `this_cCampoChave = "cidchaves"`
+- **`ObterChavePrimaria()`** retornando `this_cCidchaves`
+
+M├®todos de dados (`CarregarDoCursor`, `Buscar`, `Inserir`, `Atualizar`, `ExecutarExclusao`) ficam para as Fases 2+.

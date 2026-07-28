@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. Todos os campos restantes foram adicionados e todos os m├®todos foram atualizados. A Fase 6/8 est├í conclu├¡da com paridade 100%:
+
+**O que foi adicionado nesta fase:**
+
+- **7 campos novos** em `ConfigurarPaginaDados()`:
+  - `lbl_4c_Ocup12` + `txt_4c_Fwget1` (Consulta Serasa - 2 chars, CP/CH, vis├¡vel s├│ para SERASA)
+  - `lbl_4c_Ocup9` + `txt_4c_ValMin` (Valor M├¡nimo - num├®rico)
+  - `lbl_4c_Ocup10` + `txt_4c_ValFix` (Valor Fixo - num├®rico)
+  - `lbl_4c_Ocup8` + `txt_4c_Ip` (URL/IP Proxy)
+  - `lbl_4c_Ocup11` + `txt_4c_Porta` (Porta - num├®rico)
+  - `lbl_4c_Ocup13` + `txt_4c_UsuProxy` (Usu├írio Proxy)
+  - `lbl_4c_Ocup14` + `txt_4c_SenProxy` (Senha Proxy - com PasswordChar)
+
+- **`TipoConsultaChanged()`**: adicionado toggle de visibilidade para `txt_4c_Fwget1`/`lbl_4c_Ocup12` (vis├¡vel apenas quando tipo = "SERASA")
+
+- **`FormParaBO()`** e **`BOParaForm()`**: mapeamento completo dos 7 campos restantes (`this_cCTipos`, `this_nVlrMin`, `this_nVlrFixo`, `this_cCipchps`, `this_nPortachps`, `this_cUsuProxys`, `this_cSenProxys`)
+
+- **`HabilitarCampos()`** e **`LimparCampos()`**: todos os 7 campos novos inclu├¡dos
+
+- **`BtnSalvarClick()`**: valida├º├úo de `fwget1` quando tipo = SERASA (aceita vazio, CP ou CH)
+
+- **Novo m├®todo `ValidarTipoSerasa()`**: handler do LostFocus de `txt_4c_Fwget1` que valida CP/CH com aviso
